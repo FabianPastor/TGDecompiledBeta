@@ -265,8 +265,14 @@ public final class SimpleCache implements Cache {
     public synchronized boolean isCached(String key, long position, long length) {
         boolean z;
         CachedContent cachedContent = this.index.get(key);
-        z = cachedContent != null && cachedContent.isCached(position, length);
+        z = cachedContent != null && cachedContent.getCachedBytes(position, length) >= length;
         return z;
+    }
+
+    public synchronized long getCachedBytes(String key, long position, long length) {
+        CachedContent cachedContent;
+        cachedContent = this.index.get(key);
+        return cachedContent != null ? cachedContent.getCachedBytes(position, length) : -length;
     }
 
     public synchronized void setContentLength(String key, long length) throws CacheException {

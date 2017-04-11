@@ -8,7 +8,7 @@ import org.telegram.messenger.exoplayer2.upstream.LoaderErrorThrower;
 public interface DashChunkSource extends ChunkSource {
 
     public interface Factory {
-        DashChunkSource createDashChunkSource(LoaderErrorThrower loaderErrorThrower, DashManifest dashManifest, int i, int i2, TrackSelection trackSelection, long j);
+        DashChunkSource createDashChunkSource(LoaderErrorThrower loaderErrorThrower, DashManifest dashManifest, int i, int i2, TrackSelection trackSelection, long j, boolean z, boolean z2);
     }
 
     void updateManifest(DashManifest dashManifest, int i);

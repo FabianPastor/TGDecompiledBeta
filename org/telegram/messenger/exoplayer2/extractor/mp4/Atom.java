@@ -60,6 +60,7 @@ import com.mp4parser.iso14496.part30.WebVTTSampleEntry;
 import com.mp4parser.iso14496.part30.XMLSubtitleSampleEntry;
 import com.mp4parser.iso23001.part7.ProtectionSystemSpecificHeaderBox;
 import com.mp4parser.iso23001.part7.TrackEncryptionBox;
+import com.mp4parser.iso23009.part1.EventMessageBox;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -74,6 +75,7 @@ abstract class Atom {
     public static final int TYPE_TTML = Util.getIntegerCodeForString("TTML");
     public static final int TYPE__mp3 = Util.getIntegerCodeForString(".mp3");
     public static final int TYPE_ac_3 = Util.getIntegerCodeForString(AudioSampleEntry.TYPE8);
+    public static final int TYPE_alac = Util.getIntegerCodeForString("alac");
     public static final int TYPE_avc1 = Util.getIntegerCodeForString(VisualSampleEntry.TYPE3);
     public static final int TYPE_avc3 = Util.getIntegerCodeForString(VisualSampleEntry.TYPE4);
     public static final int TYPE_avcC = Util.getIntegerCodeForString(AvcConfigurationBox.TYPE);
@@ -93,6 +95,7 @@ abstract class Atom {
     public static final int TYPE_ec_3 = Util.getIntegerCodeForString(AudioSampleEntry.TYPE9);
     public static final int TYPE_edts = Util.getIntegerCodeForString(EditBox.TYPE);
     public static final int TYPE_elst = Util.getIntegerCodeForString(EditListBox.TYPE);
+    public static final int TYPE_emsg = Util.getIntegerCodeForString(EventMessageBox.TYPE);
     public static final int TYPE_enca = Util.getIntegerCodeForString(AudioSampleEntry.TYPE_ENCRYPTED);
     public static final int TYPE_encv = Util.getIntegerCodeForString(VisualSampleEntry.TYPE_ENCRYPTED);
     public static final int TYPE_esds = Util.getIntegerCodeForString(ESDescriptorBox.TYPE);

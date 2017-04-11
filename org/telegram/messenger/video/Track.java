@@ -74,7 +74,7 @@ public class Track {
         samplingFrequencyIndexMap.put(Integer.valueOf(8000), Integer.valueOf(11));
     }
 
-    public Track(int id, MediaFormat format, boolean audio) throws Exception {
+    public Track(int id, MediaFormat format, boolean audio) {
         this.trackId = (long) id;
         this.isAudio = audio;
         if (this.isAudio) {
@@ -98,8 +98,12 @@ public class Track {
             decoderConfigDescriptor.setObjectTypeIndication(64);
             decoderConfigDescriptor.setStreamType(5);
             decoderConfigDescriptor.setBufferSizeDB(1536);
-            decoderConfigDescriptor.setMaxBitRate(96000);
-            decoderConfigDescriptor.setAvgBitRate(96000);
+            if (format.containsKey("max-bitrate")) {
+                decoderConfigDescriptor.setMaxBitRate((long) format.getInteger("max-bitrate"));
+            } else {
+                decoderConfigDescriptor.setMaxBitRate(96000);
+            }
+            decoderConfigDescriptor.setAvgBitRate((long) this.timeScale);
             AudioSpecificConfig audioSpecificConfig = new AudioSpecificConfig();
             audioSpecificConfig.setAudioObjectType(2);
             audioSpecificConfig.setSamplingFrequencyIndex(((Integer) samplingFrequencyIndexMap.get(Integer.valueOf((int) audioSampleEntry.getSampleRate()))).intValue());

@@ -1,7 +1,6 @@
 package org.telegram.messenger.exoplayer2.text;
 
 import org.telegram.messenger.exoplayer2.Format;
-import org.telegram.messenger.exoplayer2.text.cea.Cea608Decoder;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public interface SubtitleDecoderFactory {
@@ -15,7 +14,9 @@ public interface SubtitleDecoderFactory {
                 Class<?> clazz = getDecoderClass(format.sampleMimeType);
                 if (clazz == null) {
                     throw new IllegalArgumentException("Attempted to create decoder for unsupported format");
-                } else if (clazz != Cea608Decoder.class) {
+                } else if (format.sampleMimeType.equals(MimeTypes.APPLICATION_CEA608) || format.sampleMimeType.equals(MimeTypes.APPLICATION_MP4CEA608)) {
+                    return (SubtitleDecoder) clazz.asSubclass(SubtitleDecoder.class).getConstructor(new Class[]{String.class, Integer.TYPE}).newInstance(new Object[]{format.sampleMimeType, Integer.valueOf(format.accessibilityChannel)});
+                } else if (!format.sampleMimeType.equals(MimeTypes.APPLICATION_CEA708)) {
                     return (SubtitleDecoder) clazz.asSubclass(SubtitleDecoder.class).getConstructor(new Class[0]).newInstance(new Object[0]);
                 } else {
                     return (SubtitleDecoder) clazz.asSubclass(SubtitleDecoder.class).getConstructor(new Class[]{Integer.TYPE}).newInstance(new Object[]{Integer.valueOf(format.accessibilityChannel)});
@@ -32,6 +33,12 @@ public interface SubtitleDecoderFactory {
             Object obj = -1;
             try {
                 switch (mimeType.hashCode()) {
+                    case -1026075066:
+                        if (mimeType.equals(MimeTypes.APPLICATION_MP4VTT)) {
+                            obj = 2;
+                            break;
+                        }
+                        break;
                     case -1004728940:
                         if (mimeType.equals(MimeTypes.TEXT_VTT)) {
                             obj = null;
@@ -44,15 +51,21 @@ public interface SubtitleDecoderFactory {
                             break;
                         }
                         break;
-                    case 1490991545:
-                        if (mimeType.equals(MimeTypes.APPLICATION_MP4VTT)) {
-                            obj = 2;
+                    case 930165504:
+                        if (mimeType.equals(MimeTypes.APPLICATION_MP4CEA608)) {
+                            obj = 6;
                             break;
                         }
                         break;
                     case 1566015601:
                         if (mimeType.equals(MimeTypes.APPLICATION_CEA608)) {
                             obj = 5;
+                            break;
+                        }
+                        break;
+                    case 1566016562:
+                        if (mimeType.equals(MimeTypes.APPLICATION_CEA708)) {
+                            obj = 7;
                             break;
                         }
                         break;
@@ -81,7 +94,10 @@ public interface SubtitleDecoderFactory {
                     case 4:
                         return Class.forName("org.telegram.messenger.exoplayer2.text.tx3g.Tx3gDecoder");
                     case 5:
+                    case 6:
                         return Class.forName("org.telegram.messenger.exoplayer2.text.cea.Cea608Decoder");
+                    case 7:
+                        return Class.forName("org.telegram.messenger.exoplayer2.text.cea.Cea708Decoder");
                     default:
                         return null;
                 }

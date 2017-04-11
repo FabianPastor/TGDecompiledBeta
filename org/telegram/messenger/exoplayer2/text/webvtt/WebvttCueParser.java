@@ -244,9 +244,13 @@ final class WebvttCueParser {
         }
         if (s.endsWith("%")) {
             builder.setLine(WebvttParserUtil.parsePercentage(s)).setLineType(0);
-        } else {
-            builder.setLine((float) Integer.parseInt(s)).setLineType(1);
+            return;
         }
+        int lineNumber = Integer.parseInt(s);
+        if (lineNumber < 0) {
+            lineNumber--;
+        }
+        builder.setLine((float) lineNumber).setLineType(1);
     }
 
     private static void parsePositionAttribute(String s, Builder builder) throws NumberFormatException {

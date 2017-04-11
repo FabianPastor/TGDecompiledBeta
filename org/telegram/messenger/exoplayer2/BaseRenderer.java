@@ -7,6 +7,7 @@ import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.MediaClock;
 
 public abstract class BaseRenderer implements Renderer, RendererCapabilities {
+    private RendererConfiguration configuration;
     private int index;
     private boolean readEndOfStream = true;
     private int state;
@@ -39,8 +40,9 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
         return this.state;
     }
 
-    public final void enable(Format[] formats, SampleStream stream, long positionUs, boolean joining, long offsetUs) throws ExoPlaybackException {
+    public final void enable(RendererConfiguration configuration, Format[] formats, SampleStream stream, long positionUs, boolean joining, long offsetUs) throws ExoPlaybackException {
         Assertions.checkState(this.state == 0);
+        this.configuration = configuration;
         this.state = 1;
         onEnabled(joining);
         replaceStream(formats, stream, offsetUs);
@@ -73,8 +75,12 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
         return this.readEndOfStream;
     }
 
-    public final void setCurrentStreamIsFinal() {
+    public final void setCurrentStreamFinal() {
         this.streamIsFinal = true;
+    }
+
+    public final boolean isCurrentStreamFinal() {
+        return this.streamIsFinal;
     }
 
     public final void maybeThrowStreamError() throws IOException {
@@ -83,6 +89,7 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
 
     public final void resetPosition(long positionUs) throws ExoPlaybackException {
         this.streamIsFinal = false;
+        this.readEndOfStream = false;
         onPositionReset(positionUs, false);
     }
 
@@ -129,12 +136,21 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
     protected void onDisabled() {
     }
 
+    protected final RendererConfiguration getConfiguration() {
+        return this.configuration;
+    }
+
     protected final int getIndex() {
         return this.index;
     }
 
+    @Deprecated
     protected final int readSource(FormatHolder formatHolder, DecoderInputBuffer buffer) {
-        int result = this.stream.readData(formatHolder, buffer);
+        return readSource(formatHolder, buffer, false);
+    }
+
+    protected final int readSource(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired) {
+        int result = this.stream.readData(formatHolder, buffer, formatRequired);
         if (result == -4) {
             if (buffer.isEndOfStream()) {
                 this.readEndOfStream = true;
@@ -144,6 +160,11 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
                 return -3;
             }
             buffer.timeUs += this.streamOffsetUs;
+        } else if (result == -5) {
+            Format format = formatHolder.format;
+            if (format.subsampleOffsetUs != Long.MAX_VALUE) {
+                formatHolder.format = format.copyWithSubsampleOffsetUs(format.subsampleOffsetUs + this.streamOffsetUs);
+            }
         }
         return result;
     }
@@ -153,6 +174,6 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
     }
 
     protected void skipToKeyframeBefore(long timeUs) {
-        this.stream.skipToKeyframeBefore(timeUs);
+        this.stream.skipToKeyframeBefore(timeUs - this.streamOffsetUs);
     }
 }

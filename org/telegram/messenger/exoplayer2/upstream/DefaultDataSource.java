@@ -20,7 +20,7 @@ public final class DefaultDataSource implements DataSource {
     }
 
     public DefaultDataSource(Context context, TransferListener<? super DataSource> listener, String userAgent, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
-        this(context, listener, new DefaultHttpDataSource(userAgent, null, listener, connectTimeoutMillis, readTimeoutMillis, allowCrossProtocolRedirects));
+        this(context, listener, new DefaultHttpDataSource(userAgent, null, listener, connectTimeoutMillis, readTimeoutMillis, allowCrossProtocolRedirects, null));
     }
 
     public DefaultDataSource(Context context, TransferListener<? super DataSource> listener, DataSource baseDataSource) {

@@ -182,7 +182,7 @@ public class MP4Builder {
         return flush;
     }
 
-    public int addTrack(MediaFormat mediaFormat, boolean isAudio) throws Exception {
+    public int addTrack(MediaFormat mediaFormat, boolean isAudio) {
         return this.currentMp4Movie.addTrack(mediaFormat, isAudio);
     }
 

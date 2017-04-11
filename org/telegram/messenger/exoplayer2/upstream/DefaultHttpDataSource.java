@@ -13,7 +13,6 @@ import java.net.HttpURLConnection;
 import java.net.NoRouteToHostException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,6 +22,7 @@ import java.util.regex.Pattern;
 import org.telegram.messenger.exoplayer2.upstream.HttpDataSource.HttpDataSourceException;
 import org.telegram.messenger.exoplayer2.upstream.HttpDataSource.InvalidContentTypeException;
 import org.telegram.messenger.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException;
+import org.telegram.messenger.exoplayer2.upstream.HttpDataSource.RequestProperties;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Predicate;
 import org.telegram.messenger.exoplayer2.util.Util;
@@ -45,11 +45,12 @@ public class DefaultHttpDataSource implements HttpDataSource {
     private HttpURLConnection connection;
     private final Predicate<String> contentTypePredicate;
     private DataSpec dataSpec;
+    private final RequestProperties defaultRequestProperties;
     private InputStream inputStream;
     private final TransferListener<? super DefaultHttpDataSource> listener;
     private boolean opened;
     private final int readTimeoutMillis;
-    private final HashMap<String, String> requestProperties;
+    private final RequestProperties requestProperties;
     private final String userAgent;
 
     public DefaultHttpDataSource(String userAgent, Predicate<String> contentTypePredicate) {
@@ -61,17 +62,18 @@ public class DefaultHttpDataSource implements HttpDataSource {
     }
 
     public DefaultHttpDataSource(String userAgent, Predicate<String> contentTypePredicate, TransferListener<? super DefaultHttpDataSource> listener, int connectTimeoutMillis, int readTimeoutMillis) {
-        this(userAgent, contentTypePredicate, listener, connectTimeoutMillis, readTimeoutMillis, false);
+        this(userAgent, contentTypePredicate, listener, connectTimeoutMillis, readTimeoutMillis, false, null);
     }
 
-    public DefaultHttpDataSource(String userAgent, Predicate<String> contentTypePredicate, TransferListener<? super DefaultHttpDataSource> listener, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
+    public DefaultHttpDataSource(String userAgent, Predicate<String> contentTypePredicate, TransferListener<? super DefaultHttpDataSource> listener, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects, RequestProperties defaultRequestProperties) {
         this.userAgent = Assertions.checkNotEmpty(userAgent);
         this.contentTypePredicate = contentTypePredicate;
         this.listener = listener;
-        this.requestProperties = new HashMap();
+        this.requestProperties = new RequestProperties();
         this.connectTimeoutMillis = connectTimeoutMillis;
         this.readTimeoutMillis = readTimeoutMillis;
         this.allowCrossProtocolRedirects = allowCrossProtocolRedirects;
+        this.defaultRequestProperties = defaultRequestProperties;
     }
 
     public Uri getUri() {
@@ -85,22 +87,16 @@ public class DefaultHttpDataSource implements HttpDataSource {
     public void setRequestProperty(String name, String value) {
         Assertions.checkNotNull(name);
         Assertions.checkNotNull(value);
-        synchronized (this.requestProperties) {
-            this.requestProperties.put(name, value);
-        }
+        this.requestProperties.set(name, value);
     }
 
     public void clearRequestProperty(String name) {
         Assertions.checkNotNull(name);
-        synchronized (this.requestProperties) {
-            this.requestProperties.remove(name);
-        }
+        this.requestProperties.remove(name);
     }
 
     public void clearAllRequestProperties() {
-        synchronized (this.requestProperties) {
-            this.requestProperties.clear();
-        }
+        this.requestProperties.clear();
     }
 
     public long open(DataSpec dataSpec) throws HttpDataSourceException {
@@ -124,7 +120,7 @@ public class DefaultHttpDataSource implements HttpDataSource {
                 if (this.contentTypePredicate == null || this.contentTypePredicate.evaluate(contentType)) {
                     long j = (responseCode != Callback.DEFAULT_DRAG_ANIMATION_DURATION || dataSpec.position == 0) ? 0 : dataSpec.position;
                     this.bytesToSkip = j;
-                    if ((dataSpec.flags & 1) != 0) {
+                    if (dataSpec.isFlagSet(1)) {
                         this.bytesToRead = dataSpec.length;
                     } else if (dataSpec.length != -1) {
                         this.bytesToRead = dataSpec.length;
@@ -213,7 +209,7 @@ public class DefaultHttpDataSource implements HttpDataSource {
         byte[] postBody = dataSpec.postBody;
         long position = dataSpec.position;
         long length = dataSpec.length;
-        boolean allowGzip = (dataSpec.flags & 1) != 0;
+        boolean allowGzip = dataSpec.isFlagSet(1);
         if (!this.allowCrossProtocolRedirects) {
             return makeConnection(url, postBody, position, length, allowGzip, true);
         }
@@ -246,10 +242,13 @@ public class DefaultHttpDataSource implements HttpDataSource {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setConnectTimeout(this.connectTimeoutMillis);
         connection.setReadTimeout(this.readTimeoutMillis);
-        synchronized (this.requestProperties) {
-            for (Entry<String, String> property : this.requestProperties.entrySet()) {
+        if (this.defaultRequestProperties != null) {
+            for (Entry<String, String> property : this.defaultRequestProperties.getSnapshot().entrySet()) {
                 connection.setRequestProperty((String) property.getKey(), (String) property.getValue());
             }
+        }
+        for (Entry<String, String> property2 : this.requestProperties.getSnapshot().entrySet()) {
+            connection.setRequestProperty((String) property2.getKey(), (String) property2.getValue());
         }
         if (!(position == 0 && length == -1)) {
             String rangeRequest = "bytes=" + position + "-";

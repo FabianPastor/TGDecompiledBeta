@@ -31,12 +31,12 @@ public final class WavExtractor implements Extractor, SeekMap {
 
     public void init(ExtractorOutput output) {
         this.extractorOutput = output;
-        this.trackOutput = output.track(0);
+        this.trackOutput = output.track(0, 1);
         this.wavHeader = null;
         output.endTracks();
     }
 
-    public void seek(long position) {
+    public void seek(long position, long timeUs) {
         this.pendingBytes = 0;
     }
 

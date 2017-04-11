@@ -46,7 +46,7 @@ abstract class StreamReader {
             return -1;
         }
 
-        public long startSeek() {
+        public long startSeek(long timeUs) {
             return 0;
         }
 
@@ -81,12 +81,12 @@ abstract class StreamReader {
         this.currentGranule = 0;
     }
 
-    final void seek(long position) {
+    final void seek(long position, long timeUs) {
         this.oggPacket.reset();
         if (position == 0) {
             reset(!this.seekMapSet);
         } else if (this.state != 0) {
-            this.targetGranule = this.oggSeeker.startSeek();
+            this.targetGranule = this.oggSeeker.startSeek(timeUs);
             this.state = 2;
         }
     }
@@ -145,7 +145,7 @@ abstract class StreamReader {
             return 1;
         }
         if (position < -1) {
-            onSeekEnd((-position) - 2);
+            onSeekEnd(-(2 + position));
         }
         if (!this.seekMapSet) {
             this.extractorOutput.seekMap(this.oggSeeker.createSeekMap());

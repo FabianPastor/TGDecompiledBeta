@@ -1,17 +1,23 @@
 package org.telegram.messenger.exoplayer2;
 
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.media.AudioManager;
 import android.support.v4.view.PointerIconCompat;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.UUID;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class C {
+    public static final int AUDIO_SESSION_ID_UNSET = 0;
     public static final int BUFFER_FLAG_DECODE_ONLY = Integer.MIN_VALUE;
     public static final int BUFFER_FLAG_ENCRYPTED = NUM;
     public static final int BUFFER_FLAG_END_OF_STREAM = 4;
     public static final int BUFFER_FLAG_KEY_FRAME = 1;
     public static final int CHANNEL_OUT_7POINT1_SURROUND;
+    public static final UUID CLEARKEY_UUID = new UUID(1186680826959645954L, -5988876978535335093L);
     public static final int CRYPTO_MODE_AES_CBC = 2;
     public static final int CRYPTO_MODE_AES_CTR = 1;
     public static final int CRYPTO_MODE_UNENCRYPTED = 0;
@@ -49,6 +55,7 @@ public final class C {
     public static final long NANOS_PER_SECOND = NUM;
     public static final UUID PLAYREADY_UUID = new UUID(-7348484286925749626L, -6083546864340672619L);
     public static final int POSITION_UNSET = -1;
+    public static final int PRIORITY_PLAYBACK = 0;
     public static final int RESULT_BUFFER_READ = -4;
     public static final int RESULT_END_OF_INPUT = -1;
     public static final int RESULT_FORMAT_READ = -5;
@@ -65,6 +72,7 @@ public final class C {
     public static final int SELECTION_REASON_UNKNOWN = 0;
     public static final int STEREO_MODE_LEFT_RIGHT = 2;
     public static final int STEREO_MODE_MONO = 0;
+    public static final int STEREO_MODE_STEREO_MESH = 3;
     public static final int STEREO_MODE_TOP_BOTTOM = 1;
     public static final int STREAM_TYPE_ALARM = 4;
     public static final int STREAM_TYPE_DEFAULT = 3;
@@ -148,5 +156,10 @@ public final class C {
 
     public static long msToUs(long timeMs) {
         return timeMs == TIME_UNSET ? TIME_UNSET : 1000 * timeMs;
+    }
+
+    @TargetApi(21)
+    public static int generateAudioSessionIdV21(Context context) {
+        return ((AudioManager) context.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).generateAudioSessionId();
     }
 }

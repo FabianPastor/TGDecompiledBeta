@@ -87,7 +87,7 @@ public final class Ac3Extractor implements Extractor {
         output.seekMap(new Unseekable(C.TIME_UNSET));
     }
 
-    public void seek(long position) {
+    public void seek(long position, long timeUs) {
         this.startedPacket = false;
         this.reader.seek();
     }

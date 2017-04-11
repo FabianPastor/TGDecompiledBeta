@@ -12,13 +12,14 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.NalUnitUtil;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
-final class H262Reader implements ElementaryStreamReader {
+public final class H262Reader implements ElementaryStreamReader {
     private static final double[] FRAME_RATE_VALUES = new double[]{23.976023976023978d, 24.0d, 25.0d, 29.97002997002997d, 30.0d, 50.0d, 59.94005994005994d, 60.0d};
     private static final int START_EXTENSION = 181;
     private static final int START_GROUP = 184;
     private static final int START_PICTURE = 0;
     private static final int START_SEQUENCE_HEADER = 179;
     private final CsdBuffer csdBuffer = new CsdBuffer(128);
+    private String formatId;
     private boolean foundFirstFrameInGroup;
     private long frameDurationUs;
     private long framePosition;
@@ -83,7 +84,9 @@ final class H262Reader implements ElementaryStreamReader {
     }
 
     public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
-        this.output = extractorOutput.track(idGenerator.getNextId());
+        idGenerator.generateNewId();
+        this.formatId = idGenerator.getFormatId();
+        this.output = extractorOutput.track(idGenerator.getTrackId(), 2);
     }
 
     public void packetStarted(long pesTimeUs, boolean dataAlignmentIndicator) {
@@ -112,7 +115,7 @@ final class H262Reader implements ElementaryStreamReader {
                     this.csdBuffer.onData(dataArray, offset, startCodeOffset);
                 }
                 if (this.csdBuffer.onStartCode(startCodeValue, lengthToStartCode < 0 ? -lengthToStartCode : 0)) {
-                    Pair<Format, Long> result = parseCsdBuffer(this.csdBuffer);
+                    Pair<Format, Long> result = parseCsdBuffer(this.csdBuffer, this.formatId);
                     this.output.format((Format) result.first);
                     this.frameDurationUs = ((Long) result.second).longValue();
                     this.hasOutputFormat = true;
@@ -145,7 +148,7 @@ final class H262Reader implements ElementaryStreamReader {
     public void packetFinished() {
     }
 
-    private static Pair<Format, Long> parseCsdBuffer(CsdBuffer csdBuffer) {
+    private static Pair<Format, Long> parseCsdBuffer(CsdBuffer csdBuffer, String formatId) {
         byte[] csdData = Arrays.copyOf(csdBuffer.data, csdBuffer.length);
         int secondByte = csdData[5] & 255;
         int width = ((csdData[4] & 255) << 4) | (secondByte >> 4);
@@ -162,7 +165,7 @@ final class H262Reader implements ElementaryStreamReader {
                 pixelWidthHeightRatio = ((float) (height * 121)) / ((float) (width * 100));
                 break;
         }
-        Format format = Format.createVideoSampleFormat(null, MimeTypes.VIDEO_MPEG2, null, -1, -1, width, height, -1.0f, Collections.singletonList(csdData), -1, pixelWidthHeightRatio, null);
+        Format format = Format.createVideoSampleFormat(formatId, MimeTypes.VIDEO_MPEG2, null, -1, -1, width, height, -1.0f, Collections.singletonList(csdData), -1, pixelWidthHeightRatio, null);
         long frameDurationUs = 0;
         int frameRateCodeMinusOne = (csdData[7] & 15) - 1;
         if (frameRateCodeMinusOne >= 0 && frameRateCodeMinusOne < FRAME_RATE_VALUES.length) {

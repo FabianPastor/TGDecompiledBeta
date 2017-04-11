@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public final class SlidingPercentile {
+public class SlidingPercentile {
     private static final Comparator<Sample> INDEX_COMPARATOR = new Comparator<Sample>() {
         public int compare(Sample a, Sample b) {
             return a.index - b.index;

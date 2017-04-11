@@ -72,6 +72,10 @@ public interface ExoPlayer {
 
     int getRendererType(int i);
 
+    boolean isCurrentWindowDynamic();
+
+    boolean isCurrentWindowSeekable();
+
     boolean isLoading();
 
     void prepare(MediaSource mediaSource);

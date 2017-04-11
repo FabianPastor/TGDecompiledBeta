@@ -3,10 +3,10 @@ package org.telegram.messenger.exoplayer2.extractor.ts;
 import android.util.Log;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
-import org.telegram.messenger.exoplayer2.extractor.TimestampAdjuster;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
 import org.telegram.messenger.exoplayer2.util.ParsableBitArray;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
+import org.telegram.messenger.exoplayer2.util.TimestampAdjuster;
 
 public final class PesReader implements TsPayloadReader {
     private static final int HEADER_SIZE = 9;

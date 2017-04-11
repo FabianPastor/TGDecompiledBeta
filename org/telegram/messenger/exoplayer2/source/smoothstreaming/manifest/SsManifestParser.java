@@ -292,7 +292,7 @@ public class SsManifestParser implements Parser<SsManifest> {
             int bitrate = parseRequiredInt(parser, KEY_BITRATE);
             String sampleMimeType = fourCCToMimeType(parseRequiredString(parser, KEY_FOUR_CC));
             if (type == 2) {
-                this.format = Format.createVideoContainerFormat(id, MimeTypes.VIDEO_MP4, sampleMimeType, null, bitrate, parseRequiredInt(parser, KEY_MAX_WIDTH), parseRequiredInt(parser, KEY_MAX_HEIGHT), -1.0f, buildCodecSpecificData(parser.getAttributeValue(null, KEY_CODEC_PRIVATE_DATA)));
+                this.format = Format.createVideoContainerFormat(id, MimeTypes.VIDEO_MP4, sampleMimeType, null, bitrate, parseRequiredInt(parser, KEY_MAX_WIDTH), parseRequiredInt(parser, KEY_MAX_HEIGHT), -1.0f, buildCodecSpecificData(parser.getAttributeValue(null, KEY_CODEC_PRIVATE_DATA)), 0);
             } else if (type == 1) {
                 if (sampleMimeType == null) {
                     sampleMimeType = MimeTypes.AUDIO_AAC;
@@ -309,7 +309,7 @@ public class SsManifestParser implements Parser<SsManifest> {
                 String str2 = id;
                 this.format = Format.createTextContainerFormat(str2, MimeTypes.APPLICATION_MP4, sampleMimeType, null, bitrate, 0, (String) getNormalizedAttribute(KEY_LANGUAGE));
             } else {
-                this.format = Format.createContainerFormat(id, MimeTypes.APPLICATION_MP4, null, sampleMimeType, bitrate);
+                this.format = Format.createContainerFormat(id, MimeTypes.APPLICATION_MP4, sampleMimeType, null, bitrate, 0, null);
             }
         }
 

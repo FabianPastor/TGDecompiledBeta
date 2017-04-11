@@ -5,5 +5,5 @@ public interface ExtractorOutput {
 
     void seekMap(SeekMap seekMap);
 
-    TrackOutput track(int i);
+    TrackOutput track(int i, int i2);
 }

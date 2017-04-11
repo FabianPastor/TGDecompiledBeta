@@ -4,6 +4,7 @@ import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelectionArray;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.upstream.DefaultAllocator;
+import org.telegram.messenger.exoplayer2.util.PriorityTaskManager;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class DefaultLoadControl implements LoadControl {
@@ -20,6 +21,7 @@ public final class DefaultLoadControl implements LoadControl {
     private boolean isBuffering;
     private final long maxBufferUs;
     private final long minBufferUs;
+    private final PriorityTaskManager priorityTaskManager;
     private int targetBufferSize;
 
     public DefaultLoadControl() {
@@ -31,11 +33,16 @@ public final class DefaultLoadControl implements LoadControl {
     }
 
     public DefaultLoadControl(DefaultAllocator allocator, int minBufferMs, int maxBufferMs, long bufferForPlaybackMs, long bufferForPlaybackAfterRebufferMs) {
+        this(allocator, minBufferMs, maxBufferMs, bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs, null);
+    }
+
+    public DefaultLoadControl(DefaultAllocator allocator, int minBufferMs, int maxBufferMs, long bufferForPlaybackMs, long bufferForPlaybackAfterRebufferMs, PriorityTaskManager priorityTaskManager) {
         this.allocator = allocator;
         this.minBufferUs = ((long) minBufferMs) * 1000;
         this.maxBufferUs = ((long) maxBufferMs) * 1000;
         this.bufferForPlaybackUs = bufferForPlaybackMs * 1000;
         this.bufferForPlaybackAfterRebufferUs = bufferForPlaybackAfterRebufferMs * 1000;
+        this.priorityTaskManager = priorityTaskManager;
     }
 
     public void onPrepared() {
@@ -70,7 +77,7 @@ public final class DefaultLoadControl implements LoadControl {
     }
 
     public boolean shouldContinueLoading(long bufferedDurationUs) {
-        boolean z = false;
+        boolean z = true;
         int bufferTimeState = getBufferTimeState(bufferedDurationUs);
         boolean targetBufferSizeReached;
         if (this.allocator.getTotalBytesAllocated() >= this.targetBufferSize) {
@@ -78,10 +85,18 @@ public final class DefaultLoadControl implements LoadControl {
         } else {
             targetBufferSizeReached = false;
         }
-        if (bufferTimeState == 2 || (bufferTimeState == 1 && this.isBuffering && !targetBufferSizeReached)) {
-            z = true;
+        boolean wasBuffering = this.isBuffering;
+        if (!(bufferTimeState == 2 || (bufferTimeState == 1 && this.isBuffering && !targetBufferSizeReached))) {
+            z = false;
         }
         this.isBuffering = z;
+        if (!(this.priorityTaskManager == null || this.isBuffering == wasBuffering)) {
+            if (this.isBuffering) {
+                this.priorityTaskManager.add(0);
+            } else {
+                this.priorityTaskManager.remove(0);
+            }
+        }
         return this.isBuffering;
     }
 
@@ -94,6 +109,9 @@ public final class DefaultLoadControl implements LoadControl {
 
     private void reset(boolean resetAllocator) {
         this.targetBufferSize = 0;
+        if (this.priorityTaskManager != null && this.isBuffering) {
+            this.priorityTaskManager.remove(0);
+        }
         this.isBuffering = false;
         if (resetAllocator) {
             this.allocator.reset();

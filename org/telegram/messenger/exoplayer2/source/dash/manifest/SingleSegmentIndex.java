@@ -29,8 +29,8 @@ final class SingleSegmentIndex implements DashSegmentIndex {
         return 0;
     }
 
-    public int getLastSegmentNum(long periodDurationUs) {
-        return 0;
+    public int getSegmentCount(long periodDurationUs) {
+        return 1;
     }
 
     public boolean isExplicit() {

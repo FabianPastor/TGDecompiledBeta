@@ -4,6 +4,8 @@ import android.text.TextUtils;
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
@@ -53,8 +55,57 @@ public interface HttpDataSource extends DataSource {
         }
     }
 
+    public static final class RequestProperties {
+        private final Map<String, String> requestProperties = new HashMap();
+        private Map<String, String> requestPropertiesSnapshot;
+
+        public synchronized void set(String name, String value) {
+            this.requestPropertiesSnapshot = null;
+            this.requestProperties.put(name, value);
+        }
+
+        public synchronized void set(Map<String, String> properties) {
+            this.requestPropertiesSnapshot = null;
+            this.requestProperties.putAll(properties);
+        }
+
+        public synchronized void clearAndSet(Map<String, String> properties) {
+            this.requestPropertiesSnapshot = null;
+            this.requestProperties.clear();
+            this.requestProperties.putAll(properties);
+        }
+
+        public synchronized void remove(String name) {
+            this.requestPropertiesSnapshot = null;
+            this.requestProperties.remove(name);
+        }
+
+        public synchronized void clear() {
+            this.requestPropertiesSnapshot = null;
+            this.requestProperties.clear();
+        }
+
+        public synchronized Map<String, String> getSnapshot() {
+            if (this.requestPropertiesSnapshot == null) {
+                this.requestPropertiesSnapshot = Collections.unmodifiableMap(new HashMap(this.requestProperties));
+            }
+            return this.requestPropertiesSnapshot;
+        }
+    }
+
     public interface Factory extends org.telegram.messenger.exoplayer2.upstream.DataSource.Factory {
+        @Deprecated
+        void clearAllDefaultRequestProperties();
+
+        @Deprecated
+        void clearDefaultRequestProperty(String str);
+
         HttpDataSource createDataSource();
+
+        RequestProperties getDefaultRequestProperties();
+
+        @Deprecated
+        void setDefaultRequestProperty(String str, String str2);
     }
 
     public static final class InvalidContentTypeException extends HttpDataSourceException {
@@ -74,6 +125,35 @@ public interface HttpDataSource extends DataSource {
             super("Response code: " + responseCode, dataSpec, 1);
             this.responseCode = responseCode;
             this.headerFields = headerFields;
+        }
+    }
+
+    public static abstract class BaseFactory implements Factory {
+        private final RequestProperties defaultRequestProperties = new RequestProperties();
+
+        protected abstract HttpDataSource createDataSourceInternal(RequestProperties requestProperties);
+
+        public final HttpDataSource createDataSource() {
+            return createDataSourceInternal(this.defaultRequestProperties);
+        }
+
+        public final RequestProperties getDefaultRequestProperties() {
+            return this.defaultRequestProperties;
+        }
+
+        @Deprecated
+        public final void setDefaultRequestProperty(String name, String value) {
+            this.defaultRequestProperties.set(name, value);
+        }
+
+        @Deprecated
+        public final void clearDefaultRequestProperty(String name) {
+            this.defaultRequestProperties.remove(name);
+        }
+
+        @Deprecated
+        public final void clearAllDefaultRequestProperties() {
+            this.defaultRequestProperties.clear();
         }
     }
 

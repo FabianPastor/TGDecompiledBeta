@@ -10,10 +10,12 @@ public final class MimeTypes {
     public static final String APPLICATION_CAMERA_MOTION = "application/x-camera-motion";
     public static final String APPLICATION_CEA608 = "application/cea-608";
     public static final String APPLICATION_CEA708 = "application/cea-708";
+    public static final String APPLICATION_EMSG = "application/x-emsg";
     public static final String APPLICATION_ID3 = "application/id3";
     public static final String APPLICATION_M3U8 = "application/x-mpegURL";
     public static final String APPLICATION_MP4 = "application/mp4";
-    public static final String APPLICATION_MP4VTT = "application/x-mp4vtt";
+    public static final String APPLICATION_MP4CEA608 = "application/x-mp4-cea-608";
+    public static final String APPLICATION_MP4VTT = "application/x-mp4-vtt";
     public static final String APPLICATION_PGS = "application/pgs";
     public static final String APPLICATION_RAWCC = "application/x-rawcc";
     public static final String APPLICATION_SCTE35 = "application/x-scte35";
@@ -24,6 +26,8 @@ public final class MimeTypes {
     public static final String APPLICATION_WEBM = "application/webm";
     public static final String AUDIO_AAC = "audio/mp4a-latm";
     public static final String AUDIO_AC3 = "audio/ac3";
+    public static final String AUDIO_ALAC = "audio/alac";
+    public static final String AUDIO_ALAW = "audio/g711-alaw";
     public static final String AUDIO_AMR_NB = "audio/3gpp";
     public static final String AUDIO_AMR_WB = "audio/amr-wb";
     public static final String AUDIO_DTS = "audio/vnd.dts";
@@ -38,6 +42,7 @@ public final class MimeTypes {
     public static final String AUDIO_OPUS = "audio/opus";
     public static final String AUDIO_RAW = "audio/raw";
     public static final String AUDIO_TRUEHD = "audio/true-hd";
+    public static final String AUDIO_ULAW = "audio/g711-mlaw";
     public static final String AUDIO_VORBIS = "audio/vorbis";
     public static final String AUDIO_WEBM = "audio/webm";
     public static final String BASE_TYPE_APPLICATION = "application";
@@ -153,10 +158,10 @@ public final class MimeTypes {
         if (isVideo(mimeType)) {
             return 2;
         }
-        if (isText(mimeType) || APPLICATION_CEA608.equals(mimeType) || APPLICATION_CEA708.equals(mimeType) || APPLICATION_SUBRIP.equals(mimeType) || APPLICATION_TTML.equals(mimeType) || APPLICATION_TX3G.equals(mimeType) || APPLICATION_MP4VTT.equals(mimeType) || APPLICATION_RAWCC.equals(mimeType) || APPLICATION_VOBSUB.equals(mimeType) || APPLICATION_PGS.equals(mimeType)) {
+        if (isText(mimeType) || APPLICATION_CEA608.equals(mimeType) || APPLICATION_CEA708.equals(mimeType) || APPLICATION_MP4CEA608.equals(mimeType) || APPLICATION_SUBRIP.equals(mimeType) || APPLICATION_TTML.equals(mimeType) || APPLICATION_TX3G.equals(mimeType) || APPLICATION_MP4VTT.equals(mimeType) || APPLICATION_RAWCC.equals(mimeType) || APPLICATION_VOBSUB.equals(mimeType) || APPLICATION_PGS.equals(mimeType)) {
             return 3;
         }
-        if (APPLICATION_ID3.equals(mimeType)) {
+        if (APPLICATION_ID3.equals(mimeType) || APPLICATION_EMSG.equals(mimeType) || APPLICATION_SCTE35.equals(mimeType) || APPLICATION_CAMERA_MOTION.equals(mimeType)) {
             return 4;
         }
         return -1;

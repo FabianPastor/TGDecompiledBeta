@@ -8,11 +8,12 @@ import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
-final class MpegAudioReader implements ElementaryStreamReader {
+public final class MpegAudioReader implements ElementaryStreamReader {
     private static final int HEADER_SIZE = 4;
     private static final int STATE_FINDING_HEADER = 0;
     private static final int STATE_READING_FRAME = 2;
     private static final int STATE_READING_HEADER = 1;
+    private String formatId;
     private int frameBytesRead;
     private long frameDurationUs;
     private int frameSize;
@@ -44,7 +45,9 @@ final class MpegAudioReader implements ElementaryStreamReader {
     }
 
     public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
-        this.output = extractorOutput.track(idGenerator.getNextId());
+        idGenerator.generateNewId();
+        this.formatId = idGenerator.getFormatId();
+        this.output = extractorOutput.track(idGenerator.getTrackId(), 1);
     }
 
     public void packetStarted(long pesTimeUs, boolean dataAlignmentIndicator) {
@@ -109,7 +112,7 @@ final class MpegAudioReader implements ElementaryStreamReader {
                 this.frameSize = this.header.frameSize;
                 if (!this.hasOutputFormat) {
                     this.frameDurationUs = (C.MICROS_PER_SECOND * ((long) this.header.samplesPerFrame)) / ((long) this.header.sampleRate);
-                    this.output.format(Format.createAudioSampleFormat(null, this.header.mimeType, null, -1, 4096, this.header.channels, this.header.sampleRate, null, null, 0, this.language));
+                    this.output.format(Format.createAudioSampleFormat(this.formatId, this.header.mimeType, null, -1, 4096, this.header.channels, this.header.sampleRate, null, null, 0, this.language));
                     this.hasOutputFormat = true;
                 }
                 this.headerScratch.setPosition(0);

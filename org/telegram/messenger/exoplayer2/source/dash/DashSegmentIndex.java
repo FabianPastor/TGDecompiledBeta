@@ -9,7 +9,7 @@ public interface DashSegmentIndex {
 
     int getFirstSegmentNum();
 
-    int getLastSegmentNum(long j);
+    int getSegmentCount(long j);
 
     int getSegmentNum(long j, long j2);
 

@@ -129,11 +129,11 @@ class TelemetryContext {
     @SuppressLint({"NewApi", "Deprecation"})
     protected void updateScreenResolution() {
         Point size;
+        Display d;
         if (this.mContext != null) {
             int width;
             int height;
             WindowManager wm = (WindowManager) this.mContext.getSystemService("window");
-            Display d;
             if (VERSION.SDK_INT >= 17) {
                 size = new Point();
                 d = wm.getDefaultDisplay();

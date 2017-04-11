@@ -13,7 +13,7 @@ public interface Extractor {
 
     void release();
 
-    void seek(long j);
+    void seek(long j, long j2);
 
     boolean sniff(ExtractorInput extractorInput) throws IOException, InterruptedException;
 }

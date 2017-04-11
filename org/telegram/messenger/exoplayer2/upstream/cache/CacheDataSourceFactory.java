@@ -1,7 +1,6 @@
 package org.telegram.messenger.exoplayer2.upstream.cache;
 
 import org.telegram.messenger.exoplayer2.upstream.DataSink;
-import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSource.Factory;
 import org.telegram.messenger.exoplayer2.upstream.FileDataSourceFactory;
 import org.telegram.messenger.exoplayer2.upstream.cache.CacheDataSource.EventListener;
@@ -31,7 +30,7 @@ public final class CacheDataSourceFactory implements Factory {
         this.eventListener = eventListener;
     }
 
-    public DataSource createDataSource() {
-        return new CacheDataSource(this.cache, this.upstreamFactory.createDataSource(), this.cacheReadDataSourceFactory.createDataSource(), this.cacheWriteDataSinkFactory.createDataSink(), this.flags, this.eventListener);
+    public CacheDataSource createDataSource() {
+        return new CacheDataSource(this.cache, this.upstreamFactory.createDataSource(), this.cacheReadDataSourceFactory.createDataSource(), this.cacheWriteDataSinkFactory != null ? this.cacheWriteDataSinkFactory.createDataSink() : null, this.flags, this.eventListener);
     }
 }

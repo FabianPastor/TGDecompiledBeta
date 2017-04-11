@@ -24,7 +24,7 @@ import org.telegram.messenger.exoplayer2.source.dash.DefaultDashChunkSource;
 import org.telegram.messenger.exoplayer2.source.hls.HlsMediaSource;
 import org.telegram.messenger.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import org.telegram.messenger.exoplayer2.source.smoothstreaming.SsMediaSource;
-import org.telegram.messenger.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.exoplayer2.trackselection.DefaultTrackSelector;
 import org.telegram.messenger.exoplayer2.trackselection.MappingTrackSelector;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelectionArray;
@@ -47,7 +47,7 @@ public class VideoPlayer implements EventListener, VideoListener {
     private Factory mediaDataSourceFactory = new DefaultDataSourceFactory(ApplicationLoader.applicationContext, BANDWIDTH_METER, new DefaultHttpDataSourceFactory("Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)", BANDWIDTH_METER));
     private SimpleExoPlayer player;
     private TextureView textureView;
-    private MappingTrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER));
+    private MappingTrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(BANDWIDTH_METER));
 
     public interface RendererBuilder {
         void buildRenderers(VideoPlayer videoPlayer);

@@ -12,7 +12,7 @@ public interface Renderer extends ExoPlayerComponent {
 
     void disable();
 
-    void enable(Format[] formatArr, SampleStream sampleStream, long j, boolean z, long j2) throws ExoPlaybackException;
+    void enable(RendererConfiguration rendererConfiguration, Format[] formatArr, SampleStream sampleStream, long j, boolean z, long j2) throws ExoPlaybackException;
 
     RendererCapabilities getCapabilities();
 
@@ -26,6 +26,8 @@ public interface Renderer extends ExoPlayerComponent {
 
     boolean hasReadStreamToEnd();
 
+    boolean isCurrentStreamFinal();
+
     boolean isEnded();
 
     boolean isReady();
@@ -38,7 +40,7 @@ public interface Renderer extends ExoPlayerComponent {
 
     void resetPosition(long j) throws ExoPlaybackException;
 
-    void setCurrentStreamIsFinal();
+    void setCurrentStreamFinal();
 
     void setIndex(int i);
 

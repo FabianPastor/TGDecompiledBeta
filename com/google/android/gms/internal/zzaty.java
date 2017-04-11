@@ -70,7 +70,6 @@ public class zzaty extends zzauh {
         }
 
         public void run() {
-            OutputStream outputStream;
             Throwable e;
             Map map;
             int i;
@@ -80,6 +79,7 @@ public class zzaty extends zzauh {
             this.zzbsU.zzJX();
             int i2 = 0;
             HttpURLConnection zzc;
+            OutputStream outputStream;
             try {
                 zzc = this.zzbsU.zzc(this.zzIe);
                 try {

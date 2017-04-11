@@ -19,7 +19,6 @@ final class DefaultOggSeeker implements OggSeeker {
     private final long endPosition;
     private final OggPageHeader pageHeader = new OggPageHeader();
     private long positionBeforeSeekToEnd;
-    private volatile long queriedGranule;
     private long start;
     private long startGranule;
     private final long startPosition;
@@ -38,11 +37,9 @@ final class DefaultOggSeeker implements OggSeeker {
 
         public long getPosition(long timeUs) {
             if (timeUs == 0) {
-                DefaultOggSeeker.this.queriedGranule = 0;
                 return DefaultOggSeeker.this.startPosition;
             }
-            DefaultOggSeeker.this.queriedGranule = DefaultOggSeeker.this.streamReader.convertTimeToGranule(timeUs);
-            return DefaultOggSeeker.this.getEstimatedPosition(DefaultOggSeeker.this.startPosition, DefaultOggSeeker.this.queriedGranule, 30000);
+            return DefaultOggSeeker.this.getEstimatedPosition(DefaultOggSeeker.this.startPosition, DefaultOggSeeker.this.streamReader.convertTimeToGranule(timeUs), 30000);
         }
 
         public long getDurationUs() {
@@ -100,10 +97,10 @@ final class DefaultOggSeeker implements OggSeeker {
         return this.positionBeforeSeekToEnd;
     }
 
-    public long startSeek() {
+    public long startSeek(long timeUs) {
         boolean z = this.state == 3 || this.state == 2;
         Assertions.checkArgument(z);
-        this.targetGranule = this.queriedGranule;
+        this.targetGranule = timeUs == 0 ? 0 : this.streamReader.convertTimeToGranule(timeUs);
         this.state = 2;
         resetSeeking();
         return this.targetGranule;

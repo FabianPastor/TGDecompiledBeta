@@ -68,7 +68,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
-import org.telegram.messenger.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.query.DraftQuery;
 import org.telegram.messenger.query.MessagesQuery;
 import org.telegram.messenger.query.StickersQuery;
@@ -290,11 +290,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (this.scale <= 0.5f) {
                 sc = this.scale / 0.5f;
                 alpha = sc;
-            } else if (this.scale <= AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION) {
+            } else if (this.scale <= AdaptiveTrackSelection.DEFAULT_BANDWIDTH_FRACTION) {
                 sc = 1.0f - (((this.scale - 0.5f) / 0.25f) * 0.1f);
                 alpha = 1.0f;
             } else {
-                sc = 0.9f + (((this.scale - AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION) / 0.25f) * 0.1f);
+                sc = 0.9f + (((this.scale - AdaptiveTrackSelection.DEFAULT_BANDWIDTH_FRACTION) / 0.25f) * 0.1f);
                 alpha = 1.0f;
             }
             long dt = System.currentTimeMillis() - this.lastUpdateTime;
@@ -418,7 +418,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     public ChatActivityEnterView(Activity context, SizeNotifierFrameLayout parent, ChatActivity fragment, boolean isChat) {
         super(context);
-        this.hasRecordVideo = VERSION.SDK_INT >= 16;
+        this.hasRecordVideo = VERSION.SDK_INT >= 18;
         this.currentPopupContentType = -1;
         this.isPaused = true;
         this.startedDraggingX = -1.0f;

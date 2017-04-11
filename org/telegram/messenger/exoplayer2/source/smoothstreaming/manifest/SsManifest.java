@@ -31,8 +31,10 @@ public class SsManifest {
     }
 
     public static class StreamElement {
-        private static final String URL_PLACEHOLDER_BITRATE = "{bitrate}";
-        private static final String URL_PLACEHOLDER_START_TIME = "{start time}";
+        private static final String URL_PLACEHOLDER_BITRATE_1 = "{bitrate}";
+        private static final String URL_PLACEHOLDER_BITRATE_2 = "{Bitrate}";
+        private static final String URL_PLACEHOLDER_START_TIME_1 = "{start time}";
+        private static final String URL_PLACEHOLDER_START_TIME_2 = "{start_time}";
         private final String baseUri;
         public final int chunkCount;
         private final List<Long> chunkStartTimes;
@@ -100,7 +102,9 @@ public class SsManifest {
                 z2 = false;
             }
             Assertions.checkState(z2);
-            return UriUtil.resolveToUri(this.baseUri, this.chunkTemplate.replace(URL_PLACEHOLDER_BITRATE, Integer.toString(this.formats[track].bitrate)).replace(URL_PLACEHOLDER_START_TIME, ((Long) this.chunkStartTimes.get(chunkIndex)).toString()));
+            String bitrateString = Integer.toString(this.formats[track].bitrate);
+            String startTimeString = ((Long) this.chunkStartTimes.get(chunkIndex)).toString();
+            return UriUtil.resolveToUri(this.baseUri, this.chunkTemplate.replace(URL_PLACEHOLDER_BITRATE_1, bitrateString).replace(URL_PLACEHOLDER_BITRATE_2, bitrateString).replace(URL_PLACEHOLDER_START_TIME_1, startTimeString).replace(URL_PLACEHOLDER_START_TIME_2, startTimeString));
         }
     }
 

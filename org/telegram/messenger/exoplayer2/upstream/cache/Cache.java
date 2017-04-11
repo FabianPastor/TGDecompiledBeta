@@ -31,6 +31,8 @@ public interface Cache {
 
     long getCacheSpace();
 
+    long getCachedBytes(String str, long j, long j2);
+
     NavigableSet<CacheSpan> getCachedSpans(String str);
 
     long getContentLength(String str);

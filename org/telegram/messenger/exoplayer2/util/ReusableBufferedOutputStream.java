@@ -38,6 +38,7 @@ public final class ReusableBufferedOutputStream extends BufferedOutputStream {
     public void reset(OutputStream out) {
         Assertions.checkState(this.closed);
         this.out = out;
+        this.count = 0;
         this.closed = false;
     }
 }

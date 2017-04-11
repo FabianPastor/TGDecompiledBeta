@@ -9,7 +9,13 @@ public interface MediaPeriod extends SequenceableLoader {
         void onPrepared(MediaPeriod mediaPeriod);
     }
 
+    boolean continueLoading(long j);
+
+    void discardBuffer(long j);
+
     long getBufferedPositionUs();
+
+    long getNextLoadPositionUs();
 
     TrackGroupArray getTrackGroups();
 

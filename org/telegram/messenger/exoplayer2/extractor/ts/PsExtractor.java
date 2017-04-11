@@ -10,10 +10,10 @@ import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorsFactory;
 import org.telegram.messenger.exoplayer2.extractor.PositionHolder;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap.Unseekable;
-import org.telegram.messenger.exoplayer2.extractor.TimestampAdjuster;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
 import org.telegram.messenger.exoplayer2.util.ParsableBitArray;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
+import org.telegram.messenger.exoplayer2.util.TimestampAdjuster;
 
 public final class PsExtractor implements Extractor {
     public static final int AUDIO_STREAM = 192;
@@ -137,7 +137,7 @@ public final class PsExtractor implements Extractor {
         output.seekMap(new Unseekable(C.TIME_UNSET));
     }
 
-    public void seek(long position) {
+    public void seek(long position, long timeUs) {
         this.timestampAdjuster.reset();
         for (int i = 0; i < this.psPayloadReaders.size(); i++) {
             ((PesReader) this.psPayloadReaders.valueAt(i)).seek();

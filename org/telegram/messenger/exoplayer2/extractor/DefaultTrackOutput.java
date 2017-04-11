@@ -28,7 +28,9 @@ public final class DefaultTrackOutput implements TrackOutput {
     private final InfoQueue infoQueue = new InfoQueue();
     private Allocation lastAllocation;
     private int lastAllocationOffset = this.allocationLength;
+    private Format lastUnadjustedFormat;
     private boolean needKeyframe = true;
+    private boolean pendingFormatAdjustment;
     private boolean pendingSplice;
     private long sampleOffsetUs;
     private final ParsableByteArray scratch = new ParsableByteArray(32);
@@ -131,18 +133,23 @@ public final class DefaultTrackOutput implements TrackOutput {
             return Math.max(this.largestDequeuedTimestampUs, this.largestQueuedTimestampUs);
         }
 
-        public synchronized int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, Format downstreamFormat, BufferExtrasHolder extrasHolder) {
-            int i = -5;
+        public synchronized int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired, boolean loadingFinished, Format downstreamFormat, BufferExtrasHolder extrasHolder) {
+            int i = -4;
             synchronized (this) {
                 if (this.queueSize == 0) {
-                    if (this.upstreamFormat == null || this.upstreamFormat == downstreamFormat) {
+                    if (loadingFinished) {
+                        buffer.setFlags(4);
+                    } else if (this.upstreamFormat == null || (!formatRequired && this.upstreamFormat == downstreamFormat)) {
                         i = -3;
                     } else {
                         formatHolder.format = this.upstreamFormat;
+                        i = -5;
                     }
-                } else if (this.formats[this.relativeReadIndex] != downstreamFormat) {
+                } else if (formatRequired || this.formats[this.relativeReadIndex] != downstreamFormat) {
                     formatHolder.format = this.formats[this.relativeReadIndex];
+                    i = -5;
                 } else {
+                    long j;
                     buffer.timeUs = this.timesUs[this.relativeReadIndex];
                     buffer.setFlags(this.flags[this.relativeReadIndex]);
                     extrasHolder.size = this.sizes[this.relativeReadIndex];
@@ -155,18 +162,22 @@ public final class DefaultTrackOutput implements TrackOutput {
                     if (this.relativeReadIndex == this.capacity) {
                         this.relativeReadIndex = 0;
                     }
-                    extrasHolder.nextOffset = this.queueSize > 0 ? this.offsets[this.relativeReadIndex] : extrasHolder.offset + ((long) extrasHolder.size);
-                    i = -4;
+                    if (this.queueSize > 0) {
+                        j = this.offsets[this.relativeReadIndex];
+                    } else {
+                        j = extrasHolder.offset + ((long) extrasHolder.size);
+                    }
+                    extrasHolder.nextOffset = j;
                 }
             }
             return i;
         }
 
-        public synchronized long skipToKeyframeBefore(long timeUs) {
+        public synchronized long skipToKeyframeBefore(long timeUs, boolean allowTimeBeyondBuffer) {
             long j = -1;
             synchronized (this) {
                 if (this.queueSize != 0 && timeUs >= this.timesUs[this.relativeReadIndex]) {
-                    if (timeUs <= this.timesUs[(this.relativeWriteIndex == 0 ? this.capacity : this.relativeWriteIndex) - 1]) {
+                    if (timeUs <= this.largestQueuedTimestampUs || allowTimeBeyondBuffer) {
                         int sampleCount = 0;
                         int sampleCountToKeyframe = -1;
                         int searchIndex = this.relativeReadIndex;
@@ -366,7 +377,11 @@ public final class DefaultTrackOutput implements TrackOutput {
     }
 
     public boolean skipToKeyframeBefore(long timeUs) {
-        long nextOffset = this.infoQueue.skipToKeyframeBefore(timeUs);
+        return skipToKeyframeBefore(timeUs, false);
+    }
+
+    public boolean skipToKeyframeBefore(long timeUs, boolean allowTimeBeyondBuffer) {
+        long nextOffset = this.infoQueue.skipToKeyframeBefore(timeUs, allowTimeBeyondBuffer);
         if (nextOffset == -1) {
             return false;
         }
@@ -374,28 +389,26 @@ public final class DefaultTrackOutput implements TrackOutput {
         return true;
     }
 
-    public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean loadingFinished, long decodeOnlyUntilUs) {
-        switch (this.infoQueue.readData(formatHolder, buffer, this.downstreamFormat, this.extrasHolder)) {
+    public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired, boolean loadingFinished, long decodeOnlyUntilUs) {
+        switch (this.infoQueue.readData(formatHolder, buffer, formatRequired, loadingFinished, this.downstreamFormat, this.extrasHolder)) {
             case C.RESULT_FORMAT_READ /*-5*/:
                 this.downstreamFormat = formatHolder.format;
                 return -5;
             case C.RESULT_BUFFER_READ /*-4*/:
-                if (buffer.timeUs < decodeOnlyUntilUs) {
-                    buffer.addFlag(Integer.MIN_VALUE);
+                if (!buffer.isEndOfStream()) {
+                    if (buffer.timeUs < decodeOnlyUntilUs) {
+                        buffer.addFlag(Integer.MIN_VALUE);
+                    }
+                    if (buffer.isEncrypted()) {
+                        readEncryptionData(buffer, this.extrasHolder);
+                    }
+                    buffer.ensureSpaceForWrite(this.extrasHolder.size);
+                    readData(this.extrasHolder.offset, buffer.data, this.extrasHolder.size);
+                    dropDownstreamTo(this.extrasHolder.nextOffset);
                 }
-                if (buffer.isEncrypted()) {
-                    readEncryptionData(buffer, this.extrasHolder);
-                }
-                buffer.ensureSpaceForWrite(this.extrasHolder.size);
-                readData(this.extrasHolder.offset, buffer.data, this.extrasHolder.size);
-                dropDownstreamTo(this.extrasHolder.nextOffset);
                 return -4;
             case -3:
-                if (!loadingFinished) {
-                    return -3;
-                }
-                buffer.setFlags(4);
-                return -4;
+                return -3;
             default:
                 throw new IllegalStateException();
         }
@@ -489,14 +502,18 @@ public final class DefaultTrackOutput implements TrackOutput {
         this.upstreamFormatChangeListener = listener;
     }
 
-    public void formatWithOffset(Format format, long sampleOffsetUs) {
-        this.sampleOffsetUs = sampleOffsetUs;
-        format(format);
+    public void setSampleOffsetUs(long sampleOffsetUs) {
+        if (this.sampleOffsetUs != sampleOffsetUs) {
+            this.sampleOffsetUs = sampleOffsetUs;
+            this.pendingFormatAdjustment = true;
+        }
     }
 
     public void format(Format format) {
         Format adjustedFormat = getAdjustedSampleFormat(format, this.sampleOffsetUs);
         boolean formatChanged = this.infoQueue.format(adjustedFormat);
+        this.lastUnadjustedFormat = format;
+        this.pendingFormatAdjustment = false;
         if (this.upstreamFormatChangeListener != null && formatChanged) {
             this.upstreamFormatChangeListener.onUpstreamFormatChanged(adjustedFormat);
         }
@@ -547,6 +564,9 @@ public final class DefaultTrackOutput implements TrackOutput {
     }
 
     public void sampleMetadata(long timeUs, int flags, int size, int offset, byte[] encryptionKey) {
+        if (this.pendingFormatAdjustment) {
+            format(this.lastUnadjustedFormat);
+        }
         if (startWriteOperation()) {
             try {
                 if (this.pendingSplice) {

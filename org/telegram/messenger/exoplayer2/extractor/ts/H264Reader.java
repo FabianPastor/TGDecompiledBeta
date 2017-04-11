@@ -14,22 +14,23 @@ import org.telegram.messenger.exoplayer2.util.NalUnitUtil.SpsData;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.ParsableNalUnitBitArray;
 
-final class H264Reader implements ElementaryStreamReader {
+public final class H264Reader implements ElementaryStreamReader {
     private static final int NAL_UNIT_TYPE_PPS = 8;
     private static final int NAL_UNIT_TYPE_SEI = 6;
     private static final int NAL_UNIT_TYPE_SPS = 7;
     private final boolean allowNonIdrKeyframes;
     private final boolean detectAccessUnits;
+    private String formatId;
     private boolean hasOutputFormat;
     private TrackOutput output;
     private long pesTimeUs;
-    private final NalUnitTargetBuffer pps;
+    private final NalUnitTargetBuffer pps = new NalUnitTargetBuffer(8, 128);
     private final boolean[] prefixFlags = new boolean[3];
     private SampleReader sampleReader;
-    private final NalUnitTargetBuffer sei;
-    private SeiReader seiReader;
-    private final ParsableByteArray seiWrapper;
-    private final NalUnitTargetBuffer sps;
+    private final NalUnitTargetBuffer sei = new NalUnitTargetBuffer(6, 128);
+    private final SeiReader seiReader;
+    private final ParsableByteArray seiWrapper = new ParsableByteArray();
+    private final NalUnitTargetBuffer sps = new NalUnitTargetBuffer(7, 128);
     private long totalBytesWritten;
 
     private static final class SampleReader {
@@ -308,13 +309,10 @@ final class H264Reader implements ElementaryStreamReader {
         }
     }
 
-    public H264Reader(boolean allowNonIdrKeyframes, boolean detectAccessUnits) {
+    public H264Reader(SeiReader seiReader, boolean allowNonIdrKeyframes, boolean detectAccessUnits) {
+        this.seiReader = seiReader;
         this.allowNonIdrKeyframes = allowNonIdrKeyframes;
         this.detectAccessUnits = detectAccessUnits;
-        this.sps = new NalUnitTargetBuffer(7, 128);
-        this.pps = new NalUnitTargetBuffer(8, 128);
-        this.sei = new NalUnitTargetBuffer(6, 128);
-        this.seiWrapper = new ParsableByteArray();
     }
 
     public void seek() {
@@ -327,9 +325,11 @@ final class H264Reader implements ElementaryStreamReader {
     }
 
     public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
-        this.output = extractorOutput.track(idGenerator.getNextId());
+        idGenerator.generateNewId();
+        this.formatId = idGenerator.getFormatId();
+        this.output = extractorOutput.track(idGenerator.getTrackId(), 2);
         this.sampleReader = new SampleReader(this.output, this.allowNonIdrKeyframes, this.detectAccessUnits);
-        this.seiReader = new SeiReader(extractorOutput.track(idGenerator.getNextId()));
+        this.seiReader.createTracks(extractorOutput, idGenerator);
     }
 
     public void packetStarted(long pesTimeUs, boolean dataAlignmentIndicator) {
@@ -400,7 +400,7 @@ final class H264Reader implements ElementaryStreamReader {
                 initializationData.add(Arrays.copyOf(this.pps.nalData, this.pps.nalLength));
                 SpsData spsData = NalUnitUtil.parseSpsNalUnit(this.sps.nalData, 3, this.sps.nalLength);
                 PpsData ppsData = NalUnitUtil.parsePpsNalUnit(this.pps.nalData, 3, this.pps.nalLength);
-                this.output.format(Format.createVideoSampleFormat(null, "video/avc", null, -1, -1, spsData.width, spsData.height, -1.0f, initializationData, -1, spsData.pixelWidthAspectRatio, null));
+                this.output.format(Format.createVideoSampleFormat(this.formatId, "video/avc", null, -1, -1, spsData.width, spsData.height, -1.0f, initializationData, -1, spsData.pixelWidthAspectRatio, null));
                 this.hasOutputFormat = true;
                 this.sampleReader.putSps(spsData);
                 this.sampleReader.putPps(ppsData);

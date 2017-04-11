@@ -67,7 +67,7 @@ public final class Loader implements LoaderErrorThrower {
             if (delayMillis > 0) {
                 sendEmptyMessageDelayed(0, delayMillis);
             } else {
-                submitToExecutor();
+                execute();
             }
         }
 
@@ -131,7 +131,7 @@ public final class Loader implements LoaderErrorThrower {
         public void handleMessage(Message msg) {
             if (!this.released) {
                 if (msg.what == 0) {
-                    submitToExecutor();
+                    execute();
                 } else if (msg.what == 4) {
                     throw ((Error) msg.obj);
                 } else {
@@ -175,9 +175,9 @@ public final class Loader implements LoaderErrorThrower {
             }
         }
 
-        private void submitToExecutor() {
+        private void execute() {
             this.currentError = null;
-            Loader.this.downloadExecutorService.submit(Loader.this.currentTask);
+            Loader.this.downloadExecutorService.execute(Loader.this.currentTask);
         }
 
         private void finish() {
@@ -232,7 +232,7 @@ public final class Loader implements LoaderErrorThrower {
             this.currentTask.cancel(true);
         }
         if (postLoadAction != null) {
-            this.downloadExecutorService.submit(postLoadAction);
+            this.downloadExecutorService.execute(postLoadAction);
         }
         this.downloadExecutorService.shutdown();
     }

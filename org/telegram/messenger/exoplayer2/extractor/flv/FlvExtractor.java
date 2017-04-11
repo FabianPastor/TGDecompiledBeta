@@ -69,7 +69,7 @@ public final class FlvExtractor implements Extractor, SeekMap {
         this.extractorOutput = output;
     }
 
-    public void seek(long position) {
+    public void seek(long position, long timeUs) {
         this.parserState = 1;
         this.bytesToNextTagHeader = 0;
     }
@@ -124,10 +124,10 @@ public final class FlvExtractor implements Extractor, SeekMap {
             hasVideo = false;
         }
         if (hasAudio && this.audioReader == null) {
-            this.audioReader = new AudioTagPayloadReader(this.extractorOutput.track(8));
+            this.audioReader = new AudioTagPayloadReader(this.extractorOutput.track(8, 1));
         }
         if (hasVideo && this.videoReader == null) {
-            this.videoReader = new VideoTagPayloadReader(this.extractorOutput.track(9));
+            this.videoReader = new VideoTagPayloadReader(this.extractorOutput.track(9, 2));
         }
         if (this.metadataReader == null) {
             this.metadataReader = new ScriptTagPayloadReader(null);

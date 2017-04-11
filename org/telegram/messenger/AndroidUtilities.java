@@ -124,6 +124,7 @@ public class AndroidUtilities {
     private static Field mStableInsetsField;
     public static Integer photoSize = null;
     private static int prevOrientation = -10;
+    public static int roundMessageSize;
     private static Paint roundPaint;
     private static final Object smsLock = new Object();
     public static int statusBarHeight = 0;
@@ -391,8 +392,8 @@ Error: java.util.NoSuchElementException
         if (pathString == null) {
             return false;
         }
+        String path;
         while (true) {
-            String path;
             String newPath = Utilities.readlink(pathString);
             if (newPath != null && !newPath.equals(pathString)) {
                 pathString = newPath;
@@ -640,6 +641,13 @@ Error: java.util.NoSuchElementException
                 newSize = (int) Math.ceil((double) (((float) configuration.screenHeightDp) * density));
                 if (Math.abs(displaySize.y - newSize) > 3) {
                     displaySize.y = newSize;
+                }
+            }
+            if (roundMessageSize == 0) {
+                if (isTablet()) {
+                    roundMessageSize = (int) (((float) getMinTabletSide()) * 0.5f);
+                } else {
+                    roundMessageSize = (int) (((float) Math.min(displaySize.x, displaySize.y)) * 0.5f);
                 }
             }
             FileLog.e("display size = " + displaySize.x + " " + displaySize.y + " " + displayMetrics.xdpi + "x" + displayMetrics.ydpi);

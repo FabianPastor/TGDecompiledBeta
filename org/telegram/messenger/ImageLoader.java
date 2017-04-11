@@ -1719,6 +1719,7 @@ public class ImageLoader {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static Bitmap loadBitmap(String path, Uri uri, float maxWidth, float maxHeight, boolean useMaxScale) {
         Throwable e;
+        float scaleFactor;
         Bitmap b;
         Bitmap newBitmap;
         Options bmOptions = new Options();
@@ -1750,12 +1751,23 @@ public class ImageLoader {
         }
         float photoW = (float) bmOptions.outWidth;
         float photoH = (float) bmOptions.outHeight;
-        float scaleFactor = useMaxScale ? Math.max(photoW / maxWidth, photoH / maxHeight) : Math.min(photoW / maxWidth, photoH / maxHeight);
+        if (useMaxScale) {
+            scaleFactor = Math.max(photoW / maxWidth, photoH / maxHeight);
+        } else {
+            scaleFactor = Math.min(photoW / maxWidth, photoH / maxHeight);
+        }
         if (scaleFactor < 1.0f) {
             scaleFactor = 1.0f;
         }
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = (int) scaleFactor;
+        if (bmOptions.inSampleSize % 2 != 0) {
+            int sample = 1;
+            while (sample * 2 < bmOptions.inSampleSize) {
+                sample *= 2;
+            }
+            bmOptions.inSampleSize = sample;
+        }
         bmOptions.inPurgeable = VERSION.SDK_INT < 21;
         String exifPath = null;
         if (path != null) {

@@ -55,7 +55,7 @@ public class DefaultSsChunkSource implements SsChunkSource {
         for (int i = 0; i < this.extractorWrappers.length; i++) {
             int manifestTrackIndex = trackSelection.getIndexInTrackGroup(i);
             Format format = streamElement.formats[manifestTrackIndex];
-            this.extractorWrappers[i] = new ChunkExtractorWrapper(new FragmentedMp4Extractor(3, new Track(manifestTrackIndex, streamElement.type, streamElement.timescale, C.TIME_UNSET, manifest.durationUs, format, 0, trackEncryptionBoxes, streamElement.type == 2 ? 4 : 0, null, null), null), format, false, false);
+            this.extractorWrappers[i] = new ChunkExtractorWrapper(new FragmentedMp4Extractor(3, null, new Track(manifestTrackIndex, streamElement.type, streamElement.timescale, C.TIME_UNSET, manifest.durationUs, format, 0, trackEncryptionBoxes, streamElement.type == 2 ? 4 : 0, null, null)), format);
         }
     }
 
@@ -140,6 +140,6 @@ public class DefaultSsChunkSource implements SsChunkSource {
     }
 
     private static MediaChunk newMediaChunk(Format format, DataSource dataSource, Uri uri, String cacheKey, int chunkIndex, long chunkStartTimeUs, long chunkEndTimeUs, int trackSelectionReason, Object trackSelectionData, ChunkExtractorWrapper extractorWrapper) {
-        return new ContainerMediaChunk(dataSource, new DataSpec(uri, 0, -1, cacheKey), format, trackSelectionReason, trackSelectionData, chunkStartTimeUs, chunkEndTimeUs, chunkIndex, 1, chunkStartTimeUs, extractorWrapper, format);
+        return new ContainerMediaChunk(dataSource, new DataSpec(uri, 0, -1, cacheKey), format, trackSelectionReason, trackSelectionData, chunkStartTimeUs, chunkEndTimeUs, chunkIndex, 1, chunkStartTimeUs, extractorWrapper);
     }
 }

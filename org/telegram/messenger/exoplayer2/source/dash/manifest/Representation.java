@@ -1,6 +1,8 @@
 package org.telegram.messenger.exoplayer2.source.dash.manifest;
 
 import android.net.Uri;
+import java.util.Collections;
+import java.util.List;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.source.dash.DashSegmentIndex;
 import org.telegram.messenger.exoplayer2.source.dash.manifest.SegmentBase.MultiSegmentBase;
@@ -11,6 +13,7 @@ public abstract class Representation {
     public final String baseUrl;
     public final String contentId;
     public final Format format;
+    public final List<SchemeValuePair> inbandEventStreams;
     private final RangedUri initializationUri;
     public final long presentationTimeOffsetUs;
     public final long revisionId;
@@ -18,8 +21,8 @@ public abstract class Representation {
     public static class MultiSegmentRepresentation extends Representation implements DashSegmentIndex {
         private final MultiSegmentBase segmentBase;
 
-        public MultiSegmentRepresentation(String contentId, long revisionId, Format format, String baseUrl, MultiSegmentBase segmentBase) {
-            super(contentId, revisionId, format, baseUrl, segmentBase);
+        public MultiSegmentRepresentation(String contentId, long revisionId, Format format, String baseUrl, MultiSegmentBase segmentBase, List<SchemeValuePair> inbandEventStreams) {
+            super(contentId, revisionId, format, baseUrl, segmentBase, inbandEventStreams);
             this.segmentBase = segmentBase;
         }
 
@@ -55,8 +58,8 @@ public abstract class Representation {
             return this.segmentBase.getFirstSegmentNum();
         }
 
-        public int getLastSegmentNum(long periodDurationUs) {
-            return this.segmentBase.getLastSegmentNum(periodDurationUs);
+        public int getSegmentCount(long periodDurationUs) {
+            return this.segmentBase.getSegmentCount(periodDurationUs);
         }
 
         public boolean isExplicit() {
@@ -71,13 +74,13 @@ public abstract class Representation {
         private final SingleSegmentIndex segmentIndex;
         public final Uri uri;
 
-        public static SingleSegmentRepresentation newInstance(String contentId, long revisionId, Format format, String uri, long initializationStart, long initializationEnd, long indexStart, long indexEnd, String customCacheKey, long contentLength) {
+        public static SingleSegmentRepresentation newInstance(String contentId, long revisionId, Format format, String uri, long initializationStart, long initializationEnd, long indexStart, long indexEnd, List<SchemeValuePair> inbandEventStreams, String customCacheKey, long contentLength) {
             long j = 1 + (indexEnd - indexStart);
-            return new SingleSegmentRepresentation(contentId, revisionId, format, uri, new SingleSegmentBase(new RangedUri(null, initializationStart, (initializationEnd - initializationStart) + 1), 1, 0, indexStart, j), customCacheKey, contentLength);
+            return new SingleSegmentRepresentation(contentId, revisionId, format, uri, new SingleSegmentBase(new RangedUri(null, initializationStart, (initializationEnd - initializationStart) + 1), 1, 0, indexStart, j), inbandEventStreams, customCacheKey, contentLength);
         }
 
-        public SingleSegmentRepresentation(String contentId, long revisionId, Format format, String baseUrl, SingleSegmentBase segmentBase, String customCacheKey, long contentLength) {
-            super(contentId, revisionId, format, baseUrl, segmentBase);
+        public SingleSegmentRepresentation(String contentId, long revisionId, Format format, String baseUrl, SingleSegmentBase segmentBase, List<SchemeValuePair> inbandEventStreams, String customCacheKey, long contentLength) {
+            super(contentId, revisionId, format, baseUrl, segmentBase, inbandEventStreams);
             this.uri = Uri.parse(baseUrl);
             this.indexUri = segmentBase.getIndex();
             if (customCacheKey == null) {
@@ -111,21 +114,32 @@ public abstract class Representation {
         return newInstance(contentId, revisionId, format, baseUrl, segmentBase, null);
     }
 
-    public static Representation newInstance(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase, String customCacheKey) {
+    public static Representation newInstance(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase, List<SchemeValuePair> inbandEventStreams) {
+        return newInstance(contentId, revisionId, format, baseUrl, segmentBase, inbandEventStreams, null);
+    }
+
+    public static Representation newInstance(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase, List<SchemeValuePair> inbandEventStreams, String customCacheKey) {
         if (segmentBase instanceof SingleSegmentBase) {
-            return new SingleSegmentRepresentation(contentId, revisionId, format, baseUrl, (SingleSegmentBase) segmentBase, customCacheKey, -1);
+            return new SingleSegmentRepresentation(contentId, revisionId, format, baseUrl, (SingleSegmentBase) segmentBase, inbandEventStreams, customCacheKey, -1);
         } else if (segmentBase instanceof MultiSegmentBase) {
-            return new MultiSegmentRepresentation(contentId, revisionId, format, baseUrl, (MultiSegmentBase) segmentBase);
+            return new MultiSegmentRepresentation(contentId, revisionId, format, baseUrl, (MultiSegmentBase) segmentBase, inbandEventStreams);
         } else {
             throw new IllegalArgumentException("segmentBase must be of type SingleSegmentBase or MultiSegmentBase");
         }
     }
 
-    private Representation(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase) {
+    private Representation(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase, List<SchemeValuePair> inbandEventStreams) {
+        List emptyList;
         this.contentId = contentId;
         this.revisionId = revisionId;
         this.format = format;
         this.baseUrl = baseUrl;
+        if (inbandEventStreams == null) {
+            emptyList = Collections.emptyList();
+        } else {
+            emptyList = Collections.unmodifiableList(inbandEventStreams);
+        }
+        this.inbandEventStreams = emptyList;
         this.initializationUri = segmentBase.getInitialization(this);
         this.presentationTimeOffsetUs = segmentBase.getPresentationTimeOffsetUs();
     }

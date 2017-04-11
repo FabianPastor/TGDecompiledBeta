@@ -49,6 +49,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     private boolean codecNeedsAdaptationWorkaroundBuffer;
     private boolean codecNeedsDiscardToSpsWorkaround;
     private boolean codecNeedsEosFlushWorkaround;
+    private boolean codecNeedsEosOutputExceptionWorkaround;
     private boolean codecNeedsEosPropagationWorkaround;
     private boolean codecNeedsFlushWorkaround;
     private boolean codecNeedsMonoChannelCountWorkaround;
@@ -75,6 +76,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     private final boolean playClearSamplesWithoutKeys;
     private boolean shouldSkipAdaptationWorkaroundOutputBuffer;
     private boolean shouldSkipOutputBuffer;
+    private boolean waitingForFirstSyncFrame;
     private boolean waitingForKeys;
 
     public static class DecoderInitializationException extends Exception {
@@ -115,7 +117,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
         }
     }
 
-    protected abstract void configureCodec(MediaCodec mediaCodec, Format format, MediaCrypto mediaCrypto);
+    protected abstract void configureCodec(MediaCodecInfo mediaCodecInfo, MediaCodec mediaCodec, Format format, MediaCrypto mediaCrypto) throws DecoderQueryException;
 
     protected abstract boolean processOutputBuffer(long j, long j2, MediaCodec mediaCodec, ByteBuffer byteBuffer, int i, int i2, long j3, boolean z) throws ExoPlaybackException;
 
@@ -190,6 +192,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
             this.codecNeedsAdaptationWorkaround = codecNeedsAdaptationWorkaround(codecName);
             this.codecNeedsEosPropagationWorkaround = codecNeedsEosPropagationWorkaround(codecName);
             this.codecNeedsEosFlushWorkaround = codecNeedsEosFlushWorkaround(codecName);
+            this.codecNeedsEosOutputExceptionWorkaround = codecNeedsEosOutputExceptionWorkaround(codecName);
             this.codecNeedsMonoChannelCountWorkaround = codecNeedsMonoChannelCountWorkaround(codecName, this.format);
             try {
                 long codecInitializingTimestamp = SystemClock.elapsedRealtime();
@@ -197,7 +200,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
                 this.codec = MediaCodec.createByCodecName(codecName);
                 TraceUtil.endSection();
                 TraceUtil.beginSection("configureCodec");
-                configureCodec(this.codec, this.format, mediaCrypto);
+                configureCodec(decoderInfo, this.codec, this.format, mediaCrypto);
                 TraceUtil.endSection();
                 TraceUtil.beginSection("startCodec");
                 this.codec.start();
@@ -212,6 +215,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
             this.codecHotswapDeadlineMs = getState() == 2 ? SystemClock.elapsedRealtime() + MAX_CODEC_HOTSWAP_TIME_MS : C.TIME_UNSET;
             this.inputIndex = -1;
             this.outputIndex = -1;
+            this.waitingForFirstSyncFrame = true;
             DecoderCounters decoderCounters = this.decoderCounters;
             decoderCounters.decoderInitCount++;
         }
@@ -337,8 +341,23 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     }
 
     public void render(long positionUs, long elapsedRealtimeUs) throws ExoPlaybackException {
+        if (this.outputStreamEnded) {
+            renderToEndOfStream();
+            return;
+        }
         if (this.format == null) {
-            readFormat();
+            this.buffer.clear();
+            int result = readSource(this.formatHolder, this.buffer, true);
+            if (result == -5) {
+                onInputFormatChanged(this.formatHolder.format);
+            } else if (result == -4) {
+                Assertions.checkState(this.buffer.isEndOfStream());
+                this.inputStreamEnded = true;
+                processEndOfStream();
+                return;
+            } else {
+                return;
+            }
         }
         maybeInitCodec();
         if (this.codec != null) {
@@ -354,16 +373,11 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
         this.decoderCounters.ensureUpdated();
     }
 
-    private void readFormat() throws ExoPlaybackException {
-        if (readSource(this.formatHolder, null) == -5) {
-            onInputFormatChanged(this.formatHolder.format);
-        }
-    }
-
     protected void flushCodec() throws ExoPlaybackException {
         this.codecHotswapDeadlineMs = C.TIME_UNSET;
         this.inputIndex = -1;
         this.outputIndex = -1;
+        this.waitingForFirstSyncFrame = true;
         this.waitingForKeys = false;
         this.shouldSkipOutputBuffer = false;
         this.decodeOnlyPresentationTimestamps.clear();
@@ -385,7 +399,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     }
 
     private boolean feedInputBuffer() throws ExoPlaybackException {
-        if (this.inputStreamEnded || this.codecReinitializationState == 2) {
+        if (this.codec == null || this.codecReinitializationState == 2 || this.inputStreamEnded) {
             return false;
         }
         if (this.inputIndex < 0) {
@@ -424,7 +438,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
                     this.codecReconfigurationState = 2;
                 }
                 adaptiveReconfigurationBytes = this.buffer.data.position();
-                result = readSource(this.formatHolder, this.buffer);
+                result = readSource(this.formatHolder, this.buffer, false);
             }
             if (result == -3) {
                 return false;
@@ -456,7 +470,8 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
                 }
                 processEndOfStream();
                 return false;
-            } else {
+            } else if (!this.waitingForFirstSyncFrame || this.buffer.isKeyFrame()) {
+                this.waitingForFirstSyncFrame = false;
                 boolean bufferEncrypted = this.buffer.isEncrypted();
                 this.waitingForKeys = shouldWaitForKeys(bufferEncrypted);
                 if (this.waitingForKeys) {
@@ -490,6 +505,12 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
                 } catch (Exception e2) {
                     throw ExoPlaybackException.createForRenderer(e2, getIndex());
                 }
+            } else {
+                this.buffer.clear();
+                if (this.codecReconfigurationState == 2) {
+                    this.codecReconfigurationState = 1;
+                }
+                return true;
             }
         }
     }
@@ -559,10 +580,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
         }
     }
 
-    protected void onOutputFormatChanged(MediaCodec codec, MediaFormat outputFormat) {
-    }
-
-    protected void onOutputStreamEnded() {
+    protected void onOutputFormatChanged(MediaCodec codec, MediaFormat outputFormat) throws ExoPlaybackException {
     }
 
     protected void onQueueInputBuffer(DecoderInputBuffer buffer) {
@@ -588,10 +606,18 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     }
 
     private boolean drainOutputBuffer(long positionUs, long elapsedRealtimeUs) throws ExoPlaybackException {
-        if (this.outputStreamEnded) {
-            return false;
-        }
         if (this.outputIndex < 0) {
+            if (this.codecNeedsEosOutputExceptionWorkaround && this.codecReceivedEos) {
+                try {
+                    this.outputIndex = this.codec.dequeueOutputBuffer(this.outputBufferInfo, getDequeueOutputBufferTimeoutUs());
+                } catch (IllegalStateException e) {
+                    processEndOfStream();
+                    if (this.outputStreamEnded) {
+                        releaseCodec();
+                    }
+                    return false;
+                }
+            }
             this.outputIndex = this.codec.dequeueOutputBuffer(this.outputBufferInfo, getDequeueOutputBufferTimeoutUs());
             if (this.outputIndex >= 0) {
                 if (this.shouldSkipAdaptationWorkaroundOutputBuffer) {
@@ -602,7 +628,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
                 } else if ((this.outputBufferInfo.flags & 4) != 0) {
                     processEndOfStream();
                     this.outputIndex = -1;
-                    return true;
+                    return false;
                 } else {
                     ByteBuffer outputBuffer = this.outputBuffers[this.outputIndex];
                     if (outputBuffer != null) {
@@ -617,14 +643,26 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
             } else if (this.outputIndex == -3) {
                 processOutputBuffersChanged();
                 return true;
-            } else if (!this.codecNeedsEosPropagationWorkaround || (!this.inputStreamEnded && this.codecReinitializationState != 2)) {
-                return false;
             } else {
-                processEndOfStream();
-                return true;
+                if (this.codecNeedsEosPropagationWorkaround && (this.inputStreamEnded || this.codecReinitializationState == 2)) {
+                    processEndOfStream();
+                }
+                return false;
             }
         }
-        if (!processOutputBuffer(positionUs, elapsedRealtimeUs, this.codec, this.outputBuffers[this.outputIndex], this.outputIndex, this.outputBufferInfo.flags, this.outputBufferInfo.presentationTimeUs, this.shouldSkipOutputBuffer)) {
+        if (this.codecNeedsEosOutputExceptionWorkaround && this.codecReceivedEos) {
+            try {
+                boolean processedOutputBuffer = processOutputBuffer(positionUs, elapsedRealtimeUs, this.codec, this.outputBuffers[this.outputIndex], this.outputIndex, this.outputBufferInfo.flags, this.outputBufferInfo.presentationTimeUs, this.shouldSkipOutputBuffer);
+            } catch (IllegalStateException e2) {
+                processEndOfStream();
+                if (this.outputStreamEnded) {
+                    releaseCodec();
+                }
+                return false;
+            }
+        }
+        processedOutputBuffer = processOutputBuffer(positionUs, elapsedRealtimeUs, this.codec, this.outputBuffers[this.outputIndex], this.outputIndex, this.outputBufferInfo.flags, this.outputBufferInfo.presentationTimeUs, this.shouldSkipOutputBuffer);
+        if (!processedOutputBuffer) {
             return false;
         }
         onProcessedOutputBuffer(this.outputBufferInfo.presentationTimeUs);
@@ -632,7 +670,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
         return true;
     }
 
-    private void processOutputFormat() {
+    private void processOutputFormat() throws ExoPlaybackException {
         MediaFormat format = this.codec.getOutputFormat();
         if (this.codecNeedsAdaptationWorkaround && format.getInteger("width") == 32 && format.getInteger("height") == 32) {
             this.shouldSkipAdaptationWorkaroundOutputBuffer = true;
@@ -648,6 +686,9 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
         this.outputBuffers = this.codec.getOutputBuffers();
     }
 
+    protected void renderToEndOfStream() throws ExoPlaybackException {
+    }
+
     private void processEndOfStream() throws ExoPlaybackException {
         if (this.codecReinitializationState == 2) {
             releaseCodec();
@@ -655,7 +696,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
             return;
         }
         this.outputStreamEnded = true;
-        onOutputStreamEnded();
+        renderToEndOfStream();
     }
 
     private boolean shouldSkipOutputBuffer(long presentationTimeUs) {
@@ -686,7 +727,11 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     }
 
     private static boolean codecNeedsEosFlushWorkaround(String name) {
-        return Util.SDK_INT <= 23 && "OMX.google.vorbis.decoder".equals(name);
+        return (Util.SDK_INT <= 23 && "OMX.google.vorbis.decoder".equals(name)) || (Util.SDK_INT <= 19 && "hb2000".equals(Util.DEVICE) && ("OMX.amlogic.avc.decoder.awesome".equals(name) || "OMX.amlogic.avc.decoder.awesome.secure".equals(name)));
+    }
+
+    private static boolean codecNeedsEosOutputExceptionWorkaround(String name) {
+        return Util.SDK_INT == 21 && "OMX.google.aac.decoder".equals(name);
     }
 
     private static boolean codecNeedsMonoChannelCountWorkaround(String name, Format format) {

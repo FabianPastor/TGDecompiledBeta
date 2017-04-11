@@ -108,6 +108,9 @@ final class SsMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<SsC
         return positionUs;
     }
 
+    public void discardBuffer(long positionUs) {
+    }
+
     public boolean continueLoading(long positionUs) {
         return this.sequenceableLoader.continueLoading(positionUs);
     }
@@ -144,7 +147,7 @@ final class SsMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<SsC
 
     private ChunkSampleStream<SsChunkSource> buildSampleStream(TrackSelection selection, long positionUs) {
         int streamElementIndex = this.trackGroups.indexOf(selection.getTrackGroup());
-        return new ChunkSampleStream(this.manifest.streamElements[streamElementIndex].type, this.chunkSourceFactory.createChunkSource(this.manifestLoaderErrorThrower, this.manifest, streamElementIndex, selection, this.trackEncryptionBoxes), this, this.allocator, positionUs, this.minLoadableRetryCount, this.eventDispatcher);
+        return new ChunkSampleStream(this.manifest.streamElements[streamElementIndex].type, null, this.chunkSourceFactory.createChunkSource(this.manifestLoaderErrorThrower, this.manifest, streamElementIndex, selection, this.trackEncryptionBoxes), this, this.allocator, positionUs, this.minLoadableRetryCount, this.eventDispatcher);
     }
 
     private static TrackGroupArray buildTrackGroups(SsManifest manifest) {

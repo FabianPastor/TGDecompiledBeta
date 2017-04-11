@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
+import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
@@ -119,12 +120,12 @@ public final class ConcatenatingMediaSource implements MediaSource {
         this.duplicateFlags = buildDuplicateFlags(mediaSources);
     }
 
-    public void prepareSource(Listener listener) {
+    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
         this.listener = listener;
         for (int i = 0; i < this.mediaSources.length; i++) {
             if (!this.duplicateFlags[i]) {
                 final int index = i;
-                this.mediaSources[i].prepareSource(new Listener() {
+                this.mediaSources[i].prepareSource(player, false, new Listener() {
                     public void onSourceInfoRefreshed(Timeline timeline, Object manifest) {
                         ConcatenatingMediaSource.this.handleSourceInfoRefreshed(index, timeline, manifest);
                     }

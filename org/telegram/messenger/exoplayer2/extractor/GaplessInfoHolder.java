@@ -5,10 +5,16 @@ import java.util.regex.Pattern;
 import org.telegram.messenger.exoplayer2.metadata.Metadata;
 import org.telegram.messenger.exoplayer2.metadata.Metadata.Entry;
 import org.telegram.messenger.exoplayer2.metadata.id3.CommentFrame;
+import org.telegram.messenger.exoplayer2.metadata.id3.Id3Decoder.FramePredicate;
 
 public final class GaplessInfoHolder {
     private static final String GAPLESS_COMMENT_ID = "iTunSMPB";
     private static final Pattern GAPLESS_COMMENT_PATTERN = Pattern.compile("^ [0-9a-fA-F]{8} ([0-9a-fA-F]{8}) ([0-9a-fA-F]{8})");
+    public static final FramePredicate GAPLESS_INFO_ID3_FRAME_PREDICATE = new FramePredicate() {
+        public boolean evaluate(int majorVersion, int id0, int id1, int id2, int id3) {
+            return id0 == 67 && id1 == 79 && id2 == 77 && (id3 == 77 || majorVersion == 2);
+        }
+    };
     public int encoderDelay = -1;
     public int encoderPadding = -1;
 

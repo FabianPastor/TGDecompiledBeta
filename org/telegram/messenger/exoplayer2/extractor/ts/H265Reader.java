@@ -11,7 +11,7 @@ import org.telegram.messenger.exoplayer2.util.NalUnitUtil;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.ParsableNalUnitBitArray;
 
-final class H265Reader implements ElementaryStreamReader {
+public final class H265Reader implements ElementaryStreamReader {
     private static final int BLA_W_LP = 16;
     private static final int CRA_NUT = 21;
     private static final int PPS_NUT = 34;
@@ -21,6 +21,7 @@ final class H265Reader implements ElementaryStreamReader {
     private static final int SUFFIX_SEI_NUT = 40;
     private static final String TAG = "H265Reader";
     private static final int VPS_NUT = 32;
+    private String formatId;
     private boolean hasOutputFormat;
     private TrackOutput output;
     private long pesTimeUs;
@@ -28,7 +29,7 @@ final class H265Reader implements ElementaryStreamReader {
     private final boolean[] prefixFlags = new boolean[3];
     private final NalUnitTargetBuffer prefixSei = new NalUnitTargetBuffer(39, 128);
     private SampleReader sampleReader;
-    private SeiReader seiReader;
+    private final SeiReader seiReader;
     private final ParsableByteArray seiWrapper = new ParsableByteArray();
     private final NalUnitTargetBuffer sps = new NalUnitTargetBuffer(33, 128);
     private final NalUnitTargetBuffer suffixSei = new NalUnitTargetBuffer(40, 128);
@@ -131,6 +132,10 @@ final class H265Reader implements ElementaryStreamReader {
         }
     }
 
+    public H265Reader(SeiReader seiReader) {
+        this.seiReader = seiReader;
+    }
+
     public void seek() {
         NalUnitUtil.clearPrefixFlags(this.prefixFlags);
         this.vps.reset();
@@ -143,9 +148,11 @@ final class H265Reader implements ElementaryStreamReader {
     }
 
     public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
-        this.output = extractorOutput.track(idGenerator.getNextId());
+        idGenerator.generateNewId();
+        this.formatId = idGenerator.getFormatId();
+        this.output = extractorOutput.track(idGenerator.getTrackId(), 2);
         this.sampleReader = new SampleReader(this.output);
-        this.seiReader = new SeiReader(extractorOutput.track(idGenerator.getNextId()));
+        this.seiReader.createTracks(extractorOutput, idGenerator);
     }
 
     public void packetStarted(long pesTimeUs, boolean dataAlignmentIndicator) {
@@ -214,7 +221,7 @@ final class H265Reader implements ElementaryStreamReader {
             this.sps.endNalUnit(discardPadding);
             this.pps.endNalUnit(discardPadding);
             if (this.vps.isCompleted() && this.sps.isCompleted() && this.pps.isCompleted()) {
-                this.output.format(parseMediaFormat(this.vps, this.sps, this.pps));
+                this.output.format(parseMediaFormat(this.formatId, this.vps, this.sps, this.pps));
                 this.hasOutputFormat = true;
             }
         }
@@ -230,7 +237,7 @@ final class H265Reader implements ElementaryStreamReader {
         }
     }
 
-    private static Format parseMediaFormat(NalUnitTargetBuffer vps, NalUnitTargetBuffer sps, NalUnitTargetBuffer pps) {
+    private static Format parseMediaFormat(String formatId, NalUnitTargetBuffer vps, NalUnitTargetBuffer sps, NalUnitTargetBuffer pps) {
         int i;
         Object csd = new byte[((vps.nalLength + sps.nalLength) + pps.nalLength)];
         System.arraycopy(vps.nalData, 0, csd, 0, vps.nalLength);
@@ -319,7 +326,7 @@ final class H265Reader implements ElementaryStreamReader {
                 Log.w(TAG, "Unexpected aspect_ratio_idc value: " + aspectRatioIdc);
             }
         }
-        return Format.createVideoSampleFormat(null, MimeTypes.VIDEO_H265, null, -1, -1, picWidthInLumaSamples, picHeightInLumaSamples, -1.0f, Collections.singletonList(csd), -1, pixelWidthHeightRatio, null);
+        return Format.createVideoSampleFormat(formatId, MimeTypes.VIDEO_H265, null, -1, -1, picWidthInLumaSamples, picHeightInLumaSamples, -1.0f, Collections.singletonList(csd), -1, pixelWidthHeightRatio, null);
     }
 
     private static void skipScalingList(ParsableNalUnitBitArray bitArray) {

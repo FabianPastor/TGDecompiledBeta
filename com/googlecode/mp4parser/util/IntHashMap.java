@@ -1,6 +1,6 @@
 package com.googlecode.mp4parser.util;
 
-import org.telegram.messenger.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.tgnet.ConnectionsManager;
 
 public class IntHashMap {
@@ -24,11 +24,11 @@ public class IntHashMap {
     }
 
     public IntHashMap() {
-        this(20, AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION);
+        this(20, AdaptiveTrackSelection.DEFAULT_BANDWIDTH_FRACTION);
     }
 
     public IntHashMap(int initialCapacity) {
-        this(initialCapacity, AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION);
+        this(initialCapacity, AdaptiveTrackSelection.DEFAULT_BANDWIDTH_FRACTION);
     }
 
     public IntHashMap(int initialCapacity, float loadFactor) {

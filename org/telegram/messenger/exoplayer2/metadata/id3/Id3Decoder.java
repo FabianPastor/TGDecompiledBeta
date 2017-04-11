@@ -2,12 +2,13 @@ package org.telegram.messenger.exoplayer2.metadata.id3;
 
 import android.util.Log;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.metadata.Metadata;
 import org.telegram.messenger.exoplayer2.metadata.MetadataDecoder;
-import org.telegram.messenger.exoplayer2.util.MimeTypes;
+import org.telegram.messenger.exoplayer2.metadata.MetadataInputBuffer;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
@@ -19,6 +20,11 @@ public final class Id3Decoder implements MetadataDecoder {
     private static final int ID3_TEXT_ENCODING_UTF_16BE = 2;
     private static final int ID3_TEXT_ENCODING_UTF_8 = 3;
     private static final String TAG = "Id3Decoder";
+    private final FramePredicate framePredicate;
+
+    public interface FramePredicate {
+        boolean evaluate(int i, int i2, int i3, int i4, int i5);
+    }
 
     private static final class Id3Header {
         private final int framesSize;
@@ -32,10 +38,10 @@ public final class Id3Decoder implements MetadataDecoder {
         }
     }
 
-    private static org.telegram.messenger.exoplayer2.metadata.id3.Id3Frame decodeFrame(int r22, org.telegram.messenger.exoplayer2.util.ParsableByteArray r23, boolean r24) {
+    private static org.telegram.messenger.exoplayer2.metadata.id3.Id3Frame decodeFrame(int r24, org.telegram.messenger.exoplayer2.util.ParsableByteArray r25, boolean r26, int r27, org.telegram.messenger.exoplayer2.metadata.id3.Id3Decoder.FramePredicate r28) {
         /* JADX: method processing error */
 /*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:162:? in {2, 7, 10, 18, 21, 22, 23, 31, 34, 37, 38, 42, 43, 44, 49, 52, 55, 58, 61, 62, 63, 64, 65, 66, 67, 69, 71, 73, 83, 86, 97, 107, 108, 116, 117, 125, 130, 131, 132, 142, 143, 146, 147, 149, 154, 156, 157, 158, 159, 160, 161, 163} preds:[]
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:203:? in {2, 7, 10, 18, 21, 22, 23, 35, 38, 41, 42, 46, 47, 48, 53, 56, 59, 62, 65, 66, 67, 68, 69, 70, 71, 73, 75, 77, 87, 90, 97, 98, 99, 109, 110, 115, 116, 117, 126, 136, 137, 145, 146, 154, 164, 165, 174, 183, 186, 187, 189, 194, 196, 197, 198, 199, 200, 201, 202, 204} preds:[]
 	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:129)
 	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:48)
 	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.rerun(BlockProcessor.java:44)
@@ -50,480 +56,553 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
 	at jadx.api.JadxDecompiler$1.run(JadxDecompiler.java:199)
 */
         /*
-        r5 = r23.readUnsignedByte();
-        r6 = r23.readUnsignedByte();
-        r7 = r23.readUnsignedByte();
-        r17 = 3;
-        r0 = r22;
-        r1 = r17;
-        if (r0 < r1) goto L_0x0073;
-    L_0x0014:
-        r8 = r23.readUnsignedByte();
-    L_0x0018:
-        r17 = 4;
-        r0 = r22;
-        r1 = r17;
-        if (r0 != r1) goto L_0x0075;
+        r4 = r25.readUnsignedByte();
+        r5 = r25.readUnsignedByte();
+        r6 = r25.readUnsignedByte();
+        r2 = 3;
+        r0 = r24;
+        if (r0 < r2) goto L_0x0059;
+    L_0x0011:
+        r7 = r25.readUnsignedByte();
+    L_0x0015:
+        r2 = 4;
+        r0 = r24;
+        if (r0 != r2) goto L_0x005b;
+    L_0x001a:
+        r9 = r25.readUnsignedIntToInt();
+        if (r26 != 0) goto L_0x0038;
     L_0x0020:
-        r9 = r23.readUnsignedIntToInt();
-        if (r24 != 0) goto L_0x004e;
-    L_0x0026:
-        r0 = r9 & 255;
-        r17 = r0;
-        r18 = r9 >> 8;
-        r0 = r18;
-        r0 = r0 & 255;
-        r18 = r0;
-        r18 = r18 << 7;
-        r17 = r17 | r18;
-        r18 = r9 >> 16;
-        r0 = r18;
-        r0 = r0 & 255;
-        r18 = r0;
-        r18 = r18 << 14;
-        r17 = r17 | r18;
-        r18 = r9 >> 24;
-        r0 = r18;
-        r0 = r0 & 255;
-        r18 = r0;
-        r18 = r18 << 21;
-        r9 = r17 | r18;
-    L_0x004e:
-        r17 = 3;
-        r0 = r22;
-        r1 = r17;
-        if (r0 < r1) goto L_0x0087;
-    L_0x0056:
-        r3 = r23.readUnsignedShort();
-    L_0x005a:
-        if (r5 != 0) goto L_0x0089;
-    L_0x005c:
-        if (r6 != 0) goto L_0x0089;
-    L_0x005e:
-        if (r7 != 0) goto L_0x0089;
+        r2 = r9 & 255;
+        r3 = r9 >> 8;
+        r3 = r3 & 255;
+        r3 = r3 << 7;
+        r2 = r2 | r3;
+        r3 = r9 >> 16;
+        r3 = r3 & 255;
+        r3 = r3 << 14;
+        r2 = r2 | r3;
+        r3 = r9 >> 24;
+        r3 = r3 & 255;
+        r3 = r3 << 21;
+        r9 = r2 | r3;
+    L_0x0038:
+        r2 = 3;
+        r0 = r24;
+        if (r0 < r2) goto L_0x006a;
+    L_0x003d:
+        r15 = r25.readUnsignedShort();
+    L_0x0041:
+        if (r4 != 0) goto L_0x006c;
+    L_0x0043:
+        if (r5 != 0) goto L_0x006c;
+    L_0x0045:
+        if (r6 != 0) goto L_0x006c;
+    L_0x0047:
+        if (r7 != 0) goto L_0x006c;
+    L_0x0049:
+        if (r9 != 0) goto L_0x006c;
+    L_0x004b:
+        if (r15 != 0) goto L_0x006c;
+    L_0x004d:
+        r2 = r25.limit();
+        r0 = r25;
+        r0.setPosition(r2);
+        r16 = 0;
+    L_0x0058:
+        return r16;
+    L_0x0059:
+        r7 = 0;
+        goto L_0x0015;
+    L_0x005b:
+        r2 = 3;
+        r0 = r24;
+        if (r0 != r2) goto L_0x0065;
     L_0x0060:
-        if (r8 != 0) goto L_0x0089;
-    L_0x0062:
-        if (r9 != 0) goto L_0x0089;
-    L_0x0064:
-        if (r3 != 0) goto L_0x0089;
-    L_0x0066:
-        r17 = r23.limit();
-        r0 = r23;
-        r1 = r17;
-        r0.setPosition(r1);
-        r4 = 0;
-    L_0x0072:
-        return r4;
-    L_0x0073:
-        r8 = 0;
-        goto L_0x0018;
-    L_0x0075:
-        r17 = 3;
-        r0 = r22;
-        r1 = r17;
-        if (r0 != r1) goto L_0x0082;
-    L_0x007d:
-        r9 = r23.readUnsignedIntToInt();
-        goto L_0x004e;
-    L_0x0082:
-        r9 = r23.readUnsignedInt24();
-        goto L_0x004e;
-    L_0x0087:
-        r3 = 0;
-        goto L_0x005a;
-    L_0x0089:
-        r17 = r23.getPosition();
-        r16 = r17 + r9;
-        r17 = r23.limit();
-        r0 = r16;
-        r1 = r17;
-        if (r0 <= r1) goto L_0x00af;
-    L_0x0099:
-        r17 = "Id3Decoder";
-        r18 = "Frame size exceeds remaining tag data";
-        android.util.Log.w(r17, r18);
-        r17 = r23.limit();
-        r0 = r23;
-        r1 = r17;
-        r0.setPosition(r1);
-        r4 = 0;
-        goto L_0x0072;
-    L_0x00af:
-        r13 = 0;
-        r14 = 0;
+        r9 = r25.readUnsignedIntToInt();
+        goto L_0x0038;
+    L_0x0065:
+        r9 = r25.readUnsignedInt24();
+        goto L_0x0038;
+    L_0x006a:
         r15 = 0;
-        r10 = 0;
-        r11 = 0;
-        r17 = 3;
-        r0 = r22;
-        r1 = r17;
-        if (r0 != r1) goto L_0x00ea;
-    L_0x00bc:
-        r0 = r3 & 128;
-        r17 = r0;
-        if (r17 == 0) goto L_0x00e4;
-    L_0x00c2:
-        r13 = 1;
-    L_0x00c3:
-        r17 = r3 & 64;
-        if (r17 == 0) goto L_0x00e6;
-    L_0x00c7:
-        r14 = 1;
+        goto L_0x0041;
+    L_0x006c:
+        r2 = r25.getPosition();
+        r23 = r2 + r9;
+        r2 = r25.limit();
+        r0 = r23;
+        if (r0 <= r2) goto L_0x008f;
+    L_0x007a:
+        r2 = "Id3Decoder";
+        r3 = "Frame size exceeds remaining tag data";
+        android.util.Log.w(r2, r3);
+        r2 = r25.limit();
+        r0 = r25;
+        r0.setPosition(r2);
+        r16 = 0;
+        goto L_0x0058;
+    L_0x008f:
+        if (r28 == 0) goto L_0x00a5;
+    L_0x0091:
+        r2 = r28;
+        r3 = r24;
+        r2 = r2.evaluate(r3, r4, r5, r6, r7);
+        if (r2 != 0) goto L_0x00a5;
+    L_0x009b:
+        r0 = r25;
+        r1 = r23;
+        r0.setPosition(r1);
+        r16 = 0;
+        goto L_0x0058;
+    L_0x00a5:
+        r20 = 0;
+        r21 = 0;
+        r22 = 0;
+        r17 = 0;
+        r18 = 0;
+        r2 = 3;
+        r0 = r24;
+        if (r0 != r2) goto L_0x00e9;
+    L_0x00b4:
+        r2 = r15 & 128;
+        if (r2 == 0) goto L_0x00e0;
+    L_0x00b8:
+        r20 = 1;
+    L_0x00ba:
+        r2 = r15 & 64;
+        if (r2 == 0) goto L_0x00e3;
+    L_0x00be:
+        r21 = 1;
+    L_0x00c0:
+        r2 = r15 & 32;
+        if (r2 == 0) goto L_0x00e6;
+    L_0x00c4:
+        r18 = 1;
+    L_0x00c6:
+        r17 = r20;
     L_0x00c8:
-        r17 = r3 & 32;
-        if (r17 == 0) goto L_0x00e8;
+        if (r20 != 0) goto L_0x00cc;
+    L_0x00ca:
+        if (r21 == 0) goto L_0x011c;
     L_0x00cc:
-        r11 = 1;
-    L_0x00cd:
-        r10 = r13;
-    L_0x00ce:
-        if (r13 != 0) goto L_0x00d2;
-    L_0x00d0:
-        if (r14 == 0) goto L_0x0116;
-    L_0x00d2:
-        r17 = "Id3Decoder";
-        r18 = "Skipping unsupported compressed or encrypted frame";
-        android.util.Log.w(r17, r18);
-        r0 = r23;
-        r1 = r16;
+        r2 = "Id3Decoder";
+        r3 = "Skipping unsupported compressed or encrypted frame";
+        android.util.Log.w(r2, r3);
+        r0 = r25;
+        r1 = r23;
         r0.setPosition(r1);
-        r4 = 0;
-        goto L_0x0072;
-    L_0x00e4:
-        r13 = 0;
-        goto L_0x00c3;
+        r16 = 0;
+        goto L_0x0058;
+    L_0x00e0:
+        r20 = 0;
+        goto L_0x00ba;
+    L_0x00e3:
+        r21 = 0;
+        goto L_0x00c0;
     L_0x00e6:
-        r14 = 0;
-        goto L_0x00c8;
-    L_0x00e8:
-        r11 = 0;
-        goto L_0x00cd;
-    L_0x00ea:
-        r17 = 4;
-        r0 = r22;
-        r1 = r17;
-        if (r0 != r1) goto L_0x00ce;
+        r18 = 0;
+        goto L_0x00c6;
+    L_0x00e9:
+        r2 = 4;
+        r0 = r24;
+        if (r0 != r2) goto L_0x00c8;
+    L_0x00ee:
+        r2 = r15 & 64;
+        if (r2 == 0) goto L_0x010d;
     L_0x00f2:
-        r17 = r3 & 64;
-        if (r17 == 0) goto L_0x010c;
-    L_0x00f6:
-        r11 = 1;
-    L_0x00f7:
-        r17 = r3 & 8;
-        if (r17 == 0) goto L_0x010e;
-    L_0x00fb:
-        r13 = 1;
-    L_0x00fc:
-        r17 = r3 & 4;
-        if (r17 == 0) goto L_0x0110;
+        r18 = 1;
+    L_0x00f4:
+        r2 = r15 & 8;
+        if (r2 == 0) goto L_0x0110;
+    L_0x00f8:
+        r20 = 1;
+    L_0x00fa:
+        r2 = r15 & 4;
+        if (r2 == 0) goto L_0x0113;
+    L_0x00fe:
+        r21 = 1;
     L_0x0100:
-        r14 = 1;
-    L_0x0101:
-        r17 = r3 & 2;
-        if (r17 == 0) goto L_0x0112;
-    L_0x0105:
-        r15 = 1;
+        r2 = r15 & 2;
+        if (r2 == 0) goto L_0x0116;
+    L_0x0104:
+        r22 = 1;
     L_0x0106:
-        r17 = r3 & 1;
-        if (r17 == 0) goto L_0x0114;
+        r2 = r15 & 1;
+        if (r2 == 0) goto L_0x0119;
     L_0x010a:
-        r10 = 1;
-    L_0x010b:
-        goto L_0x00ce;
-    L_0x010c:
-        r11 = 0;
-        goto L_0x00f7;
-    L_0x010e:
-        r13 = 0;
-        goto L_0x00fc;
-    L_0x0110:
-        r14 = 0;
-        goto L_0x0101;
-    L_0x0112:
-        r15 = 0;
-        goto L_0x0106;
-    L_0x0114:
-        r10 = 0;
-        goto L_0x010b;
-    L_0x0116:
-        if (r11 == 0) goto L_0x0123;
-    L_0x0118:
-        r9 = r9 + -1;
         r17 = 1;
-        r0 = r23;
-        r1 = r17;
-        r0.skipBytes(r1);
-    L_0x0123:
-        if (r10 == 0) goto L_0x0130;
-    L_0x0125:
+    L_0x010c:
+        goto L_0x00c8;
+    L_0x010d:
+        r18 = 0;
+        goto L_0x00f4;
+    L_0x0110:
+        r20 = 0;
+        goto L_0x00fa;
+    L_0x0113:
+        r21 = 0;
+        goto L_0x0100;
+    L_0x0116:
+        r22 = 0;
+        goto L_0x0106;
+    L_0x0119:
+        r17 = 0;
+        goto L_0x010c;
+    L_0x011c:
+        if (r18 == 0) goto L_0x0126;
+    L_0x011e:
+        r9 = r9 + -1;
+        r2 = 1;
+        r0 = r25;
+        r0.skipBytes(r2);
+    L_0x0126:
+        if (r17 == 0) goto L_0x0130;
+    L_0x0128:
         r9 = r9 + -4;
-        r17 = 4;
-        r0 = r23;
-        r1 = r17;
-        r0.skipBytes(r1);
+        r2 = 4;
+        r0 = r25;
+        r0.skipBytes(r2);
     L_0x0130:
-        if (r15 == 0) goto L_0x0138;
+        if (r22 == 0) goto L_0x0138;
     L_0x0132:
-        r0 = r23;
+        r0 = r25;
         r9 = removeUnsynchronization(r0, r9);
     L_0x0138:
-        r17 = 84;
-        r0 = r17;
-        if (r5 != r0) goto L_0x0167;
-    L_0x013e:
-        r17 = 88;
-        r0 = r17;
-        if (r6 != r0) goto L_0x0167;
+        r2 = 84;
+        if (r4 != r2) goto L_0x015c;
+    L_0x013c:
+        r2 = 88;
+        if (r5 != r2) goto L_0x015c;
+    L_0x0140:
+        r2 = 88;
+        if (r6 != r2) goto L_0x015c;
     L_0x0144:
-        r17 = 88;
-        r0 = r17;
-        if (r7 != r0) goto L_0x0167;
-    L_0x014a:
-        r17 = 2;
-        r0 = r22;
-        r1 = r17;
-        if (r0 == r1) goto L_0x0158;
-    L_0x0152:
-        r17 = 88;
-        r0 = r17;
-        if (r8 != r0) goto L_0x0167;
-    L_0x0158:
-        r0 = r23;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r4 = decodeTxxxFrame(r0, r9);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x015e:
-        r0 = r23;
-        r1 = r16;
+        r2 = 2;
+        r0 = r24;
+        if (r0 == r2) goto L_0x014d;
+    L_0x0149:
+        r2 = 88;
+        if (r7 != r2) goto L_0x015c;
+    L_0x014d:
+        r0 = r25;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r16 = decodeTxxxFrame(r0, r9);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0153:
+        r0 = r25;
+        r1 = r23;
         r0.setPosition(r1);
-        goto L_0x0072;
-    L_0x0167:
-        r17 = 80;
-        r0 = r17;
-        if (r5 != r0) goto L_0x0186;
-    L_0x016d:
-        r17 = 82;
-        r0 = r17;
-        if (r6 != r0) goto L_0x0186;
-    L_0x0173:
-        r17 = 73;
-        r0 = r17;
-        if (r7 != r0) goto L_0x0186;
-    L_0x0179:
-        r17 = 86;
-        r0 = r17;
-        if (r8 != r0) goto L_0x0186;
-    L_0x017f:
-        r0 = r23;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r4 = decodePrivFrame(r0, r9);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        goto L_0x015e;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
+        goto L_0x0058;
+    L_0x015c:
+        r2 = 84;
+        if (r4 != r2) goto L_0x01b8;
+    L_0x0160:
+        r2 = 2;
+        r0 = r24;
+        if (r0 != r2) goto L_0x018f;
+    L_0x0165:
+        r2 = java.util.Locale.US;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r3 = "%c%c%c";	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8 = 3;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8 = new java.lang.Object[r8];	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 0;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r4);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 1;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r5);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 2;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r6);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r19 = java.lang.String.format(r2, r3, r8);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
     L_0x0186:
-        r17 = 71;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r5 != r0) goto L_0x01ad;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x018c:
-        r17 = 69;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r6 != r0) goto L_0x01ad;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x0192:
-        r17 = 79;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r7 != r0) goto L_0x01ad;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x0198:
-        r17 = 66;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r8 == r0) goto L_0x01a6;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x019e:
-        r17 = 2;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r22;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r1 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r0 != r1) goto L_0x01ad;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x01a6:
-        r0 = r23;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r4 = decodeGeobFrame(r0, r9);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        goto L_0x015e;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x01ad:
-        r17 = 2;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r22;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r1 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r0 != r1) goto L_0x01d0;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x01b5:
-        r17 = 80;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r5 != r0) goto L_0x01e8;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x01bb:
-        r17 = 73;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r6 != r0) goto L_0x01e8;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x01c1:
-        r17 = 67;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r7 != r0) goto L_0x01e8;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x01c7:
-        r0 = r23;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r1 = r22;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r4 = decodeApicFrame(r0, r9, r1);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        goto L_0x015e;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x01d0:
-        r17 = 65;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r5 != r0) goto L_0x01e8;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x01d6:
-        r17 = 80;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r6 != r0) goto L_0x01e8;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x01dc:
-        r17 = 73;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r7 != r0) goto L_0x01e8;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x01e2:
-        r17 = 67;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r8 == r0) goto L_0x01c7;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x01e8:
-        r17 = 84;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r5 != r0) goto L_0x0259;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x01ee:
-        r17 = 2;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r22;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r1 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r0 != r1) goto L_0x0227;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x01f6:
-        r17 = java.util.Locale.US;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r18 = "%c%c%c";	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19 = 3;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r19;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = new java.lang.Object[r0];	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19 = r0;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r20 = 0;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r21 = java.lang.Integer.valueOf(r5);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19[r20] = r21;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r20 = 1;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r21 = java.lang.Integer.valueOf(r6);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19[r20] = r21;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r20 = 2;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r21 = java.lang.Integer.valueOf(r7);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19[r20] = r21;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r12 = java.lang.String.format(r17, r18, r19);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x021f:
-        r0 = r23;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r4 = decodeTextInformationFrame(r0, r9, r12);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        goto L_0x015e;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x0227:
-        r17 = java.util.Locale.US;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r18 = "%c%c%c%c";	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19 = 4;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r19;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = new java.lang.Object[r0];	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19 = r0;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r20 = 0;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r21 = java.lang.Integer.valueOf(r5);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19[r20] = r21;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r20 = 1;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r21 = java.lang.Integer.valueOf(r6);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19[r20] = r21;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r20 = 2;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r21 = java.lang.Integer.valueOf(r7);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19[r20] = r21;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r20 = 3;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r21 = java.lang.Integer.valueOf(r8);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19[r20] = r21;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r12 = java.lang.String.format(r17, r18, r19);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        goto L_0x021f;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
+        r0 = r25;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r1 = r19;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r16 = decodeTextInformationFrame(r0, r9, r1);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        goto L_0x0153;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x018f:
+        r2 = java.util.Locale.US;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r3 = "%c%c%c%c";	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8 = 4;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8 = new java.lang.Object[r8];	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 0;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r4);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 1;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r5);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 2;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r6);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 3;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r7);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r19 = java.lang.String.format(r2, r3, r8);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        goto L_0x0186;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x01b8:
+        r2 = 87;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r4 != r2) goto L_0x01d4;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x01bc:
+        r2 = 88;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r5 != r2) goto L_0x01d4;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x01c0:
+        r2 = 88;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r6 != r2) goto L_0x01d4;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x01c4:
+        r2 = 2;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r0 = r24;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r0 == r2) goto L_0x01cd;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x01c9:
+        r2 = 88;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r7 != r2) goto L_0x01d4;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x01cd:
+        r0 = r25;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r16 = decodeWxxxFrame(r0, r9);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        goto L_0x0153;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x01d4:
+        r2 = 87;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r4 != r2) goto L_0x0231;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x01d8:
+        r2 = 2;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r0 = r24;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r0 != r2) goto L_0x0208;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x01dd:
+        r2 = java.util.Locale.US;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r3 = "%c%c%c";	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8 = 3;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8 = new java.lang.Object[r8];	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 0;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r4);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 1;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r5);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 2;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r6);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r19 = java.lang.String.format(r2, r3, r8);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x01fe:
+        r0 = r25;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r1 = r19;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r16 = decodeUrlLinkFrame(r0, r9, r1);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        goto L_0x0153;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0208:
+        r2 = java.util.Locale.US;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r3 = "%c%c%c%c";	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8 = 4;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8 = new java.lang.Object[r8];	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 0;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r4);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 1;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r5);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 2;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r6);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 3;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r7);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r19 = java.lang.String.format(r2, r3, r8);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        goto L_0x01fe;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0231:
+        r2 = 80;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r4 != r2) goto L_0x0249;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0235:
+        r2 = 82;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r5 != r2) goto L_0x0249;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0239:
+        r2 = 73;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r6 != r2) goto L_0x0249;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x023d:
+        r2 = 86;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r7 != r2) goto L_0x0249;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0241:
+        r0 = r25;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r16 = decodePrivFrame(r0, r9);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        goto L_0x0153;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0249:
+        r2 = 71;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r4 != r2) goto L_0x0266;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x024d:
+        r2 = 69;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r5 != r2) goto L_0x0266;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0251:
+        r2 = 79;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r6 != r2) goto L_0x0266;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0255:
+        r2 = 66;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r7 == r2) goto L_0x025e;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
     L_0x0259:
-        r17 = 67;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r5 != r0) goto L_0x0281;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x025f:
-        r17 = 79;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r6 != r0) goto L_0x0281;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x0265:
-        r17 = 77;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r7 != r0) goto L_0x0281;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
+        r2 = 2;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r0 = r24;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r0 != r2) goto L_0x0266;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x025e:
+        r0 = r25;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r16 = decodeGeobFrame(r0, r9);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        goto L_0x0153;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0266:
+        r2 = 2;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r0 = r24;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r0 != r2) goto L_0x0281;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
     L_0x026b:
-        r17 = 77;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r8 == r0) goto L_0x0279;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x0271:
-        r17 = 2;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r22;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r1 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r0 != r1) goto L_0x0281;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-    L_0x0279:
-        r0 = r23;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r4 = decodeCommentFrame(r0, r9);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        goto L_0x015e;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
+        r2 = 80;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r4 != r2) goto L_0x0291;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x026f:
+        r2 = 73;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r5 != r2) goto L_0x0291;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0273:
+        r2 = 67;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r6 != r2) goto L_0x0291;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0277:
+        r0 = r25;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r1 = r24;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r16 = decodeApicFrame(r0, r9, r1);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        goto L_0x0153;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
     L_0x0281:
-        r17 = 2;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r22;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r1 = r17;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        if (r0 != r1) goto L_0x02ba;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
+        r2 = 65;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r4 != r2) goto L_0x0291;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0285:
+        r2 = 80;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r5 != r2) goto L_0x0291;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
     L_0x0289:
-        r17 = java.util.Locale.US;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r18 = "%c%c%c";	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19 = 3;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r19;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = new java.lang.Object[r0];	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19 = r0;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r20 = 0;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r21 = java.lang.Integer.valueOf(r5);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19[r20] = r21;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r20 = 1;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r21 = java.lang.Integer.valueOf(r6);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19[r20] = r21;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r20 = 2;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r21 = java.lang.Integer.valueOf(r7);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19[r20] = r21;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r12 = java.lang.String.format(r17, r18, r19);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
+        r2 = 73;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r6 != r2) goto L_0x0291;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x028d:
+        r2 = 67;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r7 == r2) goto L_0x0277;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0291:
+        r2 = 67;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r4 != r2) goto L_0x02ae;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0295:
+        r2 = 79;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r5 != r2) goto L_0x02ae;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0299:
+        r2 = 77;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r6 != r2) goto L_0x02ae;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x029d:
+        r2 = 77;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r7 == r2) goto L_0x02a6;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x02a1:
+        r2 = 2;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r0 = r24;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r0 != r2) goto L_0x02ae;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x02a6:
+        r0 = r25;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r16 = decodeCommentFrame(r0, r9);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        goto L_0x0153;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x02ae:
+        r2 = 67;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r4 != r2) goto L_0x02ce;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
     L_0x02b2:
-        r0 = r23;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r4 = decodeBinaryFrame(r0, r9, r12);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        goto L_0x015e;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
+        r2 = 72;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r5 != r2) goto L_0x02ce;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x02b6:
+        r2 = 65;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r6 != r2) goto L_0x02ce;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
     L_0x02ba:
-        r17 = java.util.Locale.US;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r18 = "%c%c%c%c";	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19 = 4;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = r19;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r0 = new java.lang.Object[r0];	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19 = r0;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r20 = 0;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r21 = java.lang.Integer.valueOf(r5);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19[r20] = r21;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r20 = 1;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r21 = java.lang.Integer.valueOf(r6);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19[r20] = r21;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r20 = 2;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r21 = java.lang.Integer.valueOf(r7);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19[r20] = r21;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r20 = 3;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r21 = java.lang.Integer.valueOf(r8);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r19[r20] = r21;	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r12 = java.lang.String.format(r17, r18, r19);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        goto L_0x02b2;
-    L_0x02ec:
+        r2 = 80;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r7 != r2) goto L_0x02ce;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x02be:
+        r8 = r25;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = r24;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = r26;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r12 = r27;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r13 = r28;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r16 = decodeChapterFrame(r8, r9, r10, r11, r12, r13);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        goto L_0x0153;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x02ce:
+        r2 = 67;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r4 != r2) goto L_0x02ee;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x02d2:
+        r2 = 84;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r5 != r2) goto L_0x02ee;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x02d6:
+        r2 = 79;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r6 != r2) goto L_0x02ee;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x02da:
+        r2 = 67;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r7 != r2) goto L_0x02ee;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x02de:
+        r8 = r25;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = r24;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = r26;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r12 = r27;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r13 = r28;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r16 = decodeChapterTOCFrame(r8, r9, r10, r11, r12, r13);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        goto L_0x0153;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x02ee:
+        r2 = 2;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r0 = r24;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        if (r0 != r2) goto L_0x031e;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x02f3:
+        r2 = java.util.Locale.US;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r3 = "%c%c%c";	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8 = 3;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8 = new java.lang.Object[r8];	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 0;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r4);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 1;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r5);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 2;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r6);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r19 = java.lang.String.format(r2, r3, r8);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x0314:
+        r0 = r25;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r1 = r19;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r16 = decodeBinaryFrame(r0, r9, r1);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        goto L_0x0153;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+    L_0x031e:
+        r2 = java.util.Locale.US;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r3 = "%c%c%c%c";	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8 = 4;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8 = new java.lang.Object[r8];	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 0;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r4);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 1;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r5);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 2;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r6);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r10 = 3;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r11 = java.lang.Integer.valueOf(r7);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r8[r10] = r11;	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r19 = java.lang.String.format(r2, r3, r8);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        goto L_0x0314;
+    L_0x0347:
+        r14 = move-exception;
+        r2 = "Id3Decoder";	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r3 = "Unsupported character encoding";	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        android.util.Log.w(r2, r3);	 Catch:{ UnsupportedEncodingException -> 0x0347, all -> 0x035c }
+        r16 = 0;
+        r0 = r25;
+        r1 = r23;
+        r0.setPosition(r1);
+        goto L_0x0058;
+    L_0x035c:
         r2 = move-exception;
-        r17 = "Id3Decoder";	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r18 = "Unsupported character encoding";	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        android.util.Log.w(r17, r18);	 Catch:{ UnsupportedEncodingException -> 0x02ec, all -> 0x0300 }
-        r4 = 0;
-        r0 = r23;
-        r1 = r16;
+        r0 = r25;
+        r1 = r23;
         r0.setPosition(r1);
-        goto L_0x0072;
-    L_0x0300:
-        r17 = move-exception;
-        r0 = r23;
-        r1 = r16;
-        r0.setPosition(r1);
-        throw r17;
+        throw r2;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.metadata.id3.Id3Decoder.decodeFrame(int, org.telegram.messenger.exoplayer2.util.ParsableByteArray, boolean):org.telegram.messenger.exoplayer2.metadata.id3.Id3Frame");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.metadata.id3.Id3Decoder.decodeFrame(int, org.telegram.messenger.exoplayer2.util.ParsableByteArray, boolean, int, org.telegram.messenger.exoplayer2.metadata.id3.Id3Decoder$FramePredicate):org.telegram.messenger.exoplayer2.metadata.id3.Id3Frame");
     }
 
-    public boolean canDecode(String mimeType) {
-        return mimeType.equals(MimeTypes.APPLICATION_ID3);
+    public Id3Decoder() {
+        this(null);
+    }
+
+    public Id3Decoder(FramePredicate framePredicate) {
+        this.framePredicate = framePredicate;
+    }
+
+    public Metadata decode(MetadataInputBuffer inputBuffer) {
+        ByteBuffer buffer = inputBuffer.data;
+        return decode(buffer.array(), buffer.limit());
     }
 
     public Metadata decode(byte[] data, int size) {
@@ -550,7 +629,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
         }
         int frameHeaderSize = id3Header.majorVersion == 2 ? 6 : 10;
         while (id3Data.bytesLeft() >= frameHeaderSize) {
-            Id3Frame frame = decodeFrame(id3Header.majorVersion, id3Data, unsignedIntFrameSizeHack);
+            Id3Frame frame = decodeFrame(id3Header.majorVersion, id3Data, unsignedIntFrameSizeHack, frameHeaderSize, this.framePredicate);
             if (frame != null) {
                 id3Frames.add(frame);
             }
@@ -666,17 +745,64 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
         return true;
     }
 
-    private static TxxxFrame decodeTxxxFrame(ParsableByteArray id3Data, int frameSize) throws UnsupportedEncodingException {
+    private static TextInformationFrame decodeTxxxFrame(ParsableByteArray id3Data, int frameSize) throws UnsupportedEncodingException {
+        String value;
         int encoding = id3Data.readUnsignedByte();
         String charset = getCharsetName(encoding);
         byte[] data = new byte[(frameSize - 1)];
         id3Data.readBytes(data, 0, frameSize - 1);
         int descriptionEndIndex = indexOfEos(data, 0, encoding);
+        String description = new String(data, 0, descriptionEndIndex, charset);
         int valueStartIndex = descriptionEndIndex + delimiterLength(encoding);
-        return new TxxxFrame(new String(data, 0, descriptionEndIndex, charset), new String(data, valueStartIndex, indexOfEos(data, valueStartIndex, encoding) - valueStartIndex, charset));
+        if (valueStartIndex < data.length) {
+            value = new String(data, valueStartIndex, indexOfEos(data, valueStartIndex, encoding) - valueStartIndex, charset);
+        } else {
+            value = "";
+        }
+        return new TextInformationFrame("TXXX", description, value);
+    }
+
+    private static TextInformationFrame decodeTextInformationFrame(ParsableByteArray id3Data, int frameSize, String id) throws UnsupportedEncodingException {
+        if (frameSize <= 1) {
+            return new TextInformationFrame(id, null, "");
+        }
+        int encoding = id3Data.readUnsignedByte();
+        String charset = getCharsetName(encoding);
+        byte[] data = new byte[(frameSize - 1)];
+        id3Data.readBytes(data, 0, frameSize - 1);
+        return new TextInformationFrame(id, null, new String(data, 0, indexOfEos(data, 0, encoding), charset));
+    }
+
+    private static UrlLinkFrame decodeWxxxFrame(ParsableByteArray id3Data, int frameSize) throws UnsupportedEncodingException {
+        String url;
+        int encoding = id3Data.readUnsignedByte();
+        String charset = getCharsetName(encoding);
+        byte[] data = new byte[(frameSize - 1)];
+        id3Data.readBytes(data, 0, frameSize - 1);
+        int descriptionEndIndex = indexOfEos(data, 0, encoding);
+        String description = new String(data, 0, descriptionEndIndex, charset);
+        int urlStartIndex = descriptionEndIndex + delimiterLength(encoding);
+        if (urlStartIndex < data.length) {
+            url = new String(data, urlStartIndex, indexOfZeroByte(data, urlStartIndex) - urlStartIndex, "ISO-8859-1");
+        } else {
+            url = "";
+        }
+        return new UrlLinkFrame("WXXX", description, url);
+    }
+
+    private static UrlLinkFrame decodeUrlLinkFrame(ParsableByteArray id3Data, int frameSize, String id) throws UnsupportedEncodingException {
+        if (frameSize == 0) {
+            return new UrlLinkFrame(id, null, "");
+        }
+        byte[] data = new byte[frameSize];
+        id3Data.readBytes(data, 0, frameSize);
+        return new UrlLinkFrame(id, null, new String(data, 0, indexOfZeroByte(data, 0), "ISO-8859-1"));
     }
 
     private static PrivFrame decodePrivFrame(ParsableByteArray id3Data, int frameSize) throws UnsupportedEncodingException {
+        if (frameSize == 0) {
+            return new PrivFrame("", new byte[0]);
+        }
         byte[] data = new byte[frameSize];
         id3Data.readBytes(data, 0, frameSize);
         int ownerEndIndex = indexOfZeroByte(data, 0);
@@ -707,13 +833,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
         id3Data.readBytes(data, 0, frameSize - 1);
         if (majorVersion == 2) {
             mimeTypeEndIndex = 2;
-            mimeType = "image/" + new String(data, 0, 3, "ISO-8859-1").toLowerCase();
+            mimeType = "image/" + Util.toLowerInvariant(new String(data, 0, 3, "ISO-8859-1"));
             if (mimeType.equals("image/jpg")) {
                 mimeType = "image/jpeg";
             }
         } else {
             mimeTypeEndIndex = indexOfZeroByte(data, 0);
-            mimeType = new String(data, 0, mimeTypeEndIndex, "ISO-8859-1").toLowerCase();
+            mimeType = Util.toLowerInvariant(new String(data, 0, mimeTypeEndIndex, "ISO-8859-1"));
             if (mimeType.indexOf(47) == -1) {
                 mimeType = "image/" + mimeType;
             }
@@ -725,6 +851,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
     }
 
     private static CommentFrame decodeCommentFrame(ParsableByteArray id3Data, int frameSize) throws UnsupportedEncodingException {
+        String text;
         int encoding = id3Data.readUnsignedByte();
         String charset = getCharsetName(encoding);
         byte[] data = new byte[3];
@@ -733,16 +860,71 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
         data = new byte[(frameSize - 4)];
         id3Data.readBytes(data, 0, frameSize - 4);
         int descriptionEndIndex = indexOfEos(data, 0, encoding);
+        String description = new String(data, 0, descriptionEndIndex, charset);
         int textStartIndex = descriptionEndIndex + delimiterLength(encoding);
-        return new CommentFrame(language, new String(data, 0, descriptionEndIndex, charset), new String(data, textStartIndex, indexOfEos(data, textStartIndex, encoding) - textStartIndex, charset));
+        if (textStartIndex < data.length) {
+            text = new String(data, textStartIndex, indexOfEos(data, textStartIndex, encoding) - textStartIndex, charset);
+        } else {
+            text = "";
+        }
+        return new CommentFrame(language, description, text);
     }
 
-    private static TextInformationFrame decodeTextInformationFrame(ParsableByteArray id3Data, int frameSize, String id) throws UnsupportedEncodingException {
-        int encoding = id3Data.readUnsignedByte();
-        String charset = getCharsetName(encoding);
-        byte[] data = new byte[(frameSize - 1)];
-        id3Data.readBytes(data, 0, frameSize - 1);
-        return new TextInformationFrame(id, new String(data, 0, indexOfEos(data, 0, encoding), charset));
+    private static ChapterFrame decodeChapterFrame(ParsableByteArray id3Data, int frameSize, int majorVersion, boolean unsignedIntFrameSizeHack, int frameHeaderSize, FramePredicate framePredicate) throws UnsupportedEncodingException {
+        int framePosition = id3Data.getPosition();
+        int chapterIdEndIndex = indexOfZeroByte(id3Data.data, framePosition);
+        String chapterId = new String(id3Data.data, framePosition, chapterIdEndIndex - framePosition, "ISO-8859-1");
+        id3Data.setPosition(chapterIdEndIndex + 1);
+        int startTime = id3Data.readInt();
+        int endTime = id3Data.readInt();
+        long startOffset = id3Data.readUnsignedInt();
+        if (startOffset == 4294967295L) {
+            startOffset = -1;
+        }
+        long endOffset = id3Data.readUnsignedInt();
+        if (endOffset == 4294967295L) {
+            endOffset = -1;
+        }
+        ArrayList<Id3Frame> subFrames = new ArrayList();
+        int limit = framePosition + frameSize;
+        while (id3Data.getPosition() < limit) {
+            Id3Frame frame = decodeFrame(majorVersion, id3Data, unsignedIntFrameSizeHack, frameHeaderSize, framePredicate);
+            if (frame != null) {
+                subFrames.add(frame);
+            }
+        }
+        Id3Frame[] subFrameArray = new Id3Frame[subFrames.size()];
+        subFrames.toArray(subFrameArray);
+        return new ChapterFrame(chapterId, startTime, endTime, startOffset, endOffset, subFrameArray);
+    }
+
+    private static ChapterTocFrame decodeChapterTOCFrame(ParsableByteArray id3Data, int frameSize, int majorVersion, boolean unsignedIntFrameSizeHack, int frameHeaderSize, FramePredicate framePredicate) throws UnsupportedEncodingException {
+        int framePosition = id3Data.getPosition();
+        int elementIdEndIndex = indexOfZeroByte(id3Data.data, framePosition);
+        String elementId = new String(id3Data.data, framePosition, elementIdEndIndex - framePosition, "ISO-8859-1");
+        id3Data.setPosition(elementIdEndIndex + 1);
+        int ctocFlags = id3Data.readUnsignedByte();
+        boolean isRoot = (ctocFlags & 2) != 0;
+        boolean isOrdered = (ctocFlags & 1) != 0;
+        int childCount = id3Data.readUnsignedByte();
+        String[] children = new String[childCount];
+        for (int i = 0; i < childCount; i++) {
+            int startIndex = id3Data.getPosition();
+            int endIndex = indexOfZeroByte(id3Data.data, startIndex);
+            children[i] = new String(id3Data.data, startIndex, endIndex - startIndex, "ISO-8859-1");
+            id3Data.setPosition(endIndex + 1);
+        }
+        ArrayList<Id3Frame> subFrames = new ArrayList();
+        int limit = framePosition + frameSize;
+        while (id3Data.getPosition() < limit) {
+            Id3Frame frame = decodeFrame(majorVersion, id3Data, unsignedIntFrameSizeHack, frameHeaderSize, framePredicate);
+            if (frame != null) {
+                subFrames.add(frame);
+            }
+        }
+        Id3Frame[] subFrameArray = new Id3Frame[subFrames.size()];
+        subFrames.toArray(subFrameArray);
+        return new ChapterTocFrame(elementId, isRoot, isOrdered, children, subFrameArray);
     }
 
     private static BinaryFrame decodeBinaryFrame(ParsableByteArray id3Data, int frameSize, String id) {

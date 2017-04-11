@@ -22,8 +22,8 @@ final class HlsSampleStream implements SampleStream {
         this.sampleStreamWrapper.maybeThrowError();
     }
 
-    public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer) {
-        return this.sampleStreamWrapper.readData(this.group, formatHolder, buffer);
+    public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean requireFormat) {
+        return this.sampleStreamWrapper.readData(this.group, formatHolder, buffer, requireFormat);
     }
 
     public void skipToKeyframeBefore(long timeUs) {

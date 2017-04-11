@@ -20,28 +20,102 @@ import org.telegram.messenger.exoplayer2.util.Assertions;
 public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, SequenceableLoader, Callback<Chunk> {
     private final SequenceableLoader.Callback<ChunkSampleStream<T>> callback;
     private final T chunkSource;
-    private Format downstreamTrackFormat;
+    private final DefaultTrackOutput[] embeddedSampleQueues;
+    private final int[] embeddedTrackTypes;
+    private final boolean[] embeddedTracksSelected;
     private final EventDispatcher eventDispatcher;
-    private long lastSeekPositionUs;
+    long lastSeekPositionUs;
     private final Loader loader = new Loader("Loader:ChunkSampleStream");
-    private boolean loadingFinished;
+    boolean loadingFinished;
+    private final BaseMediaChunkOutput mediaChunkOutput;
     private final LinkedList<BaseMediaChunk> mediaChunks = new LinkedList();
     private final int minLoadableRetryCount;
     private final ChunkHolder nextChunkHolder = new ChunkHolder();
     private long pendingResetPositionUs;
+    private Format primaryDownstreamTrackFormat;
+    private final DefaultTrackOutput primarySampleQueue;
+    private final int primaryTrackType;
     private final List<BaseMediaChunk> readOnlyMediaChunks = Collections.unmodifiableList(this.mediaChunks);
-    private final DefaultTrackOutput sampleQueue;
-    private final int trackType;
 
-    public ChunkSampleStream(int trackType, T chunkSource, SequenceableLoader.Callback<ChunkSampleStream<T>> callback, Allocator allocator, long positionUs, int minLoadableRetryCount, EventDispatcher eventDispatcher) {
-        this.trackType = trackType;
+    public final class EmbeddedSampleStream implements SampleStream {
+        private final int index;
+        public final ChunkSampleStream<T> parent;
+        private final DefaultTrackOutput sampleQueue;
+
+        public EmbeddedSampleStream(ChunkSampleStream<T> parent, DefaultTrackOutput sampleQueue, int index) {
+            this.parent = parent;
+            this.sampleQueue = sampleQueue;
+            this.index = index;
+        }
+
+        public boolean isReady() {
+            return ChunkSampleStream.this.loadingFinished || !(ChunkSampleStream.this.isPendingReset() || this.sampleQueue.isEmpty());
+        }
+
+        public void skipToKeyframeBefore(long timeUs) {
+            this.sampleQueue.skipToKeyframeBefore(timeUs);
+        }
+
+        public void maybeThrowError() throws IOException {
+        }
+
+        public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired) {
+            if (ChunkSampleStream.this.isPendingReset()) {
+                return -3;
+            }
+            return this.sampleQueue.readData(formatHolder, buffer, formatRequired, ChunkSampleStream.this.loadingFinished, ChunkSampleStream.this.lastSeekPositionUs);
+        }
+
+        public void release() {
+            Assertions.checkState(ChunkSampleStream.this.embeddedTracksSelected[this.index]);
+            ChunkSampleStream.this.embeddedTracksSelected[this.index] = false;
+        }
+    }
+
+    public ChunkSampleStream(int primaryTrackType, int[] embeddedTrackTypes, T chunkSource, SequenceableLoader.Callback<ChunkSampleStream<T>> callback, Allocator allocator, long positionUs, int minLoadableRetryCount, EventDispatcher eventDispatcher) {
+        this.primaryTrackType = primaryTrackType;
+        this.embeddedTrackTypes = embeddedTrackTypes;
         this.chunkSource = chunkSource;
         this.callback = callback;
         this.eventDispatcher = eventDispatcher;
         this.minLoadableRetryCount = minLoadableRetryCount;
-        this.sampleQueue = new DefaultTrackOutput(allocator);
-        this.lastSeekPositionUs = positionUs;
+        int embeddedTrackCount = embeddedTrackTypes == null ? 0 : embeddedTrackTypes.length;
+        this.embeddedSampleQueues = new DefaultTrackOutput[embeddedTrackCount];
+        this.embeddedTracksSelected = new boolean[embeddedTrackCount];
+        int[] trackTypes = new int[(embeddedTrackCount + 1)];
+        DefaultTrackOutput[] sampleQueues = new DefaultTrackOutput[(embeddedTrackCount + 1)];
+        this.primarySampleQueue = new DefaultTrackOutput(allocator);
+        trackTypes[0] = primaryTrackType;
+        sampleQueues[0] = this.primarySampleQueue;
+        for (int i = 0; i < embeddedTrackCount; i++) {
+            DefaultTrackOutput trackOutput = new DefaultTrackOutput(allocator);
+            this.embeddedSampleQueues[i] = trackOutput;
+            sampleQueues[i + 1] = trackOutput;
+            trackTypes[i + 1] = embeddedTrackTypes[i];
+        }
+        this.mediaChunkOutput = new BaseMediaChunkOutput(trackTypes, sampleQueues);
         this.pendingResetPositionUs = positionUs;
+        this.lastSeekPositionUs = positionUs;
+    }
+
+    public void discardUnselectedEmbeddedTracksTo(long positionUs) {
+        for (int i = 0; i < this.embeddedSampleQueues.length; i++) {
+            if (!this.embeddedTracksSelected[i]) {
+                this.embeddedSampleQueues[i].skipToKeyframeBefore(positionUs, true);
+            }
+        }
+    }
+
+    public EmbeddedSampleStream selectEmbeddedTrack(long positionUs, int trackType) {
+        for (int i = 0; i < this.embeddedSampleQueues.length; i++) {
+            if (this.embeddedTrackTypes[i] == trackType) {
+                Assertions.checkState(!this.embeddedTracksSelected[i]);
+                this.embeddedTracksSelected[i] = true;
+                this.embeddedSampleQueues[i].skipToKeyframeBefore(positionUs, true);
+                return new EmbeddedSampleStream(this, this.embeddedSampleQueues[i], i);
+            }
+        }
+        throw new IllegalStateException();
     }
 
     public T getChunkSource() {
@@ -61,40 +135,93 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
         if (lastCompletedMediaChunk != null) {
             bufferedPositionUs = Math.max(bufferedPositionUs, lastCompletedMediaChunk.endTimeUs);
         }
-        return Math.max(bufferedPositionUs, this.sampleQueue.getLargestQueuedTimestampUs());
+        return Math.max(bufferedPositionUs, this.primarySampleQueue.getLargestQueuedTimestampUs());
     }
 
     public void seekToUs(long positionUs) {
         boolean seekInsideBuffer;
+        DefaultTrackOutput[] defaultTrackOutputArr;
+        int length;
+        int length2;
+        int i = 0;
         this.lastSeekPositionUs = positionUs;
-        if (isPendingReset() || !this.sampleQueue.skipToKeyframeBefore(positionUs)) {
-            seekInsideBuffer = false;
-        } else {
-            seekInsideBuffer = true;
-        }
-        if (seekInsideBuffer) {
-            while (this.mediaChunks.size() > 1 && ((BaseMediaChunk) this.mediaChunks.get(1)).getFirstSampleIndex() <= this.sampleQueue.getReadIndex()) {
-                this.mediaChunks.removeFirst();
+        if (!isPendingReset()) {
+            boolean z;
+            DefaultTrackOutput defaultTrackOutput = this.primarySampleQueue;
+            if (positionUs < getNextLoadPositionUs()) {
+                z = true;
+            } else {
+                z = false;
             }
+            if (defaultTrackOutput.skipToKeyframeBefore(positionUs, z)) {
+                seekInsideBuffer = true;
+                if (seekInsideBuffer) {
+                    this.pendingResetPositionUs = positionUs;
+                    this.loadingFinished = false;
+                    this.mediaChunks.clear();
+                    if (this.loader.isLoading()) {
+                        this.primarySampleQueue.reset(true);
+                        defaultTrackOutputArr = this.embeddedSampleQueues;
+                        length = defaultTrackOutputArr.length;
+                        while (i < length) {
+                            defaultTrackOutputArr[i].reset(true);
+                            i++;
+                        }
+                        return;
+                    }
+                    this.loader.cancelLoading();
+                    return;
+                }
+                while (this.mediaChunks.size() > 1 && ((BaseMediaChunk) this.mediaChunks.get(1)).getFirstSampleIndex(0) <= this.primarySampleQueue.getReadIndex()) {
+                    this.mediaChunks.removeFirst();
+                }
+                defaultTrackOutputArr = this.embeddedSampleQueues;
+                length2 = defaultTrackOutputArr.length;
+                while (i < length2) {
+                    defaultTrackOutputArr[i].skipToKeyframeBefore(positionUs);
+                    i++;
+                }
+            }
+        }
+        seekInsideBuffer = false;
+        if (seekInsideBuffer) {
+            this.pendingResetPositionUs = positionUs;
+            this.loadingFinished = false;
+            this.mediaChunks.clear();
+            if (this.loader.isLoading()) {
+                this.primarySampleQueue.reset(true);
+                defaultTrackOutputArr = this.embeddedSampleQueues;
+                length = defaultTrackOutputArr.length;
+                while (i < length) {
+                    defaultTrackOutputArr[i].reset(true);
+                    i++;
+                }
+                return;
+            }
+            this.loader.cancelLoading();
             return;
         }
-        this.pendingResetPositionUs = positionUs;
-        this.loadingFinished = false;
-        this.mediaChunks.clear();
-        if (this.loader.isLoading()) {
-            this.loader.cancelLoading();
-        } else {
-            this.sampleQueue.reset(true);
+        while (this.mediaChunks.size() > 1) {
+            this.mediaChunks.removeFirst();
+        }
+        defaultTrackOutputArr = this.embeddedSampleQueues;
+        length2 = defaultTrackOutputArr.length;
+        while (i < length2) {
+            defaultTrackOutputArr[i].skipToKeyframeBefore(positionUs);
+            i++;
         }
     }
 
     public void release() {
-        this.sampleQueue.disable();
+        this.primarySampleQueue.disable();
+        for (DefaultTrackOutput embeddedSampleQueue : this.embeddedSampleQueues) {
+            embeddedSampleQueue.disable();
+        }
         this.loader.release();
     }
 
     public boolean isReady() {
-        return this.loadingFinished || !(isPendingReset() || this.sampleQueue.isEmpty());
+        return this.loadingFinished || !(isPendingReset() || this.primarySampleQueue.isEmpty());
     }
 
     public void maybeThrowError() throws IOException {
@@ -104,36 +231,31 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
         }
     }
 
-    public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer) {
+    public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired) {
         if (isPendingReset()) {
             return -3;
         }
-        while (this.mediaChunks.size() > 1 && ((BaseMediaChunk) this.mediaChunks.get(1)).getFirstSampleIndex() <= this.sampleQueue.getReadIndex()) {
-            this.mediaChunks.removeFirst();
-        }
-        BaseMediaChunk currentChunk = (BaseMediaChunk) this.mediaChunks.getFirst();
-        Format trackFormat = currentChunk.trackFormat;
-        if (!trackFormat.equals(this.downstreamTrackFormat)) {
-            this.eventDispatcher.downstreamFormatChanged(this.trackType, trackFormat, currentChunk.trackSelectionReason, currentChunk.trackSelectionData, currentChunk.startTimeUs);
-        }
-        this.downstreamTrackFormat = trackFormat;
-        return this.sampleQueue.readData(formatHolder, buffer, this.loadingFinished, this.lastSeekPositionUs);
+        discardDownstreamMediaChunks(this.primarySampleQueue.getReadIndex());
+        return this.primarySampleQueue.readData(formatHolder, buffer, formatRequired, this.loadingFinished, this.lastSeekPositionUs);
     }
 
     public void skipToKeyframeBefore(long timeUs) {
-        this.sampleQueue.skipToKeyframeBefore(timeUs);
+        this.primarySampleQueue.skipToKeyframeBefore(timeUs);
     }
 
     public void onLoadCompleted(Chunk loadable, long elapsedRealtimeMs, long loadDurationMs) {
         this.chunkSource.onChunkLoadCompleted(loadable);
-        this.eventDispatcher.loadCompleted(loadable.dataSpec, loadable.type, this.trackType, loadable.trackFormat, loadable.trackSelectionReason, loadable.trackSelectionData, loadable.startTimeUs, loadable.endTimeUs, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded());
+        this.eventDispatcher.loadCompleted(loadable.dataSpec, loadable.type, this.primaryTrackType, loadable.trackFormat, loadable.trackSelectionReason, loadable.trackSelectionData, loadable.startTimeUs, loadable.endTimeUs, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded());
         this.callback.onContinueLoadingRequested(this);
     }
 
     public void onLoadCanceled(Chunk loadable, long elapsedRealtimeMs, long loadDurationMs, boolean released) {
-        this.eventDispatcher.loadCanceled(loadable.dataSpec, loadable.type, this.trackType, loadable.trackFormat, loadable.trackSelectionReason, loadable.trackSelectionData, loadable.startTimeUs, loadable.endTimeUs, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded());
+        this.eventDispatcher.loadCanceled(loadable.dataSpec, loadable.type, this.primaryTrackType, loadable.trackFormat, loadable.trackSelectionReason, loadable.trackSelectionData, loadable.startTimeUs, loadable.endTimeUs, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded());
         if (!released) {
-            this.sampleQueue.reset(true);
+            this.primarySampleQueue.reset(true);
+            for (DefaultTrackOutput embeddedSampleQueue : this.embeddedSampleQueues) {
+                embeddedSampleQueue.reset(true);
+            }
             this.callback.onContinueLoadingRequested(this);
         }
     }
@@ -148,13 +270,16 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
             if (isMediaChunk) {
                 Chunk removed = (BaseMediaChunk) this.mediaChunks.removeLast();
                 Assertions.checkState(removed == loadable);
-                this.sampleQueue.discardUpstreamSamples(removed.getFirstSampleIndex());
+                this.primarySampleQueue.discardUpstreamSamples(removed.getFirstSampleIndex(0));
+                for (int i = 0; i < this.embeddedSampleQueues.length; i++) {
+                    this.embeddedSampleQueues[i].discardUpstreamSamples(removed.getFirstSampleIndex(i + 1));
+                }
                 if (this.mediaChunks.isEmpty()) {
                     this.pendingResetPositionUs = this.lastSeekPositionUs;
                 }
             }
         }
-        this.eventDispatcher.loadError(loadable.dataSpec, loadable.type, this.trackType, loadable.trackFormat, loadable.trackSelectionReason, loadable.trackSelectionData, loadable.startTimeUs, loadable.endTimeUs, elapsedRealtimeMs, loadDurationMs, bytesLoaded, error, canceled);
+        this.eventDispatcher.loadError(loadable.dataSpec, loadable.type, this.primaryTrackType, loadable.trackFormat, loadable.trackSelectionReason, loadable.trackSelectionData, loadable.startTimeUs, loadable.endTimeUs, elapsedRealtimeMs, loadDurationMs, bytesLoaded, error, canceled);
         if (!canceled) {
             return 0;
         }
@@ -189,10 +314,10 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
             if (isMediaChunk(loadable)) {
                 this.pendingResetPositionUs = C.TIME_UNSET;
                 BaseMediaChunk mediaChunk2 = (BaseMediaChunk) loadable;
-                mediaChunk2.init(this.sampleQueue);
+                mediaChunk2.init(this.mediaChunkOutput);
                 this.mediaChunks.add(mediaChunk2);
             }
-            this.eventDispatcher.loadStarted(loadable.dataSpec, loadable.type, this.trackType, loadable.trackFormat, loadable.trackSelectionReason, loadable.trackSelectionData, loadable.startTimeUs, loadable.endTimeUs, this.loader.startLoading(loadable, this, this.minLoadableRetryCount));
+            this.eventDispatcher.loadStarted(loadable.dataSpec, loadable.type, this.primaryTrackType, loadable.trackFormat, loadable.trackSelectionReason, loadable.trackSelectionData, loadable.startTimeUs, loadable.endTimeUs, this.loader.startLoading(loadable, this, this.minLoadableRetryCount));
             return true;
         }
     }
@@ -212,8 +337,20 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
         return chunk instanceof BaseMediaChunk;
     }
 
-    private boolean isPendingReset() {
+    boolean isPendingReset() {
         return this.pendingResetPositionUs != C.TIME_UNSET;
+    }
+
+    private void discardDownstreamMediaChunks(int primaryStreamReadIndex) {
+        while (this.mediaChunks.size() > 1 && ((BaseMediaChunk) this.mediaChunks.get(1)).getFirstSampleIndex(0) <= primaryStreamReadIndex) {
+            this.mediaChunks.removeFirst();
+        }
+        BaseMediaChunk currentChunk = (BaseMediaChunk) this.mediaChunks.getFirst();
+        Format trackFormat = currentChunk.trackFormat;
+        if (!trackFormat.equals(this.primaryDownstreamTrackFormat)) {
+            this.eventDispatcher.downstreamFormatChanged(this.primaryTrackType, trackFormat, currentChunk.trackSelectionReason, currentChunk.trackSelectionData, currentChunk.startTimeUs);
+        }
+        this.primaryDownstreamTrackFormat = trackFormat;
     }
 
     private boolean discardUpstreamMediaChunks(int queueLength) {
@@ -228,8 +365,11 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
             startTimeUs = removed.startTimeUs;
             this.loadingFinished = false;
         }
-        this.sampleQueue.discardUpstreamSamples(removed.getFirstSampleIndex());
-        this.eventDispatcher.upstreamDiscarded(this.trackType, startTimeUs, endTimeUs);
+        this.primarySampleQueue.discardUpstreamSamples(removed.getFirstSampleIndex(0));
+        for (int i = 0; i < this.embeddedSampleQueues.length; i++) {
+            this.embeddedSampleQueues[i].discardUpstreamSamples(removed.getFirstSampleIndex(i + 1));
+        }
+        this.eventDispatcher.upstreamDiscarded(this.primaryTrackType, startTimeUs, endTimeUs);
         return true;
     }
 }

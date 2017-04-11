@@ -2,11 +2,13 @@ package org.telegram.messenger.exoplayer2.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Join;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
@@ -22,8 +24,10 @@ final class SubtitlePainter {
     private static final String TAG = "SubtitlePainter";
     private boolean applyEmbeddedStyles;
     private int backgroundColor;
+    private Rect bitmapRect;
     private float bottomPaddingFraction;
     private final float cornerRadius;
+    private Bitmap cueBitmap;
     private float cueLine;
     private int cueLineAnchor;
     private int cueLineType;
@@ -73,102 +77,155 @@ final class SubtitlePainter {
     }
 
     public void draw(Cue cue, boolean applyEmbeddedStyles, CaptionStyleCompat style, float textSizePx, float bottomPaddingFraction, Canvas canvas, int cueBoxLeft, int cueBoxTop, int cueBoxRight, int cueBoxBottom) {
-        CharSequence cueText = cue.text;
-        if (!TextUtils.isEmpty(cueText)) {
-            if (!applyEmbeddedStyles) {
-                cueText = cueText.toString();
-            }
-            if (areCharSequencesEqual(this.cueText, cueText) && Util.areEqual(this.cueTextAlignment, cue.textAlignment) && this.cueLine == cue.line && this.cueLineType == cue.lineType && Util.areEqual(Integer.valueOf(this.cueLineAnchor), Integer.valueOf(cue.lineAnchor)) && this.cuePosition == cue.position && Util.areEqual(Integer.valueOf(this.cuePositionAnchor), Integer.valueOf(cue.positionAnchor)) && this.cueSize == cue.size && this.applyEmbeddedStyles == applyEmbeddedStyles && this.foregroundColor == style.foregroundColor && this.backgroundColor == style.backgroundColor && this.windowColor == style.windowColor && this.edgeType == style.edgeType && this.edgeColor == style.edgeColor && Util.areEqual(this.textPaint.getTypeface(), style.typeface) && this.textSizePx == textSizePx && this.bottomPaddingFraction == bottomPaddingFraction && this.parentLeft == cueBoxLeft && this.parentTop == cueBoxTop && this.parentRight == cueBoxRight && this.parentBottom == cueBoxBottom) {
-                drawLayout(canvas);
-                return;
-            }
-            this.cueText = cueText;
-            this.cueTextAlignment = cue.textAlignment;
-            this.cueLine = cue.line;
-            this.cueLineType = cue.lineType;
-            this.cueLineAnchor = cue.lineAnchor;
-            this.cuePosition = cue.position;
-            this.cuePositionAnchor = cue.positionAnchor;
-            this.cueSize = cue.size;
-            this.applyEmbeddedStyles = applyEmbeddedStyles;
-            this.foregroundColor = style.foregroundColor;
-            this.backgroundColor = style.backgroundColor;
-            this.windowColor = style.windowColor;
-            this.edgeType = style.edgeType;
-            this.edgeColor = style.edgeColor;
-            this.textPaint.setTypeface(style.typeface);
-            this.textSizePx = textSizePx;
-            this.bottomPaddingFraction = bottomPaddingFraction;
-            this.parentLeft = cueBoxLeft;
-            this.parentTop = cueBoxTop;
-            this.parentRight = cueBoxRight;
-            this.parentBottom = cueBoxBottom;
-            int parentWidth = this.parentRight - this.parentLeft;
-            int parentHeight = this.parentBottom - this.parentTop;
-            this.textPaint.setTextSize(textSizePx);
-            int textPaddingX = (int) ((INNER_PADDING_RATIO * textSizePx) + 0.5f);
-            int availableWidth = parentWidth - (textPaddingX * 2);
-            if (this.cueSize != Cue.DIMEN_UNSET) {
-                availableWidth = (int) (((float) availableWidth) * this.cueSize);
-            }
-            if (availableWidth <= 0) {
-                Log.w(TAG, "Skipped drawing subtitle cue (insufficient space)");
-                return;
-            }
-            int anchorPosition;
-            int textLeft;
-            int textRight;
-            int textTop;
-            Alignment textAlignment = this.cueTextAlignment == null ? Alignment.ALIGN_CENTER : this.cueTextAlignment;
-            this.textLayout = new StaticLayout(cueText, this.textPaint, availableWidth, textAlignment, this.spacingMult, this.spacingAdd, true);
-            int textHeight = this.textLayout.getHeight();
-            int textWidth = 0;
-            int lineCount = this.textLayout.getLineCount();
-            for (int i = 0; i < lineCount; i++) {
-                textWidth = Math.max((int) Math.ceil((double) this.textLayout.getLineWidth(i)), textWidth);
-            }
-            if (this.cueSize != Cue.DIMEN_UNSET && textWidth < availableWidth) {
-                textWidth = availableWidth;
-            }
-            textWidth += textPaddingX * 2;
-            if (this.cuePosition != Cue.DIMEN_UNSET) {
-                anchorPosition = Math.round(((float) parentWidth) * this.cuePosition) + this.parentLeft;
-                textLeft = this.cuePositionAnchor == 2 ? anchorPosition - textWidth : this.cuePositionAnchor == 1 ? ((anchorPosition * 2) - textWidth) / 2 : anchorPosition;
-                textLeft = Math.max(textLeft, this.parentLeft);
-                textRight = Math.min(textLeft + textWidth, this.parentRight);
+        boolean isTextCue = cue.bitmap == null;
+        CharSequence cueText = null;
+        Bitmap cueBitmap = null;
+        int windowColor = -16777216;
+        if (isTextCue) {
+            cueText = cue.text;
+            if (!TextUtils.isEmpty(cueText)) {
+                windowColor = cue.windowColorSet ? cue.windowColor : style.windowColor;
+                if (!applyEmbeddedStyles) {
+                    cueText = cueText.toString();
+                    windowColor = style.windowColor;
+                }
             } else {
-                textLeft = (parentWidth - textWidth) / 2;
-                textRight = textLeft + textWidth;
+                return;
             }
-            if (this.cueLine != Cue.DIMEN_UNSET) {
-                if (this.cueLineType == 0) {
-                    anchorPosition = Math.round(((float) parentHeight) * this.cueLine) + this.parentTop;
+        }
+        cueBitmap = cue.bitmap;
+        if (areCharSequencesEqual(this.cueText, cueText) && Util.areEqual(this.cueTextAlignment, cue.textAlignment) && this.cueBitmap == cueBitmap && this.cueLine == cue.line && this.cueLineType == cue.lineType && Util.areEqual(Integer.valueOf(this.cueLineAnchor), Integer.valueOf(cue.lineAnchor)) && this.cuePosition == cue.position && Util.areEqual(Integer.valueOf(this.cuePositionAnchor), Integer.valueOf(cue.positionAnchor)) && this.cueSize == cue.size && this.applyEmbeddedStyles == applyEmbeddedStyles && this.foregroundColor == style.foregroundColor && this.backgroundColor == style.backgroundColor && this.windowColor == windowColor && this.edgeType == style.edgeType && this.edgeColor == style.edgeColor && Util.areEqual(this.textPaint.getTypeface(), style.typeface) && this.textSizePx == textSizePx && this.bottomPaddingFraction == bottomPaddingFraction && this.parentLeft == cueBoxLeft && this.parentTop == cueBoxTop && this.parentRight == cueBoxRight && this.parentBottom == cueBoxBottom) {
+            drawLayout(canvas, isTextCue);
+            return;
+        }
+        this.cueText = cueText;
+        this.cueTextAlignment = cue.textAlignment;
+        this.cueBitmap = cueBitmap;
+        this.cueLine = cue.line;
+        this.cueLineType = cue.lineType;
+        this.cueLineAnchor = cue.lineAnchor;
+        this.cuePosition = cue.position;
+        this.cuePositionAnchor = cue.positionAnchor;
+        this.cueSize = cue.size;
+        this.applyEmbeddedStyles = applyEmbeddedStyles;
+        this.foregroundColor = style.foregroundColor;
+        this.backgroundColor = style.backgroundColor;
+        this.windowColor = windowColor;
+        this.edgeType = style.edgeType;
+        this.edgeColor = style.edgeColor;
+        this.textPaint.setTypeface(style.typeface);
+        this.textSizePx = textSizePx;
+        this.bottomPaddingFraction = bottomPaddingFraction;
+        this.parentLeft = cueBoxLeft;
+        this.parentTop = cueBoxTop;
+        this.parentRight = cueBoxRight;
+        this.parentBottom = cueBoxBottom;
+        if (isTextCue) {
+            setupTextLayout();
+        } else {
+            setupBitmapLayout();
+        }
+        drawLayout(canvas, isTextCue);
+    }
+
+    private void setupTextLayout() {
+        int parentWidth = this.parentRight - this.parentLeft;
+        int parentHeight = this.parentBottom - this.parentTop;
+        this.textPaint.setTextSize(this.textSizePx);
+        int textPaddingX = (int) ((this.textSizePx * INNER_PADDING_RATIO) + 0.5f);
+        int availableWidth = parentWidth - (textPaddingX * 2);
+        if (this.cueSize != Cue.DIMEN_UNSET) {
+            availableWidth = (int) (((float) availableWidth) * this.cueSize);
+        }
+        if (availableWidth <= 0) {
+            Log.w(TAG, "Skipped drawing subtitle cue (insufficient space)");
+            return;
+        }
+        int textLeft;
+        int textRight;
+        Alignment textAlignment = this.cueTextAlignment == null ? Alignment.ALIGN_CENTER : this.cueTextAlignment;
+        this.textLayout = new StaticLayout(this.cueText, this.textPaint, availableWidth, textAlignment, this.spacingMult, this.spacingAdd, true);
+        int textHeight = this.textLayout.getHeight();
+        int textWidth = 0;
+        int lineCount = this.textLayout.getLineCount();
+        for (int i = 0; i < lineCount; i++) {
+            textWidth = Math.max((int) Math.ceil((double) this.textLayout.getLineWidth(i)), textWidth);
+        }
+        if (this.cueSize != Cue.DIMEN_UNSET && textWidth < availableWidth) {
+            textWidth = availableWidth;
+        }
+        textWidth += textPaddingX * 2;
+        if (this.cuePosition != Cue.DIMEN_UNSET) {
+            int anchorPosition = Math.round(((float) parentWidth) * this.cuePosition) + this.parentLeft;
+            textLeft = this.cuePositionAnchor == 2 ? anchorPosition - textWidth : this.cuePositionAnchor == 1 ? ((anchorPosition * 2) - textWidth) / 2 : anchorPosition;
+            textLeft = Math.max(textLeft, this.parentLeft);
+            textRight = Math.min(textLeft + textWidth, this.parentRight);
+        } else {
+            textLeft = (parentWidth - textWidth) / 2;
+            textRight = textLeft + textWidth;
+        }
+        textWidth = textRight - textLeft;
+        if (textWidth <= 0) {
+            Log.w(TAG, "Skipped drawing subtitle cue (invalid horizontal positioning)");
+            return;
+        }
+        int textTop;
+        if (this.cueLine != Cue.DIMEN_UNSET) {
+            if (this.cueLineType == 0) {
+                anchorPosition = Math.round(((float) parentHeight) * this.cueLine) + this.parentTop;
+            } else {
+                int firstLineHeight = this.textLayout.getLineBottom(0) - this.textLayout.getLineTop(0);
+                if (this.cueLine >= 0.0f) {
+                    anchorPosition = Math.round(this.cueLine * ((float) firstLineHeight)) + this.parentTop;
                 } else {
-                    int firstLineHeight = this.textLayout.getLineBottom(0) - this.textLayout.getLineTop(0);
-                    if (this.cueLine >= 0.0f) {
-                        anchorPosition = Math.round(this.cueLine * ((float) firstLineHeight)) + this.parentTop;
-                    } else {
-                        anchorPosition = Math.round(this.cueLine * ((float) firstLineHeight)) + this.parentBottom;
-                    }
+                    anchorPosition = Math.round((this.cueLine + 1.0f) * ((float) firstLineHeight)) + this.parentBottom;
                 }
-                textTop = this.cueLineAnchor == 2 ? anchorPosition - textHeight : this.cueLineAnchor == 1 ? ((anchorPosition * 2) - textHeight) / 2 : anchorPosition;
-                if (textTop + textHeight > this.parentBottom) {
-                    textTop = this.parentBottom - textHeight;
-                } else if (textTop < this.parentTop) {
-                    textTop = this.parentTop;
-                }
-            } else {
-                textTop = (this.parentBottom - textHeight) - ((int) (((float) parentHeight) * bottomPaddingFraction));
             }
-            this.textLayout = new StaticLayout(cueText, this.textPaint, textRight - textLeft, textAlignment, this.spacingMult, this.spacingAdd, true);
-            this.textLeft = textLeft;
-            this.textTop = textTop;
-            this.textPaddingX = textPaddingX;
-            drawLayout(canvas);
+            textTop = this.cueLineAnchor == 2 ? anchorPosition - textHeight : this.cueLineAnchor == 1 ? ((anchorPosition * 2) - textHeight) / 2 : anchorPosition;
+            if (textTop + textHeight > this.parentBottom) {
+                textTop = this.parentBottom - textHeight;
+            } else if (textTop < this.parentTop) {
+                textTop = this.parentTop;
+            }
+        } else {
+            textTop = (this.parentBottom - textHeight) - ((int) (((float) parentHeight) * this.bottomPaddingFraction));
+        }
+        this.textLayout = new StaticLayout(this.cueText, this.textPaint, textWidth, textAlignment, this.spacingMult, this.spacingAdd, true);
+        this.textLeft = textLeft;
+        this.textTop = textTop;
+        this.textPaddingX = textPaddingX;
+    }
+
+    private void setupBitmapLayout() {
+        int parentWidth = this.parentRight - this.parentLeft;
+        float anchorX = ((float) this.parentLeft) + (((float) parentWidth) * this.cuePosition);
+        float anchorY = ((float) this.parentTop) + (((float) (this.parentBottom - this.parentTop)) * this.cueLine);
+        int width = Math.round(((float) parentWidth) * this.cueSize);
+        int height = Math.round(((float) width) * (((float) this.cueBitmap.getHeight()) / ((float) this.cueBitmap.getWidth())));
+        if (this.cueLineAnchor == 2) {
+            anchorX -= (float) width;
+        } else if (this.cueLineAnchor == 1) {
+            anchorX -= (float) (width / 2);
+        }
+        int x = Math.round(anchorX);
+        if (this.cuePositionAnchor == 2) {
+            anchorY -= (float) height;
+        } else if (this.cuePositionAnchor == 1) {
+            anchorY -= (float) (height / 2);
+        }
+        int y = Math.round(anchorY);
+        this.bitmapRect = new Rect(x, y, x + width, y + height);
+    }
+
+    private void drawLayout(Canvas canvas, boolean isTextCue) {
+        if (isTextCue) {
+            drawTextLayout(canvas);
+        } else {
+            drawBitmapLayout(canvas);
         }
     }
 
-    private void drawLayout(Canvas canvas) {
+    private void drawTextLayout(Canvas canvas) {
         StaticLayout layout = this.textLayout;
         if (layout != null) {
             int saveCount = canvas.save();
@@ -215,6 +272,10 @@ final class SubtitlePainter {
             this.textPaint.setShadowLayer(0.0f, 0.0f, 0.0f, 0);
             canvas.restoreToCount(saveCount);
         }
+    }
+
+    private void drawBitmapLayout(Canvas canvas) {
+        canvas.drawBitmap(this.cueBitmap, null, this.bitmapRect, null);
     }
 
     private static boolean areCharSequencesEqual(CharSequence first, CharSequence second) {

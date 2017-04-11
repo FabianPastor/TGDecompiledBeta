@@ -702,6 +702,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
         }
     }
 
+    public float getCurrentAlpha() {
+        return this.currentAlpha;
+    }
+
     public Bitmap getBitmap() {
         if (this.currentImage instanceof AnimatedFileDrawable) {
             return ((AnimatedFileDrawable) this.currentImage).getAnimatedBitmap();

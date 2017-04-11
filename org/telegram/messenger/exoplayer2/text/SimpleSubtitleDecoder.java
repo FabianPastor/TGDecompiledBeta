@@ -38,6 +38,7 @@ public abstract class SimpleSubtitleDecoder extends SimpleDecoder<SubtitleInputB
             ByteBuffer inputData = inputBuffer.data;
             SubtitleOutputBuffer subtitleOutputBuffer = outputBuffer;
             subtitleOutputBuffer.setContent(inputBuffer.timeUs, decode(inputData.array(), inputData.limit()), inputBuffer.subsampleOffsetUs);
+            outputBuffer.clearFlag(Integer.MIN_VALUE);
             return null;
         } catch (SubtitleDecoderException e) {
             return e;

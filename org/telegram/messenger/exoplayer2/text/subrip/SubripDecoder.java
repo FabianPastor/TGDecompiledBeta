@@ -12,8 +12,8 @@ import org.telegram.messenger.exoplayer2.util.LongArray;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
 public final class SubripDecoder extends SimpleSubtitleDecoder {
-    private static final Pattern SUBRIP_TIMESTAMP = Pattern.compile("(?:(\\d+):)?(\\d+):(\\d+),(\\d+)");
-    private static final Pattern SUBRIP_TIMING_LINE = Pattern.compile("(\\S*)\\s*-->\\s*(\\S*)");
+    private static final String SUBRIP_TIMECODE = "(?:(\\d+):)?(\\d+):(\\d+),(\\d+)";
+    private static final Pattern SUBRIP_TIMING_LINE = Pattern.compile("\\s*((?:(\\d+):)?(\\d+):(\\d+),(\\d+))\\s*-->\\s*((?:(\\d+):)?(\\d+):(\\d+),(\\d+))?\\s*");
     private static final String TAG = "SubripDecoder";
     private final StringBuilder textBuilder = new StringBuilder();
 
@@ -37,11 +37,11 @@ public final class SubripDecoder extends SimpleSubtitleDecoder {
                     boolean haveEndTimecode = false;
                     currentLine = subripData.readLine();
                     Matcher matcher = SUBRIP_TIMING_LINE.matcher(currentLine);
-                    if (matcher.find()) {
-                        cueTimesUs.add(parseTimecode(matcher.group(1)));
-                        if (!TextUtils.isEmpty(matcher.group(2))) {
+                    if (matcher.matches()) {
+                        cueTimesUs.add(parseTimecode(matcher, 1));
+                        if (!TextUtils.isEmpty(matcher.group(6))) {
                             haveEndTimecode = true;
-                            cueTimesUs.add(parseTimecode(matcher.group(2)));
+                            cueTimesUs.add(parseTimecode(matcher, 6));
                         }
                         this.textBuilder.setLength(0);
                         while (true) {
@@ -68,11 +68,7 @@ public final class SubripDecoder extends SimpleSubtitleDecoder {
         }
     }
 
-    private static long parseTimecode(String s) throws NumberFormatException {
-        Matcher matcher = SUBRIP_TIMESTAMP.matcher(s);
-        if (matcher.matches()) {
-            return ((((((Long.parseLong(matcher.group(1)) * 60) * 60) * 1000) + ((Long.parseLong(matcher.group(2)) * 60) * 1000)) + (Long.parseLong(matcher.group(3)) * 1000)) + Long.parseLong(matcher.group(4))) * 1000;
-        }
-        throw new NumberFormatException("has invalid format");
+    private static long parseTimecode(Matcher matcher, int groupOffset) {
+        return ((((((Long.parseLong(matcher.group(groupOffset + 1)) * 60) * 60) * 1000) + ((Long.parseLong(matcher.group(groupOffset + 2)) * 60) * 1000)) + (Long.parseLong(matcher.group(groupOffset + 3)) * 1000)) + Long.parseLong(matcher.group(groupOffset + 4))) * 1000;
     }
 }

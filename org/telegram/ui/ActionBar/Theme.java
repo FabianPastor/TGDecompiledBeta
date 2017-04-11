@@ -7,6 +7,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
@@ -178,6 +179,7 @@ public class Theme {
     public static Paint chat_replyLinePaint = null;
     public static TextPaint chat_replyNamePaint = null;
     public static TextPaint chat_replyTextPaint = null;
+    public static Drawable chat_roundVideoShadow = null;
     public static Drawable chat_shareDrawable = null;
     public static Drawable chat_shareIconDrawable = null;
     public static TextPaint chat_shipmentPaint = null;
@@ -2316,6 +2318,22 @@ public class Theme {
             chat_locationDrawable[0] = createRoundRectDrawableWithIcon(AndroidUtilities.dp(2.0f), R.drawable.msg_location);
             chat_locationDrawable[1] = createRoundRectDrawableWithIcon(AndroidUtilities.dp(2.0f), R.drawable.msg_location);
             chat_composeShadowDrawable = context.getResources().getDrawable(R.drawable.compose_panel_shadow);
+            if (VERSION.SDK_INT >= 16) {
+                try {
+                    int bitmapSize = AndroidUtilities.roundMessageSize + AndroidUtilities.dp(6.0f);
+                    Bitmap bitmap = Bitmap.createBitmap(bitmapSize, bitmapSize, Config.ARGB_8888);
+                    Canvas canvas = new Canvas(bitmap);
+                    Paint paint = new Paint(1);
+                    paint.setShadowLayer((float) AndroidUtilities.dp(4.0f), 0.0f, 0.0f, NUM);
+                    canvas.drawCircle((float) (bitmapSize / 2), (float) (bitmapSize / 2), (float) ((AndroidUtilities.roundMessageSize / 2) - AndroidUtilities.dp(1.0f)), paint);
+                    try {
+                        canvas.setBitmap(null);
+                    } catch (Exception e) {
+                    }
+                    chat_roundVideoShadow = new BitmapDrawable(bitmap);
+                } catch (Throwable th) {
+                }
+            }
             applyChatTheme(fontsOnly);
         }
         chat_msgTextPaintOneEmoji.setTextSize((float) AndroidUtilities.dp(28.0f));
@@ -2693,12 +2711,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
-                    int i;
                     SharedPreferences preferences;
                     int selectedBackground;
                     File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
+                        int i;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

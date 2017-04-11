@@ -8,7 +8,7 @@ import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGen
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
-final class Id3Reader implements ElementaryStreamReader {
+public final class Id3Reader implements ElementaryStreamReader {
     private static final int ID3_HEADER_SIZE = 10;
     private static final String TAG = "Id3Reader";
     private final ParsableByteArray id3Header = new ParsableByteArray(10);
@@ -23,8 +23,9 @@ final class Id3Reader implements ElementaryStreamReader {
     }
 
     public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
-        this.output = extractorOutput.track(idGenerator.getNextId());
-        this.output.format(Format.createSampleFormat(null, MimeTypes.APPLICATION_ID3, null, -1, null));
+        idGenerator.generateNewId();
+        this.output = extractorOutput.track(idGenerator.getTrackId(), 4);
+        this.output.format(Format.createSampleFormat(idGenerator.getFormatId(), MimeTypes.APPLICATION_ID3, null, -1, null));
     }
 
     public void packetStarted(long pesTimeUs, boolean dataAlignmentIndicator) {

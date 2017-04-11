@@ -36,7 +36,6 @@ public final class Format implements Parcelable {
     public final int encoderDelay;
     public final int encoderPadding;
     public final float frameRate;
-    private MediaFormat frameworkMediaFormat;
     private int hashCode;
     public final int height;
     public final String id;
@@ -55,8 +54,8 @@ public final class Format implements Parcelable {
     public final long subsampleOffsetUs;
     public final int width;
 
-    public static Format createVideoContainerFormat(String id, String containerMimeType, String sampleMimeType, String codecs, int bitrate, int width, int height, float frameRate, List<byte[]> initializationData) {
-        return new Format(id, containerMimeType, sampleMimeType, codecs, bitrate, -1, width, height, frameRate, -1, -1.0f, null, -1, -1, -1, -1, -1, -1, 0, null, -1, Long.MAX_VALUE, initializationData, null, null);
+    public static Format createVideoContainerFormat(String id, String containerMimeType, String sampleMimeType, String codecs, int bitrate, int width, int height, float frameRate, List<byte[]> initializationData, int selectionFlags) {
+        return new Format(id, containerMimeType, sampleMimeType, codecs, bitrate, -1, width, height, frameRate, -1, -1.0f, null, -1, -1, -1, -1, -1, -1, selectionFlags, null, -1, Long.MAX_VALUE, initializationData, null, null);
     }
 
     public static Format createVideoSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, int maxInputSize, int width, int height, float frameRate, List<byte[]> initializationData, DrmInitData drmInitData) {
@@ -115,8 +114,12 @@ public final class Format implements Parcelable {
         return new Format(id, null, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, -1, -1, -1, -1, -1, 0, language, -1, Long.MAX_VALUE, initializationData, drmInitData, null);
     }
 
-    public static Format createContainerFormat(String id, String containerMimeType, String codecs, String sampleMimeType, int bitrate) {
-        return new Format(id, containerMimeType, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, -1, -1, -1, -1, -1, 0, null, -1, Long.MAX_VALUE, null, null, null);
+    public static Format createContainerFormat(String id, String containerMimeType, String sampleMimeType, String codecs, int bitrate, int selectionFlags, String language) {
+        return new Format(id, containerMimeType, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, -1, -1, -1, -1, -1, selectionFlags, language, -1, Long.MAX_VALUE, null, null, null);
+    }
+
+    public static Format createSampleFormat(String id, String sampleMimeType, long subsampleOffsetUs) {
+        return new Format(id, null, sampleMimeType, null, -1, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, -1, -1, -1, -1, -1, 0, null, -1, subsampleOffsetUs, null, null, null);
     }
 
     public static Format createSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, DrmInitData drmInitData) {
@@ -198,15 +201,11 @@ public final class Format implements Parcelable {
         return new Format(id, this.containerMimeType, this.sampleMimeType, codecs, bitrate, this.maxInputSize, width, height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, selectionFlags, language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, this.drmInitData, this.metadata);
     }
 
-    public Format copyWithManifestFormatInfo(Format manifestFormat, boolean preferManifestDrmInitData) {
-        String id = manifestFormat.id;
-        String codecs = this.codecs == null ? manifestFormat.codecs : this.codecs;
-        int bitrate = this.bitrate == -1 ? manifestFormat.bitrate : this.bitrate;
-        float frameRate = this.frameRate == -1.0f ? manifestFormat.frameRate : this.frameRate;
-        int selectionFlags = this.selectionFlags | manifestFormat.selectionFlags;
-        String language = this.language == null ? manifestFormat.language : this.language;
-        DrmInitData drmInitData = ((!preferManifestDrmInitData || manifestFormat.drmInitData == null) && this.drmInitData != null) ? this.drmInitData : manifestFormat.drmInitData;
-        return new Format(id, this.containerMimeType, this.sampleMimeType, codecs, bitrate, this.maxInputSize, this.width, this.height, frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, selectionFlags, language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, drmInitData, this.metadata);
+    public Format copyWithManifestFormatInfo(Format manifestFormat) {
+        if (this == manifestFormat) {
+            return this;
+        }
+        return new Format(manifestFormat.id, this.containerMimeType, this.sampleMimeType, this.codecs == null ? manifestFormat.codecs : this.codecs, this.bitrate == -1 ? manifestFormat.bitrate : this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate == -1.0f ? manifestFormat.frameRate : this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags | manifestFormat.selectionFlags, this.language == null ? manifestFormat.language : this.language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, manifestFormat.drmInitData != null ? manifestFormat.drmInitData : this.drmInitData, this.metadata);
     }
 
     public Format copyWithGaplessInfo(int encoderDelay, int encoderPadding) {
@@ -228,29 +227,26 @@ public final class Format implements Parcelable {
     @SuppressLint({"InlinedApi"})
     @TargetApi(16)
     public final MediaFormat getFrameworkMediaFormatV16() {
-        if (this.frameworkMediaFormat == null) {
-            MediaFormat format = new MediaFormat();
-            format.setString("mime", this.sampleMimeType);
-            maybeSetStringV16(format, "language", this.language);
-            maybeSetIntegerV16(format, "max-input-size", this.maxInputSize);
-            maybeSetIntegerV16(format, "width", this.width);
-            maybeSetIntegerV16(format, "height", this.height);
-            maybeSetFloatV16(format, "frame-rate", this.frameRate);
-            maybeSetIntegerV16(format, "rotation-degrees", this.rotationDegrees);
-            maybeSetIntegerV16(format, "channel-count", this.channelCount);
-            maybeSetIntegerV16(format, "sample-rate", this.sampleRate);
-            maybeSetIntegerV16(format, "encoder-delay", this.encoderDelay);
-            maybeSetIntegerV16(format, "encoder-padding", this.encoderPadding);
-            for (int i = 0; i < this.initializationData.size(); i++) {
-                format.setByteBuffer("csd-" + i, ByteBuffer.wrap((byte[]) this.initializationData.get(i)));
-            }
-            this.frameworkMediaFormat = format;
+        MediaFormat format = new MediaFormat();
+        format.setString("mime", this.sampleMimeType);
+        maybeSetStringV16(format, "language", this.language);
+        maybeSetIntegerV16(format, "max-input-size", this.maxInputSize);
+        maybeSetIntegerV16(format, "width", this.width);
+        maybeSetIntegerV16(format, "height", this.height);
+        maybeSetFloatV16(format, "frame-rate", this.frameRate);
+        maybeSetIntegerV16(format, "rotation-degrees", this.rotationDegrees);
+        maybeSetIntegerV16(format, "channel-count", this.channelCount);
+        maybeSetIntegerV16(format, "sample-rate", this.sampleRate);
+        maybeSetIntegerV16(format, "encoder-delay", this.encoderDelay);
+        maybeSetIntegerV16(format, "encoder-padding", this.encoderPadding);
+        for (int i = 0; i < this.initializationData.size(); i++) {
+            format.setByteBuffer("csd-" + i, ByteBuffer.wrap((byte[]) this.initializationData.get(i)));
         }
-        return this.frameworkMediaFormat;
+        return format;
     }
 
     public String toString() {
-        return "Format(" + this.id + ", " + this.containerMimeType + ", " + this.sampleMimeType + ", " + this.bitrate + ", , " + this.language + ", [" + this.width + ", " + this.height + ", " + this.frameRate + "], [" + this.channelCount + ", " + this.sampleRate + "])";
+        return "Format(" + this.id + ", " + this.containerMimeType + ", " + this.sampleMimeType + ", " + this.bitrate + ", " + this.language + ", [" + this.width + ", " + this.height + ", " + this.frameRate + "], [" + this.channelCount + ", " + this.sampleRate + "])";
     }
 
     public int hashCode() {
@@ -303,6 +299,33 @@ public final class Format implements Parcelable {
         if (value != -1.0f) {
             format.setFloat(key, value);
         }
+    }
+
+    public static String toLogString(Format format) {
+        if (format == null) {
+            return "null";
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append("id=").append(format.id).append(", mimeType=").append(format.sampleMimeType);
+        if (format.bitrate != -1) {
+            builder.append(", bitrate=").append(format.bitrate);
+        }
+        if (!(format.width == -1 || format.height == -1)) {
+            builder.append(", res=").append(format.width).append("x").append(format.height);
+        }
+        if (format.frameRate != -1.0f) {
+            builder.append(", fps=").append(format.frameRate);
+        }
+        if (format.channelCount != -1) {
+            builder.append(", channels=").append(format.channelCount);
+        }
+        if (format.sampleRate != -1) {
+            builder.append(", sample_rate=").append(format.sampleRate);
+        }
+        if (format.language != null) {
+            builder.append(", language=").append(format.language);
+        }
+        return builder.toString();
     }
 
     public int describeContents() {

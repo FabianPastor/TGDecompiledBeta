@@ -5,9 +5,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Path.Direction;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -26,7 +23,6 @@ import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.view.MotionEvent;
-import android.view.TextureView;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewStructure;
@@ -55,7 +51,6 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -96,7 +91,6 @@ import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.WebPage;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
-import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkPath;
 import org.telegram.ui.Components.RadialProgress;
 import org.telegram.ui.Components.RoundVideoPlayingDrawable;
@@ -120,9 +114,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     private static final int DOCUMENT_ATTACH_TYPE_VIDEO = 4;
     private int TAG;
     private boolean allowAssistant;
-    private Paint aspectPaint;
-    private Path aspectPath = new Path();
-    private AspectRatioFrameLayout aspectRatioFrameLayout;
     private StaticLayout authorLayout;
     private int authorX;
     private int availableTimeWidth;
@@ -265,7 +256,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     private SeekBarWaveform seekBarWaveform;
     private int seekBarX;
     private int seekBarY;
-    private Paint shadowPaint;
     private boolean sharePressed;
     private int shareStartX;
     private int shareStartY;
@@ -292,7 +282,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     private int viaNameWidth;
     private int viaWidth;
     private StaticLayout videoInfoLayout;
-    private TextureView videoTextureView;
     private StaticLayout viewsLayout;
     private int viewsTextWidth;
     private boolean wasLayout;
@@ -752,10 +741,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             }
         }
         return false;
-    }
-
-    public AspectRatioFrameLayout getAspectRatioFrameLayout() {
-        return this.aspectRatioFrameLayout;
     }
 
     private boolean checkOtherButtonMotionEvent(MotionEvent event) {
@@ -1338,7 +1323,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         } else if (this.currentMessageObject.type == 12) {
             this.delegate.didPressedUserAvatar(this, MessagesController.getInstance().getUser(Integer.valueOf(this.currentMessageObject.messageOwner.media.user_id)));
         } else if (this.currentMessageObject.type == 5) {
-            if (!MediaController.getInstance().isPlayingMessage(this.currentMessageObject) || MediaController.getInstance().isAudioPaused() || this.aspectRatioFrameLayout == null || this.aspectRatioFrameLayout.getParent() == null) {
+            if (!MediaController.getInstance().isPlayingMessage(this.currentMessageObject) || MediaController.getInstance().isAudioPaused()) {
                 this.delegate.needPlayMessage(this.currentMessageObject);
             } else {
                 MediaController.getInstance().pauseMessage(this.currentMessageObject);
@@ -1505,66 +1490,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         this.avatarImage.onDetachedFromWindow();
         this.replyImageReceiver.onDetachedFromWindow();
         this.photoImage.onDetachedFromWindow();
-        destroyTextureView(true);
         MediaController.getInstance().removeLoadingFileObserver(this);
-    }
-
-    public TextureView createTextureView() {
-        if (this.aspectRatioFrameLayout == null) {
-            if (this.aspectPaint == null) {
-                this.aspectPaint = new Paint(1);
-                this.aspectPaint.setColor(-16777216);
-                this.aspectPaint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
-            }
-            this.aspectRatioFrameLayout = new AspectRatioFrameLayout(getContext()) {
-                protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-                    super.onSizeChanged(w, h, oldw, oldh);
-                    ChatMessageCell.this.aspectPath.reset();
-                    ChatMessageCell.this.aspectPath.addCircle((float) (w / 2), (float) (h / 2), (float) (w / 2), Direction.CW);
-                    ChatMessageCell.this.aspectPath.toggleInverseFillType();
-                }
-
-                public void setVisibility(int visibility) {
-                    super.setVisibility(visibility);
-                    if (visibility == 0) {
-                        ChatMessageCell.this.setLayerType(2, null);
-                    }
-                }
-            };
-            this.aspectRatioFrameLayout.setVisibility(4);
-            this.aspectRatioFrameLayout.setBackgroundColor(0);
-            this.videoTextureView = new TextureView(getContext());
-            this.videoTextureView.setOpaque(false);
-            this.aspectRatioFrameLayout.addView(this.videoTextureView, LayoutHelper.createFrame(-1, -1.0f));
-        }
-        if (this.aspectRatioFrameLayout.getParent() == null) {
-            addView(this.aspectRatioFrameLayout);
-            this.aspectRatioFrameLayout.setVisibility(4);
-            this.aspectRatioFrameLayout.setDrawingReady(false);
-        }
-        this.photoImage.setAllowStartAnimation(false);
-        this.photoImage.stopAnimation();
-        return this.videoTextureView;
-    }
-
-    public void destroyTextureView(boolean allowStart) {
-        if (this.aspectRatioFrameLayout != null) {
-            removeView(this.aspectRatioFrameLayout);
-            this.aspectRatioFrameLayout.setDrawingReady(false);
-            this.aspectRatioFrameLayout.setVisibility(4);
-            setLayerType(2, null);
-        }
-        if (this.currentMessageObject.isRoundVideo()) {
-            if (allowStart) {
-                allowStart = MediaController.getInstance().getPlayingMessageObject() == null;
-            }
-            this.photoImage.setAllowStartAnimation(allowStart);
-            if (allowStart) {
-                this.photoImage.startAnimation();
-            } else {
-                this.photoImage.stopAnimation();
-            }
-        }
     }
 
     protected void onAttachedToWindow() {
@@ -1576,6 +1502,21 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             updateButtonState(false);
         } else if (this.photoImage.onAttachedToWindow()) {
             updateButtonState(false);
+        }
+        if (this.currentMessageObject != null && this.currentMessageObject.type == 5) {
+            checkRoundVideoPlayback(true);
+        }
+    }
+
+    public void checkRoundVideoPlayback(boolean allowStart) {
+        if (allowStart) {
+            allowStart = MediaController.getInstance().getPlayingMessageObject() == null;
+        }
+        this.photoImage.setAllowStartAnimation(allowStart);
+        if (allowStart) {
+            this.photoImage.startAnimation();
+        } else {
+            this.photoImage.stopAnimation();
         }
     }
 
@@ -1853,26 +1794,33 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
         int maxWidth;
         boolean z;
+        int i;
         int dp;
         String description;
         Photo photo;
         TLObject document;
         int duration;
+        boolean smallImage;
         TL_webDocument webDocument;
         TL_webDocument webDocument2;
+        int height;
         int width;
         Throwable e;
         int restLinesCount;
-        int lineLeft;
+        int a;
         boolean authorIsRTL;
-        int textWidth;
-        int maxPhotoWidth;
-        PhotoSize photoSize;
-        PhotoSize photoSize2;
-        int dp2;
+        boolean hasRTL;
+        ArrayList arrayList;
+        DocumentAttribute attribute;
+        int durationWidth;
+        float scale;
         int seconds;
+        String str;
         int mWidth;
+        int timeWidthTotal;
+        int rows;
         boolean fullWidth;
+        float f;
         int maxButtonWidth;
         int maxButtonsWidth;
         HashMap<String, BotButton> hashMap;
@@ -1894,11 +1842,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
-            int i;
-            int a;
-            int timeWidthTotal;
-            int rows;
-            float f;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
             this.currentMessageObject = messageObject;
@@ -1968,11 +1911,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
-            DocumentAttribute attribute;
-            float scale;
+            int maxPhotoWidth;
             boolean photoExist;
             String fileName;
-            String str;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
@@ -2034,13 +1975,13 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     String title;
                     String author;
                     String type;
-                    boolean smallImage;
                     int additinalWidth;
-                    int height;
                     int restLines;
-                    boolean hasRTL;
-                    ArrayList arrayList;
-                    int durationWidth;
+                    int lineLeft;
+                    int textWidth;
+                    PhotoSize photoSize;
+                    PhotoSize photoSize2;
+                    int dp2;
                     CharSequence str2;
                     String price;
                     SpannableStringBuilder spannableStringBuilder;
@@ -5806,18 +5747,15 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         this.photoImage.setImage(messageObject.messageOwner.media.document, null, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(photoWidth), Integer.valueOf(i2)}), null, this.currentPhotoObjectThumb != null ? this.currentPhotoObjectThumb.location : null, "b1", messageObject.messageOwner.media.document.size, "webp", true);
                     }
                 } else {
-                    float coef;
                     float hScale;
                     if (messageObject.type == 5) {
-                        coef = 0.5f;
-                    } else {
-                        coef = 0.7f;
-                    }
-                    if (AndroidUtilities.isTablet()) {
-                        photoWidth = (int) (((float) AndroidUtilities.getMinTabletSide()) * coef);
+                        photoWidth = AndroidUtilities.roundMessageSize;
+                        maxPhotoWidth = photoWidth;
+                    } else if (AndroidUtilities.isTablet()) {
+                        photoWidth = (int) (((float) AndroidUtilities.getMinTabletSide()) * 0.7f);
                         maxPhotoWidth = photoWidth;
                     } else {
-                        photoWidth = (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * coef);
+                        photoWidth = (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.7f);
                         maxPhotoWidth = photoWidth;
                     }
                     i2 = photoWidth + AndroidUtilities.dp(100.0f);
@@ -5840,16 +5778,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         this.photoImage.setShouldGenerateQualityThumb(true);
                         this.photoImage.setParentMessageObject(messageObject);
                     } else if (messageObject.type == 5) {
-                        if (this.shadowPaint == null) {
-                            this.shadowPaint = new Paint(1);
-                            this.shadowPaint.setColor(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR);
-                        }
                         this.photoImage.setNeedsQualityThumb(true);
                         this.photoImage.setShouldGenerateQualityThumb(true);
                         this.photoImage.setParentMessageObject(messageObject);
-                        if (MediaController.getInstance().isPlayingMessage(messageObject)) {
-                            MediaController.getInstance().setTextureView(createTextureView(), getAspectRatioFrameLayout());
-                        }
                     } else if (messageObject.type == 8) {
                         str = AndroidUtilities.formatFileSize((long) messageObject.messageOwner.media.document.size);
                         this.infoWidth = (int) Math.ceil((double) Theme.chat_infoPaint.measureText(str));
@@ -6163,10 +6094,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         updateButtonState(dataChanged);
     }
 
-    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-        return child != this.aspectRatioFrameLayout && super.drawChild(canvas, child, drawingTime);
-    }
-
     public void requestLayout() {
         if (!this.inLayout) {
             super.requestLayout();
@@ -6180,9 +6107,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             this.currentMessageObject = null;
             setMessageObject(messageObject, this.pinnedBottom, this.pinnedTop);
             this.inLayout = false;
-        }
-        if (!(this.aspectRatioFrameLayout == null || this.aspectRatioFrameLayout.getParent() == null)) {
-            this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(this.photoImage.getImageWidth(), NUM), MeasureSpec.makeMeasureSpec(this.photoImage.getImageHeight(), NUM));
         }
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), this.totalHeight + this.keyboardHeight);
     }
@@ -6325,11 +6249,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             this.buttonY = ((int) (((float) AndroidUtilities.dp(7.0f)) + (((float) (this.photoImage.getImageHeight() - AndroidUtilities.dp(48.0f))) / 2.0f))) + this.namesOffset;
             this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + AndroidUtilities.dp(48.0f), this.buttonY + AndroidUtilities.dp(48.0f));
             this.deleteProgressRect.set((float) (this.buttonX + AndroidUtilities.dp(3.0f)), (float) (this.buttonY + AndroidUtilities.dp(3.0f)), (float) (this.buttonX + AndroidUtilities.dp(45.0f)), (float) (this.buttonY + AndroidUtilities.dp(45.0f)));
-            if (this.aspectRatioFrameLayout != null && this.aspectRatioFrameLayout.getParent() != null) {
-                x = this.photoImage.getImageX();
-                int y = this.photoImage.getImageY();
-                this.aspectRatioFrameLayout.layout(x, y, this.photoImage.getImageWidth() + x, this.photoImage.getImageHeight() + y);
-            }
         }
     }
 
@@ -6355,13 +6274,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         this.radialProgress.setProgressColor(Theme.getColor(Theme.key_chat_mediaProgress));
         boolean imageDrawn = false;
         if (this.currentMessageObject.type == 5) {
-        }
-        if (!(this.aspectRatioFrameLayout == null || this.aspectRatioFrameLayout.getVisibility() != 0 || this.aspectRatioFrameLayout.isDrawingReady())) {
-            canvas.save();
-            canvas.translate((float) this.aspectRatioFrameLayout.getLeft(), (float) this.aspectRatioFrameLayout.getTop());
-            this.aspectRatioFrameLayout.draw(canvas);
-            canvas.drawPath(this.aspectPath, this.aspectPaint);
-            canvas.restore();
         }
         if (this.currentMessageObject.type == 0) {
             if (this.currentMessageObject.isOutOwner()) {
@@ -6597,15 +6509,20 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             }
             this.drawTime = true;
         } else if (this.drawPhotoImage) {
-            imageDrawn = this.photoImage.draw(canvas);
-            this.drawTime = this.photoImage.getVisible();
-        }
-        if (this.aspectRatioFrameLayout != null && this.aspectRatioFrameLayout.getVisibility() == 0 && this.aspectRatioFrameLayout.isDrawingReady()) {
-            canvas.save();
-            canvas.translate((float) this.aspectRatioFrameLayout.getLeft(), (float) this.aspectRatioFrameLayout.getTop());
-            this.aspectRatioFrameLayout.draw(canvas);
-            canvas.drawPath(this.aspectPath, this.aspectPaint);
-            canvas.restore();
+            if (this.currentMessageObject.type == 5 && MediaController.getInstance().isPlayingMessage(this.currentMessageObject) && MediaController.getInstance().isRoundVideoDrawingReady()) {
+                imageDrawn = true;
+                this.drawTime = true;
+            } else {
+                if (this.currentMessageObject.type == 5 && Theme.chat_roundVideoShadow != null) {
+                    x = this.photoImage.getImageX() - AndroidUtilities.dp(3.0f);
+                    y = this.photoImage.getImageY() - AndroidUtilities.dp(2.0f);
+                    Theme.chat_roundVideoShadow.setAlpha((int) (this.photoImage.getCurrentAlpha() * 255.0f));
+                    Theme.chat_roundVideoShadow.setBounds(x, y, (AndroidUtilities.roundMessageSize + x) + AndroidUtilities.dp(6.0f), (AndroidUtilities.roundMessageSize + y) + AndroidUtilities.dp(6.0f));
+                    Theme.chat_roundVideoShadow.draw(canvas);
+                }
+                imageDrawn = this.photoImage.draw(canvas);
+                this.drawTime = this.photoImage.getVisible();
+            }
         }
         if (this.buttonState == -1 && this.currentMessageObject.isSecretPhoto()) {
             int drawable = 4;

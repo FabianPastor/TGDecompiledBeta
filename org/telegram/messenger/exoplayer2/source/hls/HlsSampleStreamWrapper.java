@@ -51,7 +51,6 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
     private final LinkedList<HlsMediaChunk> mediaChunks = new LinkedList();
     private final int minLoadableRetryCount;
     private final Format muxedAudioFormat;
-    private final Format muxedCaptionFormat;
     private final HlsChunkHolder nextChunkHolder = new HlsChunkHolder();
     private long pendingResetPositionUs;
     private boolean prepared;
@@ -69,13 +68,12 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
         void onPrepared();
     }
 
-    public HlsSampleStreamWrapper(int trackType, Callback callback, HlsChunkSource chunkSource, Allocator allocator, long positionUs, Format muxedAudioFormat, Format muxedCaptionFormat, int minLoadableRetryCount, EventDispatcher eventDispatcher) {
+    public HlsSampleStreamWrapper(int trackType, Callback callback, HlsChunkSource chunkSource, Allocator allocator, long positionUs, Format muxedAudioFormat, int minLoadableRetryCount, EventDispatcher eventDispatcher) {
         this.trackType = trackType;
         this.callback = callback;
         this.chunkSource = chunkSource;
         this.allocator = allocator;
         this.muxedAudioFormat = muxedAudioFormat;
-        this.muxedCaptionFormat = muxedCaptionFormat;
         this.minLoadableRetryCount = minLoadableRetryCount;
         this.eventDispatcher = eventDispatcher;
         this.lastSeekPositionUs = positionUs;
@@ -89,7 +87,7 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
     }
 
     public void prepareSingleTrack(Format format) {
-        track(0).format(format);
+        track(0, -1).format(format);
         this.sampleQueuesBuilt = true;
         maybeFinishPrepare();
     }
@@ -114,6 +112,7 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
             }
             i++;
         }
+        TrackSelection primaryTrackSelection = null;
         boolean selectedNewTracks = false;
         i = 0;
         while (i < selections.length) {
@@ -122,6 +121,7 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
                 group = this.trackGroups.indexOf(selection.getTrackGroup());
                 setTrackGroupEnabledState(group, true);
                 if (group == this.primaryTrackGroupIndex) {
+                    primaryTrackSelection = selection;
                     this.chunkSource.selectTracks(selection);
                 }
                 streams[i] = new HlsSampleStream(this, group);
@@ -135,6 +135,12 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
             for (i = 0; i < sampleQueueCount; i++) {
                 if (!this.groupEnabledStates[i]) {
                     ((DefaultTrackOutput) this.sampleQueues.valueAt(i)).disable();
+                }
+            }
+            if (!(primaryTrackSelection == null || this.mediaChunks.isEmpty())) {
+                primaryTrackSelection.updateSelectedTrack(0);
+                if (primaryTrackSelection.getSelectedIndexInTrackGroup() != this.chunkSource.getTrackGroup().indexOf(((HlsMediaChunk) this.mediaChunks.getLast()).trackFormat)) {
+                    seekTo(this.lastSeekPositionUs);
                 }
             }
         }
@@ -194,20 +200,12 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
         this.released = true;
     }
 
-    public long getLargestQueuedTimestampUs() {
-        long largestQueuedTimestampUs = Long.MIN_VALUE;
-        for (int i = 0; i < this.sampleQueues.size(); i++) {
-            largestQueuedTimestampUs = Math.max(largestQueuedTimestampUs, ((DefaultTrackOutput) this.sampleQueues.valueAt(i)).getLargestQueuedTimestampUs());
-        }
-        return largestQueuedTimestampUs;
-    }
-
     public void setIsTimestampMaster(boolean isTimestampMaster) {
         this.chunkSource.setIsTimestampMaster(isTimestampMaster);
     }
 
-    public void onPlaylistLoadError(HlsUrl url, IOException error) {
-        this.chunkSource.onPlaylistLoadError(url, error);
+    public void onPlaylistBlacklisted(HlsUrl url, long blacklistMs) {
+        this.chunkSource.onPlaylistBlacklisted(url, blacklistMs);
     }
 
     boolean isReady(int group) {
@@ -219,7 +217,7 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
         this.chunkSource.maybeThrowError();
     }
 
-    int readData(int group, FormatHolder formatHolder, DecoderInputBuffer buffer) {
+    int readData(int group, FormatHolder formatHolder, DecoderInputBuffer buffer, boolean requireFormat) {
         if (isPendingReset()) {
             return -3;
         }
@@ -232,7 +230,7 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
             this.eventDispatcher.downstreamFormatChanged(this.trackType, trackFormat, currentChunk.trackSelectionReason, currentChunk.trackSelectionData, currentChunk.startTimeUs);
         }
         this.downstreamTrackFormat = trackFormat;
-        return ((DefaultTrackOutput) this.sampleQueues.valueAt(group)).readData(formatHolder, buffer, this.loadingFinished, this.lastSeekPositionUs);
+        return ((DefaultTrackOutput) this.sampleQueues.valueAt(group)).readData(formatHolder, buffer, requireFormat, this.loadingFinished, this.lastSeekPositionUs);
     }
 
     void skipToKeyframeBefore(int group, long timeUs) {
@@ -357,7 +355,7 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
         }
     }
 
-    public DefaultTrackOutput track(int id) {
+    public DefaultTrackOutput track(int id, int type) {
         if (this.sampleQueues.indexOfKey(id) >= 0) {
             return (DefaultTrackOutput) this.sampleQueues.get(id);
         }
@@ -436,14 +434,7 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
                 trackGroups[i] = new TrackGroup(formats);
                 this.primaryTrackGroupIndex = i;
             } else {
-                Format trackFormat = null;
-                if (primaryExtractorTrackType == 3) {
-                    if (MimeTypes.isAudio(sampleFormat.sampleMimeType)) {
-                        trackFormat = this.muxedAudioFormat;
-                    } else if (MimeTypes.APPLICATION_CEA608.equals(sampleFormat.sampleMimeType)) {
-                        trackFormat = this.muxedCaptionFormat;
-                    }
-                }
+                Format trackFormat = (primaryExtractorTrackType == 3 && MimeTypes.isAudio(sampleFormat.sampleMimeType)) ? this.muxedAudioFormat : null;
                 trackGroups[i] = new TrackGroup(deriveFormat(trackFormat, sampleFormat));
             }
         }

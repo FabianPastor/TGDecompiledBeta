@@ -6,6 +6,7 @@ import android.os.SystemClock;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.Timeline;
@@ -89,7 +90,7 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
         this.mediaPeriods = new ArrayList();
     }
 
-    public void prepareSource(Listener listener) {
+    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
         this.sourceListener = listener;
         if (this.manifest != null) {
             this.manifestLoaderErrorThrower = new Dummy();

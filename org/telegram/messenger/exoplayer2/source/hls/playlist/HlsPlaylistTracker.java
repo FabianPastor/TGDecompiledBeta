@@ -2,28 +2,31 @@ package org.telegram.messenger.exoplayer2.source.hls.playlist;
 
 import android.net.Uri;
 import android.os.Handler;
+import android.os.SystemClock;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.source.AdaptiveMediaSourceEventListener.EventDispatcher;
+import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
+import org.telegram.messenger.exoplayer2.source.hls.HlsDataSourceFactory;
 import org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist.HlsUrl;
 import org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist.Segment;
-import org.telegram.messenger.exoplayer2.upstream.DataSource.Factory;
 import org.telegram.messenger.exoplayer2.upstream.Loader;
 import org.telegram.messenger.exoplayer2.upstream.Loader.Callback;
 import org.telegram.messenger.exoplayer2.upstream.ParsingLoadable;
 import org.telegram.messenger.exoplayer2.util.UriUtil;
 
 public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPlaylist>> {
-    private static final long PLAYLIST_REFRESH_PERIOD_MS = 5000;
-    private static final long TIMESTAMP_ADJUSTMENT_THRESHOLD_US = 500000;
-    private final Factory dataSourceFactory;
+    private static final long PRIMARY_URL_KEEPALIVE_MS = 15000;
+    private final HlsDataSourceFactory dataSourceFactory;
     private final EventDispatcher eventDispatcher;
     private final Loader initialPlaylistLoader = new Loader("HlsPlaylistTracker:MasterPlaylist");
     private final Uri initialPlaylistUri;
     private boolean isLive;
+    private final List<PlaylistEventListener> listeners = new ArrayList();
     private HlsMasterPlaylist masterPlaylist;
     private final int minRetryCount;
     private final IdentityHashMap<HlsUrl, MediaPlaylistBundle> playlistBundles = new IdentityHashMap();
@@ -31,11 +34,12 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
     private final Handler playlistRefreshHandler = new Handler();
     private HlsUrl primaryHlsUrl;
     private final PrimaryPlaylistListener primaryPlaylistListener;
+    private HlsMediaPlaylist primaryUrlSnapshot;
 
-    public interface PlaylistRefreshCallback {
+    public interface PlaylistEventListener {
+        void onPlaylistBlacklisted(HlsUrl hlsUrl, long j);
+
         void onPlaylistChanged();
-
-        void onPlaylistLoadError(HlsUrl hlsUrl, IOException iOException);
     }
 
     public interface PrimaryPlaylistListener {
@@ -43,21 +47,36 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
     }
 
     private final class MediaPlaylistBundle implements Callback<ParsingLoadable<HlsPlaylist>>, Runnable {
-        private PlaylistRefreshCallback callback;
-        private HlsMediaPlaylist latestPlaylistSnapshot;
+        private long blacklistUntilMs;
+        private long lastSnapshotAccessTimeMs;
+        private long lastSnapshotLoadMs;
         private final ParsingLoadable<HlsPlaylist> mediaPlaylistLoadable;
-        private final Loader mediaPlaylistLoader;
+        private final Loader mediaPlaylistLoader = new Loader("HlsPlaylistTracker:MediaPlaylist");
+        private boolean pendingRefresh;
+        private HlsMediaPlaylist playlistSnapshot;
         private final HlsUrl playlistUrl;
 
-        public MediaPlaylistBundle(HlsPlaylistTracker hlsPlaylistTracker, HlsUrl playlistUrl) {
-            this(playlistUrl, null);
+        public MediaPlaylistBundle(HlsUrl playlistUrl, long initialLastSnapshotAccessTimeMs) {
+            this.playlistUrl = playlistUrl;
+            this.lastSnapshotAccessTimeMs = initialLastSnapshotAccessTimeMs;
+            this.mediaPlaylistLoadable = new ParsingLoadable(HlsPlaylistTracker.this.dataSourceFactory.createDataSource(4), UriUtil.resolveToUri(HlsPlaylistTracker.this.masterPlaylist.baseUri, playlistUrl.url), 4, HlsPlaylistTracker.this.playlistParser);
         }
 
-        public MediaPlaylistBundle(HlsUrl playlistUrl, HlsMediaPlaylist initialSnapshot) {
-            this.playlistUrl = playlistUrl;
-            this.latestPlaylistSnapshot = initialSnapshot;
-            this.mediaPlaylistLoader = new Loader("HlsPlaylistTracker:MediaPlaylist");
-            this.mediaPlaylistLoadable = new ParsingLoadable(HlsPlaylistTracker.this.dataSourceFactory.createDataSource(), UriUtil.resolveToUri(HlsPlaylistTracker.this.masterPlaylist.baseUri, playlistUrl.url), 4, HlsPlaylistTracker.this.playlistParser);
+        public HlsMediaPlaylist getPlaylistSnapshot() {
+            this.lastSnapshotAccessTimeMs = SystemClock.elapsedRealtime();
+            return this.playlistSnapshot;
+        }
+
+        public boolean isSnapshotValid() {
+            if (this.playlistSnapshot == null) {
+                return false;
+            }
+            long currentTimeMs = SystemClock.elapsedRealtime();
+            long snapshotValidityDurationMs = Math.max(30000, C.usToMs(this.playlistSnapshot.durationUs));
+            if (this.playlistSnapshot.hasEndTag || this.playlistSnapshot.playlistType == 2 || this.playlistSnapshot.playlistType == 1 || this.lastSnapshotLoadMs + snapshotValidityDurationMs > currentTimeMs) {
+                return true;
+            }
+            return false;
         }
 
         public void release() {
@@ -65,35 +84,9 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
         }
 
         public void loadPlaylist() {
-            if (!this.mediaPlaylistLoader.isLoading()) {
+            this.blacklistUntilMs = 0;
+            if (!this.pendingRefresh && !this.mediaPlaylistLoader.isLoading()) {
                 this.mediaPlaylistLoader.startLoading(this.mediaPlaylistLoadable, this, HlsPlaylistTracker.this.minRetryCount);
-            }
-        }
-
-        public void setCallback(PlaylistRefreshCallback callback) {
-            this.callback = callback;
-        }
-
-        public void adjustTimestampsOfPlaylist(int chunkMediaSequence, long adjustedStartTimeUs) {
-            ArrayList<Segment> segments = new ArrayList(this.latestPlaylistSnapshot.segments);
-            int indexOfChunk = chunkMediaSequence - this.latestPlaylistSnapshot.mediaSequence;
-            if (indexOfChunk >= 0) {
-                Segment actualSegment = (Segment) segments.get(indexOfChunk);
-                if (Math.abs(actualSegment.startTimeUs - adjustedStartTimeUs) >= HlsPlaylistTracker.TIMESTAMP_ADJUSTMENT_THRESHOLD_US) {
-                    int i;
-                    Segment segment;
-                    segments.set(indexOfChunk, actualSegment.copyWithStartTimeUs(adjustedStartTimeUs));
-                    for (i = indexOfChunk - 1; i >= 0; i--) {
-                        segment = (Segment) segments.get(i);
-                        segments.set(i, segment.copyWithStartTimeUs(((Segment) segments.get(i + 1)).startTimeUs - segment.durationUs));
-                    }
-                    int segmentsSize = segments.size();
-                    for (i = indexOfChunk + 1; i < segmentsSize; i++) {
-                        segment = (Segment) segments.get(i);
-                        segments.set(i, segment.copyWithStartTimeUs(((Segment) segments.get(i - 1)).startTimeUs + segment.durationUs));
-                    }
-                    this.latestPlaylistSnapshot = this.latestPlaylistSnapshot.copyWithSegments(segments);
-                }
             }
         }
 
@@ -109,46 +102,42 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
         public int onLoadError(ParsingLoadable<HlsPlaylist> loadable, long elapsedRealtimeMs, long loadDurationMs, IOException error) {
             boolean isFatal = error instanceof ParserException;
             HlsPlaylistTracker.this.eventDispatcher.loadError(loadable.dataSpec, 4, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded(), error, isFatal);
-            if (this.callback != null) {
-                this.callback.onPlaylistLoadError(this.playlistUrl, error);
-            }
             if (isFatal) {
                 return 3;
             }
-            return HlsPlaylistTracker.this.primaryHlsUrl == this.playlistUrl ? 0 : 2;
+            boolean shouldRetry = true;
+            if (ChunkedTrackBlacklistUtil.shouldBlacklist(error)) {
+                this.blacklistUntilMs = SystemClock.elapsedRealtime() + ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS;
+                HlsPlaylistTracker.this.notifyPlaylistBlacklisting(this.playlistUrl, ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
+                shouldRetry = HlsPlaylistTracker.this.primaryHlsUrl == this.playlistUrl && !HlsPlaylistTracker.this.maybeSelectNewPrimaryUrl();
+            }
+            return shouldRetry ? 0 : 2;
         }
 
         public void run() {
+            this.pendingRefresh = false;
             loadPlaylist();
         }
 
-        private void processLoadedPlaylist(HlsMediaPlaylist loadedMediaPlaylist) {
-            boolean shouldScheduleRefresh;
-            boolean z = true;
-            HlsMediaPlaylist oldPlaylist = this.latestPlaylistSnapshot;
-            this.latestPlaylistSnapshot = HlsPlaylistTracker.this.adjustPlaylistTimestamps(oldPlaylist, loadedMediaPlaylist);
-            if (oldPlaylist != this.latestPlaylistSnapshot) {
-                if (this.callback != null) {
-                    this.callback.onPlaylistChanged();
-                    this.callback = null;
+        private void processLoadedPlaylist(HlsMediaPlaylist loadedPlaylist) {
+            HlsMediaPlaylist oldPlaylist = this.playlistSnapshot;
+            this.lastSnapshotLoadMs = SystemClock.elapsedRealtime();
+            this.playlistSnapshot = HlsPlaylistTracker.this.getLatestPlaylistSnapshot(oldPlaylist, loadedPlaylist);
+            long refreshDelayUs = C.TIME_UNSET;
+            if (this.playlistSnapshot != oldPlaylist) {
+                if (HlsPlaylistTracker.this.onPlaylistUpdated(this.playlistUrl, this.playlistSnapshot)) {
+                    refreshDelayUs = this.playlistSnapshot.targetDurationUs;
                 }
-                HlsPlaylistTracker hlsPlaylistTracker = HlsPlaylistTracker.this;
-                HlsUrl hlsUrl = this.playlistUrl;
-                HlsMediaPlaylist hlsMediaPlaylist = this.latestPlaylistSnapshot;
-                if (oldPlaylist != null) {
-                    z = false;
-                }
-                shouldScheduleRefresh = hlsPlaylistTracker.onPlaylistUpdated(hlsUrl, hlsMediaPlaylist, z);
-            } else {
-                shouldScheduleRefresh = !loadedMediaPlaylist.hasEndTag;
+            } else if (!this.playlistSnapshot.hasEndTag) {
+                refreshDelayUs = this.playlistSnapshot.targetDurationUs / 2;
             }
-            if (shouldScheduleRefresh) {
-                HlsPlaylistTracker.this.playlistRefreshHandler.postDelayed(this, 5000);
+            if (refreshDelayUs != C.TIME_UNSET) {
+                this.pendingRefresh = HlsPlaylistTracker.this.playlistRefreshHandler.postDelayed(this, C.usToMs(refreshDelayUs));
             }
         }
     }
 
-    public HlsPlaylistTracker(Uri initialPlaylistUri, Factory dataSourceFactory, EventDispatcher eventDispatcher, int minRetryCount, PrimaryPlaylistListener primaryPlaylistListener) {
+    public HlsPlaylistTracker(Uri initialPlaylistUri, HlsDataSourceFactory dataSourceFactory, EventDispatcher eventDispatcher, int minRetryCount, PrimaryPlaylistListener primaryPlaylistListener) {
         this.initialPlaylistUri = initialPlaylistUri;
         this.dataSourceFactory = dataSourceFactory;
         this.eventDispatcher = eventDispatcher;
@@ -156,8 +145,16 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
         this.primaryPlaylistListener = primaryPlaylistListener;
     }
 
+    public void addListener(PlaylistEventListener listener) {
+        this.listeners.add(listener);
+    }
+
+    public void removeListener(PlaylistEventListener listener) {
+        this.listeners.remove(listener);
+    }
+
     public void start() {
-        this.initialPlaylistLoader.startLoading(new ParsingLoadable(this.dataSourceFactory.createDataSource(), this.initialPlaylistUri, 4, this.playlistParser), this, this.minRetryCount);
+        this.initialPlaylistLoader.startLoading(new ParsingLoadable(this.dataSourceFactory.createDataSource(4), this.initialPlaylistUri, 4, this.playlistParser), this, this.minRetryCount);
     }
 
     public HlsMasterPlaylist getMasterPlaylist() {
@@ -165,7 +162,15 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
     }
 
     public HlsMediaPlaylist getPlaylistSnapshot(HlsUrl url) {
-        return ((MediaPlaylistBundle) this.playlistBundles.get(url)).latestPlaylistSnapshot;
+        HlsMediaPlaylist snapshot = ((MediaPlaylistBundle) this.playlistBundles.get(url)).getPlaylistSnapshot();
+        if (snapshot != null) {
+            maybeSetPrimaryUrl(url);
+        }
+        return snapshot;
+    }
+
+    public boolean isSnapshotValid(HlsUrl url) {
+        return ((MediaPlaylistBundle) this.playlistBundles.get(url)).isSnapshotValid();
     }
 
     public void release() {
@@ -177,25 +182,19 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
         this.playlistBundles.clear();
     }
 
-    public void maybeThrowPrimaryPlaylistRefreshError() throws IOException {
+    public void maybeThrowPlaylistRefreshError() throws IOException {
         this.initialPlaylistLoader.maybeThrowError();
         if (this.primaryHlsUrl != null) {
             ((MediaPlaylistBundle) this.playlistBundles.get(this.primaryHlsUrl)).mediaPlaylistLoader.maybeThrowError();
         }
     }
 
-    public void refreshPlaylist(HlsUrl key, PlaylistRefreshCallback callback) {
-        MediaPlaylistBundle bundle = (MediaPlaylistBundle) this.playlistBundles.get(key);
-        bundle.setCallback(callback);
-        bundle.loadPlaylist();
+    public void refreshPlaylist(HlsUrl url) {
+        ((MediaPlaylistBundle) this.playlistBundles.get(url)).loadPlaylist();
     }
 
     public boolean isLive() {
         return this.isLive;
-    }
-
-    public void onChunkLoaded(HlsUrl hlsUrl, int chunkMediaSequence, long adjustedStartTimeUs) {
-        ((MediaPlaylistBundle) this.playlistBundles.get(hlsUrl)).adjustTimestampsOfPlaylist(chunkMediaSequence, adjustedStartTimeUs);
     }
 
     public void onLoadCompleted(ParsingLoadable<HlsPlaylist> loadable, long elapsedRealtimeMs, long loadDurationMs) {
@@ -233,55 +232,123 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
         return isFatal ? 3 : 0;
     }
 
-    private void createBundles(List<HlsUrl> urls) {
-        int listSize = urls.size();
-        for (int i = 0; i < listSize; i++) {
-            this.playlistBundles.put(urls.get(i), new MediaPlaylistBundle(this, (HlsUrl) urls.get(i)));
+    private boolean maybeSelectNewPrimaryUrl() {
+        List<HlsUrl> variants = this.masterPlaylist.variants;
+        int variantsSize = variants.size();
+        long currentTimeMs = SystemClock.elapsedRealtime();
+        for (int i = 0; i < variantsSize; i++) {
+            MediaPlaylistBundle bundle = (MediaPlaylistBundle) this.playlistBundles.get(variants.get(i));
+            if (currentTimeMs > bundle.blacklistUntilMs) {
+                this.primaryHlsUrl = bundle.playlistUrl;
+                bundle.loadPlaylist();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void maybeSetPrimaryUrl(HlsUrl url) {
+        if (!this.masterPlaylist.variants.contains(url)) {
+            return;
+        }
+        if ((this.primaryUrlSnapshot == null || !this.primaryUrlSnapshot.hasEndTag) && ((MediaPlaylistBundle) this.playlistBundles.get(this.primaryHlsUrl)).lastSnapshotAccessTimeMs - SystemClock.elapsedRealtime() > PRIMARY_URL_KEEPALIVE_MS) {
+            this.primaryHlsUrl = url;
+            ((MediaPlaylistBundle) this.playlistBundles.get(this.primaryHlsUrl)).loadPlaylist();
         }
     }
 
-    private boolean onPlaylistUpdated(HlsUrl url, HlsMediaPlaylist newSnapshot, boolean isFirstSnapshot) {
-        if (url != this.primaryHlsUrl) {
-            return false;
+    private void createBundles(List<HlsUrl> urls) {
+        int listSize = urls.size();
+        long currentTimeMs = SystemClock.elapsedRealtime();
+        for (int i = 0; i < listSize; i++) {
+            HlsUrl url = (HlsUrl) urls.get(i);
+            this.playlistBundles.put(url, new MediaPlaylistBundle(url, currentTimeMs));
         }
-        if (isFirstSnapshot) {
-            this.isLive = !newSnapshot.hasEndTag;
+    }
+
+    private boolean onPlaylistUpdated(HlsUrl url, HlsMediaPlaylist newSnapshot) {
+        if (url == this.primaryHlsUrl) {
+            if (this.primaryUrlSnapshot == null) {
+                boolean z;
+                if (newSnapshot.hasEndTag) {
+                    z = false;
+                } else {
+                    z = true;
+                }
+                this.isLive = z;
+            }
+            this.primaryUrlSnapshot = newSnapshot;
+            this.primaryPlaylistListener.onPrimaryPlaylistRefreshed(newSnapshot);
         }
-        this.primaryPlaylistListener.onPrimaryPlaylistRefreshed(newSnapshot);
-        if (newSnapshot.hasEndTag) {
+        int listenersSize = this.listeners.size();
+        for (int i = 0; i < listenersSize; i++) {
+            ((PlaylistEventListener) this.listeners.get(i)).onPlaylistChanged();
+        }
+        if (url != this.primaryHlsUrl || newSnapshot.hasEndTag) {
             return false;
         }
         return true;
     }
 
-    private HlsMediaPlaylist adjustPlaylistTimestamps(HlsMediaPlaylist oldPlaylist, HlsMediaPlaylist newPlaylist) {
-        HlsMediaPlaylist primaryPlaylistSnapshot = ((MediaPlaylistBundle) this.playlistBundles.get(this.primaryHlsUrl)).latestPlaylistSnapshot;
-        if (oldPlaylist != null) {
-            List<Segment> oldSegments = oldPlaylist.segments;
-            int oldPlaylistSize = oldSegments.size();
-            int newPlaylistSize = newPlaylist.segments.size();
-            int mediaSequenceOffset = newPlaylist.mediaSequence - oldPlaylist.mediaSequence;
-            if ((newPlaylistSize == oldPlaylistSize && mediaSequenceOffset == 0 && oldPlaylist.hasEndTag == newPlaylist.hasEndTag) || mediaSequenceOffset < 0) {
-                return oldPlaylist;
-            }
-            if (mediaSequenceOffset <= oldPlaylistSize) {
-                int i;
-                ArrayList<Segment> newSegments = new ArrayList(newPlaylistSize);
-                for (i = mediaSequenceOffset; i < oldPlaylistSize; i++) {
-                    newSegments.add(oldSegments.get(i));
-                }
-                Segment lastSegment = (Segment) oldSegments.get(oldPlaylistSize - 1);
-                for (i = newSegments.size(); i < newPlaylistSize; i++) {
-                    lastSegment = ((Segment) newPlaylist.segments.get(i)).copyWithStartTimeUs(lastSegment.startTimeUs + lastSegment.durationUs);
-                    newSegments.add(lastSegment);
-                }
-                return newPlaylist.copyWithSegments(newSegments);
-            }
-            return newPlaylist.copyWithStartTimeUs(primaryPlaylistSnapshot.getStartTimeUs());
-        } else if (primaryPlaylistSnapshot == null) {
-            return newPlaylist;
-        } else {
-            return newPlaylist.copyWithStartTimeUs(primaryPlaylistSnapshot.getStartTimeUs());
+    private void notifyPlaylistBlacklisting(HlsUrl url, long blacklistMs) {
+        int listenersSize = this.listeners.size();
+        for (int i = 0; i < listenersSize; i++) {
+            ((PlaylistEventListener) this.listeners.get(i)).onPlaylistBlacklisted(url, blacklistMs);
         }
+    }
+
+    private HlsMediaPlaylist getLatestPlaylistSnapshot(HlsMediaPlaylist oldPlaylist, HlsMediaPlaylist loadedPlaylist) {
+        if (loadedPlaylist.isNewerThan(oldPlaylist)) {
+            return loadedPlaylist.copyWith(getLoadedPlaylistStartTimeUs(oldPlaylist, loadedPlaylist), getLoadedPlaylistDiscontinuitySequence(oldPlaylist, loadedPlaylist));
+        }
+        if (loadedPlaylist.hasEndTag) {
+            return oldPlaylist.copyWithEndTag();
+        }
+        return oldPlaylist;
+    }
+
+    private long getLoadedPlaylistStartTimeUs(HlsMediaPlaylist oldPlaylist, HlsMediaPlaylist loadedPlaylist) {
+        if (loadedPlaylist.hasProgramDateTime) {
+            return loadedPlaylist.startTimeUs;
+        }
+        long j = this.primaryUrlSnapshot != null ? this.primaryUrlSnapshot.startTimeUs : 0;
+        if (oldPlaylist == null) {
+            return j;
+        }
+        int oldPlaylistSize = oldPlaylist.segments.size();
+        Segment firstOldOverlappingSegment = getFirstOldOverlappingSegment(oldPlaylist, loadedPlaylist);
+        if (firstOldOverlappingSegment != null) {
+            return oldPlaylist.startTimeUs + firstOldOverlappingSegment.relativeStartTimeUs;
+        }
+        if (oldPlaylistSize == loadedPlaylist.mediaSequence - oldPlaylist.mediaSequence) {
+            return oldPlaylist.getEndTimeUs();
+        }
+        return j;
+    }
+
+    private int getLoadedPlaylistDiscontinuitySequence(HlsMediaPlaylist oldPlaylist, HlsMediaPlaylist loadedPlaylist) {
+        if (loadedPlaylist.hasDiscontinuitySequence) {
+            return loadedPlaylist.discontinuitySequence;
+        }
+        int primaryUrlDiscontinuitySequence;
+        if (this.primaryUrlSnapshot != null) {
+            primaryUrlDiscontinuitySequence = this.primaryUrlSnapshot.discontinuitySequence;
+        } else {
+            primaryUrlDiscontinuitySequence = 0;
+        }
+        if (oldPlaylist == null) {
+            return primaryUrlDiscontinuitySequence;
+        }
+        Segment firstOldOverlappingSegment = getFirstOldOverlappingSegment(oldPlaylist, loadedPlaylist);
+        if (firstOldOverlappingSegment != null) {
+            return (oldPlaylist.discontinuitySequence + firstOldOverlappingSegment.relativeDiscontinuitySequence) - ((Segment) loadedPlaylist.segments.get(0)).relativeDiscontinuitySequence;
+        }
+        return primaryUrlDiscontinuitySequence;
+    }
+
+    private static Segment getFirstOldOverlappingSegment(HlsMediaPlaylist oldPlaylist, HlsMediaPlaylist loadedPlaylist) {
+        int mediaSequenceOffset = loadedPlaylist.mediaSequence - oldPlaylist.mediaSequence;
+        List<Segment> oldSegments = oldPlaylist.segments;
+        return mediaSequenceOffset < oldSegments.size() ? (Segment) oldSegments.get(mediaSequenceOffset) : null;
     }
 }

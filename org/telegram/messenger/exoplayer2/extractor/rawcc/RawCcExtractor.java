@@ -37,7 +37,7 @@ public final class RawCcExtractor implements Extractor {
 
     public void init(ExtractorOutput output) {
         output.seekMap(new Unseekable(C.TIME_UNSET));
-        this.trackOutput = output.track(0);
+        this.trackOutput = output.track(0, 3);
         output.endTracks();
         this.trackOutput.format(this.format);
     }
@@ -55,9 +55,11 @@ public final class RawCcExtractor implements Extractor {
         while (true) {
             switch (this.parserState) {
                 case 0:
-                    parseHeader(input);
-                    this.parserState = 1;
-                    break;
+                    if (parseHeader(input)) {
+                        this.parserState = 1;
+                        break;
+                    }
+                    return -1;
                 case 1:
                     if (parseTimestampAndSampleCount(input)) {
                         this.parserState = 2;
@@ -75,20 +77,23 @@ public final class RawCcExtractor implements Extractor {
         }
     }
 
-    public void seek(long position) {
+    public void seek(long position, long timeUs) {
         this.parserState = 0;
     }
 
     public void release() {
     }
 
-    private void parseHeader(ExtractorInput input) throws IOException, InterruptedException {
+    private boolean parseHeader(ExtractorInput input) throws IOException, InterruptedException {
         this.dataScratch.reset();
-        input.readFully(this.dataScratch.data, 0, 8);
+        if (!input.readFully(this.dataScratch.data, 0, 8, true)) {
+            return false;
+        }
         if (this.dataScratch.readInt() != HEADER_ID) {
             throw new IOException("Input not RawCC");
         }
         this.version = this.dataScratch.readUnsignedByte();
+        return true;
     }
 
     private boolean parseTimestampAndSampleCount(ExtractorInput input) throws IOException, InterruptedException {

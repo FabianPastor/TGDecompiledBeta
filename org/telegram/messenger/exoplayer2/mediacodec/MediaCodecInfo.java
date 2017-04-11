@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2.mediacodec;
 
 import android.annotation.TargetApi;
+import android.graphics.Point;
 import android.media.MediaCodecInfo.AudioCapabilities;
 import android.media.MediaCodecInfo.CodecCapabilities;
 import android.media.MediaCodecInfo.CodecProfileLevel;
@@ -18,6 +19,7 @@ public final class MediaCodecInfo {
     private final CodecCapabilities capabilities;
     private final String mimeType;
     public final String name;
+    public final boolean tunneling;
 
     public static MediaCodecInfo newPassthroughInstance(String name) {
         return new MediaCodecInfo(name, null, null);
@@ -28,11 +30,21 @@ public final class MediaCodecInfo {
     }
 
     private MediaCodecInfo(String name, String mimeType, CodecCapabilities capabilities) {
+        boolean z;
+        boolean z2 = true;
         this.name = (String) Assertions.checkNotNull(name);
         this.mimeType = mimeType;
         this.capabilities = capabilities;
-        boolean z = capabilities != null && isAdaptive(capabilities);
+        if (capabilities == null || !isAdaptive(capabilities)) {
+            z = false;
+        } else {
+            z = true;
+        }
         this.adaptive = z;
+        if (capabilities == null || !isTunneling(capabilities)) {
+            z2 = false;
+        }
+        this.tunneling = z2;
     }
 
     public CodecProfileLevel[] getProfileLevels() {
@@ -65,27 +77,6 @@ public final class MediaCodecInfo {
     }
 
     @TargetApi(21)
-    public boolean isVideoSizeSupportedV21(int width, int height) {
-        if (this.capabilities == null) {
-            logNoSupport("size.caps");
-            return false;
-        }
-        VideoCapabilities videoCapabilities = this.capabilities.getVideoCapabilities();
-        if (videoCapabilities == null) {
-            logNoSupport("size.vCaps");
-            return false;
-        }
-        if (!videoCapabilities.isSizeSupported(width, height)) {
-            if (width >= height || !videoCapabilities.isSizeSupported(height, width)) {
-                logNoSupport("size.support, " + width + "x" + height);
-                return false;
-            }
-            logAssumedSupport("size.rotated, " + width + "x" + height);
-        }
-        return true;
-    }
-
-    @TargetApi(21)
     public boolean isVideoSizeAndRateSupportedV21(int width, int height, double frameRate) {
         if (this.capabilities == null) {
             logNoSupport("sizeAndRate.caps");
@@ -96,14 +87,30 @@ public final class MediaCodecInfo {
             logNoSupport("sizeAndRate.vCaps");
             return false;
         }
-        if (!videoCapabilities.areSizeAndRateSupported(width, height, frameRate)) {
-            if (width >= height || !videoCapabilities.areSizeAndRateSupported(height, width, frameRate)) {
+        if (!areSizeAndRateSupported(videoCapabilities, width, height, frameRate)) {
+            if (width >= height || !areSizeAndRateSupported(videoCapabilities, height, width, frameRate)) {
                 logNoSupport("sizeAndRate.support, " + width + "x" + height + "x" + frameRate);
                 return false;
             }
             logAssumedSupport("sizeAndRate.rotated, " + width + "x" + height + "x" + frameRate);
         }
         return true;
+    }
+
+    @TargetApi(21)
+    public Point alignVideoSizeV21(int width, int height) {
+        if (this.capabilities == null) {
+            logNoSupport("align.caps");
+            return null;
+        }
+        VideoCapabilities videoCapabilities = this.capabilities.getVideoCapabilities();
+        if (videoCapabilities == null) {
+            logNoSupport("align.vCaps");
+            return null;
+        }
+        int widthAlignment = videoCapabilities.getWidthAlignment();
+        int heightAlignment = videoCapabilities.getHeightAlignment();
+        return new Point(Util.ceilDivide(width, widthAlignment) * widthAlignment, Util.ceilDivide(height, heightAlignment) * heightAlignment);
     }
 
     @TargetApi(21)
@@ -157,5 +164,22 @@ public final class MediaCodecInfo {
     @TargetApi(19)
     private static boolean isAdaptiveV19(CodecCapabilities capabilities) {
         return capabilities.isFeatureSupported("adaptive-playback");
+    }
+
+    @TargetApi(21)
+    private static boolean areSizeAndRateSupported(VideoCapabilities capabilities, int width, int height, double frameRate) {
+        if (frameRate == -1.0d || frameRate <= 0.0d) {
+            return capabilities.isSizeSupported(width, height);
+        }
+        return capabilities.areSizeAndRateSupported(width, height, frameRate);
+    }
+
+    private static boolean isTunneling(CodecCapabilities capabilities) {
+        return Util.SDK_INT >= 21 && isTunnelingV21(capabilities);
+    }
+
+    @TargetApi(21)
+    private static boolean isTunnelingV21(CodecCapabilities capabilities) {
+        return capabilities.isFeatureSupported("tunneled-playback");
     }
 }

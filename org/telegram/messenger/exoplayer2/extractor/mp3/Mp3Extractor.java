@@ -2,6 +2,8 @@ package org.telegram.messenger.exoplayer2.extractor.mp3;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
@@ -24,6 +26,8 @@ public final class Mp3Extractor implements Extractor {
             return new Extractor[]{new Mp3Extractor()};
         }
     };
+    public static final int FLAG_DISABLE_ID3_METADATA = 2;
+    public static final int FLAG_ENABLE_CONSTANT_BITRATE_SEEKING = 1;
     private static final int HEADER_MASK = -128000;
     private static final int INFO_HEADER = Util.getIntegerCodeForString("Info");
     private static final int MAX_SNIFF_BYTES = 4096;
@@ -33,6 +37,7 @@ public final class Mp3Extractor implements Extractor {
     private static final int XING_HEADER = Util.getIntegerCodeForString("Xing");
     private long basisTimeUs;
     private ExtractorOutput extractorOutput;
+    private final int flags;
     private final long forcedFirstSampleTimestampUs;
     private final GaplessInfoHolder gaplessInfoHolder;
     private Metadata metadata;
@@ -44,15 +49,24 @@ public final class Mp3Extractor implements Extractor {
     private int synchronizedHeaderData;
     private TrackOutput trackOutput;
 
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Flags {
+    }
+
     interface Seeker extends SeekMap {
         long getTimeUs(long j);
     }
 
     public Mp3Extractor() {
-        this(C.TIME_UNSET);
+        this(0);
     }
 
-    public Mp3Extractor(long forcedFirstSampleTimestampUs) {
+    public Mp3Extractor(int flags) {
+        this(flags, C.TIME_UNSET);
+    }
+
+    public Mp3Extractor(int flags, long forcedFirstSampleTimestampUs) {
+        this.flags = flags;
         this.forcedFirstSampleTimestampUs = forcedFirstSampleTimestampUs;
         this.scratch = new ParsableByteArray(10);
         this.synchronizedHeader = new MpegAudioHeader();
@@ -66,11 +80,11 @@ public final class Mp3Extractor implements Extractor {
 
     public void init(ExtractorOutput output) {
         this.extractorOutput = output;
-        this.trackOutput = this.extractorOutput.track(0);
+        this.trackOutput = this.extractorOutput.track(0, 1);
         this.extractorOutput.endTracks();
     }
 
-    public void seek(long position) {
+    public void seek(long position, long timeUs) {
         this.synchronizedHeaderData = 0;
         this.basisTimeUs = C.TIME_UNSET;
         this.samplesRead = 0;
@@ -91,7 +105,7 @@ public final class Mp3Extractor implements Extractor {
         if (this.seeker == null) {
             this.seeker = setupSeeker(input);
             this.extractorOutput.seekMap(this.seeker);
-            this.trackOutput.format(Format.createAudioSampleFormat(null, this.synchronizedHeader.mimeType, null, -1, 4096, this.synchronizedHeader.channels, this.synchronizedHeader.sampleRate, -1, this.gaplessInfoHolder.encoderDelay, this.gaplessInfoHolder.encoderPadding, null, null, 0, null, this.metadata));
+            this.trackOutput.format(Format.createAudioSampleFormat(null, this.synchronizedHeader.mimeType, null, -1, 4096, this.synchronizedHeader.channels, this.synchronizedHeader.sampleRate, -1, this.gaplessInfoHolder.encoderDelay, this.gaplessInfoHolder.encoderPadding, null, null, 0, null, (this.flags & 2) != 0 ? null : this.metadata));
         }
         return readSample(input);
     }
@@ -216,7 +230,7 @@ public final class Mp3Extractor implements Extractor {
                 byte[] id3Data = new byte[tagLength];
                 System.arraycopy(this.scratch.data, 0, id3Data, 0, 10);
                 input.peekFully(id3Data, 10, framesLength);
-                this.metadata = new Id3Decoder().decode(id3Data, tagLength);
+                this.metadata = new Id3Decoder((this.flags & 2) != 0 ? GaplessInfoHolder.GAPLESS_INFO_ID3_FRAME_PREDICATE : null).decode(id3Data, tagLength);
                 if (this.metadata != null) {
                     this.gaplessInfoHolder.setFromMetadata(this.metadata);
                 }
@@ -263,7 +277,7 @@ public final class Mp3Extractor implements Extractor {
                 input.skipFully(this.synchronizedHeader.frameSize);
             }
         }
-        if (seeker != null) {
+        if (seeker != null && (seeker.isSeekable() || (this.flags & 1) == 0)) {
             return seeker;
         }
         input.resetPeekPosition();

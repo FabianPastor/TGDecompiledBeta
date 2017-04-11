@@ -8,7 +8,7 @@ import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
-final class DtsReader implements ElementaryStreamReader {
+public final class DtsReader implements ElementaryStreamReader {
     private static final int HEADER_SIZE = 15;
     private static final int STATE_FINDING_SYNC = 0;
     private static final int STATE_READING_HEADER = 1;
@@ -17,6 +17,7 @@ final class DtsReader implements ElementaryStreamReader {
     private static final int SYNC_VALUE_SIZE = 4;
     private int bytesRead;
     private Format format;
+    private String formatId;
     private final ParsableByteArray headerScratchBytes = new ParsableByteArray(new byte[15]);
     private final String language;
     private TrackOutput output;
@@ -42,7 +43,9 @@ final class DtsReader implements ElementaryStreamReader {
     }
 
     public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
-        this.output = extractorOutput.track(idGenerator.getNextId());
+        idGenerator.generateNewId();
+        this.formatId = idGenerator.getFormatId();
+        this.output = extractorOutput.track(idGenerator.getTrackId(), 1);
     }
 
     public void packetStarted(long pesTimeUs, boolean dataAlignmentIndicator) {
@@ -110,7 +113,7 @@ final class DtsReader implements ElementaryStreamReader {
     private void parseHeader() {
         byte[] frameData = this.headerScratchBytes.data;
         if (this.format == null) {
-            this.format = DtsUtil.parseDtsFormat(frameData, null, this.language, null);
+            this.format = DtsUtil.parseDtsFormat(frameData, this.formatId, this.language, null);
             this.output.format(this.format);
         }
         this.sampleSize = DtsUtil.getDtsFrameSize(frameData);

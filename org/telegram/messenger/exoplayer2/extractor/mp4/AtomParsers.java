@@ -363,6 +363,7 @@ final class AtomParsers {
         Object editedSizes;
         int editedMaximumSize;
         Object editedFlags;
+        boolean omitClippedSample = track.type == 1;
         int editedSampleCount = 0;
         int nextSampleIndex = 0;
         boolean copyMetadata = false;
@@ -371,7 +372,7 @@ final class AtomParsers {
             if (mediaTime != -1) {
                 long duration = Util.scaleLargeTimestamp(track.editListDurations[i], track.timescale, track.movieTimescale);
                 int startIndex = Util.binarySearchCeil(timestamps, mediaTime, true, true);
-                int endIndex = Util.binarySearchCeil(timestamps, mediaTime + duration, true, false);
+                int endIndex = Util.binarySearchCeil(timestamps, mediaTime + duration, omitClippedSample, false);
                 editedSampleCount += endIndex - startIndex;
                 copyMetadata |= nextSampleIndex != startIndex ? 1 : 0;
                 nextSampleIndex = endIndex;
@@ -407,7 +408,7 @@ final class AtomParsers {
             if (mediaTime != -1) {
                 long endMediaTime = mediaTime + Util.scaleLargeTimestamp(duration, track.timescale, track.movieTimescale);
                 startIndex = Util.binarySearchCeil(timestamps, mediaTime, true, true);
-                endIndex = Util.binarySearchCeil(timestamps, endMediaTime, true, false);
+                endIndex = Util.binarySearchCeil(timestamps, endMediaTime, omitClippedSample, false);
                 if (copyMetadata) {
                     int count = endIndex - startIndex;
                     System.arraycopy(offsets, startIndex, editedOffsets, sampleIndex, count);
@@ -575,7 +576,7 @@ final class AtomParsers {
             int childAtomType = stsd.readInt();
             if (childAtomType == Atom.TYPE_avc1 || childAtomType == Atom.TYPE_avc3 || childAtomType == Atom.TYPE_encv || childAtomType == Atom.TYPE_mp4v || childAtomType == Atom.TYPE_hvc1 || childAtomType == Atom.TYPE_hev1 || childAtomType == Atom.TYPE_s263 || childAtomType == Atom.TYPE_vp08 || childAtomType == Atom.TYPE_vp09) {
                 parseVideoSampleEntry(stsd, childAtomType, childStartPosition, childAtomSize, trackId, rotationDegrees, drmInitData, out, i);
-            } else if (childAtomType == Atom.TYPE_mp4a || childAtomType == Atom.TYPE_enca || childAtomType == Atom.TYPE_ac_3 || childAtomType == Atom.TYPE_ec_3 || childAtomType == Atom.TYPE_dtsc || childAtomType == Atom.TYPE_dtse || childAtomType == Atom.TYPE_dtsh || childAtomType == Atom.TYPE_dtsl || childAtomType == Atom.TYPE_samr || childAtomType == Atom.TYPE_sawb || childAtomType == Atom.TYPE_lpcm || childAtomType == Atom.TYPE_sowt || childAtomType == Atom.TYPE__mp3) {
+            } else if (childAtomType == Atom.TYPE_mp4a || childAtomType == Atom.TYPE_enca || childAtomType == Atom.TYPE_ac_3 || childAtomType == Atom.TYPE_ec_3 || childAtomType == Atom.TYPE_dtsc || childAtomType == Atom.TYPE_dtse || childAtomType == Atom.TYPE_dtsh || childAtomType == Atom.TYPE_dtsl || childAtomType == Atom.TYPE_samr || childAtomType == Atom.TYPE_sawb || childAtomType == Atom.TYPE_lpcm || childAtomType == Atom.TYPE_sowt || childAtomType == Atom.TYPE__mp3 || childAtomType == Atom.TYPE_alac) {
                 parseAudioSampleEntry(stsd, childAtomType, childStartPosition, childAtomSize, trackId, language, isQuickTime, drmInitData, out, i);
             } else if (childAtomType == Atom.TYPE_TTML) {
                 out.format = Format.createTextSampleFormat(Integer.toString(trackId), MimeTypes.APPLICATION_TTML, null, -1, 0, language, drmInitData);
@@ -586,7 +587,7 @@ final class AtomParsers {
             } else if (childAtomType == Atom.TYPE_stpp) {
                 out.format = Format.createTextSampleFormat(Integer.toString(trackId), MimeTypes.APPLICATION_TTML, null, -1, 0, language, drmInitData, 0);
             } else if (childAtomType == Atom.TYPE_c608) {
-                out.format = Format.createTextSampleFormat(Integer.toString(trackId), MimeTypes.APPLICATION_CEA608, null, -1, 0, language, drmInitData);
+                out.format = Format.createTextSampleFormat(Integer.toString(trackId), MimeTypes.APPLICATION_MP4CEA608, null, -1, 0, language, drmInitData);
                 out.requiredSampleTransformation = 1;
             } else if (childAtomType == Atom.TYPE_camm) {
                 out.format = Format.createSampleFormat(Integer.toString(trackId), MimeTypes.APPLICATION_CAMERA_MOTION, null, -1, drmInitData);
@@ -666,6 +667,9 @@ final class AtomParsers {
                                 break;
                             case 2:
                                 stereoMode = 2;
+                                break;
+                            case 3:
+                                stereoMode = 3;
                                 break;
                             default:
                                 break;
@@ -762,6 +766,8 @@ final class AtomParsers {
             mimeType = MimeTypes.AUDIO_RAW;
         } else if (atomType == Atom.TYPE__mp3) {
             mimeType = MimeTypes.AUDIO_MPEG;
+        } else if (atomType == Atom.TYPE_alac) {
+            mimeType = MimeTypes.AUDIO_ALAC;
         }
         byte[] initializationData = null;
         while (childPosition - position < size) {
@@ -794,6 +800,10 @@ final class AtomParsers {
                 out.format = Ac3Util.parseEAc3AnnexFFormat(parent, Integer.toString(trackId), language, drmInitData);
             } else if (childAtomType == Atom.TYPE_ddts) {
                 out.format = Format.createAudioSampleFormat(Integer.toString(trackId), mimeType, null, -1, -1, channelCount, sampleRate, null, drmInitData, 0, language);
+            } else if (childAtomType == Atom.TYPE_alac) {
+                initializationData = new byte[childAtomSize];
+                parent.setPosition(childPosition);
+                parent.readBytes(initializationData, 0, childAtomSize);
             }
             childPosition += childAtomSize;
         }

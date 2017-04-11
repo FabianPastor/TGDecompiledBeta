@@ -9,7 +9,7 @@ import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGen
 import org.telegram.messenger.exoplayer2.util.ParsableBitArray;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
-final class Ac3Reader implements ElementaryStreamReader {
+public final class Ac3Reader implements ElementaryStreamReader {
     private static final int HEADER_SIZE = 8;
     private static final int STATE_FINDING_SYNC = 0;
     private static final int STATE_READING_HEADER = 1;
@@ -26,6 +26,7 @@ final class Ac3Reader implements ElementaryStreamReader {
     private int sampleSize;
     private int state;
     private long timeUs;
+    private String trackFormatId;
 
     public Ac3Reader() {
         this(null);
@@ -45,7 +46,9 @@ final class Ac3Reader implements ElementaryStreamReader {
     }
 
     public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator generator) {
-        this.output = extractorOutput.track(generator.getNextId());
+        generator.generateNewId();
+        this.trackFormatId = generator.getFormatId();
+        this.output = extractorOutput.track(generator.getTrackId(), 1);
     }
 
     public void packetStarted(long pesTimeUs, boolean dataAlignmentIndicator) {
@@ -125,9 +128,9 @@ final class Ac3Reader implements ElementaryStreamReader {
             this.isEac3 = this.headerScratchBits.readBits(5) == 16;
             this.headerScratchBits.setPosition(this.headerScratchBits.getPosition() - 45);
             if (this.isEac3) {
-                parseEac3SyncframeFormat = Ac3Util.parseEac3SyncframeFormat(this.headerScratchBits, null, this.language, null);
+                parseEac3SyncframeFormat = Ac3Util.parseEac3SyncframeFormat(this.headerScratchBits, this.trackFormatId, this.language, null);
             } else {
-                parseEac3SyncframeFormat = Ac3Util.parseAc3SyncframeFormat(this.headerScratchBits, null, this.language, null);
+                parseEac3SyncframeFormat = Ac3Util.parseAc3SyncframeFormat(this.headerScratchBits, this.trackFormatId, this.language, null);
             }
             this.format = parseEac3SyncframeFormat;
             this.output.format(this.format);

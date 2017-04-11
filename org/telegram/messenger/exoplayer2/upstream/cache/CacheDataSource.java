@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2.upstream.cache;
 
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.lang.annotation.Retention;
@@ -26,6 +27,7 @@ public final class CacheDataSource implements DataSource {
     private DataSource currentDataSource;
     private boolean currentRequestIgnoresCache;
     private boolean currentRequestUnbounded;
+    @Nullable
     private final EventListener eventListener;
     private int flags;
     private final boolean ignoreCacheForUnsetLengthRequests;
@@ -108,7 +110,7 @@ Error: java.util.NoSuchElementException
         this(cache, upstream, new FileDataSource(), new CacheDataSink(cache, maxCacheFileSize), flags, null);
     }
 
-    public CacheDataSource(Cache cache, DataSource upstream, DataSource cacheReadDataSource, DataSink cacheWriteDataSink, int flags, EventListener eventListener) {
+    public CacheDataSource(Cache cache, DataSource upstream, DataSource cacheReadDataSource, DataSink cacheWriteDataSink, int flags, @Nullable EventListener eventListener) {
         boolean z;
         boolean z2 = true;
         this.cache = cache;
@@ -237,8 +239,6 @@ Error: java.util.NoSuchElementException
             dataSpec = new DataSpec(fileUri, this.readPosition, filePosition, length, this.key, this.flags);
             this.currentDataSource = this.cacheReadDataSource;
         } else {
-            DataSource dataSource;
-            this.lockedSpan = span;
             if (span.isOpenEnded()) {
                 length = this.bytesRemaining;
             } else {
@@ -249,11 +249,12 @@ Error: java.util.NoSuchElementException
             }
             DataSpec dataSpec2 = new DataSpec(this.uri, this.readPosition, length, this.key, this.flags);
             if (this.cacheWriteDataSource != null) {
-                dataSource = this.cacheWriteDataSource;
+                this.currentDataSource = this.cacheWriteDataSource;
+                this.lockedSpan = span;
             } else {
-                dataSource = this.upstreamDataSource;
+                this.currentDataSource = this.upstreamDataSource;
+                this.cache.releaseHoleSpan(span);
             }
-            this.currentDataSource = dataSource;
         }
         this.currentRequestUnbounded = dataSpec.length == -1;
         boolean successful = false;
@@ -279,15 +280,15 @@ Error: java.util.NoSuchElementException
         }
         if (this.currentRequestUnbounded && currentBytesRemaining != -1) {
             this.bytesRemaining = currentBytesRemaining;
-            if (this.lockedSpan != null) {
-                setContentLength(dataSpec.position + this.bytesRemaining);
-            }
+            setContentLength(dataSpec.position + this.bytesRemaining);
         }
         return successful;
     }
 
     private void setContentLength(long length) throws IOException {
-        this.cache.setContentLength(this.key, length);
+        if (this.currentDataSource == this.cacheWriteDataSource) {
+            this.cache.setContentLength(this.key, length);
+        }
     }
 
     private void handleBeforeThrow(IOException exception) {

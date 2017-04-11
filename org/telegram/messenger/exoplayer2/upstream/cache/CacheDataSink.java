@@ -11,6 +11,7 @@ import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.ReusableBufferedOutputStream;
 
 public final class CacheDataSink implements DataSink {
+    public static final int DEFAULT_BUFFER_SIZE = 20480;
     private final int bufferSize;
     private ReusableBufferedOutputStream bufferedOutputStream;
     private final Cache cache;
@@ -41,6 +42,8 @@ Error: java.util.NoSuchElementException
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
 	at jadx.core.ProcessClass.process(ProcessClass.java:37)
+	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:59)
+	at jadx.core.ProcessClass.process(ProcessClass.java:42)
 	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:306)
 	at jadx.api.JavaClass.decompile(JavaClass.java:62)
 	at jadx.api.JadxDecompiler$1.run(JadxDecompiler.java:199)
@@ -94,7 +97,7 @@ Error: java.util.NoSuchElementException
     }
 
     public CacheDataSink(Cache cache, long maxCacheFileSize) {
-        this(cache, maxCacheFileSize, 0);
+        this(cache, maxCacheFileSize, DEFAULT_BUFFER_SIZE);
     }
 
     public CacheDataSink(Cache cache, long maxCacheFileSize, int bufferSize) {
@@ -104,19 +107,21 @@ Error: java.util.NoSuchElementException
     }
 
     public void open(DataSpec dataSpec) throws CacheDataSinkException {
-        this.dataSpec = dataSpec;
-        if (dataSpec.length != -1) {
+        if (dataSpec.length != -1 || dataSpec.isFlagSet(2)) {
+            this.dataSpec = dataSpec;
             this.dataSpecBytesWritten = 0;
             try {
                 openNextOutputStream();
+                return;
             } catch (IOException e) {
                 throw new CacheDataSinkException(e);
             }
         }
+        this.dataSpec = null;
     }
 
     public void write(byte[] buffer, int offset, int length) throws CacheDataSinkException {
-        if (this.dataSpec.length != -1) {
+        if (this.dataSpec != null) {
             int bytesWritten = 0;
             while (bytesWritten < length) {
                 try {
@@ -137,7 +142,7 @@ Error: java.util.NoSuchElementException
     }
 
     public void close() throws CacheDataSinkException {
-        if (this.dataSpec != null && this.dataSpec.length != -1) {
+        if (this.dataSpec != null) {
             try {
                 closeCurrentOutputStream();
             } catch (IOException e) {
@@ -147,7 +152,13 @@ Error: java.util.NoSuchElementException
     }
 
     private void openNextOutputStream() throws IOException {
-        this.file = this.cache.startFile(this.dataSpec.key, this.dataSpec.absoluteStreamPosition + this.dataSpecBytesWritten, Math.min(this.dataSpec.length - this.dataSpecBytesWritten, this.maxCacheFileSize));
+        long maxLength;
+        if (this.dataSpec.length == -1) {
+            maxLength = this.maxCacheFileSize;
+        } else {
+            maxLength = Math.min(this.dataSpec.length - this.dataSpecBytesWritten, this.maxCacheFileSize);
+        }
+        this.file = this.cache.startFile(this.dataSpec.key, this.dataSpec.absoluteStreamPosition + this.dataSpecBytesWritten, maxLength);
         this.underlyingFileOutputStream = new FileOutputStream(this.file);
         if (this.bufferSize > 0) {
             if (this.bufferedOutputStream == null) {

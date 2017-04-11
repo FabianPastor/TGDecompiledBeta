@@ -24,7 +24,7 @@ public abstract class Timeline {
     };
 
     public static final class Period {
-        private long durationUs;
+        public long durationUs;
         public Object id;
         private long positionInWindowUs;
         public Object uid;
@@ -57,14 +57,14 @@ public abstract class Timeline {
     }
 
     public static final class Window {
-        private long defaultPositionUs;
-        private long durationUs;
+        public long defaultPositionUs;
+        public long durationUs;
         public int firstPeriodIndex;
         public Object id;
         public boolean isDynamic;
         public boolean isSeekable;
         public int lastPeriodIndex;
-        private long positionInFirstPeriodUs;
+        public long positionInFirstPeriodUs;
         public long presentationStartTimeMs;
         public long windowStartTimeMs;
 

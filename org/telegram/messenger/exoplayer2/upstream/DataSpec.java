@@ -7,6 +7,7 @@ import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
 public final class DataSpec {
+    public static final int FLAG_ALLOW_CACHING_UNKNOWN_LENGTH = 2;
     public static final int FLAG_ALLOW_GZIP = 1;
     public final long absoluteStreamPosition;
     public final int flags;
@@ -52,6 +53,10 @@ public final class DataSpec {
         this.length = length;
         this.key = key;
         this.flags = flags;
+    }
+
+    public boolean isFlagSet(int flag) {
+        return (this.flags & flag) == flag;
     }
 
     public String toString() {

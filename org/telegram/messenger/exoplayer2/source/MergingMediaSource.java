@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
 import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
@@ -40,11 +41,11 @@ public final class MergingMediaSource implements MediaSource {
         this.pendingTimelineSources = new ArrayList(Arrays.asList(mediaSources));
     }
 
-    public void prepareSource(Listener listener) {
+    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
         this.listener = listener;
         for (int i = 0; i < this.mediaSources.length; i++) {
             final int sourceIndex = i;
-            this.mediaSources[sourceIndex].prepareSource(new Listener() {
+            this.mediaSources[sourceIndex].prepareSource(player, false, new Listener() {
                 public void onSourceInfoRefreshed(Timeline timeline, Object manifest) {
                     MergingMediaSource.this.handleSourceInfoRefreshed(sourceIndex, timeline, manifest);
                 }

@@ -385,21 +385,41 @@ public final class ParsableByteArray {
         return readString(length, Charset.defaultCharset());
     }
 
+    public String readString(int length, Charset charset) {
+        String result = new String(this.data, this.position, length, charset);
+        this.position += length;
+        return result;
+    }
+
     public String readNullTerminatedString(int length) {
+        if (length == 0) {
+            return "";
+        }
         int stringLength = length;
         int lastIndex = (this.position + length) - 1;
         if (lastIndex < this.limit && this.data[lastIndex] == (byte) 0) {
             stringLength--;
         }
-        String result = new String(this.data, this.position, stringLength, Charset.defaultCharset());
+        String result = new String(this.data, this.position, stringLength);
         this.position += length;
         return result;
     }
 
-    public String readString(int length, Charset charset) {
-        String result = new String(this.data, this.position, length, charset);
-        this.position += length;
-        return result;
+    public String readNullTerminatedString() {
+        if (bytesLeft() == 0) {
+            return null;
+        }
+        int stringLimit = this.position;
+        while (stringLimit < this.limit && this.data[stringLimit] != (byte) 0) {
+            stringLimit++;
+        }
+        String string = new String(this.data, this.position, stringLimit - this.position);
+        this.position = stringLimit;
+        if (this.position >= this.limit) {
+            return string;
+        }
+        this.position++;
+        return string;
     }
 
     public String readLine() {
@@ -407,7 +427,7 @@ public final class ParsableByteArray {
             return null;
         }
         int lineLimit = this.position;
-        while (lineLimit < this.limit && this.data[lineLimit] != (byte) 10 && this.data[lineLimit] != (byte) 13) {
+        while (lineLimit < this.limit && !Util.isLinebreak(this.data[lineLimit])) {
             lineLimit++;
         }
         if (lineLimit - this.position >= 3 && this.data[this.position] == (byte) -17 && this.data[this.position + 1] == (byte) -69 && this.data[this.position + 2] == (byte) -65) {
@@ -432,6 +452,7 @@ public final class ParsableByteArray {
     }
 
     public long readUtf8EncodedLong() {
+        int i;
         int length = 0;
         long value = (long) this.data[this.position];
         for (int j = 7; j >= 0; j--) {
@@ -446,7 +467,6 @@ public final class ParsableByteArray {
                 if (length != 0) {
                     throw new NumberFormatException("Invalid UTF-8 sequence first byte: " + value);
                 }
-                int i;
                 for (i = 1; i < length; i++) {
                     x = this.data[this.position + i];
                     if ((x & PsExtractor.AUDIO_STREAM) == 128) {

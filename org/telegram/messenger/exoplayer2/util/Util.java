@@ -16,6 +16,7 @@ import android.view.Display.Mode;
 import android.view.WindowManager;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -47,11 +48,11 @@ public final class Util {
     public static final String MODEL = Build.MODEL;
     public static final int SDK_INT;
     private static final String TAG = "Util";
-    private static final Pattern XS_DATE_TIME_PATTERN = Pattern.compile("(\\d\\d\\d\\d)\\-(\\d\\d)\\-(\\d\\d)[Tt](\\d\\d):(\\d\\d):(\\d\\d)(\\.(\\d+))?([Zz]|((\\+|\\-)(\\d\\d):(\\d\\d)))?");
+    private static final Pattern XS_DATE_TIME_PATTERN = Pattern.compile("(\\d\\d\\d\\d)\\-(\\d\\d)\\-(\\d\\d)[Tt](\\d\\d):(\\d\\d):(\\d\\d)([\\.,](\\d+))?([Zz]|((\\+|\\-)(\\d\\d):?(\\d\\d)))?");
     private static final Pattern XS_DURATION_PATTERN = Pattern.compile("^(-)?P(([0-9]*)Y)?(([0-9]*)M)?(([0-9]*)D)?(T(([0-9]*)H)?(([0-9]*)M)?(([0-9.]*)S)?)?$");
 
     static {
-        int i = (VERSION.SDK_INT == 23 && VERSION.CODENAME.charAt(0) == 'N') ? 24 : VERSION.SDK_INT;
+        int i = (VERSION.SDK_INT == 25 && VERSION.CODENAME.charAt(0) == 'O') ? 26 : VERSION.SDK_INT;
         SDK_INT = i;
     }
 
@@ -146,6 +147,10 @@ public final class Util {
         return value.getBytes(Charset.defaultCharset());
     }
 
+    public static boolean isLinebreak(int c) {
+        return c == 10 || c == 13;
+    }
+
     public static String toLowerInvariant(String text) {
         return text == null ? null : text.toLowerCase(Locale.US);
     }
@@ -162,42 +167,74 @@ public final class Util {
         return Math.max(min, Math.min(value, max));
     }
 
-    public static int binarySearchFloor(int[] a, int value, boolean inclusive, boolean stayInBounds) {
-        int index = Arrays.binarySearch(a, value);
+    public static int binarySearchFloor(int[] array, int value, boolean inclusive, boolean stayInBounds) {
+        int index = Arrays.binarySearch(array, value);
         if (index < 0) {
             index = -(index + 2);
-        } else if (!inclusive) {
-            index--;
+        } else {
+            do {
+                index--;
+                if (index < 0) {
+                    break;
+                }
+            } while (array[index] == value);
+            if (inclusive) {
+                index++;
+            }
         }
         return stayInBounds ? Math.max(0, index) : index;
     }
 
-    public static int binarySearchFloor(long[] a, long value, boolean inclusive, boolean stayInBounds) {
-        int index = Arrays.binarySearch(a, value);
+    public static int binarySearchFloor(long[] array, long value, boolean inclusive, boolean stayInBounds) {
+        int index = Arrays.binarySearch(array, value);
         if (index < 0) {
             index = -(index + 2);
-        } else if (!inclusive) {
-            index--;
+        } else {
+            do {
+                index--;
+                if (index < 0) {
+                    break;
+                }
+            } while (array[index] == value);
+            if (inclusive) {
+                index++;
+            }
         }
         return stayInBounds ? Math.max(0, index) : index;
     }
 
-    public static int binarySearchCeil(long[] a, long value, boolean inclusive, boolean stayInBounds) {
-        int index = Arrays.binarySearch(a, value);
+    public static int binarySearchCeil(long[] array, long value, boolean inclusive, boolean stayInBounds) {
+        int index = Arrays.binarySearch(array, value);
         if (index < 0) {
             index ^= -1;
-        } else if (!inclusive) {
-            index++;
+        } else {
+            do {
+                index++;
+                if (index >= array.length) {
+                    break;
+                }
+            } while (array[index] == value);
+            if (inclusive) {
+                index--;
+            }
         }
-        return stayInBounds ? Math.min(a.length - 1, index) : index;
+        return stayInBounds ? Math.min(array.length - 1, index) : index;
     }
 
     public static <T> int binarySearchFloor(List<? extends Comparable<? super T>> list, T value, boolean inclusive, boolean stayInBounds) {
         int index = Collections.binarySearch(list, value);
         if (index < 0) {
             index = -(index + 2);
-        } else if (!inclusive) {
-            index--;
+        } else {
+            do {
+                index--;
+                if (index < 0) {
+                    break;
+                }
+            } while (((Comparable) list.get(index)).compareTo(value) == 0);
+            if (inclusive) {
+                index++;
+            }
         }
         return stayInBounds ? Math.max(0, index) : index;
     }
@@ -206,8 +243,17 @@ public final class Util {
         int index = Collections.binarySearch(list, value);
         if (index < 0) {
             index ^= -1;
-        } else if (!inclusive) {
-            index++;
+        } else {
+            int listSize = list.size();
+            do {
+                index++;
+                if (index >= listSize) {
+                    break;
+                }
+            } while (((Comparable) list.get(index)).compareTo(value) == 0);
+            if (inclusive) {
+                index--;
+            }
         }
         return stayInBounds ? Math.min(list.size() - 1, index) : index;
     }
@@ -395,18 +441,36 @@ public final class Util {
         }
     }
 
-    public static int inferContentType(String fileName) {
-        if (fileName == null) {
-            return 3;
+    public static int getPcmFrameSize(int pcmEncoding, int channelCount) {
+        switch (pcmEncoding) {
+            case Integer.MIN_VALUE:
+                return channelCount * 3;
+            case 2:
+                return channelCount * 2;
+            case 3:
+                return channelCount;
+            case 1073741824:
+                return channelCount * 4;
+            default:
+                throw new IllegalArgumentException();
         }
+    }
+
+    public static int inferContentType(Uri uri) {
+        String path = uri.getPath();
+        return path == null ? 3 : inferContentType(path);
+    }
+
+    public static int inferContentType(String fileName) {
+        fileName = fileName.toLowerCase();
         if (fileName.endsWith(".mpd")) {
             return 0;
         }
-        if (fileName.endsWith(".ism") || fileName.endsWith(".isml")) {
-            return 1;
-        }
         if (fileName.endsWith(".m3u8")) {
             return 2;
+        }
+        if (fileName.endsWith(".ism") || fileName.endsWith(".isml") || fileName.endsWith(".ism/manifest") || fileName.endsWith(".isml/manifest")) {
+            return 1;
         }
         return 3;
     }
@@ -512,6 +576,22 @@ public final class Util {
 
     private static <T extends Throwable> void sneakyThrowInternal(Throwable t) throws Throwable {
         throw t;
+    }
+
+    public static void recursiveDelete(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                recursiveDelete(child);
+            }
+        }
+        fileOrDirectory.delete();
+    }
+
+    public static File createTempDirectory(Context context, String prefix) throws IOException {
+        File tempFile = File.createTempFile(prefix, null, context.getCacheDir());
+        tempFile.delete();
+        tempFile.mkdir();
+        return tempFile;
     }
 
     public static int crc(byte[] bytes, int start, int end, int initialValue) {

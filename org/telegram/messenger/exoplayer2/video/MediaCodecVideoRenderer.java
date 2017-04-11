@@ -3,7 +3,9 @@ package org.telegram.messenger.exoplayer2.video;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Point;
 import android.media.MediaCodec;
+import android.media.MediaCodec.OnFrameRenderedListener;
 import android.media.MediaCrypto;
 import android.media.MediaFormat;
 import android.os.Handler;
@@ -15,6 +17,7 @@ import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.decoder.DecoderCounters;
+import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
 import org.telegram.messenger.exoplayer2.drm.DrmSessionManager;
 import org.telegram.messenger.exoplayer2.drm.FrameworkMediaCrypto;
@@ -34,6 +37,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     private static final String KEY_CROP_LEFT = "crop-left";
     private static final String KEY_CROP_RIGHT = "crop-right";
     private static final String KEY_CROP_TOP = "crop-top";
+    private static final int[] STANDARD_LONG_EDGE_VIDEO_PX = new int[]{1920, 1600, 1440, 1280, 960, 854, 640, 540, 480};
     private static final String TAG = "MediaCodecVideoRenderer";
     private final long allowedJoiningTimeMs;
     private CodecMaxValues codecMaxValues;
@@ -59,6 +63,9 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     private int scalingMode;
     private Format[] streamFormats;
     private Surface surface;
+    private boolean tunneling;
+    private int tunnelingAudioSessionId;
+    OnFrameRenderedListenerV23 tunnelingOnFrameRenderedListener;
 
     private static final class CodecMaxValues {
         public final int height;
@@ -69,6 +76,19 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
             this.width = width;
             this.height = height;
             this.inputSize = inputSize;
+        }
+    }
+
+    @TargetApi(23)
+    private final class OnFrameRenderedListenerV23 implements OnFrameRenderedListener {
+        private OnFrameRenderedListenerV23(MediaCodec codec) {
+            codec.setOnFrameRenderedListener(this, new Handler());
+        }
+
+        public void onFrameRendered(MediaCodec codec, long presentationTimeUs, long nanoTime) {
+            if (this == MediaCodecVideoRenderer.this.tunnelingOnFrameRenderedListener) {
+                MediaCodecVideoRenderer.this.maybeNotifyRenderedFirstFrame();
+            }
         }
     }
 
@@ -119,23 +139,21 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         boolean decoderCapable = decoderInfo.isCodecSupported(format.codecs);
         if (decoderCapable && format.width > 0 && format.height > 0) {
             if (Util.SDK_INT >= 21) {
-                decoderCapable = format.frameRate > 0.0f ? decoderInfo.isVideoSizeAndRateSupportedV21(format.width, format.height, (double) format.frameRate) : decoderInfo.isVideoSizeSupportedV21(format.width, format.height);
+                decoderCapable = decoderInfo.isVideoSizeAndRateSupportedV21(format.width, format.height, (double) format.frameRate);
             } else {
-                if (format.width * format.height <= MediaCodecUtil.maxH264DecodableFrameSize()) {
-                    decoderCapable = true;
-                } else {
-                    decoderCapable = false;
-                }
+                decoderCapable = format.width * format.height <= MediaCodecUtil.maxH264DecodableFrameSize();
                 if (!decoderCapable) {
                     Log.d(TAG, "FalseCheck [legacyFrameSize, " + format.width + "x" + format.height + "] [" + Util.DEVICE_DEBUG_INFO + "]");
                 }
             }
         }
-        return (decoderInfo.adaptive ? 8 : 4) | (decoderCapable ? 3 : 2);
+        return ((decoderInfo.adaptive ? 8 : 4) | (decoderInfo.tunneling ? 16 : 0)) | (decoderCapable ? 3 : 2);
     }
 
     protected void onEnabled(boolean joining) throws ExoPlaybackException {
         super.onEnabled(joining);
+        this.tunnelingAudioSessionId = getConfiguration().tunnelingAudioSessionId;
+        this.tunneling = this.tunnelingAudioSessionId != 0;
         this.eventDispatcher.enabled(this.decoderCounters);
         this.frameReleaseTimeHelper.enable();
     }
@@ -147,7 +165,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
 
     protected void onPositionReset(long positionUs, boolean joining) throws ExoPlaybackException {
         super.onPositionReset(positionUs, joining);
-        this.renderedFirstFrame = false;
+        clearRenderedFirstFrame();
         this.consecutiveDroppedFrameCount = 0;
         long elapsedRealtime = (!joining || this.allowedJoiningTimeMs <= 0) ? C.TIME_UNSET : SystemClock.elapsedRealtime() + this.allowedJoiningTimeMs;
         this.joiningDeadlineMs = elapsedRealtime;
@@ -187,6 +205,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         this.pendingPixelWidthHeightRatio = -1.0f;
         clearLastReportedVideoSize();
         this.frameReleaseTimeHelper.disable();
+        this.tunnelingOnFrameRenderedListener = null;
         try {
             super.onDisabled();
         } finally {
@@ -210,25 +229,33 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
 
     private void setSurface(Surface surface) throws ExoPlaybackException {
-        this.renderedFirstFrame = false;
-        clearLastReportedVideoSize();
         if (this.surface != surface) {
             this.surface = surface;
             int state = getState();
             if (state == 1 || state == 2) {
-                releaseCodec();
-                maybeInitCodec();
+                MediaCodec codec = getCodec();
+                if (Util.SDK_INT < 23 || codec == null || surface == null) {
+                    releaseCodec();
+                    maybeInitCodec();
+                } else {
+                    setOutputSurfaceV23(codec, surface);
+                }
             }
         }
+        clearRenderedFirstFrame();
+        clearLastReportedVideoSize();
     }
 
     protected boolean shouldInitCodec() {
         return super.shouldInitCodec() && this.surface != null && this.surface.isValid();
     }
 
-    protected void configureCodec(MediaCodec codec, Format format, MediaCrypto crypto) {
-        this.codecMaxValues = getCodecMaxValues(format, this.streamFormats);
-        codec.configure(getMediaFormat(format, this.codecMaxValues, this.deviceNeedsAutoFrcWorkaround), this.surface, crypto, 0);
+    protected void configureCodec(MediaCodecInfo codecInfo, MediaCodec codec, Format format, MediaCrypto crypto) throws DecoderQueryException {
+        this.codecMaxValues = getCodecMaxValues(codecInfo, format, this.streamFormats);
+        codec.configure(getMediaFormat(format, this.codecMaxValues, this.deviceNeedsAutoFrcWorkaround, this.tunnelingAudioSessionId), this.surface, crypto, 0);
+        if (Util.SDK_INT >= 23 && this.tunneling) {
+            this.tunnelingOnFrameRenderedListener = new OnFrameRenderedListenerV23(codec);
+        }
     }
 
     protected void onCodecInitialized(String name, long initializedTimestampMs, long initializationDurationMs) {
@@ -240,6 +267,12 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         this.eventDispatcher.inputFormatChanged(newFormat);
         this.pendingPixelWidthHeightRatio = getPixelWidthHeightRatio(newFormat);
         this.pendingRotationDegrees = getRotationDegrees(newFormat);
+    }
+
+    protected void onQueueInputBuffer(DecoderInputBuffer buffer) {
+        if (Util.SDK_INT < 23 && this.tunneling) {
+            maybeNotifyRenderedFirstFrame();
+        }
     }
 
     protected void onOutputFormatChanged(MediaCodec codec, MediaFormat outputFormat) {
@@ -291,7 +324,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
             long systemTimeNs = System.nanoTime();
             long adjustedReleaseTimeNs = this.frameReleaseTimeHelper.adjustReleaseTime(bufferPresentationTimeUs, systemTimeNs + (1000 * earlyUs));
             earlyUs = (adjustedReleaseTimeNs - systemTimeNs) / 1000;
-            if (earlyUs < -30000) {
+            if (shouldDropOutputBuffer(earlyUs, elapsedRealtimeUs)) {
                 dropOutputBuffer(codec, bufferIndex);
                 return true;
             }
@@ -313,6 +346,10 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
             }
             return false;
         }
+    }
+
+    protected boolean shouldDropOutputBuffer(long earlyUs, long elapsedRealtimeUs) {
+        return earlyUs < -30000;
     }
 
     private void skipOutputBuffer(MediaCodec codec, int bufferIndex) {
@@ -345,10 +382,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         DecoderCounters decoderCounters = this.decoderCounters;
         decoderCounters.renderedOutputBufferCount++;
         this.consecutiveDroppedFrameCount = 0;
-        if (!this.renderedFirstFrame) {
-            this.renderedFirstFrame = true;
-            this.eventDispatcher.renderedFirstFrame(this.surface);
-        }
+        maybeNotifyRenderedFirstFrame();
     }
 
     @TargetApi(21)
@@ -360,6 +394,20 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         DecoderCounters decoderCounters = this.decoderCounters;
         decoderCounters.renderedOutputBufferCount++;
         this.consecutiveDroppedFrameCount = 0;
+        maybeNotifyRenderedFirstFrame();
+    }
+
+    private void clearRenderedFirstFrame() {
+        this.renderedFirstFrame = false;
+        if (Util.SDK_INT >= 23 && this.tunneling) {
+            MediaCodec codec = getCodec();
+            if (codec != null) {
+                this.tunnelingOnFrameRenderedListener = new OnFrameRenderedListenerV23(codec);
+            }
+        }
+    }
+
+    void maybeNotifyRenderedFirstFrame() {
         if (!this.renderedFirstFrame) {
             this.renderedFirstFrame = true;
             this.eventDispatcher.renderedFirstFrame(this.surface);
@@ -393,7 +441,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
 
     @SuppressLint({"InlinedApi"})
-    private static MediaFormat getMediaFormat(Format format, CodecMaxValues codecMaxValues, boolean deviceNeedsAutoFrcWorkaround) {
+    private static MediaFormat getMediaFormat(Format format, CodecMaxValues codecMaxValues, boolean deviceNeedsAutoFrcWorkaround, int tunnelingAudioSessionId) {
         MediaFormat frameworkMediaFormat = format.getFrameworkMediaFormatV16();
         frameworkMediaFormat.setInteger("max-width", codecMaxValues.width);
         frameworkMediaFormat.setInteger("max-height", codecMaxValues.height);
@@ -403,64 +451,139 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         if (deviceNeedsAutoFrcWorkaround) {
             frameworkMediaFormat.setInteger("auto-frc", 0);
         }
+        if (tunnelingAudioSessionId != 0) {
+            configureTunnelingV21(frameworkMediaFormat, tunnelingAudioSessionId);
+        }
         return frameworkMediaFormat;
     }
 
-    private static CodecMaxValues getCodecMaxValues(Format format, Format[] streamFormats) {
+    @TargetApi(23)
+    private static void setOutputSurfaceV23(MediaCodec codec, Surface surface) {
+        codec.setOutputSurface(surface);
+    }
+
+    @TargetApi(21)
+    private static void configureTunnelingV21(MediaFormat mediaFormat, int tunnelingAudioSessionId) {
+        mediaFormat.setFeatureEnabled("tunneled-playback", true);
+        mediaFormat.setInteger("audio-session-id", tunnelingAudioSessionId);
+    }
+
+    private static CodecMaxValues getCodecMaxValues(MediaCodecInfo codecInfo, Format format, Format[] streamFormats) throws DecoderQueryException {
         int maxWidth = format.width;
         int maxHeight = format.height;
         int maxInputSize = getMaxInputSize(format);
+        if (streamFormats.length == 1) {
+            return new CodecMaxValues(maxWidth, maxHeight, maxInputSize);
+        }
+        boolean haveUnknownDimensions = false;
         for (Format streamFormat : streamFormats) {
             if (areAdaptationCompatible(format, streamFormat)) {
+                int i;
+                if (streamFormat.width == -1 || streamFormat.height == -1) {
+                    i = 1;
+                } else {
+                    i = 0;
+                }
+                haveUnknownDimensions |= i;
                 maxWidth = Math.max(maxWidth, streamFormat.width);
                 maxHeight = Math.max(maxHeight, streamFormat.height);
                 maxInputSize = Math.max(maxInputSize, getMaxInputSize(streamFormat));
             }
         }
+        if (haveUnknownDimensions) {
+            Log.w(TAG, "Resolutions unknown. Codec max resolution: " + maxWidth + "x" + maxHeight);
+            Point codecMaxSize = getCodecMaxSize(codecInfo, format);
+            if (codecMaxSize != null) {
+                maxWidth = Math.max(maxWidth, codecMaxSize.x);
+                maxHeight = Math.max(maxHeight, codecMaxSize.y);
+                maxInputSize = Math.max(maxInputSize, getMaxInputSize(format.sampleMimeType, maxWidth, maxHeight));
+                Log.w(TAG, "Codec max resolution adjusted to: " + maxWidth + "x" + maxHeight);
+            }
+        }
         return new CodecMaxValues(maxWidth, maxHeight, maxInputSize);
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private static Point getCodecMaxSize(MediaCodecInfo codecInfo, Format format) throws DecoderQueryException {
+        boolean isVerticalVideo = format.height > format.width;
+        int formatLongEdgePx = isVerticalVideo ? format.height : format.width;
+        int formatShortEdgePx = isVerticalVideo ? format.width : format.height;
+        float aspectRatio = ((float) formatShortEdgePx) / ((float) formatLongEdgePx);
+        for (int longEdgePx : STANDARD_LONG_EDGE_VIDEO_PX) {
+            int longEdgePx2;
+            int shortEdgePx = (int) (((float) longEdgePx2) * aspectRatio);
+            if (longEdgePx2 <= formatLongEdgePx || shortEdgePx <= formatShortEdgePx) {
+                return null;
+            }
+            if (Util.SDK_INT >= 21) {
+                int i;
+                if (isVerticalVideo) {
+                    i = shortEdgePx;
+                } else {
+                    i = longEdgePx2;
+                }
+                Point alignedSize = codecInfo.alignVideoSizeV21(i, isVerticalVideo ? longEdgePx2 : shortEdgePx);
+                if (codecInfo.isVideoSizeAndRateSupportedV21(alignedSize.x, alignedSize.y, (double) format.frameRate)) {
+                    return alignedSize;
+                }
+            } else {
+                longEdgePx2 = Util.ceilDivide(longEdgePx2, 16) * 16;
+                shortEdgePx = Util.ceilDivide(shortEdgePx, 16) * 16;
+                if (longEdgePx2 * shortEdgePx <= MediaCodecUtil.maxH264DecodableFrameSize()) {
+                    int i2 = isVerticalVideo ? shortEdgePx : longEdgePx2;
+                    if (!isVerticalVideo) {
+                        longEdgePx2 = shortEdgePx;
+                    }
+                    return new Point(i2, longEdgePx2);
+                }
+            }
+        }
+        return null;
+    }
+
     private static int getMaxInputSize(Format format) {
         if (format.maxInputSize != -1) {
             return format.maxInputSize;
         }
-        if (format.width == -1 || format.height == -1) {
+        return getMaxInputSize(format.sampleMimeType, format.width, format.height);
+    }
+
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private static int getMaxInputSize(String sampleMimeType, int width, int height) {
+        if (width == -1 || height == -1) {
             return -1;
         }
         int i;
         int maxPixels;
         int minCompressionRatio;
-        String str = format.sampleMimeType;
-        switch (str.hashCode()) {
+        switch (sampleMimeType.hashCode()) {
             case -1664118616:
-                if (str.equals(MimeTypes.VIDEO_H263)) {
+                if (sampleMimeType.equals(MimeTypes.VIDEO_H263)) {
                     i = 0;
                     break;
                 }
             case -1662541442:
-                if (str.equals(MimeTypes.VIDEO_H265)) {
+                if (sampleMimeType.equals(MimeTypes.VIDEO_H265)) {
                     i = 4;
                     break;
                 }
             case 1187890754:
-                if (str.equals(MimeTypes.VIDEO_MP4V)) {
+                if (sampleMimeType.equals(MimeTypes.VIDEO_MP4V)) {
                     i = 1;
                     break;
                 }
             case 1331836730:
-                if (str.equals("video/avc")) {
+                if (sampleMimeType.equals("video/avc")) {
                     i = 2;
                     break;
                 }
             case 1599127256:
-                if (str.equals(MimeTypes.VIDEO_VP8)) {
+                if (sampleMimeType.equals(MimeTypes.VIDEO_VP8)) {
                     i = 3;
                     break;
                 }
             case 1599127257:
-                if (str.equals(MimeTypes.VIDEO_VP9)) {
+                if (sampleMimeType.equals(MimeTypes.VIDEO_VP9)) {
                     i = 5;
                     break;
                 }
@@ -471,23 +594,23 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         switch (i) {
             case 0:
             case 1:
-                maxPixels = format.width * format.height;
+                maxPixels = width * height;
                 minCompressionRatio = 2;
                 break;
             case 2:
                 if (!"BRAVIA 4K 2015".equals(Util.MODEL)) {
-                    maxPixels = ((((format.width + 15) / 16) * ((format.height + 15) / 16)) * 16) * 16;
+                    maxPixels = ((Util.ceilDivide(width, 16) * Util.ceilDivide(height, 16)) * 16) * 16;
                     minCompressionRatio = 2;
                     break;
                 }
                 return -1;
             case 3:
-                maxPixels = format.width * format.height;
+                maxPixels = width * height;
                 minCompressionRatio = 2;
                 break;
             case 4:
             case 5:
-                maxPixels = format.width * format.height;
+                maxPixels = width * height;
                 minCompressionRatio = 4;
                 break;
             default:

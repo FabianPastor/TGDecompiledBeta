@@ -117,9 +117,8 @@ public final class TextRenderer extends BaseRenderer implements Callback {
                             return;
                         }
                     }
-                    int result = readSource(this.formatHolder, this.nextInputBuffer);
+                    int result = readSource(this.formatHolder, this.nextInputBuffer, false);
                     if (result == -4) {
-                        this.nextInputBuffer.clearFlag(Integer.MIN_VALUE);
                         if (this.nextInputBuffer.isEndOfStream()) {
                             this.inputStreamEnded = true;
                         } else {

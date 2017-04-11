@@ -56,13 +56,13 @@ public class Mp4Movie {
         return this.cacheFile;
     }
 
-    public void addSample(int trackIndex, long offset, BufferInfo bufferInfo) throws Exception {
+    public void addSample(int trackIndex, long offset, BufferInfo bufferInfo) {
         if (trackIndex >= 0 && trackIndex < this.tracks.size()) {
             ((Track) this.tracks.get(trackIndex)).addSample(offset, bufferInfo);
         }
     }
 
-    public int addTrack(MediaFormat mediaFormat, boolean isAudio) throws Exception {
+    public int addTrack(MediaFormat mediaFormat, boolean isAudio) {
         this.tracks.add(new Track(this.tracks.size(), mediaFormat, isAudio));
         return this.tracks.size() - 1;
     }

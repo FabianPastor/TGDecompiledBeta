@@ -178,7 +178,7 @@ final class MetadataUtil {
         int atomSize = data.readInt();
         if (data.readInt() == Atom.TYPE_data) {
             data.skipBytes(8);
-            return new TextInformationFrame(id, data.readNullTerminatedString(atomSize - 16));
+            return new TextInformationFrame(id, null, data.readNullTerminatedString(atomSize - 16));
         }
         Log.w(TAG, "Failed to parse text attribute: " + Atom.getAtomTypeString(type));
         return null;
@@ -204,7 +204,7 @@ final class MetadataUtil {
             Log.w(TAG, "Failed to parse uint8 attribute: " + Atom.getAtomTypeString(type));
             return null;
         } else if (isTextInformationFrame) {
-            return new TextInformationFrame(id, Integer.toString(value));
+            return new TextInformationFrame(id, null, Integer.toString(value));
         } else {
             return new CommentFrame(LANGUAGE_UNDEFINED, id, Integer.toString(value));
         }
@@ -216,12 +216,12 @@ final class MetadataUtil {
             data.skipBytes(10);
             int index = data.readUnsignedShort();
             if (index > 0) {
-                String description = "" + index;
+                String value = "" + index;
                 int count = data.readUnsignedShort();
                 if (count > 0) {
-                    description = description + "/" + count;
+                    value = value + "/" + count;
                 }
-                return new TextInformationFrame(attributeName, description);
+                return new TextInformationFrame(attributeName, null, value);
             }
         }
         Log.w(TAG, "Failed to parse index/count attribute: " + Atom.getAtomTypeString(type));
@@ -237,7 +237,7 @@ final class MetadataUtil {
             genreString = STANDARD_GENRES[genreCode - 1];
         }
         if (genreString != null) {
-            return new TextInformationFrame("TCON", genreString);
+            return new TextInformationFrame("TCON", null, genreString);
         }
         Log.w(TAG, "Failed to parse standard genre code");
         return null;

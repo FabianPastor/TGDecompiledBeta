@@ -19,7 +19,6 @@ import org.telegram.messenger.exoplayer2.extractor.PositionHolder;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource.EventListener;
-import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource.UnrecognizedInputFormatException;
 import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
@@ -31,11 +30,13 @@ import org.telegram.messenger.exoplayer2.upstream.Loader.Loadable;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.ConditionVariable;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
+import org.telegram.messenger.exoplayer2.util.Util;
 
 final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callback<ExtractingLoadable>, UpstreamFormatChangedListener {
     private static final long DEFAULT_LAST_SAMPLE_DURATION_US = 10000;
     private final Allocator allocator;
     private MediaPeriod.Callback callback;
+    private final String customCacheKey;
     private final DataSource dataSource;
     private long durationUs;
     private int enabledTrackCount;
@@ -77,7 +78,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
             this.extractorOutput = extractorOutput;
         }
 
-        public Extractor selectExtractor(ExtractorInput input) throws IOException, InterruptedException {
+        public Extractor selectExtractor(ExtractorInput input, Uri uri) throws IOException, InterruptedException {
             if (this.extractor != null) {
                 return this.extractor;
             }
@@ -101,7 +102,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
                 }
             }
             if (this.extractor == null) {
-                throw new UnrecognizedInputFormatException(this.extractors);
+                throw new UnrecognizedInputFormatException("None of the available extractors (" + Util.getCommaDelimitedSimpleClassNames(this.extractors) + ") could read the stream.", uri);
             }
             this.extractor.init(this.extractorOutput);
             return this.extractor;
@@ -124,6 +125,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
         private final ConditionVariable loadCondition;
         private boolean pendingExtractorSeek = true;
         private final PositionHolder positionHolder = new PositionHolder();
+        private long seekTimeUs;
         private final Uri uri;
 
         public ExtractingLoadable(Uri uri, DataSource dataSource, ExtractorHolder extractorHolder, ConditionVariable loadCondition) {
@@ -133,8 +135,9 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
             this.loadCondition = loadCondition;
         }
 
-        public void setLoadPosition(long position) {
+        public void setLoadPosition(long position, long timeUs) {
             this.positionHolder.position = position;
+            this.seekTimeUs = timeUs;
             this.pendingExtractorSeek = true;
         }
 
@@ -153,15 +156,15 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
                 ExtractorInput input;
                 try {
                     long position = this.positionHolder.position;
-                    this.length = this.dataSource.open(new DataSpec(this.uri, position, -1, null));
+                    this.length = this.dataSource.open(new DataSpec(this.uri, position, -1, ExtractorMediaPeriod.this.customCacheKey));
                     if (this.length != -1) {
                         this.length += position;
                     }
                     input = new DefaultExtractorInput(this.dataSource, position, this.length);
                     try {
-                        Extractor extractor = this.extractorHolder.selectExtractor(input);
+                        Extractor extractor = this.extractorHolder.selectExtractor(input, this.dataSource.getUri());
                         if (this.pendingExtractorSeek) {
-                            extractor.seek(position);
+                            extractor.seek(position, this.seekTimeUs);
                             this.pendingExtractorSeek = false;
                         }
                         while (result == 0 && !this.loadCanceled) {
@@ -178,7 +181,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
                         } else if (input != null) {
                             this.positionHolder.position = input.getPosition();
                         }
-                        this.dataSource.close();
+                        Util.closeQuietly(this.dataSource);
                     } catch (Throwable th2) {
                         th = th2;
                     }
@@ -193,7 +196,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
                     this.positionHolder.position = input.getPosition();
                 }
             }
-            this.dataSource.close();
+            Util.closeQuietly(this.dataSource);
             throw th;
         }
     }
@@ -213,8 +216,8 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
             ExtractorMediaPeriod.this.maybeThrowError();
         }
 
-        public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer) {
-            return ExtractorMediaPeriod.this.readData(this.track, formatHolder, buffer);
+        public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired) {
+            return ExtractorMediaPeriod.this.readData(this.track, formatHolder, buffer, formatRequired);
         }
 
         public void skipToKeyframeBefore(long timeUs) {
@@ -222,7 +225,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
         }
     }
 
-    public ExtractorMediaPeriod(Uri uri, DataSource dataSource, Extractor[] extractors, int minLoadableRetryCount, Handler eventHandler, EventListener eventListener, Listener sourceListener, Allocator allocator) {
+    public ExtractorMediaPeriod(Uri uri, DataSource dataSource, Extractor[] extractors, int minLoadableRetryCount, Handler eventHandler, EventListener eventListener, Listener sourceListener, Allocator allocator, String customCacheKey) {
         this.uri = uri;
         this.dataSource = dataSource;
         this.minLoadableRetryCount = minLoadableRetryCount;
@@ -230,6 +233,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
         this.eventListener = eventListener;
         this.sourceListener = sourceListener;
         this.allocator = allocator;
+        this.customCacheKey = customCacheKey;
         this.extractorHolder = new ExtractorHolder(extractors, this);
         this.loadCondition = new ConditionVariable();
         this.maybeFinishPrepareRunnable = new Runnable() {
@@ -341,6 +345,9 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
         return positionUs;
     }
 
+    public void discardBuffer(long positionUs) {
+    }
+
     public boolean continueLoading(long playbackPositionUs) {
         if (this.loadingFinished || (this.prepared && this.enabledTrackCount == 0)) {
             return false;
@@ -354,7 +361,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
     }
 
     public long getNextLoadPositionUs() {
-        return getBufferedPositionUs();
+        return this.enabledTrackCount == 0 ? Long.MIN_VALUE : getBufferedPositionUs();
     }
 
     public long readDiscontinuity() {
@@ -429,11 +436,11 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
         this.loader.maybeThrowError();
     }
 
-    int readData(int track, FormatHolder formatHolder, DecoderInputBuffer buffer) {
+    int readData(int track, FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired) {
         if (this.notifyReset || isPendingReset()) {
             return -3;
         }
-        return ((DefaultTrackOutput) this.sampleQueues.valueAt(track)).readData(formatHolder, buffer, this.loadingFinished, this.lastSeekPositionUs);
+        return ((DefaultTrackOutput) this.sampleQueues.valueAt(track)).readData(formatHolder, buffer, formatRequired, this.loadingFinished, this.lastSeekPositionUs);
     }
 
     public void onLoadCompleted(ExtractingLoadable loadable, long elapsedRealtimeMs, long loadDurationMs) {
@@ -444,6 +451,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
             this.durationUs = largestQueuedTimestampUs == Long.MIN_VALUE ? 0 : DEFAULT_LAST_SAMPLE_DURATION_US + largestQueuedTimestampUs;
             this.sourceListener.onSourceInfoRefreshed(new SinglePeriodTimeline(this.durationUs, this.seekMap.isSeekable()), null);
         }
+        this.callback.onContinueLoadingRequested(this);
     }
 
     public void onLoadCanceled(ExtractingLoadable loadable, long elapsedRealtimeMs, long loadDurationMs, boolean released) {
@@ -477,7 +485,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
         return 0;
     }
 
-    public TrackOutput track(int id) {
+    public TrackOutput track(int id, int type) {
         DefaultTrackOutput trackOutput = (DefaultTrackOutput) this.sampleQueues.get(id);
         if (trackOutput != null) {
             return trackOutput;
@@ -548,7 +556,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
         if (this.prepared) {
             Assertions.checkState(isPendingReset());
             if (this.durationUs == C.TIME_UNSET || this.pendingResetPositionUs < this.durationUs) {
-                loadable.setLoadPosition(this.seekMap.getPosition(this.pendingResetPositionUs));
+                loadable.setLoadPosition(this.seekMap.getPosition(this.pendingResetPositionUs), this.pendingResetPositionUs);
                 this.pendingResetPositionUs = C.TIME_UNSET;
             } else {
                 this.loadingFinished = true;
@@ -577,7 +585,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
                 boolean z = !this.prepared || this.trackEnabledStates[i];
                 defaultTrackOutput.reset(z);
             }
-            loadable.setLoadPosition(0);
+            loadable.setLoadPosition(0, 0);
         }
     }
 

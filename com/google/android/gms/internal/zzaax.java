@@ -45,7 +45,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
-import org.telegram.messenger.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 
 public class zzaax implements Callback {
     public static final Status zzaCn = new Status(4, "Sign-out occurred while this API call was in progress.");
@@ -54,7 +54,7 @@ public class zzaax implements Callback {
     private static final Object zztX = new Object();
     private final Context mContext;
     private final Handler mHandler;
-    private final Map<zzzz<?>, zza<?>> zzaAM = new ConcurrentHashMap(5, AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION, 1);
+    private final Map<zzzz<?>, zza<?>> zzaAM = new ConcurrentHashMap(5, AdaptiveTrackSelection.DEFAULT_BANDWIDTH_FRACTION, 1);
     private long zzaBM = 120000;
     private long zzaBN = ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
     private long zzaCp = 10000;

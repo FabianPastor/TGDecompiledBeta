@@ -15,15 +15,18 @@ public final class TextInformationFrame extends Id3Frame {
         }
     };
     public final String description;
+    public final String value;
 
-    public TextInformationFrame(String id, String description) {
+    public TextInformationFrame(String id, String description, String value) {
         super(id);
         this.description = description;
+        this.value = value;
     }
 
     TextInformationFrame(Parcel in) {
         super(in.readString());
         this.description = in.readString();
+        this.value = in.readString();
     }
 
     public boolean equals(Object obj) {
@@ -34,18 +37,31 @@ public final class TextInformationFrame extends Id3Frame {
             return false;
         }
         TextInformationFrame other = (TextInformationFrame) obj;
-        if (this.id.equals(other.id) && Util.areEqual(this.description, other.description)) {
+        if (this.id.equals(other.id) && Util.areEqual(this.description, other.description) && Util.areEqual(this.value, other.value)) {
             return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return ((this.id.hashCode() + 527) * 31) + (this.description != null ? this.description.hashCode() : 0);
+        int hashCode;
+        int i = 0;
+        int hashCode2 = (this.id.hashCode() + 527) * 31;
+        if (this.description != null) {
+            hashCode = this.description.hashCode();
+        } else {
+            hashCode = 0;
+        }
+        hashCode = (hashCode2 + hashCode) * 31;
+        if (this.value != null) {
+            i = this.value.hashCode();
+        }
+        return hashCode + i;
     }
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.description);
+        dest.writeString(this.value);
     }
 }

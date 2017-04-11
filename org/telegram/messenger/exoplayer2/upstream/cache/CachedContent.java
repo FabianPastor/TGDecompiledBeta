@@ -47,37 +47,46 @@ final class CachedContent {
     }
 
     public SimpleCacheSpan getSpan(long position) {
-        SimpleCacheSpan span = getSpanInternal(position);
-        if (span.isCached) {
-            return span;
+        SimpleCacheSpan lookupSpan = SimpleCacheSpan.createLookup(this.key, position);
+        SimpleCacheSpan floorSpan = (SimpleCacheSpan) this.cachedSpans.floor(lookupSpan);
+        if (floorSpan != null && floorSpan.position + floorSpan.length > position) {
+            return floorSpan;
         }
-        SimpleCacheSpan ceilEntry = (SimpleCacheSpan) this.cachedSpans.ceiling(span);
-        if (ceilEntry == null) {
-            return SimpleCacheSpan.createOpenHole(this.key, position);
+        SimpleCacheSpan createOpenHole;
+        SimpleCacheSpan ceilSpan = (SimpleCacheSpan) this.cachedSpans.ceiling(lookupSpan);
+        if (ceilSpan == null) {
+            createOpenHole = SimpleCacheSpan.createOpenHole(this.key, position);
+        } else {
+            createOpenHole = SimpleCacheSpan.createClosedHole(this.key, position, ceilSpan.position - position);
         }
-        return SimpleCacheSpan.createClosedHole(this.key, position, ceilEntry.position - position);
+        return createOpenHole;
     }
 
-    public boolean isCached(long position, long length) {
-        SimpleCacheSpan floorSpan = getSpanInternal(position);
-        if (!floorSpan.isCached) {
-            return false;
+    public long getCachedBytes(long position, long length) {
+        SimpleCacheSpan span = getSpan(position);
+        if (span.isHoleSpan()) {
+            long j;
+            if (span.isOpenEnded()) {
+                j = Long.MAX_VALUE;
+            } else {
+                j = span.length;
+            }
+            return -Math.min(j, length);
         }
         long queryEndPosition = position + length;
-        long currentEndPosition = floorSpan.position + floorSpan.length;
-        if (currentEndPosition >= queryEndPosition) {
-            return true;
-        }
-        for (SimpleCacheSpan next : this.cachedSpans.tailSet(floorSpan, false)) {
-            if (next.position > currentEndPosition) {
-                return false;
+        long currentEndPosition = span.position + span.length;
+        if (currentEndPosition < queryEndPosition) {
+            for (SimpleCacheSpan next : this.cachedSpans.tailSet(span, false)) {
+                if (next.position <= currentEndPosition) {
+                    currentEndPosition = Math.max(currentEndPosition, next.position + next.length);
+                    if (currentEndPosition >= queryEndPosition) {
+                        break;
+                    }
+                }
+                break;
             }
-            currentEndPosition = Math.max(currentEndPosition, next.position + next.length);
-            if (currentEndPosition >= queryEndPosition) {
-                return true;
-            }
         }
-        return false;
+        return Math.min(currentEndPosition - position, length);
     }
 
     public SimpleCacheSpan touch(SimpleCacheSpan cacheSpan) throws CacheException {
@@ -104,11 +113,5 @@ final class CachedContent {
 
     public int headerHashCode() {
         return (((this.id * 31) + this.key.hashCode()) * 31) + ((int) (this.length ^ (this.length >>> 32)));
-    }
-
-    private SimpleCacheSpan getSpanInternal(long position) {
-        SimpleCacheSpan lookupSpan = SimpleCacheSpan.createLookup(this.key, position);
-        SimpleCacheSpan floorSpan = (SimpleCacheSpan) this.cachedSpans.floor(lookupSpan);
-        return (floorSpan == null || floorSpan.position + floorSpan.length <= position) ? lookupSpan : floorSpan;
     }
 }

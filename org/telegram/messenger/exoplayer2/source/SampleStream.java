@@ -9,7 +9,7 @@ public interface SampleStream {
 
     void maybeThrowError() throws IOException;
 
-    int readData(FormatHolder formatHolder, DecoderInputBuffer decoderInputBuffer);
+    int readData(FormatHolder formatHolder, DecoderInputBuffer decoderInputBuffer, boolean z);
 
     void skipToKeyframeBefore(long j);
 }

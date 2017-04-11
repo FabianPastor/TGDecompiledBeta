@@ -105,6 +105,12 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
         return positionUs;
     }
 
+    public void discardBuffer(long positionUs) {
+        for (MediaPeriod period : this.enabledPeriods) {
+            period.discardBuffer(positionUs);
+        }
+    }
+
     public boolean continueLoading(long positionUs) {
         return this.sequenceableLoader.continueLoading(positionUs);
     }

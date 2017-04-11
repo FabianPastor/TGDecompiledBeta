@@ -14,7 +14,7 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.ParsableBitArray;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
-final class AdtsReader implements ElementaryStreamReader {
+public final class AdtsReader implements ElementaryStreamReader {
     private static final int CRC_SIZE = 2;
     private static final int HEADER_SIZE = 5;
     private static final int ID3_HEADER_SIZE = 10;
@@ -35,6 +35,7 @@ final class AdtsReader implements ElementaryStreamReader {
     private TrackOutput currentOutput;
     private long currentSampleDuration;
     private final boolean exposeId3;
+    private String formatId;
     private boolean hasCrc;
     private boolean hasOutputFormat;
     private final ParsableByteArray id3HeaderBuffer;
@@ -64,10 +65,13 @@ final class AdtsReader implements ElementaryStreamReader {
     }
 
     public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
-        this.output = extractorOutput.track(idGenerator.getNextId());
+        idGenerator.generateNewId();
+        this.formatId = idGenerator.getFormatId();
+        this.output = extractorOutput.track(idGenerator.getTrackId(), 1);
         if (this.exposeId3) {
-            this.id3Output = extractorOutput.track(idGenerator.getNextId());
-            this.id3Output.format(Format.createSampleFormat(null, MimeTypes.APPLICATION_ID3, null, -1, null));
+            idGenerator.generateNewId();
+            this.id3Output = extractorOutput.track(idGenerator.getTrackId(), 4);
+            this.id3Output.format(Format.createSampleFormat(idGenerator.getFormatId(), MimeTypes.APPLICATION_ID3, null, -1, null));
             return;
         }
         this.id3Output = new DummyTrackOutput();
@@ -203,7 +207,7 @@ final class AdtsReader implements ElementaryStreamReader {
             this.adtsScratch.skipBits(1);
             byte[] audioSpecificConfig = CodecSpecificDataUtil.buildAacAudioSpecificConfig(audioObjectType, sampleRateIndex, this.adtsScratch.readBits(3));
             Pair<Integer, Integer> audioParams = CodecSpecificDataUtil.parseAacAudioSpecificConfig(audioSpecificConfig);
-            Format format = Format.createAudioSampleFormat(null, MimeTypes.AUDIO_AAC, null, -1, -1, ((Integer) audioParams.second).intValue(), ((Integer) audioParams.first).intValue(), Collections.singletonList(audioSpecificConfig), null, 0, this.language);
+            Format format = Format.createAudioSampleFormat(this.formatId, MimeTypes.AUDIO_AAC, null, -1, -1, ((Integer) audioParams.second).intValue(), ((Integer) audioParams.first).intValue(), Collections.singletonList(audioSpecificConfig), null, 0, this.language);
             this.sampleDurationUs = NUM / ((long) format.sampleRate);
             this.output.format(format);
             this.hasOutputFormat = true;

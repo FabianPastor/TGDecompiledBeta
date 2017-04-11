@@ -3,6 +3,7 @@ package org.telegram.messenger.exoplayer2.source;
 import android.util.Log;
 import android.util.Pair;
 import java.io.IOException;
+import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
@@ -86,8 +87,8 @@ public final class LoopingMediaSource implements MediaSource {
         this.loopCount = loopCount;
     }
 
-    public void prepareSource(final Listener listener) {
-        this.childSource.prepareSource(new Listener() {
+    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, final Listener listener) {
+        this.childSource.prepareSource(player, false, new Listener() {
             public void onSourceInfoRefreshed(Timeline timeline, Object manifest) {
                 LoopingMediaSource.this.childPeriodCount = timeline.getPeriodCount();
                 listener.onSourceInfoRefreshed(new LoopingTimeline(timeline, LoopingMediaSource.this.loopCount), manifest);

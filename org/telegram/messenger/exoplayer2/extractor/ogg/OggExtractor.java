@@ -44,13 +44,13 @@ public class OggExtractor implements Extractor {
     }
 
     public void init(ExtractorOutput output) {
-        TrackOutput trackOutput = output.track(0);
+        TrackOutput trackOutput = output.track(0, 1);
         output.endTracks();
         this.streamReader.init(output, trackOutput);
     }
 
-    public void seek(long position) {
-        this.streamReader.seek(position);
+    public void seek(long position, long timeUs) {
+        this.streamReader.seek(position, timeUs);
     }
 
     public void release() {

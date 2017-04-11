@@ -1,6 +1,8 @@
 package org.telegram.messenger.exoplayer2.extractor.mp4;
 
 import java.io.IOException;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -29,10 +31,9 @@ public final class Mp4Extractor implements Extractor, SeekMap {
         }
     };
     private static final long RELOAD_MINIMUM_SEEK_DISTANCE = 262144;
-    private static final int STATE_AFTER_SEEK = 0;
-    private static final int STATE_READING_ATOM_HEADER = 1;
-    private static final int STATE_READING_ATOM_PAYLOAD = 2;
-    private static final int STATE_READING_SAMPLE = 3;
+    private static final int STATE_READING_ATOM_HEADER = 0;
+    private static final int STATE_READING_ATOM_PAYLOAD = 1;
+    private static final int STATE_READING_SAMPLE = 2;
     private ParsableByteArray atomData;
     private final ParsableByteArray atomHeader = new ParsableByteArray(16);
     private int atomHeaderBytesRead;
@@ -62,8 +63,8 @@ public final class Mp4Extractor implements Extractor, SeekMap {
         }
     }
 
-    public Mp4Extractor() {
-        enterReadingAtomHeaderState();
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface State {
     }
 
     public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
@@ -74,12 +75,16 @@ public final class Mp4Extractor implements Extractor, SeekMap {
         this.extractorOutput = output;
     }
 
-    public void seek(long position) {
+    public void seek(long position, long timeUs) {
         this.containerAtoms.clear();
         this.atomHeaderBytesRead = 0;
         this.sampleBytesWritten = 0;
         this.sampleCurrentNalBytesRemaining = 0;
-        this.parserState = 0;
+        if (position == 0) {
+            enterReadingAtomHeaderState();
+        } else if (this.tracks != null) {
+            updateSampleIndices(timeUs);
+        }
     }
 
     public void release() {
@@ -89,24 +94,19 @@ public final class Mp4Extractor implements Extractor, SeekMap {
         while (true) {
             switch (this.parserState) {
                 case 0:
-                    if (input.getPosition() != 0) {
-                        this.parserState = 3;
-                        break;
-                    }
-                    enterReadingAtomHeaderState();
-                    break;
-                case 1:
                     if (readAtomHeader(input)) {
                         break;
                     }
                     return -1;
-                case 2:
+                case 1:
                     if (!readAtomPayload(input, seekPosition)) {
                         break;
                     }
                     return 1;
-                default:
+                case 2:
                     return readSample(input, seekPosition);
+                default:
+                    throw new IllegalStateException();
             }
         }
     }
@@ -127,7 +127,6 @@ public final class Mp4Extractor implements Extractor, SeekMap {
             if (sampleIndex == -1) {
                 sampleIndex = sampleTable.getIndexOfLaterOrEqualSynchronizationSample(timeUs);
             }
-            track.sampleIndex = sampleIndex;
             long offset = sampleTable.offsets[sampleIndex];
             if (offset < earliestSamplePosition) {
                 earliestSamplePosition = offset;
@@ -137,7 +136,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
     }
 
     private void enterReadingAtomHeaderState() {
-        this.parserState = 1;
+        this.parserState = 0;
         this.atomHeaderBytesRead = 0;
     }
 
@@ -180,10 +179,10 @@ public final class Mp4Extractor implements Extractor, SeekMap {
             Assertions.checkState(z);
             this.atomData = new ParsableByteArray((int) this.atomSize);
             System.arraycopy(this.atomHeader.data, 0, this.atomData.data, 0, 8);
-            this.parserState = 2;
+            this.parserState = 1;
         } else {
             this.atomData = null;
-            this.parserState = 2;
+            this.parserState = 1;
         }
         return true;
     }
@@ -206,7 +205,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
             seekRequired = true;
         }
         processAtomEnded(atomEndPosition);
-        if (!seekRequired || this.parserState == 3) {
+        if (!seekRequired || this.parserState == 2) {
             return false;
         }
         return true;
@@ -218,12 +217,12 @@ public final class Mp4Extractor implements Extractor, SeekMap {
             if (containerAtom.type == Atom.TYPE_moov) {
                 processMoovAtom(containerAtom);
                 this.containerAtoms.clear();
-                this.parserState = 3;
+                this.parserState = 2;
             } else if (!this.containerAtoms.isEmpty()) {
                 ((ContainerAtom) this.containerAtoms.peek()).add(containerAtom);
             }
         }
-        if (this.parserState != 3) {
+        if (this.parserState != 2) {
             enterReadingAtomHeaderState();
         }
     }
@@ -262,7 +261,9 @@ public final class Mp4Extractor implements Extractor, SeekMap {
                 if (track != null) {
                     TrackSampleTable trackSampleTable = AtomParsers.parseStbl(track, atom.getContainerAtomOfType(Atom.TYPE_mdia).getContainerAtomOfType(Atom.TYPE_minf).getContainerAtomOfType(Atom.TYPE_stbl), gaplessInfoHolder);
                     if (trackSampleTable.sampleCount != 0) {
-                        Mp4Track mp4Track = new Mp4Track(track, trackSampleTable, this.extractorOutput.track(i));
+                        Track track2 = track;
+                        TrackSampleTable trackSampleTable2 = trackSampleTable;
+                        Mp4Track mp4Track = new Mp4Track(track2, trackSampleTable2, this.extractorOutput.track(i, track.type));
                         Format format = track.format.copyWithMaxInputSize(trackSampleTable.maximumSize + 30);
                         if (track.type == 1) {
                             if (gaplessInfoHolder.hasGaplessInfo()) {
@@ -361,6 +362,17 @@ public final class Mp4Extractor implements Extractor, SeekMap {
             }
         }
         return earliestSampleTrackIndex;
+    }
+
+    private void updateSampleIndices(long timeUs) {
+        for (Mp4Track track : this.tracks) {
+            TrackSampleTable sampleTable = track.sampleTable;
+            int sampleIndex = sampleTable.getIndexOfEarlierOrEqualSynchronizationSample(timeUs);
+            if (sampleIndex == -1) {
+                sampleIndex = sampleTable.getIndexOfLaterOrEqualSynchronizationSample(timeUs);
+            }
+            track.sampleIndex = sampleIndex;
+        }
     }
 
     private static boolean shouldParseLeafAtom(int atom) {

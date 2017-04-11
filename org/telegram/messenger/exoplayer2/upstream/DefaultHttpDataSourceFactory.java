@@ -1,8 +1,9 @@
 package org.telegram.messenger.exoplayer2.upstream;
 
-import org.telegram.messenger.exoplayer2.upstream.HttpDataSource.Factory;
+import org.telegram.messenger.exoplayer2.upstream.HttpDataSource.BaseFactory;
+import org.telegram.messenger.exoplayer2.upstream.HttpDataSource.RequestProperties;
 
-public final class DefaultHttpDataSourceFactory implements Factory {
+public final class DefaultHttpDataSourceFactory extends BaseFactory {
     private final boolean allowCrossProtocolRedirects;
     private final int connectTimeoutMillis;
     private final TransferListener<? super DataSource> listener;
@@ -25,7 +26,7 @@ public final class DefaultHttpDataSourceFactory implements Factory {
         this.allowCrossProtocolRedirects = allowCrossProtocolRedirects;
     }
 
-    public DefaultHttpDataSource createDataSource() {
-        return new DefaultHttpDataSource(this.userAgent, null, this.listener, this.connectTimeoutMillis, this.readTimeoutMillis, this.allowCrossProtocolRedirects);
+    protected DefaultHttpDataSource createDataSourceInternal(RequestProperties defaultRequestProperties) {
+        return new DefaultHttpDataSource(this.userAgent, null, this.listener, this.connectTimeoutMillis, this.readTimeoutMillis, this.allowCrossProtocolRedirects, defaultRequestProperties);
     }
 }

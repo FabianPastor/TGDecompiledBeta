@@ -184,7 +184,7 @@ public class CameraSession {
                 params.setPictureSize(this.pictureSize.getWidth(), this.pictureSize.getHeight());
                 params.setPictureFormat(this.pictureFormat);
                 params.setRecordingHint(true);
-                String desiredMode = "continuous-picture";
+                String desiredMode = "continuous-video";
                 if (params.getSupportedFocusModes().contains(desiredMode)) {
                     params.setFocusMode(desiredMode);
                 }

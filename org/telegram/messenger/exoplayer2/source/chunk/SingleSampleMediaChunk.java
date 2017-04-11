@@ -3,8 +3,8 @@ package org.telegram.messenger.exoplayer2.source.chunk;
 import java.io.IOException;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorInput;
-import org.telegram.messenger.exoplayer2.extractor.DefaultTrackOutput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
+import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 import org.telegram.messenger.exoplayer2.util.Util;
@@ -15,9 +15,11 @@ public final class SingleSampleMediaChunk extends BaseMediaChunk {
     private volatile boolean loadCanceled;
     private volatile boolean loadCompleted;
     private final Format sampleFormat;
+    private final int trackType;
 
-    public SingleSampleMediaChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long startTimeUs, long endTimeUs, int chunkIndex, Format sampleFormat) {
+    public SingleSampleMediaChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long startTimeUs, long endTimeUs, int chunkIndex, int trackType, Format sampleFormat) {
         super(dataSource, dataSpec, trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, endTimeUs, chunkIndex);
+        this.trackType = trackType;
         this.sampleFormat = sampleFormat;
     }
 
@@ -44,15 +46,17 @@ public final class SingleSampleMediaChunk extends BaseMediaChunk {
                 length += (long) this.bytesLoaded;
             }
             ExtractorInput extractorInput = new DefaultExtractorInput(this.dataSource, (long) this.bytesLoaded, length);
-            DefaultTrackOutput trackOutput = getTrackOutput();
-            trackOutput.formatWithOffset(this.sampleFormat, 0);
+            BaseMediaChunkOutput output = getOutput();
+            output.setSampleOffsetUs(0);
+            TrackOutput trackOutput = output.track(0, this.trackType);
+            trackOutput.format(this.sampleFormat);
             for (int result = 0; result != -1; result = trackOutput.sampleData(extractorInput, ConnectionsManager.DEFAULT_DATACENTER_ID, true)) {
                 this.bytesLoaded += result;
             }
             trackOutput.sampleMetadata(this.startTimeUs, 1, this.bytesLoaded, 0, null);
             this.loadCompleted = true;
         } finally {
-            this.dataSource.close();
+            Util.closeQuietly(this.dataSource);
         }
     }
 }

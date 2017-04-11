@@ -47,6 +47,7 @@ import android.provider.MediaStore.Video;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.TextureView;
+import android.widget.FrameLayout;
 import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import java.io.File;
 import java.io.FileInputStream;
@@ -70,6 +71,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
+import org.telegram.messenger.exoplayer2.upstream.cache.CacheDataSink;
 import org.telegram.messenger.query.SharedMediaQuery;
 import org.telegram.messenger.video.InputSurface;
 import org.telegram.messenger.video.MP4Builder;
@@ -129,7 +131,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     private int audioFocus = 0;
     private AudioInfo audioInfo;
     private MediaPlayer audioPlayer = null;
-    private AudioRecord audioRecorder = null;
+    private AudioRecord audioRecorder;
     private AudioTrack audioTrackPlayer = null;
     private boolean autoplayGifs = true;
     private int buffersWrited;
@@ -142,6 +144,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     private int currentAspectRatioFrameLayoutRotation;
     private int currentPlaylistNum;
     private TextureView currentTextureView;
+    private FrameLayout currentTextureViewContainer;
     private long currentTotalPcmDuration;
     private boolean customTabs = true;
     private boolean decodingFinished = false;
@@ -309,8 +312,8 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     private Runnable recordStartRunnable;
     private long recordStartTime;
     private long recordTimeCount;
-    private TL_document recordingAudio = null;
-    private File recordingAudioFile = null;
+    private TL_document recordingAudio;
+    private File recordingAudioFile;
     private Runnable refreshGalleryRunnable;
     private int repeatMode;
     private boolean resumeAudioOnFocusGain;
@@ -1866,6 +1869,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             }
         } else if (this.videoPlayer != null) {
             this.currentAspectRatioFrameLayout = null;
+            this.currentTextureViewContainer = null;
             this.currentAspectRatioFrameLayoutReady = false;
             this.currentTextureView = null;
             this.videoPlayer.releasePlayer();
@@ -2104,6 +2108,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                         }
                     } else if (this.videoPlayer != null) {
                         this.currentAspectRatioFrameLayout = null;
+                        this.currentTextureViewContainer = null;
                         this.currentAspectRatioFrameLayoutReady = false;
                         this.currentTextureView = null;
                         this.videoPlayer.releasePlayer();
@@ -2209,17 +2214,18 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         }
     }
 
-    public void setTextureView(TextureView textureView, AspectRatioFrameLayout aspectRatioFrameLayout) {
+    public void setTextureView(TextureView textureView, AspectRatioFrameLayout aspectRatioFrameLayout, FrameLayout container) {
         if (this.videoPlayer != null) {
             this.currentTextureView = textureView;
             this.currentAspectRatioFrameLayout = aspectRatioFrameLayout;
+            this.currentTextureViewContainer = container;
             this.videoPlayer.setTextureView(this.currentTextureView);
             if (this.currentAspectRatioFrameLayoutReady) {
                 if (this.currentAspectRatioFrameLayout != null) {
                     this.currentAspectRatioFrameLayout.setAspectRatio(this.currentAspectRatioFrameLayoutRatio, this.currentAspectRatioFrameLayoutRotation);
                 }
-                if (this.currentAspectRatioFrameLayout.getVisibility() != 0) {
-                    this.currentAspectRatioFrameLayout.setVisibility(0);
+                if (this.currentTextureViewContainer.getVisibility() != 0) {
+                    this.currentTextureViewContainer.setVisibility(0);
                 }
             }
         }
@@ -2266,8 +2272,8 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             if (MediaController.this.videoPlayer != null) {
                                 if (playbackState == 3) {
                                     MediaController.this.currentAspectRatioFrameLayoutReady = true;
-                                    if (MediaController.this.currentAspectRatioFrameLayout != null && MediaController.this.currentAspectRatioFrameLayout.getVisibility() != 0) {
-                                        MediaController.this.currentAspectRatioFrameLayout.setVisibility(0);
+                                    if (MediaController.this.currentTextureViewContainer != null && MediaController.this.currentTextureViewContainer.getVisibility() != 0) {
+                                        MediaController.this.currentTextureViewContainer.setVisibility(0);
                                     }
                                 } else if (MediaController.this.videoPlayer.isPlaying() && playbackState == 4) {
                                     MediaController.this.cleanupPlayer(true, true, true);
@@ -2514,6 +2520,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             }
                         } else if (this.videoPlayer != null) {
                             this.currentAspectRatioFrameLayout = null;
+                            this.currentTextureViewContainer = null;
                             this.currentAspectRatioFrameLayoutReady = false;
                             this.currentTextureView = null;
                             this.videoPlayer.releasePlayer();
@@ -2544,6 +2551,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                     }
                 } else if (this.videoPlayer != null) {
                     this.currentAspectRatioFrameLayout = null;
+                    this.currentTextureViewContainer = null;
                     this.currentAspectRatioFrameLayoutReady = false;
                     this.currentTextureView = null;
                     this.videoPlayer.releasePlayer();
@@ -2657,6 +2665,10 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             FileLog.e(e);
             return false;
         }
+    }
+
+    public boolean isRoundVideoDrawingReady() {
+        return this.currentAspectRatioFrameLayout != null && this.currentAspectRatioFrameLayout.isDrawingReady();
     }
 
     public boolean isPlayingMessage(MessageObject messageObject) {
@@ -2888,6 +2900,10 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
 
     public static void saveFile(String fullPath, Context context, int type, String name, String mime) {
         Throwable e;
+        final AlertDialog finalProgress;
+        final int i;
+        final String str;
+        final String str2;
         if (fullPath != null) {
             File file = null;
             if (!(fullPath == null || fullPath.length() == 0)) {
@@ -2900,10 +2916,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 final File sourceFile = file;
                 final boolean[] cancelled = new boolean[1];
                 if (sourceFile.exists()) {
-                    final AlertDialog finalProgress;
-                    final int i;
-                    final String str;
-                    final String str2;
                     AlertDialog progressDialog = null;
                     if (context != null) {
                         try {
@@ -3227,7 +3239,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             File f = new File(FileLoader.getInstance().getDirectory(4), name);
             FileOutputStream output = new FileOutputStream(f);
             try {
-                byte[] buffer = new byte[20480];
+                byte[] buffer = new byte[CacheDataSink.DEFAULT_BUFFER_SIZE];
                 while (true) {
                     int len = inputStream.read(buffer);
                     if (len == -1) {

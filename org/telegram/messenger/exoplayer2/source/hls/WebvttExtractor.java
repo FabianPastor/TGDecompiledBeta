@@ -13,11 +13,11 @@ import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.PositionHolder;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap.Unseekable;
-import org.telegram.messenger.exoplayer2.extractor.TimestampAdjuster;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.text.webvtt.WebvttParserUtil;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
+import org.telegram.messenger.exoplayer2.util.TimestampAdjuster;
 
 final class WebvttExtractor implements Extractor {
     private static final Pattern LOCAL_TIMESTAMP = Pattern.compile("LOCAL:([^,]+)");
@@ -43,7 +43,7 @@ final class WebvttExtractor implements Extractor {
         output.seekMap(new Unseekable(C.TIME_UNSET));
     }
 
-    public void seek(long position) {
+    public void seek(long position, long timeUs) {
         throw new IllegalStateException();
     }
 
@@ -114,7 +114,7 @@ final class WebvttExtractor implements Extractor {
     }
 
     private TrackOutput buildTrackOutput(long subsampleOffsetUs) {
-        TrackOutput trackOutput = this.output.track(0);
+        TrackOutput trackOutput = this.output.track(0, 3);
         trackOutput.format(Format.createTextSampleFormat(null, MimeTypes.TEXT_VTT, null, -1, 0, this.language, null, subsampleOffsetUs));
         this.output.endTracks();
         return trackOutput;

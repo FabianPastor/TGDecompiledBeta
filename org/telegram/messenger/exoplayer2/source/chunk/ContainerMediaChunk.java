@@ -3,29 +3,26 @@ package org.telegram.messenger.exoplayer2.source.chunk;
 import java.io.IOException;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorInput;
-import org.telegram.messenger.exoplayer2.extractor.DefaultTrackOutput;
+import org.telegram.messenger.exoplayer2.extractor.Extractor;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
-import org.telegram.messenger.exoplayer2.extractor.SeekMap;
-import org.telegram.messenger.exoplayer2.source.chunk.ChunkExtractorWrapper.SingleTrackMetadataOutput;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
+import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
-public class ContainerMediaChunk extends BaseMediaChunk implements SingleTrackMetadataOutput {
+public class ContainerMediaChunk extends BaseMediaChunk {
     private volatile int bytesLoaded;
     private final int chunkCount;
     private final ChunkExtractorWrapper extractorWrapper;
     private volatile boolean loadCanceled;
     private volatile boolean loadCompleted;
-    private final Format sampleFormat;
     private final long sampleOffsetUs;
 
-    public ContainerMediaChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long startTimeUs, long endTimeUs, int chunkIndex, int chunkCount, long sampleOffsetUs, ChunkExtractorWrapper extractorWrapper, Format sampleFormat) {
+    public ContainerMediaChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long startTimeUs, long endTimeUs, int chunkIndex, int chunkCount, long sampleOffsetUs, ChunkExtractorWrapper extractorWrapper) {
         super(dataSource, dataSpec, trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, endTimeUs, chunkIndex);
         this.chunkCount = chunkCount;
         this.sampleOffsetUs = sampleOffsetUs;
         this.extractorWrapper = extractorWrapper;
-        this.sampleFormat = sampleFormat;
     }
 
     public int getNextChunkIndex() {
@@ -38,9 +35,6 @@ public class ContainerMediaChunk extends BaseMediaChunk implements SingleTrackMe
 
     public final long bytesLoaded() {
         return (long) this.bytesLoaded;
-    }
-
-    public final void seekMap(SeekMap seekMap) {
     }
 
     public final void cancelLoad() {
@@ -57,21 +51,21 @@ public class ContainerMediaChunk extends BaseMediaChunk implements SingleTrackMe
         try {
             input = new DefaultExtractorInput(this.dataSource, loadDataSpec.absoluteStreamPosition, this.dataSource.open(loadDataSpec));
             if (this.bytesLoaded == 0) {
-                DefaultTrackOutput trackOutput = getTrackOutput();
-                trackOutput.formatWithOffset(this.sampleFormat, this.sampleOffsetUs);
-                this.extractorWrapper.init(this, trackOutput);
+                BaseMediaChunkOutput output = getOutput();
+                output.setSampleOffsetUs(this.sampleOffsetUs);
+                this.extractorWrapper.init(output);
             }
+            Extractor extractor = this.extractorWrapper.extractor;
             int result = 0;
-            while (result == 0) {
-                if (!this.loadCanceled) {
-                    result = this.extractorWrapper.read(input);
-                }
+            while (result == 0 && !this.loadCanceled) {
+                result = extractor.read(input, null);
             }
+            Assertions.checkState(result != 1);
             this.bytesLoaded = (int) (input.getPosition() - this.dataSpec.absoluteStreamPosition);
-            this.dataSource.close();
+            Util.closeQuietly(this.dataSource);
             this.loadCompleted = true;
         } catch (Throwable th) {
-            this.dataSource.close();
+            Util.closeQuietly(this.dataSource);
         }
     }
 }

@@ -52,19 +52,17 @@ abstract class CeaDecoder implements SubtitleDecoder {
     }
 
     public void queueInputBuffer(SubtitleInputBuffer inputBuffer) throws SubtitleDecoderException {
-        boolean z;
-        boolean z2 = true;
-        if (inputBuffer != null) {
-            z = true;
-        } else {
+        boolean z = true;
+        Assertions.checkArgument(inputBuffer != null);
+        if (inputBuffer != this.dequeuedInputBuffer) {
             z = false;
         }
         Assertions.checkArgument(z);
-        if (inputBuffer != this.dequeuedInputBuffer) {
-            z2 = false;
+        if (inputBuffer.isDecodeOnly()) {
+            releaseInputBuffer(inputBuffer);
+        } else {
+            this.queuedInputBuffers.add(inputBuffer);
         }
-        Assertions.checkArgument(z2);
-        this.queuedInputBuffers.add(inputBuffer);
         this.dequeuedInputBuffer = null;
     }
 
@@ -85,7 +83,7 @@ abstract class CeaDecoder implements SubtitleDecoder {
                 Subtitle subtitle = createSubtitle();
                 if (!inputBuffer.isDecodeOnly()) {
                     outputBuffer = (SubtitleOutputBuffer) this.availableOutputBuffers.pollFirst();
-                    outputBuffer.setContent(inputBuffer.timeUs, subtitle, 0);
+                    outputBuffer.setContent(inputBuffer.timeUs, subtitle, Long.MAX_VALUE);
                     releaseInputBuffer(inputBuffer);
                     return outputBuffer;
                 }

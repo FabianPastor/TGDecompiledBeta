@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2.extractor.mkv;
 
 import android.util.SparseArray;
+import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -47,6 +48,7 @@ public final class MatroskaExtractor implements Extractor {
     private static final String CODEC_ID_FOURCC = "V_MS/VFW/FOURCC";
     private static final String CODEC_ID_H264 = "V_MPEG4/ISO/AVC";
     private static final String CODEC_ID_H265 = "V_MPEGH/ISO/HEVC";
+    private static final String CODEC_ID_MP2 = "A_MPEG/L2";
     private static final String CODEC_ID_MP3 = "A_MPEG/L3";
     private static final String CODEC_ID_MPEG2 = "V_MPEG2";
     private static final String CODEC_ID_MPEG4_AP = "V_MPEG4/ISO/AP";
@@ -137,7 +139,6 @@ public final class MatroskaExtractor implements Extractor {
     private static final int LACING_FIXED_SIZE = 2;
     private static final int LACING_NONE = 0;
     private static final int LACING_XIPH = 1;
-    private static final int MP3_MAX_INPUT_SIZE = 4096;
     private static final int OPUS_MAX_INPUT_SIZE = 5760;
     private static final byte[] SUBRIP_PREFIX = new byte[]{(byte) 49, (byte) 10, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 44, (byte) 48, (byte) 48, (byte) 48, (byte) 32, (byte) 45, (byte) 45, (byte) 62, (byte) 32, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 44, (byte) 48, (byte) 48, (byte) 48, (byte) 10};
     private static final int SUBRIP_PREFIX_END_TIMECODE_OFFSET = 19;
@@ -249,6 +250,7 @@ public final class MatroskaExtractor implements Extractor {
 
         public void initializeOutput(ExtractorOutput output, int trackId) throws ParserException {
             String mimeType;
+            int type;
             Format format;
             int maxInputSize = -1;
             int pcmEncoding = -1;
@@ -270,13 +272,13 @@ public final class MatroskaExtractor implements Extractor {
                     break;
                 case -1985379776:
                     if (str.equals(MatroskaExtractor.CODEC_ID_ACM)) {
-                        obj = 21;
+                        obj = 22;
                         break;
                     }
                     break;
                 case -1784763192:
                     if (str.equals(MatroskaExtractor.CODEC_ID_TRUEHD)) {
-                        obj = 16;
+                        obj = 17;
                         break;
                     }
                     break;
@@ -286,9 +288,15 @@ public final class MatroskaExtractor implements Extractor {
                         break;
                     }
                     break;
+                case -1482641358:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_MP2)) {
+                        obj = 13;
+                        break;
+                    }
+                    break;
                 case -1482641357:
                     if (str.equals(MatroskaExtractor.CODEC_ID_MP3)) {
-                        obj = 13;
+                        obj = 14;
                         break;
                     }
                     break;
@@ -312,13 +320,13 @@ public final class MatroskaExtractor implements Extractor {
                     break;
                 case -425012669:
                     if (str.equals(MatroskaExtractor.CODEC_ID_VOBSUB)) {
-                        obj = 24;
+                        obj = 25;
                         break;
                     }
                     break;
                 case -356037306:
                     if (str.equals(MatroskaExtractor.CODEC_ID_DTS_LOSSLESS)) {
-                        obj = 19;
+                        obj = 20;
                         break;
                     }
                     break;
@@ -330,13 +338,13 @@ public final class MatroskaExtractor implements Extractor {
                     break;
                 case 62923603:
                     if (str.equals(MatroskaExtractor.CODEC_ID_AC3)) {
-                        obj = 14;
+                        obj = 15;
                         break;
                     }
                     break;
                 case 62927045:
                     if (str.equals(MatroskaExtractor.CODEC_ID_DTS)) {
-                        obj = 17;
+                        obj = 18;
                         break;
                     }
                     break;
@@ -354,7 +362,7 @@ public final class MatroskaExtractor implements Extractor {
                     break;
                 case 99146302:
                     if (str.equals(MatroskaExtractor.CODEC_ID_PGS)) {
-                        obj = 25;
+                        obj = 26;
                         break;
                     }
                     break;
@@ -366,13 +374,13 @@ public final class MatroskaExtractor implements Extractor {
                     break;
                 case 542569478:
                     if (str.equals(MatroskaExtractor.CODEC_ID_DTS_EXPRESS)) {
-                        obj = 18;
+                        obj = 19;
                         break;
                     }
                     break;
                 case 725957860:
                     if (str.equals(MatroskaExtractor.CODEC_ID_PCM_INT_LIT)) {
-                        obj = 22;
+                        obj = 23;
                         break;
                     }
                     break;
@@ -384,7 +392,7 @@ public final class MatroskaExtractor implements Extractor {
                     break;
                 case 1422270023:
                     if (str.equals(MatroskaExtractor.CODEC_ID_SUBRIP)) {
-                        obj = 23;
+                        obj = 24;
                         break;
                     }
                     break;
@@ -396,13 +404,13 @@ public final class MatroskaExtractor implements Extractor {
                     break;
                 case 1950749482:
                     if (str.equals(MatroskaExtractor.CODEC_ID_E_AC3)) {
-                        obj = 15;
+                        obj = 16;
                         break;
                     }
                     break;
                 case 1950789798:
                     if (str.equals(MatroskaExtractor.CODEC_ID_FLAC)) {
-                        obj = 20;
+                        obj = 21;
                         break;
                     }
                     break;
@@ -470,30 +478,34 @@ public final class MatroskaExtractor implements Extractor {
                     initializationData = Collections.singletonList(this.codecPrivate);
                     break;
                 case 13:
-                    mimeType = MimeTypes.AUDIO_MPEG;
+                    mimeType = MimeTypes.AUDIO_MPEG_L2;
                     maxInputSize = 4096;
                     break;
                 case 14:
-                    mimeType = MimeTypes.AUDIO_AC3;
+                    mimeType = MimeTypes.AUDIO_MPEG;
+                    maxInputSize = 4096;
                     break;
                 case 15:
-                    mimeType = MimeTypes.AUDIO_E_AC3;
+                    mimeType = MimeTypes.AUDIO_AC3;
                     break;
                 case 16:
-                    mimeType = MimeTypes.AUDIO_TRUEHD;
+                    mimeType = MimeTypes.AUDIO_E_AC3;
                     break;
                 case 17:
+                    mimeType = MimeTypes.AUDIO_TRUEHD;
+                    break;
                 case 18:
+                case 19:
                     mimeType = MimeTypes.AUDIO_DTS;
                     break;
-                case 19:
+                case 20:
                     mimeType = MimeTypes.AUDIO_DTS_HD;
                     break;
-                case 20:
+                case 21:
                     mimeType = MimeTypes.AUDIO_FLAC;
                     initializationData = Collections.singletonList(this.codecPrivate);
                     break;
-                case 21:
+                case 22:
                     mimeType = MimeTypes.AUDIO_RAW;
                     if (parseMsAcmCodecPrivate(new ParsableByteArray(this.codecPrivate))) {
                         pcmEncoding = Util.getPcmEncoding(this.audioBitDepth);
@@ -503,21 +515,21 @@ public final class MatroskaExtractor implements Extractor {
                     }
                     throw new ParserException("Non-PCM MS/ACM is unsupported");
                     break;
-                case 22:
+                case 23:
                     mimeType = MimeTypes.AUDIO_RAW;
                     pcmEncoding = Util.getPcmEncoding(this.audioBitDepth);
                     if (pcmEncoding == 0) {
                         throw new ParserException("Unsupported PCM bit depth: " + this.audioBitDepth);
                     }
                     break;
-                case 23:
+                case 24:
                     mimeType = MimeTypes.APPLICATION_SUBRIP;
                     break;
-                case 24:
+                case 25:
                     mimeType = MimeTypes.APPLICATION_VOBSUB;
                     initializationData = Collections.singletonList(this.codecPrivate);
                     break;
-                case 25:
+                case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
                     mimeType = MimeTypes.APPLICATION_PGS;
                     break;
                 default:
@@ -525,8 +537,10 @@ public final class MatroskaExtractor implements Extractor {
             }
             int selectionFlags = (0 | (this.flagDefault ? 1 : 0)) | (this.flagForced ? 2 : 0);
             if (MimeTypes.isAudio(mimeType)) {
+                type = 1;
                 format = Format.createAudioSampleFormat(Integer.toString(trackId), mimeType, null, -1, maxInputSize, this.channelCount, this.sampleRate, pcmEncoding, initializationData, this.drmInitData, selectionFlags, this.language);
             } else if (MimeTypes.isVideo(mimeType)) {
+                type = 2;
                 if (this.displayUnit == 0) {
                     this.displayWidth = this.displayWidth == -1 ? this.width : this.displayWidth;
                     this.displayHeight = this.displayHeight == -1 ? this.height : this.displayHeight;
@@ -537,13 +551,15 @@ public final class MatroskaExtractor implements Extractor {
                 }
                 format = Format.createVideoSampleFormat(Integer.toString(trackId), mimeType, null, -1, maxInputSize, this.width, this.height, -1.0f, initializationData, -1, pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.drmInitData);
             } else if (MimeTypes.APPLICATION_SUBRIP.equals(mimeType)) {
+                type = 3;
                 format = Format.createTextSampleFormat(Integer.toString(trackId), mimeType, null, -1, selectionFlags, this.language, this.drmInitData);
             } else if (MimeTypes.APPLICATION_VOBSUB.equals(mimeType) || MimeTypes.APPLICATION_PGS.equals(mimeType)) {
+                type = 3;
                 format = Format.createImageSampleFormat(Integer.toString(trackId), mimeType, null, -1, initializationData, this.language, this.drmInitData);
             } else {
                 throw new ParserException("Unexpected MIME type.");
             }
-            this.output = output.track(this.number);
+            this.output = output.track(this.number, type);
             this.output.format(format);
         }
 
@@ -704,7 +720,7 @@ public final class MatroskaExtractor implements Extractor {
         this.extractorOutput = output;
     }
 
-    public void seek(long position) {
+    public void seek(long position, long timeUs) {
         this.clusterTimecodeUs = C.TIME_UNSET;
         this.blockState = 0;
         this.reader.reset();
@@ -865,7 +881,7 @@ public final class MatroskaExtractor implements Extractor {
                 }
                 return;
             case ID_TRACK_ENTRY /*174*/:
-                if (this.tracks.get(this.currentTrack.number) == null && isCodecSupported(this.currentTrack.codecId)) {
+                if (isCodecSupported(this.currentTrack.codecId)) {
                     this.currentTrack.initializeOutput(this.extractorOutput, this.currentTrack.number);
                     this.tracks.put(this.currentTrack.number, this.currentTrack);
                 }
@@ -1014,6 +1030,9 @@ public final class MatroskaExtractor implements Extractor {
                         return;
                     case 3:
                         this.currentTrack.stereoMode = 1;
+                        return;
+                    case 15:
+                        this.currentTrack.stereoMode = 3;
                         return;
                     default:
                         return;
@@ -1482,7 +1501,7 @@ public final class MatroskaExtractor implements Extractor {
     }
 
     private static boolean isCodecSupported(String codecId) {
-        if (CODEC_ID_VP8.equals(codecId) || CODEC_ID_VP9.equals(codecId) || CODEC_ID_MPEG2.equals(codecId) || CODEC_ID_MPEG4_SP.equals(codecId) || CODEC_ID_MPEG4_ASP.equals(codecId) || CODEC_ID_MPEG4_AP.equals(codecId) || CODEC_ID_H264.equals(codecId) || CODEC_ID_H265.equals(codecId) || CODEC_ID_FOURCC.equals(codecId) || CODEC_ID_THEORA.equals(codecId) || CODEC_ID_OPUS.equals(codecId) || CODEC_ID_VORBIS.equals(codecId) || CODEC_ID_AAC.equals(codecId) || CODEC_ID_MP3.equals(codecId) || CODEC_ID_AC3.equals(codecId) || CODEC_ID_E_AC3.equals(codecId) || CODEC_ID_TRUEHD.equals(codecId) || CODEC_ID_DTS.equals(codecId) || CODEC_ID_DTS_EXPRESS.equals(codecId) || CODEC_ID_DTS_LOSSLESS.equals(codecId) || CODEC_ID_FLAC.equals(codecId) || CODEC_ID_ACM.equals(codecId) || CODEC_ID_PCM_INT_LIT.equals(codecId) || CODEC_ID_SUBRIP.equals(codecId) || CODEC_ID_VOBSUB.equals(codecId) || CODEC_ID_PGS.equals(codecId)) {
+        if (CODEC_ID_VP8.equals(codecId) || CODEC_ID_VP9.equals(codecId) || CODEC_ID_MPEG2.equals(codecId) || CODEC_ID_MPEG4_SP.equals(codecId) || CODEC_ID_MPEG4_ASP.equals(codecId) || CODEC_ID_MPEG4_AP.equals(codecId) || CODEC_ID_H264.equals(codecId) || CODEC_ID_H265.equals(codecId) || CODEC_ID_FOURCC.equals(codecId) || CODEC_ID_THEORA.equals(codecId) || CODEC_ID_OPUS.equals(codecId) || CODEC_ID_VORBIS.equals(codecId) || CODEC_ID_AAC.equals(codecId) || CODEC_ID_MP2.equals(codecId) || CODEC_ID_MP3.equals(codecId) || CODEC_ID_AC3.equals(codecId) || CODEC_ID_E_AC3.equals(codecId) || CODEC_ID_TRUEHD.equals(codecId) || CODEC_ID_DTS.equals(codecId) || CODEC_ID_DTS_EXPRESS.equals(codecId) || CODEC_ID_DTS_LOSSLESS.equals(codecId) || CODEC_ID_FLAC.equals(codecId) || CODEC_ID_ACM.equals(codecId) || CODEC_ID_PCM_INT_LIT.equals(codecId) || CODEC_ID_SUBRIP.equals(codecId) || CODEC_ID_VOBSUB.equals(codecId) || CODEC_ID_PGS.equals(codecId)) {
             return true;
         }
         return false;

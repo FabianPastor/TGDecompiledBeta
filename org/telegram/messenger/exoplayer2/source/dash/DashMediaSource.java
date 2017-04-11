@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.Timeline;
@@ -81,17 +82,25 @@ public final class DashMediaSource implements MediaSource {
             long availableStartTimeUs = 0;
             long availableEndTimeUs = Long.MAX_VALUE;
             boolean isIndexExplicit = false;
+            boolean seenEmptyIndex = false;
             for (int i = 0; i < adaptationSetCount; i++) {
                 DashSegmentIndex index = ((Representation) ((AdaptationSet) period.adaptationSets.get(i)).representations.get(0)).getIndex();
                 if (index == null) {
                     return new PeriodSeekInfo(true, 0, durationUs);
                 }
-                int firstSegmentNum = index.getFirstSegmentNum();
-                int lastSegmentNum = index.getLastSegmentNum(durationUs);
                 isIndexExplicit |= index.isExplicit();
-                availableStartTimeUs = Math.max(availableStartTimeUs, index.getTimeUs(firstSegmentNum));
-                if (lastSegmentNum != -1) {
-                    availableEndTimeUs = Math.min(availableEndTimeUs, index.getTimeUs(lastSegmentNum) + index.getDurationUs(lastSegmentNum, durationUs));
+                int segmentCount = index.getSegmentCount(durationUs);
+                if (segmentCount == 0) {
+                    seenEmptyIndex = true;
+                    availableStartTimeUs = 0;
+                    availableEndTimeUs = 0;
+                } else if (!seenEmptyIndex) {
+                    int firstSegmentNum = index.getFirstSegmentNum();
+                    availableStartTimeUs = Math.max(availableStartTimeUs, index.getTimeUs(firstSegmentNum));
+                    if (segmentCount != -1) {
+                        int lastSegmentNum = (firstSegmentNum + segmentCount) - 1;
+                        availableEndTimeUs = Math.min(availableEndTimeUs, index.getTimeUs(lastSegmentNum) + index.getDurationUs(lastSegmentNum, durationUs));
+                    }
                 }
             }
             return new PeriodSeekInfo(isIndexExplicit, availableStartTimeUs, availableEndTimeUs);
@@ -187,7 +196,7 @@ public final class DashMediaSource implements MediaSource {
                 return windowDefaultStartPositionUs;
             }
             DashSegmentIndex snapIndex = ((Representation) ((AdaptationSet) period.adaptationSets.get(videoAdaptationSetIndex)).representations.get(0)).getIndex();
-            if (snapIndex == null) {
+            if (snapIndex == null || snapIndex.getSegmentCount(periodDurationUs) == 0) {
                 return windowDefaultStartPositionUs;
             }
             return (snapIndex.getTimeUs(snapIndex.getSegmentNum(defaultStartPositionInPeriodUs, periodDurationUs)) + windowDefaultStartPositionUs) - defaultStartPositionInPeriodUs;
@@ -315,7 +324,7 @@ public final class DashMediaSource implements MediaSource {
         }
     }
 
-    public void prepareSource(Listener listener) {
+    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
         this.sourceListener = listener;
         if (this.sideloadedManifest) {
             this.loaderErrorThrower = new Dummy();

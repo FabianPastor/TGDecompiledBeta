@@ -9,5 +9,5 @@ interface OggSeeker {
 
     long read(ExtractorInput extractorInput) throws IOException, InterruptedException;
 
-    long startSeek();
+    long startSeek(long j);
 }

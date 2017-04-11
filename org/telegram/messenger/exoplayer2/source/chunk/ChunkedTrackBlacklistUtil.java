@@ -13,19 +13,28 @@ public final class ChunkedTrackBlacklistUtil {
     }
 
     public static boolean maybeBlacklistTrack(TrackSelection trackSelection, int trackSelectionIndex, Exception e, long blacklistDurationMs) {
-        boolean z = false;
-        if (trackSelection.length() != 1 && (e instanceof InvalidResponseCodeException)) {
-            int responseCode = ((InvalidResponseCodeException) e).responseCode;
-            if (responseCode == 404 || responseCode == 410) {
-                z = trackSelection.blacklist(trackSelectionIndex, blacklistDurationMs);
-                if (z) {
-                    Log.w(TAG, "Blacklisted: duration=" + blacklistDurationMs + ", responseCode=" + responseCode + ", format=" + trackSelection.getFormat(trackSelectionIndex));
-                } else {
-                    Log.w(TAG, "Blacklisting failed (cannot blacklist last enabled track): responseCode=" + responseCode + ", format=" + trackSelection.getFormat(trackSelectionIndex));
-                }
-            }
+        if (!shouldBlacklist(e)) {
+            return false;
         }
-        return z;
+        boolean blacklisted = trackSelection.blacklist(trackSelectionIndex, blacklistDurationMs);
+        int responseCode = ((InvalidResponseCodeException) e).responseCode;
+        if (blacklisted) {
+            Log.w(TAG, "Blacklisted: duration=" + blacklistDurationMs + ", responseCode=" + responseCode + ", format=" + trackSelection.getFormat(trackSelectionIndex));
+            return blacklisted;
+        }
+        Log.w(TAG, "Blacklisting failed (cannot blacklist last enabled track): responseCode=" + responseCode + ", format=" + trackSelection.getFormat(trackSelectionIndex));
+        return blacklisted;
+    }
+
+    public static boolean shouldBlacklist(Exception e) {
+        if (!(e instanceof InvalidResponseCodeException)) {
+            return false;
+        }
+        int responseCode = ((InvalidResponseCodeException) e).responseCode;
+        if (responseCode == 404 || responseCode == 410) {
+            return true;
+        }
+        return false;
     }
 
     private ChunkedTrackBlacklistUtil() {

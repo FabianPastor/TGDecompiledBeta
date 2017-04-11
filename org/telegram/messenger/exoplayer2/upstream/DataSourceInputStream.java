@@ -30,16 +30,11 @@ public final class DataSourceInputStream extends InputStream {
         if (read(this.singleByteArray) == -1) {
             return -1;
         }
-        this.totalBytesRead++;
         return this.singleByteArray[0] & 255;
     }
 
     public int read(byte[] buffer) throws IOException {
-        int bytesRead = read(buffer, 0, buffer.length);
-        if (bytesRead != -1) {
-            this.totalBytesRead += (long) bytesRead;
-        }
-        return bytesRead;
+        return read(buffer, 0, buffer.length);
     }
 
     public int read(byte[] buffer, int offset, int length) throws IOException {
@@ -51,14 +46,6 @@ public final class DataSourceInputStream extends InputStream {
         }
         this.totalBytesRead += (long) bytesRead;
         return bytesRead;
-    }
-
-    public long skip(long byteCount) throws IOException {
-        Assertions.checkState(!this.closed);
-        checkOpened();
-        long bytesSkipped = super.skip(byteCount);
-        this.totalBytesRead += bytesSkipped;
-        return bytesSkipped;
     }
 
     public void close() throws IOException {

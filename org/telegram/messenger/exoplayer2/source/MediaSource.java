@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2.source;
 
 import java.io.IOException;
+import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 
@@ -14,7 +15,7 @@ public interface MediaSource {
 
     void maybeThrowSourceInfoRefreshError() throws IOException;
 
-    void prepareSource(Listener listener);
+    void prepareSource(ExoPlayer exoPlayer, boolean z, Listener listener);
 
     void releasePeriod(MediaPeriod mediaPeriod);
 

@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.util.Assertions;
+import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class DefaultExtractorInput implements ExtractorInput {
+    private static final int PEEK_MAX_FREE_SPACE = 524288;
+    private static final int PEEK_MIN_FREE_SPACE_AFTER_RESIZE = 65536;
     private static final byte[] SCRATCH_SPACE = new byte[4096];
     private final DataSource dataSource;
-    private byte[] peekBuffer = new byte[8192];
+    private byte[] peekBuffer = new byte[65536];
     private int peekBufferLength;
     private int peekBufferPosition;
     private long position;
@@ -120,7 +123,7 @@ public final class DefaultExtractorInput implements ExtractorInput {
     private void ensureSpaceForPeek(int length) {
         int requiredLength = this.peekBufferPosition + length;
         if (requiredLength > this.peekBuffer.length) {
-            this.peekBuffer = Arrays.copyOf(this.peekBuffer, Math.max(this.peekBuffer.length * 2, requiredLength));
+            this.peekBuffer = Arrays.copyOf(this.peekBuffer, Util.constrainValue(this.peekBuffer.length * 2, 65536 + requiredLength, 524288 + requiredLength));
         }
     }
 
@@ -143,7 +146,12 @@ public final class DefaultExtractorInput implements ExtractorInput {
     private void updatePeekBuffer(int bytesConsumed) {
         this.peekBufferLength -= bytesConsumed;
         this.peekBufferPosition = 0;
-        System.arraycopy(this.peekBuffer, bytesConsumed, this.peekBuffer, 0, this.peekBufferLength);
+        byte[] newPeekBuffer = this.peekBuffer;
+        if (this.peekBufferLength < this.peekBuffer.length - 524288) {
+            newPeekBuffer = new byte[(this.peekBufferLength + 65536)];
+        }
+        System.arraycopy(this.peekBuffer, bytesConsumed, newPeekBuffer, 0, this.peekBufferLength);
+        this.peekBuffer = newPeekBuffer;
     }
 
     private int readFromDataSource(byte[] target, int offset, int length, int bytesAlreadyRead, boolean allowEndOfInput) throws InterruptedException, IOException {

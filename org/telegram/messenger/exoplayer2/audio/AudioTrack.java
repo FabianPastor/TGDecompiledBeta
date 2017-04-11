@@ -2,6 +2,8 @@ package org.telegram.messenger.exoplayer2.audio;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.media.AudioAttributes.Builder;
+import android.media.AudioFormat;
 import android.media.AudioTimestamp;
 import android.media.PlaybackParams;
 import android.os.ConditionVariable;
@@ -9,7 +11,10 @@ import android.os.SystemClock;
 import android.util.Log;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.ArrayList;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.upstream.cache.CacheDataSink;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.Util;
@@ -31,9 +36,6 @@ public final class AudioTrack {
     private static final int PLAYSTATE_PAUSED = 2;
     private static final int PLAYSTATE_PLAYING = 3;
     private static final int PLAYSTATE_STOPPED = 1;
-    public static final int RESULT_BUFFER_CONSUMED = 2;
-    public static final int RESULT_POSITION_DISCONTINUITY = 1;
-    public static final int SESSION_ID_NOT_SET = 0;
     private static final int START_IN_SYNC = 1;
     private static final int START_NEED_SYNC = 2;
     private static final int START_NOT_SET = 0;
@@ -44,16 +46,25 @@ public final class AudioTrack {
     public static boolean enablePreV21AudioSessionWorkaround = false;
     public static boolean failOnSpuriousAudioTimestamp = false;
     private final AudioCapabilities audioCapabilities;
+    private AudioProcessor[] audioProcessors;
+    private int audioSessionId;
     private boolean audioTimestampSet;
     private android.media.AudioTrack audioTrack;
     private final AudioTrackUtil audioTrackUtil;
+    private ByteBuffer avSyncHeader;
+    private final AudioProcessor[] availableAudioProcessors;
     private int bufferSize;
     private long bufferSizeUs;
+    private int bytesUntilNextAvSync;
     private int channelConfig;
-    private ByteBuffer currentSourceBuffer;
+    private final ChannelMappingAudioProcessor channelMappingAudioProcessor = new ChannelMappingAudioProcessor();
+    private int drainingAudioProcessorIndex;
+    private int encoding;
     private int framesPerEncodedSample;
     private Method getLatencyMethod;
+    private boolean handledEndOfStream;
     private boolean hasData;
+    private ByteBuffer inputBuffer;
     private android.media.AudioTrack keepSessionIdAudioTrack;
     private long lastFeedElapsedRealtimeMs;
     private long lastPlayheadSampleTimeUs;
@@ -61,26 +72,30 @@ public final class AudioTrack {
     private long latencyUs;
     private final Listener listener;
     private int nextPlayheadOffsetIndex;
+    private ByteBuffer outputBuffer;
+    private ByteBuffer[] outputBuffers;
+    private int outputEncoding;
+    private int outputPcmFrameSize;
     private boolean passthrough;
     private int pcmFrameSize;
     private int playheadOffsetCount;
     private final long[] playheadOffsets;
-    private final ConditionVariable releasingConditionVariable = new ConditionVariable(true);
-    private ByteBuffer resampledBuffer;
+    private boolean playing;
+    private byte[] preV21OutputBuffer;
+    private int preV21OutputBufferOffset;
+    private final ConditionVariable releasingConditionVariable;
     private long resumeSystemTimeUs;
     private int sampleRate;
     private long smoothedPlayheadOffsetUs;
-    private int sourceEncoding;
     private int startMediaTimeState;
     private long startMediaTimeUs;
     private int streamType;
     private long submittedEncodedFrames;
     private long submittedPcmBytes;
-    private int targetEncoding;
-    private byte[] temporaryBuffer;
-    private int temporaryBufferOffset;
-    private boolean useResampledBuffer;
+    private boolean tunneling;
     private float volume;
+    private long writtenEncodedFrames;
+    private long writtenPcmBytes;
 
     private static class AudioTrackUtil {
         protected android.media.AudioTrack audioTrack;
@@ -168,6 +183,16 @@ public final class AudioTrack {
         }
     }
 
+    public static final class ConfigurationException extends Exception {
+        public ConfigurationException(Throwable cause) {
+            super(cause);
+        }
+
+        public ConfigurationException(String message) {
+            super(message);
+        }
+    }
+
     public static final class InitializationException extends Exception {
         public final int audioTrackState;
 
@@ -184,6 +209,10 @@ public final class AudioTrack {
     }
 
     public interface Listener {
+        void onAudioSessionId(int i);
+
+        void onPositionDiscontinuity();
+
         void onUnderrun(int i, long j, long j2);
     }
 
@@ -267,9 +296,14 @@ public final class AudioTrack {
         }
     }
 
-    public AudioTrack(AudioCapabilities audioCapabilities, Listener listener) {
+    public AudioTrack(AudioCapabilities audioCapabilities, AudioProcessor[] audioProcessors, Listener listener) {
         this.audioCapabilities = audioCapabilities;
+        this.availableAudioProcessors = new AudioProcessor[(audioProcessors.length + 2)];
+        this.availableAudioProcessors[0] = new ResamplingAudioProcessor();
+        this.availableAudioProcessors[1] = this.channelMappingAudioProcessor;
+        System.arraycopy(audioProcessors, 0, this.availableAudioProcessors, 2, audioProcessors.length);
         this.listener = listener;
+        this.releasingConditionVariable = new ConditionVariable(true);
         if (Util.SDK_INT >= 18) {
             try {
                 this.getLatencyMethod = android.media.AudioTrack.class.getMethod("getLatency", (Class[]) null);
@@ -287,14 +321,14 @@ public final class AudioTrack {
         this.volume = 1.0f;
         this.startMediaTimeState = 0;
         this.streamType = 3;
+        this.audioSessionId = 0;
+        this.drainingAudioProcessorIndex = -1;
+        this.audioProcessors = new AudioProcessor[0];
+        this.outputBuffers = new ByteBuffer[0];
     }
 
     public boolean isPassthroughSupported(String mimeType) {
         return this.audioCapabilities != null && this.audioCapabilities.supportsEncoding(getEncodingForMimeType(mimeType));
-    }
-
-    public boolean isInitialized() {
-        return this.audioTrack != null;
     }
 
     public long getCurrentPositionUs(boolean sourceEnded) {
@@ -320,9 +354,55 @@ public final class AudioTrack {
         return currentPositionUs - this.latencyUs;
     }
 
-    public void configure(String mimeType, int channelCount, int sampleRate, int pcmEncoding, int specifiedBufferSize) {
+    public void configure(String mimeType, int channelCount, int sampleRate, int pcmEncoding, int specifiedBufferSize) throws ConfigurationException {
+        configure(mimeType, channelCount, sampleRate, pcmEncoding, specifiedBufferSize, null);
+    }
+
+    public void configure(String mimeType, int channelCount, int sampleRate, int pcmEncoding, int specifiedBufferSize, int[] outputChannels) throws ConfigurationException {
+        int encoding;
         int channelConfig;
-        int sourceEncoding;
+        boolean passthrough = !MimeTypes.AUDIO_RAW.equals(mimeType);
+        if (passthrough) {
+            encoding = getEncodingForMimeType(mimeType);
+        } else {
+            encoding = pcmEncoding;
+        }
+        boolean flush = false;
+        if (!passthrough) {
+            AudioProcessor audioProcessor;
+            this.pcmFrameSize = Util.getPcmFrameSize(pcmEncoding, channelCount);
+            this.channelMappingAudioProcessor.setChannelMap(outputChannels);
+            ArrayList<AudioProcessor> newAudioProcessors = new ArrayList();
+            AudioProcessor[] audioProcessorArr = this.availableAudioProcessors;
+            int length = audioProcessorArr.length;
+            int i = 0;
+            while (i < length) {
+                audioProcessor = audioProcessorArr[i];
+                try {
+                    flush |= audioProcessor.configure(sampleRate, channelCount, encoding);
+                    if (audioProcessor.isActive()) {
+                        newAudioProcessors.add(audioProcessor);
+                        channelCount = audioProcessor.getOutputChannelCount();
+                        encoding = audioProcessor.getOutputEncoding();
+                    } else {
+                        audioProcessor.flush();
+                    }
+                    i++;
+                } catch (Throwable e) {
+                    throw new ConfigurationException(e);
+                }
+            }
+            if (flush) {
+                int count = newAudioProcessors.size();
+                this.audioProcessors = (AudioProcessor[]) newAudioProcessors.toArray(new AudioProcessor[count]);
+                this.outputBuffers = new ByteBuffer[count];
+                for (int i2 = 0; i2 < count; i2++) {
+                    audioProcessor = this.audioProcessors[i2];
+                    audioProcessor.flush();
+                    this.outputBuffers[i2] = audioProcessor.getOutput();
+                }
+            }
+        }
         switch (channelCount) {
             case 1:
                 channelConfig = 4;
@@ -349,78 +429,90 @@ public final class AudioTrack {
                 channelConfig = C.CHANNEL_OUT_7POINT1_SURROUND;
                 break;
             default:
-                throw new IllegalArgumentException("Unsupported channel count: " + channelCount);
+                throw new ConfigurationException("Unsupported channel count: " + channelCount);
         }
-        boolean passthrough = !MimeTypes.AUDIO_RAW.equals(mimeType);
-        if (passthrough) {
-            sourceEncoding = getEncodingForMimeType(mimeType);
-        } else if (pcmEncoding == 3 || pcmEncoding == 2 || pcmEncoding == Integer.MIN_VALUE || pcmEncoding == NUM) {
-            sourceEncoding = pcmEncoding;
-        } else {
-            throw new IllegalArgumentException("Unsupported PCM encoding: " + pcmEncoding);
+        if (Util.SDK_INT <= 23 && "foster".equals(Util.DEVICE) && "NVIDIA".equals(Util.MANUFACTURER)) {
+            switch (channelCount) {
+                case 3:
+                case 5:
+                    channelConfig = 252;
+                    break;
+                case 7:
+                    channelConfig = C.CHANNEL_OUT_7POINT1_SURROUND;
+                    break;
+            }
         }
-        if (!isInitialized() || this.sourceEncoding != sourceEncoding || this.sampleRate != sampleRate || this.channelConfig != channelConfig) {
+        if (Util.SDK_INT <= 25 && "fugu".equals(Util.DEVICE) && passthrough && channelCount == 1) {
+            channelConfig = 12;
+        }
+        if (flush || !isInitialized() || this.encoding != encoding || this.sampleRate != sampleRate || this.channelConfig != channelConfig) {
             long j;
             reset();
-            this.sourceEncoding = sourceEncoding;
+            this.encoding = encoding;
             this.passthrough = passthrough;
             this.sampleRate = sampleRate;
             this.channelConfig = channelConfig;
             if (!passthrough) {
-                sourceEncoding = 2;
+                encoding = 2;
             }
-            this.targetEncoding = sourceEncoding;
-            this.pcmFrameSize = channelCount * 2;
+            this.outputEncoding = encoding;
+            this.outputPcmFrameSize = Util.getPcmFrameSize(2, channelCount);
             if (specifiedBufferSize != 0) {
                 this.bufferSize = specifiedBufferSize;
             } else if (!passthrough) {
-                int minBufferSize = android.media.AudioTrack.getMinBufferSize(sampleRate, channelConfig, this.targetEncoding);
+                int minBufferSize = android.media.AudioTrack.getMinBufferSize(sampleRate, channelConfig, this.outputEncoding);
                 Assertions.checkState(minBufferSize != -2);
                 int multipliedBufferSize = minBufferSize * 4;
-                int minAppBufferSize = ((int) durationUsToFrames(250000)) * this.pcmFrameSize;
-                int maxAppBufferSize = (int) Math.max((long) minBufferSize, durationUsToFrames(MAX_BUFFER_DURATION_US) * ((long) this.pcmFrameSize));
+                int minAppBufferSize = ((int) durationUsToFrames(250000)) * this.outputPcmFrameSize;
+                int maxAppBufferSize = (int) Math.max((long) minBufferSize, durationUsToFrames(MAX_BUFFER_DURATION_US) * ((long) this.outputPcmFrameSize));
                 if (multipliedBufferSize >= minAppBufferSize) {
                     minAppBufferSize = multipliedBufferSize > maxAppBufferSize ? maxAppBufferSize : multipliedBufferSize;
                 }
                 this.bufferSize = minAppBufferSize;
-            } else if (this.targetEncoding == 5 || this.targetEncoding == 6) {
-                this.bufferSize = 20480;
+            } else if (this.outputEncoding == 5 || this.outputEncoding == 6) {
+                this.bufferSize = CacheDataSink.DEFAULT_BUFFER_SIZE;
             } else {
                 this.bufferSize = 49152;
             }
             if (passthrough) {
                 j = C.TIME_UNSET;
             } else {
-                j = framesToDurationUs(pcmBytesToFrames((long) this.bufferSize));
+                j = framesToDurationUs((long) (this.bufferSize / this.outputPcmFrameSize));
             }
             this.bufferSizeUs = j;
         }
     }
 
-    public int initialize(int sessionId) throws InitializationException {
+    private void initialize() throws InitializationException {
         this.releasingConditionVariable.block();
-        if (sessionId == 0) {
-            this.audioTrack = new android.media.AudioTrack(this.streamType, this.sampleRate, this.channelConfig, this.targetEncoding, this.bufferSize, 1);
+        if (this.tunneling) {
+            this.audioTrack = createHwAvSyncAudioTrackV21(this.sampleRate, this.channelConfig, this.outputEncoding, this.bufferSize, this.audioSessionId);
+        } else if (this.audioSessionId == 0) {
+            this.audioTrack = new android.media.AudioTrack(this.streamType, this.sampleRate, this.channelConfig, this.outputEncoding, this.bufferSize, 1);
         } else {
-            this.audioTrack = new android.media.AudioTrack(this.streamType, this.sampleRate, this.channelConfig, this.targetEncoding, this.bufferSize, 1, sessionId);
+            this.audioTrack = new android.media.AudioTrack(this.streamType, this.sampleRate, this.channelConfig, this.outputEncoding, this.bufferSize, 1, this.audioSessionId);
         }
         checkAudioTrackInitialized();
-        sessionId = this.audioTrack.getAudioSessionId();
+        int audioSessionId = this.audioTrack.getAudioSessionId();
         if (enablePreV21AudioSessionWorkaround && Util.SDK_INT < 21) {
-            if (!(this.keepSessionIdAudioTrack == null || sessionId == this.keepSessionIdAudioTrack.getAudioSessionId())) {
+            if (!(this.keepSessionIdAudioTrack == null || audioSessionId == this.keepSessionIdAudioTrack.getAudioSessionId())) {
                 releaseKeepSessionIdAudioTrack();
             }
             if (this.keepSessionIdAudioTrack == null) {
-                this.keepSessionIdAudioTrack = new android.media.AudioTrack(this.streamType, 4000, 4, 2, 2, 0, sessionId);
+                this.keepSessionIdAudioTrack = new android.media.AudioTrack(this.streamType, 4000, 4, 2, 2, 0, audioSessionId);
             }
         }
+        if (this.audioSessionId != audioSessionId) {
+            this.audioSessionId = audioSessionId;
+            this.listener.onAudioSessionId(audioSessionId);
+        }
         this.audioTrackUtil.reconfigure(this.audioTrack, needsPassthroughWorkarounds());
-        setAudioTrackVolume();
+        setVolumeInternal();
         this.hasData = false;
-        return sessionId;
     }
 
     public void play() {
+        this.playing = true;
         if (isInitialized()) {
             this.resumeSystemTimeUs = System.nanoTime() / 1000;
             this.audioTrack.play();
@@ -433,148 +525,257 @@ public final class AudioTrack {
         }
     }
 
-    public int handleBuffer(ByteBuffer buffer, long presentationTimeUs) throws WriteException {
+    public boolean handleBuffer(ByteBuffer buffer, long presentationTimeUs) throws InitializationException, WriteException {
+        boolean z = this.inputBuffer == null || buffer == this.inputBuffer;
+        Assertions.checkArgument(z);
+        if (!isInitialized()) {
+            initialize();
+            if (this.playing) {
+                play();
+            }
+        }
+        if (needsPassthroughWorkarounds()) {
+            if (this.audioTrack.getPlayState() == 2) {
+                this.hasData = false;
+                return false;
+            } else if (this.audioTrack.getPlayState() == 1 && this.audioTrackUtil.getPlaybackHeadPosition() != 0) {
+                return false;
+            }
+        }
         boolean hadData = this.hasData;
         this.hasData = hasPendingData();
         if (!(!hadData || this.hasData || this.audioTrack.getPlayState() == 1)) {
             this.listener.onUnderrun(this.bufferSize, C.usToMs(this.bufferSizeUs), SystemClock.elapsedRealtime() - this.lastFeedElapsedRealtimeMs);
         }
-        int result = writeBuffer(buffer, presentationTimeUs);
-        this.lastFeedElapsedRealtimeMs = SystemClock.elapsedRealtime();
-        return result;
+        if (this.inputBuffer == null) {
+            if (!buffer.hasRemaining()) {
+                return true;
+            }
+            if (this.passthrough && this.framesPerEncodedSample == 0) {
+                this.framesPerEncodedSample = getFramesPerEncodedSample(this.outputEncoding, buffer);
+            }
+            if (this.startMediaTimeState == 0) {
+                this.startMediaTimeUs = Math.max(0, presentationTimeUs);
+                this.startMediaTimeState = 1;
+            } else {
+                long expectedPresentationTimeUs = this.startMediaTimeUs + framesToDurationUs(getSubmittedFrames());
+                if (this.startMediaTimeState == 1 && Math.abs(expectedPresentationTimeUs - presentationTimeUs) > 200000) {
+                    Log.e(TAG, "Discontinuity detected [expected " + expectedPresentationTimeUs + ", got " + presentationTimeUs + "]");
+                    this.startMediaTimeState = 2;
+                }
+                if (this.startMediaTimeState == 2) {
+                    this.startMediaTimeUs += presentationTimeUs - expectedPresentationTimeUs;
+                    this.startMediaTimeState = 1;
+                    this.listener.onPositionDiscontinuity();
+                }
+            }
+            if (this.passthrough) {
+                this.submittedEncodedFrames += (long) this.framesPerEncodedSample;
+            } else {
+                this.submittedPcmBytes += (long) buffer.remaining();
+            }
+            this.inputBuffer = buffer;
+        }
+        if (this.passthrough) {
+            writeBuffer(this.inputBuffer, presentationTimeUs);
+        } else {
+            processBuffers(presentationTimeUs);
+        }
+        if (this.inputBuffer.hasRemaining()) {
+            return false;
+        }
+        this.inputBuffer = null;
+        return true;
     }
 
-    private int writeBuffer(ByteBuffer buffer, long presentationTimeUs) throws WriteException {
-        int bytesRemaining;
-        boolean isNewSourceBuffer = this.currentSourceBuffer == null;
-        boolean z = isNewSourceBuffer || this.currentSourceBuffer == buffer;
-        Assertions.checkState(z);
-        this.currentSourceBuffer = buffer;
-        if (needsPassthroughWorkarounds()) {
-            if (this.audioTrack.getPlayState() == 2) {
-                return 0;
-            }
-            if (this.audioTrack.getPlayState() == 1 && this.audioTrackUtil.getPlaybackHeadPosition() != 0) {
-                return 0;
-            }
-        }
-        int result = 0;
-        if (isNewSourceBuffer) {
-            if (this.currentSourceBuffer.hasRemaining()) {
-                this.useResampledBuffer = this.targetEncoding != this.sourceEncoding;
-                if (this.useResampledBuffer) {
-                    Assertions.checkState(this.targetEncoding == 2);
-                    this.resampledBuffer = resampleTo16BitPcm(this.currentSourceBuffer, this.sourceEncoding, this.resampledBuffer);
-                    buffer = this.resampledBuffer;
-                }
-                if (this.passthrough && this.framesPerEncodedSample == 0) {
-                    this.framesPerEncodedSample = getFramesPerEncodedSample(this.targetEncoding, buffer);
-                }
-                if (this.startMediaTimeState == 0) {
-                    this.startMediaTimeUs = Math.max(0, presentationTimeUs);
-                    this.startMediaTimeState = 1;
-                } else {
-                    long expectedPresentationTimeUs = this.startMediaTimeUs + framesToDurationUs(getSubmittedFrames());
-                    if (this.startMediaTimeState == 1 && Math.abs(expectedPresentationTimeUs - presentationTimeUs) > 200000) {
-                        Log.e(TAG, "Discontinuity detected [expected " + expectedPresentationTimeUs + ", got " + presentationTimeUs + "]");
-                        this.startMediaTimeState = 2;
-                    }
-                    if (this.startMediaTimeState == 2) {
-                        this.startMediaTimeUs += presentationTimeUs - expectedPresentationTimeUs;
-                        this.startMediaTimeState = 1;
-                        result = 0 | 1;
-                    }
-                }
-                if (Util.SDK_INT < 21) {
-                    bytesRemaining = buffer.remaining();
-                    if (this.temporaryBuffer == null || this.temporaryBuffer.length < bytesRemaining) {
-                        this.temporaryBuffer = new byte[bytesRemaining];
-                    }
-                    int originalPosition = buffer.position();
-                    buffer.get(this.temporaryBuffer, 0, bytesRemaining);
-                    buffer.position(originalPosition);
-                    this.temporaryBufferOffset = 0;
-                }
+    private void processBuffers(long avSyncPresentationTimeUs) throws WriteException {
+        int count = this.audioProcessors.length;
+        int index = count;
+        while (index >= 0) {
+            ByteBuffer input = index > 0 ? this.outputBuffers[index - 1] : this.inputBuffer != null ? this.inputBuffer : AudioProcessor.EMPTY_BUFFER;
+            if (index == count) {
+                writeBuffer(input, avSyncPresentationTimeUs);
             } else {
-                this.currentSourceBuffer = null;
-                return 2;
+                AudioProcessor audioProcessor = this.audioProcessors[index];
+                audioProcessor.queueInput(input);
+                ByteBuffer output = audioProcessor.getOutput();
+                this.outputBuffers[index] = output;
+                if (output.hasRemaining()) {
+                    index++;
+                }
+            }
+            if (!input.hasRemaining()) {
+                index--;
+            } else {
+                return;
             }
         }
-        if (this.useResampledBuffer) {
-            buffer = this.resampledBuffer;
+    }
+
+    private boolean writeBuffer(ByteBuffer buffer, long avSyncPresentationTimeUs) throws WriteException {
+        if (!buffer.hasRemaining()) {
+            return true;
+        }
+        int bytesRemaining;
+        if (this.outputBuffer != null) {
+            boolean z;
+            if (this.outputBuffer == buffer) {
+                z = true;
+            } else {
+                z = false;
+            }
+            Assertions.checkArgument(z);
+        } else {
+            this.outputBuffer = buffer;
+            if (Util.SDK_INT < 21) {
+                bytesRemaining = buffer.remaining();
+                if (this.preV21OutputBuffer == null || this.preV21OutputBuffer.length < bytesRemaining) {
+                    this.preV21OutputBuffer = new byte[bytesRemaining];
+                }
+                int originalPosition = buffer.position();
+                buffer.get(this.preV21OutputBuffer, 0, bytesRemaining);
+                buffer.position(originalPosition);
+                this.preV21OutputBufferOffset = 0;
+            }
         }
         bytesRemaining = buffer.remaining();
         int bytesWritten = 0;
         if (Util.SDK_INT < 21) {
-            int bytesToWrite = this.bufferSize - ((int) (this.submittedPcmBytes - (this.audioTrackUtil.getPlaybackHeadPosition() * ((long) this.pcmFrameSize))));
+            int bytesToWrite = this.bufferSize - ((int) (this.writtenPcmBytes - (this.audioTrackUtil.getPlaybackHeadPosition() * ((long) this.outputPcmFrameSize))));
             if (bytesToWrite > 0) {
-                bytesWritten = this.audioTrack.write(this.temporaryBuffer, this.temporaryBufferOffset, Math.min(bytesRemaining, bytesToWrite));
-                if (bytesWritten >= 0) {
-                    this.temporaryBufferOffset += bytesWritten;
+                bytesWritten = this.audioTrack.write(this.preV21OutputBuffer, this.preV21OutputBufferOffset, Math.min(bytesRemaining, bytesToWrite));
+                if (bytesWritten > 0) {
+                    this.preV21OutputBufferOffset += bytesWritten;
+                    buffer.position(buffer.position() + bytesWritten);
                 }
-                buffer.position(buffer.position() + bytesWritten);
             }
+        } else if (this.tunneling) {
+            Assertions.checkState(avSyncPresentationTimeUs != C.TIME_UNSET);
+            bytesWritten = writeNonBlockingWithAvSyncV21(this.audioTrack, buffer, bytesRemaining, avSyncPresentationTimeUs);
         } else {
             bytesWritten = writeNonBlockingV21(this.audioTrack, buffer, bytesRemaining);
         }
+        this.lastFeedElapsedRealtimeMs = SystemClock.elapsedRealtime();
         if (bytesWritten < 0) {
             throw new WriteException(bytesWritten);
         }
         if (!this.passthrough) {
-            this.submittedPcmBytes += (long) bytesWritten;
+            this.writtenPcmBytes += (long) bytesWritten;
         }
         if (bytesWritten != bytesRemaining) {
-            return result;
+            return false;
         }
         if (this.passthrough) {
-            this.submittedEncodedFrames += (long) this.framesPerEncodedSample;
+            this.writtenEncodedFrames += (long) this.framesPerEncodedSample;
         }
-        this.currentSourceBuffer = null;
-        return result | 2;
+        this.outputBuffer = null;
+        return true;
     }
 
-    public void handleEndOfStream() {
-        if (isInitialized()) {
-            this.audioTrackUtil.handleEndOfStream(getSubmittedFrames());
+    public void playToEndOfStream() throws WriteException {
+        if (!this.handledEndOfStream && isInitialized()) {
+            boolean audioProcessorNeedsEndOfStream = false;
+            if (this.drainingAudioProcessorIndex == -1) {
+                int length;
+                if (this.passthrough) {
+                    length = this.audioProcessors.length;
+                } else {
+                    length = 0;
+                }
+                this.drainingAudioProcessorIndex = length;
+                audioProcessorNeedsEndOfStream = true;
+            }
+            while (this.drainingAudioProcessorIndex < this.audioProcessors.length) {
+                AudioProcessor audioProcessor = this.audioProcessors[this.drainingAudioProcessorIndex];
+                if (audioProcessorNeedsEndOfStream) {
+                    audioProcessor.queueEndOfStream();
+                }
+                processBuffers(C.TIME_UNSET);
+                if (audioProcessor.isEnded()) {
+                    audioProcessorNeedsEndOfStream = true;
+                    this.drainingAudioProcessorIndex++;
+                } else {
+                    return;
+                }
+            }
+            if (this.outputBuffer != null) {
+                writeBuffer(this.outputBuffer, C.TIME_UNSET);
+                if (this.outputBuffer != null) {
+                    return;
+                }
+            }
+            this.audioTrackUtil.handleEndOfStream(getWrittenFrames());
+            this.bytesUntilNextAvSync = 0;
+            this.handledEndOfStream = true;
         }
+    }
+
+    public boolean isEnded() {
+        return !isInitialized() || (this.handledEndOfStream && !hasPendingData());
     }
 
     public boolean hasPendingData() {
-        return isInitialized() && (getSubmittedFrames() > this.audioTrackUtil.getPlaybackHeadPosition() || overrideHasPendingData());
+        return isInitialized() && (getWrittenFrames() > this.audioTrackUtil.getPlaybackHeadPosition() || overrideHasPendingData());
     }
 
     public void setPlaybackParams(PlaybackParams playbackParams) {
         this.audioTrackUtil.setPlaybackParams(playbackParams);
     }
 
-    public boolean setStreamType(int streamType) {
-        if (this.streamType == streamType) {
-            return false;
+    public void setStreamType(int streamType) {
+        if (this.streamType != streamType) {
+            this.streamType = streamType;
+            if (!this.tunneling) {
+                reset();
+                this.audioSessionId = 0;
+            }
         }
-        this.streamType = streamType;
-        reset();
-        return true;
+    }
+
+    public void setAudioSessionId(int audioSessionId) {
+        if (this.audioSessionId != audioSessionId) {
+            this.audioSessionId = audioSessionId;
+            reset();
+        }
+    }
+
+    public void enableTunnelingV21(int tunnelingAudioSessionId) {
+        Assertions.checkState(Util.SDK_INT >= 21);
+        if (!this.tunneling || this.audioSessionId != tunnelingAudioSessionId) {
+            this.tunneling = true;
+            this.audioSessionId = tunnelingAudioSessionId;
+            reset();
+        }
+    }
+
+    public void disableTunneling() {
+        if (this.tunneling) {
+            this.tunneling = false;
+            this.audioSessionId = 0;
+            reset();
+        }
     }
 
     public void setVolume(float volume) {
         if (this.volume != volume) {
             this.volume = volume;
-            setAudioTrackVolume();
+            setVolumeInternal();
         }
     }
 
-    private void setAudioTrackVolume() {
+    private void setVolumeInternal() {
         if (!isInitialized()) {
             return;
         }
         if (Util.SDK_INT >= 21) {
-            setAudioTrackVolumeV21(this.audioTrack, this.volume);
+            setVolumeInternalV21(this.audioTrack, this.volume);
         } else {
-            setAudioTrackVolumeV3(this.audioTrack, this.volume);
+            setVolumeInternalV3(this.audioTrack, this.volume);
         }
     }
 
     public void pause() {
+        this.playing = false;
         if (isInitialized()) {
             resetSyncParams();
             this.audioTrackUtil.pause();
@@ -585,8 +786,20 @@ public final class AudioTrack {
         if (isInitialized()) {
             this.submittedPcmBytes = 0;
             this.submittedEncodedFrames = 0;
+            this.writtenPcmBytes = 0;
+            this.writtenEncodedFrames = 0;
             this.framesPerEncodedSample = 0;
-            this.currentSourceBuffer = null;
+            this.inputBuffer = null;
+            this.outputBuffer = null;
+            for (int i = 0; i < this.audioProcessors.length; i++) {
+                AudioProcessor audioProcessor = this.audioProcessors[i];
+                audioProcessor.flush();
+                this.outputBuffers[i] = audioProcessor.getOutput();
+            }
+            this.handledEndOfStream = false;
+            this.drainingAudioProcessorIndex = -1;
+            this.avSyncHeader = null;
+            this.bytesUntilNextAvSync = 0;
             this.startMediaTimeState = 0;
             this.latencyUs = 0;
             resetSyncParams();
@@ -613,6 +826,11 @@ public final class AudioTrack {
     public void release() {
         reset();
         releaseKeepSessionIdAudioTrack();
+        for (AudioProcessor audioProcessor : this.availableAudioProcessors) {
+            audioProcessor.release();
+        }
+        this.audioSessionId = 0;
+        this.playing = false;
     }
 
     private void releaseKeepSessionIdAudioTrack() {
@@ -700,8 +918,8 @@ public final class AudioTrack {
         }
     }
 
-    private long pcmBytesToFrames(long byteCount) {
-        return byteCount / ((long) this.pcmFrameSize);
+    private boolean isInitialized() {
+        return this.audioTrack != null;
     }
 
     private long framesToDurationUs(long frameCount) {
@@ -713,7 +931,11 @@ public final class AudioTrack {
     }
 
     private long getSubmittedFrames() {
-        return this.passthrough ? this.submittedEncodedFrames : pcmBytesToFrames(this.submittedPcmBytes);
+        return this.passthrough ? this.submittedEncodedFrames : this.submittedPcmBytes / ((long) this.pcmFrameSize);
+    }
+
+    private long getWrittenFrames() {
+        return this.passthrough ? this.writtenEncodedFrames : this.writtenPcmBytes / ((long) this.outputPcmFrameSize);
     }
 
     private void resetSyncParams() {
@@ -726,62 +948,16 @@ public final class AudioTrack {
     }
 
     private boolean needsPassthroughWorkarounds() {
-        return Util.SDK_INT < 23 && (this.targetEncoding == 5 || this.targetEncoding == 6);
+        return Util.SDK_INT < 23 && (this.outputEncoding == 5 || this.outputEncoding == 6);
     }
 
     private boolean overrideHasPendingData() {
         return needsPassthroughWorkarounds() && this.audioTrack.getPlayState() == 2 && this.audioTrack.getPlaybackHeadPosition() == 0;
     }
 
-    private static ByteBuffer resampleTo16BitPcm(ByteBuffer buffer, int sourceEncoding, ByteBuffer out) {
-        int resampledSize;
-        int offset = buffer.position();
-        int limit = buffer.limit();
-        int size = limit - offset;
-        switch (sourceEncoding) {
-            case Integer.MIN_VALUE:
-                resampledSize = (size / 3) * 2;
-                break;
-            case 3:
-                resampledSize = size * 2;
-                break;
-            case 1073741824:
-                resampledSize = size / 2;
-                break;
-            default:
-                throw new IllegalStateException();
-        }
-        ByteBuffer resampledBuffer = out;
-        if (resampledBuffer == null || resampledBuffer.capacity() < resampledSize) {
-            resampledBuffer = ByteBuffer.allocateDirect(resampledSize);
-        }
-        resampledBuffer.position(0);
-        resampledBuffer.limit(resampledSize);
-        int i;
-        switch (sourceEncoding) {
-            case Integer.MIN_VALUE:
-                for (i = offset; i < limit; i += 3) {
-                    resampledBuffer.put(buffer.get(i + 1));
-                    resampledBuffer.put(buffer.get(i + 2));
-                }
-                break;
-            case 3:
-                for (i = offset; i < limit; i++) {
-                    resampledBuffer.put((byte) 0);
-                    resampledBuffer.put((byte) ((buffer.get(i) & 255) - 128));
-                }
-                break;
-            case 1073741824:
-                for (i = offset; i < limit; i += 4) {
-                    resampledBuffer.put(buffer.get(i + 2));
-                    resampledBuffer.put(buffer.get(i + 3));
-                }
-                break;
-            default:
-                throw new IllegalStateException();
-        }
-        resampledBuffer.position(0);
-        return resampledBuffer;
+    @TargetApi(21)
+    private static android.media.AudioTrack createHwAvSyncAudioTrackV21(int sampleRate, int channelConfig, int encoding, int bufferSize, int sessionId) {
+        return new android.media.AudioTrack(new Builder().setUsage(1).setContentType(3).setFlags(16).build(), new AudioFormat.Builder().setChannelMask(channelConfig).setEncoding(encoding).setSampleRate(sampleRate).build(), bufferSize, 1, sessionId);
     }
 
     private static int getEncodingForMimeType(String mimeType) {
@@ -845,11 +1021,44 @@ public final class AudioTrack {
     }
 
     @TargetApi(21)
-    private static void setAudioTrackVolumeV21(android.media.AudioTrack audioTrack, float volume) {
+    private int writeNonBlockingWithAvSyncV21(android.media.AudioTrack audioTrack, ByteBuffer buffer, int size, long presentationTimeUs) {
+        int result;
+        if (this.avSyncHeader == null) {
+            this.avSyncHeader = ByteBuffer.allocate(16);
+            this.avSyncHeader.order(ByteOrder.BIG_ENDIAN);
+            this.avSyncHeader.putInt(NUM);
+        }
+        if (this.bytesUntilNextAvSync == 0) {
+            this.avSyncHeader.putInt(4, size);
+            this.avSyncHeader.putLong(8, 1000 * presentationTimeUs);
+            this.avSyncHeader.position(0);
+            this.bytesUntilNextAvSync = size;
+        }
+        int avSyncHeaderBytesRemaining = this.avSyncHeader.remaining();
+        if (avSyncHeaderBytesRemaining > 0) {
+            result = audioTrack.write(this.avSyncHeader, avSyncHeaderBytesRemaining, 1);
+            if (result < 0) {
+                this.bytesUntilNextAvSync = 0;
+                return result;
+            } else if (result < avSyncHeaderBytesRemaining) {
+                return 0;
+            }
+        }
+        result = writeNonBlockingV21(audioTrack, buffer, size);
+        if (result < 0) {
+            this.bytesUntilNextAvSync = 0;
+            return result;
+        }
+        this.bytesUntilNextAvSync -= result;
+        return result;
+    }
+
+    @TargetApi(21)
+    private static void setVolumeInternalV21(android.media.AudioTrack audioTrack, float volume) {
         audioTrack.setVolume(volume);
     }
 
-    private static void setAudioTrackVolumeV3(android.media.AudioTrack audioTrack, float volume) {
+    private static void setVolumeInternalV3(android.media.AudioTrack audioTrack, float volume) {
         audioTrack.setStereoVolume(volume, volume);
     }
 }

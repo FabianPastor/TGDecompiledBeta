@@ -3,6 +3,7 @@ package org.telegram.messenger.exoplayer2.source;
 import android.net.Uri;
 import android.os.Handler;
 import java.io.IOException;
+import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
@@ -44,7 +45,7 @@ public final class SingleSampleMediaSource implements MediaSource {
         this.timeline = new SinglePeriodTimeline(durationUs, true);
     }
 
-    public void prepareSource(Listener listener) {
+    public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
         listener.onSourceInfoRefreshed(this.timeline, null);
     }
 

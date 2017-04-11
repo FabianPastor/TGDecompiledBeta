@@ -18,6 +18,7 @@ import org.telegram.messenger.exoplayer2.upstream.Loader;
 import org.telegram.messenger.exoplayer2.upstream.Loader.Callback;
 import org.telegram.messenger.exoplayer2.upstream.Loader.Loadable;
 import org.telegram.messenger.exoplayer2.util.Assertions;
+import org.telegram.messenger.exoplayer2.util.Util;
 
 final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoadable> {
     private static final int INITIAL_SAMPLE_SIZE = 1024;
@@ -58,11 +59,11 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
             SingleSampleMediaPeriod.this.loader.maybeThrowError();
         }
 
-        public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer) {
+        public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean requireFormat) {
             if (this.streamState == 2) {
                 buffer.addFlag(4);
                 return -4;
-            } else if (this.streamState == 0) {
+            } else if (requireFormat || this.streamState == 0) {
                 formatHolder.format = SingleSampleMediaPeriod.this.format;
                 this.streamState = 1;
                 return -5;
@@ -123,7 +124,7 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
                     result = this.dataSource.read(this.sampleData, this.sampleSize, this.sampleData.length - this.sampleSize);
                 }
             } finally {
-                this.dataSource.close();
+                Util.closeQuietly(this.dataSource);
             }
         }
     }
@@ -173,6 +174,9 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
             i++;
         }
         return positionUs;
+    }
+
+    public void discardBuffer(long positionUs) {
     }
 
     public boolean continueLoading(long positionUs) {

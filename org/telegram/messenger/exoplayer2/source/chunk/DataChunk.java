@@ -6,6 +6,7 @@ import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
+import org.telegram.messenger.exoplayer2.util.Util;
 
 public abstract class DataChunk extends Chunk {
     private static final int READ_GRANULARITY = 16384;
@@ -51,9 +52,9 @@ public abstract class DataChunk extends Chunk {
             if (!this.loadCanceled) {
                 consume(this.data, this.limit);
             }
-            this.dataSource.close();
+            Util.closeQuietly(this.dataSource);
         } catch (Throwable th) {
-            this.dataSource.close();
+            Util.closeQuietly(this.dataSource);
         }
     }
 

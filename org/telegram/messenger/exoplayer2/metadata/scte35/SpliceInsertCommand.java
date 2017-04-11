@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
+import org.telegram.messenger.exoplayer2.util.TimestampAdjuster;
 
 public final class SpliceInsertCommand extends SpliceCommand {
     public static final Creator<SpliceInsertCommand> CREATOR = new Creator<SpliceInsertCommand>() {
@@ -25,6 +26,7 @@ public final class SpliceInsertCommand extends SpliceCommand {
     public final List<ComponentSplice> componentSpliceList;
     public final boolean outOfNetworkIndicator;
     public final boolean programSpliceFlag;
+    public final long programSplicePlaybackPositionUs;
     public final long programSplicePts;
     public final boolean spliceEventCancelIndicator;
     public final long spliceEventId;
@@ -32,31 +34,35 @@ public final class SpliceInsertCommand extends SpliceCommand {
     public final int uniqueProgramId;
 
     public static final class ComponentSplice {
+        public final long componentSplicePlaybackPositionUs;
         public final long componentSplicePts;
         public final int componentTag;
 
-        private ComponentSplice(int componentTag, long componentSplicePts) {
+        private ComponentSplice(int componentTag, long componentSplicePts, long componentSplicePlaybackPositionUs) {
             this.componentTag = componentTag;
             this.componentSplicePts = componentSplicePts;
+            this.componentSplicePlaybackPositionUs = componentSplicePlaybackPositionUs;
         }
 
         public void writeToParcel(Parcel dest) {
             dest.writeInt(this.componentTag);
             dest.writeLong(this.componentSplicePts);
+            dest.writeLong(this.componentSplicePlaybackPositionUs);
         }
 
         public static ComponentSplice createFromParcel(Parcel in) {
-            return new ComponentSplice(in.readInt(), in.readLong());
+            return new ComponentSplice(in.readInt(), in.readLong(), in.readLong());
         }
     }
 
-    private SpliceInsertCommand(long spliceEventId, boolean spliceEventCancelIndicator, boolean outOfNetworkIndicator, boolean programSpliceFlag, boolean spliceImmediateFlag, long programSplicePts, List<ComponentSplice> componentSpliceList, boolean autoReturn, long breakDuration, int uniqueProgramId, int availNum, int availsExpected) {
+    private SpliceInsertCommand(long spliceEventId, boolean spliceEventCancelIndicator, boolean outOfNetworkIndicator, boolean programSpliceFlag, boolean spliceImmediateFlag, long programSplicePts, long programSplicePlaybackPositionUs, List<ComponentSplice> componentSpliceList, boolean autoReturn, long breakDuration, int uniqueProgramId, int availNum, int availsExpected) {
         this.spliceEventId = spliceEventId;
         this.spliceEventCancelIndicator = spliceEventCancelIndicator;
         this.outOfNetworkIndicator = outOfNetworkIndicator;
         this.programSpliceFlag = programSpliceFlag;
         this.spliceImmediateFlag = spliceImmediateFlag;
         this.programSplicePts = programSplicePts;
+        this.programSplicePlaybackPositionUs = programSplicePlaybackPositionUs;
         this.componentSpliceList = Collections.unmodifiableList(componentSpliceList);
         this.autoReturn = autoReturn;
         this.breakDuration = breakDuration;
@@ -94,6 +100,7 @@ public final class SpliceInsertCommand extends SpliceCommand {
         }
         this.spliceImmediateFlag = z;
         this.programSplicePts = in.readLong();
+        this.programSplicePlaybackPositionUs = in.readLong();
         int componentSpliceListSize = in.readInt();
         List<ComponentSplice> componentSpliceList = new ArrayList(componentSpliceListSize);
         for (int i = 0; i < componentSpliceListSize; i++) {
@@ -110,14 +117,14 @@ public final class SpliceInsertCommand extends SpliceCommand {
         this.availsExpected = in.readInt();
     }
 
-    static SpliceInsertCommand parseFromSection(ParsableByteArray sectionData, long ptsAdjustment) {
+    static SpliceInsertCommand parseFromSection(ParsableByteArray sectionData, long ptsAdjustment, TimestampAdjuster timestampAdjuster) {
         long spliceEventId = sectionData.readUnsignedInt();
         boolean spliceEventCancelIndicator = (sectionData.readUnsignedByte() & 128) != 0;
         boolean outOfNetworkIndicator = false;
         boolean programSpliceFlag = false;
         boolean spliceImmediateFlag = false;
         long programSplicePts = C.TIME_UNSET;
-        ArrayList<ComponentSplice> componentSplices = new ArrayList();
+        List<ComponentSplice> componentSplices = Collections.emptyList();
         int uniqueProgramId = 0;
         int availNum = 0;
         int availsExpected = 0;
@@ -134,14 +141,14 @@ public final class SpliceInsertCommand extends SpliceCommand {
             }
             if (!programSpliceFlag) {
                 int componentCount = sectionData.readUnsignedByte();
-                componentSplices = new ArrayList(componentCount);
+                List<ComponentSplice> arrayList = new ArrayList(componentCount);
                 for (int i = 0; i < componentCount; i++) {
                     int componentTag = sectionData.readUnsignedByte();
                     long componentSplicePts = C.TIME_UNSET;
                     if (!spliceImmediateFlag) {
                         componentSplicePts = TimeSignalCommand.parseSpliceTime(sectionData, ptsAdjustment);
                     }
-                    componentSplices.add(new ComponentSplice(componentTag, componentSplicePts));
+                    arrayList.add(new ComponentSplice(componentTag, componentSplicePts, timestampAdjuster.adjustTsTimestamp(componentSplicePts)));
                 }
             }
             if (durationFlag) {
@@ -153,7 +160,7 @@ public final class SpliceInsertCommand extends SpliceCommand {
             availNum = sectionData.readUnsignedByte();
             availsExpected = sectionData.readUnsignedByte();
         }
-        return new SpliceInsertCommand(spliceEventId, spliceEventCancelIndicator, outOfNetworkIndicator, programSpliceFlag, spliceImmediateFlag, programSplicePts, componentSplices, autoReturn, duration, uniqueProgramId, availNum, availsExpected);
+        return new SpliceInsertCommand(spliceEventId, spliceEventCancelIndicator, outOfNetworkIndicator, programSpliceFlag, spliceImmediateFlag, programSplicePts, timestampAdjuster.adjustTsTimestamp(programSplicePts), componentSplices, autoReturn, duration, uniqueProgramId, availNum, availsExpected);
     }
 
     public void writeToParcel(Parcel dest, int flags) {
@@ -185,6 +192,7 @@ public final class SpliceInsertCommand extends SpliceCommand {
         }
         dest.writeByte((byte) i);
         dest.writeLong(this.programSplicePts);
+        dest.writeLong(this.programSplicePlaybackPositionUs);
         int componentSpliceListSize = this.componentSpliceList.size();
         dest.writeInt(componentSpliceListSize);
         for (int i3 = 0; i3 < componentSpliceListSize; i3++) {

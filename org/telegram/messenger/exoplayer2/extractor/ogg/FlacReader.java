@@ -22,17 +22,10 @@ final class FlacReader extends StreamReader {
     private class FlacOggSeeker implements OggSeeker, SeekMap {
         private static final int METADATA_LENGTH_OFFSET = 1;
         private static final int SEEK_POINT_SIZE = 18;
-        private long currentGranule;
-        private long firstFrameOffset;
-        private long[] offsets;
-        private volatile long queriedGranule;
-        private long[] sampleNumbers;
-        private volatile long seekedGranule;
-
-        private FlacOggSeeker() {
-            this.firstFrameOffset = -1;
-            this.currentGranule = -1;
-        }
+        private long firstFrameOffset = -1;
+        private long pendingSeekGranule = -1;
+        private long[] seekPointGranules;
+        private long[] seekPointOffsets;
 
         public void setFirstFrameOffset(long firstFrameOffset) {
             this.firstFrameOffset = firstFrameOffset;
@@ -41,26 +34,28 @@ final class FlacReader extends StreamReader {
         public void parseSeekTable(ParsableByteArray data) {
             data.skipBytes(1);
             int numberOfSeekPoints = data.readUnsignedInt24() / 18;
-            this.sampleNumbers = new long[numberOfSeekPoints];
-            this.offsets = new long[numberOfSeekPoints];
+            this.seekPointGranules = new long[numberOfSeekPoints];
+            this.seekPointOffsets = new long[numberOfSeekPoints];
             for (int i = 0; i < numberOfSeekPoints; i++) {
-                this.sampleNumbers[i] = data.readLong();
-                this.offsets[i] = data.readLong();
+                this.seekPointGranules[i] = data.readLong();
+                this.seekPointOffsets[i] = data.readLong();
                 data.skipBytes(2);
             }
         }
 
         public long read(ExtractorInput input) throws IOException, InterruptedException {
-            if (this.currentGranule < 0) {
+            if (this.pendingSeekGranule < 0) {
                 return -1;
             }
-            this.currentGranule = (-this.currentGranule) - 2;
-            return this.currentGranule;
+            long result = -(this.pendingSeekGranule + 2);
+            this.pendingSeekGranule = -1;
+            return result;
         }
 
-        public synchronized long startSeek() {
-            this.currentGranule = this.seekedGranule;
-            return this.queriedGranule;
+        public long startSeek(long timeUs) {
+            long granule = FlacReader.this.convertTimeToGranule(timeUs);
+            this.pendingSeekGranule = this.seekPointGranules[Util.binarySearchFloor(this.seekPointGranules, granule, true, true)];
+            return granule;
         }
 
         public SeekMap createSeekMap() {
@@ -71,12 +66,8 @@ final class FlacReader extends StreamReader {
             return true;
         }
 
-        public synchronized long getPosition(long timeUs) {
-            int index;
-            this.queriedGranule = FlacReader.this.convertTimeToGranule(timeUs);
-            index = Util.binarySearchFloor(this.sampleNumbers, this.queriedGranule, true, true);
-            this.seekedGranule = this.sampleNumbers[index];
-            return this.firstFrameOffset + this.offsets[index];
+        public long getPosition(long timeUs) {
+            return this.firstFrameOffset + this.seekPointOffsets[Util.binarySearchFloor(this.seekPointGranules, FlacReader.this.convertTimeToGranule(timeUs), true, true)];
         }
 
         public long getDurationUs() {
@@ -118,7 +109,6 @@ final class FlacReader extends StreamReader {
             metadata[4] = Byte.MIN_VALUE;
             setupData.format = Format.createAudioSampleFormat(null, MimeTypes.AUDIO_FLAC, null, -1, this.streamInfo.bitRate(), this.streamInfo.channels, this.streamInfo.sampleRate, Collections.singletonList(metadata), null, 0, null);
         } else if ((data[0] & 127) == 3) {
-            FlacReader flacReader = this;
             this.flacOggSeeker = new FlacOggSeeker();
             this.flacOggSeeker.parseSeekTable(packet);
         } else if (isAudioPacket(data)) {

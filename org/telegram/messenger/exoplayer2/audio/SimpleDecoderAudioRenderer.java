@@ -4,11 +4,14 @@ import android.media.PlaybackParams;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import org.telegram.messenger.exoplayer2.BaseRenderer;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.audio.AudioRendererEventListener.EventDispatcher;
+import org.telegram.messenger.exoplayer2.audio.AudioTrack.ConfigurationException;
 import org.telegram.messenger.exoplayer2.audio.AudioTrack.InitializationException;
 import org.telegram.messenger.exoplayer2.audio.AudioTrack.Listener;
 import org.telegram.messenger.exoplayer2.audio.AudioTrack.WriteException;
@@ -19,21 +22,28 @@ import org.telegram.messenger.exoplayer2.decoder.SimpleOutputBuffer;
 import org.telegram.messenger.exoplayer2.drm.DrmSession;
 import org.telegram.messenger.exoplayer2.drm.DrmSessionManager;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaCrypto;
+import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.MediaClock;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.TraceUtil;
 import org.telegram.messenger.exoplayer2.util.Util;
 
-public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements MediaClock, Listener {
+public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements MediaClock {
+    private static final int REINITIALIZATION_STATE_NONE = 0;
+    private static final int REINITIALIZATION_STATE_SIGNAL_END_OF_STREAM = 1;
+    private static final int REINITIALIZATION_STATE_WAIT_END_OF_STREAM = 2;
     private boolean allowPositionDiscontinuity;
-    private int audioSessionId;
     private final AudioTrack audioTrack;
+    private boolean audioTrackNeedsConfigure;
     private long currentPositionUs;
     private SimpleDecoder<DecoderInputBuffer, ? extends SimpleOutputBuffer, ? extends AudioDecoderException> decoder;
     private DecoderCounters decoderCounters;
+    private boolean decoderReceivedBuffers;
+    private int decoderReinitializationState;
     private DrmSession<ExoMediaCrypto> drmSession;
     private final DrmSessionManager<ExoMediaCrypto> drmSessionManager;
     private final EventDispatcher eventDispatcher;
+    private final DecoderInputBuffer flagsOnlyBuffer;
     private final FormatHolder formatHolder;
     private DecoderInputBuffer inputBuffer;
     private Format inputFormat;
@@ -44,94 +54,134 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
     private final boolean playClearSamplesWithoutKeys;
     private boolean waitingForKeys;
 
-    protected abstract SimpleDecoder<DecoderInputBuffer, ? extends SimpleOutputBuffer, ? extends AudioDecoderException> createDecoder(Format format, ExoMediaCrypto exoMediaCrypto) throws AudioDecoderException;
-
-    public SimpleDecoderAudioRenderer() {
-        this(null, null);
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface ReinitializationState {
     }
 
-    public SimpleDecoderAudioRenderer(Handler eventHandler, AudioRendererEventListener eventListener) {
-        this(eventHandler, eventListener, null);
+    private final class AudioTrackListener implements Listener {
+        private AudioTrackListener() {
+        }
+
+        public void onAudioSessionId(int audioSessionId) {
+            SimpleDecoderAudioRenderer.this.eventDispatcher.audioSessionId(audioSessionId);
+            SimpleDecoderAudioRenderer.this.onAudioSessionId(audioSessionId);
+        }
+
+        public void onPositionDiscontinuity() {
+            SimpleDecoderAudioRenderer.this.onAudioTrackPositionDiscontinuity();
+            SimpleDecoderAudioRenderer.this.allowPositionDiscontinuity = true;
+        }
+
+        public void onUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
+            SimpleDecoderAudioRenderer.this.eventDispatcher.audioTrackUnderrun(bufferSize, bufferSizeMs, elapsedSinceLastFeedMs);
+            SimpleDecoderAudioRenderer.this.onAudioTrackUnderrun(bufferSize, bufferSizeMs, elapsedSinceLastFeedMs);
+        }
+    }
+
+    protected abstract SimpleDecoder<DecoderInputBuffer, ? extends SimpleOutputBuffer, ? extends AudioDecoderException> createDecoder(Format format, ExoMediaCrypto exoMediaCrypto) throws AudioDecoderException;
+
+    protected abstract int supportsFormatInternal(Format format);
+
+    public SimpleDecoderAudioRenderer() {
+        this(null, null, new AudioProcessor[0]);
+    }
+
+    public SimpleDecoderAudioRenderer(Handler eventHandler, AudioRendererEventListener eventListener, AudioProcessor... audioProcessors) {
+        this(eventHandler, eventListener, null, null, false, audioProcessors);
     }
 
     public SimpleDecoderAudioRenderer(Handler eventHandler, AudioRendererEventListener eventListener, AudioCapabilities audioCapabilities) {
-        this(eventHandler, eventListener, audioCapabilities, null, false);
+        this(eventHandler, eventListener, audioCapabilities, null, false, new AudioProcessor[0]);
     }
 
-    public SimpleDecoderAudioRenderer(Handler eventHandler, AudioRendererEventListener eventListener, AudioCapabilities audioCapabilities, DrmSessionManager<ExoMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys) {
+    public SimpleDecoderAudioRenderer(Handler eventHandler, AudioRendererEventListener eventListener, AudioCapabilities audioCapabilities, DrmSessionManager<ExoMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, AudioProcessor... audioProcessors) {
         super(1);
-        this.eventDispatcher = new EventDispatcher(eventHandler, eventListener);
-        this.audioTrack = new AudioTrack(audioCapabilities, this);
         this.drmSessionManager = drmSessionManager;
-        this.formatHolder = new FormatHolder();
         this.playClearSamplesWithoutKeys = playClearSamplesWithoutKeys;
-        this.audioSessionId = 0;
+        this.eventDispatcher = new EventDispatcher(eventHandler, eventListener);
+        this.audioTrack = new AudioTrack(audioCapabilities, audioProcessors, new AudioTrackListener());
+        this.formatHolder = new FormatHolder();
+        this.flagsOnlyBuffer = new DecoderInputBuffer(0);
+        this.decoderReinitializationState = 0;
+        this.audioTrackNeedsConfigure = true;
     }
 
     public MediaClock getMediaClock() {
         return this;
     }
 
+    public final int supportsFormat(Format format) {
+        int formatSupport = supportsFormatInternal(format);
+        if (formatSupport == 0 || formatSupport == 1) {
+            return formatSupport;
+        }
+        return formatSupport | ((Util.SDK_INT >= 21 ? 16 : 0) | 4);
+    }
+
     public void render(long positionUs, long elapsedRealtimeUs) throws ExoPlaybackException {
         Exception e;
-        if (!this.outputStreamEnded) {
-            if (this.inputFormat != null || readFormat()) {
-                this.drmSession = this.pendingDrmSession;
-                ExoMediaCrypto mediaCrypto = null;
-                if (this.drmSession != null) {
-                    int drmSessionState = this.drmSession.getState();
-                    if (drmSessionState == 0) {
-                        throw ExoPlaybackException.createForRenderer(this.drmSession.getError(), getIndex());
-                    } else if (drmSessionState == 3 || drmSessionState == 4) {
-                        mediaCrypto = this.drmSession.getMediaCrypto();
-                    } else {
-                        return;
-                    }
-                }
-                if (this.decoder == null) {
-                    try {
-                        long codecInitializingTimestamp = SystemClock.elapsedRealtime();
-                        TraceUtil.beginSection("createAudioDecoder");
-                        this.decoder = createDecoder(this.inputFormat, mediaCrypto);
-                        TraceUtil.endSection();
-                        long codecInitializedTimestamp = SystemClock.elapsedRealtime();
-                        this.eventDispatcher.decoderInitialized(this.decoder.getName(), codecInitializedTimestamp, codecInitializedTimestamp - codecInitializingTimestamp);
-                        DecoderCounters decoderCounters = this.decoderCounters;
-                        decoderCounters.decoderInitCount++;
-                    } catch (AudioDecoderException e2) {
-                        throw ExoPlaybackException.createForRenderer(e2, getIndex());
-                    }
-                }
-                try {
-                    TraceUtil.beginSection("drainAndFeed");
-                    do {
-                    } while (drainOutputBuffer());
-                    do {
-                    } while (feedInputBuffer());
-                    TraceUtil.endSection();
-                    this.decoderCounters.ensureUpdated();
-                } catch (InitializationException e3) {
-                    e = e3;
-                    throw ExoPlaybackException.createForRenderer(e, getIndex());
-                } catch (WriteException e4) {
-                    e = e4;
-                    throw ExoPlaybackException.createForRenderer(e, getIndex());
-                } catch (AudioDecoderException e5) {
-                    e = e5;
-                    throw ExoPlaybackException.createForRenderer(e, getIndex());
-                }
+        if (this.outputStreamEnded) {
+            try {
+                this.audioTrack.playToEndOfStream();
+                return;
+            } catch (WriteException e2) {
+                throw ExoPlaybackException.createForRenderer(e2, getIndex());
             }
         }
+        if (this.inputFormat == null) {
+            this.flagsOnlyBuffer.clear();
+            int result = readSource(this.formatHolder, this.flagsOnlyBuffer, true);
+            if (result == -5) {
+                onInputFormatChanged(this.formatHolder.format);
+            } else if (result == -4) {
+                Assertions.checkState(this.flagsOnlyBuffer.isEndOfStream());
+                this.inputStreamEnded = true;
+                processEndOfStream();
+                return;
+            } else {
+                return;
+            }
+        }
+        maybeInitDecoder();
+        if (this.decoder != null) {
+            try {
+                TraceUtil.beginSection("drainAndFeed");
+                do {
+                } while (drainOutputBuffer());
+                do {
+                } while (feedInputBuffer());
+                TraceUtil.endSection();
+                this.decoderCounters.ensureUpdated();
+            } catch (AudioDecoderException e3) {
+                e = e3;
+                throw ExoPlaybackException.createForRenderer(e, getIndex());
+            } catch (ConfigurationException e4) {
+                e = e4;
+                throw ExoPlaybackException.createForRenderer(e, getIndex());
+            } catch (InitializationException e5) {
+                e = e5;
+                throw ExoPlaybackException.createForRenderer(e, getIndex());
+            } catch (WriteException e6) {
+                e = e6;
+                throw ExoPlaybackException.createForRenderer(e, getIndex());
+            }
+        }
+    }
+
+    protected void onAudioSessionId(int audioSessionId) {
+    }
+
+    protected void onAudioTrackPositionDiscontinuity() {
+    }
+
+    protected void onAudioTrackUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
     }
 
     protected Format getOutputFormat() {
         return Format.createAudioSampleFormat(null, MimeTypes.AUDIO_RAW, null, -1, -1, this.inputFormat.channelCount, this.inputFormat.sampleRate, 2, null, null, 0, null);
     }
 
-    private boolean drainOutputBuffer() throws AudioDecoderException, InitializationException, WriteException {
-        if (this.outputStreamEnded) {
-            return false;
-        }
+    private boolean drainOutputBuffer() throws ExoPlaybackException, AudioDecoderException, ConfigurationException, InitializationException, WriteException {
         if (this.outputBuffer == null) {
             this.outputBuffer = (SimpleOutputBuffer) this.decoder.dequeueOutputBuffer();
             if (this.outputBuffer == null) {
@@ -140,56 +190,55 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
             DecoderCounters decoderCounters = this.decoderCounters;
             decoderCounters.skippedOutputBufferCount += this.outputBuffer.skippedOutputBufferCount;
         }
-        if (this.outputBuffer.isEndOfStream()) {
-            this.outputStreamEnded = true;
-            this.audioTrack.handleEndOfStream();
+        if (!this.outputBuffer.isEndOfStream()) {
+            if (this.audioTrackNeedsConfigure) {
+                Format outputFormat = getOutputFormat();
+                this.audioTrack.configure(outputFormat.sampleMimeType, outputFormat.channelCount, outputFormat.sampleRate, outputFormat.pcmEncoding, 0);
+                this.audioTrackNeedsConfigure = false;
+            }
+            if (!this.audioTrack.handleBuffer(this.outputBuffer.data, this.outputBuffer.timeUs)) {
+                return false;
+            }
+            decoderCounters = this.decoderCounters;
+            decoderCounters.renderedOutputBufferCount++;
             this.outputBuffer.release();
             this.outputBuffer = null;
+            return true;
+        } else if (this.decoderReinitializationState == 2) {
+            releaseDecoder();
+            maybeInitDecoder();
+            this.audioTrackNeedsConfigure = true;
+            return false;
+        } else {
+            this.outputBuffer.release();
+            this.outputBuffer = null;
+            processEndOfStream();
             return false;
         }
-        if (!this.audioTrack.isInitialized()) {
-            Format outputFormat = getOutputFormat();
-            this.audioTrack.configure(outputFormat.sampleMimeType, outputFormat.channelCount, outputFormat.sampleRate, outputFormat.pcmEncoding, 0);
-            if (this.audioSessionId == 0) {
-                this.audioSessionId = this.audioTrack.initialize(0);
-                this.eventDispatcher.audioSessionId(this.audioSessionId);
-                onAudioSessionId(this.audioSessionId);
-            } else {
-                this.audioTrack.initialize(this.audioSessionId);
-            }
-            if (getState() == 2) {
-                this.audioTrack.play();
-            }
-        }
-        int handleBufferResult = this.audioTrack.handleBuffer(this.outputBuffer.data, this.outputBuffer.timeUs);
-        if ((handleBufferResult & 1) != 0) {
-            this.allowPositionDiscontinuity = true;
-        }
-        if ((handleBufferResult & 2) == 0) {
-            return false;
-        }
-        decoderCounters = this.decoderCounters;
-        decoderCounters.renderedOutputBufferCount++;
-        this.outputBuffer.release();
-        this.outputBuffer = null;
-        return true;
     }
 
     private boolean feedInputBuffer() throws AudioDecoderException, ExoPlaybackException {
-        if (this.inputStreamEnded) {
+        if (this.decoder == null || this.decoderReinitializationState == 2 || this.inputStreamEnded) {
             return false;
         }
-        int result;
         if (this.inputBuffer == null) {
             this.inputBuffer = this.decoder.dequeueInputBuffer();
             if (this.inputBuffer == null) {
                 return false;
             }
         }
+        if (this.decoderReinitializationState == 1) {
+            this.inputBuffer.setFlags(4);
+            this.decoder.queueInputBuffer(this.inputBuffer);
+            this.inputBuffer = null;
+            this.decoderReinitializationState = 2;
+            return false;
+        }
+        int result;
         if (this.waitingForKeys) {
             result = -4;
         } else {
-            result = readSource(this.formatHolder, this.inputBuffer);
+            result = readSource(this.formatHolder, this.inputBuffer, false);
         }
         if (result == -3) {
             return false;
@@ -209,6 +258,7 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
             }
             this.inputBuffer.flip();
             this.decoder.queueInputBuffer(this.inputBuffer);
+            this.decoderReceivedBuffers = true;
             DecoderCounters decoderCounters = this.decoderCounters;
             decoderCounters.inputBufferCount++;
             this.inputBuffer = null;
@@ -233,18 +283,33 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
         }
     }
 
-    private void flushDecoder() {
-        this.inputBuffer = null;
+    private void processEndOfStream() throws ExoPlaybackException {
+        this.outputStreamEnded = true;
+        try {
+            this.audioTrack.playToEndOfStream();
+        } catch (WriteException e) {
+            throw ExoPlaybackException.createForRenderer(this.drmSession.getError(), getIndex());
+        }
+    }
+
+    private void flushDecoder() throws ExoPlaybackException {
         this.waitingForKeys = false;
+        if (this.decoderReinitializationState != 0) {
+            releaseDecoder();
+            maybeInitDecoder();
+            return;
+        }
+        this.inputBuffer = null;
         if (this.outputBuffer != null) {
             this.outputBuffer.release();
             this.outputBuffer = null;
         }
         this.decoder.flush();
+        this.decoderReceivedBuffers = false;
     }
 
     public boolean isEnded() {
-        return this.outputStreamEnded && !this.audioTrack.hasPendingData();
+        return this.outputStreamEnded && this.audioTrack.isEnded();
     }
 
     public boolean isReady() {
@@ -263,15 +328,18 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
         return this.currentPositionUs;
     }
 
-    protected void onAudioSessionId(int audioSessionId) {
-    }
-
     protected void onEnabled(boolean joining) throws ExoPlaybackException {
         this.decoderCounters = new DecoderCounters();
         this.eventDispatcher.enabled(this.decoderCounters);
+        int tunnelingAudioSessionId = getConfiguration().tunnelingAudioSessionId;
+        if (tunnelingAudioSessionId != 0) {
+            this.audioTrack.enableTunnelingV21(tunnelingAudioSessionId);
+        } else {
+            this.audioTrack.disableTunneling();
+        }
     }
 
-    protected void onPositionReset(long positionUs, boolean joining) {
+    protected void onPositionReset(long positionUs, boolean joining) throws ExoPlaybackException {
         this.audioTrack.reset();
         this.currentPositionUs = positionUs;
         this.allowPositionDiscontinuity = true;
@@ -291,18 +359,11 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
     }
 
     protected void onDisabled() {
-        this.inputBuffer = null;
-        this.outputBuffer = null;
         this.inputFormat = null;
-        this.audioSessionId = 0;
+        this.audioTrackNeedsConfigure = true;
         this.waitingForKeys = false;
         try {
-            if (this.decoder != null) {
-                this.decoder.release();
-                this.decoder = null;
-                DecoderCounters decoderCounters = this.decoderCounters;
-                decoderCounters.decoderReleaseCount++;
-            }
+            releaseDecoder();
             this.audioTrack.release();
             try {
                 if (this.drmSession != null) {
@@ -336,12 +397,46 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
         }
     }
 
-    private boolean readFormat() throws ExoPlaybackException {
-        if (readSource(this.formatHolder, null) != -5) {
-            return false;
+    private void maybeInitDecoder() throws ExoPlaybackException {
+        if (this.decoder == null) {
+            this.drmSession = this.pendingDrmSession;
+            ExoMediaCrypto mediaCrypto = null;
+            if (this.drmSession != null) {
+                int drmSessionState = this.drmSession.getState();
+                if (drmSessionState == 0) {
+                    throw ExoPlaybackException.createForRenderer(this.drmSession.getError(), getIndex());
+                } else if (drmSessionState == 3 || drmSessionState == 4) {
+                    mediaCrypto = this.drmSession.getMediaCrypto();
+                } else {
+                    return;
+                }
+            }
+            try {
+                long codecInitializingTimestamp = SystemClock.elapsedRealtime();
+                TraceUtil.beginSection("createAudioDecoder");
+                this.decoder = createDecoder(this.inputFormat, mediaCrypto);
+                TraceUtil.endSection();
+                long codecInitializedTimestamp = SystemClock.elapsedRealtime();
+                this.eventDispatcher.decoderInitialized(this.decoder.getName(), codecInitializedTimestamp, codecInitializedTimestamp - codecInitializingTimestamp);
+                DecoderCounters decoderCounters = this.decoderCounters;
+                decoderCounters.decoderInitCount++;
+            } catch (AudioDecoderException e) {
+                throw ExoPlaybackException.createForRenderer(e, getIndex());
+            }
         }
-        onInputFormatChanged(this.formatHolder.format);
-        return true;
+    }
+
+    private void releaseDecoder() {
+        if (this.decoder != null) {
+            this.inputBuffer = null;
+            this.outputBuffer = null;
+            this.decoder.release();
+            this.decoder = null;
+            DecoderCounters decoderCounters = this.decoderCounters;
+            decoderCounters.decoderReleaseCount++;
+            this.decoderReinitializationState = 0;
+            this.decoderReceivedBuffers = false;
+        }
     }
 
     private void onInputFormatChanged(Format newFormat) throws ExoPlaybackException {
@@ -359,6 +454,13 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
                 }
             }
         }
+        if (this.decoderReceivedBuffers) {
+            this.decoderReinitializationState = 1;
+        } else {
+            releaseDecoder();
+            maybeInitDecoder();
+            this.audioTrackNeedsConfigure = true;
+        }
         this.eventDispatcher.inputFormatChanged(newFormat);
     }
 
@@ -371,18 +473,11 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
                 this.audioTrack.setPlaybackParams((PlaybackParams) message);
                 return;
             case 4:
-                if (this.audioTrack.setStreamType(((Integer) message).intValue())) {
-                    this.audioSessionId = 0;
-                    return;
-                }
+                this.audioTrack.setStreamType(((Integer) message).intValue());
                 return;
             default:
                 super.handleMessage(messageType, message);
                 return;
         }
-    }
-
-    public void onUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
-        this.eventDispatcher.audioTrackUnderrun(bufferSize, bufferSizeMs, elapsedSinceLastFeedMs);
     }
 }

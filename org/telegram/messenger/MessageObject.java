@@ -22,6 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.telegram.messenger.Emoji.EmojiSpan;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.upstream.cache.CacheDataSink;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
@@ -1096,7 +1097,7 @@ public class MessageObject {
     }
 
     private static boolean containsUrls(CharSequence message) {
-        if (message == null || message.length() < 2 || message.length() > 20480) {
+        if (message == null || message.length() < 2 || message.length() > CacheDataSink.DEFAULT_BUFFER_SIZE) {
             return false;
         }
         int length = message.length();
