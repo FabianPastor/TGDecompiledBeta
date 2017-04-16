@@ -49,6 +49,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -95,6 +96,7 @@ import org.telegram.ui.Components.JoinGroupAlert;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PasscodeView;
 import org.telegram.ui.Components.PasscodeView.PasscodeViewDelegate;
+import org.telegram.ui.Components.PipRoundVideoView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.StickersAlert;
@@ -800,6 +802,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         } catch (Throwable e22) {
             FileLog.e(e22);
         }
+        MediaController.getInstance().setBaseActivity(this);
     }
 
     private void checkLayout() {
@@ -2169,6 +2172,11 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         SecretPhotoViewer.getInstance().destroyPhotoViewer();
         ArticleViewer.getInstance().destroyArticleViewer();
         StickerPreviewViewer.getInstance().destroy();
+        PipRoundVideoView pipRoundVideoView = PipRoundVideoView.getInstance();
+        MediaController.getInstance().setBaseActivity(null);
+        if (pipRoundVideoView != null) {
+            pipRoundVideoView.close(false);
+        }
         Theme.destroyResources();
         EmbedBottomSheet embedBottomSheet = EmbedBottomSheet.getInstance();
         if (embedBottomSheet != null) {

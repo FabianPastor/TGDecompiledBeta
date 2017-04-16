@@ -442,7 +442,7 @@ public final class Cea608Decoder extends CeaDecoder {
                                 return;
                             }
                             return;
-                        case (byte) 46:
+                        case MotionEventCompat.AXIS_GENERIC_15 /*46*/:
                             resetCueBuilders();
                             return;
                         case MotionEventCompat.AXIS_GENERIC_16 /*47*/:

@@ -17,6 +17,7 @@ import net.hockeyapp.android.utils.Util;
 public class UpdateManager {
     public static final String INSTALLER_ADB = "adb";
     public static final String INSTALLER_PACKAGE_INSTALLER_NOUGAT = "com.google.android.packageinstaller";
+    public static final String INSTALLER_PACKAGE_INSTALLER_NOUGAT2 = "com.android.packageinstaller";
     private static UpdateManagerListener lastListener = null;
     private static CheckUpdateTask updateTask = null;
 
@@ -114,7 +115,7 @@ public class UpdateManager {
                 return false;
             }
             boolean result = true;
-            if (VERSION.SDK_INT >= 24 && TextUtils.equals(installer, INSTALLER_PACKAGE_INSTALLER_NOUGAT)) {
+            if (VERSION.SDK_INT >= 24 && (TextUtils.equals(installer, INSTALLER_PACKAGE_INSTALLER_NOUGAT) || TextUtils.equals(installer, INSTALLER_PACKAGE_INSTALLER_NOUGAT2))) {
                 result = false;
             }
             if (TextUtils.equals(installer, INSTALLER_ADB)) {

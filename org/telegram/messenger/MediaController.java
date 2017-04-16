@@ -2,6 +2,7 @@ package org.telegram.messenger;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -94,6 +95,7 @@ import org.telegram.tgnet.TLRPC.messages_Messages;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.EmbedBottomSheet;
+import org.telegram.ui.Components.PipRoundVideoView;
 import org.telegram.ui.Components.VideoPlayer;
 import org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate;
 import org.telegram.ui.PhotoViewer;
@@ -134,6 +136,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     private AudioRecord audioRecorder;
     private AudioTrack audioTrackPlayer = null;
     private boolean autoplayGifs = true;
+    private Activity baseActivity;
     private int buffersWrited;
     private boolean callInProgress;
     private boolean cancelCurrentVideoConversion = false;
@@ -192,6 +195,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     private ArrayList<DownloadObject> musicDownloadQueue = new ArrayList();
     private HashMap<Integer, String> observersByTag = new HashMap();
     private ArrayList<DownloadObject> photoDownloadQueue = new ArrayList();
+    private PipRoundVideoView pipRoundVideoView;
     private boolean playMusicAgain;
     private int playerBufferSize = 0;
     private final Object playerObjectSync = new Object();
@@ -318,6 +322,8 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     private int repeatMode;
     private boolean resumeAudioOnFocusGain;
     public int roamingDownloadMask = 0;
+    private boolean roundSwitchingFromPip;
+    private boolean roundSwitchingToPip;
     private long samplesCount;
     private boolean saveToGallery = true;
     private int sendAfterDone;
@@ -1906,12 +1912,23 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                     }
                 }
                 if (this.voiceMessagesPlaylist != null) {
-                    playMessage((MessageObject) this.voiceMessagesPlaylist.get(0));
+                    MessageObject nextVoiceMessage = (MessageObject) this.voiceMessagesPlaylist.get(0);
+                    playMessage(nextVoiceMessage);
+                    if (!(nextVoiceMessage.isRoundVideo() || this.pipRoundVideoView == null)) {
+                        this.pipRoundVideoView.close(true);
+                        this.pipRoundVideoView = null;
+                    }
                 } else {
                     if (lastFile.isVoice() && lastFile.getId() != 0) {
                         startRecordingIfFromSpeaker();
                     }
                     NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagePlayingDidReset, Integer.valueOf(lastFile.getId()), Boolean.valueOf(stopService));
+                    this.roundSwitchingFromPip = false;
+                    this.roundSwitchingToPip = false;
+                    if (this.pipRoundVideoView != null) {
+                        this.pipRoundVideoView.close(true);
+                        this.pipRoundVideoView = null;
+                    }
                 }
             }
             if (stopService) {
@@ -2214,13 +2231,44 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         }
     }
 
+    public void setCurrentRoundVisible(boolean visible) {
+        if (visible) {
+            if (this.pipRoundVideoView != null) {
+                this.roundSwitchingFromPip = true;
+                if (this.pipRoundVideoView != null) {
+                    this.pipRoundVideoView.close(true);
+                    this.pipRoundVideoView = null;
+                }
+            } else if (this.currentAspectRatioFrameLayout.getParent() == null) {
+                this.currentTextureViewContainer.addView(this.currentAspectRatioFrameLayout);
+            }
+        } else if (this.currentAspectRatioFrameLayout.getParent() != null) {
+            this.roundSwitchingToPip = true;
+            if (this.currentTextureViewContainer != null) {
+                this.currentTextureViewContainer.removeView(this.currentAspectRatioFrameLayout);
+            }
+        } else if (this.pipRoundVideoView == null) {
+            this.pipRoundVideoView = new PipRoundVideoView();
+            this.pipRoundVideoView.show(this.baseActivity, new Runnable() {
+                public void run() {
+                    MediaController.this.cleanupPlayer(true, true);
+                }
+            });
+            this.videoPlayer.setTextureView(this.pipRoundVideoView.getTextureView());
+        }
+    }
+
     public void setTextureView(TextureView textureView, AspectRatioFrameLayout aspectRatioFrameLayout, FrameLayout container) {
-        if (this.videoPlayer != null) {
+        if (this.videoPlayer != null && textureView != this.currentTextureView) {
             this.currentTextureView = textureView;
+            if (this.pipRoundVideoView != null) {
+                this.videoPlayer.setTextureView(this.pipRoundVideoView.getTextureView());
+            } else {
+                this.videoPlayer.setTextureView(this.currentTextureView);
+            }
             this.currentAspectRatioFrameLayout = aspectRatioFrameLayout;
             this.currentTextureViewContainer = container;
-            this.videoPlayer.setTextureView(this.currentTextureView);
-            if (this.currentAspectRatioFrameLayoutReady) {
+            if (this.currentAspectRatioFrameLayoutReady && this.currentAspectRatioFrameLayout != null) {
                 if (this.currentAspectRatioFrameLayout != null) {
                     this.currentAspectRatioFrameLayout.setAspectRatio(this.currentAspectRatioFrameLayoutRatio, this.currentAspectRatioFrameLayoutRotation);
                 }
@@ -2229,6 +2277,10 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 }
             }
         }
+    }
+
+    public void setBaseActivity(Activity activity) {
+        this.baseActivity = activity;
     }
 
     public boolean playMessage(MessageObject messageObject) {
@@ -2262,6 +2314,9 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 this.downloadingCurrentMessage = false;
                 if (messageObject.isMusic()) {
                     checkIsNextMusicFileDownloaded();
+                }
+                if (this.currentAspectRatioFrameLayout != null) {
+                    this.currentAspectRatioFrameLayout.setDrawingReady(false);
                 }
                 if (messageObject.isRoundVideo()) {
                     this.playlist.clear();
@@ -2299,19 +2354,62 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                         }
 
                         public void onRenderedFirstFrame() {
-                            if (MediaController.this.currentAspectRatioFrameLayout != null) {
+                            if (MediaController.this.currentAspectRatioFrameLayout != null && !MediaController.this.currentAspectRatioFrameLayout.isDrawingReady()) {
                                 MediaController.this.currentAspectRatioFrameLayout.setDrawingReady(true);
+                                if (MediaController.this.currentTextureViewContainer != null && MediaController.this.currentTextureViewContainer.getVisibility() != 0) {
+                                    MediaController.this.currentTextureViewContainer.setVisibility(0);
+                                }
                             }
                         }
 
+                        @TargetApi(16)
                         public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
-                            return false;
+                            if (MediaController.this.videoPlayer == null) {
+                                return false;
+                            }
+                            if (MediaController.this.roundSwitchingFromPip) {
+                                if (MediaController.this.currentTextureViewContainer != null && MediaController.this.currentAspectRatioFrameLayout.getParent() == null) {
+                                    MediaController.this.currentTextureViewContainer.addView(MediaController.this.currentAspectRatioFrameLayout);
+                                }
+                                MediaController.this.currentTextureView.setSurfaceTexture(surfaceTexture);
+                                MediaController.this.videoPlayer.setTextureView(MediaController.this.currentTextureView);
+                                MediaController.this.roundSwitchingFromPip = false;
+                                return true;
+                            } else if (MediaController.this.baseActivity == null) {
+                                return false;
+                            } else {
+                                if (MediaController.this.pipRoundVideoView == null) {
+                                    MediaController.this.pipRoundVideoView = new PipRoundVideoView();
+                                    MediaController.this.pipRoundVideoView.show(MediaController.this.baseActivity, new Runnable() {
+                                        public void run() {
+                                            MediaController.this.cleanupPlayer(true, true);
+                                        }
+                                    });
+                                }
+                                MediaController.this.pipRoundVideoView.getTextureView().setSurfaceTexture(surfaceTexture);
+                                MediaController.this.videoPlayer.setTextureView(MediaController.this.pipRoundVideoView.getTextureView());
+                                MediaController.this.roundSwitchingToPip = false;
+                                return true;
+                            }
                         }
 
                         public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
                         }
                     });
                     this.currentAspectRatioFrameLayoutReady = false;
+                    if (this.pipRoundVideoView != null || !MessagesController.getInstance().isDialogCreated(messageObject.getDialogId())) {
+                        if (this.pipRoundVideoView == null) {
+                            this.pipRoundVideoView = new PipRoundVideoView();
+                            this.pipRoundVideoView.show(this.baseActivity, new Runnable() {
+                                public void run() {
+                                    MediaController.this.cleanupPlayer(true, true);
+                                }
+                            });
+                        }
+                        this.videoPlayer.setTextureView(this.pipRoundVideoView.getTextureView());
+                    } else if (this.currentTextureView != null) {
+                        this.videoPlayer.setTextureView(this.currentTextureView);
+                    }
                     this.videoPlayer.preparePlayer(Uri.fromFile(cacheFile), "other");
                     this.videoPlayer.play();
                 } else if (isOpusFile(cacheFile.getAbsolutePath()) == 1) {
@@ -2696,7 +2794,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             FileLog.e(e);
         }
         DispatchQueue dispatchQueue = this.recordQueue;
-        Runnable anonymousClass18 = new Runnable() {
+        Runnable anonymousClass20 = new Runnable() {
             public void run() {
                 if (MediaController.this.audioRecorder != null) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -2763,11 +2861,11 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 }
             }
         };
-        this.recordStartRunnable = anonymousClass18;
+        this.recordStartRunnable = anonymousClass20;
         if (paused) {
             j = 500;
         }
-        dispatchQueue.postRunnable(anonymousClass18, j);
+        dispatchQueue.postRunnable(anonymousClass20, j);
     }
 
     public void generateWaveform(MessageObject messageObject) {
@@ -3455,14 +3553,13 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 String path;
                 long dateTaken;
                 AlbumEntry albumEntry;
-                AlbumEntry albumEntry2;
                 AlbumEntry allVideosAlbum;
                 PhotoEntry photoEntry;
                 Integer cameraAlbumVideoId;
                 ArrayList<AlbumEntry> albumsSorted = new ArrayList();
                 ArrayList<AlbumEntry> videoAlbumsSorted = new ArrayList();
                 HashMap<Integer, AlbumEntry> albums = new HashMap();
-                AlbumEntry albumEntry3 = null;
+                AlbumEntry albumEntry2 = null;
                 String cameraFolder = null;
                 try {
                     cameraFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/";
@@ -3491,6 +3588,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                 dateTaken = cursor.getLong(dateColumn);
                                 int orientation = cursor.getInt(orientationColumn);
                                 if (!(path == null || path.length() == 0)) {
+                                    AlbumEntry albumEntry3;
                                     PhotoEntry photoEntry2 = new PhotoEntry(bucketId, imageId, dateTaken, path, orientation, false);
                                     if (allPhotosAlbum == null) {
                                         albumEntry = new AlbumEntry(0, LocaleController.getString("AllPhotos", R.string.AllPhotos), photoEntry2, false);
@@ -3500,13 +3598,13 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                             e2 = th;
                                         }
                                     } else {
-                                        albumEntry3 = allPhotosAlbum;
+                                        albumEntry2 = allPhotosAlbum;
                                     }
-                                    if (albumEntry3 != null) {
-                                        albumEntry3.addPhoto(photoEntry2);
+                                    if (albumEntry2 != null) {
+                                        albumEntry2.addPhoto(photoEntry2);
                                     }
-                                    albumEntry2 = (AlbumEntry) albums.get(Integer.valueOf(bucketId));
-                                    if (albumEntry2 == null) {
+                                    albumEntry3 = (AlbumEntry) albums.get(Integer.valueOf(bucketId));
+                                    if (albumEntry3 == null) {
                                         albumEntry = new AlbumEntry(bucketId, bucketName, photoEntry2, false);
                                         albums.put(Integer.valueOf(bucketId), albumEntry);
                                         if (num != null || cameraFolder == null || path == null || !path.startsWith(cameraFolder)) {
@@ -3516,15 +3614,15 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                             num = Integer.valueOf(bucketId);
                                         }
                                     }
-                                    albumEntry2.addPhoto(photoEntry2);
-                                    allPhotosAlbum = albumEntry3;
+                                    albumEntry3.addPhoto(photoEntry2);
+                                    allPhotosAlbum = albumEntry2;
                                 }
                             } catch (Throwable th2) {
                                 Throwable th3 = th2;
-                                albumEntry3 = allPhotosAlbum;
+                                albumEntry2 = allPhotosAlbum;
                             }
                         }
-                        albumEntry3 = allPhotosAlbum;
+                        albumEntry2 = allPhotosAlbum;
                     }
                 }
                 if (cursor != null) {
@@ -3560,8 +3658,8 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                     if (allVideosAlbum != null) {
                                         allVideosAlbum.addPhoto(photoEntry);
                                     }
-                                    albumEntry2 = (AlbumEntry) albums.get(Integer.valueOf(bucketId));
-                                    if (albumEntry2 == null) {
+                                    albumEntry3 = (AlbumEntry) albums.get(Integer.valueOf(bucketId));
+                                    if (albumEntry3 == null) {
                                         albumEntry = new AlbumEntry(bucketId, bucketName, photoEntry, true);
                                         albums.put(Integer.valueOf(bucketId), albumEntry);
                                         if (cameraAlbumVideoId2 == null || cameraFolder == null || path == null || !path.startsWith(cameraFolder)) {
@@ -3569,13 +3667,13 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                         } else {
                                             videoAlbumsSorted.add(0, albumEntry);
                                             cameraAlbumVideoId = Integer.valueOf(bucketId);
-                                            albumEntry2.addPhoto(photoEntry);
+                                            albumEntry3.addPhoto(photoEntry);
                                             cameraAlbumVideoId2 = cameraAlbumVideoId;
                                         }
                                     }
                                     cameraAlbumVideoId = cameraAlbumVideoId2;
                                     try {
-                                        albumEntry2.addPhoto(photoEntry);
+                                        albumEntry3.addPhoto(photoEntry);
                                         cameraAlbumVideoId2 = cameraAlbumVideoId;
                                     } catch (Throwable th4) {
                                         e22 = th4;
@@ -3596,7 +3694,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                     th3 = th5;
                     cameraAlbumVideoId = cameraAlbumVideoId2;
                 }
-                MediaController.broadcastNewPhotos(guid, albumsSorted, num, videoAlbumsSorted, cameraAlbumVideoId, albumEntry3, 0);
+                MediaController.broadcastNewPhotos(guid, albumsSorted, num, videoAlbumsSorted, cameraAlbumVideoId, albumEntry2, 0);
                 try {
                     FileLog.e(e222);
                     if (cursor != null) {
@@ -3606,7 +3704,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             FileLog.e(e2222);
                         }
                     }
-                    MediaController.broadcastNewPhotos(guid, albumsSorted, num, videoAlbumsSorted, cameraAlbumVideoId, albumEntry3, 0);
+                    MediaController.broadcastNewPhotos(guid, albumsSorted, num, videoAlbumsSorted, cameraAlbumVideoId, albumEntry2, 0);
                 } catch (Throwable th6) {
                     th3 = th6;
                     if (cursor != null) {
@@ -3650,8 +3748,8 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             if (allVideosAlbum != null) {
                                 allVideosAlbum.addPhoto(photoEntry);
                             }
-                            albumEntry2 = (AlbumEntry) albums.get(Integer.valueOf(bucketId));
-                            if (albumEntry2 == null) {
+                            albumEntry3 = (AlbumEntry) albums.get(Integer.valueOf(bucketId));
+                            if (albumEntry3 == null) {
                                 albumEntry = new AlbumEntry(bucketId, bucketName, photoEntry, true);
                                 albums.put(Integer.valueOf(bucketId), albumEntry);
                                 if (cameraAlbumVideoId2 == null) {
@@ -3659,7 +3757,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                 videoAlbumsSorted.add(albumEntry);
                             }
                             cameraAlbumVideoId = cameraAlbumVideoId2;
-                            albumEntry2.addPhoto(photoEntry);
+                            albumEntry3.addPhoto(photoEntry);
                             cameraAlbumVideoId2 = cameraAlbumVideoId;
                         }
                     }
@@ -3667,7 +3765,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                     if (cursor != null) {
                         cursor.close();
                     }
-                    MediaController.broadcastNewPhotos(guid, albumsSorted, num, videoAlbumsSorted, cameraAlbumVideoId, albumEntry3, 0);
+                    MediaController.broadcastNewPhotos(guid, albumsSorted, num, videoAlbumsSorted, cameraAlbumVideoId, albumEntry2, 0);
                 } catch (Throwable th7) {
                     th3 = th7;
                     if (cursor != null) {
@@ -3695,7 +3793,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         final ArrayList<AlbumEntry> arrayList2 = videoAlbumsSorted;
         final Integer num2 = cameraAlbumVideoIdFinal;
         final AlbumEntry albumEntry = allPhotosAlbumFinal;
-        Runnable anonymousClass25 = new Runnable() {
+        Runnable anonymousClass27 = new Runnable() {
             public void run() {
                 if (PhotoViewer.getInstance().isVisible()) {
                     MediaController.broadcastNewPhotos(i, arrayList, num, arrayList2, num2, albumEntry, 1000);
@@ -3706,8 +3804,8 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.albumsDidLoaded, Integer.valueOf(i), arrayList, num, arrayList2, num2);
             }
         };
-        broadcastPhotosRunnable = anonymousClass25;
-        AndroidUtilities.runOnUIThread(anonymousClass25, (long) delay);
+        broadcastPhotosRunnable = anonymousClass27;
+        AndroidUtilities.runOnUIThread(anonymousClass27, (long) delay);
     }
 
     public void scheduleVideoConvert(MessageObject messageObject) {

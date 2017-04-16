@@ -97,7 +97,7 @@ class TelemetryContext {
         } finally {
             setAppVersion(version);
         }
-        setSdkVersion("android:" + "4.1.2");
+        setSdkVersion("android:" + "4.1.3");
     }
 
     protected void configUserId() {
@@ -128,12 +128,12 @@ class TelemetryContext {
 
     @SuppressLint({"NewApi", "Deprecation"})
     protected void updateScreenResolution() {
-        Point size;
-        Display d;
         if (this.mContext != null) {
             int width;
             int height;
             WindowManager wm = (WindowManager) this.mContext.getSystemService("window");
+            Point size;
+            Display d;
             if (VERSION.SDK_INT >= 17) {
                 size = new Point();
                 d = wm.getDefaultDisplay();
@@ -175,7 +175,7 @@ class TelemetryContext {
     }
 
     protected void configInternalContext() {
-        setSdkVersion("android:" + "4.1.2");
+        setSdkVersion("android:" + "4.1.3");
     }
 
     protected String getPackageName() {

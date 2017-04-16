@@ -3,7 +3,6 @@ package com.google.android.gms.internal;
 import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import com.googlecode.mp4parser.boxes.microsoft.XtraBox;
 import java.io.IOException;
-import org.telegram.tgnet.TLRPC;
 
 public interface zzaf {
 
@@ -98,7 +97,7 @@ public interface zzaf {
                     case 56:
                         this.zzaX = Long.valueOf(com_google_android_gms_internal_zzbxl.zzaer());
                         continue;
-                    case TLRPC.LAYER /*66*/:
+                    case 66:
                         this.zzaY = com_google_android_gms_internal_zzbxl.readString();
                         continue;
                     case XtraBox.MP4_XTRA_BT_GUID /*72*/:

@@ -108,7 +108,7 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 
 public class SecretChatHelper {
-    public static final int CURRENT_SECRET_CHAT_LAYER = 46;
+    public static final int CURRENT_SECRET_CHAT_LAYER = 66;
     private static volatile SecretChatHelper Instance = null;
     private HashMap<Integer, EncryptedChat> acceptingChats = new HashMap();
     public ArrayList<Update> delayedEncryptedChatUpdates = new ArrayList();
@@ -269,11 +269,11 @@ public class SecretChatHelper {
             dialog.unread_count = 0;
             dialog.top_message = 0;
             dialog.last_message_date = update.date;
+            MessagesController.getInstance().putEncryptedChat(newChat, false);
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     MessagesController.getInstance().dialogs_dict.put(Long.valueOf(dialog.id), dialog);
                     MessagesController.getInstance().dialogs.add(dialog);
-                    MessagesController.getInstance().putEncryptedChat(newChat, false);
                     MessagesController.getInstance().sortDialogs(null);
                     NotificationCenter.getInstance().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
                 }
@@ -354,7 +354,7 @@ public class SecretChatHelper {
                 reqSend.action = message.action.encryptedAction;
             } else {
                 reqSend.action = new TL_decryptedMessageActionNotifyLayer();
-                reqSend.action.layer = 46;
+                reqSend.action.layer = 66;
                 message = createServiceSecretMessage(encryptedChat, reqSend.action);
             }
             reqSend.random_id = message.random_id;
@@ -682,7 +682,7 @@ public class SecretChatHelper {
                                         }
                                     }
                                     SecretChatHelper.this.sendingNotifyLayer.remove(Integer.valueOf(currentChat.id));
-                                    currentChat.layer = AndroidUtilities.setMyLayerVersion(currentChat.layer, 46);
+                                    currentChat.layer = AndroidUtilities.setMyLayerVersion(currentChat.layer, 66);
                                     MessagesStorage.getInstance().updateEncryptedChatLayer(currentChat);
                                 }
                                 if (message == null) {
@@ -757,7 +757,7 @@ public class SecretChatHelper {
             }
             chat.layer = AndroidUtilities.setPeerLayerVersion(chat.layer, newPeerLayer);
             MessagesStorage.getInstance().updateEncryptedChatLayer(chat);
-            if (currentPeerLayer < 46) {
+            if (currentPeerLayer < 66) {
                 sendNotifyLayerMessage(chat, null);
             }
             AndroidUtilities.runOnUIThread(new Runnable() {
@@ -1544,9 +1544,9 @@ public class SecretChatHelper {
                 encryptedChat.seq_in = 0;
                 encryptedChat.seq_out = 1;
                 MessagesStorage.getInstance().updateEncryptedChat(encryptedChat);
+                MessagesController.getInstance().putEncryptedChat(encryptedChat, false);
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
-                        MessagesController.getInstance().putEncryptedChat(encryptedChat, false);
                         NotificationCenter.getInstance().postNotificationName(NotificationCenter.encryptedChatUpdated, encryptedChat);
                         SecretChatHelper.this.sendNotifyLayerMessage(encryptedChat, null);
                     }
@@ -1663,9 +1663,9 @@ public class SecretChatHelper {
                                         newChat.key_use_count_in = encryptedChat.key_use_count_in;
                                         newChat.key_use_count_out = encryptedChat.key_use_count_out;
                                         MessagesStorage.getInstance().updateEncryptedChat(newChat);
+                                        MessagesController.getInstance().putEncryptedChat(newChat, false);
                                         AndroidUtilities.runOnUIThread(new Runnable() {
                                             public void run() {
-                                                MessagesController.getInstance().putEncryptedChat(newChat, false);
                                                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.encryptedChatUpdated, newChat);
                                                 SecretChatHelper.this.sendNotifyLayerMessage(newChat, null);
                                             }

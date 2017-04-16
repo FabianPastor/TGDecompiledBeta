@@ -22,6 +22,7 @@ import net.hockeyapp.android.Tracking;
 import net.hockeyapp.android.UpdateActivity;
 import net.hockeyapp.android.UpdateManagerListener;
 import net.hockeyapp.android.utils.HockeyLog;
+import net.hockeyapp.android.utils.Util;
 import net.hockeyapp.android.utils.VersionCache;
 import net.hockeyapp.android.utils.VersionHelper;
 import org.json.JSONArray;
@@ -106,10 +107,14 @@ public class CheckUpdateTask extends AsyncTask<Void, String, JSONArray> {
             return null;
         } catch (IOException e2) {
             e = e2;
-            e.printStackTrace();
+            if (this.context != null && Util.isConnectedToNetwork(this.context)) {
+                HockeyLog.error("HockeyUpdate", "Could not fetch updates although connected to internet");
+                e.printStackTrace();
+            }
             return null;
         } catch (JSONException e3) {
             e = e3;
+            HockeyLog.error("HockeyUpdate", "Could not fetch updates although connected to internet");
             e.printStackTrace();
             return null;
         }
@@ -217,7 +222,7 @@ public class CheckUpdateTask extends AsyncTask<Void, String, JSONArray> {
         builder.append("&oem=" + encodeParam(Constants.PHONE_MANUFACTURER));
         builder.append("&app_version=" + encodeParam(Constants.APP_VERSION));
         builder.append("&sdk=" + encodeParam(Constants.SDK_NAME));
-        builder.append("&sdk_version=" + encodeParam("4.1.2"));
+        builder.append("&sdk_version=" + encodeParam("4.1.3"));
         builder.append("&lang=" + encodeParam(Locale.getDefault().getLanguage()));
         builder.append("&usage_time=" + this.usageTime);
         return builder.toString();

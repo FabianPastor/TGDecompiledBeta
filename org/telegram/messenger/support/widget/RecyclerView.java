@@ -69,7 +69,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
 
 public class RecyclerView extends ViewGroup implements ScrollingView, NestedScrollingChild {
     static final boolean ALLOW_SIZE_IN_UNSPECIFIED_SPEC;
@@ -4942,7 +4941,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                     return true;
                 }
                 return false;
-            case TLRPC.LAYER /*66*/:
+            case 66:
                 if ((this.mTempRect.left < this.mTempRect2.left || this.mTempRect.right <= this.mTempRect2.left) && this.mTempRect.right < this.mTempRect2.right) {
                     return true;
                 }

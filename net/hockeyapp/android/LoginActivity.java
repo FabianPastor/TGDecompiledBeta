@@ -86,6 +86,8 @@ public class LoginActivity extends Activity {
         if (keyCode == 4) {
             if (LoginManager.listener != null) {
                 LoginManager.listener.onBack();
+            } else if (LoginManager.mainActivity == null) {
+                return true;
             } else {
                 Intent intent = new Intent(this, LoginManager.mainActivity);
                 intent.setFlags(ConnectionsManager.FileTypeFile);

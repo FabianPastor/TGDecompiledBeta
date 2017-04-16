@@ -1563,7 +1563,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (AndroidUtilities.isTablet()) {
             NotificationCenter.getInstance().postNotificationName(NotificationCenter.openedChatChanged, Long.valueOf(this.dialog_id), Boolean.valueOf(false));
         }
-        if (!(this.currentEncryptedChat == null || AndroidUtilities.getMyLayerVersion(this.currentEncryptedChat.layer) == 46)) {
+        if (!(this.currentEncryptedChat == null || AndroidUtilities.getMyLayerVersion(this.currentEncryptedChat.layer) == 66)) {
             SecretChatHelper.getInstance().sendNotifyLayerMessage(this.currentEncryptedChat, null);
         }
         return true;
@@ -3614,10 +3614,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
         fixLayoutInternal();
         this.contentView.addView(this.actionBar);
+        MessageObject messageObject2 = MediaController.getInstance().getPlayingMessageObject();
+        if (messageObject2 != null && messageObject2.isRoundVideo() && messageObject2.getDialogId() == this.dialog_id) {
+            MediaController.getInstance().setTextureView(createTextureView(false), this.aspectRatioFrameLayout, this.roundVideoContainer);
+        }
         return this.fragmentView;
     }
 
-    private TextureView createTextureView() {
+    private TextureView createTextureView(boolean add) {
         if (this.parentLayout == null) {
             return null;
         }
@@ -3671,7 +3675,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             this.roundVideoContainer.setVisibility(4);
             this.aspectRatioFrameLayout = new AspectRatioFrameLayout(getParentActivity());
             this.aspectRatioFrameLayout.setBackgroundColor(0);
-            this.roundVideoContainer.addView(this.aspectRatioFrameLayout, LayoutHelper.createFrame(-1, -1.0f));
+            if (add) {
+                this.roundVideoContainer.addView(this.aspectRatioFrameLayout, LayoutHelper.createFrame(-1, -1.0f));
+            }
             this.videoTextureView = new TextureView(getParentActivity());
             this.videoTextureView.setOpaque(false);
             this.aspectRatioFrameLayout.addView(this.videoTextureView, LayoutHelper.createFrame(-1, -1.0f));
@@ -5087,8 +5093,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
             }
         }
-        if (this.roundVideoContainer != null && !foundTextureViewMessage) {
-            this.roundVideoContainer.setTranslationY((float) ((-AndroidUtilities.roundMessageSize) - 100));
+        if (this.roundVideoContainer == null) {
+            return;
+        }
+        if (foundTextureViewMessage) {
+            MediaController.getInstance().setCurrentRoundVisible(true);
+            return;
+        }
+        this.roundVideoContainer.setTranslationY((float) ((-AndroidUtilities.roundMessageSize) - 100));
+        messageObject = MediaController.getInstance().getPlayingMessageObject();
+        if (messageObject != null && messageObject.type == 5) {
+            MediaController.getInstance().setCurrentRoundVisible(false);
         }
     }
 
@@ -5151,8 +5166,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                 }
             }
-            if (!(this.roundVideoContainer == null || foundTextureViewMessage)) {
-                this.roundVideoContainer.setTranslationY((float) ((-AndroidUtilities.roundMessageSize) - 100));
+            if (this.roundVideoContainer != null) {
+                if (foundTextureViewMessage) {
+                    MediaController.getInstance().setCurrentRoundVisible(true);
+                } else {
+                    this.roundVideoContainer.setTranslationY((float) ((-AndroidUtilities.roundMessageSize) - 100));
+                    messageObject = MediaController.getInstance().getPlayingMessageObject();
+                    if (messageObject != null && messageObject.type == 5) {
+                        MediaController.getInstance().setCurrentRoundVisible(false);
+                    }
+                }
             }
             if (minMessageChild != null) {
                 if (minMessageChild instanceof ChatMessageCell) {
@@ -7321,6 +7344,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     z = this.currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(this.currentEncryptedChat.layer) >= 23;
                     boolean z4 = this.currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(this.currentEncryptedChat.layer) >= 46;
                     chatActivityEnterView.setAllowStickersAndGifs(z, z4);
+                    this.chatActivityEnterView.checkRoundVideo();
                 }
                 if (this.mentionsAdapter != null) {
                     MentionsAdapter mentionsAdapter = this.mentionsAdapter;
@@ -7450,7 +7474,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             messageObject = (MessageObject) args[0];
             sendSecretMessageRead(messageObject);
             if (messageObject.isRoundVideo()) {
-                MediaController.getInstance().setTextureView(createTextureView(), this.aspectRatioFrameLayout, this.roundVideoContainer);
+                MediaController.getInstance().setTextureView(createTextureView(true), this.aspectRatioFrameLayout, this.roundVideoContainer);
                 updateTextureViewPosition();
             }
             if (this.chatListView != null) {

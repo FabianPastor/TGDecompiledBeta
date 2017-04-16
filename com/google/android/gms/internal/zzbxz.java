@@ -2,7 +2,6 @@ package com.google.android.gms.internal;
 
 import android.support.v4.view.MotionEventCompat;
 import java.io.IOException;
-import org.telegram.tgnet.TLRPC;
 
 public interface zzbxz {
 
@@ -165,7 +164,7 @@ public interface zzbxz {
                     case 58:
                         this.zzcvV = com_google_android_gms_internal_zzbxl.readString();
                         continue;
-                    case TLRPC.LAYER /*66*/:
+                    case 66:
                         this.zzcvW = com_google_android_gms_internal_zzbxl.readString();
                         continue;
                     case 74:

@@ -52,6 +52,8 @@ public class CrashDetails {
 
     public CrashDetails(String crashIdentifier) {
         this.crashIdentifier = crashIdentifier;
+        this.isXamarinException = Boolean.valueOf(false);
+        this.throwableStackTrace = "";
     }
 
     public CrashDetails(String crashIdentifier, Throwable throwable) {
@@ -144,9 +146,12 @@ public class CrashDetails {
     }
 
     public void writeCrashReport() {
+        writeCrashReport(Constants.FILES_PATH + "/" + this.crashIdentifier + ".stacktrace");
+    }
+
+    public void writeCrashReport(String path) {
         Throwable e;
         Throwable th;
-        String path = Constants.FILES_PATH + "/" + this.crashIdentifier + ".stacktrace";
         HockeyLog.debug("Writing unhandled exception to: " + path);
         BufferedWriter writer = null;
         try {

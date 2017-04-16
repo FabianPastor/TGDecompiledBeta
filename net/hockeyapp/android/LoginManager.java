@@ -114,10 +114,14 @@ public class LoginManager {
         }
     }
 
+    public static String getLoginEmail(Context context) {
+        return context.getSharedPreferences("net.hockeyapp.android.login", 0).getString("email", null);
+    }
+
     private static void startLoginActivity(Context context) {
         Intent intent = new Intent();
         int tempMode = Boolean.valueOf(mode == 3).booleanValue() ? 2 : mode;
-        intent.setFlags(NUM);
+        intent.setFlags(335544320);
         intent.setClass(context, LoginActivity.class);
         intent.putExtra("url", getURLString(tempMode));
         intent.putExtra(LoginActivity.EXTRA_MODE, tempMode);

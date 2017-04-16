@@ -135,33 +135,29 @@ public class LoginTask extends ConnectionTask<Void, Void, Boolean> {
                 return false;
             }
             if (this.mMode == 1) {
-                if (!status.equals("identified")) {
-                    return false;
+                if (status.equals("identified")) {
+                    String iuid = response.getString("iuid");
+                    if (!TextUtils.isEmpty(iuid)) {
+                        prefs.edit().putString("iuid", iuid).putString("email", (String) this.mParams.get("email")).apply();
+                        return true;
+                    }
                 }
-                String iuid = response.getString("iuid");
-                if (TextUtils.isEmpty(iuid)) {
-                    return false;
-                }
-                prefs.edit().putString("iuid", iuid).apply();
-                return true;
             } else if (this.mMode == 2) {
-                if (!status.equals("authorized")) {
-                    return false;
+                if (status.equals("authorized")) {
+                    String auid = response.getString("auid");
+                    if (!TextUtils.isEmpty(auid)) {
+                        prefs.edit().putString("auid", auid).putString("email", (String) this.mParams.get("email")).apply();
+                        return true;
+                    }
                 }
-                String auid = response.getString("auid");
-                if (TextUtils.isEmpty(auid)) {
-                    return false;
-                }
-                prefs.edit().putString("auid", auid).apply();
-                return true;
             } else if (this.mMode != 3) {
                 throw new IllegalArgumentException("Login mode " + this.mMode + " not supported.");
             } else if (status.equals("validated")) {
                 return true;
             } else {
-                prefs.edit().remove("iuid").remove("auid").apply();
-                return false;
+                prefs.edit().remove("iuid").remove("auid").remove("email").apply();
             }
+            return false;
         } catch (JSONException e) {
             e.printStackTrace();
             return false;

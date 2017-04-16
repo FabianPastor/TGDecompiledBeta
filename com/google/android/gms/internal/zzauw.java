@@ -4,7 +4,6 @@ import android.support.v4.view.MotionEventCompat;
 import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.IOException;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
-import org.telegram.tgnet.TLRPC;
 
 public interface zzauw {
 
@@ -981,7 +980,7 @@ public interface zzauw {
                     case 56:
                         this.zzbxm = Long.valueOf(com_google_android_gms_internal_zzbxl.zzaer());
                         continue;
-                    case TLRPC.LAYER /*66*/:
+                    case 66:
                         this.zzbxn = com_google_android_gms_internal_zzbxl.readString();
                         continue;
                     case 74:

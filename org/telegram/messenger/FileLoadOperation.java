@@ -686,23 +686,12 @@ public class FileLoadOperation {
             int a = 0;
             while (a < count) {
                 if (this.totalBytesCount <= 0 || this.nextDownloadOffset < this.totalBytesCount) {
-                    boolean isLast;
-                    int i;
                     int offset;
                     TLObject request;
-                    int i2;
-                    if (this.totalBytesCount <= 0 || a == count - 1 || (this.totalBytesCount > 0 && this.nextDownloadOffset + this.currentDownloadChunkSize >= this.totalBytesCount)) {
-                        isLast = true;
-                    } else {
-                        isLast = false;
-                    }
+                    int i;
+                    boolean isLast = this.totalBytesCount <= 0 || a == count - 1 || (this.totalBytesCount > 0 && this.nextDownloadOffset + this.currentDownloadChunkSize >= this.totalBytesCount);
                     int connectionType = this.requestsCount % 2 == 0 ? 2 : ConnectionsManager.ConnectionTypeDownload2;
-                    if (this.isForceRequest) {
-                        i = 32;
-                    } else {
-                        i = 0;
-                    }
-                    int flags = i | 2;
+                    int flags = (this.isForceRequest ? 32 : 0) | 2;
                     TLObject req;
                     if (this.isCdn) {
                         req = new TL_upload_getCdnFile();
@@ -790,16 +779,16 @@ public class FileLoadOperation {
                                             FileLoadOperation.this.onFail(false, 0);
                                         }
                                     }
-                                }, null, 0, FileLoadOperation.this.datacenter_id, 1, true);
+                                }, null, null, 0, FileLoadOperation.this.datacenter_id, 1, true);
                             }
                         }
                     };
                     if (this.isCdn) {
-                        i2 = this.cdnDatacenterId;
+                        i = this.cdnDatacenterId;
                     } else {
-                        i2 = this.datacenter_id;
+                        i = this.datacenter_id;
                     }
-                    requestInfo.requestToken = instance.sendRequest(request, anonymousClass5, null, flags, i2, connectionType, isLast);
+                    requestInfo.requestToken = instance.sendRequest(request, anonymousClass5, null, null, flags, i, connectionType, isLast);
                     this.requestsCount++;
                     a++;
                 } else {

@@ -1041,7 +1041,7 @@ public class MessageObject {
             name = "";
             id = "0";
         }
-        SpannableStringBuilder builder = new SpannableStringBuilder(TextUtils.replace(source, new String[]{param}, new String[]{name}));
+        SpannableStringBuilder builder = new SpannableStringBuilder(TextUtils.replace(source, new String[]{param}, new String[]{name.replace('\n', ' ')}));
         builder.setSpan(new URLSpanNoUnderlineBold("" + id), start, name.length() + start, 33);
         return builder;
     }
@@ -1951,7 +1951,7 @@ public class MessageObject {
     }
 
     public boolean isRoundVideo() {
-        return isRoundVideoMessage(this.messageOwner);
+        return this.type == 5 || isRoundVideoMessage(this.messageOwner);
     }
 
     public boolean hasPhotoStickers() {

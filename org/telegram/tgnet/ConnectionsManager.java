@@ -45,7 +45,6 @@ public class ConnectionsManager {
     public static final int ConnectionTypeGeneric = 1;
     public static final int ConnectionTypePush = 8;
     public static final int ConnectionTypeUpload = 4;
-    public static final int ConnectionTypeUpload2 = 65540;
     public static final int DEFAULT_DATACENTER_ID = Integer.MAX_VALUE;
     public static final int FileTypeAudio = 50331648;
     public static final int FileTypeFile = 67108864;
@@ -93,7 +92,7 @@ public class ConnectionsManager {
 
     public static native void native_resumeNetwork(boolean z);
 
-    public static native void native_sendRequest(int i, RequestDelegateInternal requestDelegateInternal, QuickAckDelegate quickAckDelegate, int i2, int i3, int i4, boolean z, int i5);
+    public static native void native_sendRequest(int i, RequestDelegateInternal requestDelegateInternal, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i2, int i3, int i4, boolean z, int i5);
 
     public static native void native_setJava(boolean z);
 
@@ -161,22 +160,23 @@ public class ConnectionsManager {
     }
 
     public int sendRequest(TLObject object, RequestDelegate completionBlock, int flags) {
-        return sendRequest(object, completionBlock, null, flags, DEFAULT_DATACENTER_ID, 1, true);
+        return sendRequest(object, completionBlock, null, null, flags, DEFAULT_DATACENTER_ID, 1, true);
     }
 
     public int sendRequest(TLObject object, RequestDelegate completionBlock, int flags, int connetionType) {
-        return sendRequest(object, completionBlock, null, flags, DEFAULT_DATACENTER_ID, connetionType, true);
+        return sendRequest(object, completionBlock, null, null, flags, DEFAULT_DATACENTER_ID, connetionType, true);
     }
 
     public int sendRequest(TLObject object, RequestDelegate completionBlock, QuickAckDelegate quickAckBlock, int flags) {
-        return sendRequest(object, completionBlock, quickAckBlock, flags, DEFAULT_DATACENTER_ID, 1, true);
+        return sendRequest(object, completionBlock, quickAckBlock, null, flags, DEFAULT_DATACENTER_ID, 1, true);
     }
 
-    public int sendRequest(TLObject object, RequestDelegate onComplete, QuickAckDelegate onQuickAck, int flags, int datacenterId, int connetionType, boolean immediate) {
+    public int sendRequest(TLObject object, RequestDelegate onComplete, QuickAckDelegate onQuickAck, WriteToSocketDelegate onWriteToSocket, int flags, int datacenterId, int connetionType, boolean immediate) {
         final int requestToken = this.lastRequestToken.getAndIncrement();
         final TLObject tLObject = object;
         final RequestDelegate requestDelegate = onComplete;
         final QuickAckDelegate quickAckDelegate = onQuickAck;
+        final WriteToSocketDelegate writeToSocketDelegate = onWriteToSocket;
         final int i = flags;
         final int i2 = datacenterId;
         final int i3 = connetionType;
@@ -190,7 +190,6 @@ public class ConnectionsManager {
                     tLObject.freeResources();
                     ConnectionsManager.native_sendRequest(buffer.address, new RequestDelegateInternal() {
                         public void run(int response, int errorCode, String errorText, int networkType) {
-                            Throwable e;
                             TLObject resp = null;
                             TL_error error = null;
                             if (response != 0) {
@@ -198,8 +197,8 @@ public class ConnectionsManager {
                                     NativeByteBuffer buff = NativeByteBuffer.wrap(response);
                                     buff.reused = true;
                                     resp = tLObject.deserializeResponse(buff, buff.readInt32(true), true);
-                                } catch (Exception e2) {
-                                    e = e2;
+                                } catch (Exception e) {
+                                    e = e;
                                     FileLog.e(e);
                                     return;
                                 }
@@ -210,10 +209,11 @@ public class ConnectionsManager {
                                     error2.text = errorText;
                                     FileLog.e(tLObject + " got error " + error2.code + " " + error2.text);
                                     error = error2;
-                                } catch (Exception e3) {
-                                    e = e3;
+                                } catch (Exception e2) {
+                                    Throwable e3;
+                                    e3 = e2;
                                     error = error2;
-                                    FileLog.e(e);
+                                    FileLog.e(e3);
                                     return;
                                 }
                             }
@@ -232,7 +232,7 @@ public class ConnectionsManager {
                                 }
                             });
                         }
-                    }, quickAckDelegate, i, i2, i3, z, requestToken);
+                    }, quickAckDelegate, writeToSocketDelegate, i, i2, i3, z, requestToken);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }

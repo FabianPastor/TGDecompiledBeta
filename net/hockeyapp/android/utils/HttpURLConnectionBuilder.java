@@ -21,6 +21,7 @@ import net.hockeyapp.android.Constants;
 public class HttpURLConnectionBuilder {
     public static final String DEFAULT_CHARSET = "UTF-8";
     private static final int DEFAULT_TIMEOUT = 120000;
+    public static final long FORM_FIELD_LIMIT = 4194304;
     private final Map<String, String> mHeaders;
     private SimpleMultipartEntity mMultipartEntity;
     private String mRequestBody;
@@ -45,6 +46,12 @@ public class HttpURLConnectionBuilder {
     }
 
     public HttpURLConnectionBuilder writeFormFields(Map<String, String> fields) {
+        for (String key : fields.keySet()) {
+            String value = (String) fields.get(key);
+            if (((long) value.length()) > FORM_FIELD_LIMIT) {
+                throw new IllegalArgumentException("Form field " + key + " size too large: " + value.length() + " - max allowed: " + FORM_FIELD_LIMIT);
+            }
+        }
         try {
             String formString = getFormString(fields, "UTF-8");
             setHeader("Content-Type", "application/x-www-form-urlencoded");

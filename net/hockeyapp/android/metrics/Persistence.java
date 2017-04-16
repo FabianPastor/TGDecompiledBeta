@@ -157,7 +157,7 @@ class Persistence {
                 }
             }
             if (this.mTelemetryDirectory != null) {
-                HockeyLog.info(TAG, "The directory " + this.mTelemetryDirectory.toString() + " did not contain any unserved files");
+                HockeyLog.info(TAG, "The directory " + this.mTelemetryDirectory.toString() + " did not contain any " + "unserved files");
             }
             file = null;
         }

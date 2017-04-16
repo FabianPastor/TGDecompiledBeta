@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
 
 public abstract class ExploreByTouchHelper extends AccessibilityDelegateCompat {
     private static final String DEFAULT_CLASS_NAME = "android.view.View";
@@ -152,7 +151,7 @@ public abstract class ExploreByTouchHelper extends AccessibilityDelegateCompat {
                 }
                 return handled;
             case 23:
-            case TLRPC.LAYER /*66*/:
+            case 66:
                 if (!KeyEventCompat.hasNoModifiers(event) || event.getRepeatCount() != 0) {
                     return false;
                 }
@@ -223,7 +222,7 @@ public abstract class ExploreByTouchHelper extends AccessibilityDelegateCompat {
                 break;
             case 17:
             case 33:
-            case TLRPC.LAYER /*66*/:
+            case 66:
             case TsExtractor.TS_STREAM_TYPE_HDMV_DTS /*130*/:
                 Rect selectedRect = new Rect();
                 if (this.mKeyboardFocusedVirtualViewId != Integer.MIN_VALUE) {
@@ -266,7 +265,7 @@ public abstract class ExploreByTouchHelper extends AccessibilityDelegateCompat {
             case 33:
                 outBounds.set(0, h, w, h);
                 break;
-            case TLRPC.LAYER /*66*/:
+            case 66:
                 outBounds.set(-1, 0, -1, h);
                 break;
             case TsExtractor.TS_STREAM_TYPE_HDMV_DTS /*130*/:

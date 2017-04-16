@@ -99,6 +99,7 @@ import org.telegram.tgnet.TLRPC.TL_documentAttributeImageSize;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeSticker_layer55;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
+import org.telegram.tgnet.TLRPC.TL_documentAttributeVideo_layer65;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_fileLocation;
 import org.telegram.tgnet.TLRPC.TL_fileLocationUnavailable;
@@ -127,6 +128,11 @@ import org.telegram.tgnet.TLRPC.TL_keyboardButtonBuy;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonGame;
 import org.telegram.tgnet.TLRPC.TL_message;
 import org.telegram.tgnet.TLRPC.TL_messageEncryptedAction;
+import org.telegram.tgnet.TLRPC.TL_messageEntityBold;
+import org.telegram.tgnet.TLRPC.TL_messageEntityCode;
+import org.telegram.tgnet.TLRPC.TL_messageEntityItalic;
+import org.telegram.tgnet.TLRPC.TL_messageEntityPre;
+import org.telegram.tgnet.TLRPC.TL_messageEntityTextUrl;
 import org.telegram.tgnet.TLRPC.TL_messageEntityUrl;
 import org.telegram.tgnet.TLRPC.TL_messageFwdHeader;
 import org.telegram.tgnet.TLRPC.TL_messageMediaContact;
@@ -744,11 +750,23 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             ArrayList<MessageObject> arrayList;
             if (messageObject.messageOwner.media == null || (messageObject.messageOwner.media instanceof TL_messageMediaEmpty) || (messageObject.messageOwner.media instanceof TL_messageMediaWebPage) || (messageObject.messageOwner.media instanceof TL_messageMediaGame) || (messageObject.messageOwner.media instanceof TL_messageMediaInvoice)) {
                 if (messageObject.messageOwner.message != null) {
+                    ArrayList<MessageEntity> entities;
                     WebPage webPage = null;
                     if (messageObject.messageOwner.media instanceof TL_messageMediaWebPage) {
                         webPage = messageObject.messageOwner.media.webpage;
                     }
-                    sendMessage(messageObject.messageOwner.message, did, messageObject.replyMessageObject, webPage, true, messageObject.messageOwner.entities, null, null);
+                    if (messageObject.messageOwner.entities == null || messageObject.messageOwner.entities.isEmpty()) {
+                        entities = null;
+                    } else {
+                        entities = new ArrayList();
+                        for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
+                            MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
+                            if ((entity instanceof TL_messageEntityBold) || (entity instanceof TL_messageEntityItalic) || (entity instanceof TL_messageEntityPre) || (entity instanceof TL_messageEntityCode) || (entity instanceof TL_messageEntityTextUrl)) {
+                                entities.add(entity);
+                            }
+                        }
+                    }
+                    sendMessage(messageObject.messageOwner.message, did, messageObject.replyMessageObject, webPage, true, entities, null, null);
                 } else if (((int) did) != 0) {
                     arrayList = new ArrayList();
                     arrayList.add(messageObject);
@@ -1393,9 +1411,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     private void sendMessage(String message, MessageMedia location, TL_photo photo, VideoEditedInfo videoEditedInfo, User user, TL_document document, TL_game game, long peer, String path, MessageObject reply_to_msg, WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<MessageEntity> entities, ReplyMarkup replyMarkup, HashMap<String, String> params) {
         Throwable e;
-        MessageObject newMsgObj;
         if (peer != 0) {
             Chat chat;
+            MessageObject newMsgObj;
             int a;
             DocumentAttribute attribute;
             String originalPath = null;
@@ -2320,7 +2338,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         }
                     } else if (type == 3) {
                         ImageLoader.fillPhotoSizeWithBytes(document.thumb);
-                        if (MessageObject.isNewGifDocument(document)) {
+                        if (MessageObject.isNewGifDocument(document) || MessageObject.isRoundVideoDocument(document)) {
                             reqSend7.media = new TL_decryptedMessageMediaDocument();
                             reqSend7.media.attributes = document.attributes;
                             if (document.thumb == null || document.thumb.bytes == null) {
@@ -3063,14 +3081,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         if (ext.toLowerCase().equals("mp3") || ext.toLowerCase().equals("m4a")) {
             AudioInfo audioInfo = AudioInfo.getAudioInfo(file);
             if (!(audioInfo == null || audioInfo.getDuration() == 0)) {
-                if (isEncrypted) {
-                    if (MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (dialog_id >> 32))) == null) {
-                        return false;
-                    }
-                    attributeAudio = new TL_documentAttributeAudio();
-                } else {
-                    attributeAudio = new TL_documentAttributeAudio();
-                }
+                attributeAudio = new TL_documentAttributeAudio();
                 attributeAudio.duration = (int) (audioInfo.getDuration() / 1000);
                 attributeAudio.title = audioInfo.getTitle();
                 attributeAudio.performer = audioInfo.getArtist();
@@ -3884,6 +3895,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             TL_photo photo;
                             HashMap<String, String> params;
                             ArrayList<InputDocument> arrayList;
+                            boolean z;
                             AbstractSerializedData serializedData;
                             int b;
                             Object obj;
@@ -3932,7 +3944,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             photo.caption = (String) arrayList.get(a);
                                         }
                                         if (arrayList2 != null) {
-                                            boolean z;
                                             arrayList = (ArrayList) arrayList2.get(a);
                                             z = arrayList == null && !arrayList.isEmpty();
                                             photo.has_stickers = z;
@@ -4227,6 +4238,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         }
                         TL_document document = null;
                         PhotoSize size;
+                        EncryptedChat encryptedChat;
                         TL_documentAttributeVideo attributeVideo;
                         String fileName;
                         final TL_document videoFinal;
@@ -4246,7 +4258,19 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 }
                                 document.mime_type = MimeTypes.VIDEO_MP4;
                                 UserConfig.saveConfig(false);
-                                attributeVideo = new TL_documentAttributeVideo();
+                                if (isEncrypted) {
+                                    encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (j >> 32)));
+                                    if (encryptedChat != null) {
+                                        return;
+                                    }
+                                    if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 66) {
+                                        attributeVideo = new TL_documentAttributeVideo_layer65();
+                                    } else {
+                                        attributeVideo = new TL_documentAttributeVideo();
+                                    }
+                                } else {
+                                    attributeVideo = new TL_documentAttributeVideo();
+                                }
                                 attributeVideo.round_message = isRound;
                                 document.attributes.add(attributeVideo);
                                 if (editedInfo == null) {
@@ -4304,6 +4328,18 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             }
                             document.mime_type = MimeTypes.VIDEO_MP4;
                             UserConfig.saveConfig(false);
+                            if (isEncrypted) {
+                                encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (j >> 32)));
+                                if (encryptedChat != null) {
+                                    if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 66) {
+                                        attributeVideo = new TL_documentAttributeVideo();
+                                    } else {
+                                        attributeVideo = new TL_documentAttributeVideo_layer65();
+                                    }
+                                } else {
+                                    return;
+                                }
+                            }
                             attributeVideo = new TL_documentAttributeVideo();
                             attributeVideo.round_message = isRound;
                             document.attributes.add(attributeVideo);
