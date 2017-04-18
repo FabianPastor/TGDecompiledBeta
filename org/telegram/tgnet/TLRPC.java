@@ -1793,6 +1793,37 @@ public class TLRPC {
         }
     }
 
+    public static class LangPackString extends TLObject {
+        public String few_value;
+        public int flags;
+        public String key;
+        public String many_value;
+        public String one_value;
+        public String other_value;
+        public String two_value;
+        public String value;
+        public String zero_value;
+
+        public static LangPackString TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            LangPackString result = null;
+            switch (constructor) {
+                case -892239370:
+                    result = new TL_langPackString();
+                    break;
+                case 1816636575:
+                    result = new TL_langPackStringPluralized();
+                    break;
+            }
+            if (result == null && exception) {
+                throw new RuntimeException(String.format("can't parse magic %x in LangPackString", new Object[]{Integer.valueOf(constructor)}));
+            }
+            if (result != null) {
+                result.readParams(stream, exception);
+            }
+            return result;
+        }
+    }
+
     public static class Message extends TLObject {
         public MessageAction action;
         public String attachPath = "";
@@ -2262,6 +2293,9 @@ public class TLRPC {
                     break;
                 case 1474492012:
                     result = new TL_inputMessagesFilterEmpty();
+                    break;
+                case 2054952868:
+                    result = new TL_inputMessagesFilterRoundVoice();
                     break;
                 case 2129714567:
                     result = new TL_inputMessagesFilterUrl();
@@ -2851,6 +2885,9 @@ public class TLRPC {
         public static SendMessageAction TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             SendMessageAction result = null;
             switch (constructor) {
+                case -1997373508:
+                    result = new TL_sendMessageRecordRoundAction();
+                    break;
                 case -1884362354:
                     result = new TL_sendMessageUploadDocumentAction_old();
                     break;
@@ -2892,6 +2929,9 @@ public class TLRPC {
                     break;
                 case 393186209:
                     result = new TL_sendMessageGeoLocationAction();
+                    break;
+                case 608050278:
+                    result = new TL_sendMessageUploadRoundAction();
                     break;
                 case 1653390447:
                     result = new TL_sendMessageChooseContactAction();
@@ -7117,6 +7157,84 @@ public class TLRPC {
         }
     }
 
+    public static class TL_langPackLanguage extends TLObject {
+        public static int constructor = NUM;
+        public String language;
+        public String name;
+
+        public static TL_langPackLanguage TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            if (constructor == constructor) {
+                TL_langPackLanguage result = new TL_langPackLanguage();
+                result.readParams(stream, exception);
+                return result;
+            } else if (!exception) {
+                return null;
+            } else {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_langPackLanguage", new Object[]{Integer.valueOf(constructor)}));
+            }
+        }
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.name = stream.readString(exception);
+            this.language = stream.readString(exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeString(this.name);
+            stream.writeString(this.language);
+        }
+    }
+
+    public static class TL_langpack_getDifference extends TLObject {
+        public static int constructor = NUM;
+        public int from_version;
+        public String language;
+
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+            return Updates.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeString(this.language);
+            stream.writeInt32(this.from_version);
+        }
+    }
+
+    public static class TL_langpack_getLangPack extends TLObject {
+        public static int constructor = 987469710;
+
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+            return Updates.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+        }
+    }
+
+    public static class TL_langpack_getLanguages extends TLObject {
+        public static int constructor = -NUM;
+
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+            Vector vector = new Vector();
+            int size = stream.readInt32(exception);
+            for (int a = 0; a < size; a++) {
+                TL_langPackLanguage object = TL_langPackLanguage.TLdeserialize(stream, stream.readInt32(exception), exception);
+                if (object == null) {
+                    break;
+                }
+                vector.objects.add(object);
+            }
+            return vector;
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+        }
+    }
+
     public static class TL_maskCoords extends TLObject {
         public static int constructor = -NUM;
         public int n;
@@ -11303,12 +11421,14 @@ public class TLRPC {
         public String first_name;
         public int flags;
         public ContactLink foreign_link;
+        public int from_version;
         public String game_short_name;
         public GeoPoint geo;
         public int inbox_date;
         public int inviter_id;
         public boolean is_admin;
         public PrivacyKey key;
+        public String language;
         public String last_name;
         public boolean masks;
         public int max_date;
@@ -11334,6 +11454,7 @@ public class TLRPC {
         public ArrayList<PrivacyRule> rules = new ArrayList();
         public UserStatus status;
         public TL_messages_stickerSet stickerset;
+        public ArrayList<LangPackString> strings = new ArrayList();
         public String type;
         public int user_id;
         public String username;
@@ -11346,6 +11467,9 @@ public class TLRPC {
             switch (constructor) {
                 case -2131957734:
                     result = new TL_updateUserBlocked();
+                    break;
+                case -2081066892:
+                    result = new TL_updateLangPackTooLong();
                     break;
                 case -1906403213:
                     result = new TL_updateDcOptions();
@@ -11385,6 +11509,9 @@ public class TLRPC {
                     break;
                 case -1425052898:
                     result = new TL_updatePhoneCall();
+                    break;
+                case -1346513773:
+                    result = new TL_updateLangPack();
                     break;
                 case -1264392051:
                     result = new TL_updateEncryption();
@@ -11481,6 +11608,9 @@ public class TLRPC {
                     break;
                 case 1135492588:
                     result = new TL_updateStickerSets();
+                    break;
+                case 1236638599:
+                    result = new TL_updateLangPackLanguageChanged();
                     break;
                 case 1318109142:
                     result = new TL_updateMessageID();
@@ -16322,6 +16452,14 @@ public class TLRPC {
         }
     }
 
+    public static class TL_inputMessagesFilterRoundVoice extends MessagesFilter {
+        public static int constructor = NUM;
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+        }
+    }
+
     public static class TL_inputMessagesFilterUrl extends MessagesFilter {
         public static int constructor = NUM;
 
@@ -16891,6 +17029,68 @@ public class TLRPC {
             stream.writeInt32(constructor);
             stream.writeString(this.text);
             stream.writeString(this.url);
+        }
+    }
+
+    public static class TL_langPackString extends LangPackString {
+        public static int constructor = -892239370;
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.key = stream.readString(exception);
+            this.value = stream.readString(exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeString(this.key);
+            stream.writeString(this.value);
+        }
+    }
+
+    public static class TL_langPackStringPluralized extends LangPackString {
+        public static int constructor = NUM;
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.flags = stream.readInt32(exception);
+            this.key = stream.readString(exception);
+            if ((this.flags & 1) != 0) {
+                this.zero_value = stream.readString(exception);
+            }
+            if ((this.flags & 2) != 0) {
+                this.one_value = stream.readString(exception);
+            }
+            if ((this.flags & 4) != 0) {
+                this.two_value = stream.readString(exception);
+            }
+            if ((this.flags & 8) != 0) {
+                this.few_value = stream.readString(exception);
+            }
+            if ((this.flags & 16) != 0) {
+                this.many_value = stream.readString(exception);
+            }
+            this.other_value = stream.readString(exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeInt32(this.flags);
+            stream.writeString(this.key);
+            if ((this.flags & 1) != 0) {
+                stream.writeString(this.zero_value);
+            }
+            if ((this.flags & 2) != 0) {
+                stream.writeString(this.one_value);
+            }
+            if ((this.flags & 4) != 0) {
+                stream.writeString(this.two_value);
+            }
+            if ((this.flags & 8) != 0) {
+                stream.writeString(this.few_value);
+            }
+            if ((this.flags & 16) != 0) {
+                stream.writeString(this.many_value);
+            }
+            stream.writeString(this.other_value);
         }
     }
 
@@ -20231,6 +20431,14 @@ public class TLRPC {
         }
     }
 
+    public static class TL_sendMessageRecordRoundAction extends SendMessageAction {
+        public static int constructor = -NUM;
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+        }
+    }
+
     public static class TL_sendMessageRecordVideoAction extends SendMessageAction {
         public static int constructor = -NUM;
 
@@ -20275,6 +20483,19 @@ public class TLRPC {
 
     public static class TL_sendMessageUploadPhotoAction extends SendMessageAction {
         public static int constructor = -774682074;
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.progress = stream.readInt32(exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeInt32(this.progress);
+        }
+    }
+
+    public static class TL_sendMessageUploadRoundAction extends SendMessageAction {
+        public static int constructor = 608050278;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.progress = stream.readInt32(exception);
@@ -21240,6 +21461,70 @@ public class TLRPC {
             if ((this.flags & 2) != 0) {
                 stream.writeString(this.game_short_name);
             }
+        }
+    }
+
+    public static class TL_updateLangPack extends Update {
+        public static int constructor = -NUM;
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.language = stream.readString(exception);
+            this.from_version = stream.readInt32(exception);
+            this.version = stream.readInt32(exception);
+            if (stream.readInt32(exception) == 481674261) {
+                int count = stream.readInt32(exception);
+                int a = 0;
+                while (a < count) {
+                    LangPackString object = LangPackString.TLdeserialize(stream, stream.readInt32(exception), exception);
+                    if (object != null) {
+                        this.strings.add(object);
+                        a++;
+                    } else {
+                        return;
+                    }
+                }
+            } else if (exception) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(magic)}));
+            }
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeString(this.language);
+            stream.writeInt32(this.from_version);
+            stream.writeInt32(this.version);
+            stream.writeInt32(481674261);
+            int count = this.strings.size();
+            stream.writeInt32(count);
+            for (int a = 0; a < count; a++) {
+                ((LangPackString) this.strings.get(a)).serializeToStream(stream);
+            }
+        }
+    }
+
+    public static class TL_updateLangPackLanguageChanged extends Update {
+        public static int constructor = NUM;
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.language = stream.readString(exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeString(this.language);
+        }
+    }
+
+    public static class TL_updateLangPackTooLong extends Update {
+        public static int constructor = -NUM;
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.language = stream.readString(exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeString(this.language);
         }
     }
 

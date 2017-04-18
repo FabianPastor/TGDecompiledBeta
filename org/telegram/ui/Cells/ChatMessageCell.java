@@ -1792,38 +1792,48 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
+        boolean z;
+        int dp;
+        String description;
         Photo photo;
-        TLObject document;
-        String type;
         int duration;
-        boolean smallImage;
-        int additinalWidth;
+        TL_webDocument webDocument;
+        TL_webDocument webDocument2;
         Throwable e;
+        int restLinesCount;
         int a;
+        boolean authorIsRTL;
         boolean hasRTL;
         int textWidth;
-        int maxPhotoWidth;
-        ArrayList arrayList;
         DocumentAttribute attribute;
+        PhotoSize photoSize;
+        PhotoSize photoSize2;
+        int dp2;
         int durationWidth;
+        float scale;
+        String fileName;
         int seconds;
         String str;
+        CharSequence str2;
+        String price;
+        SpannableStringBuilder spannableStringBuilder;
         int mWidth;
         int timeWidthTotal;
         int rows;
         boolean fullWidth;
+        float f;
         int maxButtonWidth;
         int maxButtonsWidth;
         HashMap<String, BotButton> hashMap;
         HashMap<String, BotButton> oldByPosition;
         TL_keyboardButtonRow row;
-        int buttonsCount;
         int buttonWidth;
         int b;
         ChatMessageCell chatMessageCell;
         BotButton botButton;
         String key;
         String position;
+        BotButton oldButton;
         CharSequence buttonText;
         if (messageObject.checkLayout()) {
             this.currentMessageObject = null;
@@ -1833,10 +1843,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
             int i;
-            int dp;
             int width;
-            float f;
-            BotButton oldButton;
+            int buttonsCount;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
             this.currentMessageObject = messageObject;
@@ -1907,10 +1915,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.needNewVisiblePart = true;
             }
             int maxWidth;
-            boolean z;
-            float scale;
+            int maxPhotoWidth;
             boolean photoExist;
-            String fileName;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
@@ -1971,20 +1977,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     String site_name;
                     String title;
                     String author;
-                    String description;
-                    TL_webDocument webDocument;
-                    TL_webDocument webDocument2;
+                    TLObject document;
+                    String type;
+                    boolean smallImage;
+                    int additinalWidth;
                     int height;
                     int restLines;
-                    int restLinesCount;
                     int lineLeft;
-                    boolean authorIsRTL;
-                    PhotoSize photoSize;
-                    PhotoSize photoSize2;
-                    int dp2;
-                    CharSequence str2;
-                    String price;
-                    SpannableStringBuilder spannableStringBuilder;
+                    ArrayList arrayList;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);

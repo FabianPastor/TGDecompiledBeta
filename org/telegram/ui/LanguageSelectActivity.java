@@ -92,7 +92,15 @@ public class LanguageSelectActivity extends BaseFragment {
                 localeInfo = (LocaleInfo) LocaleController.getInstance().sortedLanguages.get(position);
                 last = position == LocaleController.getInstance().sortedLanguages.size() + -1;
             }
-            String str = localeInfo.name;
+            if (localeInfo.isRemote()) {
+                String str = localeInfo.name + " server side";
+                if (last) {
+                    z = false;
+                }
+                textSettingsCell.setText(str, z);
+                return;
+            }
+            str = localeInfo.name;
             if (last) {
                 z = false;
             }
@@ -185,7 +193,7 @@ public class LanguageSelectActivity extends BaseFragment {
                 } else if (position >= 0 && position < LocaleController.getInstance().sortedLanguages.size()) {
                     localeInfo = (LocaleInfo) LocaleController.getInstance().sortedLanguages.get(position);
                 }
-                if (localeInfo == null || localeInfo.pathToFile == null || LanguageSelectActivity.this.getParentActivity() == null) {
+                if (localeInfo == null || localeInfo.pathToFile == null || LanguageSelectActivity.this.getParentActivity() == null || localeInfo.isRemote()) {
                     return false;
                 }
                 final LocaleInfo finalLocaleInfo = localeInfo;

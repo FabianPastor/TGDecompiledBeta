@@ -95,6 +95,7 @@ public class NotificationCenter {
     public static final int recordStopped;
     public static final int reloadHints;
     public static final int reloadInlineHints;
+    public static final int reloadInterface;
     public static final int removeAllMessagesFromDialog;
     public static final int replaceMessagesObjects;
     public static final int screenStateChanged;
@@ -329,6 +330,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         paymentFinished = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        reloadInterface = i;
         i = totalEvents;
         totalEvents = i + 1;
         httpFileDidLoaded = i;

@@ -233,7 +233,7 @@ public class PipRoundVideoView {
             }
             instance = null;
             this.parentActivity = null;
-        } else if (this.textureView.getParent() != null) {
+        } else if (this.textureView != null && this.textureView.getParent() != null) {
             if (this.textureView.getWidth() > 0 && this.textureView.getHeight() > 0) {
                 this.bitmap = Bitmaps.createBitmap(this.textureView.getWidth(), this.textureView.getHeight(), Config.ARGB_8888);
             }
@@ -404,12 +404,18 @@ public class PipRoundVideoView {
 
     public void setX(int value) {
         this.windowLayoutParams.x = value;
-        this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
+        try {
+            this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
+        } catch (Exception e) {
+        }
     }
 
     public void setY(int value) {
         this.windowLayoutParams.y = value;
-        this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
+        try {
+            this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
+        } catch (Exception e) {
+        }
     }
 
     public static PipRoundVideoView getInstance() {

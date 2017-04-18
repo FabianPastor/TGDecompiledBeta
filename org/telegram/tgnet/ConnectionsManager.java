@@ -86,7 +86,7 @@ public class ConnectionsManager {
 
     public static native int native_getTimeDifference();
 
-    public static native void native_init(int i, int i2, int i3, String str, String str2, String str3, String str4, String str5, String str6, int i4, boolean z, boolean z2, int i5);
+    public static native void native_init(int i, int i2, int i3, String str, String str2, String str3, String str4, String str5, String str6, String str7, int i4, boolean z, boolean z2, int i5);
 
     public static native void native_pauseNetwork();
 
@@ -95,6 +95,8 @@ public class ConnectionsManager {
     public static native void native_sendRequest(int i, RequestDelegateInternal requestDelegateInternal, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i2, int i3, int i4, boolean z, int i5);
 
     public static native void native_setJava(boolean z);
+
+    public static native void native_setLangCode(String str);
 
     public static native void native_setNetworkAvailable(boolean z, int i);
 
@@ -282,13 +284,17 @@ public class ConnectionsManager {
     }
 
     public void init(int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String configPath, String logPath, int userId, boolean enablePushConnection) {
-        native_init(version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, configPath, logPath, userId, enablePushConnection, isNetworkOnline(), getCurrentNetworkType());
+        native_init(version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, "android", configPath, logPath, userId, enablePushConnection, isNetworkOnline(), getCurrentNetworkType());
         checkConnection();
         ApplicationLoader.applicationContext.registerReceiver(new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
                 ConnectionsManager.this.checkConnection();
             }
         }, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+    }
+
+    public void setLangCode(String langCode) {
+        native_setLangCode(langCode);
     }
 
     public void switchBackend() {

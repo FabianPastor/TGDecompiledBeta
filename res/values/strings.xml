@@ -716,7 +716,7 @@
     <string name="LinkPreview">Link preview</string>
     <string name="LinksTitle">Shared Links</string>
     <string name="Loading">Loading...</string>
-    <string name="LocalAudioCache">Voiceideo messages</string>
+    <string name="LocalAudioCache">Voice\Video messages</string>
     <string name="LocalCache">Other files</string>
     <string name="LocalDatabase">Local Database</string>
     <string name="LocalDatabaseClear">Clear cached text messages?</string>

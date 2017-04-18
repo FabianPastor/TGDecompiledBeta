@@ -213,11 +213,13 @@ import org.telegram.tgnet.TLRPC.TL_replyKeyboardHide;
 import org.telegram.tgnet.TLRPC.TL_sendMessageCancelAction;
 import org.telegram.tgnet.TLRPC.TL_sendMessageGamePlayAction;
 import org.telegram.tgnet.TLRPC.TL_sendMessageRecordAudioAction;
+import org.telegram.tgnet.TLRPC.TL_sendMessageRecordRoundAction;
 import org.telegram.tgnet.TLRPC.TL_sendMessageRecordVideoAction;
 import org.telegram.tgnet.TLRPC.TL_sendMessageTypingAction;
 import org.telegram.tgnet.TLRPC.TL_sendMessageUploadAudioAction;
 import org.telegram.tgnet.TLRPC.TL_sendMessageUploadDocumentAction;
 import org.telegram.tgnet.TLRPC.TL_sendMessageUploadPhotoAction;
+import org.telegram.tgnet.TLRPC.TL_sendMessageUploadRoundAction;
 import org.telegram.tgnet.TLRPC.TL_sendMessageUploadVideoAction;
 import org.telegram.tgnet.TLRPC.TL_updateChannel;
 import org.telegram.tgnet.TLRPC.TL_updateChannelMessageViews;
@@ -243,6 +245,9 @@ import org.telegram.tgnet.TLRPC.TL_updateEditMessage;
 import org.telegram.tgnet.TLRPC.TL_updateEncryptedChatTyping;
 import org.telegram.tgnet.TLRPC.TL_updateEncryptedMessagesRead;
 import org.telegram.tgnet.TLRPC.TL_updateEncryption;
+import org.telegram.tgnet.TLRPC.TL_updateLangPack;
+import org.telegram.tgnet.TLRPC.TL_updateLangPackLanguageChanged;
+import org.telegram.tgnet.TLRPC.TL_updateLangPackTooLong;
 import org.telegram.tgnet.TLRPC.TL_updateMessageID;
 import org.telegram.tgnet.TLRPC.TL_updateNewChannelMessage;
 import org.telegram.tgnet.TLRPC.TL_updateNewEncryptedMessage;
@@ -2055,7 +2060,6 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll, long taskId, TLObject taskRequest) {
-        TL_channels_deleteMessages req;
         long newTaskId;
         Throwable e;
         final int i;
@@ -2087,6 +2091,7 @@ public class MessagesController implements NotificationCenterDelegate {
             NativeByteBuffer data;
             NativeByteBuffer data2;
             if (channelId != 0) {
+                TL_channels_deleteMessages req;
                 if (taskRequest != null) {
                     req = (TL_channels_deleteMessages) taskRequest;
                     newTaskId = taskId;
@@ -2644,7 +2649,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             newPrintingStrings.put(Long.valueOf(key), LocaleController.getString("RecordingAudio", R.string.RecordingAudio));
                         }
                         newPrintingStringsTypes.put(Long.valueOf(key), Integer.valueOf(1));
-                    } else if (pu.action instanceof TL_sendMessageRecordVideoAction) {
+                    } else if ((pu.action instanceof TL_sendMessageRecordRoundAction) || (pu.action instanceof TL_sendMessageUploadRoundAction)) {
                         if (lower_id < 0) {
                             newPrintingStrings.put(Long.valueOf(key), LocaleController.formatString("IsRecordingRound", R.string.IsRecordingRound, getUserNameForTyping(user)));
                         } else {
@@ -2778,7 +2783,9 @@ public class MessagesController implements NotificationCenterDelegate {
                             } else if (action == 6) {
                                 req.action = new TL_sendMessageGamePlayAction();
                             } else if (action == 7) {
-                                req.action = new TL_sendMessageRecordVideoAction();
+                                req.action = new TL_sendMessageRecordRoundAction();
+                            } else if (action == 8) {
+                                req.action = new TL_sendMessageUploadRoundAction();
                             }
                             typings.put(Long.valueOf(dialog_id), Boolean.valueOf(true));
                             reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -3357,6 +3364,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
+                Chat chat;
                 Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
@@ -3374,7 +3382,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     MessagesController.this.nextDialogsCacheOffset = i3 + i2;
                 }
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
-                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -3817,7 +3824,6 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 int a;
-                Chat chat;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 HashMap<Integer, User> usersDict = new HashMap();
@@ -3832,6 +3838,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     chatsDict.put(Integer.valueOf(c.id), c);
                 }
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -5065,9 +5072,9 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void loadUnknownChannel(final Chat channel, long taskId) {
         Throwable e;
+        long newTaskId;
         if ((channel instanceof TL_channel) && !this.gettingUnknownChannels.containsKey(Integer.valueOf(channel.id))) {
             if (channel.access_hash != 0) {
-                long newTaskId;
                 TL_inputPeerChannel inputPeer = new TL_inputPeerChannel();
                 inputPeer.channel_id = channel.id;
                 inputPeer.access_hash = channel.access_hash;
@@ -5145,6 +5152,10 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId, InputChannel inputChannel) {
         Throwable e;
+        long newTaskId;
+        TL_updates_getChannelDifference req;
+        final int i;
+        final int i2;
         Boolean gettingDifferenceChannel = (Boolean) this.gettingDifferenceChannels.get(Integer.valueOf(channelId));
         if (gettingDifferenceChannel == null) {
             gettingDifferenceChannel = Boolean.valueOf(false);
@@ -5176,10 +5187,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 inputChannel = getInputChannel(channelId);
             }
             if (inputChannel != null && inputChannel.access_hash != 0) {
-                long newTaskId;
-                TL_updates_getChannelDifference req;
-                final int i;
-                final int i2;
                 if (taskId == 0) {
                     NativeByteBuffer data = null;
                     try {
@@ -6659,7 +6666,6 @@ public class MessagesController implements NotificationCenterDelegate {
         AbstractMap usersDict;
         int a;
         AbstractMap chatsDict;
-        Iterator it;
         long currentTime = System.currentTimeMillis();
         final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
         HashMap<Long, WebPage> webPages = new HashMap();
@@ -6713,6 +6719,7 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         int interfaceUpdateMask = 0;
         for (int c = 0; c < updates.size(); c++) {
+            Iterator it;
             Update update = (Update) updates.get(c);
             FileLog.d("process update " + update);
             Message message;
@@ -7322,6 +7329,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 updatesOnMainThread.add(update);
             } else if (update instanceof TL_updatePhoneCall) {
                 updatesOnMainThread.add(update);
+            } else if (update instanceof TL_updateLangPack) {
+                LocaleController.getInstance().saveRemoteLocaleStrings((TL_updateLangPack) update);
+            } else if (!(update instanceof TL_updateLangPackLanguageChanged) && (update instanceof TL_updateLangPackTooLong)) {
             }
         }
         if (!messages.isEmpty()) {

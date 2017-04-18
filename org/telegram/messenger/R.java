@@ -329,8 +329,13 @@ public final class R {
         public static final int loading_animation = NUM;
         public static final int location_panel = NUM;
         public static final int location_send_button_states = NUM;
+        public static final int lock_arrow = NUM;
         public static final int lock_close = NUM;
+        public static final int lock_middle = NUM;
         public static final int lock_open = NUM;
+        public static final int lock_round = NUM;
+        public static final int lock_round_shadow = NUM;
+        public static final int lock_top = NUM;
         public static final int logo_avatar = NUM;
         public static final int managers = NUM;
         public static final int map_pin = NUM;

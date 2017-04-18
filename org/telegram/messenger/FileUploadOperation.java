@@ -27,7 +27,7 @@ import org.telegram.tgnet.WriteToSocketDelegate;
 
 public class FileUploadOperation {
     private static final int initialRequestsCount = 8;
-    private static final int maxUploadingBytes = 2048;
+    private static final int maxUploadingKBytes = 2048;
     private static final int minUploadChunkSize = 64;
     private HashMap<Integer, UploadCachedResult> cachedResults = new HashMap();
     private long currentFileId;
@@ -60,7 +60,7 @@ public class FileUploadOperation {
     private FileInputStream stream;
     private long totalFileSize;
     private int totalPartsCount;
-    private int uploadChunkSize;
+    private int uploadChunkSize = 65536;
     private int uploadStartTime;
     private long uploadedBytesCount;
     private String uploadingFilePath;

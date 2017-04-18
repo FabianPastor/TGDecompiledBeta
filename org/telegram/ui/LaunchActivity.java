@@ -401,6 +401,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.wasUnableToFindCurrentLocation);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didSetNewWallpapper);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didSetPasscode);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.reloadInterface);
         if (this.actionBarLayout.fragmentsStack.isEmpty()) {
             if (UserConfig.isClientActivated()) {
                 DialogsActivity dialogsActivity = new DialogsActivity(null);
@@ -2022,6 +2023,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.wasUnableToFindCurrentLocation);
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didSetNewWallpapper);
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didSetPasscode);
+            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.reloadInterface);
         }
     }
 
@@ -2357,8 +2359,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     child.invalidate();
                 }
             }
-        } else if (id != NotificationCenter.didSetPasscode) {
-        } else {
+        } else if (id == NotificationCenter.didSetPasscode) {
             if (UserConfig.passcodeHash.length() <= 0 || UserConfig.allowScreenCapture) {
                 try {
                     getWindow().clearFlags(8192);
@@ -2373,6 +2374,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             } catch (Throwable e2) {
                 FileLog.e(e2);
             }
+        } else if (id != NotificationCenter.reloadInterface) {
         }
     }
 

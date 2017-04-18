@@ -13,10 +13,10 @@ public class zzu {
     private static final int zzaIo = Process.myPid();
 
     static String zzdq(int i) {
-        ThreadPolicy allowThreadDiskReads;
         Throwable th;
         String str = null;
         if (i > 0) {
+            ThreadPolicy allowThreadDiskReads;
             Closeable bufferedReader;
             try {
                 allowThreadDiskReads = StrictMode.allowThreadDiskReads();
