@@ -246,7 +246,7 @@ import org.telegram.tgnet.TLRPC.TL_updateEncryptedChatTyping;
 import org.telegram.tgnet.TLRPC.TL_updateEncryptedMessagesRead;
 import org.telegram.tgnet.TLRPC.TL_updateEncryption;
 import org.telegram.tgnet.TLRPC.TL_updateLangPack;
-import org.telegram.tgnet.TLRPC.TL_updateLangPackLanguageChanged;
+import org.telegram.tgnet.TLRPC.TL_updateLangPackLanguageSuggested;
 import org.telegram.tgnet.TLRPC.TL_updateLangPackTooLong;
 import org.telegram.tgnet.TLRPC.TL_updateMessageID;
 import org.telegram.tgnet.TLRPC.TL_updateNewChannelMessage;
@@ -435,6 +435,7 @@ public class MessagesController implements NotificationCenterDelegate {
     public int minGroupConvertSize = Callback.DEFAULT_DRAG_ANIMATION_DURATION;
     private SparseIntArray needShortPollChannels = new SparseIntArray();
     public int nextDialogsCacheOffset;
+    private ConcurrentHashMap<String, TLObject> objectsByUsernames = new ConcurrentHashMap(100, 1.0f, 2);
     private boolean offlineSent;
     public ConcurrentHashMap<Integer, Integer> onlinePrivacy = new ConcurrentHashMap(20, 1.0f, 2);
     public HashMap<Long, CharSequence> printingStrings = new HashMap();
@@ -487,7 +488,6 @@ public class MessagesController implements NotificationCenterDelegate {
     private String uploadingAvatar;
     public boolean useSystemEmoji;
     private ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap(100, 1.0f, 2);
-    private ConcurrentHashMap<String, User> usersByUsernames = new ConcurrentHashMap(100, 1.0f, 2);
 
     public static class PrintingUser {
         public SendMessageAction action;
@@ -858,7 +858,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.dialogMessagesByIds.clear();
         this.dialogMessagesByRandomIds.clear();
         this.users.clear();
-        this.usersByUsernames.clear();
+        this.objectsByUsernames.clear();
         this.chats.clear();
         this.dialogMessage.clear();
         this.printingUsers.clear();
@@ -929,11 +929,11 @@ public class MessagesController implements NotificationCenterDelegate {
         return (User) this.users.get(id);
     }
 
-    public User getUser(String username) {
+    public TLObject getUserOrChat(String username) {
         if (username == null || username.length() == 0) {
             return null;
         }
-        return (User) this.usersByUsernames.get(username.toLowerCase());
+        return (TLObject) this.objectsByUsernames.get(username.toLowerCase());
     }
 
     public ConcurrentHashMap<Integer, User> getUsers() {
@@ -1012,10 +1012,10 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         User oldUser = (User) this.users.get(Integer.valueOf(user.id));
         if (!(oldUser == null || TextUtils.isEmpty(oldUser.username))) {
-            this.usersByUsernames.remove(oldUser.username.toLowerCase());
+            this.objectsByUsernames.remove(oldUser.username.toLowerCase());
         }
         if (!TextUtils.isEmpty(user.username)) {
-            this.usersByUsernames.put(user.username.toLowerCase(), user);
+            this.objectsByUsernames.put(user.username.toLowerCase(), user);
         }
         if (user.min) {
             if (oldUser == null) {
@@ -1098,6 +1098,12 @@ public class MessagesController implements NotificationCenterDelegate {
     public void putChat(Chat chat, boolean fromCache) {
         if (chat != null) {
             Chat oldChat = (Chat) this.chats.get(Integer.valueOf(chat.id));
+            if (!(oldChat == null || TextUtils.isEmpty(oldChat.username))) {
+                this.objectsByUsernames.remove(oldChat.username.toLowerCase());
+            }
+            if (!TextUtils.isEmpty(chat.username)) {
+                this.objectsByUsernames.put(chat.username.toLowerCase(), chat);
+            }
             if (chat.min) {
                 if (oldChat == null) {
                     this.chats.put(Integer.valueOf(chat.id), chat);
@@ -2060,7 +2066,6 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll, long taskId, TLObject taskRequest) {
-        long newTaskId;
         Throwable e;
         final int i;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
@@ -2088,6 +2093,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
+            long newTaskId;
             NativeByteBuffer data;
             NativeByteBuffer data2;
             if (channelId != 0) {
@@ -3365,7 +3371,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 int a;
                 Chat chat;
-                Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 AbstractMap usersDict = new HashMap();
@@ -3409,6 +3414,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 final ArrayList<TL_dialog> dialogsToReload = new ArrayList();
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
+                    Integer value;
                     TL_dialog d = (TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(a);
                     if (d.id == 0 && d.peer != null) {
                         if (d.peer.user_id != 0) {
@@ -3824,6 +3830,7 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 int a;
+                Chat chat;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 HashMap<Integer, User> usersDict = new HashMap();
@@ -3838,7 +3845,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     chatsDict.put(Integer.valueOf(c.id), c);
                 }
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
-                    Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -5743,7 +5749,6 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public boolean pinDialog(long did, boolean pin, InputPeer peer, long taskId) {
         Throwable e;
-        long newTaskId;
         int lower_id = (int) did;
         TL_dialog dialog = (TL_dialog) this.dialogs_dict.get(Long.valueOf(did));
         if (dialog != null && dialog.pinned != pin) {
@@ -5775,6 +5780,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (peer instanceof TL_inputPeerEmpty) {
                     return false;
                 }
+                long newTaskId;
                 req.peer = peer;
                 if (taskId == 0) {
                     NativeByteBuffer data = null;
@@ -6391,9 +6397,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     Chat existChat = getChat(Integer.valueOf(chat.id));
                     if (existChat == null || existChat.min) {
                         Chat cacheChat = MessagesStorage.getInstance().getChatSync(updates.chat_id);
-                        if (existChat == null) {
-                            putChat(cacheChat, true);
-                        }
+                        putChat(cacheChat, true);
                         existChat = cacheChat;
                     }
                     if (existChat == null || existChat.min) {
@@ -6576,10 +6580,10 @@ public class MessagesController implements NotificationCenterDelegate {
                 boolean processUpdate = updates instanceof TL_updatesCombined ? MessagesStorage.lastSeqValue + 1 == updates.seq_start || MessagesStorage.lastSeqValue == updates.seq_start : MessagesStorage.lastSeqValue + 1 == updates.seq || updates.seq == 0 || updates.seq == MessagesStorage.lastSeqValue;
                 if (processUpdate) {
                     processUpdateArray(updates.updates, updates.users, updates.chats, false);
-                    if (updates.date != 0) {
-                        MessagesStorage.lastDateValue = updates.date;
-                    }
                     if (updates.seq != 0) {
+                        if (updates.date != 0) {
+                            MessagesStorage.lastDateValue = updates.date;
+                        }
                         MessagesStorage.lastSeqValue = updates.seq;
                     }
                 } else {
@@ -7331,7 +7335,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 updatesOnMainThread.add(update);
             } else if (update instanceof TL_updateLangPack) {
                 LocaleController.getInstance().saveRemoteLocaleStrings((TL_updateLangPack) update);
-            } else if (!(update instanceof TL_updateLangPackLanguageChanged) && (update instanceof TL_updateLangPackTooLong)) {
+            } else if (!(update instanceof TL_updateLangPackLanguageSuggested) && (update instanceof TL_updateLangPackTooLong)) {
             }
         }
         if (!messages.isEmpty()) {
@@ -7429,10 +7433,10 @@ public class MessagesController implements NotificationCenterDelegate {
                                     currentUser.last_name = update.last_name;
                                 }
                                 if (currentUser.username != null && currentUser.username.length() > 0) {
-                                    MessagesController.this.usersByUsernames.remove(currentUser.username);
+                                    MessagesController.this.objectsByUsernames.remove(currentUser.username);
                                 }
                                 if (update.username != null && update.username.length() > 0) {
-                                    MessagesController.this.usersByUsernames.put(update.username, currentUser);
+                                    MessagesController.this.objectsByUsernames.put(update.username, currentUser);
                                 }
                                 currentUser.username = update.username;
                             }
@@ -8114,6 +8118,8 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             if (type == 0) {
                 fragment.presentFragment(new ProfileActivity(args));
+            } else if (type == 2) {
+                fragment.presentFragment(new ChatActivity(args), true, true);
             } else {
                 fragment.presentFragment(new ChatActivity(args), closeLast);
             }
@@ -8122,9 +8128,24 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public static void openByUserName(String username, final BaseFragment fragment, final int type) {
         if (username != null && fragment != null) {
-            User user = getInstance().getUser(username);
+            TLObject object = getInstance().getUserOrChat(username);
+            User user = null;
+            Chat chat = null;
+            if (object instanceof User) {
+                user = (User) object;
+                if (user.min) {
+                    user = null;
+                }
+            } else if (object instanceof Chat) {
+                chat = (Chat) object;
+                if (chat.min) {
+                    chat = null;
+                }
+            }
             if (user != null) {
                 openChatOrProfileWith(user, null, fragment, type, false);
+            } else if (chat != null) {
+                openChatOrProfileWith(null, chat, fragment, type, false);
             } else if (fragment.getParentActivity() != null) {
                 final AlertDialog progressDialog = new AlertDialog(fragment.getParentActivity(), 1);
                 progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));

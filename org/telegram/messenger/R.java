@@ -1685,6 +1685,8 @@ public final class R {
         public static final int PaymentTransactionMessage = NUM;
         public static final int PaymentTransactionReview = NUM;
         public static final int PaymentTransactionTotal = NUM;
+        public static final int PaymentWarning = NUM;
+        public static final int PaymentWarningText = NUM;
         public static final int PendingEmailText = NUM;
         public static final int PermissionContacts = NUM;
         public static final int PermissionDrawAboveOtherApps = NUM;

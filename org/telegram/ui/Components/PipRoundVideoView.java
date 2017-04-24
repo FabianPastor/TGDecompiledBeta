@@ -34,6 +34,8 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.Theme;
@@ -61,6 +63,7 @@ public class PipRoundVideoView {
         this.onCloseRunnable = closeRunnable;
         this.windowView = new FrameLayout(activity) {
             private boolean dragging;
+            private boolean startDragging;
             private float startX;
             private float startY;
 
@@ -68,7 +71,7 @@ public class PipRoundVideoView {
                 if (event.getAction() == 0) {
                     this.startX = event.getRawX();
                     this.startY = event.getRawY();
-                    this.dragging = true;
+                    this.startDragging = true;
                 }
                 return true;
             }
@@ -78,7 +81,7 @@ public class PipRoundVideoView {
             }
 
             public boolean onTouchEvent(MotionEvent event) {
-                if (!this.dragging) {
+                if (!this.startDragging && !this.dragging) {
                     return false;
                 }
                 float x = event.getRawX();
@@ -86,35 +89,53 @@ public class PipRoundVideoView {
                 if (event.getAction() == 2) {
                     float dx = x - this.startX;
                     float dy = y - this.startY;
-                    LayoutParams access$000 = PipRoundVideoView.this.windowLayoutParams;
-                    access$000.x = (int) (((float) access$000.x) + dx);
-                    access$000 = PipRoundVideoView.this.windowLayoutParams;
-                    access$000.y = (int) (((float) access$000.y) + dy);
-                    int maxDiff = PipRoundVideoView.this.videoWidth / 2;
-                    if (PipRoundVideoView.this.windowLayoutParams.x < (-maxDiff)) {
-                        PipRoundVideoView.this.windowLayoutParams.x = -maxDiff;
-                    } else if (PipRoundVideoView.this.windowLayoutParams.x > (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + maxDiff) {
-                        PipRoundVideoView.this.windowLayoutParams.x = (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + maxDiff;
+                    if (this.startDragging) {
+                        if (Math.abs(dx) >= AndroidUtilities.getPixelsInCM(0.3f, true) || Math.abs(dy) >= AndroidUtilities.getPixelsInCM(0.3f, false)) {
+                            this.dragging = true;
+                            this.startDragging = false;
+                        }
+                    } else if (this.dragging) {
+                        LayoutParams access$000 = PipRoundVideoView.this.windowLayoutParams;
+                        access$000.x = (int) (((float) access$000.x) + dx);
+                        access$000 = PipRoundVideoView.this.windowLayoutParams;
+                        access$000.y = (int) (((float) access$000.y) + dy);
+                        int maxDiff = PipRoundVideoView.this.videoWidth / 2;
+                        if (PipRoundVideoView.this.windowLayoutParams.x < (-maxDiff)) {
+                            PipRoundVideoView.this.windowLayoutParams.x = -maxDiff;
+                        } else if (PipRoundVideoView.this.windowLayoutParams.x > (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + maxDiff) {
+                            PipRoundVideoView.this.windowLayoutParams.x = (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + maxDiff;
+                        }
+                        float alpha = 1.0f;
+                        if (PipRoundVideoView.this.windowLayoutParams.x < 0) {
+                            alpha = 1.0f + ((((float) PipRoundVideoView.this.windowLayoutParams.x) / ((float) maxDiff)) * 0.5f);
+                        } else if (PipRoundVideoView.this.windowLayoutParams.x > AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) {
+                            alpha = 1.0f - ((((float) ((PipRoundVideoView.this.windowLayoutParams.x - AndroidUtilities.displaySize.x) + PipRoundVideoView.this.windowLayoutParams.width)) / ((float) maxDiff)) * 0.5f);
+                        }
+                        if (PipRoundVideoView.this.windowView.getAlpha() != alpha) {
+                            PipRoundVideoView.this.windowView.setAlpha(alpha);
+                        }
+                        if (PipRoundVideoView.this.windowLayoutParams.y < (-null)) {
+                            PipRoundVideoView.this.windowLayoutParams.y = -null;
+                        } else if (PipRoundVideoView.this.windowLayoutParams.y > (AndroidUtilities.displaySize.y - PipRoundVideoView.this.windowLayoutParams.height) + 0) {
+                            PipRoundVideoView.this.windowLayoutParams.y = (AndroidUtilities.displaySize.y - PipRoundVideoView.this.windowLayoutParams.height) + 0;
+                        }
+                        PipRoundVideoView.this.windowManager.updateViewLayout(PipRoundVideoView.this.windowView, PipRoundVideoView.this.windowLayoutParams);
+                        this.startX = x;
+                        this.startY = y;
                     }
-                    float alpha = 1.0f;
-                    if (PipRoundVideoView.this.windowLayoutParams.x < 0) {
-                        alpha = 1.0f + ((((float) PipRoundVideoView.this.windowLayoutParams.x) / ((float) maxDiff)) * 0.5f);
-                    } else if (PipRoundVideoView.this.windowLayoutParams.x > AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) {
-                        alpha = 1.0f - ((((float) ((PipRoundVideoView.this.windowLayoutParams.x - AndroidUtilities.displaySize.x) + PipRoundVideoView.this.windowLayoutParams.width)) / ((float) maxDiff)) * 0.5f);
-                    }
-                    if (PipRoundVideoView.this.windowView.getAlpha() != alpha) {
-                        PipRoundVideoView.this.windowView.setAlpha(alpha);
-                    }
-                    if (PipRoundVideoView.this.windowLayoutParams.y < (-null)) {
-                        PipRoundVideoView.this.windowLayoutParams.y = -null;
-                    } else if (PipRoundVideoView.this.windowLayoutParams.y > (AndroidUtilities.displaySize.y - PipRoundVideoView.this.windowLayoutParams.height) + 0) {
-                        PipRoundVideoView.this.windowLayoutParams.y = (AndroidUtilities.displaySize.y - PipRoundVideoView.this.windowLayoutParams.height) + 0;
-                    }
-                    PipRoundVideoView.this.windowManager.updateViewLayout(PipRoundVideoView.this.windowView, PipRoundVideoView.this.windowLayoutParams);
-                    this.startX = x;
-                    this.startY = y;
                 } else if (event.getAction() == 1) {
+                    if (this.startDragging && !this.dragging) {
+                        MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
+                        if (messageObject != null) {
+                            if (MediaController.getInstance().isAudioPaused()) {
+                                MediaController.getInstance().playMessage(messageObject);
+                            } else {
+                                MediaController.getInstance().pauseMessage(messageObject);
+                            }
+                        }
+                    }
                     this.dragging = false;
+                    this.startDragging = false;
                     PipRoundVideoView.this.animateToBoundsMaybe();
                 }
                 return true;

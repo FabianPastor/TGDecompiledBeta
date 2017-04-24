@@ -67,7 +67,6 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
-import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.query.DraftQuery;
 import org.telegram.messenger.query.MessagesQuery;
@@ -3024,9 +3023,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
         } else if (id == NotificationCenter.recordProgressChanged) {
             long t = ((Long) args[0]).longValue();
-            Long time = Long.valueOf(t / 1000);
             int ms = ((int) (t % 1000)) / 10;
-            String str = String.format("%02d:%02d.%02d", new Object[]{Long.valueOf(time.longValue() / 60), Long.valueOf(time.longValue() % 60), Integer.valueOf(ms)});
+            String str = String.format("%02d:%02d.%02d", new Object[]{Long.valueOf(time.longValue() / 60), Long.valueOf(Long.valueOf(t / 1000).longValue() % 60), Integer.valueOf(ms)});
             if (this.lastTimeString == null || !this.lastTimeString.equals(str)) {
                 if (time.longValue() % 5 == 0) {
                     MessagesController instance = MessagesController.getInstance();
@@ -3041,7 +3039,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (this.recordCircle != null) {
                 this.recordCircle.setAmplitude(((Double) args[1]).doubleValue());
             }
-            if (this.videoSendButton != null && this.videoSendButton.getTag() != null && time.longValue() >= ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS) {
+            if (this.videoSendButton != null && this.videoSendButton.getTag() != null && t >= 59500) {
                 this.startedDraggingX = -1.0f;
                 this.delegate.needStartRecordVideo(1);
                 this.recordingAudioVideo = false;

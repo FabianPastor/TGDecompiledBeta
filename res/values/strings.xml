@@ -716,7 +716,7 @@
     <string name="LinkPreview">Link preview</string>
     <string name="LinksTitle">Shared Links</string>
     <string name="Loading">Loading...</string>
-    <string name="LocalAudioCache">Voice\Video messages</string>
+    <string name="LocalAudioCache">Voice/Video messages</string>
     <string name="LocalCache">Other files</string>
     <string name="LocalDatabase">Local Database</string>
     <string name="LocalDatabaseClear">Clear cached text messages?</string>
@@ -885,8 +885,8 @@
     <string name="NotificationActionPinnedVoiceChannel">%1$s pinned a voice message</string>
     <string name="NotificationContactJoined">%1$s joined Telegram!</string>
     <string name="NotificationContactNewPhoto">%1$s updated profile photo</string>
-    <string name="NotificationEditedGroupName">%1$s edited the group\'s %2$s name</string>
-    <string name="NotificationEditedGroupPhoto">%1$s edited the group\'s %2$s photo</string>
+    <string name="NotificationEditedGroupName">%1$s renamed the group %2$s</string>
+    <string name="NotificationEditedGroupPhoto">%1$s changed the group photo for %2$s</string>
     <string name="NotificationGroupAddMember">%1$s invited %3$s to the group %2$s</string>
     <string name="NotificationGroupAddSelf">%1$s returned to the group %2$s</string>
     <string name="NotificationGroupAddSelfMega">%1$s joined the group %2$s</string>
@@ -1566,6 +1566,8 @@
     <string name="NotificationActionPinnedRoundChannel">%1$s pinned a video message</string>
     <string name="NotificationMessageGroupRound">%1$s sent a video message to the group %2$s</string>
     <string name="NotificationMessageRound">%1$s sent you a video message</string>
+    <string name="PaymentWarning">Warning</string>
+    <string name="PaymentWarningText">Payments will go directly to the developer of %1$s. Telegram cannot provide any guarantees, so proceed at your own risk. In case of problems, please contact the developer of %2$s or your bank.</string>
     <string name="RecordingRound">recording video message...</string>
     <string name="default_web_client_id">760348033671-jiv412evc1r36rl4k7vhl1ba83atdmot.apps.googleusercontent.com</string>
     <string name="firebase_database_url">https://tmessages2.firebaseio.com</string>

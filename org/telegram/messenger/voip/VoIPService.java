@@ -131,6 +131,15 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     public static PhoneCall callIShouldHavePutIntoIntent;
     private static VoIPService sharedInstance;
     private byte[] a_or_b;
+    private Runnable afterSoundRunnable = new Runnable() {
+        public void run() {
+            VoIPService.this.soundPool.release();
+            if (VoIPService.this.isBtHeadsetConnected) {
+                ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).stopBluetoothSco();
+            }
+            ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).setSpeakerphoneOn(false);
+        }
+    };
     private byte[] authKey;
     private BluetoothAdapter btAdapter;
     private PhoneCall call;
@@ -394,6 +403,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
         if (this.isBtHeadsetConnected && !this.playingSound) {
             am.stopBluetoothSco();
+            am.setSpeakerphoneOn(false);
         }
         try {
             am.setMode(0);
@@ -770,6 +780,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 return;
             }
             int i;
+            Runnable stopper;
             TL_phone_discardCall req = new TL_phone_discardCall();
             req.peer = new TL_inputPhoneCall();
             req.peer.access_hash = this.call.access_hash;
@@ -804,21 +815,23 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     onDone.run();
                 }
                 callEnded();
-            }
-            final Runnable stopper = new Runnable() {
-                private boolean done = false;
+                stopper = null;
+            } else {
+                stopper = new Runnable() {
+                    private boolean done = false;
 
-                public void run() {
-                    if (!this.done) {
-                        this.done = true;
-                        if (onDone != null) {
-                            onDone.run();
+                    public void run() {
+                        if (!this.done) {
+                            this.done = true;
+                            if (onDone != null) {
+                                onDone.run();
+                            }
+                            VoIPService.this.callEnded();
                         }
-                        VoIPService.this.callEnded();
                     }
-                }
-            };
-            AndroidUtilities.runOnUIThread(stopper, (long) ((int) (VoIPServerConfig.getDouble("hangup_ui_timeout", 5.0d) * 1000.0d)));
+                };
+                AndroidUtilities.runOnUIThread(stopper, (long) ((int) (VoIPServerConfig.getDouble("hangup_ui_timeout", 5.0d) * 1000.0d)));
+            }
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                     if (error != null) {
@@ -871,14 +884,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                         dispatchStateChanged(12);
                         this.playingSound = true;
                         this.soundPool.play(this.spBusyId, 1.0f, 1.0f, 0, -1, 1.0f);
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                VoIPService.this.soundPool.release();
-                                if (VoIPService.this.isBtHeadsetConnected) {
-                                    ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).stopBluetoothSco();
-                                }
-                            }
-                        }, 2500);
+                        AndroidUtilities.runOnUIThread(this.afterSoundRunnable);
                         stopSelf();
                     } else {
                         callEnded();
@@ -1204,21 +1210,37 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     private void callFailed(int errorCode) {
+        long j;
         try {
-            throw new Exception("Call " + (this.call != null ? this.call.id : 0) + " failed with error code " + errorCode);
+            StringBuilder append = new StringBuilder().append("Call ");
+            if (this.call != null) {
+                j = this.call.id;
+            } else {
+                j = 0;
+            }
+            throw new Exception(append.append(j).append(" failed with error code ").append(errorCode).toString());
         } catch (Throwable x) {
             FileLog.e(x);
             this.lastError = errorCode;
             if (this.call != null) {
+                int i;
                 FileLog.d("Discarding failed call");
                 TL_phone_discardCall req = new TL_phone_discardCall();
                 req.peer = new TL_inputPhoneCall();
                 req.peer.access_hash = this.call.access_hash;
                 req.peer.id = this.call.id;
-                int callDuration = (this.controller == null || !this.controllerStarted) ? 0 : (int) (this.controller.getCallDuration() / 1000);
-                req.duration = callDuration;
-                long preferredRelayID = (this.controller == null || !this.controllerStarted) ? 0 : this.controller.getPreferredRelayID();
-                req.connection_id = preferredRelayID;
+                if (this.controller == null || !this.controllerStarted) {
+                    i = 0;
+                } else {
+                    i = (int) (this.controller.getCallDuration() / 1000);
+                }
+                req.duration = i;
+                if (this.controller == null || !this.controllerStarted) {
+                    j = 0;
+                } else {
+                    j = this.controller.getPreferredRelayID();
+                }
+                req.connection_id = j;
                 req.reason = new TL_phoneCallDiscardReasonDisconnect();
                 ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, TL_error error) {
@@ -1234,14 +1256,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             if (!(errorCode == -3 || this.soundPool == null)) {
                 this.playingSound = true;
                 this.soundPool.play(this.spFailedID, 1.0f, 1.0f, 0, 0, 1.0f);
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        VoIPService.this.soundPool.release();
-                        if (VoIPService.this.isBtHeadsetConnected) {
-                            ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).stopBluetoothSco();
-                        }
-                    }
-                }, 1000);
+                AndroidUtilities.runOnUIThread(this.afterSoundRunnable);
             }
             stopSelf();
         }
@@ -1253,14 +1268,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         if (this.needPlayEndSound) {
             this.playingSound = true;
             this.soundPool.play(this.spEndId, 1.0f, 1.0f, 0, 0, 1.0f);
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    VoIPService.this.soundPool.release();
-                    if (VoIPService.this.isBtHeadsetConnected) {
-                        ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).stopBluetoothSco();
-                    }
-                }
-            }, 1000);
+            AndroidUtilities.runOnUIThread(this.afterSoundRunnable);
         }
         if (this.timeoutRunnable != null) {
             AndroidUtilities.cancelRunOnUIThread(this.timeoutRunnable);

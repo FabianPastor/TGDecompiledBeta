@@ -923,14 +923,14 @@ public class Theme {
         defaultColors.put(key_avatar_backgroundActionBarGreen, Integer.valueOf(-11099828));
         defaultColors.put(key_avatar_backgroundActionBarCyan, Integer.valueOf(-12283220));
         defaultColors.put(key_avatar_backgroundActionBarBlue, Integer.valueOf(-10907718));
-        defaultColors.put(key_avatar_backgroundActionBarPink, Integer.valueOf(-11762506));
+        defaultColors.put(key_avatar_backgroundActionBarPink, Integer.valueOf(-10907718));
         defaultColors.put(key_avatar_subtitleInProfileRed, Integer.valueOf(-406587));
         defaultColors.put(key_avatar_subtitleInProfileOrange, Integer.valueOf(-139832));
         defaultColors.put(key_avatar_subtitleInProfileViolet, Integer.valueOf(-3291923));
         defaultColors.put(key_avatar_subtitleInProfileGreen, Integer.valueOf(-4133446));
         defaultColors.put(key_avatar_subtitleInProfileCyan, Integer.valueOf(-4660496));
         defaultColors.put(key_avatar_subtitleInProfileBlue, Integer.valueOf(-2626822));
-        defaultColors.put(key_avatar_subtitleInProfilePink, Integer.valueOf(-4990985));
+        defaultColors.put(key_avatar_subtitleInProfilePink, Integer.valueOf(-2626822));
         defaultColors.put(key_avatar_nameInMessageRed, Integer.valueOf(-3516848));
         defaultColors.put(key_avatar_nameInMessageOrange, Integer.valueOf(-2589911));
         defaultColors.put(key_avatar_nameInMessageViolet, Integer.valueOf(-11627828));
@@ -944,7 +944,7 @@ public class Theme {
         defaultColors.put(key_avatar_actionBarSelectorGreen, Integer.valueOf(-12020419));
         defaultColors.put(key_avatar_actionBarSelectorCyan, Integer.valueOf(-13007715));
         defaultColors.put(key_avatar_actionBarSelectorBlue, Integer.valueOf(-11959891));
-        defaultColors.put(key_avatar_actionBarSelectorPink, Integer.valueOf(-2863493));
+        defaultColors.put(key_avatar_actionBarSelectorPink, Integer.valueOf(-11959891));
         defaultColors.put(key_avatar_actionBarIconRed, Integer.valueOf(-1));
         defaultColors.put(key_avatar_actionBarIconOrange, Integer.valueOf(-1));
         defaultColors.put(key_avatar_actionBarIconViolet, Integer.valueOf(-1));
@@ -2717,12 +2717,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
-                    int i;
                     SharedPreferences preferences;
                     int selectedBackground;
-                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
+                        int i;
+                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

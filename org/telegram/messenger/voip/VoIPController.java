@@ -76,7 +76,7 @@ public class VoIPController {
 
     private native void nativeRelease(long j);
 
-    private native void nativeSetConfig(long j, double d, double d2, int i, boolean z, boolean z2, boolean z3, String str);
+    private native void nativeSetConfig(long j, double d, double d2, int i, boolean z, boolean z2, boolean z3, String str, String str2);
 
     private native void nativeSetEncryptionKey(long j, byte[] bArr, boolean z);
 
@@ -179,6 +179,7 @@ public class VoIPController {
     }
 
     public void setConfig(double recvTimeout, double initTimeout, int dataSavingOption) {
+        String logFilePath;
         ensureNativeInstance();
         boolean sysAecAvailable = false;
         boolean sysNsAvailable = false;
@@ -189,10 +190,17 @@ public class VoIPController {
             } catch (Throwable th) {
             }
         }
+        boolean dump = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("dbg_dump_call_stats", false);
         long j = this.nativeInst;
         boolean z = (VERSION.SDK_INT >= 16 && sysAecAvailable && VoIPServerConfig.getBoolean("use_system_aec", true)) ? false : true;
         boolean z2 = (VERSION.SDK_INT >= 16 && sysNsAvailable && VoIPServerConfig.getBoolean("use_system_ns", true)) ? false : true;
-        nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, z, z2, true, BuildConfig.DEBUG ? getLogFilePath() : null);
+        String logFilePath2 = BuildConfig.DEBUG ? getLogFilePath("voip") : null;
+        if (BuildConfig.DEBUG && dump) {
+            logFilePath = getLogFilePath("voipStats");
+        } else {
+            logFilePath = null;
+        }
+        nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, z, z2, true, logFilePath2, logFilePath);
     }
 
     public void debugCtl(int request, int param) {
@@ -222,9 +230,9 @@ public class VoIPController {
         return nativeGetVersion();
     }
 
-    private String getLogFilePath() {
+    private String getLogFilePath(String name) {
         Calendar c = Calendar.getInstance();
-        return new File(ApplicationLoader.applicationContext.getExternalFilesDir(null), String.format(Locale.US, "logs/%02d_%02d_%04d_%02d_%02d_%02d_voip.txt", new Object[]{Integer.valueOf(c.get(5)), Integer.valueOf(c.get(2) + 1), Integer.valueOf(c.get(1)), Integer.valueOf(c.get(11)), Integer.valueOf(c.get(12)), Integer.valueOf(c.get(13))})).getAbsolutePath();
+        return new File(ApplicationLoader.applicationContext.getExternalFilesDir(null), String.format(Locale.US, "logs/%02d_%02d_%04d_%02d_%02d_%02d_%s.txt", new Object[]{Integer.valueOf(c.get(5)), Integer.valueOf(c.get(2) + 1), Integer.valueOf(c.get(1)), Integer.valueOf(c.get(11)), Integer.valueOf(c.get(12)), Integer.valueOf(c.get(13)), name})).getAbsolutePath();
     }
 
     public String getDebugLog() {

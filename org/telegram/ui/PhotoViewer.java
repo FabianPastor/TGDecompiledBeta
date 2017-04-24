@@ -1912,15 +1912,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             videoEditedInfo.originalPath = PhotoViewer.this.currentPlayingVideoFile.getAbsolutePath();
                             videoEditedInfo.estimatedSize = (long) PhotoViewer.this.estimatedSize;
                             videoEditedInfo.estimatedDuration = PhotoViewer.this.estimatedDuration;
-                            if (PhotoViewer.this.compressItem.getVisibility() == 8 || (PhotoViewer.this.compressItem.getVisibility() == 0 && PhotoViewer.this.selectedCompression == PhotoViewer.this.compressionsCount - 1)) {
-                                videoEditedInfo.resultWidth = PhotoViewer.this.originalWidth;
-                                videoEditedInfo.resultHeight = PhotoViewer.this.originalHeight;
-                                if (!PhotoViewer.this.muteVideo) {
-                                    i = PhotoViewer.this.originalBitrate;
-                                }
-                                videoEditedInfo.bitrate = i;
-                                videoEditedInfo.muted = PhotoViewer.this.muteVideo;
-                            } else {
+                            if (PhotoViewer.this.muteVideo || !(PhotoViewer.this.compressItem.getVisibility() == 8 || (PhotoViewer.this.compressItem.getVisibility() == 0 && PhotoViewer.this.selectedCompression == PhotoViewer.this.compressionsCount - 1))) {
                                 if (PhotoViewer.this.muteVideo) {
                                     PhotoViewer.this.selectedCompression = 1;
                                     PhotoViewer.this.updateWidthHeightBitrateForCompression();
@@ -1929,6 +1921,14 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                                 videoEditedInfo.resultHeight = PhotoViewer.this.resultHeight;
                                 if (!PhotoViewer.this.muteVideo) {
                                     i = PhotoViewer.this.bitrate;
+                                }
+                                videoEditedInfo.bitrate = i;
+                                videoEditedInfo.muted = PhotoViewer.this.muteVideo;
+                            } else {
+                                videoEditedInfo.resultWidth = PhotoViewer.this.originalWidth;
+                                videoEditedInfo.resultHeight = PhotoViewer.this.originalHeight;
+                                if (!PhotoViewer.this.muteVideo) {
+                                    i = PhotoViewer.this.originalBitrate;
                                 }
                                 videoEditedInfo.bitrate = i;
                                 videoEditedInfo.muted = PhotoViewer.this.muteVideo;

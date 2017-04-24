@@ -1750,13 +1750,13 @@ public class LocaleController {
         File finalFile = new File(ApplicationLoader.getFilesDirFixed(), key + ".xml");
         try {
             HashMap<String, String> values;
-            if (langPack.from_version == 0) {
+            if (langPack.difference.from_version == 0) {
                 values = new HashMap();
             } else {
                 values = getLocaleFileStrings(finalFile);
             }
-            for (int a = 0; a < langPack.strings.size(); a++) {
-                LangPackString string = (LangPackString) langPack.strings.get(a);
+            for (int a = 0; a < langPack.difference.strings.size(); a++) {
+                LangPackString string = (LangPackString) langPack.difference.strings.get(a);
                 if (string instanceof TL_langPackString) {
                     values.put(string.key, string.value);
                 } else if (string instanceof TL_langPackStringPluralized) {
@@ -1847,7 +1847,7 @@ public class LocaleController {
                                     String str = language.name;
                                     localeInfo.name = str;
                                     localeInfo.nameEnglish = str;
-                                    localeInfo.shortName = language.language;
+                                    localeInfo.shortName = language.lang_code;
                                     localeInfo.pathToFile = "remote";
                                     if (!LocaleController.this.languagesDict.containsKey(localeInfo.getKey())) {
                                         LocaleController.this.remoteLanguages.add(localeInfo);

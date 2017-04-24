@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build.VERSION;
 import android.os.Vibrator;
@@ -142,6 +143,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private static final int FIELD_STREET1 = 0;
     private static final int FIELD_STREET2 = 1;
     private static final int done_button = 1;
+    private User botUser;
     private TextInfoPrivacyCell[] bottomCell;
     private FrameLayout bottomLayout;
     private boolean canceled;
@@ -267,9 +269,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         this.paymentForm.users = receipt.users;
         this.shippingOption = receipt.shipping;
         this.messageObject = message;
-        User user = MessagesController.getInstance().getUser(Integer.valueOf(receipt.bot_id));
-        if (user != null) {
-            this.currentBotName = user.first_name;
+        this.botUser = MessagesController.getInstance().getUser(Integer.valueOf(receipt.bot_id));
+        if (this.botUser != null) {
+            this.currentBotName = this.botUser.first_name;
         } else {
             this.currentBotName = "";
         }
@@ -336,9 +338,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         this.shippingOption = shipping;
         this.messageObject = message;
         this.saveCardInfo = saveCard;
-        User user = MessagesController.getInstance().getUser(Integer.valueOf(form.bot_id));
-        if (user != null) {
-            this.currentBotName = user.first_name;
+        this.botUser = MessagesController.getInstance().getUser(Integer.valueOf(form.bot_id));
+        if (this.botUser != null) {
+            this.currentBotName = this.botUser.first_name;
         } else {
             this.currentBotName = "";
         }
@@ -1558,18 +1560,26 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 final String str = totalPrice;
                 this.bottomLayout.setOnClickListener(new OnClickListener() {
                     public void onClick(View v) {
-                        Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
-                        builder.setTitle(LocaleController.getString("PaymentTransactionReview", R.string.PaymentTransactionReview));
-                        builder.setMessage(LocaleController.formatString("PaymentTransactionMessage", R.string.PaymentTransactionMessage, str, PaymentFormActivity.this.currentBotName, PaymentFormActivity.this.currentItemName));
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                PaymentFormActivity.this.showEditDoneProgress(true);
-                                PaymentFormActivity.this.setDonePressed(true);
-                                PaymentFormActivity.this.sendData();
+                        if (PaymentFormActivity.this.botUser != null) {
+                            String botKey = "payment_warning_" + PaymentFormActivity.this.botUser.id;
+                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+                            if (preferences.getBoolean(botKey, false)) {
+                                PaymentFormActivity.this.showPayAlert(str);
+                                return;
                             }
-                        });
-                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                        PaymentFormActivity.this.showDialog(builder.create());
+                            preferences.edit().putBoolean(botKey, true).commit();
+                            Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
+                            builder.setTitle(LocaleController.getString("PaymentWarning", R.string.PaymentWarning));
+                            builder.setMessage(LocaleController.formatString("PaymentWarningText", R.string.PaymentWarningText, PaymentFormActivity.this.currentBotName, PaymentFormActivity.this.currentBotName));
+                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    PaymentFormActivity.this.showPayAlert(str);
+                                }
+                            });
+                            PaymentFormActivity.this.showDialog(builder.create());
+                            return;
+                        }
+                        PaymentFormActivity.this.showPayAlert(str);
                     }
                 });
                 this.payTextView = new TextView(context);
@@ -1591,6 +1601,21 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             this.linearLayout2.addView(this.sectionCell[1], LayoutHelper.createLinear(-1, -2));
         }
         return this.fragmentView;
+    }
+
+    private void showPayAlert(String totalPrice) {
+        Builder builder = new Builder(getParentActivity());
+        builder.setTitle(LocaleController.getString("PaymentTransactionReview", R.string.PaymentTransactionReview));
+        builder.setMessage(LocaleController.formatString("PaymentTransactionMessage", R.string.PaymentTransactionMessage, totalPrice, this.currentBotName, this.currentItemName));
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int i) {
+                PaymentFormActivity.this.showEditDoneProgress(true);
+                PaymentFormActivity.this.setDonePressed(true);
+                PaymentFormActivity.this.sendData();
+            }
+        });
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        showDialog(builder.create());
     }
 
     private String getTotalPriceString(ArrayList<TL_labeledPrice> prices) {

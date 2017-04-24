@@ -35,37 +35,44 @@ public class AudioRecordJNI {
         if (this.audioRecord != null) {
             throw new IllegalStateException("already inited");
         }
-        int size = getBufferSize(bufferSize, 48000);
         this.bufferSize = bufferSize;
+        boolean res = tryInit(7, 48000);
+        if (!res) {
+            tryInit(1, 48000);
+        }
+        if (!res) {
+            tryInit(7, 44100);
+        }
+        if (!res) {
+            tryInit(1, 44100);
+        }
+        this.buffer = ByteBuffer.allocateDirect(bufferSize);
+    }
+
+    private boolean tryInit(int source, int sampleRate) {
+        boolean z;
+        if (this.audioRecord != null) {
+            try {
+                this.audioRecord.release();
+            } catch (Exception e) {
+            }
+        }
+        FileLog.d("Trying to initialize AudioRecord with source=" + source + " and sample rate=" + sampleRate);
         try {
-            this.audioRecord = new AudioRecord(7, 48000, channels == 1 ? 16 : 12, 2, size);
+            this.audioRecord = new AudioRecord(source, sampleRate, 16, 2, getBufferSize(this.bufferSize, 48000));
         } catch (Exception x) {
             FileLog.e("AudioRecord init failed!", x);
         }
-        if (this.audioRecord == null || this.audioRecord.getState() != 1) {
-            if (this.audioRecord != null) {
-                try {
-                    this.audioRecord.release();
-                } catch (Throwable th) {
-                }
-            }
-            FileLog.w("Failed to init AudioRecord, retrying with 44100");
-            size = getBufferSize(bufferSize, 44100);
-            this.bufferSize = bufferSize;
-            try {
-                int i;
-                if (channels == 1) {
-                    i = 16;
-                } else {
-                    i = 12;
-                }
-                this.audioRecord = new AudioRecord(7, 44100, i, 2, size);
-            } catch (Exception x2) {
-                FileLog.e("AudioRecord init failed!", x2);
-            }
-            this.needResampling = true;
+        if (sampleRate != 48000) {
+            z = true;
+        } else {
+            z = false;
         }
-        this.buffer = ByteBuffer.allocateDirect(bufferSize);
+        this.needResampling = z;
+        if (this.audioRecord == null || this.audioRecord.getState() != 1) {
+            return false;
+        }
+        return true;
     }
 
     public void stop() {

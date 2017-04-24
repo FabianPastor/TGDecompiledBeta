@@ -785,7 +785,7 @@ public class PasscodeView extends FrameLayout {
                     View relativeLayout = new RelativeLayout(getContext());
                     relativeLayout.setPadding(AndroidUtilities.dp(24.0f), 0, AndroidUtilities.dp(24.0f), 0);
                     TextView fingerprintTextView = new TextView(getContext());
-                    fingerprintTextView.setTextColor(-7105645);
+                    fingerprintTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                     fingerprintTextView.setId(1000);
                     fingerprintTextView.setTextAppearance(16974344);
                     fingerprintTextView.setText(LocaleController.getString("FingerprintInfo", R.string.FingerprintInfo));
@@ -802,7 +802,7 @@ public class PasscodeView extends FrameLayout {
                     this.fingerprintStatusTextView.setGravity(16);
                     this.fingerprintStatusTextView.setText(LocaleController.getString("FingerprintHelp", R.string.FingerprintHelp));
                     this.fingerprintStatusTextView.setTextAppearance(16974320);
-                    this.fingerprintStatusTextView.setTextColor(NUM);
+                    this.fingerprintStatusTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack) & NUM);
                     relativeLayout.addView(this.fingerprintStatusTextView);
                     layoutParams = LayoutHelper.createRelative(-2, -2);
                     layoutParams.setMarginStart(AndroidUtilities.dp(16.0f));

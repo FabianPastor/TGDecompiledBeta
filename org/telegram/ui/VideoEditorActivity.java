@@ -649,14 +649,14 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                     }
                 }
                 if (VideoEditorActivity.this.delegate != null) {
-                    if (VideoEditorActivity.this.compressItem.getVisibility() == 8 || (VideoEditorActivity.this.compressItem.getVisibility() == 0 && VideoEditorActivity.this.selectedCompression == VideoEditorActivity.this.compressionsCount - 1)) {
-                        VideoEditorActivity.this.delegate.didFinishEditVideo(VideoEditorActivity.this.videoPath, VideoEditorActivity.this.startTime, VideoEditorActivity.this.endTime, VideoEditorActivity.this.originalWidth, VideoEditorActivity.this.originalHeight, VideoEditorActivity.this.rotationValue, VideoEditorActivity.this.originalWidth, VideoEditorActivity.this.originalHeight, VideoEditorActivity.this.muteVideo ? -1 : VideoEditorActivity.this.originalBitrate, (long) VideoEditorActivity.this.estimatedSize, VideoEditorActivity.this.esimatedDuration, VideoEditorActivity.this.currentCaption != null ? VideoEditorActivity.this.currentCaption.toString() : null);
-                    } else {
+                    if (VideoEditorActivity.this.muteVideo || !(VideoEditorActivity.this.compressItem.getVisibility() == 8 || (VideoEditorActivity.this.compressItem.getVisibility() == 0 && VideoEditorActivity.this.selectedCompression == VideoEditorActivity.this.compressionsCount - 1))) {
                         if (VideoEditorActivity.this.muteVideo) {
                             VideoEditorActivity.this.selectedCompression = 1;
                             VideoEditorActivity.this.updateWidthHeightBitrateForCompression();
                         }
                         VideoEditorActivity.this.delegate.didFinishEditVideo(VideoEditorActivity.this.videoPath, VideoEditorActivity.this.startTime, VideoEditorActivity.this.endTime, VideoEditorActivity.this.resultWidth, VideoEditorActivity.this.resultHeight, VideoEditorActivity.this.rotationValue, VideoEditorActivity.this.originalWidth, VideoEditorActivity.this.originalHeight, VideoEditorActivity.this.muteVideo ? -1 : VideoEditorActivity.this.bitrate, (long) VideoEditorActivity.this.estimatedSize, VideoEditorActivity.this.esimatedDuration, VideoEditorActivity.this.currentCaption != null ? VideoEditorActivity.this.currentCaption.toString() : null);
+                    } else {
+                        VideoEditorActivity.this.delegate.didFinishEditVideo(VideoEditorActivity.this.videoPath, VideoEditorActivity.this.startTime, VideoEditorActivity.this.endTime, VideoEditorActivity.this.originalWidth, VideoEditorActivity.this.originalHeight, VideoEditorActivity.this.rotationValue, VideoEditorActivity.this.originalWidth, VideoEditorActivity.this.originalHeight, VideoEditorActivity.this.muteVideo ? -1 : VideoEditorActivity.this.originalBitrate, (long) VideoEditorActivity.this.estimatedSize, VideoEditorActivity.this.esimatedDuration, VideoEditorActivity.this.currentCaption != null ? VideoEditorActivity.this.currentCaption.toString() : null);
                     }
                 }
                 VideoEditorActivity.this.finishFragment();
@@ -1480,6 +1480,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             boolean isAvc = true;
             boolean isMp4A = true;
             if (Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/mp4a/") == null) {
+                FileLog.d("audio track not found");
                 isMp4A = false;
             }
             if (!isMp4A) {
@@ -1487,6 +1488,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             }
             int i;
             if (Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/avc1/") == null) {
+                FileLog.d("video track not found");
                 isAvc = false;
             }
             for (int b = 0; b < boxes.size(); b++) {
@@ -1519,6 +1521,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 }
             }
             if (trackHeaderBox == null) {
+                FileLog.d("video track header box not found");
                 return false;
             }
             Matrix matrix = trackHeaderBox.getMatrix();
@@ -1538,11 +1541,12 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             this.videoDuration *= 1000.0f;
             this.selectedCompression = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("compress_video2", 1);
             updateWidthHeightBitrateForCompression();
-            if (!isAvc && (this.resultWidth == this.originalWidth || this.resultHeight == this.originalHeight)) {
-                return false;
+            if (isAvc || !(this.resultWidth == this.originalWidth || this.resultHeight == this.originalHeight)) {
+                updateVideoInfo();
+                return true;
             }
-            updateVideoInfo();
-            return true;
+            FileLog.d("video is not mp4");
+            return false;
         } catch (Throwable e2) {
             FileLog.e(e2);
             return false;

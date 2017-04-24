@@ -330,9 +330,9 @@ public class MentionsAdapter extends SelectionAdapter {
                         MentionsAdapter.this.contextQueryRunnable = null;
                         if (MentionsAdapter.this.foundContextBot == null && !MentionsAdapter.this.noUserName) {
                             MentionsAdapter.this.searchingContextUsername = username;
-                            User user = MessagesController.getInstance().getUser(MentionsAdapter.this.searchingContextUsername);
-                            if (user != null) {
-                                MentionsAdapter.this.processFoundUser(user);
+                            TLObject object = MessagesController.getInstance().getUserOrChat(MentionsAdapter.this.searchingContextUsername);
+                            if (object instanceof User) {
+                                MentionsAdapter.this.processFoundUser((User) object);
                                 return;
                             }
                             TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
