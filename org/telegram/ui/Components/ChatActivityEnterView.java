@@ -203,6 +203,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private Runnable recordAudioVideoRunnable = new Runnable() {
         public void run() {
             if (ChatActivityEnterView.this.delegate != null && ChatActivityEnterView.this.parentActivity != null) {
+                ChatActivityEnterView.this.delegate.onPreAudioVideoRecord();
                 ChatActivityEnterView.this.calledRecordRunnable = true;
                 ChatActivityEnterView.this.recordAudioVideoRunnableStarted = false;
                 ChatActivityEnterView.this.recordCircle.setLockTranslation(10000.0f);
@@ -326,6 +327,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         void onMessageEditEnd(boolean z);
 
         void onMessageSend(CharSequence charSequence);
+
+        void onPreAudioVideoRecord();
 
         void onStickersTab(boolean z);
 
@@ -934,7 +937,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.recordedAudioPlayButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (ChatActivityEnterView.this.audioToSend != null) {
-                    if (!MediaController.getInstance().isPlayingMessage(ChatActivityEnterView.this.audioToSendMessageObject) || MediaController.getInstance().isAudioPaused()) {
+                    if (!MediaController.getInstance().isPlayingMessage(ChatActivityEnterView.this.audioToSendMessageObject) || MediaController.getInstance().isMessagePaused()) {
                         ChatActivityEnterView.this.recordedAudioPlayButton.setImageDrawable(ChatActivityEnterView.this.pauseDrawable);
                         MediaController.getInstance().playMessage(ChatActivityEnterView.this.audioToSendMessageObject);
                         return;
@@ -1214,76 +1217,53 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     private void setRecordVideoButtonVisible(boolean visible, boolean animated) {
-        float f = 0.0f;
-        float f2 = 0.1f;
-        if (this.hasRecordVideo && this.videoSendButton != null) {
+        if (this.videoSendButton != null) {
             this.videoSendButton.setTag(visible ? Integer.valueOf(1) : null);
             if (this.audioVideoButtonAnimation != null) {
                 this.audioVideoButtonAnimation.cancel();
                 this.audioVideoButtonAnimation = null;
             }
-            float f3;
             if (animated) {
-                ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putBoolean("currentModeVideo", visible).commit();
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                boolean isChannel = false;
+                if (((int) this.dialog_id) < 0) {
+                    Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-((int) this.dialog_id)));
+                    isChannel = ChatObject.isChannel(chat) && !chat.megagroup;
+                }
+                preferences.edit().putBoolean(isChannel ? "currentModeVideoChannel" : "currentModeVideo", visible).commit();
                 this.audioVideoButtonAnimation = new AnimatorSet();
                 AnimatorSet animatorSet = this.audioVideoButtonAnimation;
                 Animator[] animatorArr = new Animator[6];
                 ImageView imageView = this.videoSendButton;
                 String str = "scaleX";
                 float[] fArr = new float[1];
-                if (visible) {
-                    f3 = 1.0f;
-                } else {
-                    f3 = 0.1f;
-                }
-                fArr[0] = f3;
+                fArr[0] = visible ? 1.0f : 0.1f;
                 animatorArr[0] = ObjectAnimator.ofFloat(imageView, str, fArr);
                 imageView = this.videoSendButton;
                 str = "scaleY";
                 fArr = new float[1];
-                if (visible) {
-                    f3 = 1.0f;
-                } else {
-                    f3 = 0.1f;
-                }
-                fArr[0] = f3;
+                fArr[0] = visible ? 1.0f : 0.1f;
                 animatorArr[1] = ObjectAnimator.ofFloat(imageView, str, fArr);
-                ImageView imageView2 = this.videoSendButton;
-                String str2 = "alpha";
-                float[] fArr2 = new float[1];
-                if (visible) {
-                    f3 = 1.0f;
-                } else {
-                    f3 = 0.0f;
-                }
-                fArr2[0] = f3;
-                animatorArr[2] = ObjectAnimator.ofFloat(imageView2, str2, fArr2);
-                imageView2 = this.audioSendButton;
-                str2 = "scaleX";
-                fArr2 = new float[1];
-                if (visible) {
-                    f3 = 0.1f;
-                } else {
-                    f3 = 1.0f;
-                }
-                fArr2[0] = f3;
-                animatorArr[3] = ObjectAnimator.ofFloat(imageView2, str2, fArr2);
+                imageView = this.videoSendButton;
+                str = "alpha";
+                fArr = new float[1];
+                fArr[0] = visible ? 1.0f : 0.0f;
+                animatorArr[2] = ObjectAnimator.ofFloat(imageView, str, fArr);
+                imageView = this.audioSendButton;
+                str = "scaleX";
+                fArr = new float[1];
+                fArr[0] = visible ? 0.1f : 1.0f;
+                animatorArr[3] = ObjectAnimator.ofFloat(imageView, str, fArr);
                 imageView = this.audioSendButton;
                 str = "scaleY";
                 fArr = new float[1];
-                if (!visible) {
-                    f2 = 1.0f;
-                }
-                fArr[0] = f2;
+                fArr[0] = visible ? 0.1f : 1.0f;
                 animatorArr[4] = ObjectAnimator.ofFloat(imageView, str, fArr);
-                ImageView imageView3 = this.audioSendButton;
-                String str3 = "alpha";
-                float[] fArr3 = new float[1];
-                if (!visible) {
-                    f = 1.0f;
-                }
-                fArr3[0] = f;
-                animatorArr[5] = ObjectAnimator.ofFloat(imageView3, str3, fArr3);
+                imageView = this.audioSendButton;
+                str = "alpha";
+                fArr = new float[1];
+                fArr[0] = visible ? 0.0f : 1.0f;
+                animatorArr[5] = ObjectAnimator.ofFloat(imageView, str, fArr);
                 animatorSet.playTogether(animatorArr);
                 this.audioVideoButtonAnimation.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
@@ -1297,38 +1277,19 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.audioVideoButtonAnimation.start();
                 return;
             }
+            float f;
             this.videoSendButton.setScaleX(visible ? 1.0f : 0.1f);
-            ImageView imageView4 = this.videoSendButton;
+            this.videoSendButton.setScaleY(visible ? 1.0f : 0.1f);
+            this.videoSendButton.setAlpha(visible ? 1.0f : 0.0f);
+            this.audioSendButton.setScaleX(visible ? 0.1f : 1.0f);
+            this.audioSendButton.setScaleY(visible ? 0.1f : 1.0f);
+            ImageView imageView2 = this.audioSendButton;
             if (visible) {
-                f3 = 1.0f;
+                f = 0.0f;
             } else {
-                f3 = 0.1f;
-            }
-            imageView4.setScaleY(f3);
-            imageView4 = this.videoSendButton;
-            if (visible) {
-                f3 = 1.0f;
-            } else {
-                f3 = 0.0f;
-            }
-            imageView4.setAlpha(f3);
-            imageView4 = this.audioSendButton;
-            if (visible) {
-                f3 = 0.1f;
-            } else {
-                f3 = 1.0f;
-            }
-            imageView4.setScaleX(f3);
-            ImageView imageView5 = this.audioSendButton;
-            if (!visible) {
-                f2 = 1.0f;
-            }
-            imageView5.setScaleY(f2);
-            imageView5 = this.audioSendButton;
-            if (!visible) {
                 f = 1.0f;
             }
-            imageView5.setAlpha(f);
+            imageView2.setAlpha(f);
         }
     }
 
@@ -1704,6 +1665,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     public void checkRoundVideo() {
         if (this.attachLayout == null || VERSION.SDK_INT < 18 || this.hasRecordVideo) {
             this.hasRecordVideo = false;
+            setRecordVideoButtonVisible(false, false);
             return;
         }
         int high_id = (int) (this.dialog_id >> 32);
@@ -1712,11 +1674,28 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         } else if (AndroidUtilities.getPeerLayerVersion(MessagesController.getInstance().getEncryptedChat(Integer.valueOf(high_id)).layer) >= 66) {
             this.hasRecordVideo = true;
         }
+        boolean isChannel = false;
+        if (((int) this.dialog_id) < 0) {
+            Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-((int) this.dialog_id)));
+            if (!ChatObject.isChannel(chat) || chat.megagroup) {
+                isChannel = false;
+            } else {
+                isChannel = true;
+            }
+        }
         if (this.hasRecordVideo) {
-            setRecordVideoButtonVisible(ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("currentModeVideo", false), false);
+            setRecordVideoButtonVisible(ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean(isChannel ? "currentModeVideoChannel" : "currentModeVideo", isChannel), false);
         } else {
             setRecordVideoButtonVisible(false, false);
         }
+    }
+
+    public boolean isInVideoMode() {
+        return this.videoSendButton.getTag() != null;
+    }
+
+    public boolean hasRecordVideo() {
+        return this.hasRecordVideo;
     }
 
     private void updateFieldHint() {

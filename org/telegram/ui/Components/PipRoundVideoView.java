@@ -127,7 +127,7 @@ public class PipRoundVideoView {
                     if (this.startDragging && !this.dragging) {
                         MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
                         if (messageObject != null) {
-                            if (MediaController.getInstance().isAudioPaused()) {
+                            if (MediaController.getInstance().isMessagePaused()) {
                                 MediaController.getInstance().playMessage(messageObject);
                             } else {
                                 MediaController.getInstance().pauseMessage(messageObject);

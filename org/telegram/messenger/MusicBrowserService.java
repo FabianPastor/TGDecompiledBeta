@@ -83,7 +83,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             if (service == null) {
                 return;
             }
-            if (MediaController.getInstance().getPlayingMessageObject() == null || MediaController.getInstance().isAudioPaused()) {
+            if (MediaController.getInstance().getPlayingMessageObject() == null || MediaController.getInstance().isMessagePaused()) {
                 service.stopSelf();
                 service.serviceStarted = false;
             }
@@ -452,7 +452,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         } else if (MediaController.getInstance().isDownloadingCurrentMessage()) {
             state = 6;
         } else {
-            state = MediaController.getInstance().isAudioPaused() ? 2 : 3;
+            state = MediaController.getInstance().isMessagePaused() ? 2 : 3;
         }
         if (error != null) {
             stateBuilder.setErrorMessage(error);
@@ -472,7 +472,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         if (MediaController.getInstance().getPlayingMessageObject() == null) {
             return 3076;
         }
-        if (!MediaController.getInstance().isAudioPaused()) {
+        if (!MediaController.getInstance().isMessagePaused()) {
             actions = 3076 | 2;
         }
         return (actions | 16) | 32;

@@ -688,7 +688,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             MediaController.getInstance().removeLoadingFileObserver(this);
             if (this.documentAttachType == 5 || this.documentAttachType == 3) {
                 boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-                if (!playing || (playing && MediaController.getInstance().isAudioPaused())) {
+                if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
                     this.buttonState = 0;
                 } else {
                     this.buttonState = 1;

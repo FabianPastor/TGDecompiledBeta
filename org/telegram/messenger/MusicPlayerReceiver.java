@@ -14,7 +14,7 @@ public class MusicPlayerReceiver extends BroadcastReceiver {
                     switch (keyEvent.getKeyCode()) {
                         case 79:
                         case 85:
-                            if (MediaController.getInstance().isAudioPaused()) {
+                            if (MediaController.getInstance().isMessagePaused()) {
                                 MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
                                 return;
                             } else {

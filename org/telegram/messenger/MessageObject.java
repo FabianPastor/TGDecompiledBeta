@@ -135,6 +135,7 @@ public class MessageObject {
     private int generatedWithMinSize;
     public boolean hasRtl;
     public boolean isDateObject;
+    private int isRoundVideoCached;
     public int lastLineWidth;
     private boolean layoutCreated;
     public CharSequence linkDescription;
@@ -1530,11 +1531,11 @@ public class MessageObject {
     }
 
     public boolean isSecretPhoto() {
-        return (this.messageOwner instanceof TL_message_secret) && (this.messageOwner.media instanceof TL_messageMediaPhoto) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60;
+        return (this.messageOwner instanceof TL_message_secret) && (((this.messageOwner.media instanceof TL_messageMediaPhoto) || isRoundVideo()) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60);
     }
 
     public boolean isSecretMedia() {
-        return (this.messageOwner instanceof TL_message_secret) && (((this.messageOwner.media instanceof TL_messageMediaPhoto) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60) || isVoice() || isVideo());
+        return (this.messageOwner instanceof TL_message_secret) && (((this.messageOwner.media instanceof TL_messageMediaPhoto) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60) || isVoice() || isVideo() || isRoundVideo());
     }
 
     public static void setUnreadFlags(Message message, int flag) {
@@ -1749,6 +1750,9 @@ public class MessageObject {
     }
 
     public static boolean isRoundVideoMessage(Message message) {
+        if (message.media instanceof TL_messageMediaWebPage) {
+            return isRoundVideoDocument(message.media.webpage.document);
+        }
         return (message.media == null || message.media.document == null || !isRoundVideoDocument(message.media.document)) ? false : true;
     }
 
@@ -1837,6 +1841,9 @@ public class MessageObject {
             }
             if (this.type == 11) {
                 return AndroidUtilities.dp(50.0f);
+            }
+            if (this.type == 5) {
+                return AndroidUtilities.roundMessageSize;
             }
             int photoHeight;
             int photoWidth;
@@ -1956,7 +1963,14 @@ public class MessageObject {
     }
 
     public boolean isRoundVideo() {
-        return this.type == 5 || isRoundVideoMessage(this.messageOwner);
+        if (this.isRoundVideoCached == 0) {
+            int i = (this.type == 5 || isRoundVideoMessage(this.messageOwner)) ? 1 : 2;
+            this.isRoundVideoCached = i;
+        }
+        if (this.isRoundVideoCached == 1) {
+            return true;
+        }
+        return false;
     }
 
     public boolean hasPhotoStickers() {
@@ -2102,7 +2116,7 @@ public class MessageObject {
 
     public static boolean canEditMessage(Message message, Chat chat) {
         boolean z = true;
-        if (message == null || message.to_id == null) {
+        if (message == null || message.to_id == null || isRoundVideoMessage(message)) {
             return false;
         }
         if ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.id < 0) {

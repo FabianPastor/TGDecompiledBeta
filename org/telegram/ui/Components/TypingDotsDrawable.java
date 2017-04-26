@@ -2,14 +2,13 @@ package org.telegram.ui.Components;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
 import android.view.animation.DecelerateInterpolator;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.ui.ActionBar.Theme;
 
-public class TypingDotsDrawable extends Drawable {
+public class TypingDotsDrawable extends StatusDrawable {
     private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
     private float[] elapsedTimes = new float[]{0.0f, 0.0f, 0.0f};
     private boolean isChat = false;
@@ -74,6 +73,7 @@ public class TypingDotsDrawable extends Drawable {
         } else {
             y = AndroidUtilities.dp(9.3f) + getBounds().top;
         }
+        Theme.chat_statusPaint.setAlpha(255);
         canvas.drawCircle((float) AndroidUtilities.dp(3.0f), (float) y, this.scales[0] * AndroidUtilities.density, Theme.chat_statusPaint);
         canvas.drawCircle((float) AndroidUtilities.dp(9.0f), (float) y, this.scales[1] * AndroidUtilities.density, Theme.chat_statusPaint);
         canvas.drawCircle((float) AndroidUtilities.dp(15.0f), (float) y, this.scales[2] * AndroidUtilities.density, Theme.chat_statusPaint);

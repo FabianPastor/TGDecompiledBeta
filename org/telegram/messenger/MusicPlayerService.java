@@ -148,7 +148,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
                 notification.bigContentView.setViewVisibility(R.id.player_previous, 0);
                 notification.bigContentView.setViewVisibility(R.id.player_progress_bar, 8);
             }
-            if (MediaController.getInstance().isAudioPaused()) {
+            if (MediaController.getInstance().isMessagePaused()) {
                 notification.contentView.setViewVisibility(R.id.player_pause, 8);
                 notification.contentView.setViewVisibility(R.id.player_play, 0);
                 if (supportBigNotifications) {

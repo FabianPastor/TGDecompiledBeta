@@ -255,7 +255,7 @@ public class AudioPlayerActivity extends BaseFragment implements NotificationCen
         this.playButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (!MediaController.getInstance().isDownloadingCurrentMessage()) {
-                    if (MediaController.getInstance().isAudioPaused()) {
+                    if (MediaController.getInstance().isMessagePaused()) {
                         MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
                     } else {
                         MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
@@ -400,7 +400,7 @@ public class AudioPlayerActivity extends BaseFragment implements NotificationCen
             if (messageObject != null) {
                 checkIfMusicDownloaded(messageObject);
                 updateProgress(messageObject);
-                if (MediaController.getInstance().isAudioPaused()) {
+                if (MediaController.getInstance().isMessagePaused()) {
                     this.playButton.setImageDrawable(Theme.createSimpleSelectorDrawable(this.playButton.getContext(), R.drawable.pl_play, Theme.getColor(Theme.key_player_button), Theme.getColor(Theme.key_player_buttonActive)));
                 } else {
                     this.playButton.setImageDrawable(Theme.createSimpleSelectorDrawable(this.playButton.getContext(), R.drawable.pl_pause, Theme.getColor(Theme.key_player_button), Theme.getColor(Theme.key_player_buttonActive)));

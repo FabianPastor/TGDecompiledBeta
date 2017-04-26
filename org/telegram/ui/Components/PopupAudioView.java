@@ -229,7 +229,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
         if (FileLoader.getPathToMessage(this.currentMessageObject.messageOwner).exists()) {
             MediaController.getInstance().removeLoadingFileObserver(this);
             boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-            if (!playing || (playing && MediaController.getInstance().isAudioPaused())) {
+            if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
                 this.buttonState = 0;
             } else {
                 this.buttonState = 1;

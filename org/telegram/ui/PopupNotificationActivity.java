@@ -66,8 +66,10 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PlayingGameDrawable;
 import org.telegram.ui.Components.PopupAudioView;
 import org.telegram.ui.Components.RecordStatusDrawable;
+import org.telegram.ui.Components.RoundStatusDrawable;
 import org.telegram.ui.Components.SendingFileDrawable;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
+import org.telegram.ui.Components.StatusDrawable;
 import org.telegram.ui.Components.TypingDotsDrawable;
 
 public class PopupNotificationActivity extends Activity implements NotificationCenterDelegate {
@@ -95,15 +97,12 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     private TextView nameTextView;
     private Runnable onAnimationEndRunnable = null;
     private TextView onlineTextView;
-    private PlayingGameDrawable playingGameDrawable;
     private RelativeLayout popupContainer;
     private ArrayList<MessageObject> popupMessages = new ArrayList();
-    private RecordStatusDrawable recordStatusDrawable;
     private ViewGroup rightView;
-    private SendingFileDrawable sendingFileDrawable;
     private boolean startedMoving = false;
+    private StatusDrawable[] statusDrawables = new StatusDrawable[5];
     private ArrayList<ViewGroup> textViews = new ArrayList();
-    private TypingDotsDrawable typingDotsDrawable;
     private VelocityTracker velocityTracker = null;
     private WakeLock wakeLock = null;
 
@@ -171,10 +170,11 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.contactsDidLoaded);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
-        this.typingDotsDrawable = new TypingDotsDrawable();
-        this.recordStatusDrawable = new RecordStatusDrawable();
-        this.sendingFileDrawable = new SendingFileDrawable();
-        this.playingGameDrawable = new PlayingGameDrawable();
+        this.statusDrawables[0] = new TypingDotsDrawable();
+        this.statusDrawables[1] = new RecordStatusDrawable();
+        this.statusDrawables[2] = new SendingFileDrawable();
+        this.statusDrawables[3] = new PlayingGameDrawable();
+        this.statusDrawables[4] = new RoundStatusDrawable();
         SizeNotifierFrameLayout contentView = new SizeNotifierFrameLayout(this) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -281,6 +281,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             }
 
             public void onSwitchRecordMode(boolean video) {
+            }
+
+            public void onPreAudioVideoRecord() {
             }
 
             public void onMessageEditEnd(boolean loading) {
@@ -1041,44 +1044,20 @@ public class PopupNotificationActivity extends Activity implements NotificationC
 
     private void setTypingAnimation(boolean start) {
         if (this.actionBar != null) {
+            int a;
             if (start) {
                 try {
                     Integer type = (Integer) MessagesController.getInstance().printingStringsTypes.get(Long.valueOf(this.currentMessageObject.getDialogId()));
-                    if (type.intValue() == 0) {
-                        this.onlineTextView.setCompoundDrawablesWithIntrinsicBounds(this.typingDotsDrawable, null, null, null);
-                        this.onlineTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
-                        this.typingDotsDrawable.start();
-                        this.recordStatusDrawable.stop();
-                        this.sendingFileDrawable.stop();
-                        this.playingGameDrawable.stop();
-                        return;
-                    } else if (type.intValue() == 1) {
-                        this.onlineTextView.setCompoundDrawablesWithIntrinsicBounds(this.recordStatusDrawable, null, null, null);
-                        this.onlineTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
-                        this.recordStatusDrawable.start();
-                        this.typingDotsDrawable.stop();
-                        this.sendingFileDrawable.stop();
-                        this.playingGameDrawable.stop();
-                        return;
-                    } else if (type.intValue() == 2) {
-                        this.onlineTextView.setCompoundDrawablesWithIntrinsicBounds(this.sendingFileDrawable, null, null, null);
-                        this.onlineTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
-                        this.sendingFileDrawable.start();
-                        this.typingDotsDrawable.stop();
-                        this.recordStatusDrawable.stop();
-                        this.playingGameDrawable.stop();
-                        return;
-                    } else if (type.intValue() == 3) {
-                        this.onlineTextView.setCompoundDrawablesWithIntrinsicBounds(this.playingGameDrawable, null, null, null);
-                        this.onlineTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
-                        this.playingGameDrawable.start();
-                        this.typingDotsDrawable.stop();
-                        this.recordStatusDrawable.stop();
-                        this.sendingFileDrawable.stop();
-                        return;
-                    } else {
-                        return;
+                    this.onlineTextView.setCompoundDrawablesWithIntrinsicBounds(this.statusDrawables[type.intValue()], null, null, null);
+                    this.onlineTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
+                    for (a = 0; a < this.statusDrawables.length; a++) {
+                        if (a == type.intValue()) {
+                            this.statusDrawables[a].start();
+                        } else {
+                            this.statusDrawables[a].stop();
+                        }
                     }
+                    return;
                 } catch (Throwable e) {
                     FileLog.e(e);
                     return;
@@ -1086,10 +1065,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             }
             this.onlineTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             this.onlineTextView.setCompoundDrawablePadding(0);
-            this.typingDotsDrawable.stop();
-            this.recordStatusDrawable.stop();
-            this.recordStatusDrawable.stop();
-            this.sendingFileDrawable.stop();
+            for (StatusDrawable stop : this.statusDrawables) {
+                stop.stop();
+            }
         }
     }
 

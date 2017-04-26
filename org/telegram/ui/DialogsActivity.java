@@ -900,7 +900,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             args.putInt("chat_id", -lower_part);
                         }
                         args.putInt("message_id", playingMessageObject.getId());
-                        DialogsActivity.this.presentFragment(new ChatActivity(args), true);
+                        DialogsActivity.this.presentFragment(new ChatActivity(args), false);
                     }
                 }
             });

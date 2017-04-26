@@ -76,7 +76,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         addView(this.playButton, LayoutHelper.createFrame(36, 36.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
         this.playButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                if (MediaController.getInstance().isAudioPaused()) {
+                if (MediaController.getInstance().isMessagePaused()) {
                     MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
                 } else {
                     MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
@@ -271,7 +271,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             this.visible = true;
             setVisibility(0);
         }
-        if (MediaController.getInstance().isAudioPaused()) {
+        if (MediaController.getInstance().isMessagePaused()) {
             this.playButton.setImageResource(R.drawable.miniplayer_play);
         } else {
             this.playButton.setImageResource(R.drawable.miniplayer_pause);

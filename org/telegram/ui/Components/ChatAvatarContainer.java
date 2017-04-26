@@ -38,18 +38,13 @@ public class ChatAvatarContainer extends FrameLayout {
     private BackupImageView avatarImageView;
     private int onlineCount = -1;
     private ChatActivity parentFragment;
-    private PlayingGameDrawable playingGameDrawable;
-    private RecordStatusDrawable recordStatusDrawable;
-    private SendingFileDrawable sendingFileDrawable;
+    private StatusDrawable[] statusDrawables = new StatusDrawable[5];
     private SimpleTextView subtitleTextView;
     private ImageView timeItem;
     private TimerDrawable timerDrawable;
     private SimpleTextView titleTextView;
-    private TypingDotsDrawable typingDotsDrawable;
 
     public ChatAvatarContainer(Context context, ChatActivity chatActivity, boolean needTime) {
-        boolean z;
-        boolean z2 = true;
         super(context);
         this.parentFragment = chatActivity;
         this.avatarImageView = new BackupImageView(context);
@@ -108,30 +103,20 @@ public class ChatAvatarContainer extends FrameLayout {
             }
         });
         Chat chat = this.parentFragment.getCurrentChat();
-        this.typingDotsDrawable = new TypingDotsDrawable();
-        this.typingDotsDrawable.setIsChat(chat != null);
-        this.recordStatusDrawable = new RecordStatusDrawable();
-        RecordStatusDrawable recordStatusDrawable = this.recordStatusDrawable;
-        if (chat != null) {
-            z = true;
-        } else {
-            z = false;
+        this.statusDrawables[0] = new TypingDotsDrawable();
+        this.statusDrawables[1] = new RecordStatusDrawable();
+        this.statusDrawables[2] = new SendingFileDrawable();
+        this.statusDrawables[3] = new PlayingGameDrawable();
+        this.statusDrawables[4] = new RoundStatusDrawable();
+        for (StatusDrawable statusDrawable : this.statusDrawables) {
+            boolean z;
+            if (chat != null) {
+                z = true;
+            } else {
+                z = false;
+            }
+            statusDrawable.setIsChat(z);
         }
-        recordStatusDrawable.setIsChat(z);
-        this.sendingFileDrawable = new SendingFileDrawable();
-        SendingFileDrawable sendingFileDrawable = this.sendingFileDrawable;
-        if (chat != null) {
-            z = true;
-        } else {
-            z = false;
-        }
-        sendingFileDrawable.setIsChat(z);
-        this.playingGameDrawable = new PlayingGameDrawable();
-        PlayingGameDrawable playingGameDrawable = this.playingGameDrawable;
-        if (chat == null) {
-            z2 = false;
-        }
-        playingGameDrawable.setIsChat(z2);
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -201,50 +186,28 @@ public class ChatAvatarContainer extends FrameLayout {
     }
 
     private void setTypingAnimation(boolean start) {
+        int a;
         if (start) {
             try {
                 Integer type = (Integer) MessagesController.getInstance().printingStringsTypes.get(Long.valueOf(this.parentFragment.getDialogId()));
-                if (type.intValue() == 0) {
-                    this.subtitleTextView.setLeftDrawable(this.typingDotsDrawable);
-                    this.typingDotsDrawable.start();
-                    this.recordStatusDrawable.stop();
-                    this.sendingFileDrawable.stop();
-                    this.playingGameDrawable.stop();
-                    return;
-                } else if (type.intValue() == 1) {
-                    this.subtitleTextView.setLeftDrawable(this.recordStatusDrawable);
-                    this.recordStatusDrawable.start();
-                    this.typingDotsDrawable.stop();
-                    this.sendingFileDrawable.stop();
-                    this.playingGameDrawable.stop();
-                    return;
-                } else if (type.intValue() == 2) {
-                    this.subtitleTextView.setLeftDrawable(this.sendingFileDrawable);
-                    this.sendingFileDrawable.start();
-                    this.typingDotsDrawable.stop();
-                    this.recordStatusDrawable.stop();
-                    this.playingGameDrawable.stop();
-                    return;
-                } else if (type.intValue() == 3) {
-                    this.subtitleTextView.setLeftDrawable(this.playingGameDrawable);
-                    this.playingGameDrawable.start();
-                    this.typingDotsDrawable.stop();
-                    this.recordStatusDrawable.stop();
-                    this.sendingFileDrawable.stop();
-                    return;
-                } else {
-                    return;
+                this.subtitleTextView.setLeftDrawable(this.statusDrawables[type.intValue()]);
+                for (a = 0; a < this.statusDrawables.length; a++) {
+                    if (a == type.intValue()) {
+                        this.statusDrawables[a].start();
+                    } else {
+                        this.statusDrawables[a].stop();
+                    }
                 }
+                return;
             } catch (Throwable e) {
                 FileLog.e(e);
                 return;
             }
         }
         this.subtitleTextView.setLeftDrawable(null);
-        this.typingDotsDrawable.stop();
-        this.recordStatusDrawable.stop();
-        this.sendingFileDrawable.stop();
-        this.playingGameDrawable.stop();
+        for (StatusDrawable stop : this.statusDrawables) {
+            stop.stop();
+        }
     }
 
     public void updateSubtitle() {

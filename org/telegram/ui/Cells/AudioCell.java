@@ -64,7 +64,7 @@ public class AudioCell extends FrameLayout {
                 if (AudioCell.this.audioEntry == null) {
                     return;
                 }
-                if (!MediaController.getInstance().isPlayingMessage(AudioCell.this.audioEntry.messageObject) || MediaController.getInstance().isAudioPaused()) {
+                if (!MediaController.getInstance().isPlayingMessage(AudioCell.this.audioEntry.messageObject) || MediaController.getInstance().isMessagePaused()) {
                     ArrayList<MessageObject> arrayList = new ArrayList();
                     arrayList.add(AudioCell.this.audioEntry.messageObject);
                     if (MediaController.getInstance().setPlaylist(arrayList, AudioCell.this.audioEntry.messageObject)) {
@@ -214,7 +214,7 @@ public class AudioCell extends FrameLayout {
         this.genreTextView.setText(this.audioEntry.genre);
         this.authorTextView.setText(this.audioEntry.author);
         this.timeTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(this.audioEntry.duration / 60), Integer.valueOf(this.audioEntry.duration % 60)}));
-        boolean z2 = MediaController.getInstance().isPlayingMessage(this.audioEntry.messageObject) && !MediaController.getInstance().isAudioPaused();
+        boolean z2 = MediaController.getInstance().isPlayingMessage(this.audioEntry.messageObject) && !MediaController.getInstance().isMessagePaused();
         setPlayDrawable(z2);
         this.needDivider = divider;
         if (divider) {

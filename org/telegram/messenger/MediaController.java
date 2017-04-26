@@ -714,7 +714,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                         public void run() {
                             EmbedBottomSheet embedBottomSheet;
                             if (state == 1) {
-                                if (MediaController.this.isPlayingMessage(MediaController.this.getPlayingMessageObject()) && !MediaController.this.isAudioPaused()) {
+                                if (MediaController.this.isPlayingMessage(MediaController.this.getPlayingMessageObject()) && !MediaController.this.isMessagePaused()) {
                                     MediaController.this.pauseMessage(MediaController.this.getPlayingMessageObject());
                                 } else if (!(MediaController.this.recordStartRunnable == null && MediaController.this.recordingAudio == null)) {
                                     MediaController.this.stopRecording(2);
@@ -748,7 +748,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
 
     public void onAudioFocusChange(int focusChange) {
         if (focusChange == -1) {
-            if (isPlayingMessage(getPlayingMessageObject()) && !isAudioPaused()) {
+            if (isPlayingMessage(getPlayingMessageObject()) && !isMessagePaused()) {
                 pauseMessage(getPlayingMessageObject());
             }
             this.hasAudioFocus = 0;
@@ -757,7 +757,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             this.audioFocus = 2;
             if (this.resumeAudioOnFocusGain) {
                 this.resumeAudioOnFocusGain = false;
-                if (isPlayingMessage(getPlayingMessageObject()) && isAudioPaused()) {
+                if (isPlayingMessage(getPlayingMessageObject()) && isMessagePaused()) {
                     playMessage(getPlayingMessageObject());
                 }
             }
@@ -765,7 +765,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             this.audioFocus = 1;
         } else if (focusChange == -2) {
             this.audioFocus = 0;
-            if (isPlayingMessage(getPlayingMessageObject()) && !isAudioPaused()) {
+            if (isPlayingMessage(getPlayingMessageObject()) && !isMessagePaused()) {
                 pauseMessage(getPlayingMessageObject());
                 this.resumeAudioOnFocusGain = true;
             }
@@ -2775,7 +2775,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         return ((this.audioTrackPlayer == null && this.audioPlayer == null && this.videoPlayer == null) || messageObject == null || this.playingMessageObject == null || (this.playingMessageObject != null && (this.playingMessageObject.getId() != messageObject.getId() || this.downloadingCurrentMessage))) ? false : true;
     }
 
-    public boolean isAudioPaused() {
+    public boolean isMessagePaused() {
         return this.isPaused || this.downloadingCurrentMessage;
     }
 
@@ -2786,7 +2786,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     public void startRecording(final long dialog_id, final MessageObject reply_to_msg) {
         long j = 50;
         boolean paused = false;
-        if (!(this.playingMessageObject == null || !isPlayingMessage(this.playingMessageObject) || isAudioPaused())) {
+        if (!(this.playingMessageObject == null || !isPlayingMessage(this.playingMessageObject) || isMessagePaused())) {
             paused = true;
             pauseMessage(this.playingMessageObject);
         }
@@ -3543,7 +3543,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     public static void loadGalleryPhotosAlbums(final int guid) {
         Thread thread = new Thread(new Runnable() {
             public void run() {
-                Throwable e;
                 int imageIdColumn;
                 int bucketIdColumn;
                 int bucketNameColumn;
@@ -3566,7 +3565,8 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 String cameraFolder = null;
                 try {
                     cameraFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/";
-                } catch (Throwable e2) {
+                } catch (Throwable e) {
+                    Throwable e2;
                     FileLog.e(e2);
                 }
                 Integer num = null;

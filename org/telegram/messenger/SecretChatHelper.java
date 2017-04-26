@@ -573,12 +573,19 @@ public class SecretChatHelper {
                         if (encryptedChat.seq_in == 0 && encryptedChat.seq_out == 0) {
                             if (encryptedChat.admin_id == UserConfig.getClientUserId()) {
                                 encryptedChat.seq_out = 1;
+                                encryptedChat.seq_in = -2;
                             } else {
-                                encryptedChat.seq_in = 1;
+                                encryptedChat.seq_in = -1;
                             }
                         }
                         if (message.seq_in == 0 && message.seq_out == 0) {
-                            layer.in_seq_no = encryptedChat.seq_in;
+                            int i;
+                            if (encryptedChat.seq_in > 0) {
+                                i = encryptedChat.seq_in;
+                            } else {
+                                i = encryptedChat.seq_in + 2;
+                            }
+                            layer.in_seq_no = i;
                             layer.out_seq_no = encryptedChat.seq_out;
                             EncryptedChat encryptedChat = encryptedChat;
                             encryptedChat.seq_out += 2;
@@ -1423,8 +1430,9 @@ public class SecretChatHelper {
                     if (chat.seq_in == 0 && chat.seq_out == 0) {
                         if (chat.admin_id == UserConfig.getClientUserId()) {
                             chat.seq_out = 1;
+                            chat.seq_in = -2;
                         } else {
-                            chat.seq_in = 1;
+                            chat.seq_in = -1;
                         }
                     }
                     if (layer.random_bytes.length < 15) {
@@ -1433,7 +1441,7 @@ public class SecretChatHelper {
                     }
                     FileLog.e("current chat in_seq = " + chat.seq_in + " out_seq = " + chat.seq_out);
                     FileLog.e("got message with in_seq = " + layer.in_seq_no + " out_seq = " + layer.out_seq_no);
-                    if (layer.out_seq_no < chat.seq_in) {
+                    if (layer.out_seq_no <= chat.seq_in) {
                         return null;
                     }
                     if (chat.seq_in == layer.out_seq_no || chat.seq_in == layer.out_seq_no - 2) {
@@ -1541,7 +1549,7 @@ public class SecretChatHelper {
             if (encryptedChat.key_fingerprint == Utilities.bytesToLong(authKeyId)) {
                 encryptedChat.auth_key = authKey;
                 encryptedChat.key_create_date = ConnectionsManager.getInstance().getCurrentTime();
-                encryptedChat.seq_in = 0;
+                encryptedChat.seq_in = -2;
                 encryptedChat.seq_out = 1;
                 MessagesStorage.getInstance().updateEncryptedChat(encryptedChat);
                 MessagesController.getInstance().putEncryptedChat(encryptedChat, false);
@@ -1613,7 +1621,7 @@ public class SecretChatHelper {
                             salt[a] = (byte) (((byte) ((int) (Utilities.random.nextDouble() * 256.0d))) ^ res.random[a]);
                         }
                         encryptedChat.a_or_b = salt;
-                        encryptedChat.seq_in = 1;
+                        encryptedChat.seq_in = -1;
                         encryptedChat.seq_out = 0;
                         BigInteger p = new BigInteger(1, MessagesStorage.secretPBytes);
                         BigInteger g_b = BigInteger.valueOf((long) MessagesStorage.secretG).modPow(new BigInteger(1, salt), p);
@@ -1749,7 +1757,7 @@ public class SecretChatHelper {
                                             }
                                             EncryptedChat chat = response;
                                             chat.user_id = chat.participant_id;
-                                            chat.seq_in = 0;
+                                            chat.seq_in = -2;
                                             chat.seq_out = 1;
                                             chat.a_or_b = salt;
                                             MessagesController.getInstance().putEncryptedChat(chat, false);
