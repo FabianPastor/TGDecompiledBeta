@@ -43,6 +43,7 @@ public class CameraController implements OnInfoListener {
     protected ArrayList<String> availableFlashModes = new ArrayList();
     protected ArrayList<CameraInfo> cameraInfos = null;
     private boolean cameraInitied;
+    private boolean loadingCameras;
     private VideoTakeCallback onVideoTakeCallback;
     private String recordedFile;
     private MediaRecorder recorder;
@@ -89,7 +90,8 @@ public class CameraController implements OnInfoListener {
     }
 
     public void initCamera() {
-        if (!this.cameraInitied) {
+        if (!this.loadingCameras && !this.cameraInitied) {
+            this.loadingCameras = true;
             this.threadPool.execute(new Runnable() {
                 public void run() {
                     try {
@@ -125,11 +127,18 @@ public class CameraController implements OnInfoListener {
                         }
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
+                                CameraController.this.loadingCameras = false;
                                 CameraController.this.cameraInitied = true;
                                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.cameraInitied, new Object[0]);
                             }
                         });
                     } catch (Throwable e) {
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                CameraController.this.loadingCameras = false;
+                                CameraController.this.cameraInitied = false;
+                            }
+                        });
                         FileLog.e(e);
                     }
                 }

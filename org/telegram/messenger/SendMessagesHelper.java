@@ -864,7 +864,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 ArrayList<Integer> ids = new ArrayList();
                 HashMap<Long, Message> messagesByRandomIds = new HashMap();
                 InputPeer inputPeer = MessagesController.getInputPeer(lower_id);
-                boolean toMyself = peer == ((long) UserConfig.getClientUserId());
+                int myId = UserConfig.getClientUserId();
+                boolean toMyself = peer == ((long) myId);
                 a = 0;
                 while (a < messages.size()) {
                     MessageObject msgObj = (MessageObject) messages.get(a);
@@ -872,7 +873,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         Message newMsg = new TL_message();
                         if (msgObj.isForwarded()) {
                             newMsg.fwd_from = msgObj.messageOwner.fwd_from;
-                        } else {
+                        } else if (msgObj.getDialogId() != ((long) myId)) {
                             newMsg.fwd_from = new TL_messageFwdHeader();
                             TL_messageFwdHeader tL_messageFwdHeader;
                             if (msgObj.isFromUser()) {
@@ -1463,7 +1464,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         } else if (retryMessageObject.type == 1) {
                             photo = (TL_photo) newMsg.media.photo;
                             type = 2;
-                        } else if (retryMessageObject.type == 3 || videoEditedInfo != null) {
+                        } else if (retryMessageObject.type == 3 || retryMessageObject.type == 5 || videoEditedInfo != null) {
                             type = 3;
                             document = (TL_document) newMsg.media.document;
                         } else if (retryMessageObject.type == 12) {

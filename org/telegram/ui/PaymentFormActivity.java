@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Vibrator;
 import android.support.v4.view.InputDeviceCompat;
@@ -70,7 +71,6 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -179,6 +179,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private String paymentJson;
     private HashMap<String, String> phoneFormatMap;
     private ContextProgressView progressView;
+    private ContextProgressView progressViewButton;
     private RadioCell[] radioCells;
     private TL_payments_validatedRequestedInfo requestedInfo;
     private boolean saveCardInfo;
@@ -438,7 +439,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
         });
         ActionBarMenu menu = this.actionBar.createMenu();
-        if (this.currentStep == 0 || this.currentStep == 1 || this.currentStep == 2 || this.currentStep == 3) {
+        if (this.currentStep == 0 || this.currentStep == 1 || this.currentStep == 2 || this.currentStep == 3 || this.currentStep == 4) {
             this.doneItem = menu.addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
             this.progressView = new ContextProgressView(context, 1);
             this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
@@ -1300,7 +1301,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 }
             } else {
                 this.webviewLoading = true;
-                showEditDoneProgress(true);
+                showEditDoneProgress(true, true);
                 this.progressView.setVisibility(0);
                 this.doneItem.setEnabled(false);
                 this.doneItem.getImageView().setVisibility(4);
@@ -1321,7 +1322,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     public void onPageFinished(WebView view, String url) {
                         super.onPageFinished(view, url);
                         PaymentFormActivity.this.webviewLoading = false;
-                        PaymentFormActivity.this.showEditDoneProgress(false);
+                        PaymentFormActivity.this.showEditDoneProgress(true, false);
                         PaymentFormActivity.this.updateSavePaymentField();
                     }
                 });
@@ -1560,26 +1561,26 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 final String str = totalPrice;
                 this.bottomLayout.setOnClickListener(new OnClickListener() {
                     public void onClick(View v) {
-                        if (PaymentFormActivity.this.botUser != null) {
-                            String botKey = "payment_warning_" + PaymentFormActivity.this.botUser.id;
-                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
-                            if (preferences.getBoolean(botKey, false)) {
-                                PaymentFormActivity.this.showPayAlert(str);
-                                return;
-                            }
-                            preferences.edit().putBoolean(botKey, true).commit();
-                            Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
-                            builder.setTitle(LocaleController.getString("PaymentWarning", R.string.PaymentWarning));
-                            builder.setMessage(LocaleController.formatString("PaymentWarningText", R.string.PaymentWarningText, PaymentFormActivity.this.currentBotName, PaymentFormActivity.this.currentBotName));
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    PaymentFormActivity.this.showPayAlert(str);
-                                }
-                            });
-                            PaymentFormActivity.this.showDialog(builder.create());
+                        if (PaymentFormActivity.this.botUser == null || PaymentFormActivity.this.botUser.verified) {
+                            PaymentFormActivity.this.showPayAlert(str);
                             return;
                         }
-                        PaymentFormActivity.this.showPayAlert(str);
+                        String botKey = "payment_warning_" + PaymentFormActivity.this.botUser.id;
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+                        if (preferences.getBoolean(botKey, false)) {
+                            PaymentFormActivity.this.showPayAlert(str);
+                            return;
+                        }
+                        preferences.edit().putBoolean(botKey, true).commit();
+                        Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
+                        builder.setTitle(LocaleController.getString("PaymentWarning", R.string.PaymentWarning));
+                        builder.setMessage(LocaleController.formatString("PaymentWarningText", R.string.PaymentWarningText, PaymentFormActivity.this.currentBotName, PaymentFormActivity.this.currentBotName));
+                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                PaymentFormActivity.this.showPayAlert(str);
+                            }
+                        });
+                        PaymentFormActivity.this.showDialog(builder.create());
                     }
                 });
                 this.payTextView = new TextView(context);
@@ -1589,12 +1590,43 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 this.payTextView.setGravity(17);
                 this.payTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 this.bottomLayout.addView(this.payTextView, LayoutHelper.createFrame(-1, -1.0f));
-                this.progressView = new ContextProgressView(context, 0);
-                this.progressView.setVisibility(4);
-                this.bottomLayout.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
+                this.progressViewButton = new ContextProgressView(context, 0);
+                this.progressViewButton.setVisibility(4);
+                this.bottomLayout.addView(this.progressViewButton, LayoutHelper.createFrame(-1, -1.0f));
                 view = new View(context);
                 view.setBackgroundResource(R.drawable.header_shadow_reverse);
                 frameLayout.addView(view, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
+                this.doneItem.setEnabled(false);
+                this.doneItem.getImageView().setVisibility(4);
+                this.webView = new WebView(context);
+                this.webView.setBackgroundColor(-1);
+                this.webView.getSettings().setJavaScriptEnabled(true);
+                this.webView.getSettings().setDomStorageEnabled(true);
+                if (VERSION.SDK_INT >= 21) {
+                    this.webView.getSettings().setMixedContentMode(0);
+                    CookieManager.getInstance().setAcceptThirdPartyCookies(this.webView, true);
+                }
+                this.webView.setWebViewClient(new WebViewClient() {
+                    public void onLoadResource(WebView view, String url) {
+                        try {
+                            if ("t.me".equals(Uri.parse(url).getHost())) {
+                                PaymentFormActivity.this.goToNextStep();
+                                return;
+                            }
+                        } catch (Exception e) {
+                        }
+                        super.onLoadResource(view, url);
+                    }
+
+                    public void onPageFinished(WebView view, String url) {
+                        super.onPageFinished(view, url);
+                        PaymentFormActivity.this.webviewLoading = false;
+                        PaymentFormActivity.this.showEditDoneProgress(true, false);
+                        PaymentFormActivity.this.updateSavePaymentField();
+                    }
+                });
+                frameLayout.addView(this.webView, LayoutHelper.createFrame(-1, -1.0f));
+                this.webView.setVisibility(8);
             }
             this.sectionCell[1] = new ShadowSectionCell(context);
             this.sectionCell[1].setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
@@ -1609,7 +1641,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         builder.setMessage(LocaleController.formatString("PaymentTransactionMessage", R.string.PaymentTransactionMessage, totalPrice, this.currentBotName, this.currentItemName));
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                PaymentFormActivity.this.showEditDoneProgress(true);
+                PaymentFormActivity.this.showEditDoneProgress(true, true);
                 PaymentFormActivity.this.setDonePressed(true);
                 PaymentFormActivity.this.sendData();
             }
@@ -1691,9 +1723,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     public void didReceivedNotification(int id, Object... args) {
         if (id == NotificationCenter.didSetTwoStepPassword) {
             this.paymentForm.password_missing = false;
+            this.paymentForm.can_save_credentials = true;
             updateSavePaymentField();
         } else if (id == NotificationCenter.didRemovedTwoStepPassword) {
             this.paymentForm.password_missing = true;
+            this.paymentForm.can_save_credentials = false;
             updateSavePaymentField();
         } else if (id == NotificationCenter.paymentFinished) {
             removeSelfFromStack();
@@ -1756,36 +1790,36 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
 
     private void updateSavePaymentField() {
         if (this.bottomCell[0] != null) {
-            if (!this.paymentForm.can_save_credentials || (this.webView != null && (this.webView == null || this.webviewLoading))) {
-                this.checkCell1.setVisibility(8);
-                this.bottomCell[0].setVisibility(8);
-                this.sectionCell[2].setBackgroundDrawable(Theme.getThemedDrawable(this.sectionCell[2].getContext(), R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+            if ((this.paymentForm.password_missing || this.paymentForm.can_save_credentials) && (this.webView == null || !(this.webView == null || this.webviewLoading))) {
+                SpannableStringBuilder text = new SpannableStringBuilder(LocaleController.getString("PaymentCardSavePaymentInformationInfoLine1", R.string.PaymentCardSavePaymentInformationInfoLine1));
+                if (this.paymentForm.password_missing) {
+                    text.append("\n");
+                    int len = text.length();
+                    String str2 = LocaleController.getString("PaymentCardSavePaymentInformationInfoLine2", R.string.PaymentCardSavePaymentInformationInfoLine2);
+                    int index1 = str2.indexOf(42);
+                    int index2 = str2.lastIndexOf(42);
+                    text.append(str2);
+                    if (!(index1 == -1 || index2 == -1)) {
+                        index1 += len;
+                        index2 += len;
+                        this.bottomCell[0].getTextView().setMovementMethod(new LinkMovementMethodMy());
+                        text.replace(index2, index2 + 1, "");
+                        text.replace(index1, index1 + 1, "");
+                        text.setSpan(new LinkSpan(), index1, index2 - 1, 33);
+                    }
+                    this.checkCell1.setEnabled(false);
+                } else {
+                    this.checkCell1.setEnabled(true);
+                }
+                this.bottomCell[0].setText(text);
+                this.checkCell1.setVisibility(0);
+                this.bottomCell[0].setVisibility(0);
+                this.sectionCell[2].setBackgroundDrawable(Theme.getThemedDrawable(this.sectionCell[2].getContext(), R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                 return;
             }
-            SpannableStringBuilder text = new SpannableStringBuilder(LocaleController.getString("PaymentCardSavePaymentInformationInfoLine1", R.string.PaymentCardSavePaymentInformationInfoLine1));
-            if (this.paymentForm.password_missing) {
-                text.append("\n");
-                int len = text.length();
-                String str2 = LocaleController.getString("PaymentCardSavePaymentInformationInfoLine2", R.string.PaymentCardSavePaymentInformationInfoLine2);
-                int index1 = str2.indexOf(42);
-                int index2 = str2.lastIndexOf(42);
-                text.append(str2);
-                if (!(index1 == -1 || index2 == -1)) {
-                    index1 += len;
-                    index2 += len;
-                    this.bottomCell[0].getTextView().setMovementMethod(new LinkMovementMethodMy());
-                    text.replace(index2, index2 + 1, "");
-                    text.replace(index1, index1 + 1, "");
-                    text.setSpan(new LinkSpan(), index1, index2 - 1, 33);
-                }
-                this.checkCell1.setEnabled(false);
-            } else {
-                this.checkCell1.setEnabled(true);
-            }
-            this.bottomCell[0].setText(text);
-            this.checkCell1.setVisibility(0);
-            this.bottomCell[0].setVisibility(0);
-            this.sectionCell[2].setBackgroundDrawable(Theme.getThemedDrawable(this.sectionCell[2].getContext(), R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+            this.checkCell1.setVisibility(8);
+            this.bottomCell[0].setVisibility(8);
+            this.sectionCell[2].setBackgroundDrawable(Theme.getThemedDrawable(this.sectionCell[2].getContext(), R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         }
     }
 
@@ -1885,7 +1919,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             shakeField(5);
             return false;
         } else {
-            showEditDoneProgress(true);
+            showEditDoneProgress(true, true);
             try {
                 new Stripe(this.stripeApiKey).createToken(card, new TokenCallback() {
                     public void onSuccess(Token token) {
@@ -1894,7 +1928,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
                                     PaymentFormActivity.this.goToNextStep();
-                                    PaymentFormActivity.this.showEditDoneProgress(false);
+                                    PaymentFormActivity.this.showEditDoneProgress(true, false);
                                     PaymentFormActivity.this.setDonePressed(false);
                                 }
                             });
@@ -1903,7 +1937,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
 
                     public void onError(Exception error) {
                         if (!PaymentFormActivity.this.canceled) {
-                            PaymentFormActivity.this.showEditDoneProgress(false);
+                            PaymentFormActivity.this.showEditDoneProgress(true, false);
                             PaymentFormActivity.this.setDonePressed(false);
                             if ((error instanceof APIConnectionException) || (error instanceof APIException)) {
                                 AlertsCreator.showSimpleToast(PaymentFormActivity.this, LocaleController.getString("PaymentConnectionFailed", R.string.PaymentConnectionFailed));
@@ -1923,7 +1957,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private void sendForm() {
         if (!this.canceled) {
             TL_paymentRequestedInfo tL_paymentRequestedInfo;
-            showEditDoneProgress(true);
+            showEditDoneProgress(true, true);
             this.validateRequest = new TL_payments_validateRequestedInfo();
             this.validateRequest.save = this.saveShippingInfo;
             this.validateRequest.msg_id = this.messageObject.getId();
@@ -1971,14 +2005,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                 }
                                 PaymentFormActivity.this.goToNextStep();
                                 PaymentFormActivity.this.setDonePressed(false);
-                                PaymentFormActivity.this.showEditDoneProgress(false);
+                                PaymentFormActivity.this.showEditDoneProgress(true, false);
                             }
                         });
                     } else {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
                                 PaymentFormActivity.this.setDonePressed(false);
-                                PaymentFormActivity.this.showEditDoneProgress(false);
+                                PaymentFormActivity.this.showEditDoneProgress(true, false);
                                 if (error != null) {
                                     String str = error.text;
                                     boolean z = true;
@@ -2108,7 +2142,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
 
     private void sendData() {
         if (!this.canceled) {
-            showEditDoneProgress(true);
+            showEditDoneProgress(false, true);
             final TL_payments_sendPaymentForm req = new TL_payments_sendPaymentForm();
             req.msg_id = this.messageObject.getId();
             if (UserConfig.tmpPassword == null || this.paymentForm.saved_credentials == null) {
@@ -2136,7 +2170,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                             public void run() {
                                 AlertsCreator.processError(error, PaymentFormActivity.this, req, new Object[0]);
                                 PaymentFormActivity.this.setDonePressed(false);
-                                PaymentFormActivity.this.showEditDoneProgress(false);
+                                PaymentFormActivity.this.showEditDoneProgress(false, false);
                             }
                         });
                     } else if (response instanceof TL_payments_paymentResult) {
@@ -2149,8 +2183,13 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     } else if (response instanceof TL_payments_paymentVerficationNeeded) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                Browser.openUrl(PaymentFormActivity.this.getParentActivity(), ((TL_payments_paymentVerficationNeeded) response).url, false);
-                                PaymentFormActivity.this.goToNextStep();
+                                PaymentFormActivity.this.webView.setVisibility(0);
+                                PaymentFormActivity.this.webviewLoading = true;
+                                PaymentFormActivity.this.showEditDoneProgress(true, true);
+                                PaymentFormActivity.this.progressView.setVisibility(0);
+                                PaymentFormActivity.this.doneItem.setEnabled(false);
+                                PaymentFormActivity.this.doneItem.getImageView().setVisibility(4);
+                                PaymentFormActivity.this.webView.loadUrl(((TL_payments_paymentVerficationNeeded) response).url);
                             }
                         });
                     }
@@ -2203,7 +2242,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             AndroidUtilities.shakeView(this.inputFields[1], 2.0f, 0);
         } else {
             final String password = this.inputFields[1].getText().toString();
-            showEditDoneProgress(true);
+            showEditDoneProgress(true, true);
             setDonePressed(true);
             final TL_account_getPassword req = new TL_account_getPassword();
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -2212,7 +2251,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         public void run() {
                             if (error != null) {
                                 AlertsCreator.processError(error, PaymentFormActivity.this, req, new Object[0]);
-                                PaymentFormActivity.this.showEditDoneProgress(false);
+                                PaymentFormActivity.this.showEditDoneProgress(true, false);
                                 PaymentFormActivity.this.setDonePressed(false);
                             } else if (response instanceof TL_account_noPassword) {
                                 PaymentFormActivity.this.passwordOk = false;
@@ -2236,7 +2275,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                     public void run(final TLObject response, final TL_error error) {
                                         AndroidUtilities.runOnUIThread(new Runnable() {
                                             public void run() {
-                                                PaymentFormActivity.this.showEditDoneProgress(false);
+                                                PaymentFormActivity.this.showEditDoneProgress(true, false);
                                                 PaymentFormActivity.this.setDonePressed(false);
                                                 if (response != null) {
                                                     PaymentFormActivity.this.passwordOk = true;
@@ -2265,13 +2304,13 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         }
     }
 
-    private void showEditDoneProgress(final boolean show) {
+    private void showEditDoneProgress(boolean animateDoneItem, final boolean show) {
         if (this.doneItemAnimation != null) {
             this.doneItemAnimation.cancel();
         }
         AnimatorSet animatorSet;
         Animator[] animatorArr;
-        if (this.doneItem != null) {
+        if (animateDoneItem && this.doneItem != null) {
             this.doneItemAnimation = new AnimatorSet();
             if (show) {
                 this.progressView.setVisibility(0);
@@ -2327,25 +2366,25 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         } else if (this.payTextView != null) {
             this.doneItemAnimation = new AnimatorSet();
             if (show) {
-                this.progressView.setVisibility(0);
+                this.progressViewButton.setVisibility(0);
                 this.bottomLayout.setEnabled(false);
                 animatorSet = this.doneItemAnimation;
                 animatorArr = new Animator[6];
                 animatorArr[0] = ObjectAnimator.ofFloat(this.payTextView, "scaleX", new float[]{0.1f});
                 animatorArr[1] = ObjectAnimator.ofFloat(this.payTextView, "scaleY", new float[]{0.1f});
                 animatorArr[2] = ObjectAnimator.ofFloat(this.payTextView, "alpha", new float[]{0.0f});
-                animatorArr[3] = ObjectAnimator.ofFloat(this.progressView, "scaleX", new float[]{1.0f});
-                animatorArr[4] = ObjectAnimator.ofFloat(this.progressView, "scaleY", new float[]{1.0f});
-                animatorArr[5] = ObjectAnimator.ofFloat(this.progressView, "alpha", new float[]{1.0f});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.progressViewButton, "scaleX", new float[]{1.0f});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.progressViewButton, "scaleY", new float[]{1.0f});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.progressViewButton, "alpha", new float[]{1.0f});
                 animatorSet.playTogether(animatorArr);
             } else {
                 this.payTextView.setVisibility(0);
                 this.bottomLayout.setEnabled(true);
                 animatorSet = this.doneItemAnimation;
                 animatorArr = new Animator[6];
-                animatorArr[0] = ObjectAnimator.ofFloat(this.progressView, "scaleX", new float[]{0.1f});
-                animatorArr[1] = ObjectAnimator.ofFloat(this.progressView, "scaleY", new float[]{0.1f});
-                animatorArr[2] = ObjectAnimator.ofFloat(this.progressView, "alpha", new float[]{0.0f});
+                animatorArr[0] = ObjectAnimator.ofFloat(this.progressViewButton, "scaleX", new float[]{0.1f});
+                animatorArr[1] = ObjectAnimator.ofFloat(this.progressViewButton, "scaleY", new float[]{0.1f});
+                animatorArr[2] = ObjectAnimator.ofFloat(this.progressViewButton, "alpha", new float[]{0.0f});
                 animatorArr[3] = ObjectAnimator.ofFloat(this.payTextView, "scaleX", new float[]{1.0f});
                 animatorArr[4] = ObjectAnimator.ofFloat(this.payTextView, "scaleY", new float[]{1.0f});
                 animatorArr[5] = ObjectAnimator.ofFloat(this.payTextView, "alpha", new float[]{1.0f});
@@ -2357,7 +2396,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         if (show) {
                             PaymentFormActivity.this.payTextView.setVisibility(4);
                         } else {
-                            PaymentFormActivity.this.progressView.setVisibility(4);
+                            PaymentFormActivity.this.progressViewButton.setVisibility(4);
                         }
                     }
                 }
@@ -2391,6 +2430,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         arrayList.add(new ThemeDescription(this.linearLayout2, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider));
         arrayList.add(new ThemeDescription(this.progressView, 0, null, null, null, null, Theme.key_contextProgressInner2));
         arrayList.add(new ThemeDescription(this.progressView, 0, null, null, null, null, Theme.key_contextProgressOuter2));
+        arrayList.add(new ThemeDescription(this.progressViewButton, 0, null, null, null, null, Theme.key_contextProgressInner2));
+        arrayList.add(new ThemeDescription(this.progressViewButton, 0, null, null, null, null, Theme.key_contextProgressOuter2));
         if (this.inputFields != null) {
             for (a = 0; a < this.inputFields.length; a++) {
                 arrayList.add(new ThemeDescription((View) this.inputFields[a].getParent(), ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite));

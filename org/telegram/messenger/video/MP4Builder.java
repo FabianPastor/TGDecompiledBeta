@@ -186,7 +186,7 @@ public class MP4Builder {
         return this.currentMp4Movie.addTrack(mediaFormat, isAudio);
     }
 
-    public void finishMovie(boolean error) throws Exception {
+    public void finishMovie() throws Exception {
         if (this.mdat.getContentSize() != 0) {
             flushCurrentMdat();
         }

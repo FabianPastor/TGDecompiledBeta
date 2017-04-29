@@ -732,6 +732,13 @@ public class FileLoadOperation {
                                 FileLoadOperation.this.startDownloadRequest();
                             } else if (response instanceof TL_upload_fileCdnRedirect) {
                                 TL_upload_fileCdnRedirect res = (TL_upload_fileCdnRedirect) response;
+                                if (res.encryption_iv == null || res.encryption_key == null || res.encryption_iv.length != 16 || res.encryption_key.length != 32) {
+                                    error = new TL_error();
+                                    error.text = "bad redirect response";
+                                    error.code = 400;
+                                    FileLoadOperation.this.processRequestResult(requestInfo, error);
+                                    return;
+                                }
                                 FileLoadOperation.this.isCdn = true;
                                 FileLoadOperation.this.cdnDatacenterId = res.dc_id;
                                 FileLoadOperation.this.cdnIv = res.encryption_iv;

@@ -1802,41 +1802,37 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
-        int maxWidth;
         String description;
         Photo photo;
         TLObject document;
+        String type;
         int duration;
         boolean smallImage;
         TL_webDocument webDocument;
         TL_webDocument webDocument2;
         int height;
-        int width;
         Throwable e;
         int restLinesCount;
         int a;
-        boolean authorIsRTL;
+        boolean hasRTL;
         int textWidth;
-        int maxPhotoWidth;
+        ArrayList arrayList;
         DocumentAttribute attribute;
         PhotoSize photoSize;
         PhotoSize photoSize2;
         int dp;
-        int durationWidth;
+        String fileName;
+        boolean autoDownload;
         int seconds;
         String str;
         CharSequence str2;
         String price;
         SpannableStringBuilder spannableStringBuilder;
         int mWidth;
-        int timeWidthTotal;
         int rows;
-        boolean fullWidth;
-        float f;
         int maxButtonWidth;
         int maxButtonsWidth;
         HashMap<String, BotButton> hashMap;
-        HashMap<String, BotButton> oldByPosition;
         TL_keyboardButtonRow row;
         int buttonsCount;
         int buttonWidth;
@@ -1844,7 +1840,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         ChatMessageCell chatMessageCell;
         BotButton botButton;
         String key;
-        String position;
         BotButton oldButton;
         CharSequence buttonText;
         if (messageObject.checkLayout()) {
@@ -1856,6 +1851,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
             int i;
             int dp2;
+            int width;
+            int timeWidthTotal;
+            boolean fullWidth;
+            float f;
+            HashMap<String, BotButton> oldByPosition;
+            String position;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
             this.currentMessageObject = messageObject;
@@ -1925,9 +1926,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
+            int maxWidth;
             boolean z;
-            String fileName;
-            boolean autoDownload;
+            int maxPhotoWidth;
             float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
@@ -1990,12 +1991,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     String site_name;
                     String title;
                     String author;
-                    String type;
                     int additinalWidth;
                     int restLines;
                     int lineLeft;
-                    boolean hasRTL;
-                    ArrayList arrayList;
+                    boolean authorIsRTL;
+                    int durationWidth;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);
@@ -5844,7 +5844,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             }
                         }
                     }
-                    if ((w == 0 || h == 0) && (messageObject.type == 8 || messageObject.type == 5)) {
+                    if (messageObject.type == 5) {
+                        h = AndroidUtilities.roundMessageSize;
+                        w = h;
+                    }
+                    if ((w == 0 || h == 0) && messageObject.type == 8) {
                         a = 0;
                         while (a < messageObject.messageOwner.media.document.attributes.size()) {
                             attribute = (DocumentAttribute) messageObject.messageOwner.media.document.attributes.get(a);
@@ -7100,7 +7104,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     }
 
     private int getMaxNameWidth() {
-        if (this.documentAttachType == 6) {
+        if (this.documentAttachType == 6 || this.currentMessageObject.type == 5) {
             int maxWidth;
             if (AndroidUtilities.isTablet()) {
                 if (this.isChat && !this.currentMessageObject.isOutOwner() && this.currentMessageObject.isFromUser()) {
@@ -7737,12 +7741,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             }
         }
         if (messageObject.isReply()) {
-            CharSequence stringFinalName;
-            this.namesOffset += AndroidUtilities.dp(42.0f);
-            if (messageObject.type != 0) {
-                if (messageObject.type == 13 || messageObject.type == 5) {
-                    this.namesOffset -= AndroidUtilities.dp(42.0f);
-                } else {
+            if (!(messageObject.type == 13 || messageObject.type == 5)) {
+                this.namesOffset += AndroidUtilities.dp(42.0f);
+                if (messageObject.type != 0) {
                     this.namesOffset += AndroidUtilities.dp(5.0f);
                 }
             }
@@ -7750,6 +7751,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             if (!(messageObject.type == 13 || messageObject.type == 5)) {
                 maxWidth -= AndroidUtilities.dp(10.0f);
             }
+            CharSequence stringFinalName = null;
             CharSequence stringFinalText = null;
             if (messageObject.replyMessageObject != null) {
                 PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.replyMessageObject.photoThumbs2, 80);
@@ -7789,11 +7791,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         name = chat.title;
                     }
                 }
-                if (name != null) {
-                    stringFinalName = TextUtils.ellipsize(name.replace('\n', ' '), Theme.chat_replyNamePaint, (float) maxWidth, TruncateAt.END);
-                } else {
-                    stringFinalName = null;
+                if (name == null) {
+                    name = LocaleController.getString("Loading", R.string.Loading);
                 }
+                stringFinalName = TextUtils.ellipsize(name.replace('\n', ' '), Theme.chat_replyNamePaint, (float) maxWidth, TruncateAt.END);
                 if (messageObject.replyMessageObject.messageOwner.media instanceof TL_messageMediaGame) {
                     stringFinalText = TextUtils.ellipsize(Emoji.replaceEmoji(messageObject.replyMessageObject.messageOwner.media.game.title, Theme.chat_replyTextPaint.getFontMetricsInt(), AndroidUtilities.dp(14.0f), false), Theme.chat_replyTextPaint, (float) maxWidth, TruncateAt.END);
                 } else if (messageObject.replyMessageObject.messageOwner.media instanceof TL_messageMediaInvoice) {
@@ -7805,11 +7806,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     }
                     stringFinalText = TextUtils.ellipsize(Emoji.replaceEmoji(mess.replace('\n', ' '), Theme.chat_replyTextPaint.getFontMetricsInt(), AndroidUtilities.dp(14.0f), false), Theme.chat_replyTextPaint, (float) maxWidth, TruncateAt.END);
                 }
-            } else {
-                stringFinalName = null;
-            }
-            if (stringFinalName == null) {
-                stringFinalName = LocaleController.getString("Loading", R.string.Loading);
             }
             try {
                 this.replyNameLayout = new StaticLayout(stringFinalName, Theme.chat_replyNamePaint, maxWidth + AndroidUtilities.dp(6.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);

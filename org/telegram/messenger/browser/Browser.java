@@ -175,6 +175,6 @@ public class Browser {
     public static boolean isInternalUri(Uri uri) {
         String host = uri.getHost();
         host = host != null ? host.toLowerCase() : "";
-        return "tg".equals(uri.getScheme()) || "telegram.me".equals(host) || "t.me".equals(host) || "telegram.dog".equals(host);
+        return "tg".equals(uri.getScheme()) || "telegram.me".equals(host) || "t.me".equals(host) || "telegram.dog".equals(host) || "telesco.pe".equals(host);
     }
 }

@@ -66,6 +66,7 @@ import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.query.DraftQuery;
@@ -1297,6 +1298,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return this.recordingAudioVideo;
     }
 
+    public boolean isRecordLocked() {
+        return this.recordingAudioVideo && this.recordCircle.isSendButtonVisible();
+    }
+
     public void cancelRecordingAudioVideo() {
         if (!this.hasRecordVideo || this.videoSendButton.getTag() == null) {
             MediaController.getInstance().stopRecording(0);
@@ -1663,29 +1668,35 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     public void checkRoundVideo() {
-        if (this.attachLayout == null || VERSION.SDK_INT < 18 || this.hasRecordVideo) {
-            this.hasRecordVideo = false;
-            setRecordVideoButtonVisible(false, false);
-            return;
-        }
-        int high_id = (int) (this.dialog_id >> 32);
-        if (((int) this.dialog_id) != 0 || high_id == 0) {
-            this.hasRecordVideo = true;
-        } else if (AndroidUtilities.getPeerLayerVersion(MessagesController.getInstance().getEncryptedChat(Integer.valueOf(high_id)).layer) >= 66) {
-            this.hasRecordVideo = true;
-        }
-        boolean isChannel = false;
-        if (((int) this.dialog_id) < 0) {
-            Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-((int) this.dialog_id)));
-            if (!ChatObject.isChannel(chat) || chat.megagroup) {
-                isChannel = false;
-            } else {
-                isChannel = true;
+        if (!this.hasRecordVideo) {
+            if (this.attachLayout == null || VERSION.SDK_INT < 18) {
+                this.hasRecordVideo = false;
+                setRecordVideoButtonVisible(false, false);
+                return;
             }
-        }
-        if (this.hasRecordVideo) {
-            setRecordVideoButtonVisible(ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean(isChannel ? "currentModeVideoChannel" : "currentModeVideo", isChannel), false);
-        } else {
+            int high_id = (int) (this.dialog_id >> 32);
+            if (((int) this.dialog_id) != 0 || high_id == 0) {
+                this.hasRecordVideo = true;
+            } else if (AndroidUtilities.getPeerLayerVersion(MessagesController.getInstance().getEncryptedChat(Integer.valueOf(high_id)).layer) >= 66) {
+                this.hasRecordVideo = true;
+            }
+            boolean isChannel = false;
+            if (((int) this.dialog_id) < 0) {
+                Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-((int) this.dialog_id)));
+                if (!ChatObject.isChannel(chat) || chat.megagroup) {
+                    isChannel = false;
+                } else {
+                    isChannel = true;
+                }
+                if (!(!isChannel || chat.creator || chat.editor)) {
+                    this.hasRecordVideo = false;
+                }
+            }
+            if (this.hasRecordVideo) {
+                CameraController.getInstance().initCamera();
+                setRecordVideoButtonVisible(ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean(isChannel ? "currentModeVideoChannel" : "currentModeVideo", isChannel), false);
+                return;
+            }
             setRecordVideoButtonVisible(false, false);
         }
     }

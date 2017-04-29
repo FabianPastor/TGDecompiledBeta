@@ -62,6 +62,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.query.DraftQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -1288,6 +1289,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                             String host = data.getHost().toLowerCase();
                             if (!host.equals("telegram.me")) {
                                 if (!host.equals("t.me")) {
+                                    if (!host.equals("telegram.dog")) {
+                                    }
                                 }
                             }
                             path = data.getPath();
@@ -2082,11 +2085,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     ContactsController.getInstance().readContacts();
                     return;
                 } else if (requestCode == 3) {
+                    CameraController.getInstance().initCamera();
                     return;
-                } else {
-                    if (requestCode == 19 || requestCode == 20) {
-                        showAlert = false;
-                    }
+                } else if (requestCode == 19 || requestCode == 20) {
+                    showAlert = false;
                 }
             }
             if (showAlert) {

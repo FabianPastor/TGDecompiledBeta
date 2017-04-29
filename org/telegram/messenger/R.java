@@ -1080,6 +1080,9 @@ public final class R {
         public static final int DirectShareInfo = NUM;
         public static final int Disabled = NUM;
         public static final int DiscardChanges = NUM;
+        public static final int DiscardVoiceMessageAction = NUM;
+        public static final int DiscardVoiceMessageDescription = NUM;
+        public static final int DiscardVoiceMessageTitle = NUM;
         public static final int DocumentsTitle = NUM;
         public static final int Done = NUM;
         public static final int Draft = NUM;

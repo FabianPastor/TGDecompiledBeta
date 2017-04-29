@@ -2078,6 +2078,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
                 if (getKeyboardHeight() <= AndroidUtilities.dp(20.0f) && !AndroidUtilities.isInMultiwindow) {
                     heightSize -= ChatActivity.this.chatActivityEnterView.getEmojiPadding();
+                    allHeight -= ChatActivity.this.chatActivityEnterView.getEmojiPadding();
                 }
                 int childCount = getChildCount();
                 measureChildWithMargins(ChatActivity.this.chatActivityEnterView, widthMeasureSpec, 0, heightMeasureSpec, 0);
@@ -8311,6 +8312,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     layoutParams2.leftMargin = dp;
                     layoutParams1.leftMargin = dp;
                 } else {
+                    if (this.pinnedMessageObject.isRoundVideo()) {
+                        this.pinnedMessageImageView.setRoundRadius(AndroidUtilities.dp(16.0f));
+                    } else {
+                        this.pinnedMessageImageView.setRoundRadius(0);
+                    }
                     this.pinnedImageLocation = photoSize.location;
                     this.pinnedMessageImageView.setImage(this.pinnedImageLocation, "50_50", (Drawable) null);
                     this.pinnedMessageImageView.setVisibility(0);
@@ -9756,7 +9762,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     public boolean onBackPressed() {
-        if (this.actionBar != null && this.actionBar.isActionModeShowed()) {
+        if (this.chatActivityEnterView != null && this.chatActivityEnterView.isRecordLocked()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+            builder.setTitle(LocaleController.getString("DiscardVoiceMessageTitle", R.string.DiscardVoiceMessageTitle));
+            builder.setPositiveButton(LocaleController.getString("DiscardVoiceMessageAction", R.string.DiscardVoiceMessageAction), new OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    if (ChatActivity.this.chatActivityEnterView != null) {
+                        ChatActivity.this.chatActivityEnterView.cancelRecordingAudioVideo();
+                    }
+                }
+            });
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setMessage(LocaleController.getString("DiscardVoiceMessageDescription", R.string.DiscardVoiceMessageDescription));
+            showDialog(builder.create());
+            return false;
+        } else if (this.actionBar != null && this.actionBar.isActionModeShowed()) {
             for (int a = 1; a >= 0; a--) {
                 this.selectedMessagesIds[a].clear();
                 this.selectedMessagesCanCopyIds[a].clear();

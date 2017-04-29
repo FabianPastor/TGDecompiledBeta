@@ -1535,7 +1535,7 @@ public class MessageObject {
     }
 
     public boolean isSecretMedia() {
-        return (this.messageOwner instanceof TL_message_secret) && (((this.messageOwner.media instanceof TL_messageMediaPhoto) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60) || isVoice() || isVideo() || isRoundVideo());
+        return (this.messageOwner instanceof TL_message_secret) && ((((this.messageOwner.media instanceof TL_messageMediaPhoto) || isRoundVideo()) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60) || isVoice() || isVideo());
     }
 
     public static void setUnreadFlags(Message message, int flag) {
@@ -2116,7 +2116,10 @@ public class MessageObject {
 
     public static boolean canEditMessage(Message message, Chat chat) {
         boolean z = true;
-        if (message == null || message.to_id == null || isRoundVideoMessage(message)) {
+        if (message == null || message.to_id == null) {
+            return false;
+        }
+        if (message.media != null && isRoundVideoDocument(message.media.document)) {
             return false;
         }
         if ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.id < 0) {

@@ -794,6 +794,7 @@ class zzatj extends zzauh {
 
     @WorkerThread
     public zzatg zzT(String str, String str2) {
+        Cursor query;
         Object e;
         Cursor cursor;
         Throwable th;
@@ -801,7 +802,6 @@ class zzatj extends zzauh {
         zzac.zzdr(str2);
         zzmR();
         zzob();
-        Cursor query;
         try {
             query = getWritableDatabase().query("conditional_properties", new String[]{"origin", Param.VALUE, "active", "trigger_event_name", "trigger_timeout", "timed_out_event", "creation_timestamp", "triggered_event", "triggered_timestamp", "time_to_live", "expired_event"}, "app_id=? and name=?", new String[]{str, str2}, null, null, null);
             try {
@@ -956,6 +956,7 @@ class zzatj extends zzauh {
     }
 
     Map<Integer, List<zzauu.zze>> zzW(String str, String str2) {
+        Cursor query;
         Object e;
         Throwable th;
         zzob();
@@ -963,7 +964,6 @@ class zzatj extends zzauh {
         zzac.zzdr(str);
         zzac.zzdr(str2);
         Map<Integer, List<zzauu.zze>> arrayMap = new ArrayMap();
-        Cursor query;
         try {
             query = getWritableDatabase().query("property_filters", new String[]{"audience_id", "data"}, "app_id=? AND property_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -2035,12 +2035,12 @@ class zzatj extends zzauh {
 
     @WorkerThread
     public byte[] zzfw(String str) {
+        Cursor query;
         Object e;
         Throwable th;
         zzac.zzdr(str);
         zzmR();
         zzob();
-        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"remote_config"}, "app_id=?", new String[]{str}, null, null, null);
             try {

@@ -823,11 +823,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                         if (MediaController.this.videoPlayer != null) {
                                             progress = MediaController.this.videoPlayer.getCurrentPosition();
                                             value = ((float) MediaController.this.lastProgress) / ((float) MediaController.this.videoPlayer.getDuration());
-                                            if (progress <= MediaController.this.lastProgress) {
-                                                return;
-                                            }
-                                            if (value >= MediaController.VOLUME_NORMAL) {
-                                                MediaController.this.cleanupPlayer(true, true, true);
+                                            if (progress <= MediaController.this.lastProgress || value >= MediaController.VOLUME_NORMAL) {
                                                 return;
                                             }
                                         } else if (MediaController.this.audioPlayer != null) {
@@ -2327,6 +2323,19 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                     this.videoPlayer.setDelegate(new VideoPlayerDelegate() {
                         public void onStateChanged(boolean playWhenReady, int playbackState) {
                             if (MediaController.this.videoPlayer != null) {
+                                if (playbackState == 4 || playbackState == 1) {
+                                    try {
+                                        MediaController.this.baseActivity.getWindow().clearFlags(128);
+                                    } catch (Throwable e) {
+                                        FileLog.e(e);
+                                    }
+                                } else {
+                                    try {
+                                        MediaController.this.baseActivity.getWindow().addFlags(128);
+                                    } catch (Throwable e2) {
+                                        FileLog.e(e2);
+                                    }
+                                }
                                 if (playbackState == 3) {
                                     MediaController.this.currentAspectRatioFrameLayoutReady = true;
                                     if (MediaController.this.currentTextureViewContainer != null && MediaController.this.currentTextureViewContainer.getVisibility() != 0) {
@@ -3543,6 +3552,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     public static void loadGalleryPhotosAlbums(final int guid) {
         Thread thread = new Thread(new Runnable() {
             public void run() {
+                Throwable e;
                 int imageIdColumn;
                 int bucketIdColumn;
                 int bucketNameColumn;
@@ -3565,8 +3575,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 String cameraFolder = null;
                 try {
                     cameraFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/";
-                } catch (Throwable e) {
-                    Throwable e2;
+                } catch (Throwable e2) {
                     FileLog.e(e2);
                 }
                 Integer num = null;
@@ -4076,6 +4085,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     /* Code decompiled incorrectly, please refer to instructions dump. */
     @TargetApi(16)
     private boolean convertVideo(MessageObject messageObject) {
+        long videoStartTime;
         Throwable e;
         Throwable th;
         String videoPath = messageObject.videoEditedInfo.originalPath;
@@ -4127,7 +4137,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         }
         this.videoConvertFirstWrite = true;
         boolean error = false;
-        long videoStartTime = startTime;
+        long videoStartTime2 = startTime;
         long time = System.currentTimeMillis();
         if (resultWidth == 0 || resultHeight == 0) {
             preferences.edit().putBoolean("isPreviousOk", true).commit();
@@ -4136,7 +4146,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         }
         MP4Builder mP4Builder = null;
         MediaExtractor extractor = null;
-        long videoStartTime2;
         try {
             BufferInfo info = new BufferInfo();
             Mp4Movie movie = new Mp4Movie();
@@ -4152,9 +4161,9 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 if (resultWidth == originalWidth && resultHeight == originalHeight && rotateRender == 0) {
                     videoTime = readAndWriteTrack(messageObject, extractor2, mP4Builder, info, startTime, endTime, file, false);
                     if (videoTime != -1) {
-                        videoStartTime2 = videoTime;
+                        videoStartTime = videoTime;
                     }
-                    videoStartTime2 = videoStartTime;
+                    videoStartTime = videoStartTime2;
                 } else {
                     int videoIndex = selectTrack(extractor2, false);
                     if (videoIndex >= 0) {
@@ -4255,7 +4264,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                 inputSurface = inputSurface2;
                                 FileLog.e(e);
                                 error = true;
-                                videoStartTime2 = videoStartTime;
+                                videoStartTime = videoStartTime2;
                                 extractor2.unselectTrack(videoIndex);
                                 if (outputSurface != null) {
                                     outputSurface.release();
@@ -4272,13 +4281,13 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                     encoder.release();
                                 }
                                 checkConversionCanceled();
-                                readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime2, endTime, file, true);
+                                readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime, endTime, file, true);
                                 if (extractor2 != null) {
                                     extractor2.release();
                                 }
                                 if (mP4Builder != null) {
                                     try {
-                                        mP4Builder.finishMovie(false);
+                                        mP4Builder.finishMovie();
                                     } catch (Throwable e3) {
                                         FileLog.e(e3);
                                     }
@@ -4291,7 +4300,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             } catch (Throwable th2) {
                                 th = th2;
                                 extractor = extractor2;
-                                videoStartTime2 = videoStartTime;
+                                videoStartTime = videoStartTime2;
                             }
                         }
                         try {
@@ -4481,16 +4490,16 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                 }
                             }
                             if (videoTime != -1) {
-                                videoStartTime2 = videoTime;
+                                videoStartTime = videoTime;
                             } else {
-                                videoStartTime2 = videoStartTime;
+                                videoStartTime = videoStartTime2;
                             }
                         } catch (Exception e4) {
                             e3 = e4;
                         } catch (Throwable th22) {
                             th = th22;
                             extractor = extractor2;
-                            videoStartTime2 = videoStartTime;
+                            videoStartTime = videoStartTime2;
                         }
                         try {
                             extractor2.unselectTrack(videoIndex);
@@ -4520,7 +4529,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                 }
                                 if (mP4Builder != null) {
                                     try {
-                                        mP4Builder.finishMovie(false);
+                                        mP4Builder.finishMovie();
                                     } catch (Throwable e32) {
                                         FileLog.e(e32);
                                     }
@@ -4536,7 +4545,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                 }
                                 if (mP4Builder != null) {
                                     try {
-                                        mP4Builder.finishMovie(false);
+                                        mP4Builder.finishMovie();
                                     } catch (Throwable e322) {
                                         FileLog.e(e322);
                                     }
@@ -4551,36 +4560,36 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                 extractor.release();
                             }
                             if (mP4Builder != null) {
-                                mP4Builder.finishMovie(false);
+                                mP4Builder.finishMovie();
                             }
                             FileLog.e("time = " + (System.currentTimeMillis() - time));
                             throw th;
                         }
                     }
-                    videoStartTime2 = videoStartTime;
+                    videoStartTime = videoStartTime2;
                 }
                 if (!(error || bitrate == -1)) {
-                    readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime2, endTime, file, true);
+                    readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime, endTime, file, true);
                 }
                 if (extractor2 != null) {
                     extractor2.release();
                 }
                 if (mP4Builder != null) {
-                    mP4Builder.finishMovie(false);
+                    mP4Builder.finishMovie();
                 }
                 FileLog.e("time = " + (System.currentTimeMillis() - time));
                 extractor = extractor2;
             } catch (Exception e6) {
                 e322 = e6;
                 extractor = extractor2;
-                videoStartTime2 = videoStartTime;
+                videoStartTime = videoStartTime2;
                 error = true;
                 FileLog.e(e322);
                 if (extractor != null) {
                     extractor.release();
                 }
                 if (mP4Builder != null) {
-                    mP4Builder.finishMovie(false);
+                    mP4Builder.finishMovie();
                 }
                 FileLog.e("time = " + (System.currentTimeMillis() - time));
                 preferences.edit().putBoolean("isPreviousOk", true).commit();
@@ -4589,18 +4598,18 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             } catch (Throwable th222) {
                 th = th222;
                 extractor = extractor2;
-                videoStartTime2 = videoStartTime;
+                videoStartTime = videoStartTime2;
             }
         } catch (Exception e7) {
             e322 = e7;
-            videoStartTime2 = videoStartTime;
+            videoStartTime = videoStartTime2;
             error = true;
             FileLog.e(e322);
             if (extractor != null) {
                 extractor.release();
             }
             if (mP4Builder != null) {
-                mP4Builder.finishMovie(false);
+                mP4Builder.finishMovie();
             }
             FileLog.e("time = " + (System.currentTimeMillis() - time));
             preferences.edit().putBoolean("isPreviousOk", true).commit();
@@ -4608,12 +4617,12 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             return true;
         } catch (Throwable th5) {
             th = th5;
-            videoStartTime2 = videoStartTime;
+            videoStartTime = videoStartTime2;
             if (extractor != null) {
                 extractor.release();
             }
             if (mP4Builder != null) {
-                mP4Builder.finishMovie(false);
+                mP4Builder.finishMovie();
             }
             FileLog.e("time = " + (System.currentTimeMillis() - time));
             throw th;
