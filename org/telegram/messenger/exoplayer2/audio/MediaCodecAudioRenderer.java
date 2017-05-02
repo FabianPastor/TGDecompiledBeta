@@ -4,11 +4,11 @@ import android.annotation.TargetApi;
 import android.media.MediaCodec;
 import android.media.MediaCrypto;
 import android.media.MediaFormat;
-import android.media.PlaybackParams;
 import android.os.Handler;
 import java.nio.ByteBuffer;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.Format;
+import org.telegram.messenger.exoplayer2.PlaybackParameters;
 import org.telegram.messenger.exoplayer2.audio.AudioRendererEventListener.EventDispatcher;
 import org.telegram.messenger.exoplayer2.audio.AudioTrack.ConfigurationException;
 import org.telegram.messenger.exoplayer2.audio.AudioTrack.InitializationException;
@@ -253,6 +253,14 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
         return this.currentPositionUs;
     }
 
+    public PlaybackParameters setPlaybackParameters(PlaybackParameters playbackParameters) {
+        return this.audioTrack.setPlaybackParameters(playbackParameters);
+    }
+
+    public PlaybackParameters getPlaybackParameters() {
+        return this.audioTrack.getPlaybackParameters();
+    }
+
     protected boolean processOutputBuffer(long positionUs, long elapsedRealtimeUs, MediaCodec codec, ByteBuffer buffer, int bufferIndex, int bufferFlags, long bufferPresentationTimeUs, boolean shouldSkip) throws ExoPlaybackException {
         Exception e;
         if (this.passthroughEnabled && (bufferFlags & 2) != 0) {
@@ -297,9 +305,6 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
                 this.audioTrack.setVolume(((Float) message).floatValue());
                 return;
             case 3:
-                this.audioTrack.setPlaybackParams((PlaybackParams) message);
-                return;
-            case 4:
                 this.audioTrack.setStreamType(((Integer) message).intValue());
                 return;
             default:

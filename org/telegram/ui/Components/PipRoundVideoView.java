@@ -184,7 +184,7 @@ public class PipRoundVideoView {
         }
         this.aspectRatioFrameLayout.setAspectRatio(1.0f, 0);
         this.windowView.addView(this.aspectRatioFrameLayout, LayoutHelper.createFrame(120, BitmapDescriptorFactory.HUE_GREEN, 51, 3.0f, 3.0f, 0.0f, 0.0f));
-        this.windowView.setAlpha(0.0f);
+        this.windowView.setAlpha(1.0f);
         this.windowView.setScaleX(0.8f);
         this.windowView.setScaleY(0.8f);
         this.textureView = new TextureView(activity);
@@ -252,7 +252,9 @@ public class PipRoundVideoView {
                 this.windowManager.removeView(this.windowView);
             } catch (Exception e) {
             }
-            instance = null;
+            if (instance == this) {
+                instance = null;
+            }
             this.parentActivity = null;
         } else if (this.textureView != null && this.textureView.getParent() != null) {
             if (this.textureView.getWidth() > 0 && this.textureView.getHeight() > 0) {
@@ -276,7 +278,7 @@ public class PipRoundVideoView {
         this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
     }
 
-    private void runShowHideAnimation(boolean show) {
+    public void showTemporary(boolean show) {
         float f;
         float f2 = 1.0f;
         if (this.hideShowAnimation != null) {
@@ -313,21 +315,70 @@ public class PipRoundVideoView {
         if (this.decelerateInterpolator == null) {
             this.decelerateInterpolator = new DecelerateInterpolator();
         }
+        this.hideShowAnimation.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animation) {
+                if (animation.equals(PipRoundVideoView.this.hideShowAnimation)) {
+                    PipRoundVideoView.this.hideShowAnimation = null;
+                }
+            }
+        });
+        this.hideShowAnimation.setInterpolator(this.decelerateInterpolator);
+        this.hideShowAnimation.start();
+    }
+
+    private void runShowHideAnimation(final boolean show) {
+        float f;
+        float f2 = 1.0f;
+        if (this.hideShowAnimation != null) {
+            this.hideShowAnimation.cancel();
+        }
+        this.hideShowAnimation = new AnimatorSet();
+        AnimatorSet animatorSet = this.hideShowAnimation;
+        Animator[] animatorArr = new Animator[3];
+        FrameLayout frameLayout = this.windowView;
+        String str = "alpha";
+        float[] fArr = new float[1];
+        fArr[0] = show ? 1.0f : 0.0f;
+        animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
+        frameLayout = this.windowView;
+        str = "scaleX";
+        fArr = new float[1];
+        if (show) {
+            f = 1.0f;
+        } else {
+            f = 0.8f;
+        }
+        fArr[0] = f;
+        animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
+        frameLayout = this.windowView;
+        str = "scaleY";
+        fArr = new float[1];
         if (!show) {
-            this.hideShowAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
-                    if (animation.equals(PipRoundVideoView.this.hideShowAnimation)) {
+            f2 = 0.8f;
+        }
+        fArr[0] = f2;
+        animatorArr[2] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
+        animatorSet.playTogether(animatorArr);
+        this.hideShowAnimation.setDuration(150);
+        if (this.decelerateInterpolator == null) {
+            this.decelerateInterpolator = new DecelerateInterpolator();
+        }
+        this.hideShowAnimation.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animation) {
+                if (animation.equals(PipRoundVideoView.this.hideShowAnimation)) {
+                    if (!show) {
                         PipRoundVideoView.this.close(false);
                     }
+                    PipRoundVideoView.this.hideShowAnimation = null;
                 }
+            }
 
-                public void onAnimationCancel(Animator animation) {
-                    if (animation.equals(PipRoundVideoView.this.hideShowAnimation)) {
-                        PipRoundVideoView.this.hideShowAnimation = null;
-                    }
+            public void onAnimationCancel(Animator animation) {
+                if (animation.equals(PipRoundVideoView.this.hideShowAnimation)) {
+                    PipRoundVideoView.this.hideShowAnimation = null;
                 }
-            });
-        }
+            }
+        });
         this.hideShowAnimation.setInterpolator(this.decelerateInterpolator);
         this.hideShowAnimation.start();
     }

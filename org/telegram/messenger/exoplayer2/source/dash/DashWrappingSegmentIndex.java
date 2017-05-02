@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.source.dash;
 import org.telegram.messenger.exoplayer2.extractor.ChunkIndex;
 import org.telegram.messenger.exoplayer2.source.dash.manifest.RangedUri;
 
-final class DashWrappingSegmentIndex implements DashSegmentIndex {
+public final class DashWrappingSegmentIndex implements DashSegmentIndex {
     private final ChunkIndex chunkIndex;
 
     public DashWrappingSegmentIndex(ChunkIndex chunkIndex) {

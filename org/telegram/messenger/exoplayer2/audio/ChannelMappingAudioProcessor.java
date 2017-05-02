@@ -8,12 +8,12 @@ import org.telegram.messenger.exoplayer2.audio.AudioProcessor.UnhandledFormatExc
 final class ChannelMappingAudioProcessor implements AudioProcessor {
     private boolean active;
     private ByteBuffer buffer = EMPTY_BUFFER;
-    private int channelCount;
+    private int channelCount = -1;
     private boolean inputEnded;
     private ByteBuffer outputBuffer = EMPTY_BUFFER;
     private int[] outputChannels;
     private int[] pendingOutputChannels;
-    private int sampleRateHz;
+    private int sampleRateHz = -1;
 
     public void setChannelMap(int[] outputChannels) {
         this.pendingOutputChannels = outputChannels;
@@ -103,8 +103,12 @@ final class ChannelMappingAudioProcessor implements AudioProcessor {
         this.inputEnded = false;
     }
 
-    public void release() {
+    public void reset() {
         flush();
         this.buffer = EMPTY_BUFFER;
+        this.channelCount = -1;
+        this.sampleRateHz = -1;
+        this.outputChannels = null;
+        this.active = false;
     }
 }

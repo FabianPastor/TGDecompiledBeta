@@ -28,7 +28,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -508,7 +508,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                                     }
                                 }
                             };
-                            AndroidUtilities.runOnUIThread(TwoStepVerificationActivity.this.shortPollRunnable, ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                            AndroidUtilities.runOnUIThread(TwoStepVerificationActivity.this.shortPollRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                         }
                         TwoStepVerificationActivity.this.updateRows();
                     }

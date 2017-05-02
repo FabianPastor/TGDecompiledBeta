@@ -17,6 +17,6 @@ public final class EmptySampleStream implements SampleStream {
         return -4;
     }
 
-    public void skipToKeyframeBefore(long timeUs) {
+    public void skipData(long positionUs) {
     }
 }

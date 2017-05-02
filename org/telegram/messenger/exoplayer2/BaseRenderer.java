@@ -144,11 +144,6 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
         return this.index;
     }
 
-    @Deprecated
-    protected final int readSource(FormatHolder formatHolder, DecoderInputBuffer buffer) {
-        return readSource(formatHolder, buffer, false);
-    }
-
     protected final int readSource(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired) {
         int result = this.stream.readData(formatHolder, buffer, formatRequired);
         if (result == -4) {
@@ -169,11 +164,11 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
         return result;
     }
 
-    protected final boolean isSourceReady() {
-        return this.readEndOfStream ? this.streamIsFinal : this.stream.isReady();
+    protected void skipSource(long positionUs) {
+        this.stream.skipData(positionUs - this.streamOffsetUs);
     }
 
-    protected void skipToKeyframeBefore(long timeUs) {
-        this.stream.skipToKeyframeBefore(timeUs - this.streamOffsetUs);
+    protected final boolean isSourceReady() {
+        return this.readEndOfStream ? this.streamIsFinal : this.stream.isReady();
     }
 }

@@ -11,6 +11,7 @@ import org.telegram.messenger.exoplayer2.Timeline.Period;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
 import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
+import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class ConcatenatingMediaSource implements MediaSource {
@@ -30,12 +31,13 @@ public final class ConcatenatingMediaSource implements MediaSource {
         public ConcatenatedTimeline(Timeline[] timelines) {
             int[] sourcePeriodOffsets = new int[timelines.length];
             int[] sourceWindowOffsets = new int[timelines.length];
-            int periodCount = 0;
+            long periodCount = 0;
             int windowCount = 0;
             for (int i = 0; i < timelines.length; i++) {
                 Timeline timeline = timelines[i];
-                periodCount += timeline.getPeriodCount();
-                sourcePeriodOffsets[i] = periodCount;
+                periodCount += (long) timeline.getPeriodCount();
+                Assertions.checkState(periodCount <= 2147483647L, "ConcatenatingMediaSource children contain too many periods");
+                sourcePeriodOffsets[i] = (int) periodCount;
                 windowCount += timeline.getWindowCount();
                 sourceWindowOffsets[i] = windowCount;
             }

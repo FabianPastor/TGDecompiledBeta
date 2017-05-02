@@ -1,5 +1,6 @@
 package org.telegram.messenger.exoplayer2.text.cea;
 
+import android.support.annotation.NonNull;
 import android.text.Layout.Alignment;
 import org.telegram.messenger.exoplayer2.text.Cue;
 
@@ -12,7 +13,7 @@ final class Cea708Cue extends Cue implements Comparable<Cea708Cue> {
         this.priority = priority;
     }
 
-    public int compareTo(Cea708Cue other) {
+    public int compareTo(@NonNull Cea708Cue other) {
         if (other.priority < this.priority) {
             return -1;
         }

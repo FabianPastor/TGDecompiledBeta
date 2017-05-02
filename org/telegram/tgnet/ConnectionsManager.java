@@ -30,7 +30,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.tgnet.TLRPC.TL_config;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.Updates;
@@ -334,7 +334,7 @@ public class ConnectionsManager {
             native_pauseNetwork();
         } else if (!this.appPaused) {
             FileLog.e("reset app pause time");
-            if (this.lastPauseTime != 0 && System.currentTimeMillis() - this.lastPauseTime > ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS) {
+            if (this.lastPauseTime != 0 && System.currentTimeMillis() - this.lastPauseTime > DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS) {
                 ContactsController.getInstance().checkContacts();
             }
             this.lastPauseTime = 0;

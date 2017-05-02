@@ -41,7 +41,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 
 public final class zzaat extends GoogleApiClient implements com.google.android.gms.internal.zzabc.zza {
     private final Context mContext;
@@ -53,7 +53,7 @@ public final class zzaat extends GoogleApiClient implements com.google.android.g
     private zzabc zzaBK = null;
     private volatile boolean zzaBL;
     private long zzaBM = 120000;
-    private long zzaBN = ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
+    private long zzaBN = DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
     private final zza zzaBO;
     zzaaz zzaBP;
     final Map<zzc<?>, zze> zzaBQ;

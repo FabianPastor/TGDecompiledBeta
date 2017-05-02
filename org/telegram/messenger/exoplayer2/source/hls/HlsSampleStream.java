@@ -26,7 +26,7 @@ final class HlsSampleStream implements SampleStream {
         return this.sampleStreamWrapper.readData(this.group, formatHolder, buffer, requireFormat);
     }
 
-    public void skipToKeyframeBefore(long timeUs) {
-        this.sampleStreamWrapper.skipToKeyframeBefore(this.group, timeUs);
+    public void skipData(long positionUs) {
+        this.sampleStreamWrapper.skipData(this.group, positionUs);
     }
 }

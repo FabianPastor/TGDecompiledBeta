@@ -31,7 +31,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 
 public class zzauj extends zzauh {
     protected zza zzbuV;
@@ -241,7 +241,7 @@ public class zzauj extends zzauh {
                 }
             });
             try {
-                atomicReference.wait(ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                atomicReference.wait(DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
             } catch (InterruptedException e) {
                 zzKl().zzMa().zzj("Interrupted waiting for get user properties", e);
             }
@@ -362,7 +362,7 @@ public class zzauj extends zzauh {
                 }
             });
             try {
-                atomicReference.wait(ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                atomicReference.wait(DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
             } catch (InterruptedException e) {
                 zzKl().zzMa().zze("Interrupted waiting for get conditional user properties", str, e);
             }
@@ -713,7 +713,7 @@ public class zzauj extends zzauh {
                 }
             });
             try {
-                atomicReference.wait(ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                atomicReference.wait(DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
             } catch (InterruptedException e) {
                 zzKl().zzMa().zzj("Interrupted waiting for get user properties", e);
             }

@@ -95,7 +95,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private static final int MSG_STOP_RECORDING = 1;
     private static final int MSG_VIDEOFRAME_AVAILABLE = 2;
     private static final String VERTEX_SHADER = "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n   gl_Position = uMVPMatrix * aPosition;\n   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n";
-    private View actionBar;
     private AnimatorSet animatorSet;
     private Size aspectRatio = new Size(16, 9);
     private ChatActivity baseFragment;
@@ -186,7 +185,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         encoder.handleStopRecording(z);
                         return;
                     case 2:
-                        encoder.handleVideoFrameAvailable((((long) inputMessage.arg1) << 32) | (((long) inputMessage.arg2) & 4294967295L));
+                        encoder.handleVideoFrameAvailable((((long) inputMessage.arg1) << 32) | (((long) inputMessage.arg2) & 4294967295L), inputMessage.obj);
                         return;
                     case 3:
                         encoder.handleAudioFrameAvailable((AudioBufferInfo) inputMessage.obj);
@@ -222,6 +221,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         private EGLDisplay eglDisplay;
         private EGLSurface eglSurface;
         private volatile EncoderHandler handler;
+        private Integer lastCameraId;
         private long lastCommitedFrameTime;
         private long lastTimestamp;
         private MP4Builder mediaMuxer;
@@ -261,6 +261,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.currentTimestamp = 0;
             this.lastTimestamp = -1;
             this.sync = new Object();
+            this.lastCameraId = Integer.valueOf(0);
             this.buffers = new ArrayBlockingQueue(5);
             this.recorderRunnable = new Runnable() {
                 /* JADX WARNING: inconsistent code. */
@@ -376,7 +377,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         /* JADX WARNING: inconsistent code. */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void frameAvailable(SurfaceTexture st) {
+        public void frameAvailable(SurfaceTexture st, Integer cameraId) {
             synchronized (this.sync) {
                 if (!this.ready) {
                 }
@@ -451,13 +452,17 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
         }
 
-        private void handleVideoFrameAvailable(long timestampNanos) {
+        private void handleVideoFrameAvailable(long timestampNanos, Integer cameraId) {
             long dt;
             long alphaDt;
             try {
                 drainEncoder(false);
             } catch (Throwable e) {
                 FileLog.e(e);
+            }
+            if (!this.lastCameraId.equals(cameraId)) {
+                this.lastTimestamp = -1;
+                this.lastCameraId = cameraId;
             }
             if (this.lastTimestamp == -1) {
                 this.lastTimestamp = timestampNanos;
@@ -476,7 +481,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.lastCommitedFrameTime = System.currentTimeMillis();
             if (!this.skippedFirst) {
                 this.skippedTime += dt;
-                if (this.skippedTime >= 150000000) {
+                if (this.skippedTime >= 200000000) {
                     this.skippedFirst = true;
                 } else {
                     return;
@@ -1028,7 +1033,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
         }
 
-        private void onDraw() {
+        private void onDraw(Integer cameraId) {
             if (!this.initied) {
                 return;
             }
@@ -1044,7 +1049,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         InstantCameraView.this.scaleY = temp;
                     }
                 }
-                this.videoEncoder.frameAvailable(this.cameraSurface);
+                this.videoEncoder.frameAvailable(this.cameraSurface, cameraId);
                 this.cameraSurface.getTransformMatrix(InstantCameraView.this.mSTMatrix);
                 GLES20.glUseProgram(this.drawProgram);
                 GLES20.glActiveTexture(33984);
@@ -1078,7 +1083,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             boolean z = true;
             switch (inputMessage.what) {
                 case 0:
-                    onDraw();
+                    onDraw((Integer) inputMessage.obj);
                     return;
                 case 1:
                     finish();
@@ -1105,6 +1110,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             InstantCameraView.this.cameraTextureAlpha = 0.0f;
                             InstantCameraView.this.cameraTexture[0] = 0;
                         }
+                        Integer num = this.cameraId;
+                        this.cameraId = Integer.valueOf(this.cameraId.intValue() + 1);
                         InstantCameraView.this.cameraReady = false;
                         GLES20.glGenTextures(1, InstantCameraView.this.cameraTexture, 0);
                         GLES20.glBindTexture(36197, InstantCameraView.this.cameraTexture[0]);
@@ -1119,7 +1126,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             }
                         });
                         InstantCameraView.this.createCamera(this.cameraSurface);
-                        this.videoEncoder.lastTimestamp = -1;
                         return;
                     }
                     FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
@@ -1148,12 +1154,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         public void requestRender() {
             Handler handler = InstantCameraView.this.getHandler();
             if (handler != null) {
-                sendMessage(handler.obtainMessage(0), 0);
+                sendMessage(handler.obtainMessage(0, this.cameraId), 0);
             }
         }
     }
 
-    public InstantCameraView(Context context, ChatActivity parentFragment, View actionBarOverlay) {
+    public InstantCameraView(Context context, ChatActivity parentFragment) {
         super(context);
         setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
@@ -1162,13 +1168,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
         });
         setWillNotDraw(false);
-        this.actionBar = actionBarOverlay;
-        this.actionBar.setOnTouchListener(new OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                InstantCameraView.this.getParent().requestDisallowInterceptTouchEvent(true);
-                return true;
-            }
-        });
         setBackgroundColor(-NUM);
         this.baseFragment = parentFragment;
         this.paint = new Paint(1);
@@ -1221,12 +1220,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.cameraContainer.setWillNotDraw(false);
             this.cameraContainer.setLayerType(2, null);
         }
-        LayoutParams layoutParams = new LayoutParams(AndroidUtilities.roundMessageSize, AndroidUtilities.roundMessageSize, 17);
-        layoutParams.bottomMargin = AndroidUtilities.dp(48.0f);
-        addView(this.cameraContainer, layoutParams);
+        addView(this.cameraContainer, new LayoutParams(AndroidUtilities.roundMessageSize, AndroidUtilities.roundMessageSize, 17));
         this.switchCameraButton = new ImageView(context);
         this.switchCameraButton.setScaleType(ScaleType.CENTER);
-        addView(this.switchCameraButton, LayoutHelper.createFrame(48, 48.0f, 83, 20.0f, 0.0f, 0.0f, 100.0f));
+        addView(this.switchCameraButton, LayoutHelper.createFrame(48, 48.0f, 83, 20.0f, 0.0f, 0.0f, 14.0f));
         this.switchCameraButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (InstantCameraView.this.cameraReady && InstantCameraView.this.cameraSession != null && InstantCameraView.this.cameraSession.isInitied() && InstantCameraView.this.cameraThread != null) {
@@ -1299,9 +1296,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     public void setVisibility(int visibility) {
         super.setVisibility(visibility);
-        this.actionBar.setVisibility(visibility);
         setAlpha(0.0f);
-        this.actionBar.setAlpha(0.0f);
         this.switchCameraButton.setAlpha(0.0f);
         this.cameraContainer.setAlpha(0.0f);
         this.cameraContainer.setScaleX(0.1f);
@@ -1378,14 +1373,23 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         if (this.animatorSet != null) {
             this.animatorSet.cancel();
         }
+        PipRoundVideoView pipRoundVideoView = PipRoundVideoView.getInstance();
+        if (pipRoundVideoView != null) {
+            pipRoundVideoView.showTemporary(!open);
+        }
         this.animatorSet = new AnimatorSet();
         AnimatorSet animatorSet = this.animatorSet;
-        Animator[] animatorArr = new Animator[6];
-        View view = this.actionBar;
+        Animator[] animatorArr = new Animator[5];
         String str = "alpha";
         float[] fArr = new float[1];
-        fArr[0] = open ? 1.0f : 0.0f;
-        animatorArr[0] = ObjectAnimator.ofFloat(view, str, fArr);
+        if (open) {
+            f = 1.0f;
+        } else {
+            f = 0.0f;
+        }
+        fArr[0] = f;
+        animatorArr[0] = ObjectAnimator.ofFloat(this, str, fArr);
+        FrameLayout frameLayout = this.cameraContainer;
         String str2 = "alpha";
         float[] fArr2 = new float[1];
         if (open) {
@@ -1394,49 +1398,39 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             f = 0.0f;
         }
         fArr2[0] = f;
-        animatorArr[1] = ObjectAnimator.ofFloat(this, str2, fArr2);
-        FrameLayout frameLayout = this.cameraContainer;
-        String str3 = "alpha";
+        animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, str2, fArr2);
+        FrameLayout frameLayout2 = this.cameraContainer;
+        String str3 = "scaleX";
         float[] fArr3 = new float[1];
-        if (open) {
-            f = 1.0f;
-        } else {
-            f = 0.0f;
-        }
-        fArr3[0] = f;
-        animatorArr[2] = ObjectAnimator.ofFloat(frameLayout, str3, fArr3);
-        frameLayout = this.cameraContainer;
-        str3 = "scaleX";
-        fArr3 = new float[1];
         if (open) {
             f = 1.0f;
         } else {
             f = 0.1f;
         }
         fArr3[0] = f;
-        animatorArr[3] = ObjectAnimator.ofFloat(frameLayout, str3, fArr3);
-        FrameLayout frameLayout2 = this.cameraContainer;
-        str = "scaleY";
-        fArr = new float[1];
+        animatorArr[2] = ObjectAnimator.ofFloat(frameLayout2, str3, fArr3);
+        frameLayout = this.cameraContainer;
+        str2 = "scaleY";
+        fArr2 = new float[1];
         if (!open) {
             f2 = 0.1f;
         }
-        fArr[0] = f2;
-        animatorArr[4] = ObjectAnimator.ofFloat(frameLayout2, str, fArr);
+        fArr2[0] = f2;
+        animatorArr[3] = ObjectAnimator.ofFloat(frameLayout, str2, fArr2);
         FrameLayout frameLayout3 = this.cameraContainer;
-        str2 = "translationY";
-        fArr2 = new float[2];
+        str = "translationY";
+        fArr = new float[2];
         if (open) {
             f = (float) (getMeasuredHeight() / 2);
         } else {
             f = 0.0f;
         }
-        fArr2[0] = f;
+        fArr[0] = f;
         if (!open) {
             f3 = (float) (getMeasuredHeight() / 2);
         }
-        fArr2[1] = f3;
-        animatorArr[5] = ObjectAnimator.ofFloat(frameLayout3, str2, fArr2);
+        fArr[1] = f3;
+        animatorArr[4] = ObjectAnimator.ofFloat(frameLayout3, str, fArr);
         animatorSet.playTogether(animatorArr);
         if (!open) {
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -1461,7 +1455,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public void send() {
         boolean z = true;
         if (this.textureView != null) {
-            this.cancelled = this.recordedTime < 2;
+            this.cancelled = this.recordedTime < 800;
             this.recording = false;
             AndroidUtilities.cancelRunOnUIThread(this.timerRunnable);
             NotificationCenter.getInstance().postNotificationName(NotificationCenter.recordStopped, new Object[0]);

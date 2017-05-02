@@ -52,8 +52,12 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
             return ChunkSampleStream.this.loadingFinished || !(ChunkSampleStream.this.isPendingReset() || this.sampleQueue.isEmpty());
         }
 
-        public void skipToKeyframeBefore(long timeUs) {
-            this.sampleQueue.skipToKeyframeBefore(timeUs);
+        public void skipData(long positionUs) {
+            if (!ChunkSampleStream.this.loadingFinished || positionUs <= this.sampleQueue.getLargestQueuedTimestampUs()) {
+                this.sampleQueue.skipToKeyframeBefore(positionUs, true);
+            } else {
+                this.sampleQueue.skipAll();
+            }
         }
 
         public void maybeThrowError() throws IOException {
@@ -142,7 +146,6 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
         boolean seekInsideBuffer;
         DefaultTrackOutput[] defaultTrackOutputArr;
         int length;
-        int length2;
         int i = 0;
         this.lastSeekPositionUs = positionUs;
         if (!isPendingReset()) {
@@ -176,9 +179,9 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
                     this.mediaChunks.removeFirst();
                 }
                 defaultTrackOutputArr = this.embeddedSampleQueues;
-                length2 = defaultTrackOutputArr.length;
-                while (i < length2) {
-                    defaultTrackOutputArr[i].skipToKeyframeBefore(positionUs);
+                length = defaultTrackOutputArr.length;
+                while (i < length) {
+                    defaultTrackOutputArr[i].skipToKeyframeBefore(positionUs, true);
                     i++;
                 }
             }
@@ -205,9 +208,9 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
             this.mediaChunks.removeFirst();
         }
         defaultTrackOutputArr = this.embeddedSampleQueues;
-        length2 = defaultTrackOutputArr.length;
-        while (i < length2) {
-            defaultTrackOutputArr[i].skipToKeyframeBefore(positionUs);
+        length = defaultTrackOutputArr.length;
+        while (i < length) {
+            defaultTrackOutputArr[i].skipToKeyframeBefore(positionUs, true);
             i++;
         }
     }
@@ -239,8 +242,12 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
         return this.primarySampleQueue.readData(formatHolder, buffer, formatRequired, this.loadingFinished, this.lastSeekPositionUs);
     }
 
-    public void skipToKeyframeBefore(long timeUs) {
-        this.primarySampleQueue.skipToKeyframeBefore(timeUs);
+    public void skipData(long positionUs) {
+        if (!this.loadingFinished || positionUs <= this.primarySampleQueue.getLargestQueuedTimestampUs()) {
+            this.primarySampleQueue.skipToKeyframeBefore(positionUs, true);
+        } else {
+            this.primarySampleQueue.skipAll();
+        }
     }
 
     public void onLoadCompleted(Chunk loadable, long elapsedRealtimeMs, long loadDurationMs) {

@@ -18,6 +18,14 @@ public final class C {
     public static final int BUFFER_FLAG_KEY_FRAME = 1;
     public static final int CHANNEL_OUT_7POINT1_SURROUND;
     public static final UUID CLEARKEY_UUID = new UUID(1186680826959645954L, -5988876978535335093L);
+    public static final int COLOR_RANGE_FULL = 1;
+    public static final int COLOR_RANGE_LIMITED = 2;
+    public static final int COLOR_SPACE_BT2020 = 6;
+    public static final int COLOR_SPACE_BT601 = 2;
+    public static final int COLOR_SPACE_BT709 = 1;
+    public static final int COLOR_TRANSFER_HLG = 7;
+    public static final int COLOR_TRANSFER_SDR = 3;
+    public static final int COLOR_TRANSFER_ST2084 = 6;
     public static final int CRYPTO_MODE_AES_CBC = 2;
     public static final int CRYPTO_MODE_AES_CTR = 1;
     public static final int CRYPTO_MODE_UNENCRYPTED = 0;
@@ -47,20 +55,21 @@ public final class C {
     public static final int LENGTH_UNSET = -1;
     public static final long MICROS_PER_SECOND = 1000000;
     public static final int MSG_CUSTOM_BASE = 10000;
-    public static final int MSG_SET_PLAYBACK_PARAMS = 3;
-    public static final int MSG_SET_SCALING_MODE = 5;
-    public static final int MSG_SET_STREAM_TYPE = 4;
+    public static final int MSG_SET_SCALING_MODE = 4;
+    public static final int MSG_SET_STREAM_TYPE = 3;
     public static final int MSG_SET_SURFACE = 1;
     public static final int MSG_SET_VOLUME = 2;
     public static final long NANOS_PER_SECOND = NUM;
     public static final UUID PLAYREADY_UUID = new UUID(-7348484286925749626L, -6083546864340672619L);
     public static final int POSITION_UNSET = -1;
+    public static final int PRIORITY_DOWNLOAD = -1000;
     public static final int PRIORITY_PLAYBACK = 0;
     public static final int RESULT_BUFFER_READ = -4;
     public static final int RESULT_END_OF_INPUT = -1;
     public static final int RESULT_FORMAT_READ = -5;
     public static final int RESULT_MAX_LENGTH_EXCEEDED = -2;
     public static final int RESULT_NOTHING_READ = -3;
+    public static final String SANS_SERIF_NAME = "sans-serif";
     public static final int SELECTION_FLAG_AUTOSELECT = 4;
     public static final int SELECTION_FLAG_DEFAULT = 1;
     public static final int SELECTION_FLAG_FORCED = 2;
@@ -70,6 +79,7 @@ public final class C {
     public static final int SELECTION_REASON_MANUAL = 2;
     public static final int SELECTION_REASON_TRICK_PLAY = 4;
     public static final int SELECTION_REASON_UNKNOWN = 0;
+    public static final String SERIF_NAME = "serif";
     public static final int STEREO_MODE_LEFT_RIGHT = 2;
     public static final int STEREO_MODE_MONO = 0;
     public static final int STEREO_MODE_STEREO_MESH = 3;
@@ -94,6 +104,7 @@ public final class C {
     public static final int TYPE_HLS = 2;
     public static final int TYPE_OTHER = 3;
     public static final int TYPE_SS = 1;
+    public static final String UTF16_NAME = "UTF-16";
     public static final String UTF8_NAME = "UTF-8";
     public static final UUID UUID_NIL = new UUID(0, 0);
     public static final int VIDEO_SCALING_MODE_DEFAULT = 1;
@@ -103,6 +114,18 @@ public final class C {
 
     @Retention(RetentionPolicy.SOURCE)
     public @interface BufferFlags {
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface ColorRange {
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface ColorSpace {
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface ColorTransfer {
     }
 
     @Retention(RetentionPolicy.SOURCE)

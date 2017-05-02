@@ -58,7 +58,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.voip.EncryptionKeyEmojifier;
 import org.telegram.messenger.voip.VoIPController;
@@ -628,7 +628,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                             VoIPActivity.this.tooltipHider = null;
                             VoIPActivity.this.setEmojiTooltipVisible(false);
                         }
-                    }, ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                    }, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                 }
                 return true;
             }
@@ -1068,7 +1068,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                                     VoIPActivity.this.tooltipHider = null;
                                     VoIPActivity.this.setEmojiTooltipVisible(false);
                                 }
-                            }, ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                            }, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                             VoIPActivity.this.getSharedPreferences("mainconfig", 0).edit().putInt("call_emoji_tooltip_count", count + 1).apply();
                         }
                     }

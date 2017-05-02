@@ -70,8 +70,8 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
             }
         }
 
-        public void skipToKeyframeBefore(long timeUs) {
-            this.stream.skipToKeyframeBefore(this.startUs + timeUs);
+        public void skipData(long positionUs) {
+            this.stream.skipData(this.startUs + positionUs);
         }
     }
 

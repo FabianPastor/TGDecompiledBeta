@@ -10,7 +10,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
-import android.support.v4.app.NotificationManagerCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -424,7 +423,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                         ShareSearchAdapter.this.notifyDataSetChanged();
                         if (!isEmpty && !becomeEmpty && ShareAlert.this.topBeforeSwitch > 0) {
                             ShareAlert.this.layoutManager.scrollToPositionWithOffset(0, -ShareAlert.this.topBeforeSwitch);
-                            ShareAlert.this.topBeforeSwitch = NotificationManagerCompat.IMPORTANCE_UNSPECIFIED;
+                            ShareAlert.this.topBeforeSwitch = -1000;
                         }
                     }
                 }
@@ -778,7 +777,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 return paddingTop - i;
             }
         }
-        return NotificationManagerCompat.IMPORTANCE_UNSPECIFIED;
+        return -1000;
     }
 
     public void didReceivedNotification(int id, Object... args) {

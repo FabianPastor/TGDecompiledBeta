@@ -14,7 +14,9 @@ final class AudioTagPayloadReader extends TagPayloadReader {
     private static final int AAC_PACKET_TYPE_SEQUENCE_HEADER = 0;
     private static final int AUDIO_FORMAT_AAC = 10;
     private static final int AUDIO_FORMAT_ALAW = 7;
+    private static final int AUDIO_FORMAT_MP3 = 2;
     private static final int AUDIO_FORMAT_ULAW = 8;
+    private static final int[] AUDIO_SAMPLING_RATE_TABLE = new int[]{5512, 11025, 22050, 44100};
     private int audioFormat;
     private boolean hasOutputFormat;
     private boolean hasParsedAudioDataHeader;
@@ -32,7 +34,10 @@ final class AudioTagPayloadReader extends TagPayloadReader {
         } else {
             int header = data.readUnsignedByte();
             this.audioFormat = (header >> 4) & 15;
-            if (this.audioFormat == 7 || this.audioFormat == 8) {
+            if (this.audioFormat == 2) {
+                this.output.format(Format.createAudioSampleFormat(null, MimeTypes.AUDIO_MPEG, null, -1, -1, 1, AUDIO_SAMPLING_RATE_TABLE[(header >> 2) & 3], null, null, 0, null));
+                this.hasOutputFormat = true;
+            } else if (this.audioFormat == 7 || this.audioFormat == 8) {
                 this.output.format(Format.createAudioSampleFormat(null, this.audioFormat == 7 ? MimeTypes.AUDIO_ALAW : MimeTypes.AUDIO_ULAW, null, -1, -1, 1, 8000, (header & 1) == 1 ? 2 : 3, null, null, 0, null));
                 this.hasOutputFormat = true;
             } else if (this.audioFormat != 10) {
@@ -44,6 +49,12 @@ final class AudioTagPayloadReader extends TagPayloadReader {
     }
 
     protected void parsePayload(ParsableByteArray data, long timeUs) {
+        if (this.audioFormat == 2) {
+            int sampleSize = data.bytesLeft();
+            this.output.sampleData(data, sampleSize);
+            this.output.sampleMetadata(timeUs, 1, sampleSize, 0, null);
+            return;
+        }
         int packetType = data.readUnsignedByte();
         if (packetType == 0 && !this.hasOutputFormat) {
             byte[] audioSpecificConfig = new byte[data.bytesLeft()];
@@ -52,7 +63,7 @@ final class AudioTagPayloadReader extends TagPayloadReader {
             this.output.format(Format.createAudioSampleFormat(null, MimeTypes.AUDIO_AAC, null, -1, -1, ((Integer) audioParams.second).intValue(), ((Integer) audioParams.first).intValue(), Collections.singletonList(audioSpecificConfig), null, 0, null));
             this.hasOutputFormat = true;
         } else if (this.audioFormat != 10 || packetType == 1) {
-            int sampleSize = data.bytesLeft();
+            sampleSize = data.bytesLeft();
             this.output.sampleData(data, sampleSize);
             this.output.sampleMetadata(timeUs, 1, sampleSize, 0, null);
         }

@@ -70,7 +70,7 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.messenger.exoplayer2.upstream.cache.CacheDataSink;
 import org.telegram.messenger.query.SharedMediaQuery;
@@ -196,6 +196,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     private HashMap<Integer, String> observersByTag = new HashMap();
     private ArrayList<DownloadObject> photoDownloadQueue = new ArrayList();
     private PipRoundVideoView pipRoundVideoView;
+    private int pipSwitchingState;
     private boolean playMusicAgain;
     private int playerBufferSize = 0;
     private final Object playerObjectSync = new Object();
@@ -322,8 +323,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     private int repeatMode;
     private boolean resumeAudioOnFocusGain;
     public int roamingDownloadMask = 0;
-    private boolean roundSwitchingFromPip;
-    private boolean roundSwitchingToPip;
     private long samplesCount;
     private boolean saveToGallery = true;
     private int sendAfterDone;
@@ -1142,7 +1141,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             this.stopMediaObserverRunnable = new StopMediaObserverRunnable();
         }
         this.stopMediaObserverRunnable.currentObserverToken = this.startObserverToken;
-        ApplicationLoader.applicationHandler.postDelayed(this.stopMediaObserverRunnable, ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+        ApplicationLoader.applicationHandler.postDelayed(this.stopMediaObserverRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
     }
 
     public void processMediaObserver(Uri uri) {
@@ -1878,6 +1877,11 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             this.currentTextureView = null;
             this.videoPlayer.releasePlayer();
             this.videoPlayer = null;
+            try {
+                this.baseActivity.getWindow().clearFlags(128);
+            } catch (Throwable e22222) {
+                FileLog.e(e22222);
+            }
         }
         stopProgressTimer();
         this.lastProgress = 0;
@@ -1921,8 +1925,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                         startRecordingIfFromSpeaker();
                     }
                     NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagePlayingDidReset, Integer.valueOf(lastFile.getId()), Boolean.valueOf(stopService));
-                    this.roundSwitchingFromPip = false;
-                    this.roundSwitchingToPip = false;
+                    this.pipSwitchingState = 0;
                     if (this.pipRoundVideoView != null) {
                         this.pipRoundVideoView.close(true);
                         this.pipRoundVideoView = null;
@@ -2128,6 +2131,11 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                         this.currentTextureView = null;
                         this.videoPlayer.releasePlayer();
                         this.videoPlayer = null;
+                        try {
+                            this.baseActivity.getWindow().clearFlags(128);
+                        } catch (Throwable e22222) {
+                            FileLog.e(e22222);
+                        }
                     }
                     stopProgressTimer();
                     this.lastProgress = 0;
@@ -2232,32 +2240,38 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     public void setCurrentRoundVisible(boolean visible) {
         if (visible) {
             if (this.pipRoundVideoView != null) {
-                this.roundSwitchingFromPip = true;
-                if (this.pipRoundVideoView != null) {
-                    this.pipRoundVideoView.close(true);
-                    this.pipRoundVideoView = null;
+                this.pipSwitchingState = 2;
+                this.pipRoundVideoView.close(true);
+                this.pipRoundVideoView = null;
+            } else if (this.currentAspectRatioFrameLayout != null) {
+                if (this.currentAspectRatioFrameLayout.getParent() == null) {
+                    this.currentTextureViewContainer.addView(this.currentAspectRatioFrameLayout);
                 }
-            } else if (this.currentAspectRatioFrameLayout.getParent() == null) {
-                this.currentTextureViewContainer.addView(this.currentAspectRatioFrameLayout);
+                this.videoPlayer.setTextureView(this.currentTextureView);
             }
         } else if (this.currentAspectRatioFrameLayout.getParent() != null) {
-            this.roundSwitchingToPip = true;
-            if (this.currentTextureViewContainer != null) {
-                this.currentTextureViewContainer.removeView(this.currentAspectRatioFrameLayout);
+            this.pipSwitchingState = 1;
+            this.currentTextureViewContainer.removeView(this.currentAspectRatioFrameLayout);
+        } else {
+            if (this.pipRoundVideoView == null) {
+                this.pipRoundVideoView = new PipRoundVideoView();
+                this.pipRoundVideoView.show(this.baseActivity, new Runnable() {
+                    public void run() {
+                        MediaController.this.cleanupPlayer(true, true);
+                    }
+                });
             }
-        } else if (this.pipRoundVideoView == null) {
-            this.pipRoundVideoView = new PipRoundVideoView();
-            this.pipRoundVideoView.show(this.baseActivity, new Runnable() {
-                public void run() {
-                    MediaController.this.cleanupPlayer(true, true);
-                }
-            });
             this.videoPlayer.setTextureView(this.pipRoundVideoView.getTextureView());
         }
     }
 
-    public void setTextureView(TextureView textureView, AspectRatioFrameLayout aspectRatioFrameLayout, FrameLayout container) {
-        if (this.videoPlayer != null && textureView != this.currentTextureView) {
+    public void setTextureView(TextureView textureView, AspectRatioFrameLayout aspectRatioFrameLayout, FrameLayout container, boolean set) {
+        if (!set && this.currentTextureView == textureView) {
+            this.pipSwitchingState = 1;
+            this.currentTextureView = null;
+            this.currentAspectRatioFrameLayout = null;
+            this.currentTextureViewContainer = null;
+        } else if (this.videoPlayer != null && textureView != this.currentTextureView) {
             this.currentTextureView = textureView;
             if (this.pipRoundVideoView != null) {
                 this.videoPlayer.setTextureView(this.pipRoundVideoView.getTextureView());
@@ -2378,28 +2392,32 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             if (MediaController.this.videoPlayer == null) {
                                 return false;
                             }
-                            if (MediaController.this.roundSwitchingFromPip) {
-                                if (MediaController.this.currentTextureViewContainer != null && MediaController.this.currentAspectRatioFrameLayout.getParent() == null) {
-                                    MediaController.this.currentTextureViewContainer.addView(MediaController.this.currentAspectRatioFrameLayout);
+                            if (MediaController.this.pipSwitchingState == 2) {
+                                if (MediaController.this.currentAspectRatioFrameLayout != null) {
+                                    if (MediaController.this.currentAspectRatioFrameLayout.getParent() == null) {
+                                        MediaController.this.currentTextureViewContainer.addView(MediaController.this.currentAspectRatioFrameLayout);
+                                    }
+                                    MediaController.this.currentTextureView.setSurfaceTexture(surfaceTexture);
+                                    MediaController.this.videoPlayer.setTextureView(MediaController.this.currentTextureView);
                                 }
-                                MediaController.this.currentTextureView.setSurfaceTexture(surfaceTexture);
-                                MediaController.this.videoPlayer.setTextureView(MediaController.this.currentTextureView);
-                                MediaController.this.roundSwitchingFromPip = false;
+                                MediaController.this.pipSwitchingState = 0;
                                 return true;
-                            } else if (MediaController.this.baseActivity == null) {
+                            } else if (MediaController.this.pipSwitchingState != 1) {
                                 return false;
                             } else {
-                                if (MediaController.this.pipRoundVideoView == null) {
-                                    MediaController.this.pipRoundVideoView = new PipRoundVideoView();
-                                    MediaController.this.pipRoundVideoView.show(MediaController.this.baseActivity, new Runnable() {
-                                        public void run() {
-                                            MediaController.this.cleanupPlayer(true, true);
-                                        }
-                                    });
+                                if (MediaController.this.baseActivity != null) {
+                                    if (MediaController.this.pipRoundVideoView == null) {
+                                        MediaController.this.pipRoundVideoView = new PipRoundVideoView();
+                                        MediaController.this.pipRoundVideoView.show(MediaController.this.baseActivity, new Runnable() {
+                                            public void run() {
+                                                MediaController.this.cleanupPlayer(true, true);
+                                            }
+                                        });
+                                    }
+                                    MediaController.this.pipRoundVideoView.getTextureView().setSurfaceTexture(surfaceTexture);
+                                    MediaController.this.videoPlayer.setTextureView(MediaController.this.pipRoundVideoView.getTextureView());
                                 }
-                                MediaController.this.pipRoundVideoView.getTextureView().setSurfaceTexture(surfaceTexture);
-                                MediaController.this.videoPlayer.setTextureView(MediaController.this.pipRoundVideoView.getTextureView());
-                                MediaController.this.roundSwitchingToPip = false;
+                                MediaController.this.pipSwitchingState = 0;
                                 return true;
                             }
                         }
@@ -2634,9 +2652,14 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             this.currentTextureView = null;
                             this.videoPlayer.releasePlayer();
                             this.videoPlayer = null;
+                            try {
+                                this.baseActivity.getWindow().clearFlags(128);
+                            } catch (Throwable e2) {
+                                FileLog.e(e2);
+                            }
                         }
-                    } catch (Throwable e2) {
-                        FileLog.e(e2);
+                    } catch (Throwable e22) {
+                        FileLog.e(e22);
                     }
                     stopProgressTimer();
                     this.playingMessageObject = null;
@@ -2665,14 +2688,15 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                     this.currentTextureView = null;
                     this.videoPlayer.releasePlayer();
                     this.videoPlayer = null;
+                    this.baseActivity.getWindow().clearFlags(128);
                 }
                 stopProgressTimer();
                 this.playingMessageObject = null;
                 this.downloadingCurrentMessage = false;
                 this.isPaused = false;
                 ApplicationLoader.applicationContext.stopService(new Intent(ApplicationLoader.applicationContext, MusicPlayerService.class));
-            } catch (Throwable e22) {
-                FileLog.e(e22);
+            } catch (Throwable e222) {
+                FileLog.e(e222);
             }
         }
     }

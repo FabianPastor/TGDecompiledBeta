@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
+import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,6 +25,7 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Formatter;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -115,7 +117,7 @@ public final class Util {
 
     public static ExecutorService newSingleThreadExecutor(final String threadName) {
         return Executors.newSingleThreadExecutor(new ThreadFactory() {
-            public Thread newThread(Runnable r) {
+            public Thread newThread(@NonNull Runnable r) {
                 return new Thread(r, threadName);
             }
         });
@@ -164,6 +166,14 @@ public final class Util {
     }
 
     public static int constrainValue(int value, int min, int max) {
+        return Math.max(min, Math.min(value, max));
+    }
+
+    public static long constrainValue(long value, long min, long max) {
+        return Math.max(min, Math.min(value, max));
+    }
+
+    public static float constrainValue(float value, float min, float max) {
         return Math.max(min, Math.min(value, max));
     }
 
@@ -423,7 +433,7 @@ public final class Util {
         } catch (NameNotFoundException e) {
             versionName = "?";
         }
-        return applicationName + "/" + versionName + " (Linux;Android " + VERSION.RELEASE + ") ExoPlayerLib/" + ExoPlayerLibraryInfo.VERSION;
+        return applicationName + "/" + versionName + " (Linux;Android " + VERSION.RELEASE + ") " + ExoPlayerLibraryInfo.VERSION_SLASHY;
     }
 
     public static int getPcmEncoding(int bitDepth) {
@@ -473,6 +483,21 @@ public final class Util {
             return 1;
         }
         return 3;
+    }
+
+    public static String getStringForTime(StringBuilder builder, Formatter formatter, long timeMs) {
+        if (timeMs == C.TIME_UNSET) {
+            timeMs = 0;
+        }
+        long totalSeconds = (500 + timeMs) / 1000;
+        long seconds = totalSeconds % 60;
+        long minutes = (totalSeconds / 60) % 60;
+        long hours = totalSeconds / 3600;
+        builder.setLength(0);
+        if (hours > 0) {
+            return formatter.format("%d:%02d:%02d", new Object[]{Long.valueOf(hours), Long.valueOf(minutes), Long.valueOf(seconds)}).toString();
+        }
+        return formatter.format("%02d:%02d", new Object[]{Long.valueOf(minutes), Long.valueOf(seconds)}).toString();
     }
 
     public static int getDefaultBufferSize(int trackType) {

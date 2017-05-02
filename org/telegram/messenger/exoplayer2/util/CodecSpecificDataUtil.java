@@ -7,6 +7,7 @@ import java.util.List;
 public final class CodecSpecificDataUtil {
     private static final int AUDIO_OBJECT_TYPE_AAC_LC = 2;
     private static final int AUDIO_OBJECT_TYPE_ER_BSAC = 22;
+    private static final int AUDIO_OBJECT_TYPE_ESCAPE = 31;
     private static final int AUDIO_OBJECT_TYPE_PS = 29;
     private static final int AUDIO_OBJECT_TYPE_SBR = 5;
     private static final int AUDIO_SPECIFIC_CONFIG_CHANNEL_CONFIGURATION_INVALID = -1;
@@ -19,46 +20,18 @@ public final class CodecSpecificDataUtil {
     }
 
     public static Pair<Integer, Integer> parseAacAudioSpecificConfig(byte[] audioSpecificConfig) {
-        int sampleRate;
-        boolean z;
-        boolean z2 = true;
         ParsableBitArray bitArray = new ParsableBitArray(audioSpecificConfig);
-        int audioObjectType = bitArray.readBits(5);
-        int frequencyIndex = bitArray.readBits(4);
-        if (frequencyIndex == 15) {
-            sampleRate = bitArray.readBits(24);
-        } else {
-            if (frequencyIndex < 13) {
-                z = true;
-            } else {
-                z = false;
-            }
-            Assertions.checkArgument(z);
-            sampleRate = AUDIO_SPECIFIC_CONFIG_SAMPLING_RATE_TABLE[frequencyIndex];
-        }
+        int audioObjectType = getAacAudioObjectType(bitArray);
+        int sampleRate = getAacSamplingFrequency(bitArray);
         int channelConfiguration = bitArray.readBits(4);
         if (audioObjectType == 5 || audioObjectType == 29) {
-            frequencyIndex = bitArray.readBits(4);
-            if (frequencyIndex == 15) {
-                sampleRate = bitArray.readBits(24);
-            } else {
-                if (frequencyIndex < 13) {
-                    z = true;
-                } else {
-                    z = false;
-                }
-                Assertions.checkArgument(z);
-                sampleRate = AUDIO_SPECIFIC_CONFIG_SAMPLING_RATE_TABLE[frequencyIndex];
-            }
-            if (bitArray.readBits(5) == 22) {
+            sampleRate = getAacSamplingFrequency(bitArray);
+            if (getAacAudioObjectType(bitArray) == 22) {
                 channelConfiguration = bitArray.readBits(4);
             }
         }
         int channelCount = AUDIO_SPECIFIC_CONFIG_CHANNEL_COUNT_TABLE[channelConfiguration];
-        if (channelCount == -1) {
-            z2 = false;
-        }
-        Assertions.checkArgument(z2);
+        Assertions.checkArgument(channelCount != -1);
         return Pair.create(Integer.valueOf(sampleRate), Integer.valueOf(channelCount));
     }
 
@@ -135,5 +108,22 @@ public final class CodecSpecificDataUtil {
             }
         }
         return true;
+    }
+
+    private static int getAacAudioObjectType(ParsableBitArray bitArray) {
+        int audioObjectType = bitArray.readBits(5);
+        if (audioObjectType == 31) {
+            return bitArray.readBits(6) + 32;
+        }
+        return audioObjectType;
+    }
+
+    private static int getAacSamplingFrequency(ParsableBitArray bitArray) {
+        int frequencyIndex = bitArray.readBits(4);
+        if (frequencyIndex == 15) {
+            return bitArray.readBits(24);
+        }
+        Assertions.checkArgument(frequencyIndex < 13);
+        return AUDIO_SPECIFIC_CONFIG_SAMPLING_RATE_TABLE[frequencyIndex];
     }
 }

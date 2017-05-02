@@ -1,8 +1,11 @@
 package org.telegram.messenger.exoplayer2.extractor.ts;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.audio.Ac3Util;
+import org.telegram.messenger.exoplayer2.audio.Ac3Util.Ac3SyncFrameInfo;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
@@ -18,7 +21,6 @@ public final class Ac3Reader implements ElementaryStreamReader {
     private Format format;
     private final ParsableBitArray headerScratchBits;
     private final ParsableByteArray headerScratchBytes;
-    private boolean isEac3;
     private final String language;
     private boolean lastByteWas0B;
     private TrackOutput output;
@@ -27,6 +29,10 @@ public final class Ac3Reader implements ElementaryStreamReader {
     private int state;
     private long timeUs;
     private String trackFormatId;
+
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface State {
+    }
 
     public Ac3Reader() {
         this(null);
@@ -120,32 +126,13 @@ public final class Ac3Reader implements ElementaryStreamReader {
     }
 
     private void parseHeader() {
-        int parseEAc3SyncframeSize;
-        int audioSamplesPerSyncframe;
-        if (this.format == null) {
-            Format parseEac3SyncframeFormat;
-            this.headerScratchBits.skipBits(40);
-            this.isEac3 = this.headerScratchBits.readBits(5) == 16;
-            this.headerScratchBits.setPosition(this.headerScratchBits.getPosition() - 45);
-            if (this.isEac3) {
-                parseEac3SyncframeFormat = Ac3Util.parseEac3SyncframeFormat(this.headerScratchBits, this.trackFormatId, this.language, null);
-            } else {
-                parseEac3SyncframeFormat = Ac3Util.parseAc3SyncframeFormat(this.headerScratchBits, this.trackFormatId, this.language, null);
-            }
-            this.format = parseEac3SyncframeFormat;
+        this.headerScratchBits.setPosition(0);
+        Ac3SyncFrameInfo frameInfo = Ac3Util.parseAc3SyncframeInfo(this.headerScratchBits);
+        if (!(this.format != null && frameInfo.channelCount == this.format.channelCount && frameInfo.sampleRate == this.format.sampleRate && frameInfo.mimeType == this.format.sampleMimeType)) {
+            this.format = Format.createAudioSampleFormat(this.trackFormatId, frameInfo.mimeType, null, -1, -1, frameInfo.channelCount, frameInfo.sampleRate, null, null, 0, this.language);
             this.output.format(this.format);
         }
-        if (this.isEac3) {
-            parseEAc3SyncframeSize = Ac3Util.parseEAc3SyncframeSize(this.headerScratchBits.data);
-        } else {
-            parseEAc3SyncframeSize = Ac3Util.parseAc3SyncframeSize(this.headerScratchBits.data);
-        }
-        this.sampleSize = parseEAc3SyncframeSize;
-        if (this.isEac3) {
-            audioSamplesPerSyncframe = Ac3Util.parseEAc3SyncframeAudioSampleCount(this.headerScratchBits.data);
-        } else {
-            audioSamplesPerSyncframe = Ac3Util.getAc3SyncframeAudioSampleCount();
-        }
-        this.sampleDurationUs = (long) ((int) ((C.MICROS_PER_SECOND * ((long) audioSamplesPerSyncframe)) / ((long) this.format.sampleRate)));
+        this.sampleSize = frameInfo.frameSize;
+        this.sampleDurationUs = (C.MICROS_PER_SECOND * ((long) frameInfo.sampleCount)) / ((long) this.format.sampleRate);
     }
 }

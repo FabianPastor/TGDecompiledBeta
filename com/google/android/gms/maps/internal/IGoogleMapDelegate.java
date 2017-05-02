@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.internal.zzf;
 import com.google.android.gms.maps.model.internal.zzg;
 import com.google.android.gms.maps.model.internal.zzh;
 import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 
 public interface IGoogleMapDelegate extends IInterface {
 
@@ -1648,7 +1649,7 @@ public interface IGoogleMapDelegate extends IInterface {
                     setOnPolylineClickListener(com.google.android.gms.maps.internal.zzaa.zza.zzdV(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     return true;
-                case 89:
+                case TsExtractor.TS_STREAM_TYPE_DVBSUBS /*89*/:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.IGoogleMapDelegate");
                     setOnCircleClickListener(com.google.android.gms.maps.internal.zzj.zza.zzdE(parcel.readStrongBinder()));
                     parcel2.writeNoException();

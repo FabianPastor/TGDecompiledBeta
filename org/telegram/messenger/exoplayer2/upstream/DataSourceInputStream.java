@@ -1,5 +1,6 @@
 package org.telegram.messenger.exoplayer2.upstream;
 
+import android.support.annotation.NonNull;
 import java.io.IOException;
 import java.io.InputStream;
 import org.telegram.messenger.exoplayer2.util.Assertions;
@@ -33,11 +34,11 @@ public final class DataSourceInputStream extends InputStream {
         return this.singleByteArray[0] & 255;
     }
 
-    public int read(byte[] buffer) throws IOException {
+    public int read(@NonNull byte[] buffer) throws IOException {
         return read(buffer, 0, buffer.length);
     }
 
-    public int read(byte[] buffer, int offset, int length) throws IOException {
+    public int read(@NonNull byte[] buffer, int offset, int length) throws IOException {
         Assertions.checkState(!this.closed);
         checkOpened();
         int bytesRead = this.dataSource.read(buffer, offset, length);

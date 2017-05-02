@@ -27,7 +27,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.support.annotation.Keep;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.InputDeviceCompat;
 import android.support.v4.view.ViewCompat;
 import android.text.Editable;
@@ -744,7 +743,7 @@ public class ThemeEditorView {
                     return paddingTop - i;
                 }
             }
-            return NotificationManagerCompat.IMPORTANCE_UNSPECIFIED;
+            return -1000;
         }
 
         protected boolean canDismissWithSwipe() {

@@ -22,31 +22,33 @@ import org.telegram.messenger.exoplayer2.trackselection.TrackSelector.Invalidati
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelectorResult;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.MediaClock;
-import org.telegram.messenger.exoplayer2.util.PriorityHandlerThread;
 import org.telegram.messenger.exoplayer2.util.StandaloneMediaClock;
 import org.telegram.messenger.exoplayer2.util.TraceUtil;
 
 final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, InvalidationListener, Listener {
     private static final int IDLE_INTERVAL_MS = 1000;
     private static final int MAXIMUM_BUFFER_AHEAD_PERIODS = 100;
-    private static final int MSG_CUSTOM = 10;
+    private static final int MSG_CUSTOM = 11;
     private static final int MSG_DO_SOME_WORK = 2;
-    public static final int MSG_ERROR = 7;
+    public static final int MSG_ERROR = 8;
     public static final int MSG_LOADING_CHANGED = 2;
-    private static final int MSG_PERIOD_PREPARED = 7;
+    private static final int MSG_PERIOD_PREPARED = 8;
+    public static final int MSG_PLAYBACK_PARAMETERS_CHANGED = 7;
     public static final int MSG_POSITION_DISCONTINUITY = 5;
     private static final int MSG_PREPARE = 0;
-    private static final int MSG_REFRESH_SOURCE_INFO = 6;
-    private static final int MSG_RELEASE = 5;
+    public static final int MSG_PREPARE_ACK = 0;
+    private static final int MSG_REFRESH_SOURCE_INFO = 7;
+    private static final int MSG_RELEASE = 6;
     public static final int MSG_SEEK_ACK = 4;
     private static final int MSG_SEEK_TO = 3;
+    private static final int MSG_SET_PLAYBACK_PARAMETERS = 4;
     private static final int MSG_SET_PLAY_WHEN_READY = 1;
-    private static final int MSG_SOURCE_CONTINUE_LOADING_REQUESTED = 8;
+    private static final int MSG_SOURCE_CONTINUE_LOADING_REQUESTED = 9;
     public static final int MSG_SOURCE_INFO_REFRESHED = 6;
     public static final int MSG_STATE_CHANGED = 1;
-    private static final int MSG_STOP = 4;
+    private static final int MSG_STOP = 5;
     public static final int MSG_TRACKS_CHANGED = 3;
-    private static final int MSG_TRACK_SELECTION_INVALIDATED = 9;
+    private static final int MSG_TRACK_SELECTION_INVALIDATED = 10;
     private static final int PREPARING_SOURCE_INTERVAL_MS = 10;
     private static final int RENDERER_TIMESTAMP_OFFSET_US = 60000000;
     private static final int RENDERING_INTERVAL_MS = 10;
@@ -67,6 +69,7 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Inv
     private final Period period;
     private boolean playWhenReady;
     private PlaybackInfo playbackInfo;
+    private PlaybackParameters playbackParameters;
     private final ExoPlayer player;
     private MediaPeriodHolder playingPeriodHolder;
     private MediaPeriodHolder readingPeriodHolder;
@@ -268,7 +271,8 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Inv
         this.window = new Window();
         this.period = new Period();
         trackSelector.init(this);
-        this.internalPlaybackThread = new PriorityHandlerThread("ExoPlayerImplInternal:Handler", -16);
+        this.playbackParameters = PlaybackParameters.DEFAULT;
+        this.internalPlaybackThread = new HandlerThread("ExoPlayerImplInternal:Handler", -16);
         this.internalPlaybackThread.start();
         this.handler = new Handler(this.internalPlaybackThread.getLooper(), this);
     }
@@ -299,8 +303,12 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Inv
         this.handler.obtainMessage(3, new SeekPosition(timeline, windowIndex, positionUs)).sendToTarget();
     }
 
+    public void setPlaybackParameters(PlaybackParameters playbackParameters) {
+        this.handler.obtainMessage(4, playbackParameters).sendToTarget();
+    }
+
     public void stop() {
-        this.handler.sendEmptyMessage(4);
+        this.handler.sendEmptyMessage(5);
     }
 
     public void sendMessages(ExoPlayerMessage... messages) {
@@ -309,7 +317,7 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Inv
             return;
         }
         this.customMessagesSent++;
-        this.handler.obtainMessage(10, messages).sendToTarget();
+        this.handler.obtainMessage(11, messages).sendToTarget();
     }
 
     public synchronized void blockingSendMessages(ExoPlayerMessage... messages) {
@@ -318,7 +326,7 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Inv
         } else {
             int messageNumber = this.customMessagesSent;
             this.customMessagesSent = messageNumber + 1;
-            this.handler.obtainMessage(10, messages).sendToTarget();
+            this.handler.obtainMessage(11, messages).sendToTarget();
             while (this.customMessagesProcessed <= messageNumber) {
                 try {
                     wait();
@@ -331,7 +339,7 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Inv
 
     public synchronized void release() {
         if (!this.released) {
-            this.handler.sendEmptyMessage(5);
+            this.handler.sendEmptyMessage(6);
             while (!this.released) {
                 try {
                     wait();
@@ -344,19 +352,19 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Inv
     }
 
     public void onSourceInfoRefreshed(Timeline timeline, Object manifest) {
-        this.handler.obtainMessage(6, Pair.create(timeline, manifest)).sendToTarget();
+        this.handler.obtainMessage(7, Pair.create(timeline, manifest)).sendToTarget();
     }
 
     public void onPrepared(MediaPeriod source) {
-        this.handler.obtainMessage(7, source).sendToTarget();
-    }
-
-    public void onContinueLoadingRequested(MediaPeriod source) {
         this.handler.obtainMessage(8, source).sendToTarget();
     }
 
+    public void onContinueLoadingRequested(MediaPeriod source) {
+        this.handler.obtainMessage(9, source).sendToTarget();
+    }
+
     public void onTrackSelectionsInvalidated() {
-        this.handler.sendEmptyMessage(9);
+        this.handler.sendEmptyMessage(10);
     }
 
     public boolean handleMessage(Message msg) {
@@ -383,24 +391,27 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Inv
                     seekToInternal((SeekPosition) msg.obj);
                     return true;
                 case 4:
-                    stopInternal();
+                    setPlaybackParametersInternal((PlaybackParameters) msg.obj);
                     return true;
                 case 5:
-                    releaseInternal();
+                    stopInternal();
                     return true;
                 case 6:
-                    handleSourceInfoRefreshed((Pair) msg.obj);
+                    releaseInternal();
                     return true;
                 case 7:
-                    handlePeriodPrepared((MediaPeriod) msg.obj);
+                    handleSourceInfoRefreshed((Pair) msg.obj);
                     return true;
                 case 8:
-                    handleContinueLoadingRequested((MediaPeriod) msg.obj);
+                    handlePeriodPrepared((MediaPeriod) msg.obj);
                     return true;
                 case 9:
-                    reselectTracksInternal();
+                    handleContinueLoadingRequested((MediaPeriod) msg.obj);
                     return true;
                 case 10:
+                    reselectTracksInternal();
+                    return true;
+                case 11:
                     sendMessagesInternal((ExoPlayerMessage[]) msg.obj);
                     return true;
                 default:
@@ -408,17 +419,17 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Inv
             }
         } catch (ExoPlaybackException e) {
             Log.e(TAG, "Renderer error.", e);
-            this.eventHandler.obtainMessage(7, e).sendToTarget();
+            this.eventHandler.obtainMessage(8, e).sendToTarget();
             stopInternal();
             return true;
         } catch (IOException e2) {
             Log.e(TAG, "Source error.", e2);
-            this.eventHandler.obtainMessage(7, ExoPlaybackException.createForSource(e2)).sendToTarget();
+            this.eventHandler.obtainMessage(8, ExoPlaybackException.createForSource(e2)).sendToTarget();
             stopInternal();
             return true;
         } catch (RuntimeException e3) {
             Log.e(TAG, "Internal runtime error.", e3);
-            this.eventHandler.obtainMessage(7, ExoPlaybackException.createForUnexpected(e3)).sendToTarget();
+            this.eventHandler.obtainMessage(8, ExoPlaybackException.createForUnexpected(e3)).sendToTarget();
             stopInternal();
             return true;
         }
@@ -446,6 +457,7 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Inv
     }
 
     private void prepareInternal(MediaSource mediaSource, boolean resetPosition) {
+        this.eventHandler.sendEmptyMessage(0);
         resetInternal(true);
         this.loadControl.onPrepared();
         if (resetPosition) {
@@ -548,6 +560,14 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Inv
         }
         if (!allRenderersReadyOrEnded) {
             maybeThrowPeriodPrepareError();
+        }
+        if (this.rendererMediaClock != null) {
+            PlaybackParameters playbackParameters = this.rendererMediaClock.getPlaybackParameters();
+            if (!playbackParameters.equals(this.playbackParameters)) {
+                this.playbackParameters = playbackParameters;
+                this.standaloneMediaClock.synchronize(this.rendererMediaClock);
+                this.eventHandler.obtainMessage(7, playbackParameters).sendToTarget();
+            }
         }
         long playingPeriodDurationUs = this.timeline.getPeriod(this.playingPeriodHolder.index, this.period).getDurationUs();
         if (allRenderersEnded && ((playingPeriodDurationUs == C.TIME_UNSET || playingPeriodDurationUs <= this.playbackInfo.positionUs) && this.playingPeriodHolder.isLast)) {
@@ -705,6 +725,16 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Inv
         }
     }
 
+    private void setPlaybackParametersInternal(PlaybackParameters playbackParameters) {
+        if (this.rendererMediaClock != null) {
+            playbackParameters = this.rendererMediaClock.setPlaybackParameters(playbackParameters);
+        } else {
+            playbackParameters = this.standaloneMediaClock.setPlaybackParameters(playbackParameters);
+        }
+        this.playbackParameters = playbackParameters;
+        this.eventHandler.obtainMessage(7, playbackParameters).sendToTarget();
+    }
+
     private void stopInternal() {
         resetInternal(true);
         this.loadControl.onStopped();
@@ -814,7 +844,7 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Inv
                                 if (sampleStream != renderer.getStream()) {
                                     if (renderer == this.rendererMediaClockSource) {
                                         if (sampleStream == null) {
-                                            this.standaloneMediaClock.setPositionUs(this.rendererMediaClock.getPositionUs());
+                                            this.standaloneMediaClock.synchronize(this.rendererMediaClock);
                                         }
                                         this.rendererMediaClock = null;
                                         this.rendererMediaClockSource = null;
@@ -1243,7 +1273,7 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Inv
                 }
                 if (rendererWasEnabledFlags[i] && (newSelection == null || (renderer.isCurrentStreamFinal() && renderer.getStream() == this.playingPeriodHolder.sampleStreams[i]))) {
                     if (renderer == this.rendererMediaClockSource) {
-                        this.standaloneMediaClock.setPositionUs(this.rendererMediaClock.getPositionUs());
+                        this.standaloneMediaClock.synchronize(this.rendererMediaClock);
                         this.rendererMediaClock = null;
                         this.rendererMediaClockSource = null;
                     }
@@ -1283,6 +1313,7 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Inv
                         }
                         this.rendererMediaClock = mediaClock;
                         this.rendererMediaClockSource = renderer;
+                        this.rendererMediaClock.setPlaybackParameters(this.playbackParameters);
                     }
                     if (playing) {
                         renderer.start();

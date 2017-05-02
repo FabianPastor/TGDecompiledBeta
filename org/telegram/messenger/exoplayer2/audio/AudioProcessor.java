@@ -30,5 +30,5 @@ public interface AudioProcessor {
 
     void queueInput(ByteBuffer byteBuffer);
 
-    void release();
+    void reset();
 }

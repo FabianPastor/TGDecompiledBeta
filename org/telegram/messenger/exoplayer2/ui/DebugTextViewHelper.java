@@ -4,6 +4,7 @@ import android.widget.TextView;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.ExoPlayer.EventListener;
 import org.telegram.messenger.exoplayer2.Format;
+import org.telegram.messenger.exoplayer2.PlaybackParameters;
 import org.telegram.messenger.exoplayer2.SimpleExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.decoder.DecoderCounters;
@@ -46,6 +47,9 @@ public final class DebugTextViewHelper implements Runnable, EventListener {
 
     public void onPositionDiscontinuity() {
         updateAndPost();
+    }
+
+    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
     }
 
     public void onTimelineChanged(Timeline timeline, Object manifest) {

@@ -34,6 +34,11 @@ public final class ParsableBitArray {
         return (this.byteOffset * 8) + this.bitOffset;
     }
 
+    public int getBytePosition() {
+        Assertions.checkState(this.bitOffset == 0);
+        return this.byteOffset;
+    }
+
     public void setPosition(int position) {
         this.byteOffset = position / 8;
         this.bitOffset = position - (this.byteOffset * 8);
@@ -87,6 +92,27 @@ public final class ParsableBitArray {
         }
         assertValidOffset();
         return returnValue;
+    }
+
+    public void byteAlign() {
+        if (this.bitOffset != 0) {
+            this.bitOffset = 0;
+            this.byteOffset++;
+            assertValidOffset();
+        }
+    }
+
+    public void readBytes(byte[] buffer, int offset, int length) {
+        Assertions.checkState(this.bitOffset == 0);
+        System.arraycopy(this.data, this.byteOffset, buffer, offset, length);
+        this.byteOffset += length;
+        assertValidOffset();
+    }
+
+    public void skipBytes(int length) {
+        Assertions.checkState(this.bitOffset == 0);
+        this.byteOffset += length;
+        assertValidOffset();
     }
 
     private void assertValidOffset() {

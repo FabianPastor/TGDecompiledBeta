@@ -13,6 +13,7 @@ import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.tgnet.ConnectionsManager;
 
 public final class LoopingMediaSource implements MediaSource {
+    public static final int MAX_EXPOSED_PERIODS = 157680000;
     private static final String TAG = "LoopingMediaSource";
     private int childPeriodCount;
     private final MediaSource childSource;
@@ -28,7 +29,7 @@ public final class LoopingMediaSource implements MediaSource {
             this.childTimeline = childTimeline;
             this.childPeriodCount = childTimeline.getPeriodCount();
             this.childWindowCount = childTimeline.getWindowCount();
-            int maxLoopCount = ConnectionsManager.DEFAULT_DATACENTER_ID / this.childPeriodCount;
+            int maxLoopCount = LoopingMediaSource.MAX_EXPOSED_PERIODS / this.childPeriodCount;
             if (loopCount > maxLoopCount) {
                 if (loopCount != ConnectionsManager.DEFAULT_DATACENTER_ID) {
                     Log.w(LoopingMediaSource.TAG, "Capped loops to avoid overflow: " + loopCount + " -> " + maxLoopCount);

@@ -352,7 +352,7 @@ public final class NotificationManagerCompat {
         }
 
         public int getImportance(NotificationManager notificationManager) {
-            return NotificationManagerCompat.IMPORTANCE_UNSPECIFIED;
+            return -1000;
         }
     }
 

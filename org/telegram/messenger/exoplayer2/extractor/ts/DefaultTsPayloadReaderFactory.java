@@ -28,7 +28,11 @@ public final class DefaultTsPayloadReaderFactory implements Factory {
     }
 
     public DefaultTsPayloadReaderFactory() {
-        this(0, Collections.emptyList());
+        this(0);
+    }
+
+    public DefaultTsPayloadReaderFactory(int flags) {
+        this(flags, Collections.emptyList());
     }
 
     public DefaultTsPayloadReaderFactory(int flags, List<Format> closedCaptionFormats) {
@@ -64,6 +68,8 @@ public final class DefaultTsPayloadReaderFactory implements Factory {
                 return new PesReader(new H264Reader(buildSeiReader(esInfo), isSet(1), isSet(8)));
             case 36:
                 return new PesReader(new H265Reader(buildSeiReader(esInfo)));
+            case TsExtractor.TS_STREAM_TYPE_DVBSUBS /*89*/:
+                return new PesReader(new DvbSubtitleReader(esInfo.dvbSubtitleInfos));
             case TsExtractor.TS_STREAM_TYPE_AC3 /*129*/:
             case TsExtractor.TS_STREAM_TYPE_E_AC3 /*135*/:
                 return new PesReader(new Ac3Reader(esInfo.language));

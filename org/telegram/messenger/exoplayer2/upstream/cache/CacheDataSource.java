@@ -61,6 +61,8 @@ Error: java.util.NoSuchElementException
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
 	at jadx.core.ProcessClass.process(ProcessClass.java:37)
+	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:59)
+	at jadx.core.ProcessClass.process(ProcessClass.java:42)
 	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:306)
 	at jadx.api.JavaClass.decompile(JavaClass.java:62)
 	at jadx.api.JadxDecompiler$1.run(JadxDecompiler.java:199)
@@ -140,7 +142,7 @@ Error: java.util.NoSuchElementException
         try {
             this.uri = dataSpec.uri;
             this.flags = dataSpec.flags;
-            this.key = dataSpec.key != null ? dataSpec.key : this.uri.toString();
+            this.key = CacheUtil.getKey(dataSpec);
             this.readPosition = dataSpec.position;
             if (!((this.ignoreCacheOnError && this.seenCacheError) || (dataSpec.length == -1 && this.ignoreCacheForUnsetLengthRequests))) {
                 z = false;
@@ -152,6 +154,9 @@ Error: java.util.NoSuchElementException
                 this.bytesRemaining = this.cache.getContentLength(this.key);
                 if (this.bytesRemaining != -1) {
                     this.bytesRemaining -= dataSpec.position;
+                    if (this.bytesRemaining <= 0) {
+                        throw new DataSourceException(0);
+                    }
                 }
             }
             openNextSource(true);

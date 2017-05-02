@@ -3,6 +3,7 @@ package org.telegram.messenger.exoplayer2.source.dash.manifest;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
+import android.support.annotation.NonNull;
 
 public final class RepresentationKey implements Parcelable, Comparable<RepresentationKey> {
     public static final Creator<RepresentationKey> CREATOR = new Creator<RepresentationKey>() {
@@ -38,7 +39,7 @@ public final class RepresentationKey implements Parcelable, Comparable<Represent
         dest.writeInt(this.representationIndex);
     }
 
-    public int compareTo(RepresentationKey o) {
+    public int compareTo(@NonNull RepresentationKey o) {
         int result = this.periodIndex - o.periodIndex;
         if (result != 0) {
             return result;

@@ -233,8 +233,13 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
         return ((DefaultTrackOutput) this.sampleQueues.valueAt(group)).readData(formatHolder, buffer, requireFormat, this.loadingFinished, this.lastSeekPositionUs);
     }
 
-    void skipToKeyframeBefore(int group, long timeUs) {
-        ((DefaultTrackOutput) this.sampleQueues.valueAt(group)).skipToKeyframeBefore(timeUs);
+    void skipData(int group, long positionUs) {
+        DefaultTrackOutput sampleQueue = (DefaultTrackOutput) this.sampleQueues.valueAt(group);
+        if (!this.loadingFinished || positionUs <= sampleQueue.getLargestQueuedTimestampUs()) {
+            sampleQueue.skipToKeyframeBefore(positionUs, true);
+        } else {
+            sampleQueue.skipAll();
+        }
     }
 
     private boolean finishedReadingChunk(HlsMediaChunk chunk) {

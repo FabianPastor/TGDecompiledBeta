@@ -11,7 +11,7 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 
 final class zzo extends zzn implements Callback {
@@ -120,7 +120,7 @@ final class zzo extends zzn implements Callback {
         this.zzwi = context.getApplicationContext();
         this.mHandler = new Handler(context.getMainLooper(), this);
         this.zzaGg = com.google.android.gms.common.stats.zza.zzyJ();
-        this.zzaGh = ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
+        this.zzaGh = DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
         this.zzaGi = 300000;
     }
 

@@ -67,6 +67,7 @@ public class BaseFragment {
             parent = (ViewGroup) this.fragmentView.getParent();
             if (parent != null) {
                 try {
+                    onRemoveFromParent();
                     parent.removeView(this.fragmentView);
                 } catch (Throwable e) {
                     FileLog.e(e);
@@ -88,6 +89,9 @@ public class BaseFragment {
         this.parentLayout = null;
     }
 
+    protected void onRemoveFromParent() {
+    }
+
     protected void setParentLayout(ActionBarLayout layout) {
         if (this.parentLayout != layout) {
             ViewGroup parent;
@@ -96,6 +100,7 @@ public class BaseFragment {
                 parent = (ViewGroup) this.fragmentView.getParent();
                 if (parent != null) {
                     try {
+                        onRemoveFromParent();
                         parent.removeView(this.fragmentView);
                     } catch (Throwable e) {
                         FileLog.e(e);

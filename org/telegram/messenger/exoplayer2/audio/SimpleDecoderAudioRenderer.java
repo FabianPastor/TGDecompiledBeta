@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.audio;
 
-import android.media.PlaybackParams;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -10,6 +9,7 @@ import org.telegram.messenger.exoplayer2.BaseRenderer;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
+import org.telegram.messenger.exoplayer2.PlaybackParameters;
 import org.telegram.messenger.exoplayer2.audio.AudioRendererEventListener.EventDispatcher;
 import org.telegram.messenger.exoplayer2.audio.AudioTrack.ConfigurationException;
 import org.telegram.messenger.exoplayer2.audio.AudioTrack.InitializationException;
@@ -101,7 +101,7 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
         this.eventDispatcher = new EventDispatcher(eventHandler, eventListener);
         this.audioTrack = new AudioTrack(audioCapabilities, audioProcessors, new AudioTrackListener());
         this.formatHolder = new FormatHolder();
-        this.flagsOnlyBuffer = new DecoderInputBuffer(0);
+        this.flagsOnlyBuffer = DecoderInputBuffer.newFlagsOnlyInstance();
         this.decoderReinitializationState = 0;
         this.audioTrackNeedsConfigure = true;
     }
@@ -328,6 +328,14 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
         return this.currentPositionUs;
     }
 
+    public PlaybackParameters setPlaybackParameters(PlaybackParameters playbackParameters) {
+        return this.audioTrack.setPlaybackParameters(playbackParameters);
+    }
+
+    public PlaybackParameters getPlaybackParameters() {
+        return this.audioTrack.getPlaybackParameters();
+    }
+
     protected void onEnabled(boolean joining) throws ExoPlaybackException {
         this.decoderCounters = new DecoderCounters();
         this.eventDispatcher.enabled(this.decoderCounters);
@@ -470,9 +478,6 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
                 this.audioTrack.setVolume(((Float) message).floatValue());
                 return;
             case 3:
-                this.audioTrack.setPlaybackParams((PlaybackParams) message);
-                return;
-            case 4:
                 this.audioTrack.setStreamType(((Integer) message).intValue());
                 return;
             default:

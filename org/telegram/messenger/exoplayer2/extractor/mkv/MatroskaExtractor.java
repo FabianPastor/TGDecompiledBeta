@@ -3,6 +3,8 @@ package org.telegram.messenger.exoplayer2.extractor.mkv;
 import android.util.SparseArray;
 import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.IOException;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ import org.telegram.messenger.exoplayer2.util.NalUnitUtil;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 import org.telegram.messenger.exoplayer2.video.AvcConfig;
+import org.telegram.messenger.exoplayer2.video.ColorInfo;
 import org.telegram.messenger.exoplayer2.video.HevcConfig;
 
 public final class MatroskaExtractor implements Extractor {
@@ -43,6 +46,7 @@ public final class MatroskaExtractor implements Extractor {
     private static final String CODEC_ID_DTS = "A_DTS";
     private static final String CODEC_ID_DTS_EXPRESS = "A_DTS/EXPRESS";
     private static final String CODEC_ID_DTS_LOSSLESS = "A_DTS/LOSSLESS";
+    private static final String CODEC_ID_DVBSUB = "S_DVBSUB";
     private static final String CODEC_ID_E_AC3 = "A_EAC3";
     private static final String CODEC_ID_FLAC = "A_FLAC";
     private static final String CODEC_ID_FOURCC = "V_MS/VFW/FOURCC";
@@ -72,6 +76,7 @@ public final class MatroskaExtractor implements Extractor {
             return new Extractor[]{new MatroskaExtractor()};
         }
     };
+    public static final int FLAG_DISABLE_SEEK_FOR_CUES = 1;
     private static final int FOURCC_COMPRESSION_VC1 = 826496599;
     private static final int ID_AUDIO = 225;
     private static final int ID_AUDIO_BIT_DEPTH = 25188;
@@ -83,6 +88,10 @@ public final class MatroskaExtractor implements Extractor {
     private static final int ID_CODEC_DELAY = 22186;
     private static final int ID_CODEC_ID = 134;
     private static final int ID_CODEC_PRIVATE = 25506;
+    private static final int ID_COLOUR = 21936;
+    private static final int ID_COLOUR_PRIMARIES = 21947;
+    private static final int ID_COLOUR_RANGE = 21945;
+    private static final int ID_COLOUR_TRANSFER = 21946;
     private static final int ID_CONTENT_COMPRESSION = 20532;
     private static final int ID_CONTENT_COMPRESSION_ALGORITHM = 16980;
     private static final int ID_CONTENT_COMPRESSION_SETTINGS = 16981;
@@ -113,8 +122,19 @@ public final class MatroskaExtractor implements Extractor {
     private static final int ID_FLAG_FORCED = 21930;
     private static final int ID_INFO = 357149030;
     private static final int ID_LANGUAGE = 2274716;
+    private static final int ID_LUMNINANCE_MAX = 21977;
+    private static final int ID_LUMNINANCE_MIN = 21978;
+    private static final int ID_MASTERING_METADATA = 21968;
+    private static final int ID_MAX_CLL = 21948;
+    private static final int ID_MAX_FALL = 21949;
     private static final int ID_PIXEL_HEIGHT = 186;
     private static final int ID_PIXEL_WIDTH = 176;
+    private static final int ID_PRIMARY_B_CHROMATICITY_X = 21973;
+    private static final int ID_PRIMARY_B_CHROMATICITY_Y = 21974;
+    private static final int ID_PRIMARY_G_CHROMATICITY_X = 21971;
+    private static final int ID_PRIMARY_G_CHROMATICITY_Y = 21972;
+    private static final int ID_PRIMARY_R_CHROMATICITY_X = 21969;
+    private static final int ID_PRIMARY_R_CHROMATICITY_Y = 21970;
     private static final int ID_PROJECTION = 30320;
     private static final int ID_PROJECTION_PRIVATE = 30322;
     private static final int ID_REFERENCE_BLOCK = 251;
@@ -135,6 +155,8 @@ public final class MatroskaExtractor implements Extractor {
     private static final int ID_TRACK_NUMBER = 215;
     private static final int ID_TRACK_TYPE = 131;
     private static final int ID_VIDEO = 224;
+    private static final int ID_WHITE_POINT_CHROMATICITY_X = 21975;
+    private static final int ID_WHITE_POINT_CHROMATICITY_Y = 21976;
     private static final int LACING_EBML = 3;
     private static final int LACING_FIXED_SIZE = 2;
     private static final int LACING_NONE = 0;
@@ -191,6 +213,7 @@ public final class MatroskaExtractor implements Extractor {
     private final ParsableByteArray seekEntryIdBytes;
     private long seekEntryPosition;
     private boolean seekForCues;
+    private final boolean seekForCuesEnabled;
     private long seekPositionAfterBuildingCues;
     private boolean seenClusterPositionForCurrentCuePoint;
     private long segmentContentPosition;
@@ -202,13 +225,23 @@ public final class MatroskaExtractor implements Extractor {
     private final VarintReader varintReader;
     private final ParsableByteArray vorbisNumPageSamples;
 
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Flags {
+    }
+
     private static final class Track {
+        private static final int DEFAULT_MAX_CLL = 1000;
+        private static final int DEFAULT_MAX_FALL = 200;
         private static final int DISPLAY_UNIT_PIXELS = 0;
+        private static final int MAX_CHROMATICITY = 50000;
         public int audioBitDepth;
         public int channelCount;
         public long codecDelayNs;
         public String codecId;
         public byte[] codecPrivate;
+        public int colorRange;
+        public int colorSpace;
+        public int colorTransfer;
         public int defaultSampleDurationNs;
         public int displayHeight;
         public int displayUnit;
@@ -217,18 +250,31 @@ public final class MatroskaExtractor implements Extractor {
         public byte[] encryptionKeyId;
         public boolean flagDefault;
         public boolean flagForced;
+        public boolean hasColorInfo;
         public boolean hasContentEncryption;
         public int height;
         private String language;
+        public int maxContentLuminance;
+        public int maxFrameAverageLuminance;
+        public float maxMasteringLuminance;
+        public float minMasteringLuminance;
         public int nalUnitLengthFieldLength;
         public int number;
         public TrackOutput output;
+        public float primaryBChromaticityX;
+        public float primaryBChromaticityY;
+        public float primaryGChromaticityX;
+        public float primaryGChromaticityY;
+        public float primaryRChromaticityX;
+        public float primaryRChromaticityY;
         public byte[] projectionData;
         public int sampleRate;
         public byte[] sampleStrippedBytes;
         public long seekPreRollNs;
         public int stereoMode;
         public int type;
+        public float whitePointChromaticityX;
+        public float whitePointChromaticityY;
         public int width;
 
         private Track() {
@@ -239,6 +285,22 @@ public final class MatroskaExtractor implements Extractor {
             this.displayUnit = 0;
             this.projectionData = null;
             this.stereoMode = -1;
+            this.hasColorInfo = false;
+            this.colorSpace = -1;
+            this.colorTransfer = -1;
+            this.colorRange = -1;
+            this.maxContentLuminance = 1000;
+            this.maxFrameAverageLuminance = 200;
+            this.primaryRChromaticityX = -1.0f;
+            this.primaryRChromaticityY = -1.0f;
+            this.primaryGChromaticityX = -1.0f;
+            this.primaryGChromaticityY = -1.0f;
+            this.primaryBChromaticityX = -1.0f;
+            this.primaryBChromaticityY = -1.0f;
+            this.whitePointChromaticityX = -1.0f;
+            this.whitePointChromaticityY = -1.0f;
+            this.maxMasteringLuminance = -1.0f;
+            this.minMasteringLuminance = -1.0f;
             this.channelCount = 1;
             this.audioBitDepth = -1;
             this.sampleRate = 8000;
@@ -303,6 +365,12 @@ public final class MatroskaExtractor implements Extractor {
                 case -1373388978:
                     if (str.equals(MatroskaExtractor.CODEC_ID_FOURCC)) {
                         obj = 8;
+                        break;
+                    }
+                    break;
+                case -933872740:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_DVBSUB)) {
+                        obj = 27;
                         break;
                     }
                     break;
@@ -532,6 +600,10 @@ public final class MatroskaExtractor implements Extractor {
                 case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
                     mimeType = MimeTypes.APPLICATION_PGS;
                     break;
+                case 27:
+                    mimeType = MimeTypes.APPLICATION_DVBSUBS;
+                    initializationData = Collections.singletonList(new byte[]{this.codecPrivate[0], this.codecPrivate[1], this.codecPrivate[2], this.codecPrivate[3]});
+                    break;
                 default:
                     throw new ParserException("Unrecognized codec identifier.");
             }
@@ -542,18 +614,28 @@ public final class MatroskaExtractor implements Extractor {
             } else if (MimeTypes.isVideo(mimeType)) {
                 type = 2;
                 if (this.displayUnit == 0) {
+                    int i;
                     this.displayWidth = this.displayWidth == -1 ? this.width : this.displayWidth;
-                    this.displayHeight = this.displayHeight == -1 ? this.height : this.displayHeight;
+                    if (this.displayHeight == -1) {
+                        i = this.height;
+                    } else {
+                        i = this.displayHeight;
+                    }
+                    this.displayHeight = i;
                 }
                 float pixelWidthHeightRatio = -1.0f;
                 if (!(this.displayWidth == -1 || this.displayHeight == -1)) {
                     pixelWidthHeightRatio = ((float) (this.height * this.displayWidth)) / ((float) (this.width * this.displayHeight));
                 }
-                format = Format.createVideoSampleFormat(Integer.toString(trackId), mimeType, null, -1, maxInputSize, this.width, this.height, -1.0f, initializationData, -1, pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.drmInitData);
+                ColorInfo colorInfo = null;
+                if (this.hasColorInfo) {
+                    ColorInfo colorInfo2 = new ColorInfo(this.colorSpace, this.colorRange, this.colorTransfer, getHdrStaticInfo());
+                }
+                format = Format.createVideoSampleFormat(Integer.toString(trackId), mimeType, null, -1, maxInputSize, this.width, this.height, -1.0f, initializationData, -1, pixelWidthHeightRatio, this.projectionData, this.stereoMode, colorInfo, this.drmInitData);
             } else if (MimeTypes.APPLICATION_SUBRIP.equals(mimeType)) {
                 type = 3;
                 format = Format.createTextSampleFormat(Integer.toString(trackId), mimeType, null, -1, selectionFlags, this.language, this.drmInitData);
-            } else if (MimeTypes.APPLICATION_VOBSUB.equals(mimeType) || MimeTypes.APPLICATION_PGS.equals(mimeType)) {
+            } else if (MimeTypes.APPLICATION_VOBSUB.equals(mimeType) || MimeTypes.APPLICATION_PGS.equals(mimeType) || MimeTypes.APPLICATION_DVBSUBS.equals(mimeType)) {
                 type = 3;
                 format = Format.createImageSampleFormat(Integer.toString(trackId), mimeType, null, -1, initializationData, this.language, this.drmInitData);
             } else {
@@ -561,6 +643,28 @@ public final class MatroskaExtractor implements Extractor {
             }
             this.output = output.track(this.number, type);
             this.output.format(format);
+        }
+
+        private byte[] getHdrStaticInfo() {
+            if (this.primaryRChromaticityX == -1.0f || this.primaryRChromaticityY == -1.0f || this.primaryGChromaticityX == -1.0f || this.primaryGChromaticityY == -1.0f || this.primaryBChromaticityX == -1.0f || this.primaryBChromaticityY == -1.0f || this.whitePointChromaticityX == -1.0f || this.whitePointChromaticityY == -1.0f || this.maxMasteringLuminance == -1.0f || this.minMasteringLuminance == -1.0f) {
+                return null;
+            }
+            byte[] hdrStaticInfoData = new byte[25];
+            ByteBuffer hdrStaticInfo = ByteBuffer.wrap(hdrStaticInfoData);
+            hdrStaticInfo.put((byte) 0);
+            hdrStaticInfo.putShort((short) ((int) ((this.primaryRChromaticityX * 50000.0f) + 0.5f)));
+            hdrStaticInfo.putShort((short) ((int) ((this.primaryRChromaticityY * 50000.0f) + 0.5f)));
+            hdrStaticInfo.putShort((short) ((int) ((this.primaryGChromaticityX * 50000.0f) + 0.5f)));
+            hdrStaticInfo.putShort((short) ((int) ((this.primaryGChromaticityY * 50000.0f) + 0.5f)));
+            hdrStaticInfo.putShort((short) ((int) ((this.primaryBChromaticityX * 50000.0f) + 0.5f)));
+            hdrStaticInfo.putShort((short) ((int) ((this.primaryBChromaticityY * 50000.0f) + 0.5f)));
+            hdrStaticInfo.putShort((short) ((int) ((this.whitePointChromaticityX * 50000.0f) + 0.5f)));
+            hdrStaticInfo.putShort((short) ((int) ((this.whitePointChromaticityY * 50000.0f) + 0.5f)));
+            hdrStaticInfo.putShort((short) ((int) (this.maxMasteringLuminance + 0.5f)));
+            hdrStaticInfo.putShort((short) ((int) (this.minMasteringLuminance + 0.5f)));
+            hdrStaticInfo.putShort((short) this.maxContentLuminance);
+            hdrStaticInfo.putShort((short) this.maxFrameAverageLuminance);
+            return hdrStaticInfoData;
         }
 
         private static List<byte[]> parseFourCcVc1Private(ParsableByteArray buffer) throws ParserException {
@@ -686,10 +790,14 @@ public final class MatroskaExtractor implements Extractor {
     }
 
     public MatroskaExtractor() {
-        this(new DefaultEbmlReader());
+        this(0);
     }
 
-    MatroskaExtractor(EbmlReader reader) {
+    public MatroskaExtractor(int flags) {
+        this(new DefaultEbmlReader(), flags);
+    }
+
+    MatroskaExtractor(EbmlReader reader, int flags) {
         this.segmentContentPosition = -1;
         this.timecodeScale = C.TIME_UNSET;
         this.durationTimecode = C.TIME_UNSET;
@@ -699,6 +807,7 @@ public final class MatroskaExtractor implements Extractor {
         this.clusterTimecodeUs = C.TIME_UNSET;
         this.reader = reader;
         this.reader.init(new InnerEbmlReaderOutput());
+        this.seekForCuesEnabled = (flags & 1) == 0;
         this.varintReader = new VarintReader();
         this.tracks = new SparseArray();
         this.scratch = new ParsableByteArray(4);
@@ -772,6 +881,11 @@ public final class MatroskaExtractor implements Extractor {
             case ID_DISPLAY_UNIT /*21682*/:
             case ID_DISPLAY_HEIGHT /*21690*/:
             case ID_FLAG_FORCED /*21930*/:
+            case ID_COLOUR_RANGE /*21945*/:
+            case ID_COLOUR_TRANSFER /*21946*/:
+            case ID_COLOUR_PRIMARIES /*21947*/:
+            case ID_MAX_CLL /*21948*/:
+            case ID_MAX_FALL /*21949*/:
             case ID_CODEC_DELAY /*22186*/:
             case ID_SEEK_PRE_ROLL /*22203*/:
             case ID_AUDIO_BIT_DEPTH /*25188*/:
@@ -792,6 +906,8 @@ public final class MatroskaExtractor implements Extractor {
             case ID_SEEK /*19899*/:
             case ID_CONTENT_COMPRESSION /*20532*/:
             case ID_CONTENT_ENCRYPTION /*20533*/:
+            case ID_COLOUR /*21936*/:
+            case ID_MASTERING_METADATA /*21968*/:
             case ID_CONTENT_ENCODING /*25152*/:
             case ID_CONTENT_ENCODINGS /*28032*/:
             case ID_PROJECTION /*30320*/:
@@ -813,6 +929,16 @@ public final class MatroskaExtractor implements Extractor {
                 return 4;
             case ID_SAMPLING_FREQUENCY /*181*/:
             case ID_DURATION /*17545*/:
+            case ID_PRIMARY_R_CHROMATICITY_X /*21969*/:
+            case ID_PRIMARY_R_CHROMATICITY_Y /*21970*/:
+            case ID_PRIMARY_G_CHROMATICITY_X /*21971*/:
+            case ID_PRIMARY_G_CHROMATICITY_Y /*21972*/:
+            case ID_PRIMARY_B_CHROMATICITY_X /*21973*/:
+            case ID_PRIMARY_B_CHROMATICITY_Y /*21974*/:
+            case ID_WHITE_POINT_CHROMATICITY_X /*21975*/:
+            case ID_WHITE_POINT_CHROMATICITY_Y /*21976*/:
+            case ID_LUMNINANCE_MAX /*21977*/:
+            case ID_LUMNINANCE_MIN /*21978*/:
                 return 5;
             default:
                 return 0;
@@ -841,6 +967,9 @@ public final class MatroskaExtractor implements Extractor {
             case ID_CONTENT_ENCRYPTION /*20533*/:
                 this.currentTrack.hasContentEncryption = true;
                 return;
+            case ID_MASTERING_METADATA /*21968*/:
+                this.currentTrack.hasColorInfo = true;
+                return;
             case ID_SEGMENT /*408125543*/:
                 if (this.segmentContentPosition == -1 || this.segmentContentPosition == contentPosition) {
                     this.segmentContentPosition = contentPosition;
@@ -854,12 +983,12 @@ public final class MatroskaExtractor implements Extractor {
                 return;
             case ID_CLUSTER /*524531317*/:
                 if (!this.sentSeekMap) {
-                    if (this.cuesContentPosition != -1) {
-                        this.seekForCues = true;
+                    if (!this.seekForCuesEnabled || this.cuesContentPosition == -1) {
+                        this.extractorOutput.seekMap(new Unseekable(this.durationUs));
+                        this.sentSeekMap = true;
                         return;
                     }
-                    this.extractorOutput.seekMap(new Unseekable(this.durationUs));
-                    this.sentSeekMap = true;
+                    this.seekForCues = true;
                     return;
                 }
                 return;
@@ -1053,6 +1182,57 @@ public final class MatroskaExtractor implements Extractor {
                 }
                 track.flagDefault = z;
                 return;
+            case ID_COLOUR_RANGE /*21945*/:
+                switch ((int) value) {
+                    case 1:
+                        this.currentTrack.colorRange = 2;
+                        return;
+                    case 2:
+                        this.currentTrack.colorRange = 1;
+                        return;
+                    default:
+                        return;
+                }
+            case ID_COLOUR_TRANSFER /*21946*/:
+                switch ((int) value) {
+                    case 1:
+                    case 6:
+                    case 7:
+                        this.currentTrack.colorTransfer = 3;
+                        return;
+                    case 16:
+                        this.currentTrack.colorTransfer = 6;
+                        return;
+                    case 18:
+                        this.currentTrack.colorTransfer = 7;
+                        return;
+                    default:
+                        return;
+                }
+            case ID_COLOUR_PRIMARIES /*21947*/:
+                this.currentTrack.hasColorInfo = true;
+                switch ((int) value) {
+                    case 1:
+                        this.currentTrack.colorSpace = 1;
+                        return;
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                        this.currentTrack.colorSpace = 2;
+                        return;
+                    case 9:
+                        this.currentTrack.colorSpace = 6;
+                        return;
+                    default:
+                        return;
+                }
+            case ID_MAX_CLL /*21948*/:
+                this.currentTrack.maxContentLuminance = (int) value;
+                return;
+            case ID_MAX_FALL /*21949*/:
+                this.currentTrack.maxFrameAverageLuminance = (int) value;
+                return;
             case ID_CODEC_DELAY /*22186*/:
                 this.currentTrack.codecDelayNs = value;
                 return;
@@ -1080,6 +1260,36 @@ public final class MatroskaExtractor implements Extractor {
                 return;
             case ID_DURATION /*17545*/:
                 this.durationTimecode = (long) value;
+                return;
+            case ID_PRIMARY_R_CHROMATICITY_X /*21969*/:
+                this.currentTrack.primaryRChromaticityX = (float) value;
+                return;
+            case ID_PRIMARY_R_CHROMATICITY_Y /*21970*/:
+                this.currentTrack.primaryRChromaticityY = (float) value;
+                return;
+            case ID_PRIMARY_G_CHROMATICITY_X /*21971*/:
+                this.currentTrack.primaryGChromaticityX = (float) value;
+                return;
+            case ID_PRIMARY_G_CHROMATICITY_Y /*21972*/:
+                this.currentTrack.primaryGChromaticityY = (float) value;
+                return;
+            case ID_PRIMARY_B_CHROMATICITY_X /*21973*/:
+                this.currentTrack.primaryBChromaticityX = (float) value;
+                return;
+            case ID_PRIMARY_B_CHROMATICITY_Y /*21974*/:
+                this.currentTrack.primaryBChromaticityY = (float) value;
+                return;
+            case ID_WHITE_POINT_CHROMATICITY_X /*21975*/:
+                this.currentTrack.whitePointChromaticityX = (float) value;
+                return;
+            case ID_WHITE_POINT_CHROMATICITY_Y /*21976*/:
+                this.currentTrack.whitePointChromaticityY = (float) value;
+                return;
+            case ID_LUMNINANCE_MAX /*21977*/:
+                this.currentTrack.maxMasteringLuminance = (float) value;
+                return;
+            case ID_LUMNINANCE_MIN /*21978*/:
+                this.currentTrack.minMasteringLuminance = (float) value;
                 return;
             default:
                 return;
@@ -1501,7 +1711,7 @@ public final class MatroskaExtractor implements Extractor {
     }
 
     private static boolean isCodecSupported(String codecId) {
-        if (CODEC_ID_VP8.equals(codecId) || CODEC_ID_VP9.equals(codecId) || CODEC_ID_MPEG2.equals(codecId) || CODEC_ID_MPEG4_SP.equals(codecId) || CODEC_ID_MPEG4_ASP.equals(codecId) || CODEC_ID_MPEG4_AP.equals(codecId) || CODEC_ID_H264.equals(codecId) || CODEC_ID_H265.equals(codecId) || CODEC_ID_FOURCC.equals(codecId) || CODEC_ID_THEORA.equals(codecId) || CODEC_ID_OPUS.equals(codecId) || CODEC_ID_VORBIS.equals(codecId) || CODEC_ID_AAC.equals(codecId) || CODEC_ID_MP2.equals(codecId) || CODEC_ID_MP3.equals(codecId) || CODEC_ID_AC3.equals(codecId) || CODEC_ID_E_AC3.equals(codecId) || CODEC_ID_TRUEHD.equals(codecId) || CODEC_ID_DTS.equals(codecId) || CODEC_ID_DTS_EXPRESS.equals(codecId) || CODEC_ID_DTS_LOSSLESS.equals(codecId) || CODEC_ID_FLAC.equals(codecId) || CODEC_ID_ACM.equals(codecId) || CODEC_ID_PCM_INT_LIT.equals(codecId) || CODEC_ID_SUBRIP.equals(codecId) || CODEC_ID_VOBSUB.equals(codecId) || CODEC_ID_PGS.equals(codecId)) {
+        if (CODEC_ID_VP8.equals(codecId) || CODEC_ID_VP9.equals(codecId) || CODEC_ID_MPEG2.equals(codecId) || CODEC_ID_MPEG4_SP.equals(codecId) || CODEC_ID_MPEG4_ASP.equals(codecId) || CODEC_ID_MPEG4_AP.equals(codecId) || CODEC_ID_H264.equals(codecId) || CODEC_ID_H265.equals(codecId) || CODEC_ID_FOURCC.equals(codecId) || CODEC_ID_THEORA.equals(codecId) || CODEC_ID_OPUS.equals(codecId) || CODEC_ID_VORBIS.equals(codecId) || CODEC_ID_AAC.equals(codecId) || CODEC_ID_MP2.equals(codecId) || CODEC_ID_MP3.equals(codecId) || CODEC_ID_AC3.equals(codecId) || CODEC_ID_E_AC3.equals(codecId) || CODEC_ID_TRUEHD.equals(codecId) || CODEC_ID_DTS.equals(codecId) || CODEC_ID_DTS_EXPRESS.equals(codecId) || CODEC_ID_DTS_LOSSLESS.equals(codecId) || CODEC_ID_FLAC.equals(codecId) || CODEC_ID_ACM.equals(codecId) || CODEC_ID_PCM_INT_LIT.equals(codecId) || CODEC_ID_SUBRIP.equals(codecId) || CODEC_ID_VOBSUB.equals(codecId) || CODEC_ID_PGS.equals(codecId) || CODEC_ID_DVBSUB.equals(codecId)) {
             return true;
         }
         return false;

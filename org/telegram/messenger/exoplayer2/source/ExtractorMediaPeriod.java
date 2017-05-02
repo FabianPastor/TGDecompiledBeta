@@ -150,10 +150,10 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
         }
 
         public void load() throws IOException, InterruptedException {
+            ExtractorInput input;
             Throwable th;
             int result = 0;
             while (result == 0 && !this.loadCanceled) {
-                ExtractorInput input;
                 try {
                     long position = this.positionHolder.position;
                     this.length = this.dataSource.open(new DataSpec(this.uri, position, -1, ExtractorMediaPeriod.this.customCacheKey));
@@ -220,8 +220,8 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
             return ExtractorMediaPeriod.this.readData(this.track, formatHolder, buffer, formatRequired);
         }
 
-        public void skipToKeyframeBefore(long timeUs) {
-            ((DefaultTrackOutput) ExtractorMediaPeriod.this.sampleQueues.valueAt(this.track)).skipToKeyframeBefore(timeUs);
+        public void skipData(long positionUs) {
+            ExtractorMediaPeriod.this.skipData(this.track, positionUs);
         }
     }
 
@@ -409,7 +409,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
         int i = 0;
         while (seekInsideBuffer && i < trackCount) {
             if (this.trackEnabledStates[i]) {
-                seekInsideBuffer = ((DefaultTrackOutput) this.sampleQueues.valueAt(i)).skipToKeyframeBefore(positionUs);
+                seekInsideBuffer = ((DefaultTrackOutput) this.sampleQueues.valueAt(i)).skipToKeyframeBefore(positionUs, false);
             }
             i++;
         }
@@ -441,6 +441,15 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
             return -3;
         }
         return ((DefaultTrackOutput) this.sampleQueues.valueAt(track)).readData(formatHolder, buffer, formatRequired, this.loadingFinished, this.lastSeekPositionUs);
+    }
+
+    void skipData(int track, long positionUs) {
+        DefaultTrackOutput sampleQueue = (DefaultTrackOutput) this.sampleQueues.valueAt(track);
+        if (!this.loadingFinished || positionUs <= sampleQueue.getLargestQueuedTimestampUs()) {
+            sampleQueue.skipToKeyframeBefore(positionUs, true);
+        } else {
+            sampleQueue.skipAll();
+        }
     }
 
     public void onLoadCompleted(ExtractingLoadable loadable, long elapsedRealtimeMs, long loadDurationMs) {

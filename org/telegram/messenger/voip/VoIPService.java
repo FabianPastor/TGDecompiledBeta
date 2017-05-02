@@ -66,7 +66,7 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.voip.VoIPController.ConnectionStateListener;
 import org.telegram.messenger.voip.VoIPController.Stats;
@@ -1064,10 +1064,10 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 public void run() {
                     if (VoIPService.this.controller != null) {
                         VoIPService.this.updateStats();
-                        AndroidUtilities.runOnUIThread(this, ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                        AndroidUtilities.runOnUIThread(this, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                     }
                 }
-            }, ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+            }, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
         } catch (Exception x) {
             FileLog.e("error starting call", x);
             callFailed();
@@ -1295,10 +1295,10 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                             netType = VoIPService.this.lastNetInfo.isRoaming() ? 2 : 0;
                         }
                         StatsController.getInstance().incrementTotalCallsTime(netType, 5);
-                        AndroidUtilities.runOnUIThread(this, ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                        AndroidUtilities.runOnUIThread(this, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                     }
                 }
-            }, ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+            }, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
             if (this.isOutgoing) {
                 StatsController.getInstance().incrementSentItemsCount(getStatsNetworkType(), 0, 1);
             } else {

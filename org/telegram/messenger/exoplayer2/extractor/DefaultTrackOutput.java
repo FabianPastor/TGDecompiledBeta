@@ -29,7 +29,6 @@ public final class DefaultTrackOutput implements TrackOutput {
     private Allocation lastAllocation;
     private int lastAllocationOffset = this.allocationLength;
     private Format lastUnadjustedFormat;
-    private boolean needKeyframe = true;
     private boolean pendingFormatAdjustment;
     private boolean pendingSplice;
     private long sampleOffsetUs;
@@ -67,6 +66,7 @@ public final class DefaultTrackOutput implements TrackOutput {
         private long[] timesUs = new long[this.capacity];
         private Format upstreamFormat;
         private boolean upstreamFormatRequired = true;
+        private boolean upstreamKeyframeRequired = true;
         private int upstreamSourceId;
 
         public void clearSampleData() {
@@ -74,6 +74,7 @@ public final class DefaultTrackOutput implements TrackOutput {
             this.relativeReadIndex = 0;
             this.relativeWriteIndex = 0;
             this.queueSize = 0;
+            this.upstreamKeyframeRequired = true;
         }
 
         public void resetLargestParsedTimestamps() {
@@ -148,6 +149,8 @@ public final class DefaultTrackOutput implements TrackOutput {
                 } else if (formatRequired || this.formats[this.relativeReadIndex] != downstreamFormat) {
                     formatHolder.format = this.formats[this.relativeReadIndex];
                     i = -5;
+                } else if (buffer.isFlagsOnly()) {
+                    i = -3;
                 } else {
                     long j;
                     buffer.timeUs = this.timesUs[this.relativeReadIndex];
@@ -173,6 +176,20 @@ public final class DefaultTrackOutput implements TrackOutput {
             return i;
         }
 
+        public synchronized long skipAll() {
+            long j;
+            if (this.queueSize == 0) {
+                j = -1;
+            } else {
+                int lastSampleIndex = ((this.relativeReadIndex + this.queueSize) - 1) % this.capacity;
+                this.relativeReadIndex = (this.relativeReadIndex + this.queueSize) % this.capacity;
+                this.absoluteReadIndex += this.queueSize;
+                this.queueSize = 0;
+                j = this.offsets[lastSampleIndex] + ((long) this.sizes[lastSampleIndex]);
+            }
+            return j;
+        }
+
         public synchronized long skipToKeyframeBefore(long timeUs, boolean allowTimeBeyondBuffer) {
             long j = -1;
             synchronized (this) {
@@ -189,9 +206,9 @@ public final class DefaultTrackOutput implements TrackOutput {
                             sampleCount++;
                         }
                         if (sampleCountToKeyframe != -1) {
-                            this.queueSize -= sampleCountToKeyframe;
                             this.relativeReadIndex = (this.relativeReadIndex + sampleCountToKeyframe) % this.capacity;
                             this.absoluteReadIndex += sampleCountToKeyframe;
+                            this.queueSize -= sampleCountToKeyframe;
                             j = this.offsets[this.relativeReadIndex];
                         }
                     }
@@ -217,6 +234,11 @@ public final class DefaultTrackOutput implements TrackOutput {
         }
 
         public synchronized void commitSample(long timeUs, int sampleFlags, long offset, int size, byte[] encryptionKey) {
+            if (this.upstreamKeyframeRequired) {
+                if ((sampleFlags & 1) != 0) {
+                    this.upstreamKeyframeRequired = false;
+                }
+            }
             Assertions.checkState(!this.upstreamFormatRequired);
             commitSampleTimestamp(timeUs);
             this.timesUs[this.relativeWriteIndex] = timeUs;
@@ -376,8 +398,11 @@ public final class DefaultTrackOutput implements TrackOutput {
         return this.infoQueue.getLargestQueuedTimestampUs();
     }
 
-    public boolean skipToKeyframeBefore(long timeUs) {
-        return skipToKeyframeBefore(timeUs, false);
+    public void skipAll() {
+        long nextOffset = this.infoQueue.skipAll();
+        if (nextOffset != -1) {
+            dropDownstreamTo(nextOffset);
+        }
     }
 
     public boolean skipToKeyframeBefore(long timeUs, boolean allowTimeBeyondBuffer) {
@@ -576,13 +601,6 @@ public final class DefaultTrackOutput implements TrackOutput {
                     }
                     this.pendingSplice = false;
                 }
-                if (this.needKeyframe) {
-                    if ((flags & 1) == 0) {
-                        endWriteOperation();
-                        return;
-                    }
-                    this.needKeyframe = false;
-                }
                 this.infoQueue.commitSample(timeUs + this.sampleOffsetUs, flags, (this.totalBytesWritten - ((long) size)) - ((long) offset), size, encryptionKey);
                 endWriteOperation();
             } catch (Throwable th) {
@@ -612,7 +630,6 @@ public final class DefaultTrackOutput implements TrackOutput {
         this.totalBytesWritten = 0;
         this.lastAllocation = null;
         this.lastAllocationOffset = this.allocationLength;
-        this.needKeyframe = true;
     }
 
     private int prepareForAppend(int length) {

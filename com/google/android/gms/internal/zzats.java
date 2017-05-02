@@ -1,7 +1,7 @@
 package com.google.android.gms.internal;
 
 import com.google.android.gms.common.internal.zzac;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
@@ -44,7 +44,7 @@ public final class zzats {
     public static zza<Long> zzbsr = zza.zzj("measurement.upload.max_queue_time", 2419200000L);
     public static zza<Integer> zzbss = zza.zzB("measurement.lifetimevalue.max_currency_tracked", 4);
     public static zza<Integer> zzbst = zza.zzB("measurement.audience.filter_result_max_count", Callback.DEFAULT_DRAG_ANIMATION_DURATION);
-    public static zza<Long> zzbsu = zza.zzj("measurement.service_client.idle_disconnect_millis", ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+    public static zza<Long> zzbsu = zza.zzj("measurement.service_client.idle_disconnect_millis", DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
 
     public static final class zza<V> {
         private final String zzAX;

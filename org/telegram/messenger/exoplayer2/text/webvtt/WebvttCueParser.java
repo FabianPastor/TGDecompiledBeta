@@ -1,5 +1,6 @@
 package org.telegram.messenger.exoplayer2.text.webvtt;
 
+import android.support.annotation.NonNull;
 import android.text.Layout.Alignment;
 import android.text.SpannableStringBuilder;
 import android.text.style.AbsoluteSizeSpan;
@@ -98,7 +99,7 @@ final class WebvttCueParser {
             this.style = style;
         }
 
-        public int compareTo(StyleMatch another) {
+        public int compareTo(@NonNull StyleMatch another) {
             return this.score - another.score;
         }
     }

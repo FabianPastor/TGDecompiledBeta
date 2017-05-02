@@ -28,7 +28,7 @@ import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.query.DraftQuery;
 import org.telegram.messenger.query.SearchQuery;
@@ -318,7 +318,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     }
                 }
             };
-            AndroidUtilities.runOnUIThread(this.locationQueryCancelRunnable, ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+            AndroidUtilities.runOnUIThread(this.locationQueryCancelRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
         }
 
         public void stop() {
@@ -1412,9 +1412,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     private void sendMessage(String message, MessageMedia location, TL_photo photo, VideoEditedInfo videoEditedInfo, User user, TL_document document, TL_game game, long peer, String path, MessageObject reply_to_msg, WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<MessageEntity> entities, ReplyMarkup replyMarkup, HashMap<String, String> params) {
         Throwable e;
+        MessageObject newMsgObj;
         if (peer != 0) {
             Chat chat;
-            MessageObject newMsgObj;
             int a;
             DocumentAttribute attribute;
             String originalPath = null;

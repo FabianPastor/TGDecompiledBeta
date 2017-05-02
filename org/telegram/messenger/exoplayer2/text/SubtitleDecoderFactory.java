@@ -1,108 +1,105 @@
 package org.telegram.messenger.exoplayer2.text;
 
 import org.telegram.messenger.exoplayer2.Format;
+import org.telegram.messenger.exoplayer2.text.cea.Cea608Decoder;
+import org.telegram.messenger.exoplayer2.text.cea.Cea708Decoder;
+import org.telegram.messenger.exoplayer2.text.dvb.DvbDecoder;
+import org.telegram.messenger.exoplayer2.text.subrip.SubripDecoder;
+import org.telegram.messenger.exoplayer2.text.ttml.TtmlDecoder;
+import org.telegram.messenger.exoplayer2.text.tx3g.Tx3gDecoder;
+import org.telegram.messenger.exoplayer2.text.webvtt.Mp4WebvttDecoder;
+import org.telegram.messenger.exoplayer2.text.webvtt.WebvttDecoder;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public interface SubtitleDecoderFactory {
     public static final SubtitleDecoderFactory DEFAULT = new SubtitleDecoderFactory() {
         public boolean supportsFormat(Format format) {
-            return getDecoderClass(format.sampleMimeType) != null;
+            String mimeType = format.sampleMimeType;
+            if (MimeTypes.TEXT_VTT.equals(mimeType) || MimeTypes.APPLICATION_TTML.equals(mimeType) || MimeTypes.APPLICATION_MP4VTT.equals(mimeType) || MimeTypes.APPLICATION_SUBRIP.equals(mimeType) || MimeTypes.APPLICATION_TX3G.equals(mimeType) || MimeTypes.APPLICATION_CEA608.equals(mimeType) || MimeTypes.APPLICATION_MP4CEA608.equals(mimeType) || MimeTypes.APPLICATION_CEA708.equals(mimeType) || MimeTypes.APPLICATION_DVBSUBS.equals(mimeType)) {
+                return true;
+            }
+            return false;
         }
 
         public SubtitleDecoder createDecoder(Format format) {
-            try {
-                Class<?> clazz = getDecoderClass(format.sampleMimeType);
-                if (clazz == null) {
-                    throw new IllegalArgumentException("Attempted to create decoder for unsupported format");
-                } else if (format.sampleMimeType.equals(MimeTypes.APPLICATION_CEA608) || format.sampleMimeType.equals(MimeTypes.APPLICATION_MP4CEA608)) {
-                    return (SubtitleDecoder) clazz.asSubclass(SubtitleDecoder.class).getConstructor(new Class[]{String.class, Integer.TYPE}).newInstance(new Object[]{format.sampleMimeType, Integer.valueOf(format.accessibilityChannel)});
-                } else if (!format.sampleMimeType.equals(MimeTypes.APPLICATION_CEA708)) {
-                    return (SubtitleDecoder) clazz.asSubclass(SubtitleDecoder.class).getConstructor(new Class[0]).newInstance(new Object[0]);
-                } else {
-                    return (SubtitleDecoder) clazz.asSubclass(SubtitleDecoder.class).getConstructor(new Class[]{Integer.TYPE}).newInstance(new Object[]{Integer.valueOf(format.accessibilityChannel)});
-                }
-            } catch (Exception e) {
-                throw new IllegalStateException("Unexpected error instantiating decoder", e);
-            }
-        }
-
-        private Class<?> getDecoderClass(String mimeType) {
-            if (mimeType == null) {
-                return null;
-            }
+            String str = format.sampleMimeType;
             Object obj = -1;
-            try {
-                switch (mimeType.hashCode()) {
-                    case -1026075066:
-                        if (mimeType.equals(MimeTypes.APPLICATION_MP4VTT)) {
-                            obj = 2;
-                            break;
-                        }
+            switch (str.hashCode()) {
+                case -1351681404:
+                    if (str.equals(MimeTypes.APPLICATION_DVBSUBS)) {
+                        obj = 8;
                         break;
-                    case -1004728940:
-                        if (mimeType.equals(MimeTypes.TEXT_VTT)) {
-                            obj = null;
-                            break;
-                        }
+                    }
+                    break;
+                case -1026075066:
+                    if (str.equals(MimeTypes.APPLICATION_MP4VTT)) {
+                        obj = 1;
                         break;
-                    case 691401887:
-                        if (mimeType.equals(MimeTypes.APPLICATION_TX3G)) {
-                            obj = 4;
-                            break;
-                        }
+                    }
+                    break;
+                case -1004728940:
+                    if (str.equals(MimeTypes.TEXT_VTT)) {
+                        obj = null;
                         break;
-                    case 930165504:
-                        if (mimeType.equals(MimeTypes.APPLICATION_MP4CEA608)) {
-                            obj = 6;
-                            break;
-                        }
+                    }
+                    break;
+                case 691401887:
+                    if (str.equals(MimeTypes.APPLICATION_TX3G)) {
+                        obj = 4;
                         break;
-                    case 1566015601:
-                        if (mimeType.equals(MimeTypes.APPLICATION_CEA608)) {
-                            obj = 5;
-                            break;
-                        }
+                    }
+                    break;
+                case 930165504:
+                    if (str.equals(MimeTypes.APPLICATION_MP4CEA608)) {
+                        obj = 6;
                         break;
-                    case 1566016562:
-                        if (mimeType.equals(MimeTypes.APPLICATION_CEA708)) {
-                            obj = 7;
-                            break;
-                        }
+                    }
+                    break;
+                case 1566015601:
+                    if (str.equals(MimeTypes.APPLICATION_CEA608)) {
+                        obj = 5;
                         break;
-                    case 1668750253:
-                        if (mimeType.equals(MimeTypes.APPLICATION_SUBRIP)) {
-                            obj = 3;
-                            break;
-                        }
+                    }
+                    break;
+                case 1566016562:
+                    if (str.equals(MimeTypes.APPLICATION_CEA708)) {
+                        obj = 7;
                         break;
-                    case 1693976202:
-                        if (mimeType.equals(MimeTypes.APPLICATION_TTML)) {
-                            obj = 1;
-                            break;
-                        }
+                    }
+                    break;
+                case 1668750253:
+                    if (str.equals(MimeTypes.APPLICATION_SUBRIP)) {
+                        obj = 3;
                         break;
-                }
-                switch (obj) {
-                    case null:
-                        return Class.forName("org.telegram.messenger.exoplayer2.text.webvtt.WebvttDecoder");
-                    case 1:
-                        return Class.forName("org.telegram.messenger.exoplayer2.text.ttml.TtmlDecoder");
-                    case 2:
-                        return Class.forName("org.telegram.messenger.exoplayer2.text.webvtt.Mp4WebvttDecoder");
-                    case 3:
-                        return Class.forName("org.telegram.messenger.exoplayer2.text.subrip.SubripDecoder");
-                    case 4:
-                        return Class.forName("org.telegram.messenger.exoplayer2.text.tx3g.Tx3gDecoder");
-                    case 5:
-                    case 6:
-                        return Class.forName("org.telegram.messenger.exoplayer2.text.cea.Cea608Decoder");
-                    case 7:
-                        return Class.forName("org.telegram.messenger.exoplayer2.text.cea.Cea708Decoder");
-                    default:
-                        return null;
-                }
-            } catch (ClassNotFoundException e) {
-                return null;
+                    }
+                    break;
+                case 1693976202:
+                    if (str.equals(MimeTypes.APPLICATION_TTML)) {
+                        obj = 2;
+                        break;
+                    }
+                    break;
+            }
+            switch (obj) {
+                case null:
+                    return new WebvttDecoder();
+                case 1:
+                    return new Mp4WebvttDecoder();
+                case 2:
+                    return new TtmlDecoder();
+                case 3:
+                    return new SubripDecoder();
+                case 4:
+                    return new Tx3gDecoder(format.initializationData);
+                case 5:
+                case 6:
+                    return new Cea608Decoder(format.sampleMimeType, format.accessibilityChannel);
+                case 7:
+                    return new Cea708Decoder(format.accessibilityChannel);
+                case 8:
+                    return new DvbDecoder(format.initializationData);
+                default:
+                    throw new IllegalArgumentException("Attempted to create decoder for unsupported format");
             }
         }
     };

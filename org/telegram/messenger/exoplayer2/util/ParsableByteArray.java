@@ -90,6 +90,10 @@ public final class ParsableByteArray {
         return this.data[this.position] & 255;
     }
 
+    public char peekChar() {
+        return (char) (((this.data[this.position] & 255) << 8) | (this.data[this.position + 1] & 255));
+    }
+
     public int readUnsignedByte() {
         byte[] bArr = this.data;
         int i = this.position;

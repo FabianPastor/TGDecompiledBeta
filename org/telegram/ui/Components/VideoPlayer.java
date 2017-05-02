@@ -10,6 +10,7 @@ import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.ExoPlayer.EventListener;
 import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.PlaybackParameters;
 import org.telegram.messenger.exoplayer2.SimpleExoPlayer;
 import org.telegram.messenger.exoplayer2.SimpleExoPlayer.VideoListener;
 import org.telegram.messenger.exoplayer2.Timeline;
@@ -193,9 +194,11 @@ public class VideoPlayer implements EventListener, VideoListener {
     }
 
     public void setTextureView(TextureView texture) {
-        this.textureView = texture;
-        if (this.player != null) {
-            this.player.setVideoTextureView(this.textureView);
+        if (this.textureView != texture) {
+            this.textureView = texture;
+            if (this.player != null) {
+                this.player.setVideoTextureView(this.textureView);
+            }
         }
     }
 
@@ -302,6 +305,9 @@ public class VideoPlayer implements EventListener, VideoListener {
 
     public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
         this.delegate.onSurfaceTextureUpdated(surfaceTexture);
+    }
+
+    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
     }
 
     private void maybeReportPlayerState() {

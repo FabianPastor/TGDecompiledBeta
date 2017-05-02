@@ -12,7 +12,7 @@ public final class ParsingLoadable<T> implements Loadable {
     private final DataSource dataSource;
     public final DataSpec dataSpec;
     private volatile boolean isCanceled;
-    private final Parser<T> parser;
+    private final Parser<? extends T> parser;
     private volatile T result;
     public final int type;
 
@@ -20,7 +20,7 @@ public final class ParsingLoadable<T> implements Loadable {
         T parse(Uri uri, InputStream inputStream) throws IOException;
     }
 
-    public ParsingLoadable(DataSource dataSource, Uri uri, int type, Parser<T> parser) {
+    public ParsingLoadable(DataSource dataSource, Uri uri, int type, Parser<? extends T> parser) {
         this.dataSource = dataSource;
         this.dataSpec = new DataSpec(uri, 1);
         this.type = type;

@@ -1,5 +1,6 @@
 package org.telegram.messenger.exoplayer2;
 
+import android.support.annotation.Nullable;
 import org.telegram.messenger.exoplayer2.source.MediaSource;
 import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelectionArray;
@@ -12,6 +13,8 @@ public interface ExoPlayer {
 
     public interface EventListener {
         void onLoadingChanged(boolean z);
+
+        void onPlaybackParametersChanged(PlaybackParameters playbackParameters);
 
         void onPlayerError(ExoPlaybackException exoPlaybackException);
 
@@ -66,6 +69,8 @@ public interface ExoPlayer {
 
     boolean getPlayWhenReady();
 
+    PlaybackParameters getPlaybackParameters();
+
     int getPlaybackState();
 
     int getRendererCount();
@@ -97,6 +102,8 @@ public interface ExoPlayer {
     void sendMessages(ExoPlayerMessage... exoPlayerMessageArr);
 
     void setPlayWhenReady(boolean z);
+
+    void setPlaybackParameters(@Nullable PlaybackParameters playbackParameters);
 
     void stop();
 }

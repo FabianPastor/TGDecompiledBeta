@@ -10,6 +10,7 @@ public final class MimeTypes {
     public static final String APPLICATION_CAMERA_MOTION = "application/x-camera-motion";
     public static final String APPLICATION_CEA608 = "application/cea-608";
     public static final String APPLICATION_CEA708 = "application/cea-708";
+    public static final String APPLICATION_DVBSUBS = "application/dvbsubs";
     public static final String APPLICATION_EMSG = "application/x-emsg";
     public static final String APPLICATION_ID3 = "application/id3";
     public static final String APPLICATION_M3U8 = "application/x-mpegURL";
@@ -158,7 +159,7 @@ public final class MimeTypes {
         if (isVideo(mimeType)) {
             return 2;
         }
-        if (isText(mimeType) || APPLICATION_CEA608.equals(mimeType) || APPLICATION_CEA708.equals(mimeType) || APPLICATION_MP4CEA608.equals(mimeType) || APPLICATION_SUBRIP.equals(mimeType) || APPLICATION_TTML.equals(mimeType) || APPLICATION_TX3G.equals(mimeType) || APPLICATION_MP4VTT.equals(mimeType) || APPLICATION_RAWCC.equals(mimeType) || APPLICATION_VOBSUB.equals(mimeType) || APPLICATION_PGS.equals(mimeType)) {
+        if (isText(mimeType) || APPLICATION_CEA608.equals(mimeType) || APPLICATION_CEA708.equals(mimeType) || APPLICATION_MP4CEA608.equals(mimeType) || APPLICATION_SUBRIP.equals(mimeType) || APPLICATION_TTML.equals(mimeType) || APPLICATION_TX3G.equals(mimeType) || APPLICATION_MP4VTT.equals(mimeType) || APPLICATION_RAWCC.equals(mimeType) || APPLICATION_VOBSUB.equals(mimeType) || APPLICATION_PGS.equals(mimeType) || APPLICATION_DVBSUBS.equals(mimeType)) {
             return 3;
         }
         if (APPLICATION_ID3.equals(mimeType) || APPLICATION_EMSG.equals(mimeType) || APPLICATION_SCTE35.equals(mimeType) || APPLICATION_CAMERA_MOTION.equals(mimeType)) {

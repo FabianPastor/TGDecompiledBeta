@@ -439,6 +439,21 @@ public class FileUploadOperation {
                                         FileUploadOperation.this.delegate.didFinishUploadingFile(FileUploadOperation.this, null, result2, FileUploadOperation.this.key, FileUploadOperation.this.iv);
                                         FileUploadOperation.this.cleanup();
                                     }
+                                    if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeAudio) {
+                                        StatsController.getInstance().incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 3, 1);
+                                        return;
+                                    } else if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeVideo) {
+                                        StatsController.getInstance().incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 2, 1);
+                                        return;
+                                    } else if (FileUploadOperation.this.currentType == 16777216) {
+                                        StatsController.getInstance().incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 4, 1);
+                                        return;
+                                    } else if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeFile) {
+                                        StatsController.getInstance().incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 5, 1);
+                                        return;
+                                    } else {
+                                        return;
+                                    }
                                 } else if (FileUploadOperation.this.currentUploadRequetsCount < FileUploadOperation.this.maxRequestsCount) {
                                     if (FileUploadOperation.this.estimatedSize == 0) {
                                         if (FileUploadOperation.this.saveInfoTimes >= 4) {
@@ -479,18 +494,6 @@ public class FileUploadOperation {
                                         FileUploadOperation.this.saveInfoTimes = FileUploadOperation.this.saveInfoTimes + 1;
                                     }
                                     FileUploadOperation.this.startUploadRequest();
-                                }
-                                if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeAudio) {
-                                    StatsController.getInstance().incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 3, 1);
-                                    return;
-                                } else if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeVideo) {
-                                    StatsController.getInstance().incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 2, 1);
-                                    return;
-                                } else if (FileUploadOperation.this.currentType == 16777216) {
-                                    StatsController.getInstance().incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 4, 1);
-                                    return;
-                                } else if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeFile) {
-                                    StatsController.getInstance().incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 5, 1);
                                     return;
                                 } else {
                                     return;

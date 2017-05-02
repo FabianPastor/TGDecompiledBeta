@@ -297,6 +297,7 @@ public class ActionBarLayout extends FrameLayout {
             if (lastFragment.fragmentView != null) {
                 parent = (ViewGroup) lastFragment.fragmentView.getParent();
                 if (parent != null) {
+                    lastFragment.onRemoveFromParent();
                     parent.removeView(lastFragment.fragmentView);
                 }
             }
@@ -330,7 +331,6 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     private void prepareForMoving(MotionEvent ev) {
-        ViewGroup parent;
         this.maybeStartTracking = false;
         this.startedTracking = true;
         this.startedTrackingX = (int) ev.getX();
@@ -340,14 +340,10 @@ public class ActionBarLayout extends FrameLayout {
         View fragmentView = lastFragment.fragmentView;
         if (fragmentView == null) {
             fragmentView = lastFragment.createView(this.parentActivity);
-        } else {
-            parent = (ViewGroup) fragmentView.getParent();
-            if (parent != null) {
-                parent.removeView(fragmentView);
-            }
         }
-        parent = (ViewGroup) fragmentView.getParent();
+        ViewGroup parent = (ViewGroup) fragmentView.getParent();
         if (parent != null) {
+            lastFragment.onRemoveFromParent();
             parent.removeView(fragmentView);
         }
         if (lastFragment.actionBar != null && lastFragment.actionBar.getAddToContainer()) {
@@ -538,6 +534,7 @@ public class ActionBarLayout extends FrameLayout {
                 if (fragment.fragmentView != null) {
                     parent = (ViewGroup) fragment.fragmentView.getParent();
                     if (parent != null) {
+                        fragment.onRemoveFromParent();
                         parent.removeView(fragment.fragmentView);
                     }
                 }
@@ -631,6 +628,7 @@ public class ActionBarLayout extends FrameLayout {
         } else {
             parent = (ViewGroup) fragmentView.getParent();
             if (parent != null) {
+                fragment.onRemoveFromParent();
                 parent.removeView(fragmentView);
             }
         }
@@ -786,6 +784,7 @@ public class ActionBarLayout extends FrameLayout {
                 if (previousFragment.fragmentView != null) {
                     parent = (ViewGroup) previousFragment.fragmentView.getParent();
                     if (parent != null) {
+                        previousFragment.onRemoveFromParent();
                         parent.removeView(previousFragment.fragmentView);
                     }
                 }
@@ -831,6 +830,7 @@ public class ActionBarLayout extends FrameLayout {
                 } else {
                     parent = (ViewGroup) fragmentView.getParent();
                     if (parent != null) {
+                        previousFragment.onRemoveFromParent();
                         parent.removeView(fragmentView);
                     }
                 }
@@ -968,6 +968,7 @@ public class ActionBarLayout extends FrameLayout {
                     parent = (ViewGroup) previousFragment.fragmentView.getParent();
                     if (parent != null) {
                         previousFragment.onPause();
+                        previousFragment.onRemoveFromParent();
                         parent.removeView(previousFragment.fragmentView);
                     }
                 }
@@ -980,6 +981,7 @@ public class ActionBarLayout extends FrameLayout {
             } else {
                 parent = (ViewGroup) fragmentView.getParent();
                 if (parent != null) {
+                    previousFragment.onRemoveFromParent();
                     parent.removeView(fragmentView);
                 }
             }

@@ -26,16 +26,18 @@ public abstract class Timeline {
     public static final class Period {
         public long durationUs;
         public Object id;
+        public boolean isAd;
         private long positionInWindowUs;
         public Object uid;
         public int windowIndex;
 
-        public Period set(Object id, Object uid, int windowIndex, long durationUs, long positionInWindowUs) {
+        public Period set(Object id, Object uid, int windowIndex, long durationUs, long positionInWindowUs, boolean isAd) {
             this.id = id;
             this.uid = uid;
             this.windowIndex = windowIndex;
             this.durationUs = durationUs;
             this.positionInWindowUs = positionInWindowUs;
+            this.isAd = isAd;
             return this;
         }
 

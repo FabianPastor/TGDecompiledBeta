@@ -91,8 +91,13 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
         }
 
         public void onLoadCompleted(ParsingLoadable<HlsPlaylist> loadable, long elapsedRealtimeMs, long loadDurationMs) {
-            processLoadedPlaylist((HlsMediaPlaylist) loadable.getResult());
-            HlsPlaylistTracker.this.eventDispatcher.loadCompleted(loadable.dataSpec, 4, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded());
+            HlsPlaylist result = (HlsPlaylist) loadable.getResult();
+            if (result instanceof HlsMediaPlaylist) {
+                processLoadedPlaylist((HlsMediaPlaylist) result);
+                HlsPlaylistTracker.this.eventDispatcher.loadCompleted(loadable.dataSpec, 4, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded());
+                return;
+            }
+            onLoadError((ParsingLoadable) loadable, elapsedRealtimeMs, loadDurationMs, new ParserException("Loaded playlist has unexpected type."));
         }
 
         public void onLoadCanceled(ParsingLoadable<HlsPlaylist> loadable, long elapsedRealtimeMs, long loadDurationMs, boolean released) {

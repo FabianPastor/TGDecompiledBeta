@@ -22,7 +22,7 @@ public final class Mp4WebvttDecoder extends SimpleSubtitleDecoder {
         super("Mp4WebvttDecoder");
     }
 
-    protected Mp4WebvttSubtitle decode(byte[] bytes, int length) throws SubtitleDecoderException {
+    protected Mp4WebvttSubtitle decode(byte[] bytes, int length, boolean reset) throws SubtitleDecoderException {
         this.sampleData.reset(bytes, length);
         List<Cue> resultingCueList = new ArrayList();
         while (this.sampleData.bytesLeft() > 0) {

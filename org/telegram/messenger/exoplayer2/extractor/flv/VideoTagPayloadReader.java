@@ -48,7 +48,7 @@ final class VideoTagPayloadReader extends TagPayloadReader {
             this.nalUnitLengthFieldLength = avcConfig.nalUnitLengthFieldLength;
             this.output.format(Format.createVideoSampleFormat(null, "video/avc", null, -1, -1, avcConfig.width, avcConfig.height, -1.0f, avcConfig.initializationData, -1, avcConfig.pixelWidthAspectRatio, null));
             this.hasOutputFormat = true;
-        } else if (packetType == 1) {
+        } else if (packetType == 1 && this.hasOutputFormat) {
             byte[] nalLengthData = this.nalLength.data;
             nalLengthData[0] = (byte) 0;
             nalLengthData[1] = (byte) 0;

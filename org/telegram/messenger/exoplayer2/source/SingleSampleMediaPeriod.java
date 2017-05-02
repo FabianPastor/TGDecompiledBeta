@@ -87,7 +87,10 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
             }
         }
 
-        public void skipToKeyframeBefore(long timeUs) {
+        public void skipData(long positionUs) {
+            if (positionUs > 0) {
+                this.streamState = 2;
+            }
         }
     }
 

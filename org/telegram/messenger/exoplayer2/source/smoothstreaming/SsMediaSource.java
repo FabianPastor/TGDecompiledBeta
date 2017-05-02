@@ -6,8 +6,8 @@ import android.os.SystemClock;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.source.AdaptiveMediaSourceEventListener;
@@ -27,6 +27,7 @@ import org.telegram.messenger.exoplayer2.upstream.Loader.Callback;
 import org.telegram.messenger.exoplayer2.upstream.LoaderErrorThrower;
 import org.telegram.messenger.exoplayer2.upstream.LoaderErrorThrower.Dummy;
 import org.telegram.messenger.exoplayer2.upstream.ParsingLoadable;
+import org.telegram.messenger.exoplayer2.upstream.ParsingLoadable.Parser;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
@@ -44,7 +45,7 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
     private long manifestLoadStartTimestamp;
     private Loader manifestLoader;
     private LoaderErrorThrower manifestLoaderErrorThrower;
-    private final SsManifestParser manifestParser;
+    private final Parser<? extends SsManifest> manifestParser;
     private Handler manifestRefreshHandler;
     private final Uri manifestUri;
     private final ArrayList<SsMediaPeriod> mediaPeriods;
@@ -67,11 +68,11 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
         this(manifestUri, manifestDataSourceFactory, new SsManifestParser(), chunkSourceFactory, minLoadableRetryCount, livePresentationDelayMs, eventHandler, eventListener);
     }
 
-    public SsMediaSource(Uri manifestUri, DataSource.Factory manifestDataSourceFactory, SsManifestParser manifestParser, Factory chunkSourceFactory, int minLoadableRetryCount, long livePresentationDelayMs, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
+    public SsMediaSource(Uri manifestUri, DataSource.Factory manifestDataSourceFactory, Parser<? extends SsManifest> manifestParser, Factory chunkSourceFactory, int minLoadableRetryCount, long livePresentationDelayMs, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
         this(null, manifestUri, manifestDataSourceFactory, manifestParser, chunkSourceFactory, minLoadableRetryCount, livePresentationDelayMs, eventHandler, eventListener);
     }
 
-    private SsMediaSource(SsManifest manifest, Uri manifestUri, DataSource.Factory manifestDataSourceFactory, SsManifestParser manifestParser, Factory chunkSourceFactory, int minLoadableRetryCount, long livePresentationDelayMs, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
+    private SsMediaSource(SsManifest manifest, Uri manifestUri, DataSource.Factory manifestDataSourceFactory, Parser<? extends SsManifest> manifestParser, Factory chunkSourceFactory, int minLoadableRetryCount, long livePresentationDelayMs, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
         boolean z = manifest == null || !manifest.isLive;
         Assertions.checkState(z);
         this.manifest = manifest;
@@ -192,7 +193,7 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
                 public void run() {
                     SsMediaSource.this.startLoadingManifest();
                 }
-            }, Math.max(0, (this.manifestLoadStartTimestamp + ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS) - SystemClock.elapsedRealtime()));
+            }, Math.max(0, (this.manifestLoadStartTimestamp + DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS) - SystemClock.elapsedRealtime()));
         }
     }
 

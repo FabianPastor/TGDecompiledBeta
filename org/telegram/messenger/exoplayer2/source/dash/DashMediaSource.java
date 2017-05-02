@@ -13,8 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
@@ -62,7 +62,7 @@ public final class DashMediaSource implements MediaSource {
     private final DataSource.Factory manifestDataSourceFactory;
     private long manifestLoadEndTimestamp;
     private long manifestLoadStartTimestamp;
-    private final DashManifestParser manifestParser;
+    private final Parser<? extends DashManifest> manifestParser;
     private Uri manifestUri;
     private final Object manifestUriLock;
     private final int minLoadableRetryCount;
@@ -148,7 +148,7 @@ public final class DashMediaSource implements MediaSource {
             if (setIdentifiers) {
                 uid = Integer.valueOf(this.firstPeriodId + Assertions.checkIndex(periodIndex, 0, this.manifest.getPeriodCount()));
             }
-            return period.set(id, uid, 0, this.manifest.getPeriodDurationUs(periodIndex), C.msToUs(this.manifest.getPeriod(periodIndex).startMs - this.manifest.getPeriod(0).startMs) - this.offsetInFirstPeriodUs);
+            return period.set(id, uid, 0, this.manifest.getPeriodDurationUs(periodIndex), C.msToUs(this.manifest.getPeriod(periodIndex).startMs - this.manifest.getPeriod(0).startMs) - this.offsetInFirstPeriodUs, false);
         }
 
         public int getWindowCount() {
@@ -278,11 +278,11 @@ public final class DashMediaSource implements MediaSource {
         this(manifestUri, manifestDataSourceFactory, new DashManifestParser(), chunkSourceFactory, minLoadableRetryCount, livePresentationDelayMs, eventHandler, eventListener);
     }
 
-    public DashMediaSource(Uri manifestUri, DataSource.Factory manifestDataSourceFactory, DashManifestParser manifestParser, Factory chunkSourceFactory, int minLoadableRetryCount, long livePresentationDelayMs, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
+    public DashMediaSource(Uri manifestUri, DataSource.Factory manifestDataSourceFactory, Parser<? extends DashManifest> manifestParser, Factory chunkSourceFactory, int minLoadableRetryCount, long livePresentationDelayMs, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
         this(null, manifestUri, manifestDataSourceFactory, manifestParser, chunkSourceFactory, minLoadableRetryCount, livePresentationDelayMs, eventHandler, eventListener);
     }
 
-    private DashMediaSource(DashManifest manifest, Uri manifestUri, DataSource.Factory manifestDataSourceFactory, DashManifestParser manifestParser, Factory chunkSourceFactory, int minLoadableRetryCount, long livePresentationDelayMs, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
+    private DashMediaSource(DashManifest manifest, Uri manifestUri, DataSource.Factory manifestDataSourceFactory, Parser<? extends DashManifest> manifestParser, Factory chunkSourceFactory, int minLoadableRetryCount, long livePresentationDelayMs, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
         boolean z = true;
         this.manifest = manifest;
         this.manifestUri = manifestUri;
@@ -526,7 +526,7 @@ public final class DashMediaSource implements MediaSource {
         if (!this.sideloadedManifest) {
             this.handler.removeCallbacks(this.simulateManifestRefreshRunnable);
             if (windowChangingImplicitly) {
-                this.handler.postDelayed(this.simulateManifestRefreshRunnable, ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                this.handler.postDelayed(this.simulateManifestRefreshRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
             }
             if (scheduleRefresh) {
                 scheduleManifestRefresh();
@@ -538,7 +538,7 @@ public final class DashMediaSource implements MediaSource {
         if (this.manifest.dynamic) {
             long minUpdatePeriod = this.manifest.minUpdatePeriod;
             if (minUpdatePeriod == 0) {
-                minUpdatePeriod = ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
+                minUpdatePeriod = DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
             }
             this.handler.postDelayed(this.refreshManifestRunnable, Math.max(0, (this.manifestLoadStartTimestamp + minUpdatePeriod) - SystemClock.elapsedRealtime()));
         }

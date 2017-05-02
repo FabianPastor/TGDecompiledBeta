@@ -17,6 +17,7 @@ import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorsFactory;
 import org.telegram.messenger.exoplayer2.extractor.PositionHolder;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap.Unseekable;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.DvbSubtitleInfo;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.EsInfo;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.Factory;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
@@ -46,6 +47,7 @@ public final class TsExtractor implements Extractor {
     public static final int TS_STREAM_TYPE_AAC = 15;
     public static final int TS_STREAM_TYPE_AC3 = 129;
     public static final int TS_STREAM_TYPE_DTS = 138;
+    public static final int TS_STREAM_TYPE_DVBSUBS = 89;
     public static final int TS_STREAM_TYPE_E_AC3 = 135;
     public static final int TS_STREAM_TYPE_H262 = 2;
     public static final int TS_STREAM_TYPE_H264 = 27;
@@ -105,6 +107,7 @@ public final class TsExtractor implements Extractor {
     private class PmtReader implements SectionPayloadReader {
         private static final int TS_PMT_DESC_AC3 = 106;
         private static final int TS_PMT_DESC_DTS = 123;
+        private static final int TS_PMT_DESC_DVBSUBS = 89;
         private static final int TS_PMT_DESC_EAC3 = 122;
         private static final int TS_PMT_DESC_ISO639_LANG = 10;
         private static final int TS_PMT_DESC_REGISTRATION = 5;
@@ -134,7 +137,7 @@ public final class TsExtractor implements Extractor {
                 this.pmtScratch.skipBits(4);
                 sectionData.skipBytes(this.pmtScratch.readBits(12));
                 if (TsExtractor.this.mode == 2 && TsExtractor.this.id3Reader == null) {
-                    TsExtractor.this.id3Reader = TsExtractor.this.payloadReaderFactory.createPayloadReader(21, new EsInfo(21, null, new byte[0]));
+                    TsExtractor.this.id3Reader = TsExtractor.this.payloadReaderFactory.createPayloadReader(21, new EsInfo(21, null, null, new byte[0]));
                     TsExtractor.this.id3Reader.init(timestampAdjuster, TsExtractor.this.output, new TrackIdGenerator(programNumber, 21, 8192));
                 }
                 int remainingEntriesLength = sectionData.bytesLeft();
@@ -192,6 +195,7 @@ public final class TsExtractor implements Extractor {
             int descriptorsEndPosition = descriptorsStartPosition + length;
             int streamType = -1;
             String language = null;
+            List<DvbSubtitleInfo> dvbSubtitleInfos = null;
             while (data.getPosition() < descriptorsEndPosition) {
                 int descriptorTag = data.readUnsignedByte();
                 int positionOfNextDescriptor = data.getPosition() + data.readUnsignedByte();
@@ -211,17 +215,31 @@ public final class TsExtractor implements Extractor {
                 } else if (descriptorTag == TS_PMT_DESC_DTS) {
                     streamType = TsExtractor.TS_STREAM_TYPE_DTS;
                 } else if (descriptorTag == 10) {
-                    language = new String(data.data, data.getPosition(), 3).trim();
+                    language = data.readString(3).trim();
+                } else if (descriptorTag == 89) {
+                    streamType = 89;
+                    dvbSubtitleInfos = new ArrayList();
+                    while (data.getPosition() < positionOfNextDescriptor) {
+                        String dvbLanguage = data.readString(3).trim();
+                        int dvbSubtitlingType = data.readUnsignedByte();
+                        byte[] initializationData = new byte[4];
+                        data.readBytes(initializationData, 0, 4);
+                        dvbSubtitleInfos.add(new DvbSubtitleInfo(dvbLanguage, dvbSubtitlingType, initializationData));
+                    }
                 }
                 data.skipBytes(positionOfNextDescriptor - data.getPosition());
             }
             data.setPosition(descriptorsEndPosition);
-            return new EsInfo(streamType, language, Arrays.copyOfRange(data.data, descriptorsStartPosition, descriptorsEndPosition));
+            return new EsInfo(streamType, language, dvbSubtitleInfos, Arrays.copyOfRange(data.data, descriptorsStartPosition, descriptorsEndPosition));
         }
     }
 
     public TsExtractor() {
-        this(0, new TimestampAdjuster(0), new DefaultTsPayloadReaderFactory());
+        this(0);
+    }
+
+    public TsExtractor(int defaultTsPayloadReaderFlags) {
+        this(0, new TimestampAdjuster(0), new DefaultTsPayloadReaderFactory(defaultTsPayloadReaderFlags));
     }
 
     public TsExtractor(int mode, TimestampAdjuster timestampAdjuster, Factory payloadReaderFactory) {

@@ -41,17 +41,13 @@ final class ScriptTagPayloadReader extends TagPayloadReader {
         if (readAmfType(data) != 2) {
             throw new ParserException();
         }
-        if (!NAME_METADATA.equals(readAmfString(data))) {
-            return;
-        }
-        if (readAmfType(data) != 8) {
-            throw new ParserException();
-        }
-        Map<String, Object> metadata = readAmfEcmaArray(data);
-        if (metadata.containsKey(KEY_DURATION)) {
-            double durationSeconds = ((Double) metadata.get(KEY_DURATION)).doubleValue();
-            if (durationSeconds > 0.0d) {
-                this.durationUs = (long) (1000000.0d * durationSeconds);
+        if (NAME_METADATA.equals(readAmfString(data)) && readAmfType(data) == 8) {
+            Map<String, Object> metadata = readAmfEcmaArray(data);
+            if (metadata.containsKey(KEY_DURATION)) {
+                double durationSeconds = ((Double) metadata.get(KEY_DURATION)).doubleValue();
+                if (durationSeconds > 0.0d) {
+                    this.durationUs = (long) (1000000.0d * durationSeconds);
+                }
             }
         }
     }

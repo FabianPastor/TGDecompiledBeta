@@ -14,6 +14,7 @@ import java.util.List;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
 import org.telegram.messenger.exoplayer2.metadata.Metadata;
 import org.telegram.messenger.exoplayer2.util.Util;
+import org.telegram.messenger.exoplayer2.video.ColorInfo;
 
 public final class Format implements Parcelable {
     public static final Creator<Format> CREATOR = new Creator<Format>() {
@@ -31,6 +32,7 @@ public final class Format implements Parcelable {
     public final int bitrate;
     public final int channelCount;
     public final String codecs;
+    public final ColorInfo colorInfo;
     public final String containerMimeType;
     public final DrmInitData drmInitData;
     public final int encoderDelay;
@@ -55,7 +57,7 @@ public final class Format implements Parcelable {
     public final int width;
 
     public static Format createVideoContainerFormat(String id, String containerMimeType, String sampleMimeType, String codecs, int bitrate, int width, int height, float frameRate, List<byte[]> initializationData, int selectionFlags) {
-        return new Format(id, containerMimeType, sampleMimeType, codecs, bitrate, -1, width, height, frameRate, -1, -1.0f, null, -1, -1, -1, -1, -1, -1, selectionFlags, null, -1, Long.MAX_VALUE, initializationData, null, null);
+        return new Format(id, containerMimeType, sampleMimeType, codecs, bitrate, -1, width, height, frameRate, -1, -1.0f, null, -1, null, -1, -1, -1, -1, -1, selectionFlags, null, -1, Long.MAX_VALUE, initializationData, null, null);
     }
 
     public static Format createVideoSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, int maxInputSize, int width, int height, float frameRate, List<byte[]> initializationData, DrmInitData drmInitData) {
@@ -63,15 +65,15 @@ public final class Format implements Parcelable {
     }
 
     public static Format createVideoSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, int maxInputSize, int width, int height, float frameRate, List<byte[]> initializationData, int rotationDegrees, float pixelWidthHeightRatio, DrmInitData drmInitData) {
-        return createVideoSampleFormat(id, sampleMimeType, codecs, bitrate, maxInputSize, width, height, frameRate, initializationData, rotationDegrees, pixelWidthHeightRatio, null, -1, drmInitData);
+        return createVideoSampleFormat(id, sampleMimeType, codecs, bitrate, maxInputSize, width, height, frameRate, initializationData, rotationDegrees, pixelWidthHeightRatio, null, -1, null, drmInitData);
     }
 
-    public static Format createVideoSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, int maxInputSize, int width, int height, float frameRate, List<byte[]> initializationData, int rotationDegrees, float pixelWidthHeightRatio, byte[] projectionData, int stereoMode, DrmInitData drmInitData) {
-        return new Format(id, null, sampleMimeType, codecs, bitrate, maxInputSize, width, height, frameRate, rotationDegrees, pixelWidthHeightRatio, projectionData, stereoMode, -1, -1, -1, -1, -1, 0, null, -1, Long.MAX_VALUE, initializationData, drmInitData, null);
+    public static Format createVideoSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, int maxInputSize, int width, int height, float frameRate, List<byte[]> initializationData, int rotationDegrees, float pixelWidthHeightRatio, byte[] projectionData, int stereoMode, ColorInfo colorInfo, DrmInitData drmInitData) {
+        return new Format(id, null, sampleMimeType, codecs, bitrate, maxInputSize, width, height, frameRate, rotationDegrees, pixelWidthHeightRatio, projectionData, stereoMode, colorInfo, -1, -1, -1, -1, -1, 0, null, -1, Long.MAX_VALUE, initializationData, drmInitData, null);
     }
 
     public static Format createAudioContainerFormat(String id, String containerMimeType, String sampleMimeType, String codecs, int bitrate, int channelCount, int sampleRate, List<byte[]> initializationData, int selectionFlags, String language) {
-        return new Format(id, containerMimeType, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, channelCount, sampleRate, -1, -1, -1, selectionFlags, language, -1, Long.MAX_VALUE, initializationData, null, null);
+        return new Format(id, containerMimeType, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, null, channelCount, sampleRate, -1, -1, -1, selectionFlags, language, -1, Long.MAX_VALUE, initializationData, null, null);
     }
 
     public static Format createAudioSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, int maxInputSize, int channelCount, int sampleRate, List<byte[]> initializationData, DrmInitData drmInitData, int selectionFlags, String language) {
@@ -83,7 +85,7 @@ public final class Format implements Parcelable {
     }
 
     public static Format createAudioSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, int maxInputSize, int channelCount, int sampleRate, int pcmEncoding, int encoderDelay, int encoderPadding, List<byte[]> initializationData, DrmInitData drmInitData, int selectionFlags, String language, Metadata metadata) {
-        return new Format(id, null, sampleMimeType, codecs, bitrate, maxInputSize, -1, -1, -1.0f, -1, -1.0f, null, -1, channelCount, sampleRate, pcmEncoding, encoderDelay, encoderPadding, selectionFlags, language, -1, Long.MAX_VALUE, initializationData, drmInitData, metadata);
+        return new Format(id, null, sampleMimeType, codecs, bitrate, maxInputSize, -1, -1, -1.0f, -1, -1.0f, null, -1, null, channelCount, sampleRate, pcmEncoding, encoderDelay, encoderPadding, selectionFlags, language, -1, Long.MAX_VALUE, initializationData, drmInitData, metadata);
     }
 
     public static Format createTextContainerFormat(String id, String containerMimeType, String sampleMimeType, String codecs, int bitrate, int selectionFlags, String language) {
@@ -91,42 +93,42 @@ public final class Format implements Parcelable {
     }
 
     public static Format createTextContainerFormat(String id, String containerMimeType, String sampleMimeType, String codecs, int bitrate, int selectionFlags, String language, int accessibilityChannel) {
-        return new Format(id, containerMimeType, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, -1, -1, -1, -1, -1, selectionFlags, language, accessibilityChannel, Long.MAX_VALUE, null, null, null);
+        return new Format(id, containerMimeType, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, null, -1, -1, -1, -1, -1, selectionFlags, language, accessibilityChannel, Long.MAX_VALUE, null, null, null);
     }
 
     public static Format createTextSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, int selectionFlags, String language, DrmInitData drmInitData) {
-        return createTextSampleFormat(id, sampleMimeType, codecs, bitrate, selectionFlags, language, -1, drmInitData, Long.MAX_VALUE);
+        return createTextSampleFormat(id, sampleMimeType, codecs, bitrate, selectionFlags, language, -1, drmInitData, Long.MAX_VALUE, Collections.emptyList());
     }
 
     public static Format createTextSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, int selectionFlags, String language, int accessibilityChannel, DrmInitData drmInitData) {
-        return createTextSampleFormat(id, sampleMimeType, codecs, bitrate, selectionFlags, language, accessibilityChannel, drmInitData, Long.MAX_VALUE);
+        return createTextSampleFormat(id, sampleMimeType, codecs, bitrate, selectionFlags, language, accessibilityChannel, drmInitData, Long.MAX_VALUE, Collections.emptyList());
     }
 
     public static Format createTextSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, int selectionFlags, String language, DrmInitData drmInitData, long subsampleOffsetUs) {
-        return createTextSampleFormat(id, sampleMimeType, codecs, bitrate, selectionFlags, language, -1, drmInitData, subsampleOffsetUs);
+        return createTextSampleFormat(id, sampleMimeType, codecs, bitrate, selectionFlags, language, -1, drmInitData, subsampleOffsetUs, Collections.emptyList());
     }
 
-    public static Format createTextSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, int selectionFlags, String language, int accessibilityChannel, DrmInitData drmInitData, long subsampleOffsetUs) {
-        return new Format(id, null, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, -1, -1, -1, -1, -1, selectionFlags, language, accessibilityChannel, subsampleOffsetUs, null, drmInitData, null);
+    public static Format createTextSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, int selectionFlags, String language, int accessibilityChannel, DrmInitData drmInitData, long subsampleOffsetUs, List<byte[]> initializationData) {
+        return new Format(id, null, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, null, -1, -1, -1, -1, -1, selectionFlags, language, accessibilityChannel, subsampleOffsetUs, initializationData, drmInitData, null);
     }
 
     public static Format createImageSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, List<byte[]> initializationData, String language, DrmInitData drmInitData) {
-        return new Format(id, null, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, -1, -1, -1, -1, -1, 0, language, -1, Long.MAX_VALUE, initializationData, drmInitData, null);
+        return new Format(id, null, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, null, -1, -1, -1, -1, -1, 0, language, -1, Long.MAX_VALUE, initializationData, drmInitData, null);
     }
 
     public static Format createContainerFormat(String id, String containerMimeType, String sampleMimeType, String codecs, int bitrate, int selectionFlags, String language) {
-        return new Format(id, containerMimeType, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, -1, -1, -1, -1, -1, selectionFlags, language, -1, Long.MAX_VALUE, null, null, null);
+        return new Format(id, containerMimeType, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, null, -1, -1, -1, -1, -1, selectionFlags, language, -1, Long.MAX_VALUE, null, null, null);
     }
 
     public static Format createSampleFormat(String id, String sampleMimeType, long subsampleOffsetUs) {
-        return new Format(id, null, sampleMimeType, null, -1, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, -1, -1, -1, -1, -1, 0, null, -1, subsampleOffsetUs, null, null, null);
+        return new Format(id, null, sampleMimeType, null, -1, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, null, -1, -1, -1, -1, -1, 0, null, -1, subsampleOffsetUs, null, null, null);
     }
 
     public static Format createSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, DrmInitData drmInitData) {
-        return new Format(id, null, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, -1, -1, -1, -1, -1, 0, null, -1, Long.MAX_VALUE, null, drmInitData, null);
+        return new Format(id, null, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, null, -1, -1, -1, -1, -1, 0, null, -1, Long.MAX_VALUE, null, drmInitData, null);
     }
 
-    Format(String id, String containerMimeType, String sampleMimeType, String codecs, int bitrate, int maxInputSize, int width, int height, float frameRate, int rotationDegrees, float pixelWidthHeightRatio, byte[] projectionData, int stereoMode, int channelCount, int sampleRate, int pcmEncoding, int encoderDelay, int encoderPadding, int selectionFlags, String language, int accessibilityChannel, long subsampleOffsetUs, List<byte[]> initializationData, DrmInitData drmInitData, Metadata metadata) {
+    Format(String id, String containerMimeType, String sampleMimeType, String codecs, int bitrate, int maxInputSize, int width, int height, float frameRate, int rotationDegrees, float pixelWidthHeightRatio, byte[] projectionData, int stereoMode, ColorInfo colorInfo, int channelCount, int sampleRate, int pcmEncoding, int encoderDelay, int encoderPadding, int selectionFlags, String language, int accessibilityChannel, long subsampleOffsetUs, List<byte[]> initializationData, DrmInitData drmInitData, Metadata metadata) {
         this.id = id;
         this.containerMimeType = containerMimeType;
         this.sampleMimeType = sampleMimeType;
@@ -140,6 +142,7 @@ public final class Format implements Parcelable {
         this.pixelWidthHeightRatio = pixelWidthHeightRatio;
         this.projectionData = projectionData;
         this.stereoMode = stereoMode;
+        this.colorInfo = colorInfo;
         this.channelCount = channelCount;
         this.sampleRate = sampleRate;
         this.pcmEncoding = pcmEncoding;
@@ -171,6 +174,7 @@ public final class Format implements Parcelable {
         this.pixelWidthHeightRatio = in.readFloat();
         this.projectionData = in.readInt() != 0 ? in.createByteArray() : null;
         this.stereoMode = in.readInt();
+        this.colorInfo = (ColorInfo) in.readParcelable(ColorInfo.class.getClassLoader());
         this.channelCount = in.readInt();
         this.sampleRate = in.readInt();
         this.pcmEncoding = in.readInt();
@@ -190,34 +194,34 @@ public final class Format implements Parcelable {
     }
 
     public Format copyWithMaxInputSize(int maxInputSize) {
-        return new Format(this.id, this.containerMimeType, this.sampleMimeType, this.codecs, this.bitrate, maxInputSize, this.width, this.height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags, this.language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, this.drmInitData, this.metadata);
+        return new Format(this.id, this.containerMimeType, this.sampleMimeType, this.codecs, this.bitrate, maxInputSize, this.width, this.height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.colorInfo, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags, this.language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, this.drmInitData, this.metadata);
     }
 
     public Format copyWithSubsampleOffsetUs(long subsampleOffsetUs) {
-        return new Format(this.id, this.containerMimeType, this.sampleMimeType, this.codecs, this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags, this.language, this.accessibilityChannel, subsampleOffsetUs, this.initializationData, this.drmInitData, this.metadata);
+        return new Format(this.id, this.containerMimeType, this.sampleMimeType, this.codecs, this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.colorInfo, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags, this.language, this.accessibilityChannel, subsampleOffsetUs, this.initializationData, this.drmInitData, this.metadata);
     }
 
     public Format copyWithContainerInfo(String id, String codecs, int bitrate, int width, int height, int selectionFlags, String language) {
-        return new Format(id, this.containerMimeType, this.sampleMimeType, codecs, bitrate, this.maxInputSize, width, height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, selectionFlags, language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, this.drmInitData, this.metadata);
+        return new Format(id, this.containerMimeType, this.sampleMimeType, codecs, bitrate, this.maxInputSize, width, height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.colorInfo, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, selectionFlags, language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, this.drmInitData, this.metadata);
     }
 
     public Format copyWithManifestFormatInfo(Format manifestFormat) {
         if (this == manifestFormat) {
             return this;
         }
-        return new Format(manifestFormat.id, this.containerMimeType, this.sampleMimeType, this.codecs == null ? manifestFormat.codecs : this.codecs, this.bitrate == -1 ? manifestFormat.bitrate : this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate == -1.0f ? manifestFormat.frameRate : this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags | manifestFormat.selectionFlags, this.language == null ? manifestFormat.language : this.language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, manifestFormat.drmInitData != null ? manifestFormat.drmInitData : this.drmInitData, this.metadata);
+        return new Format(manifestFormat.id, this.containerMimeType, this.sampleMimeType, this.codecs == null ? manifestFormat.codecs : this.codecs, this.bitrate == -1 ? manifestFormat.bitrate : this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate == -1.0f ? manifestFormat.frameRate : this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.colorInfo, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags | manifestFormat.selectionFlags, this.language == null ? manifestFormat.language : this.language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, manifestFormat.drmInitData != null ? manifestFormat.drmInitData : this.drmInitData, this.metadata);
     }
 
     public Format copyWithGaplessInfo(int encoderDelay, int encoderPadding) {
-        return new Format(this.id, this.containerMimeType, this.sampleMimeType, this.codecs, this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.channelCount, this.sampleRate, this.pcmEncoding, encoderDelay, encoderPadding, this.selectionFlags, this.language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, this.drmInitData, this.metadata);
+        return new Format(this.id, this.containerMimeType, this.sampleMimeType, this.codecs, this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.colorInfo, this.channelCount, this.sampleRate, this.pcmEncoding, encoderDelay, encoderPadding, this.selectionFlags, this.language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, this.drmInitData, this.metadata);
     }
 
     public Format copyWithDrmInitData(DrmInitData drmInitData) {
-        return new Format(this.id, this.containerMimeType, this.sampleMimeType, this.codecs, this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags, this.language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, drmInitData, this.metadata);
+        return new Format(this.id, this.containerMimeType, this.sampleMimeType, this.codecs, this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.colorInfo, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags, this.language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, drmInitData, this.metadata);
     }
 
     public Format copyWithMetadata(Metadata metadata) {
-        return new Format(this.id, this.containerMimeType, this.sampleMimeType, this.codecs, this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags, this.language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, this.drmInitData, metadata);
+        return new Format(this.id, this.containerMimeType, this.sampleMimeType, this.codecs, this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.colorInfo, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags, this.language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, this.drmInitData, metadata);
     }
 
     public int getPixelCount() {
@@ -242,6 +246,7 @@ public final class Format implements Parcelable {
         for (int i = 0; i < this.initializationData.size(); i++) {
             format.setByteBuffer("csd-" + i, ByteBuffer.wrap((byte[]) this.initializationData.get(i)));
         }
+        maybeSetColorInfoV24(format, this.colorInfo);
         return format;
     }
 
@@ -269,7 +274,7 @@ public final class Format implements Parcelable {
             return false;
         }
         Format other = (Format) obj;
-        if (this.bitrate != other.bitrate || this.maxInputSize != other.maxInputSize || this.width != other.width || this.height != other.height || this.frameRate != other.frameRate || this.rotationDegrees != other.rotationDegrees || this.pixelWidthHeightRatio != other.pixelWidthHeightRatio || this.stereoMode != other.stereoMode || this.channelCount != other.channelCount || this.sampleRate != other.sampleRate || this.pcmEncoding != other.pcmEncoding || this.encoderDelay != other.encoderDelay || this.encoderPadding != other.encoderPadding || this.subsampleOffsetUs != other.subsampleOffsetUs || this.selectionFlags != other.selectionFlags || !Util.areEqual(this.id, other.id) || !Util.areEqual(this.language, other.language) || this.accessibilityChannel != other.accessibilityChannel || !Util.areEqual(this.containerMimeType, other.containerMimeType) || !Util.areEqual(this.sampleMimeType, other.sampleMimeType) || !Util.areEqual(this.codecs, other.codecs) || !Util.areEqual(this.drmInitData, other.drmInitData) || !Util.areEqual(this.metadata, other.metadata) || !Arrays.equals(this.projectionData, other.projectionData) || this.initializationData.size() != other.initializationData.size()) {
+        if (this.bitrate != other.bitrate || this.maxInputSize != other.maxInputSize || this.width != other.width || this.height != other.height || this.frameRate != other.frameRate || this.rotationDegrees != other.rotationDegrees || this.pixelWidthHeightRatio != other.pixelWidthHeightRatio || this.stereoMode != other.stereoMode || this.channelCount != other.channelCount || this.sampleRate != other.sampleRate || this.pcmEncoding != other.pcmEncoding || this.encoderDelay != other.encoderDelay || this.encoderPadding != other.encoderPadding || this.subsampleOffsetUs != other.subsampleOffsetUs || this.selectionFlags != other.selectionFlags || !Util.areEqual(this.id, other.id) || !Util.areEqual(this.language, other.language) || this.accessibilityChannel != other.accessibilityChannel || !Util.areEqual(this.containerMimeType, other.containerMimeType) || !Util.areEqual(this.sampleMimeType, other.sampleMimeType) || !Util.areEqual(this.codecs, other.codecs) || !Util.areEqual(this.drmInitData, other.drmInitData) || !Util.areEqual(this.metadata, other.metadata) || !Util.areEqual(this.colorInfo, other.colorInfo) || !Arrays.equals(this.projectionData, other.projectionData) || this.initializationData.size() != other.initializationData.size()) {
             return false;
         }
         for (int i = 0; i < this.initializationData.size(); i++) {
@@ -278,6 +283,16 @@ public final class Format implements Parcelable {
             }
         }
         return true;
+    }
+
+    @TargetApi(24)
+    private static void maybeSetColorInfoV24(MediaFormat format, ColorInfo colorInfo) {
+        if (colorInfo != null) {
+            maybeSetIntegerV16(format, "color-transfer", colorInfo.colorTransfer);
+            maybeSetIntegerV16(format, "color-standard", colorInfo.colorSpace);
+            maybeSetIntegerV16(format, "color-range", colorInfo.colorRange);
+            maybeSetByteBufferV16(format, "hdr-static-info", colorInfo.hdrStaticInfo);
+        }
     }
 
     @TargetApi(16)
@@ -298,6 +313,13 @@ public final class Format implements Parcelable {
     private static void maybeSetFloatV16(MediaFormat format, String key, float value) {
         if (value != -1.0f) {
             format.setFloat(key, value);
+        }
+    }
+
+    @TargetApi(16)
+    private static void maybeSetByteBufferV16(MediaFormat format, String key, byte[] value) {
+        if (value != null) {
+            format.setByteBuffer(key, ByteBuffer.wrap(value));
         }
     }
 
@@ -355,6 +377,7 @@ public final class Format implements Parcelable {
             dest.writeByteArray(this.projectionData);
         }
         dest.writeInt(this.stereoMode);
+        dest.writeParcelable(this.colorInfo, flags);
         dest.writeInt(this.channelCount);
         dest.writeInt(this.sampleRate);
         dest.writeInt(this.pcmEncoding);

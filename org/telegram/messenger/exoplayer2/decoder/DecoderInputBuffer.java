@@ -17,6 +17,10 @@ public class DecoderInputBuffer extends Buffer {
     public @interface BufferReplacementMode {
     }
 
+    public static DecoderInputBuffer newFlagsOnlyInstance() {
+        return new DecoderInputBuffer(0);
+    }
+
     public DecoderInputBuffer(int bufferReplacementMode) {
         this.bufferReplacementMode = bufferReplacementMode;
     }
@@ -38,6 +42,10 @@ public class DecoderInputBuffer extends Buffer {
             }
             this.data = newData;
         }
+    }
+
+    public final boolean isFlagsOnly() {
+        return this.data == null && this.bufferReplacementMode == 0;
     }
 
     public final boolean isEncrypted() {

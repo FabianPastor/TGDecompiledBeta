@@ -3621,13 +3621,13 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 paint.setTypeface(AndroidUtilities.getTypeface("fonts/rmono.ttf"));
             } else if ((parentBlock instanceof TL_pageBlockTitle) || (parentBlock instanceof TL_pageBlockHeader) || (parentBlock instanceof TL_pageBlockSubtitle) || (parentBlock instanceof TL_pageBlockSubheader)) {
                 if ((flags & 1) != 0 && (flags & 2) != 0) {
-                    paint.setTypeface(Typeface.create("serif", 3));
+                    paint.setTypeface(Typeface.create(C.SERIF_NAME, 3));
                 } else if ((flags & 1) != 0) {
-                    paint.setTypeface(Typeface.create("serif", 1));
+                    paint.setTypeface(Typeface.create(C.SERIF_NAME, 1));
                 } else if ((flags & 2) != 0) {
-                    paint.setTypeface(Typeface.create("serif", 2));
+                    paint.setTypeface(Typeface.create(C.SERIF_NAME, 2));
                 } else {
-                    paint.setTypeface(Typeface.create("serif", 0));
+                    paint.setTypeface(Typeface.create(C.SERIF_NAME, 0));
                 }
             } else if ((flags & 1) != 0 && (flags & 2) != 0) {
                 paint.setTypeface(AndroidUtilities.getTypeface("fonts/rmediumitalic.ttf"));

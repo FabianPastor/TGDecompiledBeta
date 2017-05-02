@@ -8,7 +8,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.support.v4.app.NotificationManagerCompat;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -234,7 +233,7 @@ public class AlertsCreator {
                                             showSimpleAlert(fragment, LocaleController.getString("CodeExpired", R.string.CodeExpired));
                                         } else if (error.text.startsWith("FLOOD_WAIT")) {
                                             showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
-                                        } else if (error.code != NotificationManagerCompat.IMPORTANCE_UNSPECIFIED) {
+                                        } else if (error.code != -1000) {
                                             showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
                                         }
                                     } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {

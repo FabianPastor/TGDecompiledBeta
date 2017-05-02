@@ -1,20 +1,42 @@
 package org.telegram.messenger.exoplayer2.extractor.ts;
 
 import android.util.SparseArray;
+import java.util.Collections;
+import java.util.List;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.TimestampAdjuster;
 
 public interface TsPayloadReader {
 
+    public static final class DvbSubtitleInfo {
+        public final byte[] initializationData;
+        public final String language;
+        public final int type;
+
+        public DvbSubtitleInfo(String language, int type, byte[] initializationData) {
+            this.language = language;
+            this.type = type;
+            this.initializationData = initializationData;
+        }
+    }
+
     public static final class EsInfo {
         public final byte[] descriptorBytes;
+        public final List<DvbSubtitleInfo> dvbSubtitleInfos;
         public final String language;
         public final int streamType;
 
-        public EsInfo(int streamType, String language, byte[] descriptorBytes) {
+        public EsInfo(int streamType, String language, List<DvbSubtitleInfo> dvbSubtitleInfos, byte[] descriptorBytes) {
+            List emptyList;
             this.streamType = streamType;
             this.language = language;
+            if (dvbSubtitleInfos == null) {
+                emptyList = Collections.emptyList();
+            } else {
+                emptyList = Collections.unmodifiableList(dvbSubtitleInfos);
+            }
+            this.dvbSubtitleInfos = emptyList;
             this.descriptorBytes = descriptorBytes;
         }
     }

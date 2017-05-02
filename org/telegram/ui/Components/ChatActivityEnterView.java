@@ -67,7 +67,7 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.camera.CameraController;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.query.DraftQuery;
 import org.telegram.messenger.query.MessagesQuery;
@@ -789,7 +789,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     if (!(ChatActivityEnterView.this.innerTextChange == 2 || before == count || count - before <= 1)) {
                         this.processChange = true;
                     }
-                    if (ChatActivityEnterView.this.editingMessageObject == null && !ChatActivityEnterView.this.canWriteToChannel && message.length() != 0 && ChatActivityEnterView.this.lastTypingTimeSend < System.currentTimeMillis() - ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS && !ChatActivityEnterView.this.ignoreTextChange) {
+                    if (ChatActivityEnterView.this.editingMessageObject == null && !ChatActivityEnterView.this.canWriteToChannel && message.length() != 0 && ChatActivityEnterView.this.lastTypingTimeSend < System.currentTimeMillis() - DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS && !ChatActivityEnterView.this.ignoreTextChange) {
                         int currentTime = ConnectionsManager.getInstance().getCurrentTime();
                         User currentUser = null;
                         if (((int) ChatActivityEnterView.this.dialog_id) > 0) {

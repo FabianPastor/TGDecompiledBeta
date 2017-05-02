@@ -21,6 +21,7 @@ public final class SubtitleView extends View implements Output {
     public static final float DEFAULT_TEXT_SIZE_FRACTION = 0.0533f;
     private static final int FRACTIONAL = 0;
     private static final int FRACTIONAL_IGNORE_PADDING = 1;
+    private boolean applyEmbeddedFontSizes;
     private boolean applyEmbeddedStyles;
     private float bottomPaddingFraction;
     private List<Cue> cues;
@@ -39,6 +40,7 @@ public final class SubtitleView extends View implements Output {
         this.textSizeType = 0;
         this.textSize = DEFAULT_TEXT_SIZE_FRACTION;
         this.applyEmbeddedStyles = true;
+        this.applyEmbeddedFontSizes = true;
         this.style = CaptionStyleCompat.DEFAULT;
         this.bottomPaddingFraction = DEFAULT_BOTTOM_PADDING_FRACTION;
     }
@@ -91,8 +93,16 @@ public final class SubtitleView extends View implements Output {
     }
 
     public void setApplyEmbeddedStyles(boolean applyEmbeddedStyles) {
-        if (this.applyEmbeddedStyles != applyEmbeddedStyles) {
+        if (this.applyEmbeddedStyles != applyEmbeddedStyles || this.applyEmbeddedFontSizes != applyEmbeddedStyles) {
             this.applyEmbeddedStyles = applyEmbeddedStyles;
+            this.applyEmbeddedFontSizes = applyEmbeddedStyles;
+            invalidate();
+        }
+    }
+
+    public void setApplyEmbeddedFontSizes(boolean applyEmbeddedFontSizes) {
+        if (this.applyEmbeddedFontSizes != applyEmbeddedFontSizes) {
+            this.applyEmbeddedFontSizes = applyEmbeddedFontSizes;
             invalidate();
         }
     }
@@ -138,7 +148,7 @@ public final class SubtitleView extends View implements Output {
             }
             if (textSizePx > 0.0f) {
                 for (int i = 0; i < cueCount; i++) {
-                    ((SubtitlePainter) this.painters.get(i)).draw((Cue) this.cues.get(i), this.applyEmbeddedStyles, this.style, textSizePx, this.bottomPaddingFraction, canvas, left, top, right, bottom);
+                    ((SubtitlePainter) this.painters.get(i)).draw((Cue) this.cues.get(i), this.applyEmbeddedStyles, this.applyEmbeddedFontSizes, this.style, textSizePx, this.bottomPaddingFraction, canvas, left, top, right, bottom);
                 }
             }
         }

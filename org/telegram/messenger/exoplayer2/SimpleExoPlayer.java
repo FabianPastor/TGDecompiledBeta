@@ -1,10 +1,10 @@
 package org.telegram.messenger.exoplayer2;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.media.PlaybackParams;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -12,22 +12,12 @@ import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.ExoPlayer.EventListener;
 import org.telegram.messenger.exoplayer2.ExoPlayer.ExoPlayerMessage;
-import org.telegram.messenger.exoplayer2.audio.AudioCapabilities;
-import org.telegram.messenger.exoplayer2.audio.AudioProcessor;
 import org.telegram.messenger.exoplayer2.audio.AudioRendererEventListener;
-import org.telegram.messenger.exoplayer2.audio.MediaCodecAudioRenderer;
 import org.telegram.messenger.exoplayer2.decoder.DecoderCounters;
-import org.telegram.messenger.exoplayer2.drm.DrmSessionManager;
-import org.telegram.messenger.exoplayer2.drm.FrameworkMediaCrypto;
-import org.telegram.messenger.exoplayer2.mediacodec.MediaCodecSelector;
 import org.telegram.messenger.exoplayer2.metadata.Metadata;
-import org.telegram.messenger.exoplayer2.metadata.MetadataRenderer;
 import org.telegram.messenger.exoplayer2.metadata.MetadataRenderer.Output;
 import org.telegram.messenger.exoplayer2.source.MediaSource;
 import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
@@ -35,15 +25,10 @@ import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.messenger.exoplayer2.text.TextRenderer;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelectionArray;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelector;
-import org.telegram.messenger.exoplayer2.video.MediaCodecVideoRenderer;
 import org.telegram.messenger.exoplayer2.video.VideoRendererEventListener;
 
 @TargetApi(16)
 public class SimpleExoPlayer implements ExoPlayer {
-    public static final int EXTENSION_RENDERER_MODE_OFF = 0;
-    public static final int EXTENSION_RENDERER_MODE_ON = 1;
-    public static final int EXTENSION_RENDERER_MODE_PREFER = 2;
-    protected static final int MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY = 50;
     private static final String TAG = "SimpleExoPlayer";
     private AudioRendererEventListener audioDebugListener;
     private DecoderCounters audioDecoderCounters;
@@ -53,13 +38,11 @@ public class SimpleExoPlayer implements ExoPlayer {
     private int audioStreamType;
     private float audioVolume;
     private final ComponentListener componentListener = new ComponentListener();
-    private final Handler mainHandler = new Handler();
     private Output metadataOutput;
     private boolean needSetSurface = true;
     private boolean ownsSurface;
-    private PlaybackParamsHolder playbackParamsHolder;
     private final ExoPlayer player;
-    private final Renderer[] renderers;
+    protected final Renderer[] renderers;
     private Surface surface;
     private SurfaceHolder surfaceHolder;
     private TextRenderer.Output textOutput;
@@ -70,19 +53,6 @@ public class SimpleExoPlayer implements ExoPlayer {
     private VideoListener videoListener;
     private final int videoRendererCount;
     private int videoScalingMode;
-
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface ExtensionRendererMode {
-    }
-
-    @TargetApi(23)
-    private static final class PlaybackParamsHolder {
-        public final PlaybackParams params;
-
-        public PlaybackParamsHolder(PlaybackParams params) {
-            this.params = params;
-        }
-    }
 
     public interface VideoListener {
         void onRenderedFirstFrame();
@@ -239,10 +209,8 @@ public class SimpleExoPlayer implements ExoPlayer {
         }
     }
 
-    protected SimpleExoPlayer(Context context, TrackSelector trackSelector, LoadControl loadControl, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int extensionRendererMode, long allowedVideoJoiningTimeMs) {
-        ArrayList<Renderer> renderersList = new ArrayList();
-        buildRenderers(context, this.mainHandler, drmSessionManager, extensionRendererMode, allowedVideoJoiningTimeMs, renderersList);
-        this.renderers = (Renderer[]) renderersList.toArray(new Renderer[renderersList.size()]);
+    protected SimpleExoPlayer(RenderersFactory renderersFactory, TrackSelector trackSelector, LoadControl loadControl) {
+        this.renderers = renderersFactory.createRenderers(new Handler(), this.componentListener, this.componentListener, this.componentListener, this.componentListener);
         int videoRendererCount = 0;
         int audioRendererCount = 0;
         for (Renderer renderer : this.renderers) {
@@ -278,7 +246,7 @@ public class SimpleExoPlayer implements ExoPlayer {
             Renderer renderer = rendererArr[i];
             if (renderer.getTrackType() == 2) {
                 count2 = count + 1;
-                messages[count] = new ExoPlayerMessage(renderer, 5, Integer.valueOf(videoScalingMode));
+                messages[count] = new ExoPlayerMessage(renderer, 4, Integer.valueOf(videoScalingMode));
             } else {
                 count2 = count;
             }
@@ -301,6 +269,12 @@ public class SimpleExoPlayer implements ExoPlayer {
         setVideoSurfaceInternal(surface, false);
     }
 
+    public void clearVideoSurface(Surface surface) {
+        if (surface != null && surface == this.surface) {
+            setVideoSurface(null);
+        }
+    }
+
     public void setVideoSurfaceHolder(SurfaceHolder surfaceHolder) {
         removeSurfaceCallbacks();
         this.surfaceHolder = surfaceHolder;
@@ -312,30 +286,46 @@ public class SimpleExoPlayer implements ExoPlayer {
         surfaceHolder.addCallback(this.componentListener);
     }
 
+    public void clearVideoSurfaceHolder(SurfaceHolder surfaceHolder) {
+        if (surfaceHolder != null && surfaceHolder == this.surfaceHolder) {
+            setVideoSurfaceHolder(null);
+        }
+    }
+
     public void setVideoSurfaceView(SurfaceView surfaceView) {
-        setVideoSurfaceHolder(surfaceView.getHolder());
+        setVideoSurfaceHolder(surfaceView == null ? null : surfaceView.getHolder());
+    }
+
+    public void clearVideoSurfaceView(SurfaceView surfaceView) {
+        clearVideoSurfaceHolder(surfaceView == null ? null : surfaceView.getHolder());
     }
 
     public void setVideoTextureView(TextureView textureView) {
         Surface surface = null;
-        removeSurfaceCallbacks();
-        this.textureView = textureView;
-        if (textureView == null) {
-            setVideoSurfaceInternal(null, true);
-            return;
+        if (this.textureView != textureView) {
+            removeSurfaceCallbacks();
+            this.textureView = textureView;
+            this.needSetSurface = true;
+            if (textureView == null) {
+                setVideoSurfaceInternal(null, true);
+                return;
+            }
+            if (textureView.getSurfaceTextureListener() != null) {
+                Log.w(TAG, "Replacing existing SurfaceTextureListener.");
+            }
+            SurfaceTexture surfaceTexture = textureView.getSurfaceTexture();
+            if (surfaceTexture != null) {
+                surface = new Surface(surfaceTexture);
+            }
+            setVideoSurfaceInternal(surface, true);
+            textureView.setSurfaceTextureListener(this.componentListener);
         }
-        if (textureView.getSurfaceTextureListener() != null) {
-            Log.w(TAG, "Replacing existing SurfaceTextureListener.");
+    }
+
+    public void clearVideoTextureView(TextureView textureView) {
+        if (textureView != null && textureView == this.textureView) {
+            setVideoTextureView(null);
         }
-        SurfaceTexture surfaceTexture = textureView.getSurfaceTexture();
-        if (surfaceTexture != null) {
-            surface = new Surface(surfaceTexture);
-        }
-        setVideoSurfaceInternal(surface, true);
-        if (surfaceTexture != null) {
-            this.needSetSurface = false;
-        }
-        textureView.setSurfaceTextureListener(this.componentListener);
     }
 
     public void setAudioStreamType(int audioStreamType) {
@@ -350,7 +340,7 @@ public class SimpleExoPlayer implements ExoPlayer {
             Renderer renderer = rendererArr[i];
             if (renderer.getTrackType() == 1) {
                 count2 = count + 1;
-                messages[count] = new ExoPlayerMessage(renderer, 4, Integer.valueOf(audioStreamType));
+                messages[count] = new ExoPlayerMessage(renderer, 3, Integer.valueOf(audioStreamType));
             } else {
                 count2 = count;
             }
@@ -391,36 +381,16 @@ public class SimpleExoPlayer implements ExoPlayer {
     }
 
     @TargetApi(23)
-    public void setPlaybackParams(PlaybackParams params) {
+    @Deprecated
+    public void setPlaybackParams(@Nullable PlaybackParams params) {
+        PlaybackParameters playbackParameters;
         if (params != null) {
             params.allowDefaults();
-            this.playbackParamsHolder = new PlaybackParamsHolder(params);
+            playbackParameters = new PlaybackParameters(params.getSpeed(), params.getPitch());
         } else {
-            this.playbackParamsHolder = null;
+            playbackParameters = null;
         }
-        ExoPlayerMessage[] messages = new ExoPlayerMessage[this.audioRendererCount];
-        Renderer[] rendererArr = this.renderers;
-        int length = rendererArr.length;
-        int i = 0;
-        int count = 0;
-        while (i < length) {
-            int count2;
-            Renderer renderer = rendererArr[i];
-            if (renderer.getTrackType() == 1) {
-                count2 = count + 1;
-                messages[count] = new ExoPlayerMessage(renderer, 3, params);
-            } else {
-                count2 = count;
-            }
-            i++;
-            count = count2;
-        }
-        this.player.sendMessages(messages);
-    }
-
-    @TargetApi(23)
-    public PlaybackParams getPlaybackParams() {
-        return this.playbackParamsHolder == null ? null : this.playbackParamsHolder.params;
+        setPlaybackParameters(playbackParameters);
     }
 
     public Format getVideoFormat() {
@@ -447,20 +417,38 @@ public class SimpleExoPlayer implements ExoPlayer {
         this.videoListener = listener;
     }
 
-    public void setVideoDebugListener(VideoRendererEventListener listener) {
-        this.videoDebugListener = listener;
-    }
-
-    public void setAudioDebugListener(AudioRendererEventListener listener) {
-        this.audioDebugListener = listener;
+    public void clearVideoListener(VideoListener listener) {
+        if (this.videoListener == listener) {
+            this.videoListener = null;
+        }
     }
 
     public void setTextOutput(TextRenderer.Output output) {
         this.textOutput = output;
     }
 
+    public void clearTextOutput(TextRenderer.Output output) {
+        if (this.textOutput == output) {
+            this.textOutput = null;
+        }
+    }
+
     public void setMetadataOutput(Output output) {
         this.metadataOutput = output;
+    }
+
+    public void clearMetadataOutput(Output output) {
+        if (this.metadataOutput == output) {
+            this.metadataOutput = null;
+        }
+    }
+
+    public void setVideoDebugListener(VideoRendererEventListener listener) {
+        this.videoDebugListener = listener;
+    }
+
+    public void setAudioDebugListener(AudioRendererEventListener listener) {
+        this.audioDebugListener = listener;
     }
 
     public void addListener(EventListener listener) {
@@ -509,6 +497,14 @@ public class SimpleExoPlayer implements ExoPlayer {
 
     public void seekTo(int windowIndex, long positionMs) {
         this.player.seekTo(windowIndex, positionMs);
+    }
+
+    public void setPlaybackParameters(PlaybackParameters playbackParameters) {
+        this.player.setPlaybackParameters(playbackParameters);
+    }
+
+    public PlaybackParameters getPlaybackParameters() {
+        return this.player.getPlaybackParameters();
     }
 
     public void stop() {
@@ -588,154 +584,6 @@ public class SimpleExoPlayer implements ExoPlayer {
 
     public boolean isCurrentWindowSeekable() {
         return this.player.isCurrentWindowSeekable();
-    }
-
-    private void buildRenderers(Context context, Handler mainHandler, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int extensionRendererMode, long allowedVideoJoiningTimeMs, ArrayList<Renderer> out) {
-        buildVideoRenderers(context, mainHandler, drmSessionManager, extensionRendererMode, this.componentListener, allowedVideoJoiningTimeMs, out);
-        buildAudioRenderers(context, mainHandler, drmSessionManager, extensionRendererMode, this.componentListener, buildAudioProcessors(), out);
-        buildTextRenderers(context, mainHandler, extensionRendererMode, this.componentListener, out);
-        buildMetadataRenderers(context, mainHandler, extensionRendererMode, this.componentListener, out);
-        buildMiscellaneousRenderers(context, mainHandler, extensionRendererMode, out);
-    }
-
-    protected void buildVideoRenderers(Context context, Handler mainHandler, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int extensionRendererMode, VideoRendererEventListener eventListener, long allowedVideoJoiningTimeMs, ArrayList<Renderer> out) {
-        Throwable e;
-        ArrayList<Renderer> arrayList = out;
-        arrayList.add(new MediaCodecVideoRenderer(context, MediaCodecSelector.DEFAULT, allowedVideoJoiningTimeMs, drmSessionManager, false, mainHandler, eventListener, 50));
-        if (extensionRendererMode != 0) {
-            int extensionRendererIndex;
-            int extensionRendererIndex2 = out.size();
-            if (extensionRendererMode == 2) {
-                extensionRendererIndex = extensionRendererIndex2 - 1;
-            } else {
-                extensionRendererIndex = extensionRendererIndex2;
-            }
-            try {
-                extensionRendererIndex2 = extensionRendererIndex + 1;
-                try {
-                    out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.vp9.LibvpxVideoRenderer").getConstructor(new Class[]{Boolean.TYPE, Long.TYPE, Handler.class, VideoRendererEventListener.class, Integer.TYPE}).newInstance(new Object[]{Boolean.valueOf(true), Long.valueOf(allowedVideoJoiningTimeMs), mainHandler, this.componentListener, Integer.valueOf(50)}));
-                    Log.i(TAG, "Loaded LibvpxVideoRenderer.");
-                } catch (ClassNotFoundException e2) {
-                } catch (Exception e3) {
-                    e = e3;
-                    throw new RuntimeException(e);
-                }
-            } catch (ClassNotFoundException e4) {
-                extensionRendererIndex2 = extensionRendererIndex;
-            } catch (Exception e5) {
-                e = e5;
-                extensionRendererIndex2 = extensionRendererIndex;
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    protected void buildAudioRenderers(Context context, Handler mainHandler, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int extensionRendererMode, AudioRendererEventListener eventListener, AudioProcessor[] audioProcessors, ArrayList<Renderer> out) {
-        Exception e;
-        ArrayList<Renderer> arrayList = out;
-        arrayList.add(new MediaCodecAudioRenderer(MediaCodecSelector.DEFAULT, drmSessionManager, true, mainHandler, eventListener, AudioCapabilities.getCapabilities(context), audioProcessors));
-        if (extensionRendererMode != 0) {
-            int extensionRendererIndex;
-            int extensionRendererIndex2 = out.size();
-            if (extensionRendererMode == 2) {
-                extensionRendererIndex = extensionRendererIndex2 - 1;
-            } else {
-                extensionRendererIndex = extensionRendererIndex2;
-            }
-            try {
-                extensionRendererIndex2 = extensionRendererIndex + 1;
-                try {
-                    out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.opus.LibopusAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{mainHandler, this.componentListener, audioProcessors}));
-                    Log.i(TAG, "Loaded LibopusAudioRenderer.");
-                    extensionRendererIndex = extensionRendererIndex2;
-                } catch (ClassNotFoundException e2) {
-                    extensionRendererIndex = extensionRendererIndex2;
-                    extensionRendererIndex2 = extensionRendererIndex + 1;
-                    try {
-                        out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.flac.LibflacAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{mainHandler, this.componentListener, audioProcessors}));
-                        Log.i(TAG, "Loaded LibflacAudioRenderer.");
-                        extensionRendererIndex = extensionRendererIndex2;
-                    } catch (ClassNotFoundException e3) {
-                        extensionRendererIndex = extensionRendererIndex2;
-                        extensionRendererIndex2 = extensionRendererIndex + 1;
-                        out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.ffmpeg.FfmpegAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{mainHandler, this.componentListener, audioProcessors}));
-                        Log.i(TAG, "Loaded FfmpegAudioRenderer.");
-                    } catch (Exception e4) {
-                        e = e4;
-                        throw new RuntimeException(e);
-                    }
-                    extensionRendererIndex2 = extensionRendererIndex + 1;
-                    try {
-                        out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.ffmpeg.FfmpegAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{mainHandler, this.componentListener, audioProcessors}));
-                        Log.i(TAG, "Loaded FfmpegAudioRenderer.");
-                    } catch (ClassNotFoundException e5) {
-                        return;
-                    } catch (Exception e6) {
-                        e = e6;
-                        throw new RuntimeException(e);
-                    }
-                } catch (Exception e7) {
-                    e = e7;
-                    throw new RuntimeException(e);
-                }
-            } catch (ClassNotFoundException e8) {
-                extensionRendererIndex2 = extensionRendererIndex;
-                extensionRendererIndex = extensionRendererIndex2;
-                extensionRendererIndex2 = extensionRendererIndex + 1;
-                out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.flac.LibflacAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{mainHandler, this.componentListener, audioProcessors}));
-                Log.i(TAG, "Loaded LibflacAudioRenderer.");
-                extensionRendererIndex = extensionRendererIndex2;
-                extensionRendererIndex2 = extensionRendererIndex + 1;
-                out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.ffmpeg.FfmpegAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{mainHandler, this.componentListener, audioProcessors}));
-                Log.i(TAG, "Loaded FfmpegAudioRenderer.");
-            } catch (Exception e9) {
-                e = e9;
-                extensionRendererIndex2 = extensionRendererIndex;
-                throw new RuntimeException(e);
-            }
-            try {
-                extensionRendererIndex2 = extensionRendererIndex + 1;
-                out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.flac.LibflacAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{mainHandler, this.componentListener, audioProcessors}));
-                Log.i(TAG, "Loaded LibflacAudioRenderer.");
-                extensionRendererIndex = extensionRendererIndex2;
-            } catch (ClassNotFoundException e10) {
-                extensionRendererIndex2 = extensionRendererIndex;
-                extensionRendererIndex = extensionRendererIndex2;
-                extensionRendererIndex2 = extensionRendererIndex + 1;
-                out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.ffmpeg.FfmpegAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{mainHandler, this.componentListener, audioProcessors}));
-                Log.i(TAG, "Loaded FfmpegAudioRenderer.");
-            } catch (Exception e11) {
-                e = e11;
-                extensionRendererIndex2 = extensionRendererIndex;
-                throw new RuntimeException(e);
-            }
-            try {
-                extensionRendererIndex2 = extensionRendererIndex + 1;
-                out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.ffmpeg.FfmpegAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{mainHandler, this.componentListener, audioProcessors}));
-                Log.i(TAG, "Loaded FfmpegAudioRenderer.");
-            } catch (ClassNotFoundException e12) {
-                extensionRendererIndex2 = extensionRendererIndex;
-            } catch (Exception e13) {
-                e = e13;
-                extensionRendererIndex2 = extensionRendererIndex;
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    protected void buildTextRenderers(Context context, Handler mainHandler, int extensionRendererMode, TextRenderer.Output output, ArrayList<Renderer> out) {
-        out.add(new TextRenderer(output, mainHandler.getLooper()));
-    }
-
-    protected void buildMetadataRenderers(Context context, Handler mainHandler, int extensionRendererMode, Output output, ArrayList<Renderer> out) {
-        out.add(new MetadataRenderer(output, mainHandler.getLooper()));
-    }
-
-    protected void buildMiscellaneousRenderers(Context context, Handler mainHandler, int extensionRendererMode, ArrayList<Renderer> arrayList) {
-    }
-
-    protected AudioProcessor[] buildAudioProcessors() {
-        return new AudioProcessor[0];
     }
 
     private void removeSurfaceCallbacks() {

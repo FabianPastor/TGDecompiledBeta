@@ -44,7 +44,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 
 public class zzaax implements Callback {
@@ -56,7 +56,7 @@ public class zzaax implements Callback {
     private final Handler mHandler;
     private final Map<zzzz<?>, zza<?>> zzaAM = new ConcurrentHashMap(5, AdaptiveTrackSelection.DEFAULT_BANDWIDTH_FRACTION, 1);
     private long zzaBM = 120000;
-    private long zzaBN = ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
+    private long zzaBN = DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
     private long zzaCp = 10000;
     private int zzaCr = -1;
     private final AtomicInteger zzaCs = new AtomicInteger(1);

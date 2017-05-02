@@ -17,7 +17,6 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.v4.app.NotificationManagerCompat;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -1248,7 +1247,7 @@ public class LoginActivity extends BaseFragment {
                                     LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("CodeExpired", R.string.CodeExpired));
                                 } else if (error.text.startsWith("FLOOD_WAIT")) {
                                     LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("FloodWait", R.string.FloodWait));
-                                } else if (error.code != NotificationManagerCompat.IMPORTANCE_UNSPECIFIED) {
+                                } else if (error.code != -1000) {
                                     LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
                                 }
                             }
@@ -2163,7 +2162,7 @@ public class LoginActivity extends BaseFragment {
                                             LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("CodeExpired", R.string.CodeExpired));
                                         } else if (error.text.startsWith("FLOOD_WAIT")) {
                                             LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("FloodWait", R.string.FloodWait));
-                                        } else if (error.code != NotificationManagerCompat.IMPORTANCE_UNSPECIFIED) {
+                                        } else if (error.code != -1000) {
                                             LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), error.text);
                                         }
                                     }

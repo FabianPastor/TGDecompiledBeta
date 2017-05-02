@@ -26,7 +26,7 @@ public final class WebvttDecoder extends SimpleSubtitleDecoder {
         super("WebvttDecoder");
     }
 
-    protected WebvttSubtitle decode(byte[] bytes, int length) throws SubtitleDecoderException {
+    protected WebvttSubtitle decode(byte[] bytes, int length, boolean reset) throws SubtitleDecoderException {
         this.parsableWebvttData.reset(bytes, length);
         this.webvttCueBuilder.reset();
         this.definedStyles.clear();

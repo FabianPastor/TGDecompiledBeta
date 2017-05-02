@@ -110,8 +110,11 @@ final class ResamplingAudioProcessor implements AudioProcessor {
         this.inputEnded = false;
     }
 
-    public void release() {
+    public void reset() {
         flush();
         this.buffer = EMPTY_BUFFER;
+        this.sampleRateHz = -1;
+        this.channelCount = -1;
+        this.encoding = 0;
     }
 }

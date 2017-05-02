@@ -96,6 +96,7 @@ final class AtomParsers {
     }
 
     private static final class StsdData {
+        public static final int STSD_HEADER_SIZE = 8;
         public Format format;
         public int nalUnitLengthFieldLength;
         public int requiredSampleTransformation = 0;
@@ -578,17 +579,8 @@ final class AtomParsers {
                 parseVideoSampleEntry(stsd, childAtomType, childStartPosition, childAtomSize, trackId, rotationDegrees, drmInitData, out, i);
             } else if (childAtomType == Atom.TYPE_mp4a || childAtomType == Atom.TYPE_enca || childAtomType == Atom.TYPE_ac_3 || childAtomType == Atom.TYPE_ec_3 || childAtomType == Atom.TYPE_dtsc || childAtomType == Atom.TYPE_dtse || childAtomType == Atom.TYPE_dtsh || childAtomType == Atom.TYPE_dtsl || childAtomType == Atom.TYPE_samr || childAtomType == Atom.TYPE_sawb || childAtomType == Atom.TYPE_lpcm || childAtomType == Atom.TYPE_sowt || childAtomType == Atom.TYPE__mp3 || childAtomType == Atom.TYPE_alac) {
                 parseAudioSampleEntry(stsd, childAtomType, childStartPosition, childAtomSize, trackId, language, isQuickTime, drmInitData, out, i);
-            } else if (childAtomType == Atom.TYPE_TTML) {
-                out.format = Format.createTextSampleFormat(Integer.toString(trackId), MimeTypes.APPLICATION_TTML, null, -1, 0, language, drmInitData);
-            } else if (childAtomType == Atom.TYPE_tx3g) {
-                out.format = Format.createTextSampleFormat(Integer.toString(trackId), MimeTypes.APPLICATION_TX3G, null, -1, 0, language, drmInitData);
-            } else if (childAtomType == Atom.TYPE_wvtt) {
-                out.format = Format.createTextSampleFormat(Integer.toString(trackId), MimeTypes.APPLICATION_MP4VTT, null, -1, 0, language, drmInitData);
-            } else if (childAtomType == Atom.TYPE_stpp) {
-                out.format = Format.createTextSampleFormat(Integer.toString(trackId), MimeTypes.APPLICATION_TTML, null, -1, 0, language, drmInitData, 0);
-            } else if (childAtomType == Atom.TYPE_c608) {
-                out.format = Format.createTextSampleFormat(Integer.toString(trackId), MimeTypes.APPLICATION_MP4CEA608, null, -1, 0, language, drmInitData);
-                out.requiredSampleTransformation = 1;
+            } else if (childAtomType == Atom.TYPE_TTML || childAtomType == Atom.TYPE_tx3g || childAtomType == Atom.TYPE_wvtt || childAtomType == Atom.TYPE_stpp || childAtomType == Atom.TYPE_c608) {
+                parseTextSampleEntry(stsd, childAtomType, childStartPosition, childAtomSize, trackId, language, drmInitData, out);
             } else if (childAtomType == Atom.TYPE_camm) {
                 out.format = Format.createSampleFormat(Integer.toString(trackId), MimeTypes.APPLICATION_CAMERA_MOTION, null, -1, drmInitData);
             }
@@ -597,9 +589,36 @@ final class AtomParsers {
         return out;
     }
 
+    private static void parseTextSampleEntry(ParsableByteArray parent, int atomType, int position, int atomSize, int trackId, String language, DrmInitData drmInitData, StsdData out) throws ParserException {
+        String mimeType;
+        parent.setPosition((position + 8) + 8);
+        List<byte[]> initializationData = null;
+        long subsampleOffsetUs = Long.MAX_VALUE;
+        if (atomType == Atom.TYPE_TTML) {
+            mimeType = MimeTypes.APPLICATION_TTML;
+        } else if (atomType == Atom.TYPE_tx3g) {
+            mimeType = MimeTypes.APPLICATION_TX3G;
+            int sampleDescriptionLength = (atomSize - 8) - 8;
+            byte[] sampleDescriptionData = new byte[sampleDescriptionLength];
+            parent.readBytes(sampleDescriptionData, 0, sampleDescriptionLength);
+            initializationData = Collections.singletonList(sampleDescriptionData);
+        } else if (atomType == Atom.TYPE_wvtt) {
+            mimeType = MimeTypes.APPLICATION_MP4VTT;
+        } else if (atomType == Atom.TYPE_stpp) {
+            mimeType = MimeTypes.APPLICATION_TTML;
+            subsampleOffsetUs = 0;
+        } else if (atomType == Atom.TYPE_c608) {
+            mimeType = MimeTypes.APPLICATION_MP4CEA608;
+            out.requiredSampleTransformation = 1;
+        } else {
+            throw new IllegalStateException();
+        }
+        out.format = Format.createTextSampleFormat(Integer.toString(trackId), mimeType, null, -1, 0, language, -1, drmInitData, subsampleOffsetUs, initializationData);
+    }
+
     private static void parseVideoSampleEntry(ParsableByteArray parent, int atomType, int position, int size, int trackId, int rotationDegrees, DrmInitData drmInitData, StsdData out, int entryIndex) throws ParserException {
-        parent.setPosition(position + 8);
-        parent.skipBytes(24);
+        parent.setPosition((position + 8) + 8);
+        parent.skipBytes(16);
         int width = parent.readUnsignedShort();
         int height = parent.readUnsignedShort();
         boolean pixelWidthHeightRatioFromPasp = false;
@@ -678,11 +697,11 @@ final class AtomParsers {
                 }
                 childPosition += childAtomSize;
             } else if (mimeType == null) {
-                out.format = Format.createVideoSampleFormat(Integer.toString(trackId), mimeType, null, -1, -1, width, height, -1.0f, initializationData, rotationDegrees, pixelWidthHeightRatio, projectionData, stereoMode, drmInitData);
+                out.format = Format.createVideoSampleFormat(Integer.toString(trackId), mimeType, null, -1, -1, width, height, -1.0f, initializationData, rotationDegrees, pixelWidthHeightRatio, projectionData, stereoMode, null, drmInitData);
             }
         }
         if (mimeType == null) {
-            out.format = Format.createVideoSampleFormat(Integer.toString(trackId), mimeType, null, -1, -1, width, height, -1.0f, initializationData, rotationDegrees, pixelWidthHeightRatio, projectionData, stereoMode, drmInitData);
+            out.format = Format.createVideoSampleFormat(Integer.toString(trackId), mimeType, null, -1, -1, width, height, -1.0f, initializationData, rotationDegrees, pixelWidthHeightRatio, projectionData, stereoMode, null, drmInitData);
         }
     }
 
@@ -718,14 +737,13 @@ final class AtomParsers {
     private static void parseAudioSampleEntry(ParsableByteArray parent, int atomType, int position, int size, int trackId, String language, boolean isQuickTime, DrmInitData drmInitData, StsdData out, int entryIndex) {
         int channelCount;
         int sampleRate;
-        parent.setPosition(position + 8);
+        parent.setPosition((position + 8) + 8);
         int quickTimeSoundDescriptionVersion = 0;
         if (isQuickTime) {
-            parent.skipBytes(8);
             quickTimeSoundDescriptionVersion = parent.readUnsignedShort();
             parent.skipBytes(6);
         } else {
-            parent.skipBytes(16);
+            parent.skipBytes(8);
         }
         if (quickTimeSoundDescriptionVersion == 0 || quickTimeSoundDescriptionVersion == 1) {
             channelCount = parent.readUnsignedShort();

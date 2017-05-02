@@ -62,6 +62,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     protected DecoderCounters decoderCounters;
     private DrmSession<FrameworkMediaCrypto> drmSession;
     private final DrmSessionManager<FrameworkMediaCrypto> drmSessionManager;
+    private final DecoderInputBuffer flagsOnlyBuffer;
     private Format format;
     private final FormatHolder formatHolder;
     private ByteBuffer[] inputBuffers;
@@ -130,6 +131,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
         this.drmSessionManager = drmSessionManager;
         this.playClearSamplesWithoutKeys = playClearSamplesWithoutKeys;
         this.buffer = new DecoderInputBuffer(0);
+        this.flagsOnlyBuffer = DecoderInputBuffer.newFlagsOnlyInstance();
         this.formatHolder = new FormatHolder();
         this.decodeOnlyPresentationTimestamps = new ArrayList();
         this.outputBufferInfo = new BufferInfo();
@@ -186,7 +188,8 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
                 throwDecoderInitError(new DecoderInitializationException(this.format, null, drmSessionRequiresSecureDecoder, -49999));
             }
             String codecName = decoderInfo.name;
-            this.codecIsAdaptive = decoderInfo.adaptive;
+            boolean z = decoderInfo.adaptive && !codecNeedsDisableAdaptationWorkaround(codecName);
+            this.codecIsAdaptive = z;
             this.codecNeedsDiscardToSpsWorkaround = codecNeedsDiscardToSpsWorkaround(codecName, this.format);
             this.codecNeedsFlushWorkaround = codecNeedsFlushWorkaround(codecName);
             this.codecNeedsAdaptationWorkaround = codecNeedsAdaptationWorkaround(codecName);
@@ -299,6 +302,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
             this.codecReinitializationState = 0;
             DecoderCounters decoderCounters = this.decoderCounters;
             decoderCounters.decoderReleaseCount++;
+            this.buffer.data = null;
             try {
                 this.codec.stop();
                 try {
@@ -345,13 +349,14 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
             renderToEndOfStream();
             return;
         }
+        int result;
         if (this.format == null) {
             this.buffer.clear();
-            int result = readSource(this.formatHolder, this.buffer, true);
+            result = readSource(this.formatHolder, this.flagsOnlyBuffer, true);
             if (result == -5) {
                 onInputFormatChanged(this.formatHolder.format);
             } else if (result == -4) {
-                Assertions.checkState(this.buffer.isEndOfStream());
+                Assertions.checkState(this.flagsOnlyBuffer.isEndOfStream());
                 this.inputStreamEnded = true;
                 processEndOfStream();
                 return;
@@ -367,8 +372,17 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
             do {
             } while (feedInputBuffer());
             TraceUtil.endSection();
-        } else if (this.format != null) {
-            skipToKeyframeBefore(positionUs);
+        } else {
+            skipSource(positionUs);
+            this.flagsOnlyBuffer.clear();
+            result = readSource(this.formatHolder, this.flagsOnlyBuffer, false);
+            if (result == -5) {
+                onInputFormatChanged(this.formatHolder.format);
+            } else if (result == -4) {
+                Assertions.checkState(this.flagsOnlyBuffer.isEndOfStream());
+                this.inputStreamEnded = true;
+                processEndOfStream();
+            }
         }
         this.decoderCounters.ensureUpdated();
     }
@@ -739,5 +753,9 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
             return true;
         }
         return false;
+    }
+
+    private static boolean codecNeedsDisableAdaptationWorkaround(String name) {
+        return Util.SDK_INT <= 19 && Util.MODEL.equals("ODROID-XU3") && ("OMX.Exynos.AVC.Decoder".equals(name) || "OMX.Exynos.AVC.Decoder.secure".equals(name));
     }
 }

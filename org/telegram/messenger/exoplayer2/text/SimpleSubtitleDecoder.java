@@ -6,7 +6,7 @@ import org.telegram.messenger.exoplayer2.decoder.SimpleDecoder;
 public abstract class SimpleSubtitleDecoder extends SimpleDecoder<SubtitleInputBuffer, SubtitleOutputBuffer, SubtitleDecoderException> implements SubtitleDecoder {
     private final String name;
 
-    protected abstract Subtitle decode(byte[] bArr, int i) throws SubtitleDecoderException;
+    protected abstract Subtitle decode(byte[] bArr, int i, boolean z) throws SubtitleDecoderException;
 
     protected SimpleSubtitleDecoder(String name) {
         super(new SubtitleInputBuffer[2], new SubtitleOutputBuffer[2]);
@@ -37,7 +37,7 @@ public abstract class SimpleSubtitleDecoder extends SimpleDecoder<SubtitleInputB
         try {
             ByteBuffer inputData = inputBuffer.data;
             SubtitleOutputBuffer subtitleOutputBuffer = outputBuffer;
-            subtitleOutputBuffer.setContent(inputBuffer.timeUs, decode(inputData.array(), inputData.limit()), inputBuffer.subsampleOffsetUs);
+            subtitleOutputBuffer.setContent(inputBuffer.timeUs, decode(inputData.array(), inputData.limit(), reset), inputBuffer.subsampleOffsetUs);
             outputBuffer.clearFlag(Integer.MIN_VALUE);
             return null;
         } catch (SubtitleDecoderException e) {

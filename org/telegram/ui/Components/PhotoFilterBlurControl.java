@@ -242,7 +242,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
                                 this.centerPoint = new Point((point.x - actualArea.x) / this.actualAreaSize.width, ((point.y - actualArea.y) + ((this.actualAreaSize.width - this.actualAreaSize.height) / 2.0f)) / this.actualAreaSize.width);
                                 break;
                             case BlurViewActiveControlInnerRadius:
-                                this.falloff = Math.min(Math.max(BlurMinimumFalloff, (this.startRadius + (radialDistance - this.startDistance)) / shorterSide), this.size - BlurMinimumDifference);
+                                this.falloff = Math.min(Math.max(0.1f, (this.startRadius + (radialDistance - this.startDistance)) / shorterSide), this.size - BlurMinimumDifference);
                                 break;
                             case BlurViewActiveControlOuterRadius:
                                 this.size = Math.max(this.falloff + BlurMinimumDifference, (this.startRadius + (radialDistance - this.startDistance)) / shorterSide);
@@ -261,7 +261,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
                         this.centerPoint = new Point((point.x - actualArea.x) / this.actualAreaSize.width, ((point.y - actualArea.y) + ((this.actualAreaSize.width - this.actualAreaSize.height) / 2.0f)) / this.actualAreaSize.width);
                         break;
                     case BlurViewActiveControlInnerRadius:
-                        this.falloff = Math.min(Math.max(BlurMinimumFalloff, (this.startRadius + (distance - this.startDistance)) / shorterSide), this.size - BlurMinimumDifference);
+                        this.falloff = Math.min(Math.max(0.1f, (this.startRadius + (distance - this.startDistance)) / shorterSide), this.size - BlurMinimumDifference);
                         break;
                     case BlurViewActiveControlOuterRadius:
                         this.size = Math.max(this.falloff + BlurMinimumDifference, (this.startRadius + (distance - this.startDistance)) / shorterSide);
@@ -346,7 +346,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
         }
         float newDistance = getDistance(event);
         this.pointerScale += ((newDistance - this.startPointerDistance) / AndroidUtilities.density) * 0.01f;
-        this.falloff = Math.max(BlurMinimumFalloff, this.falloff * this.pointerScale);
+        this.falloff = Math.max(0.1f, this.falloff * this.pointerScale);
         this.size = Math.max(this.falloff + BlurMinimumDifference, this.size * this.pointerScale);
         this.pointerScale = 1.0f;
         this.startPointerDistance = newDistance;

@@ -6,25 +6,39 @@ import org.telegram.messenger.exoplayer2.drm.FrameworkMediaCrypto;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelector;
 
 public final class ExoPlayerFactory {
-    public static final long DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS = 5000;
-
     private ExoPlayerFactory() {
     }
 
+    @Deprecated
     public static SimpleExoPlayer newSimpleInstance(Context context, TrackSelector trackSelector, LoadControl loadControl) {
-        return newSimpleInstance(context, trackSelector, loadControl, null);
+        return newSimpleInstance(new DefaultRenderersFactory(context), trackSelector, loadControl);
     }
 
+    @Deprecated
     public static SimpleExoPlayer newSimpleInstance(Context context, TrackSelector trackSelector, LoadControl loadControl, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager) {
-        return newSimpleInstance(context, trackSelector, loadControl, drmSessionManager, 0);
+        return newSimpleInstance(new DefaultRenderersFactory(context, drmSessionManager), trackSelector, loadControl);
     }
 
+    @Deprecated
     public static SimpleExoPlayer newSimpleInstance(Context context, TrackSelector trackSelector, LoadControl loadControl, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int extensionRendererMode) {
-        return newSimpleInstance(context, trackSelector, loadControl, drmSessionManager, extensionRendererMode, DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+        return newSimpleInstance(new DefaultRenderersFactory(context, drmSessionManager, extensionRendererMode), trackSelector, loadControl);
     }
 
+    @Deprecated
     public static SimpleExoPlayer newSimpleInstance(Context context, TrackSelector trackSelector, LoadControl loadControl, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int extensionRendererMode, long allowedVideoJoiningTimeMs) {
-        return new SimpleExoPlayer(context, trackSelector, loadControl, drmSessionManager, extensionRendererMode, allowedVideoJoiningTimeMs);
+        return newSimpleInstance(new DefaultRenderersFactory(context, drmSessionManager, extensionRendererMode, allowedVideoJoiningTimeMs), trackSelector, loadControl);
+    }
+
+    public static SimpleExoPlayer newSimpleInstance(Context context, TrackSelector trackSelector) {
+        return newSimpleInstance(new DefaultRenderersFactory(context), trackSelector);
+    }
+
+    public static SimpleExoPlayer newSimpleInstance(RenderersFactory renderersFactory, TrackSelector trackSelector) {
+        return newSimpleInstance(renderersFactory, trackSelector, new DefaultLoadControl());
+    }
+
+    public static SimpleExoPlayer newSimpleInstance(RenderersFactory renderersFactory, TrackSelector trackSelector, LoadControl loadControl) {
+        return new SimpleExoPlayer(renderersFactory, trackSelector, loadControl);
     }
 
     public static ExoPlayer newInstance(Renderer[] renderers, TrackSelector trackSelector) {

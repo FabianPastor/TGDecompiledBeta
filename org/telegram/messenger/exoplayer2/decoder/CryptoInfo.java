@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2.decoder;
 
 import android.annotation.TargetApi;
+import android.media.MediaCodec.CryptoInfo.Pattern;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class CryptoInfo {
@@ -11,9 +12,39 @@ public final class CryptoInfo {
     public int[] numBytesOfClearData;
     public int[] numBytesOfEncryptedData;
     public int numSubSamples;
+    public int patternBlocksToEncrypt;
+    public int patternBlocksToSkip;
+    private final PatternHolderV24 patternHolder;
+
+    @TargetApi(24)
+    private static final class PatternHolderV24 {
+        private final android.media.MediaCodec.CryptoInfo frameworkCryptoInfo;
+        private final Pattern pattern;
+
+        private PatternHolderV24(android.media.MediaCodec.CryptoInfo frameworkCryptoInfo) {
+            this.frameworkCryptoInfo = frameworkCryptoInfo;
+            this.pattern = new Pattern(0, 0);
+        }
+
+        private void set(int blocksToEncrypt, int blocksToSkip) {
+            this.pattern.set(blocksToEncrypt, blocksToSkip);
+            this.frameworkCryptoInfo.setPattern(this.pattern);
+        }
+    }
 
     public CryptoInfo() {
-        this.frameworkCryptoInfo = Util.SDK_INT >= 16 ? newFrameworkCryptoInfoV16() : null;
+        android.media.MediaCodec.CryptoInfo newFrameworkCryptoInfoV16;
+        PatternHolderV24 patternHolderV24 = null;
+        if (Util.SDK_INT >= 16) {
+            newFrameworkCryptoInfoV16 = newFrameworkCryptoInfoV16();
+        } else {
+            newFrameworkCryptoInfoV16 = null;
+        }
+        this.frameworkCryptoInfo = newFrameworkCryptoInfoV16;
+        if (Util.SDK_INT >= 24) {
+            patternHolderV24 = new PatternHolderV24(this.frameworkCryptoInfo);
+        }
+        this.patternHolder = patternHolderV24;
     }
 
     public void set(int numSubSamples, int[] numBytesOfClearData, int[] numBytesOfEncryptedData, byte[] key, byte[] iv, int mode) {
@@ -23,8 +54,18 @@ public final class CryptoInfo {
         this.key = key;
         this.iv = iv;
         this.mode = mode;
+        this.patternBlocksToEncrypt = 0;
+        this.patternBlocksToSkip = 0;
         if (Util.SDK_INT >= 16) {
             updateFrameworkCryptoInfoV16();
+        }
+    }
+
+    public void setPattern(int patternBlocksToEncrypt, int patternBlocksToSkip) {
+        this.patternBlocksToEncrypt = patternBlocksToEncrypt;
+        this.patternBlocksToSkip = patternBlocksToSkip;
+        if (Util.SDK_INT >= 24) {
+            this.patternHolder.set(patternBlocksToEncrypt, patternBlocksToSkip);
         }
     }
 
@@ -40,6 +81,14 @@ public final class CryptoInfo {
 
     @TargetApi(16)
     private void updateFrameworkCryptoInfoV16() {
-        this.frameworkCryptoInfo.set(this.numSubSamples, this.numBytesOfClearData, this.numBytesOfEncryptedData, this.key, this.iv, this.mode);
+        this.frameworkCryptoInfo.numSubSamples = this.numSubSamples;
+        this.frameworkCryptoInfo.numBytesOfClearData = this.numBytesOfClearData;
+        this.frameworkCryptoInfo.numBytesOfEncryptedData = this.numBytesOfEncryptedData;
+        this.frameworkCryptoInfo.key = this.key;
+        this.frameworkCryptoInfo.iv = this.iv;
+        this.frameworkCryptoInfo.mode = this.mode;
+        if (Util.SDK_INT >= 24) {
+            this.patternHolder.set(this.patternBlocksToEncrypt, this.patternBlocksToSkip);
+        }
     }
 }

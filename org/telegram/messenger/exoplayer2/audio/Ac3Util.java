@@ -18,6 +18,22 @@ public final class Ac3Util {
     private static final int[] SAMPLE_RATE_BY_FSCOD2 = new int[]{24000, 22050, 16000};
     private static final int[] SYNCFRAME_SIZE_WORDS_BY_HALF_FRMSIZECOD_44_1 = new int[]{69, 87, 104, 121, 139, 174, 208, 243, 278, 348, 417, 487, 557, 696, 835, 975, 1114, 1253, 1393};
 
+    public static final class Ac3SyncFrameInfo {
+        public final int channelCount;
+        public final int frameSize;
+        public final String mimeType;
+        public final int sampleCount;
+        public final int sampleRate;
+
+        private Ac3SyncFrameInfo(String mimeType, int channelCount, int sampleRate, int frameSize, int sampleCount) {
+            this.mimeType = mimeType;
+            this.channelCount = channelCount;
+            this.sampleRate = sampleRate;
+            this.frameSize = frameSize;
+            this.sampleCount = sampleCount;
+        }
+    }
+
     public static Format parseAc3AnnexFFormat(ParsableByteArray data, String trackId, String language, DrmInitData drmInitData) {
         int sampleRate = SAMPLE_RATE_BY_FSCOD[(data.readUnsignedByte() & PsExtractor.AUDIO_STREAM) >> 6];
         int nextByte = data.readUnsignedByte();
@@ -39,44 +55,52 @@ public final class Ac3Util {
         return Format.createAudioSampleFormat(trackId, MimeTypes.AUDIO_E_AC3, null, -1, -1, channelCount, sampleRate, null, drmInitData, 0, language);
     }
 
-    public static Format parseAc3SyncframeFormat(ParsableBitArray data, String trackId, String language, DrmInitData drmInitData) {
-        data.skipBits(32);
-        int fscod = data.readBits(2);
-        data.skipBits(14);
-        int acmod = data.readBits(3);
-        if (!((acmod & 1) == 0 || acmod == 1)) {
-            data.skipBits(2);
-        }
-        if ((acmod & 4) != 0) {
-            data.skipBits(2);
-        }
-        if (acmod == 2) {
-            data.skipBits(2);
-        }
-        return Format.createAudioSampleFormat(trackId, MimeTypes.AUDIO_AC3, null, -1, -1, CHANNEL_COUNT_BY_ACMOD[acmod] + (data.readBit() ? 1 : 0), SAMPLE_RATE_BY_FSCOD[fscod], null, drmInitData, 0, language);
-    }
-
-    public static Format parseEac3SyncframeFormat(ParsableBitArray data, String trackId, String language, DrmInitData drmInitData) {
+    public static Ac3SyncFrameInfo parseAc3SyncframeInfo(ParsableBitArray data) {
+        String mimeType;
+        int frameSize;
         int sampleRate;
-        int i;
-        data.skipBits(32);
-        int fscod = data.readBits(2);
-        if (fscod == 3) {
-            sampleRate = SAMPLE_RATE_BY_FSCOD2[data.readBits(2)];
+        int sampleCount;
+        int acmod;
+        int initialPosition = data.getPosition();
+        data.skipBits(40);
+        boolean isEac3 = data.readBits(5) == 16;
+        data.setPosition(initialPosition);
+        int fscod;
+        if (isEac3) {
+            int audioBlocks;
+            mimeType = MimeTypes.AUDIO_E_AC3;
+            data.skipBits(21);
+            frameSize = (data.readBits(11) + 1) * 2;
+            fscod = data.readBits(2);
+            if (fscod == 3) {
+                sampleRate = SAMPLE_RATE_BY_FSCOD2[data.readBits(2)];
+                audioBlocks = 6;
+            } else {
+                audioBlocks = BLOCKS_PER_SYNCFRAME_BY_NUMBLKSCOD[data.readBits(2)];
+                sampleRate = SAMPLE_RATE_BY_FSCOD[fscod];
+            }
+            sampleCount = audioBlocks * 256;
+            acmod = data.readBits(3);
         } else {
-            data.skipBits(2);
+            mimeType = MimeTypes.AUDIO_AC3;
+            data.skipBits(32);
+            fscod = data.readBits(2);
+            frameSize = getAc3SyncframeSize(fscod, data.readBits(6));
+            data.skipBits(8);
+            acmod = data.readBits(3);
+            if (!((acmod & 1) == 0 || acmod == 1)) {
+                data.skipBits(2);
+            }
+            if ((acmod & 4) != 0) {
+                data.skipBits(2);
+            }
+            if (acmod == 2) {
+                data.skipBits(2);
+            }
             sampleRate = SAMPLE_RATE_BY_FSCOD[fscod];
+            sampleCount = AC3_SYNCFRAME_AUDIO_SAMPLE_COUNT;
         }
-        int acmod = data.readBits(3);
-        boolean lfeon = data.readBit();
-        String str = MimeTypes.AUDIO_E_AC3;
-        int i2 = CHANNEL_COUNT_BY_ACMOD[acmod];
-        if (lfeon) {
-            i = 1;
-        } else {
-            i = 0;
-        }
-        return Format.createAudioSampleFormat(trackId, str, null, -1, -1, i2 + i, sampleRate, null, drmInitData, 0, language);
+        return new Ac3SyncFrameInfo(mimeType, CHANNEL_COUNT_BY_ACMOD[acmod] + (data.readBit() ? 1 : 0), sampleRate, frameSize, sampleCount);
     }
 
     public static int parseAc3SyncframeSize(byte[] data) {
@@ -86,16 +110,8 @@ public final class Ac3Util {
         return getAc3SyncframeSize((data[4] & PsExtractor.AUDIO_STREAM) >> 6, data[4] & 63);
     }
 
-    public static int parseEAc3SyncframeSize(byte[] data) {
-        return ((((data[2] & 7) << 8) + (data[3] & 255)) + 1) * 2;
-    }
-
     public static int getAc3SyncframeAudioSampleCount() {
         return AC3_SYNCFRAME_AUDIO_SAMPLE_COUNT;
-    }
-
-    public static int parseEAc3SyncframeAudioSampleCount(byte[] data) {
-        return (((data[4] & PsExtractor.AUDIO_STREAM) >> 6) == 3 ? 6 : BLOCKS_PER_SYNCFRAME_BY_NUMBLKSCOD[(data[4] & 48) >> 4]) * 256;
     }
 
     public static int parseEAc3SyncframeAudioSampleCount(ByteBuffer buffer) {
