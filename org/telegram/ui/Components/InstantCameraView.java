@@ -262,7 +262,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.lastTimestamp = -1;
             this.sync = new Object();
             this.lastCameraId = Integer.valueOf(0);
-            this.buffers = new ArrayBlockingQueue(5);
+            this.buffers = new ArrayBlockingQueue(10);
             this.recorderRunnable = new Runnable() {
                 /* JADX WARNING: inconsistent code. */
                 /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -438,7 +438,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         count++;
                         if (a >= input.results - 1) {
                             this.buffersToWrite.remove(input);
-                            this.buffers.put(input);
+                            if (this.running) {
+                                this.buffers.put(input);
+                            }
                             if (this.buffersToWrite.isEmpty()) {
                                 isLast = input.last;
                                 input = null;
@@ -1163,7 +1165,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         super(context);
         setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
-                InstantCameraView.this.getParent().requestDisallowInterceptTouchEvent(true);
                 return true;
             }
         });
@@ -1240,6 +1241,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
         });
         setVisibility(4);
+    }
+
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        getParent().requestDisallowInterceptTouchEvent(true);
+        return super.onInterceptTouchEvent(ev);
     }
 
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {

@@ -232,6 +232,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         ChatActivityEnterView.this.parentActivity.requestPermissions(new String[]{"android.permission.RECORD_AUDIO"}, 3);
                         return;
                     }
+                    ChatActivityEnterView.this.delegate.needStartRecordAudio(1);
                     ChatActivityEnterView.this.startedDraggingX = -1.0f;
                     MediaController.getInstance().startRecording(ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject);
                     ChatActivityEnterView.this.updateRecordIntefrace();
@@ -318,6 +319,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         void didPressedAttachButton();
 
         void needSendTyping();
+
+        void needStartRecordAudio(int i);
 
         void needStartRecordVideo(int i);
 
@@ -979,6 +982,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.recordSendText.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (!ChatActivityEnterView.this.hasRecordVideo || ChatActivityEnterView.this.videoSendButton.getTag() == null) {
+                    ChatActivityEnterView.this.delegate.needStartRecordAudio(0);
                     MediaController.getInstance().stopRecording(0);
                 } else {
                     ChatActivityEnterView.this.delegate.needStartRecordVideo(2);
@@ -1013,6 +1017,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         if (!ChatActivityEnterView.this.hasRecordVideo || ChatActivityEnterView.this.calledRecordRunnable) {
                             ChatActivityEnterView.this.startedDraggingX = -1.0f;
                             if (!ChatActivityEnterView.this.hasRecordVideo || ChatActivityEnterView.this.videoSendButton.getTag() == null) {
+                                ChatActivityEnterView.this.delegate.needStartRecordAudio(0);
                                 MediaController.getInstance().stopRecording(1);
                             } else {
                                 ChatActivityEnterView.this.delegate.needStartRecordVideo(1);
@@ -1039,6 +1044,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     } else if (!ChatActivityEnterView.this.hasRecordVideo || ChatActivityEnterView.this.calledRecordRunnable) {
                         ChatActivityEnterView.this.startedDraggingX = -1.0f;
                         if (!ChatActivityEnterView.this.hasRecordVideo || ChatActivityEnterView.this.videoSendButton.getTag() == null) {
+                            ChatActivityEnterView.this.delegate.needStartRecordAudio(0);
                             MediaController.getInstance().stopRecording(1);
                         } else {
                             ChatActivityEnterView.this.delegate.needStartRecordVideo(1);
@@ -1068,6 +1074,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                     if (x < (-ChatActivityEnterView.this.distCanMove)) {
                         if (!ChatActivityEnterView.this.hasRecordVideo || ChatActivityEnterView.this.videoSendButton.getTag() == null) {
+                            ChatActivityEnterView.this.delegate.needStartRecordAudio(0);
                             MediaController.getInstance().stopRecording(0);
                         } else {
                             ChatActivityEnterView.this.delegate.needStartRecordVideo(2);
@@ -1304,6 +1311,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     public void cancelRecordingAudioVideo() {
         if (!this.hasRecordVideo || this.videoSendButton.getTag() == null) {
+            this.delegate.needStartRecordAudio(0);
             MediaController.getInstance().stopRecording(0);
         } else {
             this.delegate.needStartRecordVideo(2);
@@ -2181,8 +2189,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    public void setDelegate(ChatActivityEnterViewDelegate delegate) {
-        this.delegate = delegate;
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (this.recordingAudioVideo) {
+            getParent().requestDisallowInterceptTouchEvent(true);
+        }
+        return super.onInterceptTouchEvent(ev);
+    }
+
+    public void setDelegate(ChatActivityEnterViewDelegate chatActivityEnterViewDelegate) {
+        this.delegate = chatActivityEnterViewDelegate;
     }
 
     public void setCommand(MessageObject messageObject, String command, boolean longPress, boolean username) {

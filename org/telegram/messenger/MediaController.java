@@ -2291,8 +2291,12 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         }
     }
 
-    public void setBaseActivity(Activity activity) {
-        this.baseActivity = activity;
+    public void setBaseActivity(Activity activity, boolean set) {
+        if (set) {
+            this.baseActivity = activity;
+        } else if (this.baseActivity == activity) {
+            this.baseActivity = null;
+        }
     }
 
     public boolean playMessage(MessageObject messageObject) {
@@ -2394,6 +2398,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             }
                             if (MediaController.this.pipSwitchingState == 2) {
                                 if (MediaController.this.currentAspectRatioFrameLayout != null) {
+                                    MediaController.this.currentAspectRatioFrameLayout.setDrawingReady(true);
                                     if (MediaController.this.currentAspectRatioFrameLayout.getParent() == null) {
                                         MediaController.this.currentTextureViewContainer.addView(MediaController.this.currentAspectRatioFrameLayout);
                                     }
@@ -2781,7 +2786,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             return false;
         }
         try {
-            startProgressTimer(messageObject);
+            startProgressTimer(this.playingMessageObject);
             if (this.audioPlayer != null) {
                 this.audioPlayer.start();
             } else if (this.audioTrackPlayer != null) {
@@ -3033,10 +3038,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
 
     public static void saveFile(String fullPath, Context context, int type, String name, String mime) {
         Throwable e;
-        final AlertDialog finalProgress;
-        final int i;
-        final String str;
-        final String str2;
         if (fullPath != null) {
             File file = null;
             if (!(fullPath == null || fullPath.length() == 0)) {
@@ -3049,6 +3050,10 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 final File sourceFile = file;
                 final boolean[] cancelled = new boolean[1];
                 if (sourceFile.exists()) {
+                    final AlertDialog finalProgress;
+                    final int i;
+                    final String str;
+                    final String str2;
                     AlertDialog progressDialog = null;
                     if (context != null) {
                         try {

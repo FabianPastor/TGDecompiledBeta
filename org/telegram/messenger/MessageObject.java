@@ -1,6 +1,7 @@
 package org.telegram.messenger;
 
 import android.graphics.Typeface;
+import android.os.Build.VERSION;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.Spannable.Factory;
@@ -852,23 +853,24 @@ public class MessageObject {
     }
 
     public static boolean isRoundVideoDocument(Document document) {
-        if (!(document == null || document.mime_type == null || !document.mime_type.equals(MimeTypes.VIDEO_MP4))) {
-            int width = 0;
-            int height = 0;
-            boolean round = false;
-            for (int a = 0; a < document.attributes.size(); a++) {
-                DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
-                if (attribute instanceof TL_documentAttributeVideo) {
-                    width = attribute.w;
-                    height = attribute.w;
-                    round = attribute.round_message;
-                }
-            }
-            if (round && width <= 1280 && height <= 1280) {
-                return true;
+        if (VERSION.SDK_INT < 16 || document == null || document.mime_type == null || !document.mime_type.equals(MimeTypes.VIDEO_MP4)) {
+            return false;
+        }
+        int width = 0;
+        int height = 0;
+        boolean round = false;
+        for (int a = 0; a < document.attributes.size(); a++) {
+            DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+            if (attribute instanceof TL_documentAttributeVideo) {
+                width = attribute.w;
+                height = attribute.w;
+                round = attribute.round_message;
             }
         }
-        return false;
+        if (!round || width > 1280 || height > 1280) {
+            return false;
+        }
+        return true;
     }
 
     public static boolean isNewGifDocument(Document document) {
@@ -1708,7 +1710,7 @@ public class MessageObject {
         for (int a = 0; a < document.attributes.size(); a++) {
             DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
             if (attribute instanceof TL_documentAttributeVideo) {
-                if (attribute.round_message) {
+                if (VERSION.SDK_INT >= 16 && attribute.round_message) {
                     return false;
                 }
                 isVideo = true;
@@ -1750,10 +1752,16 @@ public class MessageObject {
     }
 
     public static boolean isRoundVideoMessage(Message message) {
+        if (VERSION.SDK_INT < 16) {
+            return false;
+        }
         if (message.media instanceof TL_messageMediaWebPage) {
             return isRoundVideoDocument(message.media.webpage.document);
         }
-        return (message.media == null || message.media.document == null || !isRoundVideoDocument(message.media.document)) ? false : true;
+        if (message.media == null || message.media.document == null || !isRoundVideoDocument(message.media.document)) {
+            return false;
+        }
+        return true;
     }
 
     public static boolean isVoiceMessage(Message message) {
@@ -1963,14 +1971,18 @@ public class MessageObject {
     }
 
     public boolean isRoundVideo() {
+        boolean z = true;
+        if (VERSION.SDK_INT < 16) {
+            return false;
+        }
         if (this.isRoundVideoCached == 0) {
             int i = (this.type == 5 || isRoundVideoMessage(this.messageOwner)) ? 1 : 2;
             this.isRoundVideoCached = i;
         }
-        if (this.isRoundVideoCached == 1) {
-            return true;
+        if (this.isRoundVideoCached != 1) {
+            z = false;
         }
-        return false;
+        return z;
     }
 
     public boolean hasPhotoStickers() {

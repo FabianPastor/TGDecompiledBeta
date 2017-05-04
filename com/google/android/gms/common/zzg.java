@@ -31,7 +31,7 @@ public class zzg {
     @Deprecated
     public static final String GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms";
     @Deprecated
-    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = 10298000;
+    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = 10240000;
     public static final String GOOGLE_PLAY_STORE_PACKAGE = "com.android.vending";
     private static boolean zzayA = false;
     static final AtomicBoolean zzayB = new AtomicBoolean();

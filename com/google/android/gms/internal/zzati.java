@@ -167,7 +167,7 @@ public class zzati extends zzaug {
     }
 
     public long zzKv() {
-        return 10298;
+        return 10240;
     }
 
     public long zzLA() {
@@ -303,7 +303,7 @@ public class zzati extends zzaug {
         Builder encodedAuthority = builder.scheme((String) zzats.zzbrS.get()).encodedAuthority((String) zzats.zzbrT.get());
         String str3 = "config/app/";
         String valueOf = String.valueOf(str);
-        encodedAuthority.path(valueOf.length() != 0 ? str3.concat(valueOf) : new String(str3)).appendQueryParameter("app_instance_id", str2).appendQueryParameter("platform", "android").appendQueryParameter("gmp_version", String.valueOf(10298));
+        encodedAuthority.path(valueOf.length() != 0 ? str3.concat(valueOf) : new String(str3)).appendQueryParameter("app_instance_id", str2).appendQueryParameter("platform", "android").appendQueryParameter("gmp_version", String.valueOf(10240));
         return builder.build().toString();
     }
 

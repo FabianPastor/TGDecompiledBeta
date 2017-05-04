@@ -322,7 +322,7 @@ public class zzf {
             bundle.putString("osv", Integer.toString(VERSION.SDK_INT));
             bundle.putString("app_ver", Integer.toString(FirebaseInstanceId.zzcr(this.zzqn)));
             bundle.putString("app_ver_name", FirebaseInstanceId.zzbx(this.zzqn));
-            bundle.putString("cliv", "fiid-10298000");
+            bundle.putString("cliv", "fiid-10240000");
             bundle.putString("appid", FirebaseInstanceId.zza(keyPair));
             bundle.putString("pub2", FirebaseInstanceId.zzv(keyPair.getPublic().getEncoded()));
             bundle.putString("sig", zza(keyPair, this.zzqn.getPackageName(), r0));

@@ -804,7 +804,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         } catch (Throwable e22) {
             FileLog.e(e22);
         }
-        MediaController.getInstance().setBaseActivity(this);
+        MediaController.getInstance().setBaseActivity(this, true);
     }
 
     private void checkLayout() {
@@ -2177,7 +2177,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         ArticleViewer.getInstance().destroyArticleViewer();
         StickerPreviewViewer.getInstance().destroy();
         PipRoundVideoView pipRoundVideoView = PipRoundVideoView.getInstance();
-        MediaController.getInstance().setBaseActivity(null);
+        MediaController.getInstance().setBaseActivity(this, false);
         if (pipRoundVideoView != null) {
             pipRoundVideoView.close(false);
         }
@@ -2245,12 +2245,22 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         if (PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().onResume();
         }
+        if (PipRoundVideoView.getInstance() != null && MediaController.getInstance().isMessagePaused()) {
+            MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
+            if (messageObject != null) {
+                MediaController.getInstance().seekToProgress(messageObject, messageObject.audioProgress);
+            }
+        }
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
         AndroidUtilities.checkDisplaySize(this, newConfig);
         super.onConfigurationChanged(newConfig);
         checkLayout();
+        PipRoundVideoView pipRoundVideoView = PipRoundVideoView.getInstance();
+        if (pipRoundVideoView != null) {
+            pipRoundVideoView.onConfigurationChanged();
+        }
         EmbedBottomSheet embedBottomSheet = EmbedBottomSheet.getInstance();
         if (embedBottomSheet != null) {
             embedBottomSheet.onConfigurationChanged(newConfig);
