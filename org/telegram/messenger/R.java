@@ -985,10 +985,12 @@ public final class R {
         public static final int CodeExpired = NUM;
         public static final int ColorBlue = NUM;
         public static final int ColorCyan = NUM;
+        public static final int ColorDark = NUM;
         public static final int ColorGreen = NUM;
         public static final int ColorOrange = NUM;
         public static final int ColorPink = NUM;
         public static final int ColorRed = NUM;
+        public static final int ColorSepia = NUM;
         public static final int ColorViolet = NUM;
         public static final int ColorWhite = NUM;
         public static final int ColorYellow = NUM;
@@ -1144,6 +1146,7 @@ public final class R {
         public static final int FloodWait = NUM;
         public static final int FloodWaitTime = NUM;
         public static final int Folder = NUM;
+        public static final int FontSize = NUM;
         public static final int ForgotPassword = NUM;
         public static final int Forward = NUM;
         public static final int ForwardMessagesTo = NUM;

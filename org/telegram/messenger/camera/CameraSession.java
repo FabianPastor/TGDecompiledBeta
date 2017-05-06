@@ -26,6 +26,7 @@ public class CameraSession {
     protected CameraInfo cameraInfo;
     private String currentFlashMode = "off";
     private int currentOrientation;
+    private int diffOrientation;
     private boolean initied;
     private boolean isVideo;
     private int jpegOrientation;
@@ -126,6 +127,10 @@ public class CameraSession {
         return this.currentOrientation;
     }
 
+    public int getWorldAngle() {
+        return this.diffOrientation;
+    }
+
     public boolean isSameTakePictureOrientation() {
         return this.sameTakePictureOrientation;
     }
@@ -179,6 +184,7 @@ public class CameraSession {
             }
             this.currentOrientation = cameraDisplayOrientation;
             camera.setDisplayOrientation(cameraDisplayOrientation);
+            this.diffOrientation = this.currentOrientation - displayOrientation;
             if (params != null) {
                 params.setPreviewSize(this.previewSize.getWidth(), this.previewSize.getHeight());
                 params.setPictureSize(this.pictureSize.getWidth(), this.pictureSize.getHeight());

@@ -1553,9 +1553,12 @@
     <string name="AttachRound">Video message</string>
     <string name="ChannelMessageGroupRound">%1$s sent a video message to the channel %2$s</string>
     <string name="ChannelMessageRound">%1$s posted a video message</string>
+    <string name="ColorDark">Dark</string>
+    <string name="ColorSepia">Sepia</string>
     <string name="DiscardVoiceMessageAction">Discard</string>
     <string name="DiscardVoiceMessageDescription">Are you sure you want to stop recording and discard your voice message?</string>
     <string name="DiscardVoiceMessageTitle">Discard Voice Message</string>
+    <string name="FontSize">Font Size</string>
     <string name="ForwardedRound_few">%1$d forwarded video messages</string>
     <string name="ForwardedRound_many">%1$d forwarded video messages</string>
     <string name="ForwardedRound_one">Forwarded video message</string>

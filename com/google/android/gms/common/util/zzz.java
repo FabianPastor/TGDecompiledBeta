@@ -19,12 +19,12 @@ public class zzz {
     private static final Method zzaIu = zzzw();
 
     public static WorkSource zzF(Context context, String str) {
-        if (context == null || context.getPackageManager() == null) {
-            return null;
-        }
         String str2;
         String str3;
         String valueOf;
+        if (context == null || context.getPackageManager() == null) {
+            return null;
+        }
         try {
             ApplicationInfo applicationInfo = zzadg.zzbi(context).getApplicationInfo(str, 0);
             if (applicationInfo != null) {

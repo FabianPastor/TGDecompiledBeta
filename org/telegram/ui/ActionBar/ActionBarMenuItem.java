@@ -39,6 +39,7 @@ import org.telegram.ui.Components.LayoutHelper;
 public class ActionBarMenuItem extends FrameLayout {
     private static Method layoutInScreenMethod;
     private boolean allowCloseAnimation = true;
+    private boolean animationEnabled = true;
     private ImageView clearButton;
     private ActionBarMenuItemDelegate delegate;
     protected ImageView iconView;
@@ -195,7 +196,7 @@ public class ActionBarMenuItem extends FrameLayout {
         this.layoutInScreen = value;
     }
 
-    public TextView addSubItem(int id, String text) {
+    private void createPopupLayout() {
         if (this.popupLayout == null) {
             this.rect = new Rect();
             this.location = new int[2];
@@ -219,6 +220,15 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             });
         }
+    }
+
+    public void addSubItem(View view, int width, int height) {
+        createPopupLayout();
+        this.popupLayout.addView(view, new LayoutParams(width, height));
+    }
+
+    public TextView addSubItem(int id, String text) {
+        createPopupLayout();
         TextView textView = new TextView(getContext());
         textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
         textView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
@@ -294,10 +304,13 @@ public class ActionBarMenuItem extends FrameLayout {
             if (this.popupWindow == null || !this.popupWindow.isShowing()) {
                 if (this.popupWindow == null) {
                     this.popupWindow = new ActionBarPopupWindow(this.popupLayout, -2, -2);
-                    if (VERSION.SDK_INT >= 19) {
-                        this.popupWindow.setAnimationStyle(0);
-                    } else {
+                    if (!this.animationEnabled || VERSION.SDK_INT < 19) {
                         this.popupWindow.setAnimationStyle(R.style.PopupAnimation);
+                    } else {
+                        this.popupWindow.setAnimationStyle(0);
+                    }
+                    if (!this.animationEnabled) {
+                        this.popupWindow.setAnimationEnabled(this.animationEnabled);
                     }
                     this.popupWindow.setOutsideTouchable(true);
                     this.popupWindow.setClippingEnabled(true);
@@ -500,6 +513,13 @@ public class ActionBarMenuItem extends FrameLayout {
         return this;
     }
 
+    public void setPopupAnimationEnabled(boolean value) {
+        if (this.popupWindow != null) {
+            this.popupWindow.setAnimationEnabled(value);
+        }
+        this.animationEnabled = value;
+    }
+
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (this.popupWindow != null && this.popupWindow.isShowing()) {
@@ -517,7 +537,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 offsetY -= diff;
             }
         } else if (this.parentMenu == null || this.subMenuOpenSide != 0) {
-            offsetY = -getMeasuredHeight();
+            offsetY = -((int) (((float) getMeasuredHeight()) * getScaleY()));
         } else {
             offsetY = (-this.parentMenu.parentActionBar.getMeasuredHeight()) + this.parentMenu.getTop();
         }
@@ -549,10 +569,10 @@ public class ActionBarMenuItem extends FrameLayout {
         } else if (getParent() != null) {
             parent = (View) getParent();
             if (show) {
-                this.popupWindow.showAsDropDown(parent, ((parent.getMeasuredWidth() - this.popupLayout.getMeasuredWidth()) - getLeft()) - parent.getLeft(), offsetY);
+                this.popupWindow.showAsDropDown(parent, (getLeft() + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth(), offsetY);
             }
             if (update) {
-                this.popupWindow.update(parent, ((parent.getMeasuredWidth() - this.popupLayout.getMeasuredWidth()) - getLeft()) - parent.getLeft(), offsetY, -1, -1);
+                this.popupWindow.update(parent, (getLeft() + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth(), offsetY, -1, -1);
             }
         }
     }

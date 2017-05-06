@@ -69,6 +69,7 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.File;
@@ -76,6 +77,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Emoji;
@@ -215,6 +217,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private static HashMap<Integer, TextPaint> authorTextPaints = new HashMap();
     private static HashMap<Integer, TextPaint> captionTextPaints = new HashMap();
     private static TextPaint channelNamePaint = null;
+    private static Paint colorPaint = null;
     private static DecelerateInterpolator decelerateInterpolator = null;
     private static Paint dividerPaint = null;
     private static Paint dotsPaint = null;
@@ -237,6 +240,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private static Paint progressPaint;
     private static Paint quoteLinePaint;
     private static HashMap<Integer, TextPaint> quoteTextPaints = new HashMap();
+    private static Paint selectorPaint;
     private static HashMap<Integer, TextPaint> slideshowTextPaints = new HashMap();
     private static HashMap<Integer, TextPaint> subheaderTextPaints = new HashMap();
     private static HashMap<Integer, TextPaint> subquoteTextPaints = new HashMap();
@@ -274,6 +278,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private boolean changingPage;
     private boolean checkingForLongPress = false;
     private boolean collapsed;
+    private ColorCell[] colorCells = new ColorCell[3];
     private FrameLayout containerView;
     private int[] coords = new int[2];
     private ArrayList<BlockEmbedCell> createdWebViews = new ArrayList();
@@ -296,6 +301,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private boolean doubleTap;
     private float dragY;
     private boolean draggingDown;
+    private FontCell[] fontCells = new FontCell[2];
+    private final int fontSizeCount = 5;
     private AspectRatioFrameLayout fullscreenAspectRatioView;
     private TextureView fullscreenTextureView;
     private FrameLayout fullscreenVideoContainer;
@@ -357,6 +364,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private float scale = 1.0f;
     private Paint scrimPaint;
     private Scroller scroller;
+    private int selectedColor = 0;
+    private int selectedFont = 0;
+    private int selectedFontSize = 2;
+    private ActionBarMenuItem settingsButton;
     private ImageView shareButton;
     private FrameLayout shareContainer;
     private PlaceProviderObject showAfterAnimation;
@@ -566,7 +577,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             super(context);
             setWillNotDraw(false);
             this.backgroundPaint = new Paint();
-            this.backgroundPaint.setColor(-526345);
             this.textView = new TextView(context);
             this.textView.setTextSize(1, 14.0f);
             this.textView.setTextColor(-14840360);
@@ -593,6 +603,13 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
 
         public void setBlock(TL_pageBlockChannel block) {
             this.currentBlock = block;
+            if (ArticleViewer.this.selectedColor == 0) {
+                this.backgroundPaint.setColor(-526345);
+            } else if (ArticleViewer.this.selectedColor == 1) {
+                this.backgroundPaint.setColor(-1712440);
+            } else if (ArticleViewer.this.selectedColor == 2) {
+                this.backgroundPaint.setColor(-14277082);
+            }
             this.lastCreatedWidth = 0;
             Chat channel = MessagesController.getInstance().getChat(Integer.valueOf(block.channel.id));
             if (channel == null || channel.min) {
@@ -801,7 +818,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     }
                 }
             };
-            this.innerListView.setGlowColor(-657673);
             this.innerListView.addItemDecoration(new ItemDecoration(ArticleViewer.this) {
                 public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
                     outRect.left = 0;
@@ -865,6 +881,13 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.currentBlock = block;
             this.lastCreatedWidth = 0;
             this.adapter.notifyDataSetChanged();
+            if (ArticleViewer.this.selectedColor == 0) {
+                this.innerListView.setGlowColor(-657673);
+            } else if (ArticleViewer.this.selectedColor == 1) {
+                this.innerListView.setGlowColor(-659492);
+            } else if (ArticleViewer.this.selectedColor == 2) {
+                this.innerListView.setGlowColor(-15461356);
+            }
             requestLayout();
         }
 
@@ -940,7 +963,13 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             super(context);
             if (ArticleViewer.dividerPaint == null) {
                 ArticleViewer.dividerPaint = new Paint();
-                ArticleViewer.dividerPaint.setColor(-3288619);
+                if (ArticleViewer.this.selectedColor == 0) {
+                    ArticleViewer.dividerPaint.setColor(-3288619);
+                } else if (ArticleViewer.this.selectedColor == 1) {
+                    ArticleViewer.dividerPaint.setColor(-4080987);
+                } else if (ArticleViewer.this.selectedColor == 2) {
+                    ArticleViewer.dividerPaint.setColor(-12303292);
+                }
             }
         }
 
@@ -1980,7 +2009,13 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             };
             this.adapter = anonymousClass3;
             viewPager.setAdapter(anonymousClass3);
-            AndroidUtilities.setViewPagerEdgeEffectColor(this.innerListView, -657673);
+            if (ArticleViewer.this.selectedColor == 0) {
+                AndroidUtilities.setViewPagerEdgeEffectColor(this.innerListView, -657673);
+            } else if (ArticleViewer.this.selectedColor == 1) {
+                AndroidUtilities.setViewPagerEdgeEffectColor(this.innerListView, -659492);
+            } else if (ArticleViewer.this.selectedColor == 2) {
+                AndroidUtilities.setViewPagerEdgeEffectColor(this.innerListView, -15461356);
+            }
             addView(this.innerListView);
             this.dotsContainer = new View(context, ArticleViewer.this) {
                 protected void onDraw(Canvas canvas) {
@@ -2246,10 +2281,146 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             if (ArticleViewer.this.pendingCheckForLongPress == null) {
                 ArticleViewer.this.pendingCheckForLongPress = new CheckForLongPress();
             }
-            ArticleViewer.this.pendingCheckForLongPress.currentPressCount = ArticleViewer.access$404(ArticleViewer.this);
+            ArticleViewer.this.pendingCheckForLongPress.currentPressCount = ArticleViewer.access$804(ArticleViewer.this);
             if (ArticleViewer.this.windowView != null) {
                 ArticleViewer.this.windowView.postDelayed(ArticleViewer.this.pendingCheckForLongPress, (long) (ViewConfiguration.getLongPressTimeout() - ViewConfiguration.getTapTimeout()));
             }
+        }
+    }
+
+    public class ColorCell extends FrameLayout {
+        private int currentColor;
+        private boolean selected;
+        private TextView textView;
+        final /* synthetic */ ArticleViewer this$0;
+
+        public ColorCell(ArticleViewer this$0, Context context) {
+            int i;
+            int i2 = 5;
+            this.this$0 = this$0;
+            super(context);
+            if (ArticleViewer.colorPaint == null) {
+                ArticleViewer.colorPaint = new Paint(1);
+                ArticleViewer.selectorPaint = new Paint(1);
+                ArticleViewer.selectorPaint.setColor(-15428119);
+                ArticleViewer.selectorPaint.setStyle(Style.STROKE);
+                ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+            }
+            setBackgroundDrawable(Theme.createSelectorDrawable(251658240, 2));
+            setWillNotDraw(false);
+            this.textView = new TextView(context);
+            this.textView.setTextColor(-14606047);
+            this.textView.setTextSize(1, 16.0f);
+            this.textView.setLines(1);
+            this.textView.setMaxLines(1);
+            this.textView.setSingleLine(true);
+            TextView textView = this.textView;
+            if (LocaleController.isRTL) {
+                i = 5;
+            } else {
+                i = 3;
+            }
+            textView.setGravity(i | 16);
+            this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(1.0f));
+            View view = this.textView;
+            if (!LocaleController.isRTL) {
+                i2 = 3;
+            }
+            addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) (LocaleController.isRTL ? 17 : 53), 0.0f, (float) (LocaleController.isRTL ? 53 : 17), 0.0f));
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+        }
+
+        public void setTextAndColor(String text, int color) {
+            this.textView.setText(text);
+            this.currentColor = color;
+            invalidate();
+        }
+
+        public void select(boolean value) {
+            if (this.selected != value) {
+                this.selected = value;
+                invalidate();
+            }
+        }
+
+        protected void onDraw(Canvas canvas) {
+            ArticleViewer.colorPaint.setColor(this.currentColor);
+            canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(48.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), ArticleViewer.colorPaint);
+            if (this.selected) {
+                ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+                ArticleViewer.selectorPaint.setColor(-15428119);
+                canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(48.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), ArticleViewer.selectorPaint);
+            } else if (this.currentColor == -1) {
+                ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
+                ArticleViewer.selectorPaint.setColor(-4539718);
+                canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(48.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(9.0f), ArticleViewer.selectorPaint);
+            }
+        }
+    }
+
+    public class FontCell extends FrameLayout {
+        private TextView textView;
+        private TextView textView2;
+        final /* synthetic */ ArticleViewer this$0;
+
+        public FontCell(ArticleViewer this$0, Context context) {
+            int i;
+            int i2;
+            int i3 = 5;
+            this.this$0 = this$0;
+            super(context);
+            setBackgroundDrawable(Theme.createSelectorDrawable(251658240, 2));
+            this.textView = new TextView(context);
+            this.textView.setTextColor(-14606047);
+            this.textView.setTextSize(1, 16.0f);
+            this.textView.setLines(1);
+            this.textView.setMaxLines(1);
+            this.textView.setSingleLine(true);
+            this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+            View view = this.textView;
+            if (LocaleController.isRTL) {
+                i = 5;
+            } else {
+                i = 3;
+            }
+            addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, (float) (LocaleController.isRTL ? 17 : 53), 0.0f, (float) (LocaleController.isRTL ? 53 : 17), 0.0f));
+            this.textView2 = new TextView(context);
+            this.textView2.setTextColor(-14606047);
+            this.textView2.setTextSize(1, 16.0f);
+            this.textView2.setLines(1);
+            this.textView2.setMaxLines(1);
+            this.textView2.setSingleLine(true);
+            this.textView2.setText("Aa");
+            TextView textView = this.textView2;
+            if (LocaleController.isRTL) {
+                i2 = 5;
+            } else {
+                i2 = 3;
+            }
+            textView.setGravity(i2 | 16);
+            view = this.textView2;
+            if (!LocaleController.isRTL) {
+                i3 = 3;
+            }
+            addView(view, LayoutHelper.createFrame(-1, -1.0f, i3 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+        }
+
+        public void select(boolean value) {
+            this.textView2.setTextColor(value ? -15428119 : -14606047);
+        }
+
+        public void setTextAndTypeface(String text, Typeface typeface) {
+            this.textView.setText(text);
+            this.textView.setTypeface(typeface);
+            this.textView2.setTypeface(typeface);
+            invalidate();
         }
     }
 
@@ -2434,6 +2605,113 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 this.progressRect.set((float) (x + diff), (float) (y + diff), (float) ((x + sizeScaled) - diff), (float) ((y + sizeScaled) - diff));
                 canvas.drawArc(this.progressRect, this.radOffset - 0.049804688f, Math.max(4.0f, 360.0f * this.animatedProgressValue), false, ArticleViewer.progressPaint);
                 updateAnimation();
+            }
+        }
+    }
+
+    private class SizeChooseView extends View {
+        private int circleSize;
+        private int gapSize;
+        private int lineSize;
+        private boolean moving;
+        private Paint paint = new Paint(1);
+        private int sideSide;
+        private boolean startMoving;
+        private int startMovingQuality;
+        private float startX;
+
+        public SizeChooseView(Context context) {
+            super(context);
+        }
+
+        public boolean onTouchEvent(MotionEvent event) {
+            boolean z = false;
+            float x = event.getX();
+            int a;
+            int cx;
+            if (event.getAction() == 0) {
+                getParent().requestDisallowInterceptTouchEvent(true);
+                a = 0;
+                while (a < 5) {
+                    cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
+                    if (x <= ((float) (cx - AndroidUtilities.dp(15.0f))) || x >= ((float) (AndroidUtilities.dp(15.0f) + cx))) {
+                        a++;
+                    } else {
+                        if (a == ArticleViewer.this.selectedFontSize) {
+                            z = true;
+                        }
+                        this.startMoving = z;
+                        this.startX = x;
+                        this.startMovingQuality = ArticleViewer.this.selectedFontSize;
+                    }
+                }
+            } else if (event.getAction() == 2) {
+                if (this.startMoving) {
+                    if (Math.abs(this.startX - x) >= AndroidUtilities.getPixelsInCM(0.5f, true)) {
+                        this.moving = true;
+                        this.startMoving = false;
+                    }
+                } else if (this.moving) {
+                    a = 0;
+                    while (a < 5) {
+                        cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
+                        int diff = ((this.lineSize / 2) + (this.circleSize / 2)) + this.gapSize;
+                        if (x <= ((float) (cx - diff)) || x >= ((float) (cx + diff))) {
+                            a++;
+                        } else if (ArticleViewer.this.selectedFontSize != a) {
+                            ArticleViewer.this.selectedFontSize = a;
+                            ArticleViewer.this.updatePaintSize();
+                            invalidate();
+                        }
+                    }
+                }
+            } else if (event.getAction() == 1 || event.getAction() == 3) {
+                if (!this.moving) {
+                    a = 0;
+                    while (a < 5) {
+                        cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
+                        if (x <= ((float) (cx - AndroidUtilities.dp(15.0f))) || x >= ((float) (AndroidUtilities.dp(15.0f) + cx))) {
+                            a++;
+                        } else if (ArticleViewer.this.selectedFontSize != a) {
+                            ArticleViewer.this.selectedFontSize = a;
+                            ArticleViewer.this.updatePaintSize();
+                            invalidate();
+                        }
+                    }
+                } else if (ArticleViewer.this.selectedFontSize != this.startMovingQuality) {
+                    ArticleViewer.this.updatePaintSize();
+                }
+                this.startMoving = false;
+                this.moving = false;
+            }
+            return true;
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            this.circleSize = AndroidUtilities.dp(5.0f);
+            this.gapSize = AndroidUtilities.dp(2.0f);
+            this.sideSide = AndroidUtilities.dp(17.0f);
+            this.lineSize = (((getMeasuredWidth() - (this.circleSize * 5)) - (this.gapSize * 8)) - (this.sideSide * 2)) / 4;
+        }
+
+        protected void onDraw(Canvas canvas) {
+            int cy = getMeasuredHeight() / 2;
+            int a = 0;
+            while (a < 5) {
+                int cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
+                if (a <= ArticleViewer.this.selectedFontSize) {
+                    this.paint.setColor(-15428119);
+                } else {
+                    this.paint.setColor(-3355444);
+                }
+                canvas.drawCircle((float) cx, (float) cy, a == ArticleViewer.this.selectedFontSize ? (float) AndroidUtilities.dp(4.0f) : (float) (this.circleSize / 2), this.paint);
+                if (a != 0) {
+                    int x = ((cx - (this.circleSize / 2)) - this.gapSize) - this.lineSize;
+                    canvas.drawRect((float) x, (float) (cy - AndroidUtilities.dp(1.0f)), (float) (this.lineSize + x), (float) (AndroidUtilities.dp(1.0f) + cy), this.paint);
+                }
+                a++;
             }
         }
     }
@@ -3035,8 +3313,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     frameLayout.setTag(Integer.valueOf(90));
                     TextView textView = new TextView(this.context);
                     frameLayout.addView(textView, LayoutHelper.createFrame(-1, 34.0f, 51, 0.0f, 10.0f, 0.0f, 0.0f));
-                    textView.setTextColor(-8879475);
-                    textView.setBackgroundColor(-1183760);
                     textView.setText(LocaleController.getString("PreviewFeedback", R.string.PreviewFeedback));
                     textView.setTextSize(1, 12.0f);
                     textView.setGravity(17);
@@ -3144,6 +3420,27 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         return;
                 }
             }
+            switch (holder.getItemViewType()) {
+                case 90:
+                    TextView textView = (TextView) ((ViewGroup) holder.itemView).getChildAt(0);
+                    if (ArticleViewer.this.selectedColor == 0) {
+                        textView.setTextColor(-8879475);
+                        textView.setBackgroundColor(-1183760);
+                        return;
+                    } else if (ArticleViewer.this.selectedColor == 1) {
+                        textView.setTextColor(ArticleViewer.this.getGrayTextColor());
+                        textView.setBackgroundColor(-1712440);
+                        return;
+                    } else if (ArticleViewer.this.selectedColor == 2) {
+                        textView.setTextColor(ArticleViewer.this.getGrayTextColor());
+                        textView.setBackgroundColor(-14277082);
+                        return;
+                    } else {
+                        return;
+                    }
+                default:
+                    return;
+            }
         }
 
         private int getTypeForBlock(PageBlock block) {
@@ -3222,7 +3519,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         }
     }
 
-    static /* synthetic */ int access$404(ArticleViewer x0) {
+    static /* synthetic */ int access$804(ArticleViewer x0) {
         int i = x0.pressCount + 1;
         x0.pressCount = i;
         return i;
@@ -3526,85 +3823,118 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         return null;
     }
 
+    private int getTextColor() {
+        switch (this.selectedColor) {
+            case 0:
+            case 1:
+                return -14606047;
+            default:
+                return -6710887;
+        }
+    }
+
+    private int getGrayTextColor() {
+        switch (this.selectedColor) {
+            case 0:
+                return -8156010;
+            case 1:
+                return -11711675;
+            default:
+                return -10066330;
+        }
+    }
+
     private TextPaint getTextPaint(RichText parentRichText, RichText richText, PageBlock parentBlock) {
+        int additionalSize;
         int flags = getTextFlags(richText);
         HashMap<Integer, TextPaint> currentMap = null;
         int textSize = AndroidUtilities.dp(14.0f);
         int textColor = SupportMenu.CATEGORY_MASK;
+        if (this.selectedFontSize == 0) {
+            additionalSize = -AndroidUtilities.dp(4.0f);
+        } else if (this.selectedFontSize == 1) {
+            additionalSize = -AndroidUtilities.dp(2.0f);
+        } else if (this.selectedFontSize == 3) {
+            additionalSize = AndroidUtilities.dp(2.0f);
+        } else if (this.selectedFontSize == 4) {
+            additionalSize = AndroidUtilities.dp(4.0f);
+        } else {
+            additionalSize = 0;
+        }
         if (parentBlock instanceof TL_pageBlockPhoto) {
             currentMap = captionTextPaints;
             textSize = AndroidUtilities.dp(14.0f);
-            textColor = -8156010;
+            textColor = getGrayTextColor();
         } else if (parentBlock instanceof TL_pageBlockTitle) {
             currentMap = titleTextPaints;
             textSize = AndroidUtilities.dp(24.0f);
-            textColor = -16777216;
+            textColor = getTextColor();
         } else if (parentBlock instanceof TL_pageBlockAuthorDate) {
             currentMap = authorTextPaints;
             textSize = AndroidUtilities.dp(14.0f);
-            textColor = -8156010;
+            textColor = getGrayTextColor();
         } else if (parentBlock instanceof TL_pageBlockFooter) {
             currentMap = footerTextPaints;
             textSize = AndroidUtilities.dp(14.0f);
-            textColor = -8156010;
+            textColor = getGrayTextColor();
         } else if (parentBlock instanceof TL_pageBlockSubtitle) {
             currentMap = subtitleTextPaints;
             textSize = AndroidUtilities.dp(21.0f);
-            textColor = -16777216;
+            textColor = getTextColor();
         } else if (parentBlock instanceof TL_pageBlockHeader) {
             currentMap = headerTextPaints;
             textSize = AndroidUtilities.dp(21.0f);
-            textColor = -16777216;
+            textColor = getTextColor();
         } else if (parentBlock instanceof TL_pageBlockSubheader) {
             currentMap = subheaderTextPaints;
             textSize = AndroidUtilities.dp(18.0f);
-            textColor = -16777216;
+            textColor = getTextColor();
         } else if ((parentBlock instanceof TL_pageBlockBlockquote) || (parentBlock instanceof TL_pageBlockPullquote)) {
             if (parentBlock.text == parentRichText) {
                 currentMap = quoteTextPaints;
                 textSize = AndroidUtilities.dp(15.0f);
-                textColor = -16777216;
+                textColor = getTextColor();
             } else if (parentBlock.caption == parentRichText) {
                 currentMap = subquoteTextPaints;
                 textSize = AndroidUtilities.dp(14.0f);
-                textColor = -8156010;
+                textColor = getGrayTextColor();
             }
         } else if (parentBlock instanceof TL_pageBlockPreformatted) {
             currentMap = preformattedTextPaints;
             textSize = AndroidUtilities.dp(14.0f);
-            textColor = -16777216;
+            textColor = getTextColor();
         } else if (parentBlock instanceof TL_pageBlockParagraph) {
             if (parentBlock.caption == parentRichText) {
                 currentMap = embedPostCaptionTextPaints;
                 textSize = AndroidUtilities.dp(14.0f);
-                textColor = -8156010;
+                textColor = getGrayTextColor();
             } else {
                 currentMap = paragraphTextPaints;
                 textSize = AndroidUtilities.dp(16.0f);
-                textColor = -16777216;
+                textColor = getTextColor();
             }
         } else if (parentBlock instanceof TL_pageBlockList) {
             currentMap = listTextPaints;
             textSize = AndroidUtilities.dp(15.0f);
-            textColor = -16777216;
+            textColor = getTextColor();
         } else if (parentBlock instanceof TL_pageBlockEmbed) {
             currentMap = embedTextPaints;
             textSize = AndroidUtilities.dp(14.0f);
-            textColor = -8156010;
+            textColor = getGrayTextColor();
         } else if (parentBlock instanceof TL_pageBlockSlideshow) {
             currentMap = slideshowTextPaints;
             textSize = AndroidUtilities.dp(14.0f);
-            textColor = -8156010;
+            textColor = getGrayTextColor();
         } else if (parentBlock instanceof TL_pageBlockEmbedPost) {
             if (richText != null) {
                 currentMap = embedPostTextPaints;
                 textSize = AndroidUtilities.dp(14.0f);
-                textColor = -16777216;
+                textColor = getTextColor();
             }
         } else if (parentBlock instanceof TL_pageBlockVideo) {
             currentMap = videoTextPaints;
             textSize = AndroidUtilities.dp(14.0f);
-            textColor = -16777216;
+            textColor = getTextColor();
         }
         if (currentMap == null) {
             if (errorTextPaint == null) {
@@ -3619,7 +3949,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             paint = new TextPaint(1);
             if ((flags & 4) != 0) {
                 paint.setTypeface(AndroidUtilities.getTypeface("fonts/rmono.ttf"));
-            } else if ((parentBlock instanceof TL_pageBlockTitle) || (parentBlock instanceof TL_pageBlockHeader) || (parentBlock instanceof TL_pageBlockSubtitle) || (parentBlock instanceof TL_pageBlockSubheader)) {
+            } else if (this.selectedFont == 1 || (parentBlock instanceof TL_pageBlockTitle) || (parentBlock instanceof TL_pageBlockHeader) || (parentBlock instanceof TL_pageBlockSubtitle) || (parentBlock instanceof TL_pageBlockSubheader)) {
                 if ((flags & 1) != 0 && (flags & 2) != 0) {
                     paint.setTypeface(Typeface.create(C.SERIF_NAME, 3));
                 } else if ((flags & 1) != 0) {
@@ -3643,12 +3973,13 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 paint.setFlags(paint.getFlags() | 8);
             }
             if ((flags & 8) != 0) {
-                textColor = -11697229;
+                paint.setFlags(paint.getFlags() | 8);
+                textColor = getTextColor();
             }
             paint.setColor(textColor);
             currentMap.put(Integer.valueOf(flags), paint);
         }
-        paint.setTextSize((float) textSize);
+        paint.setTextSize((float) (textSize + additionalSize));
         return paint;
     }
 
@@ -3659,11 +3990,23 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         CharSequence text;
         if (quoteLinePaint == null) {
             quoteLinePaint = new Paint();
-            quoteLinePaint.setColor(-16777216);
+            quoteLinePaint.setColor(getTextColor());
             preformattedBackgroundPaint = new Paint();
-            preformattedBackgroundPaint.setColor(-657156);
+            if (this.selectedColor == 0) {
+                preformattedBackgroundPaint.setColor(-657156);
+            } else if (this.selectedColor == 1) {
+                preformattedBackgroundPaint.setColor(-1712440);
+            } else if (this.selectedColor == 2) {
+                preformattedBackgroundPaint.setColor(-14277082);
+            }
             urlPaint = new Paint();
-            urlPaint.setColor(862104035);
+            if (this.selectedColor == 0) {
+                urlPaint.setColor(862104035);
+            } else if (this.selectedColor == 1) {
+                urlPaint.setColor(-1712440);
+            } else if (this.selectedColor == 2) {
+                urlPaint.setColor(-14277082);
+            }
         }
         if (plainText != null) {
             text = plainText;
@@ -3678,14 +4021,20 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             if (parentBlock.author == plainText) {
                 if (embedPostAuthorPaint == null) {
                     embedPostAuthorPaint = new TextPaint(1);
-                    embedPostAuthorPaint.setColor(-16777216);
+                    embedPostAuthorPaint.setColor(getTextColor());
                 }
                 embedPostAuthorPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
                 paint = embedPostAuthorPaint;
             } else {
                 if (embedPostDatePaint == null) {
                     embedPostDatePaint = new TextPaint(1);
-                    embedPostDatePaint.setColor(-7366752);
+                    if (this.selectedColor == 0) {
+                        embedPostDatePaint.setColor(-7366752);
+                    } else if (this.selectedColor == 1) {
+                        embedPostDatePaint.setColor(-11711675);
+                    } else if (this.selectedColor == 2) {
+                        embedPostDatePaint.setColor(-10066330);
+                    }
                 }
                 embedPostDatePaint.setTextSize((float) AndroidUtilities.dp(14.0f));
                 paint = embedPostDatePaint;
@@ -3693,7 +4042,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         } else if (parentBlock instanceof TL_pageBlockChannel) {
             if (channelNamePaint == null) {
                 channelNamePaint = new TextPaint(1);
-                channelNamePaint.setColor(-16777216);
+                channelNamePaint.setColor(getTextColor());
                 channelNamePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             }
             channelNamePaint.setTextSize((float) AndroidUtilities.dp(15.0f));
@@ -3909,12 +4258,191 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         }
     }
 
+    private void updatePaintSize() {
+        ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().putInt("font_size", this.selectedFontSize).commit();
+        this.adapter.notifyDataSetChanged();
+    }
+
+    private void updatePaintFonts() {
+        ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().putInt("font_type", this.selectedFont).commit();
+        Typeface typefaceNormal = this.selectedFont == 0 ? Typeface.DEFAULT : Typeface.SERIF;
+        Typeface typefaceItalic = this.selectedFont == 0 ? AndroidUtilities.getTypeface("fonts/ritalic.ttf") : Typeface.create(C.SERIF_NAME, 2);
+        Typeface typefaceBold = this.selectedFont == 0 ? AndroidUtilities.getTypeface("fonts/rmedium.ttf") : Typeface.create(C.SERIF_NAME, 1);
+        Typeface typefaceBoldItalic = this.selectedFont == 0 ? AndroidUtilities.getTypeface("fonts/rmediumitalic.ttf") : Typeface.create(C.SERIF_NAME, 3);
+        for (Entry<Integer, TextPaint> entry : quoteTextPaints.entrySet()) {
+            updateFontEntry(entry, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+        for (Entry<Integer, TextPaint> entry2 : preformattedTextPaints.entrySet()) {
+            updateFontEntry(entry2, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+        for (Entry<Integer, TextPaint> entry22 : paragraphTextPaints.entrySet()) {
+            updateFontEntry(entry22, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+        for (Entry<Integer, TextPaint> entry222 : listTextPaints.entrySet()) {
+            updateFontEntry(entry222, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+        for (Entry<Integer, TextPaint> entry2222 : embedPostTextPaints.entrySet()) {
+            updateFontEntry(entry2222, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+        for (Entry<Integer, TextPaint> entry22222 : videoTextPaints.entrySet()) {
+            updateFontEntry(entry22222, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+        for (Entry<Integer, TextPaint> entry222222 : captionTextPaints.entrySet()) {
+            updateFontEntry(entry222222, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+        for (Entry<Integer, TextPaint> entry2222222 : authorTextPaints.entrySet()) {
+            updateFontEntry(entry2222222, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+        for (Entry<Integer, TextPaint> entry22222222 : footerTextPaints.entrySet()) {
+            updateFontEntry(entry22222222, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+        for (Entry<Integer, TextPaint> entry222222222 : subquoteTextPaints.entrySet()) {
+            updateFontEntry(entry222222222, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+        for (Entry<Integer, TextPaint> entryNUM : embedPostCaptionTextPaints.entrySet()) {
+            updateFontEntry(entryNUM, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+        for (Entry<Integer, TextPaint> entry2NUM : embedTextPaints.entrySet()) {
+            updateFontEntry(entry2NUM, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+        for (Entry<Integer, TextPaint> entry22NUM : slideshowTextPaints.entrySet()) {
+            updateFontEntry(entry22NUM, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+    }
+
+    private void updateFontEntry(Entry<Integer, TextPaint> entry, Typeface typefaceNormal, Typeface typefaceBoldItalic, Typeface typefaceBold, Typeface typefaceItalic) {
+        Integer flags = (Integer) entry.getKey();
+        TextPaint paint = (TextPaint) entry.getValue();
+        if ((flags.intValue() & 1) != 0 && (flags.intValue() & 2) != 0) {
+            paint.setTypeface(typefaceBoldItalic);
+        } else if ((flags.intValue() & 1) != 0) {
+            paint.setTypeface(typefaceBold);
+        } else if ((flags.intValue() & 2) != 0) {
+            paint.setTypeface(typefaceItalic);
+        } else {
+            paint.setTypeface(typefaceNormal);
+        }
+    }
+
+    private void updatePaintColors() {
+        ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().putInt("font_color", this.selectedColor).commit();
+        if (this.selectedColor == 0) {
+            this.backgroundPaint.setColor(-1);
+            this.listView.setGlowColor(-657673);
+        } else if (this.selectedColor == 1) {
+            this.backgroundPaint.setColor(-659492);
+            this.listView.setGlowColor(-659492);
+        } else if (this.selectedColor == 2) {
+            this.backgroundPaint.setColor(-15461356);
+            this.listView.setGlowColor(-15461356);
+        }
+        if (quoteLinePaint != null) {
+            quoteLinePaint.setColor(getTextColor());
+        }
+        if (preformattedBackgroundPaint != null) {
+            if (this.selectedColor == 0) {
+                preformattedBackgroundPaint.setColor(-657156);
+            } else if (this.selectedColor == 1) {
+                preformattedBackgroundPaint.setColor(-1712440);
+            } else if (this.selectedColor == 2) {
+                preformattedBackgroundPaint.setColor(-14277082);
+            }
+        }
+        if (urlPaint != null) {
+            if (this.selectedColor == 0) {
+                urlPaint.setColor(862104035);
+            } else if (this.selectedColor == 1) {
+                urlPaint.setColor(-1712440);
+            } else if (this.selectedColor == 2) {
+                urlPaint.setColor(-14277082);
+            }
+        }
+        if (embedPostAuthorPaint != null) {
+            embedPostAuthorPaint.setColor(getTextColor());
+        }
+        if (channelNamePaint != null) {
+            channelNamePaint.setColor(getTextColor());
+        }
+        if (embedPostDatePaint != null) {
+            if (this.selectedColor == 0) {
+                embedPostDatePaint.setColor(-7366752);
+            } else if (this.selectedColor == 1) {
+                embedPostDatePaint.setColor(-11711675);
+            } else if (this.selectedColor == 2) {
+                embedPostDatePaint.setColor(-10066330);
+            }
+        }
+        if (dividerPaint != null) {
+            if (this.selectedColor == 0) {
+                dividerPaint.setColor(-3288619);
+            } else if (this.selectedColor == 1) {
+                dividerPaint.setColor(-4080987);
+            } else if (this.selectedColor == 2) {
+                dividerPaint.setColor(-12303292);
+            }
+        }
+        for (Entry<Integer, TextPaint> entry : titleTextPaints.entrySet()) {
+            ((TextPaint) entry.getValue()).setColor(getTextColor());
+        }
+        for (Entry<Integer, TextPaint> entry2 : subtitleTextPaints.entrySet()) {
+            ((TextPaint) entry2.getValue()).setColor(getTextColor());
+        }
+        for (Entry<Integer, TextPaint> entry22 : headerTextPaints.entrySet()) {
+            ((TextPaint) entry22.getValue()).setColor(getTextColor());
+        }
+        for (Entry<Integer, TextPaint> entry222 : subheaderTextPaints.entrySet()) {
+            ((TextPaint) entry222.getValue()).setColor(getTextColor());
+        }
+        for (Entry<Integer, TextPaint> entry2222 : quoteTextPaints.entrySet()) {
+            ((TextPaint) entry2222.getValue()).setColor(getTextColor());
+        }
+        for (Entry<Integer, TextPaint> entry22222 : preformattedTextPaints.entrySet()) {
+            ((TextPaint) entry22222.getValue()).setColor(getTextColor());
+        }
+        for (Entry<Integer, TextPaint> entry222222 : paragraphTextPaints.entrySet()) {
+            ((TextPaint) entry222222.getValue()).setColor(getTextColor());
+        }
+        for (Entry<Integer, TextPaint> entry2222222 : listTextPaints.entrySet()) {
+            ((TextPaint) entry2222222.getValue()).setColor(getTextColor());
+        }
+        for (Entry<Integer, TextPaint> entry22222222 : embedPostTextPaints.entrySet()) {
+            ((TextPaint) entry22222222.getValue()).setColor(getTextColor());
+        }
+        for (Entry<Integer, TextPaint> entry222222222 : videoTextPaints.entrySet()) {
+            ((TextPaint) entry222222222.getValue()).setColor(getTextColor());
+        }
+        for (Entry<Integer, TextPaint> entryNUM : captionTextPaints.entrySet()) {
+            ((TextPaint) entry2222222222.getValue()).setColor(getGrayTextColor());
+        }
+        for (Entry<Integer, TextPaint> entry2NUM : authorTextPaints.entrySet()) {
+            ((TextPaint) entry22222222222.getValue()).setColor(getGrayTextColor());
+        }
+        for (Entry<Integer, TextPaint> entry22NUM : footerTextPaints.entrySet()) {
+            ((TextPaint) entry222222222222.getValue()).setColor(getGrayTextColor());
+        }
+        for (Entry<Integer, TextPaint> entry222NUM : subquoteTextPaints.entrySet()) {
+            ((TextPaint) entry2222222222222.getValue()).setColor(getGrayTextColor());
+        }
+        for (Entry<Integer, TextPaint> entry2222NUM : embedPostCaptionTextPaints.entrySet()) {
+            ((TextPaint) entry22222222222222.getValue()).setColor(getGrayTextColor());
+        }
+        for (Entry<Integer, TextPaint> entry22222NUM : embedTextPaints.entrySet()) {
+            ((TextPaint) entry222222222222222.getValue()).setColor(getGrayTextColor());
+        }
+        for (Entry<Integer, TextPaint> entry222222NUM : slideshowTextPaints.entrySet()) {
+            ((TextPaint) entry2222222222222222.getValue()).setColor(getGrayTextColor());
+        }
+    }
+
     public void setParentActivity(Activity activity, BaseFragment fragment) {
         this.parentFragment = fragment;
         if (this.parentActivity != activity) {
             this.parentActivity = activity;
+            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("articles", 0);
+            this.selectedFontSize = sharedPreferences.getInt("font_size", 2);
+            this.selectedFont = sharedPreferences.getInt("font_type", 0);
+            this.selectedColor = sharedPreferences.getInt("font_color", 0);
             this.backgroundPaint = new Paint();
-            this.backgroundPaint.setColor(-1);
             this.layerShadowDrawable = activity.getResources().getDrawable(R.drawable.layer_shadow);
             this.slideDotDrawable = activity.getResources().getDrawable(R.drawable.slide_dot_small);
             this.slideDotBigDrawable = activity.getResources().getDrawable(R.drawable.slide_dot_big);
@@ -3999,7 +4527,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.listView.setClipToPadding(false);
             this.listView.setPadding(0, AndroidUtilities.dp(56.0f), 0, 0);
             this.listView.setTopGlowOffset(AndroidUtilities.dp(56.0f));
-            this.listView.setGlowColor(-657673);
             this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
             this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
                 public boolean onItemClick(View view, int position) {
@@ -4078,6 +4605,100 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     ArticleViewer.this.close(true, true);
                 }
             });
+            LinearLayout settingsContainer = new LinearLayout(this.parentActivity);
+            settingsContainer.setPadding(0, AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f));
+            settingsContainer.setOrientation(1);
+            int a = 0;
+            while (a < 3) {
+                this.colorCells[a] = new ColorCell(this, this.parentActivity);
+                switch (a) {
+                    case 0:
+                        this.colorCells[a].setTextAndColor(LocaleController.getString("ColorWhite", R.string.ColorWhite), -1);
+                        break;
+                    case 1:
+                        this.colorCells[a].setTextAndColor(LocaleController.getString("ColorSepia", R.string.ColorSepia), -1382967);
+                        break;
+                    case 2:
+                        this.colorCells[a].setTextAndColor(LocaleController.getString("ColorDark", R.string.ColorDark), -14474461);
+                        break;
+                }
+                this.colorCells[a].select(a == this.selectedColor);
+                this.colorCells[a].setTag(Integer.valueOf(a));
+                this.colorCells[a].setOnClickListener(new OnClickListener() {
+                    public void onClick(View v) {
+                        int num = ((Integer) v.getTag()).intValue();
+                        ArticleViewer.this.selectedColor = num;
+                        int a = 0;
+                        while (a < 3) {
+                            ArticleViewer.this.colorCells[a].select(a == num);
+                            a++;
+                        }
+                        ArticleViewer.this.updatePaintColors();
+                        ArticleViewer.this.adapter.notifyDataSetChanged();
+                    }
+                });
+                settingsContainer.addView(this.colorCells[a], LayoutHelper.createLinear(-1, 48));
+                a++;
+            }
+            View divider = new View(this.parentActivity);
+            divider.setBackgroundColor(-2039584);
+            settingsContainer.addView(divider, LayoutHelper.createLinear(-1, 1, 15.0f, 4.0f, 15.0f, 4.0f));
+            divider.getLayoutParams().height = 1;
+            a = 0;
+            while (a < 2) {
+                this.fontCells[a] = new FontCell(this, this.parentActivity);
+                switch (a) {
+                    case 0:
+                        this.fontCells[a].setTextAndTypeface("Roboto", Typeface.DEFAULT);
+                        break;
+                    case 1:
+                        this.fontCells[a].setTextAndTypeface("Serif", Typeface.SERIF);
+                        break;
+                }
+                this.fontCells[a].select(a == this.selectedFont);
+                this.fontCells[a].setTag(Integer.valueOf(a));
+                this.fontCells[a].setOnClickListener(new OnClickListener() {
+                    public void onClick(View v) {
+                        int num = ((Integer) v.getTag()).intValue();
+                        ArticleViewer.this.selectedFont = num;
+                        int a = 0;
+                        while (a < 2) {
+                            ArticleViewer.this.fontCells[a].select(a == num);
+                            a++;
+                        }
+                        ArticleViewer.this.updatePaintFonts();
+                        ArticleViewer.this.adapter.notifyDataSetChanged();
+                    }
+                });
+                settingsContainer.addView(this.fontCells[a], LayoutHelper.createLinear(-1, 48));
+                a++;
+            }
+            divider = new View(this.parentActivity);
+            divider.setBackgroundColor(-2039584);
+            settingsContainer.addView(divider, LayoutHelper.createLinear(-1, 1, 15.0f, 4.0f, 15.0f, 4.0f));
+            divider.getLayoutParams().height = 1;
+            View textView = new TextView(this.parentActivity);
+            textView.setTextColor(-14606047);
+            textView.setTextSize(1, 16.0f);
+            textView.setLines(1);
+            textView.setMaxLines(1);
+            textView.setSingleLine(true);
+            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+            textView.setText(LocaleController.getString("FontSize", R.string.FontSize));
+            settingsContainer.addView(textView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 17, 12, 17, 0));
+            settingsContainer.addView(new SizeChooseView(this.parentActivity), LayoutHelper.createLinear(-1, 38, 0.0f, 0.0f, 0.0f, 1.0f));
+            this.settingsButton = new ActionBarMenuItem(this.parentActivity, null, Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, -1);
+            this.settingsButton.setPopupAnimationEnabled(false);
+            textView = new TextView(this.parentActivity);
+            textView.setTextSize(1, 18.0f);
+            textView.setText("Aa");
+            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            textView.setTextColor(-5000269);
+            textView.setGravity(17);
+            this.settingsButton.addView(textView, LayoutHelper.createFrame(-1, -1.0f));
+            this.settingsButton.addSubItem(settingsContainer, AndroidUtilities.dp(220.0f), -2);
+            this.headerView.addView(this.settingsButton, LayoutHelper.createFrame(48, 56.0f, 53, 0.0f, 0.0f, 56.0f, 0.0f));
             this.shareContainer = new FrameLayout(activity);
             this.headerView.addView(this.shareContainer, LayoutHelper.createFrame(48, 56, 53));
             this.shareContainer.setOnClickListener(new OnClickListener() {
@@ -4141,11 +4762,11 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                                 return;
                             }
                             String file = f.toString();
-                            Context access$1500 = ArticleViewer.this.parentActivity;
+                            Context access$1900 = ArticleViewer.this.parentActivity;
                             if (!ArticleViewer.this.isMediaVideo(ArticleViewer.this.currentIndex)) {
                                 i = 0;
                             }
-                            MediaController.saveFile(file, access$1500, i, null, null);
+                            MediaController.saveFile(file, access$1900, i, null, null);
                             return;
                         }
                         ArticleViewer.this.parentActivity.requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 4);
@@ -4185,9 +4806,9 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.captionTextViewOld.setTextSize(1, 16.0f);
             this.captionTextViewOld.setVisibility(4);
             this.photoContainerView.addView(this.captionTextViewOld, LayoutHelper.createFrame(-1, -2, 83));
-            TextView textView = new TextView(activity);
-            this.captionTextViewNew = textView;
-            this.captionTextView = textView;
+            TextView textView2 = new TextView(activity);
+            this.captionTextViewNew = textView2;
+            this.captionTextView = textView2;
             this.captionTextViewNew.setMaxLines(10);
             this.captionTextViewNew.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             this.captionTextViewNew.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f));
@@ -4303,6 +4924,16 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.rightImage.setCrossfadeAlpha((byte) 2);
             this.rightImage.setInvalidateAll(true);
             this.rightImage.setDelegate(imageReceiverDelegate);
+            if (this.selectedColor == 0) {
+                this.backgroundPaint.setColor(-1);
+                this.listView.setGlowColor(-657673);
+            } else if (this.selectedColor == 1) {
+                this.backgroundPaint.setColor(-659492);
+                this.listView.setGlowColor(-659492);
+            } else if (this.selectedColor == 2) {
+                this.backgroundPaint.setColor(-15461356);
+                this.listView.setGlowColor(-15461356);
+            }
         }
     }
 
@@ -4324,7 +4955,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         this.backButton.setTranslationY((float) ((maxHeight - this.currentHeaderHeight) / 2));
         this.shareContainer.setScaleX(scale);
         this.shareContainer.setScaleY(scale);
+        this.settingsButton.setScaleX(scale);
+        this.settingsButton.setScaleY(scale);
         this.shareContainer.setTranslationY((float) ((maxHeight - this.currentHeaderHeight) / 2));
+        this.settingsButton.setTranslationY((float) ((maxHeight - this.currentHeaderHeight) / 2));
         this.headerView.setTranslationY((float) (this.currentHeaderHeight - maxHeight));
         this.listView.setTopGlowOffset(this.currentHeaderHeight);
     }
@@ -4376,8 +5010,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         if (this.parentActivity == null || ((this.isVisible && !this.collapsed) || messageObject == null)) {
             return false;
         }
-        WindowManager wm;
-        LayoutParams layoutParams;
         final AnimatorSet animatorSet;
         Animator[] animatorArr;
         float[] fArr;
@@ -4436,6 +5068,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         String webPageUrl = webPage.url.toLowerCase();
         String anchor = null;
         for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
+            WindowManager wm;
+            LayoutParams layoutParams;
             MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
             if (entity instanceof TL_messageEntityUrl) {
                 try {
@@ -5632,11 +6266,11 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 int i = 4;
                 ArticleViewer.this.captionTextViewOld.setTag(null);
                 ArticleViewer.this.captionTextViewOld.setVisibility(4);
-                TextView access$11400 = ArticleViewer.this.captionTextViewNew;
+                TextView access$12600 = ArticleViewer.this.captionTextViewNew;
                 if (ArticleViewer.this.actionBar.getVisibility() == 0) {
                     i = 0;
                 }
-                access$11400.setVisibility(i);
+                access$12600.setVisibility(i);
             }
         });
     }

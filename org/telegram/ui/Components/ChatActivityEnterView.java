@@ -959,6 +959,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.recordPanel.setVisibility(8);
         this.recordPanel.setBackgroundColor(Theme.getColor(Theme.key_chat_messagePanelBackground));
         frameLayout.addView(this.recordPanel, LayoutHelper.createFrame(-1, 48, 80));
+        this.recordPanel.setOnTouchListener(new OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
         this.slideText = new LinearLayout(context);
         this.slideText.setOrientation(0);
         this.recordPanel.addView(this.slideText, LayoutHelper.createFrame(-2, -2.0f, 17, BitmapDescriptorFactory.HUE_ORANGE, 0.0f, 0.0f, 0.0f));
@@ -991,7 +996,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 ChatActivityEnterView.this.updateRecordIntefrace();
             }
         });
-        this.recordPanel.addView(this.recordSendText, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
+        this.recordPanel.addView(this.recordSendText, LayoutHelper.createFrame(-2, -1.0f, 49, 0.0f, 0.0f, 0.0f, 0.0f));
         this.recordTimeContainer = new LinearLayout(context);
         this.recordTimeContainer.setOrientation(0);
         this.recordTimeContainer.setPadding(AndroidUtilities.dp(13.0f), 0, 0, 0);

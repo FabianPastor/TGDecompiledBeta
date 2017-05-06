@@ -408,20 +408,24 @@ public class CameraController implements OnInfoListener {
         }
     }
 
-    public void openRound(final CameraSession session, final SurfaceTexture texture, final Runnable callback) {
+    public void openRound(CameraSession session, SurfaceTexture texture, Runnable callback, Runnable configureCallback) {
         if (session != null && texture != null) {
+            final CameraSession cameraSession = session;
+            final Runnable runnable = configureCallback;
+            final SurfaceTexture surfaceTexture = texture;
+            final Runnable runnable2 = callback;
             this.threadPool.execute(new Runnable() {
                 @SuppressLint({"NewApi"})
                 public void run() {
-                    Camera camera = session.cameraInfo.camera;
+                    Camera camera = cameraSession.cameraInfo.camera;
                     if (camera == null) {
                         try {
-                            CameraInfo cameraInfo = session.cameraInfo;
-                            Camera camera2 = Camera.open(session.cameraInfo.cameraId);
+                            CameraInfo cameraInfo = cameraSession.cameraInfo;
+                            Camera camera2 = Camera.open(cameraSession.cameraInfo.cameraId);
                             cameraInfo.camera = camera2;
                             camera = camera2;
                         } catch (Throwable e) {
-                            session.cameraInfo.camera = null;
+                            cameraSession.cameraInfo.camera = null;
                             if (camera != null) {
                                 camera.release();
                             }
@@ -430,11 +434,14 @@ public class CameraController implements OnInfoListener {
                         }
                     }
                     Parameters params = camera.getParameters();
-                    session.configureRoundCamera();
-                    camera.setPreviewTexture(texture);
+                    cameraSession.configureRoundCamera();
+                    if (runnable != null) {
+                        runnable.run();
+                    }
+                    camera.setPreviewTexture(surfaceTexture);
                     camera.startPreview();
-                    if (callback != null) {
-                        AndroidUtilities.runOnUIThread(callback);
+                    if (runnable2 != null) {
+                        AndroidUtilities.runOnUIThread(runnable2);
                     }
                 }
             });

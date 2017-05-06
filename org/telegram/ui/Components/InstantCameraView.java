@@ -724,12 +724,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void drainEncoder(boolean endOfStream) throws Exception {
+            MediaFormat newFormat;
             if (endOfStream) {
                 this.videoEncoder.signalEndOfInputStream();
             }
             ByteBuffer[] encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
             while (true) {
-                MediaFormat newFormat;
                 ByteBuffer encodedData;
                 int encoderStatus = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
                 if (encoderStatus == -1) {
@@ -930,7 +930,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             FileLog.e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                             finish();
                             return false;
-                        } else if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
+                        }
+                        if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
                             this.gl = this.eglContext.getGL();
                             float tX = (1.0f / InstantCameraView.this.scaleX) / 2.0f;
                             float tY = (1.0f / InstantCameraView.this.scaleY) / 2.0f;
@@ -974,9 +975,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             GLES20.glTexParameteri(36197, 10242, 33071);
                             GLES20.glTexParameteri(36197, 10243, 33071);
                             Matrix.setIdentityM(InstantCameraView.this.mMVPMatrix, 0);
-                            if (this.rotationAngle != 0) {
-                                Matrix.rotateM(InstantCameraView.this.mMVPMatrix, 0, (float) this.rotationAngle, 0.0f, 0.0f, 1.0f);
-                            }
                             this.cameraSurface = new SurfaceTexture(InstantCameraView.this.cameraTexture[0]);
                             this.cameraSurface.setOnFrameAvailableListener(new OnFrameAvailableListener() {
                                 public void onFrameAvailable(SurfaceTexture surfaceTexture) {
@@ -985,11 +983,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             });
                             InstantCameraView.this.createCamera(this.cameraSurface);
                             return true;
-                        } else {
-                            FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                            finish();
-                            return false;
                         }
+                        FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        finish();
+                        return false;
                     } else {
                         finish();
                         return false;
@@ -1082,7 +1079,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void handleMessage(Message inputMessage) {
-            boolean z = true;
+            boolean z = false;
             switch (inputMessage.what) {
                 case 0:
                     onDraw((Integer) inputMessage.obj);
@@ -1091,8 +1088,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     finish();
                     if (this.recording) {
                         VideoRecorder videoRecorder = this.videoEncoder;
-                        if (inputMessage.arg1 == 0) {
-                            z = false;
+                        if (inputMessage.arg1 != 0) {
+                            z = true;
                         }
                         videoRecorder.stopRecording(z);
                     }
@@ -1133,7 +1130,17 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                     return;
                 case 3:
-                    this.currentSession = (CameraSession) inputMessage.obj;
+                    CameraSession newSession = inputMessage.obj;
+                    if (this.currentSession == newSession) {
+                        this.rotationAngle = this.currentSession.getWorldAngle();
+                        Matrix.setIdentityM(InstantCameraView.this.mMVPMatrix, 0);
+                        if (this.rotationAngle != 0) {
+                            Matrix.rotateM(InstantCameraView.this.mMVPMatrix, 0, (float) this.rotationAngle, 0.0f, 0.0f, 1.0f);
+                            return;
+                        }
+                        return;
+                    }
+                    this.currentSession = newSession;
                     return;
                 default:
                     return;
@@ -1165,6 +1172,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         super(context);
         setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == 0 && InstantCameraView.this.baseFragment != null) {
+                    InstantCameraView.this.baseFragment.checkRecordLocked();
+                }
                 return true;
             }
         });
@@ -1574,6 +1584,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             if (InstantCameraView.this.cameraSession != null) {
                                 InstantCameraView.this.cameraSession.setInitied();
                             }
+                        }
+                    }, new Runnable() {
+                        public void run() {
+                            InstantCameraView.this.cameraThread.setCurrentSession(InstantCameraView.this.cameraSession);
                         }
                     });
                 }
