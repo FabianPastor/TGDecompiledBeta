@@ -3585,7 +3585,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 PageBlock block = (PageBlock) this.currentPage.cached_page.blocks.get(a);
                 if (!(block instanceof TL_pageBlockUnsupported)) {
                     if (block instanceof TL_pageBlockAnchor) {
-                        this.anchors.put(block.name, Integer.valueOf(this.blocks.size()));
+                        this.anchors.put(block.name.toLowerCase(), Integer.valueOf(this.blocks.size()));
                     } else {
                         setRichTextParents(null, block.text);
                         setRichTextParents(null, block.caption);
@@ -3621,7 +3621,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                                     PageBlock innerBlock4 = (PageBlock) block.blocks.get(b);
                                     if (!(innerBlock4 instanceof TL_pageBlockUnsupported)) {
                                         if (innerBlock4 instanceof TL_pageBlockAnchor) {
-                                            this.anchors.put(innerBlock4.name, Integer.valueOf(this.blocks.size()));
+                                            this.anchors.put(innerBlock4.name.toLowerCase(), Integer.valueOf(this.blocks.size()));
                                         } else {
                                             innerBlock4.level = 1;
                                             if (b == block.blocks.size() - 1) {
@@ -3669,7 +3669,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         this.pagesStack.add(webPage);
         updateInterfaceForCurrentPage(false);
         if (anchor != null) {
-            Integer row = (Integer) this.anchors.get(anchor);
+            Integer row = (Integer) this.anchors.get(anchor.toLowerCase());
             if (row != null) {
                 this.layoutManager.scrollToPositionWithOffset(row.intValue(), 0);
             }

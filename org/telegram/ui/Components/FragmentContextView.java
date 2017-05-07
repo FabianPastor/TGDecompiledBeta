@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
@@ -31,6 +32,7 @@ import org.telegram.messenger.voip.VoIPService;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.AudioPlayerActivity;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.VoIPActivity;
 
 public class FragmentContextView extends FrameLayout implements NotificationCenterDelegate {
@@ -105,8 +107,34 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             public void onClick(View v) {
                 if (FragmentContextView.this.currentStyle == 0) {
                     MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
-                    if (messageObject != null && messageObject.isMusic() && FragmentContextView.this.fragment != null) {
-                        FragmentContextView.this.fragment.presentFragment(new AudioPlayerActivity());
+                    if (FragmentContextView.this.fragment != null && messageObject != null) {
+                        if (messageObject.isMusic()) {
+                            FragmentContextView.this.fragment.presentFragment(new AudioPlayerActivity());
+                            return;
+                        }
+                        long dialog_id = 0;
+                        if (FragmentContextView.this.fragment instanceof ChatActivity) {
+                            dialog_id = ((ChatActivity) FragmentContextView.this.fragment).getDialogId();
+                        }
+                        if (messageObject.getDialogId() == dialog_id) {
+                            ((ChatActivity) FragmentContextView.this.fragment).scrollToMessageId(messageObject.getId(), 0, false, 0, true);
+                            return;
+                        }
+                        dialog_id = messageObject.getDialogId();
+                        Bundle args = new Bundle();
+                        int lower_part = (int) dialog_id;
+                        int high_id = (int) (dialog_id >> 32);
+                        if (lower_part == 0) {
+                            args.putInt("enc_id", high_id);
+                        } else if (high_id == 1) {
+                            args.putInt("chat_id", lower_part);
+                        } else if (lower_part > 0) {
+                            args.putInt("user_id", lower_part);
+                        } else if (lower_part < 0) {
+                            args.putInt("chat_id", -lower_part);
+                        }
+                        args.putInt("message_id", messageObject.getId());
+                        FragmentContextView.this.fragment.presentFragment(new ChatActivity(args), FragmentContextView.this.fragment instanceof ChatActivity);
                     }
                 } else if (FragmentContextView.this.currentStyle == 1) {
                     Intent intent = new Intent(FragmentContextView.this.getContext(), VoIPActivity.class);

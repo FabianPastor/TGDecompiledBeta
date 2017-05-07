@@ -537,7 +537,8 @@ public class ActionBarMenuItem extends FrameLayout {
                 offsetY -= diff;
             }
         } else if (this.parentMenu == null || this.subMenuOpenSide != 0) {
-            offsetY = -((int) (((float) getMeasuredHeight()) * getScaleY()));
+            float scaleY = getScaleY();
+            offsetY = -((int) ((((float) getMeasuredHeight()) * scaleY) - (getTranslationY() / scaleY)));
         } else {
             offsetY = (-this.parentMenu.parentActionBar.getMeasuredHeight()) + this.parentMenu.getTop();
         }

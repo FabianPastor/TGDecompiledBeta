@@ -12,6 +12,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.os.Bundle;
@@ -293,6 +294,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private SeekBarWaveformView recordedAudioSeekBar;
     private TextView recordedAudioTimeTextView;
     private boolean recordingAudioVideo;
+    private RectF rect = new RectF();
     private Paint redDotPaint = new Paint(1);
     private MessageObject replyingMessageObject;
     private AnimatorSet runningAnimation;
@@ -483,15 +485,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             drawable.draw(canvas);
             float moveProgress = 1.0f - (yAdd / ((float) AndroidUtilities.dp(57.0f)));
             float moveProgress2 = Math.max(0.0f, 1.0f - ((yAdd / ((float) AndroidUtilities.dp(57.0f))) * 2.0f));
+            int intAlpha = (int) (255.0f * alpha);
+            if (isSendButtonVisible()) {
+                intAlpha = (int) (((float) intAlpha) * (yAdd / ((float) AndroidUtilities.dp(57.0f))));
+            }
             int lockSize = AndroidUtilities.dp(31.0f) + ((int) (((float) AndroidUtilities.dp(29.0f)) * moveProgress));
             int lockY = (AndroidUtilities.dp(57.0f) + ((int) (((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) * (1.0f - sc)))) - ((int) yAdd);
             int lockTopY = (AndroidUtilities.dp(5.0f) + lockY) + ((int) (((float) AndroidUtilities.dp(4.0f)) * moveProgress));
             int lockMiddleY = (AndroidUtilities.dp(11.0f) + lockY) + ((int) (((float) AndroidUtilities.dp(10.0f)) * moveProgress));
             int lockArrowY = (AndroidUtilities.dp(25.0f) + lockY) + ((int) (((float) AndroidUtilities.dp(16.0f)) * moveProgress));
-            int intAlpha = (int) (255.0f * alpha);
-            if (isSendButtonVisible()) {
-                intAlpha = (int) (((float) intAlpha) * (yAdd / ((float) AndroidUtilities.dp(57.0f))));
-            }
             ChatActivityEnterView.this.lockBackgroundDrawable.setAlpha(intAlpha);
             ChatActivityEnterView.this.lockShadowDrawable.setAlpha(intAlpha);
             ChatActivityEnterView.this.lockTopDrawable.setAlpha(intAlpha);

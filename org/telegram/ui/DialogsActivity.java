@@ -38,7 +38,6 @@ import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -882,28 +881,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             View fragmentContextView = new FragmentContextView(context, this);
             this.fragmentContextView = fragmentContextView;
             frameLayout.addView(fragmentContextView, LayoutHelper.createFrame(-1, 39.0f, 51, 0.0f, -36.0f, 0.0f, 0.0f));
-            this.fragmentContextView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    MessageObject playingMessageObject = MediaController.getInstance().getPlayingMessageObject();
-                    if (playingMessageObject != null) {
-                        long dialog_id = playingMessageObject.getDialogId();
-                        Bundle args = new Bundle();
-                        int lower_part = (int) dialog_id;
-                        int high_id = (int) (dialog_id >> 32);
-                        if (lower_part == 0) {
-                            args.putInt("enc_id", high_id);
-                        } else if (high_id == 1) {
-                            args.putInt("chat_id", lower_part);
-                        } else if (lower_part > 0) {
-                            args.putInt("user_id", lower_part);
-                        } else if (lower_part < 0) {
-                            args.putInt("chat_id", -lower_part);
-                        }
-                        args.putInt("message_id", playingMessageObject.getId());
-                        DialogsActivity.this.presentFragment(new ChatActivity(args), false);
-                    }
-                }
-            });
         }
         return this.fragmentView;
     }

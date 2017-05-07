@@ -514,10 +514,10 @@ class zzatj extends zzauh {
 
     @WorkerThread
     public String zzLD() {
-        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
+        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from queue order by has_realtime desc, rowid asc limit 1;", null);
             try {
@@ -2035,12 +2035,12 @@ class zzatj extends zzauh {
 
     @WorkerThread
     public byte[] zzfw(String str) {
-        Cursor query;
         Object e;
         Throwable th;
         zzac.zzdr(str);
         zzmR();
         zzob();
+        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"remote_config"}, "app_id=?", new String[]{str}, null, null, null);
             try {
