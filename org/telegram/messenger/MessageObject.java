@@ -473,7 +473,9 @@ public class MessageObject {
         this.monthKey = String.format("%d_%02d", new Object[]{Integer.valueOf(dateYear), Integer.valueOf(dateMonth)});
         if (this.messageOwner.message != null && this.messageOwner.id < 0 && this.messageOwner.message.length() > 6 && (isVideo() || isNewGif() || isRoundVideo())) {
             this.videoEditedInfo = new VideoEditedInfo();
-            if (!this.videoEditedInfo.parseString(this.messageOwner.message)) {
+            if (this.videoEditedInfo.parseString(this.messageOwner.message)) {
+                this.videoEditedInfo.roundVideo = isRoundVideo();
+            } else {
                 this.videoEditedInfo = null;
             }
         }

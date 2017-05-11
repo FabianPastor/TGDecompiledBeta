@@ -4690,6 +4690,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             settingsContainer.addView(new SizeChooseView(this.parentActivity), LayoutHelper.createLinear(-1, 38, 0.0f, 0.0f, 0.0f, 1.0f));
             this.settingsButton = new ActionBarMenuItem(this.parentActivity, null, Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, -1);
             this.settingsButton.setPopupAnimationEnabled(false);
+            this.settingsButton.setLayoutInScreen(true);
             textView = new TextView(this.parentActivity);
             textView.setTextSize(1, 18.0f);
             textView.setText("Aa");
@@ -5010,6 +5011,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         if (this.parentActivity == null || ((this.isVisible && !this.collapsed) || messageObject == null)) {
             return false;
         }
+        WindowManager wm;
         final AnimatorSet animatorSet;
         Animator[] animatorArr;
         float[] fArr;
@@ -5062,13 +5064,13 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         this.captionTextViewOld.setVisibility(8);
         this.shareContainer.setAlpha(0.0f);
         this.backButton.setAlpha(0.0f);
+        this.settingsButton.setAlpha(0.0f);
         this.layoutManager.scrollToPositionWithOffset(0, 0);
         checkScroll(-AndroidUtilities.dp(56.0f));
         WebPage webPage = messageObject.messageOwner.media.webpage;
         String webPageUrl = webPage.url.toLowerCase();
         String anchor = null;
         for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
-            WindowManager wm;
             LayoutParams layoutParams;
             MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
             if (entity instanceof TL_messageEntityUrl) {
@@ -5209,9 +5211,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
 
     private void hideActionBar() {
         AnimatorSet animatorSet = new AnimatorSet();
-        r1 = new Animator[2];
+        r1 = new Animator[3];
         r1[0] = ObjectAnimator.ofFloat(this.backButton, "alpha", new float[]{0.0f});
         r1[1] = ObjectAnimator.ofFloat(this.shareContainer, "alpha", new float[]{0.0f});
+        r1[2] = ObjectAnimator.ofFloat(this.settingsButton, "alpha", new float[]{0.0f});
         animatorSet.playTogether(r1);
         animatorSet.setDuration(250);
         animatorSet.setInterpolator(new DecelerateInterpolator());
@@ -5220,9 +5223,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
 
     private void showActionBar(int delay) {
         AnimatorSet animatorSet = new AnimatorSet();
-        r1 = new Animator[2];
+        r1 = new Animator[3];
         r1[0] = ObjectAnimator.ofFloat(this.backButton, "alpha", new float[]{1.0f});
         r1[1] = ObjectAnimator.ofFloat(this.shareContainer, "alpha", new float[]{1.0f});
+        r1[2] = ObjectAnimator.ofFloat(this.settingsButton, "alpha", new float[]{1.0f});
         animatorSet.playTogether(r1);
         animatorSet.setDuration(150);
         animatorSet.setStartDelay((long) delay);

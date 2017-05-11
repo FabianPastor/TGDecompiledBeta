@@ -1555,6 +1555,8 @@
     <string name="ChannelMessageRound">%1$s posted a video message</string>
     <string name="ColorDark">Dark</string>
     <string name="ColorSepia">Sepia</string>
+    <string name="DiscardVideoMessageDescription">Are you sure you want to stop recording and discard your video message?</string>
+    <string name="DiscardVideoMessageTitle">Discard Video Message</string>
     <string name="DiscardVoiceMessageAction">Discard</string>
     <string name="DiscardVoiceMessageDescription">Are you sure you want to stop recording and discard your voice message?</string>
     <string name="DiscardVoiceMessageTitle">Discard Voice Message</string>

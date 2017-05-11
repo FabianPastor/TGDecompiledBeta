@@ -2175,6 +2175,26 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         }
     }
 
+    private void checkIsNextVoiceFileDownloaded() {
+        if (this.voiceMessagesPlaylist != null && this.voiceMessagesPlaylist.size() >= 2) {
+            MessageObject nextAudio = (MessageObject) this.voiceMessagesPlaylist.get(true);
+            File file = null;
+            if (nextAudio.messageOwner.attachPath != null && nextAudio.messageOwner.attachPath.length() > 0) {
+                file = new File(nextAudio.messageOwner.attachPath);
+                if (!file.exists()) {
+                    file = null;
+                }
+            }
+            File cacheFile = file != null ? file : FileLoader.getPathToMessage(nextAudio.messageOwner);
+            if (cacheFile == null || !cacheFile.exists()) {
+                boolean z = false;
+            }
+            if (cacheFile != null && cacheFile != file && !cacheFile.exists()) {
+                FileLoader.getInstance().loadFile(nextAudio.getDocument(), false, false);
+            }
+        }
+    }
+
     private void checkIsNextMusicFileDownloaded() {
         if ((getCurrentDownloadMask() & 16) != 0) {
             ArrayList<MessageObject> currentPlayList = this.shuffleMusic ? this.shuffledPlaylist : this.playlist;
@@ -2326,10 +2346,12 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             } else {
                 cacheFile = FileLoader.getPathToMessage(messageObject.messageOwner);
             }
-            if (cacheFile == null || cacheFile == file || cacheFile.exists() || !messageObject.isMusic()) {
+            if (cacheFile == null || cacheFile == file || cacheFile.exists()) {
                 this.downloadingCurrentMessage = false;
                 if (messageObject.isMusic()) {
                     checkIsNextMusicFileDownloaded();
+                } else {
+                    checkIsNextVoiceFileDownloaded();
                 }
                 if (this.currentAspectRatioFrameLayout != null) {
                     this.currentAspectRatioFrameLayout.setDrawingReady(false);
@@ -4184,10 +4206,10 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             mP4Builder = new MP4Builder().createMovie(movie);
             MediaExtractor extractor2 = new MediaExtractor();
             try {
-                extractor2.setDataSource(file.toString());
+                extractor2.setDataSource(videoPath);
                 checkConversionCanceled();
                 long videoTime;
-                if (resultWidth == originalWidth && resultHeight == originalHeight && rotateRender == 0) {
+                if (resultWidth == originalWidth && resultHeight == originalHeight && rotateRender == 0 && !messageObject.videoEditedInfo.roundVideo) {
                     videoTime = readAndWriteTrack(messageObject, extractor2, mP4Builder, info, startTime, endTime, file, false);
                     if (videoTime != -1) {
                         videoStartTime = videoTime;

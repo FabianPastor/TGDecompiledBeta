@@ -2521,52 +2521,72 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 FileLoader.getInstance().uploadFile(location, true, true, 16777216);
             }
         } else if (message.type == 1) {
-            if (message.videoEditedInfo != null) {
-                location = message.obj.messageOwner.attachPath;
-                if (location == null) {
-                    location = FileLoader.getInstance().getDirectory(4) + "/" + message.documentLocation.id + ".mp4";
-                }
-                putToDelayedMessages(location, message);
-                MediaController.getInstance().scheduleVideoConvert(message.obj);
-            } else if (message.sendRequest != null) {
-                if (message.sendRequest instanceof TL_messages_sendMedia) {
-                    media = ((TL_messages_sendMedia) message.sendRequest).media;
-                } else {
-                    media = ((TL_messages_sendBroadcast) message.sendRequest).media;
-                }
-                if (media.file == null) {
-                    location = message.obj.messageOwner.attachPath;
-                    if (location == null) {
-                        location = FileLoader.getInstance().getDirectory(4) + "/" + message.documentLocation.id + ".mp4";
+            if (message.videoEditedInfo == null || !message.videoEditedInfo.needConvert()) {
+                if (message.videoEditedInfo != null) {
+                    if (message.videoEditedInfo.file != null) {
+                        if (message.sendRequest instanceof TL_messages_sendMedia) {
+                            media = ((TL_messages_sendMedia) message.sendRequest).media;
+                        } else {
+                            media = ((TL_messages_sendBroadcast) message.sendRequest).media;
+                        }
+                        media.file = message.videoEditedInfo.file;
+                        message.videoEditedInfo.file = null;
+                    } else if (message.videoEditedInfo.encryptedFile != null) {
+                        message.sendEncryptedRequest.media.size = (int) message.videoEditedInfo.estimatedSize;
+                        message.sendEncryptedRequest.media.key = message.videoEditedInfo.key;
+                        message.sendEncryptedRequest.media.iv = message.videoEditedInfo.iv;
+                        SecretChatHelper.getInstance().performSendEncryptedRequest(message.sendEncryptedRequest, message.obj.messageOwner, message.encryptedChat, message.videoEditedInfo.encryptedFile, message.originalPath, message.obj);
+                        message.videoEditedInfo.encryptedFile = null;
+                        return;
                     }
-                    putToDelayedMessages(location, message);
-                    if (message.obj.videoEditedInfo != null) {
+                }
+                if (message.sendRequest != null) {
+                    if (message.sendRequest instanceof TL_messages_sendMedia) {
+                        media = ((TL_messages_sendMedia) message.sendRequest).media;
+                    } else {
+                        media = ((TL_messages_sendBroadcast) message.sendRequest).media;
+                    }
+                    if (media.file == null) {
+                        location = message.obj.messageOwner.attachPath;
+                        if (location == null) {
+                            location = FileLoader.getInstance().getDirectory(4) + "/" + message.documentLocation.id + ".mp4";
+                        }
+                        putToDelayedMessages(location, message);
+                        if (message.obj.videoEditedInfo == null || !message.obj.videoEditedInfo.needConvert()) {
+                            FileLoader.getInstance().uploadFile(location, false, false, ConnectionsManager.FileTypeVideo);
+                            return;
+                        }
                         FileLoader.getInstance().uploadFile(location, false, false, message.documentLocation.size, ConnectionsManager.FileTypeVideo);
                         return;
                     }
-                    FileLoader.getInstance().uploadFile(location, false, false, ConnectionsManager.FileTypeVideo);
+                    location = FileLoader.getInstance().getDirectory(4) + "/" + message.location.volume_id + "_" + message.location.local_id + ".jpg";
+                    putToDelayedMessages(location, message);
+                    FileLoader.getInstance().uploadFile(location, false, true, 16777216);
                     return;
                 }
-                location = FileLoader.getInstance().getDirectory(4) + "/" + message.location.volume_id + "_" + message.location.local_id + ".jpg";
-                putToDelayedMessages(location, message);
-                FileLoader.getInstance().uploadFile(location, false, true, 16777216);
-            } else {
                 location = message.obj.messageOwner.attachPath;
                 if (location == null) {
                     location = FileLoader.getInstance().getDirectory(4) + "/" + message.documentLocation.id + ".mp4";
                 }
                 if (message.sendEncryptedRequest == null || message.documentLocation.dc_id == 0 || new File(location).exists()) {
                     putToDelayedMessages(location, message);
-                    if (message.obj.videoEditedInfo != null) {
-                        FileLoader.getInstance().uploadFile(location, true, false, message.documentLocation.size, ConnectionsManager.FileTypeVideo);
+                    if (message.obj.videoEditedInfo == null || !message.obj.videoEditedInfo.needConvert()) {
+                        FileLoader.getInstance().uploadFile(location, true, false, ConnectionsManager.FileTypeVideo);
                         return;
                     }
-                    FileLoader.getInstance().uploadFile(location, true, false, ConnectionsManager.FileTypeVideo);
+                    FileLoader.getInstance().uploadFile(location, true, false, message.documentLocation.size, ConnectionsManager.FileTypeVideo);
                     return;
                 }
                 putToDelayedMessages(FileLoader.getAttachFileName(message.documentLocation), message);
                 FileLoader.getInstance().loadFile(message.documentLocation, true, false);
+                return;
             }
+            location = message.obj.messageOwner.attachPath;
+            if (location == null) {
+                location = FileLoader.getInstance().getDirectory(4) + "/" + message.documentLocation.id + ".mp4";
+            }
+            putToDelayedMessages(location, message);
+            MediaController.getInstance().scheduleVideoConvert(message.obj);
         } else if (message.type == 2) {
             if (message.httpLocation != null) {
                 putToDelayedMessages(message.httpLocation, message);
@@ -4225,27 +4245,28 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 public void run() {
                     boolean isEncrypted = ((int) j) == 0;
                     boolean isRound = videoEditedInfo2 != null && videoEditedInfo2.roundVideo;
-                    final VideoEditedInfo editedInfo = !isRound ? videoEditedInfo2 : null;
-                    if (editedInfo != null || str.endsWith("mp4") || isRound) {
+                    if (videoEditedInfo2 != null || str.endsWith("mp4") || isRound) {
                         String path = str;
                         String originalPath = str;
                         File file = new File(originalPath);
                         originalPath = originalPath + file.length() + "_" + file.lastModified();
-                        if (editedInfo != null) {
-                            originalPath = originalPath + j2 + "_" + editedInfo.startTime + "_" + editedInfo.endTime;
-                            if (editedInfo.resultWidth == editedInfo.originalWidth) {
-                                originalPath = originalPath + "_" + editedInfo.resultWidth;
+                        if (!(videoEditedInfo2 == null || isRound)) {
+                            originalPath = originalPath + j2 + "_" + videoEditedInfo2.startTime + "_" + videoEditedInfo2.endTime;
+                            if (videoEditedInfo2.resultWidth == videoEditedInfo2.originalWidth) {
+                                originalPath = originalPath + "_" + videoEditedInfo2.resultWidth;
                             }
                         }
                         TL_document document = null;
                         PhotoSize size;
                         EncryptedChat encryptedChat;
                         TL_documentAttributeVideo attributeVideo;
-                        String fileName;
-                        final TL_document videoFinal;
+                        TL_document videoFinal;
                         String originalPathFinal;
-                        final String finalPath;
-                        final HashMap<String, String> params;
+                        String finalPath;
+                        HashMap<String, String> params;
+                        final TL_document tL_document;
+                        final String str;
+                        final HashMap<String, String> hashMap;
                         if (isEncrypted) {
                             if (null == null) {
                                 size = ImageLoader.scaleAndSaveImage(ThumbnailUtils.createVideoThumbnail(str, 1), 90.0f, 90.0f, 55, isEncrypted);
@@ -4274,33 +4295,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 }
                                 attributeVideo.round_message = isRound;
                                 document.attributes.add(attributeVideo);
-                                if (editedInfo == null) {
-                                    if (file.exists()) {
-                                        document.size = (int) file.length();
-                                    }
-                                    SendMessagesHelper.fillVideoAttribute(str, attributeVideo, null);
-                                } else {
-                                    if (editedInfo.muted) {
-                                        document.attributes.add(new TL_documentAttributeAnimated());
-                                        SendMessagesHelper.fillVideoAttribute(str, attributeVideo, editedInfo);
-                                        editedInfo.originalWidth = attributeVideo.w;
-                                        editedInfo.originalHeight = attributeVideo.h;
-                                        attributeVideo.w = editedInfo.resultWidth;
-                                        attributeVideo.h = editedInfo.resultHeight;
-                                    } else {
-                                        attributeVideo.duration = (int) (j2 / 1000);
-                                        if (editedInfo.rotationValue != 90) {
-                                        }
-                                        attributeVideo.w = i;
-                                        attributeVideo.h = i2;
-                                    }
-                                    document.size = (int) j3;
-                                    fileName = "-2147483648_" + UserConfig.lastLocalId + ".mp4";
-                                    UserConfig.lastLocalId--;
-                                    file = new File(FileLoader.getInstance().getDirectory(4), fileName);
-                                    UserConfig.saveConfig(false);
-                                    path = file.getAbsolutePath();
+                                if (videoEditedInfo2 == null) {
                                 }
+                                if (file.exists()) {
+                                    document.size = (int) file.length();
+                                }
+                                SendMessagesHelper.fillVideoAttribute(str, attributeVideo, null);
                             }
                             videoFinal = document;
                             originalPathFinal = originalPath;
@@ -4310,9 +4310,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             if (originalPath != null) {
                                 params.put("originalPath", originalPath);
                             }
+                            tL_document = videoFinal;
+                            str = finalPath;
+                            hashMap = params;
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
-                                    SendMessagesHelper.getInstance().sendMessage(videoFinal, editedInfo, finalPath, j, messageObject, null, params);
+                                    SendMessagesHelper.getInstance().sendMessage(tL_document, videoEditedInfo2, str, j, messageObject, null, hashMap);
                                 }
                             });
                             return;
@@ -4344,17 +4347,17 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             attributeVideo = new TL_documentAttributeVideo();
                             attributeVideo.round_message = isRound;
                             document.attributes.add(attributeVideo);
-                            if (editedInfo == null) {
-                                if (editedInfo.muted) {
+                            if (videoEditedInfo2 == null && videoEditedInfo2.needConvert()) {
+                                if (videoEditedInfo2.muted) {
                                     document.attributes.add(new TL_documentAttributeAnimated());
-                                    SendMessagesHelper.fillVideoAttribute(str, attributeVideo, editedInfo);
-                                    editedInfo.originalWidth = attributeVideo.w;
-                                    editedInfo.originalHeight = attributeVideo.h;
-                                    attributeVideo.w = editedInfo.resultWidth;
-                                    attributeVideo.h = editedInfo.resultHeight;
+                                    SendMessagesHelper.fillVideoAttribute(str, attributeVideo, videoEditedInfo2);
+                                    videoEditedInfo2.originalWidth = attributeVideo.w;
+                                    videoEditedInfo2.originalHeight = attributeVideo.h;
+                                    attributeVideo.w = videoEditedInfo2.resultWidth;
+                                    attributeVideo.h = videoEditedInfo2.resultHeight;
                                 } else {
                                     attributeVideo.duration = (int) (j2 / 1000);
-                                    if (editedInfo.rotationValue != 90 || editedInfo.rotationValue == 270) {
+                                    if (videoEditedInfo2.rotationValue == 90 || videoEditedInfo2.rotationValue == 270) {
                                         attributeVideo.w = i;
                                         attributeVideo.h = i2;
                                     } else {
@@ -4363,11 +4366,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     }
                                 }
                                 document.size = (int) j3;
-                                fileName = "-2147483648_" + UserConfig.lastLocalId + ".mp4";
+                                String fileName = "-2147483648_" + UserConfig.lastLocalId + ".mp4";
                                 UserConfig.lastLocalId--;
-                                file = new File(FileLoader.getInstance().getDirectory(4), fileName);
+                                File cacheFile = new File(FileLoader.getInstance().getDirectory(4), fileName);
                                 UserConfig.saveConfig(false);
-                                path = file.getAbsolutePath();
+                                path = cacheFile.getAbsolutePath();
                             } else {
                                 if (file.exists()) {
                                     document.size = (int) file.length();
@@ -4383,6 +4386,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         if (originalPath != null) {
                             params.put("originalPath", originalPath);
                         }
+                        tL_document = videoFinal;
+                        str = finalPath;
+                        hashMap = params;
                         AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
                         return;
                     }

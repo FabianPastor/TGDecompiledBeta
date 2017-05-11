@@ -1,12 +1,18 @@
 package org.telegram.messenger;
 
 import java.util.Locale;
+import org.telegram.tgnet.TLRPC.InputEncryptedFile;
+import org.telegram.tgnet.TLRPC.InputFile;
 
 public class VideoEditedInfo {
     public int bitrate;
+    public InputEncryptedFile encryptedFile;
     public long endTime;
     public long estimatedDuration;
     public long estimatedSize;
+    public InputFile file;
+    public byte[] iv;
+    public byte[] key;
     public boolean muted;
     public int originalHeight;
     public String originalPath;
@@ -49,5 +55,9 @@ public class VideoEditedInfo {
             FileLog.e(e);
             return false;
         }
+    }
+
+    public boolean needConvert() {
+        return !this.roundVideo || (this.roundVideo && (this.startTime > 0 || !(this.endTime == -1 || this.endTime == this.estimatedDuration)));
     }
 }

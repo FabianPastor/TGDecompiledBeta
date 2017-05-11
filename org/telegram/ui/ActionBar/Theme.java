@@ -126,7 +126,6 @@ public class Theme {
     public static Drawable chat_msgInClockDrawable = null;
     public static Drawable chat_msgInDrawable = null;
     public static Drawable chat_msgInInstantDrawable = null;
-    public static Drawable chat_msgInInstantSelectedDrawable = null;
     public static Drawable chat_msgInMediaDrawable = null;
     public static Drawable chat_msgInMediaSelectedDrawable = null;
     public static Drawable chat_msgInMediaShadowDrawable = null;
@@ -153,7 +152,6 @@ public class Theme {
     public static Drawable chat_msgOutHalfCheckDrawable = null;
     public static Drawable chat_msgOutHalfCheckSelectedDrawable = null;
     public static Drawable chat_msgOutInstantDrawable = null;
-    public static Drawable chat_msgOutInstantSelectedDrawable = null;
     public static Drawable chat_msgOutLocationDrawable = null;
     public static Drawable chat_msgOutMediaDrawable = null;
     public static Drawable chat_msgOutMediaSelectedDrawable = null;
@@ -1056,8 +1054,8 @@ public class Theme {
         defaultColors.put(key_chat_inViaBotNameText, Integer.valueOf(-12940081));
         defaultColors.put(key_chat_outViaBotNameText, Integer.valueOf(-11162801));
         defaultColors.put(key_chat_stickerViaBotNameText, Integer.valueOf(-1));
-        defaultColors.put(key_chat_inReplyLine, Integer.valueOf(-9390872));
-        defaultColors.put(key_chat_outReplyLine, Integer.valueOf(-7812741));
+        defaultColors.put(key_chat_inReplyLine, Integer.valueOf(-10903592));
+        defaultColors.put(key_chat_outReplyLine, Integer.valueOf(-9520791));
         defaultColors.put(key_chat_stickerReplyLine, Integer.valueOf(-1));
         defaultColors.put(key_chat_inReplyNameText, Integer.valueOf(-12940081));
         defaultColors.put(key_chat_outReplyNameText, Integer.valueOf(-11162801));
@@ -2219,9 +2217,7 @@ public class Theme {
             chat_msgOutMenuSelectedDrawable = resources.getDrawable(R.drawable.msg_actions).mutate();
             chat_msgMediaMenuDrawable = resources.getDrawable(R.drawable.video_actions);
             chat_msgInInstantDrawable = resources.getDrawable(R.drawable.msg_instant).mutate();
-            chat_msgInInstantSelectedDrawable = resources.getDrawable(R.drawable.msg_instant).mutate();
             chat_msgOutInstantDrawable = resources.getDrawable(R.drawable.msg_instant).mutate();
-            chat_msgOutInstantSelectedDrawable = resources.getDrawable(R.drawable.msg_instant).mutate();
             chat_msgErrorDrawable = resources.getDrawable(R.drawable.msg_warning);
             chat_muteIconDrawable = resources.getDrawable(R.drawable.list_mute).mutate();
             chat_lockIconDrawable = resources.getDrawable(R.drawable.ic_lock_header);
@@ -2436,9 +2432,7 @@ public class Theme {
             setDrawableColorByKey(chat_msgOutMenuSelectedDrawable, key_chat_outMenuSelected);
             setDrawableColorByKey(chat_msgMediaMenuDrawable, key_chat_mediaMenu);
             setDrawableColorByKey(chat_msgOutInstantDrawable, key_chat_outInstant);
-            setDrawableColorByKey(chat_msgOutInstantSelectedDrawable, key_chat_outInstantSelected);
             setDrawableColorByKey(chat_msgInInstantDrawable, key_chat_inInstant);
-            setDrawableColorByKey(chat_msgInInstantSelectedDrawable, key_chat_inInstantSelected);
             setDrawableColorByKey(chat_msgErrorDrawable, key_chat_sentErrorIcon);
             setDrawableColorByKey(chat_muteIconDrawable, key_chat_muteIcon);
             setDrawableColorByKey(chat_lockIconDrawable, key_chat_lockIcon);
@@ -2720,9 +2714,9 @@ public class Theme {
                     int i;
                     SharedPreferences preferences;
                     int selectedBackground;
+                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

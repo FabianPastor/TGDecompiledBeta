@@ -229,6 +229,10 @@ public class VideoPlayer implements EventListener, VideoListener {
         return this.player != null ? this.player.getCurrentPosition() : 0;
     }
 
+    public boolean isMuted() {
+        return this.player.getVolume() == 0.0f;
+    }
+
     public void setMute(boolean value) {
         if (this.player != null) {
             if (value) {
