@@ -535,6 +535,7 @@ public final class R {
         public static final int video_720 = NUM;
         public static final int video_actions = NUM;
         public static final int video_edit_play = NUM;
+        public static final int video_mute = NUM;
         public static final int video_play = NUM;
         public static final int video_time_l = NUM;
         public static final int video_time_r = NUM;

@@ -1668,6 +1668,10 @@
     <drawable name="video_edit_play">res/drawable-hdpi-v4/video_edit_play.png</drawable>
     <drawable name="video_edit_play">res/drawable-xhdpi-v4/video_edit_play.png</drawable>
     <drawable name="video_edit_play">res/drawable-xxhdpi-v4/video_edit_play.png</drawable>
+    <drawable name="video_mute">res/drawable-mdpi-v4/video_mute.png</drawable>
+    <drawable name="video_mute">res/drawable-hdpi-v4/video_mute.png</drawable>
+    <drawable name="video_mute">res/drawable-xhdpi-v4/video_mute.png</drawable>
+    <drawable name="video_mute">res/drawable-xxhdpi-v4/video_mute.png</drawable>
     <drawable name="video_play">res/drawable-mdpi-v4/video_play.png</drawable>
     <drawable name="video_play">res/drawable-hdpi-v4/video_play.png</drawable>
     <drawable name="video_play">res/drawable-xhdpi-v4/video_play.png</drawable>

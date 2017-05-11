@@ -122,6 +122,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private float[] mMVPMatrix = new float[16];
     private float[] mSTMatrix = new float[16];
     private float[] moldSTMatrix = new float[16];
+    private AnimatorSet muteAnimation;
+    private ImageView muteImageView;
     private int[] oldCameraTexture = new int[1];
     private Paint paint;
     private int[] position = new int[2];
@@ -587,12 +589,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         InstantCameraView.this.videoEditedInfo.key = InstantCameraView.this.key;
                         InstantCameraView.this.videoEditedInfo.iv = InstantCameraView.this.iv;
                         InstantCameraView.this.videoEditedInfo.estimatedSize = InstantCameraView.this.size;
-                        VideoEditedInfo access$1700 = InstantCameraView.this.videoEditedInfo;
+                        VideoEditedInfo access$1900 = InstantCameraView.this.videoEditedInfo;
                         InstantCameraView.this.videoEditedInfo.originalWidth = PsExtractor.VIDEO_STREAM_MASK;
-                        access$1700.resultWidth = PsExtractor.VIDEO_STREAM_MASK;
-                        access$1700 = InstantCameraView.this.videoEditedInfo;
+                        access$1900.resultWidth = PsExtractor.VIDEO_STREAM_MASK;
+                        access$1900 = InstantCameraView.this.videoEditedInfo;
                         InstantCameraView.this.videoEditedInfo.originalHeight = PsExtractor.VIDEO_STREAM_MASK;
-                        access$1700.resultHeight = PsExtractor.VIDEO_STREAM_MASK;
+                        access$1900.resultHeight = PsExtractor.VIDEO_STREAM_MASK;
                         InstantCameraView.this.videoEditedInfo.originalPath = VideoRecorder.this.videoFile.getAbsolutePath();
                         if (send == 1) {
                             InstantCameraView.this.baseFragment.sendMedia(new PhotoEntry(0, 0, 0, VideoRecorder.this.videoFile.getAbsolutePath(), 0, true), InstantCameraView.this.videoEditedInfo);
@@ -633,9 +635,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             InstantCameraView.this.videoPlayer.setMute(true);
                             InstantCameraView.this.startProgressTimer();
                             AnimatorSet animatorSet = new AnimatorSet();
-                            r1 = new Animator[2];
+                            r1 = new Animator[3];
                             r1[0] = ObjectAnimator.ofFloat(InstantCameraView.this.switchCameraButton, "alpha", new float[]{0.0f});
                             r1[1] = ObjectAnimator.ofInt(InstantCameraView.this.paint, "alpha", new int[]{0});
+                            r1[2] = ObjectAnimator.ofFloat(InstantCameraView.this.muteImageView, "alpha", new float[]{1.0f});
                             animatorSet.playTogether(r1);
                             animatorSet.setDuration(180);
                             animatorSet.setInterpolator(new DecelerateInterpolator());
@@ -789,13 +792,13 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void drainEncoder(boolean endOfStream) throws Exception {
+            ByteBuffer encodedData;
             if (endOfStream) {
                 this.videoEncoder.signalEndOfInputStream();
             }
             ByteBuffer[] encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
             while (true) {
                 MediaFormat newFormat;
-                ByteBuffer encodedData;
                 int encoderStatus = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
                 if (encoderStatus == -1) {
                     if (!endOfStream) {
@@ -1226,9 +1229,52 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         super(context);
         setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
+                float f = 1.0f;
                 if (event.getAction() == 0 && InstantCameraView.this.baseFragment != null) {
                     if (InstantCameraView.this.videoPlayer != null) {
-                        InstantCameraView.this.videoPlayer.setMute(!InstantCameraView.this.videoPlayer.isMuted());
+                        float f2;
+                        boolean mute = !InstantCameraView.this.videoPlayer.isMuted();
+                        InstantCameraView.this.videoPlayer.setMute(mute);
+                        if (InstantCameraView.this.muteAnimation != null) {
+                            InstantCameraView.this.muteAnimation.cancel();
+                        }
+                        InstantCameraView.this.muteAnimation = new AnimatorSet();
+                        AnimatorSet access$600 = InstantCameraView.this.muteAnimation;
+                        Animator[] animatorArr = new Animator[3];
+                        ImageView access$700 = InstantCameraView.this.muteImageView;
+                        String str = "alpha";
+                        float[] fArr = new float[1];
+                        fArr[0] = mute ? 1.0f : 0.0f;
+                        animatorArr[0] = ObjectAnimator.ofFloat(access$700, str, fArr);
+                        access$700 = InstantCameraView.this.muteImageView;
+                        str = "scaleX";
+                        fArr = new float[1];
+                        if (mute) {
+                            f2 = 1.0f;
+                        } else {
+                            f2 = 0.5f;
+                        }
+                        fArr[0] = f2;
+                        animatorArr[1] = ObjectAnimator.ofFloat(access$700, str, fArr);
+                        access$700 = InstantCameraView.this.muteImageView;
+                        str = "scaleY";
+                        fArr = new float[1];
+                        if (!mute) {
+                            f = 0.5f;
+                        }
+                        fArr[0] = f;
+                        animatorArr[2] = ObjectAnimator.ofFloat(access$700, str, fArr);
+                        access$600.playTogether(animatorArr);
+                        InstantCameraView.this.muteAnimation.addListener(new AnimatorListenerAdapter() {
+                            public void onAnimationEnd(Animator animation) {
+                                if (animation.equals(InstantCameraView.this.muteAnimation)) {
+                                    InstantCameraView.this.muteAnimation = null;
+                                }
+                            }
+                        });
+                        InstantCameraView.this.muteAnimation.setDuration(180);
+                        InstantCameraView.this.muteAnimation.setInterpolator(new DecelerateInterpolator());
+                        InstantCameraView.this.muteAnimation.start();
                     } else {
                         InstantCameraView.this.baseFragment.checkRecordLocked();
                     }
@@ -1313,6 +1359,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
             }
         });
+        this.muteImageView = new ImageView(context);
+        this.muteImageView.setScaleType(ScaleType.CENTER);
+        this.muteImageView.setImageResource(R.drawable.video_mute);
+        this.muteImageView.setAlpha(0.0f);
+        addView(this.muteImageView, LayoutHelper.createFrame(48, 48, 17));
+        ((LayoutParams) this.muteImageView.getLayoutParams()).topMargin = (AndroidUtilities.roundMessageSize / 2) - AndroidUtilities.dp(24.0f);
         setVisibility(4);
     }
 
@@ -1391,6 +1443,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         setAlpha(0.0f);
         this.switchCameraButton.setAlpha(0.0f);
         this.cameraContainer.setAlpha(0.0f);
+        this.muteImageView.setAlpha(0.0f);
+        this.muteImageView.setScaleX(1.0f);
+        this.muteImageView.setScaleY(1.0f);
         this.cameraContainer.setScaleX(0.1f);
         this.cameraContainer.setScaleY(0.1f);
         if (this.cameraContainer.getMeasuredWidth() != 0) {
@@ -1472,7 +1527,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
         this.animatorSet = new AnimatorSet();
         AnimatorSet animatorSet = this.animatorSet;
-        Animator[] animatorArr = new Animator[7];
+        Animator[] animatorArr = new Animator[8];
         String str = "alpha";
         float[] fArr = new float[1];
         if (open) {
@@ -1492,6 +1547,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
         fArr2[0] = f;
         animatorArr[1] = ObjectAnimator.ofFloat(imageView, str2, fArr2);
+        animatorArr[2] = ObjectAnimator.ofFloat(this.muteImageView, "alpha", new float[]{0.0f});
         Paint paint = this.paint;
         String str3 = "alpha";
         int[] iArr = new int[1];
@@ -1501,7 +1557,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             i = 0;
         }
         iArr[0] = i;
-        animatorArr[2] = ObjectAnimator.ofInt(paint, str3, iArr);
+        animatorArr[3] = ObjectAnimator.ofInt(paint, str3, iArr);
         FrameLayout frameLayout = this.cameraContainer;
         str3 = "alpha";
         float[] fArr3 = new float[1];
@@ -1511,7 +1567,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             f = 0.0f;
         }
         fArr3[0] = f;
-        animatorArr[3] = ObjectAnimator.ofFloat(frameLayout, str3, fArr3);
+        animatorArr[4] = ObjectAnimator.ofFloat(frameLayout, str3, fArr3);
         frameLayout = this.cameraContainer;
         str3 = "scaleX";
         fArr3 = new float[1];
@@ -1521,7 +1577,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             f = 0.1f;
         }
         fArr3[0] = f;
-        animatorArr[4] = ObjectAnimator.ofFloat(frameLayout, str3, fArr3);
+        animatorArr[5] = ObjectAnimator.ofFloat(frameLayout, str3, fArr3);
         FrameLayout frameLayout2 = this.cameraContainer;
         str2 = "scaleY";
         fArr2 = new float[1];
@@ -1529,7 +1585,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             f2 = 0.1f;
         }
         fArr2[0] = f2;
-        animatorArr[5] = ObjectAnimator.ofFloat(frameLayout2, str2, fArr2);
+        animatorArr[6] = ObjectAnimator.ofFloat(frameLayout2, str2, fArr2);
         FrameLayout frameLayout3 = this.cameraContainer;
         str = "translationY";
         fArr = new float[2];
@@ -1543,7 +1599,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             f3 = (float) (getMeasuredHeight() / 2);
         }
         fArr[1] = f3;
-        animatorArr[6] = ObjectAnimator.ofFloat(frameLayout3, str, fArr);
+        animatorArr[7] = ObjectAnimator.ofFloat(frameLayout3, str, fArr);
         animatorSet.playTogether(animatorArr);
         if (!open) {
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -1563,6 +1619,20 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public Rect getCameraRect() {
         this.cameraContainer.getLocationOnScreen(this.position);
         return new Rect((float) this.position[0], (float) this.position[1], (float) this.cameraContainer.getWidth(), (float) this.cameraContainer.getHeight());
+    }
+
+    public void changeVideoPreviewState(int state, float progress) {
+        if (this.videoPlayer != null) {
+            if (state == 0) {
+                startProgressTimer();
+                this.videoPlayer.play();
+            } else if (state == 1) {
+                stopProgressTimer();
+                this.videoPlayer.pause();
+            } else if (state == 2) {
+                this.videoPlayer.seekTo((long) (((float) this.videoPlayer.getDuration()) * progress));
+            }
+        }
     }
 
     public void send(int state) {
@@ -1612,7 +1682,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.cancelled = this.recordedTime < 800;
             this.recording = false;
             AndroidUtilities.cancelRunOnUIThread(this.timerRunnable);
-            NotificationCenter.getInstance().postNotificationName(NotificationCenter.recordStopped, new Object[0]);
+            NotificationCenter instance = NotificationCenter.getInstance();
+            int i = NotificationCenter.recordStopped;
+            Object[] objArr = new Object[1];
+            objArr[0] = Integer.valueOf(state == 3 ? 2 : 0);
+            instance.postNotificationName(i, objArr);
             if (this.cameraThread != null) {
                 int send;
                 if (this.cancelled) {
@@ -1641,7 +1715,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.cancelled = true;
             this.recording = false;
             AndroidUtilities.cancelRunOnUIThread(this.timerRunnable);
-            NotificationCenter.getInstance().postNotificationName(NotificationCenter.recordStopped, new Object[0]);
+            NotificationCenter.getInstance().postNotificationName(NotificationCenter.recordStopped, Integer.valueOf(0));
             if (this.cameraThread != null) {
                 this.cameraThread.shutdown(0);
                 this.cameraThread = null;
@@ -1657,6 +1731,18 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public void setAlpha(float alpha) {
         ((ColorDrawable) getBackground()).setAlpha((int) (192.0f * alpha));
         invalidate();
+    }
+
+    public View getSwitchButtonView() {
+        return this.switchCameraButton;
+    }
+
+    public View getMuteImageView() {
+        return this.muteImageView;
+    }
+
+    public Paint getPaint() {
+        return this.paint;
     }
 
     public void hideCamera(boolean async) {

@@ -1354,7 +1354,6 @@ public class ViewPager extends ViewGroup {
 
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int i;
-        LayoutParams lp;
         int childLeft;
         int childTop;
         int count = getChildCount();
@@ -1367,6 +1366,7 @@ public class ViewPager extends ViewGroup {
         int scrollX = getScrollX();
         int decorCount = 0;
         for (i = 0; i < count; i++) {
+            LayoutParams lp;
             View child = getChildAt(i);
             if (child.getVisibility() != 8) {
                 lp = (LayoutParams) child.getLayoutParams();

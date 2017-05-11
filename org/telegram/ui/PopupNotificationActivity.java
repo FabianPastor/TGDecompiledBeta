@@ -315,6 +315,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
 
             public void needStartRecordAudio(int state) {
             }
+
+            public void needChangeVideoPreviewState(int state, float seekProgress) {
+            }
         });
         this.messageContainer = new FrameLayoutTouch(this);
         this.popupContainer.addView(this.messageContainer, 0);

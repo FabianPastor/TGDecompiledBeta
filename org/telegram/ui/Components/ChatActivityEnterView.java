@@ -324,6 +324,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     public interface ChatActivityEnterViewDelegate {
         void didPressedAttachButton();
 
+        void needChangeVideoPreviewState(int i, float f);
+
         void needSendTyping();
 
         void needStartRecordAudio(int i);
@@ -444,8 +446,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 int x = (int) event.getX();
                 int y = (int) event.getY();
                 if (event.getAction() == 0) {
-                    this.pressed = ChatActivityEnterView.this.lockBackgroundDrawable.getBounds().contains(x, y);
-                    return true;
+                    boolean contains = ChatActivityEnterView.this.lockBackgroundDrawable.getBounds().contains(x, y);
+                    this.pressed = contains;
+                    if (contains) {
+                        return true;
+                    }
                 } else if (this.pressed) {
                     if (event.getAction() != 1 || !ChatActivityEnterView.this.lockBackgroundDrawable.getBounds().contains(x, y)) {
                         return true;
@@ -990,10 +995,20 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.videoTimelineView.setDelegate(new VideoTimelineViewDelegate() {
             public void onLeftProgressChanged(float progress) {
                 ChatActivityEnterView.this.videoToSendMessageObject.startTime = (long) (((float) ChatActivityEnterView.this.videoToSendMessageObject.estimatedDuration) * progress);
+                ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(2, progress);
             }
 
             public void onRifhtProgressChanged(float progress) {
                 ChatActivityEnterView.this.videoToSendMessageObject.endTime = (long) (((float) ChatActivityEnterView.this.videoToSendMessageObject.estimatedDuration) * progress);
+                ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(2, progress);
+            }
+
+            public void didStartDragging() {
+                ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(1, 0.0f);
+            }
+
+            public void didStopDragging() {
+                ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(0, 0.0f);
             }
         });
         this.recordedAudioPanel.addView(this.videoTimelineView, LayoutHelper.createFrame(-1, 32.0f, 19, 40.0f, 0.0f, 0.0f, 0.0f));
@@ -1109,7 +1124,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         ChatActivityEnterView.this.recordAudioVideoRunnable.run();
                     }
                 } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
-                    if (ChatActivityEnterView.this.recordCircle.isSendButtonVisible()) {
+                    if (ChatActivityEnterView.this.recordCircle.isSendButtonVisible() || ChatActivityEnterView.this.recordedAudioPanel.getVisibility() == 0) {
                         return false;
                     }
                     if (ChatActivityEnterView.this.recordAudioVideoRunnableStarted) {
@@ -3132,10 +3147,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
             if (this.videoSendButton != null && this.videoSendButton.getTag() != null && t >= 59500) {
                 this.startedDraggingX = -1.0f;
-                this.delegate.needStartRecordVideo(1);
-                this.recordingAudioVideo = false;
-                this.calledRecordRunnable = false;
-                updateRecordIntefrace();
+                this.delegate.needStartRecordVideo(3);
             }
         } else if (id == NotificationCenter.closeChats) {
             if (this.messageEditText != null && this.messageEditText.isFocused()) {
@@ -3146,6 +3158,26 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 MessagesController.getInstance().sendTyping(this.dialog_id, 2, 0);
                 this.recordingAudioVideo = false;
                 updateRecordIntefrace();
+            }
+            if (id == NotificationCenter.recordStopped) {
+                Integer reason = args[0];
+                if (reason.intValue() == 2) {
+                    this.videoTimelineView.setVisibility(0);
+                    this.recordedAudioBackground.setVisibility(8);
+                    this.recordedAudioTimeTextView.setVisibility(8);
+                    this.recordedAudioPlayButton.setVisibility(8);
+                    this.recordedAudioSeekBar.setVisibility(8);
+                    this.recordedAudioPanel.setAlpha(1.0f);
+                    this.recordedAudioPanel.setVisibility(0);
+                } else if (reason.intValue() == 1) {
+                    this.videoTimelineView.setVisibility(8);
+                    this.recordedAudioBackground.setVisibility(0);
+                    this.recordedAudioTimeTextView.setVisibility(0);
+                    this.recordedAudioPlayButton.setVisibility(0);
+                    this.recordedAudioSeekBar.setVisibility(0);
+                    this.recordedAudioPanel.setAlpha(1.0f);
+                    this.recordedAudioPanel.setVisibility(0);
+                }
             }
         } else if (id == NotificationCenter.recordStarted) {
             if (!this.recordingAudioVideo) {

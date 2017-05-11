@@ -1412,9 +1412,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     private void sendMessage(String message, MessageMedia location, TL_photo photo, VideoEditedInfo videoEditedInfo, User user, TL_document document, TL_game game, long peer, String path, MessageObject reply_to_msg, WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<MessageEntity> entities, ReplyMarkup replyMarkup, HashMap<String, String> params) {
         Throwable e;
+        MessageObject newMsgObj;
         if (peer != 0) {
             Chat chat;
-            MessageObject newMsgObj;
             int a;
             DocumentAttribute attribute;
             String originalPath = null;
@@ -4230,6 +4230,38 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private static Bitmap createVideoThumbnail(String filePath, long time) {
+        Bitmap bitmap = null;
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            retriever.setDataSource(filePath);
+            bitmap = retriever.getFrameAtTime(time, 1);
+            try {
+                retriever.release();
+            } catch (RuntimeException e) {
+            }
+        } catch (Exception e2) {
+        } catch (Throwable th) {
+            try {
+                retriever.release();
+            } catch (RuntimeException e3) {
+            }
+        }
+        if (bitmap == null) {
+            return null;
+        }
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int max = Math.max(width, height);
+        if (max > 90) {
+            float scale = 90.0f / ((float) max);
+            bitmap = Bitmap.createScaledBitmap(bitmap, Math.round(((float) width) * scale), Math.round(((float) height) * scale), true);
+        }
+        return bitmap;
+    }
+
     public static void prepareSendingVideo(String videoPath, long estimatedSize, long duration, int width, int height, VideoEditedInfo videoEditedInfo, long dialog_id, MessageObject reply_to_msg, String caption) {
         if (videoPath != null && videoPath.length() != 0) {
             final long j = dialog_id;
@@ -4249,12 +4281,16 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         String path = str;
                         String originalPath = str;
                         File file = new File(originalPath);
+                        long startTime = 0;
                         originalPath = originalPath + file.length() + "_" + file.lastModified();
-                        if (!(videoEditedInfo2 == null || isRound)) {
-                            originalPath = originalPath + j2 + "_" + videoEditedInfo2.startTime + "_" + videoEditedInfo2.endTime;
-                            if (videoEditedInfo2.resultWidth == videoEditedInfo2.originalWidth) {
-                                originalPath = originalPath + "_" + videoEditedInfo2.resultWidth;
+                        if (videoEditedInfo2 != null) {
+                            if (!isRound) {
+                                originalPath = originalPath + j2 + "_" + videoEditedInfo2.startTime + "_" + videoEditedInfo2.endTime;
+                                if (videoEditedInfo2.resultWidth == videoEditedInfo2.originalWidth) {
+                                    originalPath = originalPath + "_" + videoEditedInfo2.resultWidth;
+                                }
                             }
+                            startTime = videoEditedInfo2.startTime >= 0 ? videoEditedInfo2.startTime : 0;
                         }
                         TL_document document = null;
                         PhotoSize size;
@@ -4269,7 +4305,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         final HashMap<String, String> hashMap;
                         if (isEncrypted) {
                             if (null == null) {
-                                size = ImageLoader.scaleAndSaveImage(ThumbnailUtils.createVideoThumbnail(str, 1), 90.0f, 90.0f, 55, isEncrypted);
+                                size = ImageLoader.scaleAndSaveImage(SendMessagesHelper.createVideoThumbnail(str, startTime), 90.0f, 90.0f, 55, isEncrypted);
                                 document = new TL_document();
                                 document.thumb = size;
                                 if (document.thumb != null) {
@@ -4321,7 +4357,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             return;
                         }
                         if (null == null) {
-                            size = ImageLoader.scaleAndSaveImage(ThumbnailUtils.createVideoThumbnail(str, 1), 90.0f, 90.0f, 55, isEncrypted);
+                            size = ImageLoader.scaleAndSaveImage(SendMessagesHelper.createVideoThumbnail(str, startTime), 90.0f, 90.0f, 55, isEncrypted);
                             document = new TL_document();
                             document.thumb = size;
                             if (document.thumb != null) {

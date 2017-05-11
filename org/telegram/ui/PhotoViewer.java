@@ -1839,6 +1839,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             PhotoViewer.this.updateVideoInfo();
                         }
                     }
+
+                    public void didStartDragging() {
+                    }
+
+                    public void didStopDragging() {
+                    }
                 });
                 this.videoTimelineViewContainer.addView(this.videoTimelineView, LayoutHelper.createFrame(-1, 44.0f, 51, 0.0f, 8.0f, 0.0f, 0.0f));
                 this.progressView = new RadialProgressView(this.parentActivity);

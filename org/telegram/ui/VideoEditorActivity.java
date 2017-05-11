@@ -771,6 +771,12 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                     VideoEditorActivity.this.updateVideoInfo();
                 }
             }
+
+            public void didStartDragging() {
+            }
+
+            public void didStopDragging() {
+            }
         });
         frameLayout.addView(this.videoTimelineView, LayoutHelper.createFrame(-1, 44.0f, 83, 0.0f, 0.0f, 0.0f, 67.0f));
         this.videoSeekBarView = new VideoSeekBarView(context);

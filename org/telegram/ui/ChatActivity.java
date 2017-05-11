@@ -1124,12 +1124,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 cameraContainer.setPivotX(0.0f);
                                 cameraContainer.setPivotY(0.0f);
                                 AnimatorSet animatorSet = new AnimatorSet();
-                                r8 = new Animator[5];
+                                r8 = new Animator[8];
                                 r8[0] = ObjectAnimator.ofFloat(ChatActivity.this.instantCameraView, "alpha", new float[]{0.0f});
                                 r8[1] = ObjectAnimator.ofFloat(cameraContainer, "scaleX", new float[]{scale});
                                 r8[2] = ObjectAnimator.ofFloat(cameraContainer, "scaleY", new float[]{scale});
                                 r8[3] = ObjectAnimator.ofFloat(cameraContainer, "translationX", new float[]{((float) position[0]) - rect.x});
                                 r8[4] = ObjectAnimator.ofFloat(cameraContainer, "translationY", new float[]{((float) position[1]) - rect.y});
+                                r8[5] = ObjectAnimator.ofFloat(ChatActivity.this.instantCameraView.getSwitchButtonView(), "alpha", new float[]{0.0f});
+                                r8[6] = ObjectAnimator.ofInt(ChatActivity.this.instantCameraView.getPaint(), "alpha", new int[]{0});
+                                r8[7] = ObjectAnimator.ofFloat(ChatActivity.this.instantCameraView.getMuteImageView(), "alpha", new float[]{0.0f});
                                 animatorSet.playTogether(r8);
                                 animatorSet.setDuration(180);
                                 animatorSet.setInterpolator(new DecelerateInterpolator());
@@ -3363,6 +3366,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     ChatActivity.this.instantCameraView.send(state);
                 } else if (state == 2) {
                     ChatActivity.this.instantCameraView.cancel();
+                }
+            }
+
+            public void needChangeVideoPreviewState(int state, float seekProgress) {
+                if (ChatActivity.this.instantCameraView != null) {
+                    ChatActivity.this.instantCameraView.changeVideoPreviewState(state, seekProgress);
                 }
             }
 
