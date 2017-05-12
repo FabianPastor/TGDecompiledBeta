@@ -1667,6 +1667,7 @@ public final class R {
         public static final int PaymentCheckoutName = NUM;
         public static final int PaymentCheckoutPay = NUM;
         public static final int PaymentCheckoutPhoneNumber = NUM;
+        public static final int PaymentCheckoutProvider = NUM;
         public static final int PaymentCheckoutShippingMethod = NUM;
         public static final int PaymentConfirmationMessage = NUM;
         public static final int PaymentConfirmationNewCard = NUM;
@@ -1751,8 +1752,13 @@ public final class R {
         public static final int PopupNotification = NUM;
         public static final int PreviewFeedback = NUM;
         public static final int PriorityInfo = NUM;
+        public static final int PrivacyClearPayment = NUM;
+        public static final int PrivacyClearShipping = NUM;
         public static final int PrivacyFloodControlError = NUM;
         public static final int PrivacyLastSeen = NUM;
+        public static final int PrivacyPayments = NUM;
+        public static final int PrivacyPaymentsClear = NUM;
+        public static final int PrivacyPaymentsClearInfo = NUM;
         public static final int PrivacyPolicy = NUM;
         public static final int PrivacyPolicyUrl = NUM;
         public static final int PrivacySettings = NUM;
@@ -1858,6 +1864,7 @@ public final class R {
         public static final int SelectContact = NUM;
         public static final int SelectFile = NUM;
         public static final int Send = NUM;
+        public static final int SendAsFiles = NUM;
         public static final int SendByEnter = NUM;
         public static final int SendContactTo = NUM;
         public static final int SendContactToGroup = NUM;
@@ -1898,6 +1905,7 @@ public final class R {
         public static final int SetTimer = NUM;
         public static final int Settings = NUM;
         public static final int Shadows = NUM;
+        public static final int ShareComment = NUM;
         public static final int ShareContact = NUM;
         public static final int ShareFile = NUM;
         public static final int ShareLink = NUM;

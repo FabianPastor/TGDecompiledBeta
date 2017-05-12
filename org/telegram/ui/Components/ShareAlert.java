@@ -1,5 +1,9 @@
 package org.telegram.ui.Components;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -19,6 +23,7 @@ import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -76,12 +81,15 @@ import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.DialogsActivity;
 
 public class ShareAlert extends BottomSheet implements NotificationCenterDelegate {
+    private AnimatorSet animatorSet;
+    private EditText commentTextView;
     private boolean copyLinkOnEnd;
     private LinearLayout doneButton;
     private TextView doneButtonBadgeTextView;
     private TextView doneButtonTextView;
     private TL_exportedMessageLink exportedMessageLink;
     private FrameLayout frameLayout;
+    private FrameLayout frameLayout2;
     private RecyclerListView gridView;
     private boolean isPublicChannel;
     private GridLayoutManager layoutManager;
@@ -96,6 +104,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     private MessageObject sendingMessageObject;
     private String sendingText;
     private View shadow;
+    private View shadow2;
     private Drawable shadowDrawable;
     private int topBeforeSwitch;
 
@@ -546,6 +555,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             }
 
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                float f = 8.0f;
                 int height = MeasureSpec.getSize(heightMeasureSpec);
                 if (VERSION.SDK_INT >= 21) {
                     height -= AndroidUtilities.statusBarHeight;
@@ -554,7 +564,11 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 int padding = contentSize < height ? 0 : (height - ((height / 5) * 3)) + AndroidUtilities.dp(8.0f);
                 if (ShareAlert.this.gridView.getPaddingTop() != padding) {
                     this.ignoreLayout = true;
-                    ShareAlert.this.gridView.setPadding(0, padding, 0, AndroidUtilities.dp(8.0f));
+                    RecyclerListView access$800 = ShareAlert.this.gridView;
+                    if (ShareAlert.this.frameLayout2.getTag() != null) {
+                        f = 56.0f;
+                    }
+                    access$800.setPadding(0, padding, 0, AndroidUtilities.dp(f));
                     this.ignoreLayout = false;
                 }
                 super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(Math.min(contentSize, height), NUM));
@@ -597,10 +611,16 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                         ArrayList<MessageObject> arrayList = new ArrayList();
                         arrayList.add(ShareAlert.this.sendingMessageObject);
                         for (Entry<Long, TL_dialog> entry : ShareAlert.this.selectedDialogs.entrySet()) {
+                            if (ShareAlert.this.frameLayout2.getTag() != null && ShareAlert.this.commentTextView.length() > 0) {
+                                SendMessagesHelper.getInstance().sendMessage(ShareAlert.this.commentTextView.getText().toString(), ((Long) entry.getKey()).longValue(), null, null, true, null, null, null);
+                            }
                             SendMessagesHelper.getInstance().sendMessage(arrayList, ((Long) entry.getKey()).longValue());
                         }
                     } else if (ShareAlert.this.sendingText != null) {
                         for (Entry<Long, TL_dialog> entry2 : ShareAlert.this.selectedDialogs.entrySet()) {
+                            if (ShareAlert.this.frameLayout2.getTag() != null && ShareAlert.this.commentTextView.length() > 0) {
+                                SendMessagesHelper.getInstance().sendMessage(ShareAlert.this.commentTextView.getText().toString(), ((Long) entry2.getKey()).longValue(), null, null, true, null, null, null);
+                            }
                             SendMessagesHelper.getInstance().sendMessage(ShareAlert.this.sendingText, ((Long) entry2.getKey()).longValue(), null, null, true, null, null, null);
                         }
                     }
@@ -753,6 +773,32 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.shadow = new View(context);
         this.shadow.setBackgroundResource(R.drawable.header_shadow);
         this.containerView.addView(this.shadow, LayoutHelper.createFrame(-1, 3.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
+        this.frameLayout2 = new FrameLayout(context);
+        this.frameLayout2.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
+        this.frameLayout2.setTranslationY((float) AndroidUtilities.dp(53.0f));
+        this.containerView.addView(this.frameLayout2, LayoutHelper.createFrame(-1, 48, 83));
+        this.frameLayout2.setOnTouchListener(new OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        this.commentTextView = new EditText(context);
+        this.commentTextView.setHint(LocaleController.getString("ShareComment", R.string.ShareComment));
+        this.commentTextView.setMaxLines(1);
+        this.commentTextView.setSingleLine(true);
+        this.commentTextView.setGravity(19);
+        this.commentTextView.setTextSize(1, 16.0f);
+        this.commentTextView.setBackgroundDrawable(null);
+        this.commentTextView.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
+        this.commentTextView.setImeOptions(268435456);
+        this.commentTextView.setInputType(16385);
+        AndroidUtilities.clearCursorDrawable(this.commentTextView);
+        this.commentTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        this.frameLayout2.addView(this.commentTextView, LayoutHelper.createFrame(-1, -1.0f, 51, 8.0f, 1.0f, 8.0f, 0.0f));
+        this.shadow2 = new View(context);
+        this.shadow2.setBackgroundResource(R.drawable.header_shadow_reverse);
+        this.shadow2.setTranslationY((float) AndroidUtilities.dp(53.0f));
+        this.containerView.addView(this.shadow2, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         updateSelectedCount();
         if (!DialogsActivity.dialogsLoaded) {
             MessagesController.getInstance().loadDialogs(0, 100, true);
@@ -826,8 +872,66 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         }
     }
 
+    private void showCommentTextView(final boolean show) {
+        boolean z;
+        float f = 0.0f;
+        if (this.frameLayout2.getTag() != null) {
+            z = true;
+        } else {
+            z = false;
+        }
+        if (show != z) {
+            float f2;
+            if (this.animatorSet != null) {
+                this.animatorSet.cancel();
+            }
+            this.frameLayout2.setTag(show ? Integer.valueOf(1) : null);
+            AndroidUtilities.hideKeyboard(this.commentTextView);
+            this.animatorSet = new AnimatorSet();
+            AnimatorSet animatorSet = this.animatorSet;
+            Animator[] animatorArr = new Animator[2];
+            View view = this.shadow2;
+            String str = "translationY";
+            float[] fArr = new float[1];
+            if (show) {
+                f2 = 0.0f;
+            } else {
+                f2 = 53.0f;
+            }
+            fArr[0] = (float) AndroidUtilities.dp(f2);
+            animatorArr[0] = ObjectAnimator.ofFloat(view, str, fArr);
+            FrameLayout frameLayout = this.frameLayout2;
+            String str2 = "translationY";
+            float[] fArr2 = new float[1];
+            if (!show) {
+                f = 53.0f;
+            }
+            fArr2[0] = (float) AndroidUtilities.dp(f);
+            animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, str2, fArr2);
+            animatorSet.playTogether(animatorArr);
+            this.animatorSet.setInterpolator(new DecelerateInterpolator());
+            this.animatorSet.setDuration(180);
+            this.animatorSet.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animation) {
+                    if (animation.equals(ShareAlert.this.animatorSet)) {
+                        ShareAlert.this.gridView.setPadding(0, 0, 0, AndroidUtilities.dp(show ? 56.0f : 8.0f));
+                        ShareAlert.this.animatorSet = null;
+                    }
+                }
+
+                public void onAnimationCancel(Animator animation) {
+                    if (animation.equals(ShareAlert.this.animatorSet)) {
+                        ShareAlert.this.animatorSet = null;
+                    }
+                }
+            });
+            this.animatorSet.start();
+        }
+    }
+
     public void updateSelectedCount() {
         if (this.selectedDialogs.isEmpty()) {
+            showCommentTextView(false);
             this.doneButtonBadgeTextView.setVisibility(8);
             if (this.isPublicChannel || this.linkToCopy != null) {
                 this.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
@@ -840,6 +944,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             this.doneButtonTextView.setText(LocaleController.getString("Send", R.string.Send).toUpperCase());
             return;
         }
+        showCommentTextView(true);
         this.doneButtonTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         this.doneButtonBadgeTextView.setVisibility(0);
         this.doneButtonBadgeTextView.setText(String.format("%d", new Object[]{Integer.valueOf(this.selectedDialogs.size())}));

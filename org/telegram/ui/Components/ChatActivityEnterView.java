@@ -994,13 +994,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.videoTimelineView.setRoundFrames(true);
         this.videoTimelineView.setDelegate(new VideoTimelineViewDelegate() {
             public void onLeftProgressChanged(float progress) {
-                ChatActivityEnterView.this.videoToSendMessageObject.startTime = (long) (((float) ChatActivityEnterView.this.videoToSendMessageObject.estimatedDuration) * progress);
-                ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(2, progress);
+                if (ChatActivityEnterView.this.videoToSendMessageObject != null) {
+                    ChatActivityEnterView.this.videoToSendMessageObject.startTime = (long) (((float) ChatActivityEnterView.this.videoToSendMessageObject.estimatedDuration) * progress);
+                    ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(2, progress);
+                }
             }
 
             public void onRifhtProgressChanged(float progress) {
-                ChatActivityEnterView.this.videoToSendMessageObject.endTime = (long) (((float) ChatActivityEnterView.this.videoToSendMessageObject.estimatedDuration) * progress);
-                ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(2, progress);
+                if (ChatActivityEnterView.this.videoToSendMessageObject != null) {
+                    ChatActivityEnterView.this.videoToSendMessageObject.endTime = (long) (((float) ChatActivityEnterView.this.videoToSendMessageObject.estimatedDuration) * progress);
+                    ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(2, progress);
+                }
             }
 
             public void didStartDragging() {

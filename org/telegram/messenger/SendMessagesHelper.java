@@ -1412,9 +1412,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     private void sendMessage(String message, MessageMedia location, TL_photo photo, VideoEditedInfo videoEditedInfo, User user, TL_document document, TL_game game, long peer, String path, MessageObject reply_to_msg, WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<MessageEntity> entities, ReplyMarkup replyMarkup, HashMap<String, String> params) {
         Throwable e;
-        MessageObject newMsgObj;
         if (peer != 0) {
             Chat chat;
+            MessageObject newMsgObj;
             int a;
             DocumentAttribute attribute;
             String originalPath = null;
@@ -3338,7 +3338,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             masks = new ArrayList();
             masks.add(new ArrayList(stickers));
         }
-        prepareSendingPhotos(paths, uris, dialog_id, reply_to_msg, captions, masks, inputContent);
+        prepareSendingPhotos(paths, uris, dialog_id, reply_to_msg, captions, masks, inputContent, false);
     }
 
     public static void prepareSendingBotContextResult(BotInlineResult result, HashMap<String, String> params, long dialog_id, MessageObject reply_to_msg) {
@@ -3880,7 +3880,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         });
     }
 
-    public static void prepareSendingPhotos(ArrayList<String> paths, ArrayList<Uri> uris, long dialog_id, MessageObject reply_to_msg, ArrayList<String> captions, ArrayList<ArrayList<InputDocument>> masks, InputContentInfoCompat inputContent) {
+    public static void prepareSendingPhotos(ArrayList<String> paths, ArrayList<Uri> uris, long dialog_id, MessageObject reply_to_msg, ArrayList<String> captions, ArrayList<ArrayList<InputDocument>> masks, InputContentInfoCompat inputContent, boolean forceDocument) {
         if (paths != null || uris != null) {
             if (paths != null && paths.isEmpty()) {
                 return;
@@ -3895,6 +3895,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     urisCopy.addAll(uris);
                 }
                 final long j = dialog_id;
+                final boolean z = forceDocument;
                 final ArrayList<String> arrayList = captions;
                 final ArrayList<ArrayList<InputDocument>> arrayList2 = masks;
                 final MessageObject messageObject = reply_to_msg;
@@ -3913,12 +3914,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         Uri uri = null;
                         String extension = null;
                         for (a = 0; a < count; a++) {
-                            TL_photo photo;
-                            HashMap<String, String> params;
-                            ArrayList<InputDocument> arrayList;
-                            AbstractSerializedData serializedData;
-                            int b;
-                            Object obj;
                             if (!pathsCopy.isEmpty()) {
                                 path = (String) pathsCopy.get(a);
                             } else if (!urisCopy.isEmpty()) {
@@ -3931,146 +3926,80 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 originalPath = uri.toString();
                             }
                             boolean isDocument = false;
-                            if (tempPath != null) {
-                                if (!tempPath.endsWith(".gif")) {
-                                }
-                                if (tempPath.endsWith(".gif")) {
-                                    extension = "gif";
-                                } else {
-                                    extension = "webp";
-                                }
+                            if (z) {
                                 isDocument = true;
-                                if (isDocument) {
-                                    if (tempPath == null) {
-                                        File temp = new File(tempPath);
-                                        originalPath = originalPath + temp.length() + "_" + temp.lastModified();
+                                extension = FileLoader.getFileExtension(new File(tempPath));
+                            } else {
+                                if (tempPath != null) {
+                                    if (!tempPath.endsWith(".gif")) {
+                                    }
+                                    if (tempPath.endsWith(".gif")) {
+                                        extension = "gif";
                                     } else {
-                                        originalPath = null;
+                                        extension = "webp";
                                     }
-                                    photo = null;
-                                    if (!isEncrypted) {
-                                        photo = (TL_photo) MessagesStorage.getInstance().getSentFile(originalPath, isEncrypted ? 0 : 3);
-                                        if (photo == null && uri != null) {
-                                            photo = (TL_photo) MessagesStorage.getInstance().getSentFile(AndroidUtilities.getPath(uri), isEncrypted ? 0 : 3);
-                                        }
-                                    }
-                                    if (photo == null) {
-                                        photo = SendMessagesHelper.getInstance().generatePhotoSizes(path, uri);
-                                    }
-                                    if (photo == null) {
-                                        TL_photo photoFinal = photo;
-                                        params = new HashMap();
-                                        if (arrayList != null) {
-                                            photo.caption = (String) arrayList.get(a);
-                                        }
-                                        if (arrayList2 != null) {
-                                            boolean z;
-                                            arrayList = (ArrayList) arrayList2.get(a);
-                                            z = arrayList == null && !arrayList.isEmpty();
-                                            photo.has_stickers = z;
-                                            if (z) {
-                                                serializedData = new SerializedData((arrayList.size() * 20) + 4);
-                                                serializedData.writeInt32(arrayList.size());
-                                                for (b = 0; b < arrayList.size(); b++) {
-                                                    ((InputDocument) arrayList.get(b)).serializeToStream(serializedData);
-                                                }
-                                                params.put("masks", Utilities.bytesToHex(serializedData.toByteArray()));
-                                            }
-                                        }
-                                        if (originalPath != null) {
-                                            params.put("originalPath", originalPath);
-                                        }
-                                        final TL_photo tL_photo = photoFinal;
-                                        final HashMap<String, String> hashMap = params;
-                                        AndroidUtilities.runOnUIThread(new Runnable() {
-                                            public void run() {
-                                                SendMessagesHelper.getInstance().sendMessage(tL_photo, null, j, messageObject, null, hashMap);
-                                            }
-                                        });
-                                    } else {
-                                        if (sendAsDocuments == null) {
-                                            sendAsDocuments = new ArrayList();
-                                            sendAsDocumentsOriginal = new ArrayList();
-                                            sendAsDocumentsCaptions = new ArrayList();
-                                        }
-                                        sendAsDocuments.add(tempPath);
-                                        sendAsDocumentsOriginal.add(originalPath);
-                                        sendAsDocumentsCaptions.add(arrayList == null ? (String) arrayList.get(a) : null);
-                                    }
-                                } else {
-                                    if (sendAsDocuments == null) {
-                                        sendAsDocuments = new ArrayList();
-                                        sendAsDocumentsOriginal = new ArrayList();
-                                        sendAsDocumentsCaptions = new ArrayList();
-                                    }
-                                    sendAsDocuments.add(tempPath);
-                                    sendAsDocumentsOriginal.add(originalPath);
-                                    if (arrayList == null) {
-                                        obj = (String) arrayList.get(a);
-                                    } else {
-                                        obj = null;
-                                    }
-                                    sendAsDocumentsCaptions.add(obj);
+                                    isDocument = true;
                                 }
-                            }
-                            if (tempPath == null && uri != null) {
-                                if (MediaController.isGif(uri)) {
-                                    isDocument = true;
-                                    originalPath = uri.toString();
-                                    tempPath = MediaController.copyFileToCache(uri, "gif");
-                                    extension = "gif";
-                                } else if (MediaController.isWebp(uri)) {
-                                    isDocument = true;
-                                    originalPath = uri.toString();
-                                    tempPath = MediaController.copyFileToCache(uri, "webp");
-                                    extension = "webp";
+                                if (tempPath == null && uri != null) {
+                                    if (MediaController.isGif(uri)) {
+                                        isDocument = true;
+                                        originalPath = uri.toString();
+                                        tempPath = MediaController.copyFileToCache(uri, "gif");
+                                        extension = "gif";
+                                    } else if (MediaController.isWebp(uri)) {
+                                        isDocument = true;
+                                        originalPath = uri.toString();
+                                        tempPath = MediaController.copyFileToCache(uri, "webp");
+                                        extension = "webp";
+                                    }
                                 }
                             }
                             if (isDocument) {
-                                if (tempPath == null) {
-                                    originalPath = null;
-                                } else {
-                                    File temp2 = new File(tempPath);
-                                    originalPath = originalPath + temp2.length() + "_" + temp2.lastModified();
+                                Object obj;
+                                if (sendAsDocuments == null) {
+                                    sendAsDocuments = new ArrayList();
+                                    sendAsDocumentsOriginal = new ArrayList();
+                                    sendAsDocumentsCaptions = new ArrayList();
                                 }
-                                photo = null;
-                                if (isEncrypted) {
-                                    if (isEncrypted) {
+                                sendAsDocuments.add(tempPath);
+                                sendAsDocumentsOriginal.add(originalPath);
+                                if (arrayList != null) {
+                                    obj = (String) arrayList.get(a);
+                                } else {
+                                    obj = null;
+                                }
+                                sendAsDocumentsCaptions.add(obj);
+                            } else {
+                                if (tempPath != null) {
+                                    File temp = new File(tempPath);
+                                    originalPath = originalPath + temp.length() + "_" + temp.lastModified();
+                                } else {
+                                    originalPath = null;
+                                }
+                                TL_photo photo = null;
+                                if (!isEncrypted) {
+                                    photo = (TL_photo) MessagesStorage.getInstance().getSentFile(originalPath, !isEncrypted ? 0 : 3);
+                                    if (photo == null && uri != null) {
+                                        photo = (TL_photo) MessagesStorage.getInstance().getSentFile(AndroidUtilities.getPath(uri), !isEncrypted ? 0 : 3);
                                     }
-                                    photo = (TL_photo) MessagesStorage.getInstance().getSentFile(originalPath, isEncrypted ? 0 : 3);
-                                    if (isEncrypted) {
-                                    }
-                                    photo = (TL_photo) MessagesStorage.getInstance().getSentFile(AndroidUtilities.getPath(uri), isEncrypted ? 0 : 3);
                                 }
                                 if (photo == null) {
                                     photo = SendMessagesHelper.getInstance().generatePhotoSizes(path, uri);
                                 }
-                                if (photo == null) {
-                                    if (sendAsDocuments == null) {
-                                        sendAsDocuments = new ArrayList();
-                                        sendAsDocumentsOriginal = new ArrayList();
-                                        sendAsDocumentsCaptions = new ArrayList();
-                                    }
-                                    sendAsDocuments.add(tempPath);
-                                    sendAsDocumentsOriginal.add(originalPath);
-                                    if (arrayList == null) {
-                                    }
-                                    sendAsDocumentsCaptions.add(arrayList == null ? (String) arrayList.get(a) : null);
-                                } else {
-                                    TL_photo photoFinal2 = photo;
-                                    params = new HashMap();
+                                if (photo != null) {
+                                    TL_photo photoFinal = photo;
+                                    HashMap<String, String> params = new HashMap();
                                     if (arrayList != null) {
                                         photo.caption = (String) arrayList.get(a);
                                     }
                                     if (arrayList2 != null) {
-                                        arrayList = (ArrayList) arrayList2.get(a);
-                                        if (arrayList == null) {
-                                        }
+                                        ArrayList<InputDocument> arrayList = (ArrayList) arrayList2.get(a);
+                                        boolean z = (arrayList == null || arrayList.isEmpty()) ? false : true;
                                         photo.has_stickers = z;
                                         if (z) {
-                                            serializedData = new SerializedData((arrayList.size() * 20) + 4);
+                                            AbstractSerializedData serializedData = new SerializedData((arrayList.size() * 20) + 4);
                                             serializedData.writeInt32(arrayList.size());
-                                            for (b = 0; b < arrayList.size(); b++) {
+                                            for (int b = 0; b < arrayList.size(); b++) {
                                                 ((InputDocument) arrayList.get(b)).serializeToStream(serializedData);
                                             }
                                             params.put("masks", Utilities.bytesToHex(serializedData.toByteArray()));
@@ -4079,24 +4008,23 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     if (originalPath != null) {
                                         params.put("originalPath", originalPath);
                                     }
-                                    final TL_photo tL_photo2 = photoFinal2;
-                                    final HashMap<String, String> hashMap2 = params;
-                                    AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
-                                }
-                            } else {
-                                if (sendAsDocuments == null) {
-                                    sendAsDocuments = new ArrayList();
-                                    sendAsDocumentsOriginal = new ArrayList();
-                                    sendAsDocumentsCaptions = new ArrayList();
-                                }
-                                sendAsDocuments.add(tempPath);
-                                sendAsDocumentsOriginal.add(originalPath);
-                                if (arrayList == null) {
-                                    obj = null;
+                                    final TL_photo tL_photo = photoFinal;
+                                    final HashMap<String, String> hashMap = params;
+                                    AndroidUtilities.runOnUIThread(new Runnable() {
+                                        public void run() {
+                                            SendMessagesHelper.getInstance().sendMessage(tL_photo, null, j, messageObject, null, hashMap);
+                                        }
+                                    });
                                 } else {
-                                    obj = (String) arrayList.get(a);
+                                    if (sendAsDocuments == null) {
+                                        sendAsDocuments = new ArrayList();
+                                        sendAsDocumentsOriginal = new ArrayList();
+                                        sendAsDocumentsCaptions = new ArrayList();
+                                    }
+                                    sendAsDocuments.add(tempPath);
+                                    sendAsDocumentsOriginal.add(originalPath);
+                                    sendAsDocumentsCaptions.add(arrayList != null ? (String) arrayList.get(a) : null);
                                 }
-                                sendAsDocumentsCaptions.add(obj);
                             }
                         }
                         if (inputContentInfoCompat != null) {

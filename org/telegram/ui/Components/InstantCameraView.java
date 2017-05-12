@@ -792,13 +792,13 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void drainEncoder(boolean endOfStream) throws Exception {
-            ByteBuffer encodedData;
             if (endOfStream) {
                 this.videoEncoder.signalEndOfInputStream();
             }
             ByteBuffer[] encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
             while (true) {
                 MediaFormat newFormat;
+                ByteBuffer encodedData;
                 int encoderStatus = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
                 if (encoderStatus == -1) {
                     if (!endOfStream) {
@@ -1682,13 +1682,14 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.cancelled = this.recordedTime < 800;
             this.recording = false;
             AndroidUtilities.cancelRunOnUIThread(this.timerRunnable);
-            NotificationCenter instance = NotificationCenter.getInstance();
-            int i = NotificationCenter.recordStopped;
-            Object[] objArr = new Object[1];
-            objArr[0] = Integer.valueOf(state == 3 ? 2 : 0);
-            instance.postNotificationName(i, objArr);
             if (this.cameraThread != null) {
                 int send;
+                NotificationCenter instance = NotificationCenter.getInstance();
+                int i = NotificationCenter.recordStopped;
+                Object[] objArr = new Object[1];
+                int i2 = (this.cancelled || state != 3) ? 0 : 2;
+                objArr[0] = Integer.valueOf(i2);
+                instance.postNotificationName(i, objArr);
                 if (this.cancelled) {
                     send = 0;
                 } else if (state == 3) {

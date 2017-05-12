@@ -3906,7 +3906,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             this.chatAttachAlert.setDelegate(new ChatAttachViewDelegate() {
                 public void didPressedButton(int button) {
                     if (ChatActivity.this.getParentActivity() != null) {
-                        if (button == 7) {
+                        if (button == 7 || (button == 4 && !ChatActivity.this.chatAttachAlert.getSelectedPhotos().isEmpty())) {
                             ChatActivity.this.chatAttachAlert.dismiss();
                             HashMap<Integer, PhotoEntry> selectedPhotos = ChatActivity.this.chatAttachAlert.getSelectedPhotos();
                             if (!selectedPhotos.isEmpty()) {
@@ -3929,7 +3929,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     photoEntry.caption = null;
                                     photoEntry.stickers.clear();
                                 }
-                                SendMessagesHelper.prepareSendingPhotos(photos, null, ChatActivity.this.dialog_id, ChatActivity.this.replyingMessageObject, captions, masks, null);
+                                SendMessagesHelper.prepareSendingPhotos(photos, null, ChatActivity.this.dialog_id, ChatActivity.this.replyingMessageObject, captions, masks, null, button == 4);
                                 ChatActivity.this.showReplyPanel(false, null, null, null, false);
                                 DraftQuery.cleanDraft(ChatActivity.this.dialog_id, true);
                                 return;
@@ -4520,7 +4520,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 PhotoAlbumPickerActivity fragment = new PhotoAlbumPickerActivity(false, z, true, this);
                 fragment.setDelegate(new PhotoAlbumPickerActivityDelegate() {
                     public void didSelectPhotos(ArrayList<String> photos, ArrayList<String> captions, ArrayList<ArrayList<InputDocument>> masks, ArrayList<SearchImage> webPhotos) {
-                        SendMessagesHelper.prepareSendingPhotos(photos, null, ChatActivity.this.dialog_id, ChatActivity.this.replyingMessageObject, captions, masks, null);
+                        SendMessagesHelper.prepareSendingPhotos(photos, null, ChatActivity.this.dialog_id, ChatActivity.this.replyingMessageObject, captions, masks, null, false);
                         SendMessagesHelper.prepareSendingPhotosSearch(webPhotos, ChatActivity.this.dialog_id, ChatActivity.this.replyingMessageObject);
                         ChatActivity.this.showReplyPanel(false, null, null, null, false);
                         DraftQuery.cleanDraft(ChatActivity.this.dialog_id, true);

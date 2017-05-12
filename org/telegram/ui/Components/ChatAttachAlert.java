@@ -138,6 +138,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     private int revealX;
     private int revealY;
     private int scrollOffsetY;
+    private AttachButton sendDocumentsButton;
     private AttachButton sendPhotosButton;
     private Drawable shadowDrawable;
     private ShutterButton shutterButton;
@@ -804,6 +805,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             if (a == 7) {
                 this.sendPhotosButton = attachButton;
                 this.sendPhotosButton.imageView.setPadding(0, AndroidUtilities.dp(4.0f), 0, 0);
+            } else if (a == 4) {
+                this.sendDocumentsButton = attachButton;
             }
             attachButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -1768,6 +1771,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             this.sendPhotosButton.imageView.setBackgroundResource(R.drawable.attach_hide_states);
             this.sendPhotosButton.imageView.setImageResource(R.drawable.attach_hide2);
             this.sendPhotosButton.textView.setText("");
+            this.sendDocumentsButton.textView.setText(LocaleController.getString("ChatDocument", R.string.ChatDocument));
         } else {
             this.sendPhotosButton.imageView.setPadding(AndroidUtilities.dp(2.0f), 0, 0, 0);
             this.sendPhotosButton.imageView.setBackgroundResource(R.drawable.attach_send_states);
@@ -1776,6 +1780,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             Object[] objArr = new Object[1];
             objArr[0] = String.format("(%d)", new Object[]{Integer.valueOf(count)});
             access$6400.setText(LocaleController.formatString("SendItems", R.string.SendItems, objArr));
+            this.sendDocumentsButton.textView.setText(LocaleController.getString("SendAsFiles", R.string.SendAsFiles));
         }
         if (VERSION.SDK_INT < 23 || getContext().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
             this.progressView.setText(LocaleController.getString("NoPhotos", R.string.NoPhotos));

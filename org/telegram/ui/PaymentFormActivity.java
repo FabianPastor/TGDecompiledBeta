@@ -62,6 +62,7 @@ import org.json.JSONObject;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -261,7 +262,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         this.dividers = new ArrayList();
         this.sectionCell = new ShadowSectionCell[3];
         this.bottomCell = new TextInfoPrivacyCell[2];
-        this.detailSettingsCell = new TextDetailSettingsCell[6];
+        this.detailSettingsCell = new TextDetailSettingsCell[7];
         this.currentStep = 5;
         this.paymentForm = new TL_payments_paymentForm();
         this.paymentForm.bot_id = receipt.bot_id;
@@ -294,7 +295,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         this.dividers = new ArrayList();
         this.sectionCell = new ShadowSectionCell[3];
         this.bottomCell = new TextInfoPrivacyCell[2];
-        this.detailSettingsCell = new TextDetailSettingsCell[6];
+        this.detailSettingsCell = new TextDetailSettingsCell[7];
         if (form.invoice.shipping_address_requested || form.invoice.email_requested || form.invoice.name_requested || form.invoice.phone_requested) {
             step = 0;
         } else if (form.saved_credentials != null) {
@@ -322,7 +323,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         this.dividers = new ArrayList();
         this.sectionCell = new ShadowSectionCell[3];
         this.bottomCell = new TextInfoPrivacyCell[2];
-        this.detailSettingsCell = new TextDetailSettingsCell[6];
+        this.detailSettingsCell = new TextDetailSettingsCell[7];
         init(form, message, step, validatedRequestedInfo, shipping, tokenJson, card, request, saveCard);
     }
 
@@ -1521,37 +1522,50 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     }
                 });
             }
+            User providerUser = null;
+            for (a = 0; a < this.paymentForm.users.size(); a++) {
+                User user = (User) this.paymentForm.users.get(a);
+                if (user.id == this.paymentForm.provider_id) {
+                    providerUser = user;
+                }
+            }
+            if (providerUser != null) {
+                this.detailSettingsCell[1] = new TextDetailSettingsCell(context);
+                this.detailSettingsCell[1].setBackgroundDrawable(Theme.getSelectorDrawable(true));
+                this.detailSettingsCell[1].setTextAndValue(ContactsController.formatName(providerUser.first_name, providerUser.last_name), LocaleController.getString("PaymentCheckoutProvider", R.string.PaymentCheckoutProvider), true);
+                this.linearLayout2.addView(this.detailSettingsCell[1]);
+            }
             if (this.validateRequest != null) {
                 if (this.validateRequest.info.shipping_address != null) {
                     String address = String.format("%s %s, %s, %s, %s, %s", new Object[]{this.validateRequest.info.shipping_address.street_line1, this.validateRequest.info.shipping_address.street_line2, this.validateRequest.info.shipping_address.city, this.validateRequest.info.shipping_address.state, this.validateRequest.info.shipping_address.country_iso2, this.validateRequest.info.shipping_address.post_code});
-                    this.detailSettingsCell[1] = new TextDetailSettingsCell(context);
-                    this.detailSettingsCell[1].setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    this.detailSettingsCell[1].setTextAndValue(address, LocaleController.getString("PaymentShippingAddress", R.string.PaymentShippingAddress), true);
-                    this.linearLayout2.addView(this.detailSettingsCell[1]);
-                }
-                if (this.validateRequest.info.name != null) {
                     this.detailSettingsCell[2] = new TextDetailSettingsCell(context);
                     this.detailSettingsCell[2].setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    this.detailSettingsCell[2].setTextAndValue(this.validateRequest.info.name, LocaleController.getString("PaymentCheckoutName", R.string.PaymentCheckoutName), true);
+                    this.detailSettingsCell[2].setTextAndValue(address, LocaleController.getString("PaymentShippingAddress", R.string.PaymentShippingAddress), true);
                     this.linearLayout2.addView(this.detailSettingsCell[2]);
                 }
-                if (this.validateRequest.info.phone != null) {
+                if (this.validateRequest.info.name != null) {
                     this.detailSettingsCell[3] = new TextDetailSettingsCell(context);
                     this.detailSettingsCell[3].setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    this.detailSettingsCell[3].setTextAndValue(PhoneFormat.getInstance().format(this.validateRequest.info.phone), LocaleController.getString("PaymentCheckoutPhoneNumber", R.string.PaymentCheckoutPhoneNumber), true);
+                    this.detailSettingsCell[3].setTextAndValue(this.validateRequest.info.name, LocaleController.getString("PaymentCheckoutName", R.string.PaymentCheckoutName), true);
                     this.linearLayout2.addView(this.detailSettingsCell[3]);
                 }
-                if (this.validateRequest.info.email != null) {
+                if (this.validateRequest.info.phone != null) {
                     this.detailSettingsCell[4] = new TextDetailSettingsCell(context);
                     this.detailSettingsCell[4].setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    this.detailSettingsCell[4].setTextAndValue(this.validateRequest.info.email, LocaleController.getString("PaymentCheckoutEmail", R.string.PaymentCheckoutEmail), true);
+                    this.detailSettingsCell[4].setTextAndValue(PhoneFormat.getInstance().format(this.validateRequest.info.phone), LocaleController.getString("PaymentCheckoutPhoneNumber", R.string.PaymentCheckoutPhoneNumber), true);
                     this.linearLayout2.addView(this.detailSettingsCell[4]);
                 }
-                if (this.shippingOption != null) {
+                if (this.validateRequest.info.email != null) {
                     this.detailSettingsCell[5] = new TextDetailSettingsCell(context);
                     this.detailSettingsCell[5].setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    this.detailSettingsCell[5].setTextAndValue(this.shippingOption.title, LocaleController.getString("PaymentCheckoutShippingMethod", R.string.PaymentCheckoutShippingMethod), false);
+                    this.detailSettingsCell[5].setTextAndValue(this.validateRequest.info.email, LocaleController.getString("PaymentCheckoutEmail", R.string.PaymentCheckoutEmail), true);
                     this.linearLayout2.addView(this.detailSettingsCell[5]);
+                }
+                if (this.shippingOption != null) {
+                    this.detailSettingsCell[6] = new TextDetailSettingsCell(context);
+                    this.detailSettingsCell[6].setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    this.detailSettingsCell[6].setTextAndValue(this.shippingOption.title, LocaleController.getString("PaymentCheckoutShippingMethod", R.string.PaymentCheckoutShippingMethod), false);
+                    this.linearLayout2.addView(this.detailSettingsCell[6]);
                 }
             }
             if (this.currentStep == 4) {
@@ -1877,20 +1891,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     private boolean sendCardData() {
+        String[] args;
         Integer month;
         Integer year;
-        if (!(this.paymentForm.saved_credentials == null || this.saveCardInfo || !this.paymentForm.can_save_credentials)) {
-            TLObject req = new TL_payments_clearSavedInfo();
-            req.credentials = true;
-            this.paymentForm.saved_credentials = null;
-            UserConfig.tmpPassword = null;
-            UserConfig.saveConfig(false);
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                public void run(TLObject response, TL_error error) {
-                }
-            });
+        if (this.paymentForm.saved_credentials == null || this.saveCardInfo || this.paymentForm.can_save_credentials) {
+            args = this.inputFields[1].getText().toString().split("/");
+        } else {
+            args = this.inputFields[1].getText().toString().split("/");
         }
-        String[] args = this.inputFields[1].getText().toString().split("/");
         if (args.length == 2) {
             month = Utilities.parseInt(args[0]);
             year = Utilities.parseInt(args[1]);

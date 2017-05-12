@@ -1965,7 +1965,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                             captions.add(this.sendingText);
                             this.sendingText = null;
                         }
-                        SendMessagesHelper.prepareSendingPhotos(null, this.photoPathsArray, dialog_id, null, captions, null, null);
+                        SendMessagesHelper.prepareSendingPhotos(null, this.photoPathsArray, dialog_id, null, captions, null, null, false);
                     }
                     if (this.sendingText != null) {
                         SendMessagesHelper.prepareSendingText(this.sendingText, dialog_id);

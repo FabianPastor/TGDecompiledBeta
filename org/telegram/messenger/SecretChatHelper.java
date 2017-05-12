@@ -715,7 +715,7 @@ public class SecretChatHelper {
                                                     message.send_state = 0;
                                                     NotificationCenter.getInstance().postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(message.id), Integer.valueOf(message.id), message, Long.valueOf(message.dialog_id));
                                                     SendMessagesHelper.getInstance().processSentMessage(message.id);
-                                                    if (MessageObject.isVideoMessage(message) || MessageObject.isNewGifMessage(message)) {
+                                                    if (MessageObject.isVideoMessage(message) || MessageObject.isNewGifMessage(message) || MessageObject.isRoundVideoMessage(message)) {
                                                         SendMessagesHelper.getInstance().stopVideoService(attachPath);
                                                     }
                                                     SendMessagesHelper.getInstance().removeFromSendingMessages(message.id);
@@ -731,7 +731,7 @@ public class SecretChatHelper {
                                         message.send_state = 2;
                                         NotificationCenter.getInstance().postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(message.id));
                                         SendMessagesHelper.getInstance().processSentMessage(message.id);
-                                        if (MessageObject.isVideoMessage(message) || MessageObject.isNewGifMessage(message)) {
+                                        if (MessageObject.isVideoMessage(message) || MessageObject.isNewGifMessage(message) || MessageObject.isRoundVideoMessage(message)) {
                                             SendMessagesHelper.getInstance().stopVideoService(message.attachPath);
                                         }
                                         SendMessagesHelper.getInstance().removeFromSendingMessages(message.id);

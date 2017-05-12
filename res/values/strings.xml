@@ -1574,9 +1574,17 @@
     <string name="NotificationActionPinnedRoundChannel">%1$s pinned a video message</string>
     <string name="NotificationMessageGroupRound">%1$s sent a video message to the group %2$s</string>
     <string name="NotificationMessageRound">%1$s sent you a video message</string>
+    <string name="PaymentCheckoutProvider">Payment provider</string>
     <string name="PaymentWarning">Warning</string>
     <string name="PaymentWarningText">Payments will go directly to the developer of %1$s. Telegram cannot provide any guarantees, so proceed at your own risk. In case of problems, please contact the developer of %2$s or your bank.</string>
+    <string name="PrivacyClearPayment">Payment info</string>
+    <string name="PrivacyClearShipping">Shipping info</string>
+    <string name="PrivacyPayments">Payments</string>
+    <string name="PrivacyPaymentsClear">Clear payment &amp; shipping info</string>
+    <string name="PrivacyPaymentsClearInfo">You can delete your shipping info and instruct all payment providers to remove your saved credit cards. Note that Telegram never stores your credit card data.</string>
     <string name="RecordingRound">recording video message...</string>
+    <string name="SendAsFiles">Send as files</string>
+    <string name="ShareComment">Write a comment...</string>
     <string name="default_web_client_id">760348033671-jiv412evc1r36rl4k7vhl1ba83atdmot.apps.googleusercontent.com</string>
     <string name="firebase_database_url">https://tmessages2.firebaseio.com</string>
     <string name="gcm_defaultSenderId">760348033671</string>

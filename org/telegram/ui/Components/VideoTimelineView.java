@@ -97,6 +97,9 @@ public class VideoTimelineView extends View {
         int endX = ((int) (((float) width) * this.progressRight)) + AndroidUtilities.dp(16.0f);
         if (event.getAction() == 0) {
             getParent().requestDisallowInterceptTouchEvent(true);
+            if (this.mediaMetadataRetriever == null) {
+                return false;
+            }
             int additionWidth = AndroidUtilities.dp(12.0f);
             if (((float) (startX - additionWidth)) <= x && x <= ((float) (startX + additionWidth)) && y >= 0.0f && y <= ((float) getMeasuredHeight())) {
                 if (this.delegate != null) {
