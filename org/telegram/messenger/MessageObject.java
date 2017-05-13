@@ -846,6 +846,15 @@ public class MessageObject {
             }
         } else if (this.messageOwner.media instanceof TL_messageMediaPhoto) {
             return "image/jpeg";
+        } else {
+            if (this.messageOwner.media instanceof TL_messageMediaWebPage) {
+                if (this.messageOwner.media.webpage.document != null) {
+                    return this.messageOwner.media.document.mime_type;
+                }
+                if (this.messageOwner.media.webpage.photo != null) {
+                    return "image/jpeg";
+                }
+            }
         }
         return "";
     }
