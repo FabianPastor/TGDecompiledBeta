@@ -828,7 +828,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     if (!(!(messageObject.messageOwner.media instanceof TL_messageMediaWebPage) || messageObject.messageOwner.media.webpage == null || messageObject.messageOwner.media.webpage.cached_page == null)) {
                                         String lowerUrl = urlFinal.toLowerCase();
                                         String lowerUrl2 = messageObject.messageOwner.media.webpage.url.toLowerCase();
-                                        if (lowerUrl.contains("telegra.ph") && (lowerUrl.contains(lowerUrl2) || lowerUrl2.contains(lowerUrl))) {
+                                        if ((lowerUrl.contains("telegra.ph") || lowerUrl.contains("t.me/iv")) && (lowerUrl.contains(lowerUrl2) || lowerUrl2.contains(lowerUrl))) {
                                             ArticleViewer.getInstance().setParentActivity(ChatActivity.this.getParentActivity(), ChatActivity.this);
                                             ArticleViewer.getInstance().open(messageObject);
                                             return;
@@ -7947,7 +7947,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     public boolean processSwitchButton(TL_keyboardButtonSwitchInline button) {
-        if (this.inlineReturn == 0 || button.same_peer) {
+        if (this.inlineReturn == 0 || button.same_peer || this.parentLayout == null) {
             return false;
         }
         String query = "@" + this.currentUser.username + " " + button.query;
@@ -8370,66 +8370,43 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     private void updateSpamView() {
-        if (this.reportSpamView != null) {
-            boolean show;
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
-            if (this.currentEncryptedChat != null) {
-                if (this.currentEncryptedChat.admin_id == UserConfig.getClientUserId() || ContactsController.getInstance().isLoadingContacts() || ContactsController.getInstance().contactsDict.get(this.currentUser.id) != null) {
-                    show = false;
-                } else {
-                    show = true;
-                }
-                if (show && preferences.getInt("spam3_" + this.dialog_id, 0) == 1) {
-                    show = false;
-                }
+        if (this.reportSpamView == null) {
+            FileLog.d("no spam view found");
+            return;
+        }
+        boolean show;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+        if (this.currentEncryptedChat != null) {
+            if (this.currentEncryptedChat.admin_id == UserConfig.getClientUserId() || ContactsController.getInstance().isLoadingContacts() || ContactsController.getInstance().contactsDict.get(this.currentUser.id) != null) {
+                show = false;
             } else {
-                show = preferences.getInt(new StringBuilder().append("spam3_").append(this.dialog_id).toString(), 0) == 2;
+                show = true;
             }
-            AnimatorSet animatorSet;
-            Animator[] animatorArr;
-            if (show) {
-                if (this.reportSpamView.getTag() != null) {
-                    this.reportSpamView.setTag(null);
-                    this.reportSpamView.setVisibility(0);
-                    if (this.reportSpamViewAnimator != null) {
-                        this.reportSpamViewAnimator.cancel();
-                    }
-                    this.reportSpamViewAnimator = new AnimatorSet();
-                    animatorSet = this.reportSpamViewAnimator;
-                    animatorArr = new Animator[1];
-                    animatorArr[0] = ObjectAnimator.ofFloat(this.reportSpamView, "translationY", new float[]{0.0f});
-                    animatorSet.playTogether(animatorArr);
-                    this.reportSpamViewAnimator.setDuration(200);
-                    this.reportSpamViewAnimator.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animation) {
-                            if (ChatActivity.this.reportSpamViewAnimator != null && ChatActivity.this.reportSpamViewAnimator.equals(animation)) {
-                                ChatActivity.this.reportSpamViewAnimator = null;
-                            }
-                        }
-
-                        public void onAnimationCancel(Animator animation) {
-                            if (ChatActivity.this.reportSpamViewAnimator != null && ChatActivity.this.reportSpamViewAnimator.equals(animation)) {
-                                ChatActivity.this.reportSpamViewAnimator = null;
-                            }
-                        }
-                    });
-                    this.reportSpamViewAnimator.start();
-                }
-            } else if (this.reportSpamView.getTag() == null) {
-                this.reportSpamView.setTag(Integer.valueOf(1));
+            if (show && preferences.getInt("spam3_" + this.dialog_id, 0) == 1) {
+                show = false;
+            }
+        } else {
+            show = preferences.getInt(new StringBuilder().append("spam3_").append(this.dialog_id).toString(), 0) == 2;
+        }
+        AnimatorSet animatorSet;
+        Animator[] animatorArr;
+        if (show) {
+            if (this.reportSpamView.getTag() != null) {
+                FileLog.d("show spam button");
+                this.reportSpamView.setTag(null);
+                this.reportSpamView.setVisibility(0);
                 if (this.reportSpamViewAnimator != null) {
                     this.reportSpamViewAnimator.cancel();
                 }
                 this.reportSpamViewAnimator = new AnimatorSet();
                 animatorSet = this.reportSpamViewAnimator;
                 animatorArr = new Animator[1];
-                animatorArr[0] = ObjectAnimator.ofFloat(this.reportSpamView, "translationY", new float[]{(float) (-AndroidUtilities.dp(50.0f))});
+                animatorArr[0] = ObjectAnimator.ofFloat(this.reportSpamView, "translationY", new float[]{0.0f});
                 animatorSet.playTogether(animatorArr);
                 this.reportSpamViewAnimator.setDuration(200);
                 this.reportSpamViewAnimator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         if (ChatActivity.this.reportSpamViewAnimator != null && ChatActivity.this.reportSpamViewAnimator.equals(animation)) {
-                            ChatActivity.this.reportSpamView.setVisibility(8);
                             ChatActivity.this.reportSpamViewAnimator = null;
                         }
                     }
@@ -8442,8 +8419,35 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 });
                 this.reportSpamViewAnimator.start();
             }
-            checkListViewPaddings();
+        } else if (this.reportSpamView.getTag() == null) {
+            FileLog.d("hide spam button");
+            this.reportSpamView.setTag(Integer.valueOf(1));
+            if (this.reportSpamViewAnimator != null) {
+                this.reportSpamViewAnimator.cancel();
+            }
+            this.reportSpamViewAnimator = new AnimatorSet();
+            animatorSet = this.reportSpamViewAnimator;
+            animatorArr = new Animator[1];
+            animatorArr[0] = ObjectAnimator.ofFloat(this.reportSpamView, "translationY", new float[]{(float) (-AndroidUtilities.dp(50.0f))});
+            animatorSet.playTogether(animatorArr);
+            this.reportSpamViewAnimator.setDuration(200);
+            this.reportSpamViewAnimator.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animation) {
+                    if (ChatActivity.this.reportSpamViewAnimator != null && ChatActivity.this.reportSpamViewAnimator.equals(animation)) {
+                        ChatActivity.this.reportSpamView.setVisibility(8);
+                        ChatActivity.this.reportSpamViewAnimator = null;
+                    }
+                }
+
+                public void onAnimationCancel(Animator animation) {
+                    if (ChatActivity.this.reportSpamViewAnimator != null && ChatActivity.this.reportSpamViewAnimator.equals(animation)) {
+                        ChatActivity.this.reportSpamViewAnimator = null;
+                    }
+                }
+            });
+            this.reportSpamViewAnimator.start();
         }
+        checkListViewPaddings();
     }
 
     private void updateContactStatus() {

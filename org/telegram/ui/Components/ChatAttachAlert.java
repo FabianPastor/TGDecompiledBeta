@@ -964,7 +964,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 }
 
                 public void shutterReleased() {
-                    if (!ChatAttachAlert.this.takingPhoto && ChatAttachAlert.this.cameraView != null && !ChatAttachAlert.this.mediaCaptured) {
+                    if (!ChatAttachAlert.this.takingPhoto && ChatAttachAlert.this.cameraView != null && !ChatAttachAlert.this.mediaCaptured && ChatAttachAlert.this.cameraView.getCameraSession() != null) {
                         ChatAttachAlert.this.mediaCaptured = true;
                         if (ChatAttachAlert.this.shutterButton.getState() == ShutterButton.State.RECORDING) {
                             ChatAttachAlert.this.resetRecordState();

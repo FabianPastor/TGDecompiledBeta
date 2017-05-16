@@ -1594,11 +1594,11 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             if (!this.loadingPeerSettings.containsKey(Long.valueOf(dialogId))) {
                 this.loadingPeerSettings.put(Long.valueOf(dialogId), Boolean.valueOf(true));
+                FileLog.d("request spam button for " + dialogId);
                 SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
                 if (preferences.getInt("spam3_" + dialogId, 0) == 1) {
-                    return;
-                }
-                if (preferences.getBoolean("spam_" + dialogId, false)) {
+                    FileLog.d("spam button already hidden for " + dialogId);
+                } else if (preferences.getBoolean("spam_" + dialogId, false)) {
                     TL_messages_hideReportSpam req = new TL_messages_hideReportSpam();
                     if (currentUser != null) {
                         req.peer = getInputPeer(currentUser.id);
@@ -1618,34 +1618,36 @@ public class MessagesController implements NotificationCenterDelegate {
                             });
                         }
                     });
-                    return;
-                }
-                TL_messages_getPeerSettings req2 = new TL_messages_getPeerSettings();
-                if (currentUser != null) {
-                    req2.peer = getInputPeer(currentUser.id);
-                } else if (currentChat != null) {
-                    req2.peer = getInputPeer(-currentChat.id);
-                }
-                ConnectionsManager.getInstance().sendRequest(req2, new RequestDelegate() {
-                    public void run(final TLObject response, TL_error error) {
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                MessagesController.this.loadingPeerSettings.remove(Long.valueOf(dialogId));
-                                if (response != null) {
-                                    TL_peerSettings res = response;
-                                    Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
-                                    if (res.report_spam) {
-                                        editor.putInt("spam3_" + dialogId, 2);
-                                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.peerSettingsDidLoaded, Long.valueOf(dialogId));
-                                    } else {
-                                        editor.putInt("spam3_" + dialogId, 1);
-                                    }
-                                    editor.commit();
-                                }
-                            }
-                        });
+                } else {
+                    TL_messages_getPeerSettings req2 = new TL_messages_getPeerSettings();
+                    if (currentUser != null) {
+                        req2.peer = getInputPeer(currentUser.id);
+                    } else if (currentChat != null) {
+                        req2.peer = getInputPeer(-currentChat.id);
                     }
-                });
+                    ConnectionsManager.getInstance().sendRequest(req2, new RequestDelegate() {
+                        public void run(final TLObject response, TL_error error) {
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    MessagesController.this.loadingPeerSettings.remove(Long.valueOf(dialogId));
+                                    if (response != null) {
+                                        TL_peerSettings res = response;
+                                        Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                                        if (res.report_spam) {
+                                            FileLog.d("show spam button for " + dialogId);
+                                            editor.putInt("spam3_" + dialogId, 2);
+                                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.peerSettingsDidLoaded, Long.valueOf(dialogId));
+                                        } else {
+                                            FileLog.d("don't show spam button for " + dialogId);
+                                            editor.putInt("spam3_" + dialogId, 1);
+                                        }
+                                        editor.commit();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
             }
         }
     }
@@ -2069,10 +2071,8 @@ public class MessagesController implements NotificationCenterDelegate {
         TL_channels_deleteMessages req;
         long newTaskId;
         NativeByteBuffer data;
-        NativeByteBuffer data2;
         Throwable e;
         final int i;
-        TL_messages_deleteMessages req2;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
             ArrayList<Integer> toSend = null;
             if (taskId == 0) {
@@ -2098,6 +2098,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
+            NativeByteBuffer data2;
             if (channelId != 0) {
                 if (taskRequest != null) {
                     req = (TL_channels_deleteMessages) taskRequest;
@@ -2147,6 +2148,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
                 return;
             }
+            TL_messages_deleteMessages req2;
             if (!(randoms == null || encryptedChat == null || randoms.isEmpty())) {
                 SecretChatHelper.getInstance().sendMessagesDeleteMessage(encryptedChat, randoms, null);
             }
@@ -3830,7 +3832,6 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 int a;
-                Chat chat;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 HashMap<Integer, User> usersDict = new HashMap();
@@ -3845,6 +3846,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     chatsDict.put(Integer.valueOf(c.id), c);
                 }
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -5078,9 +5080,9 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void loadUnknownChannel(final Chat channel, long taskId) {
         Throwable e;
-        long newTaskId;
         if ((channel instanceof TL_channel) && !this.gettingUnknownChannels.containsKey(Integer.valueOf(channel.id))) {
             if (channel.access_hash != 0) {
+                long newTaskId;
                 TL_inputPeerChannel inputPeer = new TL_inputPeerChannel();
                 inputPeer.channel_id = channel.id;
                 inputPeer.access_hash = channel.access_hash;
@@ -5749,7 +5751,6 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public boolean pinDialog(long did, boolean pin, InputPeer peer, long taskId) {
         Throwable e;
-        long newTaskId;
         int lower_id = (int) did;
         TL_dialog dialog = (TL_dialog) this.dialogs_dict.get(Long.valueOf(did));
         if (dialog != null && dialog.pinned != pin) {
@@ -5781,6 +5782,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (peer instanceof TL_inputPeerEmpty) {
                     return false;
                 }
+                long newTaskId;
                 req.peer = peer;
                 if (taskId == 0) {
                     NativeByteBuffer data = null;
@@ -6670,6 +6672,7 @@ public class MessagesController implements NotificationCenterDelegate {
         AbstractMap usersDict;
         int a;
         AbstractMap chatsDict;
+        Iterator it;
         long currentTime = System.currentTimeMillis();
         final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
         HashMap<Long, WebPage> webPages = new HashMap();
@@ -6723,7 +6726,6 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         int interfaceUpdateMask = 0;
         for (int c = 0; c < updates.size(); c++) {
-            Iterator it;
             Update update = (Update) updates.get(c);
             FileLog.d("process update " + update);
             Message message;

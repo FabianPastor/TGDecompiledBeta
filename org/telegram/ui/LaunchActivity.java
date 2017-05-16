@@ -969,11 +969,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                             if (currentData == null) {
                                                 continue;
                                             } else if (args[0].startsWith("FN") || (args[0].startsWith("ORG") && TextUtils.isEmpty(currentData.name))) {
-                                                String str;
                                                 String nameEncoding = null;
                                                 String nameCharset = null;
-                                                for (String str2 : args[0].split(";")) {
-                                                    String[] args22 = str2.split("=");
+                                                for (String param : args[0].split(";")) {
+                                                    String[] args22 = param.split("=");
                                                     if (args22.length == 2) {
                                                         if (args22[0].equals("CHARSET")) {
                                                             nameCharset = args22[1];
@@ -1000,9 +999,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                                         }
                                                         byte[] bytes = AndroidUtilities.decodeQuotedPrintable(currentData.name.getBytes());
                                                         if (!(bytes == null || bytes.length == 0)) {
-                                                            str2 = new String(bytes, nameCharset);
-                                                            if (str2 != null) {
-                                                                currentData.name = str2;
+                                                            String str = new String(bytes, nameCharset);
+                                                            if (str != null) {
+                                                                currentData.name = str;
                                                             }
                                                         }
                                                     } else {
@@ -1192,6 +1191,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                         String username = null;
                         String group = null;
                         String sticker = null;
+                        String[] instantView = null;
                         String botUser = null;
                         String botChat = null;
                         String message = null;
@@ -1302,44 +1302,52 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                     if (path.startsWith("addstickers/")) {
                                         sticker = path.replace("addstickers/", "");
                                     } else {
-                                        if (!path.startsWith("msg/")) {
-                                            if (!path.startsWith("share/")) {
-                                                if (path.startsWith("confirmphone")) {
-                                                    phone = data.getQueryParameter("phone");
-                                                    phoneHash = data.getQueryParameter("hash");
-                                                } else if (path.length() >= 1) {
-                                                    List<String> segments = data.getPathSegments();
-                                                    if (segments.size() > 0) {
-                                                        username = (String) segments.get(0);
-                                                        if (segments.size() > 1) {
-                                                            messageId = Utilities.parseInt((String) segments.get(1));
-                                                            if (messageId.intValue() == 0) {
-                                                                messageId = null;
+                                        if (path.startsWith("iv/")) {
+                                            null[0] = data.getQueryParameter("url");
+                                            null[1] = data.getQueryParameter("rhash");
+                                            if (TextUtils.isEmpty(null[0]) || TextUtils.isEmpty(null[1])) {
+                                                instantView = null;
+                                            }
+                                        } else {
+                                            if (!path.startsWith("msg/")) {
+                                                if (!path.startsWith("share/")) {
+                                                    if (path.startsWith("confirmphone")) {
+                                                        phone = data.getQueryParameter("phone");
+                                                        phoneHash = data.getQueryParameter("hash");
+                                                    } else if (path.length() >= 1) {
+                                                        List<String> segments = data.getPathSegments();
+                                                        if (segments.size() > 0) {
+                                                            username = (String) segments.get(0);
+                                                            if (segments.size() > 1) {
+                                                                messageId = Utilities.parseInt((String) segments.get(1));
+                                                                if (messageId.intValue() == 0) {
+                                                                    messageId = null;
+                                                                }
                                                             }
                                                         }
+                                                        botUser = data.getQueryParameter(TtmlNode.START);
+                                                        botChat = data.getQueryParameter("startgroup");
+                                                        game = data.getQueryParameter("game");
                                                     }
-                                                    botUser = data.getQueryParameter(TtmlNode.START);
-                                                    botChat = data.getQueryParameter("startgroup");
-                                                    game = data.getQueryParameter("game");
                                                 }
                                             }
-                                        }
-                                        message = data.getQueryParameter("url");
-                                        if (message == null) {
-                                            message = "";
-                                        }
-                                        if (data.getQueryParameter("text") != null) {
-                                            if (message.length() > 0) {
-                                                hasUrl = true;
-                                                message = message + "\n";
+                                            message = data.getQueryParameter("url");
+                                            if (message == null) {
+                                                message = "";
                                             }
-                                            message = message + data.getQueryParameter("text");
-                                        }
-                                        if (message.length() > 16384) {
-                                            message = message.substring(0, 16384);
-                                        }
-                                        while (message.endsWith("\n")) {
-                                            message = message.substring(0, message.length() - 1);
+                                            if (data.getQueryParameter("text") != null) {
+                                                if (message.length() > 0) {
+                                                    hasUrl = true;
+                                                    message = message + "\n";
+                                                }
+                                                message = message + data.getQueryParameter("text");
+                                            }
+                                            if (message.length() > 16384) {
+                                                message = message.substring(0, 16384);
+                                            }
+                                            while (message.endsWith("\n")) {
+                                                message = message.substring(0, message.length() - 1);
+                                            }
                                         }
                                     }
                                 }
@@ -1358,7 +1366,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                     LaunchActivity.this.presentFragment(new CancelAccountDeletionActivity(bundle));
                                 }
                             });
-                        } else if (username == null && group == null && sticker == null && message == null && game == null) {
+                        } else if (username == null && group == null && sticker == null && message == null && game == null && instantView == null) {
                             try {
                                 Cursor cursor = getContentResolver().query(intent.getData(), null, null, null, null);
                                 if (cursor != null) {
@@ -1373,7 +1381,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                 FileLog.e(e222);
                             }
                         } else {
-                            runLinkRequest(username, group, sticker, botUser, botChat, message, hasUrl, messageId, game, 0);
+                            runLinkRequest(username, group, sticker, botUser, botChat, message, hasUrl, messageId, game, instantView, 0);
                         }
                     }
                 } else if (intent.getAction().equals("org.telegram.messenger.OPEN_ACCOUNT")) {
@@ -1564,7 +1572,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         return false;
     }
 
-    private void runLinkRequest(String username, String group, String sticker, String botUser, String botChat, String message, boolean hasUrl, Integer messageId, String game, int state) {
+    private void runLinkRequest(String username, String group, String sticker, String botUser, String botChat, String message, boolean hasUrl, Integer messageId, String game, String[] instantView, int state) {
         final AlertDialog progressDialog = new AlertDialog(this, 1);
         progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
         progressDialog.setCanceledOnTouchOutside(false);
@@ -1731,6 +1739,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 final boolean z = hasUrl;
                 final Integer num2 = messageId;
                 final String str7 = game;
+                final String[] strArr = instantView;
                 requestId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                     public void run(final TLObject response, final TL_error error) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
@@ -1785,7 +1794,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                         }
                                         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                LaunchActivity.this.runLinkRequest(str2, str, str3, str4, str5, str6, z, num2, str7, 1);
+                                                LaunchActivity.this.runLinkRequest(str2, str, str3, str4, str5, str6, z, num2, str7, strArr, 1);
                                             }
                                         });
                                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -1889,6 +1898,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 }
             });
             presentFragment(fragment2, false, true);
+        } else if (instantView != null) {
         }
         if (requestId != 0) {
             final int i = requestId;

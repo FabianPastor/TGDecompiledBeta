@@ -1306,7 +1306,12 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 this.progressView.setVisibility(0);
                 this.doneItem.setEnabled(false);
                 this.doneItem.getImageView().setVisibility(4);
-                this.webView = new WebView(context);
+                this.webView = new WebView(context) {
+                    public boolean onTouchEvent(MotionEvent event) {
+                        getParent().requestDisallowInterceptTouchEvent(true);
+                        return super.onTouchEvent(event);
+                    }
+                };
                 this.webView.getSettings().setJavaScriptEnabled(true);
                 this.webView.getSettings().setDomStorageEnabled(true);
                 if (VERSION.SDK_INT >= 21) {
@@ -1612,7 +1617,12 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 frameLayout.addView(view, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
                 this.doneItem.setEnabled(false);
                 this.doneItem.getImageView().setVisibility(4);
-                this.webView = new WebView(context);
+                this.webView = new WebView(context) {
+                    public boolean onTouchEvent(MotionEvent event) {
+                        getParent().requestDisallowInterceptTouchEvent(true);
+                        return super.onTouchEvent(event);
+                    }
+                };
                 this.webView.setBackgroundColor(-1);
                 this.webView.getSettings().setJavaScriptEnabled(true);
                 this.webView.getSettings().setDomStorageEnabled(true);
@@ -1638,6 +1648,17 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         PaymentFormActivity.this.showEditDoneProgress(true, false);
                         PaymentFormActivity.this.updateSavePaymentField();
                     }
+
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                        try {
+                            if ("t.me".equals(Uri.parse(url).getHost())) {
+                                PaymentFormActivity.this.goToNextStep();
+                                return true;
+                            }
+                        } catch (Exception e) {
+                        }
+                        return false;
+                    }
                 });
                 frameLayout.addView(this.webView, LayoutHelper.createFrame(-1, -1.0f));
                 this.webView.setVisibility(8);
@@ -1655,7 +1676,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         builder.setMessage(LocaleController.formatString("PaymentTransactionMessage", R.string.PaymentTransactionMessage, totalPrice, this.currentBotName, this.currentItemName));
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                PaymentFormActivity.this.showEditDoneProgress(true, true);
                 PaymentFormActivity.this.setDonePressed(true);
                 PaymentFormActivity.this.sendData();
             }
@@ -1723,7 +1743,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen && !backward) {
             if (this.webView != null) {
-                this.webView.loadUrl(this.paymentForm.url);
+                if (this.currentStep != 4) {
+                    this.webView.loadUrl(this.paymentForm.url);
+                }
             } else if (this.currentStep == 2) {
                 this.inputFields[0].requestFocus();
                 AndroidUtilities.showKeyboard(this.inputFields[0]);
@@ -2191,6 +2213,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     } else if (response instanceof TL_payments_paymentVerficationNeeded) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
+                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.paymentFinished, new Object[0]);
+                                PaymentFormActivity.this.setDonePressed(false);
                                 PaymentFormActivity.this.webView.setVisibility(0);
                                 PaymentFormActivity.this.webviewLoading = true;
                                 PaymentFormActivity.this.showEditDoneProgress(true, true);

@@ -37,13 +37,13 @@ public class NativeLoader {
     }
 
     private static boolean loadFromZip(Context context, File destDir, File destLocalFile, String folder) {
-        Throwable e;
         Throwable th;
         try {
             for (File file : destDir.listFiles()) {
                 file.delete();
             }
-        } catch (Throwable e2) {
+        } catch (Throwable e) {
+            Throwable e2;
             FileLog.e(e2);
         }
         ZipFile zipFile = null;
