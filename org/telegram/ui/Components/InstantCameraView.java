@@ -95,6 +95,7 @@ import org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate;
 
 @TargetApi(18)
 public class InstantCameraView extends FrameLayout implements NotificationCenterDelegate {
+    private static final String FRAGMENT_SCREEN_SHADER = "#extension GL_OES_EGL_image_external : require\nprecision lowp float;\nvarying vec2 vTextureCoord;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n";
     private static final String FRAGMENT_SHADER = "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform float scaleX;\nuniform float scaleY;\nuniform float alpha;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n   float coef = ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n   vec3 color = texture2D(sTexture, vTextureCoord).rgb * coef + (1.0 - step(0.001, coef));\n   gl_FragColor = vec4(color * alpha, alpha);\n}\n";
     private static final int MSG_AUDIOFRAME_AVAILABLE = 3;
     private static final int MSG_START_RECORDING = 0;
@@ -930,7 +931,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         private final int DO_SHUTDOWN_MESSAGE = 1;
         private final int EGL_CONTEXT_CLIENT_VERSION = 12440;
         private final int EGL_OPENGL_ES2_BIT = 4;
-        private int alphaHandle;
         private Integer cameraId = Integer.valueOf(0);
         private SurfaceTexture cameraSurface;
         private CameraSession currentSession;
@@ -945,8 +945,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         private int positionHandle;
         private boolean recording;
         private int rotationAngle;
-        private int scaleXHandle;
-        private int scaleYHandle;
         private SurfaceTexture surfaceTexture;
         private int textureHandle;
         private int textureMatrixHandle;
@@ -1013,7 +1011,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             InstantCameraView.this.textureBuffer.put(texData).position(0);
                             Matrix.setIdentityM(InstantCameraView.this.mSTMatrix, 0);
                             int vertexShader = InstantCameraView.this.loadShader(35633, InstantCameraView.VERTEX_SHADER);
-                            int fragmentShader = InstantCameraView.this.loadShader(35632, InstantCameraView.FRAGMENT_SHADER);
+                            int fragmentShader = InstantCameraView.this.loadShader(35632, InstantCameraView.FRAGMENT_SCREEN_SHADER);
                             if (vertexShader == 0 || fragmentShader == 0) {
                                 finish();
                                 return false;
@@ -1030,9 +1028,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             } else {
                                 this.positionHandle = GLES20.glGetAttribLocation(this.drawProgram, "aPosition");
                                 this.textureHandle = GLES20.glGetAttribLocation(this.drawProgram, "aTextureCoord");
-                                this.scaleXHandle = GLES20.glGetUniformLocation(this.drawProgram, "scaleX");
-                                this.scaleYHandle = GLES20.glGetUniformLocation(this.drawProgram, "scaleY");
-                                this.alphaHandle = GLES20.glGetUniformLocation(this.drawProgram, "alpha");
                                 this.vertexMatrixHandle = GLES20.glGetUniformLocation(this.drawProgram, "uMVPMatrix");
                                 this.textureMatrixHandle = GLES20.glGetUniformLocation(this.drawProgram, "uSTMatrix");
                             }
@@ -1125,9 +1120,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 GLES20.glEnableVertexAttribArray(this.positionHandle);
                 GLES20.glVertexAttribPointer(this.textureHandle, 2, 5126, false, 8, InstantCameraView.this.textureBuffer);
                 GLES20.glEnableVertexAttribArray(this.textureHandle);
-                GLES20.glUniform1f(this.scaleXHandle, InstantCameraView.this.scaleX);
-                GLES20.glUniform1f(this.scaleYHandle, InstantCameraView.this.scaleY);
-                GLES20.glUniform1f(this.alphaHandle, 1.0f);
                 GLES20.glUniformMatrix4fv(this.textureMatrixHandle, 1, false, InstantCameraView.this.mSTMatrix, 0);
                 GLES20.glUniformMatrix4fv(this.vertexMatrixHandle, 1, false, InstantCameraView.this.mMVPMatrix, 0);
                 GLES20.glDrawArrays(5, 0, 4);

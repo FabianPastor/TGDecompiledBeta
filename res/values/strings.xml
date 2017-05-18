@@ -666,8 +666,8 @@
     <string name="InviteToGroupByLink">Invite to Group via Link</string>
     <string name="InviteToGroupError">Sorry, you can\'t add this user to groups because of user\'s privacy settings.</string>
     <string name="InviteUser">This user does not have Telegram yet, send an invitation?</string>
-    <string name="IsRecordingAudio">%1$s is recording voice message...</string>
-    <string name="IsRecordingRound">%1$s is recording video message...</string>
+    <string name="IsRecordingAudio">%1$s is recording a voice message...</string>
+    <string name="IsRecordingRound">%1$s is recording a video message...</string>
     <string name="IsSendingAudio">%1$s is sending audio...</string>
     <string name="IsSendingFile">%1$s is sending file...</string>
     <string name="IsSendingGame">%1$s is playing a game...</string>
@@ -1144,8 +1144,8 @@
     <string name="RaiseToSpeakAlert">Would you like to enable Raise to speak for voice messages?</string>
     <string name="ReEnterYourPasscode">Re-enter your new passcode</string>
     <string name="Recent">RECENT</string>
-    <string name="RecordingAudio">recording voice message...</string>
-    <string name="RecordingRound">recording video message...</string>
+    <string name="RecordingAudio">recording a voice message...</string>
+    <string name="RecordingRound">recording a video message...</string>
     <string name="RecoveryEmail">Recovery E-Mail</string>
     <string name="RegisterText">Set up your first and last name</string>
     <string name="Regular">Regular</string>

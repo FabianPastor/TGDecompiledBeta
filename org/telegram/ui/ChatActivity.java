@@ -2217,7 +2217,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         } else if (child == ChatActivity.this.actionBar) {
                             childTop -= getPaddingTop();
                         } else if (child == ChatActivity.this.roundVideoContainer) {
-                            childTop = ChatActivity.this.actionBar.getHeight();
+                            childTop = ChatActivity.this.actionBar.getMeasuredHeight();
                         } else if (child == ChatActivity.this.instantCameraView || child == ChatActivity.this.overlayView) {
                             childTop = 0;
                         }
@@ -5209,6 +5209,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     this.roundVideoContainer.setTranslationX((float) imageReceiver.getImageX());
                     this.roundVideoContainer.setTranslationY((float) (((this.fragmentView.getPaddingTop() + messageCell.getTop()) + imageReceiver.getImageY()) - additionalTop));
                     this.fragmentView.invalidate();
+                    this.roundVideoContainer.invalidate();
                     foundTextureViewMessage = true;
                     break;
                 }
@@ -5268,6 +5269,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         this.roundVideoContainer.setTranslationX((float) imageReceiver.getImageX());
                         this.roundVideoContainer.setTranslationY((float) (((this.fragmentView.getPaddingTop() + top) + imageReceiver.getImageY()) - additionalTop));
                         this.fragmentView.invalidate();
+                        this.roundVideoContainer.invalidate();
                         foundTextureViewMessage = true;
                     }
                 }

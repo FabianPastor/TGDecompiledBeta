@@ -534,9 +534,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
 
         private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
+            Matcher matcher;
             expr = expr.trim();
             if (!TextUtils.isEmpty(expr)) {
-                Matcher matcher;
                 if (expr.charAt(0) == '(') {
                     int parens_count = 0;
                     matcher = WebPlayerView.exprParensPattern.matcher(expr);
@@ -583,11 +583,22 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                             try {
                                 new JSONObject(expr).toString();
                             } catch (Exception e2) {
-                                matcher = Pattern.compile(String.format(Locale.US, "(%s)\\.([^(]+)(?:\\(+([^()]*)\\))?$", new Object[]{WebPlayerView.exprName})).matcher(expr);
+                                matcher = Pattern.compile(String.format(Locale.US, "(%s)\\[(.+)\\]$", new Object[]{WebPlayerView.exprName})).matcher(expr);
+                                if (matcher.find()) {
+                                    String val = matcher.group(1);
+                                    interpretExpression(matcher.group(2), localVars, allowRecursion - 1);
+                                    return;
+                                }
+                                matcher = Pattern.compile(String.format(Locale.US, "(%s)(?:\\.([^(]+)|\\[([^]]+)\\])\\s*(?:\\(+([^()]*)\\))?$", new Object[]{WebPlayerView.exprName})).matcher(expr);
                                 if (matcher.find()) {
                                     String variable = matcher.group(1);
-                                    String member = matcher.group(2);
-                                    String arg_str = matcher.group(3);
+                                    String m1 = matcher.group(2);
+                                    String m2 = matcher.group(3);
+                                    if (!TextUtils.isEmpty(m1)) {
+                                        m2 = m1;
+                                    }
+                                    String member = m2.replace("\"", "");
+                                    String arg_str = matcher.group(4);
                                     if (localVars.get(variable) == null) {
                                         extractObject(variable);
                                     }
@@ -608,7 +619,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                                 }
                                 matcher = Pattern.compile(String.format(Locale.US, "(%s)\\[(.+)\\]$", new Object[]{WebPlayerView.exprName})).matcher(expr);
                                 if (matcher.find()) {
-                                    Object val = localVars.get(matcher.group(1));
+                                    Object val2 = localVars.get(matcher.group(1));
                                     interpretExpression(matcher.group(2), localVars, allowRecursion - 1);
                                     return;
                                 }
@@ -661,8 +672,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
 
         private HashMap<String, Object> extractObject(String objname) throws Exception {
+            String funcName = "(?:[a-zA-Z$0-9]+|\"[a-zA-Z$0-9]+\"|'[a-zA-Z$0-9]+')";
             HashMap<String, Object> obj = new HashMap();
-            Matcher matcher = Pattern.compile(String.format(Locale.US, "(?:var\\s+)?%s\\s*=\\s*\\{\\s*(([a-zA-Z$0-9]+\\s*:\\s*function\\(.*?\\)\\s*\\{.*?\\}(?:,\\s*)?)*)\\}\\s*;", new Object[]{Pattern.quote(objname)})).matcher(this.jsCode);
+            Matcher matcher = Pattern.compile(String.format(Locale.US, "(?:var\\s+)?%s\\s*=\\s*\\{\\s*((%s\\s*:\\s*function\\(.*?\\)\\s*\\{.*?\\}(?:,\\s*)?)*)\\}\\s*;", new Object[]{Pattern.quote(objname), funcName})).matcher(this.jsCode);
             String fields = null;
             while (matcher.find()) {
                 String code = matcher.group();
@@ -671,14 +683,14 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                     if (!this.codeLines.contains(code)) {
                         this.codeLines.add(matcher.group());
                     }
-                    matcher = Pattern.compile("([a-zA-Z$0-9]+)\\s*:\\s*function\\(([a-z,]+)\\)\\{([^}]+)\\}").matcher(fields);
+                    matcher = Pattern.compile(String.format("(%s)\\s*:\\s*function\\(([a-z,]+)\\)\\{([^}]+)\\}", new Object[]{funcName})).matcher(fields);
                     while (matcher.find()) {
                         buildFunction(matcher.group(2).split(","), matcher.group(3));
                     }
                     return obj;
                 }
             }
-            matcher = Pattern.compile("([a-zA-Z$0-9]+)\\s*:\\s*function\\(([a-z,]+)\\)\\{([^}]+)\\}").matcher(fields);
+            matcher = Pattern.compile(String.format("(%s)\\s*:\\s*function\\(([a-z,]+)\\)\\{([^}]+)\\}", new Object[]{funcName})).matcher(fields);
             while (matcher.find()) {
                 buildFunction(matcher.group(2).split(","), matcher.group(3));
             }
