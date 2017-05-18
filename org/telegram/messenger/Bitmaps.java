@@ -107,7 +107,7 @@ public class Bitmaps {
             if (config != null) {
                 switch (AnonymousClass2.$SwitchMap$android$graphics$Bitmap$Config[config.ordinal()]) {
                     case 1:
-                        newConfig = Config.RGB_565;
+                        newConfig = Config.ARGB_8888;
                         break;
                     case 2:
                         newConfig = Config.ALPHA_8;

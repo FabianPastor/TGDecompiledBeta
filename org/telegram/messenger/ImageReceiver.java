@@ -806,6 +806,14 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.imageH = height;
     }
 
+    public float getCenterX() {
+        return ((float) this.imageX) + (((float) this.imageW) / 2.0f);
+    }
+
+    public float getCenterY() {
+        return ((float) this.imageY) + (((float) this.imageH) / 2.0f);
+    }
+
     public int getImageX() {
         return this.imageX;
     }
@@ -992,14 +1000,12 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 }
                 if (memCache || this.crossfadeAlpha == (byte) 2) {
                     this.currentAlpha = 1.0f;
+                } else if (this.parentMessageObject != null && this.parentMessageObject.isRoundVideo() && this.parentMessageObject.isSending()) {
+                    this.currentAlpha = 1.0f;
                 } else {
                     this.currentAlpha = 0.0f;
                     this.lastUpdateAlphaTime = System.currentTimeMillis();
-                    if (this.staticThumb == null || this.currentKey != null) {
-                        z2 = false;
-                    } else {
-                        z2 = true;
-                    }
+                    z2 = this.staticThumb != null && this.currentKey == null;
                     this.crossfadeWithThumb = z2;
                 }
                 if (!((this.staticThumb instanceof BitmapDrawable) || this.parentView == null)) {

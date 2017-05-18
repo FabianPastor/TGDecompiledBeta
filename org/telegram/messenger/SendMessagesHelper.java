@@ -2,6 +2,7 @@ package org.telegram.messenger;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory.Options;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -4185,7 +4186,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         int max = Math.max(width, height);
         if (max > 90) {
             float scale = 90.0f / ((float) max);
-            bitmap = Bitmap.createScaledBitmap(bitmap, Math.round(((float) width) * scale), Math.round(((float) height) * scale), true);
+            bitmap = Bitmaps.createScaledBitmap(bitmap, Math.round(((float) width) * scale), Math.round(((float) height) * scale), true);
         }
         return bitmap;
     }
@@ -4205,6 +4206,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 public void run() {
                     boolean isEncrypted = ((int) j) == 0;
                     boolean isRound = videoEditedInfo2 != null && videoEditedInfo2.roundVideo;
+                    Bitmap thumb = null;
+                    String thumbKey = null;
                     if (videoEditedInfo2 != null || str.endsWith("mp4") || isRound) {
                         String path = str;
                         String originalPath = str;
@@ -4224,16 +4227,29 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         PhotoSize size;
                         EncryptedChat encryptedChat;
                         TL_documentAttributeVideo attributeVideo;
-                        TL_document videoFinal;
+                        final TL_document videoFinal;
                         String originalPathFinal;
-                        String finalPath;
-                        HashMap<String, String> params;
-                        final TL_document tL_document;
-                        final String str;
-                        final HashMap<String, String> hashMap;
+                        final String finalPath;
+                        final HashMap<String, String> params;
+                        final Bitmap thumbFinal;
+                        final String thumbKeyFinal;
                         if (isEncrypted) {
                             if (null == null) {
-                                size = ImageLoader.scaleAndSaveImage(SendMessagesHelper.createVideoThumbnail(str, startTime), 90.0f, 90.0f, 55, isEncrypted);
+                                thumb = SendMessagesHelper.createVideoThumbnail(str, startTime);
+                                size = ImageLoader.scaleAndSaveImage(thumb, 90.0f, 90.0f, 55, isEncrypted);
+                                if (isRound) {
+                                    thumb = null;
+                                } else if (isEncrypted) {
+                                    if (VERSION.SDK_INT >= 21) {
+                                    }
+                                    Utilities.blurBitmap(thumb, 7, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
+                                    thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b2", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
+                                } else {
+                                    if (VERSION.SDK_INT >= 21) {
+                                    }
+                                    Utilities.blurBitmap(thumb, 3, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
+                                    thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
+                                }
                                 document = new TL_document();
                                 document.thumb = size;
                                 if (document.thumb != null) {
@@ -4270,22 +4286,34 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             originalPathFinal = originalPath;
                             finalPath = path;
                             params = new HashMap();
+                            thumbFinal = thumb;
+                            thumbKeyFinal = thumbKey;
                             videoFinal.caption = str2;
                             if (originalPath != null) {
                                 params.put("originalPath", originalPath);
                             }
-                            tL_document = videoFinal;
-                            str = finalPath;
-                            hashMap = params;
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
-                                    SendMessagesHelper.getInstance().sendMessage(tL_document, videoEditedInfo2, str, j, messageObject, null, hashMap);
+                                    if (thumbFinal != null) {
+                                        ImageLoader.getInstance().putImageToCache(new BitmapDrawable(thumbFinal), thumbKeyFinal);
+                                    }
+                                    SendMessagesHelper.getInstance().sendMessage(videoFinal, videoEditedInfo2, finalPath, j, messageObject, null, params);
                                 }
                             });
                             return;
                         }
                         if (null == null) {
-                            size = ImageLoader.scaleAndSaveImage(SendMessagesHelper.createVideoThumbnail(str, startTime), 90.0f, 90.0f, 55, isEncrypted);
+                            thumb = SendMessagesHelper.createVideoThumbnail(str, startTime);
+                            size = ImageLoader.scaleAndSaveImage(thumb, 90.0f, 90.0f, 55, isEncrypted);
+                            if (isRound) {
+                                thumb = null;
+                            } else if (isEncrypted) {
+                                Utilities.blurBitmap(thumb, 7, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
+                                thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b2", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
+                            } else {
+                                Utilities.blurBitmap(thumb, 3, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
+                                thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
+                            }
                             document = new TL_document();
                             document.thumb = size;
                             if (document.thumb != null) {
@@ -4332,9 +4360,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 document.size = (int) j3;
                                 String fileName = "-2147483648_" + UserConfig.lastLocalId + ".mp4";
                                 UserConfig.lastLocalId--;
-                                File cacheFile = new File(FileLoader.getInstance().getDirectory(4), fileName);
+                                file = new File(FileLoader.getInstance().getDirectory(4), fileName);
                                 UserConfig.saveConfig(false);
-                                path = cacheFile.getAbsolutePath();
+                                path = file.getAbsolutePath();
                             } else {
                                 if (file.exists()) {
                                     document.size = (int) file.length();
@@ -4346,13 +4374,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         originalPathFinal = originalPath;
                         finalPath = path;
                         params = new HashMap();
+                        thumbFinal = thumb;
+                        thumbKeyFinal = thumbKey;
                         videoFinal.caption = str2;
                         if (originalPath != null) {
                             params.put("originalPath", originalPath);
                         }
-                        tL_document = videoFinal;
-                        str = finalPath;
-                        hashMap = params;
                         AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
                         return;
                     }

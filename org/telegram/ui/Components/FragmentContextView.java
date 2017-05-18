@@ -7,7 +7,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
@@ -43,7 +42,6 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private FrameLayout frameLayout;
     private MessageObject lastMessageObject;
     private ImageView playButton;
-    private Paint progressPaint;
     private TextView titleTextView;
     private float topPadding;
     private boolean visible;
@@ -54,19 +52,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.fragment = parentFragment;
         this.visible = true;
         ((ViewGroup) this.fragment.getFragmentView()).setClipToPadding(false);
-        this.progressPaint = new Paint();
-        this.progressPaint.setColor(Theme.getColor(Theme.key_inappPlayerPlayPause));
         setTag(Integer.valueOf(1));
-        this.frameLayout = new FrameLayout(context) {
-            protected void onDraw(Canvas canvas) {
-                if (FragmentContextView.this.currentStyle == 0) {
-                    MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
-                    if (messageObject != null) {
-                        canvas.drawRect(0.0f, (float) AndroidUtilities.dp(34.0f), messageObject.audioProgress * ((float) getWidth()), (float) AndroidUtilities.dp(36.0f), FragmentContextView.this.progressPaint);
-                    }
-                }
-            }
-        };
+        this.frameLayout = new FrameLayout(context);
         this.frameLayout.setWillNotDraw(false);
         addView(this.frameLayout, LayoutHelper.createFrame(-1, 36.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
         View shadow = new View(context);
@@ -189,7 +176,6 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingDidStarted);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didStartedCall);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didEndedCall);
     }
@@ -199,7 +185,6 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidStarted);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didStartedCall);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didEndedCall);
         boolean callAvailable = (VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getCallState() == 10) ? false : true;
@@ -219,10 +204,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             checkPlayer(false);
         } else if (id == NotificationCenter.didStartedCall) {
             checkCall(false);
-        } else if (id != NotificationCenter.messagePlayingProgressDidChanged) {
+        } else {
             checkPlayer(false);
-        } else if (this.currentStyle == 0) {
-            this.frameLayout.invalidate();
         }
     }
 

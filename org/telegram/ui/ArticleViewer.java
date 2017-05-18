@@ -5012,6 +5012,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             return false;
         }
         WindowManager wm;
+        LayoutParams layoutParams;
         final AnimatorSet animatorSet;
         Animator[] animatorArr;
         float[] fArr;
@@ -5071,7 +5072,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         String webPageUrl = webPage.url.toLowerCase();
         String anchor = null;
         for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
-            LayoutParams layoutParams;
             MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
             if (entity instanceof TL_messageEntityUrl) {
                 try {

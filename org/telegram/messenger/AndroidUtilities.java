@@ -392,8 +392,8 @@ Error: java.util.NoSuchElementException
         if (pathString == null) {
             return false;
         }
-        String path;
         while (true) {
+            String path;
             String newPath = Utilities.readlink(pathString);
             if (newPath != null && !newPath.equals(pathString)) {
                 pathString = newPath;
@@ -645,9 +645,9 @@ Error: java.util.NoSuchElementException
             }
             if (roundMessageSize == 0) {
                 if (isTablet()) {
-                    roundMessageSize = (int) (((float) getMinTabletSide()) * 0.5f);
+                    roundMessageSize = (int) (((float) getMinTabletSide()) * 0.6f);
                 } else {
-                    roundMessageSize = (int) (((float) Math.min(displaySize.x, displaySize.y)) * 0.5f);
+                    roundMessageSize = (int) (((float) Math.min(displaySize.x, displaySize.y)) * 0.6f);
                 }
             }
             FileLog.e("display size = " + displaySize.x + " " + displaySize.y + " " + displayMetrics.xdpi + "x" + displayMetrics.ydpi);

@@ -174,6 +174,7 @@ public class Theme {
     public static Drawable chat_muteIconDrawable = null;
     public static TextPaint chat_namePaint = null;
     public static Drawable[][] chat_photoStatesDrawables = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{13, 2}));
+    public static Paint chat_radialProgressPaint = null;
     public static Paint chat_replyLinePaint = null;
     public static TextPaint chat_replyNamePaint = null;
     public static TextPaint chat_replyTextPaint = null;
@@ -2144,6 +2145,10 @@ public class Theme {
             chat_locationAddressPaint = new TextPaint(1);
             chat_urlPaint = new Paint();
             chat_textSearchSelectionPaint = new Paint();
+            chat_radialProgressPaint = new Paint(1);
+            chat_radialProgressPaint.setStrokeCap(Cap.ROUND);
+            chat_radialProgressPaint.setStyle(Style.STROKE);
+            chat_radialProgressPaint.setColor(-NUM);
             chat_audioTimePaint = new TextPaint(1);
             chat_audioTitlePaint = new TextPaint(1);
             chat_audioTitlePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -2370,6 +2375,7 @@ public class Theme {
             chat_actionTextPaint.setTextSize((float) AndroidUtilities.dp((float) (MessagesController.getInstance().fontSize - 2)));
             chat_contextResult_titleTextPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
             chat_contextResult_descriptionTextPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
+            chat_radialProgressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
         }
     }
 
@@ -2713,10 +2719,10 @@ public class Theme {
                     Throwable e;
                     int i;
                     SharedPreferences preferences;
+                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
                         int selectedBackground;
-                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

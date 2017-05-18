@@ -114,6 +114,7 @@ import org.telegram.messenger.query.SearchQuery;
 import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.GridLayoutManager.SpanSizeLookup;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
+import org.telegram.messenger.support.widget.LinearSmoothScrollerMiddle;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ItemDecoration;
@@ -2348,6 +2349,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         this.chatLayoutManager = new LinearLayoutManager(context) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
+            }
+
+            public void smoothScrollToPosition(RecyclerView recyclerView, State state, int position) {
+                LinearSmoothScrollerMiddle linearSmoothScroller = new LinearSmoothScrollerMiddle(recyclerView.getContext());
+                linearSmoothScroller.setTargetPosition(position);
+                startSmoothScroll(linearSmoothScroller);
             }
         };
         this.chatLayoutManager.setOrientation(1);
@@ -5637,7 +5644,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         } else if ((inputStickerSet instanceof TL_inputStickerSetShortName) && !StickersQuery.isStickerPackInstalled(inputStickerSet.short_name)) {
                             return 7;
                         }
-                    } else if (!messageObject.isRoundVideo() && ((messageObject.messageOwner.media instanceof TL_messageMediaPhoto) || messageObject.getDocument() != null || messageObject.isMusic() || messageObject.isVideo())) {
+                    } else if ((messageObject.messageOwner.media instanceof TL_messageMediaPhoto) || messageObject.getDocument() != null || messageObject.isMusic() || messageObject.isVideo()) {
                         canSave = false;
                         if (!(messageObject.messageOwner.attachPath == null || messageObject.messageOwner.attachPath.length() == 0 || !new File(messageObject.messageOwner.attachPath).exists())) {
                             canSave = true;
@@ -8997,11 +9004,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         for (Entry<Integer, MessageObject> entry22 : this.selectedMessagesIds[a].entrySet()) {
                             msg = (MessageObject) entry22.getValue();
                             if (msg.messageOwner.action == null) {
-                                if (!msg.isOut()) {
-                                    z = false;
+                                if (!msg.isOut() && !this.currentChat.creator && (!this.currentChat.admin || !this.currentChat.admins_enabled)) {
                                     exit = true;
+                                    z = false;
                                     break;
-                                } else if (currentDate - msg.messageOwner.date <= 172800) {
+                                } else if (!z && currentDate - msg.messageOwner.date <= 172800) {
                                     z = true;
                                 }
                             }

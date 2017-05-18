@@ -95,7 +95,7 @@ import org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate;
 
 @TargetApi(18)
 public class InstantCameraView extends FrameLayout implements NotificationCenterDelegate {
-    private static final String FRAGMENT_SHADER = "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform float scaleX;\nuniform float scaleY;\nuniform float alpha;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n   vec4 color = texture2D(sTexture, vTextureCoord) * ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n   gl_FragColor = vec4(color.rgb * alpha, alpha);\n}\n";
+    private static final String FRAGMENT_SHADER = "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform float scaleX;\nuniform float scaleY;\nuniform float alpha;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n   vec3 color = texture2D(sTexture, vTextureCoord).rgb * ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n   vec3 inverse = 1.0 - step(vec3(0.001, 0.001, 0.001), color);\n   gl_FragColor = vec4((color + inverse) * alpha, alpha);\n}\n";
     private static final int MSG_AUDIOFRAME_AVAILABLE = 3;
     private static final int MSG_START_RECORDING = 0;
     private static final int MSG_STOP_RECORDING = 1;
@@ -792,13 +792,13 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void drainEncoder(boolean endOfStream) throws Exception {
+            ByteBuffer encodedData;
             if (endOfStream) {
                 this.videoEncoder.signalEndOfInputStream();
             }
             ByteBuffer[] encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
             while (true) {
                 MediaFormat newFormat;
-                ByteBuffer encodedData;
                 int encoderStatus = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
                 if (encoderStatus == -1) {
                     if (!endOfStream) {
@@ -1038,7 +1038,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             }
                             GLES20.glGenTextures(1, InstantCameraView.this.cameraTexture, 0);
                             GLES20.glBindTexture(36197, InstantCameraView.this.cameraTexture[0]);
-                            GLES20.glTexParameterf(36197, 10241, 9728.0f);
+                            GLES20.glTexParameterf(36197, 10241, 9729.0f);
                             GLES20.glTexParameterf(36197, Task.EXTRAS_LIMIT_BYTES, 9729.0f);
                             GLES20.glTexParameteri(36197, 10242, 33071);
                             GLES20.glTexParameteri(36197, 10243, 33071);
@@ -1177,7 +1177,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         InstantCameraView.this.cameraReady = false;
                         GLES20.glGenTextures(1, InstantCameraView.this.cameraTexture, 0);
                         GLES20.glBindTexture(36197, InstantCameraView.this.cameraTexture[0]);
-                        GLES20.glTexParameterf(36197, 10241, 9728.0f);
+                        GLES20.glTexParameterf(36197, 10241, 9729.0f);
                         GLES20.glTexParameterf(36197, Task.EXTRAS_LIMIT_BYTES, 9729.0f);
                         GLES20.glTexParameteri(36197, 10242, 33071);
                         GLES20.glTexParameteri(36197, 10243, 33071);
@@ -1300,6 +1300,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.cameraContainer = new FrameLayout(context) {
                 public void setScaleX(float scaleX) {
                     super.setScaleX(scaleX);
+                    InstantCameraView.this.invalidate();
+                }
+
+                public void setAlpha(float alpha) {
+                    super.setAlpha(alpha);
                     InstantCameraView.this.invalidate();
                 }
             };

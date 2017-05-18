@@ -18,6 +18,7 @@ import android.graphics.Path;
 import android.graphics.Path.Direction;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.os.Build.VERSION;
 import android.view.MotionEvent;
 import android.view.TextureView;
@@ -36,11 +37,13 @@ import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.Theme;
 
-public class PipRoundVideoView {
+public class PipRoundVideoView implements NotificationCenterDelegate {
     @SuppressLint({"StaticFieldLeak"})
     private static PipRoundVideoView instance;
     private AspectRatioFrameLayout aspectRatioFrameLayout;
@@ -51,6 +54,7 @@ public class PipRoundVideoView {
     private Runnable onCloseRunnable;
     private Activity parentActivity;
     private SharedPreferences preferences;
+    private RectF rect = new RectF();
     private TextureView textureView;
     private int videoHeight;
     private int videoWidth;
@@ -153,7 +157,19 @@ public class PipRoundVideoView {
         this.videoWidth = AndroidUtilities.dp(126.0f);
         this.videoHeight = AndroidUtilities.dp(126.0f);
         if (VERSION.SDK_INT >= 21) {
-            this.aspectRatioFrameLayout = new AspectRatioFrameLayout(activity);
+            this.aspectRatioFrameLayout = new AspectRatioFrameLayout(activity) {
+                protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                    boolean result = super.drawChild(canvas, child, drawingTime);
+                    if (child == PipRoundVideoView.this.textureView) {
+                        MessageObject currentMessageObject = MediaController.getInstance().getPlayingMessageObject();
+                        if (currentMessageObject != null) {
+                            PipRoundVideoView.this.rect.set(AndroidUtilities.dpf2(1.5f), AndroidUtilities.dpf2(1.5f), ((float) getMeasuredWidth()) - AndroidUtilities.dpf2(1.5f), ((float) getMeasuredHeight()) - AndroidUtilities.dpf2(1.5f));
+                            canvas.drawArc(PipRoundVideoView.this.rect, -90.0f, currentMessageObject.audioProgress * 360.0f, false, Theme.chat_radialProgressPaint);
+                        }
+                    }
+                    return result;
+                }
+            };
             this.aspectRatioFrameLayout.setOutlineProvider(new ViewOutlineProvider() {
                 @TargetApi(21)
                 public void getOutline(View view, Outline outline) {
@@ -178,6 +194,18 @@ public class PipRoundVideoView {
                 protected void dispatchDraw(Canvas canvas) {
                     super.dispatchDraw(canvas);
                     canvas.drawPath(this.aspectPath, aspectPaint);
+                }
+
+                protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                    boolean result = super.drawChild(canvas, child, drawingTime);
+                    if (child == PipRoundVideoView.this.textureView) {
+                        MessageObject currentMessageObject = MediaController.getInstance().getPlayingMessageObject();
+                        if (currentMessageObject != null) {
+                            PipRoundVideoView.this.rect.set(AndroidUtilities.dpf2(1.5f), AndroidUtilities.dpf2(1.5f), ((float) getMeasuredWidth()) - AndroidUtilities.dpf2(1.5f), ((float) getMeasuredHeight()) - AndroidUtilities.dpf2(1.5f));
+                            canvas.drawArc(PipRoundVideoView.this.rect, -90.0f, currentMessageObject.audioProgress * 360.0f, false, Theme.chat_radialProgressPaint);
+                        }
+                    }
+                    return result;
                 }
             };
             this.aspectRatioFrameLayout.setLayerType(2, null);
@@ -210,6 +238,7 @@ public class PipRoundVideoView {
             this.windowLayoutParams.flags = 16777736;
             this.windowManager.addView(this.windowView, this.windowLayoutParams);
             this.parentActivity = activity;
+            NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
             runShowHideAnimation(true);
         } catch (Throwable e) {
             FileLog.e(e);
@@ -237,6 +266,12 @@ public class PipRoundVideoView {
         return result + ActionBar.getCurrentActionBarHeight();
     }
 
+    public void didReceivedNotification(int id, Object... args) {
+        if (id == NotificationCenter.messagePlayingProgressDidChanged && this.aspectRatioFrameLayout != null) {
+            this.aspectRatioFrameLayout.invalidate();
+        }
+    }
+
     public TextureView getTextureView() {
         return this.textureView;
     }
@@ -256,6 +291,7 @@ public class PipRoundVideoView {
                 instance = null;
             }
             this.parentActivity = null;
+            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
         } else if (this.textureView != null && this.textureView.getParent() != null) {
             if (this.textureView.getWidth() > 0 && this.textureView.getHeight() > 0) {
                 this.bitmap = Bitmaps.createBitmap(this.textureView.getWidth(), this.textureView.getHeight(), Config.ARGB_8888);
