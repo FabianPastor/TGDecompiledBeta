@@ -1189,16 +1189,15 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             if (this.currentMessageObject.isRoundVideo()) {
                 duration = 0;
                 Document document = this.currentMessageObject.getDocument();
-                if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
-                    duration = this.currentMessageObject.audioProgressSec;
-                } else {
-                    for (a = 0; a < document.attributes.size(); a++) {
-                        attribute = (DocumentAttribute) document.attributes.get(a);
-                        if (attribute instanceof TL_documentAttributeVideo) {
-                            duration = attribute.duration;
-                            break;
-                        }
+                for (a = 0; a < document.attributes.size(); a++) {
+                    attribute = (DocumentAttribute) document.attributes.get(a);
+                    if (attribute instanceof TL_documentAttributeVideo) {
+                        duration = attribute.duration;
+                        break;
                     }
+                }
+                if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
+                    duration = Math.max(0, this.currentMessageObject.audioProgressSec);
                 }
                 timeString = String.format("%02d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(duration % 60)});
                 if (this.lastTimeString == null || !(this.lastTimeString == null || this.lastTimeString.equals(timeString))) {
@@ -1838,27 +1837,22 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
         int maxWidth;
-        int i;
-        int linkPreviewMaxWidth;
         String description;
         Photo photo;
-        TLObject document;
-        String type;
         int duration;
         boolean smallImage;
         TL_webDocument webDocument;
-        int additinalWidth;
-        int width;
+        TL_webDocument webDocument2;
         Throwable e;
-        int restLinesCount;
-        int a;
         boolean authorIsRTL;
         boolean hasRTL;
         int textWidth;
+        DocumentAttribute attribute;
         PhotoSize photoSize;
         PhotoSize photoSize2;
         int dp;
-        ArrayList arrayList;
+        int durationWidth;
+        String fileName;
         boolean autoDownload;
         int seconds;
         String str;
@@ -1872,8 +1866,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         int maxButtonWidth;
         int maxButtonsWidth;
         HashMap<String, BotButton> hashMap;
+        HashMap<String, BotButton> oldByPosition;
         TL_keyboardButtonRow row;
-        int buttonsCount;
+        int buttonWidth;
         int b;
         ChatMessageCell chatMessageCell;
         BotButton botButton;
@@ -1888,9 +1883,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
+            int i;
             int dp2;
-            HashMap<String, BotButton> oldByPosition;
-            int buttonWidth;
+            int width;
+            int a;
+            int buttonsCount;
             int timeWidthTotal;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
@@ -1970,8 +1967,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             }
             boolean z;
             int maxPhotoWidth;
-            DocumentAttribute attribute;
-            String fileName;
             float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
@@ -2064,14 +2059,18 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 int maxChildWidth = Math.max(Math.max(Math.max(Math.max(this.backgroundWidth, this.nameWidth), this.forwardedNameWidth), this.replyNameWidth), this.replyTextWidth);
                 int maxWebWidth = 0;
                 if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
+                    int linkPreviewMaxWidth;
                     String site_name;
                     String title;
                     String author;
-                    TL_webDocument webDocument2;
+                    TLObject document;
+                    String type;
+                    int additinalWidth;
                     int height;
                     int restLines;
+                    int restLinesCount;
                     int lineLeft;
-                    int durationWidth;
+                    ArrayList arrayList;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);
@@ -5925,7 +5924,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         } else {
                             this.photoImage.setImageBitmap((BitmapDrawable) null);
                         }
-                    } else if (messageObject.type == 8 || (messageObject.type == 5 && !messageObject.isSecretMedia())) {
+                    } else if (messageObject.type == 8 || messageObject.type == 5) {
                         fileName = FileLoader.getAttachFileName(messageObject.messageOwner.media.document);
                         int localFile = 0;
                         if (messageObject.attachPathExists) {

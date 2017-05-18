@@ -50,6 +50,7 @@
     <string name="ActionPinnedMusic">un1 ha fissato una traccia</string>
     <string name="ActionPinnedNoText">un1 ha fissato un messaggio</string>
     <string name="ActionPinnedPhoto">un1 ha fissato una foto</string>
+    <string name="ActionPinnedRound">un1 ha fissato un videomessaggio</string>
     <string name="ActionPinnedSticker">un1 ha fissato uno sticker</string>
     <string name="ActionPinnedText">un1 ha fissato \"%1$s\"</string>
     <string name="ActionPinnedVideo">un1 ha fissato un video</string>
@@ -163,6 +164,7 @@
     <string name="AttachLocation">Posizione</string>
     <string name="AttachMusic">Musica</string>
     <string name="AttachPhoto">Foto</string>
+    <string name="AttachRound">Videomessaggio</string>
     <string name="AttachSticker">Sticker</string>
     <string name="AttachVideo">Video</string>
     <string name="AudioTitle">Musica condivisa</string>
@@ -286,6 +288,7 @@
     <string name="ChannelMessageGroupMusic">%1$s ha inviato una traccia al canale %2$s</string>
     <string name="ChannelMessageGroupNoText">%1$s ha inviato un messaggio al canale %2$s</string>
     <string name="ChannelMessageGroupPhoto">%1$s ha inviato una foto al canale %2$s</string>
+    <string name="ChannelMessageGroupRound">%1$s ha inviato un videomessaggio al canale %2$s</string>
     <string name="ChannelMessageGroupSticker">%1$s ha inviato uno sticker al canale %2$s</string>
     <string name="ChannelMessageGroupStickerEmoji">%1$s ha inviato uno %3$s sticker al canale %2$s</string>
     <string name="ChannelMessageGroupVideo">%1$s ha inviato un video al canale %2$s</string>
@@ -293,6 +296,7 @@
     <string name="ChannelMessageMusic">%1$s ha pubblicato una traccia</string>
     <string name="ChannelMessageNoText">%1$s ha pubblicato un messaggio</string>
     <string name="ChannelMessagePhoto">%1$s ha pubblicato una foto</string>
+    <string name="ChannelMessageRound">%1$s ha pubblicato un videomessaggio</string>
     <string name="ChannelMessageSticker">%1$s ha pubblicato uno sticker</string>
     <string name="ChannelMessageStickerEmoji">%1$s ha pubblicato uno %2$s sticker</string>
     <string name="ChannelMessageVideo">%1$s ha pubblicato un video</string>
@@ -357,10 +361,12 @@
     <string name="CodeExpired">Codice scaduto, effettua di nuovo l\'accesso</string>
     <string name="ColorBlue">Blu</string>
     <string name="ColorCyan">Ciano</string>
+    <string name="ColorDark">Scuro</string>
     <string name="ColorGreen">Verde</string>
     <string name="ColorOrange">Arancione</string>
     <string name="ColorPink">Rosa</string>
     <string name="ColorRed">Rosso</string>
+    <string name="ColorSepia">Seppia</string>
     <string name="ColorViolet">Viola</string>
     <string name="ColorWhite">Bianco</string>
     <string name="ColorYellow">Giallo</string>
@@ -455,6 +461,11 @@
     <string name="DirectShareInfo">Mostra le chat recenti nel menù di condivisione</string>
     <string name="Disabled">Disabilitata</string>
     <string name="DiscardChanges">Annullare le modifiche?</string>
+    <string name="DiscardVideoMessageDescription">Sei sicuro di voler interrompere la registrazione e scartare il tuo videomessaggio?</string>
+    <string name="DiscardVideoMessageTitle">Scarta videomessaggio</string>
+    <string name="DiscardVoiceMessageAction">Scarta</string>
+    <string name="DiscardVoiceMessageDescription">Sei sicuro di voler interrompere la registrazione e scartare il tuo messaggio vocale?</string>
+    <string name="DiscardVoiceMessageTitle">Scarta messaggio vocale</string>
     <string name="DocumentsTitle">File condivisi</string>
     <string name="Done">Fatto</string>
     <string name="Draft">Bozza</string>
@@ -513,6 +524,7 @@
     <string name="FloodWait">Troppi tentativi, riprova più tardi</string>
     <string name="FloodWaitTime">Troppi tentativi, per favore riprova di nuovo tra %1$s</string>
     <string name="Folder">Cartella</string>
+    <string name="FontSize">Dimensione carattere</string>
     <string name="ForgotPassword">Password dimenticata?</string>
     <string name="Forward">Inoltra</string>
     <string name="ForwardMessagesTo">Vuoi inoltrare i messaggi a %1$s?</string>
@@ -560,6 +572,12 @@
     <string name="ForwardedPhoto_other">%1$d foto inoltrate</string>
     <string name="ForwardedPhoto_two">%1$d foto inoltrate</string>
     <string name="ForwardedPhoto_zero">%1$d foto inoltrate</string>
+    <string name="ForwardedRound_few">%1$d videomessaggi inoltrati</string>
+    <string name="ForwardedRound_many">%1$d videomessaggi inoltrati</string>
+    <string name="ForwardedRound_one">Videomessaggio inoltrato</string>
+    <string name="ForwardedRound_other">%1$d videomessaggi inoltrati</string>
+    <string name="ForwardedRound_two">%1$d videomessaggi inoltrati</string>
+    <string name="ForwardedRound_zero">%1$d videomessaggi inoltrati</string>
     <string name="ForwardedSticker_few">%1$d sticker inoltrati</string>
     <string name="ForwardedSticker_many">%1$d sticker inoltrati</string>
     <string name="ForwardedSticker_one">Sticker inoltrato</string>
@@ -607,6 +625,8 @@
     <string name="HiddenName">Account eliminato</string>
     <string name="Highlights">Alte luci</string>
     <string name="HistoryCleared">Cronologia eliminata</string>
+    <string name="HoldToAudio">Tieni premuto per l\'audio. Tocca per il video.</string>
+    <string name="HoldToVideo">Tieni premuto per il video. Tocca per l\'audio.</string>
     <string name="HoursBold_few">&lt;b&gt;%1$d&lt;/b&gt; ore</string>
     <string name="HoursBold_many">&lt;b&gt;%1$d&lt;/b&gt; ore</string>
     <string name="HoursBold_one">&lt;b&gt;%1$d&lt;/b&gt; ora</string>
@@ -647,6 +667,7 @@
     <string name="InviteToGroupError">Spiacenti, non puoi aggiungere questo utente al gruppo a causa delle sue impostazioni di privacy.</string>
     <string name="InviteUser">Questo utente non ha ancora Telegram, vuoi invitarlo?</string>
     <string name="IsRecordingAudio">%1$s sta registrando un audio...</string>
+    <string name="IsRecordingRound">%1$s sta registrando un videomessaggio...</string>
     <string name="IsSendingAudio">%1$s sta inviando un audio...</string>
     <string name="IsSendingFile">%1$s sta inviando un file...</string>
     <string name="IsSendingGame">%1$s sta giocando a un gioco...</string>
@@ -716,7 +737,7 @@
     <string name="LinkPreview">Anteprima link</string>
     <string name="LinksTitle">Link condivisi</string>
     <string name="Loading">Carico...</string>
-    <string name="LocalAudioCache">Messaggi vocali</string>
+    <string name="LocalAudioCache">Messaggi vocali/video</string>
     <string name="LocalCache">Altri file</string>
     <string name="LocalDatabase">Database locale</string>
     <string name="LocalDatabaseClear">Cancellare i messaggi salvati nella cache?</string>
@@ -783,7 +804,7 @@
     <string name="Minutes_other">%1$d minuti</string>
     <string name="Minutes_two">%1$d minuti</string>
     <string name="Minutes_zero">%1$d minuti</string>
-    <string name="MobileUsage">Utilizzo dati mobile</string>
+    <string name="MobileUsage">Utilizzo dati cellulare</string>
     <string name="Months_few">%1$d mesi</string>
     <string name="Months_many">%1$d mesi</string>
     <string name="Months_one">%1$d mese</string>
@@ -873,6 +894,8 @@
     <string name="NotificationActionPinnedNoTextChannel">%1$s ha fissato un messaggio</string>
     <string name="NotificationActionPinnedPhoto">%1$s ha fissato una foto nel gruppo %2$s</string>
     <string name="NotificationActionPinnedPhotoChannel">%1$s ha fissato una foto</string>
+    <string name="NotificationActionPinnedRound">%1$s ha fissato un videomessaggio nel gruppo %2$s</string>
+    <string name="NotificationActionPinnedRoundChannel">%1$s ha fissato un videomessaggio</string>
     <string name="NotificationActionPinnedSticker">%1$s ha fissato uno sticker nel gruppo %2$s</string>
     <string name="NotificationActionPinnedStickerChannel">%1$s ha fissato uno sticker</string>
     <string name="NotificationActionPinnedStickerEmoji">%1$s ha fissato uno %3$s sticker nel gruppo %2$s</string>
@@ -885,7 +908,7 @@
     <string name="NotificationActionPinnedVoiceChannel">%1$s ha fissato un messaggio vocale</string>
     <string name="NotificationContactJoined">%1$s si è unito a Telegram!</string>
     <string name="NotificationContactNewPhoto">%1$s ha aggiornato la foto del profilo</string>
-    <string name="NotificationEditedGroupName">%1$s ha modificato il nome del gruppo %2$s</string>
+    <string name="NotificationEditedGroupName">%1$s ha rinominato il gruppo %2$s</string>
     <string name="NotificationEditedGroupPhoto">%1$s ha modificato la foto del gruppo %2$s</string>
     <string name="NotificationGroupAddMember">%1$s ha invitato %3$s nel gruppo %2$s</string>
     <string name="NotificationGroupAddSelf">%1$s è tornato nel gruppo %2$s</string>
@@ -909,6 +932,7 @@
     <string name="NotificationMessageGroupMusic">%1$s ha inviato una traccia al gruppo %2$s</string>
     <string name="NotificationMessageGroupNoText">%1$s ha inviato un messaggio al gruppo %2$s</string>
     <string name="NotificationMessageGroupPhoto">%1$s ha inviato una foto al gruppo %2$s</string>
+    <string name="NotificationMessageGroupRound">%1$s ha inviato un videomessaggio al gruppo %2$s</string>
     <string name="NotificationMessageGroupSticker">%1$s ha inviato uno sticker al gruppo %2$s</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s ha inviato uno %3$s sticker al gruppo %2$s</string>
     <string name="NotificationMessageGroupText">%1$s @ %2$s: %3$s</string>
@@ -917,12 +941,13 @@
     <string name="NotificationMessageMusic">%1$s ti ha inviato una traccia</string>
     <string name="NotificationMessageNoText">%1$s ti ha inviato un messaggio</string>
     <string name="NotificationMessagePhoto">%1$s ti ha inviato una foto</string>
+    <string name="NotificationMessageRound">%1$s ti ha inviato un videomessaggio</string>
     <string name="NotificationMessageSticker">%1$s ti ha inviato uno sticker</string>
     <string name="NotificationMessageStickerEmoji">%1$s ti ha inviato uno %2$s sticker</string>
     <string name="NotificationMessageText">%1$s: %2$s</string>
     <string name="NotificationMessageVideo">%1$s ti ha inviato un video</string>
     <string name="NotificationMessagesPeopleDisplayOrder">%1$s %2$s</string>
-    <string name="NotificationUnrecognizedDevice">%1$s,\nAbbiamo rilevato un accesso al tuo account da un nuovo dispositivo il %2$s\n\nDispositivo: %3$s\nPosizione: %4$s\n\nSe non sei stato tu, puoi andare nelle Impostazioni - Privacy e sicurezza - Sessioni - Termina tutte le sessioni.\n\nSe pensi che qualcuno si sia collegato al tuo account contro il tuo volere, puoi attivare la verifica in due passaggi nelle impostazioni di Privacy e sicurezza.\n\nSinceramente\nIl Team di Telegram</string>
+    <string name="NotificationUnrecognizedDevice">%1$s,\nAbbiamo rilevato un accesso al tuo account da un nuovo dispositivo il %2$s\n\nDispositivo: %3$s\nPosizione: %4$s\n\nSe non sei stato tu, puoi andare nelle Impostazioni - Privacy e sicurezza - Sessioni - Termina tutte le sessioni.\n\nSe pensi che qualcuno si sia collegato al tuo account contro il tuo volere, puoi attivare la verifica in due passaggi nelle impostazioni di Privacy e sicurezza.\n\nCordiali saluti,\nil team di Telegram</string>
     <string name="Notifications">Notifiche</string>
     <string name="NotificationsAndSounds">Notifiche e suoni</string>
     <string name="NotificationsCustom">Personalizzate</string>
@@ -1017,6 +1042,7 @@
     <string name="PaymentCheckoutName">Nome</string>
     <string name="PaymentCheckoutPay">PAGA %1$s</string>
     <string name="PaymentCheckoutPhoneNumber">Numero di telefono</string>
+    <string name="PaymentCheckoutProvider">Fornitore del pagamento</string>
     <string name="PaymentCheckoutShippingMethod">Metodo di spedizione</string>
     <string name="PaymentConfirmationMessage">La tua carta %1$s è registrata. Per pagare con questa carta, per favore inserisci la tua password della verifica in due passaggi.</string>
     <string name="PaymentConfirmationNewCard">Scegli una carta differente</string>
@@ -1047,6 +1073,8 @@
     <string name="PaymentTransactionMessage">Vuoi davvero trasferire %1$s al bot %2$s per %3$s?</string>
     <string name="PaymentTransactionReview">Riepilogo transazione</string>
     <string name="PaymentTransactionTotal">Totale</string>
+    <string name="PaymentWarning">Attenzione</string>
+    <string name="PaymentWarningText">I pagamenti saranno inviati direttamente allo sviluppatore di %1$s. Telegram non può fornire alcuna garanzia, per cui procedi a tuo rischio. In caso di problemi, per favore contatta lo sviluppatore di %2$s o la tua banca.</string>
     <string name="PendingEmailText">La tua e-mail di recupero %1$s non è ancora attiva e attende la conferma.</string>
     <string name="PermissionContacts">Telegram deve accedere ai tuoi contatti per poterti connettere con i tuoi amici su tutti i tuoi dispositivi.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram deve accedere allo spostamento su altre app per riprodurre i video in modalità PiP.</string>
@@ -1060,7 +1088,7 @@
     <string name="Phone">Telefono</string>
     <string name="PhoneHome">Home</string>
     <string name="PhoneMain">Principale</string>
-    <string name="PhoneMobile">Mobile</string>
+    <string name="PhoneMobile">Cellulare</string>
     <string name="PhoneNumberAlert">Tutti i tuoi contatti Telegram avranno il tuo nuovo numero tra i loro contatti, purché abbiano il tuo vecchio numero e tu non li abbia bloccati su Telegram.</string>
     <string name="PhoneNumberChange">CAMBIA NUMERO</string>
     <string name="PhoneNumberFlood">Spiacenti, hai eliminato e ricreato il tuo account troppe volte di recente. Per favore attendi alcuni giorni prima di iscriverti di nuovo.</string>
@@ -1099,8 +1127,13 @@
     <string name="PopupNotification">Notifiche popup</string>
     <string name="PreviewFeedback">Lascia un feedback su questa anteprima</string>
     <string name="PriorityInfo">Le notifiche con priorità più alta funzioneranno anche se il telefono è in modalità Non disturbare.</string>
+    <string name="PrivacyClearPayment">Info di pagamento</string>
+    <string name="PrivacyClearShipping">Info di spedizione</string>
     <string name="PrivacyFloodControlError">Spiacenti, troppe richieste. Impossibile cambiare le impostazioni di privacy ora, attendi.</string>
     <string name="PrivacyLastSeen">Ultimo accesso</string>
+    <string name="PrivacyPayments">Pagamenti</string>
+    <string name="PrivacyPaymentsClear">Cancella info di pagamento</string>
+    <string name="PrivacyPaymentsClearInfo">Puoi cancellare le tue info di spedizione e ordinare a tutti i fornitori dei pagamenti di rimuovere le tue carte di credito salvate. Ricorda che Telegram non archivia mai i dati della tua carta di credito.</string>
     <string name="PrivacyPolicy">Informativa sulla privacy</string>
     <string name="PrivacyPolicyUrl">https://telegram.org/privacy</string>
     <string name="PrivacySettings">Privacy e sicurezza</string>
@@ -1112,6 +1145,7 @@
     <string name="ReEnterYourPasscode">Reinserisci il nuovo codice</string>
     <string name="Recent">RECENTI</string>
     <string name="RecordingAudio">sta registrando un audio...</string>
+    <string name="RecordingRound">sta registrando un videomessaggio...</string>
     <string name="RecoveryEmail">E-mail di recupero</string>
     <string name="RegisterText">Inserisci il tuo nome e cognome</string>
     <string name="Regular">Normale</string>
@@ -1174,7 +1208,7 @@
     <string name="SaveToGallerySettings">Salva nella galleria</string>
     <string name="SaveToMusic">Salva nella musica</string>
     <string name="ScreenCapture">Consenti cattura schermo</string>
-    <string name="ScreenCaptureInfo">Se attivata, puoi fare screenshot dell\'app, ma il sistema mostrerà le tue chat nel task switcher anche quando il codice di blocco è attivo.\n\nPotresti dover riavviare l\'app per rendere effettive le modifiche.</string>
+    <string name="ScreenCaptureInfo">Se attivata, puoi fare screenshot dell\'app, ma il sistema mostrerà le tue chat nella lista delle app recenti anche quando il codice di blocco è attivo.\n\nPotresti dover riavviare l\'app per rendere effettive le modifiche.</string>
     <string name="SdCard">Scheda SD</string>
     <string name="Search">Cerca</string>
     <string name="SearchGifs">CERCA GIF</string>
@@ -1205,6 +1239,7 @@
     <string name="SelectContact">Seleziona contatto</string>
     <string name="SelectFile">Seleziona file</string>
     <string name="Send">Invia</string>
+    <string name="SendAsFiles">Invia come file</string>
     <string name="SendByEnter">Invia con tasto Invio</string>
     <string name="SendContactTo">Inviare contatto a %1$s?</string>
     <string name="SendContactToGroup">Inviare contatto a %1$s?</string>
@@ -1245,6 +1280,7 @@
     <string name="SetTimer">Timer di autodistruzione</string>
     <string name="Settings">Impostazioni</string>
     <string name="Shadows">Ombre</string>
+    <string name="ShareComment">Scrivi un commento...</string>
     <string name="ShareContact">Condividi</string>
     <string name="ShareFile">Condividi</string>
     <string name="ShareLink">Condividi link</string>
@@ -1342,7 +1378,7 @@
     <string name="UsbActive">Trasferimento USB attivo</string>
     <string name="UseLessDataAlways">Sempre</string>
     <string name="UseLessDataNever">Mai</string>
-    <string name="UseLessDataOnMobile">Solo con i dati mobile</string>
+    <string name="UseLessDataOnMobile">Solo con i dati cellulare</string>
     <string name="UserAlreadyInGroup">Questo utente è già membro del gruppo</string>
     <string name="UserRestricted">Spiacenti, questa azione non ti è permessa.</string>
     <string name="Username">Username</string>
@@ -1414,7 +1450,7 @@
     <string name="Weeks_zero">%1$d settimane</string>
     <string name="WhenConnectedOnWiFi">Quando connesso tramite Wi-Fi</string>
     <string name="WhenRoaming">In roaming</string>
-    <string name="WhenUsingMobileData">Quando utilizzi la rete mobile</string>
+    <string name="WhenUsingMobileData">Quando utilizzi la rete cellulare</string>
     <string name="WhoCanAddMe">Chi può aggiungermi ai gruppi?</string>
     <string name="WhoCanAddMeInfo">Puoi decidere chi può aggiungerti a gruppi e canali con precisione granulare.</string>
     <string name="WhoCanAddMembers">Chi può aggiungere nuovi membri?</string>

@@ -18,7 +18,7 @@ public class LinearSmoothScrollerMiddle extends SmoothScroller {
     private static final float TARGET_SEEK_EXTRA_SCROLL_RATIO = 1.2f;
     private static final int TARGET_SEEK_SCROLL_DISTANCE_PX = 10000;
     private final float MILLISECONDS_PER_PX;
-    protected final DecelerateInterpolator mDecelerateInterpolator = new DecelerateInterpolator();
+    protected final DecelerateInterpolator mDecelerateInterpolator = new DecelerateInterpolator(1.5f);
     protected int mInterimTargetDx = 0;
     protected int mInterimTargetDy = 0;
     protected final LinearInterpolator mLinearInterpolator = new LinearInterpolator();
@@ -35,7 +35,7 @@ public class LinearSmoothScrollerMiddle extends SmoothScroller {
         int dy = calculateDyToMakeVisible(targetView);
         int time = calculateTimeForDeceleration(dy);
         if (time > 0) {
-            action.update(0, -dy, Math.min(150, time), this.mDecelerateInterpolator);
+            action.update(0, -dy, Math.max(400, time), this.mDecelerateInterpolator);
         }
     }
 

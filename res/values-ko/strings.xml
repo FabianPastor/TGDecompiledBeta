@@ -50,6 +50,7 @@
     <string name="ActionPinnedMusic">un1 님이 트랙을 고정함</string>
     <string name="ActionPinnedNoText">un1 님이 메시지를 고정함</string>
     <string name="ActionPinnedPhoto">un1 님이 사진을 고정함</string>
+    <string name="ActionPinnedRound">un1 님이 영상메시지를 고정함</string>
     <string name="ActionPinnedSticker">un1 님이 스티커를 고정함</string>
     <string name="ActionPinnedText">un1 님이 \"%1$s\" 를 고정함</string>
     <string name="ActionPinnedVideo">un1 님이 비디오를 고정함</string>
@@ -163,6 +164,7 @@
     <string name="AttachLocation">위치</string>
     <string name="AttachMusic">음악</string>
     <string name="AttachPhoto">사진</string>
+    <string name="AttachRound">영상 메시지</string>
     <string name="AttachSticker">스티커</string>
     <string name="AttachVideo">동영상</string>
     <string name="AudioTitle">공유된 음악</string>
@@ -286,6 +288,7 @@
     <string name="ChannelMessageGroupMusic">%1$s님이 %2$s 채널에 트랙을 보냈습니다</string>
     <string name="ChannelMessageGroupNoText">%1$s님이 %2$s 채널에 메시지를 보냈습니다</string>
     <string name="ChannelMessageGroupPhoto">%1$s님이 %2$s 채널에 사진을 보냈습니다</string>
+    <string name="ChannelMessageGroupRound">%1$s님이 %2$s 채널에 영상메시지를 보냈습니다</string>
     <string name="ChannelMessageGroupSticker">%1$s님이 %2$s 채널에 스티커를 보냈습니다</string>
     <string name="ChannelMessageGroupStickerEmoji">%1$s님이 %2$s 채널에 %3$s 스티커를 보냈습니다</string>
     <string name="ChannelMessageGroupVideo">%1$s님이 %2$s 채널에 비디오를 보냈습니다</string>
@@ -293,6 +296,7 @@
     <string name="ChannelMessageMusic">%1$s님이 트랙을 보냈습니다</string>
     <string name="ChannelMessageNoText">%1$s 님이 메시지를 보냈습니다</string>
     <string name="ChannelMessagePhoto">%1$s 님이 사진을 보냈습니다</string>
+    <string name="ChannelMessageRound">%1$s님이 영상메시지를 보냈습니다</string>
     <string name="ChannelMessageSticker">%1$s님이 스티커를 보냈습니다</string>
     <string name="ChannelMessageStickerEmoji">%1$s님이 %2$s스티커를 작성하였습니다</string>
     <string name="ChannelMessageVideo">%1$s 님이 동영상을 보냈습니다</string>
@@ -357,10 +361,12 @@
     <string name="CodeExpired">코드가 만료되었습니다. 다시 로그인하세요</string>
     <string name="ColorBlue">파란색</string>
     <string name="ColorCyan">청록색</string>
+    <string name="ColorDark">다크</string>
     <string name="ColorGreen">초록색</string>
     <string name="ColorOrange">주황색</string>
     <string name="ColorPink">핑크색</string>
     <string name="ColorRed">빨간색</string>
+    <string name="ColorSepia">세피아</string>
     <string name="ColorViolet">보라색</string>
     <string name="ColorWhite">하얀색</string>
     <string name="ColorYellow">노란색</string>
@@ -455,6 +461,11 @@
     <string name="DirectShareInfo">공유 메뉴에서 최근 대화 보기</string>
     <string name="Disabled">끄기</string>
     <string name="DiscardChanges">변경을 취소하시겠습니까?</string>
+    <string name="DiscardVideoMessageDescription">녹화를 중단하고 영상 메시지를 지우시겠습니까?</string>
+    <string name="DiscardVideoMessageTitle">영상 메시지 지우기</string>
+    <string name="DiscardVoiceMessageAction">지우기</string>
+    <string name="DiscardVoiceMessageDescription">녹음을 중단하고 음성 메시지를 지우시겠습니까?</string>
+    <string name="DiscardVoiceMessageTitle">음성 메시지 지우기</string>
     <string name="DocumentsTitle">공유한 파일</string>
     <string name="Done">완료</string>
     <string name="Draft">임시저장</string>
@@ -513,6 +524,7 @@
     <string name="FloodWait">너무 많이 시도하셨습니다. 나중에 다시 시도하세요</string>
     <string name="FloodWaitTime">너무 많이 시도하셨습니다. %1$s 초 후에 다시 시도하세요.</string>
     <string name="Folder">폴더</string>
+    <string name="FontSize">폰트 크기</string>
     <string name="ForgotPassword">비밀번호를 잊어버리셨나요?</string>
     <string name="Forward">전달</string>
     <string name="ForwardMessagesTo">%1$s님에게 메시지를 전달할까요?</string>
@@ -560,6 +572,12 @@
     <string name="ForwardedPhoto_other">%1$d 개의 전달된 사진</string>
     <string name="ForwardedPhoto_two">%1$d 개의 전달된 사진</string>
     <string name="ForwardedPhoto_zero">%1$d 개의 전달된 사진</string>
+    <string name="ForwardedRound_few">%1$d 개의 전달된 영상메시지</string>
+    <string name="ForwardedRound_many">%1$d 개의 전달된 영상메시지</string>
+    <string name="ForwardedRound_one">전달된 영상 메시지</string>
+    <string name="ForwardedRound_other">%1$d 개의 전달된 영상메시지</string>
+    <string name="ForwardedRound_two">%1$d 개의 전달된 영상메시지</string>
+    <string name="ForwardedRound_zero">%1$d 개의 전달된 영상메시지</string>
     <string name="ForwardedSticker_few">%1$d 개의 전달된 스티커</string>
     <string name="ForwardedSticker_many">%1$d 개의 전달된 스티커</string>
     <string name="ForwardedSticker_one">전달된 스티커</string>
@@ -607,6 +625,8 @@
     <string name="HiddenName">탈퇴한 계정</string>
     <string name="Highlights">하이라이트</string>
     <string name="HistoryCleared">내역이 초기화 됨</string>
+    <string name="HoldToAudio">꾹 눌러 음성을 녹음하세요. 탭하여 영상으로 전환하세요.</string>
+    <string name="HoldToVideo">꾹 눌러 영상을 녹화하세요. 탭하여 음성으로 전환하세요.</string>
     <string name="HoursBold_few">&lt;b&gt;%1$d&lt;/b&gt; 시간</string>
     <string name="HoursBold_many">&lt;b&gt;%1$d&lt;/b&gt; 시간</string>
     <string name="HoursBold_one">&lt;b&gt;%1$d&lt;/b&gt; 시간</string>
@@ -647,6 +667,7 @@
     <string name="InviteToGroupError">죄송합니다, 이 이용자는 개인 설정으로 인하여 그룹에 초대 할 수 없습니다.</string>
     <string name="InviteUser">친구가 아직 텔레그램을 사용하지 않네요. 초대해 보세요!</string>
     <string name="IsRecordingAudio">%1$s님이 음성메시지를 녹음중입니다...</string>
+    <string name="IsRecordingRound">%1$s님이 영상메시지를 녹화중입니다...</string>
     <string name="IsSendingAudio">%1$s님이 음성파일을 전송중입니다...</string>
     <string name="IsSendingFile">%1$s님이 파일 보내는 중...</string>
     <string name="IsSendingGame">%1$s님이 게임을 플레이중입니다.</string>
@@ -716,7 +737,7 @@
     <string name="LinkPreview">링크 미리복</string>
     <string name="LinksTitle">공유한 링크</string>
     <string name="Loading">불러오는 중...</string>
-    <string name="LocalAudioCache">음성 메시지</string>
+    <string name="LocalAudioCache">음성/영상 메시지</string>
     <string name="LocalCache">다른 파일</string>
     <string name="LocalDatabase">로컬 데이터베이스</string>
     <string name="LocalDatabaseClear">캐시된 텍스트 메시지를 삭제하시겠습니까?</string>
@@ -736,7 +757,7 @@
     <string name="MasksRemoved">마스크가 삭제됨</string>
     <string name="MegaAddedBy">이 그룹방에 un1님이 초대하였습니다.</string>
     <string name="MegaAdminsInfo">그룹방 관리를 도울 수 있는 관리자를 추가 할 수 있습니다. 길게 탭을하면 관리자 삭제가 가능합니다.</string>
-    <string name="MegaDeleteAlert">이 그룹방을 삭제하실 경우 모든 구성원과 메시지를 삭제를 하게되며 복구가 안됩니다. 그래도 그룹방을 삭제하시겠습니까?</string>
+    <string name="MegaDeleteAlert">이 그룹방을 삭제하실 경우 모든 구성원과 메시지를 삭제 하게되며 복구가 안됩니다. 그래도 그룹방을 삭제하시겠습니까?</string>
     <string name="MegaDeleteInfo">그룹에 있는 모든 메시지가 삭제됩니다.</string>
     <string name="MegaLeaveAlert">정말 그룹방에서 나가겠습니까?</string>
     <string name="MegaPrivate">비공개 그룹방</string>
@@ -873,6 +894,8 @@
     <string name="NotificationActionPinnedNoTextChannel">%1$s 님이 메시지를 고정함</string>
     <string name="NotificationActionPinnedPhoto">%1$s 님이 사진을 %2$s 그룹방에 고정함</string>
     <string name="NotificationActionPinnedPhotoChannel">%1$s 님이 사진을 고정함</string>
+    <string name="NotificationActionPinnedRound">%1$s 님이 영상메시지를 %2$s 그룹방에 고정함</string>
+    <string name="NotificationActionPinnedRoundChannel">%1$s 님이 영상메시지를 고정함</string>
     <string name="NotificationActionPinnedSticker">%1$s 님이 스티커를 %2$s 그룹방에 고정함</string>
     <string name="NotificationActionPinnedStickerChannel">%1$s 님이 스티커를 고정함</string>
     <string name="NotificationActionPinnedStickerEmoji">%1$s 님이 %3$s 스티커를 %2$s 그룹방에 고정함</string>
@@ -885,8 +908,8 @@
     <string name="NotificationActionPinnedVoiceChannel">%1$s 님이 음성메시지를 고정함</string>
     <string name="NotificationContactJoined">%1$s님이 텔레그램에 가입했습니다!</string>
     <string name="NotificationContactNewPhoto">%1$s님이 프로필 사진을 변경했습니다</string>
-    <string name="NotificationEditedGroupName">%1$s님이 그룹 이름을 %2$s 그룹으로 변경했습니다</string>
-    <string name="NotificationEditedGroupPhoto">%1$s님이 %2$s 그룹 사진을 변경했습니다</string>
+    <string name="NotificationEditedGroupName">%1$s 님이 %2$s 그룹명을 변경하였습니다.</string>
+    <string name="NotificationEditedGroupPhoto">%1$s 님이 %2$s 그룹 사진을 변경하였습니다.</string>
     <string name="NotificationGroupAddMember">%1$s님이 %3$s님을 %2$s 그룹에 초대했습니다</string>
     <string name="NotificationGroupAddSelf">%1$s 님이 %2$s 그룹으로 되돌아왔습니다</string>
     <string name="NotificationGroupAddSelfMega">%1$s 님이 %2$s 그룹에 참여했습니다</string>
@@ -909,6 +932,7 @@
     <string name="NotificationMessageGroupMusic">%1$s님이 %2$s 그룹에 트랙을 보냈습니다</string>
     <string name="NotificationMessageGroupNoText">%1$s님이 %2$s 그룹에 메시지를 보냈습니다</string>
     <string name="NotificationMessageGroupPhoto">%1$s님이 %2$s 그룹에 사진을 보냈습니다</string>
+    <string name="NotificationMessageGroupRound">%1$s 님이 %2$s 그룹에 영상 메시지를 보냈습니다</string>
     <string name="NotificationMessageGroupSticker">%1$s님이 %2$s 그룹에 스티커를 보냈습니다</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s님이 %2$s 그룹에 %3$s 스티커를 보냈습니다</string>
     <string name="NotificationMessageGroupText">%1$s @ %2$s: %3$s</string>
@@ -917,6 +941,7 @@
     <string name="NotificationMessageMusic">%1$s 님이 트랙을 보냈습니다</string>
     <string name="NotificationMessageNoText">%1$s님이 메시지를 보냈습니다</string>
     <string name="NotificationMessagePhoto">%1$s님이 사진을 보냈습니다</string>
+    <string name="NotificationMessageRound">%1$s 님이 영상 메시지를 보냈습니다</string>
     <string name="NotificationMessageSticker">%1$s님이 스티커를 보냈습니다</string>
     <string name="NotificationMessageStickerEmoji">%1$s님이 %2$s스티커를 보냈습니다</string>
     <string name="NotificationMessageText">%1$s: %2$s</string>
@@ -1017,6 +1042,7 @@
     <string name="PaymentCheckoutName">이름</string>
     <string name="PaymentCheckoutPay">%1$s 결제</string>
     <string name="PaymentCheckoutPhoneNumber">전화번호</string>
+    <string name="PaymentCheckoutProvider">결제 제공 업체</string>
     <string name="PaymentCheckoutShippingMethod">배송방법</string>
     <string name="PaymentConfirmationMessage">%1$s 카드정보가 파일로 있습니다. 이 카드로 결제하시려면 2단계 비밀번호를 입력해주세요</string>
     <string name="PaymentConfirmationNewCard">다른 카드를 선택해주세요</string>
@@ -1047,6 +1073,8 @@
     <string name="PaymentTransactionMessage">%3$s에 대한 %1$s 금액을 %2$s 봇에게 전송하시겠습니까?</string>
     <string name="PaymentTransactionReview">거래내역 확인</string>
     <string name="PaymentTransactionTotal">전체</string>
+    <string name="PaymentWarning">경고</string>
+    <string name="PaymentWarningText">결제는 %1$s의 개발자로 바로 갑니다. 텔레그램은 그 어떠한 보장도 하지 않음으로 진행시 위험을 감수 하셔야 합니다. 문제발생시, %2$s의 개발자나 사용하시는 은행에게 문의를 부탁드립니다.</string>
     <string name="PendingEmailText">복구 이메일 %1$s 이 아직 활성화 되지 않았으며 미승인 상태입니다.</string>
     <string name="PermissionContacts">Telegram은 여러 기기에서 친구와 메시지를 주고받을 수 있도록 회원님의 연락처 접근이 필요합니다.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram이 화면속화면 기능을 위하여 화면위 그리기에 대한 접근이 필요합니다.</string>
@@ -1099,8 +1127,13 @@
     <string name="PopupNotification">알림 팝업</string>
     <string name="PreviewFeedback">미리보기에 대한 의견 남기기</string>
     <string name="PriorityInfo">우선수위가 높은 알림은 휴대폰 기기가 무음이더라도 알림이 작동합니다.</string>
+    <string name="PrivacyClearPayment">결제정보</string>
+    <string name="PrivacyClearShipping">배송 정보</string>
     <string name="PrivacyFloodControlError">죄송합니다. 너무 많이 변경하셨습니다. 개인정보 설정을 변경할 수 없으니 잠시 기다려 주세요.</string>
     <string name="PrivacyLastSeen">마지막 접속</string>
+    <string name="PrivacyPayments">결제</string>
+    <string name="PrivacyPaymentsClear">결제 및 배송정보 초기화</string>
+    <string name="PrivacyPaymentsClearInfo">배송 정보를 삭제 및 결제사에게 저장된 신용카드 정보 삭제를 요청할 수 있습니다. 텔레그램 절대로 회원님의 신용카드 정보를 저장하지 않습니다.</string>
     <string name="PrivacyPolicy">개인정보 정책</string>
     <string name="PrivacyPolicyUrl">https://telegram.org/privacy</string>
     <string name="PrivacySettings">개인정보 및 보안</string>
@@ -1112,6 +1145,7 @@
     <string name="ReEnterYourPasscode">잠금코드 재입력</string>
     <string name="Recent">최신</string>
     <string name="RecordingAudio">음성메시지를 녹음 중입니다..</string>
+    <string name="RecordingRound">영상메시지를 녹화 중입니다..</string>
     <string name="RecoveryEmail">복구 이메일</string>
     <string name="RegisterText">이름을 입력하세요</string>
     <string name="Regular">일반</string>
@@ -1173,8 +1207,8 @@
     <string name="SaveToGallery">앨범에 저장</string>
     <string name="SaveToGallerySettings">앨범에 자동 저장</string>
     <string name="SaveToMusic">음악으로 저장</string>
-    <string name="ScreenCapture">화면 캡춰 허용</string>
-    <string name="ScreenCaptureInfo">활성화시 앱내에서 화면 캡춰가 가능합니다. 다만, 화면전환시 잠금코드가 활성화 되어져 있더라도 대화내용이 뜰 수 있습니다.\n\n적용이 안될시, 앱 재시작이 필요할 수도 있습니다.</string>
+    <string name="ScreenCapture">화면 캡처 허용</string>
+    <string name="ScreenCaptureInfo">활성화시 앱내에서 화면 캡처가 가능합니다. 다만, 화면전환시 잠금코드가 활성화 되어져 있더라도 대화내용이 뜰 수 있습니다.\n\n적용이 안될시, 앱 재시작이 필요할 수도 있습니다.</string>
     <string name="SdCard">SD 카드</string>
     <string name="Search">검색</string>
     <string name="SearchGifs">GIF 검색</string>
@@ -1205,6 +1239,7 @@
     <string name="SelectContact">대화상대 선택</string>
     <string name="SelectFile">파일 선택</string>
     <string name="Send">보내기</string>
+    <string name="SendAsFiles">파일로 보내기</string>
     <string name="SendByEnter">엔터키로 메시지 전송</string>
     <string name="SendContactTo">%1$s에게 연락처를 보내시겠습니까?</string>
     <string name="SendContactToGroup">%1$s에게 연락처를 보내시겠습니까?</string>
@@ -1245,6 +1280,7 @@
     <string name="SetTimer">자동삭제 타이머 설정</string>
     <string name="Settings">설정</string>
     <string name="Shadows">그림자</string>
+    <string name="ShareComment">코멘트 쓰기..</string>
     <string name="ShareContact">공유</string>
     <string name="ShareFile">공유</string>
     <string name="ShareLink">링크 공유</string>

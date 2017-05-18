@@ -9004,7 +9004,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         for (Entry<Integer, MessageObject> entry22 : this.selectedMessagesIds[a].entrySet()) {
                             msg = (MessageObject) entry22.getValue();
                             if (msg.messageOwner.action == null) {
-                                if (!msg.isOut() && !this.currentChat.creator && (!this.currentChat.admin || !this.currentChat.admins_enabled)) {
+                                if (!msg.isOut() && (this.currentChat == null || (!this.currentChat.creator && (!this.currentChat.admin || !this.currentChat.admins_enabled)))) {
                                     exit = true;
                                     z = false;
                                     break;
@@ -9017,7 +9017,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             break;
                         }
                     }
-                } else if (finalSelectedObject.isSendError() || !((finalSelectedObject.messageOwner.action == null || (finalSelectedObject.messageOwner.action instanceof TL_messageActionEmpty)) && finalSelectedObject.isOut() && currentDate - finalSelectedObject.messageOwner.date <= 172800)) {
+                } else if (finalSelectedObject.isSendError() || (!(finalSelectedObject.messageOwner.action == null || (finalSelectedObject.messageOwner.action instanceof TL_messageActionEmpty)) || ((!finalSelectedObject.isOut() && (this.currentChat == null || !(this.currentChat.creator || (this.currentChat.admin && this.currentChat.admins_enabled)))) || currentDate - finalSelectedObject.messageOwner.date > 172800))) {
                     z = false;
                 } else {
                     z = true;

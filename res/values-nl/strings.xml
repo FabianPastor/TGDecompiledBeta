@@ -50,6 +50,7 @@
     <string name="ActionPinnedMusic">un1 heeft muziekbestand vastgezet</string>
     <string name="ActionPinnedNoText">un1 heeft bericht vastgezet</string>
     <string name="ActionPinnedPhoto">un1 heeft foto vastgezet</string>
+    <string name="ActionPinnedRound">un1 heeft videobericht vastgezet</string>
     <string name="ActionPinnedSticker">un1 heeft sticker vastgezet</string>
     <string name="ActionPinnedText">un1 heeft \"%1$s\" vastgezet</string>
     <string name="ActionPinnedVideo">un1 heeft video vastgezet</string>
@@ -163,6 +164,7 @@
     <string name="AttachLocation">Locatie</string>
     <string name="AttachMusic">Muziek</string>
     <string name="AttachPhoto">Foto</string>
+    <string name="AttachRound">Videobericht</string>
     <string name="AttachSticker">Sticker</string>
     <string name="AttachVideo">Video</string>
     <string name="AudioTitle">Gedeelde muziek</string>
@@ -207,7 +209,7 @@
     <string name="Call">Bellen</string>
     <string name="CallAgain">Herhaal</string>
     <string name="CallBack">Terugbellen</string>
-    <string name="CallEmojiKeyTooltip">Als deze emoji\'s er bij %1$s hetzelfde uitzien is deze oproep 100%% veilig.</string>
+    <string name="CallEmojiKeyTooltip">Als deze emoji\'s gelijk zijn bij %1$s is dit gesprek 100%% veilig.</string>
     <string name="CallEncryptionKeyDescription">Deze afbeelding en tekst zijn afgeleid van de encryptiesleutel voor deze oproep met &lt;b&gt;%1$s&lt;/b&gt;.&lt;br&gt;&lt;br&gt;Als dit er hetzelfde uitziet op het apparaat van &lt;b&gt;%2$s&lt;/b&gt;, dan is end-to-end-encryptie gegarandeerd.</string>
     <string name="CallMessageIncoming">Inkomende oproep</string>
     <string name="CallMessageIncomingDeclined">Geweigerde oproep</string>
@@ -286,6 +288,7 @@
     <string name="ChannelMessageGroupMusic">%1$s heeft een muziekbestand gestuurd naar het kanaal %2$s</string>
     <string name="ChannelMessageGroupNoText">%1$s heeft een bericht gestuurd naar het kanaal %2$s</string>
     <string name="ChannelMessageGroupPhoto">%1$s heeft een foto gestuurd naar het kanaal %2$s</string>
+    <string name="ChannelMessageGroupRound">%1$s heeft een videobericht gestuurd naar het kanaal %2$s</string>
     <string name="ChannelMessageGroupSticker">%1$s heeft een sticker gestuurd naar het kanaal %2$s</string>
     <string name="ChannelMessageGroupStickerEmoji">%1$s heeft een %3$s sticker gestuurd naar kanaal %2$s</string>
     <string name="ChannelMessageGroupVideo">%1$s heeft een video gestuurd naar het kanaal %2$s</string>
@@ -293,6 +296,7 @@
     <string name="ChannelMessageMusic">%1$s plaatste een muziekbestand</string>
     <string name="ChannelMessageNoText">%1$s plaatste een bericht</string>
     <string name="ChannelMessagePhoto">%1$s plaatste een foto</string>
+    <string name="ChannelMessageRound">%1$s plaatste een videobericht</string>
     <string name="ChannelMessageSticker">%1$s plaatste een sticker</string>
     <string name="ChannelMessageStickerEmoji">%1$s plaatste een %2$s sticker</string>
     <string name="ChannelMessageVideo">%1$s plaatste een video</string>
@@ -357,10 +361,12 @@
     <string name="CodeExpired">Code verlopen. Log opnieuw in.</string>
     <string name="ColorBlue">Blauw</string>
     <string name="ColorCyan">Cyaan</string>
+    <string name="ColorDark">Donker</string>
     <string name="ColorGreen">Groen</string>
     <string name="ColorOrange">Oranje</string>
     <string name="ColorPink">Roze</string>
     <string name="ColorRed">Rood</string>
+    <string name="ColorSepia">Sepia</string>
     <string name="ColorViolet">Paars</string>
     <string name="ColorWhite">Wit</string>
     <string name="ColorYellow">Geel</string>
@@ -455,6 +461,11 @@
     <string name="DirectShareInfo">Recente chats in snel delen weergeven</string>
     <string name="Disabled">Uitgeschakeld</string>
     <string name="DiscardChanges">Wijzigingen negeren?</string>
+    <string name="DiscardVideoMessageDescription">Wil je stoppen met opnemen en je videobericht weggooien?</string>
+    <string name="DiscardVideoMessageTitle">Videobericht weggooien</string>
+    <string name="DiscardVoiceMessageAction">Weggooien</string>
+    <string name="DiscardVoiceMessageDescription">Wil je stoppen met opnemen en je spraakbericht weggooien?</string>
+    <string name="DiscardVoiceMessageTitle">Spraakbericht weggooien</string>
     <string name="DocumentsTitle">Gedeelde bestanden</string>
     <string name="Done">Gereed</string>
     <string name="Draft">Concept</string>
@@ -513,6 +524,7 @@
     <string name="FloodWait">Te veel pogingen. Probeer het later opnieuw.</string>
     <string name="FloodWaitTime">Te veel pogingen, probeer het over %1$s opnieuw</string>
     <string name="Folder">Map</string>
+    <string name="FontSize">Tekstgrootte</string>
     <string name="ForgotPassword">Wachtwoord vergeten?</string>
     <string name="Forward">Doorsturen</string>
     <string name="ForwardMessagesTo">Berichten doorsturen naar %1$s?</string>
@@ -560,6 +572,12 @@
     <string name="ForwardedPhoto_other">Bijlage: %1$d foto\'s</string>
     <string name="ForwardedPhoto_two">Bijlage: %1$d foto\'s</string>
     <string name="ForwardedPhoto_zero">Bijlage: %1$d foto\'s</string>
+    <string name="ForwardedRound_few">Bijlage: %1$d videoberichten</string>
+    <string name="ForwardedRound_many">Bijlage: %1$d videoberichten</string>
+    <string name="ForwardedRound_one">Doorgestuurd videobericht</string>
+    <string name="ForwardedRound_other">Bijlage: %1$d videoberichten</string>
+    <string name="ForwardedRound_two">Bijlage: %1$d videoberichten</string>
+    <string name="ForwardedRound_zero">Bijlage: %1$d videoberichten</string>
     <string name="ForwardedSticker_few">Bijlage: %1$d stickers</string>
     <string name="ForwardedSticker_many">Bijlage: %1$d stickers</string>
     <string name="ForwardedSticker_one">Bijlage: 1 sticker</string>
@@ -607,6 +625,8 @@
     <string name="HiddenName">Verwijderd account</string>
     <string name="Highlights">Accent</string>
     <string name="HistoryCleared">Geschiedenis gewist</string>
+    <string name="HoldToAudio">Hou vast voor audio-opname. Tik voor video</string>
+    <string name="HoldToVideo">Hou vast voor video-opname. Tik voor audio</string>
     <string name="HoursBold_few">&lt;b&gt;%1$d&lt;/b&gt; uur</string>
     <string name="HoursBold_many">&lt;b&gt;%1$d&lt;/b&gt; uur</string>
     <string name="HoursBold_one">&lt;b&gt;%1$d&lt;/b&gt; uur</string>
@@ -647,6 +667,7 @@
     <string name="InviteToGroupError">Je kunt deze gebruiker niet toevoegen aan groepen vanwege de privacyinstellingen van deze gebruiker.</string>
     <string name="InviteUser">Deze gebruiker heeft nog geen Telegram. Wil je een uitnodiging sturen?</string>
     <string name="IsRecordingAudio">%1$s neemt een spraakbericht op...</string>
+    <string name="IsRecordingRound">%1$s neemt een videobericht op...</string>
     <string name="IsSendingAudio">%1$s verstuurt een geluid...</string>
     <string name="IsSendingFile">%1$s verstuurt een bestand</string>
     <string name="IsSendingGame">%1$s speelt een spel</string>
@@ -716,7 +737,7 @@
     <string name="LinkPreview">Link-voorvertoning</string>
     <string name="LinksTitle">Gedeelde links</string>
     <string name="Loading">Bezig met laden</string>
-    <string name="LocalAudioCache">Spraakberichten</string>
+    <string name="LocalAudioCache">Spraak/Video-berichten</string>
     <string name="LocalCache">Overige bestanden</string>
     <string name="LocalDatabase">Lokale database</string>
     <string name="LocalDatabaseClear">Gecachet tekstberichten wissen?</string>
@@ -873,6 +894,8 @@
     <string name="NotificationActionPinnedNoTextChannel">%1$s heeft bericht vastgezet</string>
     <string name="NotificationActionPinnedPhoto">%1$s heeft foto vastgezet in de groep %2$s</string>
     <string name="NotificationActionPinnedPhotoChannel">%1$s heeft foto vastgezet</string>
+    <string name="NotificationActionPinnedRound">%1$s heeft videobericht vastgezet in de groep %2$s</string>
+    <string name="NotificationActionPinnedRoundChannel">%1$s heeft videobericht vastgezet</string>
     <string name="NotificationActionPinnedSticker">%1$s heeft sticker vastgezet in de groep %2$s</string>
     <string name="NotificationActionPinnedStickerChannel">%1$s heeft sticker vastgezet</string>
     <string name="NotificationActionPinnedStickerEmoji">%1$s heeft een %3$s sticker vastgezet in de groep %2$s</string>
@@ -885,8 +908,8 @@
     <string name="NotificationActionPinnedVoiceChannel">%1$s heeft spraakbericht vastgezet</string>
     <string name="NotificationContactJoined">%1$s heeft nu Telegram!</string>
     <string name="NotificationContactNewPhoto">%1$s heeft zijn/haar profielfoto gewijzigd</string>
-    <string name="NotificationEditedGroupName">%1$s heeft de naam van de groep %2$s gewijzigd</string>
-    <string name="NotificationEditedGroupPhoto">%1$s heeft de afbeelding van de groep %2$s gewijzigd</string>
+    <string name="NotificationEditedGroupName">%1$s heeft de groepsnam van %2$s gewijzigd</string>
+    <string name="NotificationEditedGroupPhoto">%1$s heeft de groepsfoto voor %2$s aangepast</string>
     <string name="NotificationGroupAddMember">%1$s heeft %3$s uitgenodigd voor de groep %2$s</string>
     <string name="NotificationGroupAddSelf">%1$s is terug in de groep %2$s</string>
     <string name="NotificationGroupAddSelfMega">%1$s is nu lid van de groep %2$s</string>
@@ -909,6 +932,7 @@
     <string name="NotificationMessageGroupMusic">%1$s heeft een muziekbestand gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupNoText">%1$s heeft een bericht gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupPhoto">%1$s heeft een foto gestuurd naar de groep %2$s</string>
+    <string name="NotificationMessageGroupRound">%1$s heeft een videobericht gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupSticker">%1$s heeft een sticker gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s heeft een %3$s sticker gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupText">%1$s @ %2$s: %3$s</string>
@@ -917,6 +941,7 @@
     <string name="NotificationMessageMusic">%1$s heeft je een muziekbestand gestuurd</string>
     <string name="NotificationMessageNoText">%1$s heeft je een bericht gestuurd</string>
     <string name="NotificationMessagePhoto">%1$s heeft je een foto gestuurd</string>
+    <string name="NotificationMessageRound">%1$s heeft je een videobericht gestuurd</string>
     <string name="NotificationMessageSticker">%1$s heeft je een sticker gestuurd</string>
     <string name="NotificationMessageStickerEmoji">%1$s heeft je een %2$s sticker gestuurd</string>
     <string name="NotificationMessageText">%1$s: %2$s</string>
@@ -1002,7 +1027,7 @@
     <string name="PasswordReset">Wachtwoord uitgeschakeld</string>
     <string name="PaymentBillingAddress">Factuuradres</string>
     <string name="PaymentCardCvv">Veiligheidscode (CVV)</string>
-    <string name="PaymentCardExpireDate">MM/YY</string>
+    <string name="PaymentCardExpireDate">MM/JJ</string>
     <string name="PaymentCardInfo">Betaalinformatie</string>
     <string name="PaymentCardName">Achternaam</string>
     <string name="PaymentCardNameTitle">Kaarthouder</string>
@@ -1017,6 +1042,7 @@
     <string name="PaymentCheckoutName">Naam</string>
     <string name="PaymentCheckoutPay">%1$s BETALEN</string>
     <string name="PaymentCheckoutPhoneNumber">Telefoonnummer</string>
+    <string name="PaymentCheckoutProvider">Betalingsprovider</string>
     <string name="PaymentCheckoutShippingMethod">Verzendmethode</string>
     <string name="PaymentConfirmationMessage">Kaartinformatie %1$s is opgeslagen. Geef je 2-staps-verificatie-wachtwoord in om met deze kaart te betalen.</string>
     <string name="PaymentConfirmationNewCard">Kies een andere kaart</string>
@@ -1047,6 +1073,8 @@
     <string name="PaymentTransactionMessage">Echt %1$s overmaken naar de bot %2$s voor %3$s?</string>
     <string name="PaymentTransactionReview">Transactie-overzicht</string>
     <string name="PaymentTransactionTotal">Totaal</string>
+    <string name="PaymentWarning">Waarschuwing</string>
+    <string name="PaymentWarningText">Betalingen gaan direct naar de ontwikkelaar van %1$s. Telegram kan geen garanties afgeven, doorgaan is op eigen risico. Bij problemen kun je contact opnemen met de ontwikkelaar van %2$s of je bank.</string>
     <string name="PendingEmailText">Je herstel-e-mailadres %1$s is nog niet actief en in afwachting van bevestiging.</string>
     <string name="PermissionContacts">Telegram heeft toegang tot je contacten nodig zodat je kan chatten met je vrienden vanaf al je apparaten.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram heeft de toestemming \'over andere apps tekenen\' nodig om video\'s af te spelen in Picture-in-Picture-modus.</string>
@@ -1099,8 +1127,13 @@
     <string name="PopupNotification">Pop-up meldingen</string>
     <string name="PreviewFeedback">Feedback over deze voorvertoning</string>
     <string name="PriorityInfo">Meldingen met hoge prioriteit werken ook als je telefoon op \"Niet storen\" staat.</string>
+    <string name="PrivacyClearPayment">Betaalinformatie</string>
+    <string name="PrivacyClearShipping">Verzendinformatie</string>
     <string name="PrivacyFloodControlError">Sorry, te veel verzoeken. Momenteel is het niet mogelijk om de privacyinstellingen te wijzigen, even geduld alsjeblieft.</string>
     <string name="PrivacyLastSeen">Laatst gezien</string>
+    <string name="PrivacyPayments">Betalingen</string>
+    <string name="PrivacyPaymentsClear">Betaal- en verzendinfo wissen</string>
+    <string name="PrivacyPaymentsClearInfo">Je kunt je verzendinformatie wissen en alle betalingsproviders opdracht geven om je bewaarde creditcards te verwijderen. Je creditcardgegevens worden nooit opgeslagen door Telegram.</string>
     <string name="PrivacyPolicy">Privacybeleid</string>
     <string name="PrivacyPolicyUrl">https://telegram.org/privacy</string>
     <string name="PrivacySettings">Privacy en veiligheid</string>
@@ -1112,6 +1145,7 @@
     <string name="ReEnterYourPasscode">Toegangscode opnieuw invoeren</string>
     <string name="Recent">RECENT</string>
     <string name="RecordingAudio">neemt een spraakbericht op...</string>
+    <string name="RecordingRound">neemt een videobericht op...</string>
     <string name="RecoveryEmail">Herstel-e-mailadres</string>
     <string name="RegisterText">Voer je voor- en achternaam in</string>
     <string name="Regular">Normaal</string>
@@ -1205,6 +1239,7 @@
     <string name="SelectContact">Contact kiezen</string>
     <string name="SelectFile">Kies een bestand</string>
     <string name="Send">Stuur</string>
+    <string name="SendAsFiles">Als bestand</string>
     <string name="SendByEnter">Versturen met Enter</string>
     <string name="SendContactTo">Contact delen met %1$s?</string>
     <string name="SendContactToGroup">Contact delen met %1$s?</string>
@@ -1245,6 +1280,7 @@
     <string name="SetTimer">Zelfvernietigingstimer instellen</string>
     <string name="Settings">Instellingen</string>
     <string name="Shadows">Schaduwen</string>
+    <string name="ShareComment">Opmerking toevoegen</string>
     <string name="ShareContact">Delen</string>
     <string name="ShareFile">Delen</string>
     <string name="ShareLink">Link delen</string>

@@ -50,6 +50,7 @@
     <string name="ActionPinnedMusic">un1 hat ein Musikstück angeheftet</string>
     <string name="ActionPinnedNoText">un1 hat eine Nachricht angeheftet</string>
     <string name="ActionPinnedPhoto">un1 hat ein Bild angeheftet</string>
+    <string name="ActionPinnedRound">un1 hat eine Videonachricht angeheftet</string>
     <string name="ActionPinnedSticker">un1 hat einen Sticker angeheftet</string>
     <string name="ActionPinnedText">un1 hat \"%1$s\" angeheftet</string>
     <string name="ActionPinnedVideo">un1 hat ein Video angeheftet</string>
@@ -163,6 +164,7 @@
     <string name="AttachLocation">Standort</string>
     <string name="AttachMusic">Musik</string>
     <string name="AttachPhoto">Bild</string>
+    <string name="AttachRound">Videonachricht</string>
     <string name="AttachSticker">Sticker</string>
     <string name="AttachVideo">Video</string>
     <string name="AudioTitle">Geteilte Musik</string>
@@ -217,7 +219,7 @@
     <string name="CallMessageWithDuration">%1$s (%2$s)</string>
     <string name="CallNotAvailable">&lt;b&gt;%1$s&lt;/b&gt; akzeptiert leider keine Anrufe.</string>
     <string name="CallText">Wir rufen dich an in %1$d:%2$02d</string>
-    <string name="CallViaTelegram">Telegram Anruf</string>
+    <string name="CallViaTelegram">Telegram-Anruf</string>
     <string name="Calling">Wir rufen dich an…</string>
     <string name="Calls">Anrufe</string>
     <string name="CallsDataUsage">Anrufe</string>
@@ -286,6 +288,7 @@
     <string name="ChannelMessageGroupMusic">%1$s hat ein Musikstück an den Kanal %2$s gesendet</string>
     <string name="ChannelMessageGroupNoText">%1$s hat eine Nachricht an den Kanal %2$s gesendet</string>
     <string name="ChannelMessageGroupPhoto">%1$s hat ein Bild an den Kanal %2$s gesendet</string>
+    <string name="ChannelMessageGroupRound">%1$s hat eine Videonachricht an den Kanal %2$s gesendet</string>
     <string name="ChannelMessageGroupSticker">%1$s hat einen Sticker an den Kanal %2$s gesendet</string>
     <string name="ChannelMessageGroupStickerEmoji">%1$s hat einen %3$s Sticker an den Kanal %2$s gesendet</string>
     <string name="ChannelMessageGroupVideo">%1$s hat ein Video an den Kanal %2$s gesendet</string>
@@ -293,6 +296,7 @@
     <string name="ChannelMessageMusic">%1$s hat ein Musikstück gesendet</string>
     <string name="ChannelMessageNoText">%1$s hat eine Nachricht gesendet</string>
     <string name="ChannelMessagePhoto">%1$s hat ein Bild gesendet</string>
+    <string name="ChannelMessageRound">%1$s hat eine Videonachricht gesendet</string>
     <string name="ChannelMessageSticker">%1$s hat einen Sticker gesendet</string>
     <string name="ChannelMessageStickerEmoji">%1$s hat einen %2$s Sticker gesendet</string>
     <string name="ChannelMessageVideo">%1$s hat ein Video gesendet</string>
@@ -357,10 +361,12 @@
     <string name="CodeExpired">Code ist abgelaufen, bitte melde dich erneut an</string>
     <string name="ColorBlue">Blau</string>
     <string name="ColorCyan">Cyan</string>
+    <string name="ColorDark">Dunkel</string>
     <string name="ColorGreen">Grün</string>
     <string name="ColorOrange">Orange</string>
     <string name="ColorPink">Pink</string>
     <string name="ColorRed">Rot</string>
+    <string name="ColorSepia">Sepia</string>
     <string name="ColorViolet">Violett</string>
     <string name="ColorWhite">Weiß</string>
     <string name="ColorYellow">Gelb</string>
@@ -375,7 +381,7 @@
     <string name="ConvertGroupAlert">Du kannst die Supergruppe nicht mehr in eine normale Gruppe ändern.</string>
     <string name="ConvertGroupAlertWarning">Warnung</string>
     <string name="ConvertGroupInfo">&lt;b&gt;Gruppenlimit erreicht.&lt;/b&gt;\n\nFür weitere Funktionen und um das Limit aufzuheben in Supergruppe ändern:\n\n• Bis zu %1$s sind nun möglich\n• Neue Mitglieder sehen gesamten Verlauf\n• Gelöschte Nachrichten werden bei allen Mitgliedern entfernt\n• Admins können Nachrichten anheften\n• Gruppenersteller kann die Gruppe öffentlich machen</string>
-    <string name="ConvertGroupInfo2">&lt;b&gt;In Supergruppen:&lt;/b&gt;\n\n• Neue Mitglieder sehen gesamten Verlauf\n• Nachrichten werden bei allen gelöscht\n• Admins können Nachrichten anheften\n• Gründer kann Gruppe öffentlich machen</string>
+    <string name="ConvertGroupInfo2">&lt;b&gt;In Supergruppen:&lt;/b&gt;\n\n• Neue Mitglieder sehen gesamten Verlauf\n• Nachrichten sind bei allen löschbar\n• Admins können Nachrichten anheften\n• Gründer kann Gruppe öffentlich machen</string>
     <string name="ConvertGroupInfo3">&lt;b&gt;Wichtig:&lt;/b&gt; Die Änderung kann nicht rückgängig gemacht werden.</string>
     <string name="ConvertGroupMenu">In Supergruppe ändern</string>
     <string name="Copy">Kopieren</string>
@@ -455,6 +461,11 @@
     <string name="DirectShareInfo">Letzte Chats im Teilen-Menü anzeigen</string>
     <string name="Disabled">Deaktiviert</string>
     <string name="DiscardChanges">Änderungen verwerfen?</string>
+    <string name="DiscardVideoMessageDescription">Möchtest du die Aufnahme beenden und wirklich die Videonachricht dadurch verwerfen?</string>
+    <string name="DiscardVideoMessageTitle">Videonachricht verwerfen</string>
+    <string name="DiscardVoiceMessageAction">Verwerfen</string>
+    <string name="DiscardVoiceMessageDescription">Möchtest du die Aufnahme beenden und wirklich die Sprachnachricht dadurch verwerfen?</string>
+    <string name="DiscardVoiceMessageTitle">Sprachnachricht verwerfen</string>
     <string name="DocumentsTitle">Geteilte Dateien</string>
     <string name="Done">Fertig</string>
     <string name="Draft">Entwurf</string>
@@ -513,6 +524,7 @@
     <string name="FloodWait">Zu viele Versuche in zu kurzer Zeit, versuche es bitte später erneut.</string>
     <string name="FloodWaitTime">Zu viele Versuche, bitte erneut in %1$s versuchen</string>
     <string name="Folder">Ordner</string>
+    <string name="FontSize">Textgröße</string>
     <string name="ForgotPassword">Kennwort vergessen?</string>
     <string name="Forward">Weiterleiten</string>
     <string name="ForwardMessagesTo">Nachrichten an %1$s weiterleiten?</string>
@@ -560,6 +572,12 @@
     <string name="ForwardedPhoto_other">%1$d angehängte Bilder</string>
     <string name="ForwardedPhoto_two">%1$d angehängte Bilder</string>
     <string name="ForwardedPhoto_zero">%1$d angehängten Bilder</string>
+    <string name="ForwardedRound_few">%1$d angehängte Videonachrichten</string>
+    <string name="ForwardedRound_many">%1$d angehängte Videonachrichten</string>
+    <string name="ForwardedRound_one">Videonachrichtenanhang</string>
+    <string name="ForwardedRound_other">%1$d angehängte Videonachrichten</string>
+    <string name="ForwardedRound_two">%1$d angehängte Videonachrichten</string>
+    <string name="ForwardedRound_zero">%1$d angehängte Videonachrichten</string>
     <string name="ForwardedSticker_few">%1$d angehängte Sticker</string>
     <string name="ForwardedSticker_many">%1$d angehängte Sticker</string>
     <string name="ForwardedSticker_one">Angehängter Sticker</string>
@@ -607,6 +625,8 @@
     <string name="HiddenName">Gelöschtes Konto</string>
     <string name="Highlights">Lichter</string>
     <string name="HistoryCleared">Verlauf wurde gelöscht</string>
+    <string name="HoldToAudio">Halten für Audioaufnahme. Tippen für Video.</string>
+    <string name="HoldToVideo">Halten für Videoaufnahme. Tippen für Audio.</string>
     <string name="HoursBold_few">&lt;b&gt;%1$d&lt;/b&gt; Stunden</string>
     <string name="HoursBold_many">&lt;b&gt;%1$d&lt;/b&gt; Stunden</string>
     <string name="HoursBold_one">&lt;b&gt;%1$d&lt;/b&gt; Stunde</string>
@@ -647,6 +667,7 @@
     <string name="InviteToGroupError">Du kannst diesen Nutzer nicht hinzufügen, weil er das nicht erlaubt.</string>
     <string name="InviteUser">Dieser Benutzer hat noch kein Telegram. Möchtest du ihn einladen?</string>
     <string name="IsRecordingAudio">%1$s nimmt etwas auf...</string>
+    <string name="IsRecordingRound">%1$s nimmt eine Videonachricht auf...</string>
     <string name="IsSendingAudio">%1$s schickt Audio...</string>
     <string name="IsSendingFile">%1$s schickt Datei...</string>
     <string name="IsSendingGame">%1$s spielt ein Spiel...</string>
@@ -716,7 +737,7 @@
     <string name="LinkPreview">Linkvorschau</string>
     <string name="LinksTitle">Geteilte Links</string>
     <string name="Loading">Lädt…</string>
-    <string name="LocalAudioCache">Sprachnachrichten</string>
+    <string name="LocalAudioCache">Sprach-/Videonachrichten</string>
     <string name="LocalCache">Sonstige Dateien</string>
     <string name="LocalDatabase">Lokale Datenbank</string>
     <string name="LocalDatabaseClear">Textnachrichten-Cache leeren?</string>
@@ -873,6 +894,8 @@
     <string name="NotificationActionPinnedNoTextChannel">%1$s hat eine Nachricht angeheftet</string>
     <string name="NotificationActionPinnedPhoto">%1$s hat ein Bild in der Gruppe %2$s angeheftet</string>
     <string name="NotificationActionPinnedPhotoChannel">%1$s hat ein Bild angeheftet</string>
+    <string name="NotificationActionPinnedRound">%1$s hat eine Videonachricht in der Gruppe %2$s angeheftet</string>
+    <string name="NotificationActionPinnedRoundChannel">%1$s hat eine Videonachricht angeheftet</string>
     <string name="NotificationActionPinnedSticker">%1$s hat einen Sticker in der Gruppe %2$s angeheftet</string>
     <string name="NotificationActionPinnedStickerChannel">%1$s hat einen Sticker angeheftet</string>
     <string name="NotificationActionPinnedStickerEmoji">%1$s hat einen %3$s Sticker in der Gruppe %2$s angeheftet</string>
@@ -885,8 +908,8 @@
     <string name="NotificationActionPinnedVoiceChannel">%1$s hat eine Sprachnachricht angeheftet</string>
     <string name="NotificationContactJoined">%1$s benutzt jetzt Telegram!</string>
     <string name="NotificationContactNewPhoto">%1$s hat das Profilbild geändert</string>
-    <string name="NotificationEditedGroupName">%1$s hat den Namen der Gruppe %2$s geändert</string>
-    <string name="NotificationEditedGroupPhoto">%1$s hat das Bild der Gruppe %2$s geändert</string>
+    <string name="NotificationEditedGroupName">%1$s hat die Gruppe %2$s umbenannt</string>
+    <string name="NotificationEditedGroupPhoto">%1$s hat das Gruppenbild von %2$s geändert</string>
     <string name="NotificationGroupAddMember">%1$s hat %3$s in die Gruppe %2$s eingeladen</string>
     <string name="NotificationGroupAddSelf">%1$s ist in die Gruppe %2$s zurückgekehrt</string>
     <string name="NotificationGroupAddSelfMega">%1$s ist der Gruppe %2$s beigetreten</string>
@@ -909,6 +932,7 @@
     <string name="NotificationMessageGroupMusic">%1$s hat ein Musikstück an die Gruppe %2$s gesendet</string>
     <string name="NotificationMessageGroupNoText">%1$s hat eine Nachricht an die Gruppe %2$s gesendet</string>
     <string name="NotificationMessageGroupPhoto">%1$s hat ein Bild an die Gruppe %2$s gesendet</string>
+    <string name="NotificationMessageGroupRound">%1$s hat eine Videonachricht an die Gruppe %2$s gesendet</string>
     <string name="NotificationMessageGroupSticker">%1$s hat einen Sticker an die Gruppe %2$s gesendet</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s hat einen %3$s Sticker an die Gruppe %2$s gesendet</string>
     <string name="NotificationMessageGroupText">%1$s @ %2$s: %3$s</string>
@@ -917,6 +941,7 @@
     <string name="NotificationMessageMusic">%1$s hat dir ein Musikstück gesendet</string>
     <string name="NotificationMessageNoText">%1$s hat dir eine Nachricht gesendet</string>
     <string name="NotificationMessagePhoto">%1$s hat dir ein Bild gesendet</string>
+    <string name="NotificationMessageRound">%1$s hat dir eine Videonachricht gesendet</string>
     <string name="NotificationMessageSticker">%1$s hat dir einen Sticker gesendet</string>
     <string name="NotificationMessageStickerEmoji">%1$s hat dir einen %2$s Sticker gesendet</string>
     <string name="NotificationMessageText">%1$s: %2$s</string>
@@ -1017,6 +1042,7 @@
     <string name="PaymentCheckoutName">Name</string>
     <string name="PaymentCheckoutPay">%1$s BEZAHLEN</string>
     <string name="PaymentCheckoutPhoneNumber">Telefonnummer</string>
+    <string name="PaymentCheckoutProvider">Zahlungsbetreiber</string>
     <string name="PaymentCheckoutShippingMethod">Versandart</string>
     <string name="PaymentConfirmationMessage">Deine Karte %1$s ist bereits gespeichert. Um mit dieser Karte zu bezahlen, tippe dein Kennwort der zweistufigen Bestätigung ein.</string>
     <string name="PaymentConfirmationNewCard">Wähle eine andere Karte</string>
@@ -1047,6 +1073,8 @@
     <string name="PaymentTransactionMessage">Möchtest du wirklich %1$s an den %2$s Bot für %3$s übermitteln?</string>
     <string name="PaymentTransactionReview">Überprüfung der Transaktion</string>
     <string name="PaymentTransactionTotal">Gesamtsumme</string>
+    <string name="PaymentWarning">Warnung</string>
+    <string name="PaymentWarningText">Zahlungen gehen direkt an den Entwickler von %1$s. Telegram kann keine Haftung übernehmen, du handelst auf eigene Gefahr. Wende dich bei Problemen bitte direkt an den Entwickler von %2$s oder an deine Bank.</string>
     <string name="PendingEmailText">Deine E-Mail Adresse %1$s wurde noch verifiziert und ist daher noch nicht aktiv.</string>
     <string name="PermissionContacts">Telegram benötigt Zugriff auf deine Kontakte um dich auf all denen Geräten mit deinen Freunden zu verbinden.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram braucht Zugriff auf die Funktion \'Über andere Apps einblenden\'. Nur so können Videos im Bild in Bild Modus wiedergegeben werden.</string>
@@ -1099,8 +1127,13 @@
     <string name="PopupNotification">Popup Mitteilungen</string>
     <string name="PreviewFeedback">Rückmeldung zu dieser Vorschau hinterlassen</string>
     <string name="PriorityInfo">Mitteilungen höherer Priorität funktionieren auch, wenn sich dein Telefon im \"Bitte nicht stören\"-Modus befindet.</string>
+    <string name="PrivacyClearPayment">Zahlungsinformationen</string>
+    <string name="PrivacyClearShipping">Versandinformationen</string>
     <string name="PrivacyFloodControlError">Du hast zu oft probiert, deine Einstellungen zu ändern; bitte warte kurz.</string>
     <string name="PrivacyLastSeen">Zuletzt gesehen</string>
+    <string name="PrivacyPayments">Zahlungen</string>
+    <string name="PrivacyPaymentsClear">Zahlungsinfo entfernen</string>
+    <string name="PrivacyPaymentsClearInfo">Du kannst deine Versandinfos löschen und alle Zahlungsbetreiber anweisen, deine gespeicherten Kreditkartendaten zu entfernen. Beachte bitte, dass Telegram niemals deine Kreditkartendaten speichert.</string>
     <string name="PrivacyPolicy">Datenschutzerklärung</string>
     <string name="PrivacyPolicyUrl">https://telegram.org/privacy</string>
     <string name="PrivacySettings">Privatsphäre und Sicherheit</string>
@@ -1112,6 +1145,7 @@
     <string name="ReEnterYourPasscode">Neuen Pincode erneut eingben</string>
     <string name="Recent">LETZTE</string>
     <string name="RecordingAudio">nimmt etwas auf...</string>
+    <string name="RecordingRound">nimmt Videonachricht auf...</string>
     <string name="RecoveryEmail">Wiederherstellung</string>
     <string name="RegisterText">Gib deinen Vor- und Nachnamen ein</string>
     <string name="Regular">Normal</string>
@@ -1197,7 +1231,7 @@
     <string name="Seconds_zero">%1$d Sekunden</string>
     <string name="SecretChat">Geheime Chats</string>
     <string name="SecretChatContextBotAlert">Inline Bots werden von Drittentwicklern erstellt. Symbole, die du nach dem Botnamen eingibst, werden an den jeweiligen Entwickler geschickt, damit der Bot funktioniert.</string>
-    <string name="SecretLinkPreviewAlert">Möchtest du die erweitere Linkvorschau in Geheimen Chats aktivieren? Die Vorschau wird auf den Telegram Servern generiert.</string>
+    <string name="SecretLinkPreviewAlert">Möchtest du die erweiterte Linkvorschau in Geheimen Chats aktivieren? Die Vorschau wird auf den Telegram Servern generiert.</string>
     <string name="SecretWebPage">Linkvorschau</string>
     <string name="SecurityTitle">Sicherheit</string>
     <string name="SelectChat">Chat auswählen</string>
@@ -1205,6 +1239,7 @@
     <string name="SelectContact">Kontakt auswählen</string>
     <string name="SelectFile">Datei auswählen</string>
     <string name="Send">Senden</string>
+    <string name="SendAsFiles">Als Datei</string>
     <string name="SendByEnter">Mit Enter senden</string>
     <string name="SendContactTo">Kontakt senden an %1$s?</string>
     <string name="SendContactToGroup">Kontakt senden an %1$s?</string>
@@ -1245,6 +1280,7 @@
     <string name="SetTimer">Selbstzerstörungs-Timer setzen</string>
     <string name="Settings">Einstellungen</string>
     <string name="Shadows">Schatten</string>
+    <string name="ShareComment">Kommentar hinterlassen...</string>
     <string name="ShareContact">Teilen</string>
     <string name="ShareFile">Teilen</string>
     <string name="ShareLink">Link teilen</string>
@@ -1383,7 +1419,7 @@
     <string name="VoipFeedbackAlert">Möchtest du eine Rückmeldung zu unseren Sprachanrufen hinterlassen, damit wir den Dienst optimieren können?</string>
     <string name="VoipFeedbackCommentHint">Optionalen Kommentar hinzufügen</string>
     <string name="VoipHangingUp">Anruf wird beendet</string>
-    <string name="VoipInCallBranding">Telegram Anruf</string>
+    <string name="VoipInCallBranding">Telegram-Anruf</string>
     <string name="VoipIncoming">Eingehender Anruf</string>
     <string name="VoipNeedMicPermission">Telegram benötigt für Sprachanrufe Zugriff auf dein Mikrofon.</string>
     <string name="VoipNotificationSettings">Sprachanrufe</string>
@@ -1394,7 +1430,7 @@
     <string name="VoipOfflineTitle">Offline</string>
     <string name="VoipOngoingAlert">Du bist mit &lt;b&gt;%1$s&lt;/b&gt; bereits im Gespräch. Möchtest du den Anruf beenden und einen neuen mit &lt;b&gt;%2$s&lt;/b&gt; starten?</string>
     <string name="VoipOngoingAlertTitle">Ein anderer Anruf ist bereits aktiv</string>
-    <string name="VoipOutgoingCall">Laufender Telegram Anruf</string>
+    <string name="VoipOutgoingCall">Laufender Telegram-Anruf</string>
     <string name="VoipPeerIncompatible">&lt;b&gt;%1$s&lt;/b&gt;s App ist nicht mit unserem Protokoll kompatibel. Dein Chatpartner muss seine App aktualisieren, bevor du anrufen kannst.</string>
     <string name="VoipPeerOutdated">&lt;b&gt;%1$s&lt;/b&gt; unterstützt keine Anrufe. Dein Chatpartner muss seine App aktualisieren, bevor du ihn anrufen kannst.</string>
     <string name="VoipRateCallAlert">Bewerte bitte die Qualität deines Telegram-Anrufs</string>
@@ -1455,7 +1491,7 @@
     <string name="YourPasswordSuccess">Geschafft!</string>
     <string name="YourPasswordSuccessText">Dein Kennwort für die zweistufige Bestätigung ist jetzt aktiv.</string>
     <string name="YourPhone">Dein Telefon</string>
-    <string name="chatDate">d MMMM</string>
+    <string name="chatDate">d\'.\' MMMM</string>
     <string name="chatFullDate">d MMMM, yyyy</string>
     <string name="formatDateAtTime">%1$s um %2$s</string>
     <string name="formatterDay12H">h:mm a</string>

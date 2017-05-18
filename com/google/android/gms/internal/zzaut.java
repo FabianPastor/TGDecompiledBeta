@@ -59,12 +59,12 @@ public class zzaut extends zzauh {
     }
 
     public static Object zzH(Object obj) {
-        ObjectInputStream objectInputStream;
         Throwable th;
         if (obj == null) {
             return null;
         }
         ObjectOutputStream objectOutputStream;
+        ObjectInputStream objectInputStream;
         try {
             OutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);

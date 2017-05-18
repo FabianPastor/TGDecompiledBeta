@@ -50,6 +50,7 @@
     <string name="ActionPinnedMusic">un1 ثبت مقطع صوتي</string>
     <string name="ActionPinnedNoText">un1 ثبت رسالة</string>
     <string name="ActionPinnedPhoto">un1 ثبت صورة</string>
+    <string name="ActionPinnedRound">un1 ثبت رسالة مرئية</string>
     <string name="ActionPinnedSticker">un1 ثبت ملصق</string>
     <string name="ActionPinnedText">un1 ثبت \"%1$s\"</string>
     <string name="ActionPinnedVideo">un1 ثبت فيديو</string>
@@ -163,6 +164,7 @@
     <string name="AttachLocation">موقع</string>
     <string name="AttachMusic">موسيقى</string>
     <string name="AttachPhoto">صورة</string>
+    <string name="AttachRound">رسالة مرئية</string>
     <string name="AttachSticker">ملصق</string>
     <string name="AttachVideo">مقطع مرئي</string>
     <string name="AudioTitle">الموسيقى المشتركة</string>
@@ -286,6 +288,7 @@
     <string name="ChannelMessageGroupMusic">%1$s قام بإرسال مقطع صوتي للقناة %2$s</string>
     <string name="ChannelMessageGroupNoText">%1$s قام بإرسال رسالة للقناة %2$s</string>
     <string name="ChannelMessageGroupPhoto">%1$s قام بإرسال صورة للقناة %2$s</string>
+    <string name="ChannelMessageGroupRound">%1$s أرسل رسالة مرئية للقناة %2$s</string>
     <string name="ChannelMessageGroupSticker">%1$s قام بإرسال ملصق للقناة %2$s</string>
     <string name="ChannelMessageGroupStickerEmoji">%1$s أرسل %3$s ملصق للقناة %2$s</string>
     <string name="ChannelMessageGroupVideo">%1$s قام بإرسال مقطع مرئي للقناة %2$s</string>
@@ -293,6 +296,7 @@
     <string name="ChannelMessageMusic">%1$s أرسل مقطع صوتي</string>
     <string name="ChannelMessageNoText">%1$s أرسل رسالة</string>
     <string name="ChannelMessagePhoto">%1$s أرسل صورة</string>
+    <string name="ChannelMessageRound">%1$s أرسل رسالة مرئية</string>
     <string name="ChannelMessageSticker">%1$s أرسل ملصق</string>
     <string name="ChannelMessageStickerEmoji">%1$s أرسل %2$s ملصق</string>
     <string name="ChannelMessageVideo">%1$s أرسل مقطع مرئي</string>
@@ -357,10 +361,12 @@
     <string name="CodeExpired">انتهت صلاحية الرمز الخاص بك، يرجى تسجيل الدخول مرة أخرى</string>
     <string name="ColorBlue">أزرق</string>
     <string name="ColorCyan">سماوي</string>
+    <string name="ColorDark">داكن</string>
     <string name="ColorGreen">أخضر</string>
     <string name="ColorOrange">برتقالي</string>
     <string name="ColorPink">وردي</string>
     <string name="ColorRed">أحمر</string>
+    <string name="ColorSepia">بني داكن</string>
     <string name="ColorViolet">بنفسجي</string>
     <string name="ColorWhite">أبيض</string>
     <string name="ColorYellow">أصفر</string>
@@ -455,6 +461,11 @@
     <string name="DirectShareInfo">اظهار المحادثات الأخيرة في قائمة المشاركة</string>
     <string name="Disabled">تعطيل</string>
     <string name="DiscardChanges">تجاهل التغييرات؟</string>
+    <string name="DiscardVideoMessageDescription">هل أنت متأكد من رغبتك في إيقاف التسجيل وتجاهل الرسالة المرئية؟</string>
+    <string name="DiscardVideoMessageTitle">تجاهل الرسالة المرئية</string>
+    <string name="DiscardVoiceMessageAction">تجاهل</string>
+    <string name="DiscardVoiceMessageDescription">هل أنت متأكد من رغبتك في إيقاف التسجيل وتجاهل الرسالة الصوتية؟</string>
+    <string name="DiscardVoiceMessageTitle">تجاهل الرسالة الصوتية</string>
     <string name="DocumentsTitle">الملفات المشاركة</string>
     <string name="Done">تم</string>
     <string name="Draft">مسودة</string>
@@ -513,6 +524,7 @@
     <string name="FloodWait">محاولات كثيرة خاطئة، نرجو المحاولة لاحقًا</string>
     <string name="FloodWaitTime">محاولات كثيرة خاطئة، يرجى المحاولة خلال %1$s</string>
     <string name="Folder">مجلد</string>
+    <string name="FontSize">حجم النص</string>
     <string name="ForgotPassword">هل نسيت كلمة المرور؟</string>
     <string name="Forward">إعادة توجيه</string>
     <string name="ForwardMessagesTo">؟%1$s هل تريد إعادة توجيه الرسائل إلى</string>
@@ -560,6 +572,12 @@
     <string name="ForwardedPhoto_other">%1$d صورة معاد توجيهها</string>
     <string name="ForwardedPhoto_two">%1$d صورة معاد توجيهها</string>
     <string name="ForwardedPhoto_zero">%1$d صورة معاد توجيهها</string>
+    <string name="ForwardedRound_few">%1$d رسالة مرئية معاد توجيهها</string>
+    <string name="ForwardedRound_many">%1$d رسالة مرئية معاد توجيهها</string>
+    <string name="ForwardedRound_one">رسالة مرئية معاد توجيهها</string>
+    <string name="ForwardedRound_other">%1$d رسالة مرئية معاد توجيهها</string>
+    <string name="ForwardedRound_two">%1$d رسالة مرئية معاد توجيهها</string>
+    <string name="ForwardedRound_zero">%1$d رسالة مرئية معاد توجيهها</string>
     <string name="ForwardedSticker_few">%1$d ملصق معاد توجيهه</string>
     <string name="ForwardedSticker_many">%1$d ملصق معاد توجيهه</string>
     <string name="ForwardedSticker_one">ملصق معاد توجيهه</string>
@@ -607,6 +625,8 @@
     <string name="HiddenName">حساب محذوف</string>
     <string name="Highlights">التفتيح</string>
     <string name="HistoryCleared">تم مسح السجل</string>
+    <string name="HoldToAudio">اضغط باستمرار لتسجيل صوتي. اضغط مرة واحدة للتحويل للفيديو.</string>
+    <string name="HoldToVideo">اضغط باستمرار لتسجيل فيديو. اضغط مرة واحدة للتحويل للصوتي.</string>
     <string name="HoursBold_few">&lt;b&gt;%1$d&lt;/b&gt; ساعة</string>
     <string name="HoursBold_many">&lt;b&gt;%1$d&lt;/b&gt; ساعة</string>
     <string name="HoursBold_one">&lt;b&gt;%1$d&lt;/b&gt; ساعة</string>
@@ -647,6 +667,7 @@
     <string name="InviteToGroupError">المعذرة، لا يمكنك إضافة هذا المستخدم للمجموعات بسبب إعدادات الخصوصية المتعلقة به.</string>
     <string name="InviteUser">هذا المستخدم ليس لديه تيليجرام بعد ، هل ترغب في دعوته الآن؟</string>
     <string name="IsRecordingAudio">%1$s يقوم بتسجيل رسالة صوتية...</string>
+    <string name="IsRecordingRound">%1$s يقوم بتسجيل رسالة مرئية...</string>
     <string name="IsSendingAudio">%1$s يقوم بإرسال مقطع صوتي...</string>
     <string name="IsSendingFile">%1$s يقوم بإرسال ملف...</string>
     <string name="IsSendingGame">%1$s يلعب لعبة...</string>
@@ -716,7 +737,7 @@
     <string name="LinkPreview">معاينة الرابط</string>
     <string name="LinksTitle">الروابط المشاركة</string>
     <string name="Loading">جاري التحميل ...</string>
-    <string name="LocalAudioCache">الرسائل الصوتية</string>
+    <string name="LocalAudioCache">رسالة صوتية/مرئية</string>
     <string name="LocalCache">الملفات الأخرى</string>
     <string name="LocalDatabase">قاعدة البيانات على الجهاز</string>
     <string name="LocalDatabaseClear">هل ترغب في مسح الرسائل المحفوظة في الذاكرة المخبئية؟</string>
@@ -873,6 +894,8 @@
     <string name="NotificationActionPinnedNoTextChannel">%1$s ثبت رسالة</string>
     <string name="NotificationActionPinnedPhoto">%1$s ثبت صورة في المجموعة %2$s</string>
     <string name="NotificationActionPinnedPhotoChannel">%1$s ثبت صورة</string>
+    <string name="NotificationActionPinnedRound">%1$s ثبت رسالة مرئية في المجموعة %2$s</string>
+    <string name="NotificationActionPinnedRoundChannel">%1$s ثبت رسالة مرئية</string>
     <string name="NotificationActionPinnedSticker">%1$s ثبت ملصق في المجموعة %2$s</string>
     <string name="NotificationActionPinnedStickerChannel">%1$s ثبت ملصق</string>
     <string name="NotificationActionPinnedStickerEmoji">%1$s قام بتثبيت %3$s ملصق في المجموعة %2$s</string>
@@ -885,8 +908,8 @@
     <string name="NotificationActionPinnedVoiceChannel">%1$s ثبت رسالة صوتية</string>
     <string name="NotificationContactJoined">%1$s قام بالتسجيل في تيليجرام!</string>
     <string name="NotificationContactNewPhoto">%1$s قام بتغيير صورته الشخصية</string>
-    <string name="NotificationEditedGroupName">%1$s قام بتعديل اسم المجموعة %2$s</string>
-    <string name="NotificationEditedGroupPhoto">%1$s قام بتغيير صورة المجموعة %2$s</string>
+    <string name="NotificationEditedGroupName">%1$s انضم للمجموعة %2$s</string>
+    <string name="NotificationEditedGroupPhoto">%1$s غير صورة المجموعة %2$s</string>
     <string name="NotificationGroupAddMember">%1$s قام بدعوة %3$s للمجموعة %2$s</string>
     <string name="NotificationGroupAddSelf">%1$s عاد إلى المجموعة %2$s</string>
     <string name="NotificationGroupAddSelfMega">%1$s انضم للمجموعة %2$s</string>
@@ -909,6 +932,7 @@
     <string name="NotificationMessageGroupMusic">%1$s أرسل مقطع صوتي للمجموعة %2$s</string>
     <string name="NotificationMessageGroupNoText">%1$s قام بإرسال رسالة للمجموعة %2$s</string>
     <string name="NotificationMessageGroupPhoto">%1$s قام بإرسال صورة للمجموعة %2$s</string>
+    <string name="NotificationMessageGroupRound">%1$s قام بإرسال رسالة مرئية للمجموعة %2$s</string>
     <string name="NotificationMessageGroupSticker">%1$s قام بإرسال ملصق للمجموعة %2$s</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s أرسل %3$s ملصق للمجموعة %2$s</string>
     <string name="NotificationMessageGroupText">%1$s @ %2$s: %3$s</string>
@@ -917,6 +941,7 @@
     <string name="NotificationMessageMusic">%1$s أرسل مقطع صوتي لك</string>
     <string name="NotificationMessageNoText">%1$s قام بإرسال رسالة لك</string>
     <string name="NotificationMessagePhoto">%1$s قام بإرسال صورة لك</string>
+    <string name="NotificationMessageRound">%1$s قام بإرسال رسالة مرئية لك</string>
     <string name="NotificationMessageSticker">%1$s قام بإرسال ملصق</string>
     <string name="NotificationMessageStickerEmoji">%1$s قام بإرسال %2$s ملصق</string>
     <string name="NotificationMessageText">%1$s: %2$s</string>
@@ -1017,6 +1042,7 @@
     <string name="PaymentCheckoutName">الاسم</string>
     <string name="PaymentCheckoutPay">إدفع %1$s</string>
     <string name="PaymentCheckoutPhoneNumber">رقم الهاتف</string>
+    <string name="PaymentCheckoutProvider">مزود عملية الدفع</string>
     <string name="PaymentCheckoutShippingMethod">طريقة الشحن</string>
     <string name="PaymentConfirmationMessage">بطاقتك %1$s مسجلة مسبقًا. لتتمكن من استخدامها، يرجى إدخال كلمة مرور التحقق بخطوتين.</string>
     <string name="PaymentConfirmationNewCard">اختر بطاقة أخرى</string>
@@ -1047,6 +1073,8 @@
     <string name="PaymentTransactionMessage">هل حقًا ترغب في تحويل %1$s إلى البوت %2$s لـ %3$s؟</string>
     <string name="PaymentTransactionReview">مراجعة العملية</string>
     <string name="PaymentTransactionTotal">الإجمالي</string>
+    <string name="PaymentWarning">تحذير</string>
+    <string name="PaymentWarningText">الدفعات تذهب مباشرة إلى مطور %1$s. تيليجرام لا يقوم بتوفير أية ضمانات، يمكنك الاستمرار على مسؤوليتك. في حال واجهت مشاكل، فضلًا تواصل مع مطور %2$s أو البنك الخاص بك.</string>
     <string name="PendingEmailText">البريد الإلكتروني لإسترداد الحساب %1$s غير فعّال بعد ويلزم تفعيله</string>
     <string name="PermissionContacts">تيليجرام يحتاج للسماح له بالوصول لجهات الاتصال الخاصة بك لتتمكن من محادثة أصدقائك من كافة أجهزتك.</string>
     <string name="PermissionDrawAboveOtherApps">تيليجرام يحتاج الصلاحية ليقوم بتشغيل الفيديو داخل الشاشة بعد الخروج من التطبيق.</string>
@@ -1099,8 +1127,13 @@
     <string name="PopupNotification">الإشعارات المنبثقة</string>
     <string name="PreviewFeedback">اكتب رأيك بخصوص هذا الإستعراض</string>
     <string name="PriorityInfo">الإشعارات الأكثر أهمية ستعمل حتى عندما يكون جهازك في وضعية عدم الإزعاج.</string>
+    <string name="PrivacyClearPayment">معلومات عملية الدفع</string>
+    <string name="PrivacyClearShipping">معلومات الشحن</string>
     <string name="PrivacyFloodControlError">المعذرة، يوجد الكثير من الطلبات حاليًا. لا نستطيع تغيير إعدادات الخصوصية الآن، يرجى الإنتظار.</string>
     <string name="PrivacyLastSeen">آخر ظهور</string>
+    <string name="PrivacyPayments">عمليات الدفع</string>
+    <string name="PrivacyPaymentsClear">مسح معلومات عملية الدفع والشحن</string>
+    <string name="PrivacyPaymentsClearInfo">يمكنك حذف معلومات الشحن الخاصة بك والطلب من جميع موفري خدمة الدفع حذف بطاقاتك الإئتمانية المسجلة. يرجى الأخذ بالعلم أن تيليجرام لا يقوم بتاتًا بحفظ بيانات بطاقتك الإئتمانية.</string>
     <string name="PrivacyPolicy">سياسة الخصوصية</string>
     <string name="PrivacyPolicyUrl">https://telegram.org/privacy</string>
     <string name="PrivacySettings">الخصوصية والأمان</string>
@@ -1112,6 +1145,7 @@
     <string name="ReEnterYourPasscode">قم بإعادة إدخال رمز المرور الخاص بك الجديدة</string>
     <string name="Recent">حديث</string>
     <string name="RecordingAudio">جاري تسجيل الرسالة الصوتية...</string>
+    <string name="RecordingRound">جاري تسجيل الرسالة المرئية...</string>
     <string name="RecoveryEmail">بريد إسترداد الحساب</string>
     <string name="RegisterText">اختر الاسم الأول واسم العائلة</string>
     <string name="Regular">طبيعي</string>
@@ -1205,6 +1239,7 @@
     <string name="SelectContact">اختر جهة اتصال</string>
     <string name="SelectFile">اختر ملف</string>
     <string name="Send">إرسال</string>
+    <string name="SendAsFiles">أرسل كملفات</string>
     <string name="SendByEnter">أرسل بزر الإدخال</string>
     <string name="SendContactTo">أرسل جهة الاتصال إلى %1$s؟</string>
     <string name="SendContactToGroup">أرسل جهة الاتصال إلى %1$s؟</string>
@@ -1245,6 +1280,7 @@
     <string name="SetTimer">عداد التدمير الذاتي</string>
     <string name="Settings">الإعدادات</string>
     <string name="Shadows">الظل</string>
+    <string name="ShareComment">اكتب ملاحظة</string>
     <string name="ShareContact">مشاركة</string>
     <string name="ShareFile">مشاركة</string>
     <string name="ShareLink">شارك الرابط</string>
