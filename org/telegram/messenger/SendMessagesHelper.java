@@ -874,6 +874,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         Message newMsg = new TL_message();
                         if (msgObj.isForwarded()) {
                             newMsg.fwd_from = msgObj.messageOwner.fwd_from;
+                            newMsg.flags = 4;
                         } else if (msgObj.getDialogId() != ((long) myId)) {
                             newMsg.fwd_from = new TL_messageFwdHeader();
                             TL_messageFwdHeader tL_messageFwdHeader;
@@ -897,9 +898,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 }
                             }
                             newMsg.date = msgObj.messageOwner.date;
+                            newMsg.flags = 4;
                         }
                         newMsg.media = msgObj.messageOwner.media;
-                        newMsg.flags = 4;
                         if (newMsg.media != null) {
                             newMsg.flags |= 512;
                         }
@@ -1334,8 +1335,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public void sendGame(InputPeer peer, TL_inputMediaGame game, long random_id, long taskId) {
         Throwable e;
-        long newTaskId;
         if (peer != null && game != null) {
+            long newTaskId;
             TL_messages_sendMedia request = new TL_messages_sendMedia();
             request.peer = peer;
             if (request.peer instanceof TL_inputPeerChannel) {
@@ -1413,9 +1414,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     private void sendMessage(String message, MessageMedia location, TL_photo photo, VideoEditedInfo videoEditedInfo, User user, TL_document document, TL_game game, long peer, String path, MessageObject reply_to_msg, WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<MessageEntity> entities, ReplyMarkup replyMarkup, HashMap<String, String> params) {
         Throwable e;
+        MessageObject newMsgObj;
         if (peer != 0) {
             Chat chat;
-            MessageObject newMsgObj;
             int a;
             DocumentAttribute attribute;
             String originalPath = null;
@@ -4236,19 +4237,24 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         if (isEncrypted) {
                             if (null == null) {
                                 thumb = SendMessagesHelper.createVideoThumbnail(str, startTime);
+                                if (thumb == null) {
+                                    thumb = ThumbnailUtils.createVideoThumbnail(str, 1);
+                                }
                                 size = ImageLoader.scaleAndSaveImage(thumb, 90.0f, 90.0f, 55, isEncrypted);
-                                if (isRound) {
-                                    thumb = null;
-                                } else if (isEncrypted) {
-                                    if (VERSION.SDK_INT >= 21) {
+                                if (thumb != null) {
+                                    if (isRound) {
+                                        thumb = null;
+                                    } else if (isEncrypted) {
+                                        if (VERSION.SDK_INT >= 21) {
+                                        }
+                                        Utilities.blurBitmap(thumb, 7, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
+                                        thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b2", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
+                                    } else {
+                                        if (VERSION.SDK_INT >= 21) {
+                                        }
+                                        Utilities.blurBitmap(thumb, 3, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
+                                        thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
                                     }
-                                    Utilities.blurBitmap(thumb, 7, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
-                                    thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b2", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
-                                } else {
-                                    if (VERSION.SDK_INT >= 21) {
-                                    }
-                                    Utilities.blurBitmap(thumb, 3, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
-                                    thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
                                 }
                                 document = new TL_document();
                                 document.thumb = size;
@@ -4304,15 +4310,20 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         }
                         if (null == null) {
                             thumb = SendMessagesHelper.createVideoThumbnail(str, startTime);
+                            if (thumb == null) {
+                                thumb = ThumbnailUtils.createVideoThumbnail(str, 1);
+                            }
                             size = ImageLoader.scaleAndSaveImage(thumb, 90.0f, 90.0f, 55, isEncrypted);
-                            if (isRound) {
-                                thumb = null;
-                            } else if (isEncrypted) {
-                                Utilities.blurBitmap(thumb, 7, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
-                                thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b2", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
-                            } else {
-                                Utilities.blurBitmap(thumb, 3, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
-                                thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
+                            if (thumb != null) {
+                                if (isRound) {
+                                    thumb = null;
+                                } else if (isEncrypted) {
+                                    Utilities.blurBitmap(thumb, 7, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
+                                    thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b2", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
+                                } else {
+                                    Utilities.blurBitmap(thumb, 3, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
+                                    thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
+                                }
                             }
                             document = new TL_document();
                             document.thumb = size;

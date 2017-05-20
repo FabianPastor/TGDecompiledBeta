@@ -223,6 +223,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         private int alphaHandle;
         private BufferInfo audioBufferInfo;
         private MediaCodec audioEncoder;
+        private AudioRecord audioRecorder;
         private long audioStartTime;
         private int audioTrackIndex;
         private boolean blendEnabled;
@@ -281,26 +282,13 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 /* JADX WARNING: inconsistent code. */
                 /* Code decompiled incorrectly, please refer to instructions dump. */
                 public void run() {
-                    int a;
-                    int recordBufferSize = AudioRecord.getMinBufferSize(44100, 16, 2);
-                    if (recordBufferSize <= 0) {
-                        recordBufferSize = 3584;
-                    }
-                    int bufferSize = 49152;
-                    if (49152 < recordBufferSize) {
-                        bufferSize = (((recordBufferSize / 2048) + 1) * 2048) * 2;
-                    }
-                    for (a = 0; a < 3; a++) {
-                        VideoRecorder.this.buffers.add(new AudioBufferInfo());
-                    }
-                    AudioRecord audioRecorder = new AudioRecord(1, 44100, 16, 2, bufferSize);
-                    audioRecorder.startRecording();
+                    VideoRecorder.this.audioRecorder.startRecording();
                     boolean done = false;
                     while (!done) {
                         AudioBufferInfo buffer;
-                        if (!(VideoRecorder.this.running || audioRecorder.getRecordingState() == 1)) {
+                        if (!(VideoRecorder.this.running || VideoRecorder.this.audioRecorder.getRecordingState() == 1)) {
                             try {
-                                audioRecorder.stop();
+                                VideoRecorder.this.audioRecorder.stop();
                             } catch (Exception e) {
                                 done = true;
                             }
@@ -312,10 +300,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         }
                         buffer.lastWroteBuffer = 0;
                         buffer.results = 10;
-                        a = 0;
+                        int a = 0;
                         while (a < 10) {
                             long audioPresentationTimeNs = System.nanoTime();
-                            int readResult = audioRecorder.read(buffer.buffer, a * 2048, 2048);
+                            int readResult = VideoRecorder.this.audioRecorder.read(buffer.buffer, a * 2048, 2048);
                             if (readResult <= 0) {
                                 buffer.results = a;
                                 if (!VideoRecorder.this.running) {
@@ -346,7 +334,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         VideoRecorder.this.handler.sendMessage(VideoRecorder.this.handler.obtainMessage(3, buffer));
                     }
                     try {
-                        audioRecorder.release();
+                        VideoRecorder.this.audioRecorder.release();
                     } catch (Throwable e3) {
                         FileLog.e(e3);
                     }
@@ -674,6 +662,19 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         private void prepareEncoder() {
             try {
+                int recordBufferSize = AudioRecord.getMinBufferSize(44100, 16, 2);
+                if (recordBufferSize <= 0) {
+                    recordBufferSize = 3584;
+                }
+                int bufferSize = 49152;
+                if (49152 < recordBufferSize) {
+                    bufferSize = (((recordBufferSize / 2048) + 1) * 2048) * 2;
+                }
+                for (int a = 0; a < 3; a++) {
+                    this.buffers.add(new AudioBufferInfo());
+                }
+                this.audioRecorder = new AudioRecord(1, 44100, 16, 2, bufferSize);
+                new Thread(this.recorderRunnable).start();
                 this.audioBufferInfo = new BufferInfo();
                 this.videoBufferInfo = new BufferInfo();
                 MediaFormat audioFormat = new MediaFormat();
@@ -688,14 +689,14 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 this.audioEncoder.start();
                 MediaFormat format = MediaFormat.createVideoFormat("video/avc", this.videoWidth, this.videoHeight);
                 format.setInteger("color-format", NUM);
-                format.setInteger("bitrate", this.videoBitrate);
+                MediaFormat mediaFormat = format;
+                mediaFormat.setInteger("bitrate", this.videoBitrate);
                 format.setInteger("frame-rate", 30);
                 format.setInteger("i-frame-interval", 1);
                 this.videoEncoder = MediaCodec.createEncoderByType("video/avc");
                 this.videoEncoder.configure(format, null, null, 1);
                 this.surface = this.videoEncoder.createInputSurface();
                 this.videoEncoder.start();
-                new Thread(this.recorderRunnable).start();
                 Mp4Movie movie = new Mp4Movie();
                 movie.setCacheFile(this.videoFile);
                 movie.setRotation(0);
@@ -729,6 +730,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     if (this.eglContext == EGL14.EGL_NO_CONTEXT) {
                         EGLConfig[] configs = new EGLConfig[1];
                         if (EGL14.eglChooseConfig(this.eglDisplay, new int[]{12324, 8, 12323, 8, 12322, 8, 12321, 8, 12352, 4, 12610, 1, 12344}, 0, configs, 0, configs.length, new int[1], 0)) {
+                            int[] iArr = new int[3];
                             this.eglContext = EGL14.eglCreateContext(this.eglDisplay, configs[0], this.sharedEglContext, new int[]{12440, 2, 12344}, 0);
                             this.eglConfig = configs[0];
                         } else {
@@ -774,7 +776,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
                 this.eglDisplay = null;
                 throw new RuntimeException("unable to initialize EGL14");
-            } catch (Exception ioe) {
+            } catch (Throwable ioe) {
                 throw new RuntimeException(ioe);
             }
         }
@@ -793,12 +795,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void drainEncoder(boolean endOfStream) throws Exception {
+            MediaFormat newFormat;
             if (endOfStream) {
                 this.videoEncoder.signalEndOfInputStream();
             }
             ByteBuffer[] encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
             while (true) {
-                MediaFormat newFormat;
                 ByteBuffer encodedData;
                 int encoderStatus = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
                 if (encoderStatus == -1) {
@@ -1792,6 +1794,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
         if (this.selectedCamera == null) {
             this.selectedCamera = notFrontface;
+        }
+        if (this.selectedCamera == null) {
+            return false;
         }
         this.previewSize = CameraController.chooseOptimalSize(this.selectedCamera.getPreviewSizes(), 480, 270, this.aspectRatio);
         return true;

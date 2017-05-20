@@ -134,6 +134,7 @@ public class MessageObject {
     public boolean deleted;
     public boolean forceUpdate;
     private int generatedWithMinSize;
+    public float gifState;
     public boolean hasRtl;
     public boolean isDateObject;
     private int isRoundVideoCached;
@@ -2118,7 +2119,7 @@ public class MessageObject {
     }
 
     public static boolean isForwardedMessage(Message message) {
-        return (message.flags & 4) != 0;
+        return ((message.flags & 4) == 0 || message.fwd_from == null) ? false : true;
     }
 
     public boolean isReply() {

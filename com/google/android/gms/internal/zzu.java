@@ -111,13 +111,12 @@ public class zzu implements zzg {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public zzj zza(zzl<?> com_google_android_gms_internal_zzl_) throws zzs {
-        int statusCode;
-        Throwable e;
         long elapsedRealtime = SystemClock.elapsedRealtime();
         while (true) {
             HttpResponse httpResponse = null;
             Map emptyMap = Collections.emptyMap();
             HttpResponse zza;
+            int statusCode;
             try {
                 Map hashMap = new HashMap();
                 zza(hashMap, com_google_android_gms_internal_zzl_.zzh());
@@ -133,14 +132,14 @@ public class zzu implements zzg {
                 if (statusCode >= Callback.DEFAULT_DRAG_ANIMATION_DURATION && statusCode <= 299) {
                     return new zzj(statusCode, zza2, emptyMap, false, SystemClock.elapsedRealtime() - elapsedRealtime);
                 }
-            } catch (SocketTimeoutException e2) {
+            } catch (SocketTimeoutException e) {
                 zza("socket", com_google_android_gms_internal_zzl_, new zzr());
-            } catch (ConnectTimeoutException e3) {
+            } catch (ConnectTimeoutException e2) {
                 zza("connection", com_google_android_gms_internal_zzl_, new zzr());
-            } catch (Throwable e4) {
-                throw new RuntimeException("Bad URL " + com_google_android_gms_internal_zzl_.getUrl(), e4);
-            } catch (IOException e5) {
-                e4 = e5;
+            } catch (Throwable e3) {
+                throw new RuntimeException("Bad URL " + com_google_android_gms_internal_zzl_.getUrl(), e3);
+            } catch (IOException e4) {
+                e3 = e4;
                 r5 = null;
                 httpResponse = zza;
                 if (httpResponse != null) {
@@ -156,7 +155,8 @@ public class zzu implements zzg {
                         zza("network", com_google_android_gms_internal_zzl_, new zzi());
                     }
                 } else {
-                    throw new zzk(e4);
+                    Throwable e32;
+                    throw new zzk(e32);
                 }
             }
         }

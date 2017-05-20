@@ -455,12 +455,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     if (event.getAction() != 1 || !ChatActivityEnterView.this.lockBackgroundDrawable.getBounds().contains(x, y)) {
                         return true;
                     }
-                    if (ChatActivityEnterView.this.videoSendButton.getTag() != null) {
-                        ChatActivityEnterView.this.delegate.needStartRecordVideo(3);
+                    if (ChatActivityEnterView.this.videoSendButton == null || ChatActivityEnterView.this.videoSendButton.getTag() == null) {
+                        MediaController.getInstance().stopRecording(2);
+                        ChatActivityEnterView.this.delegate.needStartRecordAudio(0);
                         return true;
                     }
-                    MediaController.getInstance().stopRecording(2);
-                    ChatActivityEnterView.this.delegate.needStartRecordAudio(0);
+                    ChatActivityEnterView.this.delegate.needStartRecordVideo(3);
                     return true;
                 }
             }

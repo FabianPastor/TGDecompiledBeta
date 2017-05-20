@@ -1825,7 +1825,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     private void updateSavePaymentField() {
-        if (this.bottomCell[0] != null) {
+        if (this.bottomCell[0] != null && this.sectionCell[2] != null) {
             if ((this.paymentForm.password_missing || this.paymentForm.can_save_credentials) && (this.webView == null || !(this.webView == null || this.webviewLoading))) {
                 SpannableStringBuilder text = new SpannableStringBuilder(LocaleController.getString("PaymentCardSavePaymentInformationInfoLine1", R.string.PaymentCardSavePaymentInformationInfoLine1));
                 if (this.paymentForm.password_missing) {
