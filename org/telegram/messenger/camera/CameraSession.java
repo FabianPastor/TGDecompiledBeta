@@ -186,7 +186,9 @@ public class CameraSession {
             camera.setDisplayOrientation(cameraDisplayOrientation);
             this.diffOrientation = this.currentOrientation - displayOrientation;
             if (params != null) {
+                FileLog.e("set preview size = " + this.previewSize.getWidth() + " " + this.previewSize.getHeight());
                 params.setPreviewSize(this.previewSize.getWidth(), this.previewSize.getHeight());
+                FileLog.e("set picture size = " + this.pictureSize.getWidth() + " " + this.pictureSize.getHeight());
                 params.setPictureSize(this.pictureSize.getWidth(), this.pictureSize.getHeight());
                 params.setPictureFormat(this.pictureFormat);
                 params.setRecordingHint(true);

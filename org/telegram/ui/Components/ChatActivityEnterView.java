@@ -1711,7 +1711,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     public void onPause() {
         this.isPaused = true;
-        cancelRecordingAudioVideo();
         closeKeyboard();
     }
 

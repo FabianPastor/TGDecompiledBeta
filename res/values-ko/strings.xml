@@ -167,6 +167,7 @@
     <string name="AttachRound">영상 메시지</string>
     <string name="AttachSticker">스티커</string>
     <string name="AttachVideo">동영상</string>
+    <string name="AudioAutodownload">음성 메시지</string>
     <string name="AudioTitle">공유된 음악</string>
     <string name="AudioUnknownArtist">알수 없는 아티스트</string>
     <string name="AudioUnknownTitle">알 수 없는 제목</string>
@@ -651,6 +652,7 @@
     <string name="IncorrectTheme">올바르지 않은 테마 파일</string>
     <string name="Info">정보</string>
     <string name="InstantView">즉시 보기</string>
+    <string name="InstantViewNightMode">밤시간에는 자동으로 어두운 테마가 작동됩니다</string>
     <string name="InternalStorage">내부 저장소</string>
     <string name="InvalidCode">올바른 코드를 입력해 주세요</string>
     <string name="InvalidFirstName">올바른 이름을 입력해 주세요</string>
@@ -1144,8 +1146,8 @@
     <string name="RaiseToSpeakAlert">\"기기를 들어 말하기\"기능을 음성 메시지에 활성화 하시겠습니까?</string>
     <string name="ReEnterYourPasscode">잠금코드 재입력</string>
     <string name="Recent">최신</string>
-    <string name="RecordingAudio">음성메시지를 녹음 중입니다..</string>
-    <string name="RecordingRound">영상메시지를 녹화 중입니다..</string>
+    <string name="RecordingAudio">영상메시지를 녹화중...</string>
+    <string name="RecordingRound">영상메시지를 녹화중...</string>
     <string name="RecoveryEmail">복구 이메일</string>
     <string name="RegisterText">이름을 입력하세요</string>
     <string name="Regular">일반</string>
@@ -1403,6 +1405,7 @@
     <string name="VibrationDefault">기본값</string>
     <string name="VibrationDisabled">비활성화됨</string>
     <string name="VideoCaption">동영상 설명</string>
+    <string name="VideoMessagesAutodownload">음성 메시지</string>
     <string name="ViewPackPreview">팩 보기</string>
     <string name="Vignette">비네팅</string>
     <string name="VoipAnswerCall">받기</string>

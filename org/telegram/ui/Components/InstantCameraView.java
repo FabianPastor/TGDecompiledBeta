@@ -127,6 +127,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private ImageView muteImageView;
     private int[] oldCameraTexture = new int[1];
     private Paint paint;
+    private Size pictureSize;
     private int[] position = new int[2];
     private Size previewSize;
     private float progress;
@@ -282,7 +283,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 /* JADX WARNING: inconsistent code. */
                 /* Code decompiled incorrectly, please refer to instructions dump. */
                 public void run() {
-                    VideoRecorder.this.audioRecorder.startRecording();
                     boolean done = false;
                     while (!done) {
                         AudioBufferInfo buffer;
@@ -674,6 +674,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     this.buffers.add(new AudioBufferInfo());
                 }
                 this.audioRecorder = new AudioRecord(1, 44100, 16, 2, bufferSize);
+                this.audioRecorder.startRecording();
                 new Thread(this.recorderRunnable).start();
                 this.audioBufferInfo = new BufferInfo();
                 this.videoBufferInfo = new BufferInfo();
@@ -795,12 +796,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void drainEncoder(boolean endOfStream) throws Exception {
-            MediaFormat newFormat;
             if (endOfStream) {
                 this.videoEncoder.signalEndOfInputStream();
             }
             ByteBuffer[] encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
             while (true) {
+                MediaFormat newFormat;
                 ByteBuffer encodedData;
                 int encoderStatus = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
                 if (encoderStatus == -1) {
@@ -1788,8 +1789,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         if (cameraInfos == null) {
             return false;
         }
+        int a;
         CameraInfo notFrontface = null;
-        for (int a = 0; a < cameraInfos.size(); a++) {
+        for (a = 0; a < cameraInfos.size(); a++) {
             CameraInfo cameraInfo = (CameraInfo) cameraInfos.get(a);
             if (!cameraInfo.isFrontface()) {
                 notFrontface = cameraInfo;
@@ -1806,7 +1808,28 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         if (this.selectedCamera == null) {
             return false;
         }
-        this.previewSize = CameraController.chooseOptimalSize(this.selectedCamera.getPreviewSizes(), 480, 270, this.aspectRatio);
+        ArrayList<Size> previewSizes = this.selectedCamera.getPreviewSizes();
+        ArrayList<Size> pictureSizes = this.selectedCamera.getPictureSizes();
+        this.previewSize = CameraController.chooseOptimalSize(previewSizes, 480, 270, this.aspectRatio);
+        this.pictureSize = CameraController.chooseOptimalSize(pictureSizes, 480, 270, this.aspectRatio);
+        if (this.previewSize.mWidth != this.pictureSize.mWidth) {
+            boolean found = false;
+            for (a = previewSizes.size() - 1; a >= 0; a--) {
+                Size preview = (Size) previewSizes.get(a);
+                for (int b = pictureSizes.size() - 1; b >= 0; b--) {
+                    Size picture = (Size) pictureSizes.get(b);
+                    if (preview.mWidth >= PsExtractor.VIDEO_STREAM_MASK && preview.mHeight >= PsExtractor.VIDEO_STREAM_MASK && preview.mWidth == picture.mWidth && preview.mHeight == picture.mHeight) {
+                        this.previewSize = preview;
+                        this.pictureSize = picture;
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) {
+                    break;
+                }
+            }
+        }
         return true;
     }
 
@@ -1815,16 +1838,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             public void run() {
                 if (InstantCameraView.this.cameraThread != null) {
                     FileLog.e("create camera session");
-                    Size pictureSize = CameraController.chooseOptimalSize(InstantCameraView.this.selectedCamera.getPictureSizes(), 480, 270, InstantCameraView.this.aspectRatio);
-                    if (pictureSize.getWidth() >= 1280 && pictureSize.getHeight() >= 1280) {
-                        InstantCameraView.this.aspectRatio = new Size(9, 16);
-                        Size pictureSize2 = CameraController.chooseOptimalSize(InstantCameraView.this.selectedCamera.getPictureSizes(), 270, 480, InstantCameraView.this.aspectRatio);
-                        if (pictureSize2.getWidth() < 1280 || pictureSize2.getHeight() < 1280) {
-                            pictureSize = pictureSize2;
-                        }
-                    }
                     surfaceTexture.setDefaultBufferSize(InstantCameraView.this.previewSize.getWidth(), InstantCameraView.this.previewSize.getHeight());
-                    InstantCameraView.this.cameraSession = new CameraSession(InstantCameraView.this.selectedCamera, InstantCameraView.this.previewSize, pictureSize, 256);
+                    InstantCameraView.this.cameraSession = new CameraSession(InstantCameraView.this.selectedCamera, InstantCameraView.this.previewSize, InstantCameraView.this.pictureSize, 256);
                     InstantCameraView.this.cameraThread.setCurrentSession(InstantCameraView.this.cameraSession);
                     CameraController.getInstance().openRound(InstantCameraView.this.cameraSession, surfaceTexture, new Runnable() {
                         public void run() {

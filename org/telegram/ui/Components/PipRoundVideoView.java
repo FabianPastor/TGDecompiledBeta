@@ -63,185 +63,192 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
     private FrameLayout windowView;
 
     public void show(Activity activity, Runnable closeRunnable) {
-        instance = this;
-        this.onCloseRunnable = closeRunnable;
-        this.windowView = new FrameLayout(activity) {
-            private boolean dragging;
-            private boolean startDragging;
-            private float startX;
-            private float startY;
+        if (activity != null) {
+            instance = this;
+            this.onCloseRunnable = closeRunnable;
+            this.windowView = new FrameLayout(activity) {
+                private boolean dragging;
+                private boolean startDragging;
+                private float startX;
+                private float startY;
 
-            public boolean onInterceptTouchEvent(MotionEvent event) {
-                if (event.getAction() == 0) {
-                    this.startX = event.getRawX();
-                    this.startY = event.getRawY();
-                    this.startDragging = true;
-                }
-                return true;
-            }
-
-            public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-                super.requestDisallowInterceptTouchEvent(disallowIntercept);
-            }
-
-            public boolean onTouchEvent(MotionEvent event) {
-                if (!this.startDragging && !this.dragging) {
-                    return false;
-                }
-                float x = event.getRawX();
-                float y = event.getRawY();
-                if (event.getAction() == 2) {
-                    float dx = x - this.startX;
-                    float dy = y - this.startY;
-                    if (this.startDragging) {
-                        if (Math.abs(dx) >= AndroidUtilities.getPixelsInCM(0.3f, true) || Math.abs(dy) >= AndroidUtilities.getPixelsInCM(0.3f, false)) {
-                            this.dragging = true;
-                            this.startDragging = false;
-                        }
-                    } else if (this.dragging) {
-                        LayoutParams access$000 = PipRoundVideoView.this.windowLayoutParams;
-                        access$000.x = (int) (((float) access$000.x) + dx);
-                        access$000 = PipRoundVideoView.this.windowLayoutParams;
-                        access$000.y = (int) (((float) access$000.y) + dy);
-                        int maxDiff = PipRoundVideoView.this.videoWidth / 2;
-                        if (PipRoundVideoView.this.windowLayoutParams.x < (-maxDiff)) {
-                            PipRoundVideoView.this.windowLayoutParams.x = -maxDiff;
-                        } else if (PipRoundVideoView.this.windowLayoutParams.x > (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + maxDiff) {
-                            PipRoundVideoView.this.windowLayoutParams.x = (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + maxDiff;
-                        }
-                        float alpha = 1.0f;
-                        if (PipRoundVideoView.this.windowLayoutParams.x < 0) {
-                            alpha = 1.0f + ((((float) PipRoundVideoView.this.windowLayoutParams.x) / ((float) maxDiff)) * 0.5f);
-                        } else if (PipRoundVideoView.this.windowLayoutParams.x > AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) {
-                            alpha = 1.0f - ((((float) ((PipRoundVideoView.this.windowLayoutParams.x - AndroidUtilities.displaySize.x) + PipRoundVideoView.this.windowLayoutParams.width)) / ((float) maxDiff)) * 0.5f);
-                        }
-                        if (PipRoundVideoView.this.windowView.getAlpha() != alpha) {
-                            PipRoundVideoView.this.windowView.setAlpha(alpha);
-                        }
-                        if (PipRoundVideoView.this.windowLayoutParams.y < (-null)) {
-                            PipRoundVideoView.this.windowLayoutParams.y = -null;
-                        } else if (PipRoundVideoView.this.windowLayoutParams.y > (AndroidUtilities.displaySize.y - PipRoundVideoView.this.windowLayoutParams.height) + 0) {
-                            PipRoundVideoView.this.windowLayoutParams.y = (AndroidUtilities.displaySize.y - PipRoundVideoView.this.windowLayoutParams.height) + 0;
-                        }
-                        PipRoundVideoView.this.windowManager.updateViewLayout(PipRoundVideoView.this.windowView, PipRoundVideoView.this.windowLayoutParams);
-                        this.startX = x;
-                        this.startY = y;
+                public boolean onInterceptTouchEvent(MotionEvent event) {
+                    if (event.getAction() == 0) {
+                        this.startX = event.getRawX();
+                        this.startY = event.getRawY();
+                        this.startDragging = true;
                     }
-                } else if (event.getAction() == 1) {
-                    if (this.startDragging && !this.dragging) {
-                        MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
-                        if (messageObject != null) {
-                            if (MediaController.getInstance().isMessagePaused()) {
-                                MediaController.getInstance().playMessage(messageObject);
-                            } else {
-                                MediaController.getInstance().pauseMessage(messageObject);
+                    return true;
+                }
+
+                public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+                    super.requestDisallowInterceptTouchEvent(disallowIntercept);
+                }
+
+                public boolean onTouchEvent(MotionEvent event) {
+                    if (!this.startDragging && !this.dragging) {
+                        return false;
+                    }
+                    float x = event.getRawX();
+                    float y = event.getRawY();
+                    if (event.getAction() == 2) {
+                        float dx = x - this.startX;
+                        float dy = y - this.startY;
+                        if (this.startDragging) {
+                            if (Math.abs(dx) >= AndroidUtilities.getPixelsInCM(0.3f, true) || Math.abs(dy) >= AndroidUtilities.getPixelsInCM(0.3f, false)) {
+                                this.dragging = true;
+                                this.startDragging = false;
+                            }
+                        } else if (this.dragging) {
+                            LayoutParams access$000 = PipRoundVideoView.this.windowLayoutParams;
+                            access$000.x = (int) (((float) access$000.x) + dx);
+                            access$000 = PipRoundVideoView.this.windowLayoutParams;
+                            access$000.y = (int) (((float) access$000.y) + dy);
+                            int maxDiff = PipRoundVideoView.this.videoWidth / 2;
+                            if (PipRoundVideoView.this.windowLayoutParams.x < (-maxDiff)) {
+                                PipRoundVideoView.this.windowLayoutParams.x = -maxDiff;
+                            } else if (PipRoundVideoView.this.windowLayoutParams.x > (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + maxDiff) {
+                                PipRoundVideoView.this.windowLayoutParams.x = (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + maxDiff;
+                            }
+                            float alpha = 1.0f;
+                            if (PipRoundVideoView.this.windowLayoutParams.x < 0) {
+                                alpha = 1.0f + ((((float) PipRoundVideoView.this.windowLayoutParams.x) / ((float) maxDiff)) * 0.5f);
+                            } else if (PipRoundVideoView.this.windowLayoutParams.x > AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) {
+                                alpha = 1.0f - ((((float) ((PipRoundVideoView.this.windowLayoutParams.x - AndroidUtilities.displaySize.x) + PipRoundVideoView.this.windowLayoutParams.width)) / ((float) maxDiff)) * 0.5f);
+                            }
+                            if (PipRoundVideoView.this.windowView.getAlpha() != alpha) {
+                                PipRoundVideoView.this.windowView.setAlpha(alpha);
+                            }
+                            if (PipRoundVideoView.this.windowLayoutParams.y < (-null)) {
+                                PipRoundVideoView.this.windowLayoutParams.y = -null;
+                            } else if (PipRoundVideoView.this.windowLayoutParams.y > (AndroidUtilities.displaySize.y - PipRoundVideoView.this.windowLayoutParams.height) + 0) {
+                                PipRoundVideoView.this.windowLayoutParams.y = (AndroidUtilities.displaySize.y - PipRoundVideoView.this.windowLayoutParams.height) + 0;
+                            }
+                            PipRoundVideoView.this.windowManager.updateViewLayout(PipRoundVideoView.this.windowView, PipRoundVideoView.this.windowLayoutParams);
+                            this.startX = x;
+                            this.startY = y;
+                        }
+                    } else if (event.getAction() == 1) {
+                        if (this.startDragging && !this.dragging) {
+                            MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
+                            if (messageObject != null) {
+                                if (MediaController.getInstance().isMessagePaused()) {
+                                    MediaController.getInstance().playMessage(messageObject);
+                                } else {
+                                    MediaController.getInstance().pauseMessage(messageObject);
+                                }
                             }
                         }
+                        this.dragging = false;
+                        this.startDragging = false;
+                        PipRoundVideoView.this.animateToBoundsMaybe();
                     }
-                    this.dragging = false;
-                    this.startDragging = false;
-                    PipRoundVideoView.this.animateToBoundsMaybe();
+                    return true;
                 }
-                return true;
-            }
 
-            protected void onDraw(Canvas canvas) {
-                if (Theme.chat_roundVideoShadow != null) {
-                    Theme.chat_roundVideoShadow.setAlpha((int) (getAlpha() * 255.0f));
-                    Theme.chat_roundVideoShadow.setBounds(AndroidUtilities.dp(1.0f), AndroidUtilities.dp(2.0f), AndroidUtilities.dp(125.0f), AndroidUtilities.dp(125.0f));
-                    Theme.chat_roundVideoShadow.draw(canvas);
-                }
-            }
-        };
-        this.windowView.setWillNotDraw(false);
-        this.videoWidth = AndroidUtilities.dp(126.0f);
-        this.videoHeight = AndroidUtilities.dp(126.0f);
-        if (VERSION.SDK_INT >= 21) {
-            this.aspectRatioFrameLayout = new AspectRatioFrameLayout(activity) {
-                protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-                    boolean result = super.drawChild(canvas, child, drawingTime);
-                    if (child == PipRoundVideoView.this.textureView) {
-                        MessageObject currentMessageObject = MediaController.getInstance().getPlayingMessageObject();
-                        if (currentMessageObject != null) {
-                            PipRoundVideoView.this.rect.set(AndroidUtilities.dpf2(1.5f), AndroidUtilities.dpf2(1.5f), ((float) getMeasuredWidth()) - AndroidUtilities.dpf2(1.5f), ((float) getMeasuredHeight()) - AndroidUtilities.dpf2(1.5f));
-                            canvas.drawArc(PipRoundVideoView.this.rect, -90.0f, currentMessageObject.audioProgress * 360.0f, false, Theme.chat_radialProgressPaint);
-                        }
+                protected void onDraw(Canvas canvas) {
+                    if (Theme.chat_roundVideoShadow != null) {
+                        Theme.chat_roundVideoShadow.setAlpha((int) (getAlpha() * 255.0f));
+                        Theme.chat_roundVideoShadow.setBounds(AndroidUtilities.dp(1.0f), AndroidUtilities.dp(2.0f), AndroidUtilities.dp(125.0f), AndroidUtilities.dp(125.0f));
+                        Theme.chat_roundVideoShadow.draw(canvas);
                     }
-                    return result;
                 }
             };
-            this.aspectRatioFrameLayout.setOutlineProvider(new ViewOutlineProvider() {
-                @TargetApi(21)
-                public void getOutline(View view, Outline outline) {
-                    outline.setOval(0, 0, AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN));
-                }
-            });
-            this.aspectRatioFrameLayout.setClipToOutline(true);
-        } else {
-            final Paint aspectPaint = new Paint(1);
-            aspectPaint.setColor(-16777216);
-            aspectPaint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
-            this.aspectRatioFrameLayout = new AspectRatioFrameLayout(activity) {
-                private Path aspectPath = new Path();
-
-                protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-                    super.onSizeChanged(w, h, oldw, oldh);
-                    this.aspectPath.reset();
-                    this.aspectPath.addCircle((float) (w / 2), (float) (h / 2), (float) (w / 2), Direction.CW);
-                    this.aspectPath.toggleInverseFillType();
-                }
-
-                protected void dispatchDraw(Canvas canvas) {
-                    super.dispatchDraw(canvas);
-                    canvas.drawPath(this.aspectPath, aspectPaint);
-                }
-
-                protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-                    boolean result = super.drawChild(canvas, child, drawingTime);
-                    if (child == PipRoundVideoView.this.textureView) {
-                        MessageObject currentMessageObject = MediaController.getInstance().getPlayingMessageObject();
-                        if (currentMessageObject != null) {
-                            PipRoundVideoView.this.rect.set(AndroidUtilities.dpf2(1.5f), AndroidUtilities.dpf2(1.5f), ((float) getMeasuredWidth()) - AndroidUtilities.dpf2(1.5f), ((float) getMeasuredHeight()) - AndroidUtilities.dpf2(1.5f));
-                            canvas.drawArc(PipRoundVideoView.this.rect, -90.0f, currentMessageObject.audioProgress * 360.0f, false, Theme.chat_radialProgressPaint);
+            this.windowView.setWillNotDraw(false);
+            this.videoWidth = AndroidUtilities.dp(126.0f);
+            this.videoHeight = AndroidUtilities.dp(126.0f);
+            if (VERSION.SDK_INT >= 21) {
+                this.aspectRatioFrameLayout = new AspectRatioFrameLayout(activity) {
+                    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                        boolean result = super.drawChild(canvas, child, drawingTime);
+                        if (child == PipRoundVideoView.this.textureView) {
+                            MessageObject currentMessageObject = MediaController.getInstance().getPlayingMessageObject();
+                            if (currentMessageObject != null) {
+                                PipRoundVideoView.this.rect.set(AndroidUtilities.dpf2(1.5f), AndroidUtilities.dpf2(1.5f), ((float) getMeasuredWidth()) - AndroidUtilities.dpf2(1.5f), ((float) getMeasuredHeight()) - AndroidUtilities.dpf2(1.5f));
+                                canvas.drawArc(PipRoundVideoView.this.rect, -90.0f, currentMessageObject.audioProgress * 360.0f, false, Theme.chat_radialProgressPaint);
+                            }
                         }
+                        return result;
                     }
-                    return result;
-                }
-            };
-            this.aspectRatioFrameLayout.setLayerType(2, null);
-        }
-        this.aspectRatioFrameLayout.setAspectRatio(1.0f, 0);
-        this.windowView.addView(this.aspectRatioFrameLayout, LayoutHelper.createFrame(120, BitmapDescriptorFactory.HUE_GREEN, 51, 3.0f, 3.0f, 0.0f, 0.0f));
-        this.windowView.setAlpha(1.0f);
-        this.windowView.setScaleX(0.8f);
-        this.windowView.setScaleY(0.8f);
-        this.textureView = new TextureView(activity);
-        this.aspectRatioFrameLayout.addView(this.textureView, LayoutHelper.createFrame(-1, -1.0f));
-        this.imageView = new ImageView(activity);
-        this.aspectRatioFrameLayout.addView(this.imageView, LayoutHelper.createFrame(-1, -1.0f));
-        this.imageView.setVisibility(4);
-        this.windowManager = (WindowManager) activity.getSystemService("window");
-        this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig", 0);
-        int sidex = this.preferences.getInt("sidex", 1);
-        int sidey = this.preferences.getInt("sidey", 0);
-        float px = this.preferences.getFloat("px", 0.0f);
-        float py = this.preferences.getFloat("py", 0.0f);
-        try {
-            this.windowLayoutParams = new LayoutParams();
-            this.windowLayoutParams.width = this.videoWidth;
-            this.windowLayoutParams.height = this.videoHeight;
-            this.windowLayoutParams.x = getSideCoord(true, sidex, px, this.videoWidth);
-            this.windowLayoutParams.y = getSideCoord(false, sidey, py, this.videoHeight);
-            this.windowLayoutParams.format = -3;
-            this.windowLayoutParams.gravity = 51;
-            this.windowLayoutParams.type = 99;
-            this.windowLayoutParams.flags = 16777736;
-            this.windowManager.addView(this.windowView, this.windowLayoutParams);
-            this.parentActivity = activity;
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
-            runShowHideAnimation(true);
-        } catch (Throwable e) {
-            FileLog.e(e);
+                };
+                this.aspectRatioFrameLayout.setOutlineProvider(new ViewOutlineProvider() {
+                    @TargetApi(21)
+                    public void getOutline(View view, Outline outline) {
+                        outline.setOval(0, 0, AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN));
+                    }
+                });
+                this.aspectRatioFrameLayout.setClipToOutline(true);
+            } else {
+                final Paint aspectPaint = new Paint(1);
+                aspectPaint.setColor(-16777216);
+                aspectPaint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+                this.aspectRatioFrameLayout = new AspectRatioFrameLayout(activity) {
+                    private Path aspectPath = new Path();
+
+                    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+                        super.onSizeChanged(w, h, oldw, oldh);
+                        this.aspectPath.reset();
+                        this.aspectPath.addCircle((float) (w / 2), (float) (h / 2), (float) (w / 2), Direction.CW);
+                        this.aspectPath.toggleInverseFillType();
+                    }
+
+                    protected void dispatchDraw(Canvas canvas) {
+                        super.dispatchDraw(canvas);
+                        canvas.drawPath(this.aspectPath, aspectPaint);
+                    }
+
+                    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                        boolean result;
+                        try {
+                            result = super.drawChild(canvas, child, drawingTime);
+                        } catch (Throwable th) {
+                            result = false;
+                        }
+                        if (child == PipRoundVideoView.this.textureView) {
+                            MessageObject currentMessageObject = MediaController.getInstance().getPlayingMessageObject();
+                            if (currentMessageObject != null) {
+                                PipRoundVideoView.this.rect.set(AndroidUtilities.dpf2(1.5f), AndroidUtilities.dpf2(1.5f), ((float) getMeasuredWidth()) - AndroidUtilities.dpf2(1.5f), ((float) getMeasuredHeight()) - AndroidUtilities.dpf2(1.5f));
+                                canvas.drawArc(PipRoundVideoView.this.rect, -90.0f, currentMessageObject.audioProgress * 360.0f, false, Theme.chat_radialProgressPaint);
+                            }
+                        }
+                        return result;
+                    }
+                };
+                this.aspectRatioFrameLayout.setLayerType(2, null);
+            }
+            this.aspectRatioFrameLayout.setAspectRatio(1.0f, 0);
+            this.windowView.addView(this.aspectRatioFrameLayout, LayoutHelper.createFrame(120, BitmapDescriptorFactory.HUE_GREEN, 51, 3.0f, 3.0f, 0.0f, 0.0f));
+            this.windowView.setAlpha(1.0f);
+            this.windowView.setScaleX(0.8f);
+            this.windowView.setScaleY(0.8f);
+            this.textureView = new TextureView(activity);
+            this.aspectRatioFrameLayout.addView(this.textureView, LayoutHelper.createFrame(-1, -1.0f));
+            this.imageView = new ImageView(activity);
+            this.aspectRatioFrameLayout.addView(this.imageView, LayoutHelper.createFrame(-1, -1.0f));
+            this.imageView.setVisibility(4);
+            this.windowManager = (WindowManager) activity.getSystemService("window");
+            this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig", 0);
+            int sidex = this.preferences.getInt("sidex", 1);
+            int sidey = this.preferences.getInt("sidey", 0);
+            float px = this.preferences.getFloat("px", 0.0f);
+            float py = this.preferences.getFloat("py", 0.0f);
+            try {
+                this.windowLayoutParams = new LayoutParams();
+                this.windowLayoutParams.width = this.videoWidth;
+                this.windowLayoutParams.height = this.videoHeight;
+                this.windowLayoutParams.x = getSideCoord(true, sidex, px, this.videoWidth);
+                this.windowLayoutParams.y = getSideCoord(false, sidey, py, this.videoHeight);
+                this.windowLayoutParams.format = -3;
+                this.windowLayoutParams.gravity = 51;
+                this.windowLayoutParams.type = 99;
+                this.windowLayoutParams.flags = 16777736;
+                this.windowManager.addView(this.windowView, this.windowLayoutParams);
+                this.parentActivity = activity;
+                NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+                runShowHideAnimation(true);
+            } catch (Throwable e) {
+                FileLog.e(e);
+            }
         }
     }
 
@@ -296,7 +303,11 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
             if (this.textureView.getWidth() > 0 && this.textureView.getHeight() > 0) {
                 this.bitmap = Bitmaps.createBitmap(this.textureView.getWidth(), this.textureView.getHeight(), Config.ARGB_8888);
             }
-            this.textureView.getBitmap(this.bitmap);
+            try {
+                this.textureView.getBitmap(this.bitmap);
+            } catch (Throwable th) {
+                this.bitmap = null;
+            }
             this.imageView.setImageBitmap(this.bitmap);
             this.aspectRatioFrameLayout.removeView(this.textureView);
             this.imageView.setVisibility(0);

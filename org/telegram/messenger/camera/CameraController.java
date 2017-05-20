@@ -111,6 +111,7 @@ public class CameraController implements OnInfoListener {
                                     size = (Size) list.get(a);
                                     if (size.height < 2160 && size.width < 2160) {
                                         cameraInfo.previewSizes.add(new Size(size.width, size.height));
+                                        FileLog.e("preview size = " + size.width + " " + size.height);
                                     }
                                 }
                                 list = params.getSupportedPictureSizes();
@@ -118,6 +119,7 @@ public class CameraController implements OnInfoListener {
                                     size = (Size) list.get(a);
                                     if (!"samsung".equals(Build.MANUFACTURER) || !"jflteuc".equals(Build.PRODUCT) || size.width < 2048) {
                                         cameraInfo.pictureSizes.add(new Size(size.width, size.height));
+                                        FileLog.e("picture size = " + size.width + " " + size.height);
                                     }
                                 }
                                 camera.release();

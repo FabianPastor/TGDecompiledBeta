@@ -167,6 +167,7 @@
     <string name="AttachRound">Video message</string>
     <string name="AttachSticker">Sticker</string>
     <string name="AttachVideo">Video</string>
+    <string name="AudioAutodownload">Voice messages</string>
     <string name="AudioTitle">Shared Music</string>
     <string name="AudioUnknownArtist">Unknown artist</string>
     <string name="AudioUnknownTitle">Unknown title</string>
@@ -651,6 +652,7 @@
     <string name="IncorrectTheme">Incorrect theme file</string>
     <string name="Info">Info</string>
     <string name="InstantView">INSTANT VIEW</string>
+    <string name="InstantViewNightMode">The dark theme will turn automatically during night time</string>
     <string name="InternalStorage">Internal Storage</string>
     <string name="InvalidCode">Invalid code</string>
     <string name="InvalidFirstName">Invalid first name</string>
@@ -1403,6 +1405,7 @@
     <string name="VibrationDefault">Default</string>
     <string name="VibrationDisabled">Disabled</string>
     <string name="VideoCaption">Video Caption</string>
+    <string name="VideoMessagesAutodownload">Video messages</string>
     <string name="ViewPackPreview">View Pack</string>
     <string name="Vignette">Vignette</string>
     <string name="VoipAnswerCall">Answer</string>
@@ -1585,9 +1588,6 @@
     <string name="hockeyapp_update_dialog_positive_button">Show</string>
     <string name="hockeyapp_update_dialog_title">Update Available</string>
     <string name="hockeyapp_update_mandatory_toast">%s is available and is a mandatory update!</string>
-    <string name="AudioAutodownload">Voice messages</string>
-    <string name="InstantViewNightMode">The dark theme will turn automatically during night time</string>
-    <string name="VideoMessagesAutodownload">Video messages</string>
     <string name="default_web_client_id">760348033671-jiv412evc1r36rl4k7vhl1ba83atdmot.apps.googleusercontent.com</string>
     <string name="firebase_database_url">https://tmessages2.firebaseio.com</string>
     <string name="gcm_defaultSenderId">760348033671</string>

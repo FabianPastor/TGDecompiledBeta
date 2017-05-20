@@ -167,6 +167,7 @@
     <string name="AttachRound">Videobericht</string>
     <string name="AttachSticker">Sticker</string>
     <string name="AttachVideo">Video</string>
+    <string name="AudioAutodownload">Spraakberichten</string>
     <string name="AudioTitle">Gedeelde muziek</string>
     <string name="AudioUnknownArtist">Onbekende artiest</string>
     <string name="AudioUnknownTitle">Onbekende titel</string>
@@ -651,6 +652,7 @@
     <string name="IncorrectTheme">Themabestand is ongeldig</string>
     <string name="Info">Info</string>
     <string name="InstantView">SNELLE WEERGAVE</string>
+    <string name="InstantViewNightMode">Donker thema schakelt automatisch in tijdens de nacht</string>
     <string name="InternalStorage">Interne opslag</string>
     <string name="InvalidCode">Ongeldige code</string>
     <string name="InvalidFirstName">Ongeldige voornaam</string>
@@ -1403,6 +1405,7 @@
     <string name="VibrationDefault">Standaard</string>
     <string name="VibrationDisabled">Uitgeschakeld</string>
     <string name="VideoCaption">Video-onderschrift</string>
+    <string name="VideoMessagesAutodownload">Videoberichten</string>
     <string name="ViewPackPreview">Bundel bekijken</string>
     <string name="Vignette">Vignet</string>
     <string name="VoipAnswerCall">Opnemen</string>

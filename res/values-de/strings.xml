@@ -167,6 +167,7 @@
     <string name="AttachRound">Videonachricht</string>
     <string name="AttachSticker">Sticker</string>
     <string name="AttachVideo">Video</string>
+    <string name="AudioAutodownload">Sprachnachrichten</string>
     <string name="AudioTitle">Geteilte Musik</string>
     <string name="AudioUnknownArtist">Unbekannter Künstler</string>
     <string name="AudioUnknownTitle">Unbekannter Titel</string>
@@ -651,6 +652,7 @@
     <string name="IncorrectTheme">Themen-Datei ist fehlerhaft.</string>
     <string name="Info">Info</string>
     <string name="InstantView">SCHNELLANSICHT</string>
+    <string name="InstantViewNightMode">Das dunkle Farbthema wird Nachts automatisch aktiviert</string>
     <string name="InternalStorage">Interner Speicher</string>
     <string name="InvalidCode">Ungültiger Code</string>
     <string name="InvalidFirstName">Ungültiger Vorname</string>
@@ -666,7 +668,7 @@
     <string name="InviteToGroupByLink">Per Link zur Gruppe einladen</string>
     <string name="InviteToGroupError">Du kannst diesen Nutzer nicht hinzufügen, weil er das nicht erlaubt.</string>
     <string name="InviteUser">Dieser Benutzer hat noch kein Telegram. Möchtest du ihn einladen?</string>
-    <string name="IsRecordingAudio">%1$s nimmt etwas auf...</string>
+    <string name="IsRecordingAudio">%1$s nimmt eine Sprachnachricht auf...</string>
     <string name="IsRecordingRound">%1$s nimmt eine Videonachricht auf...</string>
     <string name="IsSendingAudio">%1$s schickt Audio...</string>
     <string name="IsSendingFile">%1$s schickt Datei...</string>
@@ -1144,8 +1146,8 @@
     <string name="RaiseToSpeakAlert">Möchtest du \"Zum Sprechen ans Ohr\" für Sprachnachrichten aktivieren?</string>
     <string name="ReEnterYourPasscode">Neuen Pincode erneut eingben</string>
     <string name="Recent">LETZTE</string>
-    <string name="RecordingAudio">nimmt etwas auf...</string>
-    <string name="RecordingRound">nimmt Videonachricht auf...</string>
+    <string name="RecordingAudio">nimmt eine Sprachnachricht auf...</string>
+    <string name="RecordingRound">nimmt eine Videonachricht auf...</string>
     <string name="RecoveryEmail">Wiederherstellung</string>
     <string name="RegisterText">Gib deinen Vor- und Nachnamen ein</string>
     <string name="Regular">Normal</string>
@@ -1403,6 +1405,7 @@
     <string name="VibrationDefault">Standard</string>
     <string name="VibrationDisabled">Deaktiviert</string>
     <string name="VideoCaption">Videobeschriftung</string>
+    <string name="VideoMessagesAutodownload">Videonachrichten</string>
     <string name="ViewPackPreview">Paket anzeigen</string>
     <string name="Vignette">Vignette</string>
     <string name="VoipAnswerCall">Annehmen</string>

@@ -167,6 +167,7 @@
     <string name="AttachRound">رسالة مرئية</string>
     <string name="AttachSticker">ملصق</string>
     <string name="AttachVideo">مقطع مرئي</string>
+    <string name="AudioAutodownload">الرسائل الصوتية</string>
     <string name="AudioTitle">الموسيقى المشتركة</string>
     <string name="AudioUnknownArtist">الفنان غير معروف</string>
     <string name="AudioUnknownTitle">العنوان غير معروف</string>
@@ -651,6 +652,7 @@
     <string name="IncorrectTheme">ملف النمط غير صحيح</string>
     <string name="Info">معلومات</string>
     <string name="InstantView">استعراض لحظي</string>
+    <string name="InstantViewNightMode">النمط الداكن سيتم تفعيله تلقائيًا في الليل</string>
     <string name="InternalStorage">الذاكرة الداخلية</string>
     <string name="InvalidCode">الرمز غير صحيح</string>
     <string name="InvalidFirstName">الاسم الأول غير صحيح</string>
@@ -1144,8 +1146,8 @@
     <string name="RaiseToSpeakAlert">هل ترغب في تفعيل خاصية رفع الجهاز لإرسال الرسائل الصوتية؟</string>
     <string name="ReEnterYourPasscode">قم بإعادة إدخال رمز المرور الخاص بك الجديدة</string>
     <string name="Recent">حديث</string>
-    <string name="RecordingAudio">جاري تسجيل الرسالة الصوتية...</string>
-    <string name="RecordingRound">جاري تسجيل الرسالة المرئية...</string>
+    <string name="RecordingAudio">جاري تسجيل رسالة صوتية...</string>
+    <string name="RecordingRound">جاري تسجيل رسالة مرئية...</string>
     <string name="RecoveryEmail">بريد إسترداد الحساب</string>
     <string name="RegisterText">اختر الاسم الأول واسم العائلة</string>
     <string name="Regular">طبيعي</string>
@@ -1403,6 +1405,7 @@
     <string name="VibrationDefault">تلقائي</string>
     <string name="VibrationDisabled">تعطيل</string>
     <string name="VideoCaption">تعليق المقطع المرئي</string>
+    <string name="VideoMessagesAutodownload">الرسائل المرئية</string>
     <string name="ViewPackPreview">استعرض الحزمة</string>
     <string name="Vignette">النقش</string>
     <string name="VoipAnswerCall">رد</string>

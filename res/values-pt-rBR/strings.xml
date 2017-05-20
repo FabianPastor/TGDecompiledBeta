@@ -167,6 +167,7 @@
     <string name="AttachRound">Mensagem de vídeo</string>
     <string name="AttachSticker">Sticker</string>
     <string name="AttachVideo">Vídeo</string>
+    <string name="AudioAutodownload">Mensagens de voz</string>
     <string name="AudioTitle">Música Compartilhada</string>
     <string name="AudioUnknownArtist">Artista desconhecido</string>
     <string name="AudioUnknownTitle">Título desconhecido</string>
@@ -651,6 +652,7 @@
     <string name="IncorrectTheme">Arquivo de tema incorreto</string>
     <string name="Info">Info</string>
     <string name="InstantView">LEITURA RÁPIDA</string>
+    <string name="InstantViewNightMode">O tema noturno será ativado automaticamente à noite</string>
     <string name="InternalStorage">Armazenamento Interno</string>
     <string name="InvalidCode">Código inválido</string>
     <string name="InvalidFirstName">Nome inválido</string>
@@ -1144,8 +1146,8 @@
     <string name="RaiseToSpeakAlert">Gostaria de habilitar o \"Levantar para Falar\" para mensagens de voz?</string>
     <string name="ReEnterYourPasscode">Re-insira sua nova senha</string>
     <string name="Recent">RECENTE</string>
-    <string name="RecordingAudio">gravando mensagem de voz...</string>
-    <string name="RecordingRound">gravando mensagem de vídeo...</string>
+    <string name="RecordingAudio">gravando uma mensagem de voz...</string>
+    <string name="RecordingRound">gravando uma mensagem de vídeo...</string>
     <string name="RecoveryEmail">E-mail de recuperação</string>
     <string name="RegisterText">Configure seu nome e sobrenome</string>
     <string name="Regular">Regular</string>
@@ -1403,6 +1405,7 @@
     <string name="VibrationDefault">Padrão</string>
     <string name="VibrationDisabled">Desativado</string>
     <string name="VideoCaption">Legenda do Vídeo</string>
+    <string name="VideoMessagesAutodownload">Mensagens de vídeo</string>
     <string name="ViewPackPreview">Ver Pacote</string>
     <string name="Vignette">Vignette</string>
     <string name="VoipAnswerCall">Atender</string>

@@ -2286,7 +2286,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     ArticleViewer.this.pressedLink = null;
                     ArticleViewer.this.pressedLinkOwnerLayout = null;
                     ArticleViewer.this.pressedLinkOwnerView.invalidate();
-                } else if (ArticleViewer.this.pressedLinkOwnerLayout != null) {
+                } else if (ArticleViewer.this.pressedLinkOwnerLayout != null && ArticleViewer.this.pressedLinkOwnerView != null) {
                     int y = (ArticleViewer.this.pressedLinkOwnerView.getTop() - AndroidUtilities.dp(54.0f)) + ArticleViewer.this.pressedLayoutY;
                     if (y < 0) {
                         y *= -1;
@@ -3616,10 +3616,12 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 deleteView.setText(LocaleController.getString("Copy", R.string.Copy).toUpperCase());
                 deleteView.setOnClickListener(new OnClickListener() {
                     public void onClick(View v) {
-                        AndroidUtilities.addToClipboard(ArticleViewer.this.pressedLinkOwnerLayout.getText());
-                        Toast.makeText(ArticleViewer.this.parentActivity, LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
-                        if (ArticleViewer.this.popupWindow != null && ArticleViewer.this.popupWindow.isShowing()) {
-                            ArticleViewer.this.popupWindow.dismiss(true);
+                        if (ArticleViewer.this.pressedLinkOwnerLayout != null) {
+                            AndroidUtilities.addToClipboard(ArticleViewer.this.pressedLinkOwnerLayout.getText());
+                            Toast.makeText(ArticleViewer.this.parentActivity, LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
+                            if (ArticleViewer.this.popupWindow != null && ArticleViewer.this.popupWindow.isShowing()) {
+                                ArticleViewer.this.popupWindow.dismiss(true);
+                            }
                         }
                     }
                 });

@@ -1017,7 +1017,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                         }
 
                                         public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
-                                            if (ChatAttachAlert.this.cameraFile != null) {
+                                            if (ChatAttachAlert.this.cameraFile != null && ChatAttachAlert.this.baseFragment != null) {
                                                 AndroidUtilities.addMediaToGallery(ChatAttachAlert.this.cameraFile.getAbsolutePath());
                                                 ChatAttachAlert.this.baseFragment.sendMedia((PhotoEntry) ChatAttachAlert.this.cameraPhoto.get(0), null);
                                                 ChatAttachAlert.this.closeCamera(false);

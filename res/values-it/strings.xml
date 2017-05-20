@@ -167,6 +167,7 @@
     <string name="AttachRound">Videomessaggio</string>
     <string name="AttachSticker">Sticker</string>
     <string name="AttachVideo">Video</string>
+    <string name="AudioAutodownload">Messaggi vocali</string>
     <string name="AudioTitle">Musica condivisa</string>
     <string name="AudioUnknownArtist">Artista sconosciuto</string>
     <string name="AudioUnknownTitle">Titolo sconosciuto</string>
@@ -651,6 +652,7 @@
     <string name="IncorrectTheme">File tema non valido</string>
     <string name="Info">Info</string>
     <string name="InstantView">APERTURA RAPIDA</string>
+    <string name="InstantViewNightMode">Il tema scuro si attiverà automaticamente durante la notte</string>
     <string name="InternalStorage">Archivio interno</string>
     <string name="InvalidCode">Codice non valido</string>
     <string name="InvalidFirstName">Nome non valido</string>
@@ -666,7 +668,7 @@
     <string name="InviteToGroupByLink">Invita nel gruppo tramite link</string>
     <string name="InviteToGroupError">Spiacenti, non puoi aggiungere questo utente al gruppo a causa delle sue impostazioni di privacy.</string>
     <string name="InviteUser">Questo utente non ha ancora Telegram, vuoi invitarlo?</string>
-    <string name="IsRecordingAudio">%1$s sta registrando un audio...</string>
+    <string name="IsRecordingAudio">%1$s sta registrando un messaggio vocale...</string>
     <string name="IsRecordingRound">%1$s sta registrando un videomessaggio...</string>
     <string name="IsSendingAudio">%1$s sta inviando un audio...</string>
     <string name="IsSendingFile">%1$s sta inviando un file...</string>
@@ -1144,7 +1146,7 @@
     <string name="RaiseToSpeakAlert">Vuoi attivare \"Alza per registrare\" per i messaggi vocali?</string>
     <string name="ReEnterYourPasscode">Reinserisci il nuovo codice</string>
     <string name="Recent">RECENTI</string>
-    <string name="RecordingAudio">sta registrando un audio...</string>
+    <string name="RecordingAudio">sta registrando un messaggio vocale...</string>
     <string name="RecordingRound">sta registrando un videomessaggio...</string>
     <string name="RecoveryEmail">E-mail di recupero</string>
     <string name="RegisterText">Inserisci il tuo nome e cognome</string>
@@ -1403,6 +1405,7 @@
     <string name="VibrationDefault">Predefinita</string>
     <string name="VibrationDisabled">Disabilitata</string>
     <string name="VideoCaption">Didascalia video</string>
+    <string name="VideoMessagesAutodownload">Videomessaggi</string>
     <string name="ViewPackPreview">Visualizza pacchetto</string>
     <string name="Vignette">Vignettatura</string>
     <string name="VoipAnswerCall">Rispondi</string>

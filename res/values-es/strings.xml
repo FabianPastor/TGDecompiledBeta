@@ -167,6 +167,7 @@
     <string name="AttachRound">Videomensaje</string>
     <string name="AttachSticker">Sticker</string>
     <string name="AttachVideo">Vídeo</string>
+    <string name="AudioAutodownload">Mensajes de voz</string>
     <string name="AudioTitle">Música</string>
     <string name="AudioUnknownArtist">Artista desconocido</string>
     <string name="AudioUnknownTitle">Título desconocido</string>
@@ -651,6 +652,7 @@
     <string name="IncorrectTheme">Archivo de tema incorrecto</string>
     <string name="Info">Información</string>
     <string name="InstantView">VISTA RÁPIDA</string>
+    <string name="InstantViewNightMode">El tema oscuro se usará automáticamente en la noche</string>
     <string name="InternalStorage">Almacenamiento Interno</string>
     <string name="InvalidCode">Código inválido</string>
     <string name="InvalidFirstName">Nombre inválido</string>
@@ -666,7 +668,7 @@
     <string name="InviteToGroupByLink">Invitar al grupo con un enlace</string>
     <string name="InviteToGroupError">No puedes añadir este usuario a grupos debido a sus ajustes de privacidad.</string>
     <string name="InviteUser">Este usuario aún no tiene Telegram. ¿Enviarle una invitación?</string>
-    <string name="IsRecordingAudio">%1$s está grabando un mensaje de voz...</string>
+    <string name="IsRecordingAudio">%1$s está grabando un videomensaje...</string>
     <string name="IsRecordingRound">%1$s está grabando un videomensaje...</string>
     <string name="IsSendingAudio">%1$s está enviando un audio...</string>
     <string name="IsSendingFile">%1$s está enviando un archivo...</string>
@@ -1144,8 +1146,8 @@
     <string name="RaiseToSpeakAlert">¿Quieres habilitar “Elevar para hablar” para mensajes de voz?</string>
     <string name="ReEnterYourPasscode">Pon, otra vez, tu nuevo código</string>
     <string name="Recent">RECIENTES</string>
-    <string name="RecordingAudio">grabando mensaje de voz...</string>
-    <string name="RecordingRound">grabando videomensaje...</string>
+    <string name="RecordingAudio">grabando un videomensaje...</string>
+    <string name="RecordingRound">grabando un videomensaje...</string>
     <string name="RecoveryEmail">E-mail de recuperación</string>
     <string name="RegisterText">Ingresa tu nombre y apellidos</string>
     <string name="Regular">Normal</string>
@@ -1403,6 +1405,7 @@
     <string name="VibrationDefault">Por defecto</string>
     <string name="VibrationDisabled">Desactivadas</string>
     <string name="VideoCaption">Comentario de vídeo</string>
+    <string name="VideoMessagesAutodownload">Videomensajes</string>
     <string name="ViewPackPreview">Ver pack</string>
     <string name="Vignette">Viñeta</string>
     <string name="VoipAnswerCall">Contestar</string>

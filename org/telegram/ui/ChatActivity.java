@@ -2049,7 +2049,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
                 if (!isRoundVideo || child != ChatActivity.this.roundVideoContainer) {
                     result = super.drawChild(canvas, child, drawingTime);
-                    if (isRoundVideo && child == ChatActivity.this.chatListView && messageObject.type != 5) {
+                    if (isRoundVideo && child == ChatActivity.this.chatListView && messageObject.type != 5 && ChatActivity.this.roundVideoContainer != null) {
                         super.drawChild(canvas, ChatActivity.this.roundVideoContainer, drawingTime);
                     }
                 } else if (messageObject.type == 5) {
