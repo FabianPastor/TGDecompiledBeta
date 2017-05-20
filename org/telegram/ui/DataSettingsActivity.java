@@ -148,7 +148,13 @@ public class DataSettingsActivity extends BaseFragment {
                             if (text.length() != 0) {
                                 text = text + ", ";
                             }
-                            text = text + LocaleController.getString("LocalAudioCache", R.string.LocalAudioCache);
+                            text = text + LocaleController.getString("AudioAutodownload", R.string.AudioAutodownload);
+                        }
+                        if ((mask & 64) != 0) {
+                            if (text.length() != 0) {
+                                text = text + ", ";
+                            }
+                            text = text + LocaleController.getString("VideoMessagesAutodownload", R.string.VideoMessagesAutodownload);
                         }
                         if ((mask & 4) != 0) {
                             if (text.length() != 0) {
@@ -313,7 +319,7 @@ public class DataSettingsActivity extends BaseFragment {
                 if (position == DataSettingsActivity.this.wifiDownloadRow || position == DataSettingsActivity.this.mobileDownloadRow || position == DataSettingsActivity.this.roamingDownloadRow) {
                     if (DataSettingsActivity.this.getParentActivity() != null) {
                         final boolean[] zArr;
-                        boolean[] maskValues = new boolean[6];
+                        boolean[] maskValues = new boolean[7];
                         Builder builder = new Builder(DataSettingsActivity.this.getParentActivity());
                         int mask = 0;
                         if (position == DataSettingsActivity.this.mobileDownloadRow) {
@@ -327,24 +333,27 @@ public class DataSettingsActivity extends BaseFragment {
                         builder.setApplyBottomPadding(false);
                         LinearLayout linearLayout = new LinearLayout(DataSettingsActivity.this.getParentActivity());
                         linearLayout.setOrientation(1);
-                        for (int a = 0; a < 6; a++) {
+                        for (int a = 0; a < 7; a++) {
                             String name = null;
                             if (a == 0) {
                                 maskValues[a] = (mask & 1) != 0;
                                 name = LocaleController.getString("LocalPhotoCache", R.string.LocalPhotoCache);
                             } else if (a == 1) {
                                 maskValues[a] = (mask & 2) != 0;
-                                name = LocaleController.getString("LocalAudioCache", R.string.LocalAudioCache);
+                                name = LocaleController.getString("AudioAutodownload", R.string.AudioAutodownload);
                             } else if (a == 2) {
+                                maskValues[a] = (mask & 64) != 0;
+                                name = LocaleController.getString("VideoMessagesAutodownload", R.string.VideoMessagesAutodownload);
+                            } else if (a == 3) {
                                 maskValues[a] = (mask & 4) != 0;
                                 name = LocaleController.getString("LocalVideoCache", R.string.LocalVideoCache);
-                            } else if (a == 3) {
+                            } else if (a == 4) {
                                 maskValues[a] = (mask & 8) != 0;
                                 name = LocaleController.getString("FilesDataUsage", R.string.FilesDataUsage);
-                            } else if (a == 4) {
+                            } else if (a == 5) {
                                 maskValues[a] = (mask & 16) != 0;
                                 name = LocaleController.getString("AttachMusic", R.string.AttachMusic);
-                            } else if (a == 5) {
+                            } else if (a == 6) {
                                 maskValues[a] = (mask & 32) != 0;
                                 name = LocaleController.getString("LocalGifCache", R.string.LocalGifCache);
                             }
@@ -387,12 +396,14 @@ public class DataSettingsActivity extends BaseFragment {
                                         } else if (a == 1) {
                                             newMask |= 2;
                                         } else if (a == 2) {
-                                            newMask |= 4;
+                                            newMask |= 64;
                                         } else if (a == 3) {
-                                            newMask |= 8;
+                                            newMask |= 4;
                                         } else if (a == 4) {
-                                            newMask |= 16;
+                                            newMask |= 8;
                                         } else if (a == 5) {
+                                            newMask |= 16;
+                                        } else if (a == 6) {
                                             newMask |= 32;
                                         }
                                     }

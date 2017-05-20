@@ -971,6 +971,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         private boolean initGL() {
+            FileLog.e("start init gl");
             this.egl10 = (EGL10) javax.microedition.khronos.egl.EGLContext.getEGL();
             this.eglDisplay = this.egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
             if (this.eglDisplay == EGL10.EGL_NO_DISPLAY) {
@@ -1015,6 +1016,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             int vertexShader = InstantCameraView.this.loadShader(35633, InstantCameraView.VERTEX_SHADER);
                             int fragmentShader = InstantCameraView.this.loadShader(35632, InstantCameraView.FRAGMENT_SCREEN_SHADER);
                             if (vertexShader == 0 || fragmentShader == 0) {
+                                FileLog.e("failed creating shader");
                                 finish();
                                 return false;
                             }
@@ -1025,6 +1027,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             int[] linkStatus = new int[1];
                             GLES20.glGetProgramiv(this.drawProgram, 35714, linkStatus, 0);
                             if (linkStatus[0] == 0) {
+                                FileLog.e("failed link shader");
                                 GLES20.glDeleteProgram(this.drawProgram);
                                 this.drawProgram = 0;
                             } else {
@@ -1047,6 +1050,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                                 }
                             });
                             InstantCameraView.this.createCamera(this.cameraSurface);
+                            FileLog.e("gl initied");
                             return true;
                         }
                         FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
@@ -1187,6 +1191,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                     return;
                 case 3:
+                    FileLog.d("set gl rednderer session");
                     CameraSession newSession = inputMessage.obj;
                     if (this.currentSession == newSession) {
                         this.rotationAngle = this.currentSession.getWorldAngle();
@@ -1480,10 +1485,13 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 this.cameraFile = new File(FileLoader.getInstance().getDirectory(4), UserConfig.lastLocalId + ".mp4");
                 UserConfig.lastLocalId--;
                 UserConfig.saveConfig(false);
+                FileLog.e("show round camera");
                 this.textureView = new TextureView(getContext());
                 this.textureView.setSurfaceTextureListener(new SurfaceTextureListener() {
                     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+                        FileLog.e("camera surface available");
                         if (InstantCameraView.this.cameraThread == null && surface != null && !InstantCameraView.this.cancelled) {
+                            FileLog.e("start create thread");
                             InstantCameraView.this.cameraThread = new CameraGLThread(surface, width, height);
                         }
                     }
@@ -1806,6 +1814,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 if (InstantCameraView.this.cameraThread != null) {
+                    FileLog.e("create camera session");
                     Size pictureSize = CameraController.chooseOptimalSize(InstantCameraView.this.selectedCamera.getPictureSizes(), 480, 270, InstantCameraView.this.aspectRatio);
                     if (pictureSize.getWidth() >= 1280 && pictureSize.getHeight() >= 1280) {
                         InstantCameraView.this.aspectRatio = new Size(9, 16);
@@ -1820,6 +1829,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     CameraController.getInstance().openRound(InstantCameraView.this.cameraSession, surfaceTexture, new Runnable() {
                         public void run() {
                             if (InstantCameraView.this.cameraSession != null) {
+                                FileLog.e("camera initied");
                                 InstantCameraView.this.cameraSession.setInitied();
                             }
                         }

@@ -956,6 +956,10 @@
     <drawable name="menu_contacts">res/drawable-hdpi-v4/menu_contacts.png</drawable>
     <drawable name="menu_contacts">res/drawable-xhdpi-v4/menu_contacts.png</drawable>
     <drawable name="menu_contacts">res/drawable-xxhdpi-v4/menu_contacts.png</drawable>
+    <drawable name="menu_copy">res/drawable-mdpi-v4/menu_copy.9.png</drawable>
+    <drawable name="menu_copy">res/drawable-hdpi-v4/menu_copy.9.png</drawable>
+    <drawable name="menu_copy">res/drawable-xhdpi-v4/menu_copy.9.png</drawable>
+    <drawable name="menu_copy">res/drawable-xxhdpi-v4/menu_copy.9.png</drawable>
     <drawable name="menu_help">res/drawable-mdpi-v4/menu_help.png</drawable>
     <drawable name="menu_help">res/drawable-hdpi-v4/menu_help.png</drawable>
     <drawable name="menu_help">res/drawable-xhdpi-v4/menu_help.png</drawable>
@@ -996,6 +1000,10 @@
     <drawable name="miniplayer_play">res/drawable-hdpi-v4/miniplayer_play.png</drawable>
     <drawable name="miniplayer_play">res/drawable-xhdpi-v4/miniplayer_play.png</drawable>
     <drawable name="miniplayer_play">res/drawable-xxhdpi-v4/miniplayer_play.png</drawable>
+    <drawable name="moon">res/drawable-mdpi-v4/moon.png</drawable>
+    <drawable name="moon">res/drawable-hdpi-v4/moon.png</drawable>
+    <drawable name="moon">res/drawable-xhdpi-v4/moon.png</drawable>
+    <drawable name="moon">res/drawable-xxhdpi-v4/moon.png</drawable>
     <drawable name="msg_actions">res/drawable-mdpi-v4/msg_actions.png</drawable>
     <drawable name="msg_actions">res/drawable-hdpi-v4/msg_actions.png</drawable>
     <drawable name="msg_actions">res/drawable-xhdpi-v4/msg_actions.png</drawable>

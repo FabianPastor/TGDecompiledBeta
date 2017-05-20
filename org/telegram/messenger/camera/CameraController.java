@@ -409,29 +409,25 @@ public class CameraController implements OnInfoListener {
     }
 
     public void openRound(CameraSession session, SurfaceTexture texture, Runnable callback, Runnable configureCallback) {
-        if (session != null && texture != null) {
-            final CameraSession cameraSession = session;
-            final Runnable runnable = configureCallback;
-            final SurfaceTexture surfaceTexture = texture;
-            final Runnable runnable2 = callback;
-            this.threadPool.execute(new Runnable() {
-                @SuppressLint({"NewApi"})
-                public void run() {
-                    Camera camera = cameraSession.cameraInfo.camera;
+        if (session == null || texture == null) {
+            FileLog.e("failed to open round " + session + " tex = " + texture);
+            return;
+        }
+        final CameraSession cameraSession = session;
+        final Runnable runnable = configureCallback;
+        final SurfaceTexture surfaceTexture = texture;
+        final Runnable runnable2 = callback;
+        this.threadPool.execute(new Runnable() {
+            @SuppressLint({"NewApi"})
+            public void run() {
+                Camera camera = cameraSession.cameraInfo.camera;
+                try {
+                    FileLog.e("start creating round camera session");
                     if (camera == null) {
-                        try {
-                            CameraInfo cameraInfo = cameraSession.cameraInfo;
-                            Camera camera2 = Camera.open(cameraSession.cameraInfo.cameraId);
-                            cameraInfo.camera = camera2;
-                            camera = camera2;
-                        } catch (Throwable e) {
-                            cameraSession.cameraInfo.camera = null;
-                            if (camera != null) {
-                                camera.release();
-                            }
-                            FileLog.e(e);
-                            return;
-                        }
+                        CameraInfo cameraInfo = cameraSession.cameraInfo;
+                        Camera camera2 = Camera.open(cameraSession.cameraInfo.cameraId);
+                        cameraInfo.camera = camera2;
+                        camera = camera2;
                     }
                     Parameters params = camera.getParameters();
                     cameraSession.configureRoundCamera();
@@ -443,9 +439,16 @@ public class CameraController implements OnInfoListener {
                     if (runnable2 != null) {
                         AndroidUtilities.runOnUIThread(runnable2);
                     }
+                    FileLog.e("round camera session created");
+                } catch (Throwable e) {
+                    cameraSession.cameraInfo.camera = null;
+                    if (camera != null) {
+                        camera.release();
+                    }
+                    FileLog.e(e);
                 }
-            });
-        }
+            }
+        });
     }
 
     public void open(CameraSession session, SurfaceTexture texture, Runnable callback, Runnable prestartCallback) {

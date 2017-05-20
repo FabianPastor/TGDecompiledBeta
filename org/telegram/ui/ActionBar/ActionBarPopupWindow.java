@@ -136,6 +136,10 @@ public class ActionBarPopupWindow extends PopupWindow {
             invalidate();
         }
 
+        public void setBackgroundDrawable(Drawable drawable) {
+            this.backgroundDrawable = drawable;
+        }
+
         private void startChildAnimation(View child) {
             if (this.animationEnabled) {
                 AnimatorSet animatorSet = new AnimatorSet();

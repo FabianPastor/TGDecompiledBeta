@@ -347,6 +347,7 @@ public final class R {
         public static final int menu_broadcast = NUM;
         public static final int menu_calls = NUM;
         public static final int menu_contacts = NUM;
+        public static final int menu_copy = NUM;
         public static final int menu_help = NUM;
         public static final int menu_invite = NUM;
         public static final int menu_newgroup = NUM;
@@ -357,6 +358,7 @@ public final class R {
         public static final int miniplayer_close = NUM;
         public static final int miniplayer_pause = NUM;
         public static final int miniplayer_play = NUM;
+        public static final int moon = NUM;
         public static final int msg_actions = NUM;
         public static final int msg_check = NUM;
         public static final int msg_clock = NUM;
@@ -792,6 +794,7 @@ public final class R {
         public static final int AttachRound = NUM;
         public static final int AttachSticker = NUM;
         public static final int AttachVideo = NUM;
+        public static final int AudioAutodownload = NUM;
         public static final int AudioTitle = NUM;
         public static final int AudioUnknownArtist = NUM;
         public static final int AudioUnknownTitle = NUM;
@@ -1276,6 +1279,7 @@ public final class R {
         public static final int IncorrectTheme = NUM;
         public static final int Info = NUM;
         public static final int InstantView = NUM;
+        public static final int InstantViewNightMode = NUM;
         public static final int InternalStorage = NUM;
         public static final int InvalidCode = NUM;
         public static final int InvalidFirstName = NUM;
@@ -2028,6 +2032,7 @@ public final class R {
         public static final int VibrationDefault = NUM;
         public static final int VibrationDisabled = NUM;
         public static final int VideoCaption = NUM;
+        public static final int VideoMessagesAutodownload = NUM;
         public static final int ViewPackPreview = NUM;
         public static final int Vignette = NUM;
         public static final int VoipAnswerCall = NUM;
