@@ -389,7 +389,7 @@ public class DataSettingsActivity extends BaseFragment {
                                     FileLog.e(e);
                                 }
                                 int newMask = 0;
-                                for (int a = 0; a < 6; a++) {
+                                for (int a = 0; a < 7; a++) {
                                     if (zArr[a]) {
                                         if (a == 0) {
                                             newMask |= 1;
