@@ -11,10 +11,8 @@ import com.google.android.gms.measurement.AppMeasurement;
 
 public class zzatx extends zzauh {
     private final String zzaGr = zzKn().zzKK();
-    private final long zzbqx = zzKn().zzKv();
-    private final char zzbsA;
-    private final zza zzbsB;
-    private final zza zzbsC;
+    private final long zzbqw = zzKn().zzKv();
+    private final char zzbsC;
     private final zza zzbsD;
     private final zza zzbsE;
     private final zza zzbsF;
@@ -22,63 +20,65 @@ public class zzatx extends zzauh {
     private final zza zzbsH;
     private final zza zzbsI;
     private final zza zzbsJ;
+    private final zza zzbsK;
+    private final zza zzbsL;
 
     public class zza {
         private final int mPriority;
-        final /* synthetic */ zzatx zzbsL;
-        private final boolean zzbsM;
-        private final boolean zzbsN;
+        final /* synthetic */ zzatx zzbsN;
+        private final boolean zzbsO;
+        private final boolean zzbsP;
 
         zza(zzatx com_google_android_gms_internal_zzatx, int i, boolean z, boolean z2) {
-            this.zzbsL = com_google_android_gms_internal_zzatx;
+            this.zzbsN = com_google_android_gms_internal_zzatx;
             this.mPriority = i;
-            this.zzbsM = z;
-            this.zzbsN = z2;
+            this.zzbsO = z;
+            this.zzbsP = z2;
         }
 
         public void log(String str) {
-            this.zzbsL.zza(this.mPriority, this.zzbsM, this.zzbsN, str, null, null, null);
+            this.zzbsN.zza(this.mPriority, this.zzbsO, this.zzbsP, str, null, null, null);
         }
 
         public void zzd(String str, Object obj, Object obj2, Object obj3) {
-            this.zzbsL.zza(this.mPriority, this.zzbsM, this.zzbsN, str, obj, obj2, obj3);
+            this.zzbsN.zza(this.mPriority, this.zzbsO, this.zzbsP, str, obj, obj2, obj3);
         }
 
         public void zze(String str, Object obj, Object obj2) {
-            this.zzbsL.zza(this.mPriority, this.zzbsM, this.zzbsN, str, obj, obj2, null);
+            this.zzbsN.zza(this.mPriority, this.zzbsO, this.zzbsP, str, obj, obj2, null);
         }
 
         public void zzj(String str, Object obj) {
-            this.zzbsL.zza(this.mPriority, this.zzbsM, this.zzbsN, str, obj, null, null);
+            this.zzbsN.zza(this.mPriority, this.zzbsO, this.zzbsP, str, obj, null, null);
         }
     }
 
     private static class zzb {
-        private final String zzbsO;
+        private final String zzbsQ;
 
         public zzb(@NonNull String str) {
-            this.zzbsO = str;
+            this.zzbsQ = str;
         }
     }
 
     zzatx(zzaue com_google_android_gms_internal_zzaue) {
         super(com_google_android_gms_internal_zzaue);
         if (zzKn().zzoW()) {
-            zzKn().zzLg();
-            this.zzbsA = 'C';
+            zzKn().zzLh();
+            this.zzbsC = 'C';
         } else {
-            zzKn().zzLg();
-            this.zzbsA = 'c';
+            zzKn().zzLh();
+            this.zzbsC = 'c';
         }
-        this.zzbsB = new zza(this, 6, false, false);
-        this.zzbsC = new zza(this, 6, true, false);
-        this.zzbsD = new zza(this, 6, false, true);
-        this.zzbsE = new zza(this, 5, false, false);
-        this.zzbsF = new zza(this, 5, true, false);
-        this.zzbsG = new zza(this, 5, false, true);
-        this.zzbsH = new zza(this, 4, false, false);
-        this.zzbsI = new zza(this, 3, false, false);
-        this.zzbsJ = new zza(this, 2, false, false);
+        this.zzbsD = new zza(this, 6, false, false);
+        this.zzbsE = new zza(this, 6, true, false);
+        this.zzbsF = new zza(this, 6, false, true);
+        this.zzbsG = new zza(this, 5, false, false);
+        this.zzbsH = new zza(this, 5, true, false);
+        this.zzbsI = new zza(this, 5, false, true);
+        this.zzbsJ = new zza(this, 4, false, false);
+        this.zzbsK = new zza(this, 3, false, false);
+        this.zzbsL = new zza(this, 2, false, false);
     }
 
     static String zza(boolean z, String str, Object obj, Object obj2, Object obj3) {
@@ -130,7 +130,7 @@ public class zzatx extends zzauh {
             return String.valueOf(valueOf);
         } else {
             if (!(valueOf instanceof Throwable)) {
-                return valueOf instanceof zzb ? ((zzb) valueOf).zzbsO : z ? "-" : String.valueOf(valueOf);
+                return valueOf instanceof zzb ? ((zzb) valueOf).zzbsQ : z ? "-" : String.valueOf(valueOf);
             } else {
                 Throwable th = (Throwable) valueOf;
                 StringBuilder stringBuilder = new StringBuilder(z ? th.getClass().getName() : th.toString());
@@ -248,12 +248,8 @@ public class zzatx extends zzauh {
         return super.zzKn();
     }
 
-    public zza zzLY() {
-        return this.zzbsB;
-    }
-
     public zza zzLZ() {
-        return this.zzbsC;
+        return this.zzbsD;
     }
 
     public zza zzMa() {
@@ -265,20 +261,24 @@ public class zzatx extends zzauh {
     }
 
     public zza zzMc() {
-        return this.zzbsH;
-    }
-
-    public zza zzMd() {
         return this.zzbsI;
     }
 
-    public zza zzMe() {
+    public zza zzMd() {
         return this.zzbsJ;
     }
 
-    public String zzMf() {
-        Pair zzqm = zzKm().zzbsY.zzqm();
-        if (zzqm == null || zzqm == zzaua.zzbsX) {
+    public zza zzMe() {
+        return this.zzbsK;
+    }
+
+    public zza zzMf() {
+        return this.zzbsL;
+    }
+
+    public String zzMg() {
+        Pair zzqm = zzKm().zzbta.zzqm();
+        if (zzqm == null || zzqm == zzaua.zzbsZ) {
             return null;
         }
         String valueOf = String.valueOf(String.valueOf(zzqm.second));
@@ -301,10 +301,10 @@ public class zzatx extends zzauh {
 
     public void zzb(int i, String str, Object obj, Object obj2, Object obj3) {
         zzac.zzw(str);
-        zzaud zzMv = this.zzbqc.zzMv();
-        if (zzMv == null) {
+        zzaud zzMw = this.zzbqb.zzMw();
+        if (zzMw == null) {
             zzn(6, "Scheduler not set. Not logging error/warn");
-        } else if (zzMv.isInitialized()) {
+        } else if (zzMw.isInitialized()) {
             if (i < 0) {
                 i = 0;
             }
@@ -313,22 +313,22 @@ public class zzatx extends zzauh {
             }
             String valueOf = String.valueOf("2");
             char charAt = "01VDIWEA?".charAt(i);
-            char c = this.zzbsA;
-            long j = this.zzbqx;
+            char c = this.zzbsC;
+            long j = this.zzbqw;
             String valueOf2 = String.valueOf(zza(true, str, obj, obj2, obj3));
             valueOf = new StringBuilder((String.valueOf(valueOf).length() + 23) + String.valueOf(valueOf2).length()).append(valueOf).append(charAt).append(c).append(j).append(":").append(valueOf2).toString();
             if (valueOf.length() > 1024) {
                 valueOf = str.substring(0, 1024);
             }
-            zzMv.zzm(new Runnable(this) {
-                final /* synthetic */ zzatx zzbsL;
+            zzMw.zzm(new Runnable(this) {
+                final /* synthetic */ zzatx zzbsN;
 
                 public void run() {
-                    zzaua zzKm = this.zzbsL.zzbqc.zzKm();
+                    zzaua zzKm = this.zzbsN.zzbqb.zzKm();
                     if (zzKm.isInitialized()) {
-                        zzKm.zzbsY.zzcc(valueOf);
+                        zzKm.zzbta.zzcc(valueOf);
                     } else {
-                        this.zzbsL.zzn(6, "Persisted config not initialized. Not logging error/warn");
+                        this.zzbsN.zzn(6, "Persisted config not initialized. Not logging error/warn");
                     }
                 }
             });

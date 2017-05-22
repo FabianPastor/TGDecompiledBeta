@@ -12,16 +12,16 @@ import com.google.android.gms.vision.face.Landmark;
 import java.nio.ByteBuffer;
 
 public class zzbjq extends zzbjz<zzbjv> {
-    private final zzbjt zzbOX;
+    private final zzbjt zzbPa;
 
     public zzbjq(Context context, zzbjt com_google_android_gms_internal_zzbjt) {
         super(context, "FaceNativeHandle");
-        this.zzbOX = com_google_android_gms_internal_zzbjt;
-        zzTS();
+        this.zzbPa = com_google_android_gms_internal_zzbjt;
+        zzTU();
     }
 
     private Face zza(zzbjr com_google_android_gms_internal_zzbjr) {
-        return new Face(com_google_android_gms_internal_zzbjr.id, new PointF(com_google_android_gms_internal_zzbjr.centerX, com_google_android_gms_internal_zzbjr.centerY), com_google_android_gms_internal_zzbjr.width, com_google_android_gms_internal_zzbjr.height, com_google_android_gms_internal_zzbjr.zzbOY, com_google_android_gms_internal_zzbjr.zzbOZ, zzb(com_google_android_gms_internal_zzbjr), com_google_android_gms_internal_zzbjr.zzbPb, com_google_android_gms_internal_zzbjr.zzbPc, com_google_android_gms_internal_zzbjr.zzbPd);
+        return new Face(com_google_android_gms_internal_zzbjr.id, new PointF(com_google_android_gms_internal_zzbjr.centerX, com_google_android_gms_internal_zzbjr.centerY), com_google_android_gms_internal_zzbjr.width, com_google_android_gms_internal_zzbjr.height, com_google_android_gms_internal_zzbjr.zzbPb, com_google_android_gms_internal_zzbjr.zzbPc, zzb(com_google_android_gms_internal_zzbjr), com_google_android_gms_internal_zzbjr.zzbPe, com_google_android_gms_internal_zzbjr.zzbPf, com_google_android_gms_internal_zzbjr.zzbPg);
     }
 
     private Landmark zza(zzbjx com_google_android_gms_internal_zzbjx) {
@@ -30,7 +30,7 @@ public class zzbjq extends zzbjz<zzbjv> {
 
     private Landmark[] zzb(zzbjr com_google_android_gms_internal_zzbjr) {
         int i = 0;
-        zzbjx[] com_google_android_gms_internal_zzbjxArr = com_google_android_gms_internal_zzbjr.zzbPa;
+        zzbjx[] com_google_android_gms_internal_zzbjxArr = com_google_android_gms_internal_zzbjr.zzbPd;
         if (com_google_android_gms_internal_zzbjxArr == null) {
             return new Landmark[0];
         }
@@ -42,8 +42,8 @@ public class zzbjq extends zzbjz<zzbjv> {
         return landmarkArr;
     }
 
-    protected void zzTP() throws RemoteException {
-        ((zzbjv) zzTS()).zzTQ();
+    protected void zzTR() throws RemoteException {
+        ((zzbjv) zzTU()).zzTS();
     }
 
     protected /* synthetic */ Object zzb(DynamiteModule dynamiteModule, Context context) throws RemoteException, zza {
@@ -55,7 +55,7 @@ public class zzbjq extends zzbjz<zzbjv> {
             return new Face[0];
         }
         try {
-            zzbjr[] zzc = ((zzbjv) zzTS()).zzc(zzd.zzA(byteBuffer), com_google_android_gms_internal_zzbka);
+            zzbjr[] zzc = ((zzbjv) zzTU()).zzc(zzd.zzA(byteBuffer), com_google_android_gms_internal_zzbka);
             Face[] faceArr = new Face[zzc.length];
             for (int i = 0; i < zzc.length; i++) {
                 faceArr[i] = zza(zzc[i]);
@@ -68,7 +68,7 @@ public class zzbjq extends zzbjz<zzbjv> {
     }
 
     protected zzbjv zzc(DynamiteModule dynamiteModule, Context context) throws RemoteException, zza {
-        return zzbjw.zza.zzfq(dynamiteModule.zzdT("com.google.android.gms.vision.face.ChimeraNativeFaceDetectorCreator")).zza(zzd.zzA(context), this.zzbOX);
+        return zzbjw.zza.zzfq(dynamiteModule.zzdT("com.google.android.gms.vision.face.ChimeraNativeFaceDetectorCreator")).zza(zzd.zzA(context), this.zzbPa);
     }
 
     public boolean zzoh(int i) {
@@ -76,7 +76,7 @@ public class zzbjq extends zzbjz<zzbjv> {
             return false;
         }
         try {
-            return ((zzbjv) zzTS()).zzoh(i);
+            return ((zzbjv) zzTU()).zzoh(i);
         } catch (Throwable e) {
             Log.e("FaceNativeHandle", "Could not call native face detector", e);
             return false;

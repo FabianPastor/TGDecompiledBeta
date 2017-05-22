@@ -10,22 +10,22 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class zzbth {
-    private static final AtomicReference<zzbth> zzbWM = new AtomicReference();
+    private static final AtomicReference<zzbth> zzbWP = new AtomicReference();
 
     zzbth(Context context) {
     }
 
     @Nullable
-    public static zzbth zzabY() {
-        return (zzbth) zzbWM.get();
+    public static zzbth zzaca() {
+        return (zzbth) zzbWP.get();
     }
 
-    public static zzbth zzcw(Context context) {
-        zzbWM.compareAndSet(null, new zzbth(context));
-        return (zzbth) zzbWM.get();
+    public static zzbth zzcx(Context context) {
+        zzbWP.compareAndSet(null, new zzbth(context));
+        return (zzbth) zzbWP.get();
     }
 
-    public Set<String> zzabZ() {
+    public Set<String> zzacb() {
         return Collections.emptySet();
     }
 

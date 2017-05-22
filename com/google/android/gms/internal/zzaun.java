@@ -10,21 +10,21 @@ import com.google.android.gms.common.util.zze;
 
 public class zzaun extends zzauh {
     private Handler mHandler;
-    protected long zzbvW;
-    private final zzatk zzbvX = new zzatk(this, this.zzbqc) {
-        final /* synthetic */ zzaun zzbvZ;
+    protected long zzbvZ;
+    private final zzatk zzbwa = new zzatk(this, this.zzbqb) {
+        final /* synthetic */ zzaun zzbwc;
 
         @WorkerThread
         public void run() {
-            this.zzbvZ.zzNf();
+            this.zzbwc.zzNh();
         }
     };
-    private final zzatk zzbvY = new zzatk(this, this.zzbqc) {
-        final /* synthetic */ zzaun zzbvZ;
+    private final zzatk zzbwb = new zzatk(this, this.zzbqb) {
+        final /* synthetic */ zzaun zzbwc;
 
         @WorkerThread
         public void run() {
-            this.zzbvZ.zzNg();
+            this.zzbwc.zzNi();
         }
     };
 
@@ -32,7 +32,7 @@ public class zzaun extends zzauh {
         super(com_google_android_gms_internal_zzaue);
     }
 
-    private void zzNd() {
+    private void zzNf() {
         synchronized (this) {
             if (this.mHandler == null) {
                 this.mHandler = new Handler(Looper.getMainLooper());
@@ -41,42 +41,42 @@ public class zzaun extends zzauh {
     }
 
     @WorkerThread
-    private void zzNg() {
+    private void zzNi() {
         zzmR();
-        zzaO(false);
+        zzaN(false);
         zzJY().zzW(zznR().elapsedRealtime());
-    }
-
-    @WorkerThread
-    private void zzas(long j) {
-        zzmR();
-        zzNd();
-        this.zzbvX.cancel();
-        this.zzbvY.cancel();
-        zzKl().zzMe().zzj("Activity resumed, time", Long.valueOf(j));
-        this.zzbvW = j;
-        if (zznR().currentTimeMillis() - zzKm().zzbtm.get() > zzKm().zzbto.get()) {
-            zzKm().zzbtn.set(true);
-            zzKm().zzbtp.set(0);
-        }
-        if (zzKm().zzbtn.get()) {
-            this.zzbvX.zzy(Math.max(0, zzKm().zzbtl.get() - zzKm().zzbtp.get()));
-        } else {
-            this.zzbvY.zzy(Math.max(0, 3600000 - zzKm().zzbtp.get()));
-        }
     }
 
     @WorkerThread
     private void zzat(long j) {
         zzmR();
-        zzNd();
-        this.zzbvX.cancel();
-        this.zzbvY.cancel();
-        zzKl().zzMe().zzj("Activity paused, time", Long.valueOf(j));
-        if (this.zzbvW != 0) {
-            zzKm().zzbtp.set(zzKm().zzbtp.get() + (j - this.zzbvW));
+        zzNf();
+        this.zzbwa.cancel();
+        this.zzbwb.cancel();
+        zzKl().zzMf().zzj("Activity resumed, time", Long.valueOf(j));
+        this.zzbvZ = j;
+        if (zznR().currentTimeMillis() - zzKm().zzbto.get() > zzKm().zzbtq.get()) {
+            zzKm().zzbtp.set(true);
+            zzKm().zzbtr.set(0);
         }
-        zzKm().zzbto.set(zznR().currentTimeMillis());
+        if (zzKm().zzbtp.get()) {
+            this.zzbwa.zzy(Math.max(0, zzKm().zzbtn.get() - zzKm().zzbtr.get()));
+        } else {
+            this.zzbwb.zzy(Math.max(0, 3600000 - zzKm().zzbtr.get()));
+        }
+    }
+
+    @WorkerThread
+    private void zzau(long j) {
+        zzmR();
+        zzNf();
+        this.zzbwa.cancel();
+        this.zzbwb.cancel();
+        zzKl().zzMf().zzj("Activity paused, time", Long.valueOf(j));
+        if (this.zzbvZ != 0) {
+            zzKm().zzbtr.set(zzKm().zzbtr.get() + (j - this.zzbvZ));
+        }
+        zzKm().zzbtq.set(zznR().currentTimeMillis());
     }
 
     public /* bridge */ /* synthetic */ Context getContext() {
@@ -160,59 +160,59 @@ public class zzaun extends zzauh {
     }
 
     @MainThread
-    protected void zzNc() {
+    protected void zzNe() {
         final long elapsedRealtime = zznR().elapsedRealtime();
         zzKk().zzm(new Runnable(this) {
-            final /* synthetic */ zzaun zzbvZ;
+            final /* synthetic */ zzaun zzbwc;
 
             public void run() {
-                this.zzbvZ.zzas(elapsedRealtime);
+                this.zzbwc.zzat(elapsedRealtime);
             }
         });
     }
 
     @MainThread
-    protected void zzNe() {
+    protected void zzNg() {
         final long elapsedRealtime = zznR().elapsedRealtime();
         zzKk().zzm(new Runnable(this) {
-            final /* synthetic */ zzaun zzbvZ;
+            final /* synthetic */ zzaun zzbwc;
 
             public void run() {
-                this.zzbvZ.zzat(elapsedRealtime);
+                this.zzbwc.zzau(elapsedRealtime);
             }
         });
     }
 
     @WorkerThread
-    protected void zzNf() {
+    protected void zzNh() {
         zzmR();
-        zzKl().zzMe().zzj("Session started, time", Long.valueOf(zznR().elapsedRealtime()));
-        zzKm().zzbtn.set(false);
+        zzKl().zzMf().zzj("Session started, time", Long.valueOf(zznR().elapsedRealtime()));
+        zzKm().zzbtp.set(false);
         zzKa().zze("auto", "_s", new Bundle());
     }
 
     @WorkerThread
-    public boolean zzaO(boolean z) {
+    public boolean zzaN(boolean z) {
         zzmR();
         zzob();
         long elapsedRealtime = zznR().elapsedRealtime();
-        if (this.zzbvW == 0) {
-            this.zzbvW = elapsedRealtime - 3600000;
+        if (this.zzbvZ == 0) {
+            this.zzbvZ = elapsedRealtime - 3600000;
         }
-        long j = elapsedRealtime - this.zzbvW;
+        long j = elapsedRealtime - this.zzbvZ;
         if (z || j >= 1000) {
-            zzKm().zzbtp.set(j);
-            zzKl().zzMe().zzj("Recording user engagement, ms", Long.valueOf(j));
+            zzKm().zzbtr.set(j);
+            zzKl().zzMf().zzj("Recording user engagement, ms", Long.valueOf(j));
             Bundle bundle = new Bundle();
             bundle.putLong("_et", j);
-            zzauk.zza(zzKe().zzMU(), bundle);
+            zzauk.zza(zzKe().zzMW(), bundle);
             zzKa().zze("auto", "_e", bundle);
-            this.zzbvW = elapsedRealtime;
-            this.zzbvY.cancel();
-            this.zzbvY.zzy(Math.max(0, 3600000 - zzKm().zzbtp.get()));
+            this.zzbvZ = elapsedRealtime;
+            this.zzbwb.cancel();
+            this.zzbwb.zzy(Math.max(0, 3600000 - zzKm().zzbtr.get()));
             return true;
         }
-        zzKl().zzMe().zzj("Screen exposed for less than 1000 ms. Event not sent. time", Long.valueOf(j));
+        zzKl().zzMf().zzj("Screen exposed for less than 1000 ms. Event not sent. time", Long.valueOf(j));
         return false;
     }
 

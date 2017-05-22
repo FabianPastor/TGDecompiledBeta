@@ -20,19 +20,19 @@ public final class FaceDetector extends Detector<Face> {
     public static final int FAST_MODE = 0;
     public static final int NO_CLASSIFICATIONS = 0;
     public static final int NO_LANDMARKS = 0;
-    private final zza zzbOO;
-    private final zzbjq zzbOP;
-    private boolean zzbOQ;
+    private final zza zzbOR;
+    private final zzbjq zzbOS;
+    private boolean zzbOT;
     private final Object zzrJ;
 
     public static class Builder {
         private final Context mContext;
         private int zzaKF = 0;
-        private int zzbOR = 0;
-        private boolean zzbOS = false;
-        private int zzbOT = 0;
-        private boolean zzbOU = true;
-        private float zzbOV = -1.0f;
+        private int zzbOU = 0;
+        private boolean zzbOV = false;
+        private int zzbOW = 0;
+        private boolean zzbOX = true;
+        private float zzbOY = -1.0f;
 
         public Builder(Context context) {
             this.mContext = context;
@@ -41,17 +41,17 @@ public final class FaceDetector extends Detector<Face> {
         public FaceDetector build() {
             zzbjt com_google_android_gms_internal_zzbjt = new zzbjt();
             com_google_android_gms_internal_zzbjt.mode = this.zzaKF;
-            com_google_android_gms_internal_zzbjt.zzbPe = this.zzbOR;
-            com_google_android_gms_internal_zzbjt.zzbPf = this.zzbOT;
-            com_google_android_gms_internal_zzbjt.zzbPg = this.zzbOS;
             com_google_android_gms_internal_zzbjt.zzbPh = this.zzbOU;
-            com_google_android_gms_internal_zzbjt.zzbPi = this.zzbOV;
+            com_google_android_gms_internal_zzbjt.zzbPi = this.zzbOW;
+            com_google_android_gms_internal_zzbjt.zzbPj = this.zzbOV;
+            com_google_android_gms_internal_zzbjt.zzbPk = this.zzbOX;
+            com_google_android_gms_internal_zzbjt.zzbPl = this.zzbOY;
             return new FaceDetector(new zzbjq(this.mContext, com_google_android_gms_internal_zzbjt));
         }
 
         public Builder setClassificationType(int i) {
             if (i == 0 || i == 1) {
-                this.zzbOT = i;
+                this.zzbOW = i;
                 return this;
             }
             throw new IllegalArgumentException("Invalid classification type: " + i);
@@ -59,7 +59,7 @@ public final class FaceDetector extends Detector<Face> {
 
         public Builder setLandmarkType(int i) {
             if (i == 0 || i == 1) {
-                this.zzbOR = i;
+                this.zzbOU = i;
                 return this;
             }
             throw new IllegalArgumentException("Invalid landmark type: " + i);
@@ -69,7 +69,7 @@ public final class FaceDetector extends Detector<Face> {
             if (f < 0.0f || f > 1.0f) {
                 throw new IllegalArgumentException("Invalid proportional face size: " + f);
             }
-            this.zzbOV = f;
+            this.zzbOY = f;
             return this;
         }
 
@@ -85,28 +85,28 @@ public final class FaceDetector extends Detector<Face> {
         }
 
         public Builder setProminentFaceOnly(boolean z) {
-            this.zzbOS = z;
+            this.zzbOV = z;
             return this;
         }
 
         public Builder setTrackingEnabled(boolean z) {
-            this.zzbOU = z;
+            this.zzbOX = z;
             return this;
         }
     }
 
     private FaceDetector() {
-        this.zzbOO = new zza();
+        this.zzbOR = new zza();
         this.zzrJ = new Object();
-        this.zzbOQ = true;
+        this.zzbOT = true;
         throw new IllegalStateException("Default constructor called");
     }
 
     private FaceDetector(zzbjq com_google_android_gms_internal_zzbjq) {
-        this.zzbOO = new zza();
+        this.zzbOR = new zza();
         this.zzrJ = new Object();
-        this.zzbOQ = true;
-        this.zzbOP = com_google_android_gms_internal_zzbjq;
+        this.zzbOT = true;
+        this.zzbOS = com_google_android_gms_internal_zzbjq;
     }
 
     public SparseArray<Face> detect(Frame frame) {
@@ -116,8 +116,8 @@ public final class FaceDetector extends Detector<Face> {
         Face[] zzb;
         ByteBuffer grayscaleImageData = frame.getGrayscaleImageData();
         synchronized (this.zzrJ) {
-            if (this.zzbOQ) {
-                zzb = this.zzbOP.zzb(grayscaleImageData, zzbka.zzc(frame));
+            if (this.zzbOT) {
+                zzb = this.zzbOS.zzb(grayscaleImageData, zzbka.zzc(frame));
             } else {
                 throw new RuntimeException("Cannot use detector after release()");
             }
@@ -133,7 +133,7 @@ public final class FaceDetector extends Detector<Face> {
                 i = id;
             }
             hashSet.add(Integer.valueOf(id));
-            sparseArray.append(this.zzbOO.zznR(id), face);
+            sparseArray.append(this.zzbOR.zznR(id), face);
         }
         return sparseArray;
     }
@@ -141,7 +141,7 @@ public final class FaceDetector extends Detector<Face> {
     protected void finalize() throws Throwable {
         try {
             synchronized (this.zzrJ) {
-                if (this.zzbOQ) {
+                if (this.zzbOT) {
                     Log.w("FaceDetector", "FaceDetector was not released with FaceDetector.release()");
                     release();
                 }
@@ -152,15 +152,15 @@ public final class FaceDetector extends Detector<Face> {
     }
 
     public boolean isOperational() {
-        return this.zzbOP.isOperational();
+        return this.zzbOS.isOperational();
     }
 
     public void release() {
         super.release();
         synchronized (this.zzrJ) {
-            if (this.zzbOQ) {
-                this.zzbOP.zzTR();
-                this.zzbOQ = false;
+            if (this.zzbOT) {
+                this.zzbOS.zzTT();
+                this.zzbOT = false;
                 return;
             }
         }
@@ -168,10 +168,10 @@ public final class FaceDetector extends Detector<Face> {
 
     public boolean setFocus(int i) {
         boolean zzoh;
-        int zznS = this.zzbOO.zznS(i);
+        int zznS = this.zzbOR.zznS(i);
         synchronized (this.zzrJ) {
-            if (this.zzbOQ) {
-                zzoh = this.zzbOP.zzoh(zznS);
+            if (this.zzbOT) {
+                zzoh = this.zzbOS.zzoh(zznS);
             } else {
                 throw new RuntimeException("Cannot use detector after release()");
             }

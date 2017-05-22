@@ -264,7 +264,7 @@ public abstract class GoogleApiClient {
         }
 
         public zzg zzvp() {
-            zzbaj com_google_android_gms_internal_zzbaj = zzbaj.zzbEi;
+            zzbaj com_google_android_gms_internal_zzbaj = zzbaj.zzbEl;
             if (this.zzazj.containsKey(zzbah.API)) {
                 com_google_android_gms_internal_zzbaj = (zzbaj) this.zzazj.get(zzbah.API);
             }

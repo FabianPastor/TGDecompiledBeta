@@ -17,17 +17,17 @@ public final class LatLngBounds extends zza implements ReflectedParcelable {
     public final LatLng southwest;
 
     public static final class Builder {
-        private double zzbpw = Double.POSITIVE_INFINITY;
-        private double zzbpx = Double.NEGATIVE_INFINITY;
+        private double zzbpv = Double.POSITIVE_INFINITY;
+        private double zzbpw = Double.NEGATIVE_INFINITY;
+        private double zzbpx = Double.NaN;
         private double zzbpy = Double.NaN;
-        private double zzbpz = Double.NaN;
 
         private boolean zzi(double d) {
             boolean z = false;
-            if (this.zzbpy <= this.zzbpz) {
-                return this.zzbpy <= d && d <= this.zzbpz;
+            if (this.zzbpx <= this.zzbpy) {
+                return this.zzbpx <= d && d <= this.zzbpy;
             } else {
-                if (this.zzbpy <= d || d <= this.zzbpz) {
+                if (this.zzbpx <= d || d <= this.zzbpy) {
                     z = true;
                 }
                 return z;
@@ -35,22 +35,22 @@ public final class LatLngBounds extends zza implements ReflectedParcelable {
         }
 
         public LatLngBounds build() {
-            zzac.zza(!Double.isNaN(this.zzbpy), (Object) "no included points");
-            return new LatLngBounds(new LatLng(this.zzbpw, this.zzbpy), new LatLng(this.zzbpx, this.zzbpz));
+            zzac.zza(!Double.isNaN(this.zzbpx), (Object) "no included points");
+            return new LatLngBounds(new LatLng(this.zzbpv, this.zzbpx), new LatLng(this.zzbpw, this.zzbpy));
         }
 
         public Builder include(LatLng latLng) {
-            this.zzbpw = Math.min(this.zzbpw, latLng.latitude);
-            this.zzbpx = Math.max(this.zzbpx, latLng.latitude);
+            this.zzbpv = Math.min(this.zzbpv, latLng.latitude);
+            this.zzbpw = Math.max(this.zzbpw, latLng.latitude);
             double d = latLng.longitude;
-            if (Double.isNaN(this.zzbpy)) {
+            if (Double.isNaN(this.zzbpx)) {
+                this.zzbpx = d;
                 this.zzbpy = d;
-                this.zzbpz = d;
             } else if (!zzi(d)) {
-                if (LatLngBounds.zzb(this.zzbpy, d) < LatLngBounds.zzc(this.zzbpz, d)) {
-                    this.zzbpy = d;
+                if (LatLngBounds.zzb(this.zzbpx, d) < LatLngBounds.zzc(this.zzbpy, d)) {
+                    this.zzbpx = d;
                 } else {
-                    this.zzbpz = d;
+                    this.zzbpy = d;
                 }
             }
             return this;

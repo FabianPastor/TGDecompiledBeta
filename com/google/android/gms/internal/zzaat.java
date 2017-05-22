@@ -74,7 +74,7 @@ public final class zzaat extends GoogleApiClient implements com.google.android.g
             return this.zzaBY.isConnected();
         }
 
-        public Bundle zzuC() {
+        public Bundle zzuB() {
             return null;
         }
     };

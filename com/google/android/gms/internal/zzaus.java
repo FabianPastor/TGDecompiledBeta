@@ -7,7 +7,7 @@ class zzaus {
     final String mName;
     final String mOrigin;
     final Object mValue;
-    final long zzbwg;
+    final long zzbwj;
 
     zzaus(String str, String str2, String str3, long j, Object obj) {
         zzac.zzdr(str);
@@ -16,7 +16,7 @@ class zzaus {
         this.mAppId = str;
         this.mOrigin = str2;
         this.mName = str3;
-        this.zzbwg = j;
+        this.zzbwj = j;
         this.mValue = obj;
     }
 }

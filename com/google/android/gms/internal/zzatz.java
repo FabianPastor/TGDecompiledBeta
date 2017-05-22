@@ -12,74 +12,74 @@ class zzatz extends BroadcastReceiver {
     static final String zzagv = zzatz.class.getName();
     private boolean zzagw;
     private boolean zzagx;
-    private final zzaue zzbqc;
+    private final zzaue zzbqb;
 
     zzatz(zzaue com_google_android_gms_internal_zzaue) {
         zzac.zzw(com_google_android_gms_internal_zzaue);
-        this.zzbqc = com_google_android_gms_internal_zzaue;
+        this.zzbqb = com_google_android_gms_internal_zzaue;
     }
 
     private Context getContext() {
-        return this.zzbqc.getContext();
+        return this.zzbqb.getContext();
     }
 
     private zzatx zzKl() {
-        return this.zzbqc.zzKl();
+        return this.zzbqb.zzKl();
     }
 
     @WorkerThread
     public boolean isRegistered() {
-        this.zzbqc.zzmR();
+        this.zzbqb.zzmR();
         return this.zzagw;
     }
 
     @MainThread
     public void onReceive(Context context, Intent intent) {
-        this.zzbqc.zzob();
+        this.zzbqb.zzob();
         String action = intent.getAction();
-        zzKl().zzMe().zzj("NetworkBroadcastReceiver received action", action);
+        zzKl().zzMf().zzj("NetworkBroadcastReceiver received action", action);
         if ("android.net.conn.CONNECTIVITY_CHANGE".equals(action)) {
-            final boolean zzqa = this.zzbqc.zzMy().zzqa();
+            final boolean zzqa = this.zzbqb.zzMz().zzqa();
             if (this.zzagx != zzqa) {
                 this.zzagx = zzqa;
-                this.zzbqc.zzKk().zzm(new Runnable(this) {
-                    final /* synthetic */ zzatz zzbsW;
+                this.zzbqb.zzKk().zzm(new Runnable(this) {
+                    final /* synthetic */ zzatz zzbsY;
 
                     public void run() {
-                        this.zzbsW.zzbqc.zzW(zzqa);
+                        this.zzbsY.zzbqb.zzV(zzqa);
                     }
                 });
                 return;
             }
             return;
         }
-        zzKl().zzMa().zzj("NetworkBroadcastReceiver received unknown action", action);
+        zzKl().zzMb().zzj("NetworkBroadcastReceiver received unknown action", action);
     }
 
     @WorkerThread
     public void unregister() {
-        this.zzbqc.zzob();
-        this.zzbqc.zzmR();
+        this.zzbqb.zzob();
+        this.zzbqb.zzmR();
         if (isRegistered()) {
-            zzKl().zzMe().log("Unregistering connectivity change receiver");
+            zzKl().zzMf().log("Unregistering connectivity change receiver");
             this.zzagw = false;
             this.zzagx = false;
             try {
                 getContext().unregisterReceiver(this);
             } catch (IllegalArgumentException e) {
-                zzKl().zzLY().zzj("Failed to unregister the network broadcast receiver", e);
+                zzKl().zzLZ().zzj("Failed to unregister the network broadcast receiver", e);
             }
         }
     }
 
     @WorkerThread
     public void zzpX() {
-        this.zzbqc.zzob();
-        this.zzbqc.zzmR();
+        this.zzbqb.zzob();
+        this.zzbqb.zzmR();
         if (!this.zzagw) {
             getContext().registerReceiver(this, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
-            this.zzagx = this.zzbqc.zzMy().zzqa();
-            zzKl().zzMe().zzj("Registering connectivity change receiver. Network connected", Boolean.valueOf(this.zzagx));
+            this.zzagx = this.zzbqb.zzMz().zzqa();
+            zzKl().zzMf().zzj("Registering connectivity change receiver. Network connected", Boolean.valueOf(this.zzagx));
             this.zzagw = true;
         }
     }

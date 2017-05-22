@@ -8,12 +8,12 @@ import android.support.annotation.Nullable;
 import com.google.android.gms.internal.zzadg;
 
 public class zzd {
-    public static int zzC(Context context, String str) {
-        return zzc(zzD(context, str));
+    public static int zzD(Context context, String str) {
+        return zzc(zzE(context, str));
     }
 
     @Nullable
-    public static PackageInfo zzD(Context context, String str) {
+    public static PackageInfo zzE(Context context, String str) {
         try {
             return zzadg.zzbi(context).getPackageInfo(str, 128);
         } catch (NameNotFoundException e) {
@@ -21,7 +21,7 @@ public class zzd {
         }
     }
 
-    public static boolean zzE(Context context, String str) {
+    public static boolean zzF(Context context, String str) {
         "com.google.android.gms".equals(str);
         try {
             return (zzadg.zzbi(context).getApplicationInfo(str, 0).flags & 2097152) != 0;

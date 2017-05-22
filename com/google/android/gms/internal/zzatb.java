@@ -11,9 +11,9 @@ import com.google.android.gms.measurement.AppMeasurement.zzf;
 import java.util.Map;
 
 public class zzatb extends zzaug {
-    private final Map<String, Long> zzbql = new ArrayMap();
-    private final Map<String, Integer> zzbqm = new ArrayMap();
-    private long zzbqn;
+    private final Map<String, Long> zzbqk = new ArrayMap();
+    private final Map<String, Integer> zzbql = new ArrayMap();
+    private long zzbqm;
 
     public zzatb(zzaue com_google_android_gms_internal_zzaue) {
         super(com_google_android_gms_internal_zzaue);
@@ -21,20 +21,20 @@ public class zzatb extends zzaug {
 
     @WorkerThread
     private void zzX(long j) {
-        for (String put : this.zzbql.keySet()) {
-            this.zzbql.put(put, Long.valueOf(j));
+        for (String put : this.zzbqk.keySet()) {
+            this.zzbqk.put(put, Long.valueOf(j));
         }
-        if (!this.zzbql.isEmpty()) {
-            this.zzbqn = j;
+        if (!this.zzbqk.isEmpty()) {
+            this.zzbqm = j;
         }
     }
 
     @WorkerThread
     private void zza(long j, zzf com_google_android_gms_measurement_AppMeasurement_zzf) {
         if (com_google_android_gms_measurement_AppMeasurement_zzf == null) {
-            zzKl().zzMe().log("Not logging ad exposure. No active activity");
+            zzKl().zzMf().log("Not logging ad exposure. No active activity");
         } else if (j < 1000) {
-            zzKl().zzMe().zzj("Not logging ad exposure. Less than 1000 ms. exposure", Long.valueOf(j));
+            zzKl().zzMf().zzj("Not logging ad exposure. Less than 1000 ms. exposure", Long.valueOf(j));
         } else {
             Bundle bundle = new Bundle();
             bundle.putLong("_xt", j);
@@ -46,9 +46,9 @@ public class zzatb extends zzaug {
     @WorkerThread
     private void zza(String str, long j, zzf com_google_android_gms_measurement_AppMeasurement_zzf) {
         if (com_google_android_gms_measurement_AppMeasurement_zzf == null) {
-            zzKl().zzMe().log("Not logging ad unit exposure. No active activity");
+            zzKl().zzMf().log("Not logging ad unit exposure. No active activity");
         } else if (j < 1000) {
-            zzKl().zzMe().zzj("Not logging ad unit exposure. Less than 1000 ms. exposure", Long.valueOf(j));
+            zzKl().zzMf().zzj("Not logging ad unit exposure. Less than 1000 ms. exposure", Long.valueOf(j));
         } else {
             Bundle bundle = new Bundle();
             bundle.putString("_ai", str);
@@ -63,17 +63,17 @@ public class zzatb extends zzaug {
         zzJW();
         zzmR();
         zzac.zzdr(str);
-        if (this.zzbqm.isEmpty()) {
-            this.zzbqn = j;
+        if (this.zzbql.isEmpty()) {
+            this.zzbqm = j;
         }
-        Integer num = (Integer) this.zzbqm.get(str);
+        Integer num = (Integer) this.zzbql.get(str);
         if (num != null) {
-            this.zzbqm.put(str, Integer.valueOf(num.intValue() + 1));
-        } else if (this.zzbqm.size() >= 100) {
-            zzKl().zzMa().log("Too many ads visible");
+            this.zzbql.put(str, Integer.valueOf(num.intValue() + 1));
+        } else if (this.zzbql.size() >= 100) {
+            zzKl().zzMb().log("Too many ads visible");
         } else {
-            this.zzbqm.put(str, Integer.valueOf(1));
-            this.zzbql.put(str, Long.valueOf(j));
+            this.zzbql.put(str, Integer.valueOf(1));
+            this.zzbqk.put(str, Long.valueOf(j));
         }
     }
 
@@ -82,49 +82,49 @@ public class zzatb extends zzaug {
         zzJW();
         zzmR();
         zzac.zzdr(str);
-        Integer num = (Integer) this.zzbqm.get(str);
+        Integer num = (Integer) this.zzbql.get(str);
         if (num != null) {
-            zzf zzMU = zzKe().zzMU();
+            zzf zzMW = zzKe().zzMW();
             int intValue = num.intValue() - 1;
             if (intValue == 0) {
-                this.zzbqm.remove(str);
-                Long l = (Long) this.zzbql.get(str);
+                this.zzbql.remove(str);
+                Long l = (Long) this.zzbqk.get(str);
                 if (l == null) {
-                    zzKl().zzLY().log("First ad unit exposure time was never set");
+                    zzKl().zzLZ().log("First ad unit exposure time was never set");
                 } else {
                     long longValue = j - l.longValue();
-                    this.zzbql.remove(str);
-                    zza(str, longValue, zzMU);
+                    this.zzbqk.remove(str);
+                    zza(str, longValue, zzMW);
                 }
-                if (!this.zzbqm.isEmpty()) {
+                if (!this.zzbql.isEmpty()) {
                     return;
                 }
-                if (this.zzbqn == 0) {
-                    zzKl().zzLY().log("First ad exposure time was never set");
+                if (this.zzbqm == 0) {
+                    zzKl().zzLZ().log("First ad exposure time was never set");
                     return;
                 }
-                zza(j - this.zzbqn, zzMU);
-                this.zzbqn = 0;
+                zza(j - this.zzbqm, zzMW);
+                this.zzbqm = 0;
                 return;
             }
-            this.zzbqm.put(str, Integer.valueOf(intValue));
+            this.zzbql.put(str, Integer.valueOf(intValue));
             return;
         }
-        zzKl().zzLY().zzj("Call to endAdUnitExposure for unknown ad unit id", str);
+        zzKl().zzLZ().zzj("Call to endAdUnitExposure for unknown ad unit id", str);
     }
 
     public void beginAdUnitExposure(final String str) {
         int i = VERSION.SDK_INT;
         if (str == null || str.length() == 0) {
-            zzKl().zzLY().log("Ad unit id must be a non-empty string");
+            zzKl().zzLZ().log("Ad unit id must be a non-empty string");
             return;
         }
         final long elapsedRealtime = zznR().elapsedRealtime();
         zzKk().zzm(new Runnable(this) {
-            final /* synthetic */ zzatb zzbqp;
+            final /* synthetic */ zzatb zzbqo;
 
             public void run() {
-                this.zzbqp.zzf(str, elapsedRealtime);
+                this.zzbqo.zzf(str, elapsedRealtime);
             }
         });
     }
@@ -132,15 +132,15 @@ public class zzatb extends zzaug {
     public void endAdUnitExposure(final String str) {
         int i = VERSION.SDK_INT;
         if (str == null || str.length() == 0) {
-            zzKl().zzLY().log("Ad unit id must be a non-empty string");
+            zzKl().zzLZ().log("Ad unit id must be a non-empty string");
             return;
         }
         final long elapsedRealtime = zznR().elapsedRealtime();
         zzKk().zzm(new Runnable(this) {
-            final /* synthetic */ zzatb zzbqp;
+            final /* synthetic */ zzatb zzbqo;
 
             public void run() {
-                this.zzbqp.zzg(str, elapsedRealtime);
+                this.zzbqo.zzg(str, elapsedRealtime);
             }
         });
     }
@@ -152,10 +152,10 @@ public class zzatb extends zzaug {
     public void zzJU() {
         final long elapsedRealtime = zznR().elapsedRealtime();
         zzKk().zzm(new Runnable(this) {
-            final /* synthetic */ zzatb zzbqp;
+            final /* synthetic */ zzatb zzbqo;
 
             public void run() {
-                this.zzbqp.zzX(elapsedRealtime);
+                this.zzbqo.zzX(elapsedRealtime);
             }
         });
     }
@@ -238,12 +238,12 @@ public class zzatb extends zzaug {
 
     @WorkerThread
     public void zzW(long j) {
-        zzf zzMU = zzKe().zzMU();
-        for (String str : this.zzbql.keySet()) {
-            zza(str, j - ((Long) this.zzbql.get(str)).longValue(), zzMU);
+        zzf zzMW = zzKe().zzMW();
+        for (String str : this.zzbqk.keySet()) {
+            zza(str, j - ((Long) this.zzbqk.get(str)).longValue(), zzMW);
         }
-        if (!this.zzbql.isEmpty()) {
-            zza(j - this.zzbqn, zzMU);
+        if (!this.zzbqk.isEmpty()) {
+            zza(j - this.zzbqm, zzMW);
         }
         zzX(j);
     }

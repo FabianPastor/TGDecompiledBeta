@@ -263,13 +263,13 @@ public class zzaar implements zzaau {
         if (zzcB(0)) {
             ConnectionResult zzyh = com_google_android_gms_internal_zzbaw.zzyh();
             if (zzyh.isSuccess()) {
-                zzaf zzPU = com_google_android_gms_internal_zzbaw.zzPU();
-                ConnectionResult zzyh2 = zzPU.zzyh();
+                zzaf zzPW = com_google_android_gms_internal_zzbaw.zzPW();
+                ConnectionResult zzyh2 = zzPW.zzyh();
                 if (zzyh2.isSuccess()) {
                     this.zzaBv = true;
-                    this.zzaBw = zzPU.zzyg();
-                    this.zzaBx = zzPU.zzyi();
-                    this.zzaBy = zzPU.zzyj();
+                    this.zzaBw = zzPW.zzyg();
+                    this.zzaBx = zzPW.zzyi();
+                    this.zzaBy = zzPW.zzyj();
                     zzwg();
                     return;
                 }
@@ -289,10 +289,10 @@ public class zzaar implements zzaau {
         return (!z || zzd(connectionResult)) ? this.zzaAZ == null || i < this.zzaBn : false;
     }
 
-    private void zzau(boolean z) {
+    private void zzat(boolean z) {
         if (this.zzaBs != null) {
             if (this.zzaBs.isConnected() && z) {
-                this.zzaBs.zzPJ();
+                this.zzaBs.zzPL();
             }
             this.zzaBs.disconnect();
             this.zzaBw = null;
@@ -344,7 +344,7 @@ public class zzaar implements zzaau {
 
     private void zzf(ConnectionResult connectionResult) {
         zzwk();
-        zzau(!connectionResult.hasResolution());
+        zzat(!connectionResult.hasResolution());
         this.zzaBk.zzh(connectionResult);
         this.zzaBk.zzaCj.zzc(connectionResult);
     }
@@ -409,7 +409,7 @@ public class zzaar implements zzaau {
             if (this.zzaBx) {
                 this.zzaBs.zza(this.zzaBw, this.zzaBy);
             }
-            zzau(false);
+            zzat(false);
         }
         for (com.google.android.gms.common.api.Api.zzc com_google_android_gms_common_api_Api_zzc : this.zzaBk.zzaCf.keySet()) {
             ((com.google.android.gms.common.api.Api.zze) this.zzaBk.zzaBQ.get(com_google_android_gms_common_api_Api_zzc)).disconnect();
@@ -491,7 +491,7 @@ public class zzaar implements zzaau {
 
     public boolean disconnect() {
         zzwk();
-        zzau(true);
+        zzat(true);
         this.zzaBk.zzh(null);
         return true;
     }

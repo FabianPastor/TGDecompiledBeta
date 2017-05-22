@@ -18,7 +18,7 @@ public class zzz {
     private static final Method zzaIt = zzzv();
     private static final Method zzaIu = zzzw();
 
-    public static WorkSource zzF(Context context, String str) {
+    public static WorkSource zzG(Context context, String str) {
         if (context == null || context.getPackageManager() == null) {
             return null;
         }

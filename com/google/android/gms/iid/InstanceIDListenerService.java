@@ -37,18 +37,18 @@ public class InstanceIDListenerService extends zzb {
             }
             if ("gcm.googleapis.com/refresh".equals(intent.getStringExtra("from"))) {
                 zza.zzHj().zzeK(stringExtra);
-                zzaG(false);
+                zzaF(false);
             } else if ("RST".equals(stringExtra2)) {
                 zza.zzHi();
-                zzaG(true);
+                zzaF(true);
             } else if ("RST_FULL".equals(stringExtra2)) {
                 if (!zza.zzHj().isEmpty()) {
                     zza.zzHj().zzHo();
-                    zzaG(true);
+                    zzaF(true);
                 }
             } else if ("SYNC".equals(stringExtra2)) {
                 zza.zzHj().zzeK(stringExtra);
-                zzaG(false);
+                zzaF(false);
             } else {
                 "PING".equals(stringExtra2);
             }
@@ -58,7 +58,7 @@ public class InstanceIDListenerService extends zzb {
     public void onTokenRefresh() {
     }
 
-    public void zzaG(boolean z) {
+    public void zzaF(boolean z) {
         onTokenRefresh();
     }
 }

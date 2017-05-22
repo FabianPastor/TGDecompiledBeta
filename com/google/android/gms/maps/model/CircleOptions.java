@@ -11,33 +11,33 @@ public final class CircleOptions extends zza {
     private int mFillColor = 0;
     private int mStrokeColor = -16777216;
     private float mStrokeWidth = 10.0f;
-    private LatLng zzbpg = null;
-    private double zzbph = 0.0d;
-    private float zzbpi = 0.0f;
-    private boolean zzbpj = true;
-    private boolean zzbpk = false;
+    private LatLng zzbpf = null;
+    private double zzbpg = 0.0d;
+    private float zzbph = 0.0f;
+    private boolean zzbpi = true;
+    private boolean zzbpj = false;
     @Nullable
-    private List<PatternItem> zzbpl = null;
+    private List<PatternItem> zzbpk = null;
 
     CircleOptions(LatLng latLng, double d, float f, int i, int i2, float f2, boolean z, boolean z2, @Nullable List<PatternItem> list) {
-        this.zzbpg = latLng;
-        this.zzbph = d;
+        this.zzbpf = latLng;
+        this.zzbpg = d;
         this.mStrokeWidth = f;
         this.mStrokeColor = i;
         this.mFillColor = i2;
-        this.zzbpi = f2;
-        this.zzbpj = z;
-        this.zzbpk = z2;
-        this.zzbpl = list;
+        this.zzbph = f2;
+        this.zzbpi = z;
+        this.zzbpj = z2;
+        this.zzbpk = list;
     }
 
     public CircleOptions center(LatLng latLng) {
-        this.zzbpg = latLng;
+        this.zzbpf = latLng;
         return this;
     }
 
     public CircleOptions clickable(boolean z) {
-        this.zzbpk = z;
+        this.zzbpj = z;
         return this;
     }
 
@@ -47,7 +47,7 @@ public final class CircleOptions extends zza {
     }
 
     public LatLng getCenter() {
-        return this.zzbpg;
+        return this.zzbpf;
     }
 
     public int getFillColor() {
@@ -55,7 +55,7 @@ public final class CircleOptions extends zza {
     }
 
     public double getRadius() {
-        return this.zzbph;
+        return this.zzbpg;
     }
 
     public int getStrokeColor() {
@@ -64,7 +64,7 @@ public final class CircleOptions extends zza {
 
     @Nullable
     public List<PatternItem> getStrokePattern() {
-        return this.zzbpl;
+        return this.zzbpk;
     }
 
     public float getStrokeWidth() {
@@ -72,19 +72,19 @@ public final class CircleOptions extends zza {
     }
 
     public float getZIndex() {
-        return this.zzbpi;
+        return this.zzbph;
     }
 
     public boolean isClickable() {
-        return this.zzbpk;
-    }
-
-    public boolean isVisible() {
         return this.zzbpj;
     }
 
+    public boolean isVisible() {
+        return this.zzbpi;
+    }
+
     public CircleOptions radius(double d) {
-        this.zzbph = d;
+        this.zzbpg = d;
         return this;
     }
 
@@ -94,7 +94,7 @@ public final class CircleOptions extends zza {
     }
 
     public CircleOptions strokePattern(@Nullable List<PatternItem> list) {
-        this.zzbpl = list;
+        this.zzbpk = list;
         return this;
     }
 
@@ -104,7 +104,7 @@ public final class CircleOptions extends zza {
     }
 
     public CircleOptions visible(boolean z) {
-        this.zzbpj = z;
+        this.zzbpi = z;
         return this;
     }
 
@@ -113,7 +113,7 @@ public final class CircleOptions extends zza {
     }
 
     public CircleOptions zIndex(float f) {
-        this.zzbpi = f;
+        this.zzbph = f;
         return this;
     }
 }

@@ -24,13 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SupportMapFragment extends Fragment {
-    private final zzb zzboU = new zzb(this);
+    private final zzb zzboT = new zzb(this);
 
     static class zzb extends com.google.android.gms.dynamic.zza<zza> {
         private Activity mActivity;
         private final Fragment zzaRN;
-        protected zze<zza> zzbor;
-        private final List<OnMapReadyCallback> zzbos = new ArrayList();
+        protected zze<zza> zzboq;
+        private final List<OnMapReadyCallback> zzbor = new ArrayList();
 
         zzb(Fragment fragment) {
             this.zzaRN = fragment;
@@ -45,7 +45,7 @@ public class SupportMapFragment extends Fragment {
             if (zzBN() != null) {
                 ((zza) zzBN()).getMapAsync(onMapReadyCallback);
             } else {
-                this.zzbos.add(onMapReadyCallback);
+                this.zzbor.add(onMapReadyCallback);
             }
         }
 
@@ -62,16 +62,16 @@ public class SupportMapFragment extends Fragment {
         }
 
         public void zzJz() {
-            if (this.mActivity != null && this.zzbor != null && zzBN() == null) {
+            if (this.mActivity != null && this.zzboq != null && zzBN() == null) {
                 try {
                     MapsInitializer.initialize(this.mActivity);
                     IMapFragmentDelegate zzI = zzai.zzbI(this.mActivity).zzI(zzd.zzA(this.mActivity));
                     if (zzI != null) {
-                        this.zzbor.zza(new zza(this.zzaRN, zzI));
-                        for (OnMapReadyCallback mapAsync : this.zzbos) {
+                        this.zzboq.zza(new zza(this.zzaRN, zzI));
+                        for (OnMapReadyCallback mapAsync : this.zzbor) {
                             ((zza) zzBN()).getMapAsync(mapAsync);
                         }
-                        this.zzbos.clear();
+                        this.zzbor.clear();
                     }
                 } catch (RemoteException e) {
                     throw new RuntimeRemoteException(e);
@@ -81,23 +81,23 @@ public class SupportMapFragment extends Fragment {
         }
 
         protected void zza(zze<zza> com_google_android_gms_dynamic_zze_com_google_android_gms_maps_SupportMapFragment_zza) {
-            this.zzbor = com_google_android_gms_dynamic_zze_com_google_android_gms_maps_SupportMapFragment_zza;
+            this.zzboq = com_google_android_gms_dynamic_zze_com_google_android_gms_maps_SupportMapFragment_zza;
             zzJz();
         }
     }
 
     static class zza implements MapLifecycleDelegate {
         private final Fragment zzaRN;
-        private final IMapFragmentDelegate zzbop;
+        private final IMapFragmentDelegate zzboo;
 
         public zza(Fragment fragment, IMapFragmentDelegate iMapFragmentDelegate) {
-            this.zzbop = (IMapFragmentDelegate) zzac.zzw(iMapFragmentDelegate);
+            this.zzboo = (IMapFragmentDelegate) zzac.zzw(iMapFragmentDelegate);
             this.zzaRN = (Fragment) zzac.zzw(fragment);
         }
 
         public void getMapAsync(final OnMapReadyCallback onMapReadyCallback) {
             try {
-                this.zzbop.getMapAsync(new com.google.android.gms.maps.internal.zzt.zza(this) {
+                this.zzboo.getMapAsync(new com.google.android.gms.maps.internal.zzt.zza(this) {
                     public void zza(IGoogleMapDelegate iGoogleMapDelegate) throws RemoteException {
                         onMapReadyCallback.onMapReady(new GoogleMap(iGoogleMapDelegate));
                     }
@@ -115,7 +115,7 @@ public class SupportMapFragment extends Fragment {
                 if (arguments != null && arguments.containsKey("MapOptions")) {
                     zzah.zza(bundle2, "MapOptions", arguments.getParcelable("MapOptions"));
                 }
-                this.zzbop.onCreate(bundle2);
+                this.zzboo.onCreate(bundle2);
                 zzah.zzd(bundle2, bundle);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
@@ -126,7 +126,7 @@ public class SupportMapFragment extends Fragment {
             try {
                 Bundle bundle2 = new Bundle();
                 zzah.zzd(bundle, bundle2);
-                IObjectWrapper onCreateView = this.zzbop.onCreateView(zzd.zzA(layoutInflater), zzd.zzA(viewGroup), bundle2);
+                IObjectWrapper onCreateView = this.zzboo.onCreateView(zzd.zzA(layoutInflater), zzd.zzA(viewGroup), bundle2);
                 zzah.zzd(bundle2, bundle);
                 return (View) zzd.zzF(onCreateView);
             } catch (RemoteException e) {
@@ -136,7 +136,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onDestroy() {
             try {
-                this.zzbop.onDestroy();
+                this.zzboo.onDestroy();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -144,7 +144,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onDestroyView() {
             try {
-                this.zzbop.onDestroyView();
+                this.zzboo.onDestroyView();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -154,7 +154,7 @@ public class SupportMapFragment extends Fragment {
             try {
                 Bundle bundle2 = new Bundle();
                 zzah.zzd(bundle, bundle2);
-                this.zzbop.onEnterAmbient(bundle2);
+                this.zzboo.onEnterAmbient(bundle2);
                 zzah.zzd(bundle2, bundle);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
@@ -163,7 +163,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onExitAmbient() {
             try {
-                this.zzbop.onExitAmbient();
+                this.zzboo.onExitAmbient();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -174,7 +174,7 @@ public class SupportMapFragment extends Fragment {
             try {
                 Bundle bundle3 = new Bundle();
                 zzah.zzd(bundle2, bundle3);
-                this.zzbop.onInflate(zzd.zzA(activity), googleMapOptions, bundle3);
+                this.zzboo.onInflate(zzd.zzA(activity), googleMapOptions, bundle3);
                 zzah.zzd(bundle3, bundle2);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
@@ -183,7 +183,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onLowMemory() {
             try {
-                this.zzbop.onLowMemory();
+                this.zzboo.onLowMemory();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -191,7 +191,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onPause() {
             try {
-                this.zzbop.onPause();
+                this.zzboo.onPause();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -199,7 +199,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onResume() {
             try {
-                this.zzbop.onResume();
+                this.zzboo.onResume();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -209,7 +209,7 @@ public class SupportMapFragment extends Fragment {
             try {
                 Bundle bundle2 = new Bundle();
                 zzah.zzd(bundle, bundle2);
-                this.zzbop.onSaveInstanceState(bundle2);
+                this.zzboo.onSaveInstanceState(bundle2);
                 zzah.zzd(bundle2, bundle);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
@@ -218,7 +218,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onStart() {
             try {
-                this.zzbop.onStart();
+                this.zzboo.onStart();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -226,7 +226,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onStop() {
             try {
-                this.zzbop.onStop();
+                this.zzboo.onStop();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -247,7 +247,7 @@ public class SupportMapFragment extends Fragment {
 
     public void getMapAsync(OnMapReadyCallback onMapReadyCallback) {
         zzac.zzdj("getMapAsync must be called on the main thread.");
-        this.zzboU.getMapAsync(onMapReadyCallback);
+        this.zzboT.getMapAsync(onMapReadyCallback);
     }
 
     public void onActivityCreated(Bundle bundle) {
@@ -259,62 +259,62 @@ public class SupportMapFragment extends Fragment {
 
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.zzboU.setActivity(activity);
+        this.zzboT.setActivity(activity);
     }
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        this.zzboU.onCreate(bundle);
+        this.zzboT.onCreate(bundle);
     }
 
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        View onCreateView = this.zzboU.onCreateView(layoutInflater, viewGroup, bundle);
+        View onCreateView = this.zzboT.onCreateView(layoutInflater, viewGroup, bundle);
         onCreateView.setClickable(true);
         return onCreateView;
     }
 
     public void onDestroy() {
-        this.zzboU.onDestroy();
+        this.zzboT.onDestroy();
         super.onDestroy();
     }
 
     public void onDestroyView() {
-        this.zzboU.onDestroyView();
+        this.zzboT.onDestroyView();
         super.onDestroyView();
     }
 
     public final void onEnterAmbient(Bundle bundle) {
         zzac.zzdj("onEnterAmbient must be called on the main thread.");
-        this.zzboU.onEnterAmbient(bundle);
+        this.zzboT.onEnterAmbient(bundle);
     }
 
     public final void onExitAmbient() {
         zzac.zzdj("onExitAmbient must be called on the main thread.");
-        this.zzboU.onExitAmbient();
+        this.zzboT.onExitAmbient();
     }
 
     public void onInflate(Activity activity, AttributeSet attributeSet, Bundle bundle) {
         super.onInflate(activity, attributeSet, bundle);
-        this.zzboU.setActivity(activity);
+        this.zzboT.setActivity(activity);
         Parcelable createFromAttributes = GoogleMapOptions.createFromAttributes(activity, attributeSet);
         Bundle bundle2 = new Bundle();
         bundle2.putParcelable("MapOptions", createFromAttributes);
-        this.zzboU.onInflate(activity, bundle2, bundle);
+        this.zzboT.onInflate(activity, bundle2, bundle);
     }
 
     public void onLowMemory() {
-        this.zzboU.onLowMemory();
+        this.zzboT.onLowMemory();
         super.onLowMemory();
     }
 
     public void onPause() {
-        this.zzboU.onPause();
+        this.zzboT.onPause();
         super.onPause();
     }
 
     public void onResume() {
         super.onResume();
-        this.zzboU.onResume();
+        this.zzboT.onResume();
     }
 
     public void onSaveInstanceState(Bundle bundle) {
@@ -322,16 +322,16 @@ public class SupportMapFragment extends Fragment {
             bundle.setClassLoader(SupportMapFragment.class.getClassLoader());
         }
         super.onSaveInstanceState(bundle);
-        this.zzboU.onSaveInstanceState(bundle);
+        this.zzboT.onSaveInstanceState(bundle);
     }
 
     public void onStart() {
         super.onStart();
-        this.zzboU.onStart();
+        this.zzboT.onStart();
     }
 
     public void onStop() {
-        this.zzboU.onStop();
+        this.zzboT.onStop();
         super.onStop();
     }
 

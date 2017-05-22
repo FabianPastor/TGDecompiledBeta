@@ -11,12 +11,12 @@ public class zzaur implements Creator<zzauq> {
         int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 1, com_google_android_gms_internal_zzauq.versionCode);
         zzc.zza(parcel, 2, com_google_android_gms_internal_zzauq.name, false);
-        zzc.zza(parcel, 3, com_google_android_gms_internal_zzauq.zzbwc);
-        zzc.zza(parcel, 4, com_google_android_gms_internal_zzauq.zzbwd, false);
-        zzc.zza(parcel, 5, com_google_android_gms_internal_zzauq.zzbwe, false);
+        zzc.zza(parcel, 3, com_google_android_gms_internal_zzauq.zzbwf);
+        zzc.zza(parcel, 4, com_google_android_gms_internal_zzauq.zzbwg, false);
+        zzc.zza(parcel, 5, com_google_android_gms_internal_zzauq.zzbwh, false);
         zzc.zza(parcel, 6, com_google_android_gms_internal_zzauq.zzaGV, false);
-        zzc.zza(parcel, 7, com_google_android_gms_internal_zzauq.zzbqV, false);
-        zzc.zza(parcel, 8, com_google_android_gms_internal_zzauq.zzbwf, false);
+        zzc.zza(parcel, 7, com_google_android_gms_internal_zzauq.zzbqW, false);
+        zzc.zza(parcel, 8, com_google_android_gms_internal_zzauq.zzbwi, false);
         zzc.zzJ(parcel, zzaZ);
     }
 

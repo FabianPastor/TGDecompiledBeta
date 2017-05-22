@@ -507,7 +507,7 @@ public class zzaax implements Callback {
     }
 
     @WorkerThread
-    private void zzav(boolean z) {
+    private void zzau(boolean z) {
         this.zzaCp = z ? 10000 : 300000;
         this.mHandler.removeMessages(12);
         for (zzzz obtainMessage : this.zzaAM.keySet()) {
@@ -541,11 +541,11 @@ public class zzaax implements Callback {
                     this.zzaCx = r1;
                 }
 
-                public void zzat(boolean z) {
+                public void zzas(boolean z) {
                     this.zzaCx.mHandler.sendMessage(this.zzaCx.mHandler.obtainMessage(1, Boolean.valueOf(z)));
                 }
             });
-            if (!zzaac.zzvB().zzas(true)) {
+            if (!zzaac.zzvB().zzar(true)) {
                 this.zzaCp = 300000;
             }
         }
@@ -594,7 +594,7 @@ public class zzaax implements Callback {
     public boolean handleMessage(Message message) {
         switch (message.what) {
             case 1:
-                zzav(((Boolean) message.obj).booleanValue());
+                zzau(((Boolean) message.obj).booleanValue());
                 break;
             case 2:
                 zza((zzaab) message.obj);

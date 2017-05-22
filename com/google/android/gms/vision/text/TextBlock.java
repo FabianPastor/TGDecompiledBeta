@@ -15,23 +15,23 @@ import org.telegram.tgnet.ConnectionsManager;
 
 public class TextBlock implements Text {
     private Point[] cornerPoints;
-    private zzbkh[] zzbPp;
-    private List<Line> zzbPq;
-    private String zzbPr;
-    private Rect zzbPs;
+    private zzbkh[] zzbPs;
+    private List<Line> zzbPt;
+    private String zzbPu;
+    private Rect zzbPv;
 
     TextBlock(SparseArray<zzbkh> sparseArray) {
-        this.zzbPp = new zzbkh[sparseArray.size()];
-        for (int i = 0; i < this.zzbPp.length; i++) {
-            this.zzbPp[i] = (zzbkh) sparseArray.valueAt(i);
+        this.zzbPs = new zzbkh[sparseArray.size()];
+        for (int i = 0; i < this.zzbPs.length; i++) {
+            this.zzbPs[i] = (zzbkh) sparseArray.valueAt(i);
         }
     }
 
     private static Point[] zza(int i, int i2, int i3, int i4, zzbkd com_google_android_gms_internal_zzbkd) {
         int i5 = com_google_android_gms_internal_zzbkd.left;
         int i6 = com_google_android_gms_internal_zzbkd.top;
-        double sin = Math.sin(Math.toRadians((double) com_google_android_gms_internal_zzbkd.zzbPv));
-        double cos = Math.cos(Math.toRadians((double) com_google_android_gms_internal_zzbkd.zzbPv));
+        double sin = Math.sin(Math.toRadians((double) com_google_android_gms_internal_zzbkd.zzbPy));
+        double cos = Math.cos(Math.toRadians((double) com_google_android_gms_internal_zzbkd.zzbPy));
         Point[] pointArr = new Point[]{new Point(i, i2), new Point(i3, i2), new Point(i3, i4), new Point(i, i4)};
         for (int i7 = 0; i7 < 4; i7++) {
             int i8 = (int) ((((double) pointArr[i7].x) * sin) + (((double) pointArr[i7].y) * cos));
@@ -45,8 +45,8 @@ public class TextBlock implements Text {
     private static Point[] zza(zzbkd com_google_android_gms_internal_zzbkd, zzbkd com_google_android_gms_internal_zzbkd2) {
         int i = -com_google_android_gms_internal_zzbkd2.left;
         int i2 = -com_google_android_gms_internal_zzbkd2.top;
-        double sin = Math.sin(Math.toRadians((double) com_google_android_gms_internal_zzbkd2.zzbPv));
-        double cos = Math.cos(Math.toRadians((double) com_google_android_gms_internal_zzbkd2.zzbPv));
+        double sin = Math.sin(Math.toRadians((double) com_google_android_gms_internal_zzbkd2.zzbPy));
+        double cos = Math.cos(Math.toRadians((double) com_google_android_gms_internal_zzbkd2.zzbPy));
         Point[] pointArr = new Point[4];
         pointArr[0] = new Point(com_google_android_gms_internal_zzbkd.left, com_google_android_gms_internal_zzbkd.top);
         pointArr[0].offset(i, i2);
@@ -61,32 +61,32 @@ public class TextBlock implements Text {
     }
 
     public Rect getBoundingBox() {
-        if (this.zzbPs == null) {
-            this.zzbPs = zza.zza((Text) this);
+        if (this.zzbPv == null) {
+            this.zzbPv = zza.zza((Text) this);
         }
-        return this.zzbPs;
+        return this.zzbPv;
     }
 
     public List<? extends Text> getComponents() {
-        return zzTV();
+        return zzTX();
     }
 
     public Point[] getCornerPoints() {
         if (this.cornerPoints == null) {
-            zzTU();
+            zzTW();
         }
         return this.cornerPoints;
     }
 
     public String getLanguage() {
-        if (this.zzbPr != null) {
-            return this.zzbPr;
+        if (this.zzbPu != null) {
+            return this.zzbPu;
         }
         HashMap hashMap = new HashMap();
-        for (zzbkh com_google_android_gms_internal_zzbkh : this.zzbPp) {
-            hashMap.put(com_google_android_gms_internal_zzbkh.zzbPr, Integer.valueOf((hashMap.containsKey(com_google_android_gms_internal_zzbkh.zzbPr) ? ((Integer) hashMap.get(com_google_android_gms_internal_zzbkh.zzbPr)).intValue() : 0) + 1));
+        for (zzbkh com_google_android_gms_internal_zzbkh : this.zzbPs) {
+            hashMap.put(com_google_android_gms_internal_zzbkh.zzbPu, Integer.valueOf((hashMap.containsKey(com_google_android_gms_internal_zzbkh.zzbPu) ? ((Integer) hashMap.get(com_google_android_gms_internal_zzbkh.zzbPu)).intValue() : 0) + 1));
         }
-        this.zzbPr = (String) ((Entry) Collections.max(hashMap.entrySet(), new Comparator<Entry<String, Integer>>(this) {
+        this.zzbPu = (String) ((Entry) Collections.max(hashMap.entrySet(), new Comparator<Entry<String, Integer>>(this) {
             public /* synthetic */ int compare(Object obj, Object obj2) {
                 return zza((Entry) obj, (Entry) obj2);
             }
@@ -95,26 +95,26 @@ public class TextBlock implements Text {
                 return ((Integer) entry.getValue()).compareTo((Integer) entry2.getValue());
             }
         })).getKey();
-        if (this.zzbPr == null || this.zzbPr.isEmpty()) {
-            this.zzbPr = "und";
+        if (this.zzbPu == null || this.zzbPu.isEmpty()) {
+            this.zzbPu = "und";
         }
-        return this.zzbPr;
+        return this.zzbPu;
     }
 
     public String getValue() {
-        if (this.zzbPp.length == 0) {
+        if (this.zzbPs.length == 0) {
             return "";
         }
-        StringBuilder stringBuilder = new StringBuilder(this.zzbPp[0].zzbPA);
-        for (int i = 1; i < this.zzbPp.length; i++) {
+        StringBuilder stringBuilder = new StringBuilder(this.zzbPs[0].zzbPD);
+        for (int i = 1; i < this.zzbPs.length; i++) {
             stringBuilder.append("\n");
-            stringBuilder.append(this.zzbPp[i].zzbPA);
+            stringBuilder.append(this.zzbPs[i].zzbPD);
         }
         return stringBuilder.toString();
     }
 
-    void zzTU() {
-        if (this.zzbPp.length == 0) {
+    void zzTW() {
+        if (this.zzbPs.length == 0) {
             this.cornerPoints = new Point[0];
             return;
         }
@@ -122,8 +122,8 @@ public class TextBlock implements Text {
         int i2 = Integer.MIN_VALUE;
         int i3 = ConnectionsManager.DEFAULT_DATACENTER_ID;
         int i4 = Integer.MIN_VALUE;
-        for (zzbkh com_google_android_gms_internal_zzbkh : this.zzbPp) {
-            Point[] zza = zza(com_google_android_gms_internal_zzbkh.zzbPx, this.zzbPp[0].zzbPx);
+        for (zzbkh com_google_android_gms_internal_zzbkh : this.zzbPs) {
+            Point[] zza = zza(com_google_android_gms_internal_zzbkh.zzbPA, this.zzbPs[0].zzbPA);
             int i5 = 0;
             while (i5 < 4) {
                 Point point = zza[i5];
@@ -137,19 +137,19 @@ public class TextBlock implements Text {
                 i3 = min;
             }
         }
-        this.cornerPoints = zza(i3, i, i2, i4, this.zzbPp[0].zzbPx);
+        this.cornerPoints = zza(i3, i, i2, i4, this.zzbPs[0].zzbPA);
     }
 
-    List<Line> zzTV() {
-        if (this.zzbPp.length == 0) {
+    List<Line> zzTX() {
+        if (this.zzbPs.length == 0) {
             return new ArrayList(0);
         }
-        if (this.zzbPq == null) {
-            this.zzbPq = new ArrayList(this.zzbPp.length);
-            for (zzbkh line : this.zzbPp) {
-                this.zzbPq.add(new Line(line));
+        if (this.zzbPt == null) {
+            this.zzbPt = new ArrayList(this.zzbPs.length);
+            for (zzbkh line : this.zzbPs) {
+                this.zzbPt.add(new Line(line));
             }
         }
-        return this.zzbPq;
+        return this.zzbPt;
     }
 }

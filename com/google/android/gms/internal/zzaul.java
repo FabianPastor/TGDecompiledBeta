@@ -30,21 +30,21 @@ import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 
 public class zzaul extends zzauh {
-    private final zza zzbvA;
-    private zzatt zzbvB;
-    private Boolean zzbvC;
-    private final zzatk zzbvD;
-    private final zzauo zzbvE;
-    private final List<Runnable> zzbvF = new ArrayList();
+    private final zza zzbvD;
+    private zzatt zzbvE;
+    private Boolean zzbvF;
     private final zzatk zzbvG;
+    private final zzauo zzbvH;
+    private final List<Runnable> zzbvI = new ArrayList();
+    private final zzatk zzbvJ;
 
     protected class zza implements ServiceConnection, zzb, zzc {
-        final /* synthetic */ zzaul zzbvH;
-        private volatile boolean zzbvO;
-        private volatile zzatw zzbvP;
+        final /* synthetic */ zzaul zzbvK;
+        private volatile boolean zzbvR;
+        private volatile zzatw zzbvS;
 
         protected zza(zzaul com_google_android_gms_internal_zzaul) {
-            this.zzbvH = com_google_android_gms_internal_zzaul;
+            this.zzbvK = com_google_android_gms_internal_zzaul;
         }
 
         @MainThread
@@ -52,27 +52,27 @@ public class zzaul extends zzauh {
             zzac.zzdj("MeasurementServiceConnection.onConnected");
             synchronized (this) {
                 try {
-                    final zzatt com_google_android_gms_internal_zzatt = (zzatt) this.zzbvP.zzxD();
-                    this.zzbvP = null;
-                    this.zzbvH.zzKk().zzm(new Runnable(this) {
-                        final /* synthetic */ zza zzbvR;
+                    final zzatt com_google_android_gms_internal_zzatt = (zzatt) this.zzbvS.zzxD();
+                    this.zzbvS = null;
+                    this.zzbvK.zzKk().zzm(new Runnable(this) {
+                        final /* synthetic */ zza zzbvU;
 
                         public void run() {
-                            synchronized (this.zzbvR) {
-                                this.zzbvR.zzbvO = false;
-                                if (!this.zzbvR.zzbvH.isConnected()) {
-                                    this.zzbvR.zzbvH.zzKl().zzMd().log("Connected to remote service");
-                                    this.zzbvR.zzbvH.zza(com_google_android_gms_internal_zzatt);
+                            synchronized (this.zzbvU) {
+                                this.zzbvU.zzbvR = false;
+                                if (!this.zzbvU.zzbvK.isConnected()) {
+                                    this.zzbvU.zzbvK.zzKl().zzMe().log("Connected to remote service");
+                                    this.zzbvU.zzbvK.zza(com_google_android_gms_internal_zzatt);
                                 }
                             }
                         }
                     });
                 } catch (DeadObjectException e) {
-                    this.zzbvP = null;
-                    this.zzbvO = false;
+                    this.zzbvS = null;
+                    this.zzbvR = false;
                 } catch (IllegalStateException e2) {
-                    this.zzbvP = null;
-                    this.zzbvO = false;
+                    this.zzbvS = null;
+                    this.zzbvR = false;
                 }
             }
         }
@@ -80,31 +80,43 @@ public class zzaul extends zzauh {
         @MainThread
         public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
             zzac.zzdj("MeasurementServiceConnection.onConnectionFailed");
-            zzatx zzMu = this.zzbvH.zzbqc.zzMu();
-            if (zzMu != null) {
-                zzMu.zzMa().zzj("Service connection failed", connectionResult);
+            zzatx zzMv = this.zzbvK.zzbqb.zzMv();
+            if (zzMv != null) {
+                zzMv.zzMb().zzj("Service connection failed", connectionResult);
             }
             synchronized (this) {
-                this.zzbvO = false;
-                this.zzbvP = null;
+                this.zzbvR = false;
+                this.zzbvS = null;
             }
+            this.zzbvK.zzKk().zzm(new Runnable(this) {
+                final /* synthetic */ zza zzbvU;
+
+                {
+                    this.zzbvU = r1;
+                }
+
+                public void run() {
+                    this.zzbvU.zzbvK.zzbvE = null;
+                    this.zzbvU.zzbvK.zzNc();
+                }
+            });
         }
 
         @MainThread
         public void onConnectionSuspended(int i) {
             zzac.zzdj("MeasurementServiceConnection.onConnectionSuspended");
-            this.zzbvH.zzKl().zzMd().log("Service connection suspended");
-            this.zzbvH.zzKk().zzm(new Runnable(this) {
-                final /* synthetic */ zza zzbvR;
+            this.zzbvK.zzKl().zzMe().log("Service connection suspended");
+            this.zzbvK.zzKk().zzm(new Runnable(this) {
+                final /* synthetic */ zza zzbvU;
 
                 {
-                    this.zzbvR = r1;
+                    this.zzbvU = r1;
                 }
 
                 public void run() {
-                    zzaul com_google_android_gms_internal_zzaul = this.zzbvR.zzbvH;
-                    Context context = this.zzbvR.zzbvH.getContext();
-                    this.zzbvR.zzbvH.zzKn().zzLg();
+                    zzaul com_google_android_gms_internal_zzaul = this.zzbvU.zzbvK;
+                    Context context = this.zzbvU.zzbvK.getContext();
+                    this.zzbvU.zzbvK.zzKn().zzLh();
                     com_google_android_gms_internal_zzaul.onServiceDisconnected(new ComponentName(context, "com.google.android.gms.measurement.AppMeasurementService"));
                 }
             });
@@ -115,8 +127,8 @@ public class zzaul extends zzauh {
             zzac.zzdj("MeasurementServiceConnection.onServiceConnected");
             synchronized (this) {
                 if (iBinder == null) {
-                    this.zzbvO = false;
-                    this.zzbvH.zzKl().zzLY().log("Service connected with null binder");
+                    this.zzbvR = false;
+                    this.zzbvK.zzKl().zzLZ().log("Service connected with null binder");
                     return;
                 }
                 zzatt com_google_android_gms_internal_zzatt = null;
@@ -124,29 +136,29 @@ public class zzaul extends zzauh {
                     String interfaceDescriptor = iBinder.getInterfaceDescriptor();
                     if ("com.google.android.gms.measurement.internal.IMeasurementService".equals(interfaceDescriptor)) {
                         com_google_android_gms_internal_zzatt = com.google.android.gms.internal.zzatt.zza.zzes(iBinder);
-                        this.zzbvH.zzKl().zzMe().log("Bound to IMeasurementService interface");
+                        this.zzbvK.zzKl().zzMf().log("Bound to IMeasurementService interface");
                     } else {
-                        this.zzbvH.zzKl().zzLY().zzj("Got binder with a wrong descriptor", interfaceDescriptor);
+                        this.zzbvK.zzKl().zzLZ().zzj("Got binder with a wrong descriptor", interfaceDescriptor);
                     }
                 } catch (RemoteException e) {
-                    this.zzbvH.zzKl().zzLY().log("Service connect failed to get IMeasurementService");
+                    this.zzbvK.zzKl().zzLZ().log("Service connect failed to get IMeasurementService");
                 }
                 if (com_google_android_gms_internal_zzatt == null) {
-                    this.zzbvO = false;
+                    this.zzbvR = false;
                     try {
-                        com.google.android.gms.common.stats.zza.zzyJ().zza(this.zzbvH.getContext(), this.zzbvH.zzbvA);
+                        com.google.android.gms.common.stats.zza.zzyJ().zza(this.zzbvK.getContext(), this.zzbvK.zzbvD);
                     } catch (IllegalArgumentException e2) {
                     }
                 } else {
-                    this.zzbvH.zzKk().zzm(new Runnable(this) {
-                        final /* synthetic */ zza zzbvR;
+                    this.zzbvK.zzKk().zzm(new Runnable(this) {
+                        final /* synthetic */ zza zzbvU;
 
                         public void run() {
-                            synchronized (this.zzbvR) {
-                                this.zzbvR.zzbvO = false;
-                                if (!this.zzbvR.zzbvH.isConnected()) {
-                                    this.zzbvR.zzbvH.zzKl().zzMe().log("Connected to service");
-                                    this.zzbvR.zzbvH.zza(com_google_android_gms_internal_zzatt);
+                            synchronized (this.zzbvU) {
+                                this.zzbvU.zzbvR = false;
+                                if (!this.zzbvU.zzbvK.isConnected()) {
+                                    this.zzbvU.zzbvK.zzKl().zzMf().log("Connected to service");
+                                    this.zzbvU.zzbvK.zza(com_google_android_gms_internal_zzatt);
                                 }
                             }
                         }
@@ -158,66 +170,66 @@ public class zzaul extends zzauh {
         @MainThread
         public void onServiceDisconnected(final ComponentName componentName) {
             zzac.zzdj("MeasurementServiceConnection.onServiceDisconnected");
-            this.zzbvH.zzKl().zzMd().log("Service disconnected");
-            this.zzbvH.zzKk().zzm(new Runnable(this) {
-                final /* synthetic */ zza zzbvR;
+            this.zzbvK.zzKl().zzMe().log("Service disconnected");
+            this.zzbvK.zzKk().zzm(new Runnable(this) {
+                final /* synthetic */ zza zzbvU;
 
                 public void run() {
-                    this.zzbvR.zzbvH.onServiceDisconnected(componentName);
+                    this.zzbvU.zzbvK.onServiceDisconnected(componentName);
                 }
             });
         }
 
         @WorkerThread
-        public void zzNb() {
-            this.zzbvH.zzmR();
-            Context context = this.zzbvH.getContext();
+        public void zzNd() {
+            this.zzbvK.zzmR();
+            Context context = this.zzbvK.getContext();
             synchronized (this) {
-                if (this.zzbvO) {
-                    this.zzbvH.zzKl().zzMe().log("Connection attempt already in progress");
-                } else if (this.zzbvP != null) {
-                    this.zzbvH.zzKl().zzMe().log("Already awaiting connection attempt");
+                if (this.zzbvR) {
+                    this.zzbvK.zzKl().zzMf().log("Connection attempt already in progress");
+                } else if (this.zzbvS != null) {
+                    this.zzbvK.zzKl().zzMf().log("Already awaiting connection attempt");
                 } else {
-                    this.zzbvP = new zzatw(context, Looper.getMainLooper(), this, this);
-                    this.zzbvH.zzKl().zzMe().log("Connecting to remote service");
-                    this.zzbvO = true;
-                    this.zzbvP.zzxz();
+                    this.zzbvS = new zzatw(context, Looper.getMainLooper(), this, this);
+                    this.zzbvK.zzKl().zzMf().log("Connecting to remote service");
+                    this.zzbvR = true;
+                    this.zzbvS.zzxz();
                 }
             }
         }
 
         @WorkerThread
         public void zzz(Intent intent) {
-            this.zzbvH.zzmR();
-            Context context = this.zzbvH.getContext();
+            this.zzbvK.zzmR();
+            Context context = this.zzbvK.getContext();
             com.google.android.gms.common.stats.zza zzyJ = com.google.android.gms.common.stats.zza.zzyJ();
             synchronized (this) {
-                if (this.zzbvO) {
-                    this.zzbvH.zzKl().zzMe().log("Connection attempt already in progress");
+                if (this.zzbvR) {
+                    this.zzbvK.zzKl().zzMf().log("Connection attempt already in progress");
                     return;
                 }
-                this.zzbvO = true;
-                zzyJ.zza(context, intent, this.zzbvH.zzbvA, (int) TsExtractor.TS_STREAM_TYPE_AC3);
+                this.zzbvR = true;
+                zzyJ.zza(context, intent, this.zzbvK.zzbvD, (int) TsExtractor.TS_STREAM_TYPE_AC3);
             }
         }
     }
 
     protected zzaul(zzaue com_google_android_gms_internal_zzaue) {
         super(com_google_android_gms_internal_zzaue);
-        this.zzbvE = new zzauo(com_google_android_gms_internal_zzaue.zznR());
-        this.zzbvA = new zza(this);
-        this.zzbvD = new zzatk(this, com_google_android_gms_internal_zzaue) {
-            final /* synthetic */ zzaul zzbvH;
+        this.zzbvH = new zzauo(com_google_android_gms_internal_zzaue.zznR());
+        this.zzbvD = new zza(this);
+        this.zzbvG = new zzatk(this, com_google_android_gms_internal_zzaue) {
+            final /* synthetic */ zzaul zzbvK;
 
             public void run() {
-                this.zzbvH.zzop();
+                this.zzbvK.zzop();
             }
         };
-        this.zzbvG = new zzatk(this, com_google_android_gms_internal_zzaue) {
-            final /* synthetic */ zzaul zzbvH;
+        this.zzbvJ = new zzatk(this, com_google_android_gms_internal_zzaue) {
+            final /* synthetic */ zzaul zzbvK;
 
             public void run() {
-                this.zzbvH.zzKl().zzMa().log("Tasks have been queued for a long time");
+                this.zzbvK.zzKl().zzMb().log("Tasks have been queued for a long time");
             }
         };
     }
@@ -225,34 +237,34 @@ public class zzaul extends zzauh {
     @WorkerThread
     private void onServiceDisconnected(ComponentName componentName) {
         zzmR();
-        if (this.zzbvB != null) {
-            this.zzbvB = null;
-            zzKl().zzMe().zzj("Disconnected from device MeasurementService", componentName);
-            zzMZ();
+        if (this.zzbvE != null) {
+            this.zzbvE = null;
+            zzKl().zzMf().zzj("Disconnected from device MeasurementService", componentName);
+            zzNb();
         }
     }
 
-    private boolean zzMX() {
-        zzKn().zzLg();
+    private boolean zzMZ() {
+        zzKn().zzLh();
         List queryIntentServices = getContext().getPackageManager().queryIntentServices(new Intent().setClassName(getContext(), "com.google.android.gms.measurement.AppMeasurementService"), 65536);
         return queryIntentServices != null && queryIntentServices.size() > 0;
     }
 
     @WorkerThread
-    private void zzMZ() {
+    private void zzNb() {
         zzmR();
         zzoD();
     }
 
     @WorkerThread
-    private void zzNa() {
+    private void zzNc() {
         zzmR();
-        zzKl().zzMe().zzj("Processing queued up service tasks", Integer.valueOf(this.zzbvF.size()));
-        for (Runnable zzm : this.zzbvF) {
+        zzKl().zzMf().zzj("Processing queued up service tasks", Integer.valueOf(this.zzbvI.size()));
+        for (Runnable zzm : this.zzbvI) {
             zzKk().zzm(zzm);
         }
-        this.zzbvF.clear();
-        this.zzbvG.cancel();
+        this.zzbvI.clear();
+        this.zzbvJ.cancel();
     }
 
     @WorkerThread
@@ -260,11 +272,11 @@ public class zzaul extends zzauh {
         zzmR();
         if (isConnected()) {
             runnable.run();
-        } else if (((long) this.zzbvF.size()) >= zzKn().zzLm()) {
-            zzKl().zzLY().log("Discarding data. Max runnable queue size reached");
+        } else if (((long) this.zzbvI.size()) >= zzKn().zzLn()) {
+            zzKl().zzLZ().log("Discarding data. Max runnable queue size reached");
         } else {
-            this.zzbvF.add(runnable);
-            this.zzbvG.zzy(ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
+            this.zzbvI.add(runnable);
+            this.zzbvJ.zzy(ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
             zzoD();
         }
     }
@@ -272,15 +284,15 @@ public class zzaul extends zzauh {
     @WorkerThread
     private void zzoo() {
         zzmR();
-        this.zzbvE.start();
-        this.zzbvD.zzy(zzKn().zzpq());
+        this.zzbvH.start();
+        this.zzbvG.zzy(zzKn().zzpq());
     }
 
     @WorkerThread
     private void zzop() {
         zzmR();
         if (isConnected()) {
-            zzKl().zzMe().log("Inactivity, disconnecting from the service");
+            zzKl().zzMf().log("Inactivity, disconnecting from the service");
             disconnect();
         }
     }
@@ -290,11 +302,11 @@ public class zzaul extends zzauh {
         zzmR();
         zzob();
         try {
-            com.google.android.gms.common.stats.zza.zzyJ().zza(getContext(), this.zzbvA);
+            com.google.android.gms.common.stats.zza.zzyJ().zza(getContext(), this.zzbvD);
         } catch (IllegalStateException e) {
         } catch (IllegalArgumentException e2) {
         }
-        this.zzbvB = null;
+        this.zzbvE = null;
     }
 
     public /* bridge */ /* synthetic */ Context getContext() {
@@ -305,7 +317,7 @@ public class zzaul extends zzauh {
     public boolean isConnected() {
         zzmR();
         zzob();
-        return this.zzbvB != null;
+        return this.zzbvE != null;
     }
 
     public /* bridge */ /* synthetic */ void zzJV() {
@@ -385,84 +397,84 @@ public class zzaul extends zzauh {
     }
 
     @WorkerThread
-    protected void zzMR() {
+    protected void zzMT() {
         zzmR();
         zzob();
         zzo(new Runnable(this) {
-            final /* synthetic */ zzaul zzbvH;
+            final /* synthetic */ zzaul zzbvK;
 
             {
-                this.zzbvH = r1;
+                this.zzbvK = r1;
             }
 
             public void run() {
-                zzatt zzc = this.zzbvH.zzbvB;
-                if (zzc == null) {
-                    this.zzbvH.zzKl().zzLY().log("Discarding data. Failed to send app launch");
+                zzatt zzd = this.zzbvK.zzbvE;
+                if (zzd == null) {
+                    this.zzbvK.zzKl().zzLZ().log("Discarding data. Failed to send app launch");
                     return;
                 }
                 try {
-                    zzc.zza(this.zzbvH.zzKb().zzfD(this.zzbvH.zzKl().zzMf()));
-                    this.zzbvH.zza(zzc, null);
-                    this.zzbvH.zzoo();
+                    zzd.zza(this.zzbvK.zzKb().zzfD(this.zzbvK.zzKl().zzMg()));
+                    this.zzbvK.zza(zzd, null);
+                    this.zzbvK.zzoo();
                 } catch (RemoteException e) {
-                    this.zzbvH.zzKl().zzLY().zzj("Failed to send app launch to the service", e);
+                    this.zzbvK.zzKl().zzLZ().zzj("Failed to send app launch to the service", e);
                 }
             }
         });
     }
 
     @WorkerThread
-    protected void zzMW() {
+    protected void zzMY() {
         zzmR();
         zzob();
         zzo(new Runnable(this) {
-            final /* synthetic */ zzaul zzbvH;
+            final /* synthetic */ zzaul zzbvK;
 
             {
-                this.zzbvH = r1;
+                this.zzbvK = r1;
             }
 
             public void run() {
-                zzatt zzc = this.zzbvH.zzbvB;
-                if (zzc == null) {
-                    this.zzbvH.zzKl().zzLY().log("Failed to send measurementEnabled to service");
+                zzatt zzd = this.zzbvK.zzbvE;
+                if (zzd == null) {
+                    this.zzbvK.zzKl().zzLZ().log("Failed to send measurementEnabled to service");
                     return;
                 }
                 try {
-                    zzc.zzb(this.zzbvH.zzKb().zzfD(this.zzbvH.zzKl().zzMf()));
-                    this.zzbvH.zzoo();
+                    zzd.zzb(this.zzbvK.zzKb().zzfD(this.zzbvK.zzKl().zzMg()));
+                    this.zzbvK.zzoo();
                 } catch (RemoteException e) {
-                    this.zzbvH.zzKl().zzLY().zzj("Failed to send measurementEnabled to the service", e);
+                    this.zzbvK.zzKl().zzLZ().zzj("Failed to send measurementEnabled to the service", e);
                 }
             }
         });
     }
 
     @WorkerThread
-    protected boolean zzMY() {
+    protected boolean zzNa() {
         zzmR();
         zzob();
-        zzKn().zzLg();
-        zzKl().zzMe().log("Checking service availability");
+        zzKn().zzLh();
+        zzKl().zzMf().log("Checking service availability");
         switch (zze.zzuY().isGooglePlayServicesAvailable(getContext())) {
             case 0:
-                zzKl().zzMe().log("Service available");
+                zzKl().zzMf().log("Service available");
                 return true;
             case 1:
-                zzKl().zzMe().log("Service missing");
+                zzKl().zzMf().log("Service missing");
                 return false;
             case 2:
-                zzKl().zzMd().log("Service container out of date");
+                zzKl().zzMe().log("Service container out of date");
                 return true;
             case 3:
-                zzKl().zzMa().log("Service disabled");
+                zzKl().zzMb().log("Service disabled");
                 return false;
             case 9:
-                zzKl().zzMa().log("Service invalid");
+                zzKl().zzMb().log("Service invalid");
                 return false;
             case 18:
-                zzKl().zzMa().log("Service updating");
+                zzKl().zzMb().log("Service updating");
                 return true;
             default:
                 return false;
@@ -473,9 +485,9 @@ public class zzaul extends zzauh {
     protected void zza(zzatt com_google_android_gms_internal_zzatt) {
         zzmR();
         zzac.zzw(com_google_android_gms_internal_zzatt);
-        this.zzbvB = com_google_android_gms_internal_zzatt;
+        this.zzbvE = com_google_android_gms_internal_zzatt;
         zzoo();
-        zzNa();
+        zzNc();
     }
 
     @WorkerThread
@@ -484,9 +496,9 @@ public class zzaul extends zzauh {
         zzJW();
         zzob();
         int i = VERSION.SDK_INT;
-        zzKn().zzLg();
+        zzKn().zzLh();
         List<com.google.android.gms.common.internal.safeparcel.zza> arrayList = new ArrayList();
-        zzKn().zzLp();
+        zzKn().zzLq();
         int i2 = 100;
         for (int i3 = 0; i3 < PointerIconCompat.TYPE_CONTEXT_MENU && r1 == 100; i3++) {
             Object zzlD = zzKf().zzlD(100);
@@ -502,24 +514,24 @@ public class zzaul extends zzauh {
             for (com.google.android.gms.common.internal.safeparcel.zza com_google_android_gms_common_internal_safeparcel_zza2 : arrayList) {
                 if (com_google_android_gms_common_internal_safeparcel_zza2 instanceof zzatq) {
                     try {
-                        com_google_android_gms_internal_zzatt.zza((zzatq) com_google_android_gms_common_internal_safeparcel_zza2, zzKb().zzfD(zzKl().zzMf()));
+                        com_google_android_gms_internal_zzatt.zza((zzatq) com_google_android_gms_common_internal_safeparcel_zza2, zzKb().zzfD(zzKl().zzMg()));
                     } catch (RemoteException e) {
-                        zzKl().zzLY().zzj("Failed to send event to the service", e);
+                        zzKl().zzLZ().zzj("Failed to send event to the service", e);
                     }
                 } else if (com_google_android_gms_common_internal_safeparcel_zza2 instanceof zzauq) {
                     try {
-                        com_google_android_gms_internal_zzatt.zza((zzauq) com_google_android_gms_common_internal_safeparcel_zza2, zzKb().zzfD(zzKl().zzMf()));
+                        com_google_android_gms_internal_zzatt.zza((zzauq) com_google_android_gms_common_internal_safeparcel_zza2, zzKb().zzfD(zzKl().zzMg()));
                     } catch (RemoteException e2) {
-                        zzKl().zzLY().zzj("Failed to send attribute to the service", e2);
+                        zzKl().zzLZ().zzj("Failed to send attribute to the service", e2);
                     }
                 } else if (com_google_android_gms_common_internal_safeparcel_zza2 instanceof zzatg) {
                     try {
-                        com_google_android_gms_internal_zzatt.zza((zzatg) com_google_android_gms_common_internal_safeparcel_zza2, zzKb().zzfD(zzKl().zzMf()));
+                        com_google_android_gms_internal_zzatt.zza((zzatg) com_google_android_gms_common_internal_safeparcel_zza2, zzKb().zzfD(zzKl().zzMg()));
                     } catch (RemoteException e22) {
-                        zzKl().zzLY().zzj("Failed to send conditional property to the service", e22);
+                        zzKl().zzLZ().zzj("Failed to send conditional property to the service", e22);
                     }
                 } else {
-                    zzKl().zzLY().log("Discarding data. Unrecognized parcel type.");
+                    zzKl().zzLZ().log("Discarding data. Unrecognized parcel type.");
                 }
             }
         }
@@ -530,23 +542,23 @@ public class zzaul extends zzauh {
         zzmR();
         zzob();
         zzo(new Runnable(this) {
-            final /* synthetic */ zzaul zzbvH;
+            final /* synthetic */ zzaul zzbvK;
 
             public void run() {
-                zzatt zzc = this.zzbvH.zzbvB;
-                if (zzc == null) {
-                    this.zzbvH.zzKl().zzLY().log("Failed to send current screen to service");
+                zzatt zzd = this.zzbvK.zzbvE;
+                if (zzd == null) {
+                    this.zzbvK.zzKl().zzLZ().log("Failed to send current screen to service");
                     return;
                 }
                 try {
                     if (com_google_android_gms_measurement_AppMeasurement_zzf == null) {
-                        zzc.zza(0, null, null, this.zzbvH.getContext().getPackageName());
+                        zzd.zza(0, null, null, this.zzbvK.getContext().getPackageName());
                     } else {
-                        zzc.zza(com_google_android_gms_measurement_AppMeasurement_zzf.zzbqh, com_google_android_gms_measurement_AppMeasurement_zzf.zzbqf, com_google_android_gms_measurement_AppMeasurement_zzf.zzbqg, this.zzbvH.getContext().getPackageName());
+                        zzd.zza(com_google_android_gms_measurement_AppMeasurement_zzf.zzbqg, com_google_android_gms_measurement_AppMeasurement_zzf.zzbqe, com_google_android_gms_measurement_AppMeasurement_zzf.zzbqf, this.zzbvK.getContext().getPackageName());
                     }
-                    this.zzbvH.zzoo();
+                    this.zzbvK.zzoo();
                 } catch (RemoteException e) {
-                    this.zzbvH.zzKl().zzLY().zzj("Failed to send current screen to the service", e);
+                    this.zzbvK.zzKl().zzLZ().zzj("Failed to send current screen to the service", e);
                 }
             }
         });
@@ -557,23 +569,23 @@ public class zzaul extends zzauh {
         zzmR();
         zzob();
         zzo(new Runnable(this) {
-            final /* synthetic */ zzaul zzbvH;
+            final /* synthetic */ zzaul zzbvK;
 
             /* JADX WARNING: inconsistent code. */
             /* Code decompiled incorrectly, please refer to instructions dump. */
             public void run() {
                 synchronized (atomicReference) {
                     try {
-                        zzatt zzc = this.zzbvH.zzbvB;
-                        if (zzc == null) {
-                            this.zzbvH.zzKl().zzLY().log("Failed to get app instance id");
+                        zzatt zzd = this.zzbvK.zzbvE;
+                        if (zzd == null) {
+                            this.zzbvK.zzKl().zzLZ().log("Failed to get app instance id");
                         } else {
-                            atomicReference.set(zzc.zzc(this.zzbvH.zzKb().zzfD(null)));
-                            this.zzbvH.zzoo();
+                            atomicReference.set(zzd.zzc(this.zzbvK.zzKb().zzfD(null)));
+                            this.zzbvK.zzoo();
                             atomicReference.notify();
                         }
                     } catch (RemoteException e) {
-                        this.zzbvH.zzKl().zzLY().zzj("Failed to get app instance id", e);
+                        this.zzbvK.zzKl().zzLZ().zzj("Failed to get app instance id", e);
                     } finally {
                         atomicReference.notify();
                     }
@@ -591,28 +603,28 @@ public class zzaul extends zzauh {
         final String str5 = str2;
         final String str6 = str3;
         zzo(new Runnable(this) {
-            final /* synthetic */ zzaul zzbvH;
+            final /* synthetic */ zzaul zzbvK;
 
             /* JADX WARNING: inconsistent code. */
             /* Code decompiled incorrectly, please refer to instructions dump. */
             public void run() {
                 synchronized (atomicReference2) {
                     try {
-                        zzatt zzc = this.zzbvH.zzbvB;
-                        if (zzc == null) {
-                            this.zzbvH.zzKl().zzLY().zzd("Failed to get conditional properties", zzatx.zzfE(str4), str5, str6);
+                        zzatt zzd = this.zzbvK.zzbvE;
+                        if (zzd == null) {
+                            this.zzbvK.zzKl().zzLZ().zzd("Failed to get conditional properties", zzatx.zzfE(str4), str5, str6);
                             atomicReference2.set(Collections.emptyList());
                         } else {
                             if (TextUtils.isEmpty(str4)) {
-                                atomicReference2.set(zzc.zza(str5, str6, this.zzbvH.zzKb().zzfD(this.zzbvH.zzKl().zzMf())));
+                                atomicReference2.set(zzd.zza(str5, str6, this.zzbvK.zzKb().zzfD(this.zzbvK.zzKl().zzMg())));
                             } else {
-                                atomicReference2.set(zzc.zzn(str4, str5, str6));
+                                atomicReference2.set(zzd.zzn(str4, str5, str6));
                             }
-                            this.zzbvH.zzoo();
+                            this.zzbvK.zzoo();
                             atomicReference2.notify();
                         }
                     } catch (RemoteException e) {
-                        this.zzbvH.zzKl().zzLY().zzd("Failed to get conditional properties", zzatx.zzfE(str4), str5, e);
+                        this.zzbvK.zzKl().zzLZ().zzd("Failed to get conditional properties", zzatx.zzfE(str4), str5, e);
                         atomicReference2.set(Collections.emptyList());
                     } finally {
                         atomicReference2.notify();
@@ -632,28 +644,28 @@ public class zzaul extends zzauh {
         final String str6 = str3;
         final boolean z2 = z;
         zzo(new Runnable(this) {
-            final /* synthetic */ zzaul zzbvH;
+            final /* synthetic */ zzaul zzbvK;
 
             /* JADX WARNING: inconsistent code. */
             /* Code decompiled incorrectly, please refer to instructions dump. */
             public void run() {
                 synchronized (atomicReference2) {
                     try {
-                        zzatt zzc = this.zzbvH.zzbvB;
-                        if (zzc == null) {
-                            this.zzbvH.zzKl().zzLY().zzd("Failed to get user properties", zzatx.zzfE(str4), str5, str6);
+                        zzatt zzd = this.zzbvK.zzbvE;
+                        if (zzd == null) {
+                            this.zzbvK.zzKl().zzLZ().zzd("Failed to get user properties", zzatx.zzfE(str4), str5, str6);
                             atomicReference2.set(Collections.emptyList());
                         } else {
                             if (TextUtils.isEmpty(str4)) {
-                                atomicReference2.set(zzc.zza(str5, str6, z2, this.zzbvH.zzKb().zzfD(this.zzbvH.zzKl().zzMf())));
+                                atomicReference2.set(zzd.zza(str5, str6, z2, this.zzbvK.zzKb().zzfD(this.zzbvK.zzKl().zzMg())));
                             } else {
-                                atomicReference2.set(zzc.zza(str4, str5, str6, z2));
+                                atomicReference2.set(zzd.zza(str4, str5, str6, z2));
                             }
-                            this.zzbvH.zzoo();
+                            this.zzbvK.zzoo();
                             atomicReference2.notify();
                         }
                     } catch (RemoteException e) {
-                        this.zzbvH.zzKl().zzLY().zzd("Failed to get user properties", zzatx.zzfE(str4), str5, e);
+                        this.zzbvK.zzKl().zzLZ().zzd("Failed to get user properties", zzatx.zzfE(str4), str5, e);
                         atomicReference2.set(Collections.emptyList());
                     } finally {
                         atomicReference2.notify();
@@ -668,23 +680,23 @@ public class zzaul extends zzauh {
         zzmR();
         zzob();
         zzo(new Runnable(this) {
-            final /* synthetic */ zzaul zzbvH;
+            final /* synthetic */ zzaul zzbvK;
 
             /* JADX WARNING: inconsistent code. */
             /* Code decompiled incorrectly, please refer to instructions dump. */
             public void run() {
                 synchronized (atomicReference) {
                     try {
-                        zzatt zzc = this.zzbvH.zzbvB;
-                        if (zzc == null) {
-                            this.zzbvH.zzKl().zzLY().log("Failed to get user properties");
+                        zzatt zzd = this.zzbvK.zzbvE;
+                        if (zzd == null) {
+                            this.zzbvK.zzKl().zzLZ().log("Failed to get user properties");
                         } else {
-                            atomicReference.set(zzc.zza(this.zzbvH.zzKb().zzfD(null), z));
-                            this.zzbvH.zzoo();
+                            atomicReference.set(zzd.zza(this.zzbvK.zzKb().zzfD(null), z));
+                            this.zzbvK.zzoo();
                             atomicReference.notify();
                         }
                     } catch (RemoteException e) {
-                        this.zzbvH.zzKl().zzLY().zzj("Failed to get user properties", e);
+                        this.zzbvK.zzKl().zzLZ().zzj("Failed to get user properties", e);
                     } finally {
                         atomicReference.notify();
                     }
@@ -698,19 +710,19 @@ public class zzaul extends zzauh {
         zzmR();
         zzob();
         int i = VERSION.SDK_INT;
-        zzKn().zzLg();
+        zzKn().zzLh();
         final boolean z = zzKf().zza(com_google_android_gms_internal_zzauq);
         zzo(new Runnable(this) {
-            final /* synthetic */ zzaul zzbvH;
+            final /* synthetic */ zzaul zzbvK;
 
             public void run() {
-                zzatt zzc = this.zzbvH.zzbvB;
-                if (zzc == null) {
-                    this.zzbvH.zzKl().zzLY().log("Discarding data. Failed to set user attribute");
+                zzatt zzd = this.zzbvK.zzbvE;
+                if (zzd == null) {
+                    this.zzbvK.zzKl().zzLZ().log("Discarding data. Failed to set user attribute");
                     return;
                 }
-                this.zzbvH.zza(zzc, z ? null : com_google_android_gms_internal_zzauq);
-                this.zzbvH.zzoo();
+                this.zzbvK.zza(zzd, z ? null : com_google_android_gms_internal_zzauq);
+                this.zzbvK.zzoo();
             }
         });
     }
@@ -721,33 +733,33 @@ public class zzaul extends zzauh {
         zzmR();
         zzob();
         int i = VERSION.SDK_INT;
-        zzKn().zzLg();
+        zzKn().zzLh();
         final boolean z = zzKf().zza(com_google_android_gms_internal_zzatq);
         final zzatq com_google_android_gms_internal_zzatq2 = com_google_android_gms_internal_zzatq;
         final String str2 = str;
         zzo(new Runnable(this, true) {
-            final /* synthetic */ zzaul zzbvH;
+            final /* synthetic */ zzaul zzbvK;
 
             public void run() {
-                zzatt zzc = this.zzbvH.zzbvB;
-                if (zzc == null) {
-                    this.zzbvH.zzKl().zzLY().log("Discarding data. Failed to send event to service");
+                zzatt zzd = this.zzbvK.zzbvE;
+                if (zzd == null) {
+                    this.zzbvK.zzKl().zzLZ().log("Discarding data. Failed to send event to service");
                     return;
                 }
                 if (true) {
-                    this.zzbvH.zza(zzc, z ? null : com_google_android_gms_internal_zzatq2);
+                    this.zzbvK.zza(zzd, z ? null : com_google_android_gms_internal_zzatq2);
                 } else {
                     try {
                         if (TextUtils.isEmpty(str2)) {
-                            zzc.zza(com_google_android_gms_internal_zzatq2, this.zzbvH.zzKb().zzfD(this.zzbvH.zzKl().zzMf()));
+                            zzd.zza(com_google_android_gms_internal_zzatq2, this.zzbvK.zzKb().zzfD(this.zzbvK.zzKl().zzMg()));
                         } else {
-                            zzc.zza(com_google_android_gms_internal_zzatq2, str2, this.zzbvH.zzKl().zzMf());
+                            zzd.zza(com_google_android_gms_internal_zzatq2, str2, this.zzbvK.zzKl().zzMg());
                         }
                     } catch (RemoteException e) {
-                        this.zzbvH.zzKl().zzLY().zzj("Failed to send event to the service", e);
+                        this.zzbvK.zzKl().zzLZ().zzj("Failed to send event to the service", e);
                     }
                 }
-                this.zzbvH.zzoo();
+                this.zzbvK.zzoo();
             }
         });
     }
@@ -757,33 +769,33 @@ public class zzaul extends zzauh {
         zzac.zzw(com_google_android_gms_internal_zzatg);
         zzmR();
         zzob();
-        zzKn().zzLg();
+        zzKn().zzLh();
         final boolean z = zzKf().zzc(com_google_android_gms_internal_zzatg);
         final zzatg com_google_android_gms_internal_zzatg2 = new zzatg(com_google_android_gms_internal_zzatg);
         final zzatg com_google_android_gms_internal_zzatg3 = com_google_android_gms_internal_zzatg;
         zzo(new Runnable(this, true) {
-            final /* synthetic */ zzaul zzbvH;
+            final /* synthetic */ zzaul zzbvK;
 
             public void run() {
-                zzatt zzc = this.zzbvH.zzbvB;
-                if (zzc == null) {
-                    this.zzbvH.zzKl().zzLY().log("Discarding data. Failed to send conditional user property to service");
+                zzatt zzd = this.zzbvK.zzbvE;
+                if (zzd == null) {
+                    this.zzbvK.zzKl().zzLZ().log("Discarding data. Failed to send conditional user property to service");
                     return;
                 }
                 if (true) {
-                    this.zzbvH.zza(zzc, z ? null : com_google_android_gms_internal_zzatg2);
+                    this.zzbvK.zza(zzd, z ? null : com_google_android_gms_internal_zzatg2);
                 } else {
                     try {
                         if (TextUtils.isEmpty(com_google_android_gms_internal_zzatg3.packageName)) {
-                            zzc.zza(com_google_android_gms_internal_zzatg2, this.zzbvH.zzKb().zzfD(this.zzbvH.zzKl().zzMf()));
+                            zzd.zza(com_google_android_gms_internal_zzatg2, this.zzbvK.zzKb().zzfD(this.zzbvK.zzKl().zzMg()));
                         } else {
-                            zzc.zzb(com_google_android_gms_internal_zzatg2);
+                            zzd.zzb(com_google_android_gms_internal_zzatg2);
                         }
                     } catch (RemoteException e) {
-                        this.zzbvH.zzKl().zzLY().zzj("Failed to send conditional user property to the service", e);
+                        this.zzbvK.zzKl().zzLZ().zzj("Failed to send conditional user property to the service", e);
                     }
                 }
-                this.zzbvH.zzoo();
+                this.zzbvK.zzoo();
             }
         });
     }
@@ -804,26 +816,26 @@ public class zzaul extends zzauh {
         zzmR();
         zzob();
         if (!isConnected()) {
-            if (this.zzbvC == null) {
-                this.zzbvC = zzKm().zzMm();
-                if (this.zzbvC == null) {
-                    zzKl().zzMe().log("State of service unknown");
-                    this.zzbvC = Boolean.valueOf(zzMY());
-                    zzKm().zzaK(this.zzbvC.booleanValue());
+            if (this.zzbvF == null) {
+                this.zzbvF = zzKm().zzMn();
+                if (this.zzbvF == null) {
+                    zzKl().zzMf().log("State of service unknown");
+                    this.zzbvF = Boolean.valueOf(zzNa());
+                    zzKm().zzaJ(this.zzbvF.booleanValue());
                 }
             }
-            if (this.zzbvC.booleanValue()) {
-                zzKl().zzMe().log("Using measurement service");
-                this.zzbvA.zzNb();
-            } else if (zzMX()) {
-                zzKl().zzMe().log("Using local app measurement service");
+            if (this.zzbvF.booleanValue()) {
+                zzKl().zzMf().log("Using measurement service");
+                this.zzbvD.zzNd();
+            } else if (zzMZ()) {
+                zzKl().zzMf().log("Using local app measurement service");
                 Intent intent = new Intent("com.google.android.gms.measurement.START");
                 Context context = getContext();
-                zzKn().zzLg();
+                zzKn().zzLh();
                 intent.setComponent(new ComponentName(context, "com.google.android.gms.measurement.AppMeasurementService"));
-                this.zzbvA.zzz(intent);
+                this.zzbvD.zzz(intent);
             } else {
-                zzKl().zzLY().log("Unable to use remote or local measurement implementation. Please register the AppMeasurementService service in the app manifest");
+                zzKl().zzLZ().log("Unable to use remote or local measurement implementation. Please register the AppMeasurementService service in the app manifest");
             }
         }
     }

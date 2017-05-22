@@ -18,7 +18,7 @@ public class Cap extends zza {
     private final BitmapDescriptor bitmapDescriptor;
     private final int type;
     @Nullable
-    private final Float zzbpe;
+    private final Float zzbpd;
 
     protected Cap(int i) {
         this(i, null, null);
@@ -39,7 +39,7 @@ public class Cap extends zza {
         zzac.zzb(z, new StringBuilder((String.valueOf(valueOf).length() + 63) + String.valueOf(valueOf2).length()).append("Invalid Cap: type=").append(i).append(" bitmapDescriptor=").append(valueOf).append(" bitmapRefWidth=").append(valueOf2).toString());
         this.type = i;
         this.bitmapDescriptor = bitmapDescriptor;
-        this.zzbpe = f;
+        this.zzbpd = f;
     }
 
     protected Cap(@NonNull BitmapDescriptor bitmapDescriptor, float f) {
@@ -59,7 +59,7 @@ public class Cap extends zza {
             return false;
         }
         Cap cap = (Cap) obj;
-        return this.type == cap.type && zzaa.equal(this.bitmapDescriptor, cap.bitmapDescriptor) && zzaa.equal(this.zzbpe, cap.zzbpe);
+        return this.type == cap.type && zzaa.equal(this.bitmapDescriptor, cap.bitmapDescriptor) && zzaa.equal(this.zzbpd, cap.zzbpd);
     }
 
     public int getType() {
@@ -67,7 +67,7 @@ public class Cap extends zza {
     }
 
     public int hashCode() {
-        return zzaa.hashCode(Integer.valueOf(this.type), this.bitmapDescriptor, this.zzbpe);
+        return zzaa.hashCode(Integer.valueOf(this.type), this.bitmapDescriptor, this.zzbpd);
     }
 
     public String toString() {
@@ -80,7 +80,7 @@ public class Cap extends zza {
 
     @Nullable
     public Float zzJH() {
-        return this.zzbpe;
+        return this.zzbpd;
     }
 
     @Nullable
@@ -97,7 +97,7 @@ public class Cap extends zza {
             case 2:
                 return new RoundCap();
             case 3:
-                return new CustomCap(this.bitmapDescriptor, this.zzbpe.floatValue());
+                return new CustomCap(this.bitmapDescriptor, this.zzbpd.floatValue());
             default:
                 Log.w(TAG, "Unknown Cap type: " + this.type);
                 return this;

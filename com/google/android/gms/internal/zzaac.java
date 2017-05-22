@@ -22,7 +22,7 @@ public final class zzaac implements ActivityLifecycleCallbacks, ComponentCallbac
     private final AtomicBoolean zzazX = new AtomicBoolean();
 
     public interface zza {
-        void zzat(boolean z);
+        void zzas(boolean z);
     }
 
     private zzaac() {
@@ -38,11 +38,11 @@ public final class zzaac implements ActivityLifecycleCallbacks, ComponentCallbac
         }
     }
 
-    private void zzat(boolean z) {
+    private void zzas(boolean z) {
         synchronized (zzazV) {
             Iterator it = this.mListeners.iterator();
             while (it.hasNext()) {
-                ((zza) it.next()).zzat(z);
+                ((zza) it.next()).zzas(z);
             }
         }
     }
@@ -55,7 +55,7 @@ public final class zzaac implements ActivityLifecycleCallbacks, ComponentCallbac
         boolean compareAndSet = this.zzazW.compareAndSet(true, false);
         this.zzazX.set(true);
         if (compareAndSet) {
-            zzat(false);
+            zzas(false);
         }
     }
 
@@ -69,7 +69,7 @@ public final class zzaac implements ActivityLifecycleCallbacks, ComponentCallbac
         boolean compareAndSet = this.zzazW.compareAndSet(true, false);
         this.zzazX.set(true);
         if (compareAndSet) {
-            zzat(false);
+            zzas(false);
         }
     }
 
@@ -91,7 +91,7 @@ public final class zzaac implements ActivityLifecycleCallbacks, ComponentCallbac
     public void onTrimMemory(int i) {
         if (i == 20 && this.zzazW.compareAndSet(false, true)) {
             this.zzazX.set(true);
-            zzat(true);
+            zzas(true);
         }
     }
 
@@ -102,7 +102,7 @@ public final class zzaac implements ActivityLifecycleCallbacks, ComponentCallbac
     }
 
     @TargetApi(16)
-    public boolean zzas(boolean z) {
+    public boolean zzar(boolean z) {
         if (!this.zzazX.get()) {
             if (!zzt.zzzi()) {
                 return z;

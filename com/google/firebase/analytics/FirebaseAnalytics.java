@@ -3,6 +3,7 @@ package com.google.firebase.analytics;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Keep;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,8 +13,9 @@ import com.google.android.gms.common.internal.zzac;
 import com.google.android.gms.internal.zzaue;
 import com.google.android.gms.tasks.Task;
 
+@Keep
 public final class FirebaseAnalytics {
-    private final zzaue zzbqc;
+    private final zzaue zzbqb;
 
     public static class Event {
         public static final String ADD_PAYMENT_INFO = "add_payment_info";
@@ -22,6 +24,7 @@ public final class FirebaseAnalytics {
         public static final String APP_OPEN = "app_open";
         public static final String BEGIN_CHECKOUT = "begin_checkout";
         public static final String CAMPAIGN_DETAILS = "campaign_details";
+        public static final String CHECKOUT_PROGRESS = "checkout_progress";
         public static final String EARN_VIRTUAL_CURRENCY = "earn_virtual_currency";
         public static final String ECOMMERCE_PURCHASE = "ecommerce_purchase";
         public static final String GENERATE_LEAD = "generate_lead";
@@ -31,8 +34,10 @@ public final class FirebaseAnalytics {
         public static final String POST_SCORE = "post_score";
         public static final String PRESENT_OFFER = "present_offer";
         public static final String PURCHASE_REFUND = "purchase_refund";
+        public static final String REMOVE_FROM_CART = "remove_from_cart";
         public static final String SEARCH = "search";
         public static final String SELECT_CONTENT = "select_content";
+        public static final String SET_CHECKOUT_OPTION = "set_checkout_option";
         public static final String SHARE = "share";
         public static final String SIGN_UP = "sign_up";
         public static final String SPEND_VIRTUAL_CURRENCY = "spend_virtual_currency";
@@ -50,21 +55,29 @@ public final class FirebaseAnalytics {
     public static class Param {
         public static final String ACHIEVEMENT_ID = "achievement_id";
         public static final String ACLID = "aclid";
+        public static final String AFFILIATION = "affiliation";
         public static final String CAMPAIGN = "campaign";
         public static final String CHARACTER = "character";
+        public static final String CHECKOUT_OPTION = "checkout_option";
+        public static final String CHECKOUT_STEP = "checkout_step";
         public static final String CONTENT = "content";
         public static final String CONTENT_TYPE = "content_type";
         public static final String COUPON = "coupon";
         public static final String CP1 = "cp1";
+        public static final String CREATIVE_NAME = "creative_name";
+        public static final String CREATIVE_SLOT = "creative_slot";
         public static final String CURRENCY = "currency";
         public static final String DESTINATION = "destination";
         public static final String END_DATE = "end_date";
         public static final String FLIGHT_NUMBER = "flight_number";
         public static final String GROUP_ID = "group_id";
+        public static final String ITEM_BRAND = "item_brand";
         public static final String ITEM_CATEGORY = "item_category";
         public static final String ITEM_ID = "item_id";
+        public static final String ITEM_LIST = "item_list";
         public static final String ITEM_LOCATION_ID = "item_location_id";
         public static final String ITEM_NAME = "item_name";
+        public static final String ITEM_VARIANT = "item_variant";
         public static final String LEVEL = "level";
         public static final String LOCATION = "location";
         public static final String MEDIUM = "medium";
@@ -100,44 +113,46 @@ public final class FirebaseAnalytics {
 
     public FirebaseAnalytics(zzaue com_google_android_gms_internal_zzaue) {
         zzac.zzw(com_google_android_gms_internal_zzaue);
-        this.zzbqc = com_google_android_gms_internal_zzaue;
+        this.zzbqb = com_google_android_gms_internal_zzaue;
     }
 
+    @Keep
     @RequiresPermission(allOf = {"android.permission.INTERNET", "android.permission.ACCESS_NETWORK_STATE", "android.permission.WAKE_LOCK"})
     public static FirebaseAnalytics getInstance(Context context) {
-        return zzaue.zzbM(context).zzMx();
+        return zzaue.zzbM(context).zzMy();
     }
 
     public Task<String> getAppInstanceId() {
-        return this.zzbqc.zzKa().getAppInstanceId();
+        return this.zzbqb.zzKa().getAppInstanceId();
     }
 
     public void logEvent(@Size(max = 40, min = 1) @NonNull String str, Bundle bundle) {
-        this.zzbqc.zzMw().logEvent(str, bundle);
+        this.zzbqb.zzMx().logEvent(str, bundle);
     }
 
     public void setAnalyticsCollectionEnabled(boolean z) {
-        this.zzbqc.zzMw().setMeasurementEnabled(z);
+        this.zzbqb.zzMx().setMeasurementEnabled(z);
     }
 
+    @Keep
     @MainThread
     public void setCurrentScreen(@NonNull Activity activity, @Nullable @Size(max = 36, min = 1) String str, @Nullable @Size(max = 36, min = 1) String str2) {
-        this.zzbqc.zzKe().setCurrentScreen(activity, str, str2);
+        this.zzbqb.zzKe().setCurrentScreen(activity, str, str2);
     }
 
     public void setMinimumSessionDuration(long j) {
-        this.zzbqc.zzMw().setMinimumSessionDuration(j);
+        this.zzbqb.zzMx().setMinimumSessionDuration(j);
     }
 
     public void setSessionTimeoutDuration(long j) {
-        this.zzbqc.zzMw().setSessionTimeoutDuration(j);
+        this.zzbqb.zzMx().setSessionTimeoutDuration(j);
     }
 
     public void setUserId(String str) {
-        this.zzbqc.zzMw().setUserId(str);
+        this.zzbqb.zzMx().setUserId(str);
     }
 
     public void setUserProperty(@Size(max = 24, min = 1) @NonNull String str, @Nullable @Size(max = 36) String str2) {
-        this.zzbqc.zzMw().setUserProperty(str, str2);
+        this.zzbqb.zzMx().setUserProperty(str, str2);
     }
 }

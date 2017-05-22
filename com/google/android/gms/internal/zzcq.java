@@ -55,7 +55,7 @@ public interface zzcq extends IInterface {
                 }
             }
 
-            public boolean zzf(boolean z) throws RemoteException {
+            public boolean zze(boolean z) throws RemoteException {
                 boolean z2 = true;
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
@@ -114,9 +114,9 @@ public interface zzcq extends IInterface {
                 case 2:
                     int i3;
                     parcel.enforceInterface("com.google.android.gms.ads.identifier.internal.IAdvertisingIdService");
-                    boolean zzf = zzf(parcel.readInt() != 0);
+                    boolean zze = zze(parcel.readInt() != 0);
                     parcel2.writeNoException();
-                    if (zzf) {
+                    if (zze) {
                         i3 = 1;
                     }
                     parcel2.writeInt(i3);
@@ -149,7 +149,7 @@ public interface zzcq extends IInterface {
 
     void zzc(String str, boolean z) throws RemoteException;
 
-    boolean zzf(boolean z) throws RemoteException;
+    boolean zze(boolean z) throws RemoteException;
 
     String zzv(String str) throws RemoteException;
 }

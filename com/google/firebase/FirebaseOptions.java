@@ -11,35 +11,35 @@ import com.google.android.gms.common.util.zzw;
 
 public final class FirebaseOptions {
     private final String zzamX;
-    private final String zzbWN;
-    private final String zzbWO;
-    private final String zzbWP;
     private final String zzbWQ;
     private final String zzbWR;
+    private final String zzbWS;
+    private final String zzbWT;
+    private final String zzbWU;
 
     public static final class Builder {
         private String zzamX;
-        private String zzbWN;
-        private String zzbWO;
-        private String zzbWP;
         private String zzbWQ;
         private String zzbWR;
+        private String zzbWS;
+        private String zzbWT;
+        private String zzbWU;
 
         public Builder(FirebaseOptions firebaseOptions) {
             this.zzamX = firebaseOptions.zzamX;
-            this.zzbWN = firebaseOptions.zzbWN;
-            this.zzbWO = firebaseOptions.zzbWO;
-            this.zzbWP = firebaseOptions.zzbWP;
             this.zzbWQ = firebaseOptions.zzbWQ;
             this.zzbWR = firebaseOptions.zzbWR;
+            this.zzbWS = firebaseOptions.zzbWS;
+            this.zzbWT = firebaseOptions.zzbWT;
+            this.zzbWU = firebaseOptions.zzbWU;
         }
 
         public FirebaseOptions build() {
-            return new FirebaseOptions(this.zzamX, this.zzbWN, this.zzbWO, this.zzbWP, this.zzbWQ, this.zzbWR);
+            return new FirebaseOptions(this.zzamX, this.zzbWQ, this.zzbWR, this.zzbWS, this.zzbWT, this.zzbWU);
         }
 
         public Builder setApiKey(@NonNull String str) {
-            this.zzbWN = zzac.zzh(str, "ApiKey must be set.");
+            this.zzbWQ = zzac.zzh(str, "ApiKey must be set.");
             return this;
         }
 
@@ -49,17 +49,17 @@ public final class FirebaseOptions {
         }
 
         public Builder setDatabaseUrl(@Nullable String str) {
-            this.zzbWO = str;
+            this.zzbWR = str;
             return this;
         }
 
         public Builder setGcmSenderId(@Nullable String str) {
-            this.zzbWQ = str;
+            this.zzbWT = str;
             return this;
         }
 
         public Builder setStorageBucket(@Nullable String str) {
-            this.zzbWR = str;
+            this.zzbWU = str;
             return this;
         }
     }
@@ -67,11 +67,11 @@ public final class FirebaseOptions {
     private FirebaseOptions(@NonNull String str, @NonNull String str2, @Nullable String str3, @Nullable String str4, @Nullable String str5, @Nullable String str6) {
         zzac.zza(!zzw.zzdz(str), (Object) "ApplicationId must be set.");
         this.zzamX = str;
-        this.zzbWN = str2;
-        this.zzbWO = str3;
-        this.zzbWP = str4;
-        this.zzbWQ = str5;
-        this.zzbWR = str6;
+        this.zzbWQ = str2;
+        this.zzbWR = str3;
+        this.zzbWS = str4;
+        this.zzbWT = str5;
+        this.zzbWU = str6;
     }
 
     public static FirebaseOptions fromResource(Context context) {
@@ -85,11 +85,11 @@ public final class FirebaseOptions {
             return false;
         }
         FirebaseOptions firebaseOptions = (FirebaseOptions) obj;
-        return zzaa.equal(this.zzamX, firebaseOptions.zzamX) && zzaa.equal(this.zzbWN, firebaseOptions.zzbWN) && zzaa.equal(this.zzbWO, firebaseOptions.zzbWO) && zzaa.equal(this.zzbWP, firebaseOptions.zzbWP) && zzaa.equal(this.zzbWQ, firebaseOptions.zzbWQ) && zzaa.equal(this.zzbWR, firebaseOptions.zzbWR);
+        return zzaa.equal(this.zzamX, firebaseOptions.zzamX) && zzaa.equal(this.zzbWQ, firebaseOptions.zzbWQ) && zzaa.equal(this.zzbWR, firebaseOptions.zzbWR) && zzaa.equal(this.zzbWS, firebaseOptions.zzbWS) && zzaa.equal(this.zzbWT, firebaseOptions.zzbWT) && zzaa.equal(this.zzbWU, firebaseOptions.zzbWU);
     }
 
     public String getApiKey() {
-        return this.zzbWN;
+        return this.zzbWQ;
     }
 
     public String getApplicationId() {
@@ -97,22 +97,22 @@ public final class FirebaseOptions {
     }
 
     public String getDatabaseUrl() {
-        return this.zzbWO;
-    }
-
-    public String getGcmSenderId() {
-        return this.zzbWQ;
-    }
-
-    public String getStorageBucket() {
         return this.zzbWR;
     }
 
+    public String getGcmSenderId() {
+        return this.zzbWT;
+    }
+
+    public String getStorageBucket() {
+        return this.zzbWU;
+    }
+
     public int hashCode() {
-        return zzaa.hashCode(this.zzamX, this.zzbWN, this.zzbWO, this.zzbWP, this.zzbWQ, this.zzbWR);
+        return zzaa.hashCode(this.zzamX, this.zzbWQ, this.zzbWR, this.zzbWS, this.zzbWT, this.zzbWU);
     }
 
     public String toString() {
-        return zzaa.zzv(this).zzg("applicationId", this.zzamX).zzg("apiKey", this.zzbWN).zzg("databaseUrl", this.zzbWO).zzg("gcmSenderId", this.zzbWQ).zzg("storageBucket", this.zzbWR).toString();
+        return zzaa.zzv(this).zzg("applicationId", this.zzamX).zzg("apiKey", this.zzbWQ).zzg("databaseUrl", this.zzbWR).zzg("gcmSenderId", this.zzbWT).zzg("storageBucket", this.zzbWU).toString();
     }
 }

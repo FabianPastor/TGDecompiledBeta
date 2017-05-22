@@ -300,7 +300,7 @@ public class zzc {
             bundle.putString("osv", Integer.toString(VERSION.SDK_INT));
             bundle.putString("app_ver", Integer.toString(InstanceID.zzbw(this.zzqn)));
             bundle.putString("app_ver_name", InstanceID.zzbx(this.zzqn));
-            bundle.putString("cliv", "iid-10240000");
+            bundle.putString("cliv", "iid-10260000");
             bundle.putString("appid", InstanceID.zza(keyPair));
             bundle.putString("pub2", InstanceID.zzv(keyPair.getPublic().getEncoded()));
             bundle.putString("sig", zza(keyPair, this.zzqn.getPackageName(), r0));

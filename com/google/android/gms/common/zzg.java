@@ -31,7 +31,7 @@ public class zzg {
     @Deprecated
     public static final String GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms";
     @Deprecated
-    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = 10240000;
+    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = 10260000;
     public static final String GOOGLE_PLAY_STORE_PACKAGE = "com.android.vending";
     private static boolean zzayA = false;
     static final AtomicBoolean zzayB = new AtomicBoolean();
@@ -164,6 +164,28 @@ public class zzg {
         }
     }
 
+    @TargetApi(21)
+    static boolean zzA(Context context, String str) {
+        boolean equals = str.equals("com.google.android.gms");
+        if (zzt.zzzo()) {
+            for (SessionInfo appPackageName : context.getPackageManager().getPackageInstaller().getAllSessions()) {
+                if (str.equals(appPackageName.getAppPackageName())) {
+                    return true;
+                }
+            }
+        }
+        try {
+            ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(str, 8192);
+            if (equals) {
+                return applicationInfo.enabled;
+            }
+            boolean z = applicationInfo.enabled && !zzaK(context);
+            return z;
+        } catch (NameNotFoundException e) {
+            return false;
+        }
+    }
+
     @Deprecated
     public static int zzaC(Context context) {
         int i = 0;
@@ -268,12 +290,12 @@ public class zzg {
 
     @Deprecated
     public static boolean zzd(Context context, int i) {
-        return i == 18 ? true : i == 1 ? zzz(context, "com.google.android.gms") : false;
+        return i == 18 ? true : i == 1 ? zzA(context, "com.google.android.gms") : false;
     }
 
     @Deprecated
     public static boolean zze(Context context, int i) {
-        return i == 9 ? zzz(context, "com.android.vending") : false;
+        return i == 9 ? zzA(context, "com.android.vending") : false;
     }
 
     @Deprecated
@@ -284,27 +306,5 @@ public class zzg {
     @Deprecated
     public static boolean zzvd() {
         return zzj.zzzd();
-    }
-
-    @TargetApi(21)
-    static boolean zzz(Context context, String str) {
-        boolean equals = str.equals("com.google.android.gms");
-        if (zzt.zzzo()) {
-            for (SessionInfo appPackageName : context.getPackageManager().getPackageInstaller().getAllSessions()) {
-                if (str.equals(appPackageName.getAppPackageName())) {
-                    return true;
-                }
-            }
-        }
-        try {
-            ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(str, 8192);
-            if (equals) {
-                return applicationInfo.enabled;
-            }
-            boolean z = applicationInfo.enabled && !zzaK(context);
-            return z;
-        } catch (NameNotFoundException e) {
-            return false;
-        }
     }
 }

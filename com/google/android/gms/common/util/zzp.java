@@ -8,6 +8,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public final class zzp {
+    public static void closeQuietly(Closeable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+
     public static long zza(InputStream inputStream, OutputStream outputStream) throws IOException {
         return zza(inputStream, outputStream, false);
     }
@@ -29,8 +38,8 @@ public final class zzp {
                 outputStream.write(bArr, 0, read);
             } finally {
                 if (z) {
-                    zzb(inputStream);
-                    zzb(outputStream);
+                    closeQuietly(inputStream);
+                    closeQuietly(outputStream);
                 }
             }
         }
@@ -50,15 +59,6 @@ public final class zzp {
         OutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         zza(inputStream, byteArrayOutputStream, z);
         return byteArrayOutputStream.toByteArray();
-    }
-
-    public static void zzb(Closeable closeable) {
-        if (closeable != null) {
-            try {
-                closeable.close();
-            } catch (IOException e) {
-            }
-        }
     }
 
     public static byte[] zzj(InputStream inputStream) throws IOException {

@@ -24,24 +24,24 @@ public class zzu {
                 try {
                     StrictMode.setThreadPolicy(allowThreadDiskReads);
                     str = bufferedReader.readLine().trim();
-                    zzp.zzb(bufferedReader);
+                    zzp.closeQuietly(bufferedReader);
                 } catch (IOException e) {
-                    zzp.zzb(bufferedReader);
+                    zzp.closeQuietly(bufferedReader);
                     return str;
                 } catch (Throwable th2) {
                     th = th2;
-                    zzp.zzb(bufferedReader);
+                    zzp.closeQuietly(bufferedReader);
                     throw th;
                 }
             } catch (IOException e2) {
                 bufferedReader = str;
-                zzp.zzb(bufferedReader);
+                zzp.closeQuietly(bufferedReader);
                 return str;
             } catch (Throwable th3) {
                 Throwable th4 = th3;
                 bufferedReader = str;
                 th = th4;
-                zzp.zzb(bufferedReader);
+                zzp.closeQuietly(bufferedReader);
                 throw th;
             }
         }

@@ -127,7 +127,7 @@ public class AdvertisingIdClient {
         }
         AdvertisingIdClient advertisingIdClient = new AdvertisingIdClient(context, -1, z);
         try {
-            advertisingIdClient.zze(false);
+            advertisingIdClient.start(false);
             info = advertisingIdClient.getInfo();
             advertisingIdClient.zza(info, z, f, null);
             return info;
@@ -243,7 +243,7 @@ public class AdvertisingIdClient {
                     }
                 }
                 try {
-                    zze(false);
+                    start(false);
                     if (!this.zzsc) {
                         throw new IOException("AdvertisingIdClient cannot reconnect.");
                     }
@@ -256,14 +256,29 @@ public class AdvertisingIdClient {
             }
             zzac.zzw(this.zzsa);
             zzac.zzw(this.zzsb);
-            info = new Info(this.zzsb.getId(), this.zzsb.zzf(true));
+            info = new Info(this.zzsb.getId(), this.zzsb.zze(true));
         }
         zzbw();
         return info;
     }
 
     public void start() throws IOException, IllegalStateException, GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
-        zze(true);
+        start(true);
+    }
+
+    protected void start(boolean z) throws IOException, IllegalStateException, GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
+        zzac.zzdk("Calling this from your main thread can lead to deadlock");
+        synchronized (this) {
+            if (this.zzsc) {
+                finish();
+            }
+            this.zzsa = zzf(this.mContext);
+            this.zzsb = zza(this.mContext, this.zzsa);
+            this.zzsc = true;
+            if (z) {
+                zzbw();
+            }
+        }
     }
 
     Uri zza(Info info, boolean z, Throwable th) {
@@ -283,20 +298,5 @@ public class AdvertisingIdClient {
             buildUpon.appendQueryParameter(str, bundle.getString(str));
         }
         return buildUpon.build();
-    }
-
-    protected void zze(boolean z) throws IOException, IllegalStateException, GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
-        zzac.zzdk("Calling this from your main thread can lead to deadlock");
-        synchronized (this) {
-            if (this.zzsc) {
-                finish();
-            }
-            this.zzsa = zzf(this.mContext);
-            this.zzsb = zza(this.mContext, this.zzsa);
-            this.zzsc = true;
-            if (z) {
-                zzbw();
-            }
-        }
     }
 }

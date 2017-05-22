@@ -11,7 +11,7 @@ public class zzbkd extends zza {
     public final int top;
     public final int versionCode;
     public final int width;
-    public final float zzbPv;
+    public final float zzbPy;
 
     public zzbkd(int i, int i2, int i3, int i4, int i5, float f) {
         this.versionCode = i;
@@ -19,7 +19,7 @@ public class zzbkd extends zza {
         this.top = i3;
         this.width = i4;
         this.height = i5;
-        this.zzbPv = f;
+        this.zzbPy = f;
     }
 
     public void writeToParcel(Parcel parcel, int i) {

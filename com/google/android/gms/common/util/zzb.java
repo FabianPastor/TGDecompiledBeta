@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public final class zzb {
-    public static <T> int zza(T[] tArr, T t) {
+    public static <T> int indexOf(T[] tArr, T t) {
         int i = 0;
         int length = tArr != null ? tArr.length : 0;
         while (i < length) {
@@ -87,6 +87,10 @@ public final class zzb {
         }
     }
 
+    public static <T> boolean zza(T[] tArr, T t) {
+        return indexOf(tArr, t) >= 0;
+    }
+
     public static byte[] zza(byte[]... bArr) {
         if (bArr.length == 0) {
             return new byte[0];
@@ -124,10 +128,6 @@ public final class zzb {
             arrayList.add(add);
         }
         return arrayList;
-    }
-
-    public static <T> boolean zzb(T[] tArr, T t) {
-        return zza((Object[]) tArr, (Object) t) >= 0;
     }
 
     public static <T> ArrayList<T> zzyY() {

@@ -8,13 +8,13 @@ import com.google.android.gms.internal.zzaub;
 import com.google.android.gms.internal.zzaub.zza;
 
 public final class AppMeasurementReceiver extends WakefulBroadcastReceiver implements zza {
-    private zzaub zzbqj;
+    private zzaub zzbqi;
 
     private zzaub zzJS() {
-        if (this.zzbqj == null) {
-            this.zzbqj = new zzaub(this);
+        if (this.zzbqi == null) {
+            this.zzbqi = new zzaub(this);
         }
-        return this.zzbqj;
+        return this.zzbqi;
     }
 
     @MainThread

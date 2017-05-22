@@ -10,49 +10,55 @@ public class zzatd extends zza {
     public static final Creator<zzatd> CREATOR = new zzate();
     public final String packageName;
     public final String zzbhN;
+    public final String zzbqK;
     public final String zzbqL;
-    public final String zzbqM;
+    public final long zzbqM;
     public final long zzbqN;
-    public final long zzbqO;
-    public final String zzbqP;
+    public final String zzbqO;
+    public final boolean zzbqP;
     public final boolean zzbqQ;
-    public final boolean zzbqR;
-    public final long zzbqS;
-    public final String zzbqT;
+    public final long zzbqR;
+    public final String zzbqS;
+    public final long zzbqT;
     public final long zzbqU;
+    public final int zzbqV;
 
-    zzatd(String str, String str2, String str3, long j, String str4, long j2, long j3, String str5, boolean z, boolean z2, String str6, long j4) {
+    zzatd(String str, String str2, String str3, long j, String str4, long j2, long j3, String str5, boolean z, boolean z2, String str6, long j4, long j5, int i) {
         zzac.zzdr(str);
         this.packageName = str;
         if (TextUtils.isEmpty(str2)) {
             str2 = null;
         }
-        this.zzbqL = str2;
+        this.zzbqK = str2;
         this.zzbhN = str3;
-        this.zzbqS = j;
-        this.zzbqM = str4;
-        this.zzbqN = j2;
-        this.zzbqO = j3;
-        this.zzbqP = str5;
-        this.zzbqQ = z;
-        this.zzbqR = z2;
-        this.zzbqT = str6;
-        this.zzbqU = j4;
+        this.zzbqR = j;
+        this.zzbqL = str4;
+        this.zzbqM = j2;
+        this.zzbqN = j3;
+        this.zzbqO = str5;
+        this.zzbqP = z;
+        this.zzbqQ = z2;
+        this.zzbqS = str6;
+        this.zzbqT = j4;
+        this.zzbqU = j5;
+        this.zzbqV = i;
     }
 
-    zzatd(String str, String str2, String str3, String str4, long j, long j2, String str5, boolean z, boolean z2, long j3, String str6, long j4) {
+    zzatd(String str, String str2, String str3, String str4, long j, long j2, String str5, boolean z, boolean z2, long j3, String str6, long j4, long j5, int i) {
         this.packageName = str;
-        this.zzbqL = str2;
+        this.zzbqK = str2;
         this.zzbhN = str3;
-        this.zzbqS = j3;
-        this.zzbqM = str4;
-        this.zzbqN = j;
-        this.zzbqO = j2;
-        this.zzbqP = str5;
-        this.zzbqQ = z;
-        this.zzbqR = z2;
-        this.zzbqT = str6;
-        this.zzbqU = j4;
+        this.zzbqR = j3;
+        this.zzbqL = str4;
+        this.zzbqM = j;
+        this.zzbqN = j2;
+        this.zzbqO = str5;
+        this.zzbqP = z;
+        this.zzbqQ = z2;
+        this.zzbqS = str6;
+        this.zzbqT = j4;
+        this.zzbqU = j5;
+        this.zzbqV = i;
     }
 
     public void writeToParcel(Parcel parcel, int i) {

@@ -3,16 +3,16 @@ package com.google.firebase.iid;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.v4.util.ArrayMap;
 import java.io.IOException;
 import java.security.KeyPair;
-import java.util.HashMap;
 import java.util.Map;
 
 public class zzd {
-    static Map<String, zzd> zzbhH = new HashMap();
+    static Map<String, zzd> zzbhH = new ArrayMap();
     static String zzbhN;
-    private static zzh zzclt;
-    private static zzf zzclu;
+    private static zzh zzclv;
+    private static zzf zzclw;
     Context mContext;
     KeyPair zzbhK;
     String zzbhL = "";
@@ -28,9 +28,9 @@ public class zzd {
             String string = bundle == null ? "" : bundle.getString("subtype");
             String str = string == null ? "" : string;
             Context applicationContext = context.getApplicationContext();
-            if (zzclt == null) {
-                zzclt = new zzh(applicationContext);
-                zzclu = new zzf(applicationContext);
+            if (zzclv == null) {
+                zzclv = new zzh(applicationContext);
+                zzclw = new zzf(applicationContext);
             }
             zzbhN = Integer.toString(FirebaseInstanceId.zzcr(applicationContext));
             com_google_firebase_iid_zzd = (zzd) zzbhH.get(str);
@@ -43,7 +43,7 @@ public class zzd {
     }
 
     public long getCreationTime() {
-        return zzclt.zzjy(this.zzbhL);
+        return zzclv.zzjy(this.zzbhL);
     }
 
     public String getToken(String str, String str2, Bundle bundle) throws IOException {
@@ -57,47 +57,47 @@ public class zzd {
         if (bundle.getString("ttl") != null || "jwt".equals(bundle.getString("type"))) {
             obj = null;
         } else {
-            zza zzu = zzclt.zzu(this.zzbhL, str, str2);
+            zza zzu = zzclv.zzu(this.zzbhL, str, str2);
             if (!(zzu == null || zzu.zzjB(zzbhN))) {
-                return zzu.zzbxT;
+                return zzu.zzbxW;
             }
         }
         String zzc = zzc(str, str2, bundle);
         if (zzc == null || r0 == null) {
             return zzc;
         }
-        zzclt.zza(this.zzbhL, str, str2, zzc, zzbhN);
+        zzclv.zza(this.zzbhL, str, str2, zzc, zzbhN);
         return zzc;
     }
 
     KeyPair zzHh() {
         if (this.zzbhK == null) {
-            this.zzbhK = zzclt.zzeI(this.zzbhL);
+            this.zzbhK = zzclv.zzeI(this.zzbhL);
         }
         if (this.zzbhK == null) {
-            this.zzbhK = zzclt.zzjz(this.zzbhL);
+            this.zzbhK = zzclv.zzjz(this.zzbhL);
         }
         return this.zzbhK;
     }
 
     public void zzHi() {
-        zzclt.zzeJ(this.zzbhL);
+        zzclv.zzeJ(this.zzbhL);
         this.zzbhK = null;
     }
 
-    public zzh zzabQ() {
-        return zzclt;
+    public zzh zzabS() {
+        return zzclv;
     }
 
-    public zzf zzabR() {
-        return zzclu;
+    public zzf zzabT() {
+        return zzclw;
     }
 
     public void zzb(String str, String str2, Bundle bundle) throws IOException {
         if (Looper.getMainLooper() == Looper.myLooper()) {
             throw new IOException("MAIN_THREAD");
         }
-        zzclt.zzi(this.zzbhL, str, str2);
+        zzclv.zzi(this.zzbhL, str, str2);
         if (bundle == null) {
             bundle = new Bundle();
         }
@@ -115,6 +115,6 @@ public class zzd {
         }
         bundle.putString("subtype", str);
         bundle.putString("X-subtype", str);
-        return zzclu.zzq(zzclu.zza(bundle, zzHh()));
+        return zzclw.zzq(zzclw.zza(bundle, zzHh()));
     }
 }

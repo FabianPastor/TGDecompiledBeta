@@ -200,7 +200,7 @@ public class GoogleApiAvailability extends zze {
         BroadcastReceiver com_google_android_gms_internal_zzaaz = new zzaaz(com_google_android_gms_internal_zzaaz_zza);
         context.registerReceiver(com_google_android_gms_internal_zzaaz, intentFilter);
         com_google_android_gms_internal_zzaaz.setContext(context);
-        if (zzz(context, "com.google.android.gms")) {
+        if (zzA(context, "com.google.android.gms")) {
             return com_google_android_gms_internal_zzaaz;
         }
         com_google_android_gms_internal_zzaaz_zza.zzvE();
@@ -237,7 +237,7 @@ public class GoogleApiAvailability extends zze {
             CharSequence zzj = zzh.zzj(context, i);
             Resources resources = context.getResources();
             if (zzj.zzba(context)) {
-                zzac.zzaw(zzt.zzzm());
+                zzac.zzav(zzt.zzzm());
                 build = new Notification.Builder(context).setSmallIcon(context.getApplicationInfo().icon).setPriority(2).setAutoCancel(true).setContentTitle(zzh).setStyle(new BigTextStyle().bigText(zzj)).addAction(R.drawable.common_full_open_on_phone, resources.getString(R.string.common_open_on_phone), pendingIntent).build();
             } else {
                 build = new NotificationCompat.Builder(context).setSmallIcon(17301642).setTicker(resources.getString(R.string.common_google_play_services_notification_ticker)).setWhen(System.currentTimeMillis()).setAutoCancel(true).setContentIntent(pendingIntent).setContentTitle(zzh).setContentText(zzj).setLocalOnly(true).setStyle(new NotificationCompat.BigTextStyle().bigText(zzj)).build();

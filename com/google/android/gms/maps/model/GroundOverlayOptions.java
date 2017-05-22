@@ -11,115 +11,115 @@ import com.google.android.gms.dynamic.IObjectWrapper;
 public final class GroundOverlayOptions extends zza {
     public static final Creator<GroundOverlayOptions> CREATOR = new zzd();
     public static final float NO_DIMENSION = -1.0f;
-    private LatLngBounds zzbnp;
-    private float zzbpd;
-    private float zzbpi;
-    private boolean zzbpj = true;
-    private boolean zzbpk = false;
+    private LatLngBounds zzbno;
+    private float zzbpc;
+    private float zzbph;
+    private boolean zzbpi = true;
+    private boolean zzbpj = false;
     @NonNull
-    private BitmapDescriptor zzbpn;
-    private LatLng zzbpo;
+    private BitmapDescriptor zzbpm;
+    private LatLng zzbpn;
+    private float zzbpo;
     private float zzbpp;
-    private float zzbpq;
-    private float zzbpr = 0.0f;
+    private float zzbpq = 0.0f;
+    private float zzbpr = 0.5f;
     private float zzbps = 0.5f;
-    private float zzbpt = 0.5f;
 
     GroundOverlayOptions(IBinder iBinder, LatLng latLng, float f, float f2, LatLngBounds latLngBounds, float f3, float f4, boolean z, float f5, float f6, float f7, boolean z2) {
-        this.zzbpn = new BitmapDescriptor(IObjectWrapper.zza.zzcd(iBinder));
-        this.zzbpo = latLng;
-        this.zzbpp = f;
-        this.zzbpq = f2;
-        this.zzbnp = latLngBounds;
-        this.zzbpd = f3;
-        this.zzbpi = f4;
-        this.zzbpj = z;
-        this.zzbpr = f5;
-        this.zzbps = f6;
-        this.zzbpt = f7;
-        this.zzbpk = z2;
+        this.zzbpm = new BitmapDescriptor(IObjectWrapper.zza.zzcd(iBinder));
+        this.zzbpn = latLng;
+        this.zzbpo = f;
+        this.zzbpp = f2;
+        this.zzbno = latLngBounds;
+        this.zzbpc = f3;
+        this.zzbph = f4;
+        this.zzbpi = z;
+        this.zzbpq = f5;
+        this.zzbpr = f6;
+        this.zzbps = f7;
+        this.zzbpj = z2;
     }
 
     private GroundOverlayOptions zza(LatLng latLng, float f, float f2) {
-        this.zzbpo = latLng;
-        this.zzbpp = f;
-        this.zzbpq = f2;
+        this.zzbpn = latLng;
+        this.zzbpo = f;
+        this.zzbpp = f2;
         return this;
     }
 
     public GroundOverlayOptions anchor(float f, float f2) {
-        this.zzbps = f;
-        this.zzbpt = f2;
+        this.zzbpr = f;
+        this.zzbps = f2;
         return this;
     }
 
     public GroundOverlayOptions bearing(float f) {
-        this.zzbpd = ((f % 360.0f) + 360.0f) % 360.0f;
+        this.zzbpc = ((f % 360.0f) + 360.0f) % 360.0f;
         return this;
     }
 
     public GroundOverlayOptions clickable(boolean z) {
-        this.zzbpk = z;
+        this.zzbpj = z;
         return this;
     }
 
     public float getAnchorU() {
-        return this.zzbps;
-    }
-
-    public float getAnchorV() {
-        return this.zzbpt;
-    }
-
-    public float getBearing() {
-        return this.zzbpd;
-    }
-
-    public LatLngBounds getBounds() {
-        return this.zzbnp;
-    }
-
-    public float getHeight() {
-        return this.zzbpq;
-    }
-
-    public BitmapDescriptor getImage() {
-        return this.zzbpn;
-    }
-
-    public LatLng getLocation() {
-        return this.zzbpo;
-    }
-
-    public float getTransparency() {
         return this.zzbpr;
     }
 
-    public float getWidth() {
+    public float getAnchorV() {
+        return this.zzbps;
+    }
+
+    public float getBearing() {
+        return this.zzbpc;
+    }
+
+    public LatLngBounds getBounds() {
+        return this.zzbno;
+    }
+
+    public float getHeight() {
         return this.zzbpp;
     }
 
+    public BitmapDescriptor getImage() {
+        return this.zzbpm;
+    }
+
+    public LatLng getLocation() {
+        return this.zzbpn;
+    }
+
+    public float getTransparency() {
+        return this.zzbpq;
+    }
+
+    public float getWidth() {
+        return this.zzbpo;
+    }
+
     public float getZIndex() {
-        return this.zzbpi;
+        return this.zzbph;
     }
 
     public GroundOverlayOptions image(@NonNull BitmapDescriptor bitmapDescriptor) {
         zzac.zzb((Object) bitmapDescriptor, (Object) "imageDescriptor must not be null");
-        this.zzbpn = bitmapDescriptor;
+        this.zzbpm = bitmapDescriptor;
         return this;
     }
 
     public boolean isClickable() {
-        return this.zzbpk;
+        return this.zzbpj;
     }
 
     public boolean isVisible() {
-        return this.zzbpj;
+        return this.zzbpi;
     }
 
     public GroundOverlayOptions position(LatLng latLng, float f) {
         boolean z = true;
-        zzac.zza(this.zzbnp == null, (Object) "Position has already been set using positionFromBounds");
+        zzac.zza(this.zzbno == null, (Object) "Position has already been set using positionFromBounds");
         zzac.zzb(latLng != null, (Object) "Location must be specified");
         if (f < 0.0f) {
             z = false;
@@ -130,7 +130,7 @@ public final class GroundOverlayOptions extends zza {
 
     public GroundOverlayOptions position(LatLng latLng, float f, float f2) {
         boolean z = true;
-        zzac.zza(this.zzbnp == null, (Object) "Position has already been set using positionFromBounds");
+        zzac.zza(this.zzbno == null, (Object) "Position has already been set using positionFromBounds");
         zzac.zzb(latLng != null, (Object) "Location must be specified");
         zzac.zzb(f >= 0.0f, (Object) "Width must be non-negative");
         if (f2 < 0.0f) {
@@ -141,22 +141,22 @@ public final class GroundOverlayOptions extends zza {
     }
 
     public GroundOverlayOptions positionFromBounds(LatLngBounds latLngBounds) {
-        boolean z = this.zzbpo == null;
-        String valueOf = String.valueOf(this.zzbpo);
+        boolean z = this.zzbpn == null;
+        String valueOf = String.valueOf(this.zzbpn);
         zzac.zza(z, new StringBuilder(String.valueOf(valueOf).length() + 46).append("Position has already been set using position: ").append(valueOf).toString());
-        this.zzbnp = latLngBounds;
+        this.zzbno = latLngBounds;
         return this;
     }
 
     public GroundOverlayOptions transparency(float f) {
         boolean z = f >= 0.0f && f <= 1.0f;
         zzac.zzb(z, (Object) "Transparency must be in the range [0..1]");
-        this.zzbpr = f;
+        this.zzbpq = f;
         return this;
     }
 
     public GroundOverlayOptions visible(boolean z) {
-        this.zzbpj = z;
+        this.zzbpi = z;
         return this;
     }
 
@@ -165,11 +165,11 @@ public final class GroundOverlayOptions extends zza {
     }
 
     public GroundOverlayOptions zIndex(float f) {
-        this.zzbpi = f;
+        this.zzbph = f;
         return this;
     }
 
     IBinder zzJK() {
-        return this.zzbpn.zzJm().asBinder();
+        return this.zzbpm.zzJm().asBinder();
     }
 }

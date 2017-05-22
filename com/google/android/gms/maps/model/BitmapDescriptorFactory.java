@@ -16,7 +16,7 @@ public final class BitmapDescriptorFactory {
     public static final float HUE_ROSE = 330.0f;
     public static final float HUE_VIOLET = 270.0f;
     public static final float HUE_YELLOW = 60.0f;
-    private static zza zzboZ;
+    private static zza zzboY;
 
     private BitmapDescriptorFactory() {
     }
@@ -78,12 +78,12 @@ public final class BitmapDescriptorFactory {
     }
 
     private static zza zzJG() {
-        return (zza) zzac.zzb(zzboZ, (Object) "IBitmapDescriptorFactory is not initialized");
+        return (zza) zzac.zzb(zzboY, (Object) "IBitmapDescriptorFactory is not initialized");
     }
 
     public static void zza(zza com_google_android_gms_maps_model_internal_zza) {
-        if (zzboZ == null) {
-            zzboZ = (zza) zzac.zzw(com_google_android_gms_maps_model_internal_zza);
+        if (zzboY == null) {
+            zzboY = (zza) zzac.zzw(com_google_android_gms_maps_model_internal_zza);
         }
     }
 }

@@ -17,7 +17,7 @@ public final class zzh {
     private static final SimpleArrayMap<String, String> zzaFE = new SimpleArrayMap();
 
     @Nullable
-    private static String zzB(Context context, String str) {
+    private static String zzC(Context context, String str) {
         synchronized (zzaFE) {
             String str2 = (String) zzaFE.get(str);
             if (str2 != null) {
@@ -76,10 +76,10 @@ public final class zzh {
                 return null;
             case 5:
                 Log.e("GoogleApiAvailability", "An invalid account was specified when connecting. Please provide a valid account.");
-                return zzB(context, "common_google_play_services_invalid_account_title");
+                return zzC(context, "common_google_play_services_invalid_account_title");
             case 7:
                 Log.e("GoogleApiAvailability", "Network error occurred. Please retry request later.");
-                return zzB(context, "common_google_play_services_network_error_title");
+                return zzC(context, "common_google_play_services_network_error_title");
             case 8:
                 Log.e("GoogleApiAvailability", "Internal error occurred. Please see logs for detailed information");
                 return null;
@@ -97,10 +97,10 @@ public final class zzh {
                 return null;
             case 17:
                 Log.e("GoogleApiAvailability", "The specified account could not be signed in.");
-                return zzB(context, "common_google_play_services_sign_in_failed_title");
+                return zzC(context, "common_google_play_services_sign_in_failed_title");
             case 20:
                 Log.e("GoogleApiAvailability", "The current user profile is restricted and could not use authenticated features.");
-                return zzB(context, "common_google_play_services_restricted_profile_title");
+                return zzC(context, "common_google_play_services_restricted_profile_title");
             default:
                 Log.e("GoogleApiAvailability", "Unexpected error code " + i);
                 return null;
@@ -109,8 +109,8 @@ public final class zzh {
 
     @NonNull
     public static String zzh(Context context, int i) {
-        String zzB = i == 6 ? zzB(context, "common_google_play_services_resolution_required_title") : zzg(context, i);
-        return zzB == null ? context.getResources().getString(R.string.common_google_play_services_notification_ticker) : zzB;
+        String zzC = i == 6 ? zzC(context, "common_google_play_services_resolution_required_title") : zzg(context, i);
+        return zzC == null ? context.getResources().getString(R.string.common_google_play_services_notification_ticker) : zzC;
     }
 
     @NonNull
@@ -168,10 +168,10 @@ public final class zzh {
 
     private static String zzo(Context context, String str, String str2) {
         Resources resources = context.getResources();
-        String zzB = zzB(context, str);
-        if (zzB == null) {
-            zzB = resources.getString(R.string.common_google_play_services_unknown_issue);
+        String zzC = zzC(context, str);
+        if (zzC == null) {
+            zzC = resources.getString(R.string.common_google_play_services_unknown_issue);
         }
-        return String.format(resources.getConfiguration().locale, zzB, new Object[]{str2});
+        return String.format(resources.getConfiguration().locale, zzC, new Object[]{str2});
     }
 }

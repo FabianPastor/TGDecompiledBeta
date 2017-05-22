@@ -9,13 +9,13 @@ import java.util.List;
 public class zzban extends zza {
     public static final Creator<zzban> CREATOR = new zzbao();
     final int zzaiI;
-    final boolean zzbEp;
-    final List<Scope> zzbEq;
+    final boolean zzbEs;
+    final List<Scope> zzbEt;
 
     zzban(int i, boolean z, List<Scope> list) {
         this.zzaiI = i;
-        this.zzbEp = z;
-        this.zzbEq = list;
+        this.zzbEs = z;
+        this.zzbEt = list;
     }
 
     public void writeToParcel(Parcel parcel, int i) {

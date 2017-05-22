@@ -9,9 +9,9 @@ import com.google.android.gms.common.internal.safeparcel.zzc;
 public class zzayy implements Creator<zzayx> {
     static void zza(zzayx com_google_android_gms_internal_zzayx, Parcel parcel, int i) {
         int zzaZ = zzc.zzaZ(parcel);
-        zzc.zzc(parcel, 2, com_google_android_gms_internal_zzayx.zzbBy);
-        zzc.zza(parcel, 3, com_google_android_gms_internal_zzayx.zzbBz, i, false);
-        zzc.zza(parcel, 4, com_google_android_gms_internal_zzayx.zzbBA, false);
+        zzc.zzc(parcel, 2, com_google_android_gms_internal_zzayx.zzbBB);
+        zzc.zza(parcel, 3, com_google_android_gms_internal_zzayx.zzbBC, i, false);
+        zzc.zza(parcel, 4, com_google_android_gms_internal_zzayx.zzbBD, false);
         zzc.zzJ(parcel, zzaZ);
     }
 

@@ -24,7 +24,7 @@ public final class zzabh<L> {
             if (message.what != 1) {
                 z = false;
             }
-            zzac.zzax(z);
+            zzac.zzaw(z);
             this.zzaCZ.zzb((zzc) message.obj);
         }
     }
@@ -89,7 +89,7 @@ public final class zzabh<L> {
         }
     }
 
-    public boolean zztK() {
+    public boolean zztJ() {
         return this.mListener != null;
     }
 

@@ -13,66 +13,66 @@ public final class PolygonOptions extends zza {
     private int mFillColor;
     private int mStrokeColor;
     private float mStrokeWidth;
-    private final List<LatLng> zzbpL;
-    private final List<List<LatLng>> zzbpM;
-    private boolean zzbpN;
-    private int zzbpO;
-    private float zzbpi;
+    private final List<LatLng> zzbpK;
+    private final List<List<LatLng>> zzbpL;
+    private boolean zzbpM;
+    private int zzbpN;
+    private float zzbph;
+    private boolean zzbpi;
     private boolean zzbpj;
-    private boolean zzbpk;
     @Nullable
-    private List<PatternItem> zzbpl;
+    private List<PatternItem> zzbpk;
 
     public PolygonOptions() {
         this.mStrokeWidth = 10.0f;
         this.mStrokeColor = -16777216;
         this.mFillColor = 0;
-        this.zzbpi = 0.0f;
-        this.zzbpj = true;
-        this.zzbpN = false;
-        this.zzbpk = false;
-        this.zzbpO = 0;
-        this.zzbpl = null;
+        this.zzbph = 0.0f;
+        this.zzbpi = true;
+        this.zzbpM = false;
+        this.zzbpj = false;
+        this.zzbpN = 0;
+        this.zzbpk = null;
+        this.zzbpK = new ArrayList();
         this.zzbpL = new ArrayList();
-        this.zzbpM = new ArrayList();
     }
 
     PolygonOptions(List<LatLng> list, List list2, float f, int i, int i2, float f2, boolean z, boolean z2, boolean z3, int i3, @Nullable List<PatternItem> list3) {
         this.mStrokeWidth = 10.0f;
         this.mStrokeColor = -16777216;
         this.mFillColor = 0;
-        this.zzbpi = 0.0f;
-        this.zzbpj = true;
-        this.zzbpN = false;
-        this.zzbpk = false;
-        this.zzbpO = 0;
-        this.zzbpl = null;
-        this.zzbpL = list;
-        this.zzbpM = list2;
+        this.zzbph = 0.0f;
+        this.zzbpi = true;
+        this.zzbpM = false;
+        this.zzbpj = false;
+        this.zzbpN = 0;
+        this.zzbpk = null;
+        this.zzbpK = list;
+        this.zzbpL = list2;
         this.mStrokeWidth = f;
         this.mStrokeColor = i;
         this.mFillColor = i2;
-        this.zzbpi = f2;
-        this.zzbpj = z;
-        this.zzbpN = z2;
-        this.zzbpk = z3;
-        this.zzbpO = i3;
-        this.zzbpl = list3;
+        this.zzbph = f2;
+        this.zzbpi = z;
+        this.zzbpM = z2;
+        this.zzbpj = z3;
+        this.zzbpN = i3;
+        this.zzbpk = list3;
     }
 
     public PolygonOptions add(LatLng latLng) {
-        this.zzbpL.add(latLng);
+        this.zzbpK.add(latLng);
         return this;
     }
 
     public PolygonOptions add(LatLng... latLngArr) {
-        this.zzbpL.addAll(Arrays.asList(latLngArr));
+        this.zzbpK.addAll(Arrays.asList(latLngArr));
         return this;
     }
 
     public PolygonOptions addAll(Iterable<LatLng> iterable) {
         for (LatLng add : iterable) {
-            this.zzbpL.add(add);
+            this.zzbpK.add(add);
         }
         return this;
     }
@@ -82,12 +82,12 @@ public final class PolygonOptions extends zza {
         for (LatLng add : iterable) {
             arrayList.add(add);
         }
-        this.zzbpM.add(arrayList);
+        this.zzbpL.add(arrayList);
         return this;
     }
 
     public PolygonOptions clickable(boolean z) {
-        this.zzbpk = z;
+        this.zzbpj = z;
         return this;
     }
 
@@ -97,7 +97,7 @@ public final class PolygonOptions extends zza {
     }
 
     public PolygonOptions geodesic(boolean z) {
-        this.zzbpN = z;
+        this.zzbpM = z;
         return this;
     }
 
@@ -106,11 +106,11 @@ public final class PolygonOptions extends zza {
     }
 
     public List<List<LatLng>> getHoles() {
-        return this.zzbpM;
+        return this.zzbpL;
     }
 
     public List<LatLng> getPoints() {
-        return this.zzbpL;
+        return this.zzbpK;
     }
 
     public int getStrokeColor() {
@@ -118,12 +118,12 @@ public final class PolygonOptions extends zza {
     }
 
     public int getStrokeJointType() {
-        return this.zzbpO;
+        return this.zzbpN;
     }
 
     @Nullable
     public List<PatternItem> getStrokePattern() {
-        return this.zzbpl;
+        return this.zzbpk;
     }
 
     public float getStrokeWidth() {
@@ -131,19 +131,19 @@ public final class PolygonOptions extends zza {
     }
 
     public float getZIndex() {
-        return this.zzbpi;
+        return this.zzbph;
     }
 
     public boolean isClickable() {
-        return this.zzbpk;
+        return this.zzbpj;
     }
 
     public boolean isGeodesic() {
-        return this.zzbpN;
+        return this.zzbpM;
     }
 
     public boolean isVisible() {
-        return this.zzbpj;
+        return this.zzbpi;
     }
 
     public PolygonOptions strokeColor(int i) {
@@ -152,12 +152,12 @@ public final class PolygonOptions extends zza {
     }
 
     public PolygonOptions strokeJointType(int i) {
-        this.zzbpO = i;
+        this.zzbpN = i;
         return this;
     }
 
     public PolygonOptions strokePattern(@Nullable List<PatternItem> list) {
-        this.zzbpl = list;
+        this.zzbpk = list;
         return this;
     }
 
@@ -167,7 +167,7 @@ public final class PolygonOptions extends zza {
     }
 
     public PolygonOptions visible(boolean z) {
-        this.zzbpj = z;
+        this.zzbpi = z;
         return this;
     }
 
@@ -176,11 +176,11 @@ public final class PolygonOptions extends zza {
     }
 
     public PolygonOptions zIndex(float f) {
-        this.zzbpi = f;
+        this.zzbph = f;
         return this;
     }
 
     List zzJP() {
-        return this.zzbpM;
+        return this.zzbpL;
     }
 }

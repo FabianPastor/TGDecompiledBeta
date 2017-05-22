@@ -37,13 +37,13 @@ public final class zzac {
         }
     }
 
-    public static void zzaw(boolean z) {
+    public static void zzav(boolean z) {
         if (!z) {
             throw new IllegalStateException();
         }
     }
 
-    public static void zzax(boolean z) {
+    public static void zzaw(boolean z) {
         if (!z) {
             throw new IllegalArgumentException();
         }

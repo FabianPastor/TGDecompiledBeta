@@ -23,7 +23,7 @@ public interface zzbkf extends IInterface {
                 return this.zzrk;
             }
 
-            public void zzTW() throws RemoteException {
+            public void zzTY() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -106,7 +106,7 @@ public interface zzbkf extends IInterface {
                     return true;
                 case 2:
                     parcel.enforceInterface("com.google.android.gms.vision.text.internal.client.INativeTextRecognizer");
-                    zzTW();
+                    zzTY();
                     parcel2.writeNoException();
                     return true;
                 case 3:
@@ -124,7 +124,7 @@ public interface zzbkf extends IInterface {
         }
     }
 
-    void zzTW() throws RemoteException;
+    void zzTY() throws RemoteException;
 
     zzbkh[] zza(IObjectWrapper iObjectWrapper, zzbka com_google_android_gms_internal_zzbka, zzbkj com_google_android_gms_internal_zzbkj) throws RemoteException;
 

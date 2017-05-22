@@ -13,11 +13,11 @@ import java.io.IOException;
 import java.util.Map;
 
 public class zzauc extends zzauh {
-    private final Map<String, Map<String, String>> zzbtD = new ArrayMap();
-    private final Map<String, Map<String, Boolean>> zzbtE = new ArrayMap();
-    private final Map<String, Map<String, Boolean>> zzbtF = new ArrayMap();
-    private final Map<String, zzb> zzbtG = new ArrayMap();
-    private final Map<String, String> zzbtH = new ArrayMap();
+    private final Map<String, Map<String, String>> zzbtF = new ArrayMap();
+    private final Map<String, Map<String, Boolean>> zzbtG = new ArrayMap();
+    private final Map<String, Map<String, Boolean>> zzbtH = new ArrayMap();
+    private final Map<String, zzb> zzbtI = new ArrayMap();
+    private final Map<String, String> zzbtJ = new ArrayMap();
 
     zzauc(zzaue com_google_android_gms_internal_zzaue) {
         super(com_google_android_gms_internal_zzaue);
@@ -25,8 +25,8 @@ public class zzauc extends zzauh {
 
     private Map<String, String> zza(zzb com_google_android_gms_internal_zzauv_zzb) {
         Map<String, String> arrayMap = new ArrayMap();
-        if (!(com_google_android_gms_internal_zzauv_zzb == null || com_google_android_gms_internal_zzauv_zzb.zzbwP == null)) {
-            for (zzc com_google_android_gms_internal_zzauv_zzc : com_google_android_gms_internal_zzauv_zzb.zzbwP) {
+        if (!(com_google_android_gms_internal_zzauv_zzb == null || com_google_android_gms_internal_zzauv_zzb.zzbwS == null)) {
+            for (zzc com_google_android_gms_internal_zzauv_zzc : com_google_android_gms_internal_zzauv_zzb.zzbwS) {
                 if (com_google_android_gms_internal_zzauv_zzc != null) {
                     arrayMap.put(com_google_android_gms_internal_zzauv_zzc.zzaB, com_google_android_gms_internal_zzauv_zzc.value);
                 }
@@ -38,20 +38,20 @@ public class zzauc extends zzauh {
     private void zza(String str, zzb com_google_android_gms_internal_zzauv_zzb) {
         Map arrayMap = new ArrayMap();
         Map arrayMap2 = new ArrayMap();
-        if (!(com_google_android_gms_internal_zzauv_zzb == null || com_google_android_gms_internal_zzauv_zzb.zzbwQ == null)) {
-            for (zza com_google_android_gms_internal_zzauv_zza : com_google_android_gms_internal_zzauv_zzb.zzbwQ) {
+        if (!(com_google_android_gms_internal_zzauv_zzb == null || com_google_android_gms_internal_zzauv_zzb.zzbwT == null)) {
+            for (zza com_google_android_gms_internal_zzauv_zza : com_google_android_gms_internal_zzauv_zzb.zzbwT) {
                 if (com_google_android_gms_internal_zzauv_zza != null) {
-                    String str2 = (String) AppMeasurement.zza.zzbqd.get(com_google_android_gms_internal_zzauv_zza.name);
+                    String str2 = (String) AppMeasurement.zza.zzbqc.get(com_google_android_gms_internal_zzauv_zza.name);
                     if (str2 != null) {
                         com_google_android_gms_internal_zzauv_zza.name = str2;
                     }
-                    arrayMap.put(com_google_android_gms_internal_zzauv_zza.name, com_google_android_gms_internal_zzauv_zza.zzbwL);
-                    arrayMap2.put(com_google_android_gms_internal_zzauv_zza.name, com_google_android_gms_internal_zzauv_zza.zzbwM);
+                    arrayMap.put(com_google_android_gms_internal_zzauv_zza.name, com_google_android_gms_internal_zzauv_zza.zzbwO);
+                    arrayMap2.put(com_google_android_gms_internal_zzauv_zza.name, com_google_android_gms_internal_zzauv_zza.zzbwP);
                 }
             }
         }
-        this.zzbtE.put(str, arrayMap);
-        this.zzbtF.put(str, arrayMap2);
+        this.zzbtG.put(str, arrayMap);
+        this.zzbtH.put(str, arrayMap2);
     }
 
     @WorkerThread
@@ -59,14 +59,14 @@ public class zzauc extends zzauh {
         if (bArr == null) {
             return new zzb();
         }
-        zzbxl zzaf = zzbxl.zzaf(bArr);
+        zzbyb zzag = zzbyb.zzag(bArr);
         zzb com_google_android_gms_internal_zzauv_zzb = new zzb();
         try {
-            com_google_android_gms_internal_zzauv_zzb.zzb(zzaf);
-            zzKl().zzMe().zze("Parsed config. version, gmp_app_id", com_google_android_gms_internal_zzauv_zzb.zzbwN, com_google_android_gms_internal_zzauv_zzb.zzbqL);
+            com_google_android_gms_internal_zzauv_zzb.zzb(zzag);
+            zzKl().zzMf().zze("Parsed config. version, gmp_app_id", com_google_android_gms_internal_zzauv_zzb.zzbwQ, com_google_android_gms_internal_zzauv_zzb.zzbqK);
             return com_google_android_gms_internal_zzauv_zzb;
         } catch (IOException e) {
-            zzKl().zzMa().zze("Unable to merge remote config. appId", zzatx.zzfE(str), e);
+            zzKl().zzMb().zze("Unable to merge remote config. appId", zzatx.zzfE(str), e);
             return null;
         }
     }
@@ -76,21 +76,21 @@ public class zzauc extends zzauh {
         zzob();
         zzmR();
         zzac.zzdr(str);
-        if (this.zzbtG.get(str) == null) {
+        if (this.zzbtI.get(str) == null) {
             byte[] zzfw = zzKg().zzfw(str);
             if (zzfw == null) {
-                this.zzbtD.put(str, null);
-                this.zzbtE.put(str, null);
                 this.zzbtF.put(str, null);
                 this.zzbtG.put(str, null);
                 this.zzbtH.put(str, null);
+                this.zzbtI.put(str, null);
+                this.zzbtJ.put(str, null);
                 return;
             }
             zzb zze = zze(str, zzfw);
-            this.zzbtD.put(str, zza(zze));
+            this.zzbtF.put(str, zza(zze));
             zza(str, zze);
-            this.zzbtG.put(str, zze);
-            this.zzbtH.put(str, null);
+            this.zzbtI.put(str, zze);
+            this.zzbtJ.put(str, null);
         }
     }
 
@@ -178,7 +178,7 @@ public class zzauc extends zzauh {
     String zzZ(String str, String str2) {
         zzmR();
         zzfK(str);
-        Map map = (Map) this.zzbtD.get(str);
+        Map map = (Map) this.zzbtF.get(str);
         return map != null ? (String) map.get(str2) : null;
     }
 
@@ -192,7 +192,7 @@ public class zzauc extends zzauh {
         if (zzKh().zzgh(str) && zzaut.zzfT(str2)) {
             return true;
         }
-        Map map = (Map) this.zzbtE.get(str);
+        Map map = (Map) this.zzbtG.get(str);
         if (map == null) {
             return false;
         }
@@ -204,7 +204,7 @@ public class zzauc extends zzauh {
     boolean zzab(String str, String str2) {
         zzmR();
         zzfK(str);
-        Map map = (Map) this.zzbtF.get(str);
+        Map map = (Map) this.zzbtH.get(str);
         if (map == null) {
             return false;
         }
@@ -222,17 +222,17 @@ public class zzauc extends zzauh {
             return false;
         }
         zza(str, zze);
-        this.zzbtG.put(str, zze);
-        this.zzbtH.put(str, str2);
-        this.zzbtD.put(str, zza(zze));
-        zzJZ().zza(str, zze.zzbwR);
+        this.zzbtI.put(str, zze);
+        this.zzbtJ.put(str, str2);
+        this.zzbtF.put(str, zza(zze));
+        zzJZ().zza(str, zze.zzbwU);
         try {
-            zze.zzbwR = null;
-            byte[] bArr2 = new byte[zze.zzaeT()];
-            zze.zza(zzbxm.zzag(bArr2));
+            zze.zzbwU = null;
+            byte[] bArr2 = new byte[zze.zzafB()];
+            zze.zza(zzbyc.zzah(bArr2));
             bArr = bArr2;
         } catch (IOException e) {
-            zzKl().zzMa().zze("Unable to serialize reduced-size config. Storing full config instead. appId", zzatx.zzfE(str), e);
+            zzKl().zzMb().zze("Unable to serialize reduced-size config. Storing full config instead. appId", zzatx.zzfE(str), e);
         }
         zzKg().zzd(str, bArr);
         return true;
@@ -244,19 +244,19 @@ public class zzauc extends zzauh {
         zzmR();
         zzac.zzdr(str);
         zzfK(str);
-        return (zzb) this.zzbtG.get(str);
+        return (zzb) this.zzbtI.get(str);
     }
 
     @WorkerThread
     protected String zzfM(String str) {
         zzmR();
-        return (String) this.zzbtH.get(str);
+        return (String) this.zzbtJ.get(str);
     }
 
     @WorkerThread
     protected void zzfN(String str) {
         zzmR();
-        this.zzbtH.put(str, null);
+        this.zzbtJ.put(str, null);
     }
 
     public /* bridge */ /* synthetic */ void zzmR() {

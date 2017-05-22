@@ -9,96 +9,130 @@ import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Process;
-import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
-import android.util.Pair;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public abstract class zzb extends Service {
     @VisibleForTesting
-    final ExecutorService zzbtI = Executors.newSingleThreadExecutor();
-    private Binder zzckU;
-    private int zzckV;
-    private int zzckW = 0;
+    final ExecutorService zzbtK = Executors.newSingleThreadExecutor();
+    private Binder zzckT;
+    private int zzckU;
+    private int zzckV = 0;
     private final Object zzrJ = new Object();
 
-    public static class zza extends Binder {
-        private final zzb zzckZ;
+    static class zza {
+        final Intent intent;
+        private final PendingResult zzckY;
+        private boolean zzckZ = false;
+        private final ScheduledFuture<?> zzcla;
 
-        zza(zzb com_google_firebase_iid_zzb) {
-            this.zzckZ = com_google_firebase_iid_zzb;
+        zza(final Intent intent, PendingResult pendingResult, ScheduledExecutorService scheduledExecutorService) {
+            this.intent = intent;
+            this.zzckY = pendingResult;
+            this.zzcla = scheduledExecutorService.schedule(new Runnable(this) {
+                final /* synthetic */ zza zzclb;
+
+                public void run() {
+                    String valueOf = String.valueOf(intent.getAction());
+                    Log.w("EnhancedIntentService", new StringBuilder(String.valueOf(valueOf).length() + 61).append("Service took too long to process intent: ").append(valueOf).append(" App may get closed.").toString());
+                    this.zzclb.finish();
+                }
+            }, 9500, TimeUnit.MILLISECONDS);
         }
 
-        private static void zza(@Nullable PendingResult pendingResult) {
-            if (pendingResult != null) {
-                pendingResult.finish();
+        synchronized void finish() {
+            if (!this.zzckZ) {
+                this.zzckY.finish();
+                this.zzcla.cancel(false);
+                this.zzckZ = true;
             }
         }
+    }
 
-        public void zza(final Intent intent, @Nullable final PendingResult pendingResult) {
+    public static class zzb extends Binder {
+        private final zzb zzclc;
+
+        zzb(zzb com_google_firebase_iid_zzb) {
+            this.zzclc = com_google_firebase_iid_zzb;
+        }
+
+        public void zza(final zza com_google_firebase_iid_zzb_zza) {
             if (Binder.getCallingUid() != Process.myUid()) {
                 throw new SecurityException("Binding only allowed within app");
             }
             if (Log.isLoggable("EnhancedIntentService", 3)) {
                 Log.d("EnhancedIntentService", "service received new intent via bind strategy");
             }
-            if (this.zzckZ.zzE(intent)) {
-                zza(pendingResult);
+            if (this.zzclc.zzE(com_google_firebase_iid_zzb_zza.intent)) {
+                com_google_firebase_iid_zzb_zza.finish();
                 return;
             }
             if (Log.isLoggable("EnhancedIntentService", 3)) {
                 Log.d("EnhancedIntentService", "intent being queued for bg execution");
             }
-            this.zzckZ.zzbtI.execute(new Runnable(this) {
-                final /* synthetic */ zza zzclb;
+            this.zzclc.zzbtK.execute(new Runnable(this) {
+                final /* synthetic */ zzb zzcle;
 
                 public void run() {
                     if (Log.isLoggable("EnhancedIntentService", 3)) {
                         Log.d("EnhancedIntentService", "bg processing of the intent starting now");
                     }
-                    this.zzclb.zzckZ.handleIntent(intent);
-                    zza.zza(pendingResult);
+                    this.zzcle.zzclc.handleIntent(com_google_firebase_iid_zzb_zza.intent);
+                    com_google_firebase_iid_zzb_zza.finish();
                 }
             });
         }
     }
 
-    public static class zzb implements ServiceConnection {
-        private final Intent zzclc;
-        private final Queue<Pair<Intent, PendingResult>> zzcld = new LinkedList();
-        private zza zzcle;
-        private boolean zzclf = false;
+    public static class zzc implements ServiceConnection {
+        private final Intent zzclf;
+        private final ScheduledExecutorService zzclg;
+        private final Queue<zza> zzclh;
+        private zzb zzcli;
+        private boolean zzclj;
         private final Context zzqn;
 
-        public zzb(Context context, String str) {
+        public zzc(Context context, String str) {
+            this(context, str, new ScheduledThreadPoolExecutor(0));
+        }
+
+        @VisibleForTesting
+        zzc(Context context, String str, ScheduledExecutorService scheduledExecutorService) {
+            this.zzclh = new LinkedList();
+            this.zzclj = false;
             this.zzqn = context.getApplicationContext();
-            this.zzclc = new Intent(str).setPackage(this.zzqn.getPackageName());
+            this.zzclf = new Intent(str).setPackage(this.zzqn.getPackageName());
+            this.zzclg = scheduledExecutorService;
         }
 
         private synchronized void zzwH() {
             if (Log.isLoggable("EnhancedIntentService", 3)) {
                 Log.d("EnhancedIntentService", "flush queue called");
             }
-            while (!this.zzcld.isEmpty()) {
+            while (!this.zzclh.isEmpty()) {
                 if (Log.isLoggable("EnhancedIntentService", 3)) {
                     Log.d("EnhancedIntentService", "found intent to be delivered");
                 }
-                if (this.zzcle == null || !this.zzcle.isBinderAlive()) {
+                if (this.zzcli == null || !this.zzcli.isBinderAlive()) {
                     if (Log.isLoggable("EnhancedIntentService", 3)) {
-                        Log.d("EnhancedIntentService", "binder is dead. start connection? " + (!this.zzclf));
+                        Log.d("EnhancedIntentService", "binder is dead. start connection? " + (!this.zzclj));
                     }
-                    if (!this.zzclf) {
-                        this.zzclf = true;
+                    if (!this.zzclj) {
+                        this.zzclj = true;
                         try {
-                            if (!com.google.android.gms.common.stats.zza.zzyJ().zza(this.zzqn, this.zzclc, (ServiceConnection) this, 65)) {
+                            if (!com.google.android.gms.common.stats.zza.zzyJ().zza(this.zzqn, this.zzclf, (ServiceConnection) this, 65)) {
                                 Log.e("EnhancedIntentService", "binding to the service failed");
-                                while (!this.zzcld.isEmpty()) {
-                                    ((PendingResult) ((Pair) this.zzcld.poll()).second).finish();
+                                while (!this.zzclh.isEmpty()) {
+                                    ((zza) this.zzclh.poll()).finish();
                                 }
                             }
                         } catch (Throwable e) {
@@ -109,16 +143,15 @@ public abstract class zzb extends Service {
                     if (Log.isLoggable("EnhancedIntentService", 3)) {
                         Log.d("EnhancedIntentService", "binder is alive, sending the intent.");
                     }
-                    Pair pair = (Pair) this.zzcld.poll();
-                    this.zzcle.zza((Intent) pair.first, (PendingResult) pair.second);
+                    this.zzcli.zza((zza) this.zzclh.poll());
                 }
             }
         }
 
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             synchronized (this) {
-                this.zzclf = false;
-                this.zzcle = (zza) iBinder;
+                this.zzclj = false;
+                this.zzcli = (zzb) iBinder;
                 if (Log.isLoggable("EnhancedIntentService", 3)) {
                     String valueOf = String.valueOf(componentName);
                     Log.d("EnhancedIntentService", new StringBuilder(String.valueOf(valueOf).length() + 20).append("onServiceConnected: ").append(valueOf).toString());
@@ -135,11 +168,11 @@ public abstract class zzb extends Service {
             zzwH();
         }
 
-        public synchronized void zzb(Intent intent, PendingResult pendingResult) {
+        public synchronized void zza(Intent intent, PendingResult pendingResult) {
             if (Log.isLoggable("EnhancedIntentService", 3)) {
                 Log.d("EnhancedIntentService", "new intent queued in the bind-strategy delivery");
             }
-            this.zzcld.add(new Pair(intent, pendingResult));
+            this.zzclh.add(new zza(intent, pendingResult, this.zzclg));
             zzwH();
         }
     }
@@ -149,9 +182,9 @@ public abstract class zzb extends Service {
             WakefulBroadcastReceiver.completeWakefulIntent(intent);
         }
         synchronized (this.zzrJ) {
-            this.zzckW--;
-            if (this.zzckW == 0) {
-                zzqE(this.zzckV);
+            this.zzckV--;
+            if (this.zzckV == 0) {
+                zzqE(this.zzckU);
             }
         }
     }
@@ -162,16 +195,16 @@ public abstract class zzb extends Service {
         if (Log.isLoggable("EnhancedIntentService", 3)) {
             Log.d("EnhancedIntentService", "Service received bind request");
         }
-        if (this.zzckU == null) {
-            this.zzckU = new zza(this);
+        if (this.zzckT == null) {
+            this.zzckT = new zzb(this);
         }
-        return this.zzckU;
+        return this.zzckT;
     }
 
     public final int onStartCommand(final Intent intent, int i, int i2) {
         synchronized (this.zzrJ) {
-            this.zzckV = i2;
-            this.zzckW++;
+            this.zzckU = i2;
+            this.zzckV++;
         }
         final Intent zzD = zzD(intent);
         if (zzD == null) {
@@ -181,12 +214,12 @@ public abstract class zzb extends Service {
             zzC(intent);
             return 2;
         } else {
-            this.zzbtI.execute(new Runnable(this) {
-                final /* synthetic */ zzb zzckY;
+            this.zzbtK.execute(new Runnable(this) {
+                final /* synthetic */ zzb zzckX;
 
                 public void run() {
-                    this.zzckY.handleIntent(zzD);
-                    this.zzckY.zzC(intent);
+                    this.zzckX.handleIntent(zzD);
+                    this.zzckX.zzC(intent);
                 }
             });
             return 3;

@@ -9,23 +9,23 @@ import com.google.android.gms.common.util.zze;
 public class zzaup extends zzauh {
     private boolean zzafh;
     private final AlarmManager zzafi = ((AlarmManager) getContext().getSystemService("alarm"));
-    private final zzatk zzbwa;
+    private final zzatk zzbwd;
 
     protected zzaup(zzaue com_google_android_gms_internal_zzaue) {
         super(com_google_android_gms_internal_zzaue);
-        this.zzbwa = new zzatk(this, com_google_android_gms_internal_zzaue) {
-            final /* synthetic */ zzaup zzbwb;
+        this.zzbwd = new zzatk(this, com_google_android_gms_internal_zzaue) {
+            final /* synthetic */ zzaup zzbwe;
 
             public void run() {
-                this.zzbwb.zzNh();
+                this.zzbwe.zzNj();
             }
         };
     }
 
-    private void zzNh() {
+    private void zzNj() {
         Intent intent = new Intent();
         Context context = getContext();
-        zzKn().zzLg();
+        zzKn().zzLh();
         intent = intent.setClassName(context, "com.google.android.gms.measurement.AppMeasurementReceiver");
         intent.setAction("com.google.android.gms.measurement.UPLOAD");
         getContext().sendBroadcast(intent);
@@ -34,7 +34,7 @@ public class zzaup extends zzauh {
     private PendingIntent zzpE() {
         Intent intent = new Intent();
         Context context = getContext();
-        zzKn().zzLg();
+        zzKn().zzLh();
         intent = intent.setClassName(context, "com.google.android.gms.measurement.AppMeasurementReceiver");
         intent.setAction("com.google.android.gms.measurement.UPLOAD");
         return PendingIntent.getBroadcast(getContext(), 0, intent, 0);
@@ -44,7 +44,7 @@ public class zzaup extends zzauh {
         zzob();
         this.zzafh = false;
         this.zzafi.cancel(zzpE());
-        this.zzbwa.cancel();
+        this.zzbwd.cancel();
     }
 
     public /* bridge */ /* synthetic */ Context getContext() {
@@ -141,20 +141,20 @@ public class zzaup extends zzauh {
 
     public void zzy(long j) {
         zzob();
-        zzKn().zzLg();
+        zzKn().zzLh();
         if (!zzaub.zzi(getContext(), false)) {
-            zzKl().zzMd().log("Receiver not registered/enabled");
+            zzKl().zzMe().log("Receiver not registered/enabled");
         }
-        zzKn().zzLg();
+        zzKn().zzLh();
         if (!zzaum.zzj(getContext(), false)) {
-            zzKl().zzMd().log("Service not registered/enabled");
+            zzKl().zzMe().log("Service not registered/enabled");
         }
         cancel();
         long elapsedRealtime = zznR().elapsedRealtime() + j;
         this.zzafh = true;
-        if (j < zzKn().zzLx() && !this.zzbwa.zzcy()) {
-            this.zzbwa.zzy(j);
+        if (j < zzKn().zzLy() && !this.zzbwd.zzcy()) {
+            this.zzbwd.zzy(j);
         }
-        this.zzafi.setInexactRepeating(2, elapsedRealtime, Math.max(zzKn().zzLy(), j), zzpE());
+        this.zzafi.setInexactRepeating(2, elapsedRealtime, Math.max(zzKn().zzLz(), j), zzpE());
     }
 }

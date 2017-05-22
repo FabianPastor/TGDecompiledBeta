@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Line implements Text {
-    private zzbkh zzbPn;
-    private List<Element> zzbPo;
+    private zzbkh zzbPq;
+    private List<Element> zzbPr;
 
     Line(zzbkh com_google_android_gms_internal_zzbkh) {
-        this.zzbPn = com_google_android_gms_internal_zzbkh;
+        this.zzbPq = com_google_android_gms_internal_zzbkh;
     }
 
     public float getAngle() {
-        return this.zzbPn.zzbPx.zzbPv;
+        return this.zzbPq.zzbPA.zzbPy;
     }
 
     public Rect getBoundingBox() {
@@ -24,35 +24,35 @@ public class Line implements Text {
     }
 
     public List<? extends Text> getComponents() {
-        return zzTT();
+        return zzTV();
     }
 
     public Point[] getCornerPoints() {
-        return zza.zza(this.zzbPn.zzbPx);
+        return zza.zza(this.zzbPq.zzbPA);
     }
 
     public String getLanguage() {
-        return this.zzbPn.zzbPr;
+        return this.zzbPq.zzbPu;
     }
 
     public String getValue() {
-        return this.zzbPn.zzbPA;
+        return this.zzbPq.zzbPD;
     }
 
     public boolean isVertical() {
-        return this.zzbPn.zzbPD;
+        return this.zzbPq.zzbPG;
     }
 
-    List<Element> zzTT() {
-        if (this.zzbPn.zzbPw.length == 0) {
+    List<Element> zzTV() {
+        if (this.zzbPq.zzbPz.length == 0) {
             return new ArrayList(0);
         }
-        if (this.zzbPo == null) {
-            this.zzbPo = new ArrayList(this.zzbPn.zzbPw.length);
-            for (zzbkq element : this.zzbPn.zzbPw) {
-                this.zzbPo.add(new Element(element));
+        if (this.zzbPr == null) {
+            this.zzbPr = new ArrayList(this.zzbPq.zzbPz.length);
+            for (zzbkq element : this.zzbPq.zzbPz) {
+                this.zzbPr.add(new Element(element));
             }
         }
-        return this.zzbPo;
+        return this.zzbPr;
     }
 }

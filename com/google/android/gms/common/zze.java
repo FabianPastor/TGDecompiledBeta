@@ -18,7 +18,7 @@ public class zze {
     zze() {
     }
 
-    static String zzA(@Nullable Context context, @Nullable String str) {
+    static String zzB(@Nullable Context context, @Nullable String str) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("gcore_");
         stringBuilder.append(GOOGLE_PLAY_SERVICES_VERSION_CODE);
@@ -67,6 +67,10 @@ public class zze {
         return zzg.isUserRecoverableError(i);
     }
 
+    public boolean zzA(Context context, String str) {
+        return zzg.zzA(context, str);
+    }
+
     @Nullable
     public PendingIntent zza(Context context, int i, int i2, @Nullable String str) {
         Intent zzb = zzb(context, i, str);
@@ -90,7 +94,7 @@ public class zze {
         switch (i) {
             case 1:
             case 2:
-                return (context == null || !zzj.zzba(context)) ? zzp.zzD("com.google.android.gms", zzA(context, str)) : zzp.zzyb();
+                return (context == null || !zzj.zzba(context)) ? zzp.zzD("com.google.android.gms", zzB(context, str)) : zzp.zzyb();
             case 3:
                 return zzp.zzdp("com.google.android.gms");
             default:
@@ -106,9 +110,5 @@ public class zze {
 
     public boolean zzd(Context context, int i) {
         return zzg.zzd(context, i);
-    }
-
-    public boolean zzz(Context context, String str) {
-        return zzg.zzz(context, str);
     }
 }

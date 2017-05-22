@@ -10,13 +10,13 @@ import com.google.android.gms.internal.zzaum;
 import com.google.android.gms.internal.zzaum.zza;
 
 public final class AppMeasurementService extends Service implements zza {
-    private zzaum zzbqk;
+    private zzaum zzbqj;
 
     private zzaum zzJT() {
-        if (this.zzbqk == null) {
-            this.zzbqk = new zzaum(this);
+        if (this.zzbqj == null) {
+            this.zzbqj = new zzaum(this);
         }
-        return this.zzbqk;
+        return this.zzbqj;
     }
 
     public boolean callServiceStopSelfResult(int i) {

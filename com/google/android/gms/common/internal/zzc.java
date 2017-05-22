@@ -10,7 +10,7 @@ public final class zzc {
         }
     }
 
-    public static void zzaw(boolean z) {
+    public static void zzav(boolean z) {
         if (!z) {
             throw new IllegalStateException();
         }

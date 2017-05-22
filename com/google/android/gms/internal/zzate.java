@@ -10,17 +10,19 @@ public class zzate implements Creator<zzatd> {
     static void zza(zzatd com_google_android_gms_internal_zzatd, Parcel parcel, int i) {
         int zzaZ = zzc.zzaZ(parcel);
         zzc.zza(parcel, 2, com_google_android_gms_internal_zzatd.packageName, false);
-        zzc.zza(parcel, 3, com_google_android_gms_internal_zzatd.zzbqL, false);
+        zzc.zza(parcel, 3, com_google_android_gms_internal_zzatd.zzbqK, false);
         zzc.zza(parcel, 4, com_google_android_gms_internal_zzatd.zzbhN, false);
-        zzc.zza(parcel, 5, com_google_android_gms_internal_zzatd.zzbqM, false);
-        zzc.zza(parcel, 6, com_google_android_gms_internal_zzatd.zzbqN);
-        zzc.zza(parcel, 7, com_google_android_gms_internal_zzatd.zzbqO);
-        zzc.zza(parcel, 8, com_google_android_gms_internal_zzatd.zzbqP, false);
-        zzc.zza(parcel, 9, com_google_android_gms_internal_zzatd.zzbqQ);
-        zzc.zza(parcel, 10, com_google_android_gms_internal_zzatd.zzbqR);
-        zzc.zza(parcel, 11, com_google_android_gms_internal_zzatd.zzbqS);
-        zzc.zza(parcel, 12, com_google_android_gms_internal_zzatd.zzbqT, false);
-        zzc.zza(parcel, 13, com_google_android_gms_internal_zzatd.zzbqU);
+        zzc.zza(parcel, 5, com_google_android_gms_internal_zzatd.zzbqL, false);
+        zzc.zza(parcel, 6, com_google_android_gms_internal_zzatd.zzbqM);
+        zzc.zza(parcel, 7, com_google_android_gms_internal_zzatd.zzbqN);
+        zzc.zza(parcel, 8, com_google_android_gms_internal_zzatd.zzbqO, false);
+        zzc.zza(parcel, 9, com_google_android_gms_internal_zzatd.zzbqP);
+        zzc.zza(parcel, 10, com_google_android_gms_internal_zzatd.zzbqQ);
+        zzc.zza(parcel, 11, com_google_android_gms_internal_zzatd.zzbqR);
+        zzc.zza(parcel, 12, com_google_android_gms_internal_zzatd.zzbqS, false);
+        zzc.zza(parcel, 13, com_google_android_gms_internal_zzatd.zzbqT);
+        zzc.zza(parcel, 14, com_google_android_gms_internal_zzatd.zzbqU);
+        zzc.zzc(parcel, 15, com_google_android_gms_internal_zzatd.zzbqV);
         zzc.zzJ(parcel, zzaZ);
     }
 
@@ -46,6 +48,8 @@ public class zzate implements Creator<zzatd> {
         long j3 = -2147483648L;
         String str6 = null;
         long j4 = 0;
+        long j5 = 0;
+        int i = 0;
         while (parcel.dataPosition() < zzaY) {
             int zzaX = zzb.zzaX(parcel);
             switch (zzb.zzdc(zzaX)) {
@@ -85,13 +89,19 @@ public class zzate implements Creator<zzatd> {
                 case 13:
                     j4 = zzb.zzi(parcel, zzaX);
                     break;
+                case 14:
+                    j5 = zzb.zzi(parcel, zzaX);
+                    break;
+                case 15:
+                    i = zzb.zzg(parcel, zzaX);
+                    break;
                 default:
                     zzb.zzb(parcel, zzaX);
                     break;
             }
         }
         if (parcel.dataPosition() == zzaY) {
-            return new zzatd(str, str2, str3, str4, j, j2, str5, z, z2, j3, str6, j4);
+            return new zzatd(str, str2, str3, str4, j, j2, str5, z, z2, j3, str6, j4, j5, i);
         }
         throw new zza("Overread allowed size end=" + zzaY, parcel);
     }

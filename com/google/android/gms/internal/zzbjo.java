@@ -24,7 +24,7 @@ public interface zzbjo extends IInterface {
                 return this.zzrk;
             }
 
-            public void zzTQ() throws RemoteException {
+            public void zzTS() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -117,7 +117,7 @@ public interface zzbjo extends IInterface {
                     return true;
                 case 3:
                     parcel.enforceInterface("com.google.android.gms.vision.barcode.internal.client.INativeBarcodeDetector");
-                    zzTQ();
+                    zzTS();
                     parcel2.writeNoException();
                     return true;
                 case 1598968902:
@@ -129,7 +129,7 @@ public interface zzbjo extends IInterface {
         }
     }
 
-    void zzTQ() throws RemoteException;
+    void zzTS() throws RemoteException;
 
     Barcode[] zza(IObjectWrapper iObjectWrapper, zzbka com_google_android_gms_internal_zzbka) throws RemoteException;
 

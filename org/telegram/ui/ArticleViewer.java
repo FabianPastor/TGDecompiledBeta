@@ -2291,9 +2291,9 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     if (y < 0) {
                         y *= -1;
                     }
-                    ArticleViewer.this.showPopup(ArticleViewer.this.pressedLinkOwnerView, 48, 0, y);
-                    ArticleViewer.this.drawBlockSelection = true;
                     ArticleViewer.this.pressedLinkOwnerView.invalidate();
+                    ArticleViewer.this.drawBlockSelection = true;
+                    ArticleViewer.this.showPopup(ArticleViewer.this.pressedLinkOwnerView, 48, 0, y);
                     ArticleViewer.this.listView.setLayoutFrozen(true);
                     ArticleViewer.this.listView.setLayoutFrozen(false);
                 }

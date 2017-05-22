@@ -10,13 +10,13 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Base64;
 import android.util.Log;
 import com.google.android.gms.common.util.zzt;
-import com.google.firebase.iid.zzb.zzb;
+import com.google.firebase.iid.zzb.zzc;
 
 public class GcmReceiver extends WakefulBroadcastReceiver {
     private static String zzbgr = "gcm.googleapis.com/refresh";
     private static boolean zzbgs = false;
-    private zzb zzbgt;
-    private zzb zzbgu;
+    private zzc zzbgt;
+    private zzc zzbgu;
 
     private void doStartService(Context context, Intent intent) {
         if (isOrderedBroadcast()) {
@@ -47,20 +47,20 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
         }
     }
 
-    private synchronized zzb zzK(Context context, String str) {
-        zzb com_google_firebase_iid_zzb_zzb;
+    private synchronized zzc zzL(Context context, String str) {
+        zzc com_google_firebase_iid_zzb_zzc;
         if ("com.google.android.c2dm.intent.RECEIVE".equals(str)) {
             if (this.zzbgu == null) {
-                this.zzbgu = new zzb(context, str);
+                this.zzbgu = new zzc(context, str);
             }
-            com_google_firebase_iid_zzb_zzb = this.zzbgu;
+            com_google_firebase_iid_zzb_zzc = this.zzbgu;
         } else {
             if (this.zzbgt == null) {
-                this.zzbgt = new zzb(context, str);
+                this.zzbgt = new zzc(context, str);
             }
-            com_google_firebase_iid_zzb_zzb = this.zzbgt;
+            com_google_firebase_iid_zzb_zzc = this.zzbgt;
         }
-        return com_google_firebase_iid_zzb_zzb;
+        return com_google_firebase_iid_zzb_zzc;
     }
 
     private void zze(Context context, Intent intent) {
@@ -113,7 +113,7 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
             if (isOrderedBroadcast()) {
                 setResultCode(-1);
             }
-            zzK(context, intent.getAction()).zzb(intent, goAsync());
+            zzL(context, intent.getAction()).zza(intent, goAsync());
             return;
         }
         if ("com.google.android.c2dm.intent.RECEIVE".equals(intent.getAction())) {

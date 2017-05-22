@@ -10,13 +10,13 @@ public class zzaza implements Creator<zzayz> {
     static void zza(zzayz com_google_android_gms_internal_zzayz, Parcel parcel, int i) {
         int zzaZ = zzc.zzaZ(parcel);
         zzc.zza(parcel, 2, com_google_android_gms_internal_zzayz.name, false);
-        zzc.zza(parcel, 3, com_google_android_gms_internal_zzayz.zzbBC);
+        zzc.zza(parcel, 3, com_google_android_gms_internal_zzayz.zzbBF);
         zzc.zza(parcel, 4, com_google_android_gms_internal_zzayz.zzbhn);
         zzc.zza(parcel, 5, com_google_android_gms_internal_zzayz.zzbhp);
         zzc.zza(parcel, 6, com_google_android_gms_internal_zzayz.zzaGV, false);
-        zzc.zza(parcel, 7, com_google_android_gms_internal_zzayz.zzbBD, false);
-        zzc.zzc(parcel, 8, com_google_android_gms_internal_zzayz.zzbBE);
-        zzc.zzc(parcel, 9, com_google_android_gms_internal_zzayz.zzbBF);
+        zzc.zza(parcel, 7, com_google_android_gms_internal_zzayz.zzbBG, false);
+        zzc.zzc(parcel, 8, com_google_android_gms_internal_zzayz.zzbBH);
+        zzc.zzc(parcel, 9, com_google_android_gms_internal_zzayz.zzbBI);
         zzc.zzJ(parcel, zzaZ);
     }
 

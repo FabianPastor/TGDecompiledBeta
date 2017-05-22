@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 
 public class zzati extends zzaug {
-    static final String zzbrf = String.valueOf(zze.GOOGLE_PLAY_SERVICES_VERSION_CODE / 1000).replaceAll("(\\d+)(\\d)(\\d\\d)", "$1.$2.$3");
+    static final String zzbrg = String.valueOf(zze.GOOGLE_PLAY_SERVICES_VERSION_CODE / 1000).replaceAll("(\\d+)(\\d)(\\d\\d)", "$1.$2.$3");
     private Boolean zzaeZ;
 
     zzati(zzaue com_google_android_gms_internal_zzaue) {
@@ -47,7 +47,7 @@ public class zzati extends zzaug {
     }
 
     String zzKK() {
-        return (String) zzats.zzbrO.get();
+        return (String) zzats.zzbrP.get();
     }
 
     public int zzKL() {
@@ -74,40 +74,40 @@ public class zzati extends zzaug {
         return 256;
     }
 
-    public int zzKR() {
-        return 36;
+    int zzKR() {
+        return 1000;
     }
 
     public int zzKS() {
+        return 36;
+    }
+
+    public int zzKT() {
         return 2048;
     }
 
-    int zzKT() {
+    int zzKU() {
         return 500;
     }
 
-    public long zzKU() {
-        return (long) ((Integer) zzats.zzbrY.get()).intValue();
-    }
-
     public long zzKV() {
-        return (long) ((Integer) zzats.zzbsa.get()).intValue();
+        return (long) ((Integer) zzats.zzbrZ.get()).intValue();
     }
 
-    int zzKW() {
-        return 25;
+    public long zzKW() {
+        return (long) ((Integer) zzats.zzbsb.get()).intValue();
     }
 
     int zzKX() {
-        return 1000;
-    }
-
-    int zzKY() {
         return 25;
     }
 
-    int zzKZ() {
+    int zzKY() {
         return 1000;
+    }
+
+    int zzKZ() {
+        return 25;
     }
 
     public /* bridge */ /* synthetic */ zzauj zzKa() {
@@ -167,34 +167,38 @@ public class zzati extends zzaug {
     }
 
     public long zzKv() {
-        return 10240;
+        return 10260;
     }
 
     public long zzLA() {
         return Math.max(0, ((Long) zzats.zzbsp.get()).longValue());
     }
 
-    public int zzLB() {
-        return Math.min(20, Math.max(0, ((Integer) zzats.zzbsq.get()).intValue()));
+    public long zzLB() {
+        return Math.max(0, ((Long) zzats.zzbsq.get()).longValue());
     }
 
-    public String zzLC() {
+    public int zzLC() {
+        return Math.min(20, Math.max(0, ((Integer) zzats.zzbsr.get()).intValue()));
+    }
+
+    public String zzLD() {
         try {
             return (String) Class.forName("android.os.SystemProperties").getMethod("get", new Class[]{String.class, String.class}).invoke(null, new Object[]{"debug.firebase.analytics.app", ""});
         } catch (ClassNotFoundException e) {
-            zzKl().zzLY().zzj("Could not find SystemProperties class", e);
+            zzKl().zzLZ().zzj("Could not find SystemProperties class", e);
         } catch (NoSuchMethodException e2) {
-            zzKl().zzLY().zzj("Could not find SystemProperties.get() method", e2);
+            zzKl().zzLZ().zzj("Could not find SystemProperties.get() method", e2);
         } catch (IllegalAccessException e3) {
-            zzKl().zzLY().zzj("Could not access SystemProperties.get()", e3);
+            zzKl().zzLZ().zzj("Could not access SystemProperties.get()", e3);
         } catch (InvocationTargetException e4) {
-            zzKl().zzLY().zzj("SystemProperties.get() threw an exception", e4);
+            zzKl().zzLZ().zzj("SystemProperties.get() threw an exception", e4);
         }
         return "";
     }
 
-    long zzLa() {
-        return 15552000000L;
+    int zzLa() {
+        return 1000;
     }
 
     long zzLb() {
@@ -202,40 +206,40 @@ public class zzati extends zzaug {
     }
 
     long zzLc() {
-        return 3600000;
+        return 15552000000L;
     }
 
     long zzLd() {
-        return ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS;
+        return 3600000;
     }
 
     long zzLe() {
+        return ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS;
+    }
+
+    long zzLf() {
         return 61000;
     }
 
-    String zzLf() {
+    String zzLg() {
         return "google_app_measurement_local.db";
     }
 
-    public boolean zzLg() {
+    public boolean zzLh() {
         return false;
     }
 
-    public boolean zzLh() {
+    public boolean zzLi() {
         Boolean zzfp = zzfp("firebase_analytics_collection_deactivated");
         return zzfp != null && zzfp.booleanValue();
     }
 
-    public Boolean zzLi() {
+    public Boolean zzLj() {
         return zzfp("firebase_analytics_collection_enabled");
     }
 
-    public long zzLj() {
-        return ((Long) zzats.zzbsr.get()).longValue();
-    }
-
     public long zzLk() {
-        return ((Long) zzats.zzbsm.get()).longValue();
+        return ((Long) zzats.zzbss.get()).longValue();
     }
 
     public long zzLl() {
@@ -243,35 +247,35 @@ public class zzati extends zzaug {
     }
 
     public long zzLm() {
+        return ((Long) zzats.zzbso.get()).longValue();
+    }
+
+    public long zzLn() {
         return 1000;
     }
 
-    public int zzLn() {
-        return Math.max(0, ((Integer) zzats.zzbrW.get()).intValue());
-    }
-
     public int zzLo() {
-        return Math.max(1, ((Integer) zzats.zzbrX.get()).intValue());
+        return Math.max(0, ((Integer) zzats.zzbrX.get()).intValue());
     }
 
     public int zzLp() {
+        return Math.max(1, ((Integer) zzats.zzbrY.get()).intValue());
+    }
+
+    public int zzLq() {
         return DefaultOggSeeker.MATCH_BYTE_RANGE;
     }
 
-    public String zzLq() {
-        return (String) zzats.zzbse.get();
-    }
-
-    public long zzLr() {
-        return ((Long) zzats.zzbrR.get()).longValue();
+    public String zzLr() {
+        return (String) zzats.zzbsf.get();
     }
 
     public long zzLs() {
-        return Math.max(0, ((Long) zzats.zzbsf.get()).longValue());
+        return ((Long) zzats.zzbrS.get()).longValue();
     }
 
     public long zzLt() {
-        return Math.max(0, ((Long) zzats.zzbsh.get()).longValue());
+        return Math.max(0, ((Long) zzats.zzbsg.get()).longValue());
     }
 
     public long zzLu() {
@@ -291,19 +295,19 @@ public class zzati extends zzaug {
     }
 
     public long zzLy() {
-        return ((Long) zzats.zzbsg.get()).longValue();
+        return Math.max(0, ((Long) zzats.zzbsm.get()).longValue());
     }
 
     public long zzLz() {
-        return Math.max(0, ((Long) zzats.zzbso.get()).longValue());
+        return ((Long) zzats.zzbsh.get()).longValue();
     }
 
     public String zzP(String str, String str2) {
         Builder builder = new Builder();
-        Builder encodedAuthority = builder.scheme((String) zzats.zzbrS.get()).encodedAuthority((String) zzats.zzbrT.get());
+        Builder encodedAuthority = builder.scheme((String) zzats.zzbrT.get()).encodedAuthority((String) zzats.zzbrU.get());
         String str3 = "config/app/";
         String valueOf = String.valueOf(str);
-        encodedAuthority.path(valueOf.length() != 0 ? str3.concat(valueOf) : new String(str3)).appendQueryParameter("app_instance_id", str2).appendQueryParameter("platform", "android").appendQueryParameter("gmp_version", String.valueOf(10240));
+        encodedAuthority.path(valueOf.length() != 0 ? str3.concat(valueOf) : new String(str3)).appendQueryParameter("app_instance_id", str2).appendQueryParameter("platform", "android").appendQueryParameter("gmp_version", String.valueOf(10260));
         return builder.build().toString();
     }
 
@@ -338,27 +342,27 @@ public class zzati extends zzaug {
     }
 
     public int zzfj(@Size(min = 1) String str) {
-        return Math.max(0, Math.min(1000000, zzb(str, zzats.zzbrZ)));
+        return Math.max(0, Math.min(1000000, zzb(str, zzats.zzbsa)));
     }
 
     public int zzfk(@Size(min = 1) String str) {
-        return zzb(str, zzats.zzbsb);
-    }
-
-    public int zzfl(@Size(min = 1) String str) {
         return zzb(str, zzats.zzbsc);
     }
 
+    public int zzfl(@Size(min = 1) String str) {
+        return zzb(str, zzats.zzbsd);
+    }
+
     long zzfm(String str) {
-        return zza(str, zzats.zzbrP);
+        return zza(str, zzats.zzbrQ);
     }
 
     int zzfn(String str) {
-        return zzb(str, zzats.zzbss);
+        return zzb(str, zzats.zzbst);
     }
 
     int zzfo(String str) {
-        return Math.max(0, Math.min(2000, zzb(str, zzats.zzbst)));
+        return Math.max(0, Math.min(2000, zzb(str, zzats.zzbsu)));
     }
 
     @Nullable
@@ -367,33 +371,33 @@ public class zzati extends zzaug {
         zzac.zzdr(str);
         try {
             if (getContext().getPackageManager() == null) {
-                zzKl().zzLY().log("Failed to load metadata: PackageManager is null");
+                zzKl().zzLZ().log("Failed to load metadata: PackageManager is null");
             } else {
                 ApplicationInfo applicationInfo = zzadg.zzbi(getContext()).getApplicationInfo(getContext().getPackageName(), 128);
                 if (applicationInfo == null) {
-                    zzKl().zzLY().log("Failed to load metadata: ApplicationInfo is null");
+                    zzKl().zzLZ().log("Failed to load metadata: ApplicationInfo is null");
                 } else if (applicationInfo.metaData == null) {
-                    zzKl().zzLY().log("Failed to load metadata: Metadata bundle is null");
+                    zzKl().zzLZ().log("Failed to load metadata: Metadata bundle is null");
                 } else if (applicationInfo.metaData.containsKey(str)) {
                     bool = Boolean.valueOf(applicationInfo.metaData.getBoolean(str));
                 }
             }
         } catch (NameNotFoundException e) {
-            zzKl().zzLY().zzj("Failed to load metadata: Package name not found", e);
+            zzKl().zzLZ().zzj("Failed to load metadata: Package name not found", e);
         }
         return bool;
     }
 
     public int zzfq(String str) {
-        return zzb(str, zzats.zzbrU);
+        return zzb(str, zzats.zzbrV);
     }
 
     public int zzfr(String str) {
-        return Math.max(0, zzb(str, zzats.zzbrV));
+        return Math.max(0, zzb(str, zzats.zzbrW));
     }
 
     public int zzfs(String str) {
-        return Math.max(0, Math.min(1000000, zzb(str, zzats.zzbsd)));
+        return Math.max(0, Math.min(1000000, zzb(str, zzats.zzbse)));
     }
 
     public /* bridge */ /* synthetic */ void zzmR() {
@@ -417,7 +421,7 @@ public class zzati extends zzaug {
                     }
                     if (this.zzaeZ == null) {
                         this.zzaeZ = Boolean.TRUE;
-                        zzKl().zzLY().log("My process not in the list of running processes");
+                        zzKl().zzLZ().log("My process not in the list of running processes");
                     }
                 }
             }
@@ -426,7 +430,7 @@ public class zzati extends zzaug {
     }
 
     long zzpq() {
-        return ((Long) zzats.zzbsu.get()).longValue();
+        return ((Long) zzats.zzbsv.get()).longValue();
     }
 
     public String zzpv() {
@@ -434,7 +438,7 @@ public class zzati extends zzaug {
     }
 
     public long zzpz() {
-        return Math.max(0, ((Long) zzats.zzbrQ.get()).longValue());
+        return Math.max(0, ((Long) zzats.zzbrR.get()).longValue());
     }
 
     public boolean zzwR() {

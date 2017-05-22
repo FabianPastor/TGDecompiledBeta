@@ -16,14 +16,14 @@ import java.util.regex.Pattern;
 
 public class zzble {
     public static final Uri CONTENT_URI = Uri.parse("content://com.google.android.gsf.gservices");
-    public static final Uri zzbVN = Uri.parse("content://com.google.android.gsf.gservices/prefix");
-    public static final Pattern zzbVO = Pattern.compile("^(1|true|t|on|yes|y)$", 2);
-    public static final Pattern zzbVP = Pattern.compile("^(0|false|f|off|no|n)$", 2);
-    private static final AtomicBoolean zzbVQ = new AtomicBoolean();
-    static HashMap<String, String> zzbVR;
-    private static Object zzbVS;
-    private static boolean zzbVT;
-    static String[] zzbVU = new String[0];
+    public static final Uri zzbVQ = Uri.parse("content://com.google.android.gsf.gservices/prefix");
+    public static final Pattern zzbVR = Pattern.compile("^(1|true|t|on|yes|y)$", 2);
+    public static final Pattern zzbVS = Pattern.compile("^(0|false|f|off|no|n)$", 2);
+    private static final AtomicBoolean zzbVT = new AtomicBoolean();
+    static HashMap<String, String> zzbVU;
+    private static Object zzbVV;
+    private static boolean zzbVW;
+    static String[] zzbVX = new String[0];
 
     class AnonymousClass1 extends ContentObserver {
         AnonymousClass1(Handler handler) {
@@ -31,7 +31,7 @@ public class zzble {
         }
 
         public void onChange(boolean z) {
-            zzble.zzbVQ.set(true);
+            zzble.zzbVT.set(true);
         }
     }
 
@@ -54,23 +54,23 @@ public class zzble {
     public static String zza(ContentResolver contentResolver, String str, String str2) {
         synchronized (zzble.class) {
             zza(contentResolver);
-            Object obj = zzbVS;
+            Object obj = zzbVV;
             String str3;
-            if (zzbVR.containsKey(str)) {
-                str3 = (String) zzbVR.get(str);
+            if (zzbVU.containsKey(str)) {
+                str3 = (String) zzbVU.get(str);
                 if (str3 != null) {
                     str2 = str3;
                 }
             } else {
-                String[] strArr = zzbVU;
+                String[] strArr = zzbVX;
                 int length = strArr.length;
                 int i = 0;
                 while (i < length) {
                     if (str.startsWith(strArr[i])) {
-                        if (!zzbVT || zzbVR.isEmpty()) {
-                            zzc(contentResolver, zzbVU);
-                            if (zzbVR.containsKey(str)) {
-                                str3 = (String) zzbVR.get(str);
+                        if (!zzbVW || zzbVU.isEmpty()) {
+                            zzc(contentResolver, zzbVX);
+                            if (zzbVU.containsKey(str)) {
+                                str3 = (String) zzbVU.get(str);
                                 if (str3 != null) {
                                     str2 = str3;
                                 }
@@ -112,7 +112,7 @@ public class zzble {
     }
 
     public static Map<String, String> zza(ContentResolver contentResolver, String... strArr) {
-        Cursor query = contentResolver.query(zzbVN, null, null, strArr, null);
+        Cursor query = contentResolver.query(zzbVQ, null, null, strArr, null);
         Map<String, String> treeMap = new TreeMap();
         if (query != null) {
             while (query.moveToNext()) {
@@ -127,23 +127,23 @@ public class zzble {
     }
 
     private static void zza(ContentResolver contentResolver) {
-        if (zzbVR == null) {
-            zzbVQ.set(false);
-            zzbVR = new HashMap();
-            zzbVS = new Object();
-            zzbVT = false;
+        if (zzbVU == null) {
+            zzbVT.set(false);
+            zzbVU = new HashMap();
+            zzbVV = new Object();
+            zzbVW = false;
             contentResolver.registerContentObserver(CONTENT_URI, true, new AnonymousClass1(null));
-        } else if (zzbVQ.getAndSet(false)) {
-            zzbVR.clear();
-            zzbVS = new Object();
-            zzbVT = false;
+        } else if (zzbVT.getAndSet(false)) {
+            zzbVU.clear();
+            zzbVV = new Object();
+            zzbVW = false;
         }
     }
 
     private static void zza(Object obj, String str, String str2) {
         synchronized (zzble.class) {
-            if (obj == zzbVS) {
-                zzbVR.put(str, str2);
+            if (obj == zzbVV) {
+                zzbVU.put(str, str2);
             }
         }
     }
@@ -153,8 +153,8 @@ public class zzble {
             synchronized (zzble.class) {
                 zza(contentResolver);
                 String[] zzk = zzk(strArr);
-                if (!zzbVT || zzbVR.isEmpty()) {
-                    zzc(contentResolver, zzbVU);
+                if (!zzbVW || zzbVU.isEmpty()) {
+                    zzc(contentResolver, zzbVX);
                 } else if (zzk.length != 0) {
                     zzc(contentResolver, zzk);
                 }
@@ -163,13 +163,13 @@ public class zzble {
     }
 
     private static void zzc(ContentResolver contentResolver, String[] strArr) {
-        zzbVR.putAll(zza(contentResolver, strArr));
-        zzbVT = true;
+        zzbVU.putAll(zza(contentResolver, strArr));
+        zzbVW = true;
     }
 
     private static String[] zzk(String[] strArr) {
-        HashSet hashSet = new HashSet((((zzbVU.length + strArr.length) * 4) / 3) + 1);
-        hashSet.addAll(Arrays.asList(zzbVU));
+        HashSet hashSet = new HashSet((((zzbVX.length + strArr.length) * 4) / 3) + 1);
+        hashSet.addAll(Arrays.asList(zzbVX));
         ArrayList arrayList = new ArrayList();
         for (Object obj : strArr) {
             if (hashSet.add(obj)) {
@@ -179,7 +179,7 @@ public class zzble {
         if (arrayList.isEmpty()) {
             return new String[0];
         }
-        zzbVU = (String[]) hashSet.toArray(new String[hashSet.size()]);
+        zzbVX = (String[]) hashSet.toArray(new String[hashSet.size()]);
         return (String[]) arrayList.toArray(new String[arrayList.size()]);
     }
 }

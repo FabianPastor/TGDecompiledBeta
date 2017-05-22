@@ -11,9 +11,9 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class zzatl extends zzauh {
-    private long zzbrv;
-    private String zzbrw;
-    private Boolean zzbrx;
+    private long zzbrw;
+    private String zzbrx;
+    private Boolean zzbry;
 
     zzatl(zzaue com_google_android_gms_internal_zzaue) {
         super(com_google_android_gms_internal_zzaue);
@@ -106,28 +106,28 @@ public class zzatl extends zzauh {
 
     public long zzLT() {
         zzob();
-        return this.zzbrv;
+        return this.zzbrw;
     }
 
     public String zzLU() {
         zzob();
-        return this.zzbrw;
+        return this.zzbrx;
     }
 
     public boolean zzbL(Context context) {
-        if (this.zzbrx == null) {
-            zzKn().zzLg();
-            this.zzbrx = Boolean.valueOf(false);
+        if (this.zzbry == null) {
+            zzKn().zzLh();
+            this.zzbry = Boolean.valueOf(false);
             try {
                 PackageManager packageManager = context.getPackageManager();
                 if (packageManager != null) {
                     packageManager.getPackageInfo("com.google.android.gms", 128);
-                    this.zzbrx = Boolean.valueOf(true);
+                    this.zzbry = Boolean.valueOf(true);
                 }
             } catch (NameNotFoundException e) {
             }
         }
-        return this.zzbrx.booleanValue();
+        return this.zzbry.booleanValue();
     }
 
     public String zzkN() {
@@ -141,11 +141,11 @@ public class zzatl extends zzauh {
 
     protected void zzmS() {
         Calendar instance = Calendar.getInstance();
-        this.zzbrv = TimeUnit.MINUTES.convert((long) (instance.get(16) + instance.get(15)), TimeUnit.MILLISECONDS);
+        this.zzbrw = TimeUnit.MINUTES.convert((long) (instance.get(16) + instance.get(15)), TimeUnit.MILLISECONDS);
         Locale locale = Locale.getDefault();
         String valueOf = String.valueOf(locale.getLanguage().toLowerCase(Locale.ENGLISH));
         String valueOf2 = String.valueOf(locale.getCountry().toLowerCase(Locale.ENGLISH));
-        this.zzbrw = new StringBuilder((String.valueOf(valueOf).length() + 1) + String.valueOf(valueOf2).length()).append(valueOf).append("-").append(valueOf2).toString();
+        this.zzbrx = new StringBuilder((String.valueOf(valueOf).length() + 1) + String.valueOf(valueOf2).length()).append(valueOf).append("-").append(valueOf2).toString();
     }
 
     public /* bridge */ /* synthetic */ zze zznR() {

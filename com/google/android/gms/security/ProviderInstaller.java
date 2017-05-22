@@ -13,17 +13,17 @@ import java.lang.reflect.Method;
 
 public class ProviderInstaller {
     public static final String PROVIDER_NAME = "GmsCore_OpenSSL";
-    private static final zze zzbEc = zze.zzuY();
-    private static Method zzbEd = null;
+    private static final zze zzbEf = zze.zzuY();
+    private static Method zzbEg = null;
     private static final Object zztX = new Object();
 
     class AnonymousClass1 extends AsyncTask<Void, Void, Integer> {
-        final /* synthetic */ ProviderInstallListener zzbEe;
+        final /* synthetic */ ProviderInstallListener zzbEh;
         final /* synthetic */ Context zztf;
 
         AnonymousClass1(Context context, ProviderInstallListener providerInstallListener) {
             this.zztf = context;
-            this.zzbEe = providerInstallListener;
+            this.zzbEh = providerInstallListener;
         }
 
         protected /* synthetic */ Object doInBackground(Object[] objArr) {
@@ -47,10 +47,10 @@ public class ProviderInstaller {
 
         protected void zzg(Integer num) {
             if (num.intValue() == 0) {
-                this.zzbEe.onProviderInstalled();
+                this.zzbEh.onProviderInstalled();
                 return;
             }
-            this.zzbEe.onProviderInstallFailed(num.intValue(), ProviderInstaller.zzbEc.zzb(this.zztf, num.intValue(), "pi"));
+            this.zzbEh.onProviderInstallFailed(num.intValue(), ProviderInstaller.zzbEf.zzb(this.zztf, num.intValue(), "pi"));
         }
     }
 
@@ -62,7 +62,7 @@ public class ProviderInstaller {
 
     public static void installIfNeeded(Context context) throws GooglePlayServicesRepairableException, GooglePlayServicesNotAvailableException {
         zzac.zzb((Object) context, (Object) "Context must not be null");
-        zzbEc.zzaE(context);
+        zzbEf.zzaE(context);
         Context remoteContext = zzg.getRemoteContext(context);
         if (remoteContext == null) {
             Log.e("ProviderInstaller", "Failed to get remote context");
@@ -70,10 +70,10 @@ public class ProviderInstaller {
         }
         synchronized (zztX) {
             try {
-                if (zzbEd == null) {
+                if (zzbEg == null) {
                     zzbR(remoteContext);
                 }
-                zzbEd.invoke(null, new Object[]{remoteContext});
+                zzbEg.invoke(null, new Object[]{remoteContext});
             } catch (Exception e) {
                 String str = "ProviderInstaller";
                 String str2 = "Failed to install provider: ";
@@ -92,6 +92,6 @@ public class ProviderInstaller {
     }
 
     private static void zzbR(Context context) throws ClassNotFoundException, NoSuchMethodException {
-        zzbEd = context.getClassLoader().loadClass("com.google.android.gms.common.security.ProviderInstallerImpl").getMethod("insertProvider", new Class[]{Context.class});
+        zzbEg = context.getClassLoader().loadClass("com.google.android.gms.common.security.ProviderInstallerImpl").getMethod("insertProvider", new Class[]{Context.class});
     }
 }

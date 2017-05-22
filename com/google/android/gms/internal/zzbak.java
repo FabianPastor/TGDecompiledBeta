@@ -10,8 +10,8 @@ import com.google.android.gms.common.internal.safeparcel.zza;
 public class zzbak extends zza implements Result {
     public static final Creator<zzbak> CREATOR = new zzbal();
     final int zzaiI;
-    private int zzbEn;
-    private Intent zzbEo;
+    private int zzbEq;
+    private Intent zzbEr;
 
     public zzbak() {
         this(0, null);
@@ -19,8 +19,8 @@ public class zzbak extends zza implements Result {
 
     zzbak(int i, int i2, Intent intent) {
         this.zzaiI = i;
-        this.zzbEn = i2;
-        this.zzbEo = intent;
+        this.zzbEq = i2;
+        this.zzbEr = intent;
     }
 
     public zzbak(int i, Intent intent) {
@@ -28,18 +28,18 @@ public class zzbak extends zza implements Result {
     }
 
     public Status getStatus() {
-        return this.zzbEn == 0 ? Status.zzazx : Status.zzazB;
+        return this.zzbEq == 0 ? Status.zzazx : Status.zzazB;
     }
 
     public void writeToParcel(Parcel parcel, int i) {
         zzbal.zza(this, parcel, i);
     }
 
-    public int zzPP() {
-        return this.zzbEn;
+    public int zzPR() {
+        return this.zzbEq;
     }
 
-    public Intent zzPQ() {
-        return this.zzbEo;
+    public Intent zzPS() {
+        return this.zzbEr;
     }
 }

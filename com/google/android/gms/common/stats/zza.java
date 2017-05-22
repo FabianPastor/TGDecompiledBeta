@@ -23,7 +23,7 @@ public class zza {
 
     private boolean zzc(Context context, Intent intent) {
         ComponentName component = intent.getComponent();
-        return component == null ? false : zzd.zzE(context, component.getPackageName());
+        return component == null ? false : zzd.zzF(context, component.getPackageName());
     }
 
     public static zza zzyJ() {

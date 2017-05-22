@@ -10,7 +10,7 @@ public class zzbaw extends zza {
     public static final Creator<zzbaw> CREATOR = new zzbax();
     private final ConnectionResult zzaGE;
     final int zzaiI;
-    private final zzaf zzbEu;
+    private final zzaf zzbEx;
 
     public zzbaw(int i) {
         this(new ConnectionResult(i, null), null);
@@ -19,7 +19,7 @@ public class zzbaw extends zza {
     zzbaw(int i, ConnectionResult connectionResult, zzaf com_google_android_gms_common_internal_zzaf) {
         this.zzaiI = i;
         this.zzaGE = connectionResult;
-        this.zzbEu = com_google_android_gms_common_internal_zzaf;
+        this.zzbEx = com_google_android_gms_common_internal_zzaf;
     }
 
     public zzbaw(ConnectionResult connectionResult, zzaf com_google_android_gms_common_internal_zzaf) {
@@ -30,8 +30,8 @@ public class zzbaw extends zza {
         zzbax.zza(this, parcel, i);
     }
 
-    public zzaf zzPU() {
-        return this.zzbEu;
+    public zzaf zzPW() {
+        return this.zzbEx;
     }
 
     public ConnectionResult zzyh() {

@@ -309,7 +309,10 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                 this.bitmap = null;
             }
             this.imageView.setImageBitmap(this.bitmap);
-            this.aspectRatioFrameLayout.removeView(this.textureView);
+            try {
+                this.aspectRatioFrameLayout.removeView(this.textureView);
+            } catch (Exception e2) {
+            }
             this.imageView.setVisibility(0);
             runShowHideAnimation(false);
         }

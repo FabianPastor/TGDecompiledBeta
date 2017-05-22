@@ -24,13 +24,13 @@ class zzh {
     Context zzqn;
 
     static class zza {
-        private static final long zzclF = TimeUnit.DAYS.toMillis(7);
+        private static final long zzclH = TimeUnit.DAYS.toMillis(7);
         final long timestamp;
         final String zzbhN;
-        final String zzbxT;
+        final String zzbxW;
 
         private zza(String str, String str2, long j) {
-            this.zzbxT = str;
+            this.zzbxW = str;
             this.zzbhN = str2;
             this.timestamp = j;
         }
@@ -67,7 +67,7 @@ class zzh {
         }
 
         boolean zzjB(String str) {
-            return System.currentTimeMillis() > this.timestamp + zzclF || !str.equals(this.zzbhN);
+            return System.currentTimeMillis() > this.timestamp + zzclH || !str.equals(this.zzbhN);
         }
     }
 
@@ -139,7 +139,7 @@ class zzh {
         }
     }
 
-    public SharedPreferences zzabX() {
+    public SharedPreferences zzabZ() {
         return this.zzbif;
     }
 

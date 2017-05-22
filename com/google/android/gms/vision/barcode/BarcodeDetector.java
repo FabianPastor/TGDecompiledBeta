@@ -9,22 +9,22 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Frame;
 
 public final class BarcodeDetector extends Detector<Barcode> {
-    private final zzbjn zzbOE;
+    private final zzbjn zzbOH;
 
     public static class Builder {
         private Context mContext;
-        private zzbjl zzbOF = new zzbjl();
+        private zzbjl zzbOI = new zzbjl();
 
         public Builder(Context context) {
             this.mContext = context;
         }
 
         public BarcodeDetector build() {
-            return new BarcodeDetector(new zzbjn(this.mContext, this.zzbOF));
+            return new BarcodeDetector(new zzbjn(this.mContext, this.zzbOI));
         }
 
         public Builder setBarcodeFormats(int i) {
-            this.zzbOF.zzbOG = i;
+            this.zzbOI.zzbOJ = i;
             return this;
         }
     }
@@ -34,7 +34,7 @@ public final class BarcodeDetector extends Detector<Barcode> {
     }
 
     private BarcodeDetector(zzbjn com_google_android_gms_internal_zzbjn) {
-        this.zzbOE = com_google_android_gms_internal_zzbjn;
+        this.zzbOH = com_google_android_gms_internal_zzbjn;
     }
 
     public SparseArray<Barcode> detect(Frame frame) {
@@ -44,12 +44,12 @@ public final class BarcodeDetector extends Detector<Barcode> {
         Barcode[] zza;
         zzbka zzc = zzbka.zzc(frame);
         if (frame.getBitmap() != null) {
-            zza = this.zzbOE.zza(frame.getBitmap(), zzc);
+            zza = this.zzbOH.zza(frame.getBitmap(), zzc);
             if (zza == null) {
                 throw new IllegalArgumentException("Internal barcode detector error; check logcat output.");
             }
         }
-        zza = this.zzbOE.zza(frame.getGrayscaleImageData(), zzc);
+        zza = this.zzbOH.zza(frame.getGrayscaleImageData(), zzc);
         SparseArray<Barcode> sparseArray = new SparseArray(zza.length);
         for (Barcode barcode : zza) {
             sparseArray.append(barcode.rawValue.hashCode(), barcode);
@@ -58,11 +58,11 @@ public final class BarcodeDetector extends Detector<Barcode> {
     }
 
     public boolean isOperational() {
-        return this.zzbOE.isOperational();
+        return this.zzbOH.isOperational();
     }
 
     public void release() {
         super.release();
-        this.zzbOE.zzTR();
+        this.zzbOH.zzTT();
     }
 }

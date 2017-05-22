@@ -11,11 +11,11 @@ public class zzbju implements Creator<zzbjt> {
         int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 1, com_google_android_gms_internal_zzbjt.versionCode);
         zzc.zzc(parcel, 2, com_google_android_gms_internal_zzbjt.mode);
-        zzc.zzc(parcel, 3, com_google_android_gms_internal_zzbjt.zzbPe);
-        zzc.zzc(parcel, 4, com_google_android_gms_internal_zzbjt.zzbPf);
-        zzc.zza(parcel, 5, com_google_android_gms_internal_zzbjt.zzbPg);
-        zzc.zza(parcel, 6, com_google_android_gms_internal_zzbjt.zzbPh);
-        zzc.zza(parcel, 7, com_google_android_gms_internal_zzbjt.zzbPi);
+        zzc.zzc(parcel, 3, com_google_android_gms_internal_zzbjt.zzbPh);
+        zzc.zzc(parcel, 4, com_google_android_gms_internal_zzbjt.zzbPi);
+        zzc.zza(parcel, 5, com_google_android_gms_internal_zzbjt.zzbPj);
+        zzc.zza(parcel, 6, com_google_android_gms_internal_zzbjt.zzbPk);
+        zzc.zza(parcel, 7, com_google_android_gms_internal_zzbjt.zzbPl);
         zzc.zzJ(parcel, zzaZ);
     }
 

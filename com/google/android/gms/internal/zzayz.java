@@ -10,13 +10,13 @@ import java.util.Comparator;
 public class zzayz extends com.google.android.gms.common.internal.safeparcel.zza implements Comparable<zzayz> {
     public static final Creator<zzayz> CREATOR = new zzaza();
     private static final Charset UTF_8 = Charset.forName("UTF-8");
-    public static final zza zzbBG = new zza();
+    public static final zza zzbBJ = new zza();
     public final String name;
     final String zzaGV;
-    final long zzbBC;
-    final byte[] zzbBD;
-    public final int zzbBE;
-    public final int zzbBF;
+    final long zzbBF;
+    final byte[] zzbBG;
+    public final int zzbBH;
+    public final int zzbBI;
     final boolean zzbhn;
     final double zzbhp;
 
@@ -26,19 +26,19 @@ public class zzayz extends com.google.android.gms.common.internal.safeparcel.zza
         }
 
         public int zza(zzayz com_google_android_gms_internal_zzayz, zzayz com_google_android_gms_internal_zzayz2) {
-            return com_google_android_gms_internal_zzayz.zzbBF == com_google_android_gms_internal_zzayz2.zzbBF ? com_google_android_gms_internal_zzayz.name.compareTo(com_google_android_gms_internal_zzayz2.name) : com_google_android_gms_internal_zzayz.zzbBF - com_google_android_gms_internal_zzayz2.zzbBF;
+            return com_google_android_gms_internal_zzayz.zzbBI == com_google_android_gms_internal_zzayz2.zzbBI ? com_google_android_gms_internal_zzayz.name.compareTo(com_google_android_gms_internal_zzayz2.name) : com_google_android_gms_internal_zzayz.zzbBI - com_google_android_gms_internal_zzayz2.zzbBI;
         }
     }
 
     public zzayz(String str, long j, boolean z, double d, String str2, byte[] bArr, int i, int i2) {
         this.name = str;
-        this.zzbBC = j;
+        this.zzbBF = j;
         this.zzbhn = z;
         this.zzbhp = d;
         this.zzaGV = str2;
-        this.zzbBD = bArr;
-        this.zzbBE = i;
-        this.zzbBF = i2;
+        this.zzbBG = bArr;
+        this.zzbBH = i;
+        this.zzbBI = i2;
     }
 
     private static int compare(byte b, byte b2) {
@@ -70,12 +70,12 @@ public class zzayz extends com.google.android.gms.common.internal.safeparcel.zza
             return false;
         }
         zzayz com_google_android_gms_internal_zzayz = (zzayz) obj;
-        if (!zzaa.equal(this.name, com_google_android_gms_internal_zzayz.name) || this.zzbBE != com_google_android_gms_internal_zzayz.zzbBE || this.zzbBF != com_google_android_gms_internal_zzayz.zzbBF) {
+        if (!zzaa.equal(this.name, com_google_android_gms_internal_zzayz.name) || this.zzbBH != com_google_android_gms_internal_zzayz.zzbBH || this.zzbBI != com_google_android_gms_internal_zzayz.zzbBI) {
             return false;
         }
-        switch (this.zzbBE) {
+        switch (this.zzbBH) {
             case 1:
-                return this.zzbBC == com_google_android_gms_internal_zzayz.zzbBC;
+                return this.zzbBF == com_google_android_gms_internal_zzayz.zzbBF;
             case 2:
                 return this.zzbhn == com_google_android_gms_internal_zzayz.zzbhn;
             case 3:
@@ -83,9 +83,9 @@ public class zzayz extends com.google.android.gms.common.internal.safeparcel.zza
             case 4:
                 return zzaa.equal(this.zzaGV, com_google_android_gms_internal_zzayz.zzaGV);
             case 5:
-                return Arrays.equals(this.zzbBD, com_google_android_gms_internal_zzayz.zzbBD);
+                return Arrays.equals(this.zzbBG, com_google_android_gms_internal_zzayz.zzbBG);
             default:
-                throw new AssertionError("Invalid enum value: " + this.zzbBE);
+                throw new AssertionError("Invalid enum value: " + this.zzbBH);
         }
     }
 
@@ -105,13 +105,13 @@ public class zzayz extends com.google.android.gms.common.internal.safeparcel.zza
         if (compareTo != 0) {
             return compareTo;
         }
-        compareTo = compare(this.zzbBE, com_google_android_gms_internal_zzayz.zzbBE);
+        compareTo = compare(this.zzbBH, com_google_android_gms_internal_zzayz.zzbBH);
         if (compareTo != 0) {
             return compareTo;
         }
-        switch (this.zzbBE) {
+        switch (this.zzbBH) {
             case 1:
-                return compare(this.zzbBC, com_google_android_gms_internal_zzayz.zzbBC);
+                return compare(this.zzbBF, com_google_android_gms_internal_zzayz.zzbBF);
             case 2:
                 return compare(this.zzbhn, com_google_android_gms_internal_zzayz.zzbhn);
             case 3:
@@ -119,25 +119,25 @@ public class zzayz extends com.google.android.gms.common.internal.safeparcel.zza
             case 4:
                 return compare(this.zzaGV, com_google_android_gms_internal_zzayz.zzaGV);
             case 5:
-                if (this.zzbBD == com_google_android_gms_internal_zzayz.zzbBD) {
+                if (this.zzbBG == com_google_android_gms_internal_zzayz.zzbBG) {
                     return 0;
                 }
-                if (this.zzbBD == null) {
+                if (this.zzbBG == null) {
                     return -1;
                 }
-                if (com_google_android_gms_internal_zzayz.zzbBD == null) {
+                if (com_google_android_gms_internal_zzayz.zzbBG == null) {
                     return 1;
                 }
-                while (i < Math.min(this.zzbBD.length, com_google_android_gms_internal_zzayz.zzbBD.length)) {
-                    compareTo = compare(this.zzbBD[i], com_google_android_gms_internal_zzayz.zzbBD[i]);
+                while (i < Math.min(this.zzbBG.length, com_google_android_gms_internal_zzayz.zzbBG.length)) {
+                    compareTo = compare(this.zzbBG[i], com_google_android_gms_internal_zzayz.zzbBG[i]);
                     if (compareTo != 0) {
                         return compareTo;
                     }
                     i++;
                 }
-                return compare(this.zzbBD.length, com_google_android_gms_internal_zzayz.zzbBD.length);
+                return compare(this.zzbBG.length, com_google_android_gms_internal_zzayz.zzbBG.length);
             default:
-                throw new AssertionError("Invalid enum value: " + this.zzbBE);
+                throw new AssertionError("Invalid enum value: " + this.zzbBH);
         }
     }
 
@@ -145,9 +145,9 @@ public class zzayz extends com.google.android.gms.common.internal.safeparcel.zza
         stringBuilder.append("Flag(");
         stringBuilder.append(this.name);
         stringBuilder.append(", ");
-        switch (this.zzbBE) {
+        switch (this.zzbBH) {
             case 1:
-                stringBuilder.append(this.zzbBC);
+                stringBuilder.append(this.zzbBF);
                 break;
             case 2:
                 stringBuilder.append(this.zzbhn);
@@ -161,9 +161,9 @@ public class zzayz extends com.google.android.gms.common.internal.safeparcel.zza
                 stringBuilder.append("'");
                 break;
             case 5:
-                if (this.zzbBD != null) {
+                if (this.zzbBG != null) {
                     stringBuilder.append("'");
-                    stringBuilder.append(new String(this.zzbBD, UTF_8));
+                    stringBuilder.append(new String(this.zzbBG, UTF_8));
                     stringBuilder.append("'");
                     break;
                 }
@@ -171,12 +171,12 @@ public class zzayz extends com.google.android.gms.common.internal.safeparcel.zza
                 break;
             default:
                 String str = this.name;
-                throw new AssertionError(new StringBuilder(String.valueOf(str).length() + 27).append("Invalid type: ").append(str).append(", ").append(this.zzbBE).toString());
+                throw new AssertionError(new StringBuilder(String.valueOf(str).length() + 27).append("Invalid type: ").append(str).append(", ").append(this.zzbBH).toString());
         }
         stringBuilder.append(", ");
-        stringBuilder.append(this.zzbBE);
+        stringBuilder.append(this.zzbBH);
         stringBuilder.append(", ");
-        stringBuilder.append(this.zzbBF);
+        stringBuilder.append(this.zzbBI);
         stringBuilder.append(")");
         return stringBuilder.toString();
     }

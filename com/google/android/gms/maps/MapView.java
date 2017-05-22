@@ -23,26 +23,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapView extends FrameLayout {
-    private final zzb zzbot;
+    private final zzb zzbos;
 
     static class zzb extends com.google.android.gms.dynamic.zza<zza> {
         private final Context mContext;
-        protected zze<zza> zzbor;
-        private final List<OnMapReadyCallback> zzbos = new ArrayList();
-        private final ViewGroup zzbox;
-        private final GoogleMapOptions zzboy;
+        protected zze<zza> zzboq;
+        private final List<OnMapReadyCallback> zzbor = new ArrayList();
+        private final ViewGroup zzbow;
+        private final GoogleMapOptions zzbox;
 
         zzb(ViewGroup viewGroup, Context context, GoogleMapOptions googleMapOptions) {
-            this.zzbox = viewGroup;
+            this.zzbow = viewGroup;
             this.mContext = context;
-            this.zzboy = googleMapOptions;
+            this.zzbox = googleMapOptions;
         }
 
         public void getMapAsync(OnMapReadyCallback onMapReadyCallback) {
             if (zzBN() != null) {
                 ((zza) zzBN()).getMapAsync(onMapReadyCallback);
             } else {
-                this.zzbos.add(onMapReadyCallback);
+                this.zzbor.add(onMapReadyCallback);
             }
         }
 
@@ -59,16 +59,16 @@ public class MapView extends FrameLayout {
         }
 
         public void zzJz() {
-            if (this.zzbor != null && zzBN() == null) {
+            if (this.zzboq != null && zzBN() == null) {
                 try {
                     MapsInitializer.initialize(this.mContext);
-                    IMapViewDelegate zza = zzai.zzbI(this.mContext).zza(zzd.zzA(this.mContext), this.zzboy);
+                    IMapViewDelegate zza = zzai.zzbI(this.mContext).zza(zzd.zzA(this.mContext), this.zzbox);
                     if (zza != null) {
-                        this.zzbor.zza(new zza(this.zzbox, zza));
-                        for (OnMapReadyCallback mapAsync : this.zzbos) {
+                        this.zzboq.zza(new zza(this.zzbow, zza));
+                        for (OnMapReadyCallback mapAsync : this.zzbor) {
                             ((zza) zzBN()).getMapAsync(mapAsync);
                         }
-                        this.zzbos.clear();
+                        this.zzbor.clear();
                     }
                 } catch (RemoteException e) {
                     throw new RuntimeRemoteException(e);
@@ -78,24 +78,24 @@ public class MapView extends FrameLayout {
         }
 
         protected void zza(zze<zza> com_google_android_gms_dynamic_zze_com_google_android_gms_maps_MapView_zza) {
-            this.zzbor = com_google_android_gms_dynamic_zze_com_google_android_gms_maps_MapView_zza;
+            this.zzboq = com_google_android_gms_dynamic_zze_com_google_android_gms_maps_MapView_zza;
             zzJz();
         }
     }
 
     static class zza implements MapLifecycleDelegate {
-        private final ViewGroup zzbou;
-        private final IMapViewDelegate zzbov;
-        private View zzbow;
+        private final ViewGroup zzbot;
+        private final IMapViewDelegate zzbou;
+        private View zzbov;
 
         public zza(ViewGroup viewGroup, IMapViewDelegate iMapViewDelegate) {
-            this.zzbov = (IMapViewDelegate) zzac.zzw(iMapViewDelegate);
-            this.zzbou = (ViewGroup) zzac.zzw(viewGroup);
+            this.zzbou = (IMapViewDelegate) zzac.zzw(iMapViewDelegate);
+            this.zzbot = (ViewGroup) zzac.zzw(viewGroup);
         }
 
         public void getMapAsync(final OnMapReadyCallback onMapReadyCallback) {
             try {
-                this.zzbov.getMapAsync(new com.google.android.gms.maps.internal.zzt.zza(this) {
+                this.zzbou.getMapAsync(new com.google.android.gms.maps.internal.zzt.zza(this) {
                     public void zza(IGoogleMapDelegate iGoogleMapDelegate) throws RemoteException {
                         onMapReadyCallback.onMapReady(new GoogleMap(iGoogleMapDelegate));
                     }
@@ -109,11 +109,11 @@ public class MapView extends FrameLayout {
             try {
                 Bundle bundle2 = new Bundle();
                 zzah.zzd(bundle, bundle2);
-                this.zzbov.onCreate(bundle2);
+                this.zzbou.onCreate(bundle2);
                 zzah.zzd(bundle2, bundle);
-                this.zzbow = (View) zzd.zzF(this.zzbov.getView());
-                this.zzbou.removeAllViews();
-                this.zzbou.addView(this.zzbow);
+                this.zzbov = (View) zzd.zzF(this.zzbou.getView());
+                this.zzbot.removeAllViews();
+                this.zzbot.addView(this.zzbov);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -125,7 +125,7 @@ public class MapView extends FrameLayout {
 
         public void onDestroy() {
             try {
-                this.zzbov.onDestroy();
+                this.zzbou.onDestroy();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -139,7 +139,7 @@ public class MapView extends FrameLayout {
             try {
                 Bundle bundle2 = new Bundle();
                 zzah.zzd(bundle, bundle2);
-                this.zzbov.onEnterAmbient(bundle2);
+                this.zzbou.onEnterAmbient(bundle2);
                 zzah.zzd(bundle2, bundle);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
@@ -148,7 +148,7 @@ public class MapView extends FrameLayout {
 
         public void onExitAmbient() {
             try {
-                this.zzbov.onExitAmbient();
+                this.zzbou.onExitAmbient();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -160,7 +160,7 @@ public class MapView extends FrameLayout {
 
         public void onLowMemory() {
             try {
-                this.zzbov.onLowMemory();
+                this.zzbou.onLowMemory();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -168,7 +168,7 @@ public class MapView extends FrameLayout {
 
         public void onPause() {
             try {
-                this.zzbov.onPause();
+                this.zzbou.onPause();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -176,7 +176,7 @@ public class MapView extends FrameLayout {
 
         public void onResume() {
             try {
-                this.zzbov.onResume();
+                this.zzbou.onResume();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -186,7 +186,7 @@ public class MapView extends FrameLayout {
             try {
                 Bundle bundle2 = new Bundle();
                 zzah.zzd(bundle, bundle2);
-                this.zzbov.onSaveInstanceState(bundle2);
+                this.zzbou.onSaveInstanceState(bundle2);
                 zzah.zzd(bundle2, bundle);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
@@ -195,7 +195,7 @@ public class MapView extends FrameLayout {
 
         public void onStart() {
             try {
-                this.zzbov.onStart();
+                this.zzbou.onStart();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -203,7 +203,7 @@ public class MapView extends FrameLayout {
 
         public void onStop() {
             try {
-                this.zzbov.onStop();
+                this.zzbou.onStop();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -212,25 +212,25 @@ public class MapView extends FrameLayout {
 
     public MapView(Context context) {
         super(context);
-        this.zzbot = new zzb(this, context, null);
+        this.zzbos = new zzb(this, context, null);
         zzJA();
     }
 
     public MapView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        this.zzbot = new zzb(this, context, GoogleMapOptions.createFromAttributes(context, attributeSet));
+        this.zzbos = new zzb(this, context, GoogleMapOptions.createFromAttributes(context, attributeSet));
         zzJA();
     }
 
     public MapView(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
-        this.zzbot = new zzb(this, context, GoogleMapOptions.createFromAttributes(context, attributeSet));
+        this.zzbos = new zzb(this, context, GoogleMapOptions.createFromAttributes(context, attributeSet));
         zzJA();
     }
 
     public MapView(Context context, GoogleMapOptions googleMapOptions) {
         super(context);
-        this.zzbot = new zzb(this, context, googleMapOptions);
+        this.zzbos = new zzb(this, context, googleMapOptions);
         zzJA();
     }
 
@@ -240,51 +240,51 @@ public class MapView extends FrameLayout {
 
     public void getMapAsync(OnMapReadyCallback onMapReadyCallback) {
         zzac.zzdj("getMapAsync() must be called on the main thread");
-        this.zzbot.getMapAsync(onMapReadyCallback);
+        this.zzbos.getMapAsync(onMapReadyCallback);
     }
 
     public final void onCreate(Bundle bundle) {
-        this.zzbot.onCreate(bundle);
-        if (this.zzbot.zzBN() == null) {
+        this.zzbos.onCreate(bundle);
+        if (this.zzbos.zzBN() == null) {
             com.google.android.gms.dynamic.zza.zzb((FrameLayout) this);
         }
     }
 
     public final void onDestroy() {
-        this.zzbot.onDestroy();
+        this.zzbos.onDestroy();
     }
 
     public final void onEnterAmbient(Bundle bundle) {
         zzac.zzdj("onEnterAmbient() must be called on the main thread");
-        this.zzbot.onEnterAmbient(bundle);
+        this.zzbos.onEnterAmbient(bundle);
     }
 
     public final void onExitAmbient() {
         zzac.zzdj("onExitAmbient() must be called on the main thread");
-        this.zzbot.onExitAmbient();
+        this.zzbos.onExitAmbient();
     }
 
     public final void onLowMemory() {
-        this.zzbot.onLowMemory();
+        this.zzbos.onLowMemory();
     }
 
     public final void onPause() {
-        this.zzbot.onPause();
+        this.zzbos.onPause();
     }
 
     public final void onResume() {
-        this.zzbot.onResume();
+        this.zzbos.onResume();
     }
 
     public final void onSaveInstanceState(Bundle bundle) {
-        this.zzbot.onSaveInstanceState(bundle);
+        this.zzbos.onSaveInstanceState(bundle);
     }
 
     public final void onStart() {
-        this.zzbot.onStart();
+        this.zzbos.onStart();
     }
 
     public final void onStop() {
-        this.zzbot.onStop();
+        this.zzbos.onStop();
     }
 }

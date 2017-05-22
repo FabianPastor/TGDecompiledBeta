@@ -6,7 +6,7 @@ import com.google.android.gms.common.internal.zzr;
 public interface zzbai extends zze {
     void connect();
 
-    void zzPJ();
+    void zzPL();
 
     void zza(zzr com_google_android_gms_common_internal_zzr, boolean z);
 

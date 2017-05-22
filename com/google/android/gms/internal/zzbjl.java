@@ -7,7 +7,7 @@ import com.google.android.gms.common.internal.safeparcel.zza;
 public class zzbjl extends zza {
     public static final Creator<zzbjl> CREATOR = new zzbjm();
     final int versionCode;
-    public int zzbOG;
+    public int zzbOJ;
 
     public zzbjl() {
         this.versionCode = 1;
@@ -15,7 +15,7 @@ public class zzbjl extends zza {
 
     public zzbjl(int i, int i2) {
         this.versionCode = i;
-        this.zzbOG = i2;
+        this.zzbOJ = i2;
     }
 
     public void writeToParcel(Parcel parcel, int i) {

@@ -7,10 +7,10 @@ import com.google.android.gms.dynamic.zzd;
 import com.google.android.gms.maps.model.internal.zzc;
 
 public final class GroundOverlay {
-    private final zzc zzbpm;
+    private final zzc zzbpl;
 
     public GroundOverlay(zzc com_google_android_gms_maps_model_internal_zzc) {
-        this.zzbpm = (zzc) zzac.zzw(com_google_android_gms_maps_model_internal_zzc);
+        this.zzbpl = (zzc) zzac.zzw(com_google_android_gms_maps_model_internal_zzc);
     }
 
     public boolean equals(Object obj) {
@@ -18,7 +18,7 @@ public final class GroundOverlay {
             return false;
         }
         try {
-            return this.zzbpm.zzb(((GroundOverlay) obj).zzbpm);
+            return this.zzbpl.zzb(((GroundOverlay) obj).zzbpl);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -26,7 +26,7 @@ public final class GroundOverlay {
 
     public float getBearing() {
         try {
-            return this.zzbpm.getBearing();
+            return this.zzbpl.getBearing();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -34,7 +34,7 @@ public final class GroundOverlay {
 
     public LatLngBounds getBounds() {
         try {
-            return this.zzbpm.getBounds();
+            return this.zzbpl.getBounds();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -42,7 +42,7 @@ public final class GroundOverlay {
 
     public float getHeight() {
         try {
-            return this.zzbpm.getHeight();
+            return this.zzbpl.getHeight();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -50,7 +50,7 @@ public final class GroundOverlay {
 
     public String getId() {
         try {
-            return this.zzbpm.getId();
+            return this.zzbpl.getId();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -58,7 +58,7 @@ public final class GroundOverlay {
 
     public LatLng getPosition() {
         try {
-            return this.zzbpm.getPosition();
+            return this.zzbpl.getPosition();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -66,7 +66,7 @@ public final class GroundOverlay {
 
     public Object getTag() {
         try {
-            return zzd.zzF(this.zzbpm.getTag());
+            return zzd.zzF(this.zzbpl.getTag());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -74,7 +74,7 @@ public final class GroundOverlay {
 
     public float getTransparency() {
         try {
-            return this.zzbpm.getTransparency();
+            return this.zzbpl.getTransparency();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -82,7 +82,7 @@ public final class GroundOverlay {
 
     public float getWidth() {
         try {
-            return this.zzbpm.getWidth();
+            return this.zzbpl.getWidth();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -90,7 +90,7 @@ public final class GroundOverlay {
 
     public float getZIndex() {
         try {
-            return this.zzbpm.getZIndex();
+            return this.zzbpl.getZIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -98,7 +98,7 @@ public final class GroundOverlay {
 
     public int hashCode() {
         try {
-            return this.zzbpm.hashCodeRemote();
+            return this.zzbpl.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -106,7 +106,7 @@ public final class GroundOverlay {
 
     public boolean isClickable() {
         try {
-            return this.zzbpm.isClickable();
+            return this.zzbpl.isClickable();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -114,7 +114,7 @@ public final class GroundOverlay {
 
     public boolean isVisible() {
         try {
-            return this.zzbpm.isVisible();
+            return this.zzbpl.isVisible();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -122,7 +122,7 @@ public final class GroundOverlay {
 
     public void remove() {
         try {
-            this.zzbpm.remove();
+            this.zzbpl.remove();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -130,7 +130,7 @@ public final class GroundOverlay {
 
     public void setBearing(float f) {
         try {
-            this.zzbpm.setBearing(f);
+            this.zzbpl.setBearing(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -138,7 +138,7 @@ public final class GroundOverlay {
 
     public void setClickable(boolean z) {
         try {
-            this.zzbpm.setClickable(z);
+            this.zzbpl.setClickable(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -146,7 +146,7 @@ public final class GroundOverlay {
 
     public void setDimensions(float f) {
         try {
-            this.zzbpm.setDimensions(f);
+            this.zzbpl.setDimensions(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -154,7 +154,7 @@ public final class GroundOverlay {
 
     public void setDimensions(float f, float f2) {
         try {
-            this.zzbpm.zzg(f, f2);
+            this.zzbpl.zzg(f, f2);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -163,7 +163,7 @@ public final class GroundOverlay {
     public void setImage(@NonNull BitmapDescriptor bitmapDescriptor) {
         zzac.zzb((Object) bitmapDescriptor, (Object) "imageDescriptor must not be null");
         try {
-            this.zzbpm.zzL(bitmapDescriptor.zzJm());
+            this.zzbpl.zzL(bitmapDescriptor.zzJm());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -171,7 +171,7 @@ public final class GroundOverlay {
 
     public void setPosition(LatLng latLng) {
         try {
-            this.zzbpm.setPosition(latLng);
+            this.zzbpl.setPosition(latLng);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -179,7 +179,7 @@ public final class GroundOverlay {
 
     public void setPositionFromBounds(LatLngBounds latLngBounds) {
         try {
-            this.zzbpm.setPositionFromBounds(latLngBounds);
+            this.zzbpl.setPositionFromBounds(latLngBounds);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -187,7 +187,7 @@ public final class GroundOverlay {
 
     public void setTag(Object obj) {
         try {
-            this.zzbpm.setTag(zzd.zzA(obj));
+            this.zzbpl.setTag(zzd.zzA(obj));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -195,7 +195,7 @@ public final class GroundOverlay {
 
     public void setTransparency(float f) {
         try {
-            this.zzbpm.setTransparency(f);
+            this.zzbpl.setTransparency(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -203,7 +203,7 @@ public final class GroundOverlay {
 
     public void setVisible(boolean z) {
         try {
-            this.zzbpm.setVisible(z);
+            this.zzbpl.setVisible(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -211,7 +211,7 @@ public final class GroundOverlay {
 
     public void setZIndex(float f) {
         try {
-            this.zzbpm.setZIndex(f);
+            this.zzbpl.setZIndex(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

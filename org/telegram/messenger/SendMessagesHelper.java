@@ -4298,7 +4298,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             }
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
-                                    if (thumbFinal != null) {
+                                    if (!(thumbFinal == null || thumbKeyFinal == null)) {
                                         ImageLoader.getInstance().putImageToCache(new BitmapDrawable(thumbFinal), thumbKeyFinal);
                                     }
                                     SendMessagesHelper.getInstance().sendMessage(videoFinal, videoEditedInfo2, finalPath, j, messageObject, null, params);

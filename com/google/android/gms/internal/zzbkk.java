@@ -11,7 +11,7 @@ public class zzbkk implements Creator<zzbkj> {
     static void zza(zzbkj com_google_android_gms_internal_zzbkj, Parcel parcel, int i) {
         int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 1, com_google_android_gms_internal_zzbkj.versionCode);
-        zzc.zza(parcel, 2, com_google_android_gms_internal_zzbkj.zzbPG, i, false);
+        zzc.zza(parcel, 2, com_google_android_gms_internal_zzbkj.zzbPJ, i, false);
         zzc.zzJ(parcel, zzaZ);
     }
 

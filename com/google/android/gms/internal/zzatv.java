@@ -19,15 +19,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class zzatv extends zzauh {
-    private final zza zzbsx = new zza(this, getContext(), zzow());
-    private boolean zzbsy;
+    private boolean zzbsA;
+    private final zza zzbsz = new zza(this, getContext(), zzow());
 
     @TargetApi(11)
     private class zza extends SQLiteOpenHelper {
-        final /* synthetic */ zzatv zzbsz;
+        final /* synthetic */ zzatv zzbsB;
 
         zza(zzatv com_google_android_gms_internal_zzatv, Context context, String str) {
-            this.zzbsz = com_google_android_gms_internal_zzatv;
+            this.zzbsB = com_google_android_gms_internal_zzatv;
             super(context, str, null, 1);
         }
 
@@ -37,15 +37,15 @@ public class zzatv extends zzauh {
                 return super.getWritableDatabase();
             } catch (SQLiteException e) {
                 if (VERSION.SDK_INT < 11 || !(e instanceof SQLiteDatabaseLockedException)) {
-                    this.zzbsz.zzKl().zzLY().log("Opening the local database failed, dropping and recreating it");
-                    String zzow = this.zzbsz.zzow();
-                    if (!this.zzbsz.getContext().getDatabasePath(zzow).delete()) {
-                        this.zzbsz.zzKl().zzLY().zzj("Failed to delete corrupted local db file", zzow);
+                    this.zzbsB.zzKl().zzLZ().log("Opening the local database failed, dropping and recreating it");
+                    String zzow = this.zzbsB.zzow();
+                    if (!this.zzbsB.getContext().getDatabasePath(zzow).delete()) {
+                        this.zzbsB.zzKl().zzLZ().zzj("Failed to delete corrupted local db file", zzow);
                     }
                     try {
                         return super.getWritableDatabase();
                     } catch (SQLiteException e2) {
-                        this.zzbsz.zzKl().zzLY().zzj("Failed to open local database. Events will bypass local storage", e2);
+                        this.zzbsB.zzKl().zzLZ().zzj("Failed to open local database. Events will bypass local storage", e2);
                         return null;
                     }
                 }
@@ -55,7 +55,7 @@ public class zzatv extends zzauh {
 
         @WorkerThread
         public void onCreate(SQLiteDatabase sQLiteDatabase) {
-            zzatj.zza(this.zzbsz.zzKl(), sQLiteDatabase);
+            zzatj.zza(this.zzbsB.zzKl(), sQLiteDatabase);
         }
 
         @WorkerThread
@@ -68,7 +68,7 @@ public class zzatv extends zzauh {
                     rawQuery.close();
                 }
             }
-            zzatj.zza(this.zzbsz.zzKl(), sQLiteDatabase, "messages", "create table if not exists messages ( type INTEGER NOT NULL, entry BLOB NOT NULL)", "type,entry", null);
+            zzatj.zza(this.zzbsB.zzKl(), sQLiteDatabase, "messages", "create table if not exists messages ( type INTEGER NOT NULL, entry BLOB NOT NULL)", "type,entry", null);
         }
 
         @WorkerThread
@@ -85,13 +85,13 @@ public class zzatv extends zzauh {
     private boolean zza(int i, byte[] bArr) {
         zzJW();
         zzmR();
-        if (this.zzbsy) {
+        if (this.zzbsA) {
             return false;
         }
         ContentValues contentValues = new ContentValues();
         contentValues.put("type", Integer.valueOf(i));
         contentValues.put("entry", bArr);
-        zzKn().zzLp();
+        zzKn().zzLq();
         int i2 = 0;
         int i3 = 5;
         while (i2 < 5) {
@@ -99,7 +99,7 @@ public class zzatv extends zzauh {
             try {
                 sQLiteDatabase = getWritableDatabase();
                 if (sQLiteDatabase == null) {
-                    this.zzbsy = true;
+                    this.zzbsA = true;
                     if (sQLiteDatabase != null) {
                         sQLiteDatabase.close();
                     }
@@ -112,11 +112,11 @@ public class zzatv extends zzauh {
                     j = rawQuery.getLong(0);
                 }
                 if (j >= 100000) {
-                    zzKl().zzLY().log("Data loss, local db full");
+                    zzKl().zzLZ().log("Data loss, local db full");
                     j = (100000 - j) + 1;
                     long delete = (long) sQLiteDatabase.delete("messages", "rowid in (select rowid from messages order by rowid asc limit ?)", new String[]{Long.toString(j)});
                     if (delete != j) {
-                        zzKl().zzLY().zzd("Different delete count than expected in local db. expected, received, difference", Long.valueOf(j), Long.valueOf(delete), Long.valueOf(j - delete));
+                        zzKl().zzLZ().zzd("Different delete count than expected in local db. expected, received, difference", Long.valueOf(j), Long.valueOf(delete), Long.valueOf(j - delete));
                     }
                 }
                 sQLiteDatabase.insertOrThrow("messages", null, contentValues);
@@ -127,8 +127,8 @@ public class zzatv extends zzauh {
                 }
                 return true;
             } catch (SQLiteFullException e) {
-                zzKl().zzLY().zzj("Error writing entry to local database", e);
-                this.zzbsy = true;
+                zzKl().zzLZ().zzj("Error writing entry to local database", e);
+                this.zzbsA = true;
                 if (sQLiteDatabase != null) {
                     sQLiteDatabase.close();
                 }
@@ -140,8 +140,8 @@ public class zzatv extends zzauh {
                             sQLiteDatabase.endTransaction();
                         }
                     }
-                    zzKl().zzLY().zzj("Error writing entry to local database", e2);
-                    this.zzbsy = true;
+                    zzKl().zzLZ().zzj("Error writing entry to local database", e2);
+                    this.zzbsA = true;
                 } else {
                     SystemClock.sleep((long) i3);
                     i3 += 20;
@@ -156,7 +156,7 @@ public class zzatv extends zzauh {
                 }
             }
         }
-        zzKl().zzMa().log("Failed to write entry to local database");
+        zzKl().zzMb().log("Failed to write entry to local database");
         return false;
     }
 
@@ -167,14 +167,14 @@ public class zzatv extends zzauh {
     @WorkerThread
     SQLiteDatabase getWritableDatabase() {
         int i = VERSION.SDK_INT;
-        if (this.zzbsy) {
+        if (this.zzbsA) {
             return null;
         }
-        SQLiteDatabase writableDatabase = this.zzbsx.getWritableDatabase();
+        SQLiteDatabase writableDatabase = this.zzbsz.getWritableDatabase();
         if (writableDatabase != null) {
             return writableDatabase;
         }
-        this.zzbsy = true;
+        this.zzbsA = true;
         return null;
     }
 
@@ -254,7 +254,7 @@ public class zzatv extends zzauh {
         return super.zzKn();
     }
 
-    boolean zzLM() {
+    boolean zzLN() {
         return getContext().getDatabasePath(zzow()).exists();
     }
 
@@ -267,7 +267,7 @@ public class zzatv extends zzauh {
         if (marshall.length <= 131072) {
             return zza(0, marshall);
         }
-        zzKl().zzMa().log("Event is too long for local database. Sending event directly to service");
+        zzKl().zzMb().log("Event is too long for local database. Sending event directly to service");
         return false;
     }
 
@@ -280,7 +280,7 @@ public class zzatv extends zzauh {
         if (marshall.length <= 131072) {
             return zza(1, marshall);
         }
-        zzKl().zzMa().log("User property too long for local database. Sending directly to service");
+        zzKl().zzMb().log("User property too long for local database. Sending directly to service");
         return false;
     }
 
@@ -290,7 +290,7 @@ public class zzatv extends zzauh {
         if (zza.length <= 131072) {
             return zza(2, zza);
         }
-        zzKl().zzMa().log("Conditional user property too long for local database. Sending directly to service");
+        zzKl().zzMb().log("Conditional user property too long for local database. Sending directly to service");
         return false;
     }
 
@@ -298,14 +298,15 @@ public class zzatv extends zzauh {
     public List<com.google.android.gms.common.internal.safeparcel.zza> zzlD(int i) {
         Object obj;
         Throwable th;
+        Parcel obtain;
         zzmR();
         zzJW();
         int i2 = VERSION.SDK_INT;
-        if (this.zzbsy) {
+        if (this.zzbsA) {
             return null;
         }
         List<com.google.android.gms.common.internal.safeparcel.zza> arrayList = new ArrayList();
-        if (!zzLM()) {
+        if (!zzLN()) {
             return arrayList;
         }
         int i3 = 5;
@@ -316,7 +317,7 @@ public class zzatv extends zzauh {
                 SQLiteDatabase writableDatabase = getWritableDatabase();
                 if (writableDatabase == null) {
                     try {
-                        this.zzbsy = true;
+                        this.zzbsA = true;
                         if (writableDatabase != null) {
                             writableDatabase.close();
                         }
@@ -344,29 +345,29 @@ public class zzatv extends zzauh {
                         byte[] blob = query.getBlob(2);
                         Object obj2;
                         if (i5 == 0) {
-                            Parcel obtain = Parcel.obtain();
+                            Parcel obtain2 = Parcel.obtain();
                             try {
-                                obtain.unmarshall(blob, 0, blob.length);
-                                obtain.setDataPosition(0);
-                                obj2 = (zzatq) zzatq.CREATOR.createFromParcel(obtain);
+                                obtain2.unmarshall(blob, 0, blob.length);
+                                obtain2.setDataPosition(0);
+                                obj2 = (zzatq) zzatq.CREATOR.createFromParcel(obtain2);
                                 if (obj2 != null) {
                                     arrayList.add(obj2);
                                 }
                             } catch (com.google.android.gms.common.internal.safeparcel.zzb.zza e3) {
-                                obj2 = zzKl().zzLY();
+                                obj2 = zzKl().zzLZ();
                                 obj2.log("Failed to load event from local database");
                                 j = j2;
                             } finally {
-                                obtain.recycle();
+                                obtain2.recycle();
                             }
                         } else if (i5 == 1) {
-                            r7 = Parcel.obtain();
+                            obtain = Parcel.obtain();
                             try {
-                                r7.unmarshall(blob, 0, blob.length);
-                                r7.setDataPosition(0);
-                                obj2 = (zzauq) zzauq.CREATOR.createFromParcel(r7);
+                                obtain.unmarshall(blob, 0, blob.length);
+                                obtain.setDataPosition(0);
+                                obj2 = (zzauq) zzauq.CREATOR.createFromParcel(obtain);
                             } catch (com.google.android.gms.common.internal.safeparcel.zzb.zza e4) {
-                                obj2 = zzKl().zzLY();
+                                obj2 = zzKl().zzLZ();
                                 obj2.log("Failed to load user property from local database");
                                 obj2 = null;
                                 if (obj2 != null) {
@@ -374,19 +375,19 @@ public class zzatv extends zzauh {
                                 }
                                 j = j2;
                             } finally {
-                                r7.recycle();
+                                obtain.recycle();
                             }
                             if (obj2 != null) {
                                 arrayList.add(obj2);
                             }
                         } else if (i5 == 2) {
-                            r7 = Parcel.obtain();
+                            obtain = Parcel.obtain();
                             try {
-                                r7.unmarshall(blob, 0, blob.length);
-                                r7.setDataPosition(0);
-                                obj2 = (zzatg) zzatg.CREATOR.createFromParcel(r7);
+                                obtain.unmarshall(blob, 0, blob.length);
+                                obtain.setDataPosition(0);
+                                obj2 = (zzatg) zzatg.CREATOR.createFromParcel(obtain);
                             } catch (com.google.android.gms.common.internal.safeparcel.zzb.zza e5) {
-                                obj2 = zzKl().zzLY();
+                                obj2 = zzKl().zzLZ();
                                 obj2.log("Failed to load user property from local database");
                                 obj2 = null;
                                 if (obj2 != null) {
@@ -394,19 +395,19 @@ public class zzatv extends zzauh {
                                 }
                                 j = j2;
                             } finally {
-                                r7.recycle();
+                                obtain.recycle();
                             }
                             if (obj2 != null) {
                                 arrayList.add(obj2);
                             }
                         } else {
-                            zzKl().zzLY().log("Unknown record type in local database");
+                            zzKl().zzLZ().log("Unknown record type in local database");
                         }
                         j = j2;
                     }
                     query.close();
                     if (writableDatabase.delete("messages", "rowid <= ?", new String[]{Long.toString(j)}) < arrayList.size()) {
-                        zzKl().zzLY().log("Fewer entries removed from local database than expected");
+                        zzKl().zzLZ().log("Fewer entries removed from local database than expected");
                     }
                     writableDatabase.setTransactionSuccessful();
                     writableDatabase.endTransaction();
@@ -418,8 +419,8 @@ public class zzatv extends zzauh {
             } catch (SQLiteFullException e6) {
                 obj = e6;
                 try {
-                    zzKl().zzLY().zzj("Error reading entries from local database", obj);
-                    this.zzbsy = true;
+                    zzKl().zzLZ().zzj("Error reading entries from local database", obj);
+                    this.zzbsA = true;
                     if (sQLiteDatabase != null) {
                         sQLiteDatabase.close();
                         i2 = i3;
@@ -439,8 +440,8 @@ public class zzatv extends zzauh {
                             sQLiteDatabase.endTransaction();
                         }
                     }
-                    zzKl().zzLY().zzj("Error reading entries from local database", obj);
-                    this.zzbsy = true;
+                    zzKl().zzLZ().zzj("Error reading entries from local database", obj);
+                    this.zzbsA = true;
                     i2 = i3;
                 } else {
                     SystemClock.sleep((long) i3);
@@ -453,7 +454,7 @@ public class zzatv extends zzauh {
                 i3 = i2;
             }
         }
-        zzKl().zzMa().log("Failed to read events from database in reasonable time");
+        zzKl().zzMb().log("Failed to read events from database in reasonable time");
         return null;
         if (sQLiteDatabase != null) {
             sQLiteDatabase.close();
@@ -473,6 +474,6 @@ public class zzatv extends zzauh {
     }
 
     String zzow() {
-        return zzKn().zzLf();
+        return zzKn().zzLg();
     }
 }

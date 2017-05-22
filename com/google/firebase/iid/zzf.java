@@ -34,13 +34,13 @@ import java.security.interfaces.RSAPrivateKey;
 import java.util.Random;
 
 public class zzf {
+    static PendingIntent zzbgG;
     static String zzbhQ = null;
     static boolean zzbhR = false;
     static int zzbhS = 0;
     static int zzbhT = 0;
     static int zzbhU = 0;
     static BroadcastReceiver zzbhV = null;
-    PendingIntent zzbgG;
     Messenger zzbgK;
     Messenger zzbhX;
     MessengerCompat zzbhY;
@@ -49,7 +49,7 @@ public class zzf {
     int zzbib;
     int zzbic;
     long zzbid;
-    private final SimpleArrayMap<String, zzb> zzclw = new SimpleArrayMap();
+    private final SimpleArrayMap<String, zzb> zzcly = new SimpleArrayMap();
     Context zzqn;
 
     private interface zzb {
@@ -60,31 +60,31 @@ public class zzf {
 
     private static class zza implements zzb {
         private Intent intent;
-        private final ConditionVariable zzcly;
-        private String zzclz;
+        private final ConditionVariable zzclA;
+        private String zzclB;
 
         private zza() {
-            this.zzcly = new ConditionVariable();
+            this.zzclA = new ConditionVariable();
         }
 
         public void onError(String str) {
-            this.zzclz = str;
-            this.zzcly.open();
+            this.zzclB = str;
+            this.zzclA.open();
         }
 
         public void zzH(Intent intent) {
             this.intent = intent;
-            this.zzcly.open();
+            this.zzclA.open();
         }
 
-        public Intent zzabT() throws IOException {
-            if (!this.zzcly.block(30000)) {
+        public Intent zzabV() throws IOException {
+            if (!this.zzclA.block(30000)) {
                 Log.w("InstanceID/Rpc", "No response");
                 throw new IOException(InstanceID.ERROR_TIMEOUT);
-            } else if (this.zzclz == null) {
+            } else if (this.zzclB == null) {
                 return this.intent;
             } else {
-                throw new IOException(this.zzclz);
+                throw new IOException(this.zzclB);
             }
         }
     }
@@ -143,14 +143,14 @@ public class zzf {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void zzay(String str, String str2) {
-        synchronized (this.zzclw) {
+        synchronized (this.zzcly) {
             if (str == null) {
-                for (int i = 0; i < this.zzclw.size(); i++) {
-                    ((zzb) this.zzclw.valueAt(i)).onError(str2);
+                for (int i = 0; i < this.zzcly.size(); i++) {
+                    ((zzb) this.zzcly.valueAt(i)).onError(str2);
                 }
-                this.zzclw.clear();
+                this.zzcly.clear();
             } else {
-                zzb com_google_firebase_iid_zzf_zzb = (zzb) this.zzclw.remove(str);
+                zzb com_google_firebase_iid_zzf_zzb = (zzb) this.zzcly.remove(str);
                 if (com_google_firebase_iid_zzf_zzb == null) {
                     String str3 = "InstanceID/Rpc";
                     String str4 = "Missing callback for ";
@@ -166,26 +166,26 @@ public class zzf {
     private Intent zzb(Bundle bundle, KeyPair keyPair) throws IOException {
         String zzHn = zzHn();
         zza com_google_firebase_iid_zzf_zza = new zza();
-        synchronized (this.zzclw) {
-            this.zzclw.put(zzHn, com_google_firebase_iid_zzf_zza);
+        synchronized (this.zzcly) {
+            this.zzcly.put(zzHn, com_google_firebase_iid_zzf_zza);
         }
         zza(bundle, keyPair, zzHn);
         try {
-            Intent zzabT = com_google_firebase_iid_zzf_zza.zzabT();
-            synchronized (this.zzclw) {
-                this.zzclw.remove(zzHn);
+            Intent zzabV = com_google_firebase_iid_zzf_zza.zzabV();
+            synchronized (this.zzcly) {
+                this.zzcly.remove(zzHn);
             }
-            return zzabT;
+            return zzabV;
         } catch (Throwable th) {
-            synchronized (this.zzclw) {
-                this.zzclw.remove(zzHn);
+            synchronized (this.zzcly) {
+                this.zzcly.remove(zzHn);
             }
         }
     }
 
     private void zzb(String str, Intent intent) {
-        synchronized (this.zzclw) {
-            zzb com_google_firebase_iid_zzf_zzb = (zzb) this.zzclw.remove(str);
+        synchronized (this.zzcly) {
+            zzb com_google_firebase_iid_zzf_zzb = (zzb) this.zzcly.remove(str);
             if (com_google_firebase_iid_zzf_zzb == null) {
                 String str2 = "InstanceID/Rpc";
                 String str3 = "Missing callback for ";
@@ -224,18 +224,17 @@ public class zzf {
         }
         zzbhS = Process.myUid();
         PackageManager packageManager = context.getPackageManager();
-        if (zzt.zzzq()) {
-            if (zzb(packageManager) || zza(packageManager)) {
-                return zzbhQ;
-            }
-        } else if (zza(packageManager) || zzb(packageManager)) {
+        if (zzb(packageManager)) {
+            return zzbhQ;
+        }
+        if (!zzt.zzzq() && zza(packageManager)) {
             return zzbhQ;
         }
         Log.w("InstanceID/Rpc", "Failed to resolve IID implementation package, falling back");
         if (zzb(packageManager, "com.google.android.gms")) {
             zzbhR = zzt.zzzq();
             return zzbhQ;
-        } else if (VERSION.SDK_INT >= 21 || !zzb(packageManager, "com.google.android.gsf")) {
+        } else if (zzt.zzzo() || !zzb(packageManager, "com.google.android.gsf")) {
             Log.w("InstanceID/Rpc", "Google Play services is missing, unable to get tokens");
             return null;
         } else {
@@ -258,14 +257,25 @@ public class zzf {
         }
     }
 
+    public static synchronized void zzf(Context context, Intent intent) {
+        synchronized (zzf.class) {
+            if (zzbgG == null) {
+                Intent intent2 = new Intent();
+                intent2.setPackage("com.google.example.invalidpackage");
+                zzbgG = PendingIntent.getBroadcast(context, 0, intent2, 0);
+            }
+            intent.putExtra("app", zzbgG);
+        }
+    }
+
     void zzHl() {
         if (this.zzbgK == null) {
             zzbA(this.zzqn);
             this.zzbgK = new Messenger(new Handler(this, Looper.getMainLooper()) {
-                final /* synthetic */ zzf zzclx;
+                final /* synthetic */ zzf zzclz;
 
                 public void handleMessage(Message message) {
-                    this.zzclx.zze(message);
+                    this.zzclz.zze(message);
                 }
             });
         }
@@ -275,10 +285,10 @@ public class zzf {
         synchronized (this) {
             if (zzbhV == null) {
                 zzbhV = new BroadcastReceiver(this) {
-                    final /* synthetic */ zzf zzclx;
+                    final /* synthetic */ zzf zzclz;
 
                     {
-                        this.zzclx = r1;
+                        this.zzclz = r1;
                     }
 
                     public void onReceive(Context context, Intent intent) {
@@ -286,7 +296,7 @@ public class zzf {
                             String valueOf = String.valueOf(intent.getExtras());
                             Log.d("InstanceID/Rpc", new StringBuilder(String.valueOf(valueOf).length() + 44).append("Received GSF callback via dynamic receiver: ").append(valueOf).toString());
                         }
-                        this.zzclx.zzs(intent);
+                        this.zzclz.zzs(intent);
                     }
                 };
                 if (Log.isLoggable("InstanceID/Rpc", 3)) {
@@ -318,16 +328,16 @@ public class zzf {
             this.zzbhZ = SystemClock.elapsedRealtime();
             Intent intent = new Intent(zzbhR ? "com.google.iid.TOKEN_REQUEST" : "com.google.android.c2dm.intent.REGISTER");
             intent.setPackage(zzbhQ);
-            bundle.putString("gmsv", Integer.toString(FirebaseInstanceId.zzR(this.zzqn, zzbA(this.zzqn))));
+            bundle.putString("gmsv", Integer.toString(FirebaseInstanceId.zzS(this.zzqn, zzbA(this.zzqn))));
             bundle.putString("osv", Integer.toString(VERSION.SDK_INT));
             bundle.putString("app_ver", Integer.toString(FirebaseInstanceId.zzcr(this.zzqn)));
             bundle.putString("app_ver_name", FirebaseInstanceId.zzbx(this.zzqn));
-            bundle.putString("cliv", "fiid-10240000");
+            bundle.putString("cliv", "fiid-10260000");
             bundle.putString("appid", FirebaseInstanceId.zza(keyPair));
             bundle.putString("pub2", FirebaseInstanceId.zzv(keyPair.getPublic().getEncoded()));
             bundle.putString("sig", zza(keyPair, this.zzqn.getPackageName(), r0));
             intent.putExtras(bundle);
-            zzp(intent);
+            zzf(this.zzqn, intent);
             zzb(intent, str);
             return;
         }
@@ -393,15 +403,6 @@ public class zzf {
             }
             Log.w("InstanceID/Rpc", "Dropping invalid message");
         }
-    }
-
-    synchronized void zzp(Intent intent) {
-        if (this.zzbgG == null) {
-            Intent intent2 = new Intent();
-            intent2.setPackage("com.google.example.invalidpackage");
-            this.zzbgG = PendingIntent.getBroadcast(this.zzqn, 0, intent2, 0);
-        }
-        intent.putExtra("app", this.zzbgG);
     }
 
     String zzq(Intent intent) throws IOException {
@@ -503,7 +504,7 @@ public class zzf {
                         if ("SYNC".equals(split[3])) {
                             FirebaseInstanceId.zzby(this.zzqn);
                         } else if ("RST".equals(split[3])) {
-                            FirebaseInstanceId.zza(this.zzqn, zzd.zzb(this.zzqn, null).zzabQ());
+                            FirebaseInstanceId.zza(this.zzqn, zzd.zzb(this.zzqn, null).zzabS());
                             intent.removeExtra("registration_id");
                             zzb(str, intent);
                             return;

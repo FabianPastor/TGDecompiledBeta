@@ -4,14 +4,14 @@ import android.support.annotation.NonNull;
 import java.util.concurrent.Executor;
 
 class zzb<TResult, TContinuationResult> implements OnFailureListener, OnSuccessListener<TContinuationResult>, zzf<TResult> {
-    private final Executor zzbFM;
-    private final Continuation<TResult, Task<TContinuationResult>> zzbNp;
-    private final zzh<TContinuationResult> zzbNq;
+    private final Executor zzbFP;
+    private final Continuation<TResult, Task<TContinuationResult>> zzbNs;
+    private final zzh<TContinuationResult> zzbNt;
 
     public zzb(@NonNull Executor executor, @NonNull Continuation<TResult, Task<TContinuationResult>> continuation, @NonNull zzh<TContinuationResult> com_google_android_gms_tasks_zzh_TContinuationResult) {
-        this.zzbFM = executor;
-        this.zzbNp = continuation;
-        this.zzbNq = com_google_android_gms_tasks_zzh_TContinuationResult;
+        this.zzbFP = executor;
+        this.zzbNs = continuation;
+        this.zzbNt = com_google_android_gms_tasks_zzh_TContinuationResult;
     }
 
     public void cancel() {
@@ -19,36 +19,36 @@ class zzb<TResult, TContinuationResult> implements OnFailureListener, OnSuccessL
     }
 
     public void onComplete(@NonNull final Task<TResult> task) {
-        this.zzbFM.execute(new Runnable(this) {
-            final /* synthetic */ zzb zzbNt;
+        this.zzbFP.execute(new Runnable(this) {
+            final /* synthetic */ zzb zzbNw;
 
             public void run() {
                 try {
-                    Task task = (Task) this.zzbNt.zzbNp.then(task);
+                    Task task = (Task) this.zzbNw.zzbNs.then(task);
                     if (task == null) {
-                        this.zzbNt.onFailure(new NullPointerException("Continuation returned null"));
+                        this.zzbNw.onFailure(new NullPointerException("Continuation returned null"));
                         return;
                     }
-                    task.addOnSuccessListener(TaskExecutors.zzbND, this.zzbNt);
-                    task.addOnFailureListener(TaskExecutors.zzbND, this.zzbNt);
+                    task.addOnSuccessListener(TaskExecutors.zzbNG, this.zzbNw);
+                    task.addOnFailureListener(TaskExecutors.zzbNG, this.zzbNw);
                 } catch (Exception e) {
                     if (e.getCause() instanceof Exception) {
-                        this.zzbNt.zzbNq.setException((Exception) e.getCause());
+                        this.zzbNw.zzbNt.setException((Exception) e.getCause());
                     } else {
-                        this.zzbNt.zzbNq.setException(e);
+                        this.zzbNw.zzbNt.setException(e);
                     }
                 } catch (Exception e2) {
-                    this.zzbNt.zzbNq.setException(e2);
+                    this.zzbNw.zzbNt.setException(e2);
                 }
             }
         });
     }
 
     public void onFailure(@NonNull Exception exception) {
-        this.zzbNq.setException(exception);
+        this.zzbNt.setException(exception);
     }
 
     public void onSuccess(TContinuationResult tContinuationResult) {
-        this.zzbNq.setResult(tContinuationResult);
+        this.zzbNt.setResult(tContinuationResult);
     }
 }

@@ -8,11 +8,11 @@ public class zzbjt extends zza {
     public static final Creator<zzbjt> CREATOR = new zzbju();
     public int mode;
     public final int versionCode;
-    public int zzbPe;
-    public int zzbPf;
-    public boolean zzbPg;
-    public boolean zzbPh;
-    public float zzbPi;
+    public int zzbPh;
+    public int zzbPi;
+    public boolean zzbPj;
+    public boolean zzbPk;
+    public float zzbPl;
 
     public zzbjt() {
         this.versionCode = 2;
@@ -21,11 +21,11 @@ public class zzbjt extends zza {
     public zzbjt(int i, int i2, int i3, int i4, boolean z, boolean z2, float f) {
         this.versionCode = i;
         this.mode = i2;
-        this.zzbPe = i3;
-        this.zzbPf = i4;
-        this.zzbPg = z;
-        this.zzbPh = z2;
-        this.zzbPi = f;
+        this.zzbPh = i3;
+        this.zzbPi = i4;
+        this.zzbPj = z;
+        this.zzbPk = z2;
+        this.zzbPl = f;
     }
 
     public void writeToParcel(Parcel parcel, int i) {

@@ -4,34 +4,34 @@ import android.support.annotation.NonNull;
 import java.util.concurrent.Executor;
 
 class zze<TResult> implements zzf<TResult> {
-    private final Executor zzbFM;
-    private OnSuccessListener<? super TResult> zzbNy;
+    private final Executor zzbFP;
+    private OnSuccessListener<? super TResult> zzbNB;
     private final Object zzrJ = new Object();
 
     public zze(@NonNull Executor executor, @NonNull OnSuccessListener<? super TResult> onSuccessListener) {
-        this.zzbFM = executor;
-        this.zzbNy = onSuccessListener;
+        this.zzbFP = executor;
+        this.zzbNB = onSuccessListener;
     }
 
     public void cancel() {
         synchronized (this.zzrJ) {
-            this.zzbNy = null;
+            this.zzbNB = null;
         }
     }
 
     public void onComplete(@NonNull final Task<TResult> task) {
         if (task.isSuccessful()) {
             synchronized (this.zzrJ) {
-                if (this.zzbNy == null) {
+                if (this.zzbNB == null) {
                     return;
                 }
-                this.zzbFM.execute(new Runnable(this) {
-                    final /* synthetic */ zze zzbNz;
+                this.zzbFP.execute(new Runnable(this) {
+                    final /* synthetic */ zze zzbNC;
 
                     public void run() {
-                        synchronized (this.zzbNz.zzrJ) {
-                            if (this.zzbNz.zzbNy != null) {
-                                this.zzbNz.zzbNy.onSuccess(task.getResult());
+                        synchronized (this.zzbNC.zzrJ) {
+                            if (this.zzbNC.zzbNB != null) {
+                                this.zzbNC.zzbNB.onSuccess(task.getResult());
                             }
                         }
                     }

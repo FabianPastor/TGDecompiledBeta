@@ -22,9 +22,10 @@ import java.util.List;
 import java.util.Map;
 import org.telegram.messenger.BuildConfig;
 
+@Keep
 @Deprecated
 public class AppMeasurement {
-    private final zzaue zzbqc;
+    private final zzaue zzbqb;
 
     public static class ConditionalUserProperty {
         @Keep
@@ -67,7 +68,7 @@ public class AppMeasurement {
             this.mCreationTimestamp = conditionalUserProperty.mCreationTimestamp;
             this.mName = conditionalUserProperty.mName;
             if (conditionalUserProperty.mValue != null) {
-                this.mValue = zzaut.zzH(conditionalUserProperty.mValue);
+                this.mValue = zzaut.zzI(conditionalUserProperty.mValue);
                 if (this.mValue == null) {
                     this.mValue = conditionalUserProperty.mValue;
                 }
@@ -109,94 +110,101 @@ public class AppMeasurement {
     }
 
     public static class zzf {
+        public String zzbqe;
         public String zzbqf;
-        public String zzbqg;
-        public long zzbqh;
+        public long zzbqg;
 
         public zzf(zzf com_google_android_gms_measurement_AppMeasurement_zzf) {
+            this.zzbqe = com_google_android_gms_measurement_AppMeasurement_zzf.zzbqe;
             this.zzbqf = com_google_android_gms_measurement_AppMeasurement_zzf.zzbqf;
             this.zzbqg = com_google_android_gms_measurement_AppMeasurement_zzf.zzbqg;
-            this.zzbqh = com_google_android_gms_measurement_AppMeasurement_zzf.zzbqh;
         }
     }
 
     public static final class zza extends Event {
-        public static final Map<String, String> zzbqd = com.google.android.gms.common.util.zzf.zzb(new String[]{"app_clear_data", "app_exception", "app_remove", "app_upgrade", "app_install", "app_update", "firebase_campaign", "error", "first_open", "in_app_purchase", "notification_dismiss", "notification_foreground", "notification_open", "notification_receive", "os_update", "session_start", "user_engagement", "firebase_ad_exposure", "firebase_adunit_exposure"}, new String[]{"_cd", "_ae", "_ui", "_in", "_ug", "_au", "_cmp", "_err", "_f", "_iap", "_nd", "_nf", "_no", "_nr", "_ou", "_s", "_e", "_xa", "_xu"});
+        public static final Map<String, String> zzbqc = com.google.android.gms.common.util.zzf.zzb(new String[]{"app_clear_data", "app_exception", "app_remove", "app_upgrade", "app_install", "app_update", "firebase_campaign", "error", "first_open", "first_visit", "in_app_purchase", "notification_dismiss", "notification_foreground", "notification_open", "notification_receive", "os_update", "session_start", "user_engagement", "firebase_ad_exposure", "firebase_adunit_exposure", "firebase_extra_parameter"}, new String[]{"_cd", "_ae", "_ui", "_in", "_ug", "_au", "_cmp", "_err", "_f", "_v", "_iap", "_nd", "_nf", "_no", "_nr", "_ou", "_s", "_e", "_xa", "_xu", "_ep"});
     }
 
     public static final class zze extends Param {
-        public static final Map<String, String> zzbqe = com.google.android.gms.common.util.zzf.zzb(new String[]{"firebase_conversion", "engagement_time_msec", "exposure_time", "ad_event_id", "ad_unit_id", "firebase_error", "firebase_error_value", "firebase_error_length", BuildConfig.BUILD_TYPE, "realtime", "firebase_event_origin", "firebase_screen", "firebase_screen_class", "firebase_screen_id", "message_device_time", "message_id", "message_name", "message_time", "previous_app_version", "previous_os_version", "topic", "update_with_analytics", "previous_first_open_count", "system_app", "system_app_update", "previous_install_count"}, new String[]{"_c", "_et", "_xt", "_aeid", "_ai", "_err", "_ev", "_el", "_dbg", "_r", "_o", "_sn", "_sc", "_si", "_ndt", "_nmid", "_nmn", "_nmt", "_pv", "_po", "_nt", "_uwa", "_pfo", "_sys", "_sysu", "_pin"});
+        public static final Map<String, String> zzbqd = com.google.android.gms.common.util.zzf.zzb(new String[]{"firebase_conversion", "engagement_time_msec", "exposure_time", "ad_event_id", "ad_unit_id", "firebase_error", "firebase_error_value", "firebase_error_length", BuildConfig.BUILD_TYPE, "realtime", "firebase_event_origin", "firebase_screen", "firebase_screen_class", "firebase_screen_id", "message_device_time", "message_id", "message_name", "message_time", "previous_app_version", "previous_os_version", "topic", "update_with_analytics", "previous_first_open_count", "system_app", "system_app_update", "previous_install_count", "firebase_event_id", "firebase_extra_params_ct", "firebase_group_name", "firebase_list_length", "firebase_index", "firebase_event_name"}, new String[]{"_c", "_et", "_xt", "_aeid", "_ai", "_err", "_ev", "_el", "_dbg", "_r", "_o", "_sn", "_sc", "_si", "_ndt", "_nmid", "_nmn", "_nmt", "_pv", "_po", "_nt", "_uwa", "_pfo", "_sys", "_sysu", "_pin", "_eid", "_epc", "_gn", "_ll", "_i", "_en"});
     }
 
     public static final class zzg extends UserProperty {
-        public static final Map<String, String> zzbqi = com.google.android.gms.common.util.zzf.zzb(new String[]{"firebase_last_notification", "first_open_time", "last_deep_link_referrer", "user_id"}, new String[]{"_ln", "_fot", "_ldl", "_id"});
+        public static final Map<String, String> zzbqh = com.google.android.gms.common.util.zzf.zzb(new String[]{"firebase_last_notification", "first_open_time", "first_visit_time", "last_deep_link_referrer", "user_id"}, new String[]{"_ln", "_fot", "_fvt", "_ldl", "_id"});
     }
 
     public AppMeasurement(zzaue com_google_android_gms_internal_zzaue) {
         zzac.zzw(com_google_android_gms_internal_zzaue);
-        this.zzbqc = com_google_android_gms_internal_zzaue;
+        this.zzbqb = com_google_android_gms_internal_zzaue;
     }
 
     @Keep
     @RequiresPermission(allOf = {"android.permission.INTERNET", "android.permission.ACCESS_NETWORK_STATE", "android.permission.WAKE_LOCK"})
     @Deprecated
     public static AppMeasurement getInstance(Context context) {
-        return zzaue.zzbM(context).zzMw();
+        return zzaue.zzbM(context).zzMx();
     }
 
     private void zzc(String str, String str2, Object obj) {
-        this.zzbqc.zzKa().zzd(str, str2, obj);
+        this.zzbqb.zzKa().zzd(str, str2, obj);
     }
 
     @Keep
     public void beginAdUnitExposure(@Size(min = 1) @NonNull String str) {
-        this.zzbqc.zzJY().beginAdUnitExposure(str);
+        this.zzbqb.zzJY().beginAdUnitExposure(str);
     }
 
     @Keep
     protected void clearConditionalUserProperty(@Size(max = 24, min = 1) @NonNull String str, @Nullable String str2, @Nullable Bundle bundle) {
-        this.zzbqc.zzKa().clearConditionalUserProperty(str, str2, bundle);
+        this.zzbqb.zzKa().clearConditionalUserProperty(str, str2, bundle);
     }
 
     @Keep
     protected void clearConditionalUserPropertyAs(@Size(min = 1) @NonNull String str, @Size(max = 24, min = 1) @NonNull String str2, @Nullable String str3, @Nullable Bundle bundle) {
-        this.zzbqc.zzKa().clearConditionalUserPropertyAs(str, str2, str3, bundle);
+        this.zzbqb.zzKa().clearConditionalUserPropertyAs(str, str2, str3, bundle);
     }
 
     @Keep
     public void endAdUnitExposure(@Size(min = 1) @NonNull String str) {
-        this.zzbqc.zzJY().endAdUnitExposure(str);
+        this.zzbqb.zzJY().endAdUnitExposure(str);
     }
 
     @Keep
     public long generateEventId() {
-        return this.zzbqc.zzKh().zzNi();
+        return this.zzbqb.zzKh().zzNk();
     }
 
     @Keep
     @Nullable
     @WorkerThread
     public String getAppInstanceId() {
-        return this.zzbqc.zzKa().zzfQ(null);
+        return this.zzbqb.zzKa().zzfQ(null);
     }
 
     @Keep
     @WorkerThread
     protected List<ConditionalUserProperty> getConditionalUserProperties(@Nullable String str, @Nullable @Size(max = 23, min = 1) String str2) {
-        return this.zzbqc.zzKa().getConditionalUserProperties(str, str2);
+        return this.zzbqb.zzKa().getConditionalUserProperties(str, str2);
     }
 
     @Keep
     @WorkerThread
     protected List<ConditionalUserProperty> getConditionalUserPropertiesAs(@Size(min = 1) @NonNull String str, @Nullable String str2, @Nullable @Size(max = 23, min = 1) String str3) {
-        return this.zzbqc.zzKa().getConditionalUserPropertiesAs(str, str2, str3);
+        return this.zzbqb.zzKa().getConditionalUserPropertiesAs(str, str2, str3);
+    }
+
+    @Keep
+    @Nullable
+    public String getCurrentScreenClass() {
+        zzf zzMX = this.zzbqb.zzKe().zzMX();
+        return zzMX != null ? zzMX.zzbqf : null;
     }
 
     @Keep
     @Nullable
     public String getCurrentScreenName() {
-        zzf zzMV = this.zzbqc.zzKe().zzMV();
-        return zzMV != null ? zzMV.zzbqf : null;
+        zzf zzMX = this.zzbqb.zzKe().zzMX();
+        return zzMX != null ? zzMX.zzbqe : null;
     }
 
     @Keep
@@ -205,7 +213,7 @@ public class AppMeasurement {
         try {
             return zzaba.zzwQ();
         } catch (IllegalStateException e) {
-            this.zzbqc.zzKl().zzLY().zzj("getGoogleAppId failed with exception", e);
+            this.zzbqb.zzKl().zzLZ().zzj("getGoogleAppId failed with exception", e);
             return null;
         }
     }
@@ -213,34 +221,34 @@ public class AppMeasurement {
     @Keep
     @WorkerThread
     protected int getMaxUserProperties(@Size(min = 1) @NonNull String str) {
-        return this.zzbqc.zzKa().getMaxUserProperties(str);
+        return this.zzbqb.zzKa().getMaxUserProperties(str);
     }
 
     @Keep
     @WorkerThread
     protected Map<String, Object> getUserProperties(@Nullable String str, @Nullable @Size(max = 24, min = 1) String str2, boolean z) {
-        return this.zzbqc.zzKa().getUserProperties(str, str2, z);
+        return this.zzbqb.zzKa().getUserProperties(str, str2, z);
     }
 
     @Keep
     @WorkerThread
     protected Map<String, Object> getUserPropertiesAs(@Size(min = 1) @NonNull String str, @Nullable String str2, @Nullable @Size(max = 23, min = 1) String str3, boolean z) {
-        return this.zzbqc.zzKa().getUserPropertiesAs(str, str2, str3, z);
+        return this.zzbqb.zzKa().getUserPropertiesAs(str, str2, str3, z);
     }
 
     public void logEvent(@Size(max = 40, min = 1) @NonNull String str, Bundle bundle) {
         if (bundle == null) {
             bundle = new Bundle();
         }
-        this.zzbqc.zzKn().zzLg();
+        this.zzbqb.zzKn().zzLh();
         if (!"_iap".equals(str)) {
-            int zzfU = this.zzbqc.zzKh().zzfU(str);
+            int zzfU = this.zzbqb.zzKh().zzfU(str);
             if (zzfU != 0) {
-                this.zzbqc.zzKh().zza(zzfU, "_ev", this.zzbqc.zzKh().zza(str, this.zzbqc.zzKn().zzKM(), true), str != null ? str.length() : 0);
+                this.zzbqb.zzKh().zza(zzfU, "_ev", this.zzbqb.zzKh().zza(str, this.zzbqb.zzKn().zzKM(), true), str != null ? str.length() : 0);
                 return;
             }
         }
-        this.zzbqc.zzKa().zza("app", str, bundle, true);
+        this.zzbqb.zzKa().zza("app", str, bundle, true);
     }
 
     @Keep
@@ -248,35 +256,35 @@ public class AppMeasurement {
         if (bundle == null) {
             bundle = new Bundle();
         }
-        this.zzbqc.zzKa().zze(str, str2, bundle);
+        this.zzbqb.zzKa().zze(str, str2, bundle);
     }
 
     @Keep
     public void registerOnScreenChangeCallback(@NonNull zzd com_google_android_gms_measurement_AppMeasurement_zzd) {
-        this.zzbqc.zzKe().registerOnScreenChangeCallback(com_google_android_gms_measurement_AppMeasurement_zzd);
+        this.zzbqb.zzKe().registerOnScreenChangeCallback(com_google_android_gms_measurement_AppMeasurement_zzd);
     }
 
     @Keep
     protected void setConditionalUserProperty(@NonNull ConditionalUserProperty conditionalUserProperty) {
-        this.zzbqc.zzKa().setConditionalUserProperty(conditionalUserProperty);
+        this.zzbqb.zzKa().setConditionalUserProperty(conditionalUserProperty);
     }
 
     @Keep
     protected void setConditionalUserPropertyAs(@NonNull ConditionalUserProperty conditionalUserProperty) {
-        this.zzbqc.zzKa().setConditionalUserPropertyAs(conditionalUserProperty);
+        this.zzbqb.zzKa().setConditionalUserPropertyAs(conditionalUserProperty);
     }
 
     @Deprecated
     public void setMeasurementEnabled(boolean z) {
-        this.zzbqc.zzKa().setMeasurementEnabled(z);
+        this.zzbqb.zzKa().setMeasurementEnabled(z);
     }
 
     public void setMinimumSessionDuration(long j) {
-        this.zzbqc.zzKa().setMinimumSessionDuration(j);
+        this.zzbqb.zzKa().setMinimumSessionDuration(j);
     }
 
     public void setSessionTimeoutDuration(long j) {
-        this.zzbqc.zzKa().setSessionTimeoutDuration(j);
+        this.zzbqb.zzKa().setSessionTimeoutDuration(j);
     }
 
     public void setUserId(String str) {
@@ -284,9 +292,9 @@ public class AppMeasurement {
     }
 
     public void setUserProperty(@Size(max = 24, min = 1) @NonNull String str, @Nullable @Size(max = 36) String str2) {
-        int zzfW = this.zzbqc.zzKh().zzfW(str);
+        int zzfW = this.zzbqb.zzKh().zzfW(str);
         if (zzfW != 0) {
-            this.zzbqc.zzKh().zza(zzfW, "_ev", this.zzbqc.zzKh().zza(str, this.zzbqc.zzKn().zzKN(), true), str != null ? str.length() : 0);
+            this.zzbqb.zzKh().zza(zzfW, "_ev", this.zzbqb.zzKh().zza(str, this.zzbqb.zzKn().zzKN(), true), str != null ? str.length() : 0);
         } else {
             zzb("app", str, str2);
         }
@@ -294,27 +302,27 @@ public class AppMeasurement {
 
     @Keep
     public void unregisterOnScreenChangeCallback(@NonNull zzd com_google_android_gms_measurement_AppMeasurement_zzd) {
-        this.zzbqc.zzKe().unregisterOnScreenChangeCallback(com_google_android_gms_measurement_AppMeasurement_zzd);
+        this.zzbqb.zzKe().unregisterOnScreenChangeCallback(com_google_android_gms_measurement_AppMeasurement_zzd);
     }
 
     @WorkerThread
     public void zza(zzb com_google_android_gms_measurement_AppMeasurement_zzb) {
-        this.zzbqc.zzKa().zza(com_google_android_gms_measurement_AppMeasurement_zzb);
+        this.zzbqb.zzKa().zza(com_google_android_gms_measurement_AppMeasurement_zzb);
     }
 
     public void zza(zzc com_google_android_gms_measurement_AppMeasurement_zzc) {
-        this.zzbqc.zzKa().zza(com_google_android_gms_measurement_AppMeasurement_zzc);
+        this.zzbqb.zzKa().zza(com_google_android_gms_measurement_AppMeasurement_zzc);
     }
 
     public void zza(String str, String str2, Bundle bundle, long j) {
-        this.zzbqc.zzKa().zzd(str, str2, bundle == null ? new Bundle() : bundle, j);
+        this.zzbqb.zzKa().zzd(str, str2, bundle == null ? new Bundle() : bundle, j);
     }
 
     @WorkerThread
-    public Map<String, Object> zzaJ(boolean z) {
-        List<zzauq> zzaN = this.zzbqc.zzKa().zzaN(z);
-        Map<String, Object> arrayMap = new ArrayMap(zzaN.size());
-        for (zzauq com_google_android_gms_internal_zzauq : zzaN) {
+    public Map<String, Object> zzaI(boolean z) {
+        List<zzauq> zzaM = this.zzbqb.zzKa().zzaM(z);
+        Map<String, Object> arrayMap = new ArrayMap(zzaM.size());
+        for (zzauq com_google_android_gms_internal_zzauq : zzaM) {
             arrayMap.put(com_google_android_gms_internal_zzauq.name, com_google_android_gms_internal_zzauq.getValue());
         }
         return arrayMap;

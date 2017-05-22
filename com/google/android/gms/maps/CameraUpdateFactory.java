@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 
 public final class CameraUpdateFactory {
-    private static ICameraUpdateFactoryDelegate zzbnv;
+    private static ICameraUpdateFactoryDelegate zzbnu;
 
     private CameraUpdateFactory() {
     }
@@ -104,10 +104,10 @@ public final class CameraUpdateFactory {
     }
 
     private static ICameraUpdateFactoryDelegate zzJn() {
-        return (ICameraUpdateFactoryDelegate) zzac.zzb(zzbnv, (Object) "CameraUpdateFactory is not initialized");
+        return (ICameraUpdateFactoryDelegate) zzac.zzb(zzbnu, (Object) "CameraUpdateFactory is not initialized");
     }
 
     public static void zza(ICameraUpdateFactoryDelegate iCameraUpdateFactoryDelegate) {
-        zzbnv = (ICameraUpdateFactoryDelegate) zzac.zzw(iCameraUpdateFactoryDelegate);
+        zzbnu = (ICameraUpdateFactoryDelegate) zzac.zzw(iCameraUpdateFactoryDelegate);
     }
 }

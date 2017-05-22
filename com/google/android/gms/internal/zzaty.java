@@ -29,22 +29,22 @@ public class zzaty extends zzauh {
         private final int zzJO;
         private final String zzRg;
         private final Throwable zzZa;
-        private final zza zzbsP;
-        private final byte[] zzbsQ;
-        private final Map<String, List<String>> zzbsR;
+        private final zza zzbsR;
+        private final byte[] zzbsS;
+        private final Map<String, List<String>> zzbsT;
 
         private zzb(String str, zza com_google_android_gms_internal_zzaty_zza, int i, Throwable th, byte[] bArr, Map<String, List<String>> map) {
             zzac.zzw(com_google_android_gms_internal_zzaty_zza);
-            this.zzbsP = com_google_android_gms_internal_zzaty_zza;
+            this.zzbsR = com_google_android_gms_internal_zzaty_zza;
             this.zzJO = i;
             this.zzZa = th;
-            this.zzbsQ = bArr;
+            this.zzbsS = bArr;
             this.zzRg = str;
-            this.zzbsR = map;
+            this.zzbsT = map;
         }
 
         public void run() {
-            this.zzbsP.zza(this.zzRg, this.zzJO, this.zzZa, this.zzbsQ, this.zzbsR);
+            this.zzbsR.zza(this.zzRg, this.zzJO, this.zzZa, this.zzbsS, this.zzbsT);
         }
     }
 
@@ -53,44 +53,44 @@ public class zzaty extends zzauh {
         private final URL zzIe;
         private final String zzRg;
         private final byte[] zzaIQ;
-        private final zza zzbsS;
-        private final Map<String, String> zzbsT;
-        final /* synthetic */ zzaty zzbsU;
+        private final zza zzbsU;
+        private final Map<String, String> zzbsV;
+        final /* synthetic */ zzaty zzbsW;
 
         public zzc(zzaty com_google_android_gms_internal_zzaty, String str, URL url, byte[] bArr, Map<String, String> map, zza com_google_android_gms_internal_zzaty_zza) {
-            this.zzbsU = com_google_android_gms_internal_zzaty;
+            this.zzbsW = com_google_android_gms_internal_zzaty;
             zzac.zzdr(str);
             zzac.zzw(url);
             zzac.zzw(com_google_android_gms_internal_zzaty_zza);
             this.zzIe = url;
             this.zzaIQ = bArr;
-            this.zzbsS = com_google_android_gms_internal_zzaty_zza;
+            this.zzbsU = com_google_android_gms_internal_zzaty_zza;
             this.zzRg = str;
-            this.zzbsT = map;
+            this.zzbsV = map;
         }
 
         public void run() {
-            HttpURLConnection zzc;
+            OutputStream outputStream;
             Throwable e;
             Map map;
             int i;
             HttpURLConnection httpURLConnection;
             Throwable th;
             Map map2;
-            this.zzbsU.zzJX();
+            this.zzbsW.zzJX();
             int i2 = 0;
-            OutputStream outputStream;
+            HttpURLConnection zzc;
             try {
-                zzc = this.zzbsU.zzc(this.zzIe);
+                zzc = this.zzbsW.zzc(this.zzIe);
                 try {
-                    if (this.zzbsT != null) {
-                        for (Entry entry : this.zzbsT.entrySet()) {
+                    if (this.zzbsV != null) {
+                        for (Entry entry : this.zzbsV.entrySet()) {
                             zzc.addRequestProperty((String) entry.getKey(), (String) entry.getValue());
                         }
                     }
                     if (this.zzaIQ != null) {
-                        byte[] zzk = this.zzbsU.zzKh().zzk(this.zzaIQ);
-                        this.zzbsU.zzKl().zzMe().zzj("Uploading data. size", Integer.valueOf(zzk.length));
+                        byte[] zzk = this.zzbsW.zzKh().zzk(this.zzaIQ);
+                        this.zzbsW.zzKl().zzMf().zzj("Uploading data. size", Integer.valueOf(zzk.length));
                         zzc.setDoOutput(true);
                         zzc.addRequestProperty("Content-Encoding", "gzip");
                         zzc.setFixedLengthStreamingMode(zzk.length);
@@ -108,13 +108,13 @@ public class zzaty extends zzauh {
                                 try {
                                     outputStream.close();
                                 } catch (IOException e3) {
-                                    this.zzbsU.zzKl().zzLY().zze("Error closing HTTP compressed POST connection output stream. appId", zzatx.zzfE(this.zzRg), e3);
+                                    this.zzbsW.zzKl().zzLZ().zze("Error closing HTTP compressed POST connection output stream. appId", zzatx.zzfE(this.zzRg), e3);
                                 }
                             }
                             if (httpURLConnection != null) {
                                 httpURLConnection.disconnect();
                             }
-                            this.zzbsU.zzKk().zzm(new zzb(this.zzRg, this.zzbsS, i, e, null, map));
+                            this.zzbsW.zzKk().zzm(new zzb(this.zzRg, this.zzbsU, i, e, null, map));
                         } catch (Throwable th2) {
                             th = th2;
                             map2 = null;
@@ -122,13 +122,13 @@ public class zzaty extends zzauh {
                                 try {
                                     outputStream.close();
                                 } catch (IOException e32) {
-                                    this.zzbsU.zzKl().zzLY().zze("Error closing HTTP compressed POST connection output stream. appId", zzatx.zzfE(this.zzRg), e32);
+                                    this.zzbsW.zzKl().zzLZ().zze("Error closing HTTP compressed POST connection output stream. appId", zzatx.zzfE(this.zzRg), e32);
                                 }
                             }
                             if (zzc != null) {
                                 zzc.disconnect();
                             }
-                            this.zzbsU.zzKk().zzm(new zzb(this.zzRg, this.zzbsS, i2, null, null, map2));
+                            this.zzbsW.zzKk().zzm(new zzb(this.zzRg, this.zzbsU, i2, null, null, map2));
                             throw th;
                         }
                     }
@@ -146,7 +146,7 @@ public class zzaty extends zzauh {
                     if (httpURLConnection != null) {
                         httpURLConnection.disconnect();
                     }
-                    this.zzbsU.zzKk().zzm(new zzb(this.zzRg, this.zzbsS, i, e, null, map));
+                    this.zzbsW.zzKk().zzm(new zzb(this.zzRg, this.zzbsU, i, e, null, map));
                 } catch (Throwable th3) {
                     th = th3;
                     map2 = null;
@@ -157,15 +157,15 @@ public class zzaty extends zzauh {
                     if (zzc != null) {
                         zzc.disconnect();
                     }
-                    this.zzbsU.zzKk().zzm(new zzb(this.zzRg, this.zzbsS, i2, null, null, map2));
+                    this.zzbsW.zzKk().zzm(new zzb(this.zzRg, this.zzbsU, i2, null, null, map2));
                     throw th;
                 }
                 try {
-                    byte[] zza = this.zzbsU.zzc(zzc);
+                    byte[] zza = this.zzbsW.zzc(zzc);
                     if (zzc != null) {
                         zzc.disconnect();
                     }
-                    this.zzbsU.zzKk().zzm(new zzb(this.zzRg, this.zzbsS, i2, null, zza, map2));
+                    this.zzbsW.zzKk().zzm(new zzb(this.zzRg, this.zzbsU, i2, null, zza, map2));
                 } catch (IOException e5) {
                     e = e5;
                     map = map2;
@@ -178,7 +178,7 @@ public class zzaty extends zzauh {
                     if (httpURLConnection != null) {
                         httpURLConnection.disconnect();
                     }
-                    this.zzbsU.zzKk().zzm(new zzb(this.zzRg, this.zzbsS, i, e, null, map));
+                    this.zzbsW.zzKk().zzm(new zzb(this.zzRg, this.zzbsU, i, e, null, map));
                 } catch (Throwable th32) {
                     th = th32;
                     outputStream = null;
@@ -188,7 +188,7 @@ public class zzaty extends zzauh {
                     if (zzc != null) {
                         zzc.disconnect();
                     }
-                    this.zzbsU.zzKk().zzm(new zzb(this.zzRg, this.zzbsS, i2, null, null, map2));
+                    this.zzbsW.zzKk().zzm(new zzb(this.zzRg, this.zzbsU, i2, null, null, map2));
                     throw th;
                 }
             } catch (IOException e6) {
@@ -203,7 +203,7 @@ public class zzaty extends zzauh {
                 if (httpURLConnection != null) {
                     httpURLConnection.disconnect();
                 }
-                this.zzbsU.zzKk().zzm(new zzb(this.zzRg, this.zzbsS, i, e, null, map));
+                this.zzbsW.zzKk().zzm(new zzb(this.zzRg, this.zzbsU, i, e, null, map));
             } catch (Throwable th322) {
                 th = th322;
                 map2 = null;
@@ -215,7 +215,7 @@ public class zzaty extends zzauh {
                 if (zzc != null) {
                     zzc.disconnect();
                 }
-                this.zzbsU.zzKk().zzm(new zzb(this.zzRg, this.zzbsS, i2, null, null, map2));
+                this.zzbsW.zzKk().zzm(new zzb(this.zzRg, this.zzbsU, i2, null, null, map2));
                 throw th;
             }
         }
@@ -353,9 +353,9 @@ public class zzaty extends zzauh {
         if (openConnection instanceof HttpURLConnection) {
             HttpURLConnection httpURLConnection = (HttpURLConnection) openConnection;
             httpURLConnection.setDefaultUseCaches(false);
-            zzKn().zzLd();
-            httpURLConnection.setConnectTimeout(60000);
             zzKn().zzLe();
+            httpURLConnection.setConnectTimeout(60000);
+            zzKn().zzLf();
             httpURLConnection.setReadTimeout(61000);
             httpURLConnection.setInstanceFollowRedirects(false);
             httpURLConnection.setDoInput(true);

@@ -12,8 +12,8 @@ public class zzbao implements Creator<zzban> {
     static void zza(zzban com_google_android_gms_internal_zzban, Parcel parcel, int i) {
         int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 1, com_google_android_gms_internal_zzban.zzaiI);
-        zzc.zza(parcel, 2, com_google_android_gms_internal_zzban.zzbEp);
-        zzc.zzc(parcel, 3, com_google_android_gms_internal_zzban.zzbEq, false);
+        zzc.zza(parcel, 2, com_google_android_gms_internal_zzban.zzbEs);
+        zzc.zzc(parcel, 3, com_google_android_gms_internal_zzban.zzbEt, false);
         zzc.zzJ(parcel, zzaZ);
     }
 

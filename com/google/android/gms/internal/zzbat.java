@@ -22,14 +22,14 @@ import com.google.android.gms.internal.zzbaq.zza;
 public class zzbat extends zzl<zzbaq> implements zzbai {
     private final zzg zzaAL;
     private Integer zzaFD;
-    private final Bundle zzbEh;
-    private final boolean zzbEs;
+    private final Bundle zzbEk;
+    private final boolean zzbEv;
 
     public zzbat(Context context, Looper looper, boolean z, zzg com_google_android_gms_common_internal_zzg, Bundle bundle, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
         super(context, looper, 44, com_google_android_gms_common_internal_zzg, connectionCallbacks, onConnectionFailedListener);
-        this.zzbEs = z;
+        this.zzbEv = z;
         this.zzaAL = com_google_android_gms_common_internal_zzg;
-        this.zzbEh = bundle;
+        this.zzbEk = bundle;
         this.zzaFD = com_google_android_gms_common_internal_zzg.zzxS();
     }
 
@@ -37,7 +37,7 @@ public class zzbat extends zzl<zzbaq> implements zzbai {
         this(context, looper, z, com_google_android_gms_common_internal_zzg, zza(com_google_android_gms_common_internal_zzg), connectionCallbacks, onConnectionFailedListener);
     }
 
-    private zzad zzPS() {
+    private zzad zzPU() {
         Account zzxB = this.zzaAL.zzxB();
         GoogleSignInAccount googleSignInAccount = null;
         if ("<<default account>>".equals(zzxB.name)) {
@@ -55,18 +55,18 @@ public class zzbat extends zzl<zzbaq> implements zzbai {
             bundle.putInt("com.google.android.gms.common.internal.ClientSettings.sessionId", zzxS.intValue());
         }
         if (zzxR != null) {
-            bundle.putBoolean("com.google.android.gms.signin.internal.offlineAccessRequested", zzxR.zzPK());
+            bundle.putBoolean("com.google.android.gms.signin.internal.offlineAccessRequested", zzxR.zzPM());
             bundle.putBoolean("com.google.android.gms.signin.internal.idTokenRequested", zzxR.isIdTokenRequested());
             bundle.putString("com.google.android.gms.signin.internal.serverClientId", zzxR.getServerClientId());
             bundle.putBoolean("com.google.android.gms.signin.internal.usePromptModeForAuthCode", true);
             bundle.putBoolean("com.google.android.gms.signin.internal.forceCodeForRefreshToken", zzxR.zzrl());
             bundle.putString("com.google.android.gms.signin.internal.hostedDomain", zzxR.zzrm());
-            bundle.putBoolean("com.google.android.gms.signin.internal.waitForAccessTokenRefresh", zzxR.zzPL());
-            if (zzxR.zzPM() != null) {
-                bundle.putLong("com.google.android.gms.signin.internal.authApiSignInModuleVersion", zzxR.zzPM().longValue());
+            bundle.putBoolean("com.google.android.gms.signin.internal.waitForAccessTokenRefresh", zzxR.zzPN());
+            if (zzxR.zzPO() != null) {
+                bundle.putLong("com.google.android.gms.signin.internal.authApiSignInModuleVersion", zzxR.zzPO().longValue());
             }
-            if (zzxR.zzPN() != null) {
-                bundle.putLong("com.google.android.gms.signin.internal.realClientLibraryVersion", zzxR.zzPN().longValue());
+            if (zzxR.zzPP() != null) {
+                bundle.putLong("com.google.android.gms.signin.internal.realClientLibraryVersion", zzxR.zzPP().longValue());
             }
         }
         return bundle;
@@ -76,7 +76,7 @@ public class zzbat extends zzl<zzbaq> implements zzbai {
         zza(new zzi(this));
     }
 
-    public void zzPJ() {
+    public void zzPL() {
         try {
             ((zzbaq) zzxD()).zznv(this.zzaFD.intValue());
         } catch (RemoteException e) {
@@ -95,7 +95,7 @@ public class zzbat extends zzl<zzbaq> implements zzbai {
     public void zza(zzbap com_google_android_gms_internal_zzbap) {
         zzac.zzb((Object) com_google_android_gms_internal_zzbap, (Object) "Expecting a valid ISignInCallbacks");
         try {
-            ((zzbaq) zzxD()).zza(new zzbau(zzPS()), com_google_android_gms_internal_zzbap);
+            ((zzbaq) zzxD()).zza(new zzbau(zzPU()), com_google_android_gms_internal_zzbap);
         } catch (Throwable e) {
             Log.w("SignInClientImpl", "Remote service probably died when signIn is called");
             try {
@@ -124,12 +124,12 @@ public class zzbat extends zzl<zzbaq> implements zzbai {
 
     protected Bundle zzqL() {
         if (!getContext().getPackageName().equals(this.zzaAL.zzxO())) {
-            this.zzbEh.putString("com.google.android.gms.signin.internal.realClientPackageName", this.zzaAL.zzxO());
+            this.zzbEk.putString("com.google.android.gms.signin.internal.realClientPackageName", this.zzaAL.zzxO());
         }
-        return this.zzbEh;
+        return this.zzbEk;
     }
 
     public boolean zzrd() {
-        return this.zzbEs;
+        return this.zzbEv;
     }
 }

@@ -27,7 +27,7 @@ public final class zzm implements Callback {
     public interface zza {
         boolean isConnected();
 
-        Bundle zzuC();
+        Bundle zzuB();
     }
 
     public zzm(Looper looper, zza com_google_android_gms_common_internal_zzm_zza) {
@@ -40,7 +40,7 @@ public final class zzm implements Callback {
             ConnectionCallbacks connectionCallbacks = (ConnectionCallbacks) message.obj;
             synchronized (this.zzrJ) {
                 if (this.zzaFY && this.zzaFU.isConnected() && this.zzaFV.contains(connectionCallbacks)) {
-                    connectionCallbacks.onConnected(this.zzaFU.zzuC());
+                    connectionCallbacks.onConnected(this.zzaFU.zzuB());
                 }
             }
             return true;
@@ -164,13 +164,13 @@ public final class zzm implements Callback {
         boolean z = true;
         zzac.zza(Looper.myLooper() == this.mHandler.getLooper(), (Object) "onConnectionSuccess must only be called on the Handler thread");
         synchronized (this.zzrJ) {
-            zzac.zzaw(!this.zzaGa);
+            zzac.zzav(!this.zzaGa);
             this.mHandler.removeMessages(1);
             this.zzaGa = true;
             if (this.zzaFW.size() != 0) {
                 z = false;
             }
-            zzac.zzaw(z);
+            zzac.zzav(z);
             ArrayList arrayList = new ArrayList(this.zzaFV);
             int i = this.zzaFZ.get();
             Iterator it = arrayList.iterator();

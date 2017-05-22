@@ -17,7 +17,7 @@ public class zzaui {
         this.mContext = applicationContext;
     }
 
-    public zzaue zzMP() {
+    public zzaue zzMR() {
         return new zzaue(this);
     }
 

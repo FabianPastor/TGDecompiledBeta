@@ -3,22 +3,22 @@ package com.google.android.gms.vision;
 import android.util.SparseArray;
 
 public class zza {
-    private static int zzbOw = 0;
+    private static int zzbOz = 0;
     private static final Object zztX = new Object();
-    private SparseArray<Integer> zzbOx = new SparseArray();
-    private SparseArray<Integer> zzbOy = new SparseArray();
+    private SparseArray<Integer> zzbOA = new SparseArray();
+    private SparseArray<Integer> zzbOB = new SparseArray();
 
     public int zznR(int i) {
         int intValue;
         synchronized (zztX) {
-            Integer num = (Integer) this.zzbOx.get(i);
+            Integer num = (Integer) this.zzbOA.get(i);
             if (num != null) {
                 intValue = num.intValue();
             } else {
-                intValue = zzbOw;
-                zzbOw++;
-                this.zzbOx.append(i, Integer.valueOf(intValue));
-                this.zzbOy.append(intValue, Integer.valueOf(i));
+                intValue = zzbOz;
+                zzbOz++;
+                this.zzbOA.append(i, Integer.valueOf(intValue));
+                this.zzbOB.append(intValue, Integer.valueOf(i));
             }
         }
         return intValue;
@@ -27,7 +27,7 @@ public class zza {
     public int zznS(int i) {
         int intValue;
         synchronized (zztX) {
-            intValue = ((Integer) this.zzbOy.get(i)).intValue();
+            intValue = ((Integer) this.zzbOB.get(i)).intValue();
         }
         return intValue;
     }

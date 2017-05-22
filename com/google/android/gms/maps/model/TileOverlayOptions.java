@@ -10,65 +10,65 @@ import com.google.android.gms.maps.model.internal.zzi;
 
 public final class TileOverlayOptions extends zza {
     public static final Creator<TileOverlayOptions> CREATOR = new zzr();
-    private zzi zzbpW;
-    private TileProvider zzbpX;
-    private boolean zzbpY = true;
-    private float zzbpi;
-    private boolean zzbpj = true;
-    private float zzbpr = 0.0f;
+    private zzi zzbpV;
+    private TileProvider zzbpW;
+    private boolean zzbpX = true;
+    private float zzbph;
+    private boolean zzbpi = true;
+    private float zzbpq = 0.0f;
 
     TileOverlayOptions(IBinder iBinder, boolean z, float f, boolean z2, float f2) {
-        this.zzbpW = zzi.zza.zzer(iBinder);
-        this.zzbpX = this.zzbpW == null ? null : new TileProvider(this) {
-            private final zzi zzbpZ = this.zzbqa.zzbpW;
-            final /* synthetic */ TileOverlayOptions zzbqa;
+        this.zzbpV = zzi.zza.zzer(iBinder);
+        this.zzbpW = this.zzbpV == null ? null : new TileProvider(this) {
+            private final zzi zzbpY = this.zzbpZ.zzbpV;
+            final /* synthetic */ TileOverlayOptions zzbpZ;
 
             {
-                this.zzbqa = r2;
+                this.zzbpZ = r2;
             }
 
             public Tile getTile(int i, int i2, int i3) {
                 try {
-                    return this.zzbpZ.getTile(i, i2, i3);
+                    return this.zzbpY.getTile(i, i2, i3);
                 } catch (RemoteException e) {
                     return null;
                 }
             }
         };
-        this.zzbpj = z;
-        this.zzbpi = f;
-        this.zzbpY = z2;
-        this.zzbpr = f2;
+        this.zzbpi = z;
+        this.zzbph = f;
+        this.zzbpX = z2;
+        this.zzbpq = f2;
     }
 
     public TileOverlayOptions fadeIn(boolean z) {
-        this.zzbpY = z;
+        this.zzbpX = z;
         return this;
     }
 
     public boolean getFadeIn() {
-        return this.zzbpY;
-    }
-
-    public TileProvider getTileProvider() {
         return this.zzbpX;
     }
 
+    public TileProvider getTileProvider() {
+        return this.zzbpW;
+    }
+
     public float getTransparency() {
-        return this.zzbpr;
+        return this.zzbpq;
     }
 
     public float getZIndex() {
-        return this.zzbpi;
+        return this.zzbph;
     }
 
     public boolean isVisible() {
-        return this.zzbpj;
+        return this.zzbpi;
     }
 
     public TileOverlayOptions tileProvider(final TileProvider tileProvider) {
-        this.zzbpX = tileProvider;
-        this.zzbpW = this.zzbpX == null ? null : new zzi.zza(this) {
+        this.zzbpW = tileProvider;
+        this.zzbpV = this.zzbpW == null ? null : new zzi.zza(this) {
             public Tile getTile(int i, int i2, int i3) {
                 return tileProvider.getTile(i, i2, i3);
             }
@@ -79,12 +79,12 @@ public final class TileOverlayOptions extends zza {
     public TileOverlayOptions transparency(float f) {
         boolean z = f >= 0.0f && f <= 1.0f;
         zzac.zzb(z, (Object) "Transparency must be in the range [0..1]");
-        this.zzbpr = f;
+        this.zzbpq = f;
         return this;
     }
 
     public TileOverlayOptions visible(boolean z) {
-        this.zzbpj = z;
+        this.zzbpi = z;
         return this;
     }
 
@@ -93,11 +93,11 @@ public final class TileOverlayOptions extends zza {
     }
 
     public TileOverlayOptions zIndex(float f) {
-        this.zzbpi = f;
+        this.zzbph = f;
         return this;
     }
 
     IBinder zzJQ() {
-        return this.zzbpW.asBinder();
+        return this.zzbpV.asBinder();
     }
 }

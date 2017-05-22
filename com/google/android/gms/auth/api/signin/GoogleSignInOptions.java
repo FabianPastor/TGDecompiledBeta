@@ -270,7 +270,7 @@ public class GoogleSignInOptions extends zza implements Optional, ReflectedParce
             arrayList.add(((Scope) it.next()).zzvt());
         }
         Collections.sort(arrayList);
-        return new zzh().zzq(arrayList).zzq(this.zzahh).zzq(this.zzajw).zzae(this.zzakm).zzae(this.zzajv).zzae(this.zzakl).zzru();
+        return new zzh().zzq(arrayList).zzq(this.zzahh).zzq(this.zzajw).zzad(this.zzakm).zzad(this.zzajv).zzad(this.zzakl).zzru();
     }
 
     public boolean isIdTokenRequested() {

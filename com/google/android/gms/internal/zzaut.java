@@ -40,7 +40,10 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -51,20 +54,20 @@ import javax.security.auth.x500.X500Principal;
 import org.telegram.messenger.NotificationBadge.NewHtcHomeBadger;
 
 public class zzaut extends zzauh {
-    private final AtomicLong zzbwh = new AtomicLong(0);
-    private int zzbwi;
+    private final AtomicLong zzbwk = new AtomicLong(0);
+    private int zzbwl;
 
     zzaut(zzaue com_google_android_gms_internal_zzaue) {
         super(com_google_android_gms_internal_zzaue);
     }
 
-    public static Object zzH(Object obj) {
+    public static Object zzI(Object obj) {
         ObjectOutputStream objectOutputStream;
+        ObjectInputStream objectInputStream;
         Throwable th;
         if (obj == null) {
             return null;
         }
-        ObjectInputStream objectInputStream;
         try {
             OutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
@@ -148,11 +151,11 @@ public class zzaut extends zzauh {
         }
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\nevent_filter {\n");
-        zza(stringBuilder, 0, "filter_id", com_google_android_gms_internal_zzauu_zzb.zzbwo);
-        zza(stringBuilder, 0, "event_name", com_google_android_gms_internal_zzauu_zzb.zzbwp);
-        zza(stringBuilder, 1, "event_count_filter", com_google_android_gms_internal_zzauu_zzb.zzbws);
+        zza(stringBuilder, 0, "filter_id", com_google_android_gms_internal_zzauu_zzb.zzbwr);
+        zza(stringBuilder, 0, "event_name", com_google_android_gms_internal_zzauu_zzb.zzbws);
+        zza(stringBuilder, 1, "event_count_filter", com_google_android_gms_internal_zzauu_zzb.zzbwv);
         stringBuilder.append("  filters {\n");
-        zzc[] com_google_android_gms_internal_zzauu_zzcArr = com_google_android_gms_internal_zzauu_zzb.zzbwq;
+        zzc[] com_google_android_gms_internal_zzauu_zzcArr = com_google_android_gms_internal_zzauu_zzb.zzbwt;
         int length = com_google_android_gms_internal_zzauu_zzcArr.length;
         while (i < length) {
             zza(stringBuilder, 2, com_google_android_gms_internal_zzauu_zzcArr[i]);
@@ -169,9 +172,9 @@ public class zzaut extends zzauh {
         }
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\nproperty_filter {\n");
-        zza(stringBuilder, 0, "filter_id", com_google_android_gms_internal_zzauu_zze.zzbwo);
-        zza(stringBuilder, 0, "property_name", com_google_android_gms_internal_zzauu_zze.zzbwE);
-        zza(stringBuilder, 1, com_google_android_gms_internal_zzauu_zze.zzbwF);
+        zza(stringBuilder, 0, "filter_id", com_google_android_gms_internal_zzauu_zze.zzbwr);
+        zza(stringBuilder, 0, "property_name", com_google_android_gms_internal_zzauu_zze.zzbwH);
+        zza(stringBuilder, 1, com_google_android_gms_internal_zzauu_zze.zzbwI);
         stringBuilder.append("}\n");
         return stringBuilder.toString();
     }
@@ -186,10 +189,10 @@ public class zzaut extends zzauh {
         if (com_google_android_gms_internal_zzauu_zzc != null) {
             zza(stringBuilder, i);
             stringBuilder.append("filter {\n");
-            zza(stringBuilder, i, "complement", com_google_android_gms_internal_zzauu_zzc.zzbww);
-            zza(stringBuilder, i, "param_name", com_google_android_gms_internal_zzauu_zzc.zzbwx);
-            zza(stringBuilder, i + 1, "string_filter", com_google_android_gms_internal_zzauu_zzc.zzbwu);
-            zza(stringBuilder, i + 1, "number_filter", com_google_android_gms_internal_zzauu_zzc.zzbwv);
+            zza(stringBuilder, i, "complement", com_google_android_gms_internal_zzauu_zzc.zzbwz);
+            zza(stringBuilder, i, "param_name", com_google_android_gms_internal_zzauu_zzc.zzbwA);
+            zza(stringBuilder, i + 1, "string_filter", com_google_android_gms_internal_zzauu_zzc.zzbwx);
+            zza(stringBuilder, i + 1, "number_filter", com_google_android_gms_internal_zzauu_zzc.zzbwy);
             zza(stringBuilder, i);
             stringBuilder.append("}\n");
         }
@@ -199,42 +202,42 @@ public class zzaut extends zzauh {
         if (com_google_android_gms_internal_zzauw_zze != null) {
             zza(stringBuilder, i);
             stringBuilder.append("bundle {\n");
-            zza(stringBuilder, i, "protocol_version", com_google_android_gms_internal_zzauw_zze.zzbxf);
-            zza(stringBuilder, i, "platform", com_google_android_gms_internal_zzauw_zze.zzbxn);
-            zza(stringBuilder, i, "gmp_version", com_google_android_gms_internal_zzauw_zze.zzbxr);
-            zza(stringBuilder, i, "uploading_gmp_version", com_google_android_gms_internal_zzauw_zze.zzbxs);
-            zza(stringBuilder, i, "config_version", com_google_android_gms_internal_zzauw_zze.zzbxE);
-            zza(stringBuilder, i, "gmp_app_id", com_google_android_gms_internal_zzauw_zze.zzbqL);
+            zza(stringBuilder, i, "protocol_version", com_google_android_gms_internal_zzauw_zze.zzbxi);
+            zza(stringBuilder, i, "platform", com_google_android_gms_internal_zzauw_zze.zzbxq);
+            zza(stringBuilder, i, "gmp_version", com_google_android_gms_internal_zzauw_zze.zzbxu);
+            zza(stringBuilder, i, "uploading_gmp_version", com_google_android_gms_internal_zzauw_zze.zzbxv);
+            zza(stringBuilder, i, "config_version", com_google_android_gms_internal_zzauw_zze.zzbxH);
+            zza(stringBuilder, i, "gmp_app_id", com_google_android_gms_internal_zzauw_zze.zzbqK);
             zza(stringBuilder, i, "app_id", com_google_android_gms_internal_zzauw_zze.zzaS);
             zza(stringBuilder, i, "app_version", com_google_android_gms_internal_zzauw_zze.zzbhN);
-            zza(stringBuilder, i, "app_version_major", com_google_android_gms_internal_zzauw_zze.zzbxA);
-            zza(stringBuilder, i, "app_version_minor", com_google_android_gms_internal_zzauw_zze.zzbxB);
-            zza(stringBuilder, i, "app_version_release", com_google_android_gms_internal_zzauw_zze.zzbxC);
-            zza(stringBuilder, i, "firebase_instance_id", com_google_android_gms_internal_zzauw_zze.zzbqT);
-            zza(stringBuilder, i, "dev_cert_hash", com_google_android_gms_internal_zzauw_zze.zzbxw);
-            zza(stringBuilder, i, "app_store", com_google_android_gms_internal_zzauw_zze.zzbqM);
-            zza(stringBuilder, i, "upload_timestamp_millis", com_google_android_gms_internal_zzauw_zze.zzbxi);
-            zza(stringBuilder, i, "start_timestamp_millis", com_google_android_gms_internal_zzauw_zze.zzbxj);
-            zza(stringBuilder, i, "end_timestamp_millis", com_google_android_gms_internal_zzauw_zze.zzbxk);
-            zza(stringBuilder, i, "previous_bundle_start_timestamp_millis", com_google_android_gms_internal_zzauw_zze.zzbxl);
-            zza(stringBuilder, i, "previous_bundle_end_timestamp_millis", com_google_android_gms_internal_zzauw_zze.zzbxm);
-            zza(stringBuilder, i, "app_instance_id", com_google_android_gms_internal_zzauw_zze.zzbxv);
-            zza(stringBuilder, i, "resettable_device_id", com_google_android_gms_internal_zzauw_zze.zzbxt);
-            zza(stringBuilder, i, "device_id", com_google_android_gms_internal_zzauw_zze.zzbxD);
-            zza(stringBuilder, i, "limited_ad_tracking", com_google_android_gms_internal_zzauw_zze.zzbxu);
+            zza(stringBuilder, i, "app_version_major", com_google_android_gms_internal_zzauw_zze.zzbxD);
+            zza(stringBuilder, i, "app_version_minor", com_google_android_gms_internal_zzauw_zze.zzbxE);
+            zza(stringBuilder, i, "app_version_release", com_google_android_gms_internal_zzauw_zze.zzbxF);
+            zza(stringBuilder, i, "firebase_instance_id", com_google_android_gms_internal_zzauw_zze.zzbqS);
+            zza(stringBuilder, i, "dev_cert_hash", com_google_android_gms_internal_zzauw_zze.zzbxz);
+            zza(stringBuilder, i, "app_store", com_google_android_gms_internal_zzauw_zze.zzbqL);
+            zza(stringBuilder, i, "upload_timestamp_millis", com_google_android_gms_internal_zzauw_zze.zzbxl);
+            zza(stringBuilder, i, "start_timestamp_millis", com_google_android_gms_internal_zzauw_zze.zzbxm);
+            zza(stringBuilder, i, "end_timestamp_millis", com_google_android_gms_internal_zzauw_zze.zzbxn);
+            zza(stringBuilder, i, "previous_bundle_start_timestamp_millis", com_google_android_gms_internal_zzauw_zze.zzbxo);
+            zza(stringBuilder, i, "previous_bundle_end_timestamp_millis", com_google_android_gms_internal_zzauw_zze.zzbxp);
+            zza(stringBuilder, i, "app_instance_id", com_google_android_gms_internal_zzauw_zze.zzbxy);
+            zza(stringBuilder, i, "resettable_device_id", com_google_android_gms_internal_zzauw_zze.zzbxw);
+            zza(stringBuilder, i, "device_id", com_google_android_gms_internal_zzauw_zze.zzbxG);
+            zza(stringBuilder, i, "limited_ad_tracking", com_google_android_gms_internal_zzauw_zze.zzbxx);
             zza(stringBuilder, i, "os_version", com_google_android_gms_internal_zzauw_zze.zzbb);
-            zza(stringBuilder, i, "device_model", com_google_android_gms_internal_zzauw_zze.zzbxo);
-            zza(stringBuilder, i, "user_default_language", com_google_android_gms_internal_zzauw_zze.zzbxp);
-            zza(stringBuilder, i, "time_zone_offset_minutes", com_google_android_gms_internal_zzauw_zze.zzbxq);
-            zza(stringBuilder, i, "bundle_sequential_index", com_google_android_gms_internal_zzauw_zze.zzbxx);
-            zza(stringBuilder, i, "service_upload", com_google_android_gms_internal_zzauw_zze.zzbxy);
-            zza(stringBuilder, i, "health_monitor", com_google_android_gms_internal_zzauw_zze.zzbqP);
-            if (com_google_android_gms_internal_zzauw_zze.zzbxF.longValue() != 0) {
-                zza(stringBuilder, i, "android_id", com_google_android_gms_internal_zzauw_zze.zzbxF);
+            zza(stringBuilder, i, "device_model", com_google_android_gms_internal_zzauw_zze.zzbxr);
+            zza(stringBuilder, i, "user_default_language", com_google_android_gms_internal_zzauw_zze.zzbxs);
+            zza(stringBuilder, i, "time_zone_offset_minutes", com_google_android_gms_internal_zzauw_zze.zzbxt);
+            zza(stringBuilder, i, "bundle_sequential_index", com_google_android_gms_internal_zzauw_zze.zzbxA);
+            zza(stringBuilder, i, "service_upload", com_google_android_gms_internal_zzauw_zze.zzbxB);
+            zza(stringBuilder, i, "health_monitor", com_google_android_gms_internal_zzauw_zze.zzbqO);
+            if (com_google_android_gms_internal_zzauw_zze.zzbxI.longValue() != 0) {
+                zza(stringBuilder, i, "android_id", com_google_android_gms_internal_zzauw_zze.zzbxI);
             }
-            zza(stringBuilder, i, com_google_android_gms_internal_zzauw_zze.zzbxh);
-            zza(stringBuilder, i, com_google_android_gms_internal_zzauw_zze.zzbxz);
-            zza(stringBuilder, i, com_google_android_gms_internal_zzauw_zze.zzbxg);
+            zza(stringBuilder, i, com_google_android_gms_internal_zzauw_zze.zzbxk);
+            zza(stringBuilder, i, com_google_android_gms_internal_zzauw_zze.zzbxC);
+            zza(stringBuilder, i, com_google_android_gms_internal_zzauw_zze.zzbxj);
             zza(stringBuilder, i);
             stringBuilder.append("}\n");
         }
@@ -245,9 +248,9 @@ public class zzaut extends zzauh {
             zza(stringBuilder, i);
             stringBuilder.append(str);
             stringBuilder.append(" {\n");
-            if (com_google_android_gms_internal_zzauu_zzd.zzbwy != null) {
+            if (com_google_android_gms_internal_zzauu_zzd.zzbwB != null) {
                 Object obj = "UNKNOWN_COMPARISON_TYPE";
-                switch (com_google_android_gms_internal_zzauu_zzd.zzbwy.intValue()) {
+                switch (com_google_android_gms_internal_zzauu_zzd.zzbwB.intValue()) {
                     case 1:
                         obj = "LESS_THAN";
                         break;
@@ -263,10 +266,10 @@ public class zzaut extends zzauh {
                 }
                 zza(stringBuilder, i, "comparison_type", obj);
             }
-            zza(stringBuilder, i, "match_as_float", com_google_android_gms_internal_zzauu_zzd.zzbwz);
-            zza(stringBuilder, i, "comparison_value", com_google_android_gms_internal_zzauu_zzd.zzbwA);
-            zza(stringBuilder, i, "min_comparison_value", com_google_android_gms_internal_zzauu_zzd.zzbwB);
-            zza(stringBuilder, i, "max_comparison_value", com_google_android_gms_internal_zzauu_zzd.zzbwC);
+            zza(stringBuilder, i, "match_as_float", com_google_android_gms_internal_zzauu_zzd.zzbwC);
+            zza(stringBuilder, i, "comparison_value", com_google_android_gms_internal_zzauu_zzd.zzbwD);
+            zza(stringBuilder, i, "min_comparison_value", com_google_android_gms_internal_zzauu_zzd.zzbwE);
+            zza(stringBuilder, i, "max_comparison_value", com_google_android_gms_internal_zzauu_zzd.zzbwF);
             zza(stringBuilder, i);
             stringBuilder.append("}\n");
         }
@@ -277,9 +280,9 @@ public class zzaut extends zzauh {
             zza(stringBuilder, i);
             stringBuilder.append(str);
             stringBuilder.append(" {\n");
-            if (com_google_android_gms_internal_zzauu_zzf.zzbwG != null) {
+            if (com_google_android_gms_internal_zzauu_zzf.zzbwJ != null) {
                 Object obj = "UNKNOWN_MATCH_TYPE";
-                switch (com_google_android_gms_internal_zzauu_zzf.zzbwG.intValue()) {
+                switch (com_google_android_gms_internal_zzauu_zzf.zzbwJ.intValue()) {
                     case 1:
                         obj = "REGEXP";
                         break;
@@ -301,12 +304,12 @@ public class zzaut extends zzauh {
                 }
                 zza(stringBuilder, i, "match_type", obj);
             }
-            zza(stringBuilder, i, "expression", com_google_android_gms_internal_zzauu_zzf.zzbwH);
-            zza(stringBuilder, i, "case_sensitive", com_google_android_gms_internal_zzauu_zzf.zzbwI);
-            if (com_google_android_gms_internal_zzauu_zzf.zzbwJ.length > 0) {
+            zza(stringBuilder, i, "expression", com_google_android_gms_internal_zzauu_zzf.zzbwK);
+            zza(stringBuilder, i, "case_sensitive", com_google_android_gms_internal_zzauu_zzf.zzbwL);
+            if (com_google_android_gms_internal_zzauu_zzf.zzbwM.length > 0) {
                 zza(stringBuilder, i + 1);
                 stringBuilder.append("expression_list {\n");
-                for (String str2 : com_google_android_gms_internal_zzauu_zzf.zzbwJ) {
+                for (String str2 : com_google_android_gms_internal_zzauu_zzf.zzbwM) {
                     zza(stringBuilder, i + 2);
                     stringBuilder.append(str2);
                     stringBuilder.append("\n");
@@ -327,10 +330,10 @@ public class zzaut extends zzauh {
             zza(stringBuilder, i5);
             stringBuilder.append(str);
             stringBuilder.append(" {\n");
-            if (com_google_android_gms_internal_zzauw_zzf.zzbxH != null) {
+            if (com_google_android_gms_internal_zzauw_zzf.zzbxK != null) {
                 zza(stringBuilder, i5 + 1);
                 stringBuilder.append("results: ");
-                long[] jArr = com_google_android_gms_internal_zzauw_zzf.zzbxH;
+                long[] jArr = com_google_android_gms_internal_zzauw_zzf.zzbxK;
                 int length = jArr.length;
                 i3 = 0;
                 i4 = 0;
@@ -346,10 +349,10 @@ public class zzaut extends zzauh {
                 }
                 stringBuilder.append('\n');
             }
-            if (com_google_android_gms_internal_zzauw_zzf.zzbxG != null) {
+            if (com_google_android_gms_internal_zzauw_zzf.zzbxJ != null) {
                 zza(stringBuilder, i5 + 1);
                 stringBuilder.append("status: ");
-                long[] jArr2 = com_google_android_gms_internal_zzauw_zzf.zzbxG;
+                long[] jArr2 = com_google_android_gms_internal_zzauw_zzf.zzbxJ;
                 int length2 = jArr2.length;
                 i3 = 0;
                 while (i2 < length2) {
@@ -386,10 +389,10 @@ public class zzaut extends zzauh {
                 if (com_google_android_gms_internal_zzauw_zza != null) {
                     zza(stringBuilder, i2);
                     stringBuilder.append("audience_membership {\n");
-                    zza(stringBuilder, i2, "audience_id", com_google_android_gms_internal_zzauw_zza.zzbwk);
-                    zza(stringBuilder, i2, "new_audience", com_google_android_gms_internal_zzauw_zza.zzbwW);
-                    zza(stringBuilder, i2, "current_data", com_google_android_gms_internal_zzauw_zza.zzbwU);
-                    zza(stringBuilder, i2, "previous_data", com_google_android_gms_internal_zzauw_zza.zzbwV);
+                    zza(stringBuilder, i2, "audience_id", com_google_android_gms_internal_zzauw_zza.zzbwn);
+                    zza(stringBuilder, i2, "new_audience", com_google_android_gms_internal_zzauw_zza.zzbwZ);
+                    zza(stringBuilder, i2, "current_data", com_google_android_gms_internal_zzauw_zza.zzbwX);
+                    zza(stringBuilder, i2, "previous_data", com_google_android_gms_internal_zzauw_zza.zzbwY);
                     zza(stringBuilder, i2);
                     stringBuilder.append("}\n");
                 }
@@ -405,10 +408,10 @@ public class zzaut extends zzauh {
                     zza(stringBuilder, i2);
                     stringBuilder.append("event {\n");
                     zza(stringBuilder, i2, "name", com_google_android_gms_internal_zzauw_zzb.name);
-                    zza(stringBuilder, i2, "timestamp_millis", com_google_android_gms_internal_zzauw_zzb.zzbwZ);
-                    zza(stringBuilder, i2, "previous_timestamp_millis", com_google_android_gms_internal_zzauw_zzb.zzbxa);
+                    zza(stringBuilder, i2, "timestamp_millis", com_google_android_gms_internal_zzauw_zzb.zzbxc);
+                    zza(stringBuilder, i2, "previous_timestamp_millis", com_google_android_gms_internal_zzauw_zzb.zzbxd);
                     zza(stringBuilder, i2, NewHtcHomeBadger.COUNT, com_google_android_gms_internal_zzauw_zzb.count);
-                    zza(stringBuilder, i2, com_google_android_gms_internal_zzauw_zzb.zzbwY);
+                    zza(stringBuilder, i2, com_google_android_gms_internal_zzauw_zzb.zzbxb);
                     zza(stringBuilder, i2);
                     stringBuilder.append("}\n");
                 }
@@ -425,8 +428,8 @@ public class zzaut extends zzauh {
                     stringBuilder.append("param {\n");
                     zza(stringBuilder, i2, "name", com_google_android_gms_internal_zzauw_zzc.name);
                     zza(stringBuilder, i2, "string_value", com_google_android_gms_internal_zzauw_zzc.zzaGV);
-                    zza(stringBuilder, i2, "int_value", com_google_android_gms_internal_zzauw_zzc.zzbxc);
-                    zza(stringBuilder, i2, "double_value", com_google_android_gms_internal_zzauw_zzc.zzbwf);
+                    zza(stringBuilder, i2, "int_value", com_google_android_gms_internal_zzauw_zzc.zzbxf);
+                    zza(stringBuilder, i2, "double_value", com_google_android_gms_internal_zzauw_zzc.zzbwi);
                     zza(stringBuilder, i2);
                     stringBuilder.append("}\n");
                 }
@@ -441,11 +444,11 @@ public class zzaut extends zzauh {
                 if (com_google_android_gms_internal_zzauw_zzg != null) {
                     zza(stringBuilder, i2);
                     stringBuilder.append("user_property {\n");
-                    zza(stringBuilder, i2, "set_timestamp_millis", com_google_android_gms_internal_zzauw_zzg.zzbxJ);
+                    zza(stringBuilder, i2, "set_timestamp_millis", com_google_android_gms_internal_zzauw_zzg.zzbxM);
                     zza(stringBuilder, i2, "name", com_google_android_gms_internal_zzauw_zzg.name);
                     zza(stringBuilder, i2, "string_value", com_google_android_gms_internal_zzauw_zzg.zzaGV);
-                    zza(stringBuilder, i2, "int_value", com_google_android_gms_internal_zzauw_zzg.zzbxc);
-                    zza(stringBuilder, i2, "double_value", com_google_android_gms_internal_zzauw_zzg.zzbwf);
+                    zza(stringBuilder, i2, "int_value", com_google_android_gms_internal_zzauw_zzg.zzbxf);
+                    zza(stringBuilder, i2, "double_value", com_google_android_gms_internal_zzauw_zzg.zzbwi);
                     zza(stringBuilder, i2);
                     stringBuilder.append("}\n");
                 }
@@ -498,8 +501,8 @@ public class zzaut extends zzauh {
         }
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\nbatch {\n");
-        if (com_google_android_gms_internal_zzauw_zzd.zzbxd != null) {
-            for (zzauw.zze com_google_android_gms_internal_zzauw_zze : com_google_android_gms_internal_zzauw_zzd.zzbxd) {
+        if (com_google_android_gms_internal_zzauw_zzd.zzbxg != null) {
+            for (zzauw.zze com_google_android_gms_internal_zzauw_zze : com_google_android_gms_internal_zzauw_zzd.zzbxg) {
                 if (com_google_android_gms_internal_zzauw_zze != null) {
                     zza(stringBuilder, 1, com_google_android_gms_internal_zzauw_zze);
                 }
@@ -526,11 +529,11 @@ public class zzaut extends zzauh {
 
     static boolean zzfT(String str) {
         zzac.zzdr(str);
-        return str.charAt(0) != '_';
+        return str.charAt(0) != '_' || str.equals("_ep");
     }
 
     private int zzgc(String str) {
-        return "_ldl".equals(str) ? zzKn().zzKS() : zzKn().zzKR();
+        return "_ldl".equals(str) ? zzKn().zzKT() : zzKn().zzKS();
     }
 
     public static boolean zzgd(String str) {
@@ -544,7 +547,7 @@ public class zzaut extends zzauh {
     static long zzy(byte[] bArr) {
         long j = null;
         zzac.zzw(bArr);
-        zzac.zzaw(bArr.length > 0);
+        zzac.zzav(bArr.length > 0);
         long j2 = 0;
         int length = bArr.length - 1;
         while (length >= 0 && length >= bArr.length - 8) {
@@ -575,6 +578,20 @@ public class zzaut extends zzauh {
     public boolean zzA(Intent intent) {
         String stringExtra = intent.getStringExtra("android.intent.extra.REFERRER_NAME");
         return "android-app://com.google.android.googlequicksearchbox/https/www.google.com".equals(stringExtra) || "https://www.google.com".equals(stringExtra) || "android-app://com.google.appcrawler".equals(stringExtra);
+    }
+
+    public Bundle[] zzH(Object obj) {
+        if (obj instanceof Bundle) {
+            return new Bundle[]{(Bundle) obj};
+        } else if (obj instanceof Parcelable[]) {
+            return (Bundle[]) Arrays.copyOf((Parcelable[]) obj, ((Parcelable[]) obj).length, Bundle[].class);
+        } else {
+            if (!(obj instanceof ArrayList)) {
+                return null;
+            }
+            ArrayList arrayList = (ArrayList) obj;
+            return (Bundle[]) arrayList.toArray(new Bundle[arrayList.size()]);
+        }
     }
 
     public /* bridge */ /* synthetic */ void zzJV() {
@@ -654,49 +671,49 @@ public class zzaut extends zzauh {
     }
 
     @WorkerThread
-    long zzL(Context context, String str) {
+    long zzM(Context context, String str) {
         zzmR();
         zzac.zzw(context);
         zzac.zzdr(str);
         PackageManager packageManager = context.getPackageManager();
         MessageDigest zzch = zzch("MD5");
         if (zzch == null) {
-            zzKl().zzLY().log("Could not get MD5 instance");
+            zzKl().zzLZ().log("Could not get MD5 instance");
             return -1;
         }
         if (packageManager != null) {
             try {
-                if (!zzM(context, str)) {
+                if (!zzN(context, str)) {
                     PackageInfo packageInfo = zzadg.zzbi(context).getPackageInfo(getContext().getPackageName(), 64);
                     if (packageInfo.signatures != null && packageInfo.signatures.length > 0) {
                         return zzy(zzch.digest(packageInfo.signatures[0].toByteArray()));
                     }
-                    zzKl().zzMa().log("Could not get signatures");
+                    zzKl().zzMb().log("Could not get signatures");
                     return -1;
                 }
             } catch (NameNotFoundException e) {
-                zzKl().zzLY().zzj("Package name not found", e);
+                zzKl().zzLZ().zzj("Package name not found", e);
             }
         }
         return 0;
     }
 
-    Bundle zzM(Bundle bundle) {
+    Bundle zzN(Bundle bundle) {
         Bundle bundle2 = new Bundle();
         if (bundle != null) {
             for (String str : bundle.keySet()) {
-                Object zzl = zzKh().zzl(str, bundle.get(str));
-                if (zzl == null) {
-                    zzKl().zzMa().zzj("Param value can't be null", str);
+                Object zzk = zzk(str, bundle.get(str));
+                if (zzk == null) {
+                    zzKl().zzMb().zzj("Param value can't be null", str);
                 } else {
-                    zzKh().zza(bundle2, str, zzl);
+                    zza(bundle2, str, zzk);
                 }
             }
         }
         return bundle2;
     }
 
-    boolean zzM(Context context, String str) {
+    boolean zzN(Context context, String str) {
         X500Principal x500Principal = new X500Principal("CN=Android Debug,O=Android,C=US");
         try {
             PackageInfo packageInfo = zzadg.zzbi(context).getPackageInfo(str, 64);
@@ -704,32 +721,39 @@ public class zzaut extends zzauh {
                 return ((X509Certificate) CertificateFactory.getInstance("X.509").generateCertificate(new ByteArrayInputStream(packageInfo.signatures[0].toByteArray()))).getSubjectX500Principal().equals(x500Principal);
             }
         } catch (CertificateException e) {
-            zzKl().zzLY().zzj("Error obtaining certificate", e);
+            zzKl().zzLZ().zzj("Error obtaining certificate", e);
         } catch (NameNotFoundException e2) {
-            zzKl().zzLY().zzj("Package name not found", e2);
+            zzKl().zzLZ().zzj("Package name not found", e2);
         }
         return true;
     }
 
-    public long zzNi() {
+    public long zzNk() {
         long nextLong;
-        if (this.zzbwh.get() == 0) {
-            synchronized (this.zzbwh) {
+        if (this.zzbwk.get() == 0) {
+            synchronized (this.zzbwk) {
                 nextLong = new Random(System.nanoTime() ^ zznR().currentTimeMillis()).nextLong();
-                int i = this.zzbwi + 1;
-                this.zzbwi = i;
+                int i = this.zzbwl + 1;
+                this.zzbwl = i;
                 nextLong += (long) i;
             }
         } else {
-            synchronized (this.zzbwh) {
-                this.zzbwh.compareAndSet(-1, 1);
-                nextLong = this.zzbwh.getAndIncrement();
+            synchronized (this.zzbwk) {
+                this.zzbwk.compareAndSet(-1, 1);
+                nextLong = this.zzbwk.getAndIncrement();
             }
         }
         return nextLong;
     }
 
-    public Bundle zza(String str, Bundle bundle, @Nullable List<String> list, boolean z) {
+    public int zza(String str, Object obj, boolean z) {
+        if (z && !zza("param", str, zzKn().zzKR(), obj)) {
+            return 17;
+        }
+        return zzgd(str) ? zza("param", str, zzKn().zzKQ(), obj, z) : zza("param", str, zzKn().zzKP(), obj, z) ? 0 : 4;
+    }
+
+    public Bundle zza(String str, Bundle bundle, @Nullable List<String> list, boolean z, boolean z2) {
         if (bundle == null) {
             return null;
         }
@@ -754,22 +778,25 @@ public class zzaut extends zzauh {
                     }
                 }
                 bundle2.remove(str2);
-            } else if (zzk(str2, bundle.get(str2)) || "_ev".equals(str2)) {
-                if (zzfT(str2)) {
-                    i++;
-                    if (i > 25) {
-                        zzKl().zzLY().zze("Event can't contain more then " + 25 + " params", str, bundle);
-                        zzd(bundle2, 5);
-                        bundle2.remove(str2);
-                    }
-                }
-                i = i;
             } else {
-                if (zzd(bundle2, 4)) {
-                    bundle2.putString("_ev", zza(str2, zzKn().zzKO(), true));
-                    zzb(bundle2, bundle.get(str2));
+                zzfY = zza(str2, bundle.get(str2), z2);
+                if (zzfY == 0 || "_ev".equals(str2)) {
+                    if (zzfT(str2)) {
+                        i++;
+                        if (i > 25) {
+                            zzKl().zzLZ().zze("Event can't contain more then " + 25 + " params", str, bundle);
+                            zzd(bundle2, 5);
+                            bundle2.remove(str2);
+                        }
+                    }
+                    i = i;
+                } else {
+                    if (zzd(bundle2, zzfY)) {
+                        bundle2.putString("_ev", zza(str2, zzKn().zzKO(), true));
+                        zzb(bundle2, bundle.get(str2));
+                    }
+                    bundle2.remove(str2);
                 }
-                bundle2.remove(str2);
             }
         }
         return bundle2;
@@ -779,14 +806,14 @@ public class zzaut extends zzauh {
         if (TextUtils.isEmpty(str)) {
             return null;
         }
-        if (zzKh().zzfV(str) != 0) {
-            zzKl().zzLY().zzj("Invalid conditional property event name", str);
+        if (zzfV(str) != 0) {
+            zzKl().zzLZ().zzj("Invalid conditional property event name", str);
             throw new IllegalArgumentException();
         }
         Bundle bundle2 = bundle != null ? new Bundle(bundle) : new Bundle();
         bundle2.putString("_o", str2);
-        bundle2 = zzKh().zza(str, bundle2, com.google.android.gms.common.util.zzf.zzx("_o"), z2);
-        return new zzatq(str, new zzato(z ? zzM(bundle2) : bundle2), str2, j);
+        Bundle zza = zza(str, bundle2, com.google.android.gms.common.util.zzf.zzx("_o"), z2, false);
+        return new zzatq(str, new zzato(z ? zzN(zza) : zza), str2, j);
     }
 
     public String zza(String str, int i, boolean z) {
@@ -806,7 +833,7 @@ public class zzaut extends zzauh {
             } else if (obj instanceof Double) {
                 bundle.putDouble(str, ((Double) obj).doubleValue());
             } else if (str != null) {
-                zzKl().zzMb().zze("Not putting event parameter. Invalid value type. name, type", str, obj != null ? obj.getClass().getSimpleName() : null);
+                zzKl().zzMc().zze("Not putting event parameter. Invalid value type. name, type", str, obj != null ? obj.getClass().getSimpleName() : null);
             }
         }
     }
@@ -814,32 +841,32 @@ public class zzaut extends zzauh {
     public void zza(zzauw.zzc com_google_android_gms_internal_zzauw_zzc, Object obj) {
         zzac.zzw(obj);
         com_google_android_gms_internal_zzauw_zzc.zzaGV = null;
-        com_google_android_gms_internal_zzauw_zzc.zzbxc = null;
-        com_google_android_gms_internal_zzauw_zzc.zzbwf = null;
+        com_google_android_gms_internal_zzauw_zzc.zzbxf = null;
+        com_google_android_gms_internal_zzauw_zzc.zzbwi = null;
         if (obj instanceof String) {
             com_google_android_gms_internal_zzauw_zzc.zzaGV = (String) obj;
         } else if (obj instanceof Long) {
-            com_google_android_gms_internal_zzauw_zzc.zzbxc = (Long) obj;
+            com_google_android_gms_internal_zzauw_zzc.zzbxf = (Long) obj;
         } else if (obj instanceof Double) {
-            com_google_android_gms_internal_zzauw_zzc.zzbwf = (Double) obj;
+            com_google_android_gms_internal_zzauw_zzc.zzbwi = (Double) obj;
         } else {
-            zzKl().zzLY().zzj("Ignoring invalid (type) event param value", obj);
+            zzKl().zzLZ().zzj("Ignoring invalid (type) event param value", obj);
         }
     }
 
     public void zza(zzg com_google_android_gms_internal_zzauw_zzg, Object obj) {
         zzac.zzw(obj);
         com_google_android_gms_internal_zzauw_zzg.zzaGV = null;
-        com_google_android_gms_internal_zzauw_zzg.zzbxc = null;
-        com_google_android_gms_internal_zzauw_zzg.zzbwf = null;
+        com_google_android_gms_internal_zzauw_zzg.zzbxf = null;
+        com_google_android_gms_internal_zzauw_zzg.zzbwi = null;
         if (obj instanceof String) {
             com_google_android_gms_internal_zzauw_zzg.zzaGV = (String) obj;
         } else if (obj instanceof Long) {
-            com_google_android_gms_internal_zzauw_zzg.zzbxc = (Long) obj;
+            com_google_android_gms_internal_zzauw_zzg.zzbxf = (Long) obj;
         } else if (obj instanceof Double) {
-            com_google_android_gms_internal_zzauw_zzg.zzbwf = (Double) obj;
+            com_google_android_gms_internal_zzauw_zzg.zzbwi = (Double) obj;
         } else {
-            zzKl().zzLY().zzj("Ignoring invalid (type) user attribute value", obj);
+            zzKl().zzLZ().zzj("Ignoring invalid (type) user attribute value", obj);
         }
     }
 
@@ -852,23 +879,68 @@ public class zzaut extends zzauh {
         if (i == 6 || i == 7 || i == 2) {
             bundle.putLong("_el", (long) i2);
         }
-        this.zzbqc.zzKn().zzLg();
-        this.zzbqc.zzKa().zze("auto", "_err", bundle);
+        this.zzbqb.zzKn().zzLh();
+        this.zzbqb.zzKa().zze("auto", "_err", bundle);
     }
 
     boolean zza(String str, String str2, int i, Object obj) {
+        int length;
+        if (obj instanceof Parcelable[]) {
+            length = ((Parcelable[]) obj).length;
+        } else if (!(obj instanceof ArrayList)) {
+            return true;
+        } else {
+            length = ((ArrayList) obj).size();
+        }
+        if (length <= i) {
+            return true;
+        }
+        zzKl().zzMb().zzd("Parameter array is too long; discarded. Value kind, name, array length", str, str2, Integer.valueOf(length));
+        return false;
+    }
+
+    boolean zza(String str, String str2, int i, Object obj, boolean z) {
         if (obj == null || (obj instanceof Long) || (obj instanceof Float) || (obj instanceof Integer) || (obj instanceof Byte) || (obj instanceof Short) || (obj instanceof Boolean) || (obj instanceof Double)) {
             return true;
         }
-        if (!(obj instanceof String) && !(obj instanceof Character) && !(obj instanceof CharSequence)) {
+        if ((obj instanceof String) || (obj instanceof Character) || (obj instanceof CharSequence)) {
+            String valueOf = String.valueOf(obj);
+            if (valueOf.length() <= i) {
+                return true;
+            }
+            zzKl().zzMb().zzd("Value is too long; discarded. Value kind, name, value length", str, str2, Integer.valueOf(valueOf.length()));
             return false;
-        }
-        String valueOf = String.valueOf(obj);
-        if (valueOf.length() <= i) {
+        } else if ((obj instanceof Bundle) && z) {
             return true;
+        } else {
+            if ((obj instanceof Parcelable[]) && z) {
+                Parcelable[] parcelableArr = (Parcelable[]) obj;
+                int length = parcelableArr.length;
+                int i2 = 0;
+                while (i2 < length) {
+                    Object obj2 = parcelableArr[i2];
+                    if (obj2 instanceof Bundle) {
+                        i2++;
+                    } else {
+                        zzKl().zzMb().zze("All Parcelable[] elements must be of type Bundle. Value type, name", obj2.getClass(), str2);
+                        return false;
+                    }
+                }
+                return true;
+            } else if (!(obj instanceof ArrayList) || !z) {
+                return false;
+            } else {
+                Iterator it = ((ArrayList) obj).iterator();
+                while (it.hasNext()) {
+                    Object next = it.next();
+                    if (!(next instanceof Bundle)) {
+                        zzKl().zzMb().zze("All ArrayList elements must be of type Bundle. Value type, name", next.getClass(), str2);
+                        return false;
+                    }
+                }
+                return true;
+            }
         }
-        zzKl().zzMa().zzd("Value is too long; discarded. Value kind, name, value length", str, str2, Integer.valueOf(valueOf.length()));
-        return false;
     }
 
     byte[] zza(Parcelable parcelable) {
@@ -887,23 +959,23 @@ public class zzaut extends zzauh {
 
     public byte[] zza(zzauw.zzd com_google_android_gms_internal_zzauw_zzd) {
         try {
-            byte[] bArr = new byte[com_google_android_gms_internal_zzauw_zzd.zzaeT()];
-            zzbxm zzag = zzbxm.zzag(bArr);
-            com_google_android_gms_internal_zzauw_zzd.zza(zzag);
-            zzag.zzaeG();
+            byte[] bArr = new byte[com_google_android_gms_internal_zzauw_zzd.zzafB()];
+            zzbyc zzah = zzbyc.zzah(bArr);
+            com_google_android_gms_internal_zzauw_zzd.zza(zzah);
+            zzah.zzafo();
             return bArr;
         } catch (IOException e) {
-            zzKl().zzLY().zzj("Data loss. Failed to serialize batch", e);
+            zzKl().zzLZ().zzj("Data loss. Failed to serialize batch", e);
             return null;
         }
     }
 
     boolean zzac(String str, String str2) {
         if (str2 == null) {
-            zzKl().zzLY().zzj("Name is required and can't be null. Type", str);
+            zzKl().zzLZ().zzj("Name is required and can't be null. Type", str);
             return false;
         } else if (str2.length() == 0) {
-            zzKl().zzLY().zzj("Name is required and can't be empty. Type", str);
+            zzKl().zzLZ().zzj("Name is required and can't be empty. Type", str);
             return false;
         } else {
             int codePointAt = str2.codePointAt(0);
@@ -915,23 +987,23 @@ public class zzaut extends zzauh {
                     if (codePointAt2 == 95 || Character.isLetterOrDigit(codePointAt2)) {
                         codePointAt += Character.charCount(codePointAt2);
                     } else {
-                        zzKl().zzLY().zze("Name must consist of letters, digits or _ (underscores). Type, name", str, str2);
+                        zzKl().zzLZ().zze("Name must consist of letters, digits or _ (underscores). Type, name", str, str2);
                         return false;
                     }
                 }
                 return true;
             }
-            zzKl().zzLY().zze("Name must start with a letter. Type, name", str, str2);
+            zzKl().zzLZ().zze("Name must start with a letter. Type, name", str, str2);
             return false;
         }
     }
 
     boolean zzad(String str, String str2) {
         if (str2 == null) {
-            zzKl().zzLY().zzj("Name is required and can't be null. Type", str);
+            zzKl().zzLZ().zzj("Name is required and can't be null. Type", str);
             return false;
         } else if (str2.length() == 0) {
-            zzKl().zzLY().zzj("Name is required and can't be empty. Type", str);
+            zzKl().zzLZ().zzj("Name is required and can't be empty. Type", str);
             return false;
         } else {
             int codePointAt = str2.codePointAt(0);
@@ -943,30 +1015,30 @@ public class zzaut extends zzauh {
                     if (codePointAt2 == 95 || Character.isLetterOrDigit(codePointAt2)) {
                         codePointAt += Character.charCount(codePointAt2);
                     } else {
-                        zzKl().zzLY().zze("Name must consist of letters, digits or _ (underscores). Type, name", str, str2);
+                        zzKl().zzLZ().zze("Name must consist of letters, digits or _ (underscores). Type, name", str, str2);
                         return false;
                     }
                 }
                 return true;
             }
-            zzKl().zzLY().zze("Name must start with a letter or _ (underscore). Type, name", str, str2);
+            zzKl().zzLZ().zze("Name must start with a letter or _ (underscore). Type, name", str, str2);
             return false;
         }
     }
 
     <T extends Parcelable> T zzb(byte[] bArr, Creator<T> creator) {
-        T t;
         if (bArr == null) {
             return null;
         }
         Parcel obtain = Parcel.obtain();
+        T t;
         try {
             obtain.unmarshall(bArr, 0, bArr.length);
             obtain.setDataPosition(0);
             t = (Parcelable) creator.createFromParcel(obtain);
             return t;
         } catch (com.google.android.gms.common.internal.safeparcel.zzb.zza e) {
-            t = zzKl().zzLY();
+            t = zzKl().zzLZ();
             t.log("Failed to load parcelable from buffer");
             return null;
         } finally {
@@ -986,12 +1058,12 @@ public class zzaut extends zzauh {
 
     boolean zzb(String str, int i, String str2) {
         if (str2 == null) {
-            zzKl().zzLY().zzj("Name is required and can't be null. Type", str);
+            zzKl().zzLZ().zzj("Name is required and can't be null. Type", str);
             return false;
         } else if (str2.length() <= i) {
             return true;
         } else {
-            zzKl().zzLY().zzd("Name is too long. Type, maximum supported length, name", str, Integer.valueOf(i), str2);
+            zzKl().zzLZ().zzd("Name is too long. Type, maximum supported length, name", str, Integer.valueOf(i), str2);
             return false;
         }
     }
@@ -1002,21 +1074,21 @@ public class zzaut extends zzauh {
         if (zzadg.zzbi(getContext()).checkCallingOrSelfPermission(str) == 0) {
             return true;
         }
-        zzKl().zzMd().zzj("Permission not granted", str);
+        zzKl().zzMe().zzj("Permission not granted", str);
         return false;
     }
 
     boolean zzc(String str, Map<String, String> map, String str2) {
         if (str2 == null) {
-            zzKl().zzLY().zzj("Name is required and can't be null. Type", str);
+            zzKl().zzLZ().zzj("Name is required and can't be null. Type", str);
             return false;
         } else if (str2.startsWith("firebase_")) {
-            zzKl().zzLY().zze("Name starts with reserved prefix. Type, name", str, str2);
+            zzKl().zzLZ().zze("Name starts with reserved prefix. Type, name", str, str2);
             return false;
         } else if (map == null || !map.containsKey(str2)) {
             return true;
         } else {
-            zzKl().zzLY().zze("Name is reserved. Type, name", str, str2);
+            zzKl().zzLZ().zze("Name is reserved. Type, name", str, str2);
             return false;
         }
     }
@@ -1033,27 +1105,27 @@ public class zzaut extends zzauh {
     boolean zzd(zzatq com_google_android_gms_internal_zzatq, zzatd com_google_android_gms_internal_zzatd) {
         zzac.zzw(com_google_android_gms_internal_zzatq);
         zzac.zzw(com_google_android_gms_internal_zzatd);
-        if (!TextUtils.isEmpty(com_google_android_gms_internal_zzatd.zzbqL)) {
+        if (!TextUtils.isEmpty(com_google_android_gms_internal_zzatd.zzbqK)) {
             return true;
         }
-        zzKn().zzLg();
+        zzKn().zzLh();
         return false;
     }
 
     public int zzfU(String str) {
-        return !zzac("event", str) ? 2 : !zzc("event", AppMeasurement.zza.zzbqd, str) ? 13 : zzb("event", zzKn().zzKM(), str) ? 0 : 2;
+        return !zzac("event", str) ? 2 : !zzc("event", AppMeasurement.zza.zzbqc, str) ? 13 : zzb("event", zzKn().zzKM(), str) ? 0 : 2;
     }
 
     public int zzfV(String str) {
-        return !zzad("event", str) ? 2 : !zzc("event", AppMeasurement.zza.zzbqd, str) ? 13 : zzb("event", zzKn().zzKM(), str) ? 0 : 2;
+        return !zzad("event", str) ? 2 : !zzc("event", AppMeasurement.zza.zzbqc, str) ? 13 : zzb("event", zzKn().zzKM(), str) ? 0 : 2;
     }
 
     public int zzfW(String str) {
-        return !zzac("user property", str) ? 6 : !zzc("user property", AppMeasurement.zzg.zzbqi, str) ? 15 : zzb("user property", zzKn().zzKN(), str) ? 0 : 6;
+        return !zzac("user property", str) ? 6 : !zzc("user property", AppMeasurement.zzg.zzbqh, str) ? 15 : zzb("user property", zzKn().zzKN(), str) ? 0 : 6;
     }
 
     public int zzfX(String str) {
-        return !zzad("user property", str) ? 6 : !zzc("user property", AppMeasurement.zzg.zzbqi, str) ? 15 : zzb("user property", zzKn().zzKN(), str) ? 0 : 6;
+        return !zzad("user property", str) ? 6 : !zzc("user property", AppMeasurement.zzg.zzbqh, str) ? 15 : zzb("user property", zzKn().zzKN(), str) ? 0 : 6;
     }
 
     public int zzfY(String str) {
@@ -1066,12 +1138,12 @@ public class zzaut extends zzauh {
 
     public boolean zzga(String str) {
         if (TextUtils.isEmpty(str)) {
-            zzKl().zzLY().log("Missing google_app_id. Firebase Analytics disabled. See https://goo.gl/NAOOOI");
+            zzKl().zzLZ().log("Missing google_app_id. Firebase Analytics disabled. See https://goo.gl/NAOOOI");
             return false;
         } else if (zzgb(str)) {
             return true;
         } else {
-            zzKl().zzLY().zzj("Invalid google_app_id. Firebase Analytics disabled. See https://goo.gl/NAOOOI. provided id", str);
+            zzKl().zzLZ().zzj("Invalid google_app_id. Firebase Analytics disabled. See https://goo.gl/NAOOOI. provided id", str);
             return false;
         }
     }
@@ -1085,9 +1157,9 @@ public class zzaut extends zzauh {
         if (TextUtils.isEmpty(str)) {
             return false;
         }
-        String zzLC = zzKn().zzLC();
-        zzKn().zzLg();
-        return zzLC.equals(str);
+        String zzLD = zzKn().zzLD();
+        zzKn().zzLh();
+        return zzLD.equals(str);
     }
 
     boolean zzgg(String str) {
@@ -1136,8 +1208,11 @@ public class zzaut extends zzauh {
         return j == 0 || j2 <= 0 || Math.abs(zznR().currentTimeMillis() - j) > j2;
     }
 
-    public boolean zzk(String str, Object obj) {
-        return zzgd(str) ? zza("param", str, zzKn().zzKQ(), obj) : zza("param", str, zzKn().zzKP(), obj);
+    public Object zzk(String str, Object obj) {
+        if ("_ev".equals(str)) {
+            return zza(zzKn().zzKQ(), obj, true);
+        }
+        return zza(zzgd(str) ? zzKn().zzKQ() : zzKn().zzKP(), obj, false);
     }
 
     public byte[] zzk(byte[] bArr) throws IOException {
@@ -1149,20 +1224,17 @@ public class zzaut extends zzauh {
             byteArrayOutputStream.close();
             return byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
-            zzKl().zzLY().zzj("Failed to gzip content", e);
+            zzKl().zzLZ().zzj("Failed to gzip content", e);
             throw e;
         }
     }
 
-    public Object zzl(String str, Object obj) {
-        if ("_ev".equals(str)) {
-            return zza(zzKn().zzKQ(), obj, true);
-        }
-        return zza(zzgd(str) ? zzKn().zzKQ() : zzKn().zzKP(), obj, false);
+    public int zzl(String str, Object obj) {
+        return "_ldl".equals(str) ? zza("user property referrer", str, zzgc(str), obj, false) : zza("user property", str, zzgc(str), obj, false) ? 0 : 7;
     }
 
-    public int zzm(String str, Object obj) {
-        return "_ldl".equals(str) ? zza("user property referrer", str, zzgc(str), obj) : zza("user property", str, zzgc(str), obj) ? 0 : 7;
+    public Object zzm(String str, Object obj) {
+        return "_ldl".equals(str) ? zza(zzgc(str), obj, true) : zza(zzgc(str), obj, false);
     }
 
     public /* bridge */ /* synthetic */ void zzmR() {
@@ -1175,14 +1247,10 @@ public class zzaut extends zzauh {
         if (nextLong == 0) {
             nextLong = secureRandom.nextLong();
             if (nextLong == 0) {
-                zzKl().zzMa().log("Utils falling back to Random for random id");
+                zzKl().zzMb().log("Utils falling back to Random for random id");
             }
         }
-        this.zzbwh.set(nextLong);
-    }
-
-    public Object zzn(String str, Object obj) {
-        return "_ldl".equals(str) ? zza(zzgc(str), obj, true) : zza(zzgc(str), obj, false);
+        this.zzbwk.set(nextLong);
     }
 
     public /* bridge */ /* synthetic */ com.google.android.gms.common.util.zze zznR() {
@@ -1244,7 +1312,7 @@ public class zzaut extends zzauh {
                     }
                 }
             } catch (UnsupportedOperationException e) {
-                zzKl().zzMa().zzj("Install referrer url isn't a hierarchical URI", e);
+                zzKl().zzMb().zzj("Install referrer url isn't a hierarchical URI", e);
             }
         }
         return bundle;
@@ -1266,7 +1334,7 @@ public class zzaut extends zzauh {
                 byteArrayOutputStream.write(bArr2, 0, read);
             }
         } catch (IOException e) {
-            zzKl().zzLY().zzj("Failed to ungzip content", e);
+            zzKl().zzLZ().zzj("Failed to ungzip content", e);
             throw e;
         }
     }
@@ -1279,7 +1347,7 @@ public class zzaut extends zzauh {
         if (zzch != null) {
             return zzy(zzch.digest(bArr));
         }
-        zzKl().zzLY().log("Failed to get MD5");
+        zzKl().zzLZ().log("Failed to get MD5");
         return 0;
     }
 }

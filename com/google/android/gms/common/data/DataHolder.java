@@ -315,7 +315,7 @@ public final class DataHolder extends com.google.android.gms.common.internal.saf
     public int zzcI(int i) {
         int i2 = 0;
         boolean z = i >= 0 && i < this.zzaDU;
-        zzac.zzaw(z);
+        zzac.zzav(z);
         while (i2 < this.zzaDT.length) {
             if (i < this.zzaDT[i2]) {
                 i2--;

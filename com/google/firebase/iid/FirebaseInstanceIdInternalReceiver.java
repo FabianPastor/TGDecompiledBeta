@@ -6,24 +6,33 @@ import android.os.Parcelable;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 import com.google.android.gms.common.util.zzt;
-import com.google.firebase.iid.zzb.zzb;
+import com.google.firebase.iid.zzb.zzc;
 
 public final class FirebaseInstanceIdInternalReceiver extends WakefulBroadcastReceiver {
     private static boolean zzbgs = false;
-    private zzb zzcll;
-    private zzb zzclm;
+    private static zzc zzclp;
+    private static zzc zzclq;
 
-    private zzb zzK(Context context, String str) {
-        if ("com.google.firebase.MESSAGING_EVENT".equals(str)) {
-            if (this.zzclm == null) {
-                this.zzclm = new zzb(context, str);
+    static synchronized zzc zzL(Context context, String str) {
+        zzc com_google_firebase_iid_zzb_zzc;
+        synchronized (FirebaseInstanceIdInternalReceiver.class) {
+            if ("com.google.firebase.MESSAGING_EVENT".equals(str)) {
+                if (zzclq == null) {
+                    zzclq = new zzc(context, str);
+                }
+                com_google_firebase_iid_zzb_zzc = zzclq;
+            } else {
+                if (zzclp == null) {
+                    zzclp = new zzc(context, str);
+                }
+                com_google_firebase_iid_zzb_zzc = zzclp;
             }
-            return this.zzclm;
         }
-        if (this.zzcll == null) {
-            this.zzcll = new zzb(context, str);
-        }
-        return this.zzcll;
+        return com_google_firebase_iid_zzb_zzc;
+    }
+
+    static boolean zzcs(Context context) {
+        return zzt.zzzq() && context.getApplicationInfo().targetSdkVersion > 25;
     }
 
     public void onReceive(Context context, Intent intent) {
@@ -31,11 +40,11 @@ public final class FirebaseInstanceIdInternalReceiver extends WakefulBroadcastRe
             Parcelable parcelableExtra = intent.getParcelableExtra("wrapped_intent");
             if (parcelableExtra instanceof Intent) {
                 Intent intent2 = (Intent) parcelableExtra;
-                if (zzt.zzzq()) {
-                    zzK(context, intent.getAction()).zzb(intent2, goAsync());
+                if (zzcs(context)) {
+                    zzL(context, intent.getAction()).zza(intent2, goAsync());
                     return;
                 } else {
-                    zzg.zzabU().zzb(context, intent.getAction(), intent2);
+                    zzg.zzabW().zzb(context, intent.getAction(), intent2);
                     return;
                 }
             }

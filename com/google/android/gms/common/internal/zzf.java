@@ -314,9 +314,9 @@ public abstract class zzf<T extends IInterface> {
                     if (zzh == null || !this.zzaFu.zza(2, 3, zzh)) {
                         return false;
                     }
-                    Bundle zzuC = this.zzaFu.zzuC();
+                    Bundle zzuB = this.zzaFu.zzuB();
                     if (this.zzaFu.zzaFn != null) {
-                        this.zzaFu.zzaFn.onConnected(zzuC);
+                        this.zzaFu.zzaFn.onConnected(zzuB);
                     }
                     return true;
                 }
@@ -376,7 +376,7 @@ public abstract class zzf<T extends IInterface> {
         if ((i == 3) != (t != null)) {
             z = false;
         }
-        zzac.zzax(z);
+        zzac.zzaw(z);
         synchronized (this.zzrJ) {
             this.zzaFm = i;
             this.zzaFj = t;
@@ -647,7 +647,7 @@ public abstract class zzf<T extends IInterface> {
         throw new UnsupportedOperationException("Not a sign in API");
     }
 
-    public Bundle zzuC() {
+    public Bundle zzuB() {
         return null;
     }
 
