@@ -168,6 +168,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private boolean ignoreOnPhoneChange;
     private boolean ignoreOnTextChange;
     private EditText[] inputFields;
+    private boolean isWebView;
     private LinearLayout linearLayout2;
     private MessageObject messageObject;
     private boolean need_card_country;
@@ -340,6 +341,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         this.shippingOption = shipping;
         this.messageObject = message;
         this.saveCardInfo = saveCard;
+        this.isWebView = !"stripe".equals(this.paymentForm.native_provider);
         this.botUser = MessagesController.getInstance().getUser(Integer.valueOf(form.bot_id));
         if (this.botUser != null) {
             this.currentBotName = this.botUser.first_name;
@@ -369,7 +371,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
         if (VERSION.SDK_INT >= 23) {
             try {
-                if (this.currentStep == 2) {
+                if (this.currentStep == 2 && !this.paymentForm.invoice.test) {
                     getParentActivity().getWindow().setFlags(8192, 8192);
                 } else if (UserConfig.passcodeHash.length() == 0 || UserConfig.allowScreenCapture) {
                     getParentActivity().getWindow().clearFlags(8192);
@@ -880,7 +882,56 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 }
             }
         } else if (this.currentStep == 2) {
-            if ("stripe".equals(this.paymentForm.native_provider)) {
+            if (this.isWebView) {
+                this.webviewLoading = true;
+                showEditDoneProgress(true, true);
+                this.progressView.setVisibility(0);
+                this.doneItem.setEnabled(false);
+                this.doneItem.getImageView().setVisibility(4);
+                this.webView = new WebView(context) {
+                    public boolean onTouchEvent(MotionEvent event) {
+                        getParent().requestDisallowInterceptTouchEvent(true);
+                        return super.onTouchEvent(event);
+                    }
+                };
+                this.webView.getSettings().setJavaScriptEnabled(true);
+                this.webView.getSettings().setDomStorageEnabled(true);
+                if (VERSION.SDK_INT >= 21) {
+                    this.webView.getSettings().setMixedContentMode(0);
+                    CookieManager.getInstance().setAcceptThirdPartyCookies(this.webView, true);
+                    PaymentFormActivity paymentFormActivity = this;
+                    this.webView.addJavascriptInterface(new TelegramWebviewProxy(), "TelegramWebviewProxy");
+                }
+                this.webView.setWebViewClient(new WebViewClient() {
+                    public void onLoadResource(WebView view, String url) {
+                        super.onLoadResource(view, url);
+                    }
+
+                    public void onPageFinished(WebView view, String url) {
+                        super.onPageFinished(view, url);
+                        PaymentFormActivity.this.webviewLoading = false;
+                        PaymentFormActivity.this.showEditDoneProgress(true, false);
+                        PaymentFormActivity.this.updateSavePaymentField();
+                    }
+                });
+                this.linearLayout2.addView(this.webView, LayoutHelper.createFrame(-1, -2.0f));
+                this.sectionCell[2] = new ShadowSectionCell(context);
+                this.linearLayout2.addView(this.sectionCell[2], LayoutHelper.createLinear(-1, -2));
+                this.checkCell1 = new TextCheckCell(context);
+                this.checkCell1.setBackgroundDrawable(Theme.getSelectorDrawable(true));
+                this.checkCell1.setTextAndCheck(LocaleController.getString("PaymentCardSavePaymentInformation", R.string.PaymentCardSavePaymentInformation), this.saveCardInfo, false);
+                this.linearLayout2.addView(this.checkCell1, LayoutHelper.createLinear(-1, -2));
+                this.checkCell1.setOnClickListener(new OnClickListener() {
+                    public void onClick(View v) {
+                        PaymentFormActivity.this.saveCardInfo = !PaymentFormActivity.this.saveCardInfo;
+                        PaymentFormActivity.this.checkCell1.setChecked(PaymentFormActivity.this.saveCardInfo);
+                    }
+                });
+                this.bottomCell[0] = new TextInfoPrivacyCell(context);
+                this.bottomCell[0].setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                updateSavePaymentField();
+                this.linearLayout2.addView(this.bottomCell[0], LayoutHelper.createLinear(-1, -2));
+            } else {
                 JSONObject jSONObject = new JSONObject(this.paymentForm.native_params.data);
                 try {
                     this.need_card_country = jSONObject.getBoolean("need_country");
@@ -894,13 +945,13 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 }
                 try {
                     this.need_card_name = jSONObject.getBoolean("need_cardholder_name");
-                } catch (Exception e5) {
-                    this.need_card_name = false;
-                }
-                try {
-                    this.stripeApiKey = jSONObject.getString("publishable_key");
-                } catch (Exception e6) {
-                    this.stripeApiKey = "";
+                    try {
+                        this.stripeApiKey = jSONObject.getString("publishable_key");
+                    } catch (Exception e5) {
+                        this.stripeApiKey = "";
+                    }
+                } catch (Throwable e22) {
+                    FileLog.e(e22);
                 }
                 this.inputFields = new EditText[6];
                 a = 0;
@@ -1300,55 +1351,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 } else {
                     this.inputFields[3].setImeOptions(268435462);
                 }
-            } else {
-                this.webviewLoading = true;
-                showEditDoneProgress(true, true);
-                this.progressView.setVisibility(0);
-                this.doneItem.setEnabled(false);
-                this.doneItem.getImageView().setVisibility(4);
-                this.webView = new WebView(context) {
-                    public boolean onTouchEvent(MotionEvent event) {
-                        getParent().requestDisallowInterceptTouchEvent(true);
-                        return super.onTouchEvent(event);
-                    }
-                };
-                this.webView.getSettings().setJavaScriptEnabled(true);
-                this.webView.getSettings().setDomStorageEnabled(true);
-                if (VERSION.SDK_INT >= 21) {
-                    this.webView.getSettings().setMixedContentMode(0);
-                    CookieManager.getInstance().setAcceptThirdPartyCookies(this.webView, true);
-                    PaymentFormActivity paymentFormActivity = this;
-                    this.webView.addJavascriptInterface(new TelegramWebviewProxy(), "TelegramWebviewProxy");
-                }
-                this.webView.setWebViewClient(new WebViewClient() {
-                    public void onLoadResource(WebView view, String url) {
-                        super.onLoadResource(view, url);
-                    }
-
-                    public void onPageFinished(WebView view, String url) {
-                        super.onPageFinished(view, url);
-                        PaymentFormActivity.this.webviewLoading = false;
-                        PaymentFormActivity.this.showEditDoneProgress(true, false);
-                        PaymentFormActivity.this.updateSavePaymentField();
-                    }
-                });
-                this.linearLayout2.addView(this.webView, LayoutHelper.createFrame(-1, -2.0f));
-                this.sectionCell[2] = new ShadowSectionCell(context);
-                this.linearLayout2.addView(this.sectionCell[2], LayoutHelper.createLinear(-1, -2));
-                this.checkCell1 = new TextCheckCell(context);
-                this.checkCell1.setBackgroundDrawable(Theme.getSelectorDrawable(true));
-                this.checkCell1.setTextAndCheck(LocaleController.getString("PaymentCardSavePaymentInformation", R.string.PaymentCardSavePaymentInformation), this.saveCardInfo, false);
-                this.linearLayout2.addView(this.checkCell1, LayoutHelper.createLinear(-1, -2));
-                this.checkCell1.setOnClickListener(new OnClickListener() {
-                    public void onClick(View v) {
-                        PaymentFormActivity.this.saveCardInfo = !PaymentFormActivity.this.saveCardInfo;
-                        PaymentFormActivity.this.checkCell1.setChecked(PaymentFormActivity.this.saveCardInfo);
-                    }
-                });
-                this.bottomCell[0] = new TextInfoPrivacyCell(context);
-                this.bottomCell[0].setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-                updateSavePaymentField();
-                this.linearLayout2.addView(this.bottomCell[0], LayoutHelper.createLinear(-1, -2));
             }
         } else if (this.currentStep == 1) {
             int count = this.requestedInfo.shipping_options.size();
@@ -1788,7 +1790,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             } else {
                 nextStep = 2;
             }
-            presentFragment(new PaymentFormActivity(this.paymentForm, this.messageObject, nextStep, this.requestedInfo, null, null, this.cardName, this.validateRequest, this.saveCardInfo));
+            presentFragment(new PaymentFormActivity(this.paymentForm, this.messageObject, nextStep, this.requestedInfo, null, null, this.cardName, this.validateRequest, this.saveCardInfo), this.isWebView);
         } else if (this.currentStep == 1) {
             if (this.paymentForm.saved_credentials != null) {
                 if (UserConfig.tmpPassword != null && UserConfig.tmpPassword.valid_until < ConnectionsManager.getInstance().getCurrentTime() + 60) {
@@ -1803,14 +1805,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             } else {
                 nextStep = 2;
             }
-            presentFragment(new PaymentFormActivity(this.paymentForm, this.messageObject, nextStep, this.requestedInfo, this.shippingOption, null, this.cardName, this.validateRequest, this.saveCardInfo));
+            presentFragment(new PaymentFormActivity(this.paymentForm, this.messageObject, nextStep, this.requestedInfo, this.shippingOption, null, this.cardName, this.validateRequest, this.saveCardInfo), this.isWebView);
         } else if (this.currentStep == 2) {
             if (this.delegate != null) {
                 this.delegate.didSelectNewCard(this.paymentJson, this.cardName, this.saveCardInfo);
                 finishFragment();
                 return;
             }
-            presentFragment(new PaymentFormActivity(this.paymentForm, this.messageObject, 4, this.requestedInfo, this.shippingOption, this.paymentJson, this.cardName, this.validateRequest, this.saveCardInfo));
+            presentFragment(new PaymentFormActivity(this.paymentForm, this.messageObject, 4, this.requestedInfo, this.shippingOption, this.paymentJson, this.cardName, this.validateRequest, this.saveCardInfo), this.isWebView);
         } else if (this.currentStep == 3) {
             if (this.passwordOk) {
                 nextStep = 4;

@@ -604,6 +604,11 @@
     <drawable name="ic_keyboard_w">res/drawable-hdpi-v4/ic_keyboard_w.png</drawable>
     <drawable name="ic_keyboard_w">res/drawable-xhdpi-v4/ic_keyboard_w.png</drawable>
     <drawable name="ic_keyboard_w">res/drawable-xxhdpi-v4/ic_keyboard_w.png</drawable>
+    <drawable name="ic_launcher">res/drawable-mdpi-v4/ic_launcher.png</drawable>
+    <drawable name="ic_launcher">res/drawable-hdpi-v4/ic_launcher.png</drawable>
+    <drawable name="ic_launcher">res/drawable-xhdpi-v4/ic_launcher.png</drawable>
+    <drawable name="ic_launcher">res/drawable-xxhdpi-v4/ic_launcher.png</drawable>
+    <drawable name="ic_launcher">res/drawable-xxxhdpi-v4/ic_launcher.png</drawable>
     <drawable name="ic_lock_header">res/drawable-mdpi-v4/ic_lock_header.png</drawable>
     <drawable name="ic_lock_header">res/drawable-hdpi-v4/ic_lock_header.png</drawable>
     <drawable name="ic_lock_header">res/drawable-xhdpi-v4/ic_lock_header.png</drawable>

@@ -112,7 +112,6 @@ public class AdvertisingIdClient {
     }
 
     public static Info getAdvertisingIdInfo(Context context) throws IOException, IllegalStateException, GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
-        Info info;
         float f = 0.0f;
         boolean z = false;
         try {
@@ -126,6 +125,7 @@ public class AdvertisingIdClient {
             Log.w("AdvertisingIdClient", "Error while reading from SharedPreferences ", e);
         }
         AdvertisingIdClient advertisingIdClient = new AdvertisingIdClient(context, -1, z);
+        Info info;
         try {
             advertisingIdClient.start(false);
             info = advertisingIdClient.getInfo();

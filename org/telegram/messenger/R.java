@@ -254,6 +254,7 @@ public final class R {
         public static final int ic_gofullscreen = NUM;
         public static final int ic_goinline = NUM;
         public static final int ic_keyboard_w = NUM;
+        public static final int ic_launcher = NUM;
         public static final int ic_lock_header = NUM;
         public static final int ic_lock_white = NUM;
         public static final int ic_masks_msk1 = NUM;
@@ -627,10 +628,6 @@ public final class R {
         public static final int intro_view_layout = NUM;
         public static final int player_big_notification = NUM;
         public static final int player_small_notification = NUM;
-    }
-
-    public static final class mipmap {
-        public static final int ic_launcher = NUM;
     }
 
     public static final class raw {

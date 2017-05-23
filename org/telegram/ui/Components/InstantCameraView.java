@@ -796,13 +796,13 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void drainEncoder(boolean endOfStream) throws Exception {
-            MediaFormat newFormat;
-            ByteBuffer encodedData;
             if (endOfStream) {
                 this.videoEncoder.signalEndOfInputStream();
             }
             ByteBuffer[] encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
             while (true) {
+                MediaFormat newFormat;
+                ByteBuffer encodedData;
                 int encoderStatus = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
                 if (encoderStatus == -1) {
                     if (!endOfStream) {
@@ -1813,12 +1813,15 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.previewSize = CameraController.chooseOptimalSize(previewSizes, 480, 270, this.aspectRatio);
         this.pictureSize = CameraController.chooseOptimalSize(pictureSizes, 480, 270, this.aspectRatio);
         if (this.previewSize.mWidth != this.pictureSize.mWidth) {
+            Size preview;
+            int b;
+            Size picture;
             boolean found = false;
             for (a = previewSizes.size() - 1; a >= 0; a--) {
-                Size preview = (Size) previewSizes.get(a);
-                for (int b = pictureSizes.size() - 1; b >= 0; b--) {
-                    Size picture = (Size) pictureSizes.get(b);
-                    if (preview.mWidth >= PsExtractor.VIDEO_STREAM_MASK && preview.mHeight >= PsExtractor.VIDEO_STREAM_MASK && preview.mWidth == picture.mWidth && preview.mHeight == picture.mHeight) {
+                preview = (Size) previewSizes.get(a);
+                for (b = pictureSizes.size() - 1; b >= 0; b--) {
+                    picture = (Size) pictureSizes.get(b);
+                    if (preview.mWidth >= this.pictureSize.mWidth && preview.mHeight >= this.pictureSize.mHeight && preview.mWidth == picture.mWidth && preview.mHeight == picture.mHeight) {
                         this.previewSize = preview;
                         this.pictureSize = picture;
                         found = true;
@@ -1827,6 +1830,23 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
                 if (found) {
                     break;
+                }
+            }
+            if (!found) {
+                for (a = previewSizes.size() - 1; a >= 0; a--) {
+                    preview = (Size) previewSizes.get(a);
+                    for (b = pictureSizes.size() - 1; b >= 0; b--) {
+                        picture = (Size) pictureSizes.get(b);
+                        if (preview.mWidth >= PsExtractor.VIDEO_STREAM_MASK && preview.mHeight >= PsExtractor.VIDEO_STREAM_MASK && preview.mWidth == picture.mWidth && preview.mHeight == picture.mHeight) {
+                            this.previewSize = preview;
+                            this.pictureSize = picture;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found) {
+                        break;
+                    }
                 }
             }
         }

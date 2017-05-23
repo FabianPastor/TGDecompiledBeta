@@ -3607,7 +3607,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 });
                 this.popupLayout.setShowedFromBotton(false);
                 TextView deleteView = new TextView(this.parentActivity);
-                deleteView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
+                deleteView.setTextColor(-16777216);
                 deleteView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                 deleteView.setGravity(16);
                 deleteView.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(14.0f), 0);
@@ -4852,6 +4852,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             textView.setGravity(17);
             this.settingsButton.addView(textView, LayoutHelper.createFrame(-1, -1.0f));
             this.settingsButton.addSubItem(settingsContainer, AndroidUtilities.dp(220.0f), -2);
+            this.settingsButton.redrawPopup(-1);
             this.headerView.addView(this.settingsButton, LayoutHelper.createFrame(48, 56.0f, 53, 0.0f, 0.0f, 56.0f, 0.0f));
             this.shareContainer = new FrameLayout(activity);
             this.headerView.addView(this.shareContainer, LayoutHelper.createFrame(48, 56, 53));
@@ -5212,8 +5213,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         if (this.parentActivity == null || ((this.isVisible && !this.collapsed) || messageObject == null)) {
             return false;
         }
-        WindowManager wm;
-        LayoutParams layoutParams;
         final AnimatorSet animatorSet;
         Animator[] animatorArr;
         float[] fArr;
@@ -5273,6 +5272,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         String webPageUrl = webPage.url.toLowerCase();
         String anchor = null;
         for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
+            WindowManager wm;
+            LayoutParams layoutParams;
             MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
             if (entity instanceof TL_messageEntityUrl) {
                 try {

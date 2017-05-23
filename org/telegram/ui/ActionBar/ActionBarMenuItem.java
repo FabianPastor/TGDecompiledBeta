@@ -272,7 +272,7 @@ public class ActionBarMenuItem extends FrameLayout {
         return textView;
     }
 
-    protected void redrawPopup(int color) {
+    public void redrawPopup(int color) {
         if (this.popupLayout != null) {
             this.popupLayout.backgroundDrawable.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
             this.popupLayout.invalidate();
