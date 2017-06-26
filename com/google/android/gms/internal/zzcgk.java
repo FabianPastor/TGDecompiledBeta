@@ -690,95 +690,94 @@ public class zzcgk {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private final boolean zzg(String str, long j) {
-        boolean z;
+        String str2;
+        Object obj;
         zzcjy com_google_android_gms_internal_zzcjy;
-        int i;
-        int i2;
-        zzcjw com_google_android_gms_internal_zzcjw;
         zzcjv com_google_android_gms_internal_zzcjv;
-        zzcjw com_google_android_gms_internal_zzcjw2;
+        int i;
+        boolean z;
+        String str3;
+        zzcef zzdQ;
+        long zzwM;
+        long zzwL;
+        zzcem zzwz;
+        boolean z2;
         Throwable th;
         zzwz().beginTransaction();
         zzcgk com_google_android_gms_internal_zzcgk = this;
         zza com_google_android_gms_internal_zzcgk_zza = new zza();
-        zzcem zzwz = zzwz();
-        String str2 = null;
+        zzcem zzwz2 = zzwz();
+        String str4 = null;
         long j2 = this.zzbsS;
         zzbo.zzu(com_google_android_gms_internal_zzcgk_zza);
-        zzwz.zzjC();
-        zzwz.zzkD();
+        zzwz2.zzjC();
+        zzwz2.zzkD();
         Cursor cursor = null;
-        Object obj;
+        boolean z3;
+        int i2;
+        int i3;
         boolean zzO;
         Object obj2;
         Object obj3;
         zzcjw[] com_google_android_gms_internal_zzcjwArr;
         int length;
-        int i3;
-        zzcjw[] com_google_android_gms_internal_zzcjwArr2;
-        zzcjw com_google_android_gms_internal_zzcjw3;
         int i4;
+        zzcjw com_google_android_gms_internal_zzcjw;
+        zzcjw[] com_google_android_gms_internal_zzcjwArr2;
+        zzcjw com_google_android_gms_internal_zzcjw2;
+        int i5;
         Object obj4;
+        zzcjw com_google_android_gms_internal_zzcjw3;
         zzcjw[] com_google_android_gms_internal_zzcjwArr3;
         int length2;
-        int i5;
-        zzcjw com_google_android_gms_internal_zzcjw4;
         int i6;
-        boolean z2;
+        zzcjw com_google_android_gms_internal_zzcjw4;
         int i7;
-        boolean z3;
-        String str3;
-        zzcef zzdQ;
-        long zzwM;
-        long zzwL;
-        zzcjs zzeh;
-        zzcem zzwz2;
         boolean z4;
+        zzcjs zzeh;
         try {
             String[] strArr;
-            String str4;
             String str5;
-            Cursor cursor2;
             String str6;
-            SQLiteDatabase writableDatabase = zzwz.getWritableDatabase();
+            SQLiteDatabase writableDatabase = zzwz2.getWritableDatabase();
             if (TextUtils.isEmpty(null)) {
                 strArr = j2 != -1 ? new String[]{String.valueOf(j2), String.valueOf(j)} : new String[]{String.valueOf(j)};
-                str4 = j2 != -1 ? "rowid <= ? and " : "";
-                cursor = writableDatabase.rawQuery(new StringBuilder(String.valueOf(str4).length() + 148).append("select app_id, metadata_fingerprint from raw_events where ").append(str4).append("app_id in (select app_id from apps where config_fetched_time >= ?) order by rowid limit 1;").toString(), strArr);
+                str5 = j2 != -1 ? "rowid <= ? and " : "";
+                cursor = writableDatabase.rawQuery(new StringBuilder(String.valueOf(str5).length() + 148).append("select app_id, metadata_fingerprint from raw_events where ").append(str5).append("app_id in (select app_id from apps where config_fetched_time >= ?) order by rowid limit 1;").toString(), strArr);
                 if (cursor.moveToFirst()) {
-                    str2 = cursor.getString(0);
-                    str4 = cursor.getString(1);
+                    str4 = cursor.getString(0);
+                    str5 = cursor.getString(1);
                     cursor.close();
-                    str5 = str4;
-                    cursor2 = cursor;
-                    str6 = str2;
+                    str6 = str5;
+                    r11 = cursor;
+                    str2 = str4;
                 } else {
                     if (cursor != null) {
                         cursor.close();
                     }
                     obj = (com_google_android_gms_internal_zzcgk_zza.zztJ != null || com_google_android_gms_internal_zzcgk_zza.zztJ.isEmpty()) ? 1 : null;
                     if (obj != null) {
-                        z = false;
+                        z3 = false;
                         com_google_android_gms_internal_zzcjy = com_google_android_gms_internal_zzcgk_zza.zzbsZ;
                         com_google_android_gms_internal_zzcjy.zzbvE = new zzcjv[com_google_android_gms_internal_zzcgk_zza.zztJ.size()];
-                        i = 0;
                         i2 = 0;
-                        while (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                            if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name)) {
-                                zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name);
+                        i3 = 0;
+                        while (i3 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                            if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name)) {
+                                zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name);
                                 if (!zzO) {
                                     zzwB();
                                 }
                                 obj2 = null;
                                 obj3 = null;
-                                if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw == null) {
-                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = new zzcjw[0];
+                                if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw == null) {
+                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = new zzcjw[0];
                                 }
-                                com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw;
+                                com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw;
                                 length = com_google_android_gms_internal_zzcjwArr.length;
-                                i3 = 0;
-                                while (i3 < length) {
-                                    com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i3];
+                                i4 = 0;
+                                while (i4 < length) {
+                                    com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i4];
                                     if (!"_c".equals(com_google_android_gms_internal_zzcjw.name)) {
                                         com_google_android_gms_internal_zzcjw.zzbvA = Long.valueOf(1);
                                         obj2 = 1;
@@ -789,129 +788,129 @@ public class zzcgk {
                                         com_google_android_gms_internal_zzcjw.zzbvA = Long.valueOf(1);
                                         obj = 1;
                                     }
-                                    i3++;
+                                    i4++;
                                     obj3 = obj;
                                 }
                                 if (obj2 == null && zzO) {
-                                    zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                                    com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                                    com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                                    com_google_android_gms_internal_zzcjw3.name = "_c";
-                                    com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                                    com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                                    zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                                    com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                                    com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                                    com_google_android_gms_internal_zzcjw2.name = "_c";
+                                    com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                                    com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                                 }
                                 if (obj3 == null) {
-                                    zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                                    com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                                    com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                                    com_google_android_gms_internal_zzcjw3.name = "_r";
-                                    com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                                    com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                                    zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                                    com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                                    com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                                    com_google_android_gms_internal_zzcjw2.name = "_r";
+                                    com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                                    com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                                 }
                                 if (zzwz().zza(zzyZ(), com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, false, false, false, false, true).zzbpy <= ((long) this.zzbsn.zzdM(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ))) {
-                                    com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                    i4 = 0;
-                                    while (i4 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
-                                        if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i4].name)) {
-                                            i4++;
+                                    com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                    i5 = 0;
+                                    while (i5 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
+                                        if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i5].name)) {
+                                            i5++;
                                         } else {
                                             obj3 = new zzcjw[(com_google_android_gms_internal_zzcjv.zzbvw.length - 1)];
-                                            if (i4 > 0) {
-                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i4);
+                                            if (i5 > 0) {
+                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i5);
                                             }
-                                            if (i4 < obj3.length) {
-                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i4 + 1, obj3, i4, obj3.length - i4);
+                                            if (i5 < obj3.length) {
+                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i5 + 1, obj3, i5, obj3.length - i5);
                                             }
                                             com_google_android_gms_internal_zzcjv.zzbvw = obj3;
                                         }
                                     }
                                 } else {
-                                    z = true;
+                                    z3 = true;
                                 }
-                                if (zzcjk.zzeo(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name) && zzO && zzwz().zza(zzyZ(), com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, false, false, true, false, false).zzbpw > ((long) this.zzbsn.zzb(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, zzcfa.zzbqi))) {
+                                if (zzcjk.zzeo(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name) && zzO && zzwz().zza(zzyZ(), com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, false, false, true, false, false).zzbpw > ((long) this.zzbsn.zzb(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, zzcfa.zzbqi))) {
                                     zzwF().zzyz().zzj("Too many conversions. Not logging as conversion. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
-                                    com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
+                                    com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
                                     obj4 = null;
-                                    com_google_android_gms_internal_zzcjw2 = null;
+                                    com_google_android_gms_internal_zzcjw3 = null;
                                     com_google_android_gms_internal_zzcjwArr3 = com_google_android_gms_internal_zzcjv.zzbvw;
                                     length2 = com_google_android_gms_internal_zzcjwArr3.length;
-                                    i5 = 0;
-                                    while (i5 < length2) {
-                                        com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjwArr3[i5];
-                                        if (!"_c".equals(com_google_android_gms_internal_zzcjw3.name)) {
+                                    i6 = 0;
+                                    while (i6 < length2) {
+                                        com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjwArr3[i6];
+                                        if (!"_c".equals(com_google_android_gms_internal_zzcjw2.name)) {
                                             obj3 = obj4;
-                                        } else if ("_err".equals(com_google_android_gms_internal_zzcjw3.name)) {
-                                            com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
+                                        } else if ("_err".equals(com_google_android_gms_internal_zzcjw2.name)) {
+                                            com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
                                             obj3 = obj4;
                                         } else {
-                                            com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw2;
-                                            i6 = 1;
-                                            com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw4;
+                                            com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw3;
+                                            i7 = 1;
+                                            com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw4;
                                         }
-                                        i5++;
+                                        i6++;
                                         obj4 = obj3;
-                                        com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
+                                        com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
                                     }
-                                    if (obj4 == null && com_google_android_gms_internal_zzcjw2 != null) {
+                                    if (obj4 == null && com_google_android_gms_internal_zzcjw3 != null) {
                                         com_google_android_gms_internal_zzcjwArr3 = new zzcjw[(com_google_android_gms_internal_zzcjv.zzbvw.length - 1)];
-                                        i3 = 0;
+                                        i4 = 0;
                                         zzcjw[] com_google_android_gms_internal_zzcjwArr4 = com_google_android_gms_internal_zzcjv.zzbvw;
                                         int length3 = com_google_android_gms_internal_zzcjwArr4.length;
-                                        i5 = 0;
-                                        while (i5 < length3) {
-                                            zzcjw com_google_android_gms_internal_zzcjw5 = com_google_android_gms_internal_zzcjwArr4[i5];
-                                            if (com_google_android_gms_internal_zzcjw5 != com_google_android_gms_internal_zzcjw2) {
-                                                i4 = i3 + 1;
-                                                com_google_android_gms_internal_zzcjwArr3[i3] = com_google_android_gms_internal_zzcjw5;
+                                        i6 = 0;
+                                        while (i6 < length3) {
+                                            zzcjw com_google_android_gms_internal_zzcjw5 = com_google_android_gms_internal_zzcjwArr4[i6];
+                                            if (com_google_android_gms_internal_zzcjw5 != com_google_android_gms_internal_zzcjw3) {
+                                                i5 = i4 + 1;
+                                                com_google_android_gms_internal_zzcjwArr3[i4] = com_google_android_gms_internal_zzcjw5;
                                             } else {
-                                                i4 = i3;
+                                                i5 = i4;
                                             }
-                                            i5++;
-                                            i3 = i4;
+                                            i6++;
+                                            i4 = i5;
                                         }
                                         com_google_android_gms_internal_zzcjv.zzbvw = com_google_android_gms_internal_zzcjwArr3;
-                                        z2 = z;
-                                        i4 = i + 1;
-                                        com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                        i7 = i4;
-                                        z3 = z2;
-                                    } else if (com_google_android_gms_internal_zzcjw2 == null) {
-                                        com_google_android_gms_internal_zzcjw2.name = "_err";
-                                        com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(10);
-                                        z2 = z;
-                                        i4 = i + 1;
-                                        com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                        i7 = i4;
-                                        z3 = z2;
+                                        z4 = z3;
+                                        i5 = i2 + 1;
+                                        com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                        i = i5;
+                                        z = z4;
+                                    } else if (com_google_android_gms_internal_zzcjw3 == null) {
+                                        com_google_android_gms_internal_zzcjw3.name = "_err";
+                                        com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(10);
+                                        z4 = z3;
+                                        i5 = i2 + 1;
+                                        com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                        i = i5;
+                                        z = z4;
                                     } else {
                                         zzwF().zzyx().zzj("Did not find conversion parameter. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
                                     }
                                 }
-                                z2 = z;
-                                i4 = i + 1;
-                                com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                i7 = i4;
-                                z3 = z2;
+                                z4 = z3;
+                                i5 = i2 + 1;
+                                com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                i = i5;
+                                z = z4;
                             } else {
-                                zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
+                                zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
                                 obj = (zzwB().zzeA(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ) || zzwB().zzeB(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ)) ? 1 : null;
-                                if (obj == null || "_err".equals(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name)) {
-                                    i7 = i;
-                                    z3 = z;
+                                if (obj == null || "_err".equals(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name)) {
+                                    i = i2;
+                                    z = z3;
                                 } else {
-                                    zzwB().zza(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, 11, "_ev", ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name, 0);
-                                    i7 = i;
-                                    z3 = z;
+                                    zzwB().zza(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, 11, "_ev", ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name, 0);
+                                    i = i2;
+                                    z = z3;
                                 }
                             }
-                            i2++;
-                            i = i7;
-                            z = z3;
+                            i3++;
+                            i2 = i;
+                            z3 = z;
                         }
-                        if (i < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                            com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i);
+                        if (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                            com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i2);
                         }
                         com_google_android_gms_internal_zzcjy.zzbvX = zza(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzbvF, com_google_android_gms_internal_zzcjy.zzbvE);
                         com_google_android_gms_internal_zzcjy.zzbvH = Long.valueOf(Long.MAX_VALUE);
@@ -953,19 +952,19 @@ public class zzcgk {
                             } else {
                                 com_google_android_gms_internal_zzcjy.zzbwb = Long.valueOf(-1);
                             }
-                            zzwz().zza(com_google_android_gms_internal_zzcjy, z);
+                            zzwz().zza(com_google_android_gms_internal_zzcjy, z3);
                         }
                         zzwz().zzG(com_google_android_gms_internal_zzcgk_zza.zzbta);
-                        zzwz2 = zzwz();
+                        zzwz = zzwz();
                         try {
-                            zzwz2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
+                            zzwz.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
                         } catch (SQLiteException e) {
-                            zzwz2.zzwF().zzyx().zze("Failed to remove unused event metadata. appId", zzcfk.zzdZ(str3), e);
+                            zzwz.zzwF().zzyx().zze("Failed to remove unused event metadata. appId", zzcfk.zzdZ(str3), e);
                         }
                         zzwz().setTransactionSuccessful();
-                        z4 = com_google_android_gms_internal_zzcjy.zzbvE.length <= 0;
+                        z2 = com_google_android_gms_internal_zzcjy.zzbvE.length <= 0;
                         zzwz().endTransaction();
-                        return z4;
+                        return z2;
                     }
                     zzwz().setTransactionSuccessful();
                     zzwz().endTransaction();
@@ -973,14 +972,14 @@ public class zzcgk {
                 }
             }
             strArr = j2 != -1 ? new String[]{null, String.valueOf(j2)} : new String[]{null};
-            str4 = j2 != -1 ? " and rowid <= ?" : "";
-            cursor = writableDatabase.rawQuery(new StringBuilder(String.valueOf(str4).length() + 84).append("select metadata_fingerprint from raw_events where app_id = ?").append(str4).append(" order by rowid limit 1;").toString(), strArr);
+            str5 = j2 != -1 ? " and rowid <= ?" : "";
+            cursor = writableDatabase.rawQuery(new StringBuilder(String.valueOf(str5).length() + 84).append("select metadata_fingerprint from raw_events where app_id = ?").append(str5).append(" order by rowid limit 1;").toString(), strArr);
             if (cursor.moveToFirst()) {
-                str4 = cursor.getString(0);
+                str5 = cursor.getString(0);
                 cursor.close();
-                str5 = str4;
-                cursor2 = cursor;
-                str6 = null;
+                str6 = str5;
+                r11 = cursor;
+                str2 = null;
             } else {
                 if (cursor != null) {
                     cursor.close();
@@ -992,27 +991,27 @@ public class zzcgk {
                     zzwz().endTransaction();
                     return false;
                 }
-                z = false;
+                z3 = false;
                 com_google_android_gms_internal_zzcjy = com_google_android_gms_internal_zzcgk_zza.zzbsZ;
                 com_google_android_gms_internal_zzcjy.zzbvE = new zzcjv[com_google_android_gms_internal_zzcgk_zza.zztJ.size()];
-                i = 0;
                 i2 = 0;
-                while (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                    if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name)) {
-                        zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name);
+                i3 = 0;
+                while (i3 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                    if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name)) {
+                        zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name);
                         if (zzO) {
                             zzwB();
                         }
                         obj2 = null;
                         obj3 = null;
-                        if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw == null) {
-                            ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = new zzcjw[0];
+                        if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw == null) {
+                            ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = new zzcjw[0];
                         }
-                        com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw;
+                        com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw;
                         length = com_google_android_gms_internal_zzcjwArr.length;
-                        i3 = 0;
-                        while (i3 < length) {
-                            com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i3];
+                        i4 = 0;
+                        while (i4 < length) {
+                            com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i4];
                             if (!"_c".equals(com_google_android_gms_internal_zzcjw.name)) {
                                 com_google_android_gms_internal_zzcjw.zzbvA = Long.valueOf(1);
                                 obj2 = 1;
@@ -1023,101 +1022,101 @@ public class zzcgk {
                                 com_google_android_gms_internal_zzcjw.zzbvA = Long.valueOf(1);
                                 obj = 1;
                             }
-                            i3++;
+                            i4++;
                             obj3 = obj;
                         }
-                        zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                        com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                        com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                        com_google_android_gms_internal_zzcjw3.name = "_c";
-                        com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                        com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                        ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                        zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                        com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                        com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                        com_google_android_gms_internal_zzcjw2.name = "_c";
+                        com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                        com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                        ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                         if (obj3 == null) {
-                            zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                            com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                            com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                            com_google_android_gms_internal_zzcjw3.name = "_r";
-                            com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                            com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                            ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                            zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                            com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                            com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                            com_google_android_gms_internal_zzcjw2.name = "_r";
+                            com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                            com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                            ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                         }
                         if (zzwz().zza(zzyZ(), com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, false, false, false, false, true).zzbpy <= ((long) this.zzbsn.zzdM(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ))) {
-                            z = true;
+                            z3 = true;
                         } else {
-                            com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                            i4 = 0;
-                            while (i4 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
-                                if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i4].name)) {
-                                    i4++;
+                            com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                            i5 = 0;
+                            while (i5 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
+                                if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i5].name)) {
+                                    i5++;
                                 } else {
                                     obj3 = new zzcjw[(com_google_android_gms_internal_zzcjv.zzbvw.length - 1)];
-                                    if (i4 > 0) {
-                                        System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i4);
+                                    if (i5 > 0) {
+                                        System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i5);
                                     }
-                                    if (i4 < obj3.length) {
-                                        System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i4 + 1, obj3, i4, obj3.length - i4);
+                                    if (i5 < obj3.length) {
+                                        System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i5 + 1, obj3, i5, obj3.length - i5);
                                     }
                                     com_google_android_gms_internal_zzcjv.zzbvw = obj3;
                                 }
                             }
                         }
                         zzwF().zzyz().zzj("Too many conversions. Not logging as conversion. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
-                        com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
+                        com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
                         obj4 = null;
-                        com_google_android_gms_internal_zzcjw2 = null;
+                        com_google_android_gms_internal_zzcjw3 = null;
                         com_google_android_gms_internal_zzcjwArr3 = com_google_android_gms_internal_zzcjv.zzbvw;
                         length2 = com_google_android_gms_internal_zzcjwArr3.length;
-                        i5 = 0;
-                        while (i5 < length2) {
-                            com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjwArr3[i5];
-                            if (!"_c".equals(com_google_android_gms_internal_zzcjw3.name)) {
+                        i6 = 0;
+                        while (i6 < length2) {
+                            com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjwArr3[i6];
+                            if (!"_c".equals(com_google_android_gms_internal_zzcjw2.name)) {
                                 obj3 = obj4;
-                            } else if ("_err".equals(com_google_android_gms_internal_zzcjw3.name)) {
-                                com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
+                            } else if ("_err".equals(com_google_android_gms_internal_zzcjw2.name)) {
+                                com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
                                 obj3 = obj4;
                             } else {
-                                com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw2;
-                                i6 = 1;
-                                com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw4;
+                                com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw3;
+                                i7 = 1;
+                                com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw4;
                             }
-                            i5++;
+                            i6++;
                             obj4 = obj3;
-                            com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
+                            com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
                         }
                         if (obj4 == null) {
                         }
-                        if (com_google_android_gms_internal_zzcjw2 == null) {
+                        if (com_google_android_gms_internal_zzcjw3 == null) {
                             zzwF().zzyx().zzj("Did not find conversion parameter. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
-                            z2 = z;
-                            i4 = i + 1;
-                            com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                            i7 = i4;
-                            z3 = z2;
+                            z4 = z3;
+                            i5 = i2 + 1;
+                            com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                            i = i5;
+                            z = z4;
                         } else {
-                            com_google_android_gms_internal_zzcjw2.name = "_err";
-                            com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(10);
-                            z2 = z;
-                            i4 = i + 1;
-                            com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                            i7 = i4;
-                            z3 = z2;
+                            com_google_android_gms_internal_zzcjw3.name = "_err";
+                            com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(10);
+                            z4 = z3;
+                            i5 = i2 + 1;
+                            com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                            i = i5;
+                            z = z4;
                         }
                     } else {
-                        zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
+                        zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
                         if (!zzwB().zzeA(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ)) {
                         }
                         if (obj == null) {
                         }
-                        i7 = i;
-                        z3 = z;
+                        i = i2;
+                        z = z3;
                     }
-                    i2++;
-                    i = i7;
-                    z = z3;
+                    i3++;
+                    i2 = i;
+                    z3 = z;
                 }
-                if (i < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                    com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i);
+                if (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                    com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i2);
                 }
                 com_google_android_gms_internal_zzcjy.zzbvX = zza(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzbvF, com_google_android_gms_internal_zzcjy.zzbvE);
                 com_google_android_gms_internal_zzcjy.zzbvH = Long.valueOf(Long.MAX_VALUE);
@@ -1163,38 +1162,38 @@ public class zzcgk {
                     } else {
                         com_google_android_gms_internal_zzcjy.zzbwb = Long.valueOf(-1);
                     }
-                    zzwz().zza(com_google_android_gms_internal_zzcjy, z);
+                    zzwz().zza(com_google_android_gms_internal_zzcjy, z3);
                 }
                 zzwz().zzG(com_google_android_gms_internal_zzcgk_zza.zzbta);
-                zzwz2 = zzwz();
-                zzwz2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
+                zzwz = zzwz();
+                zzwz.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
                 zzwz().setTransactionSuccessful();
                 if (com_google_android_gms_internal_zzcjy.zzbvE.length <= 0) {
                 }
                 zzwz().endTransaction();
-                return z4;
+                return z2;
             }
             try {
-                cursor2 = writableDatabase.query("raw_events_metadata", new String[]{TtmlNode.TAG_METADATA}, "app_id = ? and metadata_fingerprint = ?", new String[]{str6, str5}, null, null, "rowid", "2");
-                if (cursor2.moveToFirst()) {
-                    byte[] blob = cursor2.getBlob(0);
+                r11 = writableDatabase.query("raw_events_metadata", new String[]{TtmlNode.TAG_METADATA}, "app_id = ? and metadata_fingerprint = ?", new String[]{str2, str6}, null, null, "rowid", "2");
+                if (r11.moveToFirst()) {
+                    byte[] blob = r11.getBlob(0);
                     acx zzb = acx.zzb(blob, 0, blob.length);
                     zzcjy com_google_android_gms_internal_zzcjy2 = new zzcjy();
                     try {
                         com_google_android_gms_internal_zzcjy2.zza(zzb);
-                        if (cursor2.moveToNext()) {
-                            zzwz.zzwF().zzyz().zzj("Get multiple raw event metadata records, expected one. appId", zzcfk.zzdZ(str6));
+                        if (r11.moveToNext()) {
+                            zzwz2.zzwF().zzyz().zzj("Get multiple raw event metadata records, expected one. appId", zzcfk.zzdZ(str2));
                         }
-                        cursor2.close();
+                        r11.close();
                         com_google_android_gms_internal_zzcgk_zza.zzb(com_google_android_gms_internal_zzcjy2);
                         if (j2 != -1) {
-                            str4 = "app_id = ? and metadata_fingerprint = ? and rowid <= ?";
-                            strArr = new String[]{str6, str5, String.valueOf(j2)};
+                            str5 = "app_id = ? and metadata_fingerprint = ? and rowid <= ?";
+                            strArr = new String[]{str2, str6, String.valueOf(j2)};
                         } else {
-                            str4 = "app_id = ? and metadata_fingerprint = ?";
-                            strArr = new String[]{str6, str5};
+                            str5 = "app_id = ? and metadata_fingerprint = ?";
+                            strArr = new String[]{str2, str6};
                         }
-                        cursor = writableDatabase.query("raw_events", new String[]{"rowid", "name", AppMeasurement.Param.TIMESTAMP, "data"}, str4, strArr, null, null, "rowid", null);
+                        cursor = writableDatabase.query("raw_events", new String[]{"rowid", "name", AppMeasurement.Param.TIMESTAMP, "data"}, str5, strArr, null, null, "rowid", null);
                         if (cursor.moveToFirst()) {
                             do {
                                 try {
@@ -1213,35 +1212,35 @@ public class zzcgk {
                                             if (com_google_android_gms_internal_zzcgk_zza.zztJ != null) {
                                             }
                                             if (obj != null) {
-                                                z = false;
+                                                z3 = false;
                                                 com_google_android_gms_internal_zzcjy = com_google_android_gms_internal_zzcgk_zza.zzbsZ;
                                                 com_google_android_gms_internal_zzcjy.zzbvE = new zzcjv[com_google_android_gms_internal_zzcgk_zza.zztJ.size()];
-                                                i = 0;
                                                 i2 = 0;
-                                                while (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                                                    if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name)) {
-                                                        zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
+                                                i3 = 0;
+                                                while (i3 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                                                    if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name)) {
+                                                        zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
                                                         if (zzwB().zzeA(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ)) {
                                                         }
                                                         if (obj == null) {
                                                         }
-                                                        i7 = i;
-                                                        z3 = z;
+                                                        i = i2;
+                                                        z = z3;
                                                     } else {
-                                                        zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name);
+                                                        zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name);
                                                         if (zzO) {
                                                             zzwB();
                                                         }
                                                         obj2 = null;
                                                         obj3 = null;
-                                                        if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw == null) {
-                                                            ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = new zzcjw[0];
+                                                        if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw == null) {
+                                                            ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = new zzcjw[0];
                                                         }
-                                                        com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw;
+                                                        com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw;
                                                         length = com_google_android_gms_internal_zzcjwArr.length;
-                                                        i3 = 0;
-                                                        while (i3 < length) {
-                                                            com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i3];
+                                                        i4 = 0;
+                                                        while (i4 < length) {
+                                                            com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i4];
                                                             if (!"_c".equals(com_google_android_gms_internal_zzcjw.name)) {
                                                                 com_google_android_gms_internal_zzcjw.zzbvA = Long.valueOf(1);
                                                                 obj2 = 1;
@@ -1252,93 +1251,93 @@ public class zzcgk {
                                                             } else {
                                                                 obj = obj3;
                                                             }
-                                                            i3++;
+                                                            i4++;
                                                             obj3 = obj;
                                                         }
-                                                        zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                                                        com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                                                        com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                                                        com_google_android_gms_internal_zzcjw3.name = "_c";
-                                                        com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                                                        com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                                                        ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                                                        zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                                                        com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                                                        com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                                                        com_google_android_gms_internal_zzcjw2.name = "_c";
+                                                        com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                                                        com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                                                        ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                                                         if (obj3 == null) {
-                                                            zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                                                            com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                                                            com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                                                            com_google_android_gms_internal_zzcjw3.name = "_r";
-                                                            com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                                                            com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                                                            ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                                                            zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                                                            com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                                                            com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                                                            com_google_android_gms_internal_zzcjw2.name = "_r";
+                                                            com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                                                            com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                                                            ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                                                         }
                                                         if (zzwz().zza(zzyZ(), com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, false, false, false, false, true).zzbpy <= ((long) this.zzbsn.zzdM(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ))) {
-                                                            com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                                            i4 = 0;
-                                                            while (i4 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
-                                                                if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i4].name)) {
+                                                            com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                                            i5 = 0;
+                                                            while (i5 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
+                                                                if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i5].name)) {
                                                                     obj3 = new zzcjw[(com_google_android_gms_internal_zzcjv.zzbvw.length - 1)];
-                                                                    if (i4 > 0) {
-                                                                        System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i4);
+                                                                    if (i5 > 0) {
+                                                                        System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i5);
                                                                     }
-                                                                    if (i4 < obj3.length) {
-                                                                        System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i4 + 1, obj3, i4, obj3.length - i4);
+                                                                    if (i5 < obj3.length) {
+                                                                        System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i5 + 1, obj3, i5, obj3.length - i5);
                                                                     }
                                                                     com_google_android_gms_internal_zzcjv.zzbvw = obj3;
                                                                 } else {
-                                                                    i4++;
+                                                                    i5++;
                                                                 }
                                                             }
                                                         } else {
-                                                            z = true;
+                                                            z3 = true;
                                                         }
                                                         zzwF().zzyz().zzj("Too many conversions. Not logging as conversion. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
-                                                        com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
+                                                        com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
                                                         obj4 = null;
-                                                        com_google_android_gms_internal_zzcjw2 = null;
+                                                        com_google_android_gms_internal_zzcjw3 = null;
                                                         com_google_android_gms_internal_zzcjwArr3 = com_google_android_gms_internal_zzcjv.zzbvw;
                                                         length2 = com_google_android_gms_internal_zzcjwArr3.length;
-                                                        i5 = 0;
-                                                        while (i5 < length2) {
-                                                            com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjwArr3[i5];
-                                                            if (!"_c".equals(com_google_android_gms_internal_zzcjw3.name)) {
+                                                        i6 = 0;
+                                                        while (i6 < length2) {
+                                                            com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjwArr3[i6];
+                                                            if (!"_c".equals(com_google_android_gms_internal_zzcjw2.name)) {
                                                                 obj3 = obj4;
-                                                            } else if ("_err".equals(com_google_android_gms_internal_zzcjw3.name)) {
-                                                                com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw2;
-                                                                i6 = 1;
-                                                                com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw4;
+                                                            } else if ("_err".equals(com_google_android_gms_internal_zzcjw2.name)) {
+                                                                com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw3;
+                                                                i7 = 1;
+                                                                com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw4;
                                                             } else {
-                                                                com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
+                                                                com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
                                                                 obj3 = obj4;
                                                             }
-                                                            i5++;
+                                                            i6++;
                                                             obj4 = obj3;
-                                                            com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
+                                                            com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
                                                         }
                                                         if (obj4 == null) {
                                                         }
-                                                        if (com_google_android_gms_internal_zzcjw2 == null) {
-                                                            com_google_android_gms_internal_zzcjw2.name = "_err";
-                                                            com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(10);
-                                                            z2 = z;
-                                                            i4 = i + 1;
-                                                            com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                                            i7 = i4;
-                                                            z3 = z2;
+                                                        if (com_google_android_gms_internal_zzcjw3 == null) {
+                                                            com_google_android_gms_internal_zzcjw3.name = "_err";
+                                                            com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(10);
+                                                            z4 = z3;
+                                                            i5 = i2 + 1;
+                                                            com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                                            i = i5;
+                                                            z = z4;
                                                         } else {
                                                             zzwF().zzyx().zzj("Did not find conversion parameter. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
-                                                            z2 = z;
-                                                            i4 = i + 1;
-                                                            com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                                            i7 = i4;
-                                                            z3 = z2;
+                                                            z4 = z3;
+                                                            i5 = i2 + 1;
+                                                            com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                                            i = i5;
+                                                            z = z4;
                                                         }
                                                     }
-                                                    i2++;
-                                                    i = i7;
-                                                    z = z3;
+                                                    i3++;
+                                                    i2 = i;
+                                                    z3 = z;
                                                 }
-                                                if (i < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                                                    com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i);
+                                                if (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                                                    com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i2);
                                                 }
                                                 com_google_android_gms_internal_zzcjy.zzbvX = zza(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzbvF, com_google_android_gms_internal_zzcjy.zzbvE);
                                                 com_google_android_gms_internal_zzcjy.zzbvH = Long.valueOf(Long.MAX_VALUE);
@@ -1384,27 +1383,27 @@ public class zzcgk {
                                                     } else {
                                                         zzwF().zzyz().zzj("Did not find measurement config or missing version info. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
                                                     }
-                                                    zzwz().zza(com_google_android_gms_internal_zzcjy, z);
+                                                    zzwz().zza(com_google_android_gms_internal_zzcjy, z3);
                                                 }
                                                 zzwz().zzG(com_google_android_gms_internal_zzcgk_zza.zzbta);
-                                                zzwz2 = zzwz();
-                                                zzwz2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
+                                                zzwz = zzwz();
+                                                zzwz.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
                                                 zzwz().setTransactionSuccessful();
                                                 if (com_google_android_gms_internal_zzcjy.zzbvE.length <= 0) {
                                                 }
                                                 zzwz().endTransaction();
-                                                return z4;
+                                                return z2;
                                             }
                                             zzwz().setTransactionSuccessful();
                                             zzwz().endTransaction();
                                             return false;
                                         }
                                     } catch (IOException e2) {
-                                        zzwz.zzwF().zzyx().zze("Data loss. Failed to merge raw event. appId", zzcfk.zzdZ(str6), e2);
+                                        zzwz2.zzwF().zzyx().zze("Data loss. Failed to merge raw event. appId", zzcfk.zzdZ(str2), e2);
                                     }
                                 } catch (SQLiteException e3) {
                                     obj = e3;
-                                    str2 = str6;
+                                    str4 = str2;
                                 }
                             } while (cursor.moveToNext());
                             if (cursor != null) {
@@ -1417,27 +1416,27 @@ public class zzcgk {
                                 zzwz().endTransaction();
                                 return false;
                             }
-                            z = false;
+                            z3 = false;
                             com_google_android_gms_internal_zzcjy = com_google_android_gms_internal_zzcgk_zza.zzbsZ;
                             com_google_android_gms_internal_zzcjy.zzbvE = new zzcjv[com_google_android_gms_internal_zzcgk_zza.zztJ.size()];
-                            i = 0;
                             i2 = 0;
-                            while (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                                if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name)) {
-                                    zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name);
+                            i3 = 0;
+                            while (i3 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                                if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name)) {
+                                    zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name);
                                     if (zzO) {
                                         zzwB();
                                     }
                                     obj2 = null;
                                     obj3 = null;
-                                    if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw == null) {
-                                        ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = new zzcjw[0];
+                                    if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw == null) {
+                                        ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = new zzcjw[0];
                                     }
-                                    com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw;
+                                    com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw;
                                     length = com_google_android_gms_internal_zzcjwArr.length;
-                                    i3 = 0;
-                                    while (i3 < length) {
-                                        com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i3];
+                                    i4 = 0;
+                                    while (i4 < length) {
+                                        com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i4];
                                         if (!"_c".equals(com_google_android_gms_internal_zzcjw.name)) {
                                             com_google_android_gms_internal_zzcjw.zzbvA = Long.valueOf(1);
                                             obj2 = 1;
@@ -1448,101 +1447,101 @@ public class zzcgk {
                                             com_google_android_gms_internal_zzcjw.zzbvA = Long.valueOf(1);
                                             obj = 1;
                                         }
-                                        i3++;
+                                        i4++;
                                         obj3 = obj;
                                     }
-                                    zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                                    com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                                    com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                                    com_google_android_gms_internal_zzcjw3.name = "_c";
-                                    com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                                    com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                                    zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                                    com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                                    com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                                    com_google_android_gms_internal_zzcjw2.name = "_c";
+                                    com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                                    com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                                     if (obj3 == null) {
-                                        zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                                        com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                                        com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                                        com_google_android_gms_internal_zzcjw3.name = "_r";
-                                        com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                                        com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                                        ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                                        zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                                        com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                                        com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                                        com_google_android_gms_internal_zzcjw2.name = "_r";
+                                        com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                                        com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                                        ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                                     }
                                     if (zzwz().zza(zzyZ(), com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, false, false, false, false, true).zzbpy <= ((long) this.zzbsn.zzdM(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ))) {
-                                        z = true;
+                                        z3 = true;
                                     } else {
-                                        com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                        i4 = 0;
-                                        while (i4 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
-                                            if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i4].name)) {
-                                                i4++;
+                                        com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                        i5 = 0;
+                                        while (i5 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
+                                            if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i5].name)) {
+                                                i5++;
                                             } else {
                                                 obj3 = new zzcjw[(com_google_android_gms_internal_zzcjv.zzbvw.length - 1)];
-                                                if (i4 > 0) {
-                                                    System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i4);
+                                                if (i5 > 0) {
+                                                    System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i5);
                                                 }
-                                                if (i4 < obj3.length) {
-                                                    System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i4 + 1, obj3, i4, obj3.length - i4);
+                                                if (i5 < obj3.length) {
+                                                    System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i5 + 1, obj3, i5, obj3.length - i5);
                                                 }
                                                 com_google_android_gms_internal_zzcjv.zzbvw = obj3;
                                             }
                                         }
                                     }
                                     zzwF().zzyz().zzj("Too many conversions. Not logging as conversion. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
-                                    com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
+                                    com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
                                     obj4 = null;
-                                    com_google_android_gms_internal_zzcjw2 = null;
+                                    com_google_android_gms_internal_zzcjw3 = null;
                                     com_google_android_gms_internal_zzcjwArr3 = com_google_android_gms_internal_zzcjv.zzbvw;
                                     length2 = com_google_android_gms_internal_zzcjwArr3.length;
-                                    i5 = 0;
-                                    while (i5 < length2) {
-                                        com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjwArr3[i5];
-                                        if (!"_c".equals(com_google_android_gms_internal_zzcjw3.name)) {
+                                    i6 = 0;
+                                    while (i6 < length2) {
+                                        com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjwArr3[i6];
+                                        if (!"_c".equals(com_google_android_gms_internal_zzcjw2.name)) {
                                             obj3 = obj4;
-                                        } else if ("_err".equals(com_google_android_gms_internal_zzcjw3.name)) {
-                                            com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
+                                        } else if ("_err".equals(com_google_android_gms_internal_zzcjw2.name)) {
+                                            com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
                                             obj3 = obj4;
                                         } else {
-                                            com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw2;
-                                            i6 = 1;
-                                            com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw4;
+                                            com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw3;
+                                            i7 = 1;
+                                            com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw4;
                                         }
-                                        i5++;
+                                        i6++;
                                         obj4 = obj3;
-                                        com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
+                                        com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
                                     }
                                     if (obj4 == null) {
                                     }
-                                    if (com_google_android_gms_internal_zzcjw2 == null) {
+                                    if (com_google_android_gms_internal_zzcjw3 == null) {
                                         zzwF().zzyx().zzj("Did not find conversion parameter. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
-                                        z2 = z;
-                                        i4 = i + 1;
-                                        com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                        i7 = i4;
-                                        z3 = z2;
+                                        z4 = z3;
+                                        i5 = i2 + 1;
+                                        com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                        i = i5;
+                                        z = z4;
                                     } else {
-                                        com_google_android_gms_internal_zzcjw2.name = "_err";
-                                        com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(10);
-                                        z2 = z;
-                                        i4 = i + 1;
-                                        com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                        i7 = i4;
-                                        z3 = z2;
+                                        com_google_android_gms_internal_zzcjw3.name = "_err";
+                                        com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(10);
+                                        z4 = z3;
+                                        i5 = i2 + 1;
+                                        com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                        i = i5;
+                                        z = z4;
                                     }
                                 } else {
-                                    zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
+                                    zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
                                     if (zzwB().zzeA(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ)) {
                                     }
                                     if (obj == null) {
                                     }
-                                    i7 = i;
-                                    z3 = z;
+                                    i = i2;
+                                    z = z3;
                                 }
-                                i2++;
-                                i = i7;
-                                z = z3;
+                                i3++;
+                                i2 = i;
+                                z3 = z;
                             }
-                            if (i < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                                com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i);
+                            if (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                                com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i2);
                             }
                             com_google_android_gms_internal_zzcjy.zzbvX = zza(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzbvF, com_google_android_gms_internal_zzcjy.zzbvE);
                             com_google_android_gms_internal_zzcjy.zzbvH = Long.valueOf(Long.MAX_VALUE);
@@ -1588,18 +1587,18 @@ public class zzcgk {
                                 } else {
                                     com_google_android_gms_internal_zzcjy.zzbwb = Long.valueOf(-1);
                                 }
-                                zzwz().zza(com_google_android_gms_internal_zzcjy, z);
+                                zzwz().zza(com_google_android_gms_internal_zzcjy, z3);
                             }
                             zzwz().zzG(com_google_android_gms_internal_zzcgk_zza.zzbta);
-                            zzwz2 = zzwz();
-                            zzwz2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
+                            zzwz = zzwz();
+                            zzwz.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
                             zzwz().setTransactionSuccessful();
                             if (com_google_android_gms_internal_zzcjy.zzbvE.length <= 0) {
                             }
                             zzwz().endTransaction();
-                            return z4;
+                            return z2;
                         }
-                        zzwz.zzwF().zzyz().zzj("Raw event data disappeared while in transaction. appId", zzcfk.zzdZ(str6));
+                        zzwz2.zzwF().zzyz().zzj("Raw event data disappeared while in transaction. appId", zzcfk.zzdZ(str2));
                         if (cursor != null) {
                             cursor.close();
                         }
@@ -1610,27 +1609,27 @@ public class zzcgk {
                             zzwz().endTransaction();
                             return false;
                         }
-                        z = false;
+                        z3 = false;
                         com_google_android_gms_internal_zzcjy = com_google_android_gms_internal_zzcgk_zza.zzbsZ;
                         com_google_android_gms_internal_zzcjy.zzbvE = new zzcjv[com_google_android_gms_internal_zzcgk_zza.zztJ.size()];
-                        i = 0;
                         i2 = 0;
-                        while (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                            if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name)) {
-                                zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name);
+                        i3 = 0;
+                        while (i3 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                            if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name)) {
+                                zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name);
                                 if (zzO) {
                                     zzwB();
                                 }
                                 obj2 = null;
                                 obj3 = null;
-                                if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw == null) {
-                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = new zzcjw[0];
+                                if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw == null) {
+                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = new zzcjw[0];
                                 }
-                                com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw;
+                                com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw;
                                 length = com_google_android_gms_internal_zzcjwArr.length;
-                                i3 = 0;
-                                while (i3 < length) {
-                                    com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i3];
+                                i4 = 0;
+                                while (i4 < length) {
+                                    com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i4];
                                     if (!"_c".equals(com_google_android_gms_internal_zzcjw.name)) {
                                         com_google_android_gms_internal_zzcjw.zzbvA = Long.valueOf(1);
                                         obj2 = 1;
@@ -1641,101 +1640,101 @@ public class zzcgk {
                                         com_google_android_gms_internal_zzcjw.zzbvA = Long.valueOf(1);
                                         obj = 1;
                                     }
-                                    i3++;
+                                    i4++;
                                     obj3 = obj;
                                 }
-                                zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                                com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                                com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                                com_google_android_gms_internal_zzcjw3.name = "_c";
-                                com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                                com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                                ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                                zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                                com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                                com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                                com_google_android_gms_internal_zzcjw2.name = "_c";
+                                com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                                com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                                ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                                 if (obj3 == null) {
-                                    zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                                    com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                                    com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                                    com_google_android_gms_internal_zzcjw3.name = "_r";
-                                    com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                                    com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                                    zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                                    com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                                    com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                                    com_google_android_gms_internal_zzcjw2.name = "_r";
+                                    com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                                    com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                                 }
                                 if (zzwz().zza(zzyZ(), com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, false, false, false, false, true).zzbpy <= ((long) this.zzbsn.zzdM(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ))) {
-                                    z = true;
+                                    z3 = true;
                                 } else {
-                                    com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                    i4 = 0;
-                                    while (i4 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
-                                        if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i4].name)) {
-                                            i4++;
+                                    com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                    i5 = 0;
+                                    while (i5 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
+                                        if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i5].name)) {
+                                            i5++;
                                         } else {
                                             obj3 = new zzcjw[(com_google_android_gms_internal_zzcjv.zzbvw.length - 1)];
-                                            if (i4 > 0) {
-                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i4);
+                                            if (i5 > 0) {
+                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i5);
                                             }
-                                            if (i4 < obj3.length) {
-                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i4 + 1, obj3, i4, obj3.length - i4);
+                                            if (i5 < obj3.length) {
+                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i5 + 1, obj3, i5, obj3.length - i5);
                                             }
                                             com_google_android_gms_internal_zzcjv.zzbvw = obj3;
                                         }
                                     }
                                 }
                                 zzwF().zzyz().zzj("Too many conversions. Not logging as conversion. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
-                                com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
+                                com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
                                 obj4 = null;
-                                com_google_android_gms_internal_zzcjw2 = null;
+                                com_google_android_gms_internal_zzcjw3 = null;
                                 com_google_android_gms_internal_zzcjwArr3 = com_google_android_gms_internal_zzcjv.zzbvw;
                                 length2 = com_google_android_gms_internal_zzcjwArr3.length;
-                                i5 = 0;
-                                while (i5 < length2) {
-                                    com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjwArr3[i5];
-                                    if (!"_c".equals(com_google_android_gms_internal_zzcjw3.name)) {
+                                i6 = 0;
+                                while (i6 < length2) {
+                                    com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjwArr3[i6];
+                                    if (!"_c".equals(com_google_android_gms_internal_zzcjw2.name)) {
                                         obj3 = obj4;
-                                    } else if ("_err".equals(com_google_android_gms_internal_zzcjw3.name)) {
-                                        com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
+                                    } else if ("_err".equals(com_google_android_gms_internal_zzcjw2.name)) {
+                                        com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
                                         obj3 = obj4;
                                     } else {
-                                        com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw2;
-                                        i6 = 1;
-                                        com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw4;
+                                        com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw3;
+                                        i7 = 1;
+                                        com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw4;
                                     }
-                                    i5++;
+                                    i6++;
                                     obj4 = obj3;
-                                    com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
+                                    com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
                                 }
                                 if (obj4 == null) {
                                 }
-                                if (com_google_android_gms_internal_zzcjw2 == null) {
+                                if (com_google_android_gms_internal_zzcjw3 == null) {
                                     zzwF().zzyx().zzj("Did not find conversion parameter. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
-                                    z2 = z;
-                                    i4 = i + 1;
-                                    com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                    i7 = i4;
-                                    z3 = z2;
+                                    z4 = z3;
+                                    i5 = i2 + 1;
+                                    com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                    i = i5;
+                                    z = z4;
                                 } else {
-                                    com_google_android_gms_internal_zzcjw2.name = "_err";
-                                    com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(10);
-                                    z2 = z;
-                                    i4 = i + 1;
-                                    com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                    i7 = i4;
-                                    z3 = z2;
+                                    com_google_android_gms_internal_zzcjw3.name = "_err";
+                                    com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(10);
+                                    z4 = z3;
+                                    i5 = i2 + 1;
+                                    com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                    i = i5;
+                                    z = z4;
                                 }
                             } else {
-                                zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
+                                zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
                                 if (zzwB().zzeA(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ)) {
                                 }
                                 if (obj == null) {
                                 }
-                                i7 = i;
-                                z3 = z;
+                                i = i2;
+                                z = z3;
                             }
-                            i2++;
-                            i = i7;
-                            z = z3;
+                            i3++;
+                            i2 = i;
+                            z3 = z;
                         }
-                        if (i < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                            com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i);
+                        if (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                            com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i2);
                         }
                         com_google_android_gms_internal_zzcjy.zzbvX = zza(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzbvF, com_google_android_gms_internal_zzcjy.zzbvE);
                         com_google_android_gms_internal_zzcjy.zzbvH = Long.valueOf(Long.MAX_VALUE);
@@ -1781,18 +1780,19 @@ public class zzcgk {
                             } else {
                                 com_google_android_gms_internal_zzcjy.zzbwb = Long.valueOf(-1);
                             }
-                            zzwz().zza(com_google_android_gms_internal_zzcjy, z);
+                            zzwz().zza(com_google_android_gms_internal_zzcjy, z3);
                         }
                         zzwz().zzG(com_google_android_gms_internal_zzcgk_zza.zzbta);
-                        zzwz2 = zzwz();
-                        zzwz2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
+                        zzwz = zzwz();
+                        zzwz.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
                         zzwz().setTransactionSuccessful();
                         if (com_google_android_gms_internal_zzcjy.zzbvE.length <= 0) {
                         }
                         zzwz().endTransaction();
-                        return z4;
+                        return z2;
                     } catch (IOException e22) {
-                        zzwz.zzwF().zzyx().zze("Data loss. Failed to merge raw event metadata. appId", zzcfk.zzdZ(str6), e22);
+                        zzwz2.zzwF().zzyx().zze("Data loss. Failed to merge raw event metadata. appId", zzcfk.zzdZ(str2), e22);
+                        Cursor cursor2;
                         if (cursor2 != null) {
                             cursor2.close();
                         }
@@ -1800,42 +1800,42 @@ public class zzcgk {
                         zzwz().endTransaction();
                     }
                 } else {
-                    zzwz.zzwF().zzyx().zzj("Raw event metadata record is missing. appId", zzcfk.zzdZ(str6));
+                    zzwz2.zzwF().zzyx().zzj("Raw event metadata record is missing. appId", zzcfk.zzdZ(str2));
                     if (cursor2 != null) {
                         cursor2.close();
                     }
                     if (com_google_android_gms_internal_zzcgk_zza.zztJ != null) {
                     }
                     if (obj != null) {
-                        z = false;
+                        z3 = false;
                         com_google_android_gms_internal_zzcjy = com_google_android_gms_internal_zzcgk_zza.zzbsZ;
                         com_google_android_gms_internal_zzcjy.zzbvE = new zzcjv[com_google_android_gms_internal_zzcgk_zza.zztJ.size()];
-                        i = 0;
                         i2 = 0;
-                        while (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                            if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name)) {
-                                zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
+                        i3 = 0;
+                        while (i3 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                            if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name)) {
+                                zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
                                 if (zzwB().zzeA(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ)) {
                                 }
                                 if (obj == null) {
                                 }
-                                i7 = i;
-                                z3 = z;
+                                i = i2;
+                                z = z3;
                             } else {
-                                zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name);
+                                zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name);
                                 if (zzO) {
                                     zzwB();
                                 }
                                 obj2 = null;
                                 obj3 = null;
-                                if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw == null) {
-                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = new zzcjw[0];
+                                if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw == null) {
+                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = new zzcjw[0];
                                 }
-                                com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw;
+                                com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw;
                                 length = com_google_android_gms_internal_zzcjwArr.length;
-                                i3 = 0;
-                                while (i3 < length) {
-                                    com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i3];
+                                i4 = 0;
+                                while (i4 < length) {
+                                    com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i4];
                                     if (!"_c".equals(com_google_android_gms_internal_zzcjw.name)) {
                                         com_google_android_gms_internal_zzcjw.zzbvA = Long.valueOf(1);
                                         obj2 = 1;
@@ -1846,93 +1846,93 @@ public class zzcgk {
                                     } else {
                                         obj = obj3;
                                     }
-                                    i3++;
+                                    i4++;
                                     obj3 = obj;
                                 }
-                                zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                                com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                                com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                                com_google_android_gms_internal_zzcjw3.name = "_c";
-                                com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                                com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                                ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                                zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                                com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                                com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                                com_google_android_gms_internal_zzcjw2.name = "_c";
+                                com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                                com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                                ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                                 if (obj3 == null) {
-                                    zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                                    com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                                    com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                                    com_google_android_gms_internal_zzcjw3.name = "_r";
-                                    com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                                    com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                                    zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                                    com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                                    com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                                    com_google_android_gms_internal_zzcjw2.name = "_r";
+                                    com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                                    com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                                 }
                                 if (zzwz().zza(zzyZ(), com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, false, false, false, false, true).zzbpy <= ((long) this.zzbsn.zzdM(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ))) {
-                                    com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                    i4 = 0;
-                                    while (i4 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
-                                        if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i4].name)) {
+                                    com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                    i5 = 0;
+                                    while (i5 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
+                                        if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i5].name)) {
                                             obj3 = new zzcjw[(com_google_android_gms_internal_zzcjv.zzbvw.length - 1)];
-                                            if (i4 > 0) {
-                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i4);
+                                            if (i5 > 0) {
+                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i5);
                                             }
-                                            if (i4 < obj3.length) {
-                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i4 + 1, obj3, i4, obj3.length - i4);
+                                            if (i5 < obj3.length) {
+                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i5 + 1, obj3, i5, obj3.length - i5);
                                             }
                                             com_google_android_gms_internal_zzcjv.zzbvw = obj3;
                                         } else {
-                                            i4++;
+                                            i5++;
                                         }
                                     }
                                 } else {
-                                    z = true;
+                                    z3 = true;
                                 }
                                 zzwF().zzyz().zzj("Too many conversions. Not logging as conversion. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
-                                com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
+                                com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
                                 obj4 = null;
-                                com_google_android_gms_internal_zzcjw2 = null;
+                                com_google_android_gms_internal_zzcjw3 = null;
                                 com_google_android_gms_internal_zzcjwArr3 = com_google_android_gms_internal_zzcjv.zzbvw;
                                 length2 = com_google_android_gms_internal_zzcjwArr3.length;
-                                i5 = 0;
-                                while (i5 < length2) {
-                                    com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjwArr3[i5];
-                                    if (!"_c".equals(com_google_android_gms_internal_zzcjw3.name)) {
+                                i6 = 0;
+                                while (i6 < length2) {
+                                    com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjwArr3[i6];
+                                    if (!"_c".equals(com_google_android_gms_internal_zzcjw2.name)) {
                                         obj3 = obj4;
-                                    } else if ("_err".equals(com_google_android_gms_internal_zzcjw3.name)) {
-                                        com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw2;
-                                        i6 = 1;
-                                        com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw4;
+                                    } else if ("_err".equals(com_google_android_gms_internal_zzcjw2.name)) {
+                                        com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw3;
+                                        i7 = 1;
+                                        com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw4;
                                     } else {
-                                        com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
+                                        com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
                                         obj3 = obj4;
                                     }
-                                    i5++;
+                                    i6++;
                                     obj4 = obj3;
-                                    com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
+                                    com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
                                 }
                                 if (obj4 == null) {
                                 }
-                                if (com_google_android_gms_internal_zzcjw2 == null) {
-                                    com_google_android_gms_internal_zzcjw2.name = "_err";
-                                    com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(10);
-                                    z2 = z;
-                                    i4 = i + 1;
-                                    com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                    i7 = i4;
-                                    z3 = z2;
+                                if (com_google_android_gms_internal_zzcjw3 == null) {
+                                    com_google_android_gms_internal_zzcjw3.name = "_err";
+                                    com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(10);
+                                    z4 = z3;
+                                    i5 = i2 + 1;
+                                    com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                    i = i5;
+                                    z = z4;
                                 } else {
                                     zzwF().zzyx().zzj("Did not find conversion parameter. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
-                                    z2 = z;
-                                    i4 = i + 1;
-                                    com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                    i7 = i4;
-                                    z3 = z2;
+                                    z4 = z3;
+                                    i5 = i2 + 1;
+                                    com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                    i = i5;
+                                    z = z4;
                                 }
                             }
-                            i2++;
-                            i = i7;
-                            z = z3;
+                            i3++;
+                            i2 = i;
+                            z3 = z;
                         }
-                        if (i < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                            com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i);
+                        if (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                            com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i2);
                         }
                         com_google_android_gms_internal_zzcjy.zzbvX = zza(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzbvF, com_google_android_gms_internal_zzcjy.zzbvE);
                         com_google_android_gms_internal_zzcjy.zzbvH = Long.valueOf(Long.MAX_VALUE);
@@ -1978,16 +1978,16 @@ public class zzcgk {
                             } else {
                                 zzwF().zzyz().zzj("Did not find measurement config or missing version info. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
                             }
-                            zzwz().zza(com_google_android_gms_internal_zzcjy, z);
+                            zzwz().zza(com_google_android_gms_internal_zzcjy, z3);
                         }
                         zzwz().zzG(com_google_android_gms_internal_zzcgk_zza.zzbta);
-                        zzwz2 = zzwz();
-                        zzwz2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
+                        zzwz = zzwz();
+                        zzwz.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
                         zzwz().setTransactionSuccessful();
                         if (com_google_android_gms_internal_zzcjy.zzbvE.length <= 0) {
                         }
                         zzwz().endTransaction();
-                        return z4;
+                        return z2;
                     }
                     zzwz().setTransactionSuccessful();
                     zzwz().endTransaction();
@@ -1996,44 +1996,44 @@ public class zzcgk {
             } catch (SQLiteException e4) {
                 obj = e4;
                 cursor = cursor2;
-                str2 = str6;
+                str4 = str2;
                 try {
-                    zzwz.zzwF().zzyx().zze("Data loss. Error selecting raw event. appId", zzcfk.zzdZ(str2), obj);
+                    zzwz2.zzwF().zzyx().zze("Data loss. Error selecting raw event. appId", zzcfk.zzdZ(str4), obj);
                     if (cursor != null) {
                         cursor.close();
                     }
                     if (com_google_android_gms_internal_zzcgk_zza.zztJ != null) {
                     }
                     if (obj != null) {
-                        z = false;
+                        z3 = false;
                         com_google_android_gms_internal_zzcjy = com_google_android_gms_internal_zzcgk_zza.zzbsZ;
                         com_google_android_gms_internal_zzcjy.zzbvE = new zzcjv[com_google_android_gms_internal_zzcgk_zza.zztJ.size()];
-                        i = 0;
                         i2 = 0;
-                        while (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                            if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name)) {
-                                zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
+                        i3 = 0;
+                        while (i3 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                            if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name)) {
+                                zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
                                 if (zzwB().zzeA(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ)) {
                                 }
                                 if (obj == null) {
                                 }
-                                i7 = i;
-                                z3 = z;
+                                i = i2;
+                                z = z3;
                             } else {
-                                zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name);
+                                zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name);
                                 if (zzO) {
                                     zzwB();
                                 }
                                 obj2 = null;
                                 obj3 = null;
-                                if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw == null) {
-                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = new zzcjw[0];
+                                if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw == null) {
+                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = new zzcjw[0];
                                 }
-                                com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw;
+                                com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw;
                                 length = com_google_android_gms_internal_zzcjwArr.length;
-                                i3 = 0;
-                                while (i3 < length) {
-                                    com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i3];
+                                i4 = 0;
+                                while (i4 < length) {
+                                    com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i4];
                                     if (!"_c".equals(com_google_android_gms_internal_zzcjw.name)) {
                                         com_google_android_gms_internal_zzcjw.zzbvA = Long.valueOf(1);
                                         obj2 = 1;
@@ -2044,93 +2044,93 @@ public class zzcgk {
                                     } else {
                                         obj = obj3;
                                     }
-                                    i3++;
+                                    i4++;
                                     obj3 = obj;
                                 }
-                                zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                                com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                                com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                                com_google_android_gms_internal_zzcjw3.name = "_c";
-                                com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                                com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                                ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                                zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                                com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                                com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                                com_google_android_gms_internal_zzcjw2.name = "_c";
+                                com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                                com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                                ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                                 if (obj3 == null) {
-                                    zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                                    com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                                    com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                                    com_google_android_gms_internal_zzcjw3.name = "_r";
-                                    com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                                    com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                                    zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                                    com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                                    com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                                    com_google_android_gms_internal_zzcjw2.name = "_r";
+                                    com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                                    com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                                 }
                                 if (zzwz().zza(zzyZ(), com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, false, false, false, false, true).zzbpy <= ((long) this.zzbsn.zzdM(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ))) {
-                                    com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                    i4 = 0;
-                                    while (i4 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
-                                        if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i4].name)) {
+                                    com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                    i5 = 0;
+                                    while (i5 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
+                                        if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i5].name)) {
                                             obj3 = new zzcjw[(com_google_android_gms_internal_zzcjv.zzbvw.length - 1)];
-                                            if (i4 > 0) {
-                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i4);
+                                            if (i5 > 0) {
+                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i5);
                                             }
-                                            if (i4 < obj3.length) {
-                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i4 + 1, obj3, i4, obj3.length - i4);
+                                            if (i5 < obj3.length) {
+                                                System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i5 + 1, obj3, i5, obj3.length - i5);
                                             }
                                             com_google_android_gms_internal_zzcjv.zzbvw = obj3;
                                         } else {
-                                            i4++;
+                                            i5++;
                                         }
                                     }
                                 } else {
-                                    z = true;
+                                    z3 = true;
                                 }
                                 zzwF().zzyz().zzj("Too many conversions. Not logging as conversion. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
-                                com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
+                                com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
                                 obj4 = null;
-                                com_google_android_gms_internal_zzcjw2 = null;
+                                com_google_android_gms_internal_zzcjw3 = null;
                                 com_google_android_gms_internal_zzcjwArr3 = com_google_android_gms_internal_zzcjv.zzbvw;
                                 length2 = com_google_android_gms_internal_zzcjwArr3.length;
-                                i5 = 0;
-                                while (i5 < length2) {
-                                    com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjwArr3[i5];
-                                    if (!"_c".equals(com_google_android_gms_internal_zzcjw3.name)) {
+                                i6 = 0;
+                                while (i6 < length2) {
+                                    com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjwArr3[i6];
+                                    if (!"_c".equals(com_google_android_gms_internal_zzcjw2.name)) {
                                         obj3 = obj4;
-                                    } else if ("_err".equals(com_google_android_gms_internal_zzcjw3.name)) {
-                                        com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw2;
-                                        i6 = 1;
-                                        com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw4;
+                                    } else if ("_err".equals(com_google_android_gms_internal_zzcjw2.name)) {
+                                        com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw3;
+                                        i7 = 1;
+                                        com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw4;
                                     } else {
-                                        com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
+                                        com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
                                         obj3 = obj4;
                                     }
-                                    i5++;
+                                    i6++;
                                     obj4 = obj3;
-                                    com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
+                                    com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
                                 }
                                 if (obj4 == null) {
                                 }
-                                if (com_google_android_gms_internal_zzcjw2 == null) {
-                                    com_google_android_gms_internal_zzcjw2.name = "_err";
-                                    com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(10);
-                                    z2 = z;
-                                    i4 = i + 1;
-                                    com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                    i7 = i4;
-                                    z3 = z2;
+                                if (com_google_android_gms_internal_zzcjw3 == null) {
+                                    com_google_android_gms_internal_zzcjw3.name = "_err";
+                                    com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(10);
+                                    z4 = z3;
+                                    i5 = i2 + 1;
+                                    com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                    i = i5;
+                                    z = z4;
                                 } else {
                                     zzwF().zzyx().zzj("Did not find conversion parameter. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
-                                    z2 = z;
-                                    i4 = i + 1;
-                                    com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                                    i7 = i4;
-                                    z3 = z2;
+                                    z4 = z3;
+                                    i5 = i2 + 1;
+                                    com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                                    i = i5;
+                                    z = z4;
                                 }
                             }
-                            i2++;
-                            i = i7;
-                            z = z3;
+                            i3++;
+                            i2 = i;
+                            z3 = z;
                         }
-                        if (i < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                            com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i);
+                        if (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                            com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i2);
                         }
                         com_google_android_gms_internal_zzcjy.zzbvX = zza(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzbvF, com_google_android_gms_internal_zzcjy.zzbvE);
                         com_google_android_gms_internal_zzcjy.zzbvH = Long.valueOf(Long.MAX_VALUE);
@@ -2176,16 +2176,16 @@ public class zzcgk {
                             } else {
                                 zzwF().zzyz().zzj("Did not find measurement config or missing version info. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
                             }
-                            zzwz().zza(com_google_android_gms_internal_zzcjy, z);
+                            zzwz().zza(com_google_android_gms_internal_zzcjy, z3);
                         }
                         zzwz().zzG(com_google_android_gms_internal_zzcgk_zza.zzbta);
-                        zzwz2 = zzwz();
-                        zzwz2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
+                        zzwz = zzwz();
+                        zzwz.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
                         zzwz().setTransactionSuccessful();
                         if (com_google_android_gms_internal_zzcjy.zzbvE.length <= 0) {
                         }
                         zzwz().endTransaction();
-                        return z4;
+                        return z2;
                     }
                     zzwz().setTransactionSuccessful();
                     zzwz().endTransaction();
@@ -2207,7 +2207,7 @@ public class zzcgk {
             }
         } catch (SQLiteException e5) {
             obj = e5;
-            zzwz.zzwF().zzyx().zze("Data loss. Error selecting raw event. appId", zzcfk.zzdZ(str2), obj);
+            zzwz2.zzwF().zzyx().zze("Data loss. Error selecting raw event. appId", zzcfk.zzdZ(str4), obj);
             if (cursor != null) {
                 cursor.close();
             }
@@ -2218,27 +2218,27 @@ public class zzcgk {
                 zzwz().endTransaction();
                 return false;
             }
-            z = false;
+            z3 = false;
             com_google_android_gms_internal_zzcjy = com_google_android_gms_internal_zzcgk_zza.zzbsZ;
             com_google_android_gms_internal_zzcjy.zzbvE = new zzcjv[com_google_android_gms_internal_zzcgk_zza.zztJ.size()];
-            i = 0;
             i2 = 0;
-            while (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name)) {
-                    zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name);
+            i3 = 0;
+            while (i3 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                if (zzwC().zzN(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name)) {
+                    zzO = zzwC().zzO(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name);
                     if (zzO) {
                         zzwB();
                     }
                     obj2 = null;
                     obj3 = null;
-                    if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw == null) {
-                        ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = new zzcjw[0];
+                    if (((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw == null) {
+                        ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = new zzcjw[0];
                     }
-                    com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw;
+                    com_google_android_gms_internal_zzcjwArr = ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw;
                     length = com_google_android_gms_internal_zzcjwArr.length;
-                    i3 = 0;
-                    while (i3 < length) {
-                        com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i3];
+                    i4 = 0;
+                    while (i4 < length) {
+                        com_google_android_gms_internal_zzcjw = com_google_android_gms_internal_zzcjwArr[i4];
                         if (!"_c".equals(com_google_android_gms_internal_zzcjw.name)) {
                             com_google_android_gms_internal_zzcjw.zzbvA = Long.valueOf(1);
                             obj2 = 1;
@@ -2249,101 +2249,101 @@ public class zzcgk {
                             com_google_android_gms_internal_zzcjw.zzbvA = Long.valueOf(1);
                             obj = 1;
                         }
-                        i3++;
+                        i4++;
                         obj3 = obj;
                     }
-                    zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                    com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                    com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                    com_google_android_gms_internal_zzcjw3.name = "_c";
-                    com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                    com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                    zzwF().zzyD().zzj("Marking event as conversion", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                    com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                    com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                    com_google_android_gms_internal_zzcjw2.name = "_c";
+                    com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                    com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                    ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                     if (obj3 == null) {
-                        zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
-                        com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw.length + 1);
-                        com_google_android_gms_internal_zzcjw3 = new zzcjw();
-                        com_google_android_gms_internal_zzcjw3.name = "_r";
-                        com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(1);
-                        com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw3;
-                        ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
+                        zzwF().zzyD().zzj("Marking event as real-time", zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
+                        com_google_android_gms_internal_zzcjwArr2 = (zzcjw[]) Arrays.copyOf(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw, ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw.length + 1);
+                        com_google_android_gms_internal_zzcjw2 = new zzcjw();
+                        com_google_android_gms_internal_zzcjw2.name = "_r";
+                        com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(1);
+                        com_google_android_gms_internal_zzcjwArr2[com_google_android_gms_internal_zzcjwArr2.length - 1] = com_google_android_gms_internal_zzcjw2;
+                        ((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).zzbvw = com_google_android_gms_internal_zzcjwArr2;
                     }
                     if (zzwz().zza(zzyZ(), com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, false, false, false, false, true).zzbpy <= ((long) this.zzbsn.zzdM(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ))) {
-                        z = true;
+                        z3 = true;
                     } else {
-                        com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                        i4 = 0;
-                        while (i4 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
-                            if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i4].name)) {
-                                i4++;
+                        com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                        i5 = 0;
+                        while (i5 < com_google_android_gms_internal_zzcjv.zzbvw.length) {
+                            if ("_r".equals(com_google_android_gms_internal_zzcjv.zzbvw[i5].name)) {
+                                i5++;
                             } else {
                                 obj3 = new zzcjw[(com_google_android_gms_internal_zzcjv.zzbvw.length - 1)];
-                                if (i4 > 0) {
-                                    System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i4);
+                                if (i5 > 0) {
+                                    System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, 0, obj3, 0, i5);
                                 }
-                                if (i4 < obj3.length) {
-                                    System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i4 + 1, obj3, i4, obj3.length - i4);
+                                if (i5 < obj3.length) {
+                                    System.arraycopy(com_google_android_gms_internal_zzcjv.zzbvw, i5 + 1, obj3, i5, obj3.length - i5);
                                 }
                                 com_google_android_gms_internal_zzcjv.zzbvw = obj3;
                             }
                         }
                     }
                     zzwF().zzyz().zzj("Too many conversions. Not logging as conversion. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
-                    com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
+                    com_google_android_gms_internal_zzcjv = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
                     obj4 = null;
-                    com_google_android_gms_internal_zzcjw2 = null;
+                    com_google_android_gms_internal_zzcjw3 = null;
                     com_google_android_gms_internal_zzcjwArr3 = com_google_android_gms_internal_zzcjv.zzbvw;
                     length2 = com_google_android_gms_internal_zzcjwArr3.length;
-                    i5 = 0;
-                    while (i5 < length2) {
-                        com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjwArr3[i5];
-                        if (!"_c".equals(com_google_android_gms_internal_zzcjw3.name)) {
+                    i6 = 0;
+                    while (i6 < length2) {
+                        com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjwArr3[i6];
+                        if (!"_c".equals(com_google_android_gms_internal_zzcjw2.name)) {
                             obj3 = obj4;
-                        } else if ("_err".equals(com_google_android_gms_internal_zzcjw3.name)) {
-                            com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
+                        } else if ("_err".equals(com_google_android_gms_internal_zzcjw2.name)) {
+                            com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
                             obj3 = obj4;
                         } else {
-                            com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw2;
-                            i6 = 1;
-                            com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw4;
+                            com_google_android_gms_internal_zzcjw4 = com_google_android_gms_internal_zzcjw3;
+                            i7 = 1;
+                            com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw4;
                         }
-                        i5++;
+                        i6++;
                         obj4 = obj3;
-                        com_google_android_gms_internal_zzcjw2 = com_google_android_gms_internal_zzcjw3;
+                        com_google_android_gms_internal_zzcjw3 = com_google_android_gms_internal_zzcjw2;
                     }
                     if (obj4 == null) {
                     }
-                    if (com_google_android_gms_internal_zzcjw2 == null) {
+                    if (com_google_android_gms_internal_zzcjw3 == null) {
                         zzwF().zzyx().zzj("Did not find conversion parameter. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ));
-                        z2 = z;
-                        i4 = i + 1;
-                        com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                        i7 = i4;
-                        z3 = z2;
+                        z4 = z3;
+                        i5 = i2 + 1;
+                        com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                        i = i5;
+                        z = z4;
                     } else {
-                        com_google_android_gms_internal_zzcjw2.name = "_err";
-                        com_google_android_gms_internal_zzcjw2.zzbvA = Long.valueOf(10);
-                        z2 = z;
-                        i4 = i + 1;
-                        com_google_android_gms_internal_zzcjy.zzbvE[i] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2);
-                        i7 = i4;
-                        z3 = z2;
+                        com_google_android_gms_internal_zzcjw3.name = "_err";
+                        com_google_android_gms_internal_zzcjw3.zzbvA = Long.valueOf(10);
+                        z4 = z3;
+                        i5 = i2 + 1;
+                        com_google_android_gms_internal_zzcjy.zzbvE[i2] = (zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3);
+                        i = i5;
+                        z = z4;
                     }
                 } else {
-                    zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i2)).name));
+                    zzwF().zzyz().zze("Dropping blacklisted raw event. appId", zzcfk.zzdZ(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ), zzwA().zzdW(((zzcjv) com_google_android_gms_internal_zzcgk_zza.zztJ.get(i3)).name));
                     if (zzwB().zzeA(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ)) {
                     }
                     if (obj == null) {
                     }
-                    i7 = i;
-                    z3 = z;
+                    i = i2;
+                    z = z3;
                 }
-                i2++;
-                i = i7;
-                z = z3;
+                i3++;
+                i2 = i;
+                z3 = z;
             }
-            if (i < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
-                com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i);
+            if (i2 < com_google_android_gms_internal_zzcgk_zza.zztJ.size()) {
+                com_google_android_gms_internal_zzcjy.zzbvE = (zzcjv[]) Arrays.copyOf(com_google_android_gms_internal_zzcjy.zzbvE, i2);
             }
             com_google_android_gms_internal_zzcjy.zzbvX = zza(com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzaJ, com_google_android_gms_internal_zzcgk_zza.zzbsZ.zzbvF, com_google_android_gms_internal_zzcjy.zzbvE);
             com_google_android_gms_internal_zzcjy.zzbvH = Long.valueOf(Long.MAX_VALUE);
@@ -2389,16 +2389,16 @@ public class zzcgk {
                 } else {
                     com_google_android_gms_internal_zzcjy.zzbwb = Long.valueOf(-1);
                 }
-                zzwz().zza(com_google_android_gms_internal_zzcjy, z);
+                zzwz().zza(com_google_android_gms_internal_zzcjy, z3);
             }
             zzwz().zzG(com_google_android_gms_internal_zzcgk_zza.zzbta);
-            zzwz2 = zzwz();
-            zzwz2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
+            zzwz = zzwz();
+            zzwz.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str3, str3});
             zzwz().setTransactionSuccessful();
             if (com_google_android_gms_internal_zzcjy.zzbvE.length <= 0) {
             }
             zzwz().endTransaction();
-            return z4;
+            return z2;
         }
     }
 

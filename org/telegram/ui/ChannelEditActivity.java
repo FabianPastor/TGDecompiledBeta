@@ -596,13 +596,9 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                                         ChannelEditActivity.this.participantsMap.put(Integer.valueOf(participant.user_id), participant);
                                     }
                                 }
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatInfoDidLoaded, ChannelEditActivity.this.info);
                             }
                             ChannelEditActivity.this.loadingUsers = false;
-                            ChannelEditActivity.this.updateRowsIds();
-                            if (ChannelEditActivity.this.listViewAdapter != null) {
-                                ChannelEditActivity.this.listViewAdapter.notifyDataSetChanged();
-                            }
+                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatInfoDidLoaded, ChannelEditActivity.this.info, Integer.valueOf(0), Boolean.valueOf(true), null);
                         }
                     }, (long) delay);
                 }
@@ -760,9 +756,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                                         }
                                     }
                                     if (changed) {
-                                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatInfoDidLoaded, ChannelEditActivity.this.info);
-                                        ChannelEditActivity.this.updateRowsIds();
-                                        ChannelEditActivity.this.listViewAdapter.notifyDataSetChanged();
+                                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatInfoDidLoaded, ChannelEditActivity.this.info, Integer.valueOf(0), Boolean.valueOf(true), null);
                                     }
                                 }
                             }
@@ -774,9 +768,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                                 }
                             }
                             if (changed) {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatInfoDidLoaded, ChannelEditActivity.this.info);
-                                ChannelEditActivity.this.updateRowsIds();
-                                ChannelEditActivity.this.listViewAdapter.notifyDataSetChanged();
+                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatInfoDidLoaded, ChannelEditActivity.this.info, Integer.valueOf(0), Boolean.valueOf(true), null);
                             }
                         }
                     }

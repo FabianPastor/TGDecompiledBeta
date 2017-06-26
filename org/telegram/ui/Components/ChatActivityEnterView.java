@@ -1124,11 +1124,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
                         return false;
                     }
-                    Chat chat = ChatActivityEnterView.this.parentFragment.getCurrentChat();
-                    if (ChatObject.isChannel(chat) && chat.banned_rights != null && chat.banned_rights.send_media) {
-                        ChatActivityEnterView.this.delegate.needShowMediaBanHint();
-                        return false;
-                    } else if (ChatActivityEnterView.this.hasRecordVideo) {
+                    if (ChatActivityEnterView.this.parentFragment != null) {
+                        Chat chat = ChatActivityEnterView.this.parentFragment.getCurrentChat();
+                        if (ChatObject.isChannel(chat) && chat.banned_rights != null && chat.banned_rights.send_media) {
+                            ChatActivityEnterView.this.delegate.needShowMediaBanHint();
+                            return false;
+                        }
+                    }
+                    if (ChatActivityEnterView.this.hasRecordVideo) {
                         ChatActivityEnterView.this.calledRecordRunnable = false;
                         ChatActivityEnterView.this.recordAudioVideoRunnableStarted = true;
                         AndroidUtilities.runOnUIThread(ChatActivityEnterView.this.recordAudioVideoRunnable, 150);

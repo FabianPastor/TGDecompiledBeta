@@ -1,11 +1,13 @@
 package org.telegram.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
 import android.support.v4.internal.view.SupportMenu;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
@@ -18,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -29,6 +32,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -43,6 +47,7 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
     private static final int FIELD_PASSWORD = 3;
     private static final int FIELD_PORT = 1;
     private static final int FIELD_USER = 2;
+    private static final int share_item = 1;
     private TextInfoPrivacyCell bottomCell;
     private TextCheckCell checkCell1;
     private ArrayList<View> dividers = new ArrayList();
@@ -52,6 +57,7 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
     private LinearLayout linearLayout2;
     private ScrollView scrollView;
     private ShadowSectionCell sectionCell;
+    private ActionBarMenuItem shareItem;
     private boolean useProxySettings;
 
     public void onResume() {
@@ -95,9 +101,48 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
             public void onItemClick(int id) {
                 if (id == -1) {
                     ProxySettingsActivity.this.finishFragment();
+                } else if (id == 1 && ProxySettingsActivity.this.getParentActivity() != null) {
+                    StringBuilder params = new StringBuilder("");
+                    String address = ProxySettingsActivity.this.inputFields[0].getText().toString();
+                    String password = ProxySettingsActivity.this.inputFields[3].getText().toString();
+                    String user = ProxySettingsActivity.this.inputFields[2].getText().toString();
+                    String port = ProxySettingsActivity.this.inputFields[1].getText().toString();
+                    try {
+                        if (!TextUtils.isEmpty(address)) {
+                            params.append("server=").append(URLEncoder.encode(address, "UTF-8"));
+                        }
+                        if (!TextUtils.isEmpty(port)) {
+                            if (params.length() != 0) {
+                                params.append("&");
+                            }
+                            params.append("port=").append(URLEncoder.encode(port, "UTF-8"));
+                        }
+                        if (!TextUtils.isEmpty(user)) {
+                            if (params.length() != 0) {
+                                params.append("&");
+                            }
+                            params.append("user=").append(URLEncoder.encode(user, "UTF-8"));
+                        }
+                        if (!TextUtils.isEmpty(password)) {
+                            if (params.length() != 0) {
+                                params.append("&");
+                            }
+                            params.append("pass=").append(URLEncoder.encode(password, "UTF-8"));
+                        }
+                        if (params.length() != 0) {
+                            Intent shareIntent = new Intent("android.intent.action.SEND");
+                            shareIntent.setType("text/plain");
+                            shareIntent.putExtra("android.intent.extra.TEXT", "https://t.me/socks?" + params.toString());
+                            Intent chooserIntent = Intent.createChooser(shareIntent, LocaleController.getString("ShareLink", R.string.ShareLink));
+                            chooserIntent.setFlags(268435456);
+                            ProxySettingsActivity.this.getParentActivity().startActivity(chooserIntent);
+                        }
+                    } catch (Exception e) {
+                    }
                 }
             }
         });
+        this.shareItem = this.actionBar.createMenu().addItem(1, (int) R.drawable.abc_ic_menu_share_mtrl_alpha);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -139,7 +184,19 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
             this.inputFields[a].setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.inputFields[a].setBackgroundDrawable(null);
             AndroidUtilities.clearCursorDrawable(this.inputFields[a]);
-            if (a == 1) {
+            if (a == 0) {
+                this.inputFields[a].addTextChangedListener(new TextWatcher() {
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    public void afterTextChanged(Editable s) {
+                        ProxySettingsActivity.this.checkShareButton();
+                    }
+                });
+            } else if (a == 1) {
                 this.inputFields[a].setInputType(2);
                 this.inputFields[a].addTextChangedListener(new TextWatcher() {
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -178,6 +235,7 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
                                 phoneField.setSelection(start);
                             }
                             ProxySettingsActivity.this.ignoreOnTextChange = false;
+                            ProxySettingsActivity.this.checkShareButton();
                         }
                     }
                 });
@@ -233,7 +291,20 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
         this.bottomCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         this.bottomCell.setText(LocaleController.getString("UseProxyInfo", R.string.UseProxyInfo));
         this.linearLayout2.addView(this.bottomCell, LayoutHelper.createLinear(-1, -2));
+        checkShareButton();
         return this.fragmentView;
+    }
+
+    private void checkShareButton() {
+        if (this.inputFields[0] != null && this.inputFields[1] != null) {
+            if (this.inputFields[0].length() == 0 || Utilities.parseInt(this.inputFields[1].getText().toString()).intValue() == 0) {
+                this.shareItem.setAlpha(0.5f);
+                this.shareItem.setEnabled(false);
+                return;
+            }
+            this.shareItem.setAlpha(1.0f);
+            this.shareItem.setEnabled(true);
+        }
     }
 
     protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
