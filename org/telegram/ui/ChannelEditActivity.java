@@ -596,6 +596,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                                         ChannelEditActivity.this.participantsMap.put(Integer.valueOf(participant.user_id), participant);
                                     }
                                 }
+                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatInfoDidLoaded, ChannelEditActivity.this.info);
                             }
                             ChannelEditActivity.this.loadingUsers = false;
                             ChannelEditActivity.this.updateRowsIds();
@@ -759,6 +760,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                                         }
                                     }
                                     if (changed) {
+                                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatInfoDidLoaded, ChannelEditActivity.this.info);
                                         ChannelEditActivity.this.updateRowsIds();
                                         ChannelEditActivity.this.listViewAdapter.notifyDataSetChanged();
                                     }
@@ -772,6 +774,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                                 }
                             }
                             if (changed) {
+                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatInfoDidLoaded, ChannelEditActivity.this.info);
                                 ChannelEditActivity.this.updateRowsIds();
                                 ChannelEditActivity.this.listViewAdapter.notifyDataSetChanged();
                             }

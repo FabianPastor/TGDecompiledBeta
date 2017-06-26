@@ -85,15 +85,15 @@ public final class zzad implements zzk {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public final zzn zza(zzp<?> com_google_android_gms_internal_zzp_) throws zzaa {
-        HttpResponse zza;
         int statusCode;
+        byte[] zza;
         String valueOf;
         Throwable e;
         long elapsedRealtime = SystemClock.elapsedRealtime();
         while (true) {
             HttpResponse httpResponse = null;
             Map emptyMap = Collections.emptyMap();
-            byte[] zza2;
+            HttpResponse zza2;
             try {
                 Map hashMap = new HashMap();
                 zzc zze = com_google_android_gms_internal_zzp_.zze();
@@ -105,12 +105,12 @@ public final class zzad implements zzk {
                         hashMap.put("If-Modified-Since", DateUtils.formatDate(new Date(zze.zzc)));
                     }
                 }
-                zza = this.zzao.zza(com_google_android_gms_internal_zzp_, hashMap);
-                StatusLine statusLine = zza.getStatusLine();
+                zza2 = this.zzao.zza(com_google_android_gms_internal_zzp_, hashMap);
+                StatusLine statusLine = zza2.getStatusLine();
                 statusCode = statusLine.getStatusCode();
-                emptyMap = zza(zza.getAllHeaders());
+                emptyMap = zza(zza2.getAllHeaders());
                 if (statusCode != 304) {
-                    zza2 = zza.getEntity() != null ? zza(zza.getEntity()) : new byte[0];
+                    zza = zza2.getEntity() != null ? zza(zza2.getEntity()) : new byte[0];
                     long elapsedRealtime2 = SystemClock.elapsedRealtime() - elapsedRealtime;
                     if (!DEBUG && elapsedRealtime2 <= ((long) zzam)) {
                         break;
@@ -119,7 +119,7 @@ public final class zzad implements zzk {
                     Object[] objArr = new Object[5];
                     objArr[0] = com_google_android_gms_internal_zzp_;
                     objArr[1] = Long.valueOf(elapsedRealtime2);
-                    if (zza2 == null) {
+                    if (zza == null) {
                         break;
                     }
                     break;
@@ -141,12 +141,12 @@ public final class zzad implements zzk {
                 throw new RuntimeException(valueOf.length() != 0 ? str2.concat(valueOf) : new String(str2), th);
             } catch (IOException e5) {
                 e4 = e5;
-                httpResponse = zza;
+                httpResponse = zza2;
                 if (httpResponse != null) {
                     statusCode = httpResponse.getStatusLine().getStatusCode();
                     zzab.zzc("Unexpected response code %d for %s", Integer.valueOf(statusCode), com_google_android_gms_internal_zzp_.getUrl());
-                    if (zza2 != null) {
-                        zzn com_google_android_gms_internal_zzn = new zzn(statusCode, zza2, emptyMap, false, SystemClock.elapsedRealtime() - elapsedRealtime);
+                    if (zza != null) {
+                        zzn com_google_android_gms_internal_zzn = new zzn(statusCode, zza, emptyMap, false, SystemClock.elapsedRealtime() - elapsedRealtime);
                         if (statusCode != 401) {
                         }
                         zza(AuthorBox.TYPE, com_google_android_gms_internal_zzp_, new zza(com_google_android_gms_internal_zzn));

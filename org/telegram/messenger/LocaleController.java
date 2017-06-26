@@ -1923,7 +1923,7 @@ public class LocaleController {
                                         existing.name = localeInfo.name;
                                         existing.pathToFile = localeInfo.pathToFile;
                                     }
-                                    remoteLoaded.put(existing.getKey(), existing);
+                                    remoteLoaded.put(localeInfo.getKey(), localeInfo);
                                 }
                                 a = 0;
                                 while (a < LocaleController.this.languages.size()) {

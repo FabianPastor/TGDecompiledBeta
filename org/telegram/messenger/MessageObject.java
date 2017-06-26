@@ -1840,7 +1840,7 @@ public class MessageObject {
                             } else if (entity instanceof TL_messageEntityEmail) {
                                 spannable.setSpan(new URLSpanReplacement("mailto:" + url), entity.offset, entity.offset + entity.length, 33);
                             } else if (entity instanceof TL_messageEntityUrl) {
-                                if (url.toLowerCase().startsWith("http")) {
+                                if (url.toLowerCase().startsWith("http") || url.toLowerCase().startsWith("tg://")) {
                                     spannable.setSpan(new URLSpan(url), entity.offset, entity.offset + entity.length, 33);
                                 } else {
                                     spannable.setSpan(new URLSpan("http://" + url), entity.offset, entity.offset + entity.length, 33);

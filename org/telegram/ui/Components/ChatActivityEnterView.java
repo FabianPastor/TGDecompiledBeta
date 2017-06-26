@@ -1719,15 +1719,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     public void checkChannelRights() {
-        Chat chat = this.parentFragment.getCurrentChat();
-        if (ChatObject.isChannel(chat)) {
-            FrameLayout frameLayout = this.audioVideoButtonContainer;
-            float f = (chat.banned_rights == null || !chat.banned_rights.send_media) ? 1.0f : 0.5f;
-            frameLayout.setAlpha(f);
-            if (this.emojiView != null) {
-                EmojiView emojiView = this.emojiView;
-                boolean z = chat.banned_rights != null && chat.banned_rights.send_stickers;
-                emojiView.setStickersBanned(z, chat.id);
+        if (this.parentFragment != null) {
+            Chat chat = this.parentFragment.getCurrentChat();
+            if (ChatObject.isChannel(chat)) {
+                FrameLayout frameLayout = this.audioVideoButtonContainer;
+                float f = (chat.banned_rights == null || !chat.banned_rights.send_media) ? 1.0f : 0.5f;
+                frameLayout.setAlpha(f);
+                if (this.emojiView != null) {
+                    EmojiView emojiView = this.emojiView;
+                    boolean z = chat.banned_rights != null && chat.banned_rights.send_stickers;
+                    emojiView.setStickersBanned(z, chat.id);
+                }
             }
         }
     }

@@ -652,14 +652,14 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            User user;
+            CharSequence username;
             Throwable e;
-            Object username;
+            Object username2;
             String u;
             int idx;
             switch (holder.getItemViewType()) {
                 case 0:
-                    CharSequence username2;
+                    User user;
                     CharSequence username3;
                     String foundUserName;
                     ProfileSearchCell profileSearchCell;
@@ -702,13 +702,13 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                 ok = true;
                                 name = (CharSequence) this.searchResultNames.get(position - 1);
                                 if (name != null && un != null && un.length() > 0 && name.toString().startsWith("@" + un)) {
-                                    username2 = name;
+                                    username3 = name;
                                     name = null;
-                                    username3 = username2;
+                                    username = username3;
                                 }
                             } else {
                                 position -= count + 1;
-                                username3 = null;
+                                username = null;
                             }
                             if (!ok) {
                                 count = this.searchAdapterHelper.getGlobalSearch().size();
@@ -718,12 +718,12 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                         foundUserName = foundUserName.substring(1);
                                     }
                                     try {
-                                        username2 = new SpannableStringBuilder(un);
+                                        username3 = new SpannableStringBuilder(un);
                                         try {
-                                            ((SpannableStringBuilder) username2).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
+                                            ((SpannableStringBuilder) username3).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
                                         } catch (Exception e2) {
                                             e = e2;
-                                            username = un;
+                                            username2 = un;
                                             FileLog.e(e);
                                             if (nameSearch != null) {
                                                 u = UserObject.getUserName(user);
@@ -734,7 +734,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                                 }
                                             }
                                             profileSearchCell = holder.itemView;
-                                            profileSearchCell.setData(user, null, name, username2, false);
+                                            profileSearchCell.setData(user, null, name, username3, false);
                                             if (pos == getItemCount() - 1) {
                                                 z = true;
                                             } else {
@@ -745,8 +745,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                         }
                                     } catch (Exception e3) {
                                         e = e3;
-                                        username2 = username3;
-                                        username = un;
+                                        username3 = username;
+                                        username2 = un;
                                         FileLog.e(e);
                                         if (nameSearch != null) {
                                             u = UserObject.getUserName(user);
@@ -757,7 +757,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                             }
                                         }
                                         profileSearchCell = holder.itemView;
-                                        profileSearchCell.setData(user, null, name, username2, false);
+                                        profileSearchCell.setData(user, null, name, username3, false);
                                         if (pos == getItemCount() - 1) {
                                             z = false;
                                         } else {
@@ -775,7 +775,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                         }
                                     }
                                     profileSearchCell = holder.itemView;
-                                    profileSearchCell.setData(user, null, name, username2, false);
+                                    profileSearchCell.setData(user, null, name, username3, false);
                                     if (pos == getItemCount() - 1) {
                                         z = true;
                                     } else {
@@ -785,7 +785,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                     return;
                                 }
                             }
-                            username2 = username3;
+                            username3 = username;
                             if (nameSearch != null) {
                                 u = UserObject.getUserName(user);
                                 name = new SpannableStringBuilder(u);
@@ -795,7 +795,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                 }
                             }
                             profileSearchCell = holder.itemView;
-                            profileSearchCell.setData(user, null, name, username2, false);
+                            profileSearchCell.setData(user, null, name, username3, false);
                             if (pos == getItemCount() - 1) {
                                 z = false;
                             } else {
@@ -805,15 +805,15 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                             return;
                         }
                     }
-                    username3 = null;
+                    username = null;
                     if (ok) {
                         count = this.searchAdapterHelper.getGlobalSearch().size();
                         foundUserName = this.searchAdapterHelper.getLastFoundUsername();
                         if (foundUserName.startsWith("@")) {
                             foundUserName = foundUserName.substring(1);
                         }
-                        username2 = new SpannableStringBuilder(un);
-                        ((SpannableStringBuilder) username2).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
+                        username3 = new SpannableStringBuilder(un);
+                        ((SpannableStringBuilder) username3).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
                         if (nameSearch != null) {
                             u = UserObject.getUserName(user);
                             name = new SpannableStringBuilder(u);
@@ -823,7 +823,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                             }
                         }
                         profileSearchCell = holder.itemView;
-                        profileSearchCell.setData(user, null, name, username2, false);
+                        profileSearchCell.setData(user, null, name, username3, false);
                         if (pos == getItemCount() - 1) {
                             z = true;
                         } else {
@@ -832,7 +832,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         profileSearchCell.useSeparator = z;
                         return;
                     }
-                    username2 = username3;
+                    username3 = username;
                     if (nameSearch != null) {
                         u = UserObject.getUserName(user);
                         name = new SpannableStringBuilder(u);
@@ -842,7 +842,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         }
                     }
                     profileSearchCell = holder.itemView;
-                    profileSearchCell.setData(user, null, name, username2, false);
+                    profileSearchCell.setData(user, null, name, username3, false);
                     if (pos == getItemCount() - 1) {
                         z = false;
                     } else {

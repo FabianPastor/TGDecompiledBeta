@@ -2394,7 +2394,7 @@ public class Theme {
             chat_instantViewPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             chat_instantViewRectPaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
             chat_statusRecordPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-            chat_actionTextPaint.setTextSize((float) AndroidUtilities.dp((float) (MessagesController.getInstance().fontSize - 2)));
+            chat_actionTextPaint.setTextSize((float) AndroidUtilities.dp((float) (Math.max(16, MessagesController.getInstance().fontSize) - 2)));
             chat_contextResult_titleTextPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
             chat_contextResult_descriptionTextPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             chat_radialProgressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
@@ -2739,10 +2739,10 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
+                    int i;
                     SharedPreferences preferences;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        int i;
                         int selectedBackground;
                         File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
