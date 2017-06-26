@@ -1,48 +1,26 @@
 package com.google.android.gms.identity.intents;
 
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzc;
-import com.google.android.gms.identity.intents.model.CountrySpecification;
-import java.util.List;
+import android.app.Activity;
+import android.content.Context;
+import android.os.Looper;
+import com.google.android.gms.common.api.Api.zze;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.common.internal.zzq;
+import com.google.android.gms.identity.intents.Address.AddressOptions;
+import com.google.android.gms.internal.zzcbd;
 
-public class zza implements Creator<UserAddressRequest> {
-    static void zza(UserAddressRequest userAddressRequest, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zzc(parcel, 2, userAddressRequest.zzbhr, false);
-        zzc.zzJ(parcel, zzaZ);
+final class zza extends com.google.android.gms.common.api.Api.zza<zzcbd, AddressOptions> {
+    zza() {
     }
 
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzgp(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzjG(i);
-    }
-
-    public UserAddressRequest zzgp(Parcel parcel) {
-        int zzaY = zzb.zzaY(parcel);
-        List list = null;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
-                case 2:
-                    list = zzb.zzc(parcel, zzaX, CountrySpecification.CREATOR);
-                    break;
-                default:
-                    zzb.zzb(parcel, zzaX);
-                    break;
-            }
+    public final /* synthetic */ zze zza(Context context, Looper looper, zzq com_google_android_gms_common_internal_zzq, Object obj, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
+        AddressOptions addressOptions = (AddressOptions) obj;
+        zzbo.zzb(context instanceof Activity, (Object) "An Activity must be used for Address APIs");
+        if (addressOptions == null) {
+            addressOptions = new AddressOptions();
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new UserAddressRequest(list);
-        }
-        throw new com.google.android.gms.common.internal.safeparcel.zzb.zza("Overread allowed size end=" + zzaY, parcel);
-    }
-
-    public UserAddressRequest[] zzjG(int i) {
-        return new UserAddressRequest[i];
+        return new zzcbd((Activity) context, looper, com_google_android_gms_common_internal_zzq, addressOptions.theme, connectionCallbacks, onConnectionFailedListener);
     }
 }

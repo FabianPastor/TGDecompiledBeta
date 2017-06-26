@@ -1,57 +1,29 @@
 package com.google.android.gms.gcm;
 
-import android.os.Bundle;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
 
-public class zzc {
-    public static final zzc zzbgS = new zzc(0, 30, 3600);
-    public static final zzc zzbgT = new zzc(1, 30, 3600);
-    private final int zzbgU;
-    private final int zzbgV;
-    private final int zzbgW;
+final class zzc extends Handler {
+    private /* synthetic */ GoogleCloudMessaging zzbfU;
 
-    private zzc(int i, int i2, int i3) {
-        this.zzbgU = i;
-        this.zzbgV = i2;
-        this.zzbgW = i3;
+    zzc(GoogleCloudMessaging googleCloudMessaging, Looper looper) {
+        this.zzbfU = googleCloudMessaging;
+        super(looper);
     }
 
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
+    public final void handleMessage(Message message) {
+        if (message == null || !(message.obj instanceof Intent)) {
+            Log.w(GoogleCloudMessaging.INSTANCE_ID_SCOPE, "Dropping invalid message");
         }
-        if (!(obj instanceof zzc)) {
-            return false;
+        Intent intent = (Intent) message.obj;
+        if ("com.google.android.c2dm.intent.REGISTRATION".equals(intent.getAction())) {
+            this.zzbfU.zzbfS.add(intent);
+        } else if (!this.zzbfU.zze(intent)) {
+            intent.setPackage(this.zzbfU.zzqF.getPackageName());
+            this.zzbfU.zzqF.sendBroadcast(intent);
         }
-        zzc com_google_android_gms_gcm_zzc = (zzc) obj;
-        return com_google_android_gms_gcm_zzc.zzbgU == this.zzbgU && com_google_android_gms_gcm_zzc.zzbgV == this.zzbgV && com_google_android_gms_gcm_zzc.zzbgW == this.zzbgW;
-    }
-
-    public int hashCode() {
-        return (((((this.zzbgU + 1) ^ 1000003) * 1000003) ^ this.zzbgV) * 1000003) ^ this.zzbgW;
-    }
-
-    public String toString() {
-        int i = this.zzbgU;
-        int i2 = this.zzbgV;
-        return "policy=" + i + " initial_backoff=" + i2 + " maximum_backoff=" + this.zzbgW;
-    }
-
-    public int zzGU() {
-        return this.zzbgU;
-    }
-
-    public int zzGV() {
-        return this.zzbgV;
-    }
-
-    public int zzGW() {
-        return this.zzbgW;
-    }
-
-    public Bundle zzJ(Bundle bundle) {
-        bundle.putInt("retry_policy", this.zzbgU);
-        bundle.putInt("initial_backoff_seconds", this.zzbgV);
-        bundle.putInt("maximum_backoff_seconds", this.zzbgW);
-        return bundle;
     }
 }

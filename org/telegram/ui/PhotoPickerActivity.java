@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
-import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -36,7 +35,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController.AlbumEntry;
 import org.telegram.messenger.MediaController.PhotoEntry;
@@ -91,7 +89,6 @@ import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.PhotoViewer.PhotoViewerProvider;
 import org.telegram.ui.PhotoViewer.PlaceProviderObject;
-import org.telegram.ui.VideoEditorActivity.VideoEditorActivityDelegate;
 
 public class PhotoPickerActivity extends BaseFragment implements NotificationCenterDelegate, PhotoViewerProvider {
     private boolean allowCaption = true;
@@ -241,11 +238,10 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            int i = 0;
             switch (holder.getItemViewType()) {
                 case 0:
                     boolean showing;
-                    boolean z;
+                    int i;
                     PhotoPickerPhotoCell cell = holder.itemView;
                     cell.itemWidth = PhotoPickerActivity.this.itemWidth;
                     BackupImageView imageView = cell.photoImage;
@@ -259,8 +255,12 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         } else if (photoEntry.path != null) {
                             imageView.setOrientation(photoEntry.orientation, true);
                             if (photoEntry.isVideo) {
+                                cell.videoInfoContainer.setVisibility(0);
+                                int seconds = photoEntry.duration - ((photoEntry.duration / 60) * 60);
+                                cell.videoTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(seconds)}));
                                 imageView.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
                             } else {
+                                cell.videoInfoContainer.setVisibility(4);
                                 imageView.setImage("thumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
                             }
                         } else {
@@ -284,6 +284,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         } else {
                             imageView.setImage(photoEntry2.document.thumb.location, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
                         }
+                        cell.videoInfoContainer.setVisibility(4);
                         cell.setChecked(PhotoPickerActivity.this.selectedWebPhotos.containsKey(photoEntry2.id), false);
                         if (photoEntry2.document != null) {
                             showing = PhotoViewer.getInstance().isShowingImage(FileLoader.getPathToAttach(photoEntry2.document, true).getAbsolutePath());
@@ -291,16 +292,12 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             showing = PhotoViewer.getInstance().isShowingImage(photoEntry2.imageUrl);
                         }
                     }
-                    ImageReceiver imageReceiver = imageView.getImageReceiver();
-                    if (showing) {
-                        z = false;
-                    } else {
-                        z = true;
-                    }
-                    imageReceiver.setVisible(z, true);
+                    imageView.getImageReceiver().setVisible(!showing, true);
                     CheckBox checkBox = cell.checkBox;
                     if (PhotoPickerActivity.this.singlePhoto || showing) {
                         i = 8;
+                    } else {
+                        i = 0;
                     }
                     checkBox.setVisibility(i);
                     return;
@@ -335,9 +332,6 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         this.singlePhoto = onlyOnePhoto;
         this.chatActivity = chatActivity;
         this.allowCaption = allowCaption;
-        if (selectedAlbum != null && selectedAlbum.isVideo) {
-            this.singlePhoto = true;
-        }
     }
 
     public boolean onFragmentCreate() {
@@ -501,63 +495,20 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         this.listView.setGlowColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
-                int i = 1;
-                if (PhotoPickerActivity.this.selectedAlbum == null || !PhotoPickerActivity.this.selectedAlbum.isVideo) {
-                    ArrayList<Object> arrayList;
-                    if (PhotoPickerActivity.this.selectedAlbum != null) {
-                        arrayList = PhotoPickerActivity.this.selectedAlbum.photos;
-                    } else if (PhotoPickerActivity.this.searchResult.isEmpty() && PhotoPickerActivity.this.lastSearchString == null) {
-                        arrayList = PhotoPickerActivity.this.recentImages;
-                    } else {
-                        arrayList = PhotoPickerActivity.this.searchResult;
+                ArrayList<Object> arrayList;
+                if (PhotoPickerActivity.this.selectedAlbum != null) {
+                    arrayList = PhotoPickerActivity.this.selectedAlbum.photos;
+                } else if (PhotoPickerActivity.this.searchResult.isEmpty() && PhotoPickerActivity.this.lastSearchString == null) {
+                    arrayList = PhotoPickerActivity.this.recentImages;
+                } else {
+                    arrayList = PhotoPickerActivity.this.searchResult;
+                }
+                if (position >= 0 && position < arrayList.size()) {
+                    if (PhotoPickerActivity.this.searchItem != null) {
+                        AndroidUtilities.hideKeyboard(PhotoPickerActivity.this.searchItem.getSearchField());
                     }
-                    if (position >= 0 && position < arrayList.size()) {
-                        if (PhotoPickerActivity.this.searchItem != null) {
-                            AndroidUtilities.hideKeyboard(PhotoPickerActivity.this.searchItem.getSearchField());
-                        }
-                        PhotoViewer.getInstance().setParentActivity(PhotoPickerActivity.this.getParentActivity());
-                        PhotoViewer instance = PhotoViewer.getInstance();
-                        if (!PhotoPickerActivity.this.singlePhoto) {
-                            i = 0;
-                        }
-                        instance.openPhotoForSelect(arrayList, position, i, PhotoPickerActivity.this, PhotoPickerActivity.this.chatActivity);
-                    }
-                } else if (position >= 0 && position < PhotoPickerActivity.this.selectedAlbum.photos.size()) {
-                    String path = ((PhotoEntry) PhotoPickerActivity.this.selectedAlbum.photos.get(position)).path;
-                    if (VERSION.SDK_INT >= 16) {
-                        Bundle args = new Bundle();
-                        args.putString("videoPath", path);
-                        VideoEditorActivity fragment = new VideoEditorActivity(args);
-                        fragment.setDelegate(new VideoEditorActivityDelegate() {
-                            public void didFinishEditVideo(String videoPath, long startTime, long endTime, int resultWidth, int resultHeight, int rotationValue, int originalWidth, int originalHeight, int bitrate, long estimatedSize, long estimatedDuration, String caption) {
-                                PhotoPickerActivity.this.removeSelfFromStack();
-                                VideoEditedInfo videoEditedInfo = new VideoEditedInfo();
-                                videoEditedInfo.startTime = startTime;
-                                videoEditedInfo.endTime = endTime;
-                                videoEditedInfo.rotationValue = rotationValue;
-                                videoEditedInfo.originalWidth = originalWidth;
-                                videoEditedInfo.originalHeight = originalHeight;
-                                videoEditedInfo.bitrate = bitrate;
-                                videoEditedInfo.resultWidth = resultWidth;
-                                videoEditedInfo.resultHeight = resultHeight;
-                                videoEditedInfo.originalPath = videoPath;
-                                videoEditedInfo.muted = videoEditedInfo.bitrate == -1;
-                                PhotoPickerActivity.this.delegate.didSelectVideo(videoPath, videoEditedInfo, estimatedSize, estimatedDuration, caption);
-                            }
-                        });
-                        if (!fragment.onFragmentCreate()) {
-                            PhotoPickerActivity.this.delegate.didSelectVideo(path, null, 0, 0, null);
-                            PhotoPickerActivity.this.finishFragment();
-                            return;
-                        } else if (PhotoPickerActivity.this.parentLayout.presentFragment(fragment, false, false, true)) {
-                            fragment.setParentChatActivity(PhotoPickerActivity.this.chatActivity);
-                            return;
-                        } else {
-                            return;
-                        }
-                    }
-                    PhotoPickerActivity.this.delegate.didSelectVideo(path, null, 0, 0, null);
-                    PhotoPickerActivity.this.finishFragment();
+                    PhotoViewer.getInstance().setParentActivity(PhotoPickerActivity.this.getParentActivity());
+                    PhotoViewer.getInstance().openPhotoForSelect(arrayList, position, PhotoPickerActivity.this.singlePhoto ? 1 : 0, PhotoPickerActivity.this, PhotoPickerActivity.this.chatActivity);
                 }
             }
         });
@@ -707,7 +658,6 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-        int i = 0;
         PhotoPickerPhotoCell cell = getCellForIndex(index);
         if (cell == null) {
             return null;
@@ -716,16 +666,12 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         cell.photoImage.getLocationInWindow(coords);
         PlaceProviderObject object = new PlaceProviderObject();
         object.viewX = coords[0];
-        int i2 = coords[1];
-        if (VERSION.SDK_INT < 21) {
-            i = AndroidUtilities.statusBarHeight;
-        }
-        object.viewY = i2 - i;
+        object.viewY = coords[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
         object.parentView = this.listView;
         object.imageReceiver = cell.photoImage.getImageReceiver();
         object.thumb = object.imageReceiver.getBitmap();
         object.scale = cell.photoImage.getScaleX();
-        cell.checkBox.setVisibility(8);
+        cell.showCheck(false);
         return object;
     }
 
@@ -808,7 +754,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     continue;
                 }
                 if (num == index) {
-                    cell.checkBox.setVisibility(0);
+                    cell.showCheck(true);
                     return;
                 }
             }
@@ -820,10 +766,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         for (int a = 0; a < count; a++) {
             View view = this.listView.getChildAt(a);
             if (view instanceof PhotoPickerPhotoCell) {
-                PhotoPickerPhotoCell cell = (PhotoPickerPhotoCell) view;
-                if (cell.checkBox.getVisibility() != 0) {
-                    cell.checkBox.setVisibility(0);
-                }
+                ((PhotoPickerPhotoCell) view).showCheck(true);
             }
         }
     }
@@ -846,7 +789,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
     }
 
-    public void setPhotoChecked(int index) {
+    public void setPhotoChecked(int index, VideoEditedInfo videoEditedInfo) {
         boolean add = true;
         if (this.selectedAlbum == null) {
             ArrayList<SearchImage> array;
@@ -870,9 +813,11 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             PhotoEntry photoEntry2 = (PhotoEntry) this.selectedAlbum.photos.get(index);
             if (this.selectedPhotos.containsKey(Integer.valueOf(photoEntry2.imageId))) {
                 this.selectedPhotos.remove(Integer.valueOf(photoEntry2.imageId));
+                photoEntry2.editedInfo = null;
                 add = false;
             } else {
                 this.selectedPhotos.put(Integer.valueOf(photoEntry2.imageId), photoEntry2);
+                photoEntry2.editedInfo = videoEditedInfo;
             }
         } else {
             return;
@@ -900,6 +845,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             if (this.selectedPhotos.isEmpty()) {
                 if (index >= 0 && index < this.selectedAlbum.photos.size()) {
                     PhotoEntry photoEntry = (PhotoEntry) this.selectedAlbum.photos.get(index);
+                    photoEntry.editedInfo = videoEditedInfo;
                     this.selectedPhotos.put(Integer.valueOf(photoEntry.imageId), photoEntry);
                 } else {
                     return;

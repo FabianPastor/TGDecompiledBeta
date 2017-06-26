@@ -7,38 +7,18 @@ import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 
 public class PendingCallback implements Parcelable, ReflectedParcelable {
-    public static final Creator<PendingCallback> CREATOR = new Creator<PendingCallback>() {
-        public /* synthetic */ Object createFromParcel(Parcel parcel) {
-            return zzgn(parcel);
-        }
-
-        public /* synthetic */ Object[] newArray(int i) {
-            return zzjF(i);
-        }
-
-        public PendingCallback zzgn(Parcel parcel) {
-            return new PendingCallback(parcel);
-        }
-
-        public PendingCallback[] zzjF(int i) {
-            return new PendingCallback[i];
-        }
-    };
-    final IBinder zzaFz;
+    public static final Creator<PendingCallback> CREATOR = new zzg();
+    final IBinder zzaHj;
 
     public PendingCallback(Parcel parcel) {
-        this.zzaFz = parcel.readStrongBinder();
+        this.zzaHj = parcel.readStrongBinder();
     }
 
     public int describeContents() {
         return 0;
     }
 
-    public IBinder getIBinder() {
-        return this.zzaFz;
-    }
-
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeStrongBinder(this.zzaFz);
+        parcel.writeStrongBinder(this.zzaHj);
     }
 }

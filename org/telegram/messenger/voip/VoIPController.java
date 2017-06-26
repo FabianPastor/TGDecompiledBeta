@@ -4,11 +4,15 @@ import android.media.audiofx.AcousticEchoCanceler;
 import android.os.Build.VERSION;
 import android.os.SystemClock;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.Locale;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.tgnet.TLRPC.TL_phoneConnection;
+import org.telegram.ui.Components.voip.VoIPHelper;
 
 public class VoIPController {
     public static final int DATA_SAVING_ALWAYS = 2;
@@ -35,6 +39,7 @@ public class VoIPController {
     public static final int NET_TYPE_WIFI = 6;
     public static final int STATE_ESTABLISHED = 3;
     public static final int STATE_FAILED = 4;
+    public static final int STATE_RECONNECTING = 5;
     public static final int STATE_WAIT_INIT = 1;
     public static final int STATE_WAIT_INIT_ACK = 2;
     private long callStartTime;
@@ -85,6 +90,8 @@ public class VoIPController {
     private static native void nativeSetNativeBufferSize(int i);
 
     private native void nativeSetNetworkType(long j, int i);
+
+    private native void nativeSetProxy(long j, String str, int i, String str2, String str3);
 
     private native void nativeSetRemoteEndpoints(long j, TL_phoneConnection[] tL_phoneConnectionArr, boolean z);
 
@@ -158,7 +165,9 @@ public class VoIPController {
     }
 
     private void handleStateChange(int state) {
-        this.callStartTime = SystemClock.elapsedRealtime();
+        if (state == 3 && this.callStartTime == 0) {
+            this.callStartTime = SystemClock.elapsedRealtime();
+        }
         if (this.listener != null) {
             this.listener.onConnectionStateChanged(state);
         }
@@ -178,8 +187,9 @@ public class VoIPController {
         nativeSetMicMute(this.nativeInst, mute);
     }
 
-    public void setConfig(double recvTimeout, double initTimeout, int dataSavingOption) {
+    public void setConfig(double recvTimeout, double initTimeout, int dataSavingOption, long callID) {
         String logFilePath;
+        String logFilePath2;
         ensureNativeInstance();
         boolean sysAecAvailable = false;
         boolean sysNsAvailable = false;
@@ -194,13 +204,17 @@ public class VoIPController {
         long j = this.nativeInst;
         boolean z = (VERSION.SDK_INT >= 16 && sysAecAvailable && VoIPServerConfig.getBoolean("use_system_aec", true)) ? false : true;
         boolean z2 = (VERSION.SDK_INT >= 16 && sysNsAvailable && VoIPServerConfig.getBoolean("use_system_ns", true)) ? false : true;
-        String logFilePath2 = BuildConfig.DEBUG ? getLogFilePath("voip") : null;
-        if (BuildConfig.DEBUG && dump) {
-            logFilePath = getLogFilePath("voipStats");
+        if (BuildConfig.DEBUG) {
+            logFilePath = getLogFilePath("voip");
         } else {
-            logFilePath = null;
+            logFilePath = getLogFilePath(callID);
         }
-        nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, z, z2, true, logFilePath2, logFilePath);
+        if (BuildConfig.DEBUG && dump) {
+            logFilePath2 = getLogFilePath("voipStats");
+        } else {
+            logFilePath2 = null;
+        }
+        nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, z, z2, true, logFilePath, logFilePath2);
     }
 
     public void debugCtl(int request, int param) {
@@ -235,8 +249,38 @@ public class VoIPController {
         return new File(ApplicationLoader.applicationContext.getExternalFilesDir(null), String.format(Locale.US, "logs/%02d_%02d_%04d_%02d_%02d_%02d_%s.txt", new Object[]{Integer.valueOf(c.get(5)), Integer.valueOf(c.get(2) + 1), Integer.valueOf(c.get(1)), Integer.valueOf(c.get(11)), Integer.valueOf(c.get(12)), Integer.valueOf(c.get(13)), name})).getAbsolutePath();
     }
 
+    private String getLogFilePath(long callID) {
+        File dir = VoIPHelper.getLogsDir();
+        if (!BuildConfig.DEBUG) {
+            File[] _logs = dir.listFiles();
+            ArrayList<File> logs = new ArrayList();
+            logs.addAll(Arrays.asList(_logs));
+            while (logs.size() > 20) {
+                File oldest = (File) logs.get(0);
+                Iterator it = logs.iterator();
+                while (it.hasNext()) {
+                    File file = (File) it.next();
+                    if (file.getName().endsWith(".log") && file.lastModified() < oldest.lastModified()) {
+                        oldest = file;
+                    }
+                }
+                oldest.delete();
+                logs.remove(oldest);
+            }
+        }
+        return new File(dir, callID + ".log").getAbsolutePath();
+    }
+
     public String getDebugLog() {
         ensureNativeInstance();
         return nativeGetDebugLog(this.nativeInst);
+    }
+
+    public void setProxy(String address, int port, String username, String password) {
+        ensureNativeInstance();
+        if (address == null) {
+            throw new NullPointerException("address can't be null");
+        }
+        nativeSetProxy(this.nativeInst, address, port, username, password);
     }
 }

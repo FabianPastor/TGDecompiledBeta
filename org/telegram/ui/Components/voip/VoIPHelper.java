@@ -2,6 +2,7 @@ package org.telegram.ui.Components.voip;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
@@ -9,18 +10,44 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.provider.Settings.System;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import java.io.File;
+import java.util.Collections;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_inputPhoneCall;
+import org.telegram.tgnet.TLRPC.TL_messageActionPhoneCall;
+import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
+import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
+import org.telegram.tgnet.TLRPC.TL_phone_setCallRating;
+import org.telegram.tgnet.TLRPC.TL_updates;
 import org.telegram.tgnet.TLRPC.TL_userFull;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Cells.CheckBoxCell;
+import org.telegram.ui.Components.BetterRatingView;
+import org.telegram.ui.Components.BetterRatingView.OnRatingChangeListener;
+import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.VoIPActivity;
 
 public class VoIPHelper {
+    private static final int VOIP_SUPPORT_ID = 4244000;
     private static long lastCallRequestTime = 0;
 
     public static void startCall(User user, final Activity activity, TL_userFull userFull) {
@@ -111,5 +138,174 @@ public class VoIPHelper {
                 }
             });
         }
+    }
+
+    public static File getLogsDir() {
+        File logsDir = new File(ApplicationLoader.applicationContext.getCacheDir(), "voip_logs");
+        if (!logsDir.exists()) {
+            logsDir.mkdirs();
+        }
+        return logsDir;
+    }
+
+    public static boolean canRateCall(TL_messageActionPhoneCall call) {
+        if ((call.reason instanceof TL_phoneCallDiscardReasonBusy) || (call.reason instanceof TL_phoneCallDiscardReasonMissed)) {
+            return false;
+        }
+        for (String hash : ApplicationLoader.applicationContext.getSharedPreferences("notifications", 0).getStringSet("calls_access_hashes", Collections.EMPTY_SET)) {
+            String[] d = hash.split(" ");
+            if (d.length >= 2 && d[0].equals(call.call_id + "")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void showRateAlert(Context context, TL_messageActionPhoneCall call) {
+        for (String hash : context.getSharedPreferences("notifications", 0).getStringSet("calls_access_hashes", Collections.EMPTY_SET)) {
+            String[] d = hash.split(" ");
+            if (d.length >= 2 && d[0].equals(call.call_id + "")) {
+                try {
+                    Context context2 = context;
+                    showRateAlert(context2, null, call.call_id, Long.parseLong(d[1]));
+                    return;
+                } catch (Exception e) {
+                    return;
+                }
+            }
+        }
+    }
+
+    public static void showRateAlert(Context context, Runnable onDismiss, long callID, long accessHash) {
+        final File log = new File(getLogsDir(), callID + ".log");
+        View linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(1);
+        int pad = AndroidUtilities.dp(16.0f);
+        linearLayout.setPadding(pad, pad, pad, 0);
+        linearLayout = new TextView(context);
+        linearLayout.setTextSize(2, 16.0f);
+        linearLayout.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        linearLayout.setGravity(17);
+        linearLayout.setText(LocaleController.getString("VoipRateCallAlert", R.string.VoipRateCallAlert));
+        linearLayout.addView(linearLayout);
+        linearLayout = new BetterRatingView(context);
+        linearLayout.addView(linearLayout, LayoutHelper.createLinear(-2, -2, 1, 0, 16, 0, 0));
+        linearLayout = new EditText(context);
+        linearLayout.setHint(LocaleController.getString("CallReportHint", R.string.CallReportHint));
+        linearLayout.setInputType(147457);
+        linearLayout.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        linearLayout.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
+        linearLayout.setBackgroundDrawable(Theme.createEditTextDrawable(context, true));
+        linearLayout.setPadding(0, AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f));
+        linearLayout.setTextSize(18.0f);
+        linearLayout.setVisibility(8);
+        linearLayout.addView(linearLayout, LayoutHelper.createLinear(-1, -2, 8.0f, 8.0f, 8.0f, 0.0f));
+        final boolean[] includeLogs = new boolean[]{true};
+        linearLayout = new CheckBoxCell(context, true);
+        final View view = linearLayout;
+        View.OnClickListener anonymousClass5 = new View.OnClickListener() {
+            public void onClick(View v) {
+                boolean z;
+                boolean[] zArr = includeLogs;
+                if (includeLogs[0]) {
+                    z = false;
+                } else {
+                    z = true;
+                }
+                zArr[0] = z;
+                view.setChecked(includeLogs[0], true);
+            }
+        };
+        linearLayout.setText(LocaleController.getString("CallReportIncludeLogs", R.string.CallReportIncludeLogs), null, true, false);
+        linearLayout.setClipToPadding(false);
+        linearLayout.setOnClickListener(anonymousClass5);
+        linearLayout.addView(linearLayout, LayoutHelper.createLinear(-1, -2, -8.0f, 0.0f, -8.0f, 0.0f));
+        linearLayout = new TextView(context);
+        linearLayout.setTextSize(2, 14.0f);
+        linearLayout.setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
+        linearLayout.setText(LocaleController.getString("CallReportLogsExplain", R.string.CallReportLogsExplain));
+        linearLayout.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), 0);
+        linearLayout.setOnClickListener(anonymousClass5);
+        linearLayout.addView(linearLayout);
+        linearLayout.setVisibility(8);
+        linearLayout.setVisibility(8);
+        if (!log.exists()) {
+            includeLogs[0] = false;
+        }
+        final View view2 = linearLayout;
+        final View view3 = linearLayout;
+        final long j = accessHash;
+        final long j2 = callID;
+        final Context context2 = context;
+        final Runnable runnable = onDismiss;
+        final View btn = new Builder(context).setTitle(LocaleController.getString("CallMessageReportProblem", R.string.CallMessageReportProblem)).setView(linearLayout).setPositiveButton(LocaleController.getString("Send", R.string.Send), new OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                TL_phone_setCallRating req = new TL_phone_setCallRating();
+                req.rating = view2.getRating();
+                if (req.rating < 5) {
+                    req.comment = view3.getText().toString();
+                } else {
+                    req.comment = "";
+                }
+                req.peer = new TL_inputPhoneCall();
+                req.peer.access_hash = j;
+                req.peer.id = j2;
+                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    public void run(TLObject response, TL_error error) {
+                        if (response instanceof TL_updates) {
+                            MessagesController.getInstance().processUpdates((TL_updates) response, false);
+                            if (includeLogs[0] && log.exists()) {
+                                SendMessagesHelper.prepareSendingDocument(log.getAbsolutePath(), log.getAbsolutePath(), null, "text/plain", 4244000, null, null);
+                                Toast.makeText(context2, LocaleController.getString("CallReportSent", R.string.CallReportSent), 1).show();
+                            }
+                        }
+                    }
+                });
+            }
+        }).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null).setOnDismissListener(new OnDismissListener() {
+            public void onDismiss(DialogInterface dialog) {
+                if (runnable != null) {
+                    runnable.run();
+                }
+            }
+        }).show().getButton(-1);
+        btn.setEnabled(false);
+        view2 = linearLayout;
+        final Context context3 = context;
+        final File file = log;
+        final View view4 = linearLayout;
+        final View view5 = linearLayout;
+        linearLayout.setOnRatingChangeListener(new OnRatingChangeListener() {
+            public void onRatingChanged(int rating) {
+                int i;
+                int i2 = 0;
+                btn.setEnabled(rating > 0);
+                view2.setHint(rating < 4 ? LocaleController.getString("CallReportHint", R.string.CallReportHint) : LocaleController.getString("VoipFeedbackCommentHint", R.string.VoipFeedbackCommentHint));
+                EditText editText = view2;
+                if (rating >= 5 || rating <= 0) {
+                    i = 8;
+                } else {
+                    i = 0;
+                }
+                editText.setVisibility(i);
+                if (view2.getVisibility() == 8) {
+                    ((InputMethodManager) context3.getSystemService("input_method")).hideSoftInputFromWindow(view2.getWindowToken(), 0);
+                }
+                if (file.exists()) {
+                    CheckBoxCell checkBoxCell = view4;
+                    if (rating < 4) {
+                        i = 0;
+                    } else {
+                        i = 8;
+                    }
+                    checkBoxCell.setVisibility(i);
+                    TextView textView = view5;
+                    if (rating >= 4) {
+                        i2 = 8;
+                    }
+                    textView.setVisibility(i2);
+                }
+            }
+        });
     }
 }

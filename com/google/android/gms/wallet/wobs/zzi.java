@@ -2,89 +2,49 @@ package com.google.android.gms.wallet.wobs;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
 import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
 
-public class zzi implements Creator<zzf> {
-    static void zza(zzf com_google_android_gms_wallet_wobs_zzf, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zza(parcel, 2, com_google_android_gms_wallet_wobs_zzf.label, false);
-        zzc.zza(parcel, 3, com_google_android_gms_wallet_wobs_zzf.zzbSC, i, false);
-        zzc.zza(parcel, 4, com_google_android_gms_wallet_wobs_zzf.type, false);
-        zzc.zza(parcel, 5, com_google_android_gms_wallet_wobs_zzf.zzbQJ, i, false);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzkF(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzpe(i);
-    }
-
-    public zzf zzkF(Parcel parcel) {
-        zzl com_google_android_gms_wallet_wobs_zzl = null;
-        int zzaY = zzb.zzaY(parcel);
+public final class zzi implements Creator<zzh> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
         String str = null;
-        zzg com_google_android_gms_wallet_wobs_zzg = null;
+        int zzd = zzb.zzd(parcel);
+        int i = 0;
+        double d = 0.0d;
+        long j = 0;
+        int i2 = -1;
         String str2 = null;
-        while (parcel.dataPosition() < zzaY) {
-            String str3;
-            zzg com_google_android_gms_wallet_wobs_zzg2;
-            String zzq;
-            zzl com_google_android_gms_wallet_wobs_zzl2;
-            int zzaX = zzb.zzaX(parcel);
-            zzl com_google_android_gms_wallet_wobs_zzl3;
-            switch (zzb.zzdc(zzaX)) {
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
                 case 2:
-                    com_google_android_gms_wallet_wobs_zzl3 = com_google_android_gms_wallet_wobs_zzl;
-                    str3 = str;
-                    com_google_android_gms_wallet_wobs_zzg2 = com_google_android_gms_wallet_wobs_zzg;
-                    zzq = zzb.zzq(parcel, zzaX);
-                    com_google_android_gms_wallet_wobs_zzl2 = com_google_android_gms_wallet_wobs_zzl3;
+                    i = zzb.zzg(parcel, readInt);
                     break;
                 case 3:
-                    zzq = str2;
-                    String str4 = str;
-                    com_google_android_gms_wallet_wobs_zzg2 = (zzg) zzb.zza(parcel, zzaX, zzg.CREATOR);
-                    com_google_android_gms_wallet_wobs_zzl2 = com_google_android_gms_wallet_wobs_zzl;
-                    str3 = str4;
+                    str2 = zzb.zzq(parcel, readInt);
                     break;
                 case 4:
-                    com_google_android_gms_wallet_wobs_zzg2 = com_google_android_gms_wallet_wobs_zzg;
-                    zzq = str2;
-                    com_google_android_gms_wallet_wobs_zzl3 = com_google_android_gms_wallet_wobs_zzl;
-                    str3 = zzb.zzq(parcel, zzaX);
-                    com_google_android_gms_wallet_wobs_zzl2 = com_google_android_gms_wallet_wobs_zzl3;
+                    d = zzb.zzn(parcel, readInt);
                     break;
                 case 5:
-                    com_google_android_gms_wallet_wobs_zzl2 = (zzl) zzb.zza(parcel, zzaX, zzl.CREATOR);
-                    str3 = str;
-                    com_google_android_gms_wallet_wobs_zzg2 = com_google_android_gms_wallet_wobs_zzg;
-                    zzq = str2;
+                    str = zzb.zzq(parcel, readInt);
+                    break;
+                case 6:
+                    j = zzb.zzi(parcel, readInt);
+                    break;
+                case 7:
+                    i2 = zzb.zzg(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaX);
-                    com_google_android_gms_wallet_wobs_zzl2 = com_google_android_gms_wallet_wobs_zzl;
-                    str3 = str;
-                    com_google_android_gms_wallet_wobs_zzg2 = com_google_android_gms_wallet_wobs_zzg;
-                    zzq = str2;
+                    zzb.zzb(parcel, readInt);
                     break;
             }
-            str2 = zzq;
-            com_google_android_gms_wallet_wobs_zzg = com_google_android_gms_wallet_wobs_zzg2;
-            str = str3;
-            com_google_android_gms_wallet_wobs_zzl = com_google_android_gms_wallet_wobs_zzl2;
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new zzf(str2, com_google_android_gms_wallet_wobs_zzg, str, com_google_android_gms_wallet_wobs_zzl);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
+        zzb.zzF(parcel, zzd);
+        return new zzh(i, str2, d, str, j, i2);
     }
 
-    public zzf[] zzpe(int i) {
-        return new zzf[i];
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new zzh[i];
     }
 }

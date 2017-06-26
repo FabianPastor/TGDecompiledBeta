@@ -4,136 +4,132 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.common.internal.zzbe;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
 
 public final class StreetViewPanoramaOptions extends zza implements ReflectedParcelable {
-    public static final Creator<StreetViewPanoramaOptions> CREATOR = new zzb();
-    private Boolean zzbnY;
-    private StreetViewPanoramaCamera zzboI;
-    private String zzboJ;
-    private LatLng zzboK;
-    private Integer zzboL;
-    private Boolean zzboM = Boolean.valueOf(true);
-    private Boolean zzboN = Boolean.valueOf(true);
-    private Boolean zzboO = Boolean.valueOf(true);
-    private Boolean zzboe = Boolean.valueOf(true);
+    public static final Creator<StreetViewPanoramaOptions> CREATOR = new zzah();
+    private StreetViewPanoramaCamera zzbmL;
+    private String zzbmM;
+    private LatLng zzbmN;
+    private Integer zzbmO;
+    private Boolean zzbmP = Boolean.valueOf(true);
+    private Boolean zzbmQ = Boolean.valueOf(true);
+    private Boolean zzbmR = Boolean.valueOf(true);
+    private Boolean zzbma;
+    private Boolean zzbmg = Boolean.valueOf(true);
 
     StreetViewPanoramaOptions(StreetViewPanoramaCamera streetViewPanoramaCamera, String str, LatLng latLng, Integer num, byte b, byte b2, byte b3, byte b4, byte b5) {
-        this.zzboI = streetViewPanoramaCamera;
-        this.zzboK = latLng;
-        this.zzboL = num;
-        this.zzboJ = str;
-        this.zzboM = com.google.android.gms.maps.internal.zza.zza(b);
-        this.zzboe = com.google.android.gms.maps.internal.zza.zza(b2);
-        this.zzboN = com.google.android.gms.maps.internal.zza.zza(b3);
-        this.zzboO = com.google.android.gms.maps.internal.zza.zza(b4);
-        this.zzbnY = com.google.android.gms.maps.internal.zza.zza(b5);
+        this.zzbmL = streetViewPanoramaCamera;
+        this.zzbmN = latLng;
+        this.zzbmO = num;
+        this.zzbmM = str;
+        this.zzbmP = com.google.android.gms.maps.internal.zza.zza(b);
+        this.zzbmg = com.google.android.gms.maps.internal.zza.zza(b2);
+        this.zzbmQ = com.google.android.gms.maps.internal.zza.zza(b3);
+        this.zzbmR = com.google.android.gms.maps.internal.zza.zza(b4);
+        this.zzbma = com.google.android.gms.maps.internal.zza.zza(b5);
     }
 
-    public Boolean getPanningGesturesEnabled() {
-        return this.zzboN;
+    public final Boolean getPanningGesturesEnabled() {
+        return this.zzbmQ;
     }
 
-    public String getPanoramaId() {
-        return this.zzboJ;
+    public final String getPanoramaId() {
+        return this.zzbmM;
     }
 
-    public LatLng getPosition() {
-        return this.zzboK;
+    public final LatLng getPosition() {
+        return this.zzbmN;
     }
 
-    public Integer getRadius() {
-        return this.zzboL;
+    public final Integer getRadius() {
+        return this.zzbmO;
     }
 
-    public Boolean getStreetNamesEnabled() {
-        return this.zzboO;
+    public final Boolean getStreetNamesEnabled() {
+        return this.zzbmR;
     }
 
-    public StreetViewPanoramaCamera getStreetViewPanoramaCamera() {
-        return this.zzboI;
+    public final StreetViewPanoramaCamera getStreetViewPanoramaCamera() {
+        return this.zzbmL;
     }
 
-    public Boolean getUseViewLifecycleInFragment() {
-        return this.zzbnY;
+    public final Boolean getUseViewLifecycleInFragment() {
+        return this.zzbma;
     }
 
-    public Boolean getUserNavigationEnabled() {
-        return this.zzboM;
+    public final Boolean getUserNavigationEnabled() {
+        return this.zzbmP;
     }
 
-    public Boolean getZoomGesturesEnabled() {
-        return this.zzboe;
+    public final Boolean getZoomGesturesEnabled() {
+        return this.zzbmg;
     }
 
-    public StreetViewPanoramaOptions panningGesturesEnabled(boolean z) {
-        this.zzboN = Boolean.valueOf(z);
+    public final StreetViewPanoramaOptions panningGesturesEnabled(boolean z) {
+        this.zzbmQ = Boolean.valueOf(z);
         return this;
     }
 
-    public StreetViewPanoramaOptions panoramaCamera(StreetViewPanoramaCamera streetViewPanoramaCamera) {
-        this.zzboI = streetViewPanoramaCamera;
+    public final StreetViewPanoramaOptions panoramaCamera(StreetViewPanoramaCamera streetViewPanoramaCamera) {
+        this.zzbmL = streetViewPanoramaCamera;
         return this;
     }
 
-    public StreetViewPanoramaOptions panoramaId(String str) {
-        this.zzboJ = str;
+    public final StreetViewPanoramaOptions panoramaId(String str) {
+        this.zzbmM = str;
         return this;
     }
 
-    public StreetViewPanoramaOptions position(LatLng latLng) {
-        this.zzboK = latLng;
+    public final StreetViewPanoramaOptions position(LatLng latLng) {
+        this.zzbmN = latLng;
         return this;
     }
 
-    public StreetViewPanoramaOptions position(LatLng latLng, Integer num) {
-        this.zzboK = latLng;
-        this.zzboL = num;
+    public final StreetViewPanoramaOptions position(LatLng latLng, Integer num) {
+        this.zzbmN = latLng;
+        this.zzbmO = num;
         return this;
     }
 
-    public StreetViewPanoramaOptions streetNamesEnabled(boolean z) {
-        this.zzboO = Boolean.valueOf(z);
+    public final StreetViewPanoramaOptions streetNamesEnabled(boolean z) {
+        this.zzbmR = Boolean.valueOf(z);
         return this;
     }
 
-    public StreetViewPanoramaOptions useViewLifecycleInFragment(boolean z) {
-        this.zzbnY = Boolean.valueOf(z);
+    public final String toString() {
+        return zzbe.zzt(this).zzg("PanoramaId", this.zzbmM).zzg("Position", this.zzbmN).zzg("Radius", this.zzbmO).zzg("StreetViewPanoramaCamera", this.zzbmL).zzg("UserNavigationEnabled", this.zzbmP).zzg("ZoomGesturesEnabled", this.zzbmg).zzg("PanningGesturesEnabled", this.zzbmQ).zzg("StreetNamesEnabled", this.zzbmR).zzg("UseViewLifecycleInFragment", this.zzbma).toString();
+    }
+
+    public final StreetViewPanoramaOptions useViewLifecycleInFragment(boolean z) {
+        this.zzbma = Boolean.valueOf(z);
         return this;
     }
 
-    public StreetViewPanoramaOptions userNavigationEnabled(boolean z) {
-        this.zzboM = Boolean.valueOf(z);
+    public final StreetViewPanoramaOptions userNavigationEnabled(boolean z) {
+        this.zzbmP = Boolean.valueOf(z);
         return this;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzb.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, getStreetViewPanoramaCamera(), i, false);
+        zzd.zza(parcel, 3, getPanoramaId(), false);
+        zzd.zza(parcel, 4, getPosition(), i, false);
+        zzd.zza(parcel, 5, getRadius(), false);
+        zzd.zza(parcel, 6, com.google.android.gms.maps.internal.zza.zzb(this.zzbmP));
+        zzd.zza(parcel, 7, com.google.android.gms.maps.internal.zza.zzb(this.zzbmg));
+        zzd.zza(parcel, 8, com.google.android.gms.maps.internal.zza.zzb(this.zzbmQ));
+        zzd.zza(parcel, 9, com.google.android.gms.maps.internal.zza.zzb(this.zzbmR));
+        zzd.zza(parcel, 10, com.google.android.gms.maps.internal.zza.zzb(this.zzbma));
+        zzd.zzI(parcel, zze);
     }
 
-    public StreetViewPanoramaOptions zoomGesturesEnabled(boolean z) {
-        this.zzboe = Boolean.valueOf(z);
+    public final StreetViewPanoramaOptions zoomGesturesEnabled(boolean z) {
+        this.zzbmg = Boolean.valueOf(z);
         return this;
-    }
-
-    byte zzJB() {
-        return com.google.android.gms.maps.internal.zza.zzd(this.zzboM);
-    }
-
-    byte zzJC() {
-        return com.google.android.gms.maps.internal.zza.zzd(this.zzboN);
-    }
-
-    byte zzJD() {
-        return com.google.android.gms.maps.internal.zza.zzd(this.zzboO);
-    }
-
-    byte zzJp() {
-        return com.google.android.gms.maps.internal.zza.zzd(this.zzbnY);
-    }
-
-    byte zzJt() {
-        return com.google.android.gms.maps.internal.zza.zzd(this.zzboe);
     }
 }

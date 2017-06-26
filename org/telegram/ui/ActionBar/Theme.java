@@ -107,6 +107,7 @@ public class Theme {
     public static Drawable chat_inlineResultLocation = null;
     public static TextPaint chat_instantViewPaint = null;
     public static Paint chat_instantViewRectPaint = null;
+    public static Drawable[][] chat_ivStatesDrawable = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{4, 2}));
     public static TextPaint chat_locationAddressPaint = null;
     public static Drawable[] chat_locationDrawable = new Drawable[2];
     public static TextPaint chat_locationTitlePaint = null;
@@ -580,6 +581,7 @@ public class Theme {
     public static final String key_contextProgressOuter2 = "contextProgressOuter2";
     public static final String key_contextProgressOuter3 = "contextProgressOuter3";
     public static final String key_dialogBackground = "dialogBackground";
+    public static final String key_dialogBackgroundGray = "dialogBackgroundGray";
     public static final String key_dialogBadgeBackground = "dialogBadgeBackground";
     public static final String key_dialogBadgeText = "dialogBadgeText";
     public static final String key_dialogButton = "dialogButton";
@@ -807,6 +809,7 @@ public class Theme {
 
     static {
         defaultColors.put(key_dialogBackground, Integer.valueOf(-1));
+        defaultColors.put(key_dialogBackgroundGray, Integer.valueOf(-986896));
         defaultColors.put(key_dialogTextBlack, Integer.valueOf(-14606047));
         defaultColors.put(key_dialogTextLink, Integer.valueOf(-14255946));
         defaultColors.put(key_dialogLinkSelection, Integer.valueOf(862104035));
@@ -1503,10 +1506,21 @@ public class Theme {
     }
 
     public static Drawable createCircleDrawableWithIcon(int size, int iconRes) {
+        return createCircleDrawableWithIcon(size, iconRes, 0);
+    }
+
+    public static Drawable createCircleDrawableWithIcon(int size, int iconRes, int stroke) {
         OvalShape ovalShape = new OvalShape();
         ovalShape.resize((float) size, (float) size);
         ShapeDrawable defaultDrawable = new ShapeDrawable(ovalShape);
-        defaultDrawable.getPaint().setColor(-1);
+        Paint paint = defaultDrawable.getPaint();
+        paint.setColor(-1);
+        if (stroke == 1) {
+            paint.setStyle(Style.STROKE);
+            paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        } else if (stroke == 2) {
+            paint.setAlpha(0);
+        }
         CombinedDrawable combinedDrawable = new CombinedDrawable(defaultDrawable, ApplicationLoader.applicationContext.getResources().getDrawable(iconRes).mutate());
         combinedDrawable.setCustomSize(size, size);
         return combinedDrawable;
@@ -2265,6 +2279,14 @@ public class Theme {
             chat_cornerInner[3] = resources.getDrawable(R.drawable.corner_in_bl);
             chat_shareDrawable = resources.getDrawable(R.drawable.share_round);
             chat_shareIconDrawable = resources.getDrawable(R.drawable.share_arrow);
+            chat_ivStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_play_m, 1);
+            chat_ivStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_play_m, 1);
+            chat_ivStatesDrawable[1][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_pause_m, 1);
+            chat_ivStatesDrawable[1][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_pause_m, 1);
+            chat_ivStatesDrawable[2][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_load_m, 1);
+            chat_ivStatesDrawable[2][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_load_m, 1);
+            chat_ivStatesDrawable[3][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_cancel_m, 2);
+            chat_ivStatesDrawable[3][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_cancel_m, 2);
             chat_fileStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44.0f), R.drawable.msg_round_play_m);
             chat_fileStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44.0f), R.drawable.msg_round_play_m);
             chat_fileStatesDrawable[1][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44.0f), R.drawable.msg_round_pause_m);

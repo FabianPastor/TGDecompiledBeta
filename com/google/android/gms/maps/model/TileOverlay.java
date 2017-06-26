@@ -1,118 +1,118 @@
 package com.google.android.gms.maps.model;
 
 import android.os.RemoteException;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.maps.model.internal.zzh;
+import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.maps.model.internal.zzw;
 
 public final class TileOverlay {
-    private final zzh zzbpU;
+    private final zzw zzbnX;
 
-    public TileOverlay(zzh com_google_android_gms_maps_model_internal_zzh) {
-        this.zzbpU = (zzh) zzac.zzw(com_google_android_gms_maps_model_internal_zzh);
+    public TileOverlay(zzw com_google_android_gms_maps_model_internal_zzw) {
+        this.zzbnX = (zzw) zzbo.zzu(com_google_android_gms_maps_model_internal_zzw);
     }
 
-    public void clearTileCache() {
+    public final void clearTileCache() {
         try {
-            this.zzbpU.clearTileCache();
+            this.zzbnX.clearTileCache();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         if (!(obj instanceof TileOverlay)) {
             return false;
         }
         try {
-            return this.zzbpU.zza(((TileOverlay) obj).zzbpU);
+            return this.zzbnX.zza(((TileOverlay) obj).zzbnX);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean getFadeIn() {
+    public final boolean getFadeIn() {
         try {
-            return this.zzbpU.getFadeIn();
+            return this.zzbnX.getFadeIn();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public String getId() {
+    public final String getId() {
         try {
-            return this.zzbpU.getId();
+            return this.zzbnX.getId();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public float getTransparency() {
+    public final float getTransparency() {
         try {
-            return this.zzbpU.getTransparency();
+            return this.zzbnX.getTransparency();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public float getZIndex() {
+    public final float getZIndex() {
         try {
-            return this.zzbpU.getZIndex();
+            return this.zzbnX.getZIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public int hashCode() {
+    public final int hashCode() {
         try {
-            return this.zzbpU.hashCodeRemote();
+            return this.zzbnX.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isVisible() {
+    public final boolean isVisible() {
         try {
-            return this.zzbpU.isVisible();
+            return this.zzbnX.isVisible();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void remove() {
+    public final void remove() {
         try {
-            this.zzbpU.remove();
+            this.zzbnX.remove();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setFadeIn(boolean z) {
+    public final void setFadeIn(boolean z) {
         try {
-            this.zzbpU.setFadeIn(z);
+            this.zzbnX.setFadeIn(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setTransparency(float f) {
+    public final void setTransparency(float f) {
         try {
-            this.zzbpU.setTransparency(f);
+            this.zzbnX.setTransparency(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setVisible(boolean z) {
+    public final void setVisible(boolean z) {
         try {
-            this.zzbpU.setVisible(z);
+            this.zzbnX.setVisible(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setZIndex(float f) {
+    public final void setZIndex(float f) {
         try {
-            this.zzbpU.setZIndex(f);
+            this.zzbnX.setZIndex(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

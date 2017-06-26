@@ -3,6 +3,7 @@ package com.stripe.android.net;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
+import com.google.android.gms.wallet.WalletConstants;
 import com.stripe.android.exception.APIConnectionException;
 import com.stripe.android.exception.APIException;
 import com.stripe.android.exception.AuthenticationException;
@@ -368,11 +369,11 @@ Error: java.util.NoSuchElementException
                 throw new InvalidRequestException(stripeError.message, stripeError.param, requestId, Integer.valueOf(rCode), null);
             case 401:
                 throw new AuthenticationException(stripeError.message, requestId, Integer.valueOf(rCode));
-            case 402:
+            case WalletConstants.ERROR_CODE_SERVICE_UNAVAILABLE /*402*/:
                 throw new CardException(stripeError.message, requestId, stripeError.code, stripeError.param, stripeError.decline_code, stripeError.charge, Integer.valueOf(rCode), null);
             case 403:
                 throw new PermissionException(stripeError.message, requestId, Integer.valueOf(rCode));
-            case 404:
+            case WalletConstants.ERROR_CODE_INVALID_PARAMETERS /*404*/:
                 throw new InvalidRequestException(stripeError.message, stripeError.param, requestId, Integer.valueOf(rCode), null);
             case 429:
                 throw new RateLimitException(stripeError.message, stripeError.param, requestId, Integer.valueOf(rCode), null);

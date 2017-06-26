@@ -19,7 +19,20 @@
     <color name="hockeyapp_text_light">#cccccc</color>
     <color name="hockeyapp_text_normal">#888888</color>
     <color name="hockeyapp_text_white">#ffffff</color>
+    <color name="wallet_bright_foreground_disabled_holo_light">#ffb2b2b2</color>
+    <color name="wallet_bright_foreground_holo_dark">#fff3f3f3</color>
+    <color name="wallet_bright_foreground_holo_light">#ff000000</color>
+    <color name="wallet_dim_foreground_disabled_holo_dark">#80bebebe</color>
+    <color name="wallet_dim_foreground_holo_dark">#bebebe</color>
+    <color name="wallet_highlighted_text_holo_dark">#6633b5e5</color>
+    <color name="wallet_highlighted_text_holo_light">#6633b5e5</color>
+    <color name="wallet_hint_foreground_holo_dark">#808080</color>
+    <color name="wallet_hint_foreground_holo_light">#808080</color>
+    <color name="wallet_holo_blue_light">#ff33b5e5</color>
+    <color name="wallet_link_text_light">#0000ee</color>
     <color name="common_google_signin_btn_text_dark">res/color/common_google_signin_btn_text_dark.xml</color>
     <color name="common_google_signin_btn_text_light">res/color/common_google_signin_btn_text_light.xml</color>
     <color name="common_google_signin_btn_tint">res/color/common_google_signin_btn_tint.xml</color>
+    <color name="wallet_primary_text_holo_light">res/color/wallet_primary_text_holo_light.xml</color>
+    <color name="wallet_secondary_text_holo_dark">res/color/wallet_secondary_text_holo_dark.xml</color>
 </resources>

@@ -1,7 +1,5 @@
 package com.google.android.gms.internal;
 
-public class zzk extends zzi {
-    public zzk(Throwable th) {
-        super(th);
-    }
+public interface zzk {
+    zzn zza(zzp<?> com_google_android_gms_internal_zzp_) throws zzaa;
 }

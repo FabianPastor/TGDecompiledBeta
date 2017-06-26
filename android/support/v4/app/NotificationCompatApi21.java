@@ -119,7 +119,7 @@ class NotificationCompatApi21 {
         b.putParcelable(KEY_ON_REPLY, uc.getReplyPendingIntent());
         b.putParcelable(KEY_ON_READ, uc.getReadPendingIntent());
         b.putStringArray(KEY_PARTICIPANTS, uc.getParticipants());
-        b.putLong(KEY_TIMESTAMP, uc.getLatestTimestamp());
+        b.putLong("timestamp", uc.getLatestTimestamp());
         return b;
     }
 
@@ -159,7 +159,7 @@ class NotificationCompatApi21 {
         if (remoteInput2 != null) {
             remoteInput = toCompatRemoteInput(remoteInput2, remoteInputFactory);
         }
-        return factory.build(messages, remoteInput, onReply, onRead, participants, b.getLong(KEY_TIMESTAMP));
+        return factory.build(messages, remoteInput, onReply, onRead, participants, b.getLong("timestamp"));
     }
 
     private static android.app.RemoteInput fromCompatRemoteInput(RemoteInput src) {

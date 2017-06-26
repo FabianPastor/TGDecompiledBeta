@@ -4,44 +4,45 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import android.text.TextUtils;
 import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.common.internal.zzbo;
 
 @Deprecated
 public final class NotifyTransactionStatusRequest extends zza {
-    public static final Creator<NotifyTransactionStatusRequest> CREATOR = new zzp();
+    public static final Creator<NotifyTransactionStatusRequest> CREATOR = new zzu();
     int status;
-    String zzbPW;
-    String zzbRk;
+    String zzbOo;
+    String zzbPD;
 
     public final class Builder {
-        final /* synthetic */ NotifyTransactionStatusRequest zzbRl;
+        private /* synthetic */ NotifyTransactionStatusRequest zzbPE;
 
         private Builder(NotifyTransactionStatusRequest notifyTransactionStatusRequest) {
-            this.zzbRl = notifyTransactionStatusRequest;
+            this.zzbPE = notifyTransactionStatusRequest;
         }
 
-        public NotifyTransactionStatusRequest build() {
+        public final NotifyTransactionStatusRequest build() {
             boolean z = true;
-            zzac.zzb(!TextUtils.isEmpty(this.zzbRl.zzbPW), (Object) "googleTransactionId is required");
-            if (this.zzbRl.status < 1 || this.zzbRl.status > 8) {
+            zzbo.zzb(!TextUtils.isEmpty(this.zzbPE.zzbOo), (Object) "googleTransactionId is required");
+            if (this.zzbPE.status <= 0 || this.zzbPE.status > 8) {
                 z = false;
             }
-            zzac.zzb(z, (Object) "status is an unrecognized value");
-            return this.zzbRl;
+            zzbo.zzb(z, (Object) "status is an unrecognized value");
+            return this.zzbPE;
         }
 
-        public Builder setDetailedReason(String str) {
-            this.zzbRl.zzbRk = str;
+        public final Builder setDetailedReason(String str) {
+            this.zzbPE.zzbPD = str;
             return this;
         }
 
-        public Builder setGoogleTransactionId(String str) {
-            this.zzbRl.zzbPW = str;
+        public final Builder setGoogleTransactionId(String str) {
+            this.zzbPE.zzbOo = str;
             return this;
         }
 
-        public Builder setStatus(int i) {
-            this.zzbRl.status = i;
+        public final Builder setStatus(int i) {
+            this.zzbPE.status = i;
             return this;
         }
     }
@@ -64,9 +65,9 @@ public final class NotifyTransactionStatusRequest extends zza {
     }
 
     NotifyTransactionStatusRequest(String str, int i, String str2) {
-        this.zzbPW = str;
+        this.zzbOo = str;
         this.status = i;
-        this.zzbRk = str2;
+        this.zzbPD = str2;
     }
 
     public static Builder newBuilder() {
@@ -75,19 +76,23 @@ public final class NotifyTransactionStatusRequest extends zza {
         return new Builder();
     }
 
-    public String getDetailedReason() {
-        return this.zzbRk;
+    public final String getDetailedReason() {
+        return this.zzbPD;
     }
 
-    public String getGoogleTransactionId() {
-        return this.zzbPW;
+    public final String getGoogleTransactionId() {
+        return this.zzbOo;
     }
 
-    public int getStatus() {
+    public final int getStatus() {
         return this.status;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzp.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.zzbOo, false);
+        zzd.zzc(parcel, 3, this.status);
+        zzd.zza(parcel, 4, this.zzbPD, false);
+        zzd.zzI(parcel, zze);
     }
 }

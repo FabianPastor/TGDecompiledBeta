@@ -8,27 +8,19 @@ import android.util.Log;
 import com.google.android.gms.common.util.zzk;
 import java.util.List;
 
-public class zze {
-    private static zze zzaHQ = new zze();
-    private static Boolean zzaHR;
+public final class zze {
+    private static zze zzaJA = new zze();
+    private static Boolean zzaJB;
 
-    private static boolean zzaY(Context context) {
-        if (zzaHR == null) {
-            zzaHR = Boolean.valueOf(false);
+    public static void zza(Context context, String str, int i, String str2, String str3, String str4, int i2, List<String> list) {
+        zza(context, str, 8, str2, str3, str4, i2, list, 0);
+    }
+
+    public static void zza(Context context, String str, int i, String str2, String str3, String str4, int i2, List<String> list, long j) {
+        if (zzaJB == null) {
+            zzaJB = Boolean.valueOf(false);
         }
-        return zzaHR.booleanValue();
-    }
-
-    public static zze zzyX() {
-        return zzaHQ;
-    }
-
-    public void zza(Context context, String str, int i, String str2, String str3, String str4, int i2, List<String> list) {
-        zza(context, str, i, str2, str3, str4, i2, list, 0);
-    }
-
-    public void zza(Context context, String str, int i, String str2, String str3, String str4, int i2, List<String> list, long j) {
-        if (!zzaY(context)) {
+        if (!zzaJB.booleanValue()) {
             return;
         }
         if (TextUtils.isEmpty(str)) {
@@ -40,11 +32,30 @@ public class zze {
         }
         long currentTimeMillis = System.currentTimeMillis();
         if (7 == i || 8 == i || 10 == i || 11 == i) {
+            List list2;
+            if (list == null || list.size() != 1) {
+                List<String> list3 = list;
+            } else {
+                if ("com.google.android.gms".equals(list.get(0))) {
+                    list = null;
+                }
+                list2 = list;
+            }
+            long elapsedRealtime = SystemClock.elapsedRealtime();
+            int zzaK = zzk.zzaK(context);
+            String packageName = context.getPackageName();
+            if ("com.google.android.gms".equals(packageName)) {
+                packageName = null;
+            }
             try {
-                context.startService(new Intent().setComponent(zzb.zzaHv).putExtra("com.google.android.gms.common.stats.EXTRA_LOG_EVENT", new WakeLockEvent(currentTimeMillis, i, str2, i2, zzc.zzB(list), str, SystemClock.elapsedRealtime(), zzk.zzbd(context), str3, zzc.zzdx(context.getPackageName()), zzk.zzbe(context), j, str4)));
+                context.startService(new Intent().setComponent(zzb.zzaJf).putExtra("com.google.android.gms.common.stats.EXTRA_LOG_EVENT", new WakeLockEvent(currentTimeMillis, i, str2, i2, list2, str, elapsedRealtime, zzaK, str3, packageName, zzk.zzaL(context), j, str4)));
             } catch (Throwable e) {
                 Log.wtf("WakeLockTracker", e);
             }
         }
+    }
+
+    public static zze zzrX() {
+        return zzaJA;
     }
 }

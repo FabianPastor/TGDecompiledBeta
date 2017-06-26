@@ -832,7 +832,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 this.searchResultNames.clear();
                 this.searchResultHashtags.clear();
                 if (this.needMessagesSearch != 2) {
-                    this.searchAdapterHelper.queryServerSearch(null, true, true, true);
+                    this.searchAdapterHelper.queryServerSearch(null, true, true, true, true, 0, false);
                 }
                 searchMessagesInternal(null);
                 notifyDataSetChanged();
@@ -874,7 +874,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
                             if (DialogsSearchAdapter.this.needMessagesSearch != 2) {
-                                DialogsSearchAdapter.this.searchAdapterHelper.queryServerSearch(query, true, true, true);
+                                DialogsSearchAdapter.this.searchAdapterHelper.queryServerSearch(query, true, true, true, true, 0, false);
                             }
                             DialogsSearchAdapter.this.searchMessagesInternal(query);
                         }

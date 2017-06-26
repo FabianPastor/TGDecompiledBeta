@@ -26,6 +26,7 @@ public class CheckBoxSquare extends View {
 
     public CheckBoxSquare(Context context, boolean alert) {
         super(context);
+        this.isAlert = alert;
     }
 
     @Keep

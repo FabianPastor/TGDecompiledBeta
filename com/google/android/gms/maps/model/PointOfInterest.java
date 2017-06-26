@@ -3,6 +3,7 @@ package com.google.android.gms.maps.model;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 
 public final class PointOfInterest extends zza {
     public static final Creator<PointOfInterest> CREATOR = new zzj();
@@ -16,7 +17,11 @@ public final class PointOfInterest extends zza {
         this.name = str2;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzj.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.latLng, i, false);
+        zzd.zza(parcel, 3, this.placeId, false);
+        zzd.zza(parcel, 4, this.name, false);
+        zzd.zzI(parcel, zze);
     }
 }

@@ -1,19 +1,21 @@
 package com.google.android.gms.common.internal;
 
+import android.accounts.Account;
+import android.os.IBinder;
 import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
+import android.os.RemoteException;
+import com.google.android.gms.internal.zzed;
+import com.google.android.gms.internal.zzef;
 
-@Deprecated
-public class zzan extends zza {
-    public static final Creator<zzan> CREATOR = new zzao();
-    final int zzaiI;
-
-    zzan(int i) {
-        this.zzaiI = i;
+public final class zzan extends zzed implements zzal {
+    zzan(IBinder iBinder) {
+        super(iBinder, "com.google.android.gms.common.internal.IAccountAccessor");
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzao.zza(this, parcel, i);
+    public final Account getAccount() throws RemoteException {
+        Parcel zza = zza(2, zzZ());
+        Account account = (Account) zzef.zza(zza, Account.CREATOR);
+        zza.recycle();
+        return account;
     }
 }

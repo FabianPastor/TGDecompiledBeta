@@ -1,49 +1,34 @@
 package com.google.android.gms.common.api;
 
-import android.support.v4.util.ArrayMap;
-import android.text.TextUtils;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Api.ApiOptions;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.internal.zzzz;
-import java.util.ArrayList;
+import com.google.android.gms.common.api.PendingResult.zza;
 
-public class zzb extends Exception {
-    private final ArrayMap<zzzz<?>, ConnectionResult> zzayL;
+final class zzb implements zza {
+    private /* synthetic */ Batch zzaAG;
 
-    public zzb(ArrayMap<zzzz<?>, ConnectionResult> arrayMap) {
-        this.zzayL = arrayMap;
+    zzb(Batch batch) {
+        this.zzaAG = batch;
     }
 
-    public String getMessage() {
-        Iterable arrayList = new ArrayList();
-        Object obj = 1;
-        for (zzzz com_google_android_gms_internal_zzzz : this.zzayL.keySet()) {
-            ConnectionResult connectionResult = (ConnectionResult) this.zzayL.get(com_google_android_gms_internal_zzzz);
-            if (connectionResult.isSuccess()) {
-                obj = null;
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public final void zzo(Status status) {
+        synchronized (this.zzaAG.mLock) {
+            if (this.zzaAG.isCanceled()) {
+                return;
             }
-            String valueOf = String.valueOf(com_google_android_gms_internal_zzzz.zzvw());
-            String valueOf2 = String.valueOf(connectionResult);
-            arrayList.add(new StringBuilder((String.valueOf(valueOf).length() + 2) + String.valueOf(valueOf2).length()).append(valueOf).append(": ").append(valueOf2).toString());
+            if (status.isCanceled()) {
+                this.zzaAG.zzaAE = true;
+            } else if (!status.isSuccess()) {
+                this.zzaAG.zzaAD = true;
+            }
+            this.zzaAG.zzaAC = this.zzaAG.zzaAC - 1;
+            if (this.zzaAG.zzaAC == 0) {
+                if (this.zzaAG.zzaAE) {
+                    super.cancel();
+                } else {
+                    this.zzaAG.setResult(new BatchResult(this.zzaAG.zzaAD ? new Status(13) : Status.zzaBm, this.zzaAG.zzaAF));
+                }
+            }
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        if (obj != null) {
-            stringBuilder.append("None of the queried APIs are available. ");
-        } else {
-            stringBuilder.append("Some of the queried APIs are unavailable. ");
-        }
-        stringBuilder.append(TextUtils.join("; ", arrayList));
-        return stringBuilder.toString();
-    }
-
-    public ConnectionResult zza(zzc<? extends ApiOptions> com_google_android_gms_common_api_zzc__extends_com_google_android_gms_common_api_Api_ApiOptions) {
-        zzzz apiKey = com_google_android_gms_common_api_zzc__extends_com_google_android_gms_common_api_Api_ApiOptions.getApiKey();
-        zzac.zzb(this.zzayL.get(apiKey) != null, (Object) "The given API was not part of the availability request.");
-        return (ConnectionResult) this.zzayL.get(apiKey);
-    }
-
-    public ArrayMap<zzzz<?>, ConnectionResult> zzvj() {
-        return this.zzayL;
     }
 }

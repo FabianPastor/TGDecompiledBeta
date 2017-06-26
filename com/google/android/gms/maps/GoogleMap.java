@@ -5,11 +5,10 @@ import android.location.Location;
 import android.os.RemoteException;
 import android.support.annotation.RequiresPermission;
 import android.view.View;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.dynamic.IObjectWrapper;
-import com.google.android.gms.maps.LocationSource.OnLocationChangedListener;
+import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.dynamic.zzn;
 import com.google.android.gms.maps.internal.IGoogleMapDelegate;
-import com.google.android.gms.maps.internal.zzp;
+import com.google.android.gms.maps.internal.zzd;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -29,13 +28,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
-import com.google.android.gms.maps.model.internal.IPolylineDelegate;
-import com.google.android.gms.maps.model.internal.zzb;
-import com.google.android.gms.maps.model.internal.zzc;
-import com.google.android.gms.maps.model.internal.zzd;
-import com.google.android.gms.maps.model.internal.zzf;
 import com.google.android.gms.maps.model.internal.zzg;
-import com.google.android.gms.maps.model.internal.zzh;
+import com.google.android.gms.maps.model.internal.zzj;
+import com.google.android.gms.maps.model.internal.zzp;
+import com.google.android.gms.maps.model.internal.zzw;
 
 public final class GoogleMap {
     public static final int MAP_TYPE_HYBRID = 4;
@@ -43,8 +39,8 @@ public final class GoogleMap {
     public static final int MAP_TYPE_NORMAL = 1;
     public static final int MAP_TYPE_SATELLITE = 2;
     public static final int MAP_TYPE_TERRAIN = 3;
-    private final IGoogleMapDelegate zzbnv;
-    private UiSettings zzbnw;
+    private final IGoogleMapDelegate zzblx;
+    private UiSettings zzbly;
 
     public interface CancelableCallback {
         void onCancel();
@@ -158,29 +154,29 @@ public final class GoogleMap {
         void onSnapshotReady(Bitmap bitmap);
     }
 
-    private static final class zza extends com.google.android.gms.maps.internal.zzb.zza {
-        private final CancelableCallback zzbnW;
+    static final class zza extends zzd {
+        private final CancelableCallback zzblY;
 
         zza(CancelableCallback cancelableCallback) {
-            this.zzbnW = cancelableCallback;
+            this.zzblY = cancelableCallback;
         }
 
-        public void onCancel() {
-            this.zzbnW.onCancel();
+        public final void onCancel() {
+            this.zzblY.onCancel();
         }
 
-        public void onFinish() {
-            this.zzbnW.onFinish();
+        public final void onFinish() {
+            this.zzblY.onFinish();
         }
     }
 
-    protected GoogleMap(IGoogleMapDelegate iGoogleMapDelegate) {
-        this.zzbnv = (IGoogleMapDelegate) zzac.zzw(iGoogleMapDelegate);
+    public GoogleMap(IGoogleMapDelegate iGoogleMapDelegate) {
+        this.zzblx = (IGoogleMapDelegate) zzbo.zzu(iGoogleMapDelegate);
     }
 
     public final Circle addCircle(CircleOptions circleOptions) {
         try {
-            return new Circle(this.zzbnv.addCircle(circleOptions));
+            return new Circle(this.zzblx.addCircle(circleOptions));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -188,7 +184,7 @@ public final class GoogleMap {
 
     public final GroundOverlay addGroundOverlay(GroundOverlayOptions groundOverlayOptions) {
         try {
-            zzc addGroundOverlay = this.zzbnv.addGroundOverlay(groundOverlayOptions);
+            zzg addGroundOverlay = this.zzblx.addGroundOverlay(groundOverlayOptions);
             return addGroundOverlay != null ? new GroundOverlay(addGroundOverlay) : null;
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
@@ -197,7 +193,7 @@ public final class GoogleMap {
 
     public final Marker addMarker(MarkerOptions markerOptions) {
         try {
-            zzf addMarker = this.zzbnv.addMarker(markerOptions);
+            zzp addMarker = this.zzblx.addMarker(markerOptions);
             return addMarker != null ? new Marker(addMarker) : null;
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
@@ -206,7 +202,7 @@ public final class GoogleMap {
 
     public final Polygon addPolygon(PolygonOptions polygonOptions) {
         try {
-            return new Polygon(this.zzbnv.addPolygon(polygonOptions));
+            return new Polygon(this.zzblx.addPolygon(polygonOptions));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -214,7 +210,7 @@ public final class GoogleMap {
 
     public final Polyline addPolyline(PolylineOptions polylineOptions) {
         try {
-            return new Polyline(this.zzbnv.addPolyline(polylineOptions));
+            return new Polyline(this.zzblx.addPolyline(polylineOptions));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -222,7 +218,7 @@ public final class GoogleMap {
 
     public final TileOverlay addTileOverlay(TileOverlayOptions tileOverlayOptions) {
         try {
-            zzh addTileOverlay = this.zzbnv.addTileOverlay(tileOverlayOptions);
+            zzw addTileOverlay = this.zzblx.addTileOverlay(tileOverlayOptions);
             return addTileOverlay != null ? new TileOverlay(addTileOverlay) : null;
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
@@ -231,7 +227,7 @@ public final class GoogleMap {
 
     public final void animateCamera(CameraUpdate cameraUpdate) {
         try {
-            this.zzbnv.animateCamera(cameraUpdate.zzJm());
+            this.zzblx.animateCamera(cameraUpdate.zzwe());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -239,7 +235,7 @@ public final class GoogleMap {
 
     public final void animateCamera(CameraUpdate cameraUpdate, int i, CancelableCallback cancelableCallback) {
         try {
-            this.zzbnv.animateCameraWithDurationAndCallback(cameraUpdate.zzJm(), i, cancelableCallback == null ? null : new zza(cancelableCallback));
+            this.zzblx.animateCameraWithDurationAndCallback(cameraUpdate.zzwe(), i, cancelableCallback == null ? null : new zza(cancelableCallback));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -247,7 +243,7 @@ public final class GoogleMap {
 
     public final void animateCamera(CameraUpdate cameraUpdate, CancelableCallback cancelableCallback) {
         try {
-            this.zzbnv.animateCameraWithCallback(cameraUpdate.zzJm(), cancelableCallback == null ? null : new zza(cancelableCallback));
+            this.zzblx.animateCameraWithCallback(cameraUpdate.zzwe(), cancelableCallback == null ? null : new zza(cancelableCallback));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -255,7 +251,7 @@ public final class GoogleMap {
 
     public final void clear() {
         try {
-            this.zzbnv.clear();
+            this.zzblx.clear();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -263,15 +259,15 @@ public final class GoogleMap {
 
     public final CameraPosition getCameraPosition() {
         try {
-            return this.zzbnv.getCameraPosition();
+            return this.zzblx.getCameraPosition();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public IndoorBuilding getFocusedBuilding() {
+    public final IndoorBuilding getFocusedBuilding() {
         try {
-            zzd focusedBuilding = this.zzbnv.getFocusedBuilding();
+            zzj focusedBuilding = this.zzblx.getFocusedBuilding();
             return focusedBuilding != null ? new IndoorBuilding(focusedBuilding) : null;
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
@@ -280,7 +276,7 @@ public final class GoogleMap {
 
     public final int getMapType() {
         try {
-            return this.zzbnv.getMapType();
+            return this.zzblx.getMapType();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -288,7 +284,7 @@ public final class GoogleMap {
 
     public final float getMaxZoomLevel() {
         try {
-            return this.zzbnv.getMaxZoomLevel();
+            return this.zzblx.getMaxZoomLevel();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -296,7 +292,7 @@ public final class GoogleMap {
 
     public final float getMinZoomLevel() {
         try {
-            return this.zzbnv.getMinZoomLevel();
+            return this.zzblx.getMinZoomLevel();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -305,7 +301,7 @@ public final class GoogleMap {
     @Deprecated
     public final Location getMyLocation() {
         try {
-            return this.zzbnv.getMyLocation();
+            return this.zzblx.getMyLocation();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -313,7 +309,7 @@ public final class GoogleMap {
 
     public final Projection getProjection() {
         try {
-            return new Projection(this.zzbnv.getProjection());
+            return new Projection(this.zzblx.getProjection());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -321,10 +317,10 @@ public final class GoogleMap {
 
     public final UiSettings getUiSettings() {
         try {
-            if (this.zzbnw == null) {
-                this.zzbnw = new UiSettings(this.zzbnv.getUiSettings());
+            if (this.zzbly == null) {
+                this.zzbly = new UiSettings(this.zzblx.getUiSettings());
             }
-            return this.zzbnw;
+            return this.zzbly;
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -332,7 +328,7 @@ public final class GoogleMap {
 
     public final boolean isBuildingsEnabled() {
         try {
-            return this.zzbnv.isBuildingsEnabled();
+            return this.zzblx.isBuildingsEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -340,7 +336,7 @@ public final class GoogleMap {
 
     public final boolean isIndoorEnabled() {
         try {
-            return this.zzbnv.isIndoorEnabled();
+            return this.zzblx.isIndoorEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -348,7 +344,7 @@ public final class GoogleMap {
 
     public final boolean isMyLocationEnabled() {
         try {
-            return this.zzbnv.isMyLocationEnabled();
+            return this.zzblx.isMyLocationEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -356,7 +352,7 @@ public final class GoogleMap {
 
     public final boolean isTrafficEnabled() {
         try {
-            return this.zzbnv.isTrafficEnabled();
+            return this.zzblx.isTrafficEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -364,15 +360,15 @@ public final class GoogleMap {
 
     public final void moveCamera(CameraUpdate cameraUpdate) {
         try {
-            this.zzbnv.moveCamera(cameraUpdate.zzJm());
+            this.zzblx.moveCamera(cameraUpdate.zzwe());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void resetMinMaxZoomPreference() {
+    public final void resetMinMaxZoomPreference() {
         try {
-            this.zzbnv.resetMinMaxZoomPreference();
+            this.zzblx.resetMinMaxZoomPreference();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -380,7 +376,7 @@ public final class GoogleMap {
 
     public final void setBuildingsEnabled(boolean z) {
         try {
-            this.zzbnv.setBuildingsEnabled(z);
+            this.zzblx.setBuildingsEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -388,7 +384,7 @@ public final class GoogleMap {
 
     public final void setContentDescription(String str) {
         try {
-            this.zzbnv.setContentDescription(str);
+            this.zzblx.setContentDescription(str);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -396,71 +392,47 @@ public final class GoogleMap {
 
     public final boolean setIndoorEnabled(boolean z) {
         try {
-            return this.zzbnv.setIndoorEnabled(z);
+            return this.zzblx.setIndoorEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public final void setInfoWindowAdapter(final InfoWindowAdapter infoWindowAdapter) {
+    public final void setInfoWindowAdapter(InfoWindowAdapter infoWindowAdapter) {
         if (infoWindowAdapter == null) {
             try {
-                this.zzbnv.setInfoWindowAdapter(null);
+                this.zzblx.setInfoWindowAdapter(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setInfoWindowAdapter(new com.google.android.gms.maps.internal.zzd.zza(this) {
-            public IObjectWrapper zzh(zzf com_google_android_gms_maps_model_internal_zzf) {
-                return com.google.android.gms.dynamic.zzd.zzA(infoWindowAdapter.getInfoWindow(new Marker(com_google_android_gms_maps_model_internal_zzf)));
-            }
-
-            public IObjectWrapper zzi(zzf com_google_android_gms_maps_model_internal_zzf) {
-                return com.google.android.gms.dynamic.zzd.zzA(infoWindowAdapter.getInfoContents(new Marker(com_google_android_gms_maps_model_internal_zzf)));
-            }
-        });
+        this.zzblx.setInfoWindowAdapter(new zzg(this, infoWindowAdapter));
     }
 
-    public void setLatLngBoundsForCameraTarget(LatLngBounds latLngBounds) {
+    public final void setLatLngBoundsForCameraTarget(LatLngBounds latLngBounds) {
         try {
-            this.zzbnv.setLatLngBoundsForCameraTarget(latLngBounds);
+            this.zzblx.setLatLngBoundsForCameraTarget(latLngBounds);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public final void setLocationSource(final LocationSource locationSource) {
+    public final void setLocationSource(LocationSource locationSource) {
         if (locationSource == null) {
             try {
-                this.zzbnv.setLocationSource(null);
+                this.zzblx.setLocationSource(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setLocationSource(new com.google.android.gms.maps.internal.ILocationSourceDelegate.zza(this) {
-            public void activate(final zzp com_google_android_gms_maps_internal_zzp) {
-                locationSource.activate(new OnLocationChangedListener(this) {
-                    public void onLocationChanged(Location location) {
-                        try {
-                            com_google_android_gms_maps_internal_zzp.zze(location);
-                        } catch (RemoteException e) {
-                            throw new RuntimeRemoteException(e);
-                        }
-                    }
-                });
-            }
-
-            public void deactivate() {
-                locationSource.deactivate();
-            }
-        });
+        this.zzblx.setLocationSource(new zzl(this, locationSource));
     }
 
-    public boolean setMapStyle(MapStyleOptions mapStyleOptions) {
+    public final boolean setMapStyle(MapStyleOptions mapStyleOptions) {
         try {
-            return this.zzbnv.setMapStyle(mapStyleOptions);
+            return this.zzblx.setMapStyle(mapStyleOptions);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -468,23 +440,23 @@ public final class GoogleMap {
 
     public final void setMapType(int i) {
         try {
-            this.zzbnv.setMapType(i);
+            this.zzblx.setMapType(i);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setMaxZoomPreference(float f) {
+    public final void setMaxZoomPreference(float f) {
         try {
-            this.zzbnv.setMaxZoomPreference(f);
+            this.zzblx.setMaxZoomPreference(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setMinZoomPreference(float f) {
+    public final void setMinZoomPreference(float f) {
         try {
-            this.zzbnv.setMinZoomPreference(f);
+            this.zzblx.setMinZoomPreference(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -493,365 +465,269 @@ public final class GoogleMap {
     @RequiresPermission(anyOf = {"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"})
     public final void setMyLocationEnabled(boolean z) {
         try {
-            this.zzbnv.setMyLocationEnabled(z);
+            this.zzblx.setMyLocationEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
     @Deprecated
-    public final void setOnCameraChangeListener(final OnCameraChangeListener onCameraChangeListener) {
+    public final void setOnCameraChangeListener(OnCameraChangeListener onCameraChangeListener) {
         if (onCameraChangeListener == null) {
             try {
-                this.zzbnv.setOnCameraChangeListener(null);
+                this.zzblx.setOnCameraChangeListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnCameraChangeListener(new com.google.android.gms.maps.internal.zze.zza(this) {
-            public void onCameraChange(CameraPosition cameraPosition) {
-                onCameraChangeListener.onCameraChange(cameraPosition);
-            }
-        });
+        this.zzblx.setOnCameraChangeListener(new zzs(this, onCameraChangeListener));
     }
 
-    public final void setOnCameraIdleListener(final OnCameraIdleListener onCameraIdleListener) {
+    public final void setOnCameraIdleListener(OnCameraIdleListener onCameraIdleListener) {
         if (onCameraIdleListener == null) {
             try {
-                this.zzbnv.setOnCameraIdleListener(null);
+                this.zzblx.setOnCameraIdleListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnCameraIdleListener(new com.google.android.gms.maps.internal.zzf.zza(this) {
-            public void onCameraIdle() {
-                onCameraIdleListener.onCameraIdle();
-            }
-        });
+        this.zzblx.setOnCameraIdleListener(new zzw(this, onCameraIdleListener));
     }
 
-    public final void setOnCameraMoveCanceledListener(final OnCameraMoveCanceledListener onCameraMoveCanceledListener) {
+    public final void setOnCameraMoveCanceledListener(OnCameraMoveCanceledListener onCameraMoveCanceledListener) {
         if (onCameraMoveCanceledListener == null) {
             try {
-                this.zzbnv.setOnCameraMoveCanceledListener(null);
+                this.zzblx.setOnCameraMoveCanceledListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnCameraMoveCanceledListener(new com.google.android.gms.maps.internal.zzg.zza(this) {
-            public void onCameraMoveCanceled() {
-                onCameraMoveCanceledListener.onCameraMoveCanceled();
-            }
-        });
+        this.zzblx.setOnCameraMoveCanceledListener(new zzv(this, onCameraMoveCanceledListener));
     }
 
-    public final void setOnCameraMoveListener(final OnCameraMoveListener onCameraMoveListener) {
+    public final void setOnCameraMoveListener(OnCameraMoveListener onCameraMoveListener) {
         if (onCameraMoveListener == null) {
             try {
-                this.zzbnv.setOnCameraMoveListener(null);
+                this.zzblx.setOnCameraMoveListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnCameraMoveListener(new com.google.android.gms.maps.internal.zzh.zza(this) {
-            public void onCameraMove() {
-                onCameraMoveListener.onCameraMove();
-            }
-        });
+        this.zzblx.setOnCameraMoveListener(new zzu(this, onCameraMoveListener));
     }
 
-    public final void setOnCameraMoveStartedListener(final OnCameraMoveStartedListener onCameraMoveStartedListener) {
+    public final void setOnCameraMoveStartedListener(OnCameraMoveStartedListener onCameraMoveStartedListener) {
         if (onCameraMoveStartedListener == null) {
             try {
-                this.zzbnv.setOnCameraMoveStartedListener(null);
+                this.zzblx.setOnCameraMoveStartedListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnCameraMoveStartedListener(new com.google.android.gms.maps.internal.zzi.zza(this) {
-            public void onCameraMoveStarted(int i) {
-                onCameraMoveStartedListener.onCameraMoveStarted(i);
-            }
-        });
+        this.zzblx.setOnCameraMoveStartedListener(new zzt(this, onCameraMoveStartedListener));
     }
 
-    public final void setOnCircleClickListener(final OnCircleClickListener onCircleClickListener) {
+    public final void setOnCircleClickListener(OnCircleClickListener onCircleClickListener) {
         if (onCircleClickListener == null) {
             try {
-                this.zzbnv.setOnCircleClickListener(null);
+                this.zzblx.setOnCircleClickListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnCircleClickListener(new com.google.android.gms.maps.internal.zzj.zza(this) {
-            public void zza(zzb com_google_android_gms_maps_model_internal_zzb) {
-                onCircleClickListener.onCircleClick(new Circle(com_google_android_gms_maps_model_internal_zzb));
-            }
-        });
+        this.zzblx.setOnCircleClickListener(new zzn(this, onCircleClickListener));
     }
 
-    public final void setOnGroundOverlayClickListener(final OnGroundOverlayClickListener onGroundOverlayClickListener) {
+    public final void setOnGroundOverlayClickListener(OnGroundOverlayClickListener onGroundOverlayClickListener) {
         if (onGroundOverlayClickListener == null) {
             try {
-                this.zzbnv.setOnGroundOverlayClickListener(null);
+                this.zzblx.setOnGroundOverlayClickListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnGroundOverlayClickListener(new com.google.android.gms.maps.internal.zzk.zza(this) {
-            public void zza(zzc com_google_android_gms_maps_model_internal_zzc) {
-                onGroundOverlayClickListener.onGroundOverlayClick(new GroundOverlay(com_google_android_gms_maps_model_internal_zzc));
-            }
-        });
+        this.zzblx.setOnGroundOverlayClickListener(new zzk(this, onGroundOverlayClickListener));
     }
 
-    public final void setOnIndoorStateChangeListener(final OnIndoorStateChangeListener onIndoorStateChangeListener) {
+    public final void setOnIndoorStateChangeListener(OnIndoorStateChangeListener onIndoorStateChangeListener) {
         if (onIndoorStateChangeListener == null) {
             try {
-                this.zzbnv.setOnIndoorStateChangeListener(null);
+                this.zzblx.setOnIndoorStateChangeListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnIndoorStateChangeListener(new com.google.android.gms.maps.internal.zzl.zza(this) {
-            public void onIndoorBuildingFocused() {
-                onIndoorStateChangeListener.onIndoorBuildingFocused();
-            }
-
-            public void zza(zzd com_google_android_gms_maps_model_internal_zzd) {
-                onIndoorStateChangeListener.onIndoorLevelActivated(new IndoorBuilding(com_google_android_gms_maps_model_internal_zzd));
-            }
-        });
+        this.zzblx.setOnIndoorStateChangeListener(new zza(this, onIndoorStateChangeListener));
     }
 
-    public final void setOnInfoWindowClickListener(final OnInfoWindowClickListener onInfoWindowClickListener) {
+    public final void setOnInfoWindowClickListener(OnInfoWindowClickListener onInfoWindowClickListener) {
         if (onInfoWindowClickListener == null) {
             try {
-                this.zzbnv.setOnInfoWindowClickListener(null);
+                this.zzblx.setOnInfoWindowClickListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnInfoWindowClickListener(new com.google.android.gms.maps.internal.zzm.zza(this) {
-            public void zze(zzf com_google_android_gms_maps_model_internal_zzf) {
-                onInfoWindowClickListener.onInfoWindowClick(new Marker(com_google_android_gms_maps_model_internal_zzf));
-            }
-        });
+        this.zzblx.setOnInfoWindowClickListener(new zzd(this, onInfoWindowClickListener));
     }
 
-    public final void setOnInfoWindowCloseListener(final OnInfoWindowCloseListener onInfoWindowCloseListener) {
+    public final void setOnInfoWindowCloseListener(OnInfoWindowCloseListener onInfoWindowCloseListener) {
         if (onInfoWindowCloseListener == null) {
             try {
-                this.zzbnv.setOnInfoWindowCloseListener(null);
+                this.zzblx.setOnInfoWindowCloseListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnInfoWindowCloseListener(new com.google.android.gms.maps.internal.zzn.zza(this) {
-            public void zzg(zzf com_google_android_gms_maps_model_internal_zzf) {
-                onInfoWindowCloseListener.onInfoWindowClose(new Marker(com_google_android_gms_maps_model_internal_zzf));
-            }
-        });
+        this.zzblx.setOnInfoWindowCloseListener(new zzf(this, onInfoWindowCloseListener));
     }
 
-    public final void setOnInfoWindowLongClickListener(final OnInfoWindowLongClickListener onInfoWindowLongClickListener) {
+    public final void setOnInfoWindowLongClickListener(OnInfoWindowLongClickListener onInfoWindowLongClickListener) {
         if (onInfoWindowLongClickListener == null) {
             try {
-                this.zzbnv.setOnInfoWindowLongClickListener(null);
+                this.zzblx.setOnInfoWindowLongClickListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnInfoWindowLongClickListener(new com.google.android.gms.maps.internal.zzo.zza(this) {
-            public void zzf(zzf com_google_android_gms_maps_model_internal_zzf) {
-                onInfoWindowLongClickListener.onInfoWindowLongClick(new Marker(com_google_android_gms_maps_model_internal_zzf));
-            }
-        });
+        this.zzblx.setOnInfoWindowLongClickListener(new zze(this, onInfoWindowLongClickListener));
     }
 
-    public final void setOnMapClickListener(final OnMapClickListener onMapClickListener) {
+    public final void setOnMapClickListener(OnMapClickListener onMapClickListener) {
         if (onMapClickListener == null) {
             try {
-                this.zzbnv.setOnMapClickListener(null);
+                this.zzblx.setOnMapClickListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnMapClickListener(new com.google.android.gms.maps.internal.zzq.zza(this) {
-            public void onMapClick(LatLng latLng) {
-                onMapClickListener.onMapClick(latLng);
-            }
-        });
+        this.zzblx.setOnMapClickListener(new zzx(this, onMapClickListener));
     }
 
-    public void setOnMapLoadedCallback(final OnMapLoadedCallback onMapLoadedCallback) {
+    public final void setOnMapLoadedCallback(OnMapLoadedCallback onMapLoadedCallback) {
         if (onMapLoadedCallback == null) {
             try {
-                this.zzbnv.setOnMapLoadedCallback(null);
+                this.zzblx.setOnMapLoadedCallback(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnMapLoadedCallback(new com.google.android.gms.maps.internal.zzr.zza(this) {
-            public void onMapLoaded() throws RemoteException {
-                onMapLoadedCallback.onMapLoaded();
-            }
-        });
+        this.zzblx.setOnMapLoadedCallback(new zzj(this, onMapLoadedCallback));
     }
 
-    public final void setOnMapLongClickListener(final OnMapLongClickListener onMapLongClickListener) {
+    public final void setOnMapLongClickListener(OnMapLongClickListener onMapLongClickListener) {
         if (onMapLongClickListener == null) {
             try {
-                this.zzbnv.setOnMapLongClickListener(null);
+                this.zzblx.setOnMapLongClickListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnMapLongClickListener(new com.google.android.gms.maps.internal.zzs.zza(this) {
-            public void onMapLongClick(LatLng latLng) {
-                onMapLongClickListener.onMapLongClick(latLng);
-            }
-        });
+        this.zzblx.setOnMapLongClickListener(new zzy(this, onMapLongClickListener));
     }
 
-    public final void setOnMarkerClickListener(final OnMarkerClickListener onMarkerClickListener) {
+    public final void setOnMarkerClickListener(OnMarkerClickListener onMarkerClickListener) {
         if (onMarkerClickListener == null) {
             try {
-                this.zzbnv.setOnMarkerClickListener(null);
+                this.zzblx.setOnMarkerClickListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnMarkerClickListener(new com.google.android.gms.maps.internal.zzu.zza(this) {
-            public boolean zza(zzf com_google_android_gms_maps_model_internal_zzf) {
-                return onMarkerClickListener.onMarkerClick(new Marker(com_google_android_gms_maps_model_internal_zzf));
-            }
-        });
+        this.zzblx.setOnMarkerClickListener(new zzb(this, onMarkerClickListener));
     }
 
-    public final void setOnMarkerDragListener(final OnMarkerDragListener onMarkerDragListener) {
+    public final void setOnMarkerDragListener(OnMarkerDragListener onMarkerDragListener) {
         if (onMarkerDragListener == null) {
             try {
-                this.zzbnv.setOnMarkerDragListener(null);
+                this.zzblx.setOnMarkerDragListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnMarkerDragListener(new com.google.android.gms.maps.internal.zzv.zza(this) {
-            public void zzb(zzf com_google_android_gms_maps_model_internal_zzf) {
-                onMarkerDragListener.onMarkerDragStart(new Marker(com_google_android_gms_maps_model_internal_zzf));
-            }
-
-            public void zzc(zzf com_google_android_gms_maps_model_internal_zzf) {
-                onMarkerDragListener.onMarkerDragEnd(new Marker(com_google_android_gms_maps_model_internal_zzf));
-            }
-
-            public void zzd(zzf com_google_android_gms_maps_model_internal_zzf) {
-                onMarkerDragListener.onMarkerDrag(new Marker(com_google_android_gms_maps_model_internal_zzf));
-            }
-        });
+        this.zzblx.setOnMarkerDragListener(new zzc(this, onMarkerDragListener));
     }
 
-    public final void setOnMyLocationButtonClickListener(final OnMyLocationButtonClickListener onMyLocationButtonClickListener) {
+    public final void setOnMyLocationButtonClickListener(OnMyLocationButtonClickListener onMyLocationButtonClickListener) {
         if (onMyLocationButtonClickListener == null) {
             try {
-                this.zzbnv.setOnMyLocationButtonClickListener(null);
+                this.zzblx.setOnMyLocationButtonClickListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnMyLocationButtonClickListener(new com.google.android.gms.maps.internal.zzw.zza(this) {
-            public boolean onMyLocationButtonClick() throws RemoteException {
-                return onMyLocationButtonClickListener.onMyLocationButtonClick();
-            }
-        });
+        this.zzblx.setOnMyLocationButtonClickListener(new zzi(this, onMyLocationButtonClickListener));
     }
 
     @Deprecated
-    public final void setOnMyLocationChangeListener(final OnMyLocationChangeListener onMyLocationChangeListener) {
+    public final void setOnMyLocationChangeListener(OnMyLocationChangeListener onMyLocationChangeListener) {
         if (onMyLocationChangeListener == null) {
             try {
-                this.zzbnv.setOnMyLocationChangeListener(null);
+                this.zzblx.setOnMyLocationChangeListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnMyLocationChangeListener(new com.google.android.gms.maps.internal.zzx.zza(this) {
-            public void zzG(IObjectWrapper iObjectWrapper) {
-                onMyLocationChangeListener.onMyLocationChange((Location) com.google.android.gms.dynamic.zzd.zzF(iObjectWrapper));
-            }
-        });
+        this.zzblx.setOnMyLocationChangeListener(new zzh(this, onMyLocationChangeListener));
     }
 
-    public final void setOnPoiClickListener(final OnPoiClickListener onPoiClickListener) {
+    public final void setOnPoiClickListener(OnPoiClickListener onPoiClickListener) {
         if (onPoiClickListener == null) {
             try {
-                this.zzbnv.setOnPoiClickListener(null);
+                this.zzblx.setOnPoiClickListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnPoiClickListener(new com.google.android.gms.maps.internal.zzy.zza(this) {
-            public void zza(PointOfInterest pointOfInterest) throws RemoteException {
-                onPoiClickListener.onPoiClick(pointOfInterest);
-            }
-        });
+        this.zzblx.setOnPoiClickListener(new zzr(this, onPoiClickListener));
     }
 
-    public final void setOnPolygonClickListener(final OnPolygonClickListener onPolygonClickListener) {
+    public final void setOnPolygonClickListener(OnPolygonClickListener onPolygonClickListener) {
         if (onPolygonClickListener == null) {
             try {
-                this.zzbnv.setOnPolygonClickListener(null);
+                this.zzblx.setOnPolygonClickListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnPolygonClickListener(new com.google.android.gms.maps.internal.zzz.zza(this) {
-            public void zza(zzg com_google_android_gms_maps_model_internal_zzg) {
-                onPolygonClickListener.onPolygonClick(new Polygon(com_google_android_gms_maps_model_internal_zzg));
-            }
-        });
+        this.zzblx.setOnPolygonClickListener(new zzo(this, onPolygonClickListener));
     }
 
-    public final void setOnPolylineClickListener(final OnPolylineClickListener onPolylineClickListener) {
+    public final void setOnPolylineClickListener(OnPolylineClickListener onPolylineClickListener) {
         if (onPolylineClickListener == null) {
             try {
-                this.zzbnv.setOnPolylineClickListener(null);
+                this.zzblx.setOnPolylineClickListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbnv.setOnPolylineClickListener(new com.google.android.gms.maps.internal.zzaa.zza(this) {
-            public void zza(IPolylineDelegate iPolylineDelegate) {
-                onPolylineClickListener.onPolylineClick(new Polyline(iPolylineDelegate));
-            }
-        });
+        this.zzblx.setOnPolylineClickListener(new zzp(this, onPolylineClickListener));
     }
 
     public final void setPadding(int i, int i2, int i3, int i4) {
         try {
-            this.zzbnv.setPadding(i, i2, i3, i4);
+            this.zzblx.setPadding(i, i2, i3, i4);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -859,7 +735,7 @@ public final class GoogleMap {
 
     public final void setTrafficEnabled(boolean z) {
         try {
-            this.zzbnv.setTrafficEnabled(z);
+            this.zzblx.setTrafficEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -869,17 +745,9 @@ public final class GoogleMap {
         snapshot(snapshotReadyCallback, null);
     }
 
-    public final void snapshot(final SnapshotReadyCallback snapshotReadyCallback, Bitmap bitmap) {
+    public final void snapshot(SnapshotReadyCallback snapshotReadyCallback, Bitmap bitmap) {
         try {
-            this.zzbnv.snapshot(new com.google.android.gms.maps.internal.zzag.zza(this) {
-                public void onSnapshotReady(Bitmap bitmap) throws RemoteException {
-                    snapshotReadyCallback.onSnapshotReady(bitmap);
-                }
-
-                public void zzH(IObjectWrapper iObjectWrapper) throws RemoteException {
-                    snapshotReadyCallback.onSnapshotReady((Bitmap) com.google.android.gms.dynamic.zzd.zzF(iObjectWrapper));
-                }
-            }, (com.google.android.gms.dynamic.zzd) (bitmap != null ? com.google.android.gms.dynamic.zzd.zzA(bitmap) : null));
+            this.zzblx.snapshot(new zzq(this, snapshotReadyCallback), (zzn) (bitmap != null ? zzn.zzw(bitmap) : null));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -887,7 +755,7 @@ public final class GoogleMap {
 
     public final void stopAnimation() {
         try {
-            this.zzbnv.stopAnimation();
+            this.zzblx.stopAnimation();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

@@ -1,63 +1,68 @@
 package com.google.android.gms.measurement;
 
 import android.app.Service;
+import android.app.job.JobParameters;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.MainThread;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import com.google.android.gms.internal.zzaum;
-import com.google.android.gms.internal.zzaum.zza;
+import com.google.android.gms.internal.zzciv;
+import com.google.android.gms.internal.zzciy;
 
-public final class AppMeasurementService extends Service implements zza {
-    private zzaum zzbqj;
+public final class AppMeasurementService extends Service implements zzciy {
+    private zzciv zzbop;
 
-    private zzaum zzJT() {
-        if (this.zzbqj == null) {
-            this.zzbqj = new zzaum(this);
+    private final zzciv zzwm() {
+        if (this.zzbop == null) {
+            this.zzbop = new zzciv(this);
         }
-        return this.zzbqj;
+        return this.zzbop;
     }
 
-    public boolean callServiceStopSelfResult(int i) {
+    public final boolean callServiceStopSelfResult(int i) {
         return stopSelfResult(i);
     }
 
-    public Context getContext() {
+    public final Context getContext() {
         return this;
     }
 
     @MainThread
-    public IBinder onBind(Intent intent) {
-        return zzJT().onBind(intent);
+    public final IBinder onBind(Intent intent) {
+        return zzwm().onBind(intent);
     }
 
     @MainThread
-    public void onCreate() {
+    public final void onCreate() {
         super.onCreate();
-        zzJT().onCreate();
+        zzwm().onCreate();
     }
 
     @MainThread
-    public void onDestroy() {
-        zzJT().onDestroy();
+    public final void onDestroy() {
+        zzwm().onDestroy();
         super.onDestroy();
     }
 
     @MainThread
-    public void onRebind(Intent intent) {
-        zzJT().onRebind(intent);
+    public final void onRebind(Intent intent) {
+        zzwm().onRebind(intent);
     }
 
     @MainThread
-    public int onStartCommand(Intent intent, int i, int i2) {
-        zzJT().onStartCommand(intent, i, i2);
+    public final int onStartCommand(Intent intent, int i, int i2) {
+        zzwm().onStartCommand(intent, i, i2);
         WakefulBroadcastReceiver.completeWakefulIntent(intent);
         return 2;
     }
 
     @MainThread
-    public boolean onUnbind(Intent intent) {
-        return zzJT().onUnbind(intent);
+    public final boolean onUnbind(Intent intent) {
+        return zzwm().onUnbind(intent);
+    }
+
+    public final void zza(JobParameters jobParameters, boolean z) {
+        throw new UnsupportedOperationException();
     }
 }

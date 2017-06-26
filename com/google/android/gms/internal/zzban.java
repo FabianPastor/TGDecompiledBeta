@@ -1,24 +1,28 @@
 package com.google.android.gms.internal;
 
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import java.util.List;
+import android.os.DeadObjectException;
+import android.support.annotation.NonNull;
+import com.google.android.gms.common.api.Api.zzb;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.Status;
 
-public class zzban extends zza {
-    public static final Creator<zzban> CREATOR = new zzbao();
-    final int zzaiI;
-    final boolean zzbEs;
-    final List<Scope> zzbEt;
+public final class zzban<A extends zzbax<? extends Result, zzb>> extends zzbal {
+    private A zzaBt;
 
-    zzban(int i, boolean z, List<Scope> list) {
-        this.zzaiI = i;
-        this.zzbEs = z;
-        this.zzbEt = list;
+    public zzban(int i, A a) {
+        super(i);
+        this.zzaBt = a;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzbao.zza(this, parcel, i);
+    public final void zza(@NonNull zzbbs com_google_android_gms_internal_zzbbs, boolean z) {
+        com_google_android_gms_internal_zzbbs.zza(this.zzaBt, z);
+    }
+
+    public final void zza(zzbdc<?> com_google_android_gms_internal_zzbdc_) throws DeadObjectException {
+        this.zzaBt.zzb(com_google_android_gms_internal_zzbdc_.zzpJ());
+    }
+
+    public final void zzp(@NonNull Status status) {
+        this.zzaBt.zzr(status);
     }
 }

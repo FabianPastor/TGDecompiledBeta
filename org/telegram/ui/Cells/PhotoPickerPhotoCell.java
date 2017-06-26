@@ -6,7 +6,10 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.view.View.MeasureSpec;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
@@ -16,10 +19,13 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class PhotoPickerPhotoCell extends FrameLayout {
     private AnimatorSet animator;
+    private AnimatorSet animatorSet;
     public CheckBox checkBox;
     public FrameLayout checkFrame;
     public int itemWidth;
     public BackupImageView photoImage;
+    public FrameLayout videoInfoContainer;
+    public TextView videoTextView;
 
     public PhotoPickerPhotoCell(Context context) {
         super(context);
@@ -27,6 +33,17 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         addView(this.photoImage, LayoutHelper.createFrame(-1, -1.0f));
         this.checkFrame = new FrameLayout(context);
         addView(this.checkFrame, LayoutHelper.createFrame(42, 42, 53));
+        this.videoInfoContainer = new FrameLayout(context);
+        this.videoInfoContainer.setBackgroundResource(R.drawable.phototime);
+        this.videoInfoContainer.setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
+        addView(this.videoInfoContainer, LayoutHelper.createFrame(-1, 16, 83));
+        ImageView imageView1 = new ImageView(context);
+        imageView1.setImageResource(R.drawable.ic_video);
+        this.videoInfoContainer.addView(imageView1, LayoutHelper.createFrame(-2, -2, 19));
+        this.videoTextView = new TextView(context);
+        this.videoTextView.setTextColor(-1);
+        this.videoTextView.setTextSize(1, 12.0f);
+        this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createFrame(-2, -2.0f, 19, 18.0f, -0.7f, 0.0f, 0.0f));
         this.checkBox = new CheckBox(context, R.drawable.checkbig);
         this.checkBox.setSize(30);
         this.checkBox.setCheckOffset(AndroidUtilities.dp(1.0f));
@@ -37,6 +54,41 @@ public class PhotoPickerPhotoCell extends FrameLayout {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(this.itemWidth, NUM), MeasureSpec.makeMeasureSpec(this.itemWidth, NUM));
+    }
+
+    public void showCheck(boolean show) {
+        float f = 1.0f;
+        if (this.animatorSet != null) {
+            this.animatorSet.cancel();
+            this.animatorSet = null;
+        }
+        this.animatorSet = new AnimatorSet();
+        this.animatorSet.setInterpolator(new DecelerateInterpolator());
+        this.animatorSet.setDuration(180);
+        AnimatorSet animatorSet = this.animatorSet;
+        Animator[] animatorArr = new Animator[2];
+        FrameLayout frameLayout = this.videoInfoContainer;
+        String str = "alpha";
+        float[] fArr = new float[1];
+        fArr[0] = show ? 1.0f : 0.0f;
+        animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
+        CheckBox checkBox = this.checkBox;
+        String str2 = "alpha";
+        float[] fArr2 = new float[1];
+        if (!show) {
+            f = 0.0f;
+        }
+        fArr2[0] = f;
+        animatorArr[1] = ObjectAnimator.ofFloat(checkBox, str2, fArr2);
+        animatorSet.playTogether(animatorArr);
+        this.animatorSet.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animation) {
+                if (animation.equals(PhotoPickerPhotoCell.this.animatorSet)) {
+                    PhotoPickerPhotoCell.this.animatorSet = null;
+                }
+            }
+        });
+        this.animatorSet.start();
     }
 
     public void setChecked(final boolean checked, boolean animated) {

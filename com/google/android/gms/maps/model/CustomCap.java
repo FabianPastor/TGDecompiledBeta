@@ -1,7 +1,7 @@
 package com.google.android.gms.maps.model;
 
 import android.support.annotation.NonNull;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzbo;
 
 public final class CustomCap extends Cap {
     public final BitmapDescriptor bitmapDescriptor;
@@ -12,19 +12,17 @@ public final class CustomCap extends Cap {
     }
 
     public CustomCap(@NonNull BitmapDescriptor bitmapDescriptor, float f) {
-        super((BitmapDescriptor) zzac.zzb((Object) bitmapDescriptor, (Object) "bitmapDescriptor must not be null"), zza(f, "refWidth must be positive"));
+        BitmapDescriptor bitmapDescriptor2 = (BitmapDescriptor) zzbo.zzb((Object) bitmapDescriptor, (Object) "bitmapDescriptor must not be null");
+        String str = "refWidth must be positive";
+        if (f <= 0.0f) {
+            throw new IllegalArgumentException(str);
+        }
+        super(bitmapDescriptor2, f);
         this.bitmapDescriptor = bitmapDescriptor;
         this.refWidth = f;
     }
 
-    private static float zza(float f, String str) {
-        if (f > 0.0f) {
-            return f;
-        }
-        throw new IllegalArgumentException(str);
-    }
-
-    public String toString() {
+    public final String toString() {
         String valueOf = String.valueOf(this.bitmapDescriptor);
         return new StringBuilder(String.valueOf(valueOf).length() + 55).append("[CustomCap: bitmapDescriptor=").append(valueOf).append(" refWidth=").append(this.refWidth).append("]").toString();
     }

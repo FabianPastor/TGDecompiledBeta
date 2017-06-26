@@ -8,7 +8,7 @@ public final class Dash extends PatternItem {
         this.length = Math.max(f, 0.0f);
     }
 
-    public String toString() {
+    public final String toString() {
         return "[Dash: length=" + this.length + "]";
     }
 }

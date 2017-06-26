@@ -17,4 +17,5 @@
     <string name="common_open_on_phone">ဖုန်းပေါ်မှာ ဖွင့်ပါ</string>
     <string name="common_signin_button_text">လက်မှတ်ထိုး ဝင်ရန်</string>
     <string name="common_signin_button_text_long">Google ဖြင့် လက်မှတ်ထိုးဝင်ရေ</string>
+    <string name="wallet_buy_button_place_holder">Google ဖြင့်ဝယ်ပါ</string>
 </resources>

@@ -404,6 +404,9 @@ public class ImageReceiver implements NotificationCenterDelegate {
 
     public boolean onAttachedToWindow() {
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didReplacedPhotoInMemCache);
+        if (this.needsQualityThumb) {
+            NotificationCenter.getInstance().addObserver(this, NotificationCenter.messageThumbGenerated);
+        }
         if (this.setImageBackup == null || (this.setImageBackup.fileLocation == null && this.setImageBackup.httpUrl == null && this.setImageBackup.thumbLocation == null && this.setImageBackup.thumb == null)) {
             return false;
         }
@@ -727,26 +730,42 @@ public class ImageReceiver implements NotificationCenterDelegate {
 
     public int getBitmapWidth() {
         if (this.currentImage instanceof AnimatedFileDrawable) {
-            return (this.orientation % 360 == 0 || this.orientation % 360 == 180) ? this.currentImage.getIntrinsicWidth() : this.currentImage.getIntrinsicHeight();
+            if (this.orientation % 360 == 0 || this.orientation % 360 == 180) {
+                return this.currentImage.getIntrinsicWidth();
+            }
+            return this.currentImage.getIntrinsicHeight();
+        } else if (this.staticThumb instanceof AnimatedFileDrawable) {
+            return (this.orientation % 360 == 0 || this.orientation % 360 == 180) ? this.staticThumb.getIntrinsicWidth() : this.staticThumb.getIntrinsicHeight();
         } else {
-            if (this.staticThumb instanceof AnimatedFileDrawable) {
-                return (this.orientation % 360 == 0 || this.orientation % 360 == 180) ? this.staticThumb.getIntrinsicWidth() : this.staticThumb.getIntrinsicHeight();
-            } else {
-                Bitmap bitmap = getBitmap();
+            Bitmap bitmap = getBitmap();
+            if (bitmap != null) {
                 return (this.orientation % 360 == 0 || this.orientation % 360 == 180) ? bitmap.getWidth() : bitmap.getHeight();
+            } else {
+                if (this.staticThumb != null) {
+                    return this.staticThumb.getIntrinsicWidth();
+                }
+                return 1;
             }
         }
     }
 
     public int getBitmapHeight() {
         if (this.currentImage instanceof AnimatedFileDrawable) {
-            return (this.orientation % 360 == 0 || this.orientation % 360 == 180) ? this.currentImage.getIntrinsicHeight() : this.currentImage.getIntrinsicWidth();
+            if (this.orientation % 360 == 0 || this.orientation % 360 == 180) {
+                return this.currentImage.getIntrinsicHeight();
+            }
+            return this.currentImage.getIntrinsicWidth();
+        } else if (this.staticThumb instanceof AnimatedFileDrawable) {
+            return (this.orientation % 360 == 0 || this.orientation % 360 == 180) ? this.staticThumb.getIntrinsicHeight() : this.staticThumb.getIntrinsicWidth();
         } else {
-            if (this.staticThumb instanceof AnimatedFileDrawable) {
-                return (this.orientation % 360 == 0 || this.orientation % 360 == 180) ? this.staticThumb.getIntrinsicHeight() : this.staticThumb.getIntrinsicWidth();
-            } else {
-                Bitmap bitmap = getBitmap();
+            Bitmap bitmap = getBitmap();
+            if (bitmap != null) {
                 return (this.orientation % 360 == 0 || this.orientation % 360 == 180) ? bitmap.getHeight() : bitmap.getWidth();
+            } else {
+                if (this.staticThumb != null) {
+                    return this.staticThumb.getIntrinsicHeight();
+                }
+                return 1;
             }
         }
     }

@@ -13,7 +13,6 @@ import org.telegram.messenger.AndroidUtilities;
 
 public class RadialProgress {
     private static DecelerateInterpolator decelerateInterpolator;
-    private static Paint progressPaint;
     private boolean alphaForPrevious = true;
     private float animatedAlphaValue = 1.0f;
     private float animatedProgressValue = 0.0f;
@@ -23,24 +22,30 @@ public class RadialProgress {
     private float currentProgress = 0.0f;
     private long currentProgressTime = 0;
     private boolean currentWithRound;
+    private int diff = AndroidUtilities.dp(4.0f);
     private boolean hideCurrentDrawable;
     private long lastUpdateTime = 0;
     private View parent;
     private Drawable previousDrawable;
     private boolean previousWithRound;
     private int progressColor = -1;
+    private Paint progressPaint;
     private RectF progressRect = new RectF();
     private float radOffset = 0.0f;
 
     public RadialProgress(View parentView) {
         if (decelerateInterpolator == null) {
             decelerateInterpolator = new DecelerateInterpolator();
-            progressPaint = new Paint(1);
-            progressPaint.setStyle(Style.STROKE);
-            progressPaint.setStrokeCap(Cap.ROUND);
-            progressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
         }
+        this.progressPaint = new Paint(1);
+        this.progressPaint.setStyle(Style.STROKE);
+        this.progressPaint.setStrokeCap(Cap.ROUND);
+        this.progressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
         this.parent = parentView;
+    }
+
+    public void setStrikeWidth(int width) {
+        this.progressPaint.setStrokeWidth((float) width);
     }
 
     public void setProgressRect(int left, int top, int right, int bottom) {
@@ -87,6 +92,10 @@ public class RadialProgress {
             }
             invalidateParent();
         }
+    }
+
+    public void setDiff(int value) {
+        this.diff = value;
     }
 
     public void setProgressColor(int color) {
@@ -173,15 +182,14 @@ public class RadialProgress {
             this.currentDrawable.draw(canvas);
         }
         if (this.currentWithRound || this.previousWithRound) {
-            int diff = AndroidUtilities.dp(4.0f);
-            progressPaint.setColor(this.progressColor);
+            this.progressPaint.setColor(this.progressColor);
             if (this.previousWithRound) {
-                progressPaint.setAlpha((int) (this.animatedAlphaValue * 255.0f));
+                this.progressPaint.setAlpha((int) (this.animatedAlphaValue * 255.0f));
             } else {
-                progressPaint.setAlpha(255);
+                this.progressPaint.setAlpha(255);
             }
-            this.cicleRect.set(this.progressRect.left + ((float) diff), this.progressRect.top + ((float) diff), this.progressRect.right - ((float) diff), this.progressRect.bottom - ((float) diff));
-            canvas.drawArc(this.cicleRect, this.radOffset - 0.049804688f, Math.max(4.0f, 360.0f * this.animatedProgressValue), false, progressPaint);
+            this.cicleRect.set(this.progressRect.left + ((float) this.diff), this.progressRect.top + ((float) this.diff), this.progressRect.right - ((float) this.diff), this.progressRect.bottom - ((float) this.diff));
+            canvas.drawArc(this.cicleRect, this.radOffset - 0.049804688f, Math.max(4.0f, 360.0f * this.animatedProgressValue), false, this.progressPaint);
             updateAnimation(true);
             return;
         }

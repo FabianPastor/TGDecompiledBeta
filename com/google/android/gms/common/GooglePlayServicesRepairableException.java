@@ -3,14 +3,14 @@ package com.google.android.gms.common;
 import android.content.Intent;
 
 public class GooglePlayServicesRepairableException extends UserRecoverableException {
-    private final int zzaiH;
+    private final int zzakt;
 
-    GooglePlayServicesRepairableException(int i, String str, Intent intent) {
+    public GooglePlayServicesRepairableException(int i, String str, Intent intent) {
         super(str, intent);
-        this.zzaiH = i;
+        this.zzakt = i;
     }
 
     public int getConnectionStatusCode() {
-        return this.zzaiH;
+        return this.zzakt;
     }
 }

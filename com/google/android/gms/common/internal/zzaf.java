@@ -1,28 +1,27 @@
 package com.google.android.gms.common.internal;
 
-import android.os.IBinder;
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.internal.safeparcel.zza;
+import android.content.ComponentName;
+import android.content.Intent;
+import java.util.Arrays;
 
-public class zzaf extends zza {
-    public static final Creator<zzaf> CREATOR = new zzag();
-    private boolean zzaBx;
-    IBinder zzaEW;
-    private ConnectionResult zzaGE;
-    private boolean zzaGF;
-    final int zzaiI;
+public final class zzaf {
+    private final String zzaHN;
+    private final ComponentName zzaHO;
+    private final String zzaeX;
 
-    zzaf(int i, IBinder iBinder, ConnectionResult connectionResult, boolean z, boolean z2) {
-        this.zzaiI = i;
-        this.zzaEW = iBinder;
-        this.zzaGE = connectionResult;
-        this.zzaBx = z;
-        this.zzaGF = z2;
+    public zzaf(ComponentName componentName) {
+        this.zzaeX = null;
+        this.zzaHN = null;
+        this.zzaHO = (ComponentName) zzbo.zzu(componentName);
     }
 
-    public boolean equals(Object obj) {
+    public zzaf(String str, String str2) {
+        this.zzaeX = zzbo.zzcF(str);
+        this.zzaHN = zzbo.zzcF(str2);
+        this.zzaHO = null;
+    }
+
+    public final boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -30,26 +29,26 @@ public class zzaf extends zza {
             return false;
         }
         zzaf com_google_android_gms_common_internal_zzaf = (zzaf) obj;
-        return this.zzaGE.equals(com_google_android_gms_common_internal_zzaf.zzaGE) && zzyg().equals(com_google_android_gms_common_internal_zzaf.zzyg());
+        return zzbe.equal(this.zzaeX, com_google_android_gms_common_internal_zzaf.zzaeX) && zzbe.equal(this.zzaHN, com_google_android_gms_common_internal_zzaf.zzaHN) && zzbe.equal(this.zzaHO, com_google_android_gms_common_internal_zzaf.zzaHO);
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzag.zza(this, parcel, i);
+    public final ComponentName getComponentName() {
+        return this.zzaHO;
     }
 
-    public zzr zzyg() {
-        return zzr.zza.zzbr(this.zzaEW);
+    public final String getPackage() {
+        return this.zzaHN;
     }
 
-    public ConnectionResult zzyh() {
-        return this.zzaGE;
+    public final int hashCode() {
+        return Arrays.hashCode(new Object[]{this.zzaeX, this.zzaHN, this.zzaHO});
     }
 
-    public boolean zzyi() {
-        return this.zzaBx;
+    public final String toString() {
+        return this.zzaeX == null ? this.zzaHO.flattenToString() : this.zzaeX;
     }
 
-    public boolean zzyj() {
-        return this.zzaGF;
+    public final Intent zzrB() {
+        return this.zzaeX != null ? new Intent(this.zzaeX).setPackage(this.zzaHN) : new Intent().setComponent(this.zzaHO);
     }
 }

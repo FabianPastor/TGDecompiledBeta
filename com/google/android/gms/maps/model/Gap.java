@@ -8,7 +8,7 @@ public final class Gap extends PatternItem {
         this.length = Math.max(f, 0.0f);
     }
 
-    public String toString() {
+    public final String toString() {
         return "[Gap: length=" + this.length + "]";
     }
 }

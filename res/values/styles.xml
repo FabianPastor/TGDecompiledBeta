@@ -96,6 +96,8 @@
         <item>#4991cc</item>
         <item>#527da3</item>
         <item>#33000000</item>
+        <item>@style/Theme.TMessages.TimePicker</item>
+        <item>@style/Theme.TMessages.Dialog.Alert</item>
         <item>@style/Theme.TMessages.Dialog.Alert</item>
     </style>
     <style name="Theme.TMessages.BorderLessButton">
@@ -153,6 +155,9 @@
         <item>@style/ActionBar.Transparent.TMessages.Start</item>
         <item>#527da3</item>
         <item>#426482</item>
+    </style>
+    <style name="Theme.TMessages.TimePicker">
+        <item>#408bc8</item>
     </style>
     <style name="Theme.TMessages.Transparent">
         <item>?unknown_ref: 106000d</item>
@@ -218,5 +223,37 @@
     <style name="PopupAnimation">
         <item>@anim/popup_in</item>
         <item>@anim/popup_out</item>
+    </style>
+    <style name="WalletFragmentDefaultButtonTextAppearance">
+        <item>18sp</item>
+        <item>0</item>
+        <item>@color/wallet_primary_text_holo_light</item>
+        <item>@color/wallet_highlighted_text_holo_light</item>
+        <item>@color/wallet_hint_foreground_holo_light</item>
+        <item>@color/wallet_link_text_light</item>
+    </style>
+    <style name="WalletFragmentDefaultDetailsHeaderTextAppearance">
+        <item>1</item>
+    </style>
+    <style name="WalletFragmentDefaultDetailsTextAppearance">
+        <item>14sp</item>
+        <item>0</item>
+        <item>@color/wallet_secondary_text_holo_dark</item>
+        <item>@color/wallet_highlighted_text_holo_dark</item>
+        <item>@color/wallet_hint_foreground_holo_dark</item>
+        <item>@color/wallet_holo_blue_light</item>
+    </style>
+    <style name="WalletFragmentDefaultStyle">
+        <item>48dp</item>
+        <item>-1</item>
+        <item>5</item>
+        <item>4</item>
+        <item>@style/WalletFragmentDefaultDetailsTextAppearance</item>
+        <item>@style/WalletFragmentDefaultDetailsHeaderTextAppearance</item>
+        <item>@color/wallet_bright_foreground_holo_light</item>
+        <item>@style/WalletFragmentDefaultButtonTextAppearance</item>
+        <item>?unknown_ref: 1080004</item>
+        <item>@color/wallet_bright_foreground_holo_dark</item>
+        <item>3</item>
     </style>
 </resources>

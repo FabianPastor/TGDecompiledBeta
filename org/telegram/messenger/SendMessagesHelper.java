@@ -841,291 +841,314 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    public void sendMessage(ArrayList<MessageObject> messages, long peer) {
-        if (messages != null && !messages.isEmpty()) {
-            int lower_id = (int) peer;
-            int a;
-            if (lower_id != 0) {
-                Chat chat;
-                final Peer to_id = MessagesController.getPeer((int) peer);
-                boolean isMegagroup = false;
-                boolean isSignature = false;
-                if (lower_id <= 0) {
-                    chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
-                    if (ChatObject.isChannel(chat)) {
-                        isMegagroup = chat.megagroup;
-                        isSignature = chat.signatures;
+    public int sendMessage(ArrayList<MessageObject> messages, long peer) {
+        if (messages == null || messages.isEmpty()) {
+            return 0;
+        }
+        int lower_id = (int) peer;
+        int sendResult = 0;
+        int a;
+        if (lower_id != 0) {
+            Chat chat;
+            final Peer to_id = MessagesController.getPeer((int) peer);
+            boolean isMegagroup = false;
+            boolean isSignature = false;
+            boolean canSendStickers = true;
+            boolean canSendMedia = true;
+            boolean canSendPreview = true;
+            if (lower_id <= 0) {
+                chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
+                if (ChatObject.isChannel(chat)) {
+                    isMegagroup = chat.megagroup;
+                    isSignature = chat.signatures;
+                    if (chat.banned_rights != null) {
+                        canSendStickers = !chat.banned_rights.send_stickers;
+                        canSendMedia = !chat.banned_rights.send_media;
+                        canSendPreview = !chat.banned_rights.embed_links;
                     }
-                } else if (MessagesController.getInstance().getUser(Integer.valueOf(lower_id)) == null) {
-                    return;
                 }
-                ArrayList<MessageObject> objArr = new ArrayList();
-                ArrayList<Message> arr = new ArrayList();
-                ArrayList<Long> randomIds = new ArrayList();
-                ArrayList<Integer> ids = new ArrayList();
-                HashMap<Long, Message> messagesByRandomIds = new HashMap();
-                InputPeer inputPeer = MessagesController.getInputPeer(lower_id);
-                int myId = UserConfig.getClientUserId();
-                boolean toMyself = peer == ((long) myId);
-                a = 0;
-                while (a < messages.size()) {
-                    MessageObject msgObj = (MessageObject) messages.get(a);
-                    if (msgObj.getId() > 0) {
-                        Message newMsg = new TL_message();
-                        if (msgObj.isForwarded()) {
-                            newMsg.fwd_from = msgObj.messageOwner.fwd_from;
-                            newMsg.flags = 4;
-                        } else if (msgObj.getDialogId() != ((long) myId)) {
-                            newMsg.fwd_from = new TL_messageFwdHeader();
-                            TL_messageFwdHeader tL_messageFwdHeader;
-                            if (msgObj.isFromUser()) {
-                                newMsg.fwd_from.from_id = msgObj.messageOwner.from_id;
-                                tL_messageFwdHeader = newMsg.fwd_from;
-                                tL_messageFwdHeader.flags |= 1;
-                            } else {
-                                newMsg.fwd_from.channel_id = msgObj.messageOwner.to_id.channel_id;
-                                tL_messageFwdHeader = newMsg.fwd_from;
-                                tL_messageFwdHeader.flags |= 2;
-                                if (msgObj.messageOwner.post) {
-                                    newMsg.fwd_from.channel_post = msgObj.getId();
+            } else if (MessagesController.getInstance().getUser(Integer.valueOf(lower_id)) == null) {
+                return 0;
+            }
+            ArrayList<MessageObject> objArr = new ArrayList();
+            ArrayList<Message> arr = new ArrayList();
+            ArrayList<Long> randomIds = new ArrayList();
+            ArrayList<Integer> ids = new ArrayList();
+            HashMap<Long, Message> messagesByRandomIds = new HashMap();
+            InputPeer inputPeer = MessagesController.getInputPeer(lower_id);
+            int myId = UserConfig.getClientUserId();
+            boolean toMyself = peer == ((long) myId);
+            a = 0;
+            while (a < messages.size()) {
+                MessageObject msgObj = (MessageObject) messages.get(a);
+                if (msgObj.getId() > 0) {
+                    if (canSendStickers || !(msgObj.isSticker() || msgObj.isGif() || msgObj.isGame())) {
+                        if (canSendMedia || !((msgObj.messageOwner.media instanceof TL_messageMediaPhoto) || (msgObj.messageOwner.media instanceof TL_messageMediaDocument))) {
+                            Message newMsg = new TL_message();
+                            if (msgObj.isForwarded()) {
+                                newMsg.fwd_from = msgObj.messageOwner.fwd_from;
+                                newMsg.flags = 4;
+                            } else if (msgObj.getDialogId() != ((long) myId)) {
+                                newMsg.fwd_from = new TL_messageFwdHeader();
+                                TL_messageFwdHeader tL_messageFwdHeader;
+                                if (msgObj.isFromUser()) {
+                                    newMsg.fwd_from.from_id = msgObj.messageOwner.from_id;
                                     tL_messageFwdHeader = newMsg.fwd_from;
-                                    tL_messageFwdHeader.flags |= 4;
-                                    if (msgObj.messageOwner.from_id > 0) {
-                                        newMsg.fwd_from.from_id = msgObj.messageOwner.from_id;
+                                    tL_messageFwdHeader.flags |= 1;
+                                } else {
+                                    newMsg.fwd_from.channel_id = msgObj.messageOwner.to_id.channel_id;
+                                    tL_messageFwdHeader = newMsg.fwd_from;
+                                    tL_messageFwdHeader.flags |= 2;
+                                    if (msgObj.messageOwner.post) {
+                                        newMsg.fwd_from.channel_post = msgObj.getId();
                                         tL_messageFwdHeader = newMsg.fwd_from;
-                                        tL_messageFwdHeader.flags |= 1;
+                                        tL_messageFwdHeader.flags |= 4;
+                                        if (msgObj.messageOwner.from_id > 0) {
+                                            newMsg.fwd_from.from_id = msgObj.messageOwner.from_id;
+                                            tL_messageFwdHeader = newMsg.fwd_from;
+                                            tL_messageFwdHeader.flags |= 1;
+                                        }
                                     }
                                 }
+                                newMsg.date = msgObj.messageOwner.date;
+                                newMsg.flags = 4;
                             }
-                            newMsg.date = msgObj.messageOwner.date;
-                            newMsg.flags = 4;
-                        }
-                        newMsg.media = msgObj.messageOwner.media;
-                        if (newMsg.media != null) {
-                            newMsg.flags |= 512;
-                        }
-                        if (isMegagroup) {
-                            newMsg.flags |= Integer.MIN_VALUE;
-                        }
-                        if (msgObj.messageOwner.via_bot_id != 0) {
-                            newMsg.via_bot_id = msgObj.messageOwner.via_bot_id;
-                            newMsg.flags |= 2048;
-                        }
-                        newMsg.message = msgObj.messageOwner.message;
-                        newMsg.fwd_msg_id = msgObj.getId();
-                        newMsg.attachPath = msgObj.messageOwner.attachPath;
-                        newMsg.entities = msgObj.messageOwner.entities;
-                        if (!newMsg.entities.isEmpty()) {
-                            newMsg.flags |= 128;
-                        }
-                        if (newMsg.attachPath == null) {
-                            newMsg.attachPath = "";
-                        }
-                        int newMessageId = UserConfig.getNewMessageId();
-                        newMsg.id = newMessageId;
-                        newMsg.local_id = newMessageId;
-                        newMsg.out = true;
-                        if (to_id.channel_id == 0 || isMegagroup) {
-                            newMsg.from_id = UserConfig.getClientUserId();
-                            newMsg.flags |= 256;
-                        } else {
-                            newMsg.from_id = isSignature ? UserConfig.getClientUserId() : -to_id.channel_id;
-                            newMsg.post = true;
-                        }
-                        if (newMsg.random_id == 0) {
-                            newMsg.random_id = getNextRandomId();
-                        }
-                        randomIds.add(Long.valueOf(newMsg.random_id));
-                        messagesByRandomIds.put(Long.valueOf(newMsg.random_id), newMsg);
-                        ids.add(Integer.valueOf(newMsg.fwd_msg_id));
-                        newMsg.date = ConnectionsManager.getInstance().getCurrentTime();
-                        if (!(inputPeer instanceof TL_inputPeerChannel)) {
-                            if ((msgObj.messageOwner.flags & 1024) != 0) {
-                                newMsg.views = msgObj.messageOwner.views;
+                            if (canSendPreview || !(msgObj.messageOwner.media instanceof TL_messageMediaWebPage)) {
+                                newMsg.media = msgObj.messageOwner.media;
+                            } else {
+                                newMsg.media = new TL_messageMediaEmpty();
+                            }
+                            if (newMsg.media != null) {
+                                newMsg.flags |= 512;
+                            }
+                            if (isMegagroup) {
+                                newMsg.flags |= Integer.MIN_VALUE;
+                            }
+                            if (msgObj.messageOwner.via_bot_id != 0) {
+                                newMsg.via_bot_id = msgObj.messageOwner.via_bot_id;
+                                newMsg.flags |= 2048;
+                            }
+                            newMsg.message = msgObj.messageOwner.message;
+                            newMsg.fwd_msg_id = msgObj.getId();
+                            newMsg.attachPath = msgObj.messageOwner.attachPath;
+                            newMsg.entities = msgObj.messageOwner.entities;
+                            if (!newMsg.entities.isEmpty()) {
+                                newMsg.flags |= 128;
+                            }
+                            if (newMsg.attachPath == null) {
+                                newMsg.attachPath = "";
+                            }
+                            int newMessageId = UserConfig.getNewMessageId();
+                            newMsg.id = newMessageId;
+                            newMsg.local_id = newMessageId;
+                            newMsg.out = true;
+                            if (to_id.channel_id == 0 || isMegagroup) {
+                                newMsg.from_id = UserConfig.getClientUserId();
+                                newMsg.flags |= 256;
+                            } else {
+                                newMsg.from_id = isSignature ? UserConfig.getClientUserId() : -to_id.channel_id;
+                                newMsg.post = true;
+                            }
+                            if (newMsg.random_id == 0) {
+                                newMsg.random_id = getNextRandomId();
+                            }
+                            randomIds.add(Long.valueOf(newMsg.random_id));
+                            messagesByRandomIds.put(Long.valueOf(newMsg.random_id), newMsg);
+                            ids.add(Integer.valueOf(newMsg.fwd_msg_id));
+                            newMsg.date = ConnectionsManager.getInstance().getCurrentTime();
+                            if (!(inputPeer instanceof TL_inputPeerChannel)) {
+                                if ((msgObj.messageOwner.flags & 1024) != 0) {
+                                    newMsg.views = msgObj.messageOwner.views;
+                                    newMsg.flags |= 1024;
+                                }
+                                newMsg.unread = true;
+                            } else if (isMegagroup) {
+                                newMsg.unread = true;
+                            } else {
+                                newMsg.views = 1;
                                 newMsg.flags |= 1024;
                             }
-                            newMsg.unread = true;
-                        } else if (isMegagroup) {
-                            newMsg.unread = true;
-                        } else {
-                            newMsg.views = 1;
-                            newMsg.flags |= 1024;
-                        }
-                        newMsg.dialog_id = peer;
-                        newMsg.to_id = to_id;
-                        if ((MessageObject.isVoiceMessage(newMsg) || MessageObject.isRoundVideoMessage(newMsg)) && newMsg.to_id.channel_id == 0) {
-                            newMsg.media_unread = true;
-                        }
-                        if (msgObj.messageOwner.to_id instanceof TL_peerChannel) {
-                            newMsg.ttl = -msgObj.messageOwner.to_id.channel_id;
-                        }
-                        MessageObject messageObject = new MessageObject(newMsg, null, true);
-                        messageObject.messageOwner.send_state = 1;
-                        objArr.add(messageObject);
-                        arr.add(newMsg);
-                        putToSendingMessages(newMsg);
-                        if (BuildVars.DEBUG_VERSION) {
-                            FileLog.e("forward message user_id = " + inputPeer.user_id + " chat_id = " + inputPeer.chat_id + " channel_id = " + inputPeer.channel_id + " access_hash = " + inputPeer.access_hash);
-                        }
-                        if (!(arr.size() == 100 || a == messages.size() - 1)) {
-                            if (a != messages.size() - 1) {
-                                if (((MessageObject) messages.get(a + 1)).getDialogId() == msgObj.getDialogId()) {
+                            newMsg.dialog_id = peer;
+                            newMsg.to_id = to_id;
+                            if ((MessageObject.isVoiceMessage(newMsg) || MessageObject.isRoundVideoMessage(newMsg)) && newMsg.to_id.channel_id == 0) {
+                                newMsg.media_unread = true;
+                            }
+                            if (msgObj.messageOwner.to_id instanceof TL_peerChannel) {
+                                newMsg.ttl = -msgObj.messageOwner.to_id.channel_id;
+                            }
+                            MessageObject messageObject = new MessageObject(newMsg, null, true);
+                            messageObject.messageOwner.send_state = 1;
+                            objArr.add(messageObject);
+                            arr.add(newMsg);
+                            putToSendingMessages(newMsg);
+                            if (BuildVars.DEBUG_VERSION) {
+                                FileLog.e("forward message user_id = " + inputPeer.user_id + " chat_id = " + inputPeer.chat_id + " channel_id = " + inputPeer.channel_id + " access_hash = " + inputPeer.access_hash);
+                            }
+                            if (!(arr.size() == 100 || a == messages.size() - 1)) {
+                                if (a != messages.size() - 1) {
+                                    if (((MessageObject) messages.get(a + 1)).getDialogId() == msgObj.getDialogId()) {
+                                    }
                                 }
                             }
-                        }
-                        MessagesStorage.getInstance().putMessages(new ArrayList(arr), false, true, false, 0);
-                        MessagesController.getInstance().updateInterfaceWithMessages(peer, objArr);
-                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
-                        UserConfig.saveConfig(false);
-                        final TL_messages_forwardMessages req = new TL_messages_forwardMessages();
-                        req.to_peer = inputPeer;
-                        if (req.to_peer instanceof TL_inputPeerChannel) {
-                            req.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("silent_" + peer, false);
-                        }
-                        if (msgObj.messageOwner.to_id instanceof TL_peerChannel) {
-                            chat = MessagesController.getInstance().getChat(Integer.valueOf(msgObj.messageOwner.to_id.channel_id));
-                            req.from_peer = new TL_inputPeerChannel();
-                            req.from_peer.channel_id = msgObj.messageOwner.to_id.channel_id;
-                            if (chat != null) {
-                                req.from_peer.access_hash = chat.access_hash;
+                            MessagesStorage.getInstance().putMessages(new ArrayList(arr), false, true, false, 0);
+                            MessagesController.getInstance().updateInterfaceWithMessages(peer, objArr);
+                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
+                            UserConfig.saveConfig(false);
+                            final TL_messages_forwardMessages req = new TL_messages_forwardMessages();
+                            req.to_peer = inputPeer;
+                            if (req.to_peer instanceof TL_inputPeerChannel) {
+                                req.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("silent_" + peer, false);
                             }
-                        } else {
-                            req.from_peer = new TL_inputPeerEmpty();
-                        }
-                        req.random_id = randomIds;
-                        req.id = ids;
-                        boolean z = messages.size() == 1 && ((MessageObject) messages.get(0)).messageOwner.with_my_score;
-                        req.with_my_score = z;
-                        final ArrayList<Message> newMsgObjArr = arr;
-                        final ArrayList<MessageObject> newMsgArr = objArr;
-                        final HashMap<Long, Message> messagesByRandomIdsFinal = messagesByRandomIds;
-                        final boolean isMegagroupFinal = isMegagroup;
-                        final long j = peer;
-                        final boolean z2 = toMyself;
-                        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                            public void run(TLObject response, TL_error error) {
-                                int a;
-                                final Message newMsgObj;
-                                if (error == null) {
-                                    Update update;
-                                    HashMap<Integer, Long> newMessagesByIds = new HashMap();
-                                    Updates updates = (Updates) response;
-                                    a = 0;
-                                    while (a < updates.updates.size()) {
-                                        update = (Update) updates.updates.get(a);
-                                        if (update instanceof TL_updateMessageID) {
-                                            TL_updateMessageID updateMessageID = (TL_updateMessageID) update;
-                                            newMessagesByIds.put(Integer.valueOf(updateMessageID.id), Long.valueOf(updateMessageID.random_id));
-                                            updates.updates.remove(a);
-                                            a--;
+                            if (msgObj.messageOwner.to_id instanceof TL_peerChannel) {
+                                chat = MessagesController.getInstance().getChat(Integer.valueOf(msgObj.messageOwner.to_id.channel_id));
+                                req.from_peer = new TL_inputPeerChannel();
+                                req.from_peer.channel_id = msgObj.messageOwner.to_id.channel_id;
+                                if (chat != null) {
+                                    req.from_peer.access_hash = chat.access_hash;
+                                }
+                            } else {
+                                req.from_peer = new TL_inputPeerEmpty();
+                            }
+                            req.random_id = randomIds;
+                            req.id = ids;
+                            boolean z = messages.size() == 1 && ((MessageObject) messages.get(0)).messageOwner.with_my_score;
+                            req.with_my_score = z;
+                            final ArrayList<Message> newMsgObjArr = arr;
+                            final ArrayList<MessageObject> newMsgArr = objArr;
+                            final HashMap<Long, Message> messagesByRandomIdsFinal = messagesByRandomIds;
+                            final boolean isMegagroupFinal = isMegagroup;
+                            final long j = peer;
+                            final boolean z2 = toMyself;
+                            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                public void run(TLObject response, TL_error error) {
+                                    int a;
+                                    final Message newMsgObj;
+                                    if (error == null) {
+                                        Update update;
+                                        HashMap<Integer, Long> newMessagesByIds = new HashMap();
+                                        Updates updates = (Updates) response;
+                                        a = 0;
+                                        while (a < updates.updates.size()) {
+                                            update = (Update) updates.updates.get(a);
+                                            if (update instanceof TL_updateMessageID) {
+                                                TL_updateMessageID updateMessageID = (TL_updateMessageID) update;
+                                                newMessagesByIds.put(Integer.valueOf(updateMessageID.id), Long.valueOf(updateMessageID.random_id));
+                                                updates.updates.remove(a);
+                                                a--;
+                                            }
+                                            a++;
                                         }
-                                        a++;
-                                    }
-                                    Integer value = (Integer) MessagesController.getInstance().dialogs_read_outbox_max.get(Long.valueOf(j));
-                                    if (value == null) {
-                                        value = Integer.valueOf(MessagesStorage.getInstance().getDialogReadMax(true, j));
-                                        MessagesController.getInstance().dialogs_read_outbox_max.put(Long.valueOf(j), value);
-                                    }
-                                    int sentCount = 0;
-                                    for (a = 0; a < updates.updates.size(); a++) {
-                                        update = (Update) updates.updates.get(a);
-                                        if ((update instanceof TL_updateNewMessage) || (update instanceof TL_updateNewChannelMessage)) {
-                                            Message message;
-                                            if (update instanceof TL_updateNewMessage) {
-                                                message = ((TL_updateNewMessage) update).message;
-                                                MessagesController.getInstance().processNewDifferenceParams(-1, update.pts, -1, update.pts_count);
-                                            } else {
-                                                message = ((TL_updateNewChannelMessage) update).message;
-                                                MessagesController.getInstance().processNewChannelDifferenceParams(update.pts, update.pts_count, message.to_id.channel_id);
-                                                if (isMegagroupFinal) {
-                                                    message.flags |= Integer.MIN_VALUE;
+                                        Integer value = (Integer) MessagesController.getInstance().dialogs_read_outbox_max.get(Long.valueOf(j));
+                                        if (value == null) {
+                                            value = Integer.valueOf(MessagesStorage.getInstance().getDialogReadMax(true, j));
+                                            MessagesController.getInstance().dialogs_read_outbox_max.put(Long.valueOf(j), value);
+                                        }
+                                        int sentCount = 0;
+                                        for (a = 0; a < updates.updates.size(); a++) {
+                                            update = (Update) updates.updates.get(a);
+                                            if ((update instanceof TL_updateNewMessage) || (update instanceof TL_updateNewChannelMessage)) {
+                                                Message message;
+                                                if (update instanceof TL_updateNewMessage) {
+                                                    message = ((TL_updateNewMessage) update).message;
+                                                    MessagesController.getInstance().processNewDifferenceParams(-1, update.pts, -1, update.pts_count);
+                                                } else {
+                                                    message = ((TL_updateNewChannelMessage) update).message;
+                                                    MessagesController.getInstance().processNewChannelDifferenceParams(update.pts, update.pts_count, message.to_id.channel_id);
+                                                    if (isMegagroupFinal) {
+                                                        message.flags |= Integer.MIN_VALUE;
+                                                    }
                                                 }
-                                            }
-                                            message.unread = value.intValue() < message.id;
-                                            if (z2) {
-                                                message.out = true;
-                                                message.unread = false;
-                                            }
-                                            Long random_id = (Long) newMessagesByIds.get(Integer.valueOf(message.id));
-                                            if (random_id != null) {
-                                                newMsgObj = (Message) messagesByRandomIdsFinal.get(random_id);
-                                                if (newMsgObj != null) {
-                                                    int index = newMsgObjArr.indexOf(newMsgObj);
-                                                    if (index != -1) {
-                                                        MessageObject msgObj = (MessageObject) newMsgArr.get(index);
-                                                        newMsgObjArr.remove(index);
-                                                        newMsgArr.remove(index);
-                                                        final int oldId = newMsgObj.id;
-                                                        final ArrayList<Message> sentMessages = new ArrayList();
-                                                        sentMessages.add(message);
-                                                        newMsgObj.id = message.id;
-                                                        sentCount++;
-                                                        SendMessagesHelper.this.updateMediaPaths(msgObj, message, null, true);
-                                                        MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
-                                                            public void run() {
-                                                                MessagesStorage.getInstance().updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), newMsgObj.id, 0, false, to_id.channel_id);
-                                                                MessagesStorage.getInstance().putMessages(sentMessages, true, false, false, 0);
-                                                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                                                    public void run() {
-                                                                        newMsgObj.send_state = 0;
-                                                                        SearchQuery.increasePeerRaiting(j);
-                                                                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(message.id), message, Long.valueOf(j));
-                                                                        SendMessagesHelper.this.processSentMessage(oldId);
-                                                                        SendMessagesHelper.this.removeFromSendingMessages(oldId);
+                                                message.unread = value.intValue() < message.id;
+                                                if (z2) {
+                                                    message.out = true;
+                                                    message.unread = false;
+                                                }
+                                                Long random_id = (Long) newMessagesByIds.get(Integer.valueOf(message.id));
+                                                if (random_id != null) {
+                                                    newMsgObj = (Message) messagesByRandomIdsFinal.get(random_id);
+                                                    if (newMsgObj != null) {
+                                                        int index = newMsgObjArr.indexOf(newMsgObj);
+                                                        if (index != -1) {
+                                                            MessageObject msgObj = (MessageObject) newMsgArr.get(index);
+                                                            newMsgObjArr.remove(index);
+                                                            newMsgArr.remove(index);
+                                                            final int oldId = newMsgObj.id;
+                                                            final ArrayList<Message> sentMessages = new ArrayList();
+                                                            sentMessages.add(message);
+                                                            newMsgObj.id = message.id;
+                                                            sentCount++;
+                                                            SendMessagesHelper.this.updateMediaPaths(msgObj, message, null, true);
+                                                            MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+                                                                public void run() {
+                                                                    MessagesStorage.getInstance().updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), newMsgObj.id, 0, false, to_id.channel_id);
+                                                                    MessagesStorage.getInstance().putMessages(sentMessages, true, false, false, 0);
+                                                                    AndroidUtilities.runOnUIThread(new Runnable() {
+                                                                        public void run() {
+                                                                            newMsgObj.send_state = 0;
+                                                                            SearchQuery.increasePeerRaiting(j);
+                                                                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(message.id), message, Long.valueOf(j));
+                                                                            SendMessagesHelper.this.processSentMessage(oldId);
+                                                                            SendMessagesHelper.this.removeFromSendingMessages(oldId);
+                                                                        }
+                                                                    });
+                                                                    if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
+                                                                        SendMessagesHelper.this.stopVideoService(newMsgObj.attachPath);
                                                                     }
-                                                                });
-                                                                if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
-                                                                    SendMessagesHelper.this.stopVideoService(newMsgObj.attachPath);
                                                                 }
-                                                            }
-                                                        });
+                                                            });
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
-                                    }
-                                    StatsController.getInstance().incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, sentCount);
-                                } else {
-                                    final TL_error tL_error = error;
-                                    AndroidUtilities.runOnUIThread(new Runnable() {
-                                        public void run() {
-                                            AlertsCreator.processError(tL_error, null, req, new Object[0]);
-                                        }
-                                    });
-                                }
-                                for (a = 0; a < newMsgObjArr.size(); a++) {
-                                    newMsgObj = (Message) newMsgObjArr.get(a);
-                                    MessagesStorage.getInstance().markMessageAsSendError(newMsgObj);
-                                    AndroidUtilities.runOnUIThread(new Runnable() {
-                                        public void run() {
-                                            newMsgObj.send_state = 2;
-                                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsgObj.id));
-                                            SendMessagesHelper.this.processSentMessage(newMsgObj.id);
-                                            if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
-                                                SendMessagesHelper.this.stopVideoService(newMsgObj.attachPath);
+                                        StatsController.getInstance().incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, sentCount);
+                                    } else {
+                                        final TL_error tL_error = error;
+                                        AndroidUtilities.runOnUIThread(new Runnable() {
+                                            public void run() {
+                                                AlertsCreator.processError(tL_error, null, req, new Object[0]);
                                             }
-                                            SendMessagesHelper.this.removeFromSendingMessages(newMsgObj.id);
-                                        }
-                                    });
+                                        });
+                                    }
+                                    for (a = 0; a < newMsgObjArr.size(); a++) {
+                                        newMsgObj = (Message) newMsgObjArr.get(a);
+                                        MessagesStorage.getInstance().markMessageAsSendError(newMsgObj);
+                                        AndroidUtilities.runOnUIThread(new Runnable() {
+                                            public void run() {
+                                                newMsgObj.send_state = 2;
+                                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsgObj.id));
+                                                SendMessagesHelper.this.processSentMessage(newMsgObj.id);
+                                                if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
+                                                    SendMessagesHelper.this.stopVideoService(newMsgObj.attachPath);
+                                                }
+                                                SendMessagesHelper.this.removeFromSendingMessages(newMsgObj.id);
+                                            }
+                                        });
+                                    }
                                 }
+                            }, 68);
+                            if (a != messages.size() - 1) {
+                                objArr = new ArrayList();
+                                arr = new ArrayList();
+                                randomIds = new ArrayList();
+                                ids = new ArrayList();
+                                messagesByRandomIds = new HashMap();
                             }
-                        }, 68);
-                        if (a != messages.size() - 1) {
-                            objArr = new ArrayList();
-                            arr = new ArrayList();
-                            randomIds = new ArrayList();
-                            ids = new ArrayList();
-                            messagesByRandomIds = new HashMap();
+                        } else if (sendResult == 0) {
+                            sendResult = 2;
                         }
+                    } else if (sendResult == 0) {
+                        sendResult = 1;
                     }
-                    a++;
                 }
-                return;
+                a++;
             }
-            for (a = 0; a < messages.size(); a++) {
-                processForwardFromMyName((MessageObject) messages.get(a), peer);
-            }
+            return sendResult;
         }
+        for (a = 0; a < messages.size(); a++) {
+            processForwardFromMyName((MessageObject) messages.get(a), peer);
+        }
+        return 0;
     }
 
     public int editMessage(MessageObject messageObject, String message, boolean searchLinks, final BaseFragment fragment, ArrayList<MessageEntity> entities, final Runnable callback) {
@@ -3060,7 +3083,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         return photo;
     }
 
-    private static boolean prepareSendingDocumentInternal(String path, String originalPath, Uri uri, String mime, long dialog_id, MessageObject reply_to_msg, String caption) {
+    private static boolean prepareSendingDocumentInternal(String path, String originalPath, Uri uri, String mime, long dialog_id, MessageObject reply_to_msg, CharSequence caption) {
         if ((path == null || path.length() == 0) && uri == null) {
             return false;
         }
@@ -3198,7 +3221,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 tL_document.thumb.type = "s";
             }
         }
-        tL_document.caption = caption;
+        if (caption != null) {
+            tL_document.caption = caption.toString();
+        } else {
+            tL_document.caption = "";
+        }
         final HashMap<String, String> params = new HashMap();
         if (originalPath != null) {
             params.put("originalPath", originalPath);
@@ -4034,7 +4061,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         }
                         if (sendAsDocuments != null && !sendAsDocuments.isEmpty()) {
                             for (a = 0; a < sendAsDocuments.size(); a++) {
-                                SendMessagesHelper.prepareSendingDocumentInternal((String) sendAsDocuments.get(a), (String) sendAsDocumentsOriginal.get(a), null, extension, j, messageObject, (String) sendAsDocumentsCaptions.get(a));
+                                SendMessagesHelper.prepareSendingDocumentInternal((String) sendAsDocuments.get(a), (String) sendAsDocumentsOriginal.get(a), null, extension, j, messageObject, (CharSequence) sendAsDocumentsCaptions.get(a));
                             }
                         }
                     }
@@ -4192,7 +4219,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         return bitmap;
     }
 
-    public static void prepareSendingVideo(String videoPath, long estimatedSize, long duration, int width, int height, VideoEditedInfo videoEditedInfo, long dialog_id, MessageObject reply_to_msg, String caption) {
+    public static void prepareSendingVideo(String videoPath, long estimatedSize, long duration, int width, int height, VideoEditedInfo videoEditedInfo, long dialog_id, MessageObject reply_to_msg, CharSequence caption) {
         if (videoPath != null && videoPath.length() != 0) {
             final long j = dialog_id;
             final VideoEditedInfo videoEditedInfo2 = videoEditedInfo;
@@ -4201,7 +4228,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             final int i = height;
             final int i2 = width;
             final long j3 = estimatedSize;
-            final String str2 = caption;
+            final CharSequence charSequence = caption;
             final MessageObject messageObject = reply_to_msg;
             new Thread(new Runnable() {
                 public void run() {
@@ -4224,119 +4251,42 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             }
                             startTime = videoEditedInfo2.startTime >= 0 ? videoEditedInfo2.startTime : 0;
                         }
-                        TL_document document = null;
-                        PhotoSize size;
-                        EncryptedChat encryptedChat;
-                        TL_documentAttributeVideo attributeVideo;
-                        final TL_document videoFinal;
-                        String originalPathFinal;
-                        final String finalPath;
-                        final HashMap<String, String> params;
-                        final Bitmap thumbFinal;
-                        final String thumbKeyFinal;
-                        if (isEncrypted) {
-                            if (null == null) {
-                                thumb = SendMessagesHelper.createVideoThumbnail(str, startTime);
-                                if (thumb == null) {
-                                    thumb = ThumbnailUtils.createVideoThumbnail(str, 1);
-                                }
-                                size = ImageLoader.scaleAndSaveImage(thumb, 90.0f, 90.0f, 55, isEncrypted);
-                                if (isRound) {
-                                    thumb = null;
-                                } else if (isEncrypted) {
-                                    if (VERSION.SDK_INT >= 21) {
-                                    }
-                                    Utilities.blurBitmap(thumb, 7, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
-                                    thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b2", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
-                                } else {
-                                    if (VERSION.SDK_INT >= 21) {
-                                    }
-                                    Utilities.blurBitmap(thumb, 3, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
-                                    thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
-                                }
-                                document = new TL_document();
-                                document.thumb = size;
-                                if (document.thumb != null) {
-                                    document.thumb.type = "s";
-                                } else {
-                                    document.thumb = new TL_photoSizeEmpty();
-                                    document.thumb.type = "s";
-                                }
-                                document.mime_type = MimeTypes.VIDEO_MP4;
-                                UserConfig.saveConfig(false);
-                                if (isEncrypted) {
-                                    encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (j >> 32)));
-                                    if (encryptedChat != null) {
-                                        return;
-                                    }
-                                    if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 66) {
-                                        attributeVideo = new TL_documentAttributeVideo_layer65();
-                                    } else {
-                                        attributeVideo = new TL_documentAttributeVideo();
-                                    }
-                                } else {
-                                    attributeVideo = new TL_documentAttributeVideo();
-                                }
-                                attributeVideo.round_message = isRound;
-                                document.attributes.add(attributeVideo);
-                                if (videoEditedInfo2 == null) {
-                                }
-                                if (file.exists()) {
-                                    document.size = (int) file.length();
-                                }
-                                SendMessagesHelper.fillVideoAttribute(str, attributeVideo, null);
-                            }
-                            videoFinal = document;
-                            originalPathFinal = originalPath;
-                            finalPath = path;
-                            params = new HashMap();
-                            thumbFinal = thumb;
-                            thumbKeyFinal = thumbKey;
-                            videoFinal.caption = str2;
-                            if (originalPath != null) {
-                                params.put("originalPath", originalPath);
-                            }
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    if (!(thumbFinal == null || thumbKeyFinal == null)) {
-                                        ImageLoader.getInstance().putImageToCache(new BitmapDrawable(thumbFinal), thumbKeyFinal);
-                                    }
-                                    SendMessagesHelper.getInstance().sendMessage(videoFinal, videoEditedInfo2, finalPath, j, messageObject, null, params);
-                                }
-                            });
-                            return;
+                        TL_document tL_document = null;
+                        if (!isEncrypted) {
+                            tL_document = (TL_document) MessagesStorage.getInstance().getSentFile(originalPath, !isEncrypted ? 2 : 5);
                         }
-                        if (null == null) {
+                        if (tL_document == null) {
+                            TL_documentAttributeVideo attributeVideo;
                             thumb = SendMessagesHelper.createVideoThumbnail(str, startTime);
                             if (thumb == null) {
                                 thumb = ThumbnailUtils.createVideoThumbnail(str, 1);
                             }
-                            size = ImageLoader.scaleAndSaveImage(thumb, 90.0f, 90.0f, 55, isEncrypted);
+                            PhotoSize size = ImageLoader.scaleAndSaveImage(thumb, 90.0f, 90.0f, 55, isEncrypted);
                             if (!(thumb == null || size == null)) {
-                                if (isRound) {
+                                if (!isRound) {
                                     thumb = null;
                                 } else if (isEncrypted) {
-                                    Utilities.blurBitmap(thumb, 7, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
+                                    Utilities.blurBitmap(thumb, 7, VERSION.SDK_INT < 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
                                     thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b2", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
                                 } else {
-                                    Utilities.blurBitmap(thumb, 3, VERSION.SDK_INT >= 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
+                                    Utilities.blurBitmap(thumb, 3, VERSION.SDK_INT < 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
                                     thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
                                 }
                             }
-                            document = new TL_document();
-                            document.thumb = size;
-                            if (document.thumb != null) {
-                                document.thumb = new TL_photoSizeEmpty();
-                                document.thumb.type = "s";
+                            tL_document = new TL_document();
+                            tL_document.thumb = size;
+                            if (tL_document.thumb == null) {
+                                tL_document.thumb = new TL_photoSizeEmpty();
+                                tL_document.thumb.type = "s";
                             } else {
-                                document.thumb.type = "s";
+                                tL_document.thumb.type = "s";
                             }
-                            document.mime_type = MimeTypes.VIDEO_MP4;
+                            tL_document.mime_type = MimeTypes.VIDEO_MP4;
                             UserConfig.saveConfig(false);
                             if (isEncrypted) {
-                                encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (j >> 32)));
+                                EncryptedChat encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (j >> 32)));
                                 if (encryptedChat != null) {
-                                    if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 66) {
+                                    if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 66) {
                                         attributeVideo = new TL_documentAttributeVideo();
                                     } else {
                                         attributeVideo = new TL_documentAttributeVideo_layer65();
@@ -4347,10 +4297,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             }
                             attributeVideo = new TL_documentAttributeVideo();
                             attributeVideo.round_message = isRound;
-                            document.attributes.add(attributeVideo);
-                            if (videoEditedInfo2 == null && videoEditedInfo2.needConvert()) {
+                            tL_document.attributes.add(attributeVideo);
+                            if (videoEditedInfo2 == null || !videoEditedInfo2.needConvert()) {
+                                if (file.exists()) {
+                                    tL_document.size = (int) file.length();
+                                }
+                                SendMessagesHelper.fillVideoAttribute(str, attributeVideo, null);
+                            } else {
                                 if (videoEditedInfo2.muted) {
-                                    document.attributes.add(new TL_documentAttributeAnimated());
+                                    tL_document.attributes.add(new TL_documentAttributeAnimated());
                                     SendMessagesHelper.fillVideoAttribute(str, attributeVideo, videoEditedInfo2);
                                     videoEditedInfo2.originalWidth = attributeVideo.w;
                                     videoEditedInfo2.originalHeight = attributeVideo.h;
@@ -4366,33 +4321,39 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         attributeVideo.h = i;
                                     }
                                 }
-                                document.size = (int) j3;
+                                tL_document.size = (int) j3;
                                 String fileName = "-2147483648_" + UserConfig.lastLocalId + ".mp4";
                                 UserConfig.lastLocalId--;
                                 file = new File(FileLoader.getInstance().getDirectory(4), fileName);
                                 UserConfig.saveConfig(false);
                                 path = file.getAbsolutePath();
-                            } else {
-                                if (file.exists()) {
-                                    document.size = (int) file.length();
-                                }
-                                SendMessagesHelper.fillVideoAttribute(str, attributeVideo, null);
                             }
                         }
-                        videoFinal = document;
-                        originalPathFinal = originalPath;
-                        finalPath = path;
-                        params = new HashMap();
-                        thumbFinal = thumb;
-                        thumbKeyFinal = thumbKey;
-                        videoFinal.caption = str2;
+                        final TL_document videoFinal = tL_document;
+                        String originalPathFinal = originalPath;
+                        final String finalPath = path;
+                        final HashMap<String, String> params = new HashMap();
+                        final Bitmap thumbFinal = thumb;
+                        final String thumbKeyFinal = thumbKey;
+                        if (charSequence != null) {
+                            videoFinal.caption = charSequence.toString();
+                        } else {
+                            videoFinal.caption = "";
+                        }
                         if (originalPath != null) {
                             params.put("originalPath", originalPath);
                         }
-                        AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                if (!(thumbFinal == null || thumbKeyFinal == null)) {
+                                    ImageLoader.getInstance().putImageToCache(new BitmapDrawable(thumbFinal), thumbKeyFinal);
+                                }
+                                SendMessagesHelper.getInstance().sendMessage(videoFinal, videoEditedInfo2, finalPath, j, messageObject, null, params);
+                            }
+                        });
                         return;
                     }
-                    SendMessagesHelper.prepareSendingDocumentInternal(str, str, null, null, j, messageObject, str2);
+                    SendMessagesHelper.prepareSendingDocumentInternal(str, str, null, null, j, messageObject, charSequence);
                 }
             }).start();
         }

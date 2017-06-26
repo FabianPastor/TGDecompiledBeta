@@ -1,18 +1,24 @@
 package com.google.android.gms.ads.identifier;
 
-import android.support.annotation.WorkerThread;
 import android.util.Log;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
-public class zza {
-    @WorkerThread
-    public void zzu(String str) {
+final class zza extends Thread {
+    private /* synthetic */ String zzsF;
+
+    zza(AdvertisingIdClient advertisingIdClient, String str) {
+        this.zzsF = str;
+    }
+
+    public final void run() {
+        HttpURLConnection httpURLConnection;
         String valueOf;
         Throwable e;
-        HttpURLConnection httpURLConnection;
+        zzb com_google_android_gms_ads_identifier_zzb = new zzb();
+        String str = this.zzsF;
         try {
             httpURLConnection = (HttpURLConnection) new URL(str).openConnection();
             int responseCode = httpURLConnection.getResponseCode();

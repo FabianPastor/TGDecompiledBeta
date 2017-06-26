@@ -3,6 +3,7 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.LocaleController;
@@ -42,6 +43,10 @@ public class TextBlockCell extends FrameLayout {
         this.textView.setText(text);
         this.needDivider = divider;
         setWillNotDraw(!divider);
+    }
+
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), heightMeasureSpec);
     }
 
     protected void onDraw(Canvas canvas) {

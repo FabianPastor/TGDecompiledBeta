@@ -2,86 +2,41 @@ package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
 import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzc;
 
-public class zza implements Creator<CameraPosition> {
-    static void zza(CameraPosition cameraPosition, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zza(parcel, 2, cameraPosition.target, i, false);
-        zzc.zza(parcel, 3, cameraPosition.zoom);
-        zzc.zza(parcel, 4, cameraPosition.tilt);
-        zzc.zza(parcel, 5, cameraPosition.bearing);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzhx(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzlf(i);
-    }
-
-    public CameraPosition zzhx(Parcel parcel) {
+public final class zza implements Creator<CameraPosition> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzb.zzd(parcel);
         float f = 0.0f;
-        int zzaY = zzb.zzaY(parcel);
-        LatLng latLng = null;
         float f2 = 0.0f;
+        LatLng latLng = null;
         float f3 = 0.0f;
-        while (parcel.dataPosition() < zzaY) {
-            LatLng latLng2;
-            float f4;
-            int zzaX = zzb.zzaX(parcel);
-            float f5;
-            switch (zzb.zzdc(zzaX)) {
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
                 case 2:
-                    f5 = f;
-                    f = f2;
-                    f2 = f3;
-                    latLng2 = (LatLng) zzb.zza(parcel, zzaX, LatLng.CREATOR);
-                    f4 = f5;
+                    latLng = (LatLng) zzb.zza(parcel, readInt, LatLng.CREATOR);
                     break;
                 case 3:
-                    latLng2 = latLng;
-                    f5 = f2;
-                    f2 = zzb.zzl(parcel, zzaX);
-                    f4 = f;
-                    f = f5;
+                    f2 = zzb.zzl(parcel, readInt);
                     break;
                 case 4:
-                    f2 = f3;
-                    latLng2 = latLng;
-                    f5 = f;
-                    f = zzb.zzl(parcel, zzaX);
-                    f4 = f5;
+                    f = zzb.zzl(parcel, readInt);
                     break;
                 case 5:
-                    f4 = zzb.zzl(parcel, zzaX);
-                    f = f2;
-                    f2 = f3;
-                    latLng2 = latLng;
+                    f3 = zzb.zzl(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaX);
-                    f4 = f;
-                    f = f2;
-                    f2 = f3;
-                    latLng2 = latLng;
+                    zzb.zzb(parcel, readInt);
                     break;
             }
-            latLng = latLng2;
-            f3 = f2;
-            f2 = f;
-            f = f4;
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new CameraPosition(latLng, f3, f2, f);
-        }
-        throw new com.google.android.gms.common.internal.safeparcel.zzb.zza("Overread allowed size end=" + zzaY, parcel);
+        zzb.zzF(parcel, zzd);
+        return new CameraPosition(latLng, f2, f, f3);
     }
 
-    public CameraPosition[] zzlf(int i) {
+    public final /* synthetic */ Object[] newArray(int i) {
         return new CameraPosition[i];
     }
 }

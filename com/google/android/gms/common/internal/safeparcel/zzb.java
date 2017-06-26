@@ -11,43 +11,8 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class zzb {
-
-    public static class zza extends RuntimeException {
-        public zza(String str, Parcel parcel) {
-            int dataPosition = parcel.dataPosition();
-            super(new StringBuilder(String.valueOf(str).length() + 41).append(str).append(" Parcel: pos=").append(dataPosition).append(" size=").append(parcel.dataSize()).toString());
-        }
-    }
-
-    public static double[] zzA(Parcel parcel, int i) {
-        int zza = zza(parcel, i);
-        int dataPosition = parcel.dataPosition();
-        if (zza == 0) {
-            return null;
-        }
-        double[] createDoubleArray = parcel.createDoubleArray();
-        parcel.setDataPosition(zza + dataPosition);
-        return createDoubleArray;
-    }
-
-    public static BigDecimal[] zzB(Parcel parcel, int i) {
-        int zza = zza(parcel, i);
-        int dataPosition = parcel.dataPosition();
-        if (zza == 0) {
-            return null;
-        }
-        int readInt = parcel.readInt();
-        BigDecimal[] bigDecimalArr = new BigDecimal[readInt];
-        for (int i2 = 0; i2 < readInt; i2++) {
-            byte[] createByteArray = parcel.createByteArray();
-            bigDecimalArr[i2] = new BigDecimal(new BigInteger(createByteArray), parcel.readInt());
-        }
-        parcel.setDataPosition(dataPosition + zza);
-        return bigDecimalArr;
-    }
-
-    public static String[] zzC(Parcel parcel, int i) {
+public final class zzb {
+    public static String[] zzA(Parcel parcel, int i) {
         int zza = zza(parcel, i);
         int dataPosition = parcel.dataPosition();
         if (zza == 0) {
@@ -58,7 +23,7 @@ public class zzb {
         return createStringArray;
     }
 
-    public static ArrayList<Integer> zzD(Parcel parcel, int i) {
+    public static ArrayList<Integer> zzB(Parcel parcel, int i) {
         int zza = zza(parcel, i);
         int dataPosition = parcel.dataPosition();
         if (zza == 0) {
@@ -73,7 +38,7 @@ public class zzb {
         return arrayList;
     }
 
-    public static ArrayList<String> zzE(Parcel parcel, int i) {
+    public static ArrayList<String> zzC(Parcel parcel, int i) {
         int zza = zza(parcel, i);
         int dataPosition = parcel.dataPosition();
         if (zza == 0) {
@@ -84,7 +49,7 @@ public class zzb {
         return createStringArrayList;
     }
 
-    public static Parcel zzF(Parcel parcel, int i) {
+    public static Parcel zzD(Parcel parcel, int i) {
         int zza = zza(parcel, i);
         int dataPosition = parcel.dataPosition();
         if (zza == 0) {
@@ -96,7 +61,7 @@ public class zzb {
         return obtain;
     }
 
-    public static Parcel[] zzG(Parcel parcel, int i) {
+    public static Parcel[] zzE(Parcel parcel, int i) {
         int zza = zza(parcel, i);
         int dataPosition = parcel.dataPosition();
         if (zza == 0) {
@@ -120,6 +85,12 @@ public class zzb {
         return parcelArr;
     }
 
+    public static void zzF(Parcel parcel, int i) {
+        if (parcel.dataPosition() != i) {
+            throw new zzc("Overread allowed size end=" + i, parcel);
+        }
+    }
+
     public static int zza(Parcel parcel, int i) {
         return (i & SupportMenu.CATEGORY_MASK) != SupportMenu.CATEGORY_MASK ? (i >> 16) & SupportMenu.USER_MASK : parcel.readInt();
     }
@@ -139,14 +110,14 @@ public class zzb {
         int zza = zza(parcel, i);
         if (zza != i2) {
             String valueOf = String.valueOf(Integer.toHexString(zza));
-            throw new zza(new StringBuilder(String.valueOf(valueOf).length() + 46).append("Expected size ").append(i2).append(" got ").append(zza).append(" (0x").append(valueOf).append(")").toString(), parcel);
+            throw new zzc(new StringBuilder(String.valueOf(valueOf).length() + 46).append("Expected size ").append(i2).append(" got ").append(zza).append(" (0x").append(valueOf).append(")").toString(), parcel);
         }
     }
 
     private static void zza(Parcel parcel, int i, int i2, int i3) {
         if (i2 != i3) {
             String valueOf = String.valueOf(Integer.toHexString(i2));
-            throw new zza(new StringBuilder(String.valueOf(valueOf).length() + 46).append("Expected size ").append(i3).append(" got ").append(i2).append(" (0x").append(valueOf).append(")").toString(), parcel);
+            throw new zzc(new StringBuilder(String.valueOf(valueOf).length() + 46).append("Expected size ").append(i3).append(" got ").append(i2).append(" (0x").append(valueOf).append(")").toString(), parcel);
         }
     }
 
@@ -157,26 +128,6 @@ public class zzb {
             parcel.readList(list, classLoader);
             parcel.setDataPosition(zza + dataPosition);
         }
-    }
-
-    public static int zzaX(Parcel parcel) {
-        return parcel.readInt();
-    }
-
-    public static int zzaY(Parcel parcel) {
-        int zzaX = zzaX(parcel);
-        int zza = zza(parcel, zzaX);
-        int dataPosition = parcel.dataPosition();
-        if (zzdc(zzaX) != 20293) {
-            String str = "Expected object header. Got 0x";
-            String valueOf = String.valueOf(Integer.toHexString(zzaX));
-            throw new zza(valueOf.length() != 0 ? str.concat(valueOf) : new String(str), parcel);
-        }
-        zzaX = dataPosition + zza;
-        if (zzaX >= dataPosition && zzaX <= parcel.dataSize()) {
-            return zzaX;
-        }
-        throw new zza("Size read is invalid start=" + dataPosition + " end=" + zzaX, parcel);
     }
 
     public static void zzb(Parcel parcel, int i) {
@@ -210,6 +161,22 @@ public class zzb {
         return parcel.readInt() != 0;
     }
 
+    public static int zzd(Parcel parcel) {
+        int readInt = parcel.readInt();
+        int zza = zza(parcel, readInt);
+        int dataPosition = parcel.dataPosition();
+        if ((SupportMenu.USER_MASK & readInt) != 20293) {
+            String str = "Expected object header. Got 0x";
+            String valueOf = String.valueOf(Integer.toHexString(readInt));
+            throw new zzc(valueOf.length() != 0 ? str.concat(valueOf) : new String(str), parcel);
+        }
+        readInt = dataPosition + zza;
+        if (readInt >= dataPosition && readInt <= parcel.dataSize()) {
+            return readInt;
+        }
+        throw new zzc("Size read is invalid start=" + dataPosition + " end=" + readInt, parcel);
+    }
+
     public static Boolean zzd(Parcel parcel, int i) {
         int zza = zza(parcel, i);
         if (zza == 0) {
@@ -217,10 +184,6 @@ public class zzb {
         }
         zza(parcel, i, zza, 4);
         return Boolean.valueOf(parcel.readInt() != 0);
-    }
-
-    public static int zzdc(int i) {
-        return SupportMenu.USER_MASK & i;
     }
 
     public static byte zze(Parcel parcel, int i) {
@@ -404,22 +367,7 @@ public class zzb {
         return createLongArray;
     }
 
-    public static BigInteger[] zzy(Parcel parcel, int i) {
-        int zza = zza(parcel, i);
-        int dataPosition = parcel.dataPosition();
-        if (zza == 0) {
-            return null;
-        }
-        int readInt = parcel.readInt();
-        BigInteger[] bigIntegerArr = new BigInteger[readInt];
-        for (int i2 = 0; i2 < readInt; i2++) {
-            bigIntegerArr[i2] = new BigInteger(parcel.createByteArray());
-        }
-        parcel.setDataPosition(dataPosition + zza);
-        return bigIntegerArr;
-    }
-
-    public static float[] zzz(Parcel parcel, int i) {
+    public static float[] zzy(Parcel parcel, int i) {
         int zza = zza(parcel, i);
         int dataPosition = parcel.dataPosition();
         if (zza == 0) {
@@ -428,5 +376,21 @@ public class zzb {
         float[] createFloatArray = parcel.createFloatArray();
         parcel.setDataPosition(zza + dataPosition);
         return createFloatArray;
+    }
+
+    public static BigDecimal[] zzz(Parcel parcel, int i) {
+        int zza = zza(parcel, i);
+        int dataPosition = parcel.dataPosition();
+        if (zza == 0) {
+            return null;
+        }
+        int readInt = parcel.readInt();
+        BigDecimal[] bigDecimalArr = new BigDecimal[readInt];
+        for (int i2 = 0; i2 < readInt; i2++) {
+            byte[] createByteArray = parcel.createByteArray();
+            bigDecimalArr[i2] = new BigDecimal(new BigInteger(createByteArray), parcel.readInt());
+        }
+        parcel.setDataPosition(dataPosition + zza);
+        return bigDecimalArr;
     }
 }

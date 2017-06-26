@@ -8,44 +8,28 @@ import com.google.android.gms.common.annotation.KeepName;
 
 @KeepName
 public final class BinderWrapper implements Parcelable {
-    public static final Creator<BinderWrapper> CREATOR = new Creator<BinderWrapper>() {
-        public /* synthetic */ Object createFromParcel(Parcel parcel) {
-            return zzaR(parcel);
-        }
-
-        public /* synthetic */ Object[] newArray(int i) {
-            return zzcT(i);
-        }
-
-        public BinderWrapper zzaR(Parcel parcel) {
-            return new BinderWrapper(parcel);
-        }
-
-        public BinderWrapper[] zzcT(int i) {
-            return new BinderWrapper[i];
-        }
-    };
-    private IBinder zzaFz;
+    public static final Creator<BinderWrapper> CREATOR = new zzp();
+    private IBinder zzaHj;
 
     public BinderWrapper() {
-        this.zzaFz = null;
+        this.zzaHj = null;
     }
 
     public BinderWrapper(IBinder iBinder) {
-        this.zzaFz = null;
-        this.zzaFz = iBinder;
+        this.zzaHj = null;
+        this.zzaHj = iBinder;
     }
 
     private BinderWrapper(Parcel parcel) {
-        this.zzaFz = null;
-        this.zzaFz = parcel.readStrongBinder();
+        this.zzaHj = null;
+        this.zzaHj = parcel.readStrongBinder();
     }
 
-    public int describeContents() {
+    public final int describeContents() {
         return 0;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeStrongBinder(this.zzaFz);
+    public final void writeToParcel(Parcel parcel, int i) {
+        parcel.writeStrongBinder(this.zzaHj);
     }
 }

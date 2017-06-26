@@ -1,124 +1,69 @@
 package com.google.android.gms.internal;
 
+import android.annotation.TargetApi;
+import android.app.AppOpsManager;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Binder;
-import android.os.IBinder;
-import android.os.IInterface;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.os.RemoteException;
-import com.google.android.gms.dynamic.zzd;
+import android.os.Process;
+import com.google.android.gms.common.util.zzq;
 
-public interface zzbgy extends IInterface {
+public final class zzbgy {
+    private Context mContext;
 
-    public static abstract class zza extends Binder implements zzbgy {
-
-        private static class zza implements zzbgy {
-            private IBinder zzrp;
-
-            zza(IBinder iBinder) {
-                this.zzrp = iBinder;
-            }
-
-            public IBinder asBinder() {
-                return this.zzrp;
-            }
-
-            public void zzSo() throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
-                    this.zzrp.transact(3, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public zzbgu[] zzc(zzd com_google_android_gms_dynamic_zzd, zzbhd com_google_android_gms_internal_zzbhd) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
-                    obtain.writeStrongBinder(com_google_android_gms_dynamic_zzd != null ? com_google_android_gms_dynamic_zzd.asBinder() : null);
-                    if (com_google_android_gms_internal_zzbhd != null) {
-                        obtain.writeInt(1);
-                        com_google_android_gms_internal_zzbhd.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.zzrp.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                    zzbgu[] com_google_android_gms_internal_zzbguArr = (zzbgu[]) obtain2.createTypedArray(zzbgu.CREATOR);
-                    return com_google_android_gms_internal_zzbguArr;
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public boolean zznw(int i) throws RemoteException {
-                boolean z = false;
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
-                    obtain.writeInt(i);
-                    this.zzrp.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
-                    if (obtain2.readInt() != 0) {
-                        z = true;
-                    }
-                    obtain2.recycle();
-                    obtain.recycle();
-                    return z;
-                } catch (Throwable th) {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-        }
-
-        public static zzbgy zzfi(IBinder iBinder) {
-            if (iBinder == null) {
-                return null;
-            }
-            IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
-            return (queryLocalInterface == null || !(queryLocalInterface instanceof zzbgy)) ? new zza(iBinder) : (zzbgy) queryLocalInterface;
-        }
-
-        public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-            switch (i) {
-                case 1:
-                    parcel.enforceInterface("com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
-                    Parcelable[] zzc = zzc(com.google.android.gms.dynamic.zzd.zza.zzcd(parcel.readStrongBinder()), parcel.readInt() != 0 ? (zzbhd) zzbhd.CREATOR.createFromParcel(parcel) : null);
-                    parcel2.writeNoException();
-                    parcel2.writeTypedArray(zzc, 1);
-                    return true;
-                case 2:
-                    parcel.enforceInterface("com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
-                    boolean zznw = zznw(parcel.readInt());
-                    parcel2.writeNoException();
-                    parcel2.writeInt(zznw ? 1 : 0);
-                    return true;
-                case 3:
-                    parcel.enforceInterface("com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
-                    zzSo();
-                    parcel2.writeNoException();
-                    return true;
-                case 1598968902:
-                    parcel2.writeString("com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
-                    return true;
-                default:
-                    return super.onTransact(i, parcel, parcel2, i2);
-            }
-        }
+    public zzbgy(Context context) {
+        this.mContext = context;
     }
 
-    void zzSo() throws RemoteException;
+    public final int checkCallingOrSelfPermission(String str) {
+        return this.mContext.checkCallingOrSelfPermission(str);
+    }
 
-    zzbgu[] zzc(zzd com_google_android_gms_dynamic_zzd, zzbhd com_google_android_gms_internal_zzbhd) throws RemoteException;
+    public final int checkPermission(String str, String str2) {
+        return this.mContext.getPackageManager().checkPermission(str, str2);
+    }
 
-    boolean zznw(int i) throws RemoteException;
+    public final ApplicationInfo getApplicationInfo(String str, int i) throws NameNotFoundException {
+        return this.mContext.getPackageManager().getApplicationInfo(str, i);
+    }
+
+    public final PackageInfo getPackageInfo(String str, int i) throws NameNotFoundException {
+        return this.mContext.getPackageManager().getPackageInfo(str, i);
+    }
+
+    public final String[] getPackagesForUid(int i) {
+        return this.mContext.getPackageManager().getPackagesForUid(i);
+    }
+
+    public final CharSequence zzcM(String str) throws NameNotFoundException {
+        return this.mContext.getPackageManager().getApplicationLabel(this.mContext.getPackageManager().getApplicationInfo(str, 0));
+    }
+
+    @TargetApi(19)
+    public final boolean zzf(int i, String str) {
+        if (zzq.zzsc()) {
+            try {
+                ((AppOpsManager) this.mContext.getSystemService("appops")).checkPackage(i, str);
+                return true;
+            } catch (SecurityException e) {
+                return false;
+            }
+        }
+        String[] packagesForUid = this.mContext.getPackageManager().getPackagesForUid(i);
+        if (str == null || packagesForUid == null) {
+            return false;
+        }
+        for (Object equals : packagesForUid) {
+            if (str.equals(equals)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public final boolean zzsl() {
+        return Binder.getCallingUid() == Process.myUid() ? zzbgx.zzaN(this.mContext) : false;
+    }
 }

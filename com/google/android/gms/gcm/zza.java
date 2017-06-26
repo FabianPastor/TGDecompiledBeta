@@ -23,191 +23,54 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-class zza {
-    static zza zzbgn;
+final class zza {
+    static zza zzbfw;
     private final Context mContext;
 
     private zza(Context context) {
         this.mContext = context.getApplicationContext();
     }
 
-    static boolean zzE(Bundle bundle) {
-        return "1".equals(zzf(bundle, "gcm.n.e")) || zzf(bundle, "gcm.n.icon") != null;
-    }
-
-    static void zzF(Bundle bundle) {
-        String str;
-        Bundle bundle2 = new Bundle();
-        Iterator it = bundle.keySet().iterator();
-        while (it.hasNext()) {
-            str = (String) it.next();
-            String string = bundle.getString(str);
-            if (str.startsWith("gcm.notification.")) {
-                str = str.replace("gcm.notification.", "gcm.n.");
-            }
-            if (str.startsWith("gcm.n.")) {
-                if (!"gcm.n.e".equals(str)) {
-                    bundle2.putString(str.substring("gcm.n.".length()), string);
-                }
-                it.remove();
-            }
-        }
-        str = bundle2.getString("sound2");
-        if (str != null) {
-            bundle2.remove("sound2");
-            bundle2.putString("sound", str);
-        }
-        if (!bundle2.isEmpty()) {
-            bundle.putBundle("notification", bundle2);
-        }
-    }
-
-    private int zzGP() {
-        return (int) SystemClock.uptimeMillis();
-    }
-
-    private Notification zzH(Bundle bundle) {
-        CharSequence zzg = zzg(bundle, "gcm.n.title");
-        CharSequence zzg2 = zzg(bundle, "gcm.n.body");
-        int zzeB = zzeB(zzf(bundle, "gcm.n.icon"));
-        Object zzf = zzf(bundle, "gcm.n.color");
-        Uri zzeC = zzeC(zzf(bundle, "gcm.n.sound2"));
-        PendingIntent zzI = zzI(bundle);
-        Builder smallIcon = new Builder(this.mContext).setAutoCancel(true).setSmallIcon(zzeB);
-        if (TextUtils.isEmpty(zzg)) {
-            smallIcon.setContentTitle(this.mContext.getApplicationInfo().loadLabel(this.mContext.getPackageManager()));
-        } else {
-            smallIcon.setContentTitle(zzg);
-        }
-        if (!TextUtils.isEmpty(zzg2)) {
-            smallIcon.setContentText(zzg2);
-        }
-        if (!TextUtils.isEmpty(zzf)) {
-            smallIcon.setColor(Color.parseColor(zzf));
-        }
-        if (zzeC != null) {
-            smallIcon.setSound(zzeC);
-        }
-        if (zzI != null) {
-            smallIcon.setContentIntent(zzI);
-        }
-        return smallIcon.build();
-    }
-
-    private PendingIntent zzI(Bundle bundle) {
-        Intent intent;
-        Object zzf = zzf(bundle, "gcm.n.click_action");
-        Intent launchIntentForPackage;
-        if (TextUtils.isEmpty(zzf)) {
-            launchIntentForPackage = this.mContext.getPackageManager().getLaunchIntentForPackage(this.mContext.getPackageName());
-            if (launchIntentForPackage == null) {
-                Log.w("GcmNotification", "No activity found to launch app");
-                return null;
-            }
-            intent = launchIntentForPackage;
-        } else {
-            launchIntentForPackage = new Intent(zzf);
-            launchIntentForPackage.setPackage(this.mContext.getPackageName());
-            launchIntentForPackage.setFlags(268435456);
-            intent = launchIntentForPackage;
-        }
-        Bundle bundle2 = new Bundle(bundle);
-        GcmListenerService.zzD(bundle2);
-        intent.putExtras(bundle2);
-        for (String str : bundle2.keySet()) {
-            if (str.startsWith("gcm.n.") || str.startsWith("gcm.notification.")) {
-                intent.removeExtra(str);
-            }
-        }
-        return PendingIntent.getActivity(this.mContext, zzGP(), intent, NUM);
-    }
-
-    private void zza(String str, Notification notification) {
-        if (Log.isLoggable("GcmNotification", 3)) {
-            Log.d("GcmNotification", "Showing notification");
-        }
-        NotificationManager notificationManager = (NotificationManager) this.mContext.getSystemService("notification");
-        if (TextUtils.isEmpty(str)) {
-            str = "GCM-Notification:" + SystemClock.uptimeMillis();
-        }
-        notificationManager.notify(str, 0, notification);
-    }
-
-    static synchronized zza zzbt(Context context) {
+    static synchronized zza zzaX(Context context) {
         zza com_google_android_gms_gcm_zza;
         synchronized (zza.class) {
-            if (zzbgn == null) {
-                zzbgn = new zza(context);
+            if (zzbfw == null) {
+                zzbfw = new zza(context);
             }
-            com_google_android_gms_gcm_zza = zzbgn;
+            com_google_android_gms_gcm_zza = zzbfw;
         }
         return com_google_android_gms_gcm_zza;
     }
 
-    static boolean zzbu(Context context) {
+    static boolean zzaY(Context context) {
         if (((KeyguardManager) context.getSystemService("keyguard")).inKeyguardRestrictedInputMode()) {
             return false;
         }
         int myPid = Process.myPid();
         List<RunningAppProcessInfo> runningAppProcesses = ((ActivityManager) context.getSystemService("activity")).getRunningAppProcesses();
-        if (runningAppProcesses == null) {
-            return false;
-        }
-        for (RunningAppProcessInfo runningAppProcessInfo : runningAppProcesses) {
-            if (runningAppProcessInfo.pid == myPid) {
-                return runningAppProcessInfo.importance == 100;
+        if (runningAppProcesses != null) {
+            for (RunningAppProcessInfo runningAppProcessInfo : runningAppProcesses) {
+                if (runningAppProcessInfo.pid == myPid) {
+                    return runningAppProcessInfo.importance == 100;
+                }
             }
         }
         return false;
     }
 
-    private String zzeA(String str) {
-        return str.substring("gcm.n.".length());
-    }
-
-    private int zzeB(String str) {
-        int identifier;
-        if (!TextUtils.isEmpty(str)) {
-            Resources resources = this.mContext.getResources();
-            identifier = resources.getIdentifier(str, "drawable", this.mContext.getPackageName());
-            if (identifier != 0) {
-                return identifier;
-            }
-            identifier = resources.getIdentifier(str, "mipmap", this.mContext.getPackageName());
-            if (identifier != 0) {
-                return identifier;
-            }
-            Log.w("GcmNotification", new StringBuilder(String.valueOf(str).length() + 57).append("Icon resource ").append(str).append(" not found. Notification will use app icon.").toString());
-        }
-        identifier = this.mContext.getApplicationInfo().icon;
-        return identifier == 0 ? 17301651 : identifier;
-    }
-
-    private Uri zzeC(String str) {
-        if (TextUtils.isEmpty(str)) {
-            return null;
-        }
-        if ("default".equals(str) || this.mContext.getResources().getIdentifier(str, "raw", this.mContext.getPackageName()) == 0) {
-            return RingtoneManager.getDefaultUri(2);
-        }
-        String valueOf = String.valueOf("android.resource://");
-        String valueOf2 = String.valueOf(this.mContext.getPackageName());
-        return Uri.parse(new StringBuilder(((String.valueOf(valueOf).length() + 5) + String.valueOf(valueOf2).length()) + String.valueOf(str).length()).append(valueOf).append(valueOf2).append("/raw/").append(str).toString());
-    }
-
-    static String zzf(Bundle bundle, String str) {
+    static String zze(Bundle bundle, String str) {
         String string = bundle.getString(str);
         return string == null ? bundle.getString(str.replace("gcm.n.", "gcm.notification.")) : string;
     }
 
-    private String zzg(Bundle bundle, String str) {
-        Object zzf = zzf(bundle, str);
-        if (!TextUtils.isEmpty(zzf)) {
-            return zzf;
+    private final String zzf(Bundle bundle, String str) {
+        Object zze = zze(bundle, str);
+        if (!TextUtils.isEmpty(zze)) {
+            return zze;
         }
         String valueOf = String.valueOf(str);
         String valueOf2 = String.valueOf("_loc_key");
-        valueOf = zzf(bundle, valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf));
+        valueOf = zze(bundle, valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf));
         if (TextUtils.isEmpty(valueOf)) {
             return null;
         }
@@ -217,13 +80,13 @@ class zza {
             String str2 = "GcmNotification";
             String valueOf3 = String.valueOf(str);
             valueOf2 = String.valueOf("_loc_key");
-            valueOf2 = String.valueOf(zzeA(valueOf2.length() != 0 ? valueOf3.concat(valueOf2) : new String(valueOf3)));
+            valueOf2 = String.valueOf((valueOf2.length() != 0 ? valueOf3.concat(valueOf2) : new String(valueOf3)).substring(6));
             Log.w(str2, new StringBuilder((String.valueOf(valueOf2).length() + 49) + String.valueOf(valueOf).length()).append(valueOf2).append(" resource not found: ").append(valueOf).append(" Default value will be used.").toString());
             return null;
         }
         String valueOf4 = String.valueOf(str);
         valueOf2 = String.valueOf("_loc_args");
-        valueOf4 = zzf(bundle, valueOf2.length() != 0 ? valueOf4.concat(valueOf2) : new String(valueOf4));
+        valueOf4 = zze(bundle, valueOf2.length() != 0 ? valueOf4.concat(valueOf2) : new String(valueOf4));
         if (TextUtils.isEmpty(valueOf4)) {
             return resources.getString(identifier);
         }
@@ -238,7 +101,7 @@ class zza {
             valueOf = "GcmNotification";
             str2 = String.valueOf(str);
             valueOf2 = String.valueOf("_loc_args");
-            valueOf2 = String.valueOf(zzeA(valueOf2.length() != 0 ? str2.concat(valueOf2) : new String(str2)));
+            valueOf2 = String.valueOf((valueOf2.length() != 0 ? str2.concat(valueOf2) : new String(str2)).substring(6));
             Log.w(valueOf, new StringBuilder((String.valueOf(valueOf2).length() + 41) + String.valueOf(valueOf4).length()).append("Malformed ").append(valueOf2).append(": ").append(valueOf4).append("  Default value will be used.").toString());
             return null;
         } catch (Throwable e2) {
@@ -247,8 +110,165 @@ class zza {
         }
     }
 
-    boolean zzG(Bundle bundle) {
-        zza(zzf(bundle, "gcm.n.tag"), zzH(bundle));
+    static void zzu(Bundle bundle) {
+        String str;
+        Bundle bundle2 = new Bundle();
+        Iterator it = bundle.keySet().iterator();
+        while (it.hasNext()) {
+            str = (String) it.next();
+            String string = bundle.getString(str);
+            if (str.startsWith("gcm.notification.")) {
+                str = str.replace("gcm.notification.", "gcm.n.");
+            }
+            if (str.startsWith("gcm.n.")) {
+                if (!"gcm.n.e".equals(str)) {
+                    bundle2.putString(str.substring(6), string);
+                }
+                it.remove();
+            }
+        }
+        str = bundle2.getString("sound2");
+        if (str != null) {
+            bundle2.remove("sound2");
+            bundle2.putString("sound", str);
+        }
+        if (!bundle2.isEmpty()) {
+            bundle.putBundle("notification", bundle2);
+        }
+    }
+
+    private final PendingIntent zzw(Bundle bundle) {
+        Intent intent;
+        Object zze = zze(bundle, "gcm.n.click_action");
+        Intent launchIntentForPackage;
+        if (TextUtils.isEmpty(zze)) {
+            launchIntentForPackage = this.mContext.getPackageManager().getLaunchIntentForPackage(this.mContext.getPackageName());
+            if (launchIntentForPackage == null) {
+                Log.w("GcmNotification", "No activity found to launch app");
+                return null;
+            }
+            intent = launchIntentForPackage;
+        } else {
+            launchIntentForPackage = new Intent(zze);
+            launchIntentForPackage.setPackage(this.mContext.getPackageName());
+            launchIntentForPackage.setFlags(268435456);
+            intent = launchIntentForPackage;
+        }
+        Bundle bundle2 = new Bundle(bundle);
+        GcmListenerService.zzt(bundle2);
+        intent.putExtras(bundle2);
+        for (String str : bundle2.keySet()) {
+            if (str.startsWith("gcm.n.") || str.startsWith("gcm.notification.")) {
+                intent.removeExtra(str);
+            }
+        }
+        return PendingIntent.getActivity(this.mContext, (int) SystemClock.uptimeMillis(), intent, NUM);
+    }
+
+    final boolean zzv(Bundle bundle) {
+        int identifier;
+        Object zze;
+        Uri uri;
+        PendingIntent zzw;
+        Builder smallIcon;
+        Notification build;
+        NotificationManager notificationManager;
+        CharSequence zzf = zzf(bundle, "gcm.n.title");
+        CharSequence zzf2 = zzf(bundle, "gcm.n.body");
+        String zze2 = zze(bundle, "gcm.n.icon");
+        if (!TextUtils.isEmpty(zze2)) {
+            Resources resources = this.mContext.getResources();
+            identifier = resources.getIdentifier(zze2, "drawable", this.mContext.getPackageName());
+            if (identifier == 0) {
+                identifier = resources.getIdentifier(zze2, "mipmap", this.mContext.getPackageName());
+                if (identifier == 0) {
+                    Log.w("GcmNotification", new StringBuilder(String.valueOf(zze2).length() + 57).append("Icon resource ").append(zze2).append(" not found. Notification will use app icon.").toString());
+                }
+            }
+            zze = zze(bundle, "gcm.n.color");
+            zze2 = zze(bundle, "gcm.n.sound2");
+            if (TextUtils.isEmpty(zze2)) {
+                uri = null;
+            } else if (!"default".equals(zze2) || this.mContext.getResources().getIdentifier(zze2, "raw", this.mContext.getPackageName()) == 0) {
+                uri = RingtoneManager.getDefaultUri(2);
+            } else {
+                String valueOf = String.valueOf("android.resource://");
+                String valueOf2 = String.valueOf(this.mContext.getPackageName());
+                uri = Uri.parse(new StringBuilder(((String.valueOf(valueOf).length() + 5) + String.valueOf(valueOf2).length()) + String.valueOf(zze2).length()).append(valueOf).append(valueOf2).append("/raw/").append(zze2).toString());
+            }
+            zzw = zzw(bundle);
+            smallIcon = new Builder(this.mContext).setAutoCancel(true).setSmallIcon(identifier);
+            if (TextUtils.isEmpty(zzf)) {
+                smallIcon.setContentTitle(zzf);
+            } else {
+                smallIcon.setContentTitle(this.mContext.getApplicationInfo().loadLabel(this.mContext.getPackageManager()));
+            }
+            if (!TextUtils.isEmpty(zzf2)) {
+                smallIcon.setContentText(zzf2);
+            }
+            if (!TextUtils.isEmpty(zze)) {
+                smallIcon.setColor(Color.parseColor(zze));
+            }
+            if (uri != null) {
+                smallIcon.setSound(uri);
+            }
+            if (zzw != null) {
+                smallIcon.setContentIntent(zzw);
+            }
+            build = smallIcon.build();
+            zze2 = zze(bundle, "gcm.n.tag");
+            if (Log.isLoggable("GcmNotification", 3)) {
+                Log.d("GcmNotification", "Showing notification");
+            }
+            notificationManager = (NotificationManager) this.mContext.getSystemService("notification");
+            if (TextUtils.isEmpty(zze2)) {
+                zze2 = "GCM-Notification:" + SystemClock.uptimeMillis();
+            }
+            notificationManager.notify(zze2, 0, build);
+            return true;
+        }
+        identifier = this.mContext.getApplicationInfo().icon;
+        if (identifier == 0) {
+            identifier = 17301651;
+        }
+        zze = zze(bundle, "gcm.n.color");
+        zze2 = zze(bundle, "gcm.n.sound2");
+        if (TextUtils.isEmpty(zze2)) {
+            uri = null;
+        } else {
+            if ("default".equals(zze2)) {
+            }
+            uri = RingtoneManager.getDefaultUri(2);
+        }
+        zzw = zzw(bundle);
+        smallIcon = new Builder(this.mContext).setAutoCancel(true).setSmallIcon(identifier);
+        if (TextUtils.isEmpty(zzf)) {
+            smallIcon.setContentTitle(this.mContext.getApplicationInfo().loadLabel(this.mContext.getPackageManager()));
+        } else {
+            smallIcon.setContentTitle(zzf);
+        }
+        if (TextUtils.isEmpty(zzf2)) {
+            smallIcon.setContentText(zzf2);
+        }
+        if (TextUtils.isEmpty(zze)) {
+            smallIcon.setColor(Color.parseColor(zze));
+        }
+        if (uri != null) {
+            smallIcon.setSound(uri);
+        }
+        if (zzw != null) {
+            smallIcon.setContentIntent(zzw);
+        }
+        build = smallIcon.build();
+        zze2 = zze(bundle, "gcm.n.tag");
+        if (Log.isLoggable("GcmNotification", 3)) {
+            Log.d("GcmNotification", "Showing notification");
+        }
+        notificationManager = (NotificationManager) this.mContext.getSystemService("notification");
+        if (TextUtils.isEmpty(zze2)) {
+            zze2 = "GCM-Notification:" + SystemClock.uptimeMillis();
+        }
+        notificationManager.notify(zze2, 0, build);
         return true;
     }
 }

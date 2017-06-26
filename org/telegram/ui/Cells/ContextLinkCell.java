@@ -51,6 +51,7 @@ import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LetterDrawable;
 import org.telegram.ui.Components.RadialProgress;
+import org.telegram.ui.PhotoViewer;
 
 public class ContextLinkCell extends View implements FileDownloadProgressListener {
     private static final int DOCUMENT_ATTACH_TYPE_AUDIO = 3;
@@ -67,6 +68,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     private boolean buttonPressed;
     private int buttonState;
     private MessageObject currentMessageObject;
+    private PhotoSize currentPhotoObject;
     private ContextLinkCellDelegate delegate;
     private StaticLayout descriptionLayout;
     private int descriptionY = AndroidUtilities.dp(27.0f);
@@ -103,6 +105,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         this.descriptionLayout = null;
         this.titleLayout = null;
         this.linkLayout = null;
+        this.currentPhotoObject = null;
         this.linkY = AndroidUtilities.dp(27.0f);
         if (this.inlineResult == null && this.documentAttach == null) {
             setMeasuredDimension(AndroidUtilities.dp(100.0f), AndroidUtilities.dp(100.0f));
@@ -111,7 +114,6 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         int width;
         int viewWidth = MeasureSpec.getSize(widthMeasureSpec);
         int maxWidth = (viewWidth - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline)) - AndroidUtilities.dp(8.0f);
-        PhotoSize currentPhotoObject = null;
         PhotoSize currentPhotoObjectThumb = null;
         ArrayList<PhotoSize> photoThumbs = null;
         String url = null;
@@ -151,17 +153,17 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         String ext = null;
         if (this.documentAttach != null) {
             if (MessageObject.isGifDocument(this.documentAttach)) {
-                currentPhotoObject = this.documentAttach.thumb;
+                this.currentPhotoObject = this.documentAttach.thumb;
             } else if (MessageObject.isStickerDocument(this.documentAttach)) {
-                currentPhotoObject = this.documentAttach.thumb;
+                this.currentPhotoObject = this.documentAttach.thumb;
                 ext = "webp";
             } else if (!(this.documentAttachType == 5 || this.documentAttachType == 3)) {
-                currentPhotoObject = this.documentAttach.thumb;
+                this.currentPhotoObject = this.documentAttach.thumb;
             }
         } else if (!(this.inlineResult == null || this.inlineResult.photo == null)) {
-            currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(photoThumbs, AndroidUtilities.getPhotoSize(), true);
+            this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(photoThumbs, AndroidUtilities.getPhotoSize(), true);
             currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(photoThumbs, 80);
-            if (currentPhotoObjectThumb == currentPhotoObject) {
+            if (currentPhotoObjectThumb == this.currentPhotoObject) {
                 currentPhotoObjectThumb = null;
             }
         }
@@ -183,7 +185,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                 url = this.inlineResult.thumb_url;
             }
         }
-        if (url == null && currentPhotoObject == null && currentPhotoObjectThumb == null && ((this.inlineResult.send_message instanceof TL_botInlineMessageMediaVenue) || (this.inlineResult.send_message instanceof TL_botInlineMessageMediaGeo))) {
+        if (url == null && this.currentPhotoObject == null && currentPhotoObjectThumb == null && ((this.inlineResult.send_message instanceof TL_botInlineMessageMediaVenue) || (this.inlineResult.send_message instanceof TL_botInlineMessageMediaGeo))) {
             double lat = this.inlineResult.send_message.geo.lat;
             double lon = this.inlineResult.send_message.geo._long;
             url = String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=15&size=72x72&maptype=roadmap&scale=%d&markers=color:red|size:small|%f,%f&sensor=false", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(Math.min(2, (int) Math.ceil((double) AndroidUtilities.density))), Double.valueOf(lat), Double.valueOf(lon)});
@@ -201,12 +203,12 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             }
         }
         if (w == 0 || h == 0) {
-            if (currentPhotoObject != null) {
+            if (this.currentPhotoObject != null) {
                 if (currentPhotoObjectThumb != null) {
                     currentPhotoObjectThumb.size = -1;
                 }
-                w = currentPhotoObject.w;
-                h = currentPhotoObject.h;
+                w = this.currentPhotoObject.w;
+                h = this.currentPhotoObject.h;
             } else if (this.inlineResult != null) {
                 w = this.inlineResult.w;
                 h = this.inlineResult.h;
@@ -216,7 +218,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             h = AndroidUtilities.dp(80.0f);
             w = h;
         }
-        if (!(this.documentAttach == null && currentPhotoObject == null && url == null)) {
+        if (!(this.documentAttach == null && this.currentPhotoObject == null && url == null)) {
             String currentPhotoFilter;
             String currentPhotoFilterThumb = "52_52_b";
             if (this.mediaWebpage) {
@@ -237,17 +239,17 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                     FileLocation fileLocation;
                     ImageReceiver imageReceiver = this.linkImageView;
                     TLObject tLObject = this.documentAttach;
-                    if (currentPhotoObject != null) {
-                        fileLocation = currentPhotoObject.location;
+                    if (this.currentPhotoObject != null) {
+                        fileLocation = this.currentPhotoObject.location;
                     } else {
                         fileLocation = null;
                     }
                     imageReceiver.setImage(tLObject, null, fileLocation, currentPhotoFilter, this.documentAttach.size, ext, false);
                 } else {
-                    this.linkImageView.setImage(null, url, null, null, currentPhotoObject != null ? currentPhotoObject.location : null, currentPhotoFilter, -1, ext, true);
+                    this.linkImageView.setImage(null, url, null, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, currentPhotoFilter, -1, ext, true);
                 }
-            } else if (currentPhotoObject != null) {
-                this.linkImageView.setImage(currentPhotoObject.location, currentPhotoFilter, currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, currentPhotoFilterThumb, currentPhotoObject.size, ext, false);
+            } else if (this.currentPhotoObject != null) {
+                this.linkImageView.setImage(this.currentPhotoObject.location, currentPhotoFilter, currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, currentPhotoFilterThumb, this.currentPhotoObject.size, ext, false);
             } else {
                 this.linkImageView.setImage(null, url, currentPhotoFilter, null, currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, currentPhotoFilterThumb, -1, ext, true);
             }
@@ -590,6 +592,9 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             Theme.chat_inlineResultLocation.draw(canvas);
         }
         if (this.drawLinkImageView) {
+            if (this.inlineResult != null) {
+                this.linkImageView.setVisible(!PhotoViewer.getInstance().isShowingImage(this.inlineResult), false);
+            }
             canvas.save();
             if ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == 1.0f)) {
                 long newTime = System.currentTimeMillis();
@@ -646,6 +651,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     }
 
     public void updateButtonState(boolean animated) {
+        float setProgress = 0.0f;
         String fileName = null;
         File cacheFile = null;
         if (this.documentAttachType == 5 || this.documentAttachType == 3) {
@@ -662,9 +668,9 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                     fileName = FileLoader.getAttachFileName(this.inlineResult.document);
                     cacheFile = FileLoader.getPathToAttach(this.inlineResult.document);
                 } else if (this.inlineResult.photo instanceof TL_photo) {
-                    PhotoSize currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(this.inlineResult.photo.sizes, AndroidUtilities.getPhotoSize(), true);
-                    fileName = FileLoader.getAttachFileName(currentPhotoObject);
-                    cacheFile = FileLoader.getPathToAttach(currentPhotoObject);
+                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(this.inlineResult.photo.sizes, AndroidUtilities.getPhotoSize(), true);
+                    fileName = FileLoader.getAttachFileName(this.currentPhotoObject);
+                    cacheFile = FileLoader.getPathToAttach(this.currentPhotoObject);
                 } else if (this.inlineResult.content_url != null) {
                     fileName = Utilities.MD5(this.inlineResult.content_url) + "." + ImageLoader.getHttpUrlExtension(this.inlineResult.content_url, "jpg");
                     cacheFile = new File(FileLoader.getInstance().getDirectory(4), fileName);
@@ -726,7 +732,10 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         } else {
             this.buttonState = 1;
             progress = ImageLoader.getInstance().getFileProgress(fileName);
-            this.radialProgress.setProgress(progress != null ? progress.floatValue() : 0.0f, false);
+            if (progress != null) {
+                setProgress = progress.floatValue();
+            }
+            this.radialProgress.setProgress(setProgress, false);
             this.radialProgress.setBackground(getDrawableForCurrentState(), true, animated);
         }
         invalidate();

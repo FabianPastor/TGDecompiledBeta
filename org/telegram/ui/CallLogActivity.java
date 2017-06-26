@@ -350,9 +350,23 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                     return false;
                 }
                 final CallLogRow row = (CallLogRow) CallLogActivity.this.calls.get(position);
-                new Builder(CallLogActivity.this.getParentActivity()).setTitle(LocaleController.getString("Calls", R.string.Calls)).setItems(new String[]{LocaleController.getString("Delete", R.string.Delete)}, new DialogInterface.OnClickListener() {
+                ArrayList<String> items = new ArrayList();
+                items.add(LocaleController.getString("Delete", R.string.Delete));
+                if (VoIPHelper.canRateCall((TL_messageActionPhoneCall) ((Message) row.calls.get(0)).action)) {
+                    items.add(LocaleController.getString("CallMessageReportProblem", R.string.CallMessageReportProblem));
+                }
+                new Builder(CallLogActivity.this.getParentActivity()).setTitle(LocaleController.getString("Calls", R.string.Calls)).setItems((CharSequence[]) items.toArray(new String[items.size()]), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        CallLogActivity.this.confirmAndDelete(row);
+                        switch (which) {
+                            case 0:
+                                CallLogActivity.this.confirmAndDelete(row);
+                                return;
+                            case 1:
+                                VoIPHelper.showRateAlert(CallLogActivity.this.getParentActivity(), (TL_messageActionPhoneCall) ((Message) row.calls.get(0)).action);
+                                return;
+                            default:
+                                return;
+                        }
                     }
                 }).show();
                 return true;
@@ -438,7 +452,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                 args.putBoolean("onlyUsers", true);
                 ContactsActivity contactsFragment = new ContactsActivity(args);
                 contactsFragment.setDelegate(new ContactsActivityDelegate() {
-                    public void didSelectContact(User user, String param) {
+                    public void didSelectContact(User user, String param, ContactsActivity activity) {
                         VoIPHelper.startCall(user, CallLogActivity.this.getParentActivity(), null);
                     }
                 });

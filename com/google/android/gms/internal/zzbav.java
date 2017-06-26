@@ -1,53 +1,121 @@
 package com.google.android.gms.internal;
 
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
-import com.google.android.gms.common.internal.zzad;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
+import android.app.Application;
+import android.app.Application.ActivityLifecycleCallbacks;
+import android.content.ComponentCallbacks2;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import com.google.android.gms.common.util.zzq;
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class zzbav implements Creator<zzbau> {
-    static void zza(zzbau com_google_android_gms_internal_zzbau, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zzc(parcel, 1, com_google_android_gms_internal_zzbau.zzaiI);
-        zzc.zza(parcel, 2, com_google_android_gms_internal_zzbau.zzPV(), i, false);
-        zzc.zzJ(parcel, zzaZ);
+public final class zzbav implements ActivityLifecycleCallbacks, ComponentCallbacks2 {
+    private static final zzbav zzaBJ = new zzbav();
+    private final ArrayList<zzbaw> mListeners = new ArrayList();
+    private final AtomicBoolean zzaBK = new AtomicBoolean();
+    private final AtomicBoolean zzaBL = new AtomicBoolean();
+    private boolean zzafK = false;
+
+    private zzbav() {
     }
 
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzjx(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zznx(i);
-    }
-
-    public zzbau zzjx(Parcel parcel) {
-        int zzaY = zzb.zzaY(parcel);
-        int i = 0;
-        zzad com_google_android_gms_common_internal_zzad = null;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
-                case 1:
-                    i = zzb.zzg(parcel, zzaX);
-                    break;
-                case 2:
-                    com_google_android_gms_common_internal_zzad = (zzad) zzb.zza(parcel, zzaX, zzad.CREATOR);
-                    break;
-                default:
-                    zzb.zzb(parcel, zzaX);
-                    break;
+    public static void zza(Application application) {
+        synchronized (zzaBJ) {
+            if (!zzaBJ.zzafK) {
+                application.registerActivityLifecycleCallbacks(zzaBJ);
+                application.registerComponentCallbacks(zzaBJ);
+                zzaBJ.zzafK = true;
             }
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new zzbau(i, com_google_android_gms_common_internal_zzad);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public zzbau[] zznx(int i) {
-        return new zzbau[i];
+    private final void zzac(boolean z) {
+        synchronized (zzaBJ) {
+            ArrayList arrayList = this.mListeners;
+            int size = arrayList.size();
+            int i = 0;
+            while (i < size) {
+                Object obj = arrayList.get(i);
+                i++;
+                ((zzbaw) obj).zzac(z);
+            }
+        }
+    }
+
+    public static zzbav zzpv() {
+        return zzaBJ;
+    }
+
+    public final void onActivityCreated(Activity activity, Bundle bundle) {
+        boolean compareAndSet = this.zzaBK.compareAndSet(true, false);
+        this.zzaBL.set(true);
+        if (compareAndSet) {
+            zzac(false);
+        }
+    }
+
+    public final void onActivityDestroyed(Activity activity) {
+    }
+
+    public final void onActivityPaused(Activity activity) {
+    }
+
+    public final void onActivityResumed(Activity activity) {
+        boolean compareAndSet = this.zzaBK.compareAndSet(true, false);
+        this.zzaBL.set(true);
+        if (compareAndSet) {
+            zzac(false);
+        }
+    }
+
+    public final void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+    }
+
+    public final void onActivityStarted(Activity activity) {
+    }
+
+    public final void onActivityStopped(Activity activity) {
+    }
+
+    public final void onConfigurationChanged(Configuration configuration) {
+    }
+
+    public final void onLowMemory() {
+    }
+
+    public final void onTrimMemory(int i) {
+        if (i == 20 && this.zzaBK.compareAndSet(false, true)) {
+            this.zzaBL.set(true);
+            zzac(true);
+        }
+    }
+
+    public final void zza(zzbaw com_google_android_gms_internal_zzbaw) {
+        synchronized (zzaBJ) {
+            this.mListeners.add(com_google_android_gms_internal_zzbaw);
+        }
+    }
+
+    @TargetApi(16)
+    public final boolean zzab(boolean z) {
+        if (!this.zzaBL.get()) {
+            if (!zzq.zzrZ()) {
+                return true;
+            }
+            RunningAppProcessInfo runningAppProcessInfo = new RunningAppProcessInfo();
+            ActivityManager.getMyMemoryState(runningAppProcessInfo);
+            if (!this.zzaBL.getAndSet(true) && runningAppProcessInfo.importance > 100) {
+                this.zzaBK.set(true);
+            }
+        }
+        return this.zzaBK.get();
+    }
+
+    public final boolean zzpw() {
+        return this.zzaBK.get();
     }
 }

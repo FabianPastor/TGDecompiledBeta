@@ -7,6 +7,9 @@ import android.os.Bundle;
 import com.google.android.gms.gcm.GcmListenerService;
 import org.json.JSONObject;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLRPC.TL_messageMediaEmpty;
+import org.telegram.tgnet.TLRPC.TL_updateServiceNotification;
+import org.telegram.tgnet.TLRPC.TL_updates;
 
 public class GcmPushListenerService extends GcmListenerService {
     public static final int NOTIFICATION_ID = 1;
@@ -17,7 +20,8 @@ public class GcmPushListenerService extends GcmListenerService {
             public void run() {
                 ApplicationLoader.postInitApplication();
                 try {
-                    if ("DC_UPDATE".equals(bundle.getString("loc_key"))) {
+                    String key = bundle.getString("loc_key");
+                    if ("DC_UPDATE".equals(key)) {
                         JSONObject object = new JSONObject(bundle.getString("custom"));
                         int dc = object.getInt("dc");
                         String[] parts = object.getString("addr").split(":");
@@ -26,9 +30,36 @@ public class GcmPushListenerService extends GcmListenerService {
                         } else {
                             return;
                         }
+                    } else if ("MESSAGE_ANNOUNCEMENT".equals(key)) {
+                        obj = bundle.get("google.sent_time");
+                        try {
+                            if (obj instanceof String) {
+                                time = Utilities.parseLong((String) obj).longValue();
+                            } else if (obj instanceof Long) {
+                                time = ((Long) obj).longValue();
+                            } else {
+                                time = System.currentTimeMillis();
+                            }
+                        } catch (Exception e) {
+                            time = System.currentTimeMillis();
+                        }
+                        TL_updateServiceNotification update = new TL_updateServiceNotification();
+                        update.popup = false;
+                        update.flags = 2;
+                        update.inbox_date = (int) (time / 1000);
+                        update.message = bundle.getString("message");
+                        update.type = "announcement";
+                        update.media = new TL_messageMediaEmpty();
+                        TL_updates updates = new TL_updates();
+                        updates.updates.add(update);
+                        final TL_updates tL_updates = updates;
+                        Utilities.stageQueue.postRunnable(new Runnable() {
+                            public void run() {
+                                MessagesController.getInstance().processUpdates(tL_updates, false);
+                            }
+                        });
                     } else if (VERSION.SDK_INT >= 24 && ApplicationLoader.mainInterfacePaused && UserConfig.isClientActivated() && bundle.get("badge") == null) {
-                        long time;
-                        Object obj = bundle.get("google.sent_time");
+                        obj = bundle.get("google.sent_time");
                         if (obj instanceof String) {
                             time = Utilities.parseLong((String) obj).longValue();
                         } else if (obj instanceof Long) {
@@ -44,8 +75,8 @@ public class GcmPushListenerService extends GcmListenerService {
                             }
                         }
                     }
-                } catch (Throwable e) {
-                    FileLog.e(e);
+                } catch (Throwable e2) {
+                    FileLog.e(e2);
                 }
                 ConnectionsManager.onInternalPushReceived();
                 ConnectionsManager.getInstance().resumeNetworkMaybe();

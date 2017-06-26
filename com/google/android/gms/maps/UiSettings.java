@@ -5,159 +5,159 @@ import com.google.android.gms.maps.internal.IUiSettingsDelegate;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 
 public final class UiSettings {
-    private final IUiSettingsDelegate zzboV;
+    private final IUiSettingsDelegate zzbmY;
 
     UiSettings(IUiSettingsDelegate iUiSettingsDelegate) {
-        this.zzboV = iUiSettingsDelegate;
+        this.zzbmY = iUiSettingsDelegate;
     }
 
-    public boolean isCompassEnabled() {
+    public final boolean isCompassEnabled() {
         try {
-            return this.zzboV.isCompassEnabled();
+            return this.zzbmY.isCompassEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isIndoorLevelPickerEnabled() {
+    public final boolean isIndoorLevelPickerEnabled() {
         try {
-            return this.zzboV.isIndoorLevelPickerEnabled();
+            return this.zzbmY.isIndoorLevelPickerEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isMapToolbarEnabled() {
+    public final boolean isMapToolbarEnabled() {
         try {
-            return this.zzboV.isMapToolbarEnabled();
+            return this.zzbmY.isMapToolbarEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isMyLocationButtonEnabled() {
+    public final boolean isMyLocationButtonEnabled() {
         try {
-            return this.zzboV.isMyLocationButtonEnabled();
+            return this.zzbmY.isMyLocationButtonEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isRotateGesturesEnabled() {
+    public final boolean isRotateGesturesEnabled() {
         try {
-            return this.zzboV.isRotateGesturesEnabled();
+            return this.zzbmY.isRotateGesturesEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isScrollGesturesEnabled() {
+    public final boolean isScrollGesturesEnabled() {
         try {
-            return this.zzboV.isScrollGesturesEnabled();
+            return this.zzbmY.isScrollGesturesEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isTiltGesturesEnabled() {
+    public final boolean isTiltGesturesEnabled() {
         try {
-            return this.zzboV.isTiltGesturesEnabled();
+            return this.zzbmY.isTiltGesturesEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isZoomControlsEnabled() {
+    public final boolean isZoomControlsEnabled() {
         try {
-            return this.zzboV.isZoomControlsEnabled();
+            return this.zzbmY.isZoomControlsEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isZoomGesturesEnabled() {
+    public final boolean isZoomGesturesEnabled() {
         try {
-            return this.zzboV.isZoomGesturesEnabled();
+            return this.zzbmY.isZoomGesturesEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setAllGesturesEnabled(boolean z) {
+    public final void setAllGesturesEnabled(boolean z) {
         try {
-            this.zzboV.setAllGesturesEnabled(z);
+            this.zzbmY.setAllGesturesEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setCompassEnabled(boolean z) {
+    public final void setCompassEnabled(boolean z) {
         try {
-            this.zzboV.setCompassEnabled(z);
+            this.zzbmY.setCompassEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setIndoorLevelPickerEnabled(boolean z) {
+    public final void setIndoorLevelPickerEnabled(boolean z) {
         try {
-            this.zzboV.setIndoorLevelPickerEnabled(z);
+            this.zzbmY.setIndoorLevelPickerEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setMapToolbarEnabled(boolean z) {
+    public final void setMapToolbarEnabled(boolean z) {
         try {
-            this.zzboV.setMapToolbarEnabled(z);
+            this.zzbmY.setMapToolbarEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setMyLocationButtonEnabled(boolean z) {
+    public final void setMyLocationButtonEnabled(boolean z) {
         try {
-            this.zzboV.setMyLocationButtonEnabled(z);
+            this.zzbmY.setMyLocationButtonEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setRotateGesturesEnabled(boolean z) {
+    public final void setRotateGesturesEnabled(boolean z) {
         try {
-            this.zzboV.setRotateGesturesEnabled(z);
+            this.zzbmY.setRotateGesturesEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setScrollGesturesEnabled(boolean z) {
+    public final void setScrollGesturesEnabled(boolean z) {
         try {
-            this.zzboV.setScrollGesturesEnabled(z);
+            this.zzbmY.setScrollGesturesEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setTiltGesturesEnabled(boolean z) {
+    public final void setTiltGesturesEnabled(boolean z) {
         try {
-            this.zzboV.setTiltGesturesEnabled(z);
+            this.zzbmY.setTiltGesturesEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setZoomControlsEnabled(boolean z) {
+    public final void setZoomControlsEnabled(boolean z) {
         try {
-            this.zzboV.setZoomControlsEnabled(z);
+            this.zzbmY.setZoomControlsEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setZoomGesturesEnabled(boolean z) {
+    public final void setZoomGesturesEnabled(boolean z) {
         try {
-            this.zzboV.setZoomGesturesEnabled(z);
+            this.zzbmY.setZoomGesturesEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

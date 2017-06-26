@@ -19,6 +19,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.Locale;
+import org.telegram.messenger.SecretChatHelper;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -457,7 +458,7 @@ public class NumberPicker extends LinearLayout {
                         break;
                 }
             case 23:
-            case 66:
+            case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*66*/:
                 removeAllCallbacks();
                 break;
         }

@@ -2,52 +2,52 @@ package com.google.android.gms.maps.model;
 
 import android.os.IBinder;
 import android.os.RemoteException;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.maps.model.internal.zzd;
-import com.google.android.gms.maps.model.internal.zze.zza;
+import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.maps.model.internal.zzj;
+import com.google.android.gms.maps.model.internal.zzn;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class IndoorBuilding {
-    private final zzd zzbpt;
+    private final zzj zzbnw;
 
-    public IndoorBuilding(zzd com_google_android_gms_maps_model_internal_zzd) {
-        this.zzbpt = (zzd) zzac.zzw(com_google_android_gms_maps_model_internal_zzd);
+    public IndoorBuilding(zzj com_google_android_gms_maps_model_internal_zzj) {
+        this.zzbnw = (zzj) zzbo.zzu(com_google_android_gms_maps_model_internal_zzj);
     }
 
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         if (!(obj instanceof IndoorBuilding)) {
             return false;
         }
         try {
-            return this.zzbpt.zzb(((IndoorBuilding) obj).zzbpt);
+            return this.zzbnw.zzb(((IndoorBuilding) obj).zzbnw);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public int getActiveLevelIndex() {
+    public final int getActiveLevelIndex() {
         try {
-            return this.zzbpt.getActiveLevelIndex();
+            return this.zzbnw.getActiveLevelIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public int getDefaultLevelIndex() {
+    public final int getDefaultLevelIndex() {
         try {
-            return this.zzbpt.getActiveLevelIndex();
+            return this.zzbnw.getActiveLevelIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public List<IndoorLevel> getLevels() {
+    public final List<IndoorLevel> getLevels() {
         try {
-            List<IBinder> levels = this.zzbpt.getLevels();
+            List<IBinder> levels = this.zzbnw.getLevels();
             List<IndoorLevel> arrayList = new ArrayList(levels.size());
-            for (IBinder zzem : levels) {
-                arrayList.add(new IndoorLevel(zza.zzem(zzem)));
+            for (IBinder zzae : levels) {
+                arrayList.add(new IndoorLevel(zzn.zzae(zzae)));
             }
             return arrayList;
         } catch (RemoteException e) {
@@ -55,17 +55,17 @@ public final class IndoorBuilding {
         }
     }
 
-    public int hashCode() {
+    public final int hashCode() {
         try {
-            return this.zzbpt.hashCodeRemote();
+            return this.zzbnw.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isUnderground() {
+    public final boolean isUnderground() {
         try {
-            return this.zzbpt.isUnderground();
+            return this.zzbnw.isUnderground();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

@@ -8,6 +8,7 @@ import android.media.AudioTimestamp;
 import android.os.ConditionVariable;
 import android.os.SystemClock;
 import android.util.Log;
+import com.google.android.gms.wearable.WearableStatusCodes;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -457,9 +458,9 @@ public final class AudioTrack {
     }
 
     private void resetAudioProcessors() {
+        AudioProcessor audioProcessor;
         ArrayList<AudioProcessor> newAudioProcessors = new ArrayList();
-        for (AudioProcessor audioProcessor : this.availableAudioProcessors) {
-            AudioProcessor audioProcessor2;
+        for (AudioProcessor audioProcessor2 : this.availableAudioProcessors) {
             if (audioProcessor2.isActive()) {
                 newAudioProcessors.add(audioProcessor2);
             } else {
@@ -492,7 +493,7 @@ public final class AudioTrack {
                 releaseKeepSessionIdAudioTrack();
             }
             if (this.keepSessionIdAudioTrack == null) {
-                this.keepSessionIdAudioTrack = new android.media.AudioTrack(this.streamType, 4000, 4, 2, 2, 0, audioSessionId);
+                this.keepSessionIdAudioTrack = new android.media.AudioTrack(this.streamType, WearableStatusCodes.TARGET_NODE_NOT_CONNECTED, 4, 2, 2, 0, audioSessionId);
             }
         }
         if (this.audioSessionId != audioSessionId) {

@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 
 public final class LatLng extends zza implements ReflectedParcelable {
     public static final Creator<LatLng> CREATOR = new zzf();
@@ -19,7 +20,7 @@ public final class LatLng extends zza implements ReflectedParcelable {
         this.latitude = Math.max(-90.0d, Math.min(90.0d, d));
     }
 
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -30,19 +31,22 @@ public final class LatLng extends zza implements ReflectedParcelable {
         return Double.doubleToLongBits(this.latitude) == Double.doubleToLongBits(latLng.latitude) && Double.doubleToLongBits(this.longitude) == Double.doubleToLongBits(latLng.longitude);
     }
 
-    public int hashCode() {
+    public final int hashCode() {
         long doubleToLongBits = Double.doubleToLongBits(this.latitude);
         int i = ((int) (doubleToLongBits ^ (doubleToLongBits >>> 32))) + 31;
         long doubleToLongBits2 = Double.doubleToLongBits(this.longitude);
         return (i * 31) + ((int) (doubleToLongBits2 ^ (doubleToLongBits2 >>> 32)));
     }
 
-    public String toString() {
+    public final String toString() {
         double d = this.latitude;
         return "lat/lng: (" + d + "," + this.longitude + ")";
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzf.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.latitude);
+        zzd.zza(parcel, 3, this.longitude);
+        zzd.zzI(parcel, zze);
     }
 }

@@ -3,6 +3,7 @@ package com.google.android.gms.maps.model;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 
 public final class Tile extends zza {
     public static final Creator<Tile> CREATOR = new zzq();
@@ -16,7 +17,11 @@ public final class Tile extends zza {
         this.data = bArr;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzq.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zzc(parcel, 2, this.width);
+        zzd.zzc(parcel, 3, this.height);
+        zzd.zza(parcel, 4, this.data, false);
+        zzd.zzI(parcel, zze);
     }
 }

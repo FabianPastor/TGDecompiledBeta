@@ -2,86 +2,55 @@ package com.google.android.gms.vision.barcode;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
 import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
-import com.google.android.gms.vision.barcode.Barcode.Address;
-import com.google.android.gms.vision.barcode.Barcode.ContactInfo;
-import com.google.android.gms.vision.barcode.Barcode.Email;
-import com.google.android.gms.vision.barcode.Barcode.PersonName;
-import com.google.android.gms.vision.barcode.Barcode.Phone;
+import com.google.android.gms.vision.barcode.Barcode.CalendarDateTime;
+import com.google.android.gms.vision.barcode.Barcode.CalendarEvent;
 
-public class zze implements Creator<ContactInfo> {
-    static void zza(ContactInfo contactInfo, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zzc(parcel, 1, contactInfo.versionCode);
-        zzc.zza(parcel, 2, contactInfo.name, i, false);
-        zzc.zza(parcel, 3, contactInfo.organization, false);
-        zzc.zza(parcel, 4, contactInfo.title, false);
-        zzc.zza(parcel, 5, contactInfo.phones, i, false);
-        zzc.zza(parcel, 6, contactInfo.emails, i, false);
-        zzc.zza(parcel, 7, contactInfo.urls, false);
-        zzc.zza(parcel, 8, contactInfo.addresses, i, false);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzjD(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zznX(i);
-    }
-
-    public ContactInfo zzjD(Parcel parcel) {
-        Address[] addressArr = null;
-        int zzaY = zzb.zzaY(parcel);
-        int i = 0;
-        String[] strArr = null;
-        Email[] emailArr = null;
-        Phone[] phoneArr = null;
+public final class zze implements Creator<CalendarEvent> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        CalendarDateTime calendarDateTime = null;
+        int zzd = zzb.zzd(parcel);
+        CalendarDateTime calendarDateTime2 = null;
         String str = null;
         String str2 = null;
-        PersonName personName = null;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
-                case 1:
-                    i = zzb.zzg(parcel, zzaX);
-                    break;
+        String str3 = null;
+        String str4 = null;
+        String str5 = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
                 case 2:
-                    personName = (PersonName) zzb.zza(parcel, zzaX, PersonName.CREATOR);
+                    str5 = zzb.zzq(parcel, readInt);
                     break;
                 case 3:
-                    str2 = zzb.zzq(parcel, zzaX);
+                    str4 = zzb.zzq(parcel, readInt);
                     break;
                 case 4:
-                    str = zzb.zzq(parcel, zzaX);
+                    str3 = zzb.zzq(parcel, readInt);
                     break;
                 case 5:
-                    phoneArr = (Phone[]) zzb.zzb(parcel, zzaX, Phone.CREATOR);
+                    str2 = zzb.zzq(parcel, readInt);
                     break;
                 case 6:
-                    emailArr = (Email[]) zzb.zzb(parcel, zzaX, Email.CREATOR);
+                    str = zzb.zzq(parcel, readInt);
                     break;
                 case 7:
-                    strArr = zzb.zzC(parcel, zzaX);
+                    calendarDateTime2 = (CalendarDateTime) zzb.zza(parcel, readInt, CalendarDateTime.CREATOR);
                     break;
                 case 8:
-                    addressArr = (Address[]) zzb.zzb(parcel, zzaX, Address.CREATOR);
+                    calendarDateTime = (CalendarDateTime) zzb.zza(parcel, readInt, CalendarDateTime.CREATOR);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaX);
+                    zzb.zzb(parcel, readInt);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new ContactInfo(i, personName, str2, str, phoneArr, emailArr, strArr, addressArr);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
+        zzb.zzF(parcel, zzd);
+        return new CalendarEvent(str5, str4, str3, str2, str, calendarDateTime2, calendarDateTime);
     }
 
-    public ContactInfo[] zznX(int i) {
-        return new ContactInfo[i];
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new CalendarEvent[i];
     }
 }

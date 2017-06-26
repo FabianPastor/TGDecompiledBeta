@@ -1,54 +1,54 @@
 package com.google.android.gms.maps.model;
 
 import android.os.RemoteException;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.maps.model.internal.zze;
+import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.maps.model.internal.zzm;
 
 public final class IndoorLevel {
-    private final zze zzbpu;
+    private final zzm zzbnx;
 
-    public IndoorLevel(zze com_google_android_gms_maps_model_internal_zze) {
-        this.zzbpu = (zze) zzac.zzw(com_google_android_gms_maps_model_internal_zze);
+    public IndoorLevel(zzm com_google_android_gms_maps_model_internal_zzm) {
+        this.zzbnx = (zzm) zzbo.zzu(com_google_android_gms_maps_model_internal_zzm);
     }
 
-    public void activate() {
+    public final void activate() {
         try {
-            this.zzbpu.activate();
+            this.zzbnx.activate();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         if (!(obj instanceof IndoorLevel)) {
             return false;
         }
         try {
-            return this.zzbpu.zza(((IndoorLevel) obj).zzbpu);
+            return this.zzbnx.zza(((IndoorLevel) obj).zzbnx);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public String getName() {
+    public final String getName() {
         try {
-            return this.zzbpu.getName();
+            return this.zzbnx.getName();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public String getShortName() {
+    public final String getShortName() {
         try {
-            return this.zzbpu.getShortName();
+            return this.zzbnx.getShortName();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public int hashCode() {
+    public final int hashCode() {
         try {
-            return this.zzbpu.hashCodeRemote();
+            return this.zzbnx.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

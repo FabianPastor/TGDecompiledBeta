@@ -2,46 +2,38 @@ package com.google.android.gms.wallet;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
 import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
+import java.util.ArrayList;
 
-public class zzd implements Creator<CountrySpecification> {
-    static void zza(CountrySpecification countrySpecification, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zza(parcel, 2, countrySpecification.zzUI, false);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzjZ(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzov(i);
-    }
-
-    public CountrySpecification zzjZ(Parcel parcel) {
-        int zzaY = zzb.zzaY(parcel);
+public final class zzd implements Creator<Cart> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
         String str = null;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
+        int zzd = zzb.zzd(parcel);
+        ArrayList arrayList = new ArrayList();
+        String str2 = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
                 case 2:
-                    str = zzb.zzq(parcel, zzaX);
+                    str2 = zzb.zzq(parcel, readInt);
+                    break;
+                case 3:
+                    str = zzb.zzq(parcel, readInt);
+                    break;
+                case 4:
+                    arrayList = zzb.zzc(parcel, readInt, LineItem.CREATOR);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaX);
+                    zzb.zzb(parcel, readInt);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new CountrySpecification(str);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
+        zzb.zzF(parcel, zzd);
+        return new Cart(str2, str, arrayList);
     }
 
-    public CountrySpecification[] zzov(int i) {
-        return new CountrySpecification[i];
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new Cart[i];
     }
 }

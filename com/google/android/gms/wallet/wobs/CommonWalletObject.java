@@ -3,92 +3,112 @@ package com.google.android.gms.wallet.wobs;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.annotation.KeepName;
-import com.google.android.gms.common.util.zzb;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 
 @KeepName
 public class CommonWalletObject extends com.google.android.gms.common.internal.safeparcel.zza {
-    public static final Creator<CommonWalletObject> CREATOR = new zza();
-    String name;
-    int state;
-    String zzbQB;
-    String zzbQD;
-    String zzbQE;
-    String zzbQF;
-    String zzbQG;
-    String zzbQH;
-    ArrayList<zzp> zzbQI;
-    zzl zzbQJ;
-    ArrayList<LatLng> zzbQK;
-    String zzbQL;
-    String zzbQM;
-    ArrayList<zzd> zzbQN;
-    boolean zzbQO;
-    ArrayList<zzn> zzbQP;
-    ArrayList<zzj> zzbQQ;
-    ArrayList<zzn> zzbQR;
-    String zzkl;
+    public static final Creator<CommonWalletObject> CREATOR = new zzb();
+    private String name;
+    private int state;
+    private String zzbOU;
+    private String zzbOW;
+    private String zzbOX;
+    private String zzbOY;
+    private String zzbOZ;
+    private String zzbPa;
+    private ArrayList<zzq> zzbPb;
+    private zzm zzbPc;
+    private ArrayList<LatLng> zzbPd;
+    private String zzbPe;
+    private String zzbPf;
+    private ArrayList<zze> zzbPg;
+    private boolean zzbPh;
+    private ArrayList<zzo> zzbPi;
+    private ArrayList<zzk> zzbPj;
+    private ArrayList<zzo> zzbPk;
+    String zzkx;
 
     public final class zza {
-        final /* synthetic */ CommonWalletObject zzbSy;
+        private /* synthetic */ CommonWalletObject zzbQE;
 
         private zza(CommonWalletObject commonWalletObject) {
-            this.zzbSy = commonWalletObject;
+            this.zzbQE = commonWalletObject;
         }
 
-        public CommonWalletObject zzUc() {
-            return this.zzbSy;
+        public final CommonWalletObject zzDU() {
+            return this.zzbQE;
         }
 
-        public zza zzim(String str) {
-            this.zzbSy.zzkl = str;
+        public final zza zzgi(String str) {
+            this.zzbQE.zzkx = str;
             return this;
         }
     }
 
     CommonWalletObject() {
-        this.zzbQI = zzb.zzyY();
-        this.zzbQK = zzb.zzyY();
-        this.zzbQN = zzb.zzyY();
-        this.zzbQP = zzb.zzyY();
-        this.zzbQQ = zzb.zzyY();
-        this.zzbQR = zzb.zzyY();
+        this.zzbPb = new ArrayList();
+        this.zzbPd = new ArrayList();
+        this.zzbPg = new ArrayList();
+        this.zzbPi = new ArrayList();
+        this.zzbPj = new ArrayList();
+        this.zzbPk = new ArrayList();
     }
 
-    CommonWalletObject(String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, int i, ArrayList<zzp> arrayList, zzl com_google_android_gms_wallet_wobs_zzl, ArrayList<LatLng> arrayList2, String str9, String str10, ArrayList<zzd> arrayList3, boolean z, ArrayList<zzn> arrayList4, ArrayList<zzj> arrayList5, ArrayList<zzn> arrayList6) {
-        this.zzkl = str;
-        this.zzbQH = str2;
+    CommonWalletObject(String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, int i, ArrayList<zzq> arrayList, zzm com_google_android_gms_wallet_wobs_zzm, ArrayList<LatLng> arrayList2, String str9, String str10, ArrayList<zze> arrayList3, boolean z, ArrayList<zzo> arrayList4, ArrayList<zzk> arrayList5, ArrayList<zzo> arrayList6) {
+        this.zzkx = str;
+        this.zzbPa = str2;
         this.name = str3;
-        this.zzbQB = str4;
-        this.zzbQD = str5;
-        this.zzbQE = str6;
-        this.zzbQF = str7;
-        this.zzbQG = str8;
+        this.zzbOU = str4;
+        this.zzbOW = str5;
+        this.zzbOX = str6;
+        this.zzbOY = str7;
+        this.zzbOZ = str8;
         this.state = i;
-        this.zzbQI = arrayList;
-        this.zzbQJ = com_google_android_gms_wallet_wobs_zzl;
-        this.zzbQK = arrayList2;
-        this.zzbQL = str9;
-        this.zzbQM = str10;
-        this.zzbQN = arrayList3;
-        this.zzbQO = z;
-        this.zzbQP = arrayList4;
-        this.zzbQQ = arrayList5;
-        this.zzbQR = arrayList6;
+        this.zzbPb = arrayList;
+        this.zzbPc = com_google_android_gms_wallet_wobs_zzm;
+        this.zzbPd = arrayList2;
+        this.zzbPe = str9;
+        this.zzbPf = str10;
+        this.zzbPg = arrayList3;
+        this.zzbPh = z;
+        this.zzbPi = arrayList4;
+        this.zzbPj = arrayList5;
+        this.zzbPk = arrayList6;
     }
 
-    public static zza zzUb() {
+    public static zza zzDT() {
         CommonWalletObject commonWalletObject = new CommonWalletObject();
         commonWalletObject.getClass();
         return new zza();
     }
 
-    public String getId() {
-        return this.zzkl;
+    public final String getId() {
+        return this.zzkx;
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zza.zza(this, parcel, i);
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.zzkx, false);
+        zzd.zza(parcel, 3, this.zzbPa, false);
+        zzd.zza(parcel, 4, this.name, false);
+        zzd.zza(parcel, 5, this.zzbOU, false);
+        zzd.zza(parcel, 6, this.zzbOW, false);
+        zzd.zza(parcel, 7, this.zzbOX, false);
+        zzd.zza(parcel, 8, this.zzbOY, false);
+        zzd.zza(parcel, 9, this.zzbOZ, false);
+        zzd.zzc(parcel, 10, this.state);
+        zzd.zzc(parcel, 11, this.zzbPb, false);
+        zzd.zza(parcel, 12, this.zzbPc, i, false);
+        zzd.zzc(parcel, 13, this.zzbPd, false);
+        zzd.zza(parcel, 14, this.zzbPe, false);
+        zzd.zza(parcel, 15, this.zzbPf, false);
+        zzd.zzc(parcel, 16, this.zzbPg, false);
+        zzd.zza(parcel, 17, this.zzbPh);
+        zzd.zzc(parcel, 18, this.zzbPi, false);
+        zzd.zzc(parcel, 19, this.zzbPj, false);
+        zzd.zzc(parcel, 20, this.zzbPk, false);
+        zzd.zzI(parcel, zze);
     }
 }

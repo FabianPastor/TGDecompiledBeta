@@ -10,46 +10,41 @@ import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 
 public final class zzk {
-    private static IntentFilter zzaIe = new IntentFilter("android.intent.action.BATTERY_CHANGED");
-    private static long zzaIf;
-    private static float zzaIg = Float.NaN;
+    private static IntentFilter zzaJO = new IntentFilter("android.intent.action.BATTERY_CHANGED");
+    private static long zzaJP;
+    private static float zzaJQ = Float.NaN;
 
     @TargetApi(20)
-    public static boolean zzb(PowerManager powerManager) {
-        return zzt.zzzm() ? powerManager.isInteractive() : powerManager.isScreenOn();
-    }
-
-    @TargetApi(20)
-    public static int zzbd(Context context) {
+    public static int zzaK(Context context) {
         int i = 1;
         if (context == null || context.getApplicationContext() == null) {
             return -1;
         }
-        Intent registerReceiver = context.getApplicationContext().registerReceiver(null, zzaIe);
+        Intent registerReceiver = context.getApplicationContext().registerReceiver(null, zzaJO);
         int i2 = ((registerReceiver == null ? 0 : registerReceiver.getIntExtra("plugged", 0)) & 7) != 0 ? 1 : 0;
         PowerManager powerManager = (PowerManager) context.getSystemService("power");
         if (powerManager == null) {
             return -1;
         }
-        int i3 = (zzb(powerManager) ? 1 : 0) << 1;
+        int i3 = (zzq.zzsd() ? powerManager.isInteractive() : powerManager.isScreenOn() ? 1 : 0) << 1;
         if (i2 == 0) {
             i = 0;
         }
         return i3 | i;
     }
 
-    public static synchronized float zzbe(Context context) {
+    public static synchronized float zzaL(Context context) {
         float f;
         synchronized (zzk.class) {
-            if (SystemClock.elapsedRealtime() - zzaIf >= ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS || Float.isNaN(zzaIg)) {
-                Intent registerReceiver = context.getApplicationContext().registerReceiver(null, zzaIe);
+            if (SystemClock.elapsedRealtime() - zzaJP >= ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS || Float.isNaN(zzaJQ)) {
+                Intent registerReceiver = context.getApplicationContext().registerReceiver(null, zzaJO);
                 if (registerReceiver != null) {
-                    zzaIg = ((float) registerReceiver.getIntExtra(Param.LEVEL, -1)) / ((float) registerReceiver.getIntExtra("scale", -1));
+                    zzaJQ = ((float) registerReceiver.getIntExtra(Param.LEVEL, -1)) / ((float) registerReceiver.getIntExtra("scale", -1));
                 }
-                zzaIf = SystemClock.elapsedRealtime();
-                f = zzaIg;
+                zzaJP = SystemClock.elapsedRealtime();
+                f = zzaJQ;
             } else {
-                f = zzaIg;
+                f = zzaJQ;
             }
         }
         return f;

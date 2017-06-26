@@ -1,5 +1,9 @@
 package org.telegram.ui.Components;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -50,10 +54,12 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.EmojiData;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.GridLayoutManager;
 import org.telegram.messenger.support.widget.GridLayoutManager.SpanSizeLookup;
@@ -64,6 +70,7 @@ import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.State;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
+import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.InputStickerSet;
@@ -99,6 +106,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private boolean backspaceOnce;
     private boolean backspacePressed;
     private int currentBackgroundType = -1;
+    private int currentChatId;
     private int currentPage;
     private Paint dotPaint;
     private ArrayList<GridView> emojiGrids = new ArrayList();
@@ -116,6 +124,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private int lastNotifyWidth;
     private Listener listener;
     private int[] location = new int[2];
+    private TextView mediaBanTooltip;
     private int minusDy;
     private int oldWidth;
     private Object outlineProvider;
@@ -691,6 +700,14 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 view = (View) EmojiView.this.views.get(position);
             }
             viewGroup.removeView(view);
+        }
+
+        public boolean canScrollToTab(int position) {
+            if (position != 6 || EmojiView.this.currentChatId == 0) {
+                return true;
+            }
+            EmojiView.this.showStickerBanHint();
+            return false;
         }
 
         public int getCount() {
@@ -1556,6 +1573,14 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         ((FrameLayout) this.views.get(0)).addView(textView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 48.0f, 0.0f, 0.0f));
         ((GridView) this.emojiGrids.get(0)).setEmptyView(textView);
         addView(this.pager, 0, LayoutHelper.createFrame(-1, -1, 51));
+        this.mediaBanTooltip = new CorrectlyMeasuringTextView(context);
+        this.mediaBanTooltip.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(3.0f), Theme.getColor(Theme.key_chat_gifSaveHintBackground)));
+        this.mediaBanTooltip.setTextColor(Theme.getColor(Theme.key_chat_gifSaveHintText));
+        this.mediaBanTooltip.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(7.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(7.0f));
+        this.mediaBanTooltip.setGravity(16);
+        this.mediaBanTooltip.setTextSize(1, 14.0f);
+        this.mediaBanTooltip.setVisibility(4);
+        addView(this.mediaBanTooltip, LayoutHelper.createFrame(-2, -2.0f, 53, BitmapDescriptorFactory.HUE_ORANGE, 53.0f, 5.0f, 0.0f));
         this.emojiSize = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 40.0f : 32.0f);
         this.pickerView = new EmojiColorPickerView(context);
         View view2 = this.pickerView;
@@ -2049,42 +2074,44 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
 
     public void onOpen(boolean forceEmoji) {
         boolean z = true;
-        if (this.stickersTab == null) {
-            return;
-        }
-        if (this.currentPage == 0 || forceEmoji) {
-            if (this.pager.getCurrentItem() == 6) {
-                ViewPager viewPager = this.pager;
-                if (forceEmoji) {
-                    z = false;
+        if (this.stickersTab != null) {
+            if (!(this.currentPage == 0 || this.currentChatId == 0)) {
+                this.currentPage = 0;
+            }
+            if (this.currentPage == 0 || forceEmoji) {
+                if (this.pager.getCurrentItem() == 6) {
+                    ViewPager viewPager = this.pager;
+                    if (forceEmoji) {
+                        z = false;
+                    }
+                    viewPager.setCurrentItem(0, z);
                 }
-                viewPager.setCurrentItem(0, z);
-            }
-        } else if (this.currentPage == 1) {
-            if (this.pager.getCurrentItem() != 6) {
-                this.pager.setCurrentItem(6);
-            }
-            if (this.stickersTab.getCurrentPosition() != this.gifTabNum + 1) {
-                return;
-            }
-            if (this.recentTabBum >= 0) {
-                this.stickersTab.selectTab(this.recentTabBum + 1);
-            } else if (this.gifTabNum >= 0) {
-                this.stickersTab.selectTab(this.gifTabNum + 2);
-            } else {
-                this.stickersTab.selectTab(1);
-            }
-        } else if (this.currentPage == 2) {
-            if (this.pager.getCurrentItem() != 6) {
-                this.pager.setCurrentItem(6);
-            }
-            if (this.stickersTab.getCurrentPosition() == this.gifTabNum + 1) {
-                return;
-            }
-            if (this.gifTabNum < 0 || this.recentGifs.isEmpty()) {
-                this.switchToGifTab = true;
-            } else {
-                this.stickersTab.selectTab(this.gifTabNum + 1);
+            } else if (this.currentPage == 1) {
+                if (this.pager.getCurrentItem() != 6) {
+                    this.pager.setCurrentItem(6);
+                }
+                if (this.stickersTab.getCurrentPosition() != this.gifTabNum + 1) {
+                    return;
+                }
+                if (this.recentTabBum >= 0) {
+                    this.stickersTab.selectTab(this.recentTabBum + 1);
+                } else if (this.gifTabNum >= 0) {
+                    this.stickersTab.selectTab(this.gifTabNum + 2);
+                } else {
+                    this.stickersTab.selectTab(1);
+                }
+            } else if (this.currentPage == 2) {
+                if (this.pager.getCurrentItem() != 6) {
+                    this.pager.setCurrentItem(6);
+                }
+                if (this.stickersTab.getCurrentPosition() == this.gifTabNum + 1) {
+                    return;
+                }
+                if (this.gifTabNum < 0 || this.recentGifs.isEmpty()) {
+                    this.switchToGifTab = true;
+                } else {
+                    this.stickersTab.selectTab(this.gifTabNum + 1);
+                }
             }
         }
     }
@@ -2171,6 +2198,62 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
         if (previousCount != this.recentStickers.size()) {
             updateStickerTabs();
+        }
+    }
+
+    public void setStickersBanned(boolean value, int chatId) {
+        if (value) {
+            this.currentChatId = chatId;
+        } else {
+            this.currentChatId = 0;
+        }
+        View view = this.pagerSlidingTabStrip.getTab(6);
+        if (view != null) {
+            view.setAlpha(this.currentChatId != 0 ? 0.5f : 1.0f);
+            if (this.currentChatId != 0 && this.pager.getCurrentItem() == 6) {
+                this.pager.setCurrentItem(0);
+            }
+        }
+    }
+
+    public void showStickerBanHint() {
+        if (this.mediaBanTooltip.getVisibility() != 0) {
+            Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(this.currentChatId));
+            if (chat != null && chat.banned_rights != null) {
+                if (AndroidUtilities.isBannedForever(chat.banned_rights.until_date)) {
+                    this.mediaBanTooltip.setText(LocaleController.getString("AttachStickersRestrictedForever", R.string.AttachStickersRestrictedForever));
+                } else {
+                    this.mediaBanTooltip.setText(LocaleController.formatString("AttachStickersRestricted", R.string.AttachStickersRestricted, LocaleController.formatDateForBan((long) chat.banned_rights.until_date)));
+                }
+                this.mediaBanTooltip.setVisibility(0);
+                AnimatorSet AnimatorSet = new AnimatorSet();
+                AnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.mediaBanTooltip, "alpha", new float[]{0.0f, 1.0f})});
+                AnimatorSet.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animation) {
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                if (EmojiView.this.mediaBanTooltip != null) {
+                                    AnimatorSet AnimatorSet = new AnimatorSet();
+                                    Animator[] animatorArr = new Animator[1];
+                                    animatorArr[0] = ObjectAnimator.ofFloat(EmojiView.this.mediaBanTooltip, "alpha", new float[]{0.0f});
+                                    AnimatorSet.playTogether(animatorArr);
+                                    AnimatorSet.addListener(new AnimatorListenerAdapter() {
+                                        public void onAnimationEnd(Animator animation) {
+                                            if (EmojiView.this.mediaBanTooltip != null) {
+                                                EmojiView.this.mediaBanTooltip.setVisibility(4);
+                                            }
+                                        }
+                                    });
+                                    AnimatorSet.setDuration(300);
+                                    AnimatorSet.start();
+                                }
+                            }
+                        }, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                    }
+                });
+                AnimatorSet.setDuration(300);
+                AnimatorSet.start();
+            }
         }
     }
 

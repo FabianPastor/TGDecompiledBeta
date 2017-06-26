@@ -24,6 +24,7 @@ public class NotificationCenter {
     public static final int botInfoDidLoaded;
     public static final int botKeyboardDidLoaded;
     public static final int cameraInitied;
+    public static final int channelRightsUpdated;
     public static final int chatDidCreated;
     public static final int chatDidFailCreate;
     public static final int chatInfoCantLoad;
@@ -86,6 +87,7 @@ public class NotificationCenter {
     public static final int paymentFinished;
     public static final int peerSettingsDidLoaded;
     public static final int privacyRulesUpdated;
+    public static final int proxySettingsChanged;
     public static final int pushMessagesUpdated;
     public static final int recentDocumentsDidLoaded;
     public static final int recentImagesDidLoaded;
@@ -102,6 +104,7 @@ public class NotificationCenter {
     public static final int screenshotTook;
     public static final int stickersDidLoaded;
     public static final int stopEncodingService;
+    public static final int suggestedLangpack;
     private static int totalEvents;
     public static final int updateInterfaces;
     public static final int updateMessageMedia;
@@ -333,6 +336,15 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         reloadInterface = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        suggestedLangpack = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        channelRightsUpdated = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        proxySettingsChanged = i;
         i = totalEvents;
         totalEvents = i + 1;
         httpFileDidLoaded = i;

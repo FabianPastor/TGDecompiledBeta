@@ -5,112 +5,129 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 import com.google.android.gms.identity.intents.AddressConstants.Extras;
 
 public final class UserAddress extends zza implements ReflectedParcelable {
     public static final Creator<UserAddress> CREATOR = new zzb();
-    String name;
-    String phoneNumber;
-    String zzUI;
-    String zzbhA;
-    String zzbhB;
-    String zzbhC;
-    boolean zzbhD;
-    String zzbhE;
-    String zzbhF;
-    String zzbhu;
-    String zzbhv;
-    String zzbhw;
-    String zzbhx;
-    String zzbhy;
-    String zzbhz;
+    private String name;
+    private String phoneNumber;
+    private String zzVJ;
+    private String zzbgE;
+    private String zzbgF;
+    private String zzbgG;
+    private String zzbgH;
+    private String zzbgI;
+    private String zzbgJ;
+    private String zzbgK;
+    private String zzbgL;
+    private String zzbgM;
+    private boolean zzbgN;
+    private String zzbgO;
+    private String zzbgP;
 
     UserAddress() {
     }
 
     UserAddress(String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, String str10, String str11, String str12, boolean z, String str13, String str14) {
         this.name = str;
-        this.zzbhu = str2;
-        this.zzbhv = str3;
-        this.zzbhw = str4;
-        this.zzbhx = str5;
-        this.zzbhy = str6;
-        this.zzbhz = str7;
-        this.zzbhA = str8;
-        this.zzUI = str9;
-        this.zzbhB = str10;
-        this.zzbhC = str11;
+        this.zzbgE = str2;
+        this.zzbgF = str3;
+        this.zzbgG = str4;
+        this.zzbgH = str5;
+        this.zzbgI = str6;
+        this.zzbgJ = str7;
+        this.zzbgK = str8;
+        this.zzVJ = str9;
+        this.zzbgL = str10;
+        this.zzbgM = str11;
         this.phoneNumber = str12;
-        this.zzbhD = z;
-        this.zzbhE = str13;
-        this.zzbhF = str14;
+        this.zzbgN = z;
+        this.zzbgO = str13;
+        this.zzbgP = str14;
     }
 
     public static UserAddress fromIntent(Intent intent) {
         return (intent == null || !intent.hasExtra(Extras.EXTRA_ADDRESS)) ? null : (UserAddress) intent.getParcelableExtra(Extras.EXTRA_ADDRESS);
     }
 
-    public String getAddress1() {
-        return this.zzbhu;
+    public final String getAddress1() {
+        return this.zzbgE;
     }
 
-    public String getAddress2() {
-        return this.zzbhv;
+    public final String getAddress2() {
+        return this.zzbgF;
     }
 
-    public String getAddress3() {
-        return this.zzbhw;
+    public final String getAddress3() {
+        return this.zzbgG;
     }
 
-    public String getAddress4() {
-        return this.zzbhx;
+    public final String getAddress4() {
+        return this.zzbgH;
     }
 
-    public String getAddress5() {
-        return this.zzbhy;
+    public final String getAddress5() {
+        return this.zzbgI;
     }
 
-    public String getAdministrativeArea() {
-        return this.zzbhz;
+    public final String getAdministrativeArea() {
+        return this.zzbgJ;
     }
 
-    public String getCompanyName() {
-        return this.zzbhE;
+    public final String getCompanyName() {
+        return this.zzbgO;
     }
 
-    public String getCountryCode() {
-        return this.zzUI;
+    public final String getCountryCode() {
+        return this.zzVJ;
     }
 
-    public String getEmailAddress() {
-        return this.zzbhF;
+    public final String getEmailAddress() {
+        return this.zzbgP;
     }
 
-    public String getLocality() {
-        return this.zzbhA;
+    public final String getLocality() {
+        return this.zzbgK;
     }
 
-    public String getName() {
+    public final String getName() {
         return this.name;
     }
 
-    public String getPhoneNumber() {
+    public final String getPhoneNumber() {
         return this.phoneNumber;
     }
 
-    public String getPostalCode() {
-        return this.zzbhB;
+    public final String getPostalCode() {
+        return this.zzbgL;
     }
 
-    public String getSortingCode() {
-        return this.zzbhC;
+    public final String getSortingCode() {
+        return this.zzbgM;
     }
 
-    public boolean isPostBox() {
-        return this.zzbhD;
+    public final boolean isPostBox() {
+        return this.zzbgN;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzb.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.name, false);
+        zzd.zza(parcel, 3, this.zzbgE, false);
+        zzd.zza(parcel, 4, this.zzbgF, false);
+        zzd.zza(parcel, 5, this.zzbgG, false);
+        zzd.zza(parcel, 6, this.zzbgH, false);
+        zzd.zza(parcel, 7, this.zzbgI, false);
+        zzd.zza(parcel, 8, this.zzbgJ, false);
+        zzd.zza(parcel, 9, this.zzbgK, false);
+        zzd.zza(parcel, 10, this.zzVJ, false);
+        zzd.zza(parcel, 11, this.zzbgL, false);
+        zzd.zza(parcel, 12, this.zzbgM, false);
+        zzd.zza(parcel, 13, this.phoneNumber, false);
+        zzd.zza(parcel, 14, this.zzbgN);
+        zzd.zza(parcel, 15, this.zzbgO, false);
+        zzd.zza(parcel, 16, this.zzbgP, false);
+        zzd.zzI(parcel, zze);
     }
 }

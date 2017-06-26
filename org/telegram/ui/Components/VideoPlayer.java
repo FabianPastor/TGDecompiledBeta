@@ -275,6 +275,12 @@ public class VideoPlayer implements EventListener, VideoListener {
         return this.player != null && this.lastReportedPlaybackState == 2;
     }
 
+    public void setStreamType(int type) {
+        if (this.player != null) {
+            this.player.setAudioStreamType(type);
+        }
+    }
+
     public void onLoadingChanged(boolean isLoading) {
     }
 

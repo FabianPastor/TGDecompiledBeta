@@ -31,6 +31,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.gms.wallet.WalletConstants;
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -115,7 +116,7 @@ public class FeedbackActivity extends Activity implements OnClickListener {
                     String requestType = bundle.getString(SendFeedbackTask.BUNDLE_REQUEST_TYPE);
                     if ("send".equals(requestType) && (responseString == null || Integer.parseInt(statusCode) != 201)) {
                         error.setMessage(feedbackActivity.getString(R.string.hockeyapp_feedback_send_generic_error));
-                    } else if ("fetch".equals(requestType) && statusCode != null && (Integer.parseInt(statusCode) == 404 || Integer.parseInt(statusCode) == 422)) {
+                    } else if ("fetch".equals(requestType) && statusCode != null && (Integer.parseInt(statusCode) == WalletConstants.ERROR_CODE_INVALID_PARAMETERS || Integer.parseInt(statusCode) == 422)) {
                         feedbackActivity.resetFeedbackView();
                         success = true;
                     } else if (responseString != null) {

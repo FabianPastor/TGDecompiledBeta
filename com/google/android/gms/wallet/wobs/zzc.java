@@ -2,50 +2,26 @@ package com.google.android.gms.wallet.wobs;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 
-public class zzc implements Creator<zzb> {
-    static void zza(zzb com_google_android_gms_wallet_wobs_zzb, Parcel parcel, int i) {
-        int zzaZ = com.google.android.gms.common.internal.safeparcel.zzc.zzaZ(parcel);
-        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 2, com_google_android_gms_wallet_wobs_zzb.label, false);
-        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 3, com_google_android_gms_wallet_wobs_zzb.value, false);
-        com.google.android.gms.common.internal.safeparcel.zzc.zzJ(parcel, zzaZ);
+public final class zzc extends zza {
+    public static final Creator<zzc> CREATOR = new zzd();
+    private String label;
+    private String value;
+
+    zzc() {
     }
 
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzkC(parcel);
+    public zzc(String str, String str2) {
+        this.label = str;
+        this.value = str2;
     }
 
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzpb(i);
-    }
-
-    public zzb zzkC(Parcel parcel) {
-        String str = null;
-        int zzaY = zzb.zzaY(parcel);
-        String str2 = null;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
-                case 2:
-                    str2 = zzb.zzq(parcel, zzaX);
-                    break;
-                case 3:
-                    str = zzb.zzq(parcel, zzaX);
-                    break;
-                default:
-                    zzb.zzb(parcel, zzaX);
-                    break;
-            }
-        }
-        if (parcel.dataPosition() == zzaY) {
-            return new zzb(str2, str);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
-    }
-
-    public zzb[] zzpb(int i) {
-        return new zzb[i];
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.label, false);
+        zzd.zza(parcel, 3, this.value, false);
+        zzd.zzI(parcel, zze);
     }
 }

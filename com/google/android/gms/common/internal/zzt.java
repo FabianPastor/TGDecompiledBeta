@@ -1,47 +1,36 @@
 package com.google.android.gms.common.internal;
 
-import android.os.Binder;
-import android.os.IBinder;
-import android.os.IInterface;
-import android.os.Parcel;
-import android.os.RemoteException;
-import com.google.android.gms.dynamic.IObjectWrapper;
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import com.google.android.gms.internal.zzbds;
 
-public interface zzt extends IInterface {
+public abstract class zzt implements OnClickListener {
+    public static zzt zza(Activity activity, Intent intent, int i) {
+        return new zzu(intent, activity, i);
+    }
 
-    public static abstract class zza extends Binder implements zzt {
-        public zza() {
-            attachInterface(this, "com.google.android.gms.common.internal.ICertData");
-        }
+    public static zzt zza(@NonNull Fragment fragment, Intent intent, int i) {
+        return new zzv(intent, fragment, i);
+    }
 
-        public IBinder asBinder() {
-            return this;
-        }
+    public static zzt zza(@NonNull zzbds com_google_android_gms_internal_zzbds, Intent intent, int i) {
+        return new zzw(intent, com_google_android_gms_internal_zzbds, 2);
+    }
 
-        public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-            switch (i) {
-                case 1:
-                    parcel.enforceInterface("com.google.android.gms.common.internal.ICertData");
-                    IObjectWrapper zzva = zzva();
-                    parcel2.writeNoException();
-                    parcel2.writeStrongBinder(zzva != null ? zzva.asBinder() : null);
-                    return true;
-                case 2:
-                    parcel.enforceInterface("com.google.android.gms.common.internal.ICertData");
-                    int zzvb = zzvb();
-                    parcel2.writeNoException();
-                    parcel2.writeInt(zzvb);
-                    return true;
-                case 1598968902:
-                    parcel2.writeString("com.google.android.gms.common.internal.ICertData");
-                    return true;
-                default:
-                    return super.onTransact(i, parcel, parcel2, i2);
-            }
+    public void onClick(DialogInterface dialogInterface, int i) {
+        try {
+            zzrv();
+        } catch (Throwable e) {
+            Log.e("DialogRedirect", "Failed to start resolution intent", e);
+        } finally {
+            dialogInterface.dismiss();
         }
     }
 
-    IObjectWrapper zzva() throws RemoteException;
-
-    int zzvb() throws RemoteException;
+    protected abstract void zzrv();
 }

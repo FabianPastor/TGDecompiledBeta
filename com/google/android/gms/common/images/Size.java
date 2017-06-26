@@ -1,12 +1,12 @@
 package com.google.android.gms.common.images;
 
 public final class Size {
-    private final int zzrC;
-    private final int zzrD;
+    private final int zzrY;
+    private final int zzrZ;
 
     public Size(int i, int i2) {
-        this.zzrC = i;
-        this.zzrD = i2;
+        this.zzrY = i;
+        this.zzrZ = i2;
     }
 
     public static Size parseSize(String str) throws NumberFormatException {
@@ -18,21 +18,20 @@ public final class Size {
             indexOf = str.indexOf(120);
         }
         if (indexOf < 0) {
-            throw zzdi(str);
+            throw zzcy(str);
         }
         try {
             return new Size(Integer.parseInt(str.substring(0, indexOf)), Integer.parseInt(str.substring(indexOf + 1)));
         } catch (NumberFormatException e) {
-            throw zzdi(str);
+            throw zzcy(str);
         }
     }
 
-    private static NumberFormatException zzdi(String str) {
+    private static NumberFormatException zzcy(String str) {
         throw new NumberFormatException(new StringBuilder(String.valueOf(str).length() + 16).append("Invalid Size: \"").append(str).append("\"").toString());
     }
 
-    public boolean equals(Object obj) {
-        boolean z = true;
+    public final boolean equals(Object obj) {
         if (obj == null) {
             return false;
         }
@@ -43,26 +42,23 @@ public final class Size {
             return false;
         }
         Size size = (Size) obj;
-        if (!(this.zzrC == size.zzrC && this.zzrD == size.zzrD)) {
-            z = false;
-        }
-        return z;
+        return this.zzrY == size.zzrY && this.zzrZ == size.zzrZ;
     }
 
-    public int getHeight() {
-        return this.zzrD;
+    public final int getHeight() {
+        return this.zzrZ;
     }
 
-    public int getWidth() {
-        return this.zzrC;
+    public final int getWidth() {
+        return this.zzrY;
     }
 
-    public int hashCode() {
-        return this.zzrD ^ ((this.zzrC << 16) | (this.zzrC >>> 16));
+    public final int hashCode() {
+        return this.zzrZ ^ ((this.zzrY << 16) | (this.zzrY >>> 16));
     }
 
-    public String toString() {
-        int i = this.zzrC;
-        return i + "x" + this.zzrD;
+    public final String toString() {
+        int i = this.zzrY;
+        return i + "x" + this.zzrZ;
     }
 }

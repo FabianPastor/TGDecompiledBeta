@@ -6,22 +6,17 @@ import android.content.Context;
 import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzbo;
 import com.google.firebase.FirebaseApp;
 
 public class FirebaseInitProvider extends ContentProvider {
-    private static void zza(@NonNull ProviderInfo providerInfo) {
-        zzac.zzb((Object) providerInfo, (Object) "FirebaseInitProvider ProviderInfo cannot be null.");
+    public void attachInfo(Context context, ProviderInfo providerInfo) {
+        zzbo.zzb((Object) providerInfo, (Object) "FirebaseInitProvider ProviderInfo cannot be null.");
         if ("com.google.firebase.firebaseinitprovider".equals(providerInfo.authority)) {
             throw new IllegalStateException("Incorrect provider authority in manifest. Most likely due to a missing applicationId variable in application's build.gradle.");
         }
-    }
-
-    public void attachInfo(Context context, ProviderInfo providerInfo) {
-        zza(providerInfo);
         super.attachInfo(context, providerInfo);
     }
 

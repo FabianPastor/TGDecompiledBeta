@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 
 class FocusStrategy {
@@ -129,7 +130,7 @@ class FocusStrategy {
             case 33:
                 bestCandidateRect.offset(0, focusedRect.height() + 1);
                 break;
-            case 66:
+            case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*66*/:
                 bestCandidateRect.offset(-(focusedRect.width() + 1), 0);
                 break;
             case TsExtractor.TS_STREAM_TYPE_HDMV_DTS /*130*/:
@@ -197,7 +198,7 @@ class FocusStrategy {
                     return true;
                 }
                 return false;
-            case 66:
+            case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*66*/:
                 if ((srcRect.left < destRect.left || srcRect.right <= destRect.left) && srcRect.right < destRect.right) {
                     return true;
                 }
@@ -212,7 +213,7 @@ class FocusStrategy {
     private static boolean beamsOverlap(int direction, @NonNull Rect rect1, @NonNull Rect rect2) {
         switch (direction) {
             case 17:
-            case 66:
+            case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*66*/:
                 if (rect2.bottom < rect1.top || rect2.top > rect1.bottom) {
                     return false;
                 }
@@ -237,7 +238,7 @@ class FocusStrategy {
                     return false;
                 }
                 return true;
-            case 66:
+            case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*66*/:
                 if (src.right > dest.left) {
                     return false;
                 }
@@ -259,7 +260,7 @@ class FocusStrategy {
                 return source.left - dest.right;
             case 33:
                 return source.top - dest.bottom;
-            case 66:
+            case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*66*/:
                 return dest.left - source.right;
             case TsExtractor.TS_STREAM_TYPE_HDMV_DTS /*130*/:
                 return dest.top - source.bottom;
@@ -278,7 +279,7 @@ class FocusStrategy {
                 return source.left - dest.left;
             case 33:
                 return source.top - dest.top;
-            case 66:
+            case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*66*/:
                 return dest.right - source.right;
             case TsExtractor.TS_STREAM_TYPE_HDMV_DTS /*130*/:
                 return dest.bottom - source.bottom;
@@ -290,7 +291,7 @@ class FocusStrategy {
     private static int minorAxisDistance(int direction, @NonNull Rect source, @NonNull Rect dest) {
         switch (direction) {
             case 17:
-            case 66:
+            case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*66*/:
                 return Math.abs((source.top + (source.height() / 2)) - (dest.top + (dest.height() / 2)));
             case 33:
             case TsExtractor.TS_STREAM_TYPE_HDMV_DTS /*130*/:

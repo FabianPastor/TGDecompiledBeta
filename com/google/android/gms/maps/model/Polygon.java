@@ -2,242 +2,242 @@ package com.google.android.gms.maps.model;
 
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.dynamic.zzd;
-import com.google.android.gms.maps.model.internal.zzg;
+import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.dynamic.zzn;
+import com.google.android.gms.maps.model.internal.zzs;
 import java.util.List;
 
 public final class Polygon {
-    private final zzg zzbpJ;
+    private final zzs zzbnM;
 
-    public Polygon(zzg com_google_android_gms_maps_model_internal_zzg) {
-        this.zzbpJ = (zzg) zzac.zzw(com_google_android_gms_maps_model_internal_zzg);
+    public Polygon(zzs com_google_android_gms_maps_model_internal_zzs) {
+        this.zzbnM = (zzs) zzbo.zzu(com_google_android_gms_maps_model_internal_zzs);
     }
 
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         if (!(obj instanceof Polygon)) {
             return false;
         }
         try {
-            return this.zzbpJ.zzb(((Polygon) obj).zzbpJ);
+            return this.zzbnM.zzb(((Polygon) obj).zzbnM);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public int getFillColor() {
+    public final int getFillColor() {
         try {
-            return this.zzbpJ.getFillColor();
+            return this.zzbnM.getFillColor();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public List<List<LatLng>> getHoles() {
+    public final List<List<LatLng>> getHoles() {
         try {
-            return this.zzbpJ.getHoles();
+            return this.zzbnM.getHoles();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public String getId() {
+    public final String getId() {
         try {
-            return this.zzbpJ.getId();
+            return this.zzbnM.getId();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public List<LatLng> getPoints() {
+    public final List<LatLng> getPoints() {
         try {
-            return this.zzbpJ.getPoints();
+            return this.zzbnM.getPoints();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public int getStrokeColor() {
+    public final int getStrokeColor() {
         try {
-            return this.zzbpJ.getStrokeColor();
+            return this.zzbnM.getStrokeColor();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public int getStrokeJointType() {
+    public final int getStrokeJointType() {
         try {
-            return this.zzbpJ.getStrokeJointType();
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
-    }
-
-    @Nullable
-    public List<PatternItem> getStrokePattern() {
-        try {
-            return PatternItem.zzI(this.zzbpJ.getStrokePattern());
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
-    }
-
-    public float getStrokeWidth() {
-        try {
-            return this.zzbpJ.getStrokeWidth();
+            return this.zzbnM.getStrokeJointType();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
     @Nullable
-    public Object getTag() {
+    public final List<PatternItem> getStrokePattern() {
         try {
-            return zzd.zzF(this.zzbpJ.getTag());
+            return PatternItem.zzF(this.zzbnM.getStrokePattern());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public float getZIndex() {
+    public final float getStrokeWidth() {
         try {
-            return this.zzbpJ.getZIndex();
+            return this.zzbnM.getStrokeWidth();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public int hashCode() {
+    @Nullable
+    public final Object getTag() {
         try {
-            return this.zzbpJ.hashCodeRemote();
+            return zzn.zzE(this.zzbnM.getTag());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isClickable() {
+    public final float getZIndex() {
         try {
-            return this.zzbpJ.isClickable();
+            return this.zzbnM.getZIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isGeodesic() {
+    public final int hashCode() {
         try {
-            return this.zzbpJ.isGeodesic();
+            return this.zzbnM.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isVisible() {
+    public final boolean isClickable() {
         try {
-            return this.zzbpJ.isVisible();
+            return this.zzbnM.isClickable();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void remove() {
+    public final boolean isGeodesic() {
         try {
-            this.zzbpJ.remove();
+            return this.zzbnM.isGeodesic();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setClickable(boolean z) {
+    public final boolean isVisible() {
         try {
-            this.zzbpJ.setClickable(z);
+            return this.zzbnM.isVisible();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setFillColor(int i) {
+    public final void remove() {
         try {
-            this.zzbpJ.setFillColor(i);
+            this.zzbnM.remove();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setGeodesic(boolean z) {
+    public final void setClickable(boolean z) {
         try {
-            this.zzbpJ.setGeodesic(z);
+            this.zzbnM.setClickable(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setHoles(List<? extends List<LatLng>> list) {
+    public final void setFillColor(int i) {
         try {
-            this.zzbpJ.setHoles(list);
+            this.zzbnM.setFillColor(i);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setPoints(List<LatLng> list) {
+    public final void setGeodesic(boolean z) {
         try {
-            this.zzbpJ.setPoints(list);
+            this.zzbnM.setGeodesic(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setStrokeColor(int i) {
+    public final void setHoles(List<? extends List<LatLng>> list) {
         try {
-            this.zzbpJ.setStrokeColor(i);
+            this.zzbnM.setHoles(list);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setStrokeJointType(int i) {
+    public final void setPoints(List<LatLng> list) {
         try {
-            this.zzbpJ.setStrokeJointType(i);
+            this.zzbnM.setPoints(list);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setStrokePattern(@Nullable List<PatternItem> list) {
+    public final void setStrokeColor(int i) {
         try {
-            this.zzbpJ.setStrokePattern(list);
+            this.zzbnM.setStrokeColor(i);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setStrokeWidth(float f) {
+    public final void setStrokeJointType(int i) {
         try {
-            this.zzbpJ.setStrokeWidth(f);
+            this.zzbnM.setStrokeJointType(i);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setTag(@Nullable Object obj) {
+    public final void setStrokePattern(@Nullable List<PatternItem> list) {
         try {
-            this.zzbpJ.setTag(zzd.zzA(obj));
+            this.zzbnM.setStrokePattern(list);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setVisible(boolean z) {
+    public final void setStrokeWidth(float f) {
         try {
-            this.zzbpJ.setVisible(z);
+            this.zzbnM.setStrokeWidth(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setZIndex(float f) {
+    public final void setTag(@Nullable Object obj) {
         try {
-            this.zzbpJ.setZIndex(f);
+            this.zzbnM.setTag(zzn.zzw(obj));
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public final void setVisible(boolean z) {
+        try {
+            this.zzbnM.setVisible(z);
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public final void setZIndex(float f) {
+        try {
+            this.zzbnM.setZIndex(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

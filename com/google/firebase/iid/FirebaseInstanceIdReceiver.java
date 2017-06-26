@@ -8,7 +8,11 @@ import android.util.Base64;
 import android.util.Log;
 
 public final class FirebaseInstanceIdReceiver extends WakefulBroadcastReceiver {
-    public void onReceive(Context context, Intent intent) {
+    private static boolean zzbfB = false;
+
+    public final void onReceive(Context context, Intent intent) {
+        String str = null;
+        int i = -1;
         intent.setComponent(null);
         intent.setPackage(context.getPackageName());
         if (VERSION.SDK_INT <= 18) {
@@ -21,30 +25,24 @@ public final class FirebaseInstanceIdReceiver extends WakefulBroadcastReceiver {
         }
         stringExtra = intent.getStringExtra("from");
         if ("google.com/iid".equals(stringExtra) || "gcm.googleapis.com/refresh".equals(stringExtra)) {
-            stringExtra = "com.google.firebase.INSTANCE_ID_EVENT";
+            str = "com.google.firebase.INSTANCE_ID_EVENT";
         } else if ("com.google.android.c2dm.intent.RECEIVE".equals(intent.getAction())) {
-            stringExtra = "com.google.firebase.MESSAGING_EVENT";
+            str = "com.google.firebase.MESSAGING_EVENT";
         } else {
             Log.d("FirebaseInstanceId", "Unexpected intent");
-            stringExtra = null;
         }
-        int i = -1;
-        if (stringExtra != null) {
-            i = zza(context, stringExtra, intent);
+        if (str != null) {
+            if (FirebaseInstanceIdInternalReceiver.zzbH(context)) {
+                if (isOrderedBroadcast()) {
+                    setResultCode(-1);
+                }
+                FirebaseInstanceIdInternalReceiver.zzH(context, str).zza(intent, goAsync());
+            } else {
+                i = zzq.zzJU().zza(context, str, intent);
+            }
         }
         if (isOrderedBroadcast()) {
             setResultCode(i);
         }
-    }
-
-    public int zza(Context context, String str, Intent intent) {
-        if (!FirebaseInstanceIdInternalReceiver.zzcs(context)) {
-            return zzg.zzabW().zzb(context, str, intent);
-        }
-        if (isOrderedBroadcast()) {
-            setResultCode(-1);
-        }
-        FirebaseInstanceIdInternalReceiver.zzL(context, str).zza(intent, goAsync());
-        return -1;
     }
 }

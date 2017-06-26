@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import com.google.android.gms.wallet.WalletConstants;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
@@ -35,6 +36,7 @@ import org.telegram.tgnet.TLRPC.TL_account_sendConfirmPhoneCode;
 import org.telegram.tgnet.TLRPC.TL_auth_resendCode;
 import org.telegram.tgnet.TLRPC.TL_channels_createChannel;
 import org.telegram.tgnet.TLRPC.TL_channels_editAdmin;
+import org.telegram.tgnet.TLRPC.TL_channels_editBanned;
 import org.telegram.tgnet.TLRPC.TL_channels_inviteToChannel;
 import org.telegram.tgnet.TLRPC.TL_channels_joinChannel;
 import org.telegram.tgnet.TLRPC.TL_contacts_importContacts;
@@ -78,10 +80,10 @@ public class AlertsCreator {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static Dialog processError(TL_error error, BaseFragment fragment, TLObject request, Object... args) {
         boolean z = false;
-        if (error.code == 406 || error.text == null) {
+        if (error.code == WalletConstants.ERROR_CODE_SPENDING_LIMIT_EXCEEDED || error.text == null) {
             return null;
         }
-        if (!(request instanceof TL_channels_joinChannel) && !(request instanceof TL_channels_editAdmin) && !(request instanceof TL_channels_inviteToChannel) && !(request instanceof TL_messages_addChatUser) && !(request instanceof TL_messages_startBot)) {
+        if (!(request instanceof TL_channels_joinChannel) && !(request instanceof TL_channels_editAdmin) && !(request instanceof TL_channels_inviteToChannel) && !(request instanceof TL_messages_addChatUser) && !(request instanceof TL_messages_startBot) && !(request instanceof TL_channels_editBanned)) {
             if (!(request instanceof TL_messages_createChat)) {
                 if (!(request instanceof TL_channels_createChannel)) {
                     if (!(request instanceof TL_messages_editMessage)) {
@@ -406,6 +408,20 @@ public class AlertsCreator {
         }
     }
 
+    public static void showSendMediaAlert(int result, BaseFragment fragment) {
+        if (result != 0) {
+            Builder builder = new Builder(fragment.getParentActivity());
+            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            if (result == 1) {
+                builder.setMessage(LocaleController.getString("ErrorSendRestrictedStickers", R.string.ErrorSendRestrictedStickers));
+            } else if (result == 2) {
+                builder.setMessage(LocaleController.getString("ErrorSendRestrictedMedia", R.string.ErrorSendRestrictedMedia));
+            }
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+            fragment.showDialog(builder.create(), true, null);
+        }
+    }
+
     public static void showAddUserAlert(String error, final BaseFragment fragment, boolean isChannel) {
         if (error != null && fragment != null && fragment.getParentActivity() != null) {
             Builder builder = new Builder(fragment.getParentActivity());
@@ -442,6 +458,12 @@ public class AlertsCreator {
                         break;
                     }
                     break;
+                case 98635865:
+                    if (error.equals("USER_KICKED")) {
+                        z = true;
+                        break;
+                    }
+                    break;
                 case 517420851:
                     if (error.equals("USER_BOT")) {
                         z = true;
@@ -450,6 +472,18 @@ public class AlertsCreator {
                     break;
                 case 845559454:
                     if (error.equals("YOU_BLOCKED_USER")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case 916342611:
+                    if (error.equals("USER_ADMIN_INVALID")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case 1047173446:
+                    if (error.equals("CHAT_ADMIN_BAN_REQUIRED")) {
                         z = true;
                         break;
                     }
@@ -474,6 +508,12 @@ public class AlertsCreator {
                     break;
                 case 1623167701:
                     if (error.equals("USER_NOT_MUTUAL_CONTACT")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case 1754587486:
+                    if (error.equals("CHAT_ADMIN_INVITE_REQUIRED")) {
                         z = true;
                         break;
                     }
@@ -553,8 +593,18 @@ public class AlertsCreator {
                 case true:
                     builder.setMessage(LocaleController.getString("YouBlockedUser", R.string.YouBlockedUser));
                     break;
+                case true:
+                case true:
+                    builder.setMessage(LocaleController.getString("AddAdminErrorBlacklisted", R.string.AddAdminErrorBlacklisted));
+                    break;
+                case true:
+                    builder.setMessage(LocaleController.getString("AddAdminErrorNotAMember", R.string.AddAdminErrorNotAMember));
+                    break;
+                case true:
+                    builder.setMessage(LocaleController.getString("AddBannedErrorAdmin", R.string.AddBannedErrorAdmin));
+                    break;
                 default:
-                    builder.setMessage(error);
+                    builder.setMessage(LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error);
                     break;
             }
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);

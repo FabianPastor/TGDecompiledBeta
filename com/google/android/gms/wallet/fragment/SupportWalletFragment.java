@@ -21,181 +21,182 @@ import com.google.android.gms.R;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.dynamic.LifecycleDelegate;
-import com.google.android.gms.dynamic.zzd;
-import com.google.android.gms.dynamic.zze;
-import com.google.android.gms.dynamic.zzg;
-import com.google.android.gms.internal.zzbks;
-import com.google.android.gms.internal.zzbkz;
+import com.google.android.gms.dynamic.zzn;
+import com.google.android.gms.dynamic.zzo;
+import com.google.android.gms.dynamic.zzr;
+import com.google.android.gms.internal.fz;
+import com.google.android.gms.internal.gd;
+import com.google.android.gms.internal.gy;
 import com.google.android.gms.wallet.MaskedWallet;
 import com.google.android.gms.wallet.MaskedWalletRequest;
 
 public final class SupportWalletFragment extends Fragment {
     private boolean mCreated = false;
-    private final Fragment zzaRN = this;
-    private zzb zzbRR;
-    private final zzg zzbRS = zzg.zza(this);
-    private final zzc zzbRT = new zzc();
-    private zza zzbRU = new zza(this);
-    private WalletFragmentOptions zzbRV;
-    private WalletFragmentInitParams zzbRW;
-    private MaskedWalletRequest zzbRX;
-    private MaskedWallet zzbRY;
-    private Boolean zzbRZ;
+    private final Fragment zzaSE = this;
+    private zzb zzbPX;
+    private final zzr zzbPY = zzr.zza(this);
+    private final zzc zzbPZ = new zzc();
+    private zza zzbQa = new zza(this);
+    private WalletFragmentOptions zzbQb;
+    private WalletFragmentInitParams zzbQc;
+    private MaskedWalletRequest zzbQd;
+    private MaskedWallet zzbQe;
+    private Boolean zzbQf;
 
     public interface OnStateChangedListener {
         void onStateChanged(SupportWalletFragment supportWalletFragment, int i, int i2, Bundle bundle);
     }
 
-    private static class zzb implements LifecycleDelegate {
-        private final zzbks zzbSc;
+    static class zzb implements LifecycleDelegate {
+        private final fz zzbQi;
 
-        private zzb(zzbks com_google_android_gms_internal_zzbks) {
-            this.zzbSc = com_google_android_gms_internal_zzbks;
+        private zzb(fz fzVar) {
+            this.zzbQi = fzVar;
         }
 
-        private int getState() {
+        private final int getState() {
             try {
-                return this.zzbSc.getState();
+                return this.zzbQi.getState();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
 
-        private void initialize(WalletFragmentInitParams walletFragmentInitParams) {
+        private final void initialize(WalletFragmentInitParams walletFragmentInitParams) {
             try {
-                this.zzbSc.initialize(walletFragmentInitParams);
+                this.zzbQi.initialize(walletFragmentInitParams);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
 
-        private void onActivityResult(int i, int i2, Intent intent) {
+        private final void onActivityResult(int i, int i2, Intent intent) {
             try {
-                this.zzbSc.onActivityResult(i, i2, intent);
+                this.zzbQi.onActivityResult(i, i2, intent);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
 
-        private void setEnabled(boolean z) {
+        private final void setEnabled(boolean z) {
             try {
-                this.zzbSc.setEnabled(z);
+                this.zzbQi.setEnabled(z);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
 
-        private void updateMaskedWallet(MaskedWallet maskedWallet) {
+        private final void updateMaskedWallet(MaskedWallet maskedWallet) {
             try {
-                this.zzbSc.updateMaskedWallet(maskedWallet);
+                this.zzbQi.updateMaskedWallet(maskedWallet);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
 
-        private void updateMaskedWalletRequest(MaskedWalletRequest maskedWalletRequest) {
+        private final void updateMaskedWalletRequest(MaskedWalletRequest maskedWalletRequest) {
             try {
-                this.zzbSc.updateMaskedWalletRequest(maskedWalletRequest);
+                this.zzbQi.updateMaskedWalletRequest(maskedWalletRequest);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
 
-        public void onCreate(Bundle bundle) {
+        public final void onCreate(Bundle bundle) {
             try {
-                this.zzbSc.onCreate(bundle);
+                this.zzbQi.onCreate(bundle);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
 
-        public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        public final View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
             try {
-                return (View) zzd.zzF(this.zzbSc.onCreateView(zzd.zzA(layoutInflater), zzd.zzA(viewGroup), bundle));
+                return (View) zzn.zzE(this.zzbQi.onCreateView(zzn.zzw(layoutInflater), zzn.zzw(viewGroup), bundle));
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
 
-        public void onDestroy() {
+        public final void onDestroy() {
         }
 
-        public void onDestroyView() {
+        public final void onDestroyView() {
         }
 
-        public void onInflate(Activity activity, Bundle bundle, Bundle bundle2) {
+        public final void onInflate(Activity activity, Bundle bundle, Bundle bundle2) {
             try {
-                this.zzbSc.zza(zzd.zzA(activity), (WalletFragmentOptions) bundle.getParcelable("extraWalletFragmentOptions"), bundle2);
+                this.zzbQi.zza(zzn.zzw(activity), (WalletFragmentOptions) bundle.getParcelable("extraWalletFragmentOptions"), bundle2);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
 
-        public void onLowMemory() {
+        public final void onLowMemory() {
         }
 
-        public void onPause() {
+        public final void onPause() {
             try {
-                this.zzbSc.onPause();
+                this.zzbQi.onPause();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
 
-        public void onResume() {
+        public final void onResume() {
             try {
-                this.zzbSc.onResume();
+                this.zzbQi.onResume();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
 
-        public void onSaveInstanceState(Bundle bundle) {
+        public final void onSaveInstanceState(Bundle bundle) {
             try {
-                this.zzbSc.onSaveInstanceState(bundle);
+                this.zzbQi.onSaveInstanceState(bundle);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
 
-        public void onStart() {
+        public final void onStart() {
             try {
-                this.zzbSc.onStart();
+                this.zzbQi.onStart();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
 
-        public void onStop() {
+        public final void onStop() {
             try {
-                this.zzbSc.onStop();
+                this.zzbQi.onStop();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    private class zzc extends com.google.android.gms.dynamic.zza<zzb> implements OnClickListener {
-        final /* synthetic */ SupportWalletFragment zzbSd;
+    class zzc extends com.google.android.gms.dynamic.zza<zzb> implements OnClickListener {
+        private /* synthetic */ SupportWalletFragment zzbQj;
 
         private zzc(SupportWalletFragment supportWalletFragment) {
-            this.zzbSd = supportWalletFragment;
+            this.zzbQj = supportWalletFragment;
         }
 
-        public void onClick(View view) {
-            FragmentActivity activity = this.zzbSd.zzaRN.getActivity();
+        public final void onClick(View view) {
+            FragmentActivity activity = this.zzbQj.zzaSE.getActivity();
             GooglePlayServicesUtil.showErrorDialogFragment(GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity), activity, -1);
         }
 
-        protected void zza(FrameLayout frameLayout) {
+        protected final void zza(FrameLayout frameLayout) {
             int i = -1;
             int i2 = -2;
-            View button = new Button(this.zzbSd.zzaRN.getActivity());
+            View button = new Button(this.zzbQj.zzaSE.getActivity());
             button.setText(R.string.wallet_buy_button_place_holder);
-            if (this.zzbSd.zzbRV != null) {
-                WalletFragmentStyle fragmentStyle = this.zzbSd.zzbRV.getFragmentStyle();
+            if (this.zzbQj.zzbQb != null) {
+                WalletFragmentStyle fragmentStyle = this.zzbQj.zzbQb.getFragmentStyle();
                 if (fragmentStyle != null) {
-                    DisplayMetrics displayMetrics = this.zzbSd.zzaRN.getResources().getDisplayMetrics();
+                    DisplayMetrics displayMetrics = this.zzbQj.zzaSE.getResources().getDisplayMetrics();
                     i = fragmentStyle.zza("buyButtonWidth", displayMetrics, -1);
                     i2 = fragmentStyle.zza("buyButtonHeight", displayMetrics, -2);
                 }
@@ -205,28 +206,28 @@ public final class SupportWalletFragment extends Fragment {
             frameLayout.addView(button);
         }
 
-        protected void zza(zze<zzb> com_google_android_gms_dynamic_zze_com_google_android_gms_wallet_fragment_SupportWalletFragment_zzb) {
-            FragmentActivity activity = this.zzbSd.zzaRN.getActivity();
-            if (this.zzbSd.zzbRR == null && this.zzbSd.mCreated && activity != null) {
+        protected final void zza(zzo<zzb> com_google_android_gms_dynamic_zzo_com_google_android_gms_wallet_fragment_SupportWalletFragment_zzb) {
+            FragmentActivity activity = this.zzbQj.zzaSE.getActivity();
+            if (this.zzbQj.zzbPX == null && this.zzbQj.mCreated && activity != null) {
                 try {
-                    this.zzbSd.zzbRR = new zzb(zzbkz.zza(activity, this.zzbSd.zzbRS, this.zzbSd.zzbRV, this.zzbSd.zzbRU));
-                    this.zzbSd.zzbRV = null;
-                    com_google_android_gms_dynamic_zze_com_google_android_gms_wallet_fragment_SupportWalletFragment_zzb.zza(this.zzbSd.zzbRR);
-                    if (this.zzbSd.zzbRW != null) {
-                        this.zzbSd.zzbRR.initialize(this.zzbSd.zzbRW);
-                        this.zzbSd.zzbRW = null;
+                    this.zzbQj.zzbPX = new zzb(gy.zza(activity, this.zzbQj.zzbPY, this.zzbQj.zzbQb, this.zzbQj.zzbQa));
+                    this.zzbQj.zzbQb = null;
+                    com_google_android_gms_dynamic_zzo_com_google_android_gms_wallet_fragment_SupportWalletFragment_zzb.zza(this.zzbQj.zzbPX);
+                    if (this.zzbQj.zzbQc != null) {
+                        this.zzbQj.zzbPX.initialize(this.zzbQj.zzbQc);
+                        this.zzbQj.zzbQc = null;
                     }
-                    if (this.zzbSd.zzbRX != null) {
-                        this.zzbSd.zzbRR.updateMaskedWalletRequest(this.zzbSd.zzbRX);
-                        this.zzbSd.zzbRX = null;
+                    if (this.zzbQj.zzbQd != null) {
+                        this.zzbQj.zzbPX.updateMaskedWalletRequest(this.zzbQj.zzbQd);
+                        this.zzbQj.zzbQd = null;
                     }
-                    if (this.zzbSd.zzbRY != null) {
-                        this.zzbSd.zzbRR.updateMaskedWallet(this.zzbSd.zzbRY);
-                        this.zzbSd.zzbRY = null;
+                    if (this.zzbQj.zzbQe != null) {
+                        this.zzbQj.zzbPX.updateMaskedWallet(this.zzbQj.zzbQe);
+                        this.zzbQj.zzbQe = null;
                     }
-                    if (this.zzbSd.zzbRZ != null) {
-                        this.zzbSd.zzbRR.setEnabled(this.zzbSd.zzbRZ.booleanValue());
-                        this.zzbSd.zzbRZ = null;
+                    if (this.zzbQj.zzbQf != null) {
+                        this.zzbQj.zzbPX.setEnabled(this.zzbQj.zzbQf.booleanValue());
+                        this.zzbQj.zzbQf = null;
                     }
                 } catch (GooglePlayServicesNotAvailableException e) {
                 }
@@ -234,22 +235,22 @@ public final class SupportWalletFragment extends Fragment {
         }
     }
 
-    static class zza extends com.google.android.gms.internal.zzbkt.zza {
-        private OnStateChangedListener zzbSa;
-        private final SupportWalletFragment zzbSb;
+    static class zza extends gd {
+        private OnStateChangedListener zzbQg;
+        private final SupportWalletFragment zzbQh;
 
         zza(SupportWalletFragment supportWalletFragment) {
-            this.zzbSb = supportWalletFragment;
+            this.zzbQh = supportWalletFragment;
         }
 
-        public void zza(int i, int i2, Bundle bundle) {
-            if (this.zzbSa != null) {
-                this.zzbSa.onStateChanged(this.zzbSb, i, i2, bundle);
+        public final void zza(int i, int i2, Bundle bundle) {
+            if (this.zzbQg != null) {
+                this.zzbQg.onStateChanged(this.zzbQh, i, i2, bundle);
             }
         }
 
-        public void zza(OnStateChangedListener onStateChangedListener) {
-            this.zzbSa = onStateChangedListener;
+        public final void zza(OnStateChangedListener onStateChangedListener) {
+            this.zzbQg = onStateChangedListener;
         }
     }
 
@@ -257,24 +258,24 @@ public final class SupportWalletFragment extends Fragment {
         SupportWalletFragment supportWalletFragment = new SupportWalletFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable("extraWalletFragmentOptions", walletFragmentOptions);
-        supportWalletFragment.zzaRN.setArguments(bundle);
+        supportWalletFragment.zzaSE.setArguments(bundle);
         return supportWalletFragment;
     }
 
-    public int getState() {
-        return this.zzbRR != null ? this.zzbRR.getState() : 0;
+    public final int getState() {
+        return this.zzbPX != null ? this.zzbPX.getState() : 0;
     }
 
-    public void initialize(WalletFragmentInitParams walletFragmentInitParams) {
-        if (this.zzbRR != null) {
-            this.zzbRR.initialize(walletFragmentInitParams);
-            this.zzbRW = null;
-        } else if (this.zzbRW == null) {
-            this.zzbRW = walletFragmentInitParams;
-            if (this.zzbRX != null) {
+    public final void initialize(WalletFragmentInitParams walletFragmentInitParams) {
+        if (this.zzbPX != null) {
+            this.zzbPX.initialize(walletFragmentInitParams);
+            this.zzbQc = null;
+        } else if (this.zzbQc == null) {
+            this.zzbQc = walletFragmentInitParams;
+            if (this.zzbQd != null) {
                 Log.w("SupportWalletFragment", "updateMaskedWalletRequest() was called before initialize()");
             }
-            if (this.zzbRY != null) {
+            if (this.zzbQe != null) {
                 Log.w("SupportWalletFragment", "updateMaskedWallet() was called before initialize()");
             }
         } else {
@@ -282,146 +283,146 @@ public final class SupportWalletFragment extends Fragment {
         }
     }
 
-    public void onActivityResult(int i, int i2, Intent intent) {
+    public final void onActivityResult(int i, int i2, Intent intent) {
         super.onActivityResult(i, i2, intent);
-        if (this.zzbRR != null) {
-            this.zzbRR.onActivityResult(i, i2, intent);
+        if (this.zzbPX != null) {
+            this.zzbPX.onActivityResult(i, i2, intent);
         }
     }
 
-    public void onCreate(Bundle bundle) {
+    public final void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         if (bundle != null) {
             bundle.setClassLoader(WalletFragmentOptions.class.getClassLoader());
             WalletFragmentInitParams walletFragmentInitParams = (WalletFragmentInitParams) bundle.getParcelable("walletFragmentInitParams");
             if (walletFragmentInitParams != null) {
-                if (this.zzbRW != null) {
+                if (this.zzbQc != null) {
                     Log.w("SupportWalletFragment", "initialize(WalletFragmentInitParams) was called more than once.Ignoring.");
                 }
-                this.zzbRW = walletFragmentInitParams;
+                this.zzbQc = walletFragmentInitParams;
             }
-            if (this.zzbRX == null) {
-                this.zzbRX = (MaskedWalletRequest) bundle.getParcelable("maskedWalletRequest");
+            if (this.zzbQd == null) {
+                this.zzbQd = (MaskedWalletRequest) bundle.getParcelable("maskedWalletRequest");
             }
-            if (this.zzbRY == null) {
-                this.zzbRY = (MaskedWallet) bundle.getParcelable("maskedWallet");
+            if (this.zzbQe == null) {
+                this.zzbQe = (MaskedWallet) bundle.getParcelable("maskedWallet");
             }
             if (bundle.containsKey("walletFragmentOptions")) {
-                this.zzbRV = (WalletFragmentOptions) bundle.getParcelable("walletFragmentOptions");
+                this.zzbQb = (WalletFragmentOptions) bundle.getParcelable("walletFragmentOptions");
             }
             if (bundle.containsKey("enabled")) {
-                this.zzbRZ = Boolean.valueOf(bundle.getBoolean("enabled"));
+                this.zzbQf = Boolean.valueOf(bundle.getBoolean("enabled"));
             }
-        } else if (this.zzaRN.getArguments() != null) {
-            WalletFragmentOptions walletFragmentOptions = (WalletFragmentOptions) this.zzaRN.getArguments().getParcelable("extraWalletFragmentOptions");
+        } else if (this.zzaSE.getArguments() != null) {
+            WalletFragmentOptions walletFragmentOptions = (WalletFragmentOptions) this.zzaSE.getArguments().getParcelable("extraWalletFragmentOptions");
             if (walletFragmentOptions != null) {
-                walletFragmentOptions.zzci(this.zzaRN.getActivity());
-                this.zzbRV = walletFragmentOptions;
+                walletFragmentOptions.zzby(this.zzaSE.getActivity());
+                this.zzbQb = walletFragmentOptions;
             }
         }
         this.mCreated = true;
-        this.zzbRT.onCreate(bundle);
+        this.zzbPZ.onCreate(bundle);
     }
 
-    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        return this.zzbRT.onCreateView(layoutInflater, viewGroup, bundle);
+    public final View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        return this.zzbPZ.onCreateView(layoutInflater, viewGroup, bundle);
     }
 
-    public void onDestroy() {
+    public final void onDestroy() {
         super.onDestroy();
         this.mCreated = false;
     }
 
-    public void onInflate(Activity activity, AttributeSet attributeSet, Bundle bundle) {
+    public final void onInflate(Activity activity, AttributeSet attributeSet, Bundle bundle) {
         super.onInflate(activity, attributeSet, bundle);
-        if (this.zzbRV == null) {
-            this.zzbRV = WalletFragmentOptions.zzc((Context) activity, attributeSet);
+        if (this.zzbQb == null) {
+            this.zzbQb = WalletFragmentOptions.zza((Context) activity, attributeSet);
         }
         Bundle bundle2 = new Bundle();
-        bundle2.putParcelable("attrKeyWalletFragmentOptions", this.zzbRV);
-        this.zzbRT.onInflate(activity, bundle2, bundle);
+        bundle2.putParcelable("attrKeyWalletFragmentOptions", this.zzbQb);
+        this.zzbPZ.onInflate(activity, bundle2, bundle);
     }
 
-    public void onPause() {
+    public final void onPause() {
         super.onPause();
-        this.zzbRT.onPause();
+        this.zzbPZ.onPause();
     }
 
-    public void onResume() {
+    public final void onResume() {
         super.onResume();
-        this.zzbRT.onResume();
-        FragmentManager supportFragmentManager = this.zzaRN.getActivity().getSupportFragmentManager();
+        this.zzbPZ.onResume();
+        FragmentManager supportFragmentManager = this.zzaSE.getActivity().getSupportFragmentManager();
         Fragment findFragmentByTag = supportFragmentManager.findFragmentByTag(GooglePlayServicesUtil.GMS_ERROR_DIALOG);
         if (findFragmentByTag != null) {
             supportFragmentManager.beginTransaction().remove(findFragmentByTag).commit();
-            GooglePlayServicesUtil.showErrorDialogFragment(GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.zzaRN.getActivity()), this.zzaRN.getActivity(), -1);
+            GooglePlayServicesUtil.showErrorDialogFragment(GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.zzaSE.getActivity()), this.zzaSE.getActivity(), -1);
         }
     }
 
-    public void onSaveInstanceState(Bundle bundle) {
+    public final void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
         bundle.setClassLoader(WalletFragmentOptions.class.getClassLoader());
-        this.zzbRT.onSaveInstanceState(bundle);
-        if (this.zzbRW != null) {
-            bundle.putParcelable("walletFragmentInitParams", this.zzbRW);
-            this.zzbRW = null;
+        this.zzbPZ.onSaveInstanceState(bundle);
+        if (this.zzbQc != null) {
+            bundle.putParcelable("walletFragmentInitParams", this.zzbQc);
+            this.zzbQc = null;
         }
-        if (this.zzbRX != null) {
-            bundle.putParcelable("maskedWalletRequest", this.zzbRX);
-            this.zzbRX = null;
+        if (this.zzbQd != null) {
+            bundle.putParcelable("maskedWalletRequest", this.zzbQd);
+            this.zzbQd = null;
         }
-        if (this.zzbRY != null) {
-            bundle.putParcelable("maskedWallet", this.zzbRY);
-            this.zzbRY = null;
+        if (this.zzbQe != null) {
+            bundle.putParcelable("maskedWallet", this.zzbQe);
+            this.zzbQe = null;
         }
-        if (this.zzbRV != null) {
-            bundle.putParcelable("walletFragmentOptions", this.zzbRV);
-            this.zzbRV = null;
+        if (this.zzbQb != null) {
+            bundle.putParcelable("walletFragmentOptions", this.zzbQb);
+            this.zzbQb = null;
         }
-        if (this.zzbRZ != null) {
-            bundle.putBoolean("enabled", this.zzbRZ.booleanValue());
-            this.zzbRZ = null;
+        if (this.zzbQf != null) {
+            bundle.putBoolean("enabled", this.zzbQf.booleanValue());
+            this.zzbQf = null;
         }
     }
 
-    public void onStart() {
+    public final void onStart() {
         super.onStart();
-        this.zzbRT.onStart();
+        this.zzbPZ.onStart();
     }
 
-    public void onStop() {
+    public final void onStop() {
         super.onStop();
-        this.zzbRT.onStop();
+        this.zzbPZ.onStop();
     }
 
-    public void setEnabled(boolean z) {
-        if (this.zzbRR != null) {
-            this.zzbRR.setEnabled(z);
-            this.zzbRZ = null;
+    public final void setEnabled(boolean z) {
+        if (this.zzbPX != null) {
+            this.zzbPX.setEnabled(z);
+            this.zzbQf = null;
             return;
         }
-        this.zzbRZ = Boolean.valueOf(z);
+        this.zzbQf = Boolean.valueOf(z);
     }
 
-    public void setOnStateChangedListener(OnStateChangedListener onStateChangedListener) {
-        this.zzbRU.zza(onStateChangedListener);
+    public final void setOnStateChangedListener(OnStateChangedListener onStateChangedListener) {
+        this.zzbQa.zza(onStateChangedListener);
     }
 
-    public void updateMaskedWallet(MaskedWallet maskedWallet) {
-        if (this.zzbRR != null) {
-            this.zzbRR.updateMaskedWallet(maskedWallet);
-            this.zzbRY = null;
+    public final void updateMaskedWallet(MaskedWallet maskedWallet) {
+        if (this.zzbPX != null) {
+            this.zzbPX.updateMaskedWallet(maskedWallet);
+            this.zzbQe = null;
             return;
         }
-        this.zzbRY = maskedWallet;
+        this.zzbQe = maskedWallet;
     }
 
-    public void updateMaskedWalletRequest(MaskedWalletRequest maskedWalletRequest) {
-        if (this.zzbRR != null) {
-            this.zzbRR.updateMaskedWalletRequest(maskedWalletRequest);
-            this.zzbRX = null;
+    public final void updateMaskedWalletRequest(MaskedWalletRequest maskedWalletRequest) {
+        if (this.zzbPX != null) {
+            this.zzbPX.updateMaskedWalletRequest(maskedWalletRequest);
+            this.zzbQd = null;
             return;
         }
-        this.zzbRX = maskedWalletRequest;
+        this.zzbQd = maskedWalletRequest;
     }
 }

@@ -7,17 +7,10 @@ import android.util.Log;
 import com.google.firebase.iid.zzb;
 
 public class InstanceIDListenerService extends zzb {
-    static void zza(Context context, zzd com_google_android_gms_iid_zzd) {
-        com_google_android_gms_iid_zzd.zzHo();
+    static void zza(Context context, zzh com_google_android_gms_iid_zzh) {
+        com_google_android_gms_iid_zzh.zzvP();
         Intent intent = new Intent("com.google.android.gms.iid.InstanceID");
         intent.putExtra("CMD", "RST");
-        intent.setClassName(context, "com.google.android.gms.gcm.GcmReceiver");
-        context.sendBroadcast(intent);
-    }
-
-    static void zzby(Context context) {
-        Intent intent = new Intent("com.google.android.gms.iid.InstanceID");
-        intent.putExtra("CMD", "SYNC");
         intent.setClassName(context, "com.google.android.gms.gcm.GcmReceiver");
         context.sendBroadcast(intent);
     }
@@ -36,19 +29,19 @@ public class InstanceIDListenerService extends zzb {
                 Log.d("InstanceID", new StringBuilder((String.valueOf(stringExtra).length() + 34) + String.valueOf(stringExtra2).length()).append("Service command. subtype:").append(stringExtra).append(" command:").append(stringExtra2).toString());
             }
             if ("gcm.googleapis.com/refresh".equals(intent.getStringExtra("from"))) {
-                zza.zzHj().zzeK(stringExtra);
-                zzaF(false);
+                InstanceID.zzvM().zzdr(stringExtra);
+                onTokenRefresh();
             } else if ("RST".equals(stringExtra2)) {
-                zza.zzHi();
-                zzaF(true);
+                zza.zzvL();
+                onTokenRefresh();
             } else if ("RST_FULL".equals(stringExtra2)) {
-                if (!zza.zzHj().isEmpty()) {
-                    zza.zzHj().zzHo();
-                    zzaF(true);
+                if (!InstanceID.zzvM().isEmpty()) {
+                    InstanceID.zzvM().zzvP();
+                    onTokenRefresh();
                 }
             } else if ("SYNC".equals(stringExtra2)) {
-                zza.zzHj().zzeK(stringExtra);
-                zzaF(false);
+                InstanceID.zzvM().zzdr(stringExtra);
+                onTokenRefresh();
             } else {
                 "PING".equals(stringExtra2);
             }
@@ -56,9 +49,5 @@ public class InstanceIDListenerService extends zzb {
     }
 
     public void onTokenRefresh() {
-    }
-
-    public void zzaF(boolean z) {
-        onTokenRefresh();
     }
 }

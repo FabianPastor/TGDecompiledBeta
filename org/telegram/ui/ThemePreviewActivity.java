@@ -428,7 +428,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                     public void didPressedImage(ChatMessageCell cell) {
                     }
 
-                    public void didPressedInstantButton(ChatMessageCell cell) {
+                    public void didPressedInstantButton(ChatMessageCell cell, int type) {
                     }
                 });
             } else if (viewType == 1) {
@@ -722,7 +722,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         cancelButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Theme.applyPreviousTheme();
-                ThemePreviewActivity.this.parentLayout.rebuildAllFragmentViews(false);
+                ThemePreviewActivity.this.parentLayout.rebuildAllFragmentViews(false, false);
                 ThemePreviewActivity.this.finishFragment();
             }
         });
@@ -738,7 +738,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         doneButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 ThemePreviewActivity.this.applied = true;
-                ThemePreviewActivity.this.parentLayout.rebuildAllFragmentViews(false);
+                ThemePreviewActivity.this.parentLayout.rebuildAllFragmentViews(false, false);
                 Theme.applyThemeFile(ThemePreviewActivity.this.themeFile, ThemePreviewActivity.this.applyingTheme.name, false);
                 ThemePreviewActivity.this.finishFragment();
             }
@@ -768,7 +768,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
 
     public boolean onBackPressed() {
         Theme.applyPreviousTheme();
-        this.parentLayout.rebuildAllFragmentViews(false);
+        this.parentLayout.rebuildAllFragmentViews(false, false);
         return super.onBackPressed();
     }
 

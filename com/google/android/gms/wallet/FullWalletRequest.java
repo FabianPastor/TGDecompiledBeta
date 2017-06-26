@@ -4,36 +4,37 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 
 public final class FullWalletRequest extends zza implements ReflectedParcelable {
     public static final Creator<FullWalletRequest> CREATOR = new zzh();
-    String zzbPW;
-    String zzbPX;
-    Cart zzbQh;
+    String zzbOo;
+    String zzbOp;
+    Cart zzbOz;
 
     public final class Builder {
-        final /* synthetic */ FullWalletRequest zzbQi;
+        private /* synthetic */ FullWalletRequest zzbOA;
 
         private Builder(FullWalletRequest fullWalletRequest) {
-            this.zzbQi = fullWalletRequest;
+            this.zzbOA = fullWalletRequest;
         }
 
-        public FullWalletRequest build() {
-            return this.zzbQi;
+        public final FullWalletRequest build() {
+            return this.zzbOA;
         }
 
-        public Builder setCart(Cart cart) {
-            this.zzbQi.zzbQh = cart;
+        public final Builder setCart(Cart cart) {
+            this.zzbOA.zzbOz = cart;
             return this;
         }
 
-        public Builder setGoogleTransactionId(String str) {
-            this.zzbQi.zzbPW = str;
+        public final Builder setGoogleTransactionId(String str) {
+            this.zzbOA.zzbOo = str;
             return this;
         }
 
-        public Builder setMerchantTransactionId(String str) {
-            this.zzbQi.zzbPX = str;
+        public final Builder setMerchantTransactionId(String str) {
+            this.zzbOA.zzbOp = str;
             return this;
         }
     }
@@ -42,9 +43,9 @@ public final class FullWalletRequest extends zza implements ReflectedParcelable 
     }
 
     FullWalletRequest(String str, String str2, Cart cart) {
-        this.zzbPW = str;
-        this.zzbPX = str2;
-        this.zzbQh = cart;
+        this.zzbOo = str;
+        this.zzbOp = str2;
+        this.zzbOz = cart;
     }
 
     public static Builder newBuilder() {
@@ -53,19 +54,23 @@ public final class FullWalletRequest extends zza implements ReflectedParcelable 
         return new Builder();
     }
 
-    public Cart getCart() {
-        return this.zzbQh;
+    public final Cart getCart() {
+        return this.zzbOz;
     }
 
-    public String getGoogleTransactionId() {
-        return this.zzbPW;
+    public final String getGoogleTransactionId() {
+        return this.zzbOo;
     }
 
-    public String getMerchantTransactionId() {
-        return this.zzbPX;
+    public final String getMerchantTransactionId() {
+        return this.zzbOp;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzh.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.zzbOo, false);
+        zzd.zza(parcel, 3, this.zzbOp, false);
+        zzd.zza(parcel, 4, this.zzbOz, i, false);
+        zzd.zzI(parcel, zze);
     }
 }

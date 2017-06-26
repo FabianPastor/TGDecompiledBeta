@@ -2,20 +2,11 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.text.Layout;
-import android.util.AttributeSet;
 import android.widget.TextView;
 
 public class CorrectlyMeasuringTextView extends TextView {
     public CorrectlyMeasuringTextView(Context context) {
         super(context);
-    }
-
-    public CorrectlyMeasuringTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public CorrectlyMeasuringTextView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
     }
 
     public void onMeasure(int wms, int hms) {

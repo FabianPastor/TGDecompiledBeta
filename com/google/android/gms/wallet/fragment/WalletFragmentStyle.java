@@ -9,14 +9,15 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import com.google.android.gms.R;
 import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 
 public final class WalletFragmentStyle extends zza {
-    public static final Creator<WalletFragmentStyle> CREATOR = new zzc();
-    Bundle zzbRP;
-    int zzbSp;
+    public static final Creator<WalletFragmentStyle> CREATOR = new zzg();
+    private Bundle zzbQv;
+    private int zzbQw;
 
     @Retention(RetentionPolicy.SOURCE)
     public @interface BuyButtonAppearance {
@@ -60,82 +61,47 @@ public final class WalletFragmentStyle extends zza {
     }
 
     public WalletFragmentStyle() {
-        this.zzbRP = new Bundle();
-        this.zzbRP.putInt("buyButtonAppearanceDefault", 4);
-        this.zzbRP.putInt("maskedWalletDetailsLogoImageTypeDefault", 3);
+        this.zzbQv = new Bundle();
+        this.zzbQv.putInt("buyButtonAppearanceDefault", 4);
+        this.zzbQv.putInt("maskedWalletDetailsLogoImageTypeDefault", 3);
     }
 
     WalletFragmentStyle(Bundle bundle, int i) {
-        this.zzbRP = bundle;
-        this.zzbSp = i;
+        this.zzbQv = bundle;
+        this.zzbQw = i;
     }
 
-    private static long zzB(int i, int i2) {
-        return (((long) i) << 32) | (((long) i2) & 4294967295L);
-    }
-
-    private static int zza(long j, DisplayMetrics displayMetrics) {
-        int i = (int) (j >>> 32);
-        int i2 = (int) j;
-        switch (i) {
-            case 0:
-                i = 0;
-                break;
-            case 1:
-                i = 1;
-                break;
-            case 2:
-                i = 2;
-                break;
-            case 3:
-                i = 3;
-                break;
-            case 4:
-                i = 4;
-                break;
-            case 5:
-                i = 5;
-                break;
-            case 128:
-                return TypedValue.complexToDimensionPixelSize(i2, displayMetrics);
-            case TsExtractor.TS_STREAM_TYPE_AC3 /*129*/:
-                return i2;
-            default:
-                throw new IllegalStateException("Unexpected unit or type: " + i);
-        }
-        return Math.round(TypedValue.applyDimension(i, Float.intBitsToFloat(i2), displayMetrics));
-    }
-
-    private static long zza(TypedValue typedValue) {
-        switch (typedValue.type) {
-            case 5:
-                return zzB(128, typedValue.data);
-            case 16:
-                return zzoW(typedValue.data);
-            default:
-                throw new IllegalArgumentException("Unexpected dimension type: " + typedValue.type);
-        }
-    }
-
-    private void zza(TypedArray typedArray, int i, String str) {
-        if (!this.zzbRP.containsKey(str)) {
+    private final void zza(TypedArray typedArray, int i, String str) {
+        if (!this.zzbQv.containsKey(str)) {
             TypedValue peekValue = typedArray.peekValue(i);
             if (peekValue != null) {
-                this.zzbRP.putLong(str, zza(peekValue));
+                long zzl;
+                Bundle bundle = this.zzbQv;
+                switch (peekValue.type) {
+                    case 5:
+                        zzl = zzl(128, peekValue.data);
+                        break;
+                    case 16:
+                        zzl = zzbO(peekValue.data);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unexpected dimension type: " + peekValue.type);
+                }
+                bundle.putLong(str, zzl);
             }
         }
     }
 
-    private void zza(TypedArray typedArray, int i, String str, String str2) {
-        if (!this.zzbRP.containsKey(str) && !this.zzbRP.containsKey(str2)) {
+    private final void zza(TypedArray typedArray, int i, String str, String str2) {
+        if (!this.zzbQv.containsKey(str) && !this.zzbQv.containsKey(str2)) {
             TypedValue peekValue = typedArray.peekValue(i);
             if (peekValue == null) {
                 return;
             }
             if (peekValue.type < 28 || peekValue.type > 31) {
-                this.zzbRP.putInt(str2, peekValue.resourceId);
+                this.zzbQv.putInt(str2, peekValue.resourceId);
             } else {
-                this.zzbRP.putInt(str, peekValue.data);
+                this.zzbQv.putInt(str, peekValue.data);
             }
         }
     }
@@ -148,126 +114,166 @@ public final class WalletFragmentStyle extends zza {
             case 3:
             case 4:
             case 5:
-                return zzB(i, Float.floatToIntBits(f));
+                return zzl(i, Float.floatToIntBits(f));
             default:
                 throw new IllegalArgumentException("Unrecognized unit: " + i);
         }
     }
 
-    private void zzb(TypedArray typedArray, int i, String str) {
-        if (!this.zzbRP.containsKey(str)) {
+    private final void zzb(TypedArray typedArray, int i, String str) {
+        if (!this.zzbQv.containsKey(str)) {
             TypedValue peekValue = typedArray.peekValue(i);
             if (peekValue != null) {
-                this.zzbRP.putInt(str, peekValue.data);
+                this.zzbQv.putInt(str, peekValue.data);
             }
         }
     }
 
-    private static long zzoW(int i) {
+    private static long zzbO(int i) {
         if (i >= 0) {
             return zzb(0, (float) i);
         }
         if (i == -1 || i == -2) {
-            return zzB(TsExtractor.TS_STREAM_TYPE_AC3, i);
+            return zzl(TsExtractor.TS_STREAM_TYPE_AC3, i);
         }
         throw new IllegalArgumentException("Unexpected dimension value: " + i);
     }
 
-    public WalletFragmentStyle setBuyButtonAppearance(int i) {
-        this.zzbRP.putInt("buyButtonAppearance", i);
+    private static long zzl(int i, int i2) {
+        return (((long) i) << 32) | (((long) i2) & 4294967295L);
+    }
+
+    public final WalletFragmentStyle setBuyButtonAppearance(int i) {
+        this.zzbQv.putInt("buyButtonAppearance", i);
         return this;
     }
 
-    public WalletFragmentStyle setBuyButtonHeight(int i) {
-        this.zzbRP.putLong("buyButtonHeight", zzoW(i));
+    public final WalletFragmentStyle setBuyButtonHeight(int i) {
+        this.zzbQv.putLong("buyButtonHeight", zzbO(i));
         return this;
     }
 
-    public WalletFragmentStyle setBuyButtonHeight(int i, float f) {
-        this.zzbRP.putLong("buyButtonHeight", zzb(i, f));
+    public final WalletFragmentStyle setBuyButtonHeight(int i, float f) {
+        this.zzbQv.putLong("buyButtonHeight", zzb(i, f));
         return this;
     }
 
-    public WalletFragmentStyle setBuyButtonText(int i) {
-        this.zzbRP.putInt("buyButtonText", i);
+    public final WalletFragmentStyle setBuyButtonText(int i) {
+        this.zzbQv.putInt("buyButtonText", i);
         return this;
     }
 
-    public WalletFragmentStyle setBuyButtonWidth(int i) {
-        this.zzbRP.putLong("buyButtonWidth", zzoW(i));
+    public final WalletFragmentStyle setBuyButtonWidth(int i) {
+        this.zzbQv.putLong("buyButtonWidth", zzbO(i));
         return this;
     }
 
-    public WalletFragmentStyle setBuyButtonWidth(int i, float f) {
-        this.zzbRP.putLong("buyButtonWidth", zzb(i, f));
+    public final WalletFragmentStyle setBuyButtonWidth(int i, float f) {
+        this.zzbQv.putLong("buyButtonWidth", zzb(i, f));
         return this;
     }
 
-    public WalletFragmentStyle setMaskedWalletDetailsBackgroundColor(int i) {
-        this.zzbRP.remove("maskedWalletDetailsBackgroundResource");
-        this.zzbRP.putInt("maskedWalletDetailsBackgroundColor", i);
+    public final WalletFragmentStyle setMaskedWalletDetailsBackgroundColor(int i) {
+        this.zzbQv.remove("maskedWalletDetailsBackgroundResource");
+        this.zzbQv.putInt("maskedWalletDetailsBackgroundColor", i);
         return this;
     }
 
-    public WalletFragmentStyle setMaskedWalletDetailsBackgroundResource(int i) {
-        this.zzbRP.remove("maskedWalletDetailsBackgroundColor");
-        this.zzbRP.putInt("maskedWalletDetailsBackgroundResource", i);
+    public final WalletFragmentStyle setMaskedWalletDetailsBackgroundResource(int i) {
+        this.zzbQv.remove("maskedWalletDetailsBackgroundColor");
+        this.zzbQv.putInt("maskedWalletDetailsBackgroundResource", i);
         return this;
     }
 
-    public WalletFragmentStyle setMaskedWalletDetailsButtonBackgroundColor(int i) {
-        this.zzbRP.remove("maskedWalletDetailsButtonBackgroundResource");
-        this.zzbRP.putInt("maskedWalletDetailsButtonBackgroundColor", i);
+    public final WalletFragmentStyle setMaskedWalletDetailsButtonBackgroundColor(int i) {
+        this.zzbQv.remove("maskedWalletDetailsButtonBackgroundResource");
+        this.zzbQv.putInt("maskedWalletDetailsButtonBackgroundColor", i);
         return this;
     }
 
-    public WalletFragmentStyle setMaskedWalletDetailsButtonBackgroundResource(int i) {
-        this.zzbRP.remove("maskedWalletDetailsButtonBackgroundColor");
-        this.zzbRP.putInt("maskedWalletDetailsButtonBackgroundResource", i);
+    public final WalletFragmentStyle setMaskedWalletDetailsButtonBackgroundResource(int i) {
+        this.zzbQv.remove("maskedWalletDetailsButtonBackgroundColor");
+        this.zzbQv.putInt("maskedWalletDetailsButtonBackgroundResource", i);
         return this;
     }
 
-    public WalletFragmentStyle setMaskedWalletDetailsButtonTextAppearance(int i) {
-        this.zzbRP.putInt("maskedWalletDetailsButtonTextAppearance", i);
+    public final WalletFragmentStyle setMaskedWalletDetailsButtonTextAppearance(int i) {
+        this.zzbQv.putInt("maskedWalletDetailsButtonTextAppearance", i);
         return this;
     }
 
-    public WalletFragmentStyle setMaskedWalletDetailsHeaderTextAppearance(int i) {
-        this.zzbRP.putInt("maskedWalletDetailsHeaderTextAppearance", i);
+    public final WalletFragmentStyle setMaskedWalletDetailsHeaderTextAppearance(int i) {
+        this.zzbQv.putInt("maskedWalletDetailsHeaderTextAppearance", i);
         return this;
     }
 
-    public WalletFragmentStyle setMaskedWalletDetailsLogoImageType(int i) {
-        this.zzbRP.putInt("maskedWalletDetailsLogoImageType", i);
+    public final WalletFragmentStyle setMaskedWalletDetailsLogoImageType(int i) {
+        this.zzbQv.putInt("maskedWalletDetailsLogoImageType", i);
         return this;
     }
 
     @Deprecated
-    public WalletFragmentStyle setMaskedWalletDetailsLogoTextColor(int i) {
-        this.zzbRP.putInt("maskedWalletDetailsLogoTextColor", i);
+    public final WalletFragmentStyle setMaskedWalletDetailsLogoTextColor(int i) {
+        this.zzbQv.putInt("maskedWalletDetailsLogoTextColor", i);
         return this;
     }
 
-    public WalletFragmentStyle setMaskedWalletDetailsTextAppearance(int i) {
-        this.zzbRP.putInt("maskedWalletDetailsTextAppearance", i);
+    public final WalletFragmentStyle setMaskedWalletDetailsTextAppearance(int i) {
+        this.zzbQv.putInt("maskedWalletDetailsTextAppearance", i);
         return this;
     }
 
-    public WalletFragmentStyle setStyleResourceId(int i) {
-        this.zzbSp = i;
+    public final WalletFragmentStyle setStyleResourceId(int i) {
+        this.zzbQw = i;
         return this;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzc.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.zzbQv, false);
+        zzd.zzc(parcel, 3, this.zzbQw);
+        zzd.zzI(parcel, zze);
     }
 
-    public int zza(String str, DisplayMetrics displayMetrics, int i) {
-        return this.zzbRP.containsKey(str) ? zza(this.zzbRP.getLong(str), displayMetrics) : i;
+    public final int zza(String str, DisplayMetrics displayMetrics, int i) {
+        if (!this.zzbQv.containsKey(str)) {
+            return i;
+        }
+        int i2;
+        long j = this.zzbQv.getLong(str);
+        int i3 = (int) (j >>> 32);
+        i = (int) j;
+        switch (i3) {
+            case 0:
+                i2 = 0;
+                break;
+            case 1:
+                i2 = 1;
+                break;
+            case 2:
+                i2 = 2;
+                break;
+            case 3:
+                i2 = 3;
+                break;
+            case 4:
+                i2 = 4;
+                break;
+            case 5:
+                i2 = 5;
+                break;
+            case 128:
+                return TypedValue.complexToDimensionPixelSize(i, displayMetrics);
+            case TsExtractor.TS_STREAM_TYPE_AC3 /*129*/:
+                return i;
+            default:
+                throw new IllegalStateException("Unexpected unit or type: " + i3);
+        }
+        return Math.round(TypedValue.applyDimension(i2, Float.intBitsToFloat(i), displayMetrics));
     }
 
-    public void zzci(Context context) {
-        TypedArray obtainStyledAttributes = context.obtainStyledAttributes(this.zzbSp <= 0 ? R.style.WalletFragmentDefaultStyle : this.zzbSp, R.styleable.WalletFragmentStyle);
+    public final void zzby(Context context) {
+        TypedArray obtainStyledAttributes = context.obtainStyledAttributes(this.zzbQw <= 0 ? R.style.WalletFragmentDefaultStyle : this.zzbQw, R.styleable.WalletFragmentStyle);
         zza(obtainStyledAttributes, R.styleable.WalletFragmentStyle_buyButtonWidth, "buyButtonWidth");
         zza(obtainStyledAttributes, R.styleable.WalletFragmentStyle_buyButtonHeight, "buyButtonHeight");
         zzb(obtainStyledAttributes, R.styleable.WalletFragmentStyle_buyButtonText, "buyButtonText");

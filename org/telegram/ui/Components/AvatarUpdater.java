@@ -79,7 +79,7 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
         if (VERSION.SDK_INT < 23 || this.parentFragment == null || this.parentFragment.getParentActivity() == null || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
             PhotoAlbumPickerActivity fragment = new PhotoAlbumPickerActivity(true, false, false, null);
             fragment.setDelegate(new PhotoAlbumPickerActivityDelegate() {
-                public void didSelectPhotos(ArrayList<String> photos, ArrayList<String> arrayList, ArrayList<ArrayList<InputDocument>> arrayList2, ArrayList<SearchImage> arrayList3) {
+                public void didSelectPhotos(ArrayList<String> photos, ArrayList<String> arrayList, ArrayList<PhotoEntry> arrayList2, ArrayList<ArrayList<InputDocument>> arrayList3, ArrayList<SearchImage> arrayList4) {
                     if (!photos.isEmpty()) {
                         AvatarUpdater.this.processBitmap(ImageLoader.loadBitmap((String) photos.get(0), null, 800.0f, 800.0f, true));
                     }

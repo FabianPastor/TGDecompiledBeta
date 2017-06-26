@@ -77,45 +77,47 @@ public class ChatAvatarContainer extends FrameLayout {
                 }
             });
         }
-        setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                User user = ChatAvatarContainer.this.parentFragment.getCurrentUser();
-                Chat chat = ChatAvatarContainer.this.parentFragment.getCurrentChat();
-                Bundle args;
-                ProfileActivity fragment;
-                if (user != null) {
-                    args = new Bundle();
-                    args.putInt("user_id", user.id);
-                    if (ChatAvatarContainer.this.timeItem != null) {
-                        args.putLong("dialog_id", ChatAvatarContainer.this.parentFragment.getDialogId());
+        if (this.parentFragment != null) {
+            setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
+                    User user = ChatAvatarContainer.this.parentFragment.getCurrentUser();
+                    Chat chat = ChatAvatarContainer.this.parentFragment.getCurrentChat();
+                    Bundle args;
+                    ProfileActivity fragment;
+                    if (user != null) {
+                        args = new Bundle();
+                        args.putInt("user_id", user.id);
+                        if (ChatAvatarContainer.this.timeItem != null) {
+                            args.putLong("dialog_id", ChatAvatarContainer.this.parentFragment.getDialogId());
+                        }
+                        fragment = new ProfileActivity(args);
+                        fragment.setPlayProfileAnimation(true);
+                        ChatAvatarContainer.this.parentFragment.presentFragment(fragment);
+                    } else if (chat != null) {
+                        args = new Bundle();
+                        args.putInt("chat_id", chat.id);
+                        fragment = new ProfileActivity(args);
+                        fragment.setChatInfo(ChatAvatarContainer.this.parentFragment.getCurrentChatInfo());
+                        fragment.setPlayProfileAnimation(true);
+                        ChatAvatarContainer.this.parentFragment.presentFragment(fragment);
                     }
-                    fragment = new ProfileActivity(args);
-                    fragment.setPlayProfileAnimation(true);
-                    ChatAvatarContainer.this.parentFragment.presentFragment(fragment);
-                } else if (chat != null) {
-                    args = new Bundle();
-                    args.putInt("chat_id", chat.id);
-                    fragment = new ProfileActivity(args);
-                    fragment.setChatInfo(ChatAvatarContainer.this.parentFragment.getCurrentChatInfo());
-                    fragment.setPlayProfileAnimation(true);
-                    ChatAvatarContainer.this.parentFragment.presentFragment(fragment);
                 }
+            });
+            Chat chat = this.parentFragment.getCurrentChat();
+            this.statusDrawables[0] = new TypingDotsDrawable();
+            this.statusDrawables[1] = new RecordStatusDrawable();
+            this.statusDrawables[2] = new SendingFileDrawable();
+            this.statusDrawables[3] = new PlayingGameDrawable();
+            this.statusDrawables[4] = new RoundStatusDrawable();
+            for (StatusDrawable statusDrawable : this.statusDrawables) {
+                boolean z;
+                if (chat != null) {
+                    z = true;
+                } else {
+                    z = false;
+                }
+                statusDrawable.setIsChat(z);
             }
-        });
-        Chat chat = this.parentFragment.getCurrentChat();
-        this.statusDrawables[0] = new TypingDotsDrawable();
-        this.statusDrawables[1] = new RecordStatusDrawable();
-        this.statusDrawables[2] = new SendingFileDrawable();
-        this.statusDrawables[3] = new PlayingGameDrawable();
-        this.statusDrawables[4] = new RoundStatusDrawable();
-        for (StatusDrawable statusDrawable : this.statusDrawables) {
-            boolean z;
-            if (chat != null) {
-                z = true;
-            } else {
-                z = false;
-            }
-            statusDrawable.setIsChat(z);
         }
     }
 
@@ -173,6 +175,10 @@ public class ChatAvatarContainer extends FrameLayout {
         this.titleTextView.setText(value);
     }
 
+    public void setSubtitle(CharSequence value) {
+        this.subtitleTextView.setText(value);
+    }
+
     public ImageView getTimeItem() {
         return this.timeItem;
     }
@@ -211,113 +217,130 @@ public class ChatAvatarContainer extends FrameLayout {
     }
 
     public void updateSubtitle() {
-        User user = this.parentFragment.getCurrentUser();
-        Chat chat = this.parentFragment.getCurrentChat();
-        CharSequence printString = (CharSequence) MessagesController.getInstance().printingStrings.get(Long.valueOf(this.parentFragment.getDialogId()));
-        if (printString != null) {
-            printString = TextUtils.replace(printString, new String[]{"..."}, new String[]{""});
-        }
-        if (printString == null || printString.length() == 0 || (ChatObject.isChannel(chat) && !chat.megagroup)) {
-            setTypingAnimation(false);
-            if (chat != null) {
-                ChatFull info = this.parentFragment.getCurrentChatInfo();
-                if (ChatObject.isChannel(chat)) {
-                    if (info == null || info.participants_count == 0) {
-                        if (chat.megagroup) {
-                            this.subtitleTextView.setText(LocaleController.getString("Loading", R.string.Loading).toLowerCase());
+        if (this.parentFragment != null) {
+            User user = this.parentFragment.getCurrentUser();
+            Chat chat = this.parentFragment.getCurrentChat();
+            CharSequence printString = (CharSequence) MessagesController.getInstance().printingStrings.get(Long.valueOf(this.parentFragment.getDialogId()));
+            if (printString != null) {
+                printString = TextUtils.replace(printString, new String[]{"..."}, new String[]{""});
+            }
+            if (printString == null || printString.length() == 0 || (ChatObject.isChannel(chat) && !chat.megagroup)) {
+                setTypingAnimation(false);
+                if (chat != null) {
+                    ChatFull info = this.parentFragment.getCurrentChatInfo();
+                    if (ChatObject.isChannel(chat)) {
+                        if (info == null || info.participants_count == 0) {
+                            if (chat.megagroup) {
+                                this.subtitleTextView.setText(LocaleController.getString("Loading", R.string.Loading).toLowerCase());
+                                return;
+                            } else if ((chat.flags & 64) != 0) {
+                                this.subtitleTextView.setText(LocaleController.getString("ChannelPublic", R.string.ChannelPublic).toLowerCase());
+                                return;
+                            } else {
+                                this.subtitleTextView.setText(LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase());
+                                return;
+                            }
+                        } else if (!chat.megagroup || info.participants_count > Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
+                            int[] result = new int[1];
+                            String shortNumber = LocaleController.formatShortNumber(info.participants_count, result);
+                            this.subtitleTextView.setText(LocaleController.formatPluralString("Members", result[0]).replace(String.format("%d", new Object[]{Integer.valueOf(result[0])}), shortNumber));
                             return;
-                        } else if ((chat.flags & 64) != 0) {
-                            this.subtitleTextView.setText(LocaleController.getString("ChannelPublic", R.string.ChannelPublic).toLowerCase());
+                        } else if (this.onlineCount <= 1 || info.participants_count == 0) {
+                            this.subtitleTextView.setText(LocaleController.formatPluralString("Members", info.participants_count));
                             return;
                         } else {
-                            this.subtitleTextView.setText(LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase());
+                            this.subtitleTextView.setText(String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Members", info.participants_count), LocaleController.formatPluralString("OnlineCount", this.onlineCount)}));
                             return;
                         }
-                    } else if (!chat.megagroup || info.participants_count > Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
-                        int[] result = new int[1];
-                        String shortNumber = LocaleController.formatShortNumber(info.participants_count, result);
-                        this.subtitleTextView.setText(LocaleController.formatPluralString("Members", result[0]).replace(String.format("%d", new Object[]{Integer.valueOf(result[0])}), shortNumber));
+                    } else if (ChatObject.isKickedFromChat(chat)) {
+                        this.subtitleTextView.setText(LocaleController.getString("YouWereKicked", R.string.YouWereKicked));
                         return;
-                    } else if (this.onlineCount <= 1 || info.participants_count == 0) {
-                        this.subtitleTextView.setText(LocaleController.formatPluralString("Members", info.participants_count));
+                    } else if (ChatObject.isLeftFromChat(chat)) {
+                        this.subtitleTextView.setText(LocaleController.getString("YouLeft", R.string.YouLeft));
                         return;
                     } else {
-                        this.subtitleTextView.setText(String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Members", info.participants_count), LocaleController.formatPluralString("Online", this.onlineCount)}));
+                        int count = chat.participants_count;
+                        if (!(info == null || info.participants == null)) {
+                            count = info.participants.participants.size();
+                        }
+                        if (this.onlineCount <= 1 || count == 0) {
+                            this.subtitleTextView.setText(LocaleController.formatPluralString("Members", count));
+                            return;
+                        }
+                        this.subtitleTextView.setText(String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Members", count), LocaleController.formatPluralString("OnlineCount", this.onlineCount)}));
                         return;
                     }
-                } else if (ChatObject.isKickedFromChat(chat)) {
-                    this.subtitleTextView.setText(LocaleController.getString("YouWereKicked", R.string.YouWereKicked));
-                    return;
-                } else if (ChatObject.isLeftFromChat(chat)) {
-                    this.subtitleTextView.setText(LocaleController.getString("YouLeft", R.string.YouLeft));
+                } else if (user != null) {
+                    String newStatus;
+                    User newUser = MessagesController.getInstance().getUser(Integer.valueOf(user.id));
+                    if (newUser != null) {
+                        user = newUser;
+                    }
+                    if (user.id == UserConfig.getClientUserId()) {
+                        newStatus = LocaleController.getString("ChatYourSelf", R.string.ChatYourSelf);
+                    } else if (user.id == 333000 || user.id == 777000) {
+                        newStatus = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
+                    } else if (user.bot) {
+                        newStatus = LocaleController.getString("Bot", R.string.Bot);
+                    } else {
+                        newStatus = LocaleController.formatUserStatus(user);
+                    }
+                    this.subtitleTextView.setText(newStatus);
                     return;
                 } else {
-                    int count = chat.participants_count;
-                    if (!(info == null || info.participants == null)) {
-                        count = info.participants.participants.size();
-                    }
-                    if (this.onlineCount <= 1 || count == 0) {
-                        this.subtitleTextView.setText(LocaleController.formatPluralString("Members", count));
-                        return;
-                    }
-                    this.subtitleTextView.setText(String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Members", count), LocaleController.formatPluralString("Online", this.onlineCount)}));
                     return;
                 }
-            } else if (user != null) {
-                String newStatus;
-                User newUser = MessagesController.getInstance().getUser(Integer.valueOf(user.id));
-                if (newUser != null) {
-                    user = newUser;
-                }
-                if (user.id == UserConfig.getClientUserId()) {
-                    newStatus = LocaleController.getString("ChatYourSelf", R.string.ChatYourSelf);
-                } else if (user.id == 333000 || user.id == 777000) {
-                    newStatus = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
-                } else if (user.bot) {
-                    newStatus = LocaleController.getString("Bot", R.string.Bot);
-                } else {
-                    newStatus = LocaleController.formatUserStatus(user);
-                }
-                this.subtitleTextView.setText(newStatus);
-                return;
-            } else {
-                return;
             }
+            this.subtitleTextView.setText(printString);
+            setTypingAnimation(true);
         }
-        this.subtitleTextView.setText(printString);
-        setTypingAnimation(true);
     }
 
-    public void checkAndUpdateAvatar() {
+    public void setChatAvatar(Chat chat) {
         TLObject newPhoto = null;
-        User user = this.parentFragment.getCurrentUser();
-        Chat chat = this.parentFragment.getCurrentChat();
-        if (user != null) {
-            if (user.photo != null) {
-                newPhoto = user.photo.photo_small;
-            }
-            this.avatarDrawable.setInfo(user);
-        } else if (chat != null) {
-            if (chat.photo != null) {
-                newPhoto = chat.photo.photo_small;
-            }
-            this.avatarDrawable.setInfo(chat);
+        if (chat.photo != null) {
+            newPhoto = chat.photo.photo_small;
         }
+        this.avatarDrawable.setInfo(chat);
         if (this.avatarImageView != null) {
             this.avatarImageView.setImage(newPhoto, "50_50", this.avatarDrawable);
         }
     }
 
+    public void checkAndUpdateAvatar() {
+        if (this.parentFragment != null) {
+            TLObject newPhoto = null;
+            User user = this.parentFragment.getCurrentUser();
+            Chat chat = this.parentFragment.getCurrentChat();
+            if (user != null) {
+                if (user.photo != null) {
+                    newPhoto = user.photo.photo_small;
+                }
+                this.avatarDrawable.setInfo(user);
+            } else if (chat != null) {
+                if (chat.photo != null) {
+                    newPhoto = chat.photo.photo_small;
+                }
+                this.avatarDrawable.setInfo(chat);
+            }
+            if (this.avatarImageView != null) {
+                this.avatarImageView.setImage(newPhoto, "50_50", this.avatarDrawable);
+            }
+        }
+    }
+
     public void updateOnlineCount() {
-        this.onlineCount = 0;
-        ChatFull info = this.parentFragment.getCurrentChatInfo();
-        if (info != null) {
-            int currentTime = ConnectionsManager.getInstance().getCurrentTime();
-            if ((info instanceof TL_chatFull) || ((info instanceof TL_channelFull) && info.participants_count <= Callback.DEFAULT_DRAG_ANIMATION_DURATION && info.participants != null)) {
-                for (int a = 0; a < info.participants.participants.size(); a++) {
-                    User user = MessagesController.getInstance().getUser(Integer.valueOf(((ChatParticipant) info.participants.participants.get(a)).user_id));
-                    if (!(user == null || user.status == null || ((user.status.expires <= currentTime && user.id != UserConfig.getClientUserId()) || user.status.expires <= 10000))) {
-                        this.onlineCount++;
+        if (this.parentFragment != null) {
+            this.onlineCount = 0;
+            ChatFull info = this.parentFragment.getCurrentChatInfo();
+            if (info != null) {
+                int currentTime = ConnectionsManager.getInstance().getCurrentTime();
+                if ((info instanceof TL_chatFull) || ((info instanceof TL_channelFull) && info.participants_count <= Callback.DEFAULT_DRAG_ANIMATION_DURATION && info.participants != null)) {
+                    for (int a = 0; a < info.participants.participants.size(); a++) {
+                        User user = MessagesController.getInstance().getUser(Integer.valueOf(((ChatParticipant) info.participants.participants.get(a)).user_id));
+                        if (!(user == null || user.status == null || ((user.status.expires <= currentTime && user.id != UserConfig.getClientUserId()) || user.status.expires <= 10000))) {
+                            this.onlineCount++;
+                        }
                     }
                 }
             }

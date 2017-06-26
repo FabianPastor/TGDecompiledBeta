@@ -1,10 +1,12 @@
 package com.google.firebase;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.internal.zzabs;
+import com.google.android.gms.internal.zzbaw;
 
-public class zza implements zzabs {
-    public Exception zzA(Status status) {
-        return status.getStatusCode() == 8 ? new FirebaseException(status.zzvv()) : new FirebaseApiNotAvailableException(status.zzvv());
+final class zza implements zzbaw {
+    zza() {
+    }
+
+    public final void zzac(boolean z) {
+        FirebaseApp.zzac(z);
     }
 }

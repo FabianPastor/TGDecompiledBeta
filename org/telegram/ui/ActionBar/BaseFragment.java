@@ -192,6 +192,13 @@ public class BaseFragment {
         }
     }
 
+    public BaseFragment getFragmentForAlert(int offset) {
+        if (this.parentLayout == null || this.parentLayout.fragmentsStack.size() <= offset + 1) {
+            return this;
+        }
+        return (BaseFragment) this.parentLayout.fragmentsStack.get((this.parentLayout.fragmentsStack.size() - 2) - offset);
+    }
+
     public void onConfigurationChanged(Configuration newConfig) {
     }
 

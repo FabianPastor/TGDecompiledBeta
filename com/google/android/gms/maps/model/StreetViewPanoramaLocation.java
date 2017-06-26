@@ -3,7 +3,9 @@ package com.google.android.gms.maps.model;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.common.internal.zzbe;
+import java.util.Arrays;
 
 public class StreetViewPanoramaLocation extends zza {
     public static final Creator<StreetViewPanoramaLocation> CREATOR = new zzo();
@@ -29,14 +31,18 @@ public class StreetViewPanoramaLocation extends zza {
     }
 
     public int hashCode() {
-        return zzaa.hashCode(this.position, this.panoId);
+        return Arrays.hashCode(new Object[]{this.position, this.panoId});
     }
 
     public String toString() {
-        return zzaa.zzv(this).zzg("panoId", this.panoId).zzg("position", this.position.toString()).toString();
+        return zzbe.zzt(this).zzg("panoId", this.panoId).zzg("position", this.position.toString()).toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zzo.zza(this, parcel, i);
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.links, i, false);
+        zzd.zza(parcel, 3, this.position, i, false);
+        zzd.zza(parcel, 4, this.panoId, false);
+        zzd.zzI(parcel, zze);
     }
 }

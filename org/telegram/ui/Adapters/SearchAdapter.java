@@ -35,6 +35,7 @@ public class SearchAdapter extends SelectionAdapter {
     private boolean allowBots;
     private boolean allowChats;
     private boolean allowUsernameSearch;
+    private int channelId;
     private HashMap<Integer, ?> checkedMap;
     private HashMap<Integer, User> ignoreUsers;
     private Context mContext;
@@ -45,13 +46,14 @@ public class SearchAdapter extends SelectionAdapter {
     private Timer searchTimer;
     private boolean useUserCell;
 
-    public SearchAdapter(Context context, HashMap<Integer, User> arg1, boolean usernameSearch, boolean mutual, boolean chats, boolean bots) {
+    public SearchAdapter(Context context, HashMap<Integer, User> arg1, boolean usernameSearch, boolean mutual, boolean chats, boolean bots, int searchChannelId) {
         this.mContext = context;
         this.ignoreUsers = arg1;
         this.onlyMutual = mutual;
         this.allowUsernameSearch = usernameSearch;
         this.allowChats = chats;
         this.allowBots = bots;
+        this.channelId = searchChannelId;
         this.searchAdapterHelper = new SearchAdapterHelper();
         this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate() {
             public void onDataSetChanged() {
@@ -83,7 +85,7 @@ public class SearchAdapter extends SelectionAdapter {
             this.searchResult.clear();
             this.searchResultNames.clear();
             if (this.allowUsernameSearch) {
-                this.searchAdapterHelper.queryServerSearch(null, this.allowChats, this.allowBots, true);
+                this.searchAdapterHelper.queryServerSearch(null, true, this.allowChats, this.allowBots, true, this.channelId, false);
             }
             notifyDataSetChanged();
             return;
@@ -106,7 +108,7 @@ public class SearchAdapter extends SelectionAdapter {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 if (SearchAdapter.this.allowUsernameSearch) {
-                    SearchAdapter.this.searchAdapterHelper.queryServerSearch(query, SearchAdapter.this.allowChats, SearchAdapter.this.allowBots, true);
+                    SearchAdapter.this.searchAdapterHelper.queryServerSearch(query, true, SearchAdapter.this.allowChats, SearchAdapter.this.allowBots, true, SearchAdapter.this.channelId, false);
                 }
                 final ArrayList<TL_contact> contactsCopy = new ArrayList();
                 contactsCopy.addAll(ContactsController.getInstance().contacts);
@@ -235,11 +237,11 @@ public class SearchAdapter extends SelectionAdapter {
     public void onBindViewHolder(ViewHolder holder, int position) {
         Throwable e;
         Object username;
+        ProfileSearchCell profileSearchCell;
+        boolean z;
         if (holder.getItemViewType() == 0) {
             TLObject object = getItem(position);
             if (object != null) {
-                ProfileSearchCell profileSearchCell;
-                boolean z;
                 UserCell userCell;
                 int id = 0;
                 String un = null;

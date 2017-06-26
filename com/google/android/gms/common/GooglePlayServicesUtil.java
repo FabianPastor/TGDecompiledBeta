@@ -7,14 +7,14 @@ import android.content.Context;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.res.Resources;
 import android.support.v4.app.Fragment;
-import com.google.android.gms.common.internal.zzi;
+import com.google.android.gms.common.internal.zzt;
 
-public final class GooglePlayServicesUtil extends zzg {
+public final class GooglePlayServicesUtil extends zzo {
     public static final String GMS_ERROR_DIALOG = "GooglePlayServicesErrorDialog";
     @Deprecated
     public static final String GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms";
     @Deprecated
-    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = zzg.GOOGLE_PLAY_SERVICES_VERSION_CODE;
+    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = zzo.GOOGLE_PLAY_SERVICES_VERSION_CODE;
     public static final String GOOGLE_PLAY_STORE_PACKAGE = "com.android.vending";
 
     private GooglePlayServicesUtil() {
@@ -27,7 +27,7 @@ public final class GooglePlayServicesUtil extends zzg {
 
     @Deprecated
     public static Dialog getErrorDialog(int i, Activity activity, int i2, OnCancelListener onCancelListener) {
-        if (zzd(activity, i)) {
+        if (zzo.zze(activity, i)) {
             i = 18;
         }
         return GoogleApiAvailability.getInstance().getErrorDialog(activity, i, i2, onCancelListener);
@@ -35,35 +35,35 @@ public final class GooglePlayServicesUtil extends zzg {
 
     @Deprecated
     public static PendingIntent getErrorPendingIntent(int i, Context context, int i2) {
-        return zzg.getErrorPendingIntent(i, context, i2);
+        return zzo.getErrorPendingIntent(i, context, i2);
     }
 
     @Deprecated
     public static String getErrorString(int i) {
-        return zzg.getErrorString(i);
+        return zzo.getErrorString(i);
     }
 
     @Deprecated
     public static String getOpenSourceSoftwareLicenseInfo(Context context) {
-        return zzg.getOpenSourceSoftwareLicenseInfo(context);
+        return zzo.getOpenSourceSoftwareLicenseInfo(context);
     }
 
     public static Context getRemoteContext(Context context) {
-        return zzg.getRemoteContext(context);
+        return zzo.getRemoteContext(context);
     }
 
     public static Resources getRemoteResource(Context context) {
-        return zzg.getRemoteResource(context);
+        return zzo.getRemoteResource(context);
     }
 
     @Deprecated
     public static int isGooglePlayServicesAvailable(Context context) {
-        return zzg.isGooglePlayServicesAvailable(context);
+        return zzo.isGooglePlayServicesAvailable(context);
     }
 
     @Deprecated
     public static boolean isUserRecoverableError(int i) {
-        return zzg.isUserRecoverableError(i);
+        return zzo.isUserRecoverableError(i);
     }
 
     @Deprecated
@@ -77,38 +77,31 @@ public final class GooglePlayServicesUtil extends zzg {
     }
 
     public static boolean showErrorDialogFragment(int i, Activity activity, Fragment fragment, int i2, OnCancelListener onCancelListener) {
-        if (zzd(activity, i)) {
+        if (zzo.zze(activity, i)) {
             i = 18;
         }
         GoogleApiAvailability instance = GoogleApiAvailability.getInstance();
         if (fragment == null) {
             return instance.showErrorDialogFragment(activity, i, i2, onCancelListener);
         }
-        Dialog zza = instance.zza((Context) activity, i, zzi.zza(fragment, GoogleApiAvailability.getInstance().zzb(activity, i, "d"), i2), onCancelListener);
+        GoogleApiAvailability.getInstance();
+        Dialog zza = GoogleApiAvailability.zza((Context) activity, i, zzt.zza(fragment, zze.zza(activity, i, "d"), i2), onCancelListener);
         if (zza == null) {
             return false;
         }
-        instance.zza(activity, zza, GMS_ERROR_DIALOG, onCancelListener);
+        GoogleApiAvailability.zza(activity, zza, GMS_ERROR_DIALOG, onCancelListener);
         return true;
     }
 
     @Deprecated
     public static void showErrorNotification(int i, Context context) {
         GoogleApiAvailability instance = GoogleApiAvailability.getInstance();
-        if (zzd(context, i) || zze(context, i)) {
-            instance.zzaD(context);
-        } else {
-            instance.showErrorNotification(context, i);
+        if (!zzo.zze(context, i)) {
+            if (!(i == 9 ? zzo.zzy(context, "com.android.vending") : false)) {
+                instance.showErrorNotification(context, i);
+                return;
+            }
         }
-    }
-
-    @Deprecated
-    public static boolean zzd(Context context, int i) {
-        return zzg.zzd(context, i);
-    }
-
-    @Deprecated
-    public static boolean zze(Context context, int i) {
-        return zzg.zze(context, i);
+        instance.zzar(context);
     }
 }

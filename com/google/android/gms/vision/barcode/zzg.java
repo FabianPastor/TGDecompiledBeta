@@ -2,67 +2,82 @@ package com.google.android.gms.vision.barcode;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
 import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
-import com.google.android.gms.vision.barcode.Barcode.Email;
+import com.google.android.gms.vision.barcode.Barcode.DriverLicense;
 
-public class zzg implements Creator<Email> {
-    static void zza(Email email, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zzc(parcel, 1, email.versionCode);
-        zzc.zzc(parcel, 2, email.type);
-        zzc.zza(parcel, 3, email.address, false);
-        zzc.zza(parcel, 4, email.subject, false);
-        zzc.zza(parcel, 5, email.body, false);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzjF(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zznZ(i);
-    }
-
-    public Email zzjF(Parcel parcel) {
-        int i = 0;
+public final class zzg implements Creator<DriverLicense> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzb.zzd(parcel);
         String str = null;
-        int zzaY = zzb.zzaY(parcel);
         String str2 = null;
         String str3 = null;
-        int i2 = 0;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
-                case 1:
-                    i2 = zzb.zzg(parcel, zzaX);
-                    break;
+        String str4 = null;
+        String str5 = null;
+        String str6 = null;
+        String str7 = null;
+        String str8 = null;
+        String str9 = null;
+        String str10 = null;
+        String str11 = null;
+        String str12 = null;
+        String str13 = null;
+        String str14 = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
                 case 2:
-                    i = zzb.zzg(parcel, zzaX);
+                    str = zzb.zzq(parcel, readInt);
                     break;
                 case 3:
-                    str3 = zzb.zzq(parcel, zzaX);
+                    str2 = zzb.zzq(parcel, readInt);
                     break;
                 case 4:
-                    str2 = zzb.zzq(parcel, zzaX);
+                    str3 = zzb.zzq(parcel, readInt);
                     break;
                 case 5:
-                    str = zzb.zzq(parcel, zzaX);
+                    str4 = zzb.zzq(parcel, readInt);
+                    break;
+                case 6:
+                    str5 = zzb.zzq(parcel, readInt);
+                    break;
+                case 7:
+                    str6 = zzb.zzq(parcel, readInt);
+                    break;
+                case 8:
+                    str7 = zzb.zzq(parcel, readInt);
+                    break;
+                case 9:
+                    str8 = zzb.zzq(parcel, readInt);
+                    break;
+                case 10:
+                    str9 = zzb.zzq(parcel, readInt);
+                    break;
+                case 11:
+                    str10 = zzb.zzq(parcel, readInt);
+                    break;
+                case 12:
+                    str11 = zzb.zzq(parcel, readInt);
+                    break;
+                case 13:
+                    str12 = zzb.zzq(parcel, readInt);
+                    break;
+                case 14:
+                    str13 = zzb.zzq(parcel, readInt);
+                    break;
+                case 15:
+                    str14 = zzb.zzq(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaX);
+                    zzb.zzb(parcel, readInt);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new Email(i2, i, str3, str2, str);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
+        zzb.zzF(parcel, zzd);
+        return new DriverLicense(str, str2, str3, str4, str5, str6, str7, str8, str9, str10, str11, str12, str13, str14);
     }
 
-    public Email[] zznZ(int i) {
-        return new Email[i];
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new DriverLicense[i];
     }
 }

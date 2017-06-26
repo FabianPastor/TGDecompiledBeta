@@ -17,4 +17,5 @@
     <string name="common_open_on_phone">फोनवर उघडा</string>
     <string name="common_signin_button_text">साइन इन करा</string>
     <string name="common_signin_button_text_long">Google सह साइन इन करा</string>
+    <string name="wallet_buy_button_place_holder">Google सह खरेदी करा</string>
 </resources>

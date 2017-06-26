@@ -270,7 +270,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         textCell.setText(LocaleController.getString("ImportContacts", R.string.ImportContacts), true);
                         return;
                     } else if (position == SettingsActivity.this.stickersRow) {
-                        textCell.setTextAndValue(LocaleController.getString("Stickers", R.string.Stickers), StickersQuery.getUnreadStickerSets().size() != 0 ? String.format("%d", new Object[]{Integer.valueOf(StickersQuery.getUnreadStickerSets().size())}) : "", true);
+                        textCell.setTextAndValue(LocaleController.getString("StickersName", R.string.StickersName), StickersQuery.getUnreadStickerSets().size() != 0 ? String.format("%d", new Object[]{Integer.valueOf(StickersQuery.getUnreadStickerSets().size())}) : "", true);
                         return;
                     } else if (position == SettingsActivity.this.privacyPolicyRow) {
                         textCell.setText(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), true);
@@ -741,7 +741,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 } else if (position == SettingsActivity.this.askQuestionRow) {
                     if (SettingsActivity.this.getParentActivity() != null) {
                         TextView message = new TextView(SettingsActivity.this.getParentActivity());
-                        Spannable spannableString = new SpannableString(Html.fromHtml(LocaleController.getString("AskAQuestionInfo", R.string.AskAQuestionInfo)));
+                        Spannable spannableString = new SpannableString(Html.fromHtml(LocaleController.getString("AskAQuestionInfo", R.string.AskAQuestionInfo).replace("\n", "<br>")));
                         URLSpan[] spans = (URLSpan[]) spannableString.getSpans(0, spannableString.length(), URLSpan.class);
                         for (URLSpan span : spans) {
                             int start = spannableString.getSpanStart(span);
@@ -1159,7 +1159,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         return false;
     }
 
-    public void setPhotoChecked(int index) {
+    public void setPhotoChecked(int index, VideoEditedInfo videoEditedInfo) {
     }
 
     public boolean cancelButtonPressed() {

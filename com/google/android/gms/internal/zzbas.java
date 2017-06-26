@@ -1,92 +1,52 @@
 package com.google.android.gms.internal;
 
-import android.accounts.Account;
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.Api.ApiOptions;
+import com.google.android.gms.common.internal.zzbe;
+import java.util.Arrays;
 
-public class zzbas implements Creator<zzbar> {
-    static void zza(zzbar com_google_android_gms_internal_zzbar, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zzc(parcel, 1, com_google_android_gms_internal_zzbar.zzaiI);
-        zzc.zza(parcel, 2, com_google_android_gms_internal_zzbar.getAccount(), i, false);
-        zzc.zza(parcel, 3, com_google_android_gms_internal_zzbar.zzPT(), i, false);
-        zzc.zza(parcel, 4, com_google_android_gms_internal_zzbar.getServerClientId(), false);
-        zzc.zzJ(parcel, zzaZ);
+public final class zzbas<O extends ApiOptions> {
+    private final O zzaAJ;
+    private final int zzaBA;
+    private final boolean zzaBz = true;
+    private final Api<O> zzayW;
+
+    private zzbas(Api<O> api) {
+        this.zzayW = api;
+        this.zzaAJ = null;
+        this.zzaBA = System.identityHashCode(this);
     }
 
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzjw(parcel);
+    private zzbas(Api<O> api, O o) {
+        this.zzayW = api;
+        this.zzaAJ = o;
+        this.zzaBA = Arrays.hashCode(new Object[]{this.zzayW, this.zzaAJ});
     }
 
-    public /* synthetic */ Object[] newArray(int i) {
-        return zznw(i);
+    public static <O extends ApiOptions> zzbas<O> zza(Api<O> api, O o) {
+        return new zzbas(api, o);
     }
 
-    public zzbar zzjw(Parcel parcel) {
-        String str = null;
-        int zzaY = zzb.zzaY(parcel);
-        int i = 0;
-        Scope[] scopeArr = null;
-        Account account = null;
-        while (parcel.dataPosition() < zzaY) {
-            Scope[] scopeArr2;
-            Account account2;
-            int zzg;
-            String str2;
-            int zzaX = zzb.zzaX(parcel);
-            String str3;
-            switch (zzb.zzdc(zzaX)) {
-                case 1:
-                    str3 = str;
-                    scopeArr2 = scopeArr;
-                    account2 = account;
-                    zzg = zzb.zzg(parcel, zzaX);
-                    str2 = str3;
-                    break;
-                case 2:
-                    zzg = i;
-                    Scope[] scopeArr3 = scopeArr;
-                    account2 = (Account) zzb.zza(parcel, zzaX, Account.CREATOR);
-                    str2 = str;
-                    scopeArr2 = scopeArr3;
-                    break;
-                case 3:
-                    account2 = account;
-                    zzg = i;
-                    str3 = str;
-                    scopeArr2 = (Scope[]) zzb.zzb(parcel, zzaX, Scope.CREATOR);
-                    str2 = str3;
-                    break;
-                case 4:
-                    str2 = zzb.zzq(parcel, zzaX);
-                    scopeArr2 = scopeArr;
-                    account2 = account;
-                    zzg = i;
-                    break;
-                default:
-                    zzb.zzb(parcel, zzaX);
-                    str2 = str;
-                    scopeArr2 = scopeArr;
-                    account2 = account;
-                    zzg = i;
-                    break;
-            }
-            i = zzg;
-            account = account2;
-            scopeArr = scopeArr2;
-            str = str2;
+    public static <O extends ApiOptions> zzbas<O> zzb(Api<O> api) {
+        return new zzbas(api);
+    }
+
+    public final boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new zzbar(i, account, scopeArr, str);
+        if (!(obj instanceof zzbas)) {
+            return false;
         }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
+        zzbas com_google_android_gms_internal_zzbas = (zzbas) obj;
+        return !this.zzaBz && !com_google_android_gms_internal_zzbas.zzaBz && zzbe.equal(this.zzayW, com_google_android_gms_internal_zzbas.zzayW) && zzbe.equal(this.zzaAJ, com_google_android_gms_internal_zzbas.zzaAJ);
     }
 
-    public zzbar[] zznw(int i) {
-        return new zzbar[i];
+    public final int hashCode() {
+        return this.zzaBA;
+    }
+
+    public final String zzpr() {
+        return this.zzayW.getName();
     }
 }

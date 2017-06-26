@@ -2,25 +2,25 @@ package com.google.android.gms.common.util;
 
 import android.os.SystemClock;
 
-public class zzi implements zze {
-    private static zzi zzaHY = new zzi();
+public final class zzi implements zze {
+    private static zzi zzaJI = new zzi();
 
     private zzi() {
     }
 
-    public static zze zzzc() {
-        return zzaHY;
+    public static zze zzrY() {
+        return zzaJI;
     }
 
-    public long currentTimeMillis() {
+    public final long currentTimeMillis() {
         return System.currentTimeMillis();
     }
 
-    public long elapsedRealtime() {
+    public final long elapsedRealtime() {
         return SystemClock.elapsedRealtime();
     }
 
-    public long nanoTime() {
+    public final long nanoTime() {
         return System.nanoTime();
     }
 }

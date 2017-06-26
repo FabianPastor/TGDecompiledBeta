@@ -7,15 +7,15 @@ import java.io.OutputStream;
 import java.net.URL;
 
 public abstract class UrlTileProvider implements TileProvider {
-    private final int zzrC;
-    private final int zzrD;
+    private final int zzrY;
+    private final int zzrZ;
 
     public UrlTileProvider(int i, int i2) {
-        this.zzrC = i;
-        this.zzrD = i2;
+        this.zzrY = i;
+        this.zzrZ = i2;
     }
 
-    private static long zzb(InputStream inputStream, OutputStream outputStream) throws IOException {
+    private static long zza(InputStream inputStream, OutputStream outputStream) throws IOException {
         byte[] bArr = new byte[4096];
         long j = 0;
         while (true) {
@@ -28,19 +28,18 @@ public abstract class UrlTileProvider implements TileProvider {
         }
     }
 
-    private static byte[] zzk(InputStream inputStream) throws IOException {
-        OutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        zzb(inputStream, byteArrayOutputStream);
-        return byteArrayOutputStream.toByteArray();
-    }
-
     public final Tile getTile(int i, int i2, int i3) {
         URL tileUrl = getTileUrl(i, i2, i3);
         if (tileUrl == null) {
             return NO_TILE;
         }
         try {
-            return new Tile(this.zzrC, this.zzrD, zzk(tileUrl.openStream()));
+            int i4 = this.zzrY;
+            int i5 = this.zzrZ;
+            InputStream openStream = tileUrl.openStream();
+            OutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            zza(openStream, byteArrayOutputStream);
+            return new Tile(i4, i5, byteArrayOutputStream.toByteArray());
         } catch (IOException e) {
             return null;
         }

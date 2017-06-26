@@ -1,69 +1,75 @@
 package com.google.android.gms.common.internal;
 
-import android.os.Binder;
+import android.accounts.Account;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
-import android.os.RemoteException;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.common.zzc;
+import com.google.android.gms.common.zze;
 
-public interface zzx extends IInterface {
+public final class zzx extends zza {
+    public static final Creator<zzx> CREATOR = new zzy();
+    private int version;
+    Account zzaHA;
+    zzc[] zzaHB;
+    private int zzaHu;
+    private int zzaHv;
+    String zzaHw;
+    IBinder zzaHx;
+    Scope[] zzaHy;
+    Bundle zzaHz;
 
-    public static abstract class zza extends Binder implements zzx {
-
-        private static class zza implements zzx {
-            private IBinder zzrk;
-
-            zza(IBinder iBinder) {
-                this.zzrk = iBinder;
-            }
-
-            public IBinder asBinder() {
-                return this.zzrk;
-            }
-
-            public void zza(zzaf com_google_android_gms_common_internal_zzaf) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.common.internal.IResolveAccountCallbacks");
-                    if (com_google_android_gms_common_internal_zzaf != null) {
-                        obtain.writeInt(1);
-                        com_google_android_gms_common_internal_zzaf.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.zzrk.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-        }
-
-        public static zzx zzbw(IBinder iBinder) {
-            if (iBinder == null) {
-                return null;
-            }
-            IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.common.internal.IResolveAccountCallbacks");
-            return (queryLocalInterface == null || !(queryLocalInterface instanceof zzx)) ? new zza(iBinder) : (zzx) queryLocalInterface;
-        }
-
-        public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-            switch (i) {
-                case 2:
-                    parcel.enforceInterface("com.google.android.gms.common.internal.IResolveAccountCallbacks");
-                    zza(parcel.readInt() != 0 ? (zzaf) zzaf.CREATOR.createFromParcel(parcel) : null);
-                    parcel2.writeNoException();
-                    return true;
-                case 1598968902:
-                    parcel2.writeString("com.google.android.gms.common.internal.IResolveAccountCallbacks");
-                    return true;
-                default:
-                    return super.onTransact(i, parcel, parcel2, i2);
-            }
-        }
+    public zzx(int i) {
+        this.version = 3;
+        this.zzaHv = zze.GOOGLE_PLAY_SERVICES_VERSION_CODE;
+        this.zzaHu = i;
     }
 
-    void zza(zzaf com_google_android_gms_common_internal_zzaf) throws RemoteException;
+    zzx(int i, int i2, int i3, String str, IBinder iBinder, Scope[] scopeArr, Bundle bundle, Account account, zzc[] com_google_android_gms_common_zzcArr) {
+        Account account2 = null;
+        this.version = i;
+        this.zzaHu = i2;
+        this.zzaHv = i3;
+        if ("com.google.android.gms".equals(str)) {
+            this.zzaHw = "com.google.android.gms";
+        } else {
+            this.zzaHw = str;
+        }
+        if (i < 2) {
+            if (iBinder != null) {
+                zzal com_google_android_gms_common_internal_zzan;
+                if (iBinder != null) {
+                    IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.common.internal.IAccountAccessor");
+                    com_google_android_gms_common_internal_zzan = queryLocalInterface instanceof zzal ? (zzal) queryLocalInterface : new zzan(iBinder);
+                }
+                account2 = zza.zza(com_google_android_gms_common_internal_zzan);
+            }
+            this.zzaHA = account2;
+        } else {
+            this.zzaHx = iBinder;
+            this.zzaHA = account;
+        }
+        this.zzaHy = scopeArr;
+        this.zzaHz = bundle;
+        this.zzaHB = com_google_android_gms_common_zzcArr;
+    }
+
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zzc(parcel, 1, this.version);
+        zzd.zzc(parcel, 2, this.zzaHu);
+        zzd.zzc(parcel, 3, this.zzaHv);
+        zzd.zza(parcel, 4, this.zzaHw, false);
+        zzd.zza(parcel, 5, this.zzaHx, false);
+        zzd.zza(parcel, 6, this.zzaHy, i, false);
+        zzd.zza(parcel, 7, this.zzaHz, false);
+        zzd.zza(parcel, 8, this.zzaHA, i, false);
+        zzd.zza(parcel, 10, this.zzaHB, i, false);
+        zzd.zzI(parcel, zze);
+    }
 }

@@ -1,34 +1,32 @@
 package com.google.android.gms.tasks;
 
 import android.support.annotation.NonNull;
-import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.concurrent.Executor;
 
-class zzg<TResult> {
-    private Queue<zzf<TResult>> zzbND;
-    private boolean zzbNE;
-    private final Object zzrJ = new Object();
+final class zzg<TResult> implements zzk<TResult> {
+    private final Object mLock = new Object();
+    private final Executor zzbEo;
+    private OnFailureListener zzbLW;
 
-    zzg() {
+    public zzg(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
+        this.zzbEo = executor;
+        this.zzbLW = onFailureListener;
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void zza(@NonNull Task<TResult> task) {
-        synchronized (this.zzrJ) {
-            if (this.zzbND == null || this.zzbNE) {
-            } else {
-                this.zzbNE = true;
-            }
+    public final void cancel() {
+        synchronized (this.mLock) {
+            this.zzbLW = null;
         }
     }
 
-    public void zza(@NonNull zzf<TResult> com_google_android_gms_tasks_zzf_TResult) {
-        synchronized (this.zzrJ) {
-            if (this.zzbND == null) {
-                this.zzbND = new ArrayDeque();
+    public final void onComplete(@NonNull Task<TResult> task) {
+        if (!task.isSuccessful()) {
+            synchronized (this.mLock) {
+                if (this.zzbLW == null) {
+                    return;
+                }
+                this.zzbEo.execute(new zzh(this, task));
             }
-            this.zzbND.add(com_google_android_gms_tasks_zzf_TResult);
         }
     }
 }

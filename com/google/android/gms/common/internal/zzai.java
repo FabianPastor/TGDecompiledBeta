@@ -1,63 +1,43 @@
 package com.google.android.gms.common.internal;
 
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
+import android.content.Intent;
+import android.net.Uri;
+import android.net.Uri.Builder;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
-public class zzai implements Creator<zzah> {
-    static void zza(zzah com_google_android_gms_common_internal_zzah, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zzc(parcel, 1, com_google_android_gms_common_internal_zzah.zzaiI);
-        zzc.zzc(parcel, 2, com_google_android_gms_common_internal_zzah.zzyk());
-        zzc.zzc(parcel, 3, com_google_android_gms_common_internal_zzah.zzyl());
-        zzc.zza(parcel, 4, com_google_android_gms_common_internal_zzah.zzym(), i, false);
-        zzc.zzJ(parcel, zzaZ);
+public final class zzai {
+    private static final Uri zzaHX;
+    private static final Uri zzaHY;
+
+    static {
+        Uri parse = Uri.parse("https://plus.google.com/");
+        zzaHX = parse;
+        zzaHY = parse.buildUpon().appendPath("circles").appendPath("find").build();
     }
 
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzaV(parcel);
+    public static Intent zzcD(String str) {
+        Uri fromParts = Uri.fromParts("package", str, null);
+        Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+        intent.setData(fromParts);
+        return intent;
     }
 
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzda(i);
+    public static Intent zzrD() {
+        Intent intent = new Intent("com.google.android.clockwork.home.UPDATE_ANDROID_WEAR_ACTION");
+        intent.setPackage("com.google.android.wearable.app");
+        return intent;
     }
 
-    public zzah zzaV(Parcel parcel) {
-        int i = 0;
-        int zzaY = zzb.zzaY(parcel);
-        Scope[] scopeArr = null;
-        int i2 = 0;
-        int i3 = 0;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
-                case 1:
-                    i3 = zzb.zzg(parcel, zzaX);
-                    break;
-                case 2:
-                    i2 = zzb.zzg(parcel, zzaX);
-                    break;
-                case 3:
-                    i = zzb.zzg(parcel, zzaX);
-                    break;
-                case 4:
-                    scopeArr = (Scope[]) zzb.zzb(parcel, zzaX, Scope.CREATOR);
-                    break;
-                default:
-                    zzb.zzb(parcel, zzaX);
-                    break;
-            }
+    public static Intent zzw(String str, @Nullable String str2) {
+        Intent intent = new Intent("android.intent.action.VIEW");
+        Builder appendQueryParameter = Uri.parse("market://details").buildUpon().appendQueryParameter(TtmlNode.ATTR_ID, str);
+        if (!TextUtils.isEmpty(str2)) {
+            appendQueryParameter.appendQueryParameter("pcampaignid", str2);
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new zzah(i3, i2, i, scopeArr);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
-    }
-
-    public zzah[] zzda(int i) {
-        return new zzah[i];
+        intent.setData(appendQueryParameter.build());
+        intent.setPackage("com.android.vending");
+        intent.addFlags(524288);
+        return intent;
     }
 }

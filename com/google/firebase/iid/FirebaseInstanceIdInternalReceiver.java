@@ -5,46 +5,45 @@ import android.content.Intent;
 import android.os.Parcelable;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
-import com.google.android.gms.common.util.zzt;
-import com.google.firebase.iid.zzb.zzc;
+import com.google.android.gms.common.util.zzq;
 
 public final class FirebaseInstanceIdInternalReceiver extends WakefulBroadcastReceiver {
-    private static boolean zzbgs = false;
-    private static zzc zzclp;
-    private static zzc zzclq;
+    private static boolean zzbfB = false;
+    private static zzh zzckv;
+    private static zzh zzckw;
 
-    static synchronized zzc zzL(Context context, String str) {
-        zzc com_google_firebase_iid_zzb_zzc;
+    static synchronized zzh zzH(Context context, String str) {
+        zzh com_google_firebase_iid_zzh;
         synchronized (FirebaseInstanceIdInternalReceiver.class) {
             if ("com.google.firebase.MESSAGING_EVENT".equals(str)) {
-                if (zzclq == null) {
-                    zzclq = new zzc(context, str);
+                if (zzckw == null) {
+                    zzckw = new zzh(context, str);
                 }
-                com_google_firebase_iid_zzb_zzc = zzclq;
+                com_google_firebase_iid_zzh = zzckw;
             } else {
-                if (zzclp == null) {
-                    zzclp = new zzc(context, str);
+                if (zzckv == null) {
+                    zzckv = new zzh(context, str);
                 }
-                com_google_firebase_iid_zzb_zzc = zzclp;
+                com_google_firebase_iid_zzh = zzckv;
             }
         }
-        return com_google_firebase_iid_zzb_zzc;
+        return com_google_firebase_iid_zzh;
     }
 
-    static boolean zzcs(Context context) {
-        return zzt.zzzq() && context.getApplicationInfo().targetSdkVersion > 25;
+    static boolean zzbH(Context context) {
+        return zzq.isAtLeastO() && context.getApplicationInfo().targetSdkVersion > 25;
     }
 
-    public void onReceive(Context context, Intent intent) {
+    public final void onReceive(Context context, Intent intent) {
         if (intent != null) {
             Parcelable parcelableExtra = intent.getParcelableExtra("wrapped_intent");
             if (parcelableExtra instanceof Intent) {
                 Intent intent2 = (Intent) parcelableExtra;
-                if (zzcs(context)) {
-                    zzL(context, intent.getAction()).zza(intent2, goAsync());
+                if (zzbH(context)) {
+                    zzH(context, intent.getAction()).zza(intent2, goAsync());
                     return;
                 } else {
-                    zzg.zzabW().zzb(context, intent.getAction(), intent2);
+                    zzq.zzJU().zza(context, intent.getAction(), intent2);
                     return;
                 }
             }

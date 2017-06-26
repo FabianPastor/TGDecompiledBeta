@@ -2,22 +2,33 @@ package com.google.android.gms.wallet.wobs;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
+import android.support.v4.internal.view.SupportMenu;
+import com.google.android.gms.common.internal.safeparcel.zzb;
 
-public final class zzn extends zza {
-    public static final Creator<zzn> CREATOR = new zzo();
-    String description;
-    String zzbSL;
-
-    zzn() {
+public final class zzn implements Creator<zzm> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        long j = 0;
+        int zzd = zzb.zzd(parcel);
+        long j2 = 0;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
+                case 2:
+                    j2 = zzb.zzi(parcel, readInt);
+                    break;
+                case 3:
+                    j = zzb.zzi(parcel, readInt);
+                    break;
+                default:
+                    zzb.zzb(parcel, readInt);
+                    break;
+            }
+        }
+        zzb.zzF(parcel, zzd);
+        return new zzm(j2, j);
     }
 
-    public zzn(String str, String str2) {
-        this.zzbSL = str;
-        this.description = str2;
-    }
-
-    public void writeToParcel(Parcel parcel, int i) {
-        zzo.zza(this, parcel, i);
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new zzm[i];
     }
 }

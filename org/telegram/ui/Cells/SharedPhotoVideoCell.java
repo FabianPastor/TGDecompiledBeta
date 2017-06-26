@@ -14,7 +14,6 @@ import android.view.View.OnLongClickListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -44,7 +43,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
         private FrameLayout container;
         private BackupImageView imageView;
         private View selector;
-        private LinearLayout videoInfoContainer;
+        private FrameLayout videoInfoContainer;
         private TextView videoTextView;
 
         public PhotoVideoView(Context context) {
@@ -55,20 +54,17 @@ public class SharedPhotoVideoCell extends FrameLayout {
             this.imageView.getImageReceiver().setNeedsQualityThumb(true);
             this.imageView.getImageReceiver().setShouldGenerateQualityThumb(true);
             this.container.addView(this.imageView, LayoutHelper.createFrame(-1, -1.0f));
-            this.videoInfoContainer = new LinearLayout(context);
-            this.videoInfoContainer.setOrientation(0);
+            this.videoInfoContainer = new FrameLayout(context);
             this.videoInfoContainer.setBackgroundResource(R.drawable.phototime);
             this.videoInfoContainer.setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
-            this.videoInfoContainer.setGravity(16);
             this.container.addView(this.videoInfoContainer, LayoutHelper.createFrame(-1, 16, 83));
             ImageView imageView1 = new ImageView(context);
             imageView1.setImageResource(R.drawable.ic_video);
-            this.videoInfoContainer.addView(imageView1, LayoutHelper.createLinear(-2, -2));
+            this.videoInfoContainer.addView(imageView1, LayoutHelper.createFrame(-2, -2, 19));
             this.videoTextView = new TextView(context);
             this.videoTextView.setTextColor(-1);
             this.videoTextView.setTextSize(1, 12.0f);
-            this.videoTextView.setGravity(16);
-            this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createLinear(-2, -2, 16, 4, 0, 0, 1));
+            this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createFrame(-2, -2.0f, 19, 18.0f, -0.7f, 0.0f, 0.0f));
             this.selector = new View(context);
             this.selector.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             addView(this.selector, LayoutHelper.createFrame(-1, -1.0f));

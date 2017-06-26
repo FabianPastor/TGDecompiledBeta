@@ -17,4 +17,5 @@
     <string name="common_open_on_phone">Atvērt tālrunī</string>
     <string name="common_signin_button_text">Pierakstīties</string>
     <string name="common_signin_button_text_long">Pierakstīties ar Google kontu</string>
+    <string name="wallet_buy_button_place_holder">Iegādāties, izmantojot Google</string>
 </resources>

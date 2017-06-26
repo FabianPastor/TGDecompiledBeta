@@ -1,24 +1,37 @@
 package com.google.android.gms.internal;
 
+import android.os.DeadObjectException;
 import android.os.RemoteException;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.ConnectionResult;
+import android.support.annotation.NonNull;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.internal.zzbap.zza;
+import com.google.android.gms.tasks.TaskCompletionSource;
 
-public class zzbam extends zza {
-    public void zza(ConnectionResult connectionResult, zzbak com_google_android_gms_internal_zzbak) throws RemoteException {
+abstract class zzbam extends zzbal {
+    protected final TaskCompletionSource<Void> zzalE;
+
+    public zzbam(int i, TaskCompletionSource<Void> taskCompletionSource) {
+        super(i);
+        this.zzalE = taskCompletionSource;
     }
 
-    public void zza(Status status, GoogleSignInAccount googleSignInAccount) throws RemoteException {
+    public void zza(@NonNull zzbbs com_google_android_gms_internal_zzbbs, boolean z) {
     }
 
-    public void zzb(zzbaw com_google_android_gms_internal_zzbaw) throws RemoteException {
+    public final void zza(zzbdc<?> com_google_android_gms_internal_zzbdc_) throws DeadObjectException {
+        try {
+            zzb(com_google_android_gms_internal_zzbdc_);
+        } catch (RemoteException e) {
+            zzp(zzbal.zza(e));
+            throw e;
+        } catch (RemoteException e2) {
+            zzp(zzbal.zza(e2));
+        }
     }
 
-    public void zzbL(Status status) throws RemoteException {
-    }
+    protected abstract void zzb(zzbdc<?> com_google_android_gms_internal_zzbdc_) throws RemoteException;
 
-    public void zzbM(Status status) throws RemoteException {
+    public void zzp(@NonNull Status status) {
+        this.zzalE.trySetException(new ApiException(status));
     }
 }

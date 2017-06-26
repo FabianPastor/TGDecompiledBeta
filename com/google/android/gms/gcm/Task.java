@@ -5,9 +5,9 @@ import android.os.Parcel;
 import android.support.annotation.CallSuper;
 import android.util.Log;
 import com.google.android.gms.common.internal.ReflectedParcelable;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzbo;
 
-public abstract class Task implements ReflectedParcelable {
+public class Task implements ReflectedParcelable {
     public static final int EXTRAS_LIMIT_BYTES = 10240;
     public static final int NETWORK_STATE_ANY = 2;
     public static final int NETWORK_STATE_CONNECTED = 0;
@@ -15,13 +15,13 @@ public abstract class Task implements ReflectedParcelable {
     protected static final long UNINITIALIZED = -1;
     private final Bundle mExtras;
     private final String mTag;
-    private final String zzbgX;
-    private final boolean zzbgY;
-    private final boolean zzbgZ;
-    private final int zzbha;
-    private final boolean zzbhb;
-    private final boolean zzbhc;
-    private final zzc zzbhd;
+    private final String zzbgg;
+    private final boolean zzbgh;
+    private final boolean zzbgi;
+    private final int zzbgj;
+    private final boolean zzbgk;
+    private final boolean zzbgl;
+    private final zzi zzbgm;
 
     public static abstract class Builder {
         protected Bundle extras;
@@ -31,17 +31,32 @@ public abstract class Task implements ReflectedParcelable {
         protected boolean requiresCharging;
         protected String tag;
         protected boolean updateCurrent;
-        protected zzc zzbhe = zzc.zzbgS;
+        protected zzi zzbgn = zzi.zzbgb;
 
         public abstract Task build();
 
         @CallSuper
         protected void checkConditions() {
-            zzac.zzb(this.gcmTaskService != null, (Object) "Must provide an endpoint for this task by calling setService(ComponentName).");
-            GcmNetworkManager.zzey(this.tag);
-            Task.zza(this.zzbhe);
+            zzbo.zzb(this.gcmTaskService != null, (Object) "Must provide an endpoint for this task by calling setService(ComponentName).");
+            GcmNetworkManager.zzdn(this.tag);
+            zzi com_google_android_gms_gcm_zzi = this.zzbgn;
+            if (com_google_android_gms_gcm_zzi != null) {
+                int zzvE = com_google_android_gms_gcm_zzi.zzvE();
+                if (zzvE == 1 || zzvE == 0) {
+                    int zzvF = com_google_android_gms_gcm_zzi.zzvF();
+                    int zzvG = com_google_android_gms_gcm_zzi.zzvG();
+                    if (zzvE == 0 && zzvF < 0) {
+                        throw new IllegalArgumentException("InitialBackoffSeconds can't be negative: " + zzvF);
+                    } else if (zzvE == 1 && zzvF < 10) {
+                        throw new IllegalArgumentException("RETRY_POLICY_LINEAR must have an initial backoff at least 10 seconds.");
+                    } else if (zzvG < zzvF) {
+                        throw new IllegalArgumentException("MaximumBackoffSeconds must be greater than InitialBackoffSeconds: " + com_google_android_gms_gcm_zzi.zzvG());
+                    }
+                }
+                throw new IllegalArgumentException("Must provide a valid RetryPolicy: " + zzvE);
+            }
             if (this.isPersisted) {
-                Task.zzK(this.extras);
+                Task.zzy(this.extras);
             }
         }
 
@@ -64,37 +79,33 @@ public abstract class Task implements ReflectedParcelable {
     Task(Parcel parcel) {
         boolean z = true;
         Log.e("Task", "Constructing a Task object using a parcel.");
-        this.zzbgX = parcel.readString();
+        this.zzbgg = parcel.readString();
         this.mTag = parcel.readString();
-        this.zzbgY = parcel.readInt() == 1;
+        this.zzbgh = parcel.readInt() == 1;
         if (parcel.readInt() != 1) {
             z = false;
         }
-        this.zzbgZ = z;
-        this.zzbha = 2;
-        this.zzbhb = false;
-        this.zzbhc = false;
-        this.zzbhd = zzc.zzbgS;
+        this.zzbgi = z;
+        this.zzbgj = 2;
+        this.zzbgk = false;
+        this.zzbgl = false;
+        this.zzbgm = zzi.zzbgb;
         this.mExtras = null;
     }
 
     Task(Builder builder) {
-        this.zzbgX = builder.gcmTaskService;
+        this.zzbgg = builder.gcmTaskService;
         this.mTag = builder.tag;
-        this.zzbgY = builder.updateCurrent;
-        this.zzbgZ = builder.isPersisted;
-        this.zzbha = builder.requiredNetworkState;
-        this.zzbhb = builder.requiresCharging;
-        this.zzbhc = false;
+        this.zzbgh = builder.updateCurrent;
+        this.zzbgi = builder.isPersisted;
+        this.zzbgj = builder.requiredNetworkState;
+        this.zzbgk = builder.requiresCharging;
+        this.zzbgl = false;
         this.mExtras = builder.extras;
-        this.zzbhd = builder.zzbhe != null ? builder.zzbhe : zzc.zzbgS;
+        this.zzbgm = builder.zzbgn != null ? builder.zzbgn : zzi.zzbgb;
     }
 
-    private static boolean zzF(Object obj) {
-        return (obj instanceof Integer) || (obj instanceof Long) || (obj instanceof Double) || (obj instanceof String) || (obj instanceof Boolean);
-    }
-
-    public static void zzK(Bundle bundle) {
+    public static void zzy(Bundle bundle) {
         if (bundle != null) {
             Parcel obtain = Parcel.obtain();
             bundle.writeToParcel(obtain, 0);
@@ -107,34 +118,15 @@ public abstract class Task implements ReflectedParcelable {
             obtain.recycle();
             for (String str : bundle.keySet()) {
                 Object obj = bundle.get(str);
-                if (!zzF(obj)) {
+                dataSize = ((obj instanceof Integer) || (obj instanceof Long) || (obj instanceof Double) || (obj instanceof String) || (obj instanceof Boolean)) ? 1 : 0;
+                if (dataSize == 0) {
                     if (obj instanceof Bundle) {
-                        zzK((Bundle) obj);
+                        zzy((Bundle) obj);
                     } else {
                         throw new IllegalArgumentException("Only the following extra parameter types are supported: Integer, Long, Double, String, Boolean, and nested Bundles with the same restrictions.");
                     }
                 }
             }
-        }
-    }
-
-    public static void zza(zzc com_google_android_gms_gcm_zzc) {
-        if (com_google_android_gms_gcm_zzc != null) {
-            int zzGU = com_google_android_gms_gcm_zzc.zzGU();
-            if (zzGU == 1 || zzGU == 0) {
-                int zzGV = com_google_android_gms_gcm_zzc.zzGV();
-                int zzGW = com_google_android_gms_gcm_zzc.zzGW();
-                if (zzGU == 0 && zzGV < 0) {
-                    throw new IllegalArgumentException("InitialBackoffSeconds can't be negative: " + zzGV);
-                } else if (zzGU == 1 && zzGV < 10) {
-                    throw new IllegalArgumentException("RETRY_POLICY_LINEAR must have an initial backoff at least 10 seconds.");
-                } else if (zzGW < zzGV) {
-                    throw new IllegalArgumentException("MaximumBackoffSeconds must be greater than InitialBackoffSeconds: " + com_google_android_gms_gcm_zzc.zzGW());
-                } else {
-                    return;
-                }
-            }
-            throw new IllegalArgumentException("Must provide a valid RetryPolicy: " + zzGU);
         }
     }
 
@@ -147,15 +139,15 @@ public abstract class Task implements ReflectedParcelable {
     }
 
     public int getRequiredNetwork() {
-        return this.zzbha;
+        return this.zzbgj;
     }
 
     public boolean getRequiresCharging() {
-        return this.zzbhb;
+        return this.zzbgk;
     }
 
     public String getServiceName() {
-        return this.zzbgX;
+        return this.zzbgg;
     }
 
     public String getTag() {
@@ -163,31 +155,31 @@ public abstract class Task implements ReflectedParcelable {
     }
 
     public boolean isPersisted() {
-        return this.zzbgZ;
+        return this.zzbgi;
     }
 
     public boolean isUpdateCurrent() {
-        return this.zzbgY;
+        return this.zzbgh;
     }
 
     public void toBundle(Bundle bundle) {
         bundle.putString("tag", this.mTag);
-        bundle.putBoolean("update_current", this.zzbgY);
-        bundle.putBoolean("persisted", this.zzbgZ);
-        bundle.putString("service", this.zzbgX);
-        bundle.putInt("requiredNetwork", this.zzbha);
-        bundle.putBoolean("requiresCharging", this.zzbhb);
+        bundle.putBoolean("update_current", this.zzbgh);
+        bundle.putBoolean("persisted", this.zzbgi);
+        bundle.putString("service", this.zzbgg);
+        bundle.putInt("requiredNetwork", this.zzbgj);
+        bundle.putBoolean("requiresCharging", this.zzbgk);
         bundle.putBoolean("requiresIdle", false);
-        bundle.putBundle("retryStrategy", this.zzbhd.zzJ(new Bundle()));
+        bundle.putBundle("retryStrategy", this.zzbgm.zzx(new Bundle()));
         bundle.putBundle("extras", this.mExtras);
     }
 
     public void writeToParcel(Parcel parcel, int i) {
         int i2 = 1;
-        parcel.writeString(this.zzbgX);
+        parcel.writeString(this.zzbgg);
         parcel.writeString(this.mTag);
-        parcel.writeInt(this.zzbgY ? 1 : 0);
-        if (!this.zzbgZ) {
+        parcel.writeInt(this.zzbgh ? 1 : 0);
+        if (!this.zzbgi) {
             i2 = 0;
         }
         parcel.writeInt(i2);

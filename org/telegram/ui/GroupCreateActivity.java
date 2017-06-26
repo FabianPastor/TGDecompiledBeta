@@ -451,7 +451,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             if (query == null) {
                 this.searchResult.clear();
                 this.searchResultNames.clear();
-                this.searchAdapterHelper.queryServerSearch(null, false, false, false);
+                this.searchAdapterHelper.queryServerSearch(null, true, false, false, false, 0, false);
                 notifyDataSetChanged();
                 return;
             }
@@ -466,7 +466,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     }
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            GroupCreateAdapter.this.searchAdapterHelper.queryServerSearch(query, false, false, false);
+                            GroupCreateAdapter.this.searchAdapterHelper.queryServerSearch(query, true, false, false, false, 0, false);
                             Utilities.searchQueue.postRunnable(new Runnable() {
                                 public void run() {
                                     String search1 = query.trim().toLowerCase();

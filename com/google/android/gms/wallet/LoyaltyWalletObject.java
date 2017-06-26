@@ -3,108 +3,131 @@ package com.google.android.gms.wallet;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.util.zzb;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.wallet.wobs.zzd;
-import com.google.android.gms.wallet.wobs.zzf;
-import com.google.android.gms.wallet.wobs.zzj;
-import com.google.android.gms.wallet.wobs.zzl;
-import com.google.android.gms.wallet.wobs.zzn;
-import com.google.android.gms.wallet.wobs.zzp;
+import com.google.android.gms.wallet.wobs.zze;
+import com.google.android.gms.wallet.wobs.zzg;
+import com.google.android.gms.wallet.wobs.zzk;
+import com.google.android.gms.wallet.wobs.zzm;
+import com.google.android.gms.wallet.wobs.zzo;
+import com.google.android.gms.wallet.wobs.zzq;
 import java.util.ArrayList;
 
 public final class LoyaltyWalletObject extends zza {
-    public static final Creator<LoyaltyWalletObject> CREATOR = new zzm();
-    int state;
-    String zzaJT;
-    String zzbQA;
-    String zzbQB;
-    String zzbQC;
-    String zzbQD;
-    String zzbQE;
-    String zzbQF;
-    String zzbQG;
-    String zzbQH;
-    ArrayList<zzp> zzbQI;
-    zzl zzbQJ;
-    ArrayList<LatLng> zzbQK;
-    String zzbQL;
-    String zzbQM;
-    ArrayList<zzd> zzbQN;
-    boolean zzbQO;
-    ArrayList<zzn> zzbQP;
-    ArrayList<zzj> zzbQQ;
-    ArrayList<zzn> zzbQR;
-    zzf zzbQS;
-    String zzkl;
+    public static final Creator<LoyaltyWalletObject> CREATOR = new zzo();
+    private int state;
+    private String zzaLx;
+    private String zzbOT;
+    private String zzbOU;
+    private String zzbOV;
+    private String zzbOW;
+    private String zzbOX;
+    private String zzbOY;
+    private String zzbOZ;
+    private String zzbPa;
+    private ArrayList<zzq> zzbPb;
+    private zzm zzbPc;
+    private ArrayList<LatLng> zzbPd;
+    private String zzbPe;
+    private String zzbPf;
+    private ArrayList<zze> zzbPg;
+    private boolean zzbPh;
+    private ArrayList<zzo> zzbPi;
+    private ArrayList<zzk> zzbPj;
+    private ArrayList<zzo> zzbPk;
+    private zzg zzbPl;
+    private String zzkx;
 
     LoyaltyWalletObject() {
-        this.zzbQI = zzb.zzyY();
-        this.zzbQK = zzb.zzyY();
-        this.zzbQN = zzb.zzyY();
-        this.zzbQP = zzb.zzyY();
-        this.zzbQQ = zzb.zzyY();
-        this.zzbQR = zzb.zzyY();
+        this.zzbPb = new ArrayList();
+        this.zzbPd = new ArrayList();
+        this.zzbPg = new ArrayList();
+        this.zzbPi = new ArrayList();
+        this.zzbPj = new ArrayList();
+        this.zzbPk = new ArrayList();
     }
 
-    LoyaltyWalletObject(String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, String str10, int i, ArrayList<zzp> arrayList, zzl com_google_android_gms_wallet_wobs_zzl, ArrayList<LatLng> arrayList2, String str11, String str12, ArrayList<zzd> arrayList3, boolean z, ArrayList<zzn> arrayList4, ArrayList<zzj> arrayList5, ArrayList<zzn> arrayList6, zzf com_google_android_gms_wallet_wobs_zzf) {
-        this.zzkl = str;
-        this.zzbQA = str2;
-        this.zzbQB = str3;
-        this.zzbQC = str4;
-        this.zzaJT = str5;
-        this.zzbQD = str6;
-        this.zzbQE = str7;
-        this.zzbQF = str8;
-        this.zzbQG = str9;
-        this.zzbQH = str10;
+    LoyaltyWalletObject(String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, String str10, int i, ArrayList<zzq> arrayList, zzm com_google_android_gms_wallet_wobs_zzm, ArrayList<LatLng> arrayList2, String str11, String str12, ArrayList<zze> arrayList3, boolean z, ArrayList<zzo> arrayList4, ArrayList<zzk> arrayList5, ArrayList<zzo> arrayList6, zzg com_google_android_gms_wallet_wobs_zzg) {
+        this.zzkx = str;
+        this.zzbOT = str2;
+        this.zzbOU = str3;
+        this.zzbOV = str4;
+        this.zzaLx = str5;
+        this.zzbOW = str6;
+        this.zzbOX = str7;
+        this.zzbOY = str8;
+        this.zzbOZ = str9;
+        this.zzbPa = str10;
         this.state = i;
-        this.zzbQI = arrayList;
-        this.zzbQJ = com_google_android_gms_wallet_wobs_zzl;
-        this.zzbQK = arrayList2;
-        this.zzbQL = str11;
-        this.zzbQM = str12;
-        this.zzbQN = arrayList3;
-        this.zzbQO = z;
-        this.zzbQP = arrayList4;
-        this.zzbQQ = arrayList5;
-        this.zzbQR = arrayList6;
-        this.zzbQS = com_google_android_gms_wallet_wobs_zzf;
+        this.zzbPb = arrayList;
+        this.zzbPc = com_google_android_gms_wallet_wobs_zzm;
+        this.zzbPd = arrayList2;
+        this.zzbPe = str11;
+        this.zzbPf = str12;
+        this.zzbPg = arrayList3;
+        this.zzbPh = z;
+        this.zzbPi = arrayList4;
+        this.zzbPj = arrayList5;
+        this.zzbPk = arrayList6;
+        this.zzbPl = com_google_android_gms_wallet_wobs_zzg;
     }
 
-    public String getAccountId() {
-        return this.zzbQA;
+    public final String getAccountId() {
+        return this.zzbOT;
     }
 
-    public String getAccountName() {
-        return this.zzaJT;
+    public final String getAccountName() {
+        return this.zzaLx;
     }
 
-    public String getBarcodeAlternateText() {
-        return this.zzbQD;
+    public final String getBarcodeAlternateText() {
+        return this.zzbOW;
     }
 
-    public String getBarcodeType() {
-        return this.zzbQE;
+    public final String getBarcodeType() {
+        return this.zzbOX;
     }
 
-    public String getBarcodeValue() {
-        return this.zzbQF;
+    public final String getBarcodeValue() {
+        return this.zzbOY;
     }
 
-    public String getId() {
-        return this.zzkl;
+    public final String getId() {
+        return this.zzkx;
     }
 
-    public String getIssuerName() {
-        return this.zzbQB;
+    public final String getIssuerName() {
+        return this.zzbOU;
     }
 
-    public String getProgramName() {
-        return this.zzbQC;
+    public final String getProgramName() {
+        return this.zzbOV;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzm.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.zzkx, false);
+        zzd.zza(parcel, 3, this.zzbOT, false);
+        zzd.zza(parcel, 4, this.zzbOU, false);
+        zzd.zza(parcel, 5, this.zzbOV, false);
+        zzd.zza(parcel, 6, this.zzaLx, false);
+        zzd.zza(parcel, 7, this.zzbOW, false);
+        zzd.zza(parcel, 8, this.zzbOX, false);
+        zzd.zza(parcel, 9, this.zzbOY, false);
+        zzd.zza(parcel, 10, this.zzbOZ, false);
+        zzd.zza(parcel, 11, this.zzbPa, false);
+        zzd.zzc(parcel, 12, this.state);
+        zzd.zzc(parcel, 13, this.zzbPb, false);
+        zzd.zza(parcel, 14, this.zzbPc, i, false);
+        zzd.zzc(parcel, 15, this.zzbPd, false);
+        zzd.zza(parcel, 16, this.zzbPe, false);
+        zzd.zza(parcel, 17, this.zzbPf, false);
+        zzd.zzc(parcel, 18, this.zzbPg, false);
+        zzd.zza(parcel, 19, this.zzbPh);
+        zzd.zzc(parcel, 20, this.zzbPi, false);
+        zzd.zzc(parcel, 21, this.zzbPj, false);
+        zzd.zzc(parcel, 22, this.zzbPk, false);
+        zzd.zza(parcel, 23, this.zzbPl, i, false);
+        zzd.zzI(parcel, zze);
     }
 }

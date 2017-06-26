@@ -1,54 +1,20 @@
 package com.google.firebase.iid;
 
-import android.support.annotation.Nullable;
-import android.text.TextUtils;
+import android.content.Intent;
+import android.util.Log;
 
-public class zze {
-    private static final Object zztX = new Object();
-    private final zzh zzclx;
+final class zze implements Runnable {
+    private /* synthetic */ Intent val$intent;
+    private /* synthetic */ zzd zzckh;
 
-    zze(zzh com_google_firebase_iid_zzh) {
-        this.zzclx = com_google_firebase_iid_zzh;
+    zze(zzd com_google_firebase_iid_zzd, Intent intent) {
+        this.zzckh = com_google_firebase_iid_zzd;
+        this.val$intent = intent;
     }
 
-    @Nullable
-    String zzabU() {
-        String str = null;
-        synchronized (zztX) {
-            String string = this.zzclx.zzabZ().getString("topic_operaion_queue", null);
-            if (string != null) {
-                String[] split = string.split(",");
-                if (split.length > 1 && !TextUtils.isEmpty(split[1])) {
-                    str = split[1];
-                }
-            }
-        }
-        return str;
-    }
-
-    void zzjt(String str) {
-        synchronized (zztX) {
-            String string = this.zzclx.zzabZ().getString("topic_operaion_queue", "");
-            String valueOf = String.valueOf(",");
-            this.zzclx.zzabZ().edit().putString("topic_operaion_queue", new StringBuilder((String.valueOf(string).length() + String.valueOf(valueOf).length()) + String.valueOf(str).length()).append(string).append(valueOf).append(str).toString()).apply();
-        }
-    }
-
-    boolean zzjx(String str) {
-        boolean z;
-        synchronized (zztX) {
-            String string = this.zzclx.zzabZ().getString("topic_operaion_queue", "");
-            String valueOf = String.valueOf(",");
-            String valueOf2 = String.valueOf(str);
-            if (string.startsWith(valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf))) {
-                valueOf = String.valueOf(",");
-                valueOf2 = String.valueOf(str);
-                this.zzclx.zzabZ().edit().putString("topic_operaion_queue", string.substring((valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf)).length())).apply();
-                z = true;
-            } else {
-                z = false;
-            }
-        }
-        return z;
+    public final void run() {
+        String valueOf = String.valueOf(this.val$intent.getAction());
+        Log.w("EnhancedIntentService", new StringBuilder(String.valueOf(valueOf).length() + 61).append("Service took too long to process intent: ").append(valueOf).append(" App may get closed.").toString());
+        this.zzckh.finish();
     }
 }

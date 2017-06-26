@@ -9,13 +9,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
 import android.support.annotation.Size;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.internal.zzaue;
+import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.internal.zzcgk;
 import com.google.android.gms.tasks.Task;
 
 @Keep
 public final class FirebaseAnalytics {
-    private final zzaue zzbqb;
+    private final zzcgk zzboe;
 
     public static class Event {
         public static final String ADD_PAYMENT_INFO = "add_payment_info";
@@ -71,6 +71,7 @@ public final class FirebaseAnalytics {
         public static final String END_DATE = "end_date";
         public static final String FLIGHT_NUMBER = "flight_number";
         public static final String GROUP_ID = "group_id";
+        public static final String INDEX = "index";
         public static final String ITEM_BRAND = "item_brand";
         public static final String ITEM_CATEGORY = "item_category";
         public static final String ITEM_ID = "item_id";
@@ -111,48 +112,48 @@ public final class FirebaseAnalytics {
         }
     }
 
-    public FirebaseAnalytics(zzaue com_google_android_gms_internal_zzaue) {
-        zzac.zzw(com_google_android_gms_internal_zzaue);
-        this.zzbqb = com_google_android_gms_internal_zzaue;
+    public FirebaseAnalytics(zzcgk com_google_android_gms_internal_zzcgk) {
+        zzbo.zzu(com_google_android_gms_internal_zzcgk);
+        this.zzboe = com_google_android_gms_internal_zzcgk;
     }
 
     @Keep
     @RequiresPermission(allOf = {"android.permission.INTERNET", "android.permission.ACCESS_NETWORK_STATE", "android.permission.WAKE_LOCK"})
     public static FirebaseAnalytics getInstance(Context context) {
-        return zzaue.zzbM(context).zzMy();
+        return zzcgk.zzbj(context).zzyT();
     }
 
-    public Task<String> getAppInstanceId() {
-        return this.zzbqb.zzKa().getAppInstanceId();
+    public final Task<String> getAppInstanceId() {
+        return this.zzboe.zzwt().getAppInstanceId();
     }
 
-    public void logEvent(@Size(max = 40, min = 1) @NonNull String str, Bundle bundle) {
-        this.zzbqb.zzMx().logEvent(str, bundle);
+    public final void logEvent(@Size(max = 40, min = 1) @NonNull String str, Bundle bundle) {
+        this.zzboe.zzyS().logEvent(str, bundle);
     }
 
-    public void setAnalyticsCollectionEnabled(boolean z) {
-        this.zzbqb.zzMx().setMeasurementEnabled(z);
+    public final void setAnalyticsCollectionEnabled(boolean z) {
+        this.zzboe.zzyS().setMeasurementEnabled(z);
     }
 
     @Keep
     @MainThread
-    public void setCurrentScreen(@NonNull Activity activity, @Nullable @Size(max = 36, min = 1) String str, @Nullable @Size(max = 36, min = 1) String str2) {
-        this.zzbqb.zzKe().setCurrentScreen(activity, str, str2);
+    public final void setCurrentScreen(@NonNull Activity activity, @Nullable @Size(max = 36, min = 1) String str, @Nullable @Size(max = 36, min = 1) String str2) {
+        this.zzboe.zzwx().setCurrentScreen(activity, str, str2);
     }
 
-    public void setMinimumSessionDuration(long j) {
-        this.zzbqb.zzMx().setMinimumSessionDuration(j);
+    public final void setMinimumSessionDuration(long j) {
+        this.zzboe.zzyS().setMinimumSessionDuration(j);
     }
 
-    public void setSessionTimeoutDuration(long j) {
-        this.zzbqb.zzMx().setSessionTimeoutDuration(j);
+    public final void setSessionTimeoutDuration(long j) {
+        this.zzboe.zzyS().setSessionTimeoutDuration(j);
     }
 
-    public void setUserId(String str) {
-        this.zzbqb.zzMx().setUserId(str);
+    public final void setUserId(String str) {
+        this.zzboe.zzyS().setUserPropertyInternal("app", "_id", str);
     }
 
-    public void setUserProperty(@Size(max = 24, min = 1) @NonNull String str, @Nullable @Size(max = 36) String str2) {
-        this.zzbqb.zzMx().setUserProperty(str, str2);
+    public final void setUserProperty(@Size(max = 24, min = 1) @NonNull String str, @Nullable @Size(max = 36) String str2) {
+        this.zzboe.zzyS().setUserProperty(str, str2);
     }
 }

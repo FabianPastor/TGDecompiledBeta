@@ -2,51 +2,33 @@ package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
 import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
 
-public class zzn implements Creator<StreetViewPanoramaLink> {
-    static void zza(StreetViewPanoramaLink streetViewPanoramaLink, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zza(parcel, 2, streetViewPanoramaLink.panoId, false);
-        zzc.zza(parcel, 3, streetViewPanoramaLink.bearing);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzhK(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzls(i);
-    }
-
-    public StreetViewPanoramaLink zzhK(Parcel parcel) {
-        int zzaY = zzb.zzaY(parcel);
+public final class zzn implements Creator<StreetViewPanoramaLink> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzb.zzd(parcel);
         String str = null;
         float f = 0.0f;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
                 case 2:
-                    str = zzb.zzq(parcel, zzaX);
+                    str = zzb.zzq(parcel, readInt);
                     break;
                 case 3:
-                    f = zzb.zzl(parcel, zzaX);
+                    f = zzb.zzl(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaX);
+                    zzb.zzb(parcel, readInt);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new StreetViewPanoramaLink(str, f);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
+        zzb.zzF(parcel, zzd);
+        return new StreetViewPanoramaLink(str, f);
     }
 
-    public StreetViewPanoramaLink[] zzls(int i) {
+    public final /* synthetic */ Object[] newArray(int i) {
         return new StreetViewPanoramaLink[i];
     }
 }

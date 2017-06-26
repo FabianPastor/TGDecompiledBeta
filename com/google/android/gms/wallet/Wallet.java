@@ -1,65 +1,54 @@
 package com.google.android.gms.wallet;
 
-import android.content.Context;
-import android.os.Looper;
 import android.os.RemoteException;
 import android.support.annotation.VisibleForTesting;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.Api.ApiOptions.HasOptions;
 import com.google.android.gms.common.api.Api.zzf;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.common.internal.zzg;
-import com.google.android.gms.internal.zzbkx;
-import com.google.android.gms.internal.zzbky;
-import com.google.android.gms.internal.zzbla;
-import com.google.android.gms.internal.zzblb;
-import com.google.android.gms.wallet.firstparty.zzc;
-import com.google.android.gms.wallet.wobs.zzr;
+import com.google.android.gms.internal.fu;
+import com.google.android.gms.internal.gk;
+import com.google.android.gms.internal.gt;
+import com.google.android.gms.internal.gz;
+import com.google.android.gms.internal.ha;
+import com.google.android.gms.internal.zzbax;
+import com.google.android.gms.wallet.wobs.zzs;
 import java.util.Locale;
 
 public final class Wallet {
-    public static final Api<WalletOptions> API = new Api("Wallet.API", zzaie, zzaid);
-    public static final Payments Payments = new zzbkx();
-    private static final zzf<zzbky> zzaid = new zzf();
-    private static final com.google.android.gms.common.api.Api.zza<zzbky, WalletOptions> zzaie = new com.google.android.gms.common.api.Api.zza<zzbky, WalletOptions>() {
-        public zzbky zza(Context context, Looper looper, zzg com_google_android_gms_common_internal_zzg, WalletOptions walletOptions, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
-            if (walletOptions == null) {
-                walletOptions = new WalletOptions();
-            }
-            return new zzbky(context, looper, com_google_android_gms_common_internal_zzg, connectionCallbacks, onConnectionFailedListener, walletOptions.environment, walletOptions.theme, walletOptions.zzbRw);
-        }
-    };
-    public static final zzr zzbRu = new zzblb();
-    public static final zzc zzbRv = new zzbla();
+    public static final Api<WalletOptions> API = new Api("Wallet.API", zzajS, zzajR);
+    public static final Payments Payments = new gk();
+    private static final zzf<gt> zzajR = new zzf();
+    private static final com.google.android.gms.common.api.Api.zza<gt, WalletOptions> zzajS = new zzaa();
+    private static zzs zzbPO = new ha();
+    private static fu zzbPP = new gz();
 
     public static final class WalletOptions implements HasOptions {
         public final int environment;
         public final int theme;
         @VisibleForTesting
-        final boolean zzbRw;
+        final boolean zzbPQ;
 
         public static final class Builder {
             private int mTheme = 0;
-            private int zzbRx = 3;
-            private boolean zzbRy = true;
+            private int zzbPR = 3;
+            private boolean zzbPS = true;
 
-            public WalletOptions build() {
+            public final WalletOptions build() {
                 return new WalletOptions();
             }
 
-            public Builder setEnvironment(int i) {
+            public final Builder setEnvironment(int i) {
                 if (i == 0 || i == 0 || i == 2 || i == 1 || i == 3) {
-                    this.zzbRx = i;
+                    this.zzbPR = i;
                     return this;
                 }
                 throw new IllegalArgumentException(String.format(Locale.US, "Invalid environment value %d", new Object[]{Integer.valueOf(i)}));
             }
 
-            public Builder setTheme(int i) {
+            public final Builder setTheme(int i) {
                 if (i == 0 || i == 1) {
                     this.mTheme = i;
                     return this;
@@ -68,8 +57,8 @@ public final class Wallet {
             }
 
             @Deprecated
-            public Builder useGoogleWallet() {
-                this.zzbRy = false;
+            public final Builder useGoogleWallet() {
+                this.zzbPS = false;
                 return this;
             }
         }
@@ -79,23 +68,23 @@ public final class Wallet {
         }
 
         private WalletOptions(Builder builder) {
-            this.environment = builder.zzbRx;
+            this.environment = builder.zzbPR;
             this.theme = builder.mTheme;
-            this.zzbRw = builder.zzbRy;
+            this.zzbPQ = builder.zzbPS;
         }
     }
 
-    public static abstract class zza<R extends Result> extends com.google.android.gms.internal.zzaad.zza<R, zzbky> {
+    public static abstract class zza<R extends Result> extends zzbax<R, gt> {
         public zza(GoogleApiClient googleApiClient) {
             super(Wallet.API, googleApiClient);
         }
 
-        public /* synthetic */ void setResult(Object obj) {
-            super.zzb((Result) obj);
+        public final /* bridge */ /* synthetic */ void setResult(Object obj) {
+            super.setResult((Result) obj);
         }
 
         @VisibleForTesting
-        protected abstract void zza(zzbky com_google_android_gms_internal_zzbky) throws RemoteException;
+        protected abstract void zza(gt gtVar) throws RemoteException;
     }
 
     public static abstract class zzb extends zza<Status> {
@@ -103,12 +92,8 @@ public final class Wallet {
             super(googleApiClient);
         }
 
-        protected Status zzb(Status status) {
+        protected final /* synthetic */ Result zzb(Status status) {
             return status;
-        }
-
-        protected /* synthetic */ Result zzc(Status status) {
-            return zzb(status);
         }
     }
 

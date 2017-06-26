@@ -1,54 +1,25 @@
 package com.google.android.gms.tasks;
 
-import android.support.annotation.NonNull;
-import java.util.concurrent.Executor;
+final class zzb implements Runnable {
+    private /* synthetic */ Task zzbLR;
+    private /* synthetic */ zza zzbLS;
 
-class zzb<TResult, TContinuationResult> implements OnFailureListener, OnSuccessListener<TContinuationResult>, zzf<TResult> {
-    private final Executor zzbFP;
-    private final Continuation<TResult, Task<TContinuationResult>> zzbNs;
-    private final zzh<TContinuationResult> zzbNt;
-
-    public zzb(@NonNull Executor executor, @NonNull Continuation<TResult, Task<TContinuationResult>> continuation, @NonNull zzh<TContinuationResult> com_google_android_gms_tasks_zzh_TContinuationResult) {
-        this.zzbFP = executor;
-        this.zzbNs = continuation;
-        this.zzbNt = com_google_android_gms_tasks_zzh_TContinuationResult;
+    zzb(zza com_google_android_gms_tasks_zza, Task task) {
+        this.zzbLS = com_google_android_gms_tasks_zza;
+        this.zzbLR = task;
     }
 
-    public void cancel() {
-        throw new UnsupportedOperationException();
-    }
-
-    public void onComplete(@NonNull final Task<TResult> task) {
-        this.zzbFP.execute(new Runnable(this) {
-            final /* synthetic */ zzb zzbNw;
-
-            public void run() {
-                try {
-                    Task task = (Task) this.zzbNw.zzbNs.then(task);
-                    if (task == null) {
-                        this.zzbNw.onFailure(new NullPointerException("Continuation returned null"));
-                        return;
-                    }
-                    task.addOnSuccessListener(TaskExecutors.zzbNG, this.zzbNw);
-                    task.addOnFailureListener(TaskExecutors.zzbNG, this.zzbNw);
-                } catch (Exception e) {
-                    if (e.getCause() instanceof Exception) {
-                        this.zzbNw.zzbNt.setException((Exception) e.getCause());
-                    } else {
-                        this.zzbNw.zzbNt.setException(e);
-                    }
-                } catch (Exception e2) {
-                    this.zzbNw.zzbNt.setException(e2);
-                }
+    public final void run() {
+        try {
+            this.zzbLS.zzbLQ.setResult(this.zzbLS.zzbLP.then(this.zzbLR));
+        } catch (Exception e) {
+            if (e.getCause() instanceof Exception) {
+                this.zzbLS.zzbLQ.setException((Exception) e.getCause());
+            } else {
+                this.zzbLS.zzbLQ.setException(e);
             }
-        });
-    }
-
-    public void onFailure(@NonNull Exception exception) {
-        this.zzbNt.setException(exception);
-    }
-
-    public void onSuccess(TContinuationResult tContinuationResult) {
-        this.zzbNt.setResult(tContinuationResult);
+        } catch (Exception e2) {
+            this.zzbLS.zzbLQ.setException(e2);
+        }
     }
 }

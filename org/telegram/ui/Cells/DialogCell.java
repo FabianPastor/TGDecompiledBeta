@@ -339,7 +339,7 @@ public class DialogCell extends BaseCell {
             }
             if (this.isDialogCell) {
                 this.draftMessage = DraftQuery.getDraft(this.currentDialogId);
-                if ((this.draftMessage != null && ((TextUtils.isEmpty(this.draftMessage.message) && this.draftMessage.reply_to_msg_id == 0) || (lastDate > this.draftMessage.date && this.unreadCount != 0))) || (!(!ChatObject.isChannel(this.chat) || this.chat.megagroup || this.chat.creator || this.chat.editor) || (this.chat != null && (this.chat.left || this.chat.kicked)))) {
+                if ((this.draftMessage != null && ((TextUtils.isEmpty(this.draftMessage.message) && this.draftMessage.reply_to_msg_id == 0) || (lastDate > this.draftMessage.date && this.unreadCount != 0))) || ((ChatObject.isChannel(this.chat) && !this.chat.megagroup && !this.chat.creator && (this.chat.admin_rights == null || !this.chat.admin_rights.post_messages)) || (this.chat != null && (this.chat.left || this.chat.kicked)))) {
                     this.draftMessage = null;
                 }
             } else {

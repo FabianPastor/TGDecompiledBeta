@@ -176,8 +176,7 @@ public class ThemeActivity extends BaseFragment {
                                         } else if (which == 1) {
                                             if (ThemeActivity.this.parentLayout != null) {
                                                 Theme.applyTheme(themeInfo);
-                                                ThemeActivity.this.parentLayout.rebuildAllFragmentViews(true);
-                                                ThemeActivity.this.parentLayout.showLastFragment();
+                                                ThemeActivity.this.parentLayout.rebuildAllFragmentViews(true, true);
                                                 new ThemeEditorView().show(ThemeActivity.this.getParentActivity(), themeInfo.name);
                                             }
                                         } else if (ThemeActivity.this.getParentActivity() != null) {
@@ -187,8 +186,7 @@ public class ThemeActivity extends BaseFragment {
                                             builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     if (Theme.deleteTheme(themeInfo)) {
-                                                        ThemeActivity.this.parentLayout.rebuildAllFragmentViews(true);
-                                                        ThemeActivity.this.parentLayout.showLastFragment();
+                                                        ThemeActivity.this.parentLayout.rebuildAllFragmentViews(true, true);
                                                     }
                                                     if (ThemeActivity.this.listAdapter != null) {
                                                         ThemeActivity.this.listAdapter.notifyDataSetChanged();
@@ -271,7 +269,7 @@ public class ThemeActivity extends BaseFragment {
                     if (position >= 0 && position < Theme.themes.size()) {
                         Theme.applyTheme((ThemeInfo) Theme.themes.get(position));
                         if (ThemeActivity.this.parentLayout != null) {
-                            ThemeActivity.this.parentLayout.rebuildAllFragmentViews(false);
+                            ThemeActivity.this.parentLayout.rebuildAllFragmentViews(false, false);
                         }
                         ThemeActivity.this.finishFragment();
                     }

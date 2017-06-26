@@ -1,73 +1,119 @@
 package com.google.android.gms.maps.internal;
 
-import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.os.RemoteException;
-import com.google.android.gms.maps.model.internal.zzb;
+import com.google.android.gms.dynamic.IObjectWrapper;
+import com.google.android.gms.dynamic.IObjectWrapper.zza;
+import com.google.android.gms.internal.zzed;
+import com.google.android.gms.internal.zzef;
+import com.google.android.gms.maps.GoogleMapOptions;
 
-public interface zzj extends IInterface {
-
-    public static abstract class zza extends Binder implements zzj {
-
-        private static class zza implements zzj {
-            private IBinder zzrk;
-
-            zza(IBinder iBinder) {
-                this.zzrk = iBinder;
-            }
-
-            public IBinder asBinder() {
-                return this.zzrk;
-            }
-
-            public void zza(zzb com_google_android_gms_maps_model_internal_zzb) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IOnCircleClickListener");
-                    obtain.writeStrongBinder(com_google_android_gms_maps_model_internal_zzb != null ? com_google_android_gms_maps_model_internal_zzb.asBinder() : null);
-                    this.zzrk.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-        }
-
-        public zza() {
-            attachInterface(this, "com.google.android.gms.maps.internal.IOnCircleClickListener");
-        }
-
-        public static zzj zzdE(IBinder iBinder) {
-            if (iBinder == null) {
-                return null;
-            }
-            IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.maps.internal.IOnCircleClickListener");
-            return (queryLocalInterface == null || !(queryLocalInterface instanceof zzj)) ? new zza(iBinder) : (zzj) queryLocalInterface;
-        }
-
-        public IBinder asBinder() {
-            return this;
-        }
-
-        public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-            switch (i) {
-                case 1:
-                    parcel.enforceInterface("com.google.android.gms.maps.internal.IOnCircleClickListener");
-                    zza(com.google.android.gms.maps.model.internal.zzb.zza.zzej(parcel.readStrongBinder()));
-                    parcel2.writeNoException();
-                    return true;
-                case 1598968902:
-                    parcel2.writeString("com.google.android.gms.maps.internal.IOnCircleClickListener");
-                    return true;
-                default:
-                    return super.onTransact(i, parcel, parcel2, i2);
-            }
-        }
+public final class zzj extends zzed implements IMapFragmentDelegate {
+    zzj(IBinder iBinder) {
+        super(iBinder, "com.google.android.gms.maps.internal.IMapFragmentDelegate");
     }
 
-    void zza(zzb com_google_android_gms_maps_model_internal_zzb) throws RemoteException;
+    public final IGoogleMapDelegate getMap() throws RemoteException {
+        IGoogleMapDelegate iGoogleMapDelegate;
+        Parcel zza = zza(1, zzZ());
+        IBinder readStrongBinder = zza.readStrongBinder();
+        if (readStrongBinder == null) {
+            iGoogleMapDelegate = null;
+        } else {
+            IInterface queryLocalInterface = readStrongBinder.queryLocalInterface("com.google.android.gms.maps.internal.IGoogleMapDelegate");
+            iGoogleMapDelegate = queryLocalInterface instanceof IGoogleMapDelegate ? (IGoogleMapDelegate) queryLocalInterface : new zzg(readStrongBinder);
+        }
+        zza.recycle();
+        return iGoogleMapDelegate;
+    }
+
+    public final void getMapAsync(zzap com_google_android_gms_maps_internal_zzap) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (IInterface) com_google_android_gms_maps_internal_zzap);
+        zzb(12, zzZ);
+    }
+
+    public final boolean isReady() throws RemoteException {
+        Parcel zza = zza(11, zzZ());
+        boolean zza2 = zzef.zza(zza);
+        zza.recycle();
+        return zza2;
+    }
+
+    public final void onCreate(Bundle bundle) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) bundle);
+        zzb(3, zzZ);
+    }
+
+    public final IObjectWrapper onCreateView(IObjectWrapper iObjectWrapper, IObjectWrapper iObjectWrapper2, Bundle bundle) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (IInterface) iObjectWrapper);
+        zzef.zza(zzZ, (IInterface) iObjectWrapper2);
+        zzef.zza(zzZ, (Parcelable) bundle);
+        zzZ = zza(4, zzZ);
+        IObjectWrapper zzM = zza.zzM(zzZ.readStrongBinder());
+        zzZ.recycle();
+        return zzM;
+    }
+
+    public final void onDestroy() throws RemoteException {
+        zzb(8, zzZ());
+    }
+
+    public final void onDestroyView() throws RemoteException {
+        zzb(7, zzZ());
+    }
+
+    public final void onEnterAmbient(Bundle bundle) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) bundle);
+        zzb(13, zzZ);
+    }
+
+    public final void onExitAmbient() throws RemoteException {
+        zzb(14, zzZ());
+    }
+
+    public final void onInflate(IObjectWrapper iObjectWrapper, GoogleMapOptions googleMapOptions, Bundle bundle) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (IInterface) iObjectWrapper);
+        zzef.zza(zzZ, (Parcelable) googleMapOptions);
+        zzef.zza(zzZ, (Parcelable) bundle);
+        zzb(2, zzZ);
+    }
+
+    public final void onLowMemory() throws RemoteException {
+        zzb(9, zzZ());
+    }
+
+    public final void onPause() throws RemoteException {
+        zzb(6, zzZ());
+    }
+
+    public final void onResume() throws RemoteException {
+        zzb(5, zzZ());
+    }
+
+    public final void onSaveInstanceState(Bundle bundle) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) bundle);
+        zzZ = zza(10, zzZ);
+        if (zzZ.readInt() != 0) {
+            bundle.readFromParcel(zzZ);
+        }
+        zzZ.recycle();
+    }
+
+    public final void onStart() throws RemoteException {
+        zzb(15, zzZ());
+    }
+
+    public final void onStop() throws RemoteException {
+        zzb(16, zzZ());
+    }
 }

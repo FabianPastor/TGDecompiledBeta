@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import android.support.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 import java.util.List;
 
 public final class CircleOptions extends zza {
@@ -11,109 +12,119 @@ public final class CircleOptions extends zza {
     private int mFillColor = 0;
     private int mStrokeColor = -16777216;
     private float mStrokeWidth = 10.0f;
-    private LatLng zzbpf = null;
-    private double zzbpg = 0.0d;
-    private float zzbph = 0.0f;
-    private boolean zzbpi = true;
-    private boolean zzbpj = false;
+    private LatLng zzbni = null;
+    private double zzbnj = 0.0d;
+    private float zzbnk = 0.0f;
+    private boolean zzbnl = true;
+    private boolean zzbnm = false;
     @Nullable
-    private List<PatternItem> zzbpk = null;
+    private List<PatternItem> zzbnn = null;
 
     CircleOptions(LatLng latLng, double d, float f, int i, int i2, float f2, boolean z, boolean z2, @Nullable List<PatternItem> list) {
-        this.zzbpf = latLng;
-        this.zzbpg = d;
+        this.zzbni = latLng;
+        this.zzbnj = d;
         this.mStrokeWidth = f;
         this.mStrokeColor = i;
         this.mFillColor = i2;
-        this.zzbph = f2;
-        this.zzbpi = z;
-        this.zzbpj = z2;
-        this.zzbpk = list;
+        this.zzbnk = f2;
+        this.zzbnl = z;
+        this.zzbnm = z2;
+        this.zzbnn = list;
     }
 
-    public CircleOptions center(LatLng latLng) {
-        this.zzbpf = latLng;
+    public final CircleOptions center(LatLng latLng) {
+        this.zzbni = latLng;
         return this;
     }
 
-    public CircleOptions clickable(boolean z) {
-        this.zzbpj = z;
+    public final CircleOptions clickable(boolean z) {
+        this.zzbnm = z;
         return this;
     }
 
-    public CircleOptions fillColor(int i) {
+    public final CircleOptions fillColor(int i) {
         this.mFillColor = i;
         return this;
     }
 
-    public LatLng getCenter() {
-        return this.zzbpf;
+    public final LatLng getCenter() {
+        return this.zzbni;
     }
 
-    public int getFillColor() {
+    public final int getFillColor() {
         return this.mFillColor;
     }
 
-    public double getRadius() {
-        return this.zzbpg;
+    public final double getRadius() {
+        return this.zzbnj;
     }
 
-    public int getStrokeColor() {
+    public final int getStrokeColor() {
         return this.mStrokeColor;
     }
 
     @Nullable
-    public List<PatternItem> getStrokePattern() {
-        return this.zzbpk;
+    public final List<PatternItem> getStrokePattern() {
+        return this.zzbnn;
     }
 
-    public float getStrokeWidth() {
+    public final float getStrokeWidth() {
         return this.mStrokeWidth;
     }
 
-    public float getZIndex() {
-        return this.zzbph;
+    public final float getZIndex() {
+        return this.zzbnk;
     }
 
-    public boolean isClickable() {
-        return this.zzbpj;
+    public final boolean isClickable() {
+        return this.zzbnm;
     }
 
-    public boolean isVisible() {
-        return this.zzbpi;
+    public final boolean isVisible() {
+        return this.zzbnl;
     }
 
-    public CircleOptions radius(double d) {
-        this.zzbpg = d;
+    public final CircleOptions radius(double d) {
+        this.zzbnj = d;
         return this;
     }
 
-    public CircleOptions strokeColor(int i) {
+    public final CircleOptions strokeColor(int i) {
         this.mStrokeColor = i;
         return this;
     }
 
-    public CircleOptions strokePattern(@Nullable List<PatternItem> list) {
-        this.zzbpk = list;
+    public final CircleOptions strokePattern(@Nullable List<PatternItem> list) {
+        this.zzbnn = list;
         return this;
     }
 
-    public CircleOptions strokeWidth(float f) {
+    public final CircleOptions strokeWidth(float f) {
         this.mStrokeWidth = f;
         return this;
     }
 
-    public CircleOptions visible(boolean z) {
-        this.zzbpi = z;
+    public final CircleOptions visible(boolean z) {
+        this.zzbnl = z;
         return this;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzc.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, getCenter(), i, false);
+        zzd.zza(parcel, 3, getRadius());
+        zzd.zza(parcel, 4, getStrokeWidth());
+        zzd.zzc(parcel, 5, getStrokeColor());
+        zzd.zzc(parcel, 6, getFillColor());
+        zzd.zza(parcel, 7, getZIndex());
+        zzd.zza(parcel, 8, isVisible());
+        zzd.zza(parcel, 9, isClickable());
+        zzd.zzc(parcel, 10, getStrokePattern(), false);
+        zzd.zzI(parcel, zze);
     }
 
-    public CircleOptions zIndex(float f) {
-        this.zzbph = f;
+    public final CircleOptions zIndex(float f) {
+        this.zzbnk = f;
         return this;
     }
 }

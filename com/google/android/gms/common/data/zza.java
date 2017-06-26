@@ -3,71 +3,37 @@ package com.google.android.gms.common.data;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
 import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzc;
 
-public class zza implements Creator<BitmapTeleporter> {
-    static void zza(BitmapTeleporter bitmapTeleporter, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zzc(parcel, 1, bitmapTeleporter.zzaiI);
-        zzc.zza(parcel, 2, bitmapTeleporter.zzSQ, i, false);
-        zzc.zzc(parcel, 3, bitmapTeleporter.zzakD);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzaN(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzcF(i);
-    }
-
-    public BitmapTeleporter zzaN(Parcel parcel) {
-        int i = 0;
-        int zzaY = zzb.zzaY(parcel);
+public final class zza implements Creator<BitmapTeleporter> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzb.zzd(parcel);
         ParcelFileDescriptor parcelFileDescriptor = null;
+        int i = 0;
         int i2 = 0;
-        while (parcel.dataPosition() < zzaY) {
-            ParcelFileDescriptor parcelFileDescriptor2;
-            int zzg;
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
                 case 1:
-                    int i3 = i;
-                    parcelFileDescriptor2 = parcelFileDescriptor;
-                    zzg = zzb.zzg(parcel, zzaX);
-                    zzaX = i3;
+                    i = zzb.zzg(parcel, readInt);
                     break;
                 case 2:
-                    zzg = i2;
-                    ParcelFileDescriptor parcelFileDescriptor3 = (ParcelFileDescriptor) zzb.zza(parcel, zzaX, ParcelFileDescriptor.CREATOR);
-                    zzaX = i;
-                    parcelFileDescriptor2 = parcelFileDescriptor3;
+                    parcelFileDescriptor = (ParcelFileDescriptor) zzb.zza(parcel, readInt, ParcelFileDescriptor.CREATOR);
                     break;
                 case 3:
-                    zzaX = zzb.zzg(parcel, zzaX);
-                    parcelFileDescriptor2 = parcelFileDescriptor;
-                    zzg = i2;
+                    i2 = zzb.zzg(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaX);
-                    zzaX = i;
-                    parcelFileDescriptor2 = parcelFileDescriptor;
-                    zzg = i2;
+                    zzb.zzb(parcel, readInt);
                     break;
             }
-            i2 = zzg;
-            parcelFileDescriptor = parcelFileDescriptor2;
-            i = zzaX;
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new BitmapTeleporter(i2, parcelFileDescriptor, i);
-        }
-        throw new com.google.android.gms.common.internal.safeparcel.zzb.zza("Overread allowed size end=" + zzaY, parcel);
+        zzb.zzF(parcel, zzd);
+        return new BitmapTeleporter(i, parcelFileDescriptor, i2);
     }
 
-    public BitmapTeleporter[] zzcF(int i) {
+    public final /* synthetic */ Object[] newArray(int i) {
         return new BitmapTeleporter[i];
     }
 }

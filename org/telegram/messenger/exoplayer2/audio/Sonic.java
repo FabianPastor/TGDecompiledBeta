@@ -195,8 +195,8 @@ final class Sonic {
         int skip;
         int period;
         int retPeriod;
-        if (this.sampleRate > AMDF_FREQUENCY) {
-            skip = this.sampleRate / AMDF_FREQUENCY;
+        if (this.sampleRate > 4000) {
+            skip = this.sampleRate / 4000;
         } else {
             skip = 1;
         }

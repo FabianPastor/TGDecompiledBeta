@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
@@ -173,6 +174,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     private boolean drawForwardedName;
     private boolean drawImageButton;
     private boolean drawInstantView;
+    private int drawInstantViewType;
+    private boolean drawJoinChannelView;
+    private boolean drawJoinGroupView;
     private boolean drawName;
     private boolean drawNameLayout;
     private boolean drawPhotoImage;
@@ -195,6 +199,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     private boolean hasGamePreview;
     private boolean hasInvoicePreview;
     private boolean hasLinkPreview;
+    private boolean hasOldCaptionPreview;
     private boolean imagePressed;
     private boolean inLayout;
     private StaticLayout infoLayout;
@@ -324,7 +329,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
 
         void didPressedImage(ChatMessageCell chatMessageCell);
 
-        void didPressedInstantButton(ChatMessageCell chatMessageCell);
+        void didPressedInstantButton(ChatMessageCell chatMessageCell, int i);
 
         void didPressedOther(ChatMessageCell chatMessageCell);
 
@@ -704,7 +709,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 } else if (event.getAction() == 1) {
                     if (this.instantPressed) {
                         if (this.delegate != null) {
-                            this.delegate.didPressedInstantButton(this);
+                            this.delegate.didPressedInstantButton(this, this.drawInstantViewType);
                         }
                         playSoundEffect(0);
                         if (VERSION.SDK_INT >= 21 && this.instantViewSelectorDrawable != null) {
@@ -937,7 +942,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     }
 
     private boolean checkBotButtonMotionEvent(MotionEvent event) {
-        if (this.botButtons.isEmpty()) {
+        if (this.botButtons.isEmpty() || this.currentMessageObject.eventId != 0) {
             return false;
         }
         int x = (int) event.getX();
@@ -1766,7 +1771,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     }
 
     private void calcBackgroundWidth(int maxWidth, int timeMore, int maxChildWidth) {
-        if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview || maxWidth - this.currentMessageObject.lastLineWidth < timeMore || this.currentMessageObject.hasRtl) {
+        if (this.hasLinkPreview || this.hasOldCaptionPreview || this.hasGamePreview || this.hasInvoicePreview || maxWidth - this.currentMessageObject.lastLineWidth < timeMore || this.currentMessageObject.hasRtl) {
             this.totalHeight += AndroidUtilities.dp(14.0f);
             this.backgroundWidth = Math.max(maxChildWidth, this.currentMessageObject.lastLineWidth) + AndroidUtilities.dp(31.0f);
             this.backgroundWidth = Math.max(this.backgroundWidth, this.timeWidth + AndroidUtilities.dp(31.0f));
@@ -1836,35 +1841,38 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
-        int maxWidth;
-        boolean z;
         int dp;
         int linkPreviewMaxWidth;
-        String description;
         Photo photo;
         TLObject document;
         String type;
         int duration;
         boolean smallImage;
         TL_webDocument webDocument;
-        TL_webDocument webDocument2;
+        int additinalWidth;
         int height;
+        int width;
         Throwable e;
         int restLinesCount;
+        int a;
+        int lineLeft;
         boolean authorIsRTL;
+        boolean hasRTL;
         int maxPhotoWidth;
         DocumentAttribute attribute;
         PhotoSize photoSize;
         PhotoSize photoSize2;
         int dp2;
         int durationWidth;
-        ArrayList arrayList;
+        String fileName;
+        boolean autoDownload;
         int seconds;
         String str;
         CharSequence str2;
         String price;
         SpannableStringBuilder spannableStringBuilder;
-        int mWidth;
+        WebPage webPage;
+        int rows;
         boolean fullWidth;
         int maxButtonWidth;
         int maxButtonsWidth;
@@ -1878,6 +1886,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         BotButton botButton;
         String key;
         String position;
+        BotButton oldButton;
         CharSequence buttonText;
         if (messageObject.checkLayout()) {
             this.currentMessageObject = null;
@@ -1887,11 +1896,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
             int i;
-            int width;
-            int a;
-            int rows;
             float f;
-            BotButton oldButton;
             int timeWidthTotal;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
@@ -1921,6 +1926,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             messageObject.forceUpdate = false;
             this.drawPhotoImage = false;
             this.hasLinkPreview = false;
+            this.hasOldCaptionPreview = false;
             this.hasGamePreview = false;
             this.hasInvoicePreview = false;
             this.instantButtonPressed = false;
@@ -1956,8 +1962,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             this.drawName = false;
             this.useSeekBarWaweform = false;
             this.drawInstantView = false;
+            this.drawInstantViewType = 0;
             this.drawForwardedName = false;
             this.mediaBackground = false;
+            int captionNewLine = 0;
             this.availableTimeWidth = 0;
             this.photoImage.setNeedsQualityThumb(false);
             this.photoImage.setShouldGenerateQualityThumb(false);
@@ -1969,14 +1977,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
-            String fileName;
-            boolean autoDownload;
+            int maxWidth;
+            boolean z;
             float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
-                    if (this.isChat && !messageObject.isOutOwner() && messageObject.isFromUser()) {
+                    if (this.isChat && !messageObject.isOutOwner() && messageObject.needDrawAvatar()) {
                         maxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(122.0f);
                         this.drawName = true;
                     } else {
@@ -1984,7 +1992,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         this.drawName = z;
                         maxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);
                     }
-                } else if (this.isChat && !messageObject.isOutOwner() && messageObject.isFromUser()) {
+                } else if (this.isChat && !messageObject.isOutOwner() && messageObject.needDrawAvatar()) {
                     maxWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(122.0f);
                     this.drawName = true;
                 } else {
@@ -2005,6 +2013,16 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.hasLinkPreview = z;
                 z = VERSION.SDK_INT >= 16 && this.hasLinkPreview && messageObject.messageOwner.media.webpage.cached_page != null;
                 this.drawInstantView = z;
+                String webpageType = this.hasLinkPreview ? messageObject.messageOwner.media.webpage.type : null;
+                if (!this.drawInstantView) {
+                    if ("telegram_channel".equals(webpageType)) {
+                        this.drawInstantView = true;
+                        this.drawInstantViewType = 1;
+                    } else if ("telegram_group".equals(webpageType)) {
+                        this.drawInstantView = true;
+                        this.drawInstantViewType = 2;
+                    }
+                }
                 if (VERSION.SDK_INT >= 21 && this.drawInstantView) {
                     if (this.instantViewSelectorDrawable == null) {
                         Paint paint = new Paint(1);
@@ -2066,18 +2084,19 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     String site_name;
                     String title;
                     String author;
-                    int additinalWidth;
+                    String description;
+                    TL_webDocument webDocument2;
                     int restLines;
-                    int lineLeft;
-                    boolean hasRTL;
                     int textWidth;
+                    ArrayList arrayList;
+                    int mWidth;
                     if (AndroidUtilities.isTablet()) {
-                        if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
+                        if (!messageObject.needDrawAvatar() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);
                         } else {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(122.0f);
                         }
-                    } else if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOutOwner())) {
+                    } else if (!messageObject.needDrawAvatar() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOutOwner())) {
                         linkPreviewMaxWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(80.0f);
                     } else {
                         linkPreviewMaxWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(122.0f);
@@ -2086,15 +2105,15 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         linkPreviewMaxWidth -= AndroidUtilities.dp(20.0f);
                     }
                     if (this.hasLinkPreview) {
-                        TL_webPage webPage = (TL_webPage) messageObject.messageOwner.media.webpage;
-                        site_name = webPage.site_name;
-                        title = webPage.title;
-                        author = webPage.author;
-                        description = webPage.description;
-                        photo = webPage.photo;
-                        document = webPage.document;
-                        type = webPage.type;
-                        duration = webPage.duration;
+                        TL_webPage webPage2 = (TL_webPage) messageObject.messageOwner.media.webpage;
+                        site_name = webPage2.site_name;
+                        title = webPage2.title;
+                        author = webPage2.author;
+                        description = webPage2.description;
+                        photo = webPage2.photo;
+                        document = webPage2.document;
+                        type = webPage2.type;
+                        duration = webPage2.duration;
                         if (!(site_name == null || photo == null || !site_name.toLowerCase().equals("instagram"))) {
                             linkPreviewMaxWidth = Math.max(AndroidUtilities.displaySize.y / 3, this.currentMessageObject.textWidth);
                         }
@@ -2112,12 +2131,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 if (this.currentMessageObject.photoThumbs != null) {
                                     z = true;
                                     this.isSmallImage = z;
-                                    webDocument = null;
+                                    webDocument2 = null;
                                 }
                             }
                             z = false;
                             this.isSmallImage = z;
-                            webDocument = null;
+                            webDocument2 = null;
                         }
                         smallImage = false;
                         if (type.equals("app")) {
@@ -2127,11 +2146,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         if (this.currentMessageObject.photoThumbs != null) {
                             z = true;
                             this.isSmallImage = z;
-                            webDocument = null;
+                            webDocument2 = null;
                         }
                         z = false;
                         this.isSmallImage = z;
-                        webDocument = null;
+                        webDocument2 = null;
                     } else if (this.hasInvoicePreview) {
                         site_name = messageObject.messageOwner.media.title;
                         title = null;
@@ -2139,12 +2158,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         photo = null;
                         author = null;
                         document = null;
-                        webDocument2 = ((TL_messageMediaInvoice) messageObject.messageOwner.media).photo;
+                        webDocument = ((TL_messageMediaInvoice) messageObject.messageOwner.media).photo;
                         duration = 0;
                         type = "invoice";
                         this.isSmallImage = false;
                         smallImage = false;
-                        webDocument = webDocument2;
+                        webDocument2 = webDocument;
                     } else {
                         TL_game game = messageObject.messageOwner.media.game;
                         site_name = game.title;
@@ -2157,7 +2176,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         type = "game";
                         this.isSmallImage = false;
                         smallImage = false;
-                        webDocument = null;
+                        webDocument2 = null;
                     }
                     if (this.hasInvoicePreview) {
                         additinalWidth = 0;
@@ -2261,9 +2280,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         if (lineLeft == 0) {
                                             hasRTL = true;
                                             if (this.descriptionX != 0) {
-                                                this.descriptionX = -lineLeft;
-                                            } else {
                                                 this.descriptionX = Math.max(this.descriptionX, -lineLeft);
+                                            } else {
+                                                this.descriptionX = -lineLeft;
                                             }
                                         }
                                     }
@@ -2274,9 +2293,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         if (lineLeft == 0) {
                                             width = textWidth - lineLeft;
                                         } else if (hasRTL) {
-                                            width = Math.min((int) Math.ceil((double) this.descriptionLayout.getLineWidth(a)), textWidth);
-                                        } else {
                                             width = textWidth;
+                                        } else {
+                                            width = Math.min((int) Math.ceil((double) this.descriptionLayout.getLineWidth(a)), textWidth);
                                         }
                                         width += AndroidUtilities.dp(52.0f);
                                         if (maxWebWidth >= width + additinalWidth) {
@@ -2297,161 +2316,161 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             smallImage = false;
                             this.isSmallImage = false;
                             if (smallImage) {
-                                maxPhotoWidth = linkPreviewMaxWidth;
-                            } else {
                                 maxPhotoWidth = AndroidUtilities.dp(48.0f);
+                            } else {
+                                maxPhotoWidth = linkPreviewMaxWidth;
                             }
                             if (document == null) {
-                                if (!MessageObject.isGifDocument(document)) {
-                                    if (!MediaController.getInstance().canAutoplayGifs()) {
-                                        messageObject.gifState = 1.0f;
-                                    }
-                                    this.photoImage.setAllowStartAnimation(messageObject.gifState == 1.0f);
-                                    this.currentPhotoObject = document.thumb;
-                                    while (a < document.attributes.size()) {
-                                        attribute = (DocumentAttribute) document.attributes.get(a);
-                                        if (attribute instanceof TL_documentAttributeImageSize) {
+                                if (photo == null) {
+                                    if (webDocument2 != null) {
+                                        if (webDocument2.mime_type.startsWith("image/")) {
+                                            webDocument = webDocument2;
+                                        } else {
+                                            webDocument = null;
                                         }
+                                        this.drawImageButton = false;
+                                    }
+                                    webDocument = webDocument2;
+                                } else {
+                                    if (type != null) {
+                                        if (type.equals("photo")) {
+                                            z = true;
+                                            this.drawImageButton = z;
+                                            arrayList = messageObject.photoThumbs;
+                                            if (this.drawImageButton) {
+                                                dp = maxPhotoWidth;
+                                            } else {
+                                                dp = AndroidUtilities.getPhotoSize();
+                                            }
+                                            this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
+                                            this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
+                                            if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
+                                                this.currentPhotoObjectThumb = null;
+                                                webDocument = webDocument2;
+                                            }
+                                            webDocument = webDocument2;
+                                        }
+                                    }
+                                    z = false;
+                                    this.drawImageButton = z;
+                                    arrayList = messageObject.photoThumbs;
+                                    if (this.drawImageButton) {
+                                        dp = maxPhotoWidth;
+                                    } else {
+                                        dp = AndroidUtilities.getPhotoSize();
+                                    }
+                                    if (this.drawImageButton) {
+                                    }
+                                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
+                                    this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
+                                    if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
+                                        this.currentPhotoObjectThumb = null;
+                                        webDocument = webDocument2;
+                                    }
+                                    webDocument = webDocument2;
+                                }
+                            } else if (!MessageObject.isGifDocument(document)) {
+                                if (!MediaController.getInstance().canAutoplayGifs()) {
+                                    messageObject.gifState = 1.0f;
+                                }
+                                this.photoImage.setAllowStartAnimation(messageObject.gifState != 1.0f);
+                                this.currentPhotoObject = document.thumb;
+                                while (a < document.attributes.size()) {
+                                    attribute = (DocumentAttribute) document.attributes.get(a);
+                                    if (attribute instanceof TL_documentAttributeImageSize) {
+                                    }
+                                    this.currentPhotoObject.w = attribute.w;
+                                    this.currentPhotoObject.h = attribute.h;
+                                }
+                                photoSize = this.currentPhotoObject;
+                                photoSize2 = this.currentPhotoObject;
+                                dp2 = AndroidUtilities.dp(150.0f);
+                                photoSize2.h = dp2;
+                                photoSize.w = dp2;
+                                this.documentAttachType = 2;
+                                webDocument = webDocument2;
+                            } else if (!MessageObject.isVideoDocument(document)) {
+                                this.currentPhotoObject = document.thumb;
+                                for (a = 0; a < document.attributes.size(); a++) {
+                                    attribute = (DocumentAttribute) document.attributes.get(a);
+                                    if (!(attribute instanceof TL_documentAttributeVideo)) {
                                         this.currentPhotoObject.w = attribute.w;
                                         this.currentPhotoObject.h = attribute.h;
-                                    }
-                                    photoSize = this.currentPhotoObject;
-                                    photoSize2 = this.currentPhotoObject;
-                                    dp2 = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp2;
-                                    photoSize.w = dp2;
-                                    this.documentAttachType = 2;
-                                    webDocument2 = webDocument;
-                                } else if (!MessageObject.isVideoDocument(document)) {
-                                    this.currentPhotoObject = document.thumb;
-                                    for (a = 0; a < document.attributes.size(); a++) {
-                                        attribute = (DocumentAttribute) document.attributes.get(a);
-                                        if (!(attribute instanceof TL_documentAttributeVideo)) {
-                                            this.currentPhotoObject.w = attribute.w;
-                                            this.currentPhotoObject.h = attribute.h;
-                                            break;
-                                        }
-                                    }
-                                    photoSize = this.currentPhotoObject;
-                                    photoSize2 = this.currentPhotoObject;
-                                    dp2 = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp2;
-                                    photoSize.w = dp2;
-                                    createDocumentLayout(0, messageObject);
-                                    webDocument2 = webDocument;
-                                } else if (!MessageObject.isStickerDocument(document)) {
-                                    this.currentPhotoObject = document.thumb;
-                                    for (a = 0; a < document.attributes.size(); a++) {
-                                        attribute = (DocumentAttribute) document.attributes.get(a);
-                                        if (!(attribute instanceof TL_documentAttributeImageSize)) {
-                                            this.currentPhotoObject.w = attribute.w;
-                                            this.currentPhotoObject.h = attribute.h;
-                                            break;
-                                        }
-                                    }
-                                    photoSize = this.currentPhotoObject;
-                                    photoSize2 = this.currentPhotoObject;
-                                    dp2 = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp2;
-                                    photoSize.w = dp2;
-                                    this.documentAttach = document;
-                                    this.documentAttachType = 6;
-                                    webDocument2 = webDocument;
-                                } else if (MessageObject.isRoundVideoDocument(document)) {
-                                    calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                    if (!MessageObject.isStickerDocument(document)) {
-                                        if (this.backgroundWidth < AndroidUtilities.dp(20.0f) + maxWidth) {
-                                            this.backgroundWidth = AndroidUtilities.dp(20.0f) + maxWidth;
-                                        }
-                                        if (!MessageObject.isVoiceDocument(document)) {
-                                            createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
-                                            this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
-                                            this.totalHeight += AndroidUtilities.dp(44.0f);
-                                            this.linkPreviewHeight += AndroidUtilities.dp(44.0f);
-                                            calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                            webDocument2 = webDocument;
-                                        } else if (MessageObject.isMusicDocument(document)) {
-                                            createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(168.0f), messageObject);
-                                            this.drawImageButton = true;
-                                            if (this.drawPhotoImage) {
-                                                this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
-                                                this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.dp(14.0f), AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
-                                                this.totalHeight += AndroidUtilities.dp(64.0f);
-                                                this.linkPreviewHeight += AndroidUtilities.dp(50.0f);
-                                                webDocument2 = webDocument;
-                                            } else {
-                                                this.totalHeight += AndroidUtilities.dp(100.0f);
-                                                this.linkPreviewHeight += AndroidUtilities.dp(86.0f);
-                                                this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.dp(86.0f), AndroidUtilities.dp(86.0f));
-                                                webDocument2 = webDocument;
-                                            }
-                                        } else {
-                                            durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
-                                            this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
-                                            this.totalHeight += AndroidUtilities.dp(56.0f);
-                                            this.linkPreviewHeight += AndroidUtilities.dp(56.0f);
-                                            maxWidth -= AndroidUtilities.dp(86.0f);
-                                            maxChildWidth = Math.max(maxChildWidth, (durationWidth + additinalWidth) + AndroidUtilities.dp(94.0f));
-                                            maxChildWidth = (int) Math.max((float) maxChildWidth, (this.songLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
-                                            maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
-                                            calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                            webDocument2 = webDocument;
-                                        }
-                                    }
-                                    webDocument2 = webDocument;
-                                } else {
-                                    this.currentPhotoObject = document.thumb;
-                                    this.documentAttach = document;
-                                    this.documentAttachType = 7;
-                                    webDocument2 = webDocument;
-                                }
-                            } else if (photo == null) {
-                                if (type != null) {
-                                    if (type.equals("photo")) {
-                                        z = true;
-                                        this.drawImageButton = z;
-                                        arrayList = messageObject.photoThumbs;
-                                        if (this.drawImageButton) {
-                                            dp = maxPhotoWidth;
-                                        } else {
-                                            dp = AndroidUtilities.getPhotoSize();
-                                        }
-                                        this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
-                                        this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
-                                        if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
-                                            this.currentPhotoObjectThumb = null;
-                                            webDocument2 = webDocument;
-                                        }
-                                        webDocument2 = webDocument;
+                                        break;
                                     }
                                 }
-                                z = false;
-                                this.drawImageButton = z;
-                                arrayList = messageObject.photoThumbs;
-                                if (this.drawImageButton) {
-                                    dp = maxPhotoWidth;
-                                } else {
-                                    dp = AndroidUtilities.getPhotoSize();
+                                photoSize = this.currentPhotoObject;
+                                photoSize2 = this.currentPhotoObject;
+                                dp2 = AndroidUtilities.dp(150.0f);
+                                photoSize2.h = dp2;
+                                photoSize.w = dp2;
+                                createDocumentLayout(0, messageObject);
+                                webDocument = webDocument2;
+                            } else if (!MessageObject.isStickerDocument(document)) {
+                                this.currentPhotoObject = document.thumb;
+                                for (a = 0; a < document.attributes.size(); a++) {
+                                    attribute = (DocumentAttribute) document.attributes.get(a);
+                                    if (!(attribute instanceof TL_documentAttributeImageSize)) {
+                                        this.currentPhotoObject.w = attribute.w;
+                                        this.currentPhotoObject.h = attribute.h;
+                                        break;
+                                    }
                                 }
-                                if (this.drawImageButton) {
-                                }
-                                this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
-                                this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
-                                if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
-                                    this.currentPhotoObjectThumb = null;
-                                    webDocument2 = webDocument;
-                                }
-                                webDocument2 = webDocument;
+                                photoSize = this.currentPhotoObject;
+                                photoSize2 = this.currentPhotoObject;
+                                dp2 = AndroidUtilities.dp(150.0f);
+                                photoSize2.h = dp2;
+                                photoSize.w = dp2;
+                                this.documentAttach = document;
+                                this.documentAttachType = 6;
+                                webDocument = webDocument2;
+                            } else if (MessageObject.isRoundVideoDocument(document)) {
+                                this.currentPhotoObject = document.thumb;
+                                this.documentAttach = document;
+                                this.documentAttachType = 7;
+                                webDocument = webDocument2;
                             } else {
-                                if (webDocument != null) {
-                                    if (webDocument.mime_type.startsWith("image/")) {
-                                        webDocument2 = null;
-                                    } else {
-                                        webDocument2 = webDocument;
+                                calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
+                                if (!MessageObject.isStickerDocument(document)) {
+                                    if (this.backgroundWidth < AndroidUtilities.dp(20.0f) + maxWidth) {
+                                        this.backgroundWidth = AndroidUtilities.dp(20.0f) + maxWidth;
                                     }
-                                    this.drawImageButton = false;
+                                    if (!MessageObject.isVoiceDocument(document)) {
+                                        createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
+                                        this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
+                                        this.totalHeight += AndroidUtilities.dp(44.0f);
+                                        this.linkPreviewHeight += AndroidUtilities.dp(44.0f);
+                                        calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
+                                        webDocument = webDocument2;
+                                    } else if (MessageObject.isMusicDocument(document)) {
+                                        durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
+                                        this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
+                                        this.totalHeight += AndroidUtilities.dp(56.0f);
+                                        this.linkPreviewHeight += AndroidUtilities.dp(56.0f);
+                                        maxWidth -= AndroidUtilities.dp(86.0f);
+                                        maxChildWidth = Math.max(maxChildWidth, (durationWidth + additinalWidth) + AndroidUtilities.dp(94.0f));
+                                        maxChildWidth = (int) Math.max((float) maxChildWidth, (this.songLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
+                                        maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
+                                        calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
+                                        webDocument = webDocument2;
+                                    } else {
+                                        createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(168.0f), messageObject);
+                                        this.drawImageButton = true;
+                                        if (this.drawPhotoImage) {
+                                            this.totalHeight += AndroidUtilities.dp(100.0f);
+                                            this.linkPreviewHeight += AndroidUtilities.dp(86.0f);
+                                            this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.dp(86.0f), AndroidUtilities.dp(86.0f));
+                                            webDocument = webDocument2;
+                                        } else {
+                                            this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
+                                            this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.dp(14.0f), AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
+                                            this.totalHeight += AndroidUtilities.dp(64.0f);
+                                            this.linkPreviewHeight += AndroidUtilities.dp(50.0f);
+                                            webDocument = webDocument2;
+                                        }
+                                    }
                                 }
-                                webDocument2 = webDocument;
+                                webDocument = webDocument2;
                             }
                             if (this.currentPhotoObject == null) {
                             }
@@ -2483,7 +2502,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         this.currentPhotoObjectThumb.size = -1;
                                     }
                                 } else {
-                                    webDocument2.size = -1;
+                                    webDocument.size = -1;
                                 }
                                 if (!smallImage) {
                                 }
@@ -2502,8 +2521,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.photoImage.setImageCoords(0, 0, width, height);
                                 this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                 this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                                if (webDocument2 == null) {
-                                    this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
+                                if (webDocument == null) {
+                                    this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
                                 } else if (this.documentAttachType != 6) {
                                     this.photoImage.setImage(this.documentAttach, null, this.currentPhotoFilter, null, this.currentPhotoObject == null ? this.currentPhotoObject.location : null, "b1", this.documentAttach.size, "webp", true);
                                 } else if (this.documentAttachType != 4) {
@@ -2558,16 +2577,56 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                     if (this.drawInstantView) {
                                         this.instantWidth = AndroidUtilities.dp(33.0f);
+                                        if (this.drawInstantViewType == 1) {
+                                            str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                        } else if (this.drawInstantViewType == 2) {
+                                            str = LocaleController.getString("InstantView", R.string.InstantView);
+                                        } else {
+                                            str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                        }
                                         mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("InstantView", R.string.InstantView), Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                         this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                         this.totalHeight += AndroidUtilities.dp(46.0f);
-                                        this.instantTextX = (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2) + AndroidUtilities.dp(8.0f);
+                                        this.instantTextX = (this.drawInstantViewType == 0 ? 0 : AndroidUtilities.dp(8.0f)) + (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2);
                                         this.instantTextX += (int) (-this.instantViewLayout.getLineLeft(0));
                                     }
                                     if (this.captionLayout != null) {
                                     }
                                     this.totalHeight += AndroidUtilities.dp(14.0f);
+                                    linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.dp(41.0f);
+                                    this.hasOldCaptionPreview = true;
+                                    this.linkPreviewHeight = 0;
+                                    webPage = this.currentMessageObject.messageOwner.media.webpage;
+                                    this.siteNameLayout = new StaticLayout(webPage.site_name, Theme.chat_replyNamePaint, Math.min((int) Math.ceil((double) Theme.chat_replyNamePaint.measureText(webPage.site_name)), linkPreviewMaxWidth), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    height = this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
+                                    this.linkPreviewHeight += height;
+                                    this.totalHeight += height;
+                                    this.descriptionX = 0;
+                                    if (this.linkPreviewHeight != 0) {
+                                        this.totalHeight += AndroidUtilities.dp(2.0f);
+                                    }
+                                    this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                                    height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
+                                    this.linkPreviewHeight += height;
+                                    this.totalHeight += height;
+                                    for (a = 0; a < this.descriptionLayout.getLineCount(); a++) {
+                                        lineLeft = (int) Math.ceil((double) this.descriptionLayout.getLineLeft(a));
+                                        if (lineLeft != 0) {
+                                            if (this.descriptionX == 0) {
+                                                this.descriptionX = Math.max(this.descriptionX, -lineLeft);
+                                            } else {
+                                                this.descriptionX = -lineLeft;
+                                            }
+                                        }
+                                    }
+                                    this.totalHeight += AndroidUtilities.dp(17.0f);
+                                    if (captionNewLine != 0) {
+                                        this.totalHeight -= AndroidUtilities.dp(14.0f);
+                                        if (captionNewLine == 2) {
+                                            this.captionHeight -= AndroidUtilities.dp(14.0f);
+                                        }
+                                    }
                                     this.botButtons.clear();
                                     if (messageIdChanged) {
                                         this.botButtonsByData.clear();
@@ -2691,16 +2750,58 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                 if (this.drawInstantView) {
                                     this.instantWidth = AndroidUtilities.dp(33.0f);
+                                    if (this.drawInstantViewType == 1) {
+                                        str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                    } else if (this.drawInstantViewType == 2) {
+                                        str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                    } else {
+                                        str = LocaleController.getString("InstantView", R.string.InstantView);
+                                    }
                                     mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("InstantView", R.string.InstantView), Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                     this.totalHeight += AndroidUtilities.dp(46.0f);
-                                    this.instantTextX = (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2) + AndroidUtilities.dp(8.0f);
+                                    if (this.drawInstantViewType == 0) {
+                                    }
+                                    this.instantTextX = (this.drawInstantViewType == 0 ? 0 : AndroidUtilities.dp(8.0f)) + (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2);
                                     this.instantTextX += (int) (-this.instantViewLayout.getLineLeft(0));
                                 }
                                 if (this.captionLayout != null) {
                                 }
                                 this.totalHeight += AndroidUtilities.dp(14.0f);
+                                linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.dp(41.0f);
+                                this.hasOldCaptionPreview = true;
+                                this.linkPreviewHeight = 0;
+                                webPage = this.currentMessageObject.messageOwner.media.webpage;
+                                this.siteNameLayout = new StaticLayout(webPage.site_name, Theme.chat_replyNamePaint, Math.min((int) Math.ceil((double) Theme.chat_replyNamePaint.measureText(webPage.site_name)), linkPreviewMaxWidth), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                height = this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
+                                this.linkPreviewHeight += height;
+                                this.totalHeight += height;
+                                this.descriptionX = 0;
+                                if (this.linkPreviewHeight != 0) {
+                                    this.totalHeight += AndroidUtilities.dp(2.0f);
+                                }
+                                this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                                height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
+                                this.linkPreviewHeight += height;
+                                this.totalHeight += height;
+                                for (a = 0; a < this.descriptionLayout.getLineCount(); a++) {
+                                    lineLeft = (int) Math.ceil((double) this.descriptionLayout.getLineLeft(a));
+                                    if (lineLeft != 0) {
+                                        if (this.descriptionX == 0) {
+                                            this.descriptionX = -lineLeft;
+                                        } else {
+                                            this.descriptionX = Math.max(this.descriptionX, -lineLeft);
+                                        }
+                                    }
+                                }
+                                this.totalHeight += AndroidUtilities.dp(17.0f);
+                                if (captionNewLine != 0) {
+                                    this.totalHeight -= AndroidUtilities.dp(14.0f);
+                                    if (captionNewLine == 2) {
+                                        this.captionHeight -= AndroidUtilities.dp(14.0f);
+                                    }
+                                }
                                 this.botButtons.clear();
                                 if (messageIdChanged) {
                                     this.botButtonsByData.clear();
@@ -2811,7 +2912,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             }
                             maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.dp(12.0f) : 0)) + additinalWidth);
                             if (this.currentPhotoObject == null) {
-                                webDocument2.size = -1;
+                                webDocument.size = -1;
                             } else {
                                 this.currentPhotoObject.size = -1;
                                 if (this.currentPhotoObjectThumb != null) {
@@ -2835,8 +2936,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             this.photoImage.setImageCoords(0, 0, width, height);
                             this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                             this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                            if (webDocument2 == null) {
-                                this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
+                            if (webDocument == null) {
+                                this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
                             } else if (this.documentAttachType != 6) {
                                 if (this.currentPhotoObject == null) {
                                 }
@@ -2895,16 +2996,58 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                 if (this.drawInstantView) {
                                     this.instantWidth = AndroidUtilities.dp(33.0f);
+                                    if (this.drawInstantViewType == 1) {
+                                        str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                    } else if (this.drawInstantViewType == 2) {
+                                        str = LocaleController.getString("InstantView", R.string.InstantView);
+                                    } else {
+                                        str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                    }
                                     mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("InstantView", R.string.InstantView), Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                     this.totalHeight += AndroidUtilities.dp(46.0f);
-                                    this.instantTextX = (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2) + AndroidUtilities.dp(8.0f);
+                                    if (this.drawInstantViewType == 0) {
+                                    }
+                                    this.instantTextX = (this.drawInstantViewType == 0 ? 0 : AndroidUtilities.dp(8.0f)) + (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2);
                                     this.instantTextX += (int) (-this.instantViewLayout.getLineLeft(0));
                                 }
                                 if (this.captionLayout != null) {
                                 }
                                 this.totalHeight += AndroidUtilities.dp(14.0f);
+                                linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.dp(41.0f);
+                                this.hasOldCaptionPreview = true;
+                                this.linkPreviewHeight = 0;
+                                webPage = this.currentMessageObject.messageOwner.media.webpage;
+                                this.siteNameLayout = new StaticLayout(webPage.site_name, Theme.chat_replyNamePaint, Math.min((int) Math.ceil((double) Theme.chat_replyNamePaint.measureText(webPage.site_name)), linkPreviewMaxWidth), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                height = this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
+                                this.linkPreviewHeight += height;
+                                this.totalHeight += height;
+                                this.descriptionX = 0;
+                                if (this.linkPreviewHeight != 0) {
+                                    this.totalHeight += AndroidUtilities.dp(2.0f);
+                                }
+                                this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                                height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
+                                this.linkPreviewHeight += height;
+                                this.totalHeight += height;
+                                for (a = 0; a < this.descriptionLayout.getLineCount(); a++) {
+                                    lineLeft = (int) Math.ceil((double) this.descriptionLayout.getLineLeft(a));
+                                    if (lineLeft != 0) {
+                                        if (this.descriptionX == 0) {
+                                            this.descriptionX = Math.max(this.descriptionX, -lineLeft);
+                                        } else {
+                                            this.descriptionX = -lineLeft;
+                                        }
+                                    }
+                                }
+                                this.totalHeight += AndroidUtilities.dp(17.0f);
+                                if (captionNewLine != 0) {
+                                    this.totalHeight -= AndroidUtilities.dp(14.0f);
+                                    if (captionNewLine == 2) {
+                                        this.captionHeight -= AndroidUtilities.dp(14.0f);
+                                    }
+                                }
                                 this.botButtons.clear();
                                 if (messageIdChanged) {
                                     this.botButtonsByData.clear();
@@ -3028,16 +3171,66 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                             if (this.drawInstantView) {
                                 this.instantWidth = AndroidUtilities.dp(33.0f);
+                                if (this.drawInstantViewType == 1) {
+                                    str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                } else if (this.drawInstantViewType == 2) {
+                                    str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                } else {
+                                    str = LocaleController.getString("InstantView", R.string.InstantView);
+                                }
                                 mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("InstantView", R.string.InstantView), Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                 this.totalHeight += AndroidUtilities.dp(46.0f);
-                                this.instantTextX = (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2) + AndroidUtilities.dp(8.0f);
+                                if (this.drawInstantViewType == 0) {
+                                }
+                                this.instantTextX = (this.drawInstantViewType == 0 ? 0 : AndroidUtilities.dp(8.0f)) + (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2);
                                 this.instantTextX += (int) (-this.instantViewLayout.getLineLeft(0));
                             }
                             if (this.captionLayout != null) {
                             }
                             this.totalHeight += AndroidUtilities.dp(14.0f);
+                            linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.dp(41.0f);
+                            this.hasOldCaptionPreview = true;
+                            this.linkPreviewHeight = 0;
+                            webPage = this.currentMessageObject.messageOwner.media.webpage;
+                            try {
+                                this.siteNameLayout = new StaticLayout(webPage.site_name, Theme.chat_replyNamePaint, Math.min((int) Math.ceil((double) Theme.chat_replyNamePaint.measureText(webPage.site_name)), linkPreviewMaxWidth), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                height = this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
+                                this.linkPreviewHeight += height;
+                                this.totalHeight += height;
+                            } catch (Throwable e222) {
+                                FileLog.e(e222);
+                            }
+                            try {
+                                this.descriptionX = 0;
+                                if (this.linkPreviewHeight != 0) {
+                                    this.totalHeight += AndroidUtilities.dp(2.0f);
+                                }
+                                this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                                height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
+                                this.linkPreviewHeight += height;
+                                this.totalHeight += height;
+                                for (a = 0; a < this.descriptionLayout.getLineCount(); a++) {
+                                    lineLeft = (int) Math.ceil((double) this.descriptionLayout.getLineLeft(a));
+                                    if (lineLeft != 0) {
+                                        if (this.descriptionX == 0) {
+                                            this.descriptionX = -lineLeft;
+                                        } else {
+                                            this.descriptionX = Math.max(this.descriptionX, -lineLeft);
+                                        }
+                                    }
+                                }
+                            } catch (Throwable e2222) {
+                                FileLog.e(e2222);
+                            }
+                            this.totalHeight += AndroidUtilities.dp(17.0f);
+                            if (captionNewLine != 0) {
+                                this.totalHeight -= AndroidUtilities.dp(14.0f);
+                                if (captionNewLine == 2) {
+                                    this.captionHeight -= AndroidUtilities.dp(14.0f);
+                                }
+                            }
                             this.botButtons.clear();
                             if (messageIdChanged) {
                                 this.botButtonsByData.clear();
@@ -3158,8 +3351,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 maxChildWidth = Math.max(maxChildWidth, width + additinalWidth);
                                 maxWebWidth = Math.max(maxWebWidth, width + additinalWidth);
                             } catch (Exception e5) {
-                                e22 = e5;
-                                FileLog.e(e22);
+                                e2222 = e5;
+                                FileLog.e(e2222);
                                 if (description != null) {
                                     this.descriptionX = 0;
                                     this.currentMessageObject.generateLinkDescription();
@@ -3220,15 +3413,15 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 }
                                 if (document == null) {
                                     if (photo == null) {
-                                        if (webDocument != null) {
-                                            if (webDocument.mime_type.startsWith("image/")) {
-                                                webDocument2 = webDocument;
+                                        if (webDocument2 != null) {
+                                            if (webDocument2.mime_type.startsWith("image/")) {
+                                                webDocument = webDocument2;
                                             } else {
-                                                webDocument2 = null;
+                                                webDocument = null;
                                             }
                                             this.drawImageButton = false;
                                         }
-                                        webDocument2 = webDocument;
+                                        webDocument = webDocument2;
                                     } else {
                                         if (type != null) {
                                             if (type.equals("photo")) {
@@ -3246,9 +3439,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                                 if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                                     this.currentPhotoObjectThumb = null;
-                                                    webDocument2 = webDocument;
+                                                    webDocument = webDocument2;
                                                 }
-                                                webDocument2 = webDocument;
+                                                webDocument = webDocument2;
                                             }
                                         }
                                         z = false;
@@ -3265,17 +3458,17 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                         if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                             this.currentPhotoObjectThumb = null;
-                                            webDocument2 = webDocument;
+                                            webDocument = webDocument2;
                                         }
-                                        webDocument2 = webDocument;
+                                        webDocument = webDocument2;
                                     }
                                 } else if (!MessageObject.isGifDocument(document)) {
                                     if (MediaController.getInstance().canAutoplayGifs()) {
                                         messageObject.gifState = 1.0f;
                                     }
-                                    if (messageObject.gifState == 1.0f) {
+                                    if (messageObject.gifState != 1.0f) {
                                     }
-                                    this.photoImage.setAllowStartAnimation(messageObject.gifState == 1.0f);
+                                    this.photoImage.setAllowStartAnimation(messageObject.gifState != 1.0f);
                                     this.currentPhotoObject = document.thumb;
                                     while (a < document.attributes.size()) {
                                         attribute = (DocumentAttribute) document.attributes.get(a);
@@ -3290,7 +3483,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     photoSize2.h = dp2;
                                     photoSize.w = dp2;
                                     this.documentAttachType = 2;
-                                    webDocument2 = webDocument;
+                                    webDocument = webDocument2;
                                 } else if (!MessageObject.isVideoDocument(document)) {
                                     this.currentPhotoObject = document.thumb;
                                     for (a = 0; a < document.attributes.size(); a++) {
@@ -3307,7 +3500,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     photoSize2.h = dp2;
                                     photoSize.w = dp2;
                                     createDocumentLayout(0, messageObject);
-                                    webDocument2 = webDocument;
+                                    webDocument = webDocument2;
                                 } else if (!MessageObject.isStickerDocument(document)) {
                                     this.currentPhotoObject = document.thumb;
                                     for (a = 0; a < document.attributes.size(); a++) {
@@ -3325,7 +3518,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     photoSize.w = dp2;
                                     this.documentAttach = document;
                                     this.documentAttachType = 6;
-                                    webDocument2 = webDocument;
+                                    webDocument = webDocument2;
                                 } else if (MessageObject.isRoundVideoDocument(document)) {
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                     if (MessageObject.isStickerDocument(document)) {
@@ -3338,7 +3531,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             this.totalHeight += AndroidUtilities.dp(44.0f);
                                             this.linkPreviewHeight += AndroidUtilities.dp(44.0f);
                                             calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                            webDocument2 = webDocument;
+                                            webDocument = webDocument2;
                                         } else if (MessageObject.isMusicDocument(document)) {
                                             createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(168.0f), messageObject);
                                             this.drawImageButton = true;
@@ -3347,12 +3540,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.dp(14.0f), AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
                                                 this.totalHeight += AndroidUtilities.dp(64.0f);
                                                 this.linkPreviewHeight += AndroidUtilities.dp(50.0f);
-                                                webDocument2 = webDocument;
+                                                webDocument = webDocument2;
                                             } else {
                                                 this.totalHeight += AndroidUtilities.dp(100.0f);
                                                 this.linkPreviewHeight += AndroidUtilities.dp(86.0f);
                                                 this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.dp(86.0f), AndroidUtilities.dp(86.0f));
-                                                webDocument2 = webDocument;
+                                                webDocument = webDocument2;
                                             }
                                         } else {
                                             durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
@@ -3364,15 +3557,15 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             maxChildWidth = (int) Math.max((float) maxChildWidth, (this.songLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                             maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                             calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                            webDocument2 = webDocument;
+                                            webDocument = webDocument2;
                                         }
                                     }
-                                    webDocument2 = webDocument;
+                                    webDocument = webDocument2;
                                 } else {
                                     this.currentPhotoObject = document.thumb;
                                     this.documentAttach = document;
                                     this.documentAttachType = 7;
-                                    webDocument2 = webDocument;
+                                    webDocument = webDocument2;
                                 }
                                 if (this.currentPhotoObject == null) {
                                 }
@@ -3406,7 +3599,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             this.currentPhotoObjectThumb.size = -1;
                                         }
                                     } else {
-                                        webDocument2.size = -1;
+                                        webDocument.size = -1;
                                     }
                                     if (smallImage) {
                                     }
@@ -3425,8 +3618,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     this.photoImage.setImageCoords(0, 0, width, height);
                                     this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                     this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                                    if (webDocument2 == null) {
-                                        this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
+                                    if (webDocument == null) {
+                                        this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
                                     } else if (this.documentAttachType != 6) {
                                         if (this.currentPhotoObject == null) {
                                         }
@@ -3485,16 +3678,58 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                         if (this.drawInstantView) {
                                             this.instantWidth = AndroidUtilities.dp(33.0f);
+                                            if (this.drawInstantViewType == 1) {
+                                                str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                            } else if (this.drawInstantViewType == 2) {
+                                                str = LocaleController.getString("InstantView", R.string.InstantView);
+                                            } else {
+                                                str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                            }
                                             mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                            this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("InstantView", R.string.InstantView), Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                            this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                             this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                             this.totalHeight += AndroidUtilities.dp(46.0f);
-                                            this.instantTextX = (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2) + AndroidUtilities.dp(8.0f);
+                                            if (this.drawInstantViewType == 0) {
+                                            }
+                                            this.instantTextX = (this.drawInstantViewType == 0 ? 0 : AndroidUtilities.dp(8.0f)) + (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2);
                                             this.instantTextX += (int) (-this.instantViewLayout.getLineLeft(0));
                                         }
                                         if (this.captionLayout != null) {
                                         }
                                         this.totalHeight += AndroidUtilities.dp(14.0f);
+                                        linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.dp(41.0f);
+                                        this.hasOldCaptionPreview = true;
+                                        this.linkPreviewHeight = 0;
+                                        webPage = this.currentMessageObject.messageOwner.media.webpage;
+                                        this.siteNameLayout = new StaticLayout(webPage.site_name, Theme.chat_replyNamePaint, Math.min((int) Math.ceil((double) Theme.chat_replyNamePaint.measureText(webPage.site_name)), linkPreviewMaxWidth), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        height = this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
+                                        this.linkPreviewHeight += height;
+                                        this.totalHeight += height;
+                                        this.descriptionX = 0;
+                                        if (this.linkPreviewHeight != 0) {
+                                            this.totalHeight += AndroidUtilities.dp(2.0f);
+                                        }
+                                        this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                                        height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
+                                        this.linkPreviewHeight += height;
+                                        this.totalHeight += height;
+                                        for (a = 0; a < this.descriptionLayout.getLineCount(); a++) {
+                                            lineLeft = (int) Math.ceil((double) this.descriptionLayout.getLineLeft(a));
+                                            if (lineLeft != 0) {
+                                                if (this.descriptionX == 0) {
+                                                    this.descriptionX = Math.max(this.descriptionX, -lineLeft);
+                                                } else {
+                                                    this.descriptionX = -lineLeft;
+                                                }
+                                            }
+                                        }
+                                        this.totalHeight += AndroidUtilities.dp(17.0f);
+                                        if (captionNewLine != 0) {
+                                            this.totalHeight -= AndroidUtilities.dp(14.0f);
+                                            if (captionNewLine == 2) {
+                                                this.captionHeight -= AndroidUtilities.dp(14.0f);
+                                            }
+                                        }
                                         this.botButtons.clear();
                                         if (messageIdChanged) {
                                             this.botButtonsByData.clear();
@@ -3618,16 +3853,58 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                     if (this.drawInstantView) {
                                         this.instantWidth = AndroidUtilities.dp(33.0f);
+                                        if (this.drawInstantViewType == 1) {
+                                            str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                        } else if (this.drawInstantViewType == 2) {
+                                            str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                        } else {
+                                            str = LocaleController.getString("InstantView", R.string.InstantView);
+                                        }
                                         mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("InstantView", R.string.InstantView), Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                         this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                         this.totalHeight += AndroidUtilities.dp(46.0f);
-                                        this.instantTextX = (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2) + AndroidUtilities.dp(8.0f);
+                                        if (this.drawInstantViewType == 0) {
+                                        }
+                                        this.instantTextX = (this.drawInstantViewType == 0 ? 0 : AndroidUtilities.dp(8.0f)) + (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2);
                                         this.instantTextX += (int) (-this.instantViewLayout.getLineLeft(0));
                                     }
                                     if (this.captionLayout != null) {
                                     }
                                     this.totalHeight += AndroidUtilities.dp(14.0f);
+                                    linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.dp(41.0f);
+                                    this.hasOldCaptionPreview = true;
+                                    this.linkPreviewHeight = 0;
+                                    webPage = this.currentMessageObject.messageOwner.media.webpage;
+                                    this.siteNameLayout = new StaticLayout(webPage.site_name, Theme.chat_replyNamePaint, Math.min((int) Math.ceil((double) Theme.chat_replyNamePaint.measureText(webPage.site_name)), linkPreviewMaxWidth), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    height = this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
+                                    this.linkPreviewHeight += height;
+                                    this.totalHeight += height;
+                                    this.descriptionX = 0;
+                                    if (this.linkPreviewHeight != 0) {
+                                        this.totalHeight += AndroidUtilities.dp(2.0f);
+                                    }
+                                    this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                                    height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
+                                    this.linkPreviewHeight += height;
+                                    this.totalHeight += height;
+                                    for (a = 0; a < this.descriptionLayout.getLineCount(); a++) {
+                                        lineLeft = (int) Math.ceil((double) this.descriptionLayout.getLineLeft(a));
+                                        if (lineLeft != 0) {
+                                            if (this.descriptionX == 0) {
+                                                this.descriptionX = -lineLeft;
+                                            } else {
+                                                this.descriptionX = Math.max(this.descriptionX, -lineLeft);
+                                            }
+                                        }
+                                    }
+                                    this.totalHeight += AndroidUtilities.dp(17.0f);
+                                    if (captionNewLine != 0) {
+                                        this.totalHeight -= AndroidUtilities.dp(14.0f);
+                                        if (captionNewLine == 2) {
+                                            this.captionHeight -= AndroidUtilities.dp(14.0f);
+                                        }
+                                    }
                                     this.botButtons.clear();
                                     if (messageIdChanged) {
                                         this.botButtonsByData.clear();
@@ -3738,7 +4015,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 }
                                 maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.dp(12.0f) : 0)) + additinalWidth);
                                 if (this.currentPhotoObject == null) {
-                                    webDocument2.size = -1;
+                                    webDocument.size = -1;
                                 } else {
                                     this.currentPhotoObject.size = -1;
                                     if (this.currentPhotoObjectThumb != null) {
@@ -3762,8 +4039,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.photoImage.setImageCoords(0, 0, width, height);
                                 this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                 this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                                if (webDocument2 == null) {
-                                    this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
+                                if (webDocument == null) {
+                                    this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
                                 } else if (this.documentAttachType != 6) {
                                     if (this.currentPhotoObject == null) {
                                     }
@@ -3822,16 +4099,58 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                     if (this.drawInstantView) {
                                         this.instantWidth = AndroidUtilities.dp(33.0f);
+                                        if (this.drawInstantViewType == 1) {
+                                            str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                        } else if (this.drawInstantViewType == 2) {
+                                            str = LocaleController.getString("InstantView", R.string.InstantView);
+                                        } else {
+                                            str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                        }
                                         mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("InstantView", R.string.InstantView), Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                         this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                         this.totalHeight += AndroidUtilities.dp(46.0f);
-                                        this.instantTextX = (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2) + AndroidUtilities.dp(8.0f);
+                                        if (this.drawInstantViewType == 0) {
+                                        }
+                                        this.instantTextX = (this.drawInstantViewType == 0 ? 0 : AndroidUtilities.dp(8.0f)) + (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2);
                                         this.instantTextX += (int) (-this.instantViewLayout.getLineLeft(0));
                                     }
                                     if (this.captionLayout != null) {
                                     }
                                     this.totalHeight += AndroidUtilities.dp(14.0f);
+                                    linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.dp(41.0f);
+                                    this.hasOldCaptionPreview = true;
+                                    this.linkPreviewHeight = 0;
+                                    webPage = this.currentMessageObject.messageOwner.media.webpage;
+                                    this.siteNameLayout = new StaticLayout(webPage.site_name, Theme.chat_replyNamePaint, Math.min((int) Math.ceil((double) Theme.chat_replyNamePaint.measureText(webPage.site_name)), linkPreviewMaxWidth), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    height = this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
+                                    this.linkPreviewHeight += height;
+                                    this.totalHeight += height;
+                                    this.descriptionX = 0;
+                                    if (this.linkPreviewHeight != 0) {
+                                        this.totalHeight += AndroidUtilities.dp(2.0f);
+                                    }
+                                    this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                                    height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
+                                    this.linkPreviewHeight += height;
+                                    this.totalHeight += height;
+                                    for (a = 0; a < this.descriptionLayout.getLineCount(); a++) {
+                                        lineLeft = (int) Math.ceil((double) this.descriptionLayout.getLineLeft(a));
+                                        if (lineLeft != 0) {
+                                            if (this.descriptionX == 0) {
+                                                this.descriptionX = Math.max(this.descriptionX, -lineLeft);
+                                            } else {
+                                                this.descriptionX = -lineLeft;
+                                            }
+                                        }
+                                    }
+                                    this.totalHeight += AndroidUtilities.dp(17.0f);
+                                    if (captionNewLine != 0) {
+                                        this.totalHeight -= AndroidUtilities.dp(14.0f);
+                                        if (captionNewLine == 2) {
+                                            this.captionHeight -= AndroidUtilities.dp(14.0f);
+                                        }
+                                    }
                                     this.botButtons.clear();
                                     if (messageIdChanged) {
                                         this.botButtonsByData.clear();
@@ -3955,16 +4274,58 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                 if (this.drawInstantView) {
                                     this.instantWidth = AndroidUtilities.dp(33.0f);
+                                    if (this.drawInstantViewType == 1) {
+                                        str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                    } else if (this.drawInstantViewType == 2) {
+                                        str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                    } else {
+                                        str = LocaleController.getString("InstantView", R.string.InstantView);
+                                    }
                                     mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("InstantView", R.string.InstantView), Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                     this.totalHeight += AndroidUtilities.dp(46.0f);
-                                    this.instantTextX = (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2) + AndroidUtilities.dp(8.0f);
+                                    if (this.drawInstantViewType == 0) {
+                                    }
+                                    this.instantTextX = (this.drawInstantViewType == 0 ? 0 : AndroidUtilities.dp(8.0f)) + (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2);
                                     this.instantTextX += (int) (-this.instantViewLayout.getLineLeft(0));
                                 }
                                 if (this.captionLayout != null) {
                                 }
                                 this.totalHeight += AndroidUtilities.dp(14.0f);
+                                linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.dp(41.0f);
+                                this.hasOldCaptionPreview = true;
+                                this.linkPreviewHeight = 0;
+                                webPage = this.currentMessageObject.messageOwner.media.webpage;
+                                this.siteNameLayout = new StaticLayout(webPage.site_name, Theme.chat_replyNamePaint, Math.min((int) Math.ceil((double) Theme.chat_replyNamePaint.measureText(webPage.site_name)), linkPreviewMaxWidth), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                height = this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
+                                this.linkPreviewHeight += height;
+                                this.totalHeight += height;
+                                this.descriptionX = 0;
+                                if (this.linkPreviewHeight != 0) {
+                                    this.totalHeight += AndroidUtilities.dp(2.0f);
+                                }
+                                this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                                height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
+                                this.linkPreviewHeight += height;
+                                this.totalHeight += height;
+                                for (a = 0; a < this.descriptionLayout.getLineCount(); a++) {
+                                    lineLeft = (int) Math.ceil((double) this.descriptionLayout.getLineLeft(a));
+                                    if (lineLeft != 0) {
+                                        if (this.descriptionX == 0) {
+                                            this.descriptionX = -lineLeft;
+                                        } else {
+                                            this.descriptionX = Math.max(this.descriptionX, -lineLeft);
+                                        }
+                                    }
+                                }
+                                this.totalHeight += AndroidUtilities.dp(17.0f);
+                                if (captionNewLine != 0) {
+                                    this.totalHeight -= AndroidUtilities.dp(14.0f);
+                                    if (captionNewLine == 2) {
+                                        this.captionHeight -= AndroidUtilities.dp(14.0f);
+                                    }
+                                }
                                 this.botButtons.clear();
                                 if (messageIdChanged) {
                                     this.botButtonsByData.clear();
@@ -4056,9 +4417,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 updateButtonState(dataChanged);
                             }
                         } catch (Exception e6) {
-                            e22 = e6;
+                            e2222 = e6;
                             restLinesCount = restLinesCount2;
-                            FileLog.e(e22);
+                            FileLog.e(e2222);
                             if (description != null) {
                                 this.descriptionX = 0;
                                 this.currentMessageObject.generateLinkDescription();
@@ -4080,9 +4441,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     if (lineLeft == 0) {
                                         hasRTL = true;
                                         if (this.descriptionX != 0) {
-                                            this.descriptionX = Math.max(this.descriptionX, -lineLeft);
-                                        } else {
                                             this.descriptionX = -lineLeft;
+                                        } else {
+                                            this.descriptionX = Math.max(this.descriptionX, -lineLeft);
                                         }
                                     }
                                 }
@@ -4093,9 +4454,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     if (lineLeft == 0) {
                                         width = textWidth - lineLeft;
                                     } else if (hasRTL) {
-                                        width = Math.min((int) Math.ceil((double) this.descriptionLayout.getLineWidth(a)), textWidth);
-                                    } else {
                                         width = textWidth;
+                                    } else {
+                                        width = Math.min((int) Math.ceil((double) this.descriptionLayout.getLineWidth(a)), textWidth);
                                     }
                                     width += AndroidUtilities.dp(52.0f);
                                     if (maxWebWidth >= width + additinalWidth) {
@@ -4113,165 +4474,165 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             smallImage = false;
                             this.isSmallImage = false;
                             if (smallImage) {
-                                maxPhotoWidth = linkPreviewMaxWidth;
-                            } else {
                                 maxPhotoWidth = AndroidUtilities.dp(48.0f);
+                            } else {
+                                maxPhotoWidth = linkPreviewMaxWidth;
                             }
                             if (document == null) {
-                                if (photo == null) {
-                                    if (webDocument != null) {
-                                        if (webDocument.mime_type.startsWith("image/")) {
-                                            webDocument2 = webDocument;
-                                        } else {
-                                            webDocument2 = null;
-                                        }
-                                        this.drawImageButton = false;
+                                if (!MessageObject.isGifDocument(document)) {
+                                    if (MediaController.getInstance().canAutoplayGifs()) {
+                                        messageObject.gifState = 1.0f;
                                     }
-                                    webDocument2 = webDocument;
+                                    if (messageObject.gifState != 1.0f) {
+                                    }
+                                    this.photoImage.setAllowStartAnimation(messageObject.gifState != 1.0f);
+                                    this.currentPhotoObject = document.thumb;
+                                    while (a < document.attributes.size()) {
+                                        attribute = (DocumentAttribute) document.attributes.get(a);
+                                        if (attribute instanceof TL_documentAttributeImageSize) {
+                                        }
+                                        this.currentPhotoObject.w = attribute.w;
+                                        this.currentPhotoObject.h = attribute.h;
+                                    }
+                                    photoSize = this.currentPhotoObject;
+                                    photoSize2 = this.currentPhotoObject;
+                                    dp2 = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp2;
+                                    photoSize.w = dp2;
+                                    this.documentAttachType = 2;
+                                    webDocument = webDocument2;
+                                } else if (!MessageObject.isVideoDocument(document)) {
+                                    this.currentPhotoObject = document.thumb;
+                                    for (a = 0; a < document.attributes.size(); a++) {
+                                        attribute = (DocumentAttribute) document.attributes.get(a);
+                                        if (!(attribute instanceof TL_documentAttributeVideo)) {
+                                            this.currentPhotoObject.w = attribute.w;
+                                            this.currentPhotoObject.h = attribute.h;
+                                            break;
+                                        }
+                                    }
+                                    photoSize = this.currentPhotoObject;
+                                    photoSize2 = this.currentPhotoObject;
+                                    dp2 = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp2;
+                                    photoSize.w = dp2;
+                                    createDocumentLayout(0, messageObject);
+                                    webDocument = webDocument2;
+                                } else if (!MessageObject.isStickerDocument(document)) {
+                                    this.currentPhotoObject = document.thumb;
+                                    for (a = 0; a < document.attributes.size(); a++) {
+                                        attribute = (DocumentAttribute) document.attributes.get(a);
+                                        if (!(attribute instanceof TL_documentAttributeImageSize)) {
+                                            this.currentPhotoObject.w = attribute.w;
+                                            this.currentPhotoObject.h = attribute.h;
+                                            break;
+                                        }
+                                    }
+                                    photoSize = this.currentPhotoObject;
+                                    photoSize2 = this.currentPhotoObject;
+                                    dp2 = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp2;
+                                    photoSize.w = dp2;
+                                    this.documentAttach = document;
+                                    this.documentAttachType = 6;
+                                    webDocument = webDocument2;
+                                } else if (MessageObject.isRoundVideoDocument(document)) {
+                                    this.currentPhotoObject = document.thumb;
+                                    this.documentAttach = document;
+                                    this.documentAttachType = 7;
+                                    webDocument = webDocument2;
                                 } else {
-                                    if (type != null) {
-                                        if (type.equals("photo")) {
-                                            z = true;
-                                            this.drawImageButton = z;
-                                            arrayList = messageObject.photoThumbs;
-                                            if (this.drawImageButton) {
-                                                dp = AndroidUtilities.getPhotoSize();
-                                            } else {
-                                                dp = maxPhotoWidth;
-                                            }
-                                            if (this.drawImageButton) {
-                                            }
-                                            this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
-                                            this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
-                                            if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
-                                                this.currentPhotoObjectThumb = null;
-                                                webDocument2 = webDocument;
-                                            }
-                                            webDocument2 = webDocument;
+                                    calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
+                                    if (MessageObject.isStickerDocument(document)) {
+                                        if (this.backgroundWidth < AndroidUtilities.dp(20.0f) + maxWidth) {
+                                            this.backgroundWidth = AndroidUtilities.dp(20.0f) + maxWidth;
                                         }
-                                    }
-                                    z = false;
-                                    this.drawImageButton = z;
-                                    arrayList = messageObject.photoThumbs;
-                                    if (this.drawImageButton) {
-                                        dp = maxPhotoWidth;
-                                    } else {
-                                        dp = AndroidUtilities.getPhotoSize();
-                                    }
-                                    if (this.drawImageButton) {
-                                    }
-                                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
-                                    this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
-                                    if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
-                                        this.currentPhotoObjectThumb = null;
-                                        webDocument2 = webDocument;
-                                    }
-                                    webDocument2 = webDocument;
-                                }
-                            } else if (!MessageObject.isGifDocument(document)) {
-                                if (MediaController.getInstance().canAutoplayGifs()) {
-                                    messageObject.gifState = 1.0f;
-                                }
-                                if (messageObject.gifState == 1.0f) {
-                                }
-                                this.photoImage.setAllowStartAnimation(messageObject.gifState == 1.0f);
-                                this.currentPhotoObject = document.thumb;
-                                while (a < document.attributes.size()) {
-                                    attribute = (DocumentAttribute) document.attributes.get(a);
-                                    if (attribute instanceof TL_documentAttributeImageSize) {
-                                    }
-                                    this.currentPhotoObject.w = attribute.w;
-                                    this.currentPhotoObject.h = attribute.h;
-                                }
-                                photoSize = this.currentPhotoObject;
-                                photoSize2 = this.currentPhotoObject;
-                                dp2 = AndroidUtilities.dp(150.0f);
-                                photoSize2.h = dp2;
-                                photoSize.w = dp2;
-                                this.documentAttachType = 2;
-                                webDocument2 = webDocument;
-                            } else if (!MessageObject.isVideoDocument(document)) {
-                                this.currentPhotoObject = document.thumb;
-                                for (a = 0; a < document.attributes.size(); a++) {
-                                    attribute = (DocumentAttribute) document.attributes.get(a);
-                                    if (!(attribute instanceof TL_documentAttributeVideo)) {
-                                        this.currentPhotoObject.w = attribute.w;
-                                        this.currentPhotoObject.h = attribute.h;
-                                        break;
-                                    }
-                                }
-                                photoSize = this.currentPhotoObject;
-                                photoSize2 = this.currentPhotoObject;
-                                dp2 = AndroidUtilities.dp(150.0f);
-                                photoSize2.h = dp2;
-                                photoSize.w = dp2;
-                                createDocumentLayout(0, messageObject);
-                                webDocument2 = webDocument;
-                            } else if (!MessageObject.isStickerDocument(document)) {
-                                this.currentPhotoObject = document.thumb;
-                                for (a = 0; a < document.attributes.size(); a++) {
-                                    attribute = (DocumentAttribute) document.attributes.get(a);
-                                    if (!(attribute instanceof TL_documentAttributeImageSize)) {
-                                        this.currentPhotoObject.w = attribute.w;
-                                        this.currentPhotoObject.h = attribute.h;
-                                        break;
-                                    }
-                                }
-                                photoSize = this.currentPhotoObject;
-                                photoSize2 = this.currentPhotoObject;
-                                dp2 = AndroidUtilities.dp(150.0f);
-                                photoSize2.h = dp2;
-                                photoSize.w = dp2;
-                                this.documentAttach = document;
-                                this.documentAttachType = 6;
-                                webDocument2 = webDocument;
-                            } else if (MessageObject.isRoundVideoDocument(document)) {
-                                calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                if (MessageObject.isStickerDocument(document)) {
-                                    if (this.backgroundWidth < AndroidUtilities.dp(20.0f) + maxWidth) {
-                                        this.backgroundWidth = AndroidUtilities.dp(20.0f) + maxWidth;
-                                    }
-                                    if (!MessageObject.isVoiceDocument(document)) {
-                                        createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
-                                        this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
-                                        this.totalHeight += AndroidUtilities.dp(44.0f);
-                                        this.linkPreviewHeight += AndroidUtilities.dp(44.0f);
-                                        calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                        webDocument2 = webDocument;
-                                    } else if (MessageObject.isMusicDocument(document)) {
-                                        createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(168.0f), messageObject);
-                                        this.drawImageButton = true;
-                                        if (this.drawPhotoImage) {
+                                        if (!MessageObject.isVoiceDocument(document)) {
+                                            createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
                                             this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
-                                            this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.dp(14.0f), AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
-                                            this.totalHeight += AndroidUtilities.dp(64.0f);
-                                            this.linkPreviewHeight += AndroidUtilities.dp(50.0f);
-                                            webDocument2 = webDocument;
+                                            this.totalHeight += AndroidUtilities.dp(44.0f);
+                                            this.linkPreviewHeight += AndroidUtilities.dp(44.0f);
+                                            calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
+                                            webDocument = webDocument2;
+                                        } else if (MessageObject.isMusicDocument(document)) {
+                                            durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
+                                            this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
+                                            this.totalHeight += AndroidUtilities.dp(56.0f);
+                                            this.linkPreviewHeight += AndroidUtilities.dp(56.0f);
+                                            maxWidth -= AndroidUtilities.dp(86.0f);
+                                            maxChildWidth = Math.max(maxChildWidth, (durationWidth + additinalWidth) + AndroidUtilities.dp(94.0f));
+                                            maxChildWidth = (int) Math.max((float) maxChildWidth, (this.songLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
+                                            maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
+                                            calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
+                                            webDocument = webDocument2;
                                         } else {
-                                            this.totalHeight += AndroidUtilities.dp(100.0f);
-                                            this.linkPreviewHeight += AndroidUtilities.dp(86.0f);
-                                            this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.dp(86.0f), AndroidUtilities.dp(86.0f));
-                                            webDocument2 = webDocument;
+                                            createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(168.0f), messageObject);
+                                            this.drawImageButton = true;
+                                            if (this.drawPhotoImage) {
+                                                this.totalHeight += AndroidUtilities.dp(100.0f);
+                                                this.linkPreviewHeight += AndroidUtilities.dp(86.0f);
+                                                this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.dp(86.0f), AndroidUtilities.dp(86.0f));
+                                                webDocument = webDocument2;
+                                            } else {
+                                                this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
+                                                this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.dp(14.0f), AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
+                                                this.totalHeight += AndroidUtilities.dp(64.0f);
+                                                this.linkPreviewHeight += AndroidUtilities.dp(50.0f);
+                                                webDocument = webDocument2;
+                                            }
                                         }
-                                    } else {
-                                        durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
-                                        this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
-                                        this.totalHeight += AndroidUtilities.dp(56.0f);
-                                        this.linkPreviewHeight += AndroidUtilities.dp(56.0f);
-                                        maxWidth -= AndroidUtilities.dp(86.0f);
-                                        maxChildWidth = Math.max(maxChildWidth, (durationWidth + additinalWidth) + AndroidUtilities.dp(94.0f));
-                                        maxChildWidth = (int) Math.max((float) maxChildWidth, (this.songLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
-                                        maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
-                                        calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                        webDocument2 = webDocument;
+                                    }
+                                    webDocument = webDocument2;
+                                }
+                            } else if (photo == null) {
+                                if (type != null) {
+                                    if (type.equals("photo")) {
+                                        z = true;
+                                        this.drawImageButton = z;
+                                        arrayList = messageObject.photoThumbs;
+                                        if (this.drawImageButton) {
+                                            dp = AndroidUtilities.getPhotoSize();
+                                        } else {
+                                            dp = maxPhotoWidth;
+                                        }
+                                        if (this.drawImageButton) {
+                                        }
+                                        this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
+                                        this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
+                                        if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
+                                            this.currentPhotoObjectThumb = null;
+                                            webDocument = webDocument2;
+                                        }
+                                        webDocument = webDocument2;
                                     }
                                 }
-                                webDocument2 = webDocument;
+                                z = false;
+                                this.drawImageButton = z;
+                                arrayList = messageObject.photoThumbs;
+                                if (this.drawImageButton) {
+                                    dp = maxPhotoWidth;
+                                } else {
+                                    dp = AndroidUtilities.getPhotoSize();
+                                }
+                                if (this.drawImageButton) {
+                                }
+                                this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
+                                this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
+                                if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
+                                    this.currentPhotoObjectThumb = null;
+                                    webDocument = webDocument2;
+                                }
+                                webDocument = webDocument2;
                             } else {
-                                this.currentPhotoObject = document.thumb;
-                                this.documentAttach = document;
-                                this.documentAttachType = 7;
-                                webDocument2 = webDocument;
+                                if (webDocument2 != null) {
+                                    if (webDocument2.mime_type.startsWith("image/")) {
+                                        webDocument = null;
+                                    } else {
+                                        webDocument = webDocument2;
+                                    }
+                                    this.drawImageButton = false;
+                                }
+                                webDocument = webDocument2;
                             }
                             if (this.currentPhotoObject == null) {
                             }
@@ -4305,7 +4666,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         this.currentPhotoObjectThumb.size = -1;
                                     }
                                 } else {
-                                    webDocument2.size = -1;
+                                    webDocument.size = -1;
                                 }
                                 if (smallImage) {
                                 }
@@ -4324,8 +4685,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.photoImage.setImageCoords(0, 0, width, height);
                                 this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                 this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                                if (webDocument2 == null) {
-                                    this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
+                                if (webDocument == null) {
+                                    this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
                                 } else if (this.documentAttachType != 6) {
                                     if (this.currentPhotoObject == null) {
                                     }
@@ -4384,16 +4745,58 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                     if (this.drawInstantView) {
                                         this.instantWidth = AndroidUtilities.dp(33.0f);
+                                        if (this.drawInstantViewType == 1) {
+                                            str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                        } else if (this.drawInstantViewType == 2) {
+                                            str = LocaleController.getString("InstantView", R.string.InstantView);
+                                        } else {
+                                            str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                        }
                                         mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("InstantView", R.string.InstantView), Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                         this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                         this.totalHeight += AndroidUtilities.dp(46.0f);
-                                        this.instantTextX = (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2) + AndroidUtilities.dp(8.0f);
+                                        if (this.drawInstantViewType == 0) {
+                                        }
+                                        this.instantTextX = (this.drawInstantViewType == 0 ? 0 : AndroidUtilities.dp(8.0f)) + (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2);
                                         this.instantTextX += (int) (-this.instantViewLayout.getLineLeft(0));
                                     }
                                     if (this.captionLayout != null) {
                                     }
                                     this.totalHeight += AndroidUtilities.dp(14.0f);
+                                    linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.dp(41.0f);
+                                    this.hasOldCaptionPreview = true;
+                                    this.linkPreviewHeight = 0;
+                                    webPage = this.currentMessageObject.messageOwner.media.webpage;
+                                    this.siteNameLayout = new StaticLayout(webPage.site_name, Theme.chat_replyNamePaint, Math.min((int) Math.ceil((double) Theme.chat_replyNamePaint.measureText(webPage.site_name)), linkPreviewMaxWidth), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    height = this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
+                                    this.linkPreviewHeight += height;
+                                    this.totalHeight += height;
+                                    this.descriptionX = 0;
+                                    if (this.linkPreviewHeight != 0) {
+                                        this.totalHeight += AndroidUtilities.dp(2.0f);
+                                    }
+                                    this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                                    height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
+                                    this.linkPreviewHeight += height;
+                                    this.totalHeight += height;
+                                    for (a = 0; a < this.descriptionLayout.getLineCount(); a++) {
+                                        lineLeft = (int) Math.ceil((double) this.descriptionLayout.getLineLeft(a));
+                                        if (lineLeft != 0) {
+                                            if (this.descriptionX == 0) {
+                                                this.descriptionX = Math.max(this.descriptionX, -lineLeft);
+                                            } else {
+                                                this.descriptionX = -lineLeft;
+                                            }
+                                        }
+                                    }
+                                    this.totalHeight += AndroidUtilities.dp(17.0f);
+                                    if (captionNewLine != 0) {
+                                        this.totalHeight -= AndroidUtilities.dp(14.0f);
+                                        if (captionNewLine == 2) {
+                                            this.captionHeight -= AndroidUtilities.dp(14.0f);
+                                        }
+                                    }
                                     this.botButtons.clear();
                                     if (messageIdChanged) {
                                         this.botButtonsByData.clear();
@@ -4517,16 +4920,58 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                 if (this.drawInstantView) {
                                     this.instantWidth = AndroidUtilities.dp(33.0f);
+                                    if (this.drawInstantViewType == 1) {
+                                        str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                    } else if (this.drawInstantViewType == 2) {
+                                        str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                    } else {
+                                        str = LocaleController.getString("InstantView", R.string.InstantView);
+                                    }
                                     mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("InstantView", R.string.InstantView), Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                     this.totalHeight += AndroidUtilities.dp(46.0f);
-                                    this.instantTextX = (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2) + AndroidUtilities.dp(8.0f);
+                                    if (this.drawInstantViewType == 0) {
+                                    }
+                                    this.instantTextX = (this.drawInstantViewType == 0 ? 0 : AndroidUtilities.dp(8.0f)) + (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2);
                                     this.instantTextX += (int) (-this.instantViewLayout.getLineLeft(0));
                                 }
                                 if (this.captionLayout != null) {
                                 }
                                 this.totalHeight += AndroidUtilities.dp(14.0f);
+                                linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.dp(41.0f);
+                                this.hasOldCaptionPreview = true;
+                                this.linkPreviewHeight = 0;
+                                webPage = this.currentMessageObject.messageOwner.media.webpage;
+                                this.siteNameLayout = new StaticLayout(webPage.site_name, Theme.chat_replyNamePaint, Math.min((int) Math.ceil((double) Theme.chat_replyNamePaint.measureText(webPage.site_name)), linkPreviewMaxWidth), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                height = this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
+                                this.linkPreviewHeight += height;
+                                this.totalHeight += height;
+                                this.descriptionX = 0;
+                                if (this.linkPreviewHeight != 0) {
+                                    this.totalHeight += AndroidUtilities.dp(2.0f);
+                                }
+                                this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                                height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
+                                this.linkPreviewHeight += height;
+                                this.totalHeight += height;
+                                for (a = 0; a < this.descriptionLayout.getLineCount(); a++) {
+                                    lineLeft = (int) Math.ceil((double) this.descriptionLayout.getLineLeft(a));
+                                    if (lineLeft != 0) {
+                                        if (this.descriptionX == 0) {
+                                            this.descriptionX = -lineLeft;
+                                        } else {
+                                            this.descriptionX = Math.max(this.descriptionX, -lineLeft);
+                                        }
+                                    }
+                                }
+                                this.totalHeight += AndroidUtilities.dp(17.0f);
+                                if (captionNewLine != 0) {
+                                    this.totalHeight -= AndroidUtilities.dp(14.0f);
+                                    if (captionNewLine == 2) {
+                                        this.captionHeight -= AndroidUtilities.dp(14.0f);
+                                    }
+                                }
                                 this.botButtons.clear();
                                 if (messageIdChanged) {
                                     this.botButtonsByData.clear();
@@ -4637,7 +5082,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             }
                             maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.dp(12.0f) : 0)) + additinalWidth);
                             if (this.currentPhotoObject == null) {
-                                webDocument2.size = -1;
+                                webDocument.size = -1;
                             } else {
                                 this.currentPhotoObject.size = -1;
                                 if (this.currentPhotoObjectThumb != null) {
@@ -4661,8 +5106,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             this.photoImage.setImageCoords(0, 0, width, height);
                             this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                             this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                            if (webDocument2 == null) {
-                                this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
+                            if (webDocument == null) {
+                                this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
                             } else if (this.documentAttachType != 6) {
                                 if (this.currentPhotoObject == null) {
                                 }
@@ -4721,16 +5166,58 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                 if (this.drawInstantView) {
                                     this.instantWidth = AndroidUtilities.dp(33.0f);
+                                    if (this.drawInstantViewType == 1) {
+                                        str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                    } else if (this.drawInstantViewType == 2) {
+                                        str = LocaleController.getString("InstantView", R.string.InstantView);
+                                    } else {
+                                        str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                    }
                                     mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("InstantView", R.string.InstantView), Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                     this.totalHeight += AndroidUtilities.dp(46.0f);
-                                    this.instantTextX = (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2) + AndroidUtilities.dp(8.0f);
+                                    if (this.drawInstantViewType == 0) {
+                                    }
+                                    this.instantTextX = (this.drawInstantViewType == 0 ? 0 : AndroidUtilities.dp(8.0f)) + (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2);
                                     this.instantTextX += (int) (-this.instantViewLayout.getLineLeft(0));
                                 }
                                 if (this.captionLayout != null) {
                                 }
                                 this.totalHeight += AndroidUtilities.dp(14.0f);
+                                linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.dp(41.0f);
+                                this.hasOldCaptionPreview = true;
+                                this.linkPreviewHeight = 0;
+                                webPage = this.currentMessageObject.messageOwner.media.webpage;
+                                this.siteNameLayout = new StaticLayout(webPage.site_name, Theme.chat_replyNamePaint, Math.min((int) Math.ceil((double) Theme.chat_replyNamePaint.measureText(webPage.site_name)), linkPreviewMaxWidth), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                height = this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
+                                this.linkPreviewHeight += height;
+                                this.totalHeight += height;
+                                this.descriptionX = 0;
+                                if (this.linkPreviewHeight != 0) {
+                                    this.totalHeight += AndroidUtilities.dp(2.0f);
+                                }
+                                this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                                height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
+                                this.linkPreviewHeight += height;
+                                this.totalHeight += height;
+                                for (a = 0; a < this.descriptionLayout.getLineCount(); a++) {
+                                    lineLeft = (int) Math.ceil((double) this.descriptionLayout.getLineLeft(a));
+                                    if (lineLeft != 0) {
+                                        if (this.descriptionX == 0) {
+                                            this.descriptionX = Math.max(this.descriptionX, -lineLeft);
+                                        } else {
+                                            this.descriptionX = -lineLeft;
+                                        }
+                                    }
+                                }
+                                this.totalHeight += AndroidUtilities.dp(17.0f);
+                                if (captionNewLine != 0) {
+                                    this.totalHeight -= AndroidUtilities.dp(14.0f);
+                                    if (captionNewLine == 2) {
+                                        this.captionHeight -= AndroidUtilities.dp(14.0f);
+                                    }
+                                }
                                 this.botButtons.clear();
                                 if (messageIdChanged) {
                                     this.botButtonsByData.clear();
@@ -4854,16 +5341,58 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                             if (this.drawInstantView) {
                                 this.instantWidth = AndroidUtilities.dp(33.0f);
+                                if (this.drawInstantViewType == 1) {
+                                    str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                } else if (this.drawInstantViewType == 2) {
+                                    str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                } else {
+                                    str = LocaleController.getString("InstantView", R.string.InstantView);
+                                }
                                 mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("InstantView", R.string.InstantView), Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                 this.totalHeight += AndroidUtilities.dp(46.0f);
-                                this.instantTextX = (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2) + AndroidUtilities.dp(8.0f);
+                                if (this.drawInstantViewType == 0) {
+                                }
+                                this.instantTextX = (this.drawInstantViewType == 0 ? 0 : AndroidUtilities.dp(8.0f)) + (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2);
                                 this.instantTextX += (int) (-this.instantViewLayout.getLineLeft(0));
                             }
                             if (this.captionLayout != null) {
                             }
                             this.totalHeight += AndroidUtilities.dp(14.0f);
+                            linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.dp(41.0f);
+                            this.hasOldCaptionPreview = true;
+                            this.linkPreviewHeight = 0;
+                            webPage = this.currentMessageObject.messageOwner.media.webpage;
+                            this.siteNameLayout = new StaticLayout(webPage.site_name, Theme.chat_replyNamePaint, Math.min((int) Math.ceil((double) Theme.chat_replyNamePaint.measureText(webPage.site_name)), linkPreviewMaxWidth), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                            height = this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
+                            this.linkPreviewHeight += height;
+                            this.totalHeight += height;
+                            this.descriptionX = 0;
+                            if (this.linkPreviewHeight != 0) {
+                                this.totalHeight += AndroidUtilities.dp(2.0f);
+                            }
+                            this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                            height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
+                            this.linkPreviewHeight += height;
+                            this.totalHeight += height;
+                            for (a = 0; a < this.descriptionLayout.getLineCount(); a++) {
+                                lineLeft = (int) Math.ceil((double) this.descriptionLayout.getLineLeft(a));
+                                if (lineLeft != 0) {
+                                    if (this.descriptionX == 0) {
+                                        this.descriptionX = -lineLeft;
+                                    } else {
+                                        this.descriptionX = Math.max(this.descriptionX, -lineLeft);
+                                    }
+                                }
+                            }
+                            this.totalHeight += AndroidUtilities.dp(17.0f);
+                            if (captionNewLine != 0) {
+                                this.totalHeight -= AndroidUtilities.dp(14.0f);
+                                if (captionNewLine == 2) {
+                                    this.captionHeight -= AndroidUtilities.dp(14.0f);
+                                }
+                            }
                             this.botButtons.clear();
                             if (messageIdChanged) {
                                 this.botButtonsByData.clear();
@@ -5027,9 +5556,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             if (MediaController.getInstance().canAutoplayGifs()) {
                                 messageObject.gifState = 1.0f;
                             }
-                            if (messageObject.gifState == 1.0f) {
+                            if (messageObject.gifState != 1.0f) {
                             }
-                            this.photoImage.setAllowStartAnimation(messageObject.gifState == 1.0f);
+                            this.photoImage.setAllowStartAnimation(messageObject.gifState != 1.0f);
                             this.currentPhotoObject = document.thumb;
                             if (this.currentPhotoObject != null && (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0)) {
                                 for (a = 0; a < document.attributes.size(); a++) {
@@ -5049,7 +5578,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 }
                             }
                             this.documentAttachType = 2;
-                            webDocument2 = webDocument;
+                            webDocument = webDocument2;
                         } else if (!MessageObject.isVideoDocument(document)) {
                             this.currentPhotoObject = document.thumb;
                             if (this.currentPhotoObject != null && (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0)) {
@@ -5070,7 +5599,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 }
                             }
                             createDocumentLayout(0, messageObject);
-                            webDocument2 = webDocument;
+                            webDocument = webDocument2;
                         } else if (!MessageObject.isStickerDocument(document)) {
                             this.currentPhotoObject = document.thumb;
                             if (this.currentPhotoObject != null && (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0)) {
@@ -5092,12 +5621,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             }
                             this.documentAttach = document;
                             this.documentAttachType = 6;
-                            webDocument2 = webDocument;
+                            webDocument = webDocument2;
                         } else if (MessageObject.isRoundVideoDocument(document)) {
                             this.currentPhotoObject = document.thumb;
                             this.documentAttach = document;
                             this.documentAttachType = 7;
-                            webDocument2 = webDocument;
+                            webDocument = webDocument2;
                         } else {
                             calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                             if (MessageObject.isStickerDocument(document)) {
@@ -5110,7 +5639,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     this.totalHeight += AndroidUtilities.dp(44.0f);
                                     this.linkPreviewHeight += AndroidUtilities.dp(44.0f);
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                    webDocument2 = webDocument;
+                                    webDocument = webDocument2;
                                 } else if (MessageObject.isMusicDocument(document)) {
                                     durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
                                     this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
@@ -5125,7 +5654,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                     }
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                    webDocument2 = webDocument;
+                                    webDocument = webDocument2;
                                 } else {
                                     createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(168.0f), messageObject);
                                     this.drawImageButton = true;
@@ -5133,17 +5662,17 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         this.totalHeight += AndroidUtilities.dp(100.0f);
                                         this.linkPreviewHeight += AndroidUtilities.dp(86.0f);
                                         this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.dp(86.0f), AndroidUtilities.dp(86.0f));
-                                        webDocument2 = webDocument;
+                                        webDocument = webDocument2;
                                     } else {
                                         this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
                                         this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.dp(14.0f), AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
                                         this.totalHeight += AndroidUtilities.dp(64.0f);
                                         this.linkPreviewHeight += AndroidUtilities.dp(50.0f);
-                                        webDocument2 = webDocument;
+                                        webDocument = webDocument2;
                                     }
                                 }
                             }
-                            webDocument2 = webDocument;
+                            webDocument = webDocument2;
                         }
                     } else if (photo == null) {
                         if (type != null) {
@@ -5162,9 +5691,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                 if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                     this.currentPhotoObjectThumb = null;
-                                    webDocument2 = webDocument;
+                                    webDocument = webDocument2;
                                 }
-                                webDocument2 = webDocument;
+                                webDocument = webDocument2;
                             }
                         }
                         z = false;
@@ -5181,22 +5710,22 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                         if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                             this.currentPhotoObjectThumb = null;
-                            webDocument2 = webDocument;
+                            webDocument = webDocument2;
                         }
-                        webDocument2 = webDocument;
+                        webDocument = webDocument2;
                     } else {
-                        if (webDocument != null) {
-                            if (webDocument.mime_type.startsWith("image/")) {
-                                webDocument2 = null;
+                        if (webDocument2 != null) {
+                            if (webDocument2.mime_type.startsWith("image/")) {
+                                webDocument = null;
                             } else {
-                                webDocument2 = webDocument;
+                                webDocument = webDocument2;
                             }
                             this.drawImageButton = false;
                         }
-                        webDocument2 = webDocument;
+                        webDocument = webDocument2;
                     }
                     if (!(this.documentAttachType == 5 || this.documentAttachType == 3 || this.documentAttachType == 1)) {
-                        if (this.currentPhotoObject == null || webDocument2 != null) {
+                        if (this.currentPhotoObject == null || webDocument != null) {
                             if (type != null) {
                                 if (type.equals("photo")) {
                                     if (!type.equals("document") || this.documentAttachType == 6) {
@@ -5229,7 +5758,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         this.currentPhotoObjectThumb.size = -1;
                                     }
                                 } else {
-                                    webDocument2.size = -1;
+                                    webDocument.size = -1;
                                 }
                                 if (smallImage || this.documentAttachType == 7) {
                                     height = maxPhotoWidth;
@@ -5260,8 +5789,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.photoImage.setImageCoords(0, 0, width, height);
                                 this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                 this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                                if (webDocument2 == null) {
-                                    this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
+                                if (webDocument == null) {
+                                    this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
                                 } else if (this.documentAttachType != 6) {
                                     if (this.currentPhotoObject == null) {
                                     }
@@ -5343,7 +5872,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             }
                             maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.dp(12.0f) : 0)) + additinalWidth);
                             if (this.currentPhotoObject == null) {
-                                webDocument2.size = -1;
+                                webDocument.size = -1;
                             } else {
                                 this.currentPhotoObject.size = -1;
                                 if (this.currentPhotoObjectThumb != null) {
@@ -5367,8 +5896,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             this.photoImage.setImageCoords(0, 0, width, height);
                             this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                             this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                            if (webDocument2 == null) {
-                                this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
+                            if (webDocument == null) {
+                                this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
                             } else if (this.documentAttachType != 6) {
                                 if (this.currentPhotoObject == null) {
                                 }
@@ -5441,12 +5970,21 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     }
                     if (this.drawInstantView) {
                         this.instantWidth = AndroidUtilities.dp(33.0f);
+                        if (this.drawInstantViewType == 1) {
+                            str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                        } else if (this.drawInstantViewType == 2) {
+                            str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                        } else {
+                            str = LocaleController.getString("InstantView", R.string.InstantView);
+                        }
                         mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("InstantView", R.string.InstantView), Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                         this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                         this.totalHeight += AndroidUtilities.dp(46.0f);
                         if (this.instantViewLayout != null && this.instantViewLayout.getLineCount() > 0) {
-                            this.instantTextX = (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2) + AndroidUtilities.dp(8.0f);
+                            if (this.drawInstantViewType == 0) {
+                            }
+                            this.instantTextX = (this.drawInstantViewType == 0 ? 0 : AndroidUtilities.dp(8.0f)) + (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2);
                             this.instantTextX += (int) (-this.instantViewLayout.getLineLeft(0));
                         }
                     }
@@ -5461,11 +5999,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.drawPhotoImage = false;
                 if (AndroidUtilities.isTablet()) {
                     i = AndroidUtilities.getMinTabletSide();
-                    f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
+                    f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
                     this.backgroundWidth = Math.min(i - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                 } else {
                     i = AndroidUtilities.displaySize.x;
-                    f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
+                    f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
                     this.backgroundWidth = Math.min(i - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                 }
                 this.availableTimeWidth = this.backgroundWidth - AndroidUtilities.dp(31.0f);
@@ -5509,11 +6047,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.photoImage.setRoundRadius(AndroidUtilities.dp(22.0f));
                 if (AndroidUtilities.isTablet()) {
                     i = AndroidUtilities.getMinTabletSide();
-                    f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
+                    f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
                     this.backgroundWidth = Math.min(i - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                 } else {
                     i = AndroidUtilities.displaySize.x;
-                    f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
+                    f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
                     this.backgroundWidth = Math.min(i - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                 }
                 this.availableTimeWidth = this.backgroundWidth - AndroidUtilities.dp(31.0f);
@@ -5568,11 +6106,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
                     i = AndroidUtilities.getMinTabletSide();
-                    f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
+                    f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
                     this.backgroundWidth = Math.min(i - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                 } else {
                     i = AndroidUtilities.displaySize.x;
-                    f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
+                    f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
                     this.backgroundWidth = Math.min(i - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                 }
                 createDocumentLayout(this.backgroundWidth, messageObject);
@@ -5584,11 +6122,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             } else if (messageObject.type == 14) {
                 if (AndroidUtilities.isTablet()) {
                     i = AndroidUtilities.getMinTabletSide();
-                    f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
+                    f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
                     this.backgroundWidth = Math.min(i - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                 } else {
                     i = AndroidUtilities.displaySize.x;
-                    f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
+                    f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
                     this.backgroundWidth = Math.min(i - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                 }
                 createDocumentLayout(this.backgroundWidth, messageObject);
@@ -5619,11 +6157,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 if (messageObject.type == 9) {
                     if (AndroidUtilities.isTablet()) {
                         i = AndroidUtilities.getMinTabletSide();
-                        f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
+                        f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
                         this.backgroundWidth = Math.min(i - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                     } else {
                         i = AndroidUtilities.displaySize.x;
-                        f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
+                        f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
                         this.backgroundWidth = Math.min(i - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                     }
                     if (checkNeedDrawShareButton(messageObject)) {
@@ -5661,11 +6199,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     } else {
                         if (AndroidUtilities.isTablet()) {
                             i = AndroidUtilities.getMinTabletSide();
-                            f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
+                            f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
                             this.backgroundWidth = Math.min(i - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                         } else {
                             i = AndroidUtilities.displaySize.x;
-                            f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
+                            f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
                             this.backgroundWidth = Math.min(i - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                         }
                         if (checkNeedDrawShareButton(messageObject)) {
@@ -5876,10 +6414,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 additionHeight = 0 + (this.captionHeight + AndroidUtilities.dp(9.0f));
                                 if (((float) (photoWidth - AndroidUtilities.dp(8.0f))) - (this.captionLayout.getLineWidth(this.captionLayout.getLineCount() - 1) + this.captionLayout.getLineLeft(this.captionLayout.getLineCount() - 1)) < ((float) timeWidthTotal)) {
                                     additionHeight += AndroidUtilities.dp(14.0f);
+                                    captionNewLine = 1;
                                 }
                             }
-                        } catch (Throwable e222) {
-                            FileLog.e(e222);
+                        } catch (Throwable e22222) {
+                            FileLog.e(e22222);
                         }
                     }
                     String format = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf((int) (((float) w) / AndroidUtilities.density)), Integer.valueOf((int) (((float) h) / AndroidUtilities.density))});
@@ -5990,13 +6529,49 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         if (((float) (width - AndroidUtilities.dp(8.0f))) - (this.captionLayout.getLineWidth(this.captionLayout.getLineCount() - 1) + this.captionLayout.getLineLeft(this.captionLayout.getLineCount() - 1)) < ((float) timeWidthTotal)) {
                             this.totalHeight += AndroidUtilities.dp(14.0f);
                             this.captionHeight += AndroidUtilities.dp(14.0f);
+                            captionNewLine = 2;
                         }
                     }
-                } catch (Throwable e2222) {
-                    FileLog.e(e2222);
+                } catch (Throwable e222222) {
+                    FileLog.e(e222222);
                 }
             } else if (this.widthBeforeNewTimeLine != -1 && this.availableTimeWidth - this.widthBeforeNewTimeLine < this.timeWidth) {
                 this.totalHeight += AndroidUtilities.dp(14.0f);
+            }
+            if (!(this.currentMessageObject.eventId == 0 || this.currentMessageObject.isMediaEmpty() || this.currentMessageObject.messageOwner.media.webpage == null)) {
+                linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.dp(41.0f);
+                this.hasOldCaptionPreview = true;
+                this.linkPreviewHeight = 0;
+                webPage = this.currentMessageObject.messageOwner.media.webpage;
+                this.siteNameLayout = new StaticLayout(webPage.site_name, Theme.chat_replyNamePaint, Math.min((int) Math.ceil((double) Theme.chat_replyNamePaint.measureText(webPage.site_name)), linkPreviewMaxWidth), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                height = this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
+                this.linkPreviewHeight += height;
+                this.totalHeight += height;
+                this.descriptionX = 0;
+                if (this.linkPreviewHeight != 0) {
+                    this.totalHeight += AndroidUtilities.dp(2.0f);
+                }
+                this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
+                this.linkPreviewHeight += height;
+                this.totalHeight += height;
+                for (a = 0; a < this.descriptionLayout.getLineCount(); a++) {
+                    lineLeft = (int) Math.ceil((double) this.descriptionLayout.getLineLeft(a));
+                    if (lineLeft != 0) {
+                        if (this.descriptionX == 0) {
+                            this.descriptionX = -lineLeft;
+                        } else {
+                            this.descriptionX = Math.max(this.descriptionX, -lineLeft);
+                        }
+                    }
+                }
+                this.totalHeight += AndroidUtilities.dp(17.0f);
+                if (captionNewLine != 0) {
+                    this.totalHeight -= AndroidUtilities.dp(14.0f);
+                    if (captionNewLine == 2) {
+                        this.captionHeight -= AndroidUtilities.dp(14.0f);
+                    }
+                }
             }
             this.botButtons.clear();
             if (messageIdChanged) {
@@ -6012,7 +6587,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.widthForButtons = this.backgroundWidth;
                 fullWidth = false;
                 if (messageObject.wantedBotKeyboardWidth > this.widthForButtons) {
-                    f = (this.isChat || !messageObject.isFromUser() || messageObject.isOutOwner()) ? 10.0f : 62.0f;
+                    f = (this.isChat || !messageObject.needDrawAvatar() || messageObject.isOutOwner()) ? 10.0f : 62.0f;
                     maxButtonWidth = -AndroidUtilities.dp(f);
                     if (AndroidUtilities.isTablet()) {
                         maxButtonWidth += AndroidUtilities.getMinTabletSide();
@@ -6129,14 +6704,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     this.timeX = (this.layoutWidth - this.timeWidth) - AndroidUtilities.dp(42.0f);
                 } else {
                     dp = (this.backgroundWidth - AndroidUtilities.dp(4.0f)) - this.timeWidth;
-                    dp2 = (this.isChat && this.currentMessageObject.isFromUser()) ? AndroidUtilities.dp(48.0f) : 0;
+                    dp2 = (this.isChat && this.currentMessageObject.needDrawAvatar()) ? AndroidUtilities.dp(48.0f) : 0;
                     this.timeX = dp2 + dp;
                 }
             } else if (this.currentMessageObject.isOutOwner()) {
                 this.timeX = (this.layoutWidth - this.timeWidth) - AndroidUtilities.dp(38.5f);
             } else {
                 dp = (this.backgroundWidth - AndroidUtilities.dp(9.0f)) - this.timeWidth;
-                if (this.isChat && this.currentMessageObject.isFromUser()) {
+                if (this.isChat && this.currentMessageObject.needDrawAvatar()) {
                     dp2 = AndroidUtilities.dp(48.0f);
                 } else {
                     dp2 = 0;
@@ -6164,7 +6739,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.seekBarX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.dp(57.0f);
                 this.buttonX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.dp(14.0f);
                 this.timeAudioX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.dp(67.0f);
-            } else if (this.isChat && this.currentMessageObject.isFromUser()) {
+            } else if (this.isChat && this.currentMessageObject.needDrawAvatar()) {
                 this.seekBarX = AndroidUtilities.dp(114.0f);
                 this.buttonX = AndroidUtilities.dp(71.0f);
                 this.timeAudioX = AndroidUtilities.dp(124.0f);
@@ -6189,7 +6764,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.seekBarX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.dp(56.0f);
                 this.buttonX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.dp(14.0f);
                 this.timeAudioX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.dp(67.0f);
-            } else if (this.isChat && this.currentMessageObject.isFromUser()) {
+            } else if (this.isChat && this.currentMessageObject.needDrawAvatar()) {
                 this.seekBarX = AndroidUtilities.dp(113.0f);
                 this.buttonX = AndroidUtilities.dp(71.0f);
                 this.timeAudioX = AndroidUtilities.dp(124.0f);
@@ -6211,7 +6786,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         } else if (this.documentAttachType == 1 && !this.drawPhotoImage) {
             if (this.currentMessageObject.isOutOwner()) {
                 this.buttonX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.dp(14.0f);
-            } else if (this.isChat && this.currentMessageObject.isFromUser()) {
+            } else if (this.isChat && this.currentMessageObject.needDrawAvatar()) {
                 this.buttonX = AndroidUtilities.dp(71.0f);
             } else {
                 this.buttonX = AndroidUtilities.dp(23.0f);
@@ -6225,7 +6800,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         } else if (this.currentMessageObject.type == 12) {
             if (this.currentMessageObject.isOutOwner()) {
                 x = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.dp(14.0f);
-            } else if (this.isChat && this.currentMessageObject.isFromUser()) {
+            } else if (this.isChat && this.currentMessageObject.needDrawAvatar()) {
                 x = AndroidUtilities.dp(72.0f);
             } else {
                 x = AndroidUtilities.dp(23.0f);
@@ -6252,7 +6827,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 } else {
                     x = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.dp(6.0f);
                 }
-            } else if (this.isChat && this.currentMessageObject.isFromUser()) {
+            } else if (this.isChat && this.currentMessageObject.needDrawAvatar()) {
                 x = AndroidUtilities.dp(63.0f);
             } else {
                 x = AndroidUtilities.dp(15.0f);
@@ -6268,6 +6843,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     private void drawContent(Canvas canvas) {
         int a;
         int b;
+        int startY;
+        int linkX;
+        int linkPreviewY;
         int i;
         int x;
         int y;
@@ -6340,8 +6918,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 }
             }
             if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
-                int startY;
-                int linkX;
                 int size;
                 if (this.hasGamePreview) {
                     startY = AndroidUtilities.dp(14.0f) + this.namesOffset;
@@ -6353,7 +6929,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     startY = (this.textY + this.currentMessageObject.textHeight) + AndroidUtilities.dp(8.0f);
                     linkX = this.textX + AndroidUtilities.dp(1.0f);
                 }
-                int linkPreviewY = startY;
+                linkPreviewY = startY;
                 int smallImageStartY = 0;
                 if (!this.hasInvoicePreview) {
                     Theme.chat_replyLinePaint.setColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outPreviewLine : Theme.key_chat_inPreviewLine));
@@ -6516,8 +7092,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     }
                     this.rect.set((float) linkX, (float) instantY, (float) (this.instantWidth + linkX), (float) (AndroidUtilities.dp(36.0f) + instantY));
                     canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), backPaint);
-                    setDrawableBounds(instantDrawable, (this.instantTextX + linkX) - AndroidUtilities.dp(15.0f), instantY + AndroidUtilities.dp(11.5f), AndroidUtilities.dp(9.0f), AndroidUtilities.dp(13.0f));
-                    instantDrawable.draw(canvas);
+                    if (this.drawInstantViewType == 0) {
+                        setDrawableBounds(instantDrawable, (this.instantTextX + linkX) - AndroidUtilities.dp(15.0f), instantY + AndroidUtilities.dp(11.5f), AndroidUtilities.dp(9.0f), AndroidUtilities.dp(13.0f));
+                        instantDrawable.draw(canvas);
+                    }
                     if (this.instantViewLayout != null) {
                         canvas.save();
                         canvas.translate((float) (this.instantTextX + linkX), (float) (AndroidUtilities.dp(10.5f) + instantY));
@@ -6744,7 +7322,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             this.forceNotDrawTime = true;
             if (this.currentMessageObject.isOutOwner()) {
                 x = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.dp(16.0f);
-            } else if (this.isChat && this.currentMessageObject.isFromUser()) {
+            } else if (this.isChat && this.currentMessageObject.needDrawAvatar()) {
                 x = AndroidUtilities.dp(74.0f);
             } else {
                 x = AndroidUtilities.dp(25.0f);
@@ -6813,13 +7391,20 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 i2 = (this.photoImage.getImageY() + this.photoImage.getImageHeight()) + AndroidUtilities.dp(6.0f);
                 this.captionY = i2;
                 canvas.translate(f, (float) i2);
+            } else if (this.hasOldCaptionPreview) {
+                i = AndroidUtilities.dp(this.currentMessageObject.isOutOwner() ? 11.0f : 17.0f) + this.backgroundDrawableLeft;
+                this.captionX = i;
+                r4 = (float) i;
+                i = (((this.totalHeight - this.captionHeight) - AndroidUtilities.dp(this.pinnedTop ? 9.0f : 10.0f)) - this.linkPreviewHeight) - AndroidUtilities.dp(17.0f);
+                this.captionY = i;
+                canvas.translate(r4, (float) i);
             } else {
                 i = AndroidUtilities.dp(this.currentMessageObject.isOutOwner() ? 11.0f : 17.0f) + this.backgroundDrawableLeft;
                 this.captionX = i;
-                float f2 = (float) i;
+                r4 = (float) i;
                 i = (this.totalHeight - this.captionHeight) - AndroidUtilities.dp(this.pinnedTop ? 9.0f : 10.0f);
                 this.captionY = i;
-                canvas.translate(f2, (float) i);
+                canvas.translate(r4, (float) i);
             }
             if (this.pressedLink != null) {
                 for (b = 0; b < this.urlPath.size(); b++) {
@@ -6832,6 +7417,41 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 FileLog.e(e2);
             }
             canvas.restore();
+        }
+        if (this.hasOldCaptionPreview) {
+            if (this.currentMessageObject.type == 1 || this.documentAttachType == 4 || this.currentMessageObject.type == 8) {
+                linkX = this.photoImage.getImageX() + AndroidUtilities.dp(5.0f);
+            } else {
+                linkX = this.backgroundDrawableLeft + AndroidUtilities.dp(this.currentMessageObject.isOutOwner() ? 11.0f : 17.0f);
+            }
+            startY = ((this.totalHeight - AndroidUtilities.dp(this.pinnedTop ? 9.0f : 10.0f)) - this.linkPreviewHeight) - AndroidUtilities.dp(8.0f);
+            linkPreviewY = startY;
+            Theme.chat_replyLinePaint.setColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outPreviewLine : Theme.key_chat_inPreviewLine));
+            canvas.drawRect((float) linkX, (float) (linkPreviewY - AndroidUtilities.dp(3.0f)), (float) (AndroidUtilities.dp(2.0f) + linkX), (float) (this.linkPreviewHeight + linkPreviewY), Theme.chat_replyLinePaint);
+            if (this.siteNameLayout != null) {
+                Theme.chat_replyNamePaint.setColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outSiteNameText : Theme.key_chat_inSiteNameText));
+                canvas.save();
+                canvas.translate((float) ((this.hasInvoicePreview ? 0 : AndroidUtilities.dp(10.0f)) + linkX), (float) (linkPreviewY - AndroidUtilities.dp(3.0f)));
+                this.siteNameLayout.draw(canvas);
+                canvas.restore();
+                linkPreviewY += this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
+            }
+            if (this.currentMessageObject.isOutOwner()) {
+                Theme.chat_replyTextPaint.setColor(Theme.getColor(Theme.key_chat_messageTextOut));
+            } else {
+                Theme.chat_replyTextPaint.setColor(Theme.getColor(Theme.key_chat_messageTextIn));
+            }
+            if (this.descriptionLayout != null) {
+                if (linkPreviewY != startY) {
+                    linkPreviewY += AndroidUtilities.dp(2.0f);
+                }
+                this.descriptionY = linkPreviewY - AndroidUtilities.dp(3.0f);
+                canvas.save();
+                canvas.translate((float) ((AndroidUtilities.dp(10.0f) + linkX) + this.descriptionX), (float) this.descriptionY);
+                this.descriptionLayout.draw(canvas);
+                canvas.restore();
+            }
+            this.drawTime = true;
         }
         if (this.documentAttachType == 1) {
             int titleY;
@@ -7082,12 +7702,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         if (this.documentAttachType == 6 || this.currentMessageObject.type == 5) {
             int maxWidth;
             if (AndroidUtilities.isTablet()) {
-                if (this.isChat && !this.currentMessageObject.isOutOwner() && this.currentMessageObject.isFromUser()) {
+                if (this.isChat && !this.currentMessageObject.isOutOwner() && this.currentMessageObject.needDrawAvatar()) {
                     maxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(42.0f);
                 } else {
                     maxWidth = AndroidUtilities.getMinTabletSide();
                 }
-            } else if (this.isChat && !this.currentMessageObject.isOutOwner() && this.currentMessageObject.isFromUser()) {
+            } else if (this.isChat && !this.currentMessageObject.isOutOwner() && this.currentMessageObject.needDrawAvatar()) {
                 maxWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(42.0f);
             } else {
                 maxWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y);
@@ -7297,17 +7917,17 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     } else {
                         fileLocation = null;
                     }
-                    imageReceiver.setImage(tLObject, str, fileLocation, this.currentPhotoFilter, this.currentPhotoObject.size, null, false);
+                    imageReceiver.setImage(tLObject, str, fileLocation, this.currentPhotoFilterThumb, this.currentPhotoObject.size, null, false);
                 } else if (this.currentMessageObject.type == 8) {
                     this.currentMessageObject.gifState = 2.0f;
-                    this.photoImage.setImage(this.currentMessageObject.messageOwner.media.document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilter, this.currentMessageObject.messageOwner.media.document.size, null, false);
+                    this.photoImage.setImage(this.currentMessageObject.messageOwner.media.document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, this.currentMessageObject.messageOwner.media.document.size, null, false);
                 } else if (this.currentMessageObject.isRoundVideo()) {
                     if (this.currentMessageObject.isSecretMedia()) {
                         FileLoader.getInstance().loadFile(this.currentMessageObject.getDocument(), true, true);
                     } else {
                         this.currentMessageObject.gifState = 2.0f;
                         Document document = this.currentMessageObject.getDocument();
-                        this.photoImage.setImage(document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilter, document.size, null, false);
+                        this.photoImage.setImage(document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, document.size, null, false);
                     }
                 } else if (this.currentMessageObject.type == 9) {
                     FileLoader.getInstance().loadFile(this.currentMessageObject.messageOwner.media.document, false, false);
@@ -7316,7 +7936,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 } else if (this.currentMessageObject.type != 0 || this.documentAttachType == 0) {
                     this.photoImage.setImage(this.currentPhotoObject.location, this.currentPhotoFilter, this.currentPhotoObjectThumb != null ? this.currentPhotoObjectThumb.location : null, this.currentPhotoFilterThumb, 0, null, false);
                 } else if (this.documentAttachType == 2) {
-                    this.photoImage.setImage(this.currentMessageObject.messageOwner.media.webpage.document, null, this.currentPhotoObject.location, this.currentPhotoFilter, this.currentMessageObject.messageOwner.media.webpage.document.size, null, false);
+                    this.photoImage.setImage(this.currentMessageObject.messageOwner.media.webpage.document, null, this.currentPhotoObject.location, this.currentPhotoFilterThumb, this.currentMessageObject.messageOwner.media.webpage.document.size, null, false);
                     this.currentMessageObject.gifState = 2.0f;
                 } else if (this.documentAttachType == 1) {
                     FileLoader.getInstance().loadFile(this.currentMessageObject.messageOwner.media.webpage.document, false, false);
@@ -7510,6 +8130,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     }
 
     private boolean checkNeedDrawShareButton(MessageObject messageObject) {
+        if (messageObject.eventId != 0) {
+            return false;
+        }
         if (messageObject.type == 13) {
             return false;
         }
@@ -7561,7 +8184,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         } else if (this.currentMessageObject.messageOwner.post) {
             this.currentChat = MessagesController.getInstance().getChat(Integer.valueOf(this.currentMessageObject.messageOwner.to_id.channel_id));
         }
-        if (this.isChat && !messageObject.isOutOwner() && messageObject.isFromUser()) {
+        if (this.isChat && !messageObject.isOutOwner() && messageObject.needDrawAvatar()) {
             this.isAvatarVisible = true;
             if (this.currentUser != null) {
                 if (this.currentUser.photo != null) {
@@ -7923,7 +8546,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         this.currentBackgroundDrawable = Theme.chat_msgInDrawable;
                         currentBackgroundShadowDrawable = Theme.chat_msgInShadowDrawable;
                     }
-                    i = (this.isChat && this.currentMessageObject.isFromUser()) ? 48 : 0;
+                    i = (this.isChat && this.isAvatarVisible) ? 48 : 0;
                     this.backgroundDrawableLeft = AndroidUtilities.dp((float) (i + (!this.mediaBackground ? 3 : 9)));
                     backgroundRight = this.backgroundWidth - (this.mediaBackground ? 0 : AndroidUtilities.dp(3.0f));
                     backgroundLeft = this.backgroundDrawableLeft;
@@ -7992,10 +8615,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         }
                         if (this.currentUser != null) {
                             Theme.chat_namePaint.setColor(AvatarDrawable.getNameColorForId(this.currentUser.id));
-                        } else if (this.currentChat != null) {
+                        } else if (this.currentChat == null) {
+                            Theme.chat_namePaint.setColor(AvatarDrawable.getNameColorForId(0));
+                        } else if (!ChatObject.isChannel(this.currentChat) || this.currentChat.megagroup) {
                             Theme.chat_namePaint.setColor(AvatarDrawable.getNameColorForId(this.currentChat.id));
                         } else {
-                            Theme.chat_namePaint.setColor(AvatarDrawable.getNameColorForId(0));
+                            Theme.chat_namePaint.setColor(AvatarDrawable.getNameColorForId(5));
                         }
                         if (this.pinnedTop) {
                             f = 9.0f;

@@ -392,9 +392,8 @@ public class RenderView extends TextureView {
     private void updateTransform() {
         float scale;
         Matrix matrix = new Matrix();
-        int width = getWidth();
         if (this.painting != null) {
-            scale = ((float) width) / this.painting.getSize().width;
+            scale = ((float) getWidth()) / this.painting.getSize().width;
         } else {
             scale = 1.0f;
         }

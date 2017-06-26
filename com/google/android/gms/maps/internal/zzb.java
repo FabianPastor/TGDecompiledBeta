@@ -1,91 +1,122 @@
 package com.google.android.gms.maps.internal;
 
-import android.os.Binder;
 import android.os.IBinder;
-import android.os.IInterface;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.os.RemoteException;
+import com.google.android.gms.dynamic.IObjectWrapper;
+import com.google.android.gms.dynamic.IObjectWrapper.zza;
+import com.google.android.gms.internal.zzed;
+import com.google.android.gms.internal.zzef;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
-public interface zzb extends IInterface {
-
-    public static abstract class zza extends Binder implements zzb {
-
-        private static class zza implements zzb {
-            private IBinder zzrk;
-
-            zza(IBinder iBinder) {
-                this.zzrk = iBinder;
-            }
-
-            public IBinder asBinder() {
-                return this.zzrk;
-            }
-
-            public void onCancel() throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.maps.internal.ICancelableCallback");
-                    this.zzrk.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public void onFinish() throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.maps.internal.ICancelableCallback");
-                    this.zzrk.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-        }
-
-        public zza() {
-            attachInterface(this, "com.google.android.gms.maps.internal.ICancelableCallback");
-        }
-
-        public static zzb zzds(IBinder iBinder) {
-            if (iBinder == null) {
-                return null;
-            }
-            IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.maps.internal.ICancelableCallback");
-            return (queryLocalInterface == null || !(queryLocalInterface instanceof zzb)) ? new zza(iBinder) : (zzb) queryLocalInterface;
-        }
-
-        public IBinder asBinder() {
-            return this;
-        }
-
-        public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-            switch (i) {
-                case 1:
-                    parcel.enforceInterface("com.google.android.gms.maps.internal.ICancelableCallback");
-                    onFinish();
-                    parcel2.writeNoException();
-                    return true;
-                case 2:
-                    parcel.enforceInterface("com.google.android.gms.maps.internal.ICancelableCallback");
-                    onCancel();
-                    parcel2.writeNoException();
-                    return true;
-                case 1598968902:
-                    parcel2.writeString("com.google.android.gms.maps.internal.ICancelableCallback");
-                    return true;
-                default:
-                    return super.onTransact(i, parcel, parcel2, i2);
-            }
-        }
+public final class zzb extends zzed implements ICameraUpdateFactoryDelegate {
+    zzb(IBinder iBinder) {
+        super(iBinder, "com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate");
     }
 
-    void onCancel() throws RemoteException;
+    public final IObjectWrapper newCameraPosition(CameraPosition cameraPosition) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) cameraPosition);
+        zzZ = zza(7, zzZ);
+        IObjectWrapper zzM = zza.zzM(zzZ.readStrongBinder());
+        zzZ.recycle();
+        return zzM;
+    }
 
-    void onFinish() throws RemoteException;
+    public final IObjectWrapper newLatLng(LatLng latLng) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) latLng);
+        zzZ = zza(8, zzZ);
+        IObjectWrapper zzM = zza.zzM(zzZ.readStrongBinder());
+        zzZ.recycle();
+        return zzM;
+    }
+
+    public final IObjectWrapper newLatLngBounds(LatLngBounds latLngBounds, int i) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) latLngBounds);
+        zzZ.writeInt(i);
+        zzZ = zza(10, zzZ);
+        IObjectWrapper zzM = zza.zzM(zzZ.readStrongBinder());
+        zzZ.recycle();
+        return zzM;
+    }
+
+    public final IObjectWrapper newLatLngBoundsWithSize(LatLngBounds latLngBounds, int i, int i2, int i3) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) latLngBounds);
+        zzZ.writeInt(i);
+        zzZ.writeInt(i2);
+        zzZ.writeInt(i3);
+        zzZ = zza(11, zzZ);
+        IObjectWrapper zzM = zza.zzM(zzZ.readStrongBinder());
+        zzZ.recycle();
+        return zzM;
+    }
+
+    public final IObjectWrapper newLatLngZoom(LatLng latLng, float f) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) latLng);
+        zzZ.writeFloat(f);
+        zzZ = zza(9, zzZ);
+        IObjectWrapper zzM = zza.zzM(zzZ.readStrongBinder());
+        zzZ.recycle();
+        return zzM;
+    }
+
+    public final IObjectWrapper scrollBy(float f, float f2) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzZ.writeFloat(f);
+        zzZ.writeFloat(f2);
+        zzZ = zza(3, zzZ);
+        IObjectWrapper zzM = zza.zzM(zzZ.readStrongBinder());
+        zzZ.recycle();
+        return zzM;
+    }
+
+    public final IObjectWrapper zoomBy(float f) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzZ.writeFloat(f);
+        zzZ = zza(5, zzZ);
+        IObjectWrapper zzM = zza.zzM(zzZ.readStrongBinder());
+        zzZ.recycle();
+        return zzM;
+    }
+
+    public final IObjectWrapper zoomByWithFocus(float f, int i, int i2) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzZ.writeFloat(f);
+        zzZ.writeInt(i);
+        zzZ.writeInt(i2);
+        zzZ = zza(6, zzZ);
+        IObjectWrapper zzM = zza.zzM(zzZ.readStrongBinder());
+        zzZ.recycle();
+        return zzM;
+    }
+
+    public final IObjectWrapper zoomIn() throws RemoteException {
+        Parcel zza = zza(1, zzZ());
+        IObjectWrapper zzM = zza.zzM(zza.readStrongBinder());
+        zza.recycle();
+        return zzM;
+    }
+
+    public final IObjectWrapper zoomOut() throws RemoteException {
+        Parcel zza = zza(2, zzZ());
+        IObjectWrapper zzM = zza.zzM(zza.readStrongBinder());
+        zza.recycle();
+        return zzM;
+    }
+
+    public final IObjectWrapper zoomTo(float f) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzZ.writeFloat(f);
+        zzZ = zza(4, zzZ);
+        IObjectWrapper zzM = zza.zzM(zzZ.readStrongBinder());
+        zzZ.recycle();
+        return zzM;
+    }
 }

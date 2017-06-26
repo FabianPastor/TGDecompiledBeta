@@ -129,7 +129,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                         this.dialogs.add(dialog);
                     } else {
                         Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
-                        if (!(chat == null || ChatObject.isNotInChat(chat) || (ChatObject.isChannel(chat) && !chat.creator && !chat.editor && !chat.megagroup))) {
+                        if (!(chat == null || ChatObject.isNotInChat(chat) || (ChatObject.isChannel(chat) && !chat.creator && ((chat.admin_rights == null || !chat.admin_rights.post_messages) && !chat.megagroup)))) {
                             this.dialogs.add(dialog);
                         }
                     }
@@ -312,7 +312,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                                             Chat chat = Chat.TLdeserialize(data, data.readInt32(false), false);
                                             data.reuse();
                                             if (!(chat == null || ChatObject.isNotInChat(chat))) {
-                                                if (!ChatObject.isChannel(chat) || chat.creator || chat.editor || chat.megagroup) {
+                                                if (!ChatObject.isChannel(chat) || chat.creator || ((chat.admin_rights != null && chat.admin_rights.post_messages) || chat.megagroup)) {
                                                     dialogSearchResult = (DialogSearchResult) dialogsResult.get(Long.valueOf(-((long) chat.id)));
                                                     dialogSearchResult.name = AndroidUtilities.generateSearchName(chat.title, null, q);
                                                     dialogSearchResult.object = chat;

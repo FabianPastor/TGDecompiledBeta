@@ -5,7 +5,7 @@ public final class SquareCap extends Cap {
         super(1);
     }
 
-    public String toString() {
+    public final String toString() {
         return "[SquareCap]";
     }
 }

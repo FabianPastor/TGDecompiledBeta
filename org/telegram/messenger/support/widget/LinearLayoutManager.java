@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 import java.util.List;
+import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager.LayoutPrefetchRegistry;
@@ -1299,7 +1300,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
                     return Integer.MIN_VALUE;
                 }
                 return -1;
-            case 66:
+            case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*66*/:
                 if (this.mOrientation != 0) {
                     i2 = Integer.MIN_VALUE;
                 }

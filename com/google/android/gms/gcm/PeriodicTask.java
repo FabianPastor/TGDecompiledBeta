@@ -5,33 +5,17 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 
 public class PeriodicTask extends Task {
-    public static final Creator<PeriodicTask> CREATOR = new Creator<PeriodicTask>() {
-        public /* synthetic */ Object createFromParcel(Parcel parcel) {
-            return zzgo(parcel);
-        }
-
-        public /* synthetic */ Object[] newArray(int i) {
-            return zzjG(i);
-        }
-
-        public PeriodicTask zzgo(Parcel parcel) {
-            return new PeriodicTask(parcel);
-        }
-
-        public PeriodicTask[] zzjG(int i) {
-            return new PeriodicTask[i];
-        }
-    };
+    public static final Creator<PeriodicTask> CREATOR = new zzh();
     protected long mFlexInSeconds;
     protected long mIntervalInSeconds;
 
     public static class Builder extends com.google.android.gms.gcm.Task.Builder {
-        private long zzbgQ;
-        private long zzbgR;
+        private long zzbfZ;
+        private long zzbga;
 
         public Builder() {
-            this.zzbgQ = -1;
-            this.zzbgR = -1;
+            this.zzbfZ = -1;
+            this.zzbga = -1;
             this.isPersisted = true;
         }
 
@@ -42,14 +26,14 @@ public class PeriodicTask extends Task {
 
         protected void checkConditions() {
             super.checkConditions();
-            if (this.zzbgQ == -1) {
+            if (this.zzbfZ == -1) {
                 throw new IllegalArgumentException("Must call setPeriod(long) to establish an execution interval for this periodic task.");
-            } else if (this.zzbgQ <= 0) {
-                throw new IllegalArgumentException("Period set cannot be less than or equal to 0: " + this.zzbgQ);
-            } else if (this.zzbgR == -1) {
-                this.zzbgR = (long) (((float) this.zzbgQ) * 0.1f);
-            } else if (this.zzbgR > this.zzbgQ) {
-                this.zzbgR = this.zzbgQ;
+            } else if (this.zzbfZ <= 0) {
+                throw new IllegalArgumentException("Period set cannot be less than or equal to 0: " + this.zzbfZ);
+            } else if (this.zzbga == -1) {
+                this.zzbga = (long) (((float) this.zzbfZ) * 0.1f);
+            } else if (this.zzbga > this.zzbfZ) {
+                this.zzbga = this.zzbfZ;
             }
         }
 
@@ -59,12 +43,12 @@ public class PeriodicTask extends Task {
         }
 
         public Builder setFlex(long j) {
-            this.zzbgR = j;
+            this.zzbga = j;
             return this;
         }
 
         public Builder setPeriod(long j) {
-            this.zzbgQ = j;
+            this.zzbfZ = j;
             return this;
         }
 
@@ -112,8 +96,8 @@ public class PeriodicTask extends Task {
         super((com.google.android.gms.gcm.Task.Builder) builder);
         this.mIntervalInSeconds = -1;
         this.mFlexInSeconds = -1;
-        this.mIntervalInSeconds = builder.zzbgQ;
-        this.mFlexInSeconds = Math.min(builder.zzbgR, this.mIntervalInSeconds);
+        this.mIntervalInSeconds = builder.zzbfZ;
+        this.mFlexInSeconds = Math.min(builder.zzbga, this.mIntervalInSeconds);
     }
 
     public long getFlex() {

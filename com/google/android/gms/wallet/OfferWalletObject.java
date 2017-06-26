@@ -3,42 +3,47 @@ package com.google.android.gms.wallet;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 import com.google.android.gms.wallet.wobs.CommonWalletObject;
 
 public final class OfferWalletObject extends zza {
-    public static final Creator<OfferWalletObject> CREATOR = new zzq();
-    private final int zzaiI;
-    CommonWalletObject zzbQj;
-    String zzbRm;
-    String zzkl;
+    public static final Creator<OfferWalletObject> CREATOR = new zzv();
+    private final int zzaku;
+    private CommonWalletObject zzbOB;
+    private String zzbPF;
 
     OfferWalletObject() {
-        this.zzaiI = 3;
+        this.zzaku = 3;
     }
 
     OfferWalletObject(int i, String str, String str2, CommonWalletObject commonWalletObject) {
-        this.zzaiI = i;
-        this.zzbRm = str2;
+        this.zzaku = i;
+        this.zzbPF = str2;
         if (i < 3) {
-            this.zzbQj = CommonWalletObject.zzUb().zzim(str).zzUc();
+            this.zzbOB = CommonWalletObject.zzDT().zzgi(str).zzDU();
         } else {
-            this.zzbQj = commonWalletObject;
+            this.zzbOB = commonWalletObject;
         }
     }
 
-    public String getId() {
-        return this.zzbQj.getId();
+    public final String getId() {
+        return this.zzbOB.getId();
     }
 
-    public String getRedemptionCode() {
-        return this.zzbRm;
+    public final String getRedemptionCode() {
+        return this.zzbPF;
     }
 
-    public int getVersionCode() {
-        return this.zzaiI;
+    public final int getVersionCode() {
+        return this.zzaku;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzq.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zzc(parcel, 1, getVersionCode());
+        zzd.zza(parcel, 2, null, false);
+        zzd.zza(parcel, 3, this.zzbPF, false);
+        zzd.zza(parcel, 4, this.zzbOB, i, false);
+        zzd.zzI(parcel, zze);
     }
 }

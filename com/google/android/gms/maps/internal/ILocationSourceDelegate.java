@@ -1,92 +1,46 @@
 package com.google.android.gms.maps.internal;
 
-import android.os.Binder;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
+import com.google.android.gms.internal.zzee;
 
 public interface ILocationSourceDelegate extends IInterface {
 
-    public static abstract class zza extends Binder implements ILocationSourceDelegate {
-
-        private static class zza implements ILocationSourceDelegate {
-            private IBinder zzrk;
-
-            zza(IBinder iBinder) {
-                this.zzrk = iBinder;
-            }
-
-            public void activate(zzp com_google_android_gms_maps_internal_zzp) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.maps.internal.ILocationSourceDelegate");
-                    obtain.writeStrongBinder(com_google_android_gms_maps_internal_zzp != null ? com_google_android_gms_maps_internal_zzp.asBinder() : null);
-                    this.zzrk.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public IBinder asBinder() {
-                return this.zzrk;
-            }
-
-            public void deactivate() throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.maps.internal.ILocationSourceDelegate");
-                    this.zzrk.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-        }
-
+    public static abstract class zza extends zzee implements ILocationSourceDelegate {
         public zza() {
             attachInterface(this, "com.google.android.gms.maps.internal.ILocationSourceDelegate");
         }
 
-        public static ILocationSourceDelegate zzdw(IBinder iBinder) {
-            if (iBinder == null) {
-                return null;
-            }
-            IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.maps.internal.ILocationSourceDelegate");
-            return (queryLocalInterface == null || !(queryLocalInterface instanceof ILocationSourceDelegate)) ? new zza(iBinder) : (ILocationSourceDelegate) queryLocalInterface;
-        }
-
-        public IBinder asBinder() {
-            return this;
-        }
-
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
+            if (zza(i, parcel, parcel2, i2)) {
+                return true;
+            }
             switch (i) {
                 case 1:
-                    parcel.enforceInterface("com.google.android.gms.maps.internal.ILocationSourceDelegate");
-                    activate(com.google.android.gms.maps.internal.zzp.zza.zzdK(parcel.readStrongBinder()));
-                    parcel2.writeNoException();
-                    return true;
+                    zzah com_google_android_gms_maps_internal_zzah;
+                    IBinder readStrongBinder = parcel.readStrongBinder();
+                    if (readStrongBinder == null) {
+                        com_google_android_gms_maps_internal_zzah = null;
+                    } else {
+                        IInterface queryLocalInterface = readStrongBinder.queryLocalInterface("com.google.android.gms.maps.internal.IOnLocationChangeListener");
+                        com_google_android_gms_maps_internal_zzah = queryLocalInterface instanceof zzah ? (zzah) queryLocalInterface : new zzai(readStrongBinder);
+                    }
+                    activate(com_google_android_gms_maps_internal_zzah);
+                    break;
                 case 2:
-                    parcel.enforceInterface("com.google.android.gms.maps.internal.ILocationSourceDelegate");
                     deactivate();
-                    parcel2.writeNoException();
-                    return true;
-                case 1598968902:
-                    parcel2.writeString("com.google.android.gms.maps.internal.ILocationSourceDelegate");
-                    return true;
+                    break;
                 default:
-                    return super.onTransact(i, parcel, parcel2, i2);
+                    return false;
             }
+            parcel2.writeNoException();
+            return true;
         }
     }
 
-    void activate(zzp com_google_android_gms_maps_internal_zzp) throws RemoteException;
+    void activate(zzah com_google_android_gms_maps_internal_zzah) throws RemoteException;
 
     void deactivate() throws RemoteException;
 }

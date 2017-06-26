@@ -4,71 +4,63 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.os.Build;
-import com.google.android.gms.common.zzg;
 
 public final class zzj {
-    private static Boolean zzaHZ;
-    private static Boolean zzaIa;
-    private static Boolean zzaIb;
-    private static Boolean zzaIc;
-    private static Boolean zzaId;
+    private static Boolean zzaJJ;
+    private static Boolean zzaJK;
+    private static Boolean zzaJL;
+    private static Boolean zzaJM;
+    private static Boolean zzaJN;
 
-    @TargetApi(20)
-    public static boolean zzaZ(Context context) {
-        if (zzaIb == null) {
-            boolean z = zzt.zzzm() && context.getPackageManager().hasSystemFeature("android.hardware.type.watch");
-            zzaIb = Boolean.valueOf(z);
-        }
-        return zzaIb.booleanValue();
-    }
-
-    public static boolean zzb(Resources resources) {
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static boolean zza(Resources resources) {
         boolean z = false;
         if (resources == null) {
             return false;
         }
-        if (zzaHZ == null) {
-            if (((resources.getConfiguration().screenLayout & 15) > 3) || zzc(resources)) {
-                z = true;
+        if (zzaJJ == null) {
+            if (!((resources.getConfiguration().screenLayout & 15) > 3)) {
+                if (zzaJK == null) {
+                    Configuration configuration = resources.getConfiguration();
+                    boolean z2 = (configuration.screenLayout & 15) <= 3 && configuration.smallestScreenWidthDp >= 600;
+                    zzaJK = Boolean.valueOf(z2);
+                }
             }
-            zzaHZ = Boolean.valueOf(z);
+            z = true;
+            zzaJJ = Boolean.valueOf(z);
         }
-        return zzaHZ.booleanValue();
+        return zzaJJ.booleanValue();
+    }
+
+    @TargetApi(20)
+    public static boolean zzaG(Context context) {
+        if (zzaJL == null) {
+            boolean z = zzq.zzsd() && context.getPackageManager().hasSystemFeature("android.hardware.type.watch");
+            zzaJL = Boolean.valueOf(z);
+        }
+        return zzaJL.booleanValue();
     }
 
     @TargetApi(24)
-    public static boolean zzba(Context context) {
-        return (!zzt.isAtLeastN() || zzbb(context)) && zzaZ(context);
+    public static boolean zzaH(Context context) {
+        return (!zzq.isAtLeastN() || zzaI(context)) && zzaG(context);
     }
 
     @TargetApi(21)
-    public static boolean zzbb(Context context) {
-        if (zzaIc == null) {
-            boolean z = zzt.zzzo() && context.getPackageManager().hasSystemFeature("cn.google");
-            zzaIc = Boolean.valueOf(z);
+    public static boolean zzaI(Context context) {
+        if (zzaJM == null) {
+            boolean z = zzq.zzse() && context.getPackageManager().hasSystemFeature("cn.google");
+            zzaJM = Boolean.valueOf(z);
         }
-        return zzaIc.booleanValue();
+        return zzaJM.booleanValue();
     }
 
-    public static boolean zzbc(Context context) {
-        if (zzaId == null) {
-            zzaId = Boolean.valueOf(context.getPackageManager().hasSystemFeature("android.hardware.type.iot"));
+    public static boolean zzaJ(Context context) {
+        if (zzaJN == null) {
+            boolean z = context.getPackageManager().hasSystemFeature("android.hardware.type.iot") || context.getPackageManager().hasSystemFeature("android.hardware.type.embedded");
+            zzaJN = Boolean.valueOf(z);
         }
-        return zzaId.booleanValue();
-    }
-
-    private static boolean zzc(Resources resources) {
-        if (zzaIa == null) {
-            Configuration configuration = resources.getConfiguration();
-            boolean z = (configuration.screenLayout & 15) <= 3 && configuration.smallestScreenWidthDp >= 600;
-            zzaIa = Boolean.valueOf(z);
-        }
-        return zzaIa.booleanValue();
-    }
-
-    public static boolean zzzd() {
-        boolean z = zzg.zzayx;
-        return "user".equals(Build.TYPE);
+        return zzaJN.booleanValue();
     }
 }

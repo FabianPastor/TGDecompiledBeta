@@ -1,20 +1,15 @@
 package com.google.android.gms.common.util;
 
-import com.google.android.gms.common.internal.zzaa;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public final class zzb {
-    public static <T> int indexOf(T[] tArr, T t) {
-        int i = 0;
-        int length = tArr != null ? tArr.length : 0;
-        while (i < length) {
-            if (zzaa.equal(tArr[i], t)) {
-                return i;
-            }
-            i++;
+    public static <T> ArrayList<T> zza(T[] tArr) {
+        ArrayList<T> arrayList = new ArrayList(r1);
+        for (Object add : tArr) {
+            arrayList.add(add);
         }
-        return -1;
+        return arrayList;
     }
 
     public static void zza(StringBuilder stringBuilder, double[] dArr) {
@@ -34,16 +29,6 @@ public final class zzb {
                 stringBuilder.append(",");
             }
             stringBuilder.append(Float.toString(fArr[i]));
-        }
-    }
-
-    public static void zza(StringBuilder stringBuilder, int[] iArr) {
-        int length = iArr.length;
-        for (int i = 0; i < length; i++) {
-            if (i != 0) {
-                stringBuilder.append(",");
-            }
-            stringBuilder.append(Integer.toString(iArr[i]));
         }
     }
 
@@ -87,10 +72,6 @@ public final class zzb {
         }
     }
 
-    public static <T> boolean zza(T[] tArr, T t) {
-        return indexOf(tArr, t) >= 0;
-    }
-
     public static byte[] zza(byte[]... bArr) {
         if (bArr.length == 0) {
             return new byte[0];
@@ -120,17 +101,5 @@ public final class zzb {
             numArr[i] = Integer.valueOf(iArr[i]);
         }
         return numArr;
-    }
-
-    public static <T> ArrayList<T> zzb(T[] tArr) {
-        ArrayList<T> arrayList = new ArrayList(r1);
-        for (Object add : tArr) {
-            arrayList.add(add);
-        }
-        return arrayList;
-    }
-
-    public static <T> ArrayList<T> zzyY() {
-        return new ArrayList();
     }
 }

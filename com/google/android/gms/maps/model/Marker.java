@@ -3,263 +3,263 @@ package com.google.android.gms.maps.model;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.dynamic.zzd;
-import com.google.android.gms.maps.model.internal.zzf;
+import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.dynamic.zzn;
+import com.google.android.gms.maps.model.internal.zzp;
 
 public final class Marker {
-    private final zzf zzbpA;
+    private final zzp zzbnD;
 
-    public Marker(zzf com_google_android_gms_maps_model_internal_zzf) {
-        this.zzbpA = (zzf) zzac.zzw(com_google_android_gms_maps_model_internal_zzf);
+    public Marker(zzp com_google_android_gms_maps_model_internal_zzp) {
+        this.zzbnD = (zzp) zzbo.zzu(com_google_android_gms_maps_model_internal_zzp);
     }
 
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         if (!(obj instanceof Marker)) {
             return false;
         }
         try {
-            return this.zzbpA.zzj(((Marker) obj).zzbpA);
+            return this.zzbnD.zzj(((Marker) obj).zzbnD);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public float getAlpha() {
+    public final float getAlpha() {
         try {
-            return this.zzbpA.getAlpha();
+            return this.zzbnD.getAlpha();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public String getId() {
+    public final String getId() {
         try {
-            return this.zzbpA.getId();
+            return this.zzbnD.getId();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public LatLng getPosition() {
+    public final LatLng getPosition() {
         try {
-            return this.zzbpA.getPosition();
+            return this.zzbnD.getPosition();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public float getRotation() {
+    public final float getRotation() {
         try {
-            return this.zzbpA.getRotation();
+            return this.zzbnD.getRotation();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public String getSnippet() {
+    public final String getSnippet() {
         try {
-            return this.zzbpA.getSnippet();
+            return this.zzbnD.getSnippet();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
     @Nullable
-    public Object getTag() {
+    public final Object getTag() {
         try {
-            return zzd.zzF(this.zzbpA.getTag());
+            return zzn.zzE(this.zzbnD.getTag());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public String getTitle() {
+    public final String getTitle() {
         try {
-            return this.zzbpA.getTitle();
+            return this.zzbnD.getTitle();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public float getZIndex() {
+    public final float getZIndex() {
         try {
-            return this.zzbpA.getZIndex();
+            return this.zzbnD.getZIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public int hashCode() {
+    public final int hashCode() {
         try {
-            return this.zzbpA.hashCodeRemote();
+            return this.zzbnD.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void hideInfoWindow() {
+    public final void hideInfoWindow() {
         try {
-            this.zzbpA.hideInfoWindow();
+            this.zzbnD.hideInfoWindow();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isDraggable() {
+    public final boolean isDraggable() {
         try {
-            return this.zzbpA.isDraggable();
+            return this.zzbnD.isDraggable();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isFlat() {
+    public final boolean isFlat() {
         try {
-            return this.zzbpA.isFlat();
+            return this.zzbnD.isFlat();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isInfoWindowShown() {
+    public final boolean isInfoWindowShown() {
         try {
-            return this.zzbpA.isInfoWindowShown();
+            return this.zzbnD.isInfoWindowShown();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isVisible() {
+    public final boolean isVisible() {
         try {
-            return this.zzbpA.isVisible();
+            return this.zzbnD.isVisible();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void remove() {
+    public final void remove() {
         try {
-            this.zzbpA.remove();
+            this.zzbnD.remove();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setAlpha(float f) {
+    public final void setAlpha(float f) {
         try {
-            this.zzbpA.setAlpha(f);
+            this.zzbnD.setAlpha(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setAnchor(float f, float f2) {
+    public final void setAnchor(float f, float f2) {
         try {
-            this.zzbpA.setAnchor(f, f2);
+            this.zzbnD.setAnchor(f, f2);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setDraggable(boolean z) {
+    public final void setDraggable(boolean z) {
         try {
-            this.zzbpA.setDraggable(z);
+            this.zzbnD.setDraggable(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setFlat(boolean z) {
+    public final void setFlat(boolean z) {
         try {
-            this.zzbpA.setFlat(z);
+            this.zzbnD.setFlat(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setIcon(@Nullable BitmapDescriptor bitmapDescriptor) {
+    public final void setIcon(@Nullable BitmapDescriptor bitmapDescriptor) {
         if (bitmapDescriptor == null) {
             try {
-                this.zzbpA.zzM(null);
+                this.zzbnD.zzK(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbpA.zzM(bitmapDescriptor.zzJm());
+        this.zzbnD.zzK(bitmapDescriptor.zzwe());
     }
 
-    public void setInfoWindowAnchor(float f, float f2) {
+    public final void setInfoWindowAnchor(float f, float f2) {
         try {
-            this.zzbpA.setInfoWindowAnchor(f, f2);
+            this.zzbnD.setInfoWindowAnchor(f, f2);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setPosition(@NonNull LatLng latLng) {
+    public final void setPosition(@NonNull LatLng latLng) {
         if (latLng == null) {
             throw new IllegalArgumentException("latlng cannot be null - a position is required.");
         }
         try {
-            this.zzbpA.setPosition(latLng);
+            this.zzbnD.setPosition(latLng);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setRotation(float f) {
+    public final void setRotation(float f) {
         try {
-            this.zzbpA.setRotation(f);
+            this.zzbnD.setRotation(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setSnippet(@Nullable String str) {
+    public final void setSnippet(@Nullable String str) {
         try {
-            this.zzbpA.setSnippet(str);
+            this.zzbnD.setSnippet(str);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setTag(@Nullable Object obj) {
+    public final void setTag(@Nullable Object obj) {
         try {
-            this.zzbpA.setTag(zzd.zzA(obj));
+            this.zzbnD.setTag(zzn.zzw(obj));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setTitle(@Nullable String str) {
+    public final void setTitle(@Nullable String str) {
         try {
-            this.zzbpA.setTitle(str);
+            this.zzbnD.setTitle(str);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setVisible(boolean z) {
+    public final void setVisible(boolean z) {
         try {
-            this.zzbpA.setVisible(z);
+            this.zzbnD.setVisible(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setZIndex(float f) {
+    public final void setZIndex(float f) {
         try {
-            this.zzbpA.setZIndex(f);
+            this.zzbnD.setZIndex(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void showInfoWindow() {
+    public final void showInfoWindow() {
         try {
-            this.zzbpA.showInfoWindow();
+            this.zzbnD.showInfoWindow();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

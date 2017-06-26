@@ -5,21 +5,35 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
+import android.os.AsyncTask;
 import android.os.Build.VERSION;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.text.TextUtils;
+import android.util.Base64;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.aspectj.lang.JoinPoint;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -30,6 +44,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.tgnet.TLRPC.TL_config;
 import org.telegram.tgnet.TLRPC.TL_error;
@@ -38,7 +53,8 @@ import org.telegram.tgnet.TLRPC.Updates;
 public class ConnectionsManager {
     public static final int ConnectionStateConnected = 3;
     public static final int ConnectionStateConnecting = 1;
-    public static final int ConnectionStateUpdating = 4;
+    public static final int ConnectionStateConnectingToProxy = 4;
+    public static final int ConnectionStateUpdating = 5;
     public static final int ConnectionStateWaitingForNetwork = 2;
     public static final int ConnectionTypeDownload = 2;
     public static final int ConnectionTypeDownload2 = 65538;
@@ -59,6 +75,8 @@ public class ConnectionsManager {
     public static final int RequestFlagNeedQuickAck = 128;
     public static final int RequestFlagTryDifferentDc = 16;
     public static final int RequestFlagWithoutLogin = 8;
+    private static AsyncTask currentTask;
+    private static final int dnsConfigVersion = 0;
     private boolean appPaused = true;
     private int appResumeCount;
     private int connectionState = native_getConnectionState();
@@ -68,7 +86,168 @@ public class ConnectionsManager {
     private AtomicInteger lastRequestToken = new AtomicInteger(1);
     private WakeLock wakeLock;
 
+    private static class DnsLoadTask extends AsyncTask<Void, Void, NativeByteBuffer> {
+        private DnsLoadTask() {
+        }
+
+        protected NativeByteBuffer doInBackground(Void... voids) {
+            ByteArrayOutputStream outbuf;
+            byte[] bytes;
+            NativeByteBuffer buffer;
+            try {
+                URL downloadUrl;
+                if (ConnectionsManager.native_isTestBackend() != 0) {
+                    downloadUrl = new URL("https://google.com/test/");
+                } else {
+                    downloadUrl = new URL("https://google.com");
+                }
+                URLConnection httpConnection = downloadUrl.openConnection();
+                httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1");
+                httpConnection.addRequestProperty("Host", String.format(Locale.US, "dns-telegram%1$s.appspot.com", new Object[]{""}));
+                httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+                httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+                httpConnection.connect();
+                InputStream httpConnectionStream = httpConnection.getInputStream();
+                outbuf = new ByteArrayOutputStream();
+                byte[] data = new byte[32768];
+                while (!isCancelled()) {
+                    int read = httpConnectionStream.read(data);
+                    if (read > 0) {
+                        outbuf.write(data, 0, read);
+                    } else {
+                        if (read == -1) {
+                        }
+                        if (httpConnectionStream != null) {
+                            httpConnectionStream.close();
+                        }
+                        bytes = Base64.decode(outbuf.toByteArray(), 0);
+                        buffer = new NativeByteBuffer(bytes.length);
+                        buffer.writeBytes(bytes);
+                        return buffer;
+                    }
+                }
+                if (httpConnectionStream != null) {
+                    httpConnectionStream.close();
+                }
+            } catch (Throwable e) {
+                FileLog.e(e);
+                return null;
+            }
+            bytes = Base64.decode(outbuf.toByteArray(), 0);
+            buffer = new NativeByteBuffer(bytes.length);
+            buffer.writeBytes(bytes);
+            return buffer;
+        }
+
+        protected void onPostExecute(NativeByteBuffer result) {
+            if (result != null) {
+                ConnectionsManager.currentTask = null;
+                ConnectionsManager.native_applyDnsConfig(result.address);
+                return;
+            }
+            DnsTxtLoadTask task = new DnsTxtLoadTask();
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+            ConnectionsManager.currentTask = task;
+        }
+    }
+
+    private static class DnsTxtLoadTask extends AsyncTask<Void, Void, NativeByteBuffer> {
+        private DnsTxtLoadTask() {
+        }
+
+        protected NativeByteBuffer doInBackground(Void... voids) {
+            ByteArrayOutputStream outbuf;
+            JSONArray array;
+            int len;
+            ArrayList<String> arrayList;
+            int a;
+            StringBuilder builder;
+            byte[] bytes;
+            NativeByteBuffer buffer;
+            try {
+                URLConnection httpConnection = new URL("https://google.com/resolve?name=" + String.format(Locale.US, ConnectionsManager.native_isTestBackend() != 0 ? "tap%1$s.stel.com" : "ap%1$s.stel.com", new Object[]{""}) + "&type=16").openConnection();
+                httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1");
+                httpConnection.addRequestProperty("Host", "dns.google.com");
+                httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+                httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+                httpConnection.connect();
+                InputStream httpConnectionStream = httpConnection.getInputStream();
+                outbuf = new ByteArrayOutputStream();
+                byte[] data = new byte[32768];
+                while (!isCancelled()) {
+                    int read = httpConnectionStream.read(data);
+                    if (read > 0) {
+                        outbuf.write(data, 0, read);
+                    } else {
+                        if (read == -1) {
+                        }
+                        if (httpConnectionStream != null) {
+                            httpConnectionStream.close();
+                        }
+                        array = new JSONObject(new String(outbuf.toByteArray(), "UTF-8")).getJSONArray("Answer");
+                        len = array.length();
+                        arrayList = new ArrayList(len);
+                        for (a = 0; a < len; a++) {
+                            arrayList.add(array.getJSONObject(a).getString("data"));
+                        }
+                        Collections.sort(arrayList, new Comparator<String>() {
+                            public int compare(String o1, String o2) {
+                                int l1 = o1.length();
+                                int l2 = o2.length();
+                                if (l1 > l2) {
+                                    return -1;
+                                }
+                                if (l1 < l2) {
+                                    return 1;
+                                }
+                                return 0;
+                            }
+                        });
+                        builder = new StringBuilder();
+                        for (a = 0; a < arrayList.size(); a++) {
+                            builder.append(((String) arrayList.get(a)).replace("\"", ""));
+                        }
+                        bytes = Base64.decode(builder.toString(), 0);
+                        buffer = new NativeByteBuffer(bytes.length);
+                        buffer.writeBytes(bytes);
+                        return buffer;
+                    }
+                }
+                if (httpConnectionStream != null) {
+                    httpConnectionStream.close();
+                }
+            } catch (Throwable e) {
+                FileLog.e(e);
+                return null;
+            }
+            array = new JSONObject(new String(outbuf.toByteArray(), "UTF-8")).getJSONArray("Answer");
+            len = array.length();
+            arrayList = new ArrayList(len);
+            for (a = 0; a < len; a++) {
+                arrayList.add(array.getJSONObject(a).getString("data"));
+            }
+            Collections.sort(arrayList, /* anonymous class already generated */);
+            builder = new StringBuilder();
+            for (a = 0; a < arrayList.size(); a++) {
+                builder.append(((String) arrayList.get(a)).replace("\"", ""));
+            }
+            bytes = Base64.decode(builder.toString(), 0);
+            buffer = new NativeByteBuffer(bytes.length);
+            buffer.writeBytes(bytes);
+            return buffer;
+        }
+
+        protected void onPostExecute(NativeByteBuffer result) {
+            if (result != null) {
+                ConnectionsManager.native_applyDnsConfig(result.address);
+            }
+            ConnectionsManager.currentTask = null;
+        }
+    }
+
     public static native void native_applyDatacenterAddress(int i, String str, int i2);
+
+    public static native void native_applyDnsConfig(int i);
 
     public static native void native_bindRequestToGuid(int i, int i2);
 
@@ -88,6 +267,8 @@ public class ConnectionsManager {
 
     public static native void native_init(int i, int i2, int i3, String str, String str2, String str3, String str4, String str5, String str6, String str7, int i4, boolean z, boolean z2, int i5);
 
+    public static native int native_isTestBackend();
+
     public static native void native_pauseNetwork();
 
     public static native void native_resumeNetwork(boolean z);
@@ -99,6 +280,8 @@ public class ConnectionsManager {
     public static native void native_setLangCode(String str);
 
     public static native void native_setNetworkAvailable(boolean z, int i);
+
+    public static native void native_setProxySettings(String str, int i, String str2, String str3);
 
     public static native void native_setPushConnectionEnabled(boolean z);
 
@@ -265,7 +448,7 @@ public class ConnectionsManager {
 
     public int getConnectionState() {
         if (this.connectionState == 3 && this.isUpdating) {
-            return 4;
+            return 5;
         }
         return this.connectionState;
     }
@@ -283,8 +466,16 @@ public class ConnectionsManager {
         native_setPushConnectionEnabled(value);
     }
 
-    public void init(int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String configPath, String logPath, int userId, boolean enablePushConnection) {
-        native_init(version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, "android", configPath, logPath, userId, enablePushConnection, isNetworkOnline(), getCurrentNetworkType());
+    public void init(int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, int userId, boolean enablePushConnection) {
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+        String proxyAddress = preferences.getString("proxy_ip", "");
+        String proxyUsername = preferences.getString("proxy_user", "");
+        String proxyPassword = preferences.getString("proxy_pass", "");
+        int proxyPort = preferences.getInt("proxy_port", 1080);
+        if (preferences.getBoolean("proxy_enabled", false) && !TextUtils.isEmpty(proxyAddress)) {
+            native_setProxySettings(proxyAddress, proxyPort, proxyUsername, proxyPassword);
+        }
+        native_init(version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, userId, enablePushConnection, isNetworkOnline(), getCurrentNetworkType());
         checkConnection();
         ApplicationLoader.applicationContext.registerReceiver(new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
@@ -419,6 +610,20 @@ public class ConnectionsManager {
             StatsController.getInstance().incrementSentBytesCount(networkType, 6, (long) amount);
         } catch (Throwable e) {
             FileLog.e(e);
+        }
+    }
+
+    public static void onRequestNewServerIpAndPort(int second) {
+        if (currentTask == null) {
+            if (second == 1) {
+                DnsTxtLoadTask task = new DnsTxtLoadTask();
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                currentTask = task;
+                return;
+            }
+            DnsLoadTask task2 = new DnsLoadTask();
+            task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+            currentTask = task2;
         }
     }
 

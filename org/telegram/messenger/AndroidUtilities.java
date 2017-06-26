@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
@@ -1684,6 +1685,10 @@ Error: java.util.NoSuchElementException
         }
     }
 
+    public static boolean isBannedForever(int time) {
+        return Math.abs(((long) time) - (System.currentTimeMillis() / 1000)) > 157680000;
+    }
+
     public static void setRectToRect(Matrix matrix, RectF src, RectF dst, int rotation, ScaleToFit align) {
         float sx;
         float sy;
@@ -1716,5 +1721,102 @@ Error: java.util.NoSuchElementException
         }
         matrix.preScale(sx, sy);
         matrix.preTranslate(tx, ty);
+    }
+
+    public static boolean handleProxyIntent(Activity activity, Intent intent) {
+        if (intent == null) {
+            return false;
+        }
+        try {
+            if ((intent.getFlags() & 1048576) != 0) {
+                return false;
+            }
+            Uri data = intent.getData();
+            if (data == null) {
+                return false;
+            }
+            String user = null;
+            String password = null;
+            String port = null;
+            String address = null;
+            String scheme = data.getScheme();
+            if (scheme != null) {
+                if (scheme.equals("http") || scheme.equals("https")) {
+                    String host = data.getHost().toLowerCase();
+                    if (host.equals("telegram.me") || host.equals("t.me") || host.equals("telegram.dog") || host.equals("telesco.pe")) {
+                        String path = data.getPath();
+                        if (path != null && path.startsWith("/socks")) {
+                            address = data.getQueryParameter("server");
+                            port = data.getQueryParameter("port");
+                            user = data.getQueryParameter("user");
+                            password = data.getQueryParameter("pass");
+                        }
+                    }
+                } else if (scheme.equals("tg")) {
+                    String url = data.toString();
+                    if (url.startsWith("tg:socks") || url.startsWith("tg://socks")) {
+                        data = Uri.parse(url.replace("tg:proxy", "tg://telegram.org").replace("tg://proxy", "tg://telegram.org"));
+                        address = data.getQueryParameter("server");
+                        port = data.getQueryParameter("port");
+                        user = data.getQueryParameter("user");
+                        password = data.getQueryParameter("pass");
+                    }
+                }
+            }
+            if (TextUtils.isEmpty(address) || TextUtils.isEmpty(port)) {
+                return false;
+            }
+            if (user == null) {
+                user = "";
+            }
+            if (password == null) {
+                password = "";
+            }
+            showProxyAlert(activity, address, port, user, password);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static void showProxyAlert(Activity activity, final String address, final String port, final String user, final String password) {
+        Builder builder = new Builder(activity);
+        builder.setTitle(LocaleController.getString("Proxy", R.string.Proxy));
+        StringBuilder stringBuilder = new StringBuilder(LocaleController.getString("EnableProxyAlert", R.string.EnableProxyAlert));
+        stringBuilder.append("\n\n");
+        stringBuilder.append(LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress)).append(": ").append(address).append("\n");
+        stringBuilder.append(LocaleController.getString("UseProxyPort", R.string.UseProxyPort)).append(": ").append(port).append("\n");
+        if (!TextUtils.isEmpty(user)) {
+            stringBuilder.append(LocaleController.getString("UseProxyUsername", R.string.UseProxyUsername)).append(": ").append(user).append("\n");
+        }
+        if (!TextUtils.isEmpty(password)) {
+            stringBuilder.append(LocaleController.getString("UseProxyPassword", R.string.UseProxyPassword)).append(": ").append(password).append("\n");
+        }
+        stringBuilder.append("\n").append(LocaleController.getString("EnableProxyAlert2", R.string.EnableProxyAlert2));
+        builder.setMessage(stringBuilder.toString());
+        builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", R.string.ConnectingToProxyEnable), new OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+                editor.putBoolean("proxy_enabled", true);
+                editor.putString("proxy_ip", address);
+                int p = Utilities.parseInt(port).intValue();
+                editor.putInt("proxy_port", p);
+                if (TextUtils.isEmpty(password)) {
+                    editor.remove("proxy_pass");
+                } else {
+                    editor.putString("proxy_pass", password);
+                }
+                if (TextUtils.isEmpty(user)) {
+                    editor.remove("proxy_user");
+                } else {
+                    editor.putString("proxy_user", user);
+                }
+                editor.commit();
+                ConnectionsManager.native_setProxySettings(address, p, user, password);
+                NotificationCenter.getInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
+            }
+        });
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.show().setCanceledOnTouchOutside(true);
     }
 }

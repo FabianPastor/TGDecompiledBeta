@@ -1,37 +1,19 @@
 package com.google.android.gms.flags.impl;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import com.google.android.gms.internal.zzaqf;
-import java.util.concurrent.Callable;
+import android.util.Log;
+import com.google.android.gms.internal.zzcaf;
 
-public class zzb {
-    private static SharedPreferences zzaXu = null;
-
-    class AnonymousClass1 implements Callable<SharedPreferences> {
-        final /* synthetic */ Context zztf;
-
-        AnonymousClass1(Context context) {
-            this.zztf = context;
+public final class zzb extends zza<Boolean> {
+    public static Boolean zza(SharedPreferences sharedPreferences, String str, Boolean bool) {
+        try {
+            return (Boolean) zzcaf.zzb(new zzc(sharedPreferences, str, bool));
+        } catch (Exception e) {
+            String str2 = "FlagDataUtils";
+            String str3 = "Flag value not available, returning default: ";
+            String valueOf = String.valueOf(e.getMessage());
+            Log.w(str2, valueOf.length() != 0 ? str3.concat(valueOf) : new String(str3));
+            return bool;
         }
-
-        public /* synthetic */ Object call() throws Exception {
-            return zzDI();
-        }
-
-        public SharedPreferences zzDI() {
-            return this.zztf.getSharedPreferences("google_sdk_flags", 1);
-        }
-    }
-
-    public static SharedPreferences zzn(Context context) {
-        SharedPreferences sharedPreferences;
-        synchronized (SharedPreferences.class) {
-            if (zzaXu == null) {
-                zzaXu = (SharedPreferences) zzaqf.zzb(new AnonymousClass1(context));
-            }
-            sharedPreferences = zzaXu;
-        }
-        return sharedPreferences;
     }
 }

@@ -246,10 +246,12 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
             text = LocaleController.getString("WaitingForNetwork", R.string.WaitingForNetwork);
         } else if (this.currentConnectionState == 1) {
             text = LocaleController.getString("Connecting", R.string.Connecting);
-        } else if (this.currentConnectionState == 4) {
+        } else if (this.currentConnectionState == 5) {
             text = LocaleController.getString("Updating", R.string.Updating);
+        } else if (this.currentConnectionState == 4) {
+            text = LocaleController.getString("ConnectingToProxy", R.string.ConnectingToProxy);
         }
-        this.actionBarLayout.setTitleOverlayText(text);
+        this.actionBarLayout.setTitleOverlayText(text, null, null);
     }
 
     public void onBackPressed() {
@@ -303,8 +305,7 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
 
     public void onRebuildAllFragments(ActionBarLayout layout) {
         if (AndroidUtilities.isTablet() && layout == this.layersActionBarLayout) {
-            this.actionBarLayout.rebuildAllFragmentViews(true);
-            this.actionBarLayout.showLastFragment();
+            this.actionBarLayout.rebuildAllFragmentViews(true, true);
         }
     }
 }

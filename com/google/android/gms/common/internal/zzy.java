@@ -1,105 +1,67 @@
 package com.google.android.gms.common.internal;
 
-import android.os.Binder;
+import android.accounts.Account;
+import android.os.Bundle;
 import android.os.IBinder;
-import android.os.IInterface;
 import android.os.Parcel;
-import android.os.RemoteException;
-import com.google.android.gms.dynamic.IObjectWrapper;
+import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.zzc;
 
-public interface zzy extends IInterface {
-
-    public static abstract class zza extends Binder implements zzy {
-
-        private static class zza implements zzy {
-            private IBinder zzrk;
-
-            zza(IBinder iBinder) {
-                this.zzrk = iBinder;
-            }
-
-            public IBinder asBinder() {
-                return this.zzrk;
-            }
-
-            public IObjectWrapper zza(IObjectWrapper iObjectWrapper, int i, int i2) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.common.internal.ISignInButtonCreator");
-                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
-                    obtain.writeInt(i);
-                    obtain.writeInt(i2);
-                    this.zzrk.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
-                    return zzcd;
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public IObjectWrapper zza(IObjectWrapper iObjectWrapper, zzah com_google_android_gms_common_internal_zzah) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.common.internal.ISignInButtonCreator");
-                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
-                    if (com_google_android_gms_common_internal_zzah != null) {
-                        obtain.writeInt(1);
-                        com_google_android_gms_common_internal_zzah.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.zzrk.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
-                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
-                    return zzcd;
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-        }
-
-        public static zzy zzbx(IBinder iBinder) {
-            if (iBinder == null) {
-                return null;
-            }
-            IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.common.internal.ISignInButtonCreator");
-            return (queryLocalInterface == null || !(queryLocalInterface instanceof zzy)) ? new zza(iBinder) : (zzy) queryLocalInterface;
-        }
-
-        public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-            IBinder iBinder = null;
-            IObjectWrapper zza;
-            switch (i) {
+public final class zzy implements Creator<zzx> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int i = 0;
+        zzc[] com_google_android_gms_common_zzcArr = null;
+        int zzd = zzb.zzd(parcel);
+        Account account = null;
+        Bundle bundle = null;
+        Scope[] scopeArr = null;
+        IBinder iBinder = null;
+        String str = null;
+        int i2 = 0;
+        int i3 = 0;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
                 case 1:
-                    parcel.enforceInterface("com.google.android.gms.common.internal.ISignInButtonCreator");
-                    zza = zza(com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()), parcel.readInt(), parcel.readInt());
-                    parcel2.writeNoException();
-                    parcel2.writeStrongBinder(zza != null ? zza.asBinder() : null);
-                    return true;
+                    i3 = zzb.zzg(parcel, readInt);
+                    break;
                 case 2:
-                    parcel.enforceInterface("com.google.android.gms.common.internal.ISignInButtonCreator");
-                    zza = zza(com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()), parcel.readInt() != 0 ? (zzah) zzah.CREATOR.createFromParcel(parcel) : null);
-                    parcel2.writeNoException();
-                    if (zza != null) {
-                        iBinder = zza.asBinder();
-                    }
-                    parcel2.writeStrongBinder(iBinder);
-                    return true;
-                case 1598968902:
-                    parcel2.writeString("com.google.android.gms.common.internal.ISignInButtonCreator");
-                    return true;
+                    i2 = zzb.zzg(parcel, readInt);
+                    break;
+                case 3:
+                    i = zzb.zzg(parcel, readInt);
+                    break;
+                case 4:
+                    str = zzb.zzq(parcel, readInt);
+                    break;
+                case 5:
+                    iBinder = zzb.zzr(parcel, readInt);
+                    break;
+                case 6:
+                    scopeArr = (Scope[]) zzb.zzb(parcel, readInt, Scope.CREATOR);
+                    break;
+                case 7:
+                    bundle = zzb.zzs(parcel, readInt);
+                    break;
+                case 8:
+                    account = (Account) zzb.zza(parcel, readInt, Account.CREATOR);
+                    break;
+                case 10:
+                    com_google_android_gms_common_zzcArr = (zzc[]) zzb.zzb(parcel, readInt, zzc.CREATOR);
+                    break;
                 default:
-                    return super.onTransact(i, parcel, parcel2, i2);
+                    zzb.zzb(parcel, readInt);
+                    break;
             }
         }
+        zzb.zzF(parcel, zzd);
+        return new zzx(i3, i2, i, str, iBinder, scopeArr, bundle, account, com_google_android_gms_common_zzcArr);
     }
 
-    IObjectWrapper zza(IObjectWrapper iObjectWrapper, int i, int i2) throws RemoteException;
-
-    IObjectWrapper zza(IObjectWrapper iObjectWrapper, zzah com_google_android_gms_common_internal_zzah) throws RemoteException;
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new zzx[i];
+    }
 }

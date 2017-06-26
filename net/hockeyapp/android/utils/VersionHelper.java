@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.text.TextUtils;
+import com.google.android.gms.measurement.AppMeasurement.Param;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class VersionHelper {
                     largerVersionCode = false;
                 }
                 boolean newerApkFile;
-                if (entry.getInt("version") == versionCode && isNewerThanLastUpdateTime(context, entry.getLong("timestamp"))) {
+                if (entry.getInt("version") == versionCode && isNewerThanLastUpdateTime(context, entry.getLong(Param.TIMESTAMP))) {
                     newerApkFile = true;
                 } else {
                     newerApkFile = false;
@@ -81,7 +82,7 @@ public class VersionHelper {
 
     @SuppressLint({"SimpleDateFormat"})
     public String getFileDateString() {
-        return new SimpleDateFormat("dd.MM.yyyy").format(new Date(1000 * failSafeGetLongFromJSON(this.mNewest, "timestamp", 0)));
+        return new SimpleDateFormat("dd.MM.yyyy").format(new Date(1000 * failSafeGetLongFromJSON(this.mNewest, Param.TIMESTAMP, 0)));
     }
 
     public long getFileSizeBytes() {

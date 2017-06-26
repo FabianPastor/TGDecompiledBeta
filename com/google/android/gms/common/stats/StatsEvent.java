@@ -13,12 +13,12 @@ public abstract class StatsEvent extends zza implements ReflectedParcelable {
         String valueOf = String.valueOf("\t");
         int eventType = getEventType();
         String valueOf2 = String.valueOf("\t");
-        long zzyK = zzyK();
-        String valueOf3 = String.valueOf(zzyL());
-        return new StringBuilder(((String.valueOf(valueOf).length() + 51) + String.valueOf(valueOf2).length()) + String.valueOf(valueOf3).length()).append(timeMillis).append(valueOf).append(eventType).append(valueOf2).append(zzyK).append(valueOf3).toString();
+        long zzrV = zzrV();
+        String valueOf3 = String.valueOf(zzrW());
+        return new StringBuilder(((String.valueOf(valueOf).length() + 51) + String.valueOf(valueOf2).length()) + String.valueOf(valueOf3).length()).append(timeMillis).append(valueOf).append(eventType).append(valueOf2).append(zzrV).append(valueOf3).toString();
     }
 
-    public abstract long zzyK();
+    public abstract long zzrV();
 
-    public abstract String zzyL();
+    public abstract String zzrW();
 }

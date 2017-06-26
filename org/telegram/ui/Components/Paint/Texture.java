@@ -30,7 +30,6 @@ public class Texture {
 
     public int texture() {
         int i = 9729;
-        boolean mipMappable = true;
         if (this.texture != 0) {
             return this.texture;
         }
@@ -41,18 +40,15 @@ public class Texture {
         GLES20.glGenTextures(1, textures, 0);
         this.texture = textures[0];
         GLES20.glBindTexture(3553, this.texture);
-        if (!(isPOT(this.bitmap.getWidth()) && isPOT(this.bitmap.getHeight()))) {
-            mipMappable = false;
-        }
         GLES20.glTexParameteri(3553, 10242, 33071);
         GLES20.glTexParameteri(3553, 10243, 33071);
         GLES20.glTexParameteri(3553, Task.EXTRAS_LIMIT_BYTES, 9729);
-        if (mipMappable) {
+        if (null != null) {
             i = 9987;
         }
         GLES20.glTexParameteri(3553, 10241, i);
         GLUtils.texImage2D(3553, 0, this.bitmap, 0);
-        if (mipMappable) {
+        if (null != null) {
             GLES20.glGenerateMipmap(3553);
         }
         Utils.HasGLError();

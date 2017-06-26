@@ -196,20 +196,16 @@ public class Painting {
                             if (shader != null) {
                                 GLES20.glUseProgram(shader.program);
                                 GLES20.glUniformMatrix4fv(shader.getUniform("mvpMatrix"), 1, false, FloatBuffer.wrap(Painting.this.projection));
-                                GLES20.glUniform1i(shader.getUniform("texture"), 0);
-                                GLES20.glUniform1i(shader.getUniform("mask"), 1);
+                                GLES20.glUniform1i(shader.getUniform("mask"), 0);
                                 Shader.SetColorUniform(shader.getUniform(TtmlNode.ATTR_TTS_COLOR), color);
                                 GLES20.glActiveTexture(33984);
-                                GLES20.glBindTexture(3553, Painting.this.getTexture());
-                                GLES20.glActiveTexture(33985);
                                 GLES20.glBindTexture(3553, Painting.this.getPaintTexture());
-                                GLES20.glBlendFunc(1, 0);
+                                GLES20.glBlendFuncSeparate(770, 771, 770, 1);
                                 GLES20.glVertexAttribPointer(0, 2, 5126, false, 8, Painting.this.vertexBuffer);
                                 GLES20.glEnableVertexAttribArray(0);
                                 GLES20.glVertexAttribPointer(1, 2, 5126, false, 8, Painting.this.textureBuffer);
                                 GLES20.glEnableVertexAttribArray(1);
                                 GLES20.glDrawArrays(5, 0, 4);
-                                GLES20.glBindTexture(3553, Painting.this.getTexture());
                             }
                         }
                     }

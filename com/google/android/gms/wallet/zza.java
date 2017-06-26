@@ -2,40 +2,53 @@ package com.google.android.gms.wallet;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 
 @Deprecated
 public final class zza extends com.google.android.gms.common.internal.safeparcel.zza {
     public static final Creator<zza> CREATOR = new zzb();
-    String name;
-    String phoneNumber;
-    String zzUI;
-    String zzbPN;
-    String zzbPO;
-    String zzbhB;
-    boolean zzbhD;
-    String zzbhE;
-    String zzbhu;
-    String zzbhv;
-    String zzbhw;
+    private String name;
+    private String phoneNumber;
+    private String zzVJ;
+    private String zzbOi;
+    private String zzbOj;
+    private String zzbgE;
+    private String zzbgF;
+    private String zzbgG;
+    private String zzbgL;
+    private boolean zzbgN;
+    private String zzbgO;
 
     zza() {
     }
 
     zza(String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, boolean z, String str10) {
         this.name = str;
-        this.zzbhu = str2;
-        this.zzbhv = str3;
-        this.zzbhw = str4;
-        this.zzUI = str5;
-        this.zzbPN = str6;
-        this.zzbPO = str7;
-        this.zzbhB = str8;
+        this.zzbgE = str2;
+        this.zzbgF = str3;
+        this.zzbgG = str4;
+        this.zzVJ = str5;
+        this.zzbOi = str6;
+        this.zzbOj = str7;
+        this.zzbgL = str8;
         this.phoneNumber = str9;
-        this.zzbhD = z;
-        this.zzbhE = str10;
+        this.zzbgN = z;
+        this.zzbgO = str10;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzb.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.name, false);
+        zzd.zza(parcel, 3, this.zzbgE, false);
+        zzd.zza(parcel, 4, this.zzbgF, false);
+        zzd.zza(parcel, 5, this.zzbgG, false);
+        zzd.zza(parcel, 6, this.zzVJ, false);
+        zzd.zza(parcel, 7, this.zzbOi, false);
+        zzd.zza(parcel, 8, this.zzbOj, false);
+        zzd.zza(parcel, 9, this.zzbgL, false);
+        zzd.zza(parcel, 10, this.phoneNumber, false);
+        zzd.zza(parcel, 11, this.zzbgN);
+        zzd.zza(parcel, 12, this.zzbgO, false);
+        zzd.zzI(parcel, zze);
     }
 }

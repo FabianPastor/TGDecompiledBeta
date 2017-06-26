@@ -1,42 +1,31 @@
 package com.google.android.gms.tasks;
 
-import android.support.annotation.NonNull;
-import java.util.concurrent.Executor;
+final class zzd implements Runnable {
+    private /* synthetic */ Task zzbLR;
+    private /* synthetic */ zzc zzbLT;
 
-class zzd<TResult> implements zzf<TResult> {
-    private final Executor zzbFP;
-    private OnFailureListener zzbNz;
-    private final Object zzrJ = new Object();
-
-    public zzd(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
-        this.zzbFP = executor;
-        this.zzbNz = onFailureListener;
+    zzd(zzc com_google_android_gms_tasks_zzc, Task task) {
+        this.zzbLT = com_google_android_gms_tasks_zzc;
+        this.zzbLR = task;
     }
 
-    public void cancel() {
-        synchronized (this.zzrJ) {
-            this.zzbNz = null;
-        }
-    }
-
-    public void onComplete(@NonNull final Task<TResult> task) {
-        if (!task.isSuccessful()) {
-            synchronized (this.zzrJ) {
-                if (this.zzbNz == null) {
-                    return;
-                }
-                this.zzbFP.execute(new Runnable(this) {
-                    final /* synthetic */ zzd zzbNA;
-
-                    public void run() {
-                        synchronized (this.zzbNA.zzrJ) {
-                            if (this.zzbNA.zzbNz != null) {
-                                this.zzbNA.zzbNz.onFailure(task.getException());
-                            }
-                        }
-                    }
-                });
+    public final void run() {
+        try {
+            Task task = (Task) this.zzbLT.zzbLP.then(this.zzbLR);
+            if (task == null) {
+                this.zzbLT.onFailure(new NullPointerException("Continuation returned null"));
+                return;
             }
+            task.addOnSuccessListener(TaskExecutors.zzbMd, this.zzbLT);
+            task.addOnFailureListener(TaskExecutors.zzbMd, this.zzbLT);
+        } catch (Exception e) {
+            if (e.getCause() instanceof Exception) {
+                this.zzbLT.zzbLQ.setException((Exception) e.getCause());
+            } else {
+                this.zzbLT.zzbLQ.setException(e);
+            }
+        } catch (Exception e2) {
+            this.zzbLT.zzbLQ.setException(e2);
         }
     }
 }

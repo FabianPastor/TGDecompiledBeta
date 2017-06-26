@@ -2,71 +2,41 @@ package com.google.android.gms.wallet.wobs;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 
-public class zzh implements Creator<zzg> {
-    static void zza(zzg com_google_android_gms_wallet_wobs_zzg, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zzc(parcel, 2, com_google_android_gms_wallet_wobs_zzg.zzbSD);
-        zzc.zza(parcel, 3, com_google_android_gms_wallet_wobs_zzg.zzbSE, false);
-        zzc.zza(parcel, 4, com_google_android_gms_wallet_wobs_zzg.zzbSF);
-        zzc.zza(parcel, 5, com_google_android_gms_wallet_wobs_zzg.zzbQn, false);
-        zzc.zza(parcel, 6, com_google_android_gms_wallet_wobs_zzg.zzbSG);
-        zzc.zzc(parcel, 7, com_google_android_gms_wallet_wobs_zzg.zzbSH);
-        zzc.zzJ(parcel, zzaZ);
+public final class zzh extends zza {
+    public static final Creator<zzh> CREATOR = new zzi();
+    private String zzbOF;
+    private int zzbQJ;
+    private String zzbQK;
+    private double zzbQL;
+    private long zzbQM;
+    private int zzbQN;
+
+    zzh() {
+        this.zzbQN = -1;
+        this.zzbQJ = -1;
+        this.zzbQL = -1.0d;
     }
 
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzkE(parcel);
+    zzh(int i, String str, double d, String str2, long j, int i2) {
+        this.zzbQJ = i;
+        this.zzbQK = str;
+        this.zzbQL = d;
+        this.zzbOF = str2;
+        this.zzbQM = j;
+        this.zzbQN = i2;
     }
 
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzpd(i);
-    }
-
-    public zzg zzkE(Parcel parcel) {
-        String str = null;
-        int zzaY = zzb.zzaY(parcel);
-        int i = 0;
-        double d = 0.0d;
-        long j = 0;
-        int i2 = -1;
-        String str2 = null;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
-                case 2:
-                    i = zzb.zzg(parcel, zzaX);
-                    break;
-                case 3:
-                    str2 = zzb.zzq(parcel, zzaX);
-                    break;
-                case 4:
-                    d = zzb.zzn(parcel, zzaX);
-                    break;
-                case 5:
-                    str = zzb.zzq(parcel, zzaX);
-                    break;
-                case 6:
-                    j = zzb.zzi(parcel, zzaX);
-                    break;
-                case 7:
-                    i2 = zzb.zzg(parcel, zzaX);
-                    break;
-                default:
-                    zzb.zzb(parcel, zzaX);
-                    break;
-            }
-        }
-        if (parcel.dataPosition() == zzaY) {
-            return new zzg(i, str2, d, str, j, i2);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
-    }
-
-    public zzg[] zzpd(int i) {
-        return new zzg[i];
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zzc(parcel, 2, this.zzbQJ);
+        zzd.zza(parcel, 3, this.zzbQK, false);
+        zzd.zza(parcel, 4, this.zzbQL);
+        zzd.zza(parcel, 5, this.zzbOF, false);
+        zzd.zza(parcel, 6, this.zzbQM);
+        zzd.zzc(parcel, 7, this.zzbQN);
+        zzd.zzI(parcel, zze);
     }
 }

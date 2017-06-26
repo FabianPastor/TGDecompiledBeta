@@ -3,8 +3,7 @@ package com.google.android.gms.vision.barcode;
 import android.graphics.Point;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
+import android.support.v4.internal.view.SupportMenu;
 import com.google.android.gms.vision.barcode.Barcode.CalendarEvent;
 import com.google.android.gms.vision.barcode.Barcode.ContactInfo;
 import com.google.android.gms.vision.barcode.Barcode.DriverLicense;
@@ -15,42 +14,13 @@ import com.google.android.gms.vision.barcode.Barcode.Sms;
 import com.google.android.gms.vision.barcode.Barcode.UrlBookmark;
 import com.google.android.gms.vision.barcode.Barcode.WiFi;
 
-public class zzb implements Creator<Barcode> {
-    static void zza(Barcode barcode, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zzc(parcel, 1, barcode.versionCode);
-        zzc.zzc(parcel, 2, barcode.format);
-        zzc.zza(parcel, 3, barcode.rawValue, false);
-        zzc.zza(parcel, 4, barcode.displayValue, false);
-        zzc.zzc(parcel, 5, barcode.valueFormat);
-        zzc.zza(parcel, 6, barcode.cornerPoints, i, false);
-        zzc.zza(parcel, 7, barcode.email, i, false);
-        zzc.zza(parcel, 8, barcode.phone, i, false);
-        zzc.zza(parcel, 9, barcode.sms, i, false);
-        zzc.zza(parcel, 10, barcode.wifi, i, false);
-        zzc.zza(parcel, 11, barcode.url, i, false);
-        zzc.zza(parcel, 12, barcode.geoPoint, i, false);
-        zzc.zza(parcel, 13, barcode.calendarEvent, i, false);
-        zzc.zza(parcel, 14, barcode.contactInfo, i, false);
-        zzc.zza(parcel, 15, barcode.driverLicense, i, false);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzjA(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zznU(i);
-    }
-
-    public Barcode zzjA(Parcel parcel) {
-        int zzaY = com.google.android.gms.common.internal.safeparcel.zzb.zzaY(parcel);
+public final class zzb implements Creator<Barcode> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = com.google.android.gms.common.internal.safeparcel.zzb.zzd(parcel);
         int i = 0;
-        int i2 = 0;
         String str = null;
         String str2 = null;
-        int i3 = 0;
+        int i2 = 0;
         Point[] pointArr = null;
         Email email = null;
         Phone phone = null;
@@ -61,66 +31,61 @@ public class zzb implements Creator<Barcode> {
         CalendarEvent calendarEvent = null;
         ContactInfo contactInfo = null;
         DriverLicense driverLicense = null;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = com.google.android.gms.common.internal.safeparcel.zzb.zzaX(parcel);
-            switch (com.google.android.gms.common.internal.safeparcel.zzb.zzdc(zzaX)) {
-                case 1:
-                    i = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaX);
-                    break;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
                 case 2:
-                    i2 = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaX);
+                    i = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, readInt);
                     break;
                 case 3:
-                    str = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, zzaX);
+                    str = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, readInt);
                     break;
                 case 4:
-                    str2 = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, zzaX);
+                    str2 = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, readInt);
                     break;
                 case 5:
-                    i3 = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaX);
+                    i2 = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, readInt);
                     break;
                 case 6:
-                    pointArr = (Point[]) com.google.android.gms.common.internal.safeparcel.zzb.zzb(parcel, zzaX, Point.CREATOR);
+                    pointArr = (Point[]) com.google.android.gms.common.internal.safeparcel.zzb.zzb(parcel, readInt, Point.CREATOR);
                     break;
                 case 7:
-                    email = (Email) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaX, Email.CREATOR);
+                    email = (Email) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, readInt, Email.CREATOR);
                     break;
                 case 8:
-                    phone = (Phone) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaX, Phone.CREATOR);
+                    phone = (Phone) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, readInt, Phone.CREATOR);
                     break;
                 case 9:
-                    sms = (Sms) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaX, Sms.CREATOR);
+                    sms = (Sms) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, readInt, Sms.CREATOR);
                     break;
                 case 10:
-                    wiFi = (WiFi) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaX, WiFi.CREATOR);
+                    wiFi = (WiFi) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, readInt, WiFi.CREATOR);
                     break;
                 case 11:
-                    urlBookmark = (UrlBookmark) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaX, UrlBookmark.CREATOR);
+                    urlBookmark = (UrlBookmark) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, readInt, UrlBookmark.CREATOR);
                     break;
                 case 12:
-                    geoPoint = (GeoPoint) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaX, GeoPoint.CREATOR);
+                    geoPoint = (GeoPoint) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, readInt, GeoPoint.CREATOR);
                     break;
                 case 13:
-                    calendarEvent = (CalendarEvent) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaX, CalendarEvent.CREATOR);
+                    calendarEvent = (CalendarEvent) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, readInt, CalendarEvent.CREATOR);
                     break;
                 case 14:
-                    contactInfo = (ContactInfo) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaX, ContactInfo.CREATOR);
+                    contactInfo = (ContactInfo) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, readInt, ContactInfo.CREATOR);
                     break;
                 case 15:
-                    driverLicense = (DriverLicense) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaX, DriverLicense.CREATOR);
+                    driverLicense = (DriverLicense) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, readInt, DriverLicense.CREATOR);
                     break;
                 default:
-                    com.google.android.gms.common.internal.safeparcel.zzb.zzb(parcel, zzaX);
+                    com.google.android.gms.common.internal.safeparcel.zzb.zzb(parcel, readInt);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new Barcode(i, i2, str, str2, i3, pointArr, email, phone, sms, wiFi, urlBookmark, geoPoint, calendarEvent, contactInfo, driverLicense);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
+        com.google.android.gms.common.internal.safeparcel.zzb.zzF(parcel, zzd);
+        return new Barcode(i, str, str2, i2, pointArr, email, phone, sms, wiFi, urlBookmark, geoPoint, calendarEvent, contactInfo, driverLicense);
     }
 
-    public Barcode[] zznU(int i) {
+    public final /* synthetic */ Object[] newArray(int i) {
         return new Barcode[i];
     }
 }

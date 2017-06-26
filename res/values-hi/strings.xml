@@ -6,7 +6,7 @@
     <string name="common_google_play_services_install_button">इंस्टॉल करें</string>
     <string name="common_google_play_services_install_text">%1$s उन Google Play सेवाओं के बिना नहीं चलेगा जो आपके डिवाइस में उपलब्ध नहीं हैं.</string>
     <string name="common_google_play_services_install_title">Google Play सेवाएं प्राप्त करना</string>
-    <string name="common_google_play_services_notification_ticker">Google Play सेवाएं त्रुटि</string>
+    <string name="common_google_play_services_notification_ticker">Google Play सेवाएं गड़बड़ी</string>
     <string name="common_google_play_services_unknown_issue">%1$s को Google Play सेवाओं के साथ समस्या आ रही है. कृपया फिर से प्रयास करें.</string>
     <string name="common_google_play_services_unsupported_text">%1$s उन Google Play सेवाओं के बिना नहीं चलेगा, जो आपके डिवाइस द्वारा समर्थित नहीं हैं.</string>
     <string name="common_google_play_services_update_button">अपडेट करें</string>
@@ -17,4 +17,5 @@
     <string name="common_open_on_phone">फ़ोन पर खोलें</string>
     <string name="common_signin_button_text">प्रवेश करें</string>
     <string name="common_signin_button_text_long">Google के साथ प्रवेश करें</string>
+    <string name="wallet_buy_button_place_holder">Google से खरीदें</string>
 </resources>

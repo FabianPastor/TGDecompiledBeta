@@ -3,31 +3,32 @@ package com.google.android.gms.wallet;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 import java.util.ArrayList;
 
 public final class IsReadyToPayRequest extends zza {
-    public static final Creator<IsReadyToPayRequest> CREATOR = new zzk();
-    ArrayList<Integer> zzbQs;
-    String zzbQt;
-    String zzbQu;
+    public static final Creator<IsReadyToPayRequest> CREATOR = new zzl();
+    ArrayList<Integer> zzbOL;
+    private String zzbOM;
+    private String zzbON;
 
     public final class Builder {
-        final /* synthetic */ IsReadyToPayRequest zzbQv;
+        private /* synthetic */ IsReadyToPayRequest zzbOO;
 
         private Builder(IsReadyToPayRequest isReadyToPayRequest) {
-            this.zzbQv = isReadyToPayRequest;
+            this.zzbOO = isReadyToPayRequest;
         }
 
-        public Builder addAllowedCardNetwork(int i) {
-            if (this.zzbQv.zzbQs == null) {
-                this.zzbQv.zzbQs = new ArrayList();
+        public final Builder addAllowedCardNetwork(int i) {
+            if (this.zzbOO.zzbOL == null) {
+                this.zzbOO.zzbOL = new ArrayList();
             }
-            this.zzbQv.zzbQs.add(Integer.valueOf(i));
+            this.zzbOO.zzbOL.add(Integer.valueOf(i));
             return this;
         }
 
-        public IsReadyToPayRequest build() {
-            return this.zzbQv;
+        public final IsReadyToPayRequest build() {
+            return this.zzbOO;
         }
     }
 
@@ -35,7 +36,9 @@ public final class IsReadyToPayRequest extends zza {
     }
 
     IsReadyToPayRequest(ArrayList<Integer> arrayList, String str, String str2) {
-        this.zzbQs = arrayList;
+        this.zzbOL = arrayList;
+        this.zzbOM = str;
+        this.zzbON = str2;
     }
 
     public static Builder newBuilder() {
@@ -44,11 +47,15 @@ public final class IsReadyToPayRequest extends zza {
         return new Builder();
     }
 
-    public ArrayList<Integer> getAllowedCardNetworks() {
-        return this.zzbQs;
+    public final ArrayList<Integer> getAllowedCardNetworks() {
+        return this.zzbOL;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzk.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.zzbOL, false);
+        zzd.zza(parcel, 4, this.zzbOM, false);
+        zzd.zza(parcel, 5, this.zzbON, false);
+        zzd.zzI(parcel, zze);
     }
 }

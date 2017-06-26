@@ -5,7 +5,7 @@ public final class RoundCap extends Cap {
         super(2);
     }
 
-    public String toString() {
+    public final String toString() {
         return "[RoundCap]";
     }
 }

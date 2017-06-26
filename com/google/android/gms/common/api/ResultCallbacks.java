@@ -2,10 +2,12 @@ package com.google.android.gms.common.api;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+import com.google.android.gms.common.annotation.KeepForSdk;
 
 public abstract class ResultCallbacks<R extends Result> implements ResultCallback<R> {
     public abstract void onFailure(@NonNull Status status);
 
+    @KeepForSdk
     public final void onResult(@NonNull R r) {
         Status status = r.getStatus();
         if (status.isSuccess()) {

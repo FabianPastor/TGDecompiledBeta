@@ -98,6 +98,7 @@ public class ApplicationLoader extends Application {
 
     public static void postInitApplication() {
         if (!applicationInited) {
+            String systemLangCode;
             String langCode;
             String deviceModel;
             String appVersion;
@@ -110,9 +111,9 @@ public class ApplicationLoader extends Application {
                 e.printStackTrace();
             }
             try {
-                IntentFilter filter = new IntentFilter("android.intent.action.SCREEN_ON");
-                filter.addAction("android.intent.action.SCREEN_OFF");
-                applicationContext.registerReceiver(new ScreenReceiver(), filter);
+                IntentFilter intentFilter = new IntentFilter("android.intent.action.SCREEN_ON");
+                intentFilter.addAction("android.intent.action.SCREEN_OFF");
+                applicationContext.registerReceiver(new ScreenReceiver(), intentFilter);
             } catch (Exception e2) {
                 e2.printStackTrace();
             }
@@ -125,18 +126,20 @@ public class ApplicationLoader extends Application {
             UserConfig.loadConfig();
             String configPath = getFilesDirFixed().toString();
             try {
+                systemLangCode = LocaleController.getSystemLocaleStringIso639();
                 langCode = LocaleController.getLocaleStringIso639();
                 deviceModel = Build.MANUFACTURER + Build.MODEL;
                 PackageInfo pInfo = applicationContext.getPackageManager().getPackageInfo(applicationContext.getPackageName(), 0);
                 appVersion = pInfo.versionName + " (" + pInfo.versionCode + ")";
                 systemVersion = "SDK " + VERSION.SDK_INT;
             } catch (Exception e4) {
-                langCode = "en";
+                systemLangCode = "en";
+                langCode = "";
                 deviceModel = "Android unknown";
                 appVersion = "App version unknown";
                 systemVersion = "SDK " + VERSION.SDK_INT;
             }
-            if (langCode.trim().length() == 0) {
+            if (systemLangCode.trim().length() == 0) {
                 langCode = "en";
             }
             if (deviceModel.trim().length() == 0) {
@@ -150,7 +153,7 @@ public class ApplicationLoader extends Application {
             }
             boolean enablePushConnection = applicationContext.getSharedPreferences("Notifications", 0).getBoolean("pushConnection", true);
             MessagesController.getInstance();
-            ConnectionsManager.getInstance().init(BuildVars.BUILD_VERSION, 66, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, configPath, FileLog.getNetworkLogPath(), UserConfig.getClientUserId(), enablePushConnection);
+            ConnectionsManager.getInstance().init(BuildVars.BUILD_VERSION, 68, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), UserConfig.getClientUserId(), enablePushConnection);
             if (UserConfig.getCurrentUser() != null) {
                 MessagesController.getInstance().putUser(UserConfig.getCurrentUser(), true);
                 ConnectionsManager.getInstance().applyCountryPortNumber(UserConfig.getCurrentUser().phone);

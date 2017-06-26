@@ -1,53 +1,96 @@
 package com.google.android.gms.wallet;
 
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
 import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
+import com.google.android.gms.identity.intents.model.CountrySpecification;
+import java.util.ArrayList;
 
-public class zzs implements Creator<PaymentMethodTokenizationParameters> {
-    static void zza(PaymentMethodTokenizationParameters paymentMethodTokenizationParameters, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zzc(parcel, 2, paymentMethodTokenizationParameters.zzbRn);
-        zzc.zza(parcel, 3, paymentMethodTokenizationParameters.zzbRo, false);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzkn(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzoJ(i);
-    }
-
-    public PaymentMethodTokenizationParameters zzkn(Parcel parcel) {
-        int zzaY = zzb.zzaY(parcel);
-        int i = 0;
-        Bundle bundle = null;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
+public final class zzs implements Creator<MaskedWalletRequest> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzb.zzd(parcel);
+        String str = null;
+        boolean z = false;
+        boolean z2 = false;
+        boolean z3 = false;
+        String str2 = null;
+        String str3 = null;
+        String str4 = null;
+        Cart cart = null;
+        boolean z4 = false;
+        boolean z5 = false;
+        CountrySpecification[] countrySpecificationArr = null;
+        boolean z6 = true;
+        boolean z7 = true;
+        ArrayList arrayList = null;
+        PaymentMethodTokenizationParameters paymentMethodTokenizationParameters = null;
+        ArrayList arrayList2 = null;
+        String str5 = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
                 case 2:
-                    i = zzb.zzg(parcel, zzaX);
+                    str = zzb.zzq(parcel, readInt);
                     break;
                 case 3:
-                    bundle = zzb.zzs(parcel, zzaX);
+                    z = zzb.zzc(parcel, readInt);
+                    break;
+                case 4:
+                    z2 = zzb.zzc(parcel, readInt);
+                    break;
+                case 5:
+                    z3 = zzb.zzc(parcel, readInt);
+                    break;
+                case 6:
+                    str2 = zzb.zzq(parcel, readInt);
+                    break;
+                case 7:
+                    str3 = zzb.zzq(parcel, readInt);
+                    break;
+                case 8:
+                    str4 = zzb.zzq(parcel, readInt);
+                    break;
+                case 9:
+                    cart = (Cart) zzb.zza(parcel, readInt, Cart.CREATOR);
+                    break;
+                case 10:
+                    z4 = zzb.zzc(parcel, readInt);
+                    break;
+                case 11:
+                    z5 = zzb.zzc(parcel, readInt);
+                    break;
+                case 12:
+                    countrySpecificationArr = (CountrySpecification[]) zzb.zzb(parcel, readInt, CountrySpecification.CREATOR);
+                    break;
+                case 13:
+                    z6 = zzb.zzc(parcel, readInt);
+                    break;
+                case 14:
+                    z7 = zzb.zzc(parcel, readInt);
+                    break;
+                case 15:
+                    arrayList = zzb.zzc(parcel, readInt, CountrySpecification.CREATOR);
+                    break;
+                case 16:
+                    paymentMethodTokenizationParameters = (PaymentMethodTokenizationParameters) zzb.zza(parcel, readInt, PaymentMethodTokenizationParameters.CREATOR);
+                    break;
+                case 17:
+                    arrayList2 = zzb.zzB(parcel, readInt);
+                    break;
+                case 18:
+                    str5 = zzb.zzq(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaX);
+                    zzb.zzb(parcel, readInt);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new PaymentMethodTokenizationParameters(i, bundle);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
+        zzb.zzF(parcel, zzd);
+        return new MaskedWalletRequest(str, z, z2, z3, str2, str3, str4, cart, z4, z5, countrySpecificationArr, z6, z7, arrayList, paymentMethodTokenizationParameters, arrayList2, str5);
     }
 
-    public PaymentMethodTokenizationParameters[] zzoJ(int i) {
-        return new PaymentMethodTokenizationParameters[i];
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new MaskedWalletRequest[i];
     }
 }

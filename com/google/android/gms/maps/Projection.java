@@ -2,38 +2,38 @@ package com.google.android.gms.maps;
 
 import android.graphics.Point;
 import android.os.RemoteException;
-import com.google.android.gms.dynamic.zzd;
+import com.google.android.gms.dynamic.zzn;
 import com.google.android.gms.maps.internal.IProjectionDelegate;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 import com.google.android.gms.maps.model.VisibleRegion;
 
 public final class Projection {
-    private final IProjectionDelegate zzboy;
+    private final IProjectionDelegate zzbmB;
 
     Projection(IProjectionDelegate iProjectionDelegate) {
-        this.zzboy = iProjectionDelegate;
+        this.zzbmB = iProjectionDelegate;
     }
 
-    public LatLng fromScreenLocation(Point point) {
+    public final LatLng fromScreenLocation(Point point) {
         try {
-            return this.zzboy.fromScreenLocation(zzd.zzA(point));
+            return this.zzbmB.fromScreenLocation(zzn.zzw(point));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public VisibleRegion getVisibleRegion() {
+    public final VisibleRegion getVisibleRegion() {
         try {
-            return this.zzboy.getVisibleRegion();
+            return this.zzbmB.getVisibleRegion();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public Point toScreenLocation(LatLng latLng) {
+    public final Point toScreenLocation(LatLng latLng) {
         try {
-            return (Point) zzd.zzF(this.zzboy.toScreenLocation(latLng));
+            return (Point) zzn.zzE(this.zzbmB.toScreenLocation(latLng));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

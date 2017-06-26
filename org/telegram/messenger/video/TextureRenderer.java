@@ -98,8 +98,8 @@ public class TextureRenderer {
         this.mTextureID = textures[0];
         GLES20.glBindTexture(36197, this.mTextureID);
         checkGlError("glBindTexture mTextureID");
-        GLES20.glTexParameterf(36197, 10241, 9728.0f);
-        GLES20.glTexParameterf(36197, Task.EXTRAS_LIMIT_BYTES, 9729.0f);
+        GLES20.glTexParameteri(36197, 10241, 9729);
+        GLES20.glTexParameteri(36197, Task.EXTRAS_LIMIT_BYTES, 9729);
         GLES20.glTexParameteri(36197, 10242, 33071);
         GLES20.glTexParameteri(36197, 10243, 33071);
         checkGlError("glTexParameter");

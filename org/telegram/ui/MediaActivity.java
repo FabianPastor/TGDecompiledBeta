@@ -1446,11 +1446,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     this.sharedMediaData[type].addMessage((MessageObject) arr.get(a), false, enc);
                 }
                 this.sharedMediaData[type].endReached[loadIndex] = ((Boolean) args[5]).booleanValue();
-                if (loadIndex == 0 && this.sharedMediaData[this.selectedMode].messages.isEmpty() && this.mergeDialogId != 0) {
-                    this.sharedMediaData[this.selectedMode].loading = true;
-                    SharedMediaQuery.loadMedia(this.mergeDialogId, 0, 50, this.sharedMediaData[this.selectedMode].max_id[1], type, true, this.classGuid);
+                if (loadIndex == 0 && this.sharedMediaData[type].endReached[loadIndex] && this.mergeDialogId != 0) {
+                    this.sharedMediaData[type].loading = true;
+                    SharedMediaQuery.loadMedia(this.mergeDialogId, 0, 50, this.sharedMediaData[type].max_id[1], type, true, this.classGuid);
                 }
-                if (!this.sharedMediaData[this.selectedMode].loading) {
+                if (!this.sharedMediaData[type].loading) {
                     if (this.progressView != null) {
                         this.progressView.setVisibility(8);
                     }
@@ -1476,7 +1476,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 }
                 if (this.selectedMode == 1 || this.selectedMode == 3 || this.selectedMode == 4) {
                     actionBarMenuItem = this.searchItem;
-                    if (this.sharedMediaData[this.selectedMode].messages.isEmpty() || this.searching) {
+                    if (this.sharedMediaData[type].messages.isEmpty() || this.searching) {
                         i = 8;
                     } else {
                         i = 0;
@@ -1676,7 +1676,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         return false;
     }
 
-    public void setPhotoChecked(int index) {
+    public void setPhotoChecked(int index, VideoEditedInfo videoEditedInfo) {
     }
 
     public boolean cancelButtonPressed() {

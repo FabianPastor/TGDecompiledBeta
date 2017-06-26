@@ -45,6 +45,7 @@ import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
@@ -67,6 +68,7 @@ import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 public class ContactsActivity extends BaseFragment implements NotificationCenterDelegate {
     private static final int add_button = 1;
     private static final int search_button = 0;
+    private ActionBarMenuItem addItem;
     private boolean addingToChannel;
     private boolean allowBots = true;
     private boolean allowUsernameSearch = true;
@@ -80,6 +82,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     private HashMap<Integer, User> ignoreUsers;
     private RecyclerListView listView;
     private ContactsAdapter listViewAdapter;
+    private boolean needFinishFragment = true;
     private boolean needForwardCount = true;
     private boolean needPhonebook;
     private boolean onlyUsers;
@@ -91,7 +94,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     private String selectAlertString = null;
 
     public interface ContactsActivityDelegate {
-        void didSelectContact(User user, String str);
+        void didSelectContact(User user, String str, ContactsActivity contactsActivity);
     }
 
     public ContactsActivity(Bundle args) {
@@ -114,6 +117,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             this.needForwardCount = this.arguments.getBoolean("needForwardCount", true);
             this.allowBots = this.arguments.getBoolean("allowBots", true);
             this.addingToChannel = this.arguments.getBoolean("addingToChannel", false);
+            this.needFinishFragment = this.arguments.getBoolean("needFinishFragment", true);
             this.chat_id = this.arguments.getInt("chat_id", 0);
         } else {
             this.needPhonebook = true;
@@ -158,9 +162,15 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 ContactsActivity.this.searching = true;
+                if (ContactsActivity.this.addItem != null) {
+                    ContactsActivity.this.addItem.setVisibility(8);
+                }
             }
 
             public void onSearchCollapse() {
+                if (ContactsActivity.this.addItem != null) {
+                    ContactsActivity.this.addItem.setVisibility(0);
+                }
                 ContactsActivity.this.searchListViewAdapter.searchDialogs(null);
                 ContactsActivity.this.searching = false;
                 ContactsActivity.this.searchWas = false;
@@ -191,9 +201,9 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             }
         }).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         if (!(this.createSecretChat || this.returnAsResult)) {
-            menu.addItem(1, (int) R.drawable.add);
+            this.addItem = menu.addItem(1, (int) R.drawable.add);
         }
-        this.searchListViewAdapter = new SearchAdapter(context, this.ignoreUsers, this.allowUsernameSearch, false, false, this.allowBots);
+        this.searchListViewAdapter = new SearchAdapter(context, this.ignoreUsers, this.allowUsernameSearch, false, false, this.allowBots, 0);
         this.listViewAdapter = new ContactsAdapter(context, this.onlyUsers ? 1 : 0, this.needPhonebook, this.ignoreUsers, this.chat_id != 0);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -351,10 +361,12 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     private void didSelectResult(final User user, boolean useAlert, String param) {
         if (!useAlert || this.selectAlertString == null) {
             if (this.delegate != null) {
-                this.delegate.didSelectContact(user, param);
+                this.delegate.didSelectContact(user, param, this);
                 this.delegate = null;
             }
-            finishFragment();
+            if (this.needFinishFragment) {
+                finishFragment();
+            }
         } else if (getParentActivity() != null) {
             if (user.bot && user.bot_nochats && !this.addingToChannel) {
                 try {

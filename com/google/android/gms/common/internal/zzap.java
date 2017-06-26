@@ -1,33 +1,28 @@
 package com.google.android.gms.common.internal;
 
-import android.content.Context;
-import android.content.res.Resources.NotFoundException;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.util.TypedValue;
+import android.os.IBinder;
+import android.os.IInterface;
+import android.os.Parcel;
+import android.os.RemoteException;
+import com.google.android.gms.internal.zzee;
 
-public class zzap {
-    public static String zza(String str, String str2, Context context, AttributeSet attributeSet, boolean z, boolean z2, String str3) {
-        String attributeValue = attributeSet == null ? null : attributeSet.getAttributeValue(str, str2);
-        if (attributeValue != null && attributeValue.startsWith("@string/") && z) {
-            String substring = attributeValue.substring("@string/".length());
-            String packageName = context.getPackageName();
-            TypedValue typedValue = new TypedValue();
-            try {
-                context.getResources().getValue(new StringBuilder((String.valueOf(packageName).length() + 8) + String.valueOf(substring).length()).append(packageName).append(":string/").append(substring).toString(), typedValue, true);
-            } catch (NotFoundException e) {
-                Log.w(str3, new StringBuilder((String.valueOf(str2).length() + 30) + String.valueOf(attributeValue).length()).append("Could not find resource for ").append(str2).append(": ").append(attributeValue).toString());
-            }
-            if (typedValue.string != null) {
-                attributeValue = typedValue.string.toString();
-            } else {
-                substring = String.valueOf(typedValue);
-                Log.w(str3, new StringBuilder((String.valueOf(str2).length() + 28) + String.valueOf(substring).length()).append("Resource ").append(str2).append(" was not a string: ").append(substring).toString());
-            }
+public abstract class zzap extends zzee implements zzao {
+    public static zzao zzH(IBinder iBinder) {
+        if (iBinder == null) {
+            return null;
         }
-        if (z2 && attributeValue == null) {
-            Log.w(str3, new StringBuilder(String.valueOf(str2).length() + 33).append("Required XML attribute \"").append(str2).append("\" missing").toString());
+        IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.common.internal.ICancelToken");
+        return queryLocalInterface instanceof zzao ? (zzao) queryLocalInterface : new zzaq(iBinder);
+    }
+
+    public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
+        if (zza(i, parcel, parcel2, i2)) {
+            return true;
         }
-        return attributeValue;
+        if (i != 2) {
+            return false;
+        }
+        cancel();
+        return true;
     }
 }

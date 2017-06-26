@@ -3,246 +3,246 @@ package com.google.android.gms.maps.model;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.dynamic.zzd;
+import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.dynamic.zzn;
 import com.google.android.gms.maps.model.internal.IPolylineDelegate;
 import java.util.List;
 
 public final class Polyline {
-    private final IPolylineDelegate zzbpO;
+    private final IPolylineDelegate zzbnR;
 
     public Polyline(IPolylineDelegate iPolylineDelegate) {
-        this.zzbpO = (IPolylineDelegate) zzac.zzw(iPolylineDelegate);
+        this.zzbnR = (IPolylineDelegate) zzbo.zzu(iPolylineDelegate);
     }
 
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         if (!(obj instanceof Polyline)) {
             return false;
         }
         try {
-            return this.zzbpO.equalsRemote(((Polyline) obj).zzbpO);
+            return this.zzbnR.equalsRemote(((Polyline) obj).zzbnR);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public int getColor() {
+    public final int getColor() {
         try {
-            return this.zzbpO.getColor();
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
-    }
-
-    @NonNull
-    public Cap getEndCap() {
-        try {
-            return this.zzbpO.getEndCap().zzJJ();
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
-    }
-
-    public String getId() {
-        try {
-            return this.zzbpO.getId();
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
-    }
-
-    public int getJointType() {
-        try {
-            return this.zzbpO.getJointType();
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
-    }
-
-    @Nullable
-    public List<PatternItem> getPattern() {
-        try {
-            return PatternItem.zzI(this.zzbpO.getPattern());
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
-    }
-
-    public List<LatLng> getPoints() {
-        try {
-            return this.zzbpO.getPoints();
+            return this.zzbnR.getColor();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
     @NonNull
-    public Cap getStartCap() {
+    public final Cap getEndCap() {
         try {
-            return this.zzbpO.getStartCap().zzJJ();
+            return this.zzbnR.getEndCap().zzwk();
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public final String getId() {
+        try {
+            return this.zzbnR.getId();
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public final int getJointType() {
+        try {
+            return this.zzbnR.getJointType();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
     @Nullable
-    public Object getTag() {
+    public final List<PatternItem> getPattern() {
         try {
-            return zzd.zzF(this.zzbpO.getTag());
+            return PatternItem.zzF(this.zzbnR.getPattern());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public float getWidth() {
+    public final List<LatLng> getPoints() {
         try {
-            return this.zzbpO.getWidth();
+            return this.zzbnR.getPoints();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public float getZIndex() {
+    @NonNull
+    public final Cap getStartCap() {
         try {
-            return this.zzbpO.getZIndex();
+            return this.zzbnR.getStartCap().zzwk();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public int hashCode() {
+    @Nullable
+    public final Object getTag() {
         try {
-            return this.zzbpO.hashCodeRemote();
+            return zzn.zzE(this.zzbnR.getTag());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isClickable() {
+    public final float getWidth() {
         try {
-            return this.zzbpO.isClickable();
+            return this.zzbnR.getWidth();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isGeodesic() {
+    public final float getZIndex() {
         try {
-            return this.zzbpO.isGeodesic();
+            return this.zzbnR.getZIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public boolean isVisible() {
+    public final int hashCode() {
         try {
-            return this.zzbpO.isVisible();
+            return this.zzbnR.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void remove() {
+    public final boolean isClickable() {
         try {
-            this.zzbpO.remove();
+            return this.zzbnR.isClickable();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setClickable(boolean z) {
+    public final boolean isGeodesic() {
         try {
-            this.zzbpO.setClickable(z);
+            return this.zzbnR.isGeodesic();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setColor(int i) {
+    public final boolean isVisible() {
         try {
-            this.zzbpO.setColor(i);
+            return this.zzbnR.isVisible();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setEndCap(@NonNull Cap cap) {
-        zzac.zzb((Object) cap, (Object) "endCap must not be null");
+    public final void remove() {
         try {
-            this.zzbpO.setEndCap(cap);
+            this.zzbnR.remove();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setGeodesic(boolean z) {
+    public final void setClickable(boolean z) {
         try {
-            this.zzbpO.setGeodesic(z);
+            this.zzbnR.setClickable(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setJointType(int i) {
+    public final void setColor(int i) {
         try {
-            this.zzbpO.setJointType(i);
+            this.zzbnR.setColor(i);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setPattern(@Nullable List<PatternItem> list) {
+    public final void setEndCap(@NonNull Cap cap) {
+        zzbo.zzb((Object) cap, (Object) "endCap must not be null");
         try {
-            this.zzbpO.setPattern(list);
+            this.zzbnR.setEndCap(cap);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setPoints(List<LatLng> list) {
+    public final void setGeodesic(boolean z) {
         try {
-            this.zzbpO.setPoints(list);
+            this.zzbnR.setGeodesic(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setStartCap(@NonNull Cap cap) {
-        zzac.zzb((Object) cap, (Object) "startCap must not be null");
+    public final void setJointType(int i) {
         try {
-            this.zzbpO.setStartCap(cap);
+            this.zzbnR.setJointType(i);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setTag(@Nullable Object obj) {
+    public final void setPattern(@Nullable List<PatternItem> list) {
         try {
-            this.zzbpO.setTag(zzd.zzA(obj));
+            this.zzbnR.setPattern(list);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setVisible(boolean z) {
+    public final void setPoints(List<LatLng> list) {
         try {
-            this.zzbpO.setVisible(z);
+            this.zzbnR.setPoints(list);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setWidth(float f) {
+    public final void setStartCap(@NonNull Cap cap) {
+        zzbo.zzb((Object) cap, (Object) "startCap must not be null");
         try {
-            this.zzbpO.setWidth(f);
+            this.zzbnR.setStartCap(cap);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setZIndex(float f) {
+    public final void setTag(@Nullable Object obj) {
         try {
-            this.zzbpO.setZIndex(f);
+            this.zzbnR.setTag(zzn.zzw(obj));
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public final void setVisible(boolean z) {
+        try {
+            this.zzbnR.setVisible(z);
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public final void setWidth(float f) {
+        try {
+            this.zzbnR.setWidth(f);
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public final void setZIndex(float f) {
+        try {
+            this.zzbnR.setZIndex(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

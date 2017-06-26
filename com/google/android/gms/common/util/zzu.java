@@ -1,57 +1,26 @@
 package com.google.android.gms.common.util;
 
-import android.os.Process;
-import android.os.StrictMode;
-import android.os.StrictMode.ThreadPolicy;
-import java.io.BufferedReader;
-import java.io.Closeable;
-import java.io.FileReader;
-import java.io.IOException;
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.util.Log;
+import java.io.File;
 
-public class zzu {
-    private static String zzaIn = null;
-    private static final int zzaIo = Process.myPid();
-
-    static String zzdq(int i) {
-        ThreadPolicy allowThreadDiskReads;
-        Closeable bufferedReader;
-        Throwable th;
-        String str = null;
-        if (i > 0) {
-            try {
-                allowThreadDiskReads = StrictMode.allowThreadDiskReads();
-                bufferedReader = new BufferedReader(new FileReader("/proc/" + i + "/cmdline"));
-                try {
-                    StrictMode.setThreadPolicy(allowThreadDiskReads);
-                    str = bufferedReader.readLine().trim();
-                    zzp.closeQuietly(bufferedReader);
-                } catch (IOException e) {
-                    zzp.closeQuietly(bufferedReader);
-                    return str;
-                } catch (Throwable th2) {
-                    th = th2;
-                    zzp.closeQuietly(bufferedReader);
-                    throw th;
-                }
-            } catch (IOException e2) {
-                bufferedReader = str;
-                zzp.closeQuietly(bufferedReader);
-                return str;
-            } catch (Throwable th3) {
-                Throwable th4 = th3;
-                bufferedReader = str;
-                th = th4;
-                zzp.closeQuietly(bufferedReader);
-                throw th;
-            }
-        }
-        return str;
+public final class zzu {
+    @TargetApi(21)
+    public static File getNoBackupFilesDir(Context context) {
+        return zzq.zzse() ? context.getNoBackupFilesDir() : zzd(new File(context.getApplicationInfo().dataDir, "no_backup"));
     }
 
-    public static String zzzr() {
-        if (zzaIn == null) {
-            zzaIn = zzdq(zzaIo);
+    private static synchronized File zzd(File file) {
+        synchronized (zzu.class) {
+            if (!(file.exists() || file.mkdirs() || file.exists())) {
+                String str = "SupportV4Utils";
+                String str2 = "Unable to create no-backup dir ";
+                String valueOf = String.valueOf(file.getPath());
+                Log.w(str, valueOf.length() != 0 ? str2.concat(valueOf) : new String(str2));
+                file = null;
+            }
         }
-        return zzaIn;
+        return file;
     }
 }

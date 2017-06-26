@@ -2,51 +2,33 @@ package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
 import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
 
-public class zzf implements Creator<LatLng> {
-    static void zza(LatLng latLng, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zza(parcel, 2, latLng.latitude);
-        zzc.zza(parcel, 3, latLng.longitude);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzhC(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzlk(i);
-    }
-
-    public LatLng zzhC(Parcel parcel) {
+public final class zzf implements Creator<LatLng> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
         double d = 0.0d;
-        int zzaY = zzb.zzaY(parcel);
+        int zzd = zzb.zzd(parcel);
         double d2 = 0.0d;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
                 case 2:
-                    d2 = zzb.zzn(parcel, zzaX);
+                    d2 = zzb.zzn(parcel, readInt);
                     break;
                 case 3:
-                    d = zzb.zzn(parcel, zzaX);
+                    d = zzb.zzn(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaX);
+                    zzb.zzb(parcel, readInt);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new LatLng(d2, d);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
+        zzb.zzF(parcel, zzd);
+        return new LatLng(d2, d);
     }
 
-    public LatLng[] zzlk(int i) {
+    public final /* synthetic */ Object[] newArray(int i) {
         return new LatLng[i];
     }
 }

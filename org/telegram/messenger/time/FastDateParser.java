@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.telegram.tgnet.TLRPC;
 
 public class FastDateParser implements DateParser, Serializable {
     private static final Strategy ABBREVIATED_YEAR_STRATEGY = new NumberStrategy(1) {
@@ -467,7 +468,7 @@ public class FastDateParser implements DateParser, Serializable {
                     return new CopyQuotedStrategy(formatField.substring(1, formatField.length() - 1));
                 }
                 break;
-            case 'D':
+            case TLRPC.LAYER /*68*/:
                 return DAY_OF_YEAR_STRATEGY;
             case 'E':
                 return getLocaleSpecificStrategy(7, definingCalendar);

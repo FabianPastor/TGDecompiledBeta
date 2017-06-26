@@ -187,7 +187,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidStarted);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didStartedCall);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didEndedCall);
-        boolean callAvailable = (VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getCallState() == 10) ? false : true;
+        boolean callAvailable = (VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getCallState() == 15) ? false : true;
         if (callAvailable) {
             checkCall(true);
         } else {
@@ -308,7 +308,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (!(create || fragmentView == null || (fragmentView.getParent() != null && ((View) fragmentView.getParent()).getVisibility() == 0))) {
             create = true;
         }
-        if (VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getCallState() == 10) {
+        if (VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getCallState() == 15) {
             callAvailable = false;
         } else {
             callAvailable = true;

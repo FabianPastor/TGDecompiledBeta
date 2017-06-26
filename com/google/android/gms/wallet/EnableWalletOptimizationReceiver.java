@@ -6,6 +6,6 @@ import android.content.Intent;
 
 @Deprecated
 public final class EnableWalletOptimizationReceiver extends BroadcastReceiver {
-    public void onReceive(Context context, Intent intent) {
+    public final void onReceive(Context context, Intent intent) {
     }
 }

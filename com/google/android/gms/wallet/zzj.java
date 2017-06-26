@@ -2,51 +2,37 @@ package com.google.android.gms.wallet;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
 import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
 
-public class zzj implements Creator<InstrumentInfo> {
-    static void zza(InstrumentInfo instrumentInfo, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zza(parcel, 2, instrumentInfo.getInstrumentType(), false);
-        zzc.zza(parcel, 3, instrumentInfo.getInstrumentDetails(), false);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzke(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzoA(i);
-    }
-
-    public InstrumentInfo zzke(Parcel parcel) {
+public final class zzj implements Creator<InstrumentInfo> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
         String str = null;
-        int zzaY = zzb.zzaY(parcel);
+        int zzd = zzb.zzd(parcel);
+        int i = 0;
         String str2 = null;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
                 case 2:
-                    str2 = zzb.zzq(parcel, zzaX);
+                    str2 = zzb.zzq(parcel, readInt);
                     break;
                 case 3:
-                    str = zzb.zzq(parcel, zzaX);
+                    str = zzb.zzq(parcel, readInt);
+                    break;
+                case 4:
+                    i = zzb.zzg(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaX);
+                    zzb.zzb(parcel, readInt);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new InstrumentInfo(str2, str);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
+        zzb.zzF(parcel, zzd);
+        return new InstrumentInfo(str2, str, i);
     }
 
-    public InstrumentInfo[] zzoA(int i) {
+    public final /* synthetic */ Object[] newArray(int i) {
         return new InstrumentInfo[i];
     }
 }

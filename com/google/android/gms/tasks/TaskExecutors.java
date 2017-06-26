@@ -7,16 +7,12 @@ import java.util.concurrent.Executor;
 
 public final class TaskExecutors {
     public static final Executor MAIN_THREAD = new zza();
-    static final Executor zzbNG = new Executor() {
-        public void execute(@NonNull Runnable runnable) {
-            runnable.run();
-        }
-    };
+    static final Executor zzbMd = new zzm();
 
-    private static final class zza implements Executor {
+    static final class zza implements Executor {
         private final Handler mHandler = new Handler(Looper.getMainLooper());
 
-        public void execute(@NonNull Runnable runnable) {
+        public final void execute(@NonNull Runnable runnable) {
             this.mHandler.post(runnable);
         }
     }

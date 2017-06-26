@@ -17,4 +17,5 @@
     <string name="common_open_on_phone">Obre al telèfon</string>
     <string name="common_signin_button_text">Inicia sessió</string>
     <string name="common_signin_button_text_long">Inicia la sessió amb Google</string>
+    <string name="wallet_buy_button_place_holder">Compra amb Google</string>
 </resources>

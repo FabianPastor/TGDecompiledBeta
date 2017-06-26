@@ -2,128 +2,120 @@ package com.google.android.gms.wallet;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
 import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
-import com.google.android.gms.identity.intents.model.CountrySpecification;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.wallet.wobs.zze;
+import com.google.android.gms.wallet.wobs.zzg;
+import com.google.android.gms.wallet.wobs.zzk;
+import com.google.android.gms.wallet.wobs.zzm;
+import com.google.android.gms.wallet.wobs.zzq;
 import java.util.ArrayList;
 
-public class zzo implements Creator<MaskedWalletRequest> {
-    static void zza(MaskedWalletRequest maskedWalletRequest, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zza(parcel, 2, maskedWalletRequest.zzbPX, false);
-        zzc.zza(parcel, 3, maskedWalletRequest.zzbQW);
-        zzc.zza(parcel, 4, maskedWalletRequest.zzbQX);
-        zzc.zza(parcel, 5, maskedWalletRequest.zzbQY);
-        zzc.zza(parcel, 6, maskedWalletRequest.zzbQZ, false);
-        zzc.zza(parcel, 7, maskedWalletRequest.zzbPQ, false);
-        zzc.zza(parcel, 8, maskedWalletRequest.zzbRa, false);
-        zzc.zza(parcel, 9, maskedWalletRequest.zzbQh, i, false);
-        zzc.zza(parcel, 10, maskedWalletRequest.zzbRb);
-        zzc.zza(parcel, 11, maskedWalletRequest.zzbRc);
-        zzc.zza(parcel, 12, maskedWalletRequest.zzbRd, i, false);
-        zzc.zza(parcel, 13, maskedWalletRequest.zzbRe);
-        zzc.zza(parcel, 14, maskedWalletRequest.zzbRf);
-        zzc.zzc(parcel, 15, maskedWalletRequest.zzbRg, false);
-        zzc.zza(parcel, 16, maskedWalletRequest.zzbRh, i, false);
-        zzc.zza(parcel, 17, maskedWalletRequest.zzbRi, false);
-        zzc.zza(parcel, 18, maskedWalletRequest.zzUI, false);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzkj(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzoF(i);
-    }
-
-    public MaskedWalletRequest zzkj(Parcel parcel) {
-        int zzaY = zzb.zzaY(parcel);
+public final class zzo implements Creator<LoyaltyWalletObject> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzb.zzd(parcel);
         String str = null;
-        boolean z = false;
-        boolean z2 = false;
-        boolean z3 = false;
         String str2 = null;
         String str3 = null;
         String str4 = null;
-        Cart cart = null;
-        boolean z4 = false;
-        boolean z5 = false;
-        CountrySpecification[] countrySpecificationArr = null;
-        boolean z6 = true;
-        boolean z7 = true;
-        ArrayList arrayList = null;
-        PaymentMethodTokenizationParameters paymentMethodTokenizationParameters = null;
-        ArrayList arrayList2 = null;
         String str5 = null;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
+        String str6 = null;
+        String str7 = null;
+        String str8 = null;
+        String str9 = null;
+        String str10 = null;
+        int i = 0;
+        ArrayList arrayList = new ArrayList();
+        zzm com_google_android_gms_wallet_wobs_zzm = null;
+        ArrayList arrayList2 = new ArrayList();
+        String str11 = null;
+        String str12 = null;
+        ArrayList arrayList3 = new ArrayList();
+        boolean z = false;
+        ArrayList arrayList4 = new ArrayList();
+        ArrayList arrayList5 = new ArrayList();
+        ArrayList arrayList6 = new ArrayList();
+        zzg com_google_android_gms_wallet_wobs_zzg = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
                 case 2:
-                    str = zzb.zzq(parcel, zzaX);
+                    str = zzb.zzq(parcel, readInt);
                     break;
                 case 3:
-                    z = zzb.zzc(parcel, zzaX);
+                    str2 = zzb.zzq(parcel, readInt);
                     break;
                 case 4:
-                    z2 = zzb.zzc(parcel, zzaX);
+                    str3 = zzb.zzq(parcel, readInt);
                     break;
                 case 5:
-                    z3 = zzb.zzc(parcel, zzaX);
+                    str4 = zzb.zzq(parcel, readInt);
                     break;
                 case 6:
-                    str2 = zzb.zzq(parcel, zzaX);
+                    str5 = zzb.zzq(parcel, readInt);
                     break;
                 case 7:
-                    str3 = zzb.zzq(parcel, zzaX);
+                    str6 = zzb.zzq(parcel, readInt);
                     break;
                 case 8:
-                    str4 = zzb.zzq(parcel, zzaX);
+                    str7 = zzb.zzq(parcel, readInt);
                     break;
                 case 9:
-                    cart = (Cart) zzb.zza(parcel, zzaX, Cart.CREATOR);
+                    str8 = zzb.zzq(parcel, readInt);
                     break;
                 case 10:
-                    z4 = zzb.zzc(parcel, zzaX);
+                    str9 = zzb.zzq(parcel, readInt);
                     break;
                 case 11:
-                    z5 = zzb.zzc(parcel, zzaX);
+                    str10 = zzb.zzq(parcel, readInt);
                     break;
                 case 12:
-                    countrySpecificationArr = (CountrySpecification[]) zzb.zzb(parcel, zzaX, CountrySpecification.CREATOR);
+                    i = zzb.zzg(parcel, readInt);
                     break;
                 case 13:
-                    z6 = zzb.zzc(parcel, zzaX);
+                    arrayList = zzb.zzc(parcel, readInt, zzq.CREATOR);
                     break;
                 case 14:
-                    z7 = zzb.zzc(parcel, zzaX);
+                    com_google_android_gms_wallet_wobs_zzm = (zzm) zzb.zza(parcel, readInt, zzm.CREATOR);
                     break;
                 case 15:
-                    arrayList = zzb.zzc(parcel, zzaX, CountrySpecification.CREATOR);
+                    arrayList2 = zzb.zzc(parcel, readInt, LatLng.CREATOR);
                     break;
                 case 16:
-                    paymentMethodTokenizationParameters = (PaymentMethodTokenizationParameters) zzb.zza(parcel, zzaX, PaymentMethodTokenizationParameters.CREATOR);
+                    str11 = zzb.zzq(parcel, readInt);
                     break;
                 case 17:
-                    arrayList2 = zzb.zzD(parcel, zzaX);
+                    str12 = zzb.zzq(parcel, readInt);
                     break;
                 case 18:
-                    str5 = zzb.zzq(parcel, zzaX);
+                    arrayList3 = zzb.zzc(parcel, readInt, zze.CREATOR);
+                    break;
+                case 19:
+                    z = zzb.zzc(parcel, readInt);
+                    break;
+                case 20:
+                    arrayList4 = zzb.zzc(parcel, readInt, com.google.android.gms.wallet.wobs.zzo.CREATOR);
+                    break;
+                case 21:
+                    arrayList5 = zzb.zzc(parcel, readInt, zzk.CREATOR);
+                    break;
+                case 22:
+                    arrayList6 = zzb.zzc(parcel, readInt, com.google.android.gms.wallet.wobs.zzo.CREATOR);
+                    break;
+                case 23:
+                    com_google_android_gms_wallet_wobs_zzg = (zzg) zzb.zza(parcel, readInt, zzg.CREATOR);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaX);
+                    zzb.zzb(parcel, readInt);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new MaskedWalletRequest(str, z, z2, z3, str2, str3, str4, cart, z4, z5, countrySpecificationArr, z6, z7, arrayList, paymentMethodTokenizationParameters, arrayList2, str5);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
+        zzb.zzF(parcel, zzd);
+        return new LoyaltyWalletObject(str, str2, str3, str4, str5, str6, str7, str8, str9, str10, i, arrayList, com_google_android_gms_wallet_wobs_zzm, arrayList2, str11, str12, arrayList3, z, arrayList4, arrayList5, arrayList6, com_google_android_gms_wallet_wobs_zzg);
     }
 
-    public MaskedWalletRequest[] zzoF(int i) {
-        return new MaskedWalletRequest[i];
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new LoyaltyWalletObject[i];
     }
 }

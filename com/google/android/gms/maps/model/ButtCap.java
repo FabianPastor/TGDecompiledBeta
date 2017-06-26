@@ -5,7 +5,7 @@ public final class ButtCap extends Cap {
         super(0);
     }
 
-    public String toString() {
+    public final String toString() {
         return "[ButtCap]";
     }
 }

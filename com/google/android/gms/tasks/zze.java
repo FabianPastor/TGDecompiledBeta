@@ -3,40 +3,28 @@ package com.google.android.gms.tasks;
 import android.support.annotation.NonNull;
 import java.util.concurrent.Executor;
 
-class zze<TResult> implements zzf<TResult> {
-    private final Executor zzbFP;
-    private OnSuccessListener<? super TResult> zzbNB;
-    private final Object zzrJ = new Object();
+final class zze<TResult> implements zzk<TResult> {
+    private final Object mLock = new Object();
+    private final Executor zzbEo;
+    private OnCompleteListener<TResult> zzbLU;
 
-    public zze(@NonNull Executor executor, @NonNull OnSuccessListener<? super TResult> onSuccessListener) {
-        this.zzbFP = executor;
-        this.zzbNB = onSuccessListener;
+    public zze(@NonNull Executor executor, @NonNull OnCompleteListener<TResult> onCompleteListener) {
+        this.zzbEo = executor;
+        this.zzbLU = onCompleteListener;
     }
 
-    public void cancel() {
-        synchronized (this.zzrJ) {
-            this.zzbNB = null;
+    public final void cancel() {
+        synchronized (this.mLock) {
+            this.zzbLU = null;
         }
     }
 
-    public void onComplete(@NonNull final Task<TResult> task) {
-        if (task.isSuccessful()) {
-            synchronized (this.zzrJ) {
-                if (this.zzbNB == null) {
-                    return;
-                }
-                this.zzbFP.execute(new Runnable(this) {
-                    final /* synthetic */ zze zzbNC;
-
-                    public void run() {
-                        synchronized (this.zzbNC.zzrJ) {
-                            if (this.zzbNC.zzbNB != null) {
-                                this.zzbNC.zzbNB.onSuccess(task.getResult());
-                            }
-                        }
-                    }
-                });
+    public final void onComplete(@NonNull Task<TResult> task) {
+        synchronized (this.mLock) {
+            if (this.zzbLU == null) {
+                return;
             }
+            this.zzbEo.execute(new zzf(this, task));
         }
     }
 }

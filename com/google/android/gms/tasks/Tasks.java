@@ -1,7 +1,7 @@
 package com.google.android.gms.tasks;
 
 import android.support.annotation.NonNull;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzbo;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.Callable;
@@ -13,89 +13,71 @@ import java.util.concurrent.TimeoutException;
 
 public final class Tasks {
 
-    class AnonymousClass1 implements Runnable {
-        final /* synthetic */ Callable zzXy;
-        final /* synthetic */ zzh zzbNL;
-
-        AnonymousClass1(zzh com_google_android_gms_tasks_zzh, Callable callable) {
-            this.zzbNL = com_google_android_gms_tasks_zzh;
-            this.zzXy = callable;
-        }
-
-        public void run() {
-            try {
-                this.zzbNL.setResult(this.zzXy.call());
-            } catch (Exception e) {
-                this.zzbNL.setException(e);
-            }
-        }
-    }
-
     interface zzb extends OnFailureListener, OnSuccessListener<Object> {
     }
 
-    private static final class zza implements zzb {
-        private final CountDownLatch zztj;
+    static final class zza implements zzb {
+        private final CountDownLatch zztL;
 
         private zza() {
-            this.zztj = new CountDownLatch(1);
+            this.zztL = new CountDownLatch(1);
         }
 
-        public void await() throws InterruptedException {
-            this.zztj.await();
+        public final void await() throws InterruptedException {
+            this.zztL.await();
         }
 
-        public boolean await(long j, TimeUnit timeUnit) throws InterruptedException {
-            return this.zztj.await(j, timeUnit);
+        public final boolean await(long j, TimeUnit timeUnit) throws InterruptedException {
+            return this.zztL.await(j, timeUnit);
         }
 
-        public void onFailure(@NonNull Exception exception) {
-            this.zztj.countDown();
+        public final void onFailure(@NonNull Exception exception) {
+            this.zztL.countDown();
         }
 
-        public void onSuccess(Object obj) {
-            this.zztj.countDown();
+        public final void onSuccess(Object obj) {
+            this.zztL.countDown();
         }
     }
 
-    private static final class zzc implements zzb {
-        private final zzh<Void> zzbNF;
-        private Exception zzbNK;
-        private final int zzbNM;
-        private int zzbNN;
-        private int zzbNO;
-        private final Object zzrJ = new Object();
+    static final class zzc implements zzb {
+        private final Object mLock = new Object();
+        private final zzn<Void> zzbMc;
+        private Exception zzbMh;
+        private final int zzbMj;
+        private int zzbMk;
+        private int zzbMl;
 
-        public zzc(int i, zzh<Void> com_google_android_gms_tasks_zzh_java_lang_Void) {
-            this.zzbNM = i;
-            this.zzbNF = com_google_android_gms_tasks_zzh_java_lang_Void;
+        public zzc(int i, zzn<Void> com_google_android_gms_tasks_zzn_java_lang_Void) {
+            this.zzbMj = i;
+            this.zzbMc = com_google_android_gms_tasks_zzn_java_lang_Void;
         }
 
-        private void zzTL() {
-            if (this.zzbNN + this.zzbNO != this.zzbNM) {
+        private final void zzDI() {
+            if (this.zzbMk + this.zzbMl != this.zzbMj) {
                 return;
             }
-            if (this.zzbNK == null) {
-                this.zzbNF.setResult(null);
+            if (this.zzbMh == null) {
+                this.zzbMc.setResult(null);
                 return;
             }
-            zzh com_google_android_gms_tasks_zzh = this.zzbNF;
-            int i = this.zzbNO;
-            com_google_android_gms_tasks_zzh.setException(new ExecutionException(i + " out of " + this.zzbNM + " underlying tasks failed", this.zzbNK));
+            zzn com_google_android_gms_tasks_zzn = this.zzbMc;
+            int i = this.zzbMl;
+            com_google_android_gms_tasks_zzn.setException(new ExecutionException(i + " out of " + this.zzbMj + " underlying tasks failed", this.zzbMh));
         }
 
-        public void onFailure(@NonNull Exception exception) {
-            synchronized (this.zzrJ) {
-                this.zzbNO++;
-                this.zzbNK = exception;
-                zzTL();
+        public final void onFailure(@NonNull Exception exception) {
+            synchronized (this.mLock) {
+                this.zzbMl++;
+                this.zzbMh = exception;
+                zzDI();
             }
         }
 
-        public void onSuccess(Object obj) {
-            synchronized (this.zzrJ) {
-                this.zzbNN++;
-                zzTL();
+        public final void onSuccess(Object obj) {
+            synchronized (this.mLock) {
+                this.zzbMk++;
+                zzDI();
             }
         }
     }
@@ -104,8 +86,8 @@ public final class Tasks {
     }
 
     public static <TResult> TResult await(@NonNull Task<TResult> task) throws ExecutionException, InterruptedException {
-        zzac.zzye();
-        zzac.zzb((Object) task, (Object) "Task must not be null");
+        zzbo.zzcG("Must not be called on the main application thread");
+        zzbo.zzb((Object) task, (Object) "Task must not be null");
         if (task.isComplete()) {
             return zzb(task);
         }
@@ -116,9 +98,9 @@ public final class Tasks {
     }
 
     public static <TResult> TResult await(@NonNull Task<TResult> task, long j, @NonNull TimeUnit timeUnit) throws ExecutionException, InterruptedException, TimeoutException {
-        zzac.zzye();
-        zzac.zzb((Object) task, (Object) "Task must not be null");
-        zzac.zzb((Object) timeUnit, (Object) "TimeUnit must not be null");
+        zzbo.zzcG("Must not be called on the main application thread");
+        zzbo.zzb((Object) task, (Object) "Task must not be null");
+        zzbo.zzb((Object) timeUnit, (Object) "TimeUnit must not be null");
         if (task.isComplete()) {
             return zzb(task);
         }
@@ -135,23 +117,23 @@ public final class Tasks {
     }
 
     public static <TResult> Task<TResult> call(@NonNull Executor executor, @NonNull Callable<TResult> callable) {
-        zzac.zzb((Object) executor, (Object) "Executor must not be null");
-        zzac.zzb((Object) callable, (Object) "Callback must not be null");
-        Task com_google_android_gms_tasks_zzh = new zzh();
-        executor.execute(new AnonymousClass1(com_google_android_gms_tasks_zzh, callable));
-        return com_google_android_gms_tasks_zzh;
+        zzbo.zzb((Object) executor, (Object) "Executor must not be null");
+        zzbo.zzb((Object) callable, (Object) "Callback must not be null");
+        Task com_google_android_gms_tasks_zzn = new zzn();
+        executor.execute(new zzo(com_google_android_gms_tasks_zzn, callable));
+        return com_google_android_gms_tasks_zzn;
     }
 
     public static <TResult> Task<TResult> forException(@NonNull Exception exception) {
-        Task com_google_android_gms_tasks_zzh = new zzh();
-        com_google_android_gms_tasks_zzh.setException(exception);
-        return com_google_android_gms_tasks_zzh;
+        Task com_google_android_gms_tasks_zzn = new zzn();
+        com_google_android_gms_tasks_zzn.setException(exception);
+        return com_google_android_gms_tasks_zzn;
     }
 
     public static <TResult> Task<TResult> forResult(TResult tResult) {
-        Task com_google_android_gms_tasks_zzh = new zzh();
-        com_google_android_gms_tasks_zzh.setResult(tResult);
-        return com_google_android_gms_tasks_zzh;
+        Task com_google_android_gms_tasks_zzn = new zzn();
+        com_google_android_gms_tasks_zzn.setResult(tResult);
+        return com_google_android_gms_tasks_zzn;
     }
 
     public static Task<Void> whenAll(Collection<? extends Task<?>> collection) {
@@ -163,12 +145,12 @@ public final class Tasks {
                 throw new NullPointerException("null tasks are not accepted");
             }
         }
-        Task com_google_android_gms_tasks_zzh = new zzh();
-        zzb com_google_android_gms_tasks_Tasks_zzc = new zzc(collection.size(), com_google_android_gms_tasks_zzh);
+        Task com_google_android_gms_tasks_zzn = new zzn();
+        zzb com_google_android_gms_tasks_Tasks_zzc = new zzc(collection.size(), com_google_android_gms_tasks_zzn);
         for (Task task2 : collection) {
             zza(task2, com_google_android_gms_tasks_Tasks_zzc);
         }
-        return com_google_android_gms_tasks_zzh;
+        return com_google_android_gms_tasks_zzn;
     }
 
     public static Task<Void> whenAll(Task<?>... taskArr) {
@@ -176,8 +158,8 @@ public final class Tasks {
     }
 
     private static void zza(Task<?> task, zzb com_google_android_gms_tasks_Tasks_zzb) {
-        task.addOnSuccessListener(TaskExecutors.zzbNG, (OnSuccessListener) com_google_android_gms_tasks_Tasks_zzb);
-        task.addOnFailureListener(TaskExecutors.zzbNG, (OnFailureListener) com_google_android_gms_tasks_Tasks_zzb);
+        task.addOnSuccessListener(TaskExecutors.zzbMd, (OnSuccessListener) com_google_android_gms_tasks_Tasks_zzb);
+        task.addOnFailureListener(TaskExecutors.zzbMd, (OnFailureListener) com_google_android_gms_tasks_Tasks_zzb);
     }
 
     private static <TResult> TResult zzb(Task<TResult> task) throws ExecutionException {

@@ -1,69 +1,51 @@
 package com.google.android.gms.common.internal;
 
-import android.os.IBinder;
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
+import android.app.PendingIntent;
+import android.os.Bundle;
+import android.support.annotation.BinderThread;
+import com.google.android.gms.common.ConnectionResult;
 
-public class zze implements Creator<zzd> {
-    static void zza(zzd com_google_android_gms_common_internal_zzd, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zzc(parcel, 1, com_google_android_gms_common_internal_zzd.zzaiI);
-        zzc.zza(parcel, 2, com_google_android_gms_common_internal_zzd.zzaEW, false);
-        zzc.zza(parcel, 3, com_google_android_gms_common_internal_zzd.zzaEX, i, false);
-        zzc.zza(parcel, 4, com_google_android_gms_common_internal_zzd.zzaEY, false);
-        zzc.zza(parcel, 5, com_google_android_gms_common_internal_zzd.zzaEZ, false);
-        zzc.zzJ(parcel, zzaZ);
+abstract class zze extends zzi<Boolean> {
+    private int statusCode;
+    private Bundle zzaHd;
+    private /* synthetic */ zzd zzaHe;
+
+    @BinderThread
+    protected zze(zzd com_google_android_gms_common_internal_zzd, int i, Bundle bundle) {
+        this.zzaHe = com_google_android_gms_common_internal_zzd;
+        super(com_google_android_gms_common_internal_zzd, Boolean.valueOf(true));
+        this.statusCode = i;
+        this.zzaHd = bundle;
     }
 
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzaQ(parcel);
-    }
+    protected abstract void zzj(ConnectionResult connectionResult);
 
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzcR(i);
-    }
+    protected abstract boolean zzrj();
 
-    public zzd zzaQ(Parcel parcel) {
-        Integer num = null;
-        int zzaY = zzb.zzaY(parcel);
-        int i = 0;
-        Integer num2 = null;
-        Scope[] scopeArr = null;
-        IBinder iBinder = null;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
-                case 1:
-                    i = zzb.zzg(parcel, zzaX);
-                    break;
-                case 2:
-                    iBinder = zzb.zzr(parcel, zzaX);
-                    break;
-                case 3:
-                    scopeArr = (Scope[]) zzb.zzb(parcel, zzaX, Scope.CREATOR);
-                    break;
-                case 4:
-                    num2 = zzb.zzh(parcel, zzaX);
-                    break;
-                case 5:
-                    num = zzb.zzh(parcel, zzaX);
-                    break;
-                default:
-                    zzb.zzb(parcel, zzaX);
-                    break;
-            }
+    protected final /* synthetic */ void zzs(Object obj) {
+        PendingIntent pendingIntent = null;
+        if (((Boolean) obj) == null) {
+            this.zzaHe.zza(1, null);
+            return;
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new zzd(i, iBinder, scopeArr, num2, num);
+        switch (this.statusCode) {
+            case 0:
+                if (!zzrj()) {
+                    this.zzaHe.zza(1, null);
+                    zzj(new ConnectionResult(8, null));
+                    return;
+                }
+                return;
+            case 10:
+                this.zzaHe.zza(1, null);
+                throw new IllegalStateException("A fatal developer error has occurred. Check the logs for further information.");
+            default:
+                this.zzaHe.zza(1, null);
+                if (this.zzaHd != null) {
+                    pendingIntent = (PendingIntent) this.zzaHd.getParcelable("pendingIntent");
+                }
+                zzj(new ConnectionResult(this.statusCode, pendingIntent));
+                return;
         }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
-    }
-
-    public zzd[] zzcR(int i) {
-        return new zzd[i];
     }
 }

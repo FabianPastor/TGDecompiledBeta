@@ -2,46 +2,29 @@ package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
 import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
 
-public class zzg implements Creator<MapStyleOptions> {
-    static void zza(MapStyleOptions mapStyleOptions, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zza(parcel, 2, mapStyleOptions.zzJL(), false);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzhD(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzll(i);
-    }
-
-    public MapStyleOptions zzhD(Parcel parcel) {
-        int zzaY = zzb.zzaY(parcel);
+public final class zzg implements Creator<MapStyleOptions> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzb.zzd(parcel);
         String str = null;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
                 case 2:
-                    str = zzb.zzq(parcel, zzaX);
+                    str = zzb.zzq(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaX);
+                    zzb.zzb(parcel, readInt);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new MapStyleOptions(str);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
+        zzb.zzF(parcel, zzd);
+        return new MapStyleOptions(str);
     }
 
-    public MapStyleOptions[] zzll(int i) {
+    public final /* synthetic */ Object[] newArray(int i) {
         return new MapStyleOptions[i];
     }
 }

@@ -104,6 +104,31 @@ public class CheckBoxCell extends FrameLayout {
         setWillNotDraw(z);
     }
 
+    public void setEnabled(boolean enabled) {
+        float f;
+        float f2 = 1.0f;
+        super.setEnabled(enabled);
+        TextView textView = this.textView;
+        if (enabled) {
+            f = 1.0f;
+        } else {
+            f = 0.5f;
+        }
+        textView.setAlpha(f);
+        textView = this.valueTextView;
+        if (enabled) {
+            f = 1.0f;
+        } else {
+            f = 0.5f;
+        }
+        textView.setAlpha(f);
+        CheckBoxSquare checkBoxSquare = this.checkBox;
+        if (!enabled) {
+            f2 = 0.5f;
+        }
+        checkBoxSquare.setAlpha(f2);
+    }
+
     public void setChecked(boolean checked, boolean animated) {
         this.checkBox.setChecked(checked, animated);
     }

@@ -9,6 +9,7 @@ import android.os.Build.VERSION;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -31,6 +33,7 @@ import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInfo;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
+import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.ChatFull;
 import org.telegram.tgnet.TLRPC.ChatParticipant;
 import org.telegram.tgnet.TLRPC.TL_botCommand;
@@ -49,13 +52,14 @@ import org.telegram.tgnet.TLRPC.TL_photo;
 import org.telegram.tgnet.TLRPC.TL_topPeer;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
-import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject;
 import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate;
 import org.telegram.ui.Cells.BotSwitchCell;
 import org.telegram.ui.Cells.ContextLinkCell;
 import org.telegram.ui.Cells.ContextLinkCell.ContextLinkCellDelegate;
 import org.telegram.ui.Cells.MentionCell;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
@@ -71,6 +75,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private long dialog_id;
     private User foundContextBot;
     private ChatFull info;
+    private boolean inlineMediaEnabled = true;
     private boolean isDarkTheme;
     private Location lastKnownLocation;
     private int lastPosition;
@@ -98,7 +103,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private boolean needUsernames = true;
     private String nextQueryOffset;
     private boolean noUserName;
-    private BaseFragment parentFragment;
+    private ChatActivity parentFragment;
     private int resultLength;
     private int resultStartPosition;
     private SearchAdapterHelper searchAdapterHelper;
@@ -157,6 +162,7 @@ public class MentionsAdapter extends SelectionAdapter {
             this.contextQueryReqid = 0;
         }
         this.foundContextBot = null;
+        this.inlineMediaEnabled = true;
         this.searchingContextUsername = null;
         this.searchingContextQuery = null;
         this.noUserName = false;
@@ -166,7 +172,7 @@ public class MentionsAdapter extends SelectionAdapter {
         this.allowNewMentions = value;
     }
 
-    public void setParentFragment(BaseFragment fragment) {
+    public void setParentFragment(ChatActivity fragment) {
         this.parentFragment = fragment;
     }
 
@@ -223,8 +229,20 @@ public class MentionsAdapter extends SelectionAdapter {
         this.locationProvider.stop();
         if (user == null || !user.bot || user.bot_inline_placeholder == null) {
             this.foundContextBot = null;
+            this.inlineMediaEnabled = true;
         } else {
             this.foundContextBot = user;
+            if (this.parentFragment != null) {
+                Chat chat = this.parentFragment.getCurrentChat();
+                if (chat != null) {
+                    this.inlineMediaEnabled = ChatObject.canSendStickers(chat);
+                    if (!this.inlineMediaEnabled) {
+                        notifyDataSetChanged();
+                        this.delegate.needChangePanelVisibility(true);
+                        return;
+                    }
+                }
+            }
             if (this.foundContextBot.bot_inline_geo) {
                 if (ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("inlinegeo_" + this.foundContextBot.id, false) || this.parentFragment == null || this.parentFragment.getParentActivity() == null) {
                     checkLocationPermissionsOrStart();
@@ -276,7 +294,11 @@ public class MentionsAdapter extends SelectionAdapter {
             this.searchResultBotContextSwitch = null;
             notifyDataSetChanged();
             if (this.foundContextBot != null) {
-                this.delegate.needChangePanelVisibility(false);
+                if (this.inlineMediaEnabled || username == null || query == null) {
+                    this.delegate.needChangePanelVisibility(false);
+                } else {
+                    return;
+                }
             }
             if (this.contextQueryRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(this.contextQueryRunnable);
@@ -292,6 +314,7 @@ public class MentionsAdapter extends SelectionAdapter {
                     this.contextQueryReqid = 0;
                 }
                 this.foundContextBot = null;
+                this.inlineMediaEnabled = true;
                 this.searchingContextUsername = null;
                 this.searchingContextQuery = null;
                 this.locationProvider.stop();
@@ -407,126 +430,130 @@ public class MentionsAdapter extends SelectionAdapter {
             ConnectionsManager.getInstance().cancelRequest(this.contextQueryReqid, true);
             this.contextQueryReqid = 0;
         }
-        if (query == null || user == null) {
-            this.searchingContextQuery = null;
-        } else if (!user.bot_inline_geo || this.lastKnownLocation != null) {
-            StringBuilder append = new StringBuilder().append(this.dialog_id).append("_").append(query).append("_").append(offset).append("_").append(this.dialog_id).append("_").append(user.id).append("_");
-            Object valueOf = (!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d) ? "" : Double.valueOf(this.lastKnownLocation.getLatitude() + this.lastKnownLocation.getLongitude());
-            final String key = append.append(valueOf).toString();
-            final String str = query;
-            final boolean z = cache;
-            final User user2 = user;
-            final String str2 = offset;
-            RequestDelegate requestDelegate = new RequestDelegate() {
-                public void run(final TLObject response, TL_error error) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            boolean z = false;
-                            if (MentionsAdapter.this.searchingContextQuery != null && str.equals(MentionsAdapter.this.searchingContextQuery)) {
-                                if (MentionsAdapter.this.delegate != null) {
-                                    MentionsAdapter.this.delegate.onContextSearch(false);
-                                }
-                                MentionsAdapter.this.contextQueryReqid = 0;
-                                if (z && response == null) {
-                                    MentionsAdapter.this.searchForContextBotResults(false, user2, str, str2);
-                                }
-                                if (response != null) {
-                                    TL_messages_botResults res = response;
-                                    if (!(z || res.cache_time == 0)) {
-                                        MessagesStorage.getInstance().saveBotCache(key, res);
+        if (this.inlineMediaEnabled) {
+            if (query == null || user == null) {
+                this.searchingContextQuery = null;
+            } else if (!user.bot_inline_geo || this.lastKnownLocation != null) {
+                StringBuilder append = new StringBuilder().append(this.dialog_id).append("_").append(query).append("_").append(offset).append("_").append(this.dialog_id).append("_").append(user.id).append("_");
+                Object valueOf = (!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d) ? "" : Double.valueOf(this.lastKnownLocation.getLatitude() + this.lastKnownLocation.getLongitude());
+                final String key = append.append(valueOf).toString();
+                final String str = query;
+                final boolean z = cache;
+                final User user2 = user;
+                final String str2 = offset;
+                RequestDelegate requestDelegate = new RequestDelegate() {
+                    public void run(final TLObject response, TL_error error) {
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                boolean z = false;
+                                if (MentionsAdapter.this.searchingContextQuery != null && str.equals(MentionsAdapter.this.searchingContextQuery)) {
+                                    if (MentionsAdapter.this.delegate != null) {
+                                        MentionsAdapter.this.delegate.onContextSearch(false);
                                     }
-                                    MentionsAdapter.this.nextQueryOffset = res.next_offset;
-                                    if (MentionsAdapter.this.searchResultBotContextById == null) {
-                                        MentionsAdapter.this.searchResultBotContextById = new HashMap();
-                                        MentionsAdapter.this.searchResultBotContextSwitch = res.switch_pm;
+                                    MentionsAdapter.this.contextQueryReqid = 0;
+                                    if (z && response == null) {
+                                        MentionsAdapter.this.searchForContextBotResults(false, user2, str, str2);
                                     }
-                                    int a = 0;
-                                    while (a < res.results.size()) {
-                                        BotInlineResult result = (BotInlineResult) res.results.get(a);
-                                        if (MentionsAdapter.this.searchResultBotContextById.containsKey(result.id) || (!(result.document instanceof TL_document) && !(result.photo instanceof TL_photo) && result.content_url == null && (result.send_message instanceof TL_botInlineMessageMediaAuto))) {
-                                            res.results.remove(a);
-                                            a--;
+                                    if (response != null) {
+                                        TL_messages_botResults res = response;
+                                        if (!(z || res.cache_time == 0)) {
+                                            MessagesStorage.getInstance().saveBotCache(key, res);
                                         }
-                                        result.query_id = res.query_id;
-                                        MentionsAdapter.this.searchResultBotContextById.put(result.id, result);
-                                        a++;
-                                    }
-                                    boolean added = false;
-                                    if (MentionsAdapter.this.searchResultBotContext == null || str2.length() == 0) {
-                                        MentionsAdapter.this.searchResultBotContext = res.results;
-                                        MentionsAdapter.this.contextMedia = res.gallery;
-                                    } else {
-                                        added = true;
-                                        MentionsAdapter.this.searchResultBotContext.addAll(res.results);
-                                        if (res.results.isEmpty()) {
-                                            MentionsAdapter.this.nextQueryOffset = "";
+                                        MentionsAdapter.this.nextQueryOffset = res.next_offset;
+                                        if (MentionsAdapter.this.searchResultBotContextById == null) {
+                                            MentionsAdapter.this.searchResultBotContextById = new HashMap();
+                                            MentionsAdapter.this.searchResultBotContextSwitch = res.switch_pm;
                                         }
-                                    }
-                                    MentionsAdapter.this.searchResultHashtags = null;
-                                    MentionsAdapter.this.searchResultUsernames = null;
-                                    MentionsAdapter.this.searchResultCommands = null;
-                                    MentionsAdapter.this.searchResultCommandsHelp = null;
-                                    MentionsAdapter.this.searchResultCommandsUsers = null;
-                                    if (added) {
-                                        boolean hasTop;
-                                        int i;
-                                        if (MentionsAdapter.this.searchResultBotContextSwitch != null) {
-                                            hasTop = true;
+                                        int a = 0;
+                                        while (a < res.results.size()) {
+                                            BotInlineResult result = (BotInlineResult) res.results.get(a);
+                                            if (MentionsAdapter.this.searchResultBotContextById.containsKey(result.id) || (!(result.document instanceof TL_document) && !(result.photo instanceof TL_photo) && result.content_url == null && (result.send_message instanceof TL_botInlineMessageMediaAuto))) {
+                                                res.results.remove(a);
+                                                a--;
+                                            }
+                                            result.query_id = res.query_id;
+                                            MentionsAdapter.this.searchResultBotContextById.put(result.id, result);
+                                            a++;
+                                        }
+                                        boolean added = false;
+                                        if (MentionsAdapter.this.searchResultBotContext == null || str2.length() == 0) {
+                                            MentionsAdapter.this.searchResultBotContext = res.results;
+                                            MentionsAdapter.this.contextMedia = res.gallery;
                                         } else {
-                                            hasTop = false;
+                                            added = true;
+                                            MentionsAdapter.this.searchResultBotContext.addAll(res.results);
+                                            if (res.results.isEmpty()) {
+                                                MentionsAdapter.this.nextQueryOffset = "";
+                                            }
                                         }
-                                        MentionsAdapter mentionsAdapter = MentionsAdapter.this;
-                                        int size = MentionsAdapter.this.searchResultBotContext.size() - res.results.size();
-                                        if (hasTop) {
-                                            i = 1;
+                                        MentionsAdapter.this.searchResultHashtags = null;
+                                        MentionsAdapter.this.searchResultUsernames = null;
+                                        MentionsAdapter.this.searchResultCommands = null;
+                                        MentionsAdapter.this.searchResultCommandsHelp = null;
+                                        MentionsAdapter.this.searchResultCommandsUsers = null;
+                                        if (added) {
+                                            boolean hasTop;
+                                            int i;
+                                            if (MentionsAdapter.this.searchResultBotContextSwitch != null) {
+                                                hasTop = true;
+                                            } else {
+                                                hasTop = false;
+                                            }
+                                            MentionsAdapter mentionsAdapter = MentionsAdapter.this;
+                                            int size = MentionsAdapter.this.searchResultBotContext.size() - res.results.size();
+                                            if (hasTop) {
+                                                i = 1;
+                                            } else {
+                                                i = 0;
+                                            }
+                                            mentionsAdapter.notifyItemChanged((i + size) - 1);
+                                            mentionsAdapter = MentionsAdapter.this;
+                                            size = MentionsAdapter.this.searchResultBotContext.size() - res.results.size();
+                                            if (hasTop) {
+                                                i = 1;
+                                            } else {
+                                                i = 0;
+                                            }
+                                            mentionsAdapter.notifyItemRangeInserted(i + size, res.results.size());
                                         } else {
-                                            i = 0;
+                                            MentionsAdapter.this.notifyDataSetChanged();
                                         }
-                                        mentionsAdapter.notifyItemChanged((i + size) - 1);
-                                        mentionsAdapter = MentionsAdapter.this;
-                                        size = MentionsAdapter.this.searchResultBotContext.size() - res.results.size();
-                                        if (hasTop) {
-                                            i = 1;
-                                        } else {
-                                            i = 0;
+                                        MentionsAdapterDelegate access$1400 = MentionsAdapter.this.delegate;
+                                        if (!(MentionsAdapter.this.searchResultBotContext.isEmpty() && MentionsAdapter.this.searchResultBotContextSwitch == null)) {
+                                            z = true;
                                         }
-                                        mentionsAdapter.notifyItemRangeInserted(i + size, res.results.size());
-                                    } else {
-                                        MentionsAdapter.this.notifyDataSetChanged();
+                                        access$1400.needChangePanelVisibility(z);
                                     }
-                                    MentionsAdapterDelegate access$1400 = MentionsAdapter.this.delegate;
-                                    if (!(MentionsAdapter.this.searchResultBotContext.isEmpty() && MentionsAdapter.this.searchResultBotContextSwitch == null)) {
-                                        z = true;
-                                    }
-                                    access$1400.needChangePanelVisibility(z);
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
+                };
+                if (cache) {
+                    MessagesStorage.getInstance().getBotCache(key, requestDelegate);
+                    return;
                 }
-            };
-            if (cache) {
-                MessagesStorage.getInstance().getBotCache(key, requestDelegate);
-                return;
+                TL_messages_getInlineBotResults req = new TL_messages_getInlineBotResults();
+                req.bot = MessagesController.getInputUser(user);
+                req.query = query;
+                req.offset = offset;
+                if (!(!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d)) {
+                    req.flags |= 1;
+                    req.geo_point = new TL_inputGeoPoint();
+                    req.geo_point.lat = this.lastKnownLocation.getLatitude();
+                    req.geo_point._long = this.lastKnownLocation.getLongitude();
+                }
+                int lower_id = (int) this.dialog_id;
+                int high_id = (int) (this.dialog_id >> 32);
+                if (lower_id != 0) {
+                    req.peer = MessagesController.getInputPeer(lower_id);
+                } else {
+                    req.peer = new TL_inputPeerEmpty();
+                }
+                this.contextQueryReqid = ConnectionsManager.getInstance().sendRequest(req, requestDelegate, 2);
             }
-            TL_messages_getInlineBotResults req = new TL_messages_getInlineBotResults();
-            req.bot = MessagesController.getInputUser(user);
-            req.query = query;
-            req.offset = offset;
-            if (!(!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d)) {
-                req.flags |= 1;
-                req.geo_point = new TL_inputGeoPoint();
-                req.geo_point.lat = this.lastKnownLocation.getLatitude();
-                req.geo_point._long = this.lastKnownLocation.getLongitude();
-            }
-            int lower_id = (int) this.dialog_id;
-            int high_id = (int) (this.dialog_id >> 32);
-            if (lower_id != 0) {
-                req.peer = MessagesController.getInputPeer(lower_id);
-            } else {
-                req.peer = new TL_inputPeerEmpty();
-            }
-            this.contextQueryReqid = ConnectionsManager.getInstance().sendRequest(req, requestDelegate, 2);
+        } else if (this.delegate != null) {
+            this.delegate.onContextSearch(false);
         }
     }
 
@@ -772,11 +799,14 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     public int getItemCount() {
-        int i = 0;
+        int i = 1;
+        if (this.foundContextBot != null && !this.inlineMediaEnabled) {
+            return 1;
+        }
         if (this.searchResultBotContext != null) {
             int size = this.searchResultBotContext.size();
-            if (this.searchResultBotContextSwitch != null) {
-                i = 1;
+            if (this.searchResultBotContextSwitch == null) {
+                i = 0;
             }
             return i + size;
         } else if (this.searchResultUsernames != null) {
@@ -785,14 +815,14 @@ public class MentionsAdapter extends SelectionAdapter {
             if (this.searchResultHashtags != null) {
                 return this.searchResultHashtags.size();
             }
-            if (this.searchResultCommands != null) {
-                return this.searchResultCommands.size();
-            }
-            return 0;
+            return this.searchResultCommands != null ? this.searchResultCommands.size() : 0;
         }
     }
 
     public int getItemViewType(int position) {
+        if (this.foundContextBot != null && !this.inlineMediaEnabled) {
+            return 3;
+        }
         if (this.searchResultBotContext == null) {
             return 0;
         }
@@ -864,36 +894,67 @@ public class MentionsAdapter extends SelectionAdapter {
         return this.searchResultBotContext != null;
     }
 
+    public boolean isBannedInline() {
+        return (this.foundContextBot == null || this.inlineMediaEnabled) ? false : true;
+    }
+
     public boolean isMediaLayout() {
         return this.contextMedia;
     }
 
     public boolean isEnabled(ViewHolder holder) {
-        return true;
+        return this.foundContextBot == null || this.inlineMediaEnabled;
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        if (viewType == 1) {
-            view = new ContextLinkCell(this.mContext);
-            ((ContextLinkCell) view).setDelegate(new ContextLinkCellDelegate() {
-                public void didPressedImage(ContextLinkCell cell) {
-                    MentionsAdapter.this.delegate.onContextClick(cell.getResult());
-                }
-            });
-        } else if (viewType == 2) {
-            view = new BotSwitchCell(this.mContext);
-        } else {
-            view = new MentionCell(this.mContext);
-            ((MentionCell) view).setIsDarkTheme(this.isDarkTheme);
+        switch (viewType) {
+            case 0:
+                view = new MentionCell(this.mContext);
+                ((MentionCell) view).setIsDarkTheme(this.isDarkTheme);
+                break;
+            case 1:
+                view = new ContextLinkCell(this.mContext);
+                ((ContextLinkCell) view).setDelegate(new ContextLinkCellDelegate() {
+                    public void didPressedImage(ContextLinkCell cell) {
+                        MentionsAdapter.this.delegate.onContextClick(cell.getResult());
+                    }
+                });
+                break;
+            case 2:
+                view = new BotSwitchCell(this.mContext);
+                break;
+            default:
+                View textView = new TextView(this.mContext);
+                textView.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
+                textView.setTextSize(1, 14.0f);
+                textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+                view = textView;
+                break;
         }
         return new Holder(view);
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
         boolean z = true;
-        if (this.searchResultBotContext != null) {
-            boolean hasTop = this.searchResultBotContextSwitch != null;
+        if (holder.getItemViewType() == 3) {
+            TextView textView = holder.itemView;
+            Chat chat = this.parentFragment.getCurrentChat();
+            if (chat == null) {
+                return;
+            }
+            if (AndroidUtilities.isBannedForever(chat.banned_rights.until_date)) {
+                textView.setText(LocaleController.getString("AttachInlineRestrictedForever", R.string.AttachInlineRestrictedForever));
+            } else {
+                textView.setText(LocaleController.formatString("AttachInlineRestricted", R.string.AttachInlineRestricted, LocaleController.formatDateForBan((long) chat.banned_rights.until_date)));
+            }
+        } else if (this.searchResultBotContext != null) {
+            boolean hasTop;
+            if (this.searchResultBotContextSwitch != null) {
+                hasTop = true;
+            } else {
+                hasTop = false;
+            }
             if (holder.getItemViewType() != 2) {
                 if (hasTop) {
                     position--;

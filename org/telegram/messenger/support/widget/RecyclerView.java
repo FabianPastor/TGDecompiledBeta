@@ -66,6 +66,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.tgnet.ConnectionsManager;
@@ -111,6 +112,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             return ((((t * t) * t) * t) * t) + 1.0f;
         }
     };
+    private int bottomGlowOffset;
     private int glowColor;
     RecyclerViewAccessibilityDelegate mAccessibilityDelegate;
     private final AccessibilityManager mAccessibilityManager;
@@ -3692,6 +3694,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         this.topGlowOffset = offset;
     }
 
+    public void setBottomGlowOffset(int offset) {
+        this.bottomGlowOffset = offset;
+    }
+
     public void setGlowColor(int color) {
         this.glowColor = color;
     }
@@ -3749,6 +3755,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         this.mScrollConsumed = new int[2];
         this.mNestedOffsets = new int[2];
         this.topGlowOffset = 0;
+        this.bottomGlowOffset = 0;
         this.glowColor = 0;
         this.mPendingAccessibilityImportanceChange = new ArrayList();
         this.mItemAnimatorRunner = new Runnable() {
@@ -4941,7 +4948,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                     return true;
                 }
                 return false;
-            case 66:
+            case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*66*/:
                 if ((this.mTempRect.left < this.mTempRect2.left || this.mTempRect.right <= this.mTempRect2.left) && this.mTempRect.right < this.mTempRect2.right) {
                     return true;
                 }
@@ -6111,7 +6118,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             if (this.mClipToPadding) {
                 c.translate((float) ((-getWidth()) + getPaddingRight()), (float) ((-getHeight()) + getPaddingBottom()));
             } else {
-                c.translate((float) (-getWidth()), (float) (-getHeight()));
+                c.translate((float) (-getWidth()), (float) ((-getHeight()) + this.bottomGlowOffset));
             }
             if (this.mBottomGlow == null || !this.mBottomGlow.draw(c)) {
                 i2 = 0;

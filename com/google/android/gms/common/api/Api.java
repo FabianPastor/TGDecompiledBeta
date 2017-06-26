@@ -5,11 +5,12 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Looper;
-import android.support.annotation.Nullable;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.common.internal.zzr;
+import com.google.android.gms.common.internal.zzal;
+import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.common.internal.zzj;
+import com.google.android.gms.common.internal.zzq;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.Collections;
@@ -19,10 +20,10 @@ import org.telegram.tgnet.ConnectionsManager;
 
 public final class Api<O extends ApiOptions> {
     private final String mName;
-    private final zza<?, O> zzayH;
-    private final zzh<?, O> zzayI = null;
-    private final zzf<?> zzayJ;
-    private final zzi<?> zzayK;
+    private final zzi<?> zzaAA;
+    private final zza<?, O> zzaAx;
+    private final zzh<?, O> zzaAy = null;
+    private final zzf<?> zzaAz;
 
     public interface ApiOptions {
 
@@ -52,13 +53,13 @@ public final class Api<O extends ApiOptions> {
             return ConnectionsManager.DEFAULT_DATACENTER_ID;
         }
 
-        public List<Scope> zzp(O o) {
+        public List<Scope> zzn(O o) {
             return Collections.emptyList();
         }
     }
 
     public static abstract class zza<T extends zze, O> extends zzd<T, O> {
-        public abstract T zza(Context context, Looper looper, com.google.android.gms.common.internal.zzg com_google_android_gms_common_internal_zzg, O o, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener);
+        public abstract T zza(Context context, Looper looper, zzq com_google_android_gms_common_internal_zzq, O o, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener);
     }
 
     public interface zze extends zzb {
@@ -70,31 +71,28 @@ public final class Api<O extends ApiOptions> {
 
         boolean isConnecting();
 
-        void zza(com.google.android.gms.common.internal.zzf.zzf com_google_android_gms_common_internal_zzf_zzf);
+        void zza(zzal com_google_android_gms_common_internal_zzal, Set<Scope> set);
 
-        void zza(zzr com_google_android_gms_common_internal_zzr, Set<Scope> set);
+        void zza(zzj com_google_android_gms_common_internal_zzj);
 
-        boolean zzrd();
+        boolean zzmG();
 
-        boolean zzrr();
+        Intent zzmH();
 
-        Intent zzrs();
+        boolean zzmv();
 
-        boolean zzvh();
-
-        @Nullable
-        IBinder zzvi();
+        boolean zzpe();
     }
 
     public static final class zzf<C extends zze> extends zzc<C> {
     }
 
     public interface zzg<T extends IInterface> extends zzb {
-        String zzeA();
+        T zzd(IBinder iBinder);
 
-        String zzez();
+        String zzdb();
 
-        T zzh(IBinder iBinder);
+        String zzdc();
     }
 
     public static abstract class zzh<T extends zzg, O> extends zzd<T, O> {
@@ -104,30 +102,30 @@ public final class Api<O extends ApiOptions> {
     }
 
     public <C extends zze> Api(String str, zza<C, O> com_google_android_gms_common_api_Api_zza_C__O, zzf<C> com_google_android_gms_common_api_Api_zzf_C) {
-        zzac.zzb((Object) com_google_android_gms_common_api_Api_zza_C__O, (Object) "Cannot construct an Api with a null ClientBuilder");
-        zzac.zzb((Object) com_google_android_gms_common_api_Api_zzf_C, (Object) "Cannot construct an Api with a null ClientKey");
+        zzbo.zzb((Object) com_google_android_gms_common_api_Api_zza_C__O, (Object) "Cannot construct an Api with a null ClientBuilder");
+        zzbo.zzb((Object) com_google_android_gms_common_api_Api_zzf_C, (Object) "Cannot construct an Api with a null ClientKey");
         this.mName = str;
-        this.zzayH = com_google_android_gms_common_api_Api_zza_C__O;
-        this.zzayJ = com_google_android_gms_common_api_Api_zzf_C;
-        this.zzayK = null;
+        this.zzaAx = com_google_android_gms_common_api_Api_zza_C__O;
+        this.zzaAz = com_google_android_gms_common_api_Api_zzf_C;
+        this.zzaAA = null;
     }
 
-    public String getName() {
+    public final String getName() {
         return this.mName;
     }
 
-    public zzd<?, O> zzve() {
-        return this.zzayH;
+    public final zzd<?, O> zzpb() {
+        return this.zzaAx;
     }
 
-    public zza<?, O> zzvf() {
-        zzac.zza(this.zzayH != null, (Object) "This API was constructed with a SimpleClientBuilder. Use getSimpleClientBuilder");
-        return this.zzayH;
+    public final zza<?, O> zzpc() {
+        zzbo.zza(this.zzaAx != null, (Object) "This API was constructed with a SimpleClientBuilder. Use getSimpleClientBuilder");
+        return this.zzaAx;
     }
 
-    public zzc<?> zzvg() {
-        if (this.zzayJ != null) {
-            return this.zzayJ;
+    public final zzc<?> zzpd() {
+        if (this.zzaAz != null) {
+            return this.zzaAz;
         }
         throw new IllegalStateException("This API was constructed with null client keys. This should not be possible.");
     }

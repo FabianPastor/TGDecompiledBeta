@@ -2,57 +2,53 @@ package com.google.android.gms.vision.text;
 
 import android.graphics.Point;
 import android.graphics.Rect;
-import com.google.android.gms.internal.zzbkh;
-import com.google.android.gms.internal.zzbkq;
+import com.google.android.gms.internal.fj;
+import com.google.android.gms.internal.fs;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Line implements Text {
-    private zzbkh zzbPq;
-    private List<Element> zzbPr;
+    private fj zzbNM;
+    private List<Element> zzbNN;
 
-    Line(zzbkh com_google_android_gms_internal_zzbkh) {
-        this.zzbPq = com_google_android_gms_internal_zzbkh;
+    Line(fj fjVar) {
+        this.zzbNM = fjVar;
     }
 
     public float getAngle() {
-        return this.zzbPq.zzbPA.zzbPy;
+        return this.zzbNM.zzbNW.zzbNU;
     }
 
     public Rect getBoundingBox() {
-        return zza.zza((Text) this);
+        return zzc.zza((Text) this);
     }
 
     public List<? extends Text> getComponents() {
-        return zzTV();
+        if (this.zzbNM.zzbNV.length == 0) {
+            return new ArrayList(0);
+        }
+        if (this.zzbNN == null) {
+            this.zzbNN = new ArrayList(this.zzbNM.zzbNV.length);
+            for (fs element : this.zzbNM.zzbNV) {
+                this.zzbNN.add(new Element(element));
+            }
+        }
+        return this.zzbNN;
     }
 
     public Point[] getCornerPoints() {
-        return zza.zza(this.zzbPq.zzbPA);
+        return zzc.zza(this.zzbNM.zzbNW);
     }
 
     public String getLanguage() {
-        return this.zzbPq.zzbPu;
+        return this.zzbNM.zzbNQ;
     }
 
     public String getValue() {
-        return this.zzbPq.zzbPD;
+        return this.zzbNM.zzbNZ;
     }
 
     public boolean isVertical() {
-        return this.zzbPq.zzbPG;
-    }
-
-    List<Element> zzTV() {
-        if (this.zzbPq.zzbPz.length == 0) {
-            return new ArrayList(0);
-        }
-        if (this.zzbPr == null) {
-            this.zzbPr = new ArrayList(this.zzbPq.zzbPz.length);
-            for (zzbkq element : this.zzbPq.zzbPz) {
-                this.zzbPr.add(new Element(element));
-            }
-        }
-        return this.zzbPr;
+        return this.zzbNM.zzbOc;
     }
 }

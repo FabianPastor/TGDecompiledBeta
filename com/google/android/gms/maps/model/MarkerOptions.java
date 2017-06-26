@@ -6,172 +6,184 @@ import android.os.Parcelable.Creator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 import com.google.android.gms.dynamic.IObjectWrapper;
 
 public final class MarkerOptions extends zza {
     public static final Creator<MarkerOptions> CREATOR = new zzh();
     private float mAlpha = 1.0f;
-    private String zzamJ;
-    private LatLng zzboK;
-    private String zzbpB;
-    private BitmapDescriptor zzbpC;
-    private boolean zzbpD;
-    private boolean zzbpE = false;
-    private float zzbpF = 0.0f;
-    private float zzbpG = 0.5f;
-    private float zzbpH = 0.0f;
-    private float zzbph;
-    private boolean zzbpi = true;
-    private float zzbpr = 0.5f;
-    private float zzbps = 1.0f;
+    private String zzaoy;
+    private LatLng zzbmN;
+    private String zzbnE;
+    private BitmapDescriptor zzbnF;
+    private boolean zzbnG;
+    private boolean zzbnH = false;
+    private float zzbnI = 0.0f;
+    private float zzbnJ = 0.5f;
+    private float zzbnK = 0.0f;
+    private float zzbnk;
+    private boolean zzbnl = true;
+    private float zzbnu = 0.5f;
+    private float zzbnv = 1.0f;
 
     MarkerOptions(LatLng latLng, String str, String str2, IBinder iBinder, float f, float f2, boolean z, boolean z2, boolean z3, float f3, float f4, float f5, float f6, float f7) {
-        this.zzboK = latLng;
-        this.zzamJ = str;
-        this.zzbpB = str2;
+        this.zzbmN = latLng;
+        this.zzaoy = str;
+        this.zzbnE = str2;
         if (iBinder == null) {
-            this.zzbpC = null;
+            this.zzbnF = null;
         } else {
-            this.zzbpC = new BitmapDescriptor(IObjectWrapper.zza.zzcd(iBinder));
+            this.zzbnF = new BitmapDescriptor(IObjectWrapper.zza.zzM(iBinder));
         }
-        this.zzbpr = f;
-        this.zzbps = f2;
-        this.zzbpD = z;
-        this.zzbpi = z2;
-        this.zzbpE = z3;
-        this.zzbpF = f3;
-        this.zzbpG = f4;
-        this.zzbpH = f5;
+        this.zzbnu = f;
+        this.zzbnv = f2;
+        this.zzbnG = z;
+        this.zzbnl = z2;
+        this.zzbnH = z3;
+        this.zzbnI = f3;
+        this.zzbnJ = f4;
+        this.zzbnK = f5;
         this.mAlpha = f6;
-        this.zzbph = f7;
+        this.zzbnk = f7;
     }
 
-    public MarkerOptions alpha(float f) {
+    public final MarkerOptions alpha(float f) {
         this.mAlpha = f;
         return this;
     }
 
-    public MarkerOptions anchor(float f, float f2) {
-        this.zzbpr = f;
-        this.zzbps = f2;
+    public final MarkerOptions anchor(float f, float f2) {
+        this.zzbnu = f;
+        this.zzbnv = f2;
         return this;
     }
 
-    public MarkerOptions draggable(boolean z) {
-        this.zzbpD = z;
+    public final MarkerOptions draggable(boolean z) {
+        this.zzbnG = z;
         return this;
     }
 
-    public MarkerOptions flat(boolean z) {
-        this.zzbpE = z;
+    public final MarkerOptions flat(boolean z) {
+        this.zzbnH = z;
         return this;
     }
 
-    public float getAlpha() {
+    public final float getAlpha() {
         return this.mAlpha;
     }
 
-    public float getAnchorU() {
-        return this.zzbpr;
+    public final float getAnchorU() {
+        return this.zzbnu;
     }
 
-    public float getAnchorV() {
-        return this.zzbps;
+    public final float getAnchorV() {
+        return this.zzbnv;
     }
 
-    public BitmapDescriptor getIcon() {
-        return this.zzbpC;
+    public final BitmapDescriptor getIcon() {
+        return this.zzbnF;
     }
 
-    public float getInfoWindowAnchorU() {
-        return this.zzbpG;
+    public final float getInfoWindowAnchorU() {
+        return this.zzbnJ;
     }
 
-    public float getInfoWindowAnchorV() {
-        return this.zzbpH;
+    public final float getInfoWindowAnchorV() {
+        return this.zzbnK;
     }
 
-    public LatLng getPosition() {
-        return this.zzboK;
+    public final LatLng getPosition() {
+        return this.zzbmN;
     }
 
-    public float getRotation() {
-        return this.zzbpF;
+    public final float getRotation() {
+        return this.zzbnI;
     }
 
-    public String getSnippet() {
-        return this.zzbpB;
+    public final String getSnippet() {
+        return this.zzbnE;
     }
 
-    public String getTitle() {
-        return this.zzamJ;
+    public final String getTitle() {
+        return this.zzaoy;
     }
 
-    public float getZIndex() {
-        return this.zzbph;
+    public final float getZIndex() {
+        return this.zzbnk;
     }
 
-    public MarkerOptions icon(@Nullable BitmapDescriptor bitmapDescriptor) {
-        this.zzbpC = bitmapDescriptor;
+    public final MarkerOptions icon(@Nullable BitmapDescriptor bitmapDescriptor) {
+        this.zzbnF = bitmapDescriptor;
         return this;
     }
 
-    public MarkerOptions infoWindowAnchor(float f, float f2) {
-        this.zzbpG = f;
-        this.zzbpH = f2;
+    public final MarkerOptions infoWindowAnchor(float f, float f2) {
+        this.zzbnJ = f;
+        this.zzbnK = f2;
         return this;
     }
 
-    public boolean isDraggable() {
-        return this.zzbpD;
+    public final boolean isDraggable() {
+        return this.zzbnG;
     }
 
-    public boolean isFlat() {
-        return this.zzbpE;
+    public final boolean isFlat() {
+        return this.zzbnH;
     }
 
-    public boolean isVisible() {
-        return this.zzbpi;
+    public final boolean isVisible() {
+        return this.zzbnl;
     }
 
-    public MarkerOptions position(@NonNull LatLng latLng) {
+    public final MarkerOptions position(@NonNull LatLng latLng) {
         if (latLng == null) {
             throw new IllegalArgumentException("latlng cannot be null - a position is required.");
         }
-        this.zzboK = latLng;
+        this.zzbmN = latLng;
         return this;
     }
 
-    public MarkerOptions rotation(float f) {
-        this.zzbpF = f;
+    public final MarkerOptions rotation(float f) {
+        this.zzbnI = f;
         return this;
     }
 
-    public MarkerOptions snippet(@Nullable String str) {
-        this.zzbpB = str;
+    public final MarkerOptions snippet(@Nullable String str) {
+        this.zzbnE = str;
         return this;
     }
 
-    public MarkerOptions title(@Nullable String str) {
-        this.zzamJ = str;
+    public final MarkerOptions title(@Nullable String str) {
+        this.zzaoy = str;
         return this;
     }
 
-    public MarkerOptions visible(boolean z) {
-        this.zzbpi = z;
+    public final MarkerOptions visible(boolean z) {
+        this.zzbnl = z;
         return this;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzh.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, getPosition(), i, false);
+        zzd.zza(parcel, 3, getTitle(), false);
+        zzd.zza(parcel, 4, getSnippet(), false);
+        zzd.zza(parcel, 5, this.zzbnF == null ? null : this.zzbnF.zzwe().asBinder(), false);
+        zzd.zza(parcel, 6, getAnchorU());
+        zzd.zza(parcel, 7, getAnchorV());
+        zzd.zza(parcel, 8, isDraggable());
+        zzd.zza(parcel, 9, isVisible());
+        zzd.zza(parcel, 10, isFlat());
+        zzd.zza(parcel, 11, getRotation());
+        zzd.zza(parcel, 12, getInfoWindowAnchorU());
+        zzd.zza(parcel, 13, getInfoWindowAnchorV());
+        zzd.zza(parcel, 14, getAlpha());
+        zzd.zza(parcel, 15, getZIndex());
+        zzd.zzI(parcel, zze);
     }
 
-    public MarkerOptions zIndex(float f) {
-        this.zzbph = f;
+    public final MarkerOptions zIndex(float f) {
+        this.zzbnk = f;
         return this;
-    }
-
-    IBinder zzJM() {
-        return this.zzbpC == null ? null : this.zzbpC.zzJm().asBinder();
     }
 }

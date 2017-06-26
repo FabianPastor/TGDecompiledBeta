@@ -5,61 +5,57 @@ import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class zza<E> extends AbstractSet<E> {
-    private final ArrayMap<E, E> zzaHS;
+@Deprecated
+public final class zza<E> extends AbstractSet<E> {
+    private final ArrayMap<E, E> zzaJC;
 
     public zza() {
-        this.zzaHS = new ArrayMap();
+        this.zzaJC = new ArrayMap();
     }
 
     public zza(int i) {
-        this.zzaHS = new ArrayMap(i);
+        this.zzaJC = new ArrayMap(i);
     }
 
-    public zza(Collection<E> collection) {
-        this(collection.size());
-        addAll(collection);
-    }
-
-    public boolean add(E e) {
-        if (this.zzaHS.containsKey(e)) {
+    public final boolean add(E e) {
+        if (this.zzaJC.containsKey(e)) {
             return false;
         }
-        this.zzaHS.put(e, e);
+        this.zzaJC.put(e, e);
         return true;
     }
 
-    public boolean addAll(Collection<? extends E> collection) {
-        return collection instanceof zza ? zza((zza) collection) : super.addAll(collection);
-    }
-
-    public void clear() {
-        this.zzaHS.clear();
-    }
-
-    public boolean contains(Object obj) {
-        return this.zzaHS.containsKey(obj);
-    }
-
-    public Iterator<E> iterator() {
-        return this.zzaHS.keySet().iterator();
-    }
-
-    public boolean remove(Object obj) {
-        if (!this.zzaHS.containsKey(obj)) {
-            return false;
+    public final boolean addAll(Collection<? extends E> collection) {
+        if (!(collection instanceof zza)) {
+            return super.addAll(collection);
         }
-        this.zzaHS.remove(obj);
-        return true;
-    }
-
-    public int size() {
-        return this.zzaHS.size();
-    }
-
-    public boolean zza(zza<? extends E> com_google_android_gms_common_util_zza__extends_E) {
+        zza com_google_android_gms_common_util_zza = (zza) collection;
         int size = size();
-        this.zzaHS.putAll(com_google_android_gms_common_util_zza__extends_E.zzaHS);
+        this.zzaJC.putAll(com_google_android_gms_common_util_zza.zzaJC);
         return size() > size;
+    }
+
+    public final void clear() {
+        this.zzaJC.clear();
+    }
+
+    public final boolean contains(Object obj) {
+        return this.zzaJC.containsKey(obj);
+    }
+
+    public final Iterator<E> iterator() {
+        return this.zzaJC.keySet().iterator();
+    }
+
+    public final boolean remove(Object obj) {
+        if (!this.zzaJC.containsKey(obj)) {
+            return false;
+        }
+        this.zzaJC.remove(obj);
+        return true;
+    }
+
+    public final int size() {
+        return this.zzaJC.size();
     }
 }

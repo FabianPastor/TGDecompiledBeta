@@ -9,18 +9,18 @@ import com.google.android.gms.vision.Tracker;
 public class LargestFaceFocusingProcessor extends FocusingProcessor<Face> {
 
     public static class Builder {
-        private LargestFaceFocusingProcessor zzbOZ;
+        private LargestFaceFocusingProcessor zzbNw;
 
         public Builder(Detector<Face> detector, Tracker<Face> tracker) {
-            this.zzbOZ = new LargestFaceFocusingProcessor(detector, tracker);
+            this.zzbNw = new LargestFaceFocusingProcessor(detector, tracker);
         }
 
         public LargestFaceFocusingProcessor build() {
-            return this.zzbOZ;
+            return this.zzbNw;
         }
 
         public Builder setMaxGapFrames(int i) {
-            this.zzbOZ.zznQ(i);
+            this.zzbNw.zzbK(i);
             return this;
         }
     }

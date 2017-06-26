@@ -1,59 +1,32 @@
 package com.google.android.gms.internal;
 
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
-import java.util.List;
+import android.os.RemoteException;
+import android.support.annotation.NonNull;
+import com.google.android.gms.common.api.Api.zzb;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.TaskCompletionSource;
 
-public class zzbao implements Creator<zzban> {
-    static void zza(zzban com_google_android_gms_internal_zzban, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zzc(parcel, 1, com_google_android_gms_internal_zzban.zzaiI);
-        zzc.zza(parcel, 2, com_google_android_gms_internal_zzban.zzbEs);
-        zzc.zzc(parcel, 3, com_google_android_gms_internal_zzban.zzbEt, false);
-        zzc.zzJ(parcel, zzaZ);
+public final class zzbao extends zzbam {
+    private zzbed<zzb, ?> zzaBu;
+    private zzbex<zzb, ?> zzaBv;
+
+    public zzbao(zzbee com_google_android_gms_internal_zzbee, TaskCompletionSource<Void> taskCompletionSource) {
+        super(3, taskCompletionSource);
+        this.zzaBu = com_google_android_gms_internal_zzbee.zzaBu;
+        this.zzaBv = com_google_android_gms_internal_zzbee.zzaBv;
     }
 
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzjv(parcel);
+    public final /* bridge */ /* synthetic */ void zza(@NonNull zzbbs com_google_android_gms_internal_zzbbs, boolean z) {
     }
 
-    public /* synthetic */ Object[] newArray(int i) {
-        return zznu(i);
-    }
-
-    public zzban zzjv(Parcel parcel) {
-        boolean z = false;
-        int zzaY = zzb.zzaY(parcel);
-        List list = null;
-        int i = 0;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
-                case 1:
-                    i = zzb.zzg(parcel, zzaX);
-                    break;
-                case 2:
-                    z = zzb.zzc(parcel, zzaX);
-                    break;
-                case 3:
-                    list = zzb.zzc(parcel, zzaX, Scope.CREATOR);
-                    break;
-                default:
-                    zzb.zzb(parcel, zzaX);
-                    break;
-            }
+    public final void zzb(zzbdc<?> com_google_android_gms_internal_zzbdc_) throws RemoteException {
+        this.zzaBu.zzb(com_google_android_gms_internal_zzbdc_.zzpJ(), this.zzalE);
+        if (this.zzaBu.zzqG() != null) {
+            com_google_android_gms_internal_zzbdc_.zzqs().put(this.zzaBu.zzqG(), new zzbee(this.zzaBu, this.zzaBv));
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new zzban(i, z, list);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public zzban[] zznu(int i) {
-        return new zzban[i];
+    public final /* bridge */ /* synthetic */ void zzp(@NonNull Status status) {
+        super.zzp(status);
     }
 }

@@ -10,21 +10,36 @@ import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.ChannelParticipant;
+import org.telegram.tgnet.TLRPC.TL_channelParticipantsBanned;
+import org.telegram.tgnet.TLRPC.TL_channelParticipantsKicked;
+import org.telegram.tgnet.TLRPC.TL_channelParticipantsSearch;
+import org.telegram.tgnet.TLRPC.TL_channels_channelParticipants;
+import org.telegram.tgnet.TLRPC.TL_channels_getParticipants;
 import org.telegram.tgnet.TLRPC.TL_contacts_found;
 import org.telegram.tgnet.TLRPC.TL_contacts_search;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.User;
 
 public class SearchAdapterHelper {
+    private int channelLastReqId;
+    private int channelLastReqId2;
+    private int channelReqId = 0;
+    private int channelReqId2 = 0;
     private SearchAdapterHelperDelegate delegate;
     private ArrayList<TLObject> globalSearch = new ArrayList();
+    private ArrayList<ChannelParticipant> groupSearch = new ArrayList();
+    private ArrayList<ChannelParticipant> groupSearch2 = new ArrayList();
     private ArrayList<HashtagObject> hashtags;
     private HashMap<String, HashtagObject> hashtagsByText;
     private boolean hashtagsLoadedFromDb = false;
+    private String lastFoundChannel;
+    private String lastFoundChannel2;
     private String lastFoundUsername = null;
     private int lastReqId;
     private int reqId = 0;
@@ -40,53 +55,136 @@ public class SearchAdapterHelper {
         void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap);
     }
 
-    public void queryServerSearch(String query, boolean allowChats, boolean allowBots, boolean allowSelf) {
+    public void queryServerSearch(final String query, boolean allowUsername, boolean allowChats, boolean allowBots, boolean allowSelf, int channelId, boolean kicked) {
         if (this.reqId != 0) {
             ConnectionsManager.getInstance().cancelRequest(this.reqId, true);
             this.reqId = 0;
         }
-        if (query == null || query.length() < 5) {
+        if (this.channelReqId != 0) {
+            ConnectionsManager.getInstance().cancelRequest(this.channelReqId, true);
+            this.channelReqId = 0;
+        }
+        if (this.channelReqId2 != 0) {
+            ConnectionsManager.getInstance().cancelRequest(this.channelReqId2, true);
+            this.channelReqId2 = 0;
+        }
+        if (query == null) {
+            this.groupSearch.clear();
+            this.groupSearch2.clear();
             this.globalSearch.clear();
             this.lastReqId = 0;
+            this.channelLastReqId = 0;
+            this.channelLastReqId2 = 0;
             this.delegate.onDataSetChanged();
             return;
         }
-        TL_contacts_search req = new TL_contacts_search();
-        req.q = query;
-        req.limit = 50;
-        final int currentReqId = this.lastReqId + 1;
-        this.lastReqId = currentReqId;
-        final boolean z = allowChats;
-        final boolean z2 = allowBots;
-        final boolean z3 = allowSelf;
-        final String str = query;
-        this.reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-            public void run(final TLObject response, final TL_error error) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        if (currentReqId == SearchAdapterHelper.this.lastReqId && error == null) {
-                            int a;
-                            TL_contacts_found res = response;
-                            SearchAdapterHelper.this.globalSearch.clear();
-                            if (z) {
-                                for (a = 0; a < res.chats.size(); a++) {
-                                    SearchAdapterHelper.this.globalSearch.add(res.chats.get(a));
-                                }
-                            }
-                            for (a = 0; a < res.users.size(); a++) {
-                                User user = (User) res.users.get(a);
-                                if ((z2 || !user.bot) && (z3 || !user.self)) {
-                                    SearchAdapterHelper.this.globalSearch.add(res.users.get(a));
-                                }
-                            }
-                            SearchAdapterHelper.this.lastFoundUsername = str;
-                            SearchAdapterHelper.this.delegate.onDataSetChanged();
-                        }
-                        SearchAdapterHelper.this.reqId = 0;
-                    }
-                });
+        TL_channels_getParticipants req;
+        if (query.length() <= 0 || channelId == 0) {
+            this.groupSearch.clear();
+            this.groupSearch2.clear();
+            this.channelLastReqId = 0;
+            this.delegate.onDataSetChanged();
+        } else {
+            req = new TL_channels_getParticipants();
+            if (kicked) {
+                req.filter = new TL_channelParticipantsBanned();
+            } else {
+                req.filter = new TL_channelParticipantsSearch();
             }
-        }, 2);
+            req.filter.q = query;
+            req.limit = 50;
+            req.offset = 0;
+            req.channel = MessagesController.getInputChannel(channelId);
+            final int currentReqId = this.channelLastReqId + 1;
+            this.channelLastReqId = currentReqId;
+            this.channelReqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                public void run(final TLObject response, final TL_error error) {
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            if (currentReqId == SearchAdapterHelper.this.channelLastReqId && error == null) {
+                                TL_channels_channelParticipants res = response;
+                                SearchAdapterHelper.this.lastFoundChannel = query.toLowerCase();
+                                MessagesController.getInstance().putUsers(res.users, false);
+                                SearchAdapterHelper.this.groupSearch = res.participants;
+                                SearchAdapterHelper.this.delegate.onDataSetChanged();
+                            }
+                            SearchAdapterHelper.this.channelReqId = 0;
+                        }
+                    });
+                }
+            }, 2);
+            if (kicked) {
+                req = new TL_channels_getParticipants();
+                req.filter = new TL_channelParticipantsKicked();
+                req.filter.q = query;
+                req.limit = 50;
+                req.offset = 0;
+                req.channel = MessagesController.getInputChannel(channelId);
+                final int currentReqId2 = this.channelLastReqId2 + 1;
+                this.channelLastReqId2 = currentReqId2;
+                this.channelReqId2 = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    public void run(final TLObject response, final TL_error error) {
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                if (currentReqId2 == SearchAdapterHelper.this.channelLastReqId2 && error == null) {
+                                    TL_channels_channelParticipants res = response;
+                                    SearchAdapterHelper.this.lastFoundChannel2 = query.toLowerCase();
+                                    MessagesController.getInstance().putUsers(res.users, false);
+                                    SearchAdapterHelper.this.groupSearch2 = res.participants;
+                                    SearchAdapterHelper.this.delegate.onDataSetChanged();
+                                }
+                                SearchAdapterHelper.this.channelReqId2 = 0;
+                            }
+                        });
+                    }
+                }, 2);
+            }
+        }
+        if (!allowUsername) {
+            return;
+        }
+        if (query.length() >= 5) {
+            req = new TL_contacts_search();
+            req.q = query;
+            req.limit = 50;
+            currentReqId = this.lastReqId + 1;
+            this.lastReqId = currentReqId;
+            final boolean z = allowChats;
+            final boolean z2 = allowBots;
+            final boolean z3 = allowSelf;
+            final String str = query;
+            this.reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                public void run(final TLObject response, final TL_error error) {
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            if (currentReqId == SearchAdapterHelper.this.lastReqId && error == null) {
+                                int a;
+                                TL_contacts_found res = response;
+                                SearchAdapterHelper.this.globalSearch.clear();
+                                if (z) {
+                                    for (a = 0; a < res.chats.size(); a++) {
+                                        SearchAdapterHelper.this.globalSearch.add(res.chats.get(a));
+                                    }
+                                }
+                                for (a = 0; a < res.users.size(); a++) {
+                                    User user = (User) res.users.get(a);
+                                    if ((z2 || !user.bot) && (z3 || !user.self)) {
+                                        SearchAdapterHelper.this.globalSearch.add(res.users.get(a));
+                                    }
+                                }
+                                SearchAdapterHelper.this.lastFoundUsername = str.toLowerCase();
+                                SearchAdapterHelper.this.delegate.onDataSetChanged();
+                            }
+                            SearchAdapterHelper.this.reqId = 0;
+                        }
+                    });
+                }
+            }, 2);
+            return;
+        }
+        this.globalSearch.clear();
+        this.lastReqId = 0;
+        this.delegate.onDataSetChanged();
     }
 
     public void unloadRecentHashtags() {
@@ -207,12 +305,28 @@ public class SearchAdapterHelper {
         return this.globalSearch;
     }
 
+    public ArrayList<ChannelParticipant> getGroupSearch() {
+        return this.groupSearch;
+    }
+
+    public ArrayList<ChannelParticipant> getGroupSearch2() {
+        return this.groupSearch2;
+    }
+
     public ArrayList<HashtagObject> getHashtags() {
         return this.hashtags;
     }
 
     public String getLastFoundUsername() {
         return this.lastFoundUsername;
+    }
+
+    public String getLastFoundChannel() {
+        return this.lastFoundChannel;
+    }
+
+    public String getLastFoundChannel2() {
+        return this.lastFoundChannel2;
     }
 
     public void clearRecentHashtags() {

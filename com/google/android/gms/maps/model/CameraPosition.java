@@ -8,8 +8,10 @@ import android.util.AttributeSet;
 import com.google.android.gms.R;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.zzaa;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.common.internal.zzbe;
+import com.google.android.gms.common.internal.zzbo;
+import java.util.Arrays;
 
 public final class CameraPosition extends zza implements ReflectedParcelable {
     public static final Creator<CameraPosition> CREATOR = new zza();
@@ -19,47 +21,47 @@ public final class CameraPosition extends zza implements ReflectedParcelable {
     public final float zoom;
 
     public static final class Builder {
-        private LatLng zzboZ;
-        private float zzbpa;
-        private float zzbpb;
-        private float zzbpc;
+        private LatLng zzbnc;
+        private float zzbnd;
+        private float zzbne;
+        private float zzbnf;
 
         public Builder(CameraPosition cameraPosition) {
-            this.zzboZ = cameraPosition.target;
-            this.zzbpa = cameraPosition.zoom;
-            this.zzbpb = cameraPosition.tilt;
-            this.zzbpc = cameraPosition.bearing;
+            this.zzbnc = cameraPosition.target;
+            this.zzbnd = cameraPosition.zoom;
+            this.zzbne = cameraPosition.tilt;
+            this.zzbnf = cameraPosition.bearing;
         }
 
-        public Builder bearing(float f) {
-            this.zzbpc = f;
+        public final Builder bearing(float f) {
+            this.zzbnf = f;
             return this;
         }
 
-        public CameraPosition build() {
-            return new CameraPosition(this.zzboZ, this.zzbpa, this.zzbpb, this.zzbpc);
+        public final CameraPosition build() {
+            return new CameraPosition(this.zzbnc, this.zzbnd, this.zzbne, this.zzbnf);
         }
 
-        public Builder target(LatLng latLng) {
-            this.zzboZ = latLng;
+        public final Builder target(LatLng latLng) {
+            this.zzbnc = latLng;
             return this;
         }
 
-        public Builder tilt(float f) {
-            this.zzbpb = f;
+        public final Builder tilt(float f) {
+            this.zzbne = f;
             return this;
         }
 
-        public Builder zoom(float f) {
-            this.zzbpa = f;
+        public final Builder zoom(float f) {
+            this.zzbnd = f;
             return this;
         }
     }
 
     public CameraPosition(LatLng latLng, float f, float f2, float f3) {
-        zzac.zzb((Object) latLng, (Object) "null camera target");
+        zzbo.zzb((Object) latLng, (Object) "null camera target");
         boolean z = 0.0f <= f2 && f2 <= 90.0f;
-        zzac.zzb(z, "Tilt needs to be between 0 and 90 inclusive: %s", Float.valueOf(f2));
+        zzbo.zzb(z, "Tilt needs to be between 0 and 90 inclusive: %s", Float.valueOf(f2));
         this.target = latLng;
         this.zoom = f;
         this.tilt = f2 + 0.0f;
@@ -101,7 +103,7 @@ public final class CameraPosition extends zza implements ReflectedParcelable {
         return new CameraPosition(latLng, f, 0.0f, 0.0f);
     }
 
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -112,15 +114,20 @@ public final class CameraPosition extends zza implements ReflectedParcelable {
         return this.target.equals(cameraPosition.target) && Float.floatToIntBits(this.zoom) == Float.floatToIntBits(cameraPosition.zoom) && Float.floatToIntBits(this.tilt) == Float.floatToIntBits(cameraPosition.tilt) && Float.floatToIntBits(this.bearing) == Float.floatToIntBits(cameraPosition.bearing);
     }
 
-    public int hashCode() {
-        return zzaa.hashCode(this.target, Float.valueOf(this.zoom), Float.valueOf(this.tilt), Float.valueOf(this.bearing));
+    public final int hashCode() {
+        return Arrays.hashCode(new Object[]{this.target, Float.valueOf(this.zoom), Float.valueOf(this.tilt), Float.valueOf(this.bearing)});
     }
 
-    public String toString() {
-        return zzaa.zzv(this).zzg("target", this.target).zzg("zoom", Float.valueOf(this.zoom)).zzg("tilt", Float.valueOf(this.tilt)).zzg("bearing", Float.valueOf(this.bearing)).toString();
+    public final String toString() {
+        return zzbe.zzt(this).zzg("target", this.target).zzg("zoom", Float.valueOf(this.zoom)).zzg("tilt", Float.valueOf(this.tilt)).zzg("bearing", Float.valueOf(this.bearing)).toString();
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zza.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.target, i, false);
+        zzd.zza(parcel, 3, this.zoom);
+        zzd.zza(parcel, 4, this.tilt);
+        zzd.zza(parcel, 5, this.bearing);
+        zzd.zzI(parcel, zze);
     }
 }

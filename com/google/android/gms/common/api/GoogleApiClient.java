@@ -15,24 +15,25 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.Api.ApiOptions;
 import com.google.android.gms.common.api.Api.ApiOptions.HasOptions;
 import com.google.android.gms.common.api.Api.ApiOptions.NotRequiredOptions;
+import com.google.android.gms.common.api.Api.zza;
 import com.google.android.gms.common.api.Api.zzb;
 import com.google.android.gms.common.api.Api.zzc;
 import com.google.android.gms.common.api.Api.zzd;
 import com.google.android.gms.common.api.Api.zze;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.common.internal.zzg;
-import com.google.android.gms.common.internal.zzg.zza;
-import com.google.android.gms.internal.zzaaa;
-import com.google.android.gms.internal.zzaad;
-import com.google.android.gms.internal.zzaag;
-import com.google.android.gms.internal.zzaat;
-import com.google.android.gms.internal.zzabd;
-import com.google.android.gms.internal.zzabh;
-import com.google.android.gms.internal.zzabq;
-import com.google.android.gms.internal.zzabx;
-import com.google.android.gms.internal.zzbah;
-import com.google.android.gms.internal.zzbai;
-import com.google.android.gms.internal.zzbaj;
+import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.common.internal.zzq;
+import com.google.android.gms.common.internal.zzr;
+import com.google.android.gms.internal.zzbat;
+import com.google.android.gms.internal.zzbax;
+import com.google.android.gms.internal.zzbbh;
+import com.google.android.gms.internal.zzbco;
+import com.google.android.gms.internal.zzbdq;
+import com.google.android.gms.internal.zzbdv;
+import com.google.android.gms.internal.zzbeh;
+import com.google.android.gms.internal.zzber;
+import com.google.android.gms.internal.zzctf;
+import com.google.android.gms.internal.zzctj;
+import com.google.android.gms.internal.zzctk;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -48,98 +49,135 @@ import java.util.concurrent.locks.ReentrantLock;
 public abstract class GoogleApiClient {
     public static final int SIGN_IN_MODE_OPTIONAL = 2;
     public static final int SIGN_IN_MODE_REQUIRED = 1;
-    private static final Set<GoogleApiClient> zzazc = Collections.newSetFromMap(new WeakHashMap());
+    private static final Set<GoogleApiClient> zzaAS = Collections.newSetFromMap(new WeakHashMap());
 
     public static final class Builder {
         private final Context mContext;
-        private Account zzahh;
-        private String zzaiq;
-        private final Set<Scope> zzazd;
-        private final Set<Scope> zzaze;
-        private int zzazf;
-        private View zzazg;
-        private String zzazh;
-        private final Map<Api<?>, zza> zzazi;
-        private final Map<Api<?>, ApiOptions> zzazj;
-        private zzabd zzazk;
-        private int zzazl;
-        private OnConnectionFailedListener zzazm;
-        private GoogleApiAvailability zzazn;
-        private Api.zza<? extends zzbai, zzbaj> zzazo;
-        private final ArrayList<ConnectionCallbacks> zzazp;
-        private final ArrayList<OnConnectionFailedListener> zzazq;
-        private boolean zzazr;
-        private Looper zzrs;
+        private final Set<Scope> zzaAT;
+        private final Set<Scope> zzaAU;
+        private int zzaAV;
+        private View zzaAW;
+        private String zzaAX;
+        private final Map<Api<?>, zzr> zzaAY;
+        private final Map<Api<?>, ApiOptions> zzaAZ;
+        private zzbdq zzaBa;
+        private int zzaBb;
+        private OnConnectionFailedListener zzaBc;
+        private GoogleApiAvailability zzaBd;
+        private zza<? extends zzctj, zzctk> zzaBe;
+        private final ArrayList<ConnectionCallbacks> zzaBf;
+        private final ArrayList<OnConnectionFailedListener> zzaBg;
+        private boolean zzaBh;
+        private Account zzajb;
+        private String zzake;
+        private Looper zzrO;
 
         public Builder(@NonNull Context context) {
-            this.zzazd = new HashSet();
-            this.zzaze = new HashSet();
-            this.zzazi = new ArrayMap();
-            this.zzazj = new ArrayMap();
-            this.zzazl = -1;
-            this.zzazn = GoogleApiAvailability.getInstance();
-            this.zzazo = zzbah.zzaie;
-            this.zzazp = new ArrayList();
-            this.zzazq = new ArrayList();
-            this.zzazr = false;
+            this.zzaAT = new HashSet();
+            this.zzaAU = new HashSet();
+            this.zzaAY = new ArrayMap();
+            this.zzaAZ = new ArrayMap();
+            this.zzaBb = -1;
+            this.zzaBd = GoogleApiAvailability.getInstance();
+            this.zzaBe = zzctf.zzajS;
+            this.zzaBf = new ArrayList();
+            this.zzaBg = new ArrayList();
+            this.zzaBh = false;
             this.mContext = context;
-            this.zzrs = context.getMainLooper();
-            this.zzaiq = context.getPackageName();
-            this.zzazh = context.getClass().getName();
+            this.zzrO = context.getMainLooper();
+            this.zzake = context.getPackageName();
+            this.zzaAX = context.getClass().getName();
         }
 
         public Builder(@NonNull Context context, @NonNull ConnectionCallbacks connectionCallbacks, @NonNull OnConnectionFailedListener onConnectionFailedListener) {
             this(context);
-            zzac.zzb((Object) connectionCallbacks, (Object) "Must provide a connected listener");
-            this.zzazp.add(connectionCallbacks);
-            zzac.zzb((Object) onConnectionFailedListener, (Object) "Must provide a connection failed listener");
-            this.zzazq.add(onConnectionFailedListener);
+            zzbo.zzb((Object) connectionCallbacks, (Object) "Must provide a connected listener");
+            this.zzaBf.add(connectionCallbacks);
+            zzbo.zzb((Object) onConnectionFailedListener, (Object) "Must provide a connection failed listener");
+            this.zzaBg.add(onConnectionFailedListener);
         }
 
-        private static <C extends zze, O> C zza(Api.zza<C, O> com_google_android_gms_common_api_Api_zza_C__O, Object obj, Context context, Looper looper, zzg com_google_android_gms_common_internal_zzg, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
-            return com_google_android_gms_common_api_Api_zza_C__O.zza(context, looper, com_google_android_gms_common_internal_zzg, obj, connectionCallbacks, onConnectionFailedListener);
-        }
-
-        private Builder zza(@NonNull zzabd com_google_android_gms_internal_zzabd, int i, @Nullable OnConnectionFailedListener onConnectionFailedListener) {
-            zzac.zzb(i >= 0, (Object) "clientId must be non-negative");
-            this.zzazl = i;
-            this.zzazm = onConnectionFailedListener;
-            this.zzazk = com_google_android_gms_internal_zzabd;
-            return this;
-        }
-
-        private <O extends ApiOptions> void zza(Api<O> api, O o, Scope... scopeArr) {
-            Set hashSet = new HashSet(api.zzve().zzp(o));
+        private final <O extends ApiOptions> void zza(Api<O> api, O o, Scope... scopeArr) {
+            Set hashSet = new HashSet(api.zzpb().zzn(o));
             for (Object add : scopeArr) {
                 hashSet.add(add);
             }
-            this.zzazi.put(api, new zza(hashSet));
+            this.zzaAY.put(api, new zzr(hashSet));
         }
 
-        private void zzf(GoogleApiClient googleApiClient) {
-            zzaaa.zza(this.zzazk).zza(this.zzazl, googleApiClient, this.zzazm);
+        public final Builder addApi(@NonNull Api<? extends NotRequiredOptions> api) {
+            zzbo.zzb((Object) api, (Object) "Api must not be null");
+            this.zzaAZ.put(api, null);
+            Collection zzn = api.zzpb().zzn(null);
+            this.zzaAU.addAll(zzn);
+            this.zzaAT.addAll(zzn);
+            return this;
         }
 
-        private GoogleApiClient zzvq() {
-            zzg zzvp = zzvp();
+        public final <O extends HasOptions> Builder addApi(@NonNull Api<O> api, @NonNull O o) {
+            zzbo.zzb((Object) api, (Object) "Api must not be null");
+            zzbo.zzb((Object) o, (Object) "Null options are not permitted for this Api");
+            this.zzaAZ.put(api, o);
+            Collection zzn = api.zzpb().zzn(o);
+            this.zzaAU.addAll(zzn);
+            this.zzaAT.addAll(zzn);
+            return this;
+        }
+
+        public final <O extends HasOptions> Builder addApiIfAvailable(@NonNull Api<O> api, @NonNull O o, Scope... scopeArr) {
+            zzbo.zzb((Object) api, (Object) "Api must not be null");
+            zzbo.zzb((Object) o, (Object) "Null options are not permitted for this Api");
+            this.zzaAZ.put(api, o);
+            zza(api, o, scopeArr);
+            return this;
+        }
+
+        public final Builder addApiIfAvailable(@NonNull Api<? extends NotRequiredOptions> api, Scope... scopeArr) {
+            zzbo.zzb((Object) api, (Object) "Api must not be null");
+            this.zzaAZ.put(api, null);
+            zza(api, null, scopeArr);
+            return this;
+        }
+
+        public final Builder addConnectionCallbacks(@NonNull ConnectionCallbacks connectionCallbacks) {
+            zzbo.zzb((Object) connectionCallbacks, (Object) "Listener must not be null");
+            this.zzaBf.add(connectionCallbacks);
+            return this;
+        }
+
+        public final Builder addOnConnectionFailedListener(@NonNull OnConnectionFailedListener onConnectionFailedListener) {
+            zzbo.zzb((Object) onConnectionFailedListener, (Object) "Listener must not be null");
+            this.zzaBg.add(onConnectionFailedListener);
+            return this;
+        }
+
+        public final Builder addScope(@NonNull Scope scope) {
+            zzbo.zzb((Object) scope, (Object) "Scope must not be null");
+            this.zzaAT.add(scope);
+            return this;
+        }
+
+        public final GoogleApiClient build() {
+            zzbo.zzb(!this.zzaAZ.isEmpty(), (Object) "must call addApi() to add at least one API");
+            zzq zzpn = zzpn();
             Api api = null;
-            Map zzxN = zzvp.zzxN();
+            Map zzrp = zzpn.zzrp();
             Map arrayMap = new ArrayMap();
             Map arrayMap2 = new ArrayMap();
             ArrayList arrayList = new ArrayList();
             Object obj = null;
-            for (Api api2 : this.zzazj.keySet()) {
+            for (Api api2 : this.zzaAZ.keySet()) {
                 Api api22;
-                Object obj2 = this.zzazj.get(api22);
-                boolean z = zzxN.get(api22) != null;
+                Object obj2 = this.zzaAZ.get(api22);
+                boolean z = zzrp.get(api22) != null;
                 arrayMap.put(api22, Boolean.valueOf(z));
-                ConnectionCallbacks com_google_android_gms_internal_zzaag = new zzaag(api22, z);
-                arrayList.add(com_google_android_gms_internal_zzaag);
-                zzd zzvf = api22.zzvf();
-                zze zza = zza(zzvf, obj2, this.mContext, this.zzrs, zzvp, com_google_android_gms_internal_zzaag, com_google_android_gms_internal_zzaag);
-                arrayMap2.put(api22.zzvg(), zza);
-                Object obj3 = zzvf.getPriority() == 1 ? obj2 != null ? 1 : null : obj;
-                if (!zza.zzrr()) {
+                ConnectionCallbacks com_google_android_gms_internal_zzbbh = new zzbbh(api22, z);
+                arrayList.add(com_google_android_gms_internal_zzbbh);
+                zzd zzpc = api22.zzpc();
+                zze zza = zzpc.zza(this.mContext, this.zzrO, zzpn, obj2, com_google_android_gms_internal_zzbbh, com_google_android_gms_internal_zzbbh);
+                arrayMap2.put(api22.zzpd(), zza);
+                Object obj3 = zzpc.getPriority() == 1 ? obj2 != null ? 1 : null : obj;
+                if (!zza.zzmG()) {
                     api22 = api;
                 } else if (api != null) {
                     String valueOf = String.valueOf(api22.getName());
@@ -154,121 +192,69 @@ public abstract class GoogleApiClient {
                     valueOf = String.valueOf(api.getName());
                     throw new IllegalStateException(new StringBuilder(String.valueOf(valueOf).length() + 82).append("With using ").append(valueOf).append(", GamesOptions can only be specified within GoogleSignInOptions.Builder").toString());
                 }
-                zzac.zza(this.zzahh == null, "Must not set an account in GoogleApiClient.Builder when using %s. Set account in GoogleSignInOptions.Builder instead", api.getName());
-                zzac.zza(this.zzazd.equals(this.zzaze), "Must not set scopes in GoogleApiClient.Builder when using %s. Set account in GoogleSignInOptions.Builder instead.", api.getName());
+                zzbo.zza(this.zzajb == null, "Must not set an account in GoogleApiClient.Builder when using %s. Set account in GoogleSignInOptions.Builder instead", api.getName());
+                zzbo.zza(this.zzaAT.equals(this.zzaAU), "Must not set scopes in GoogleApiClient.Builder when using %s. Set account in GoogleSignInOptions.Builder instead.", api.getName());
             }
-            return new zzaat(this.mContext, new ReentrantLock(), this.zzrs, zzvp, this.zzazn, this.zzazo, arrayMap, this.zzazp, this.zzazq, arrayMap2, this.zzazl, zzaat.zza(arrayMap2.values(), true), arrayList, false);
-        }
-
-        public Builder addApi(@NonNull Api<? extends NotRequiredOptions> api) {
-            zzac.zzb((Object) api, (Object) "Api must not be null");
-            this.zzazj.put(api, null);
-            Collection zzp = api.zzve().zzp(null);
-            this.zzaze.addAll(zzp);
-            this.zzazd.addAll(zzp);
-            return this;
-        }
-
-        public <O extends HasOptions> Builder addApi(@NonNull Api<O> api, @NonNull O o) {
-            zzac.zzb((Object) api, (Object) "Api must not be null");
-            zzac.zzb((Object) o, (Object) "Null options are not permitted for this Api");
-            this.zzazj.put(api, o);
-            Collection zzp = api.zzve().zzp(o);
-            this.zzaze.addAll(zzp);
-            this.zzazd.addAll(zzp);
-            return this;
-        }
-
-        public <O extends HasOptions> Builder addApiIfAvailable(@NonNull Api<O> api, @NonNull O o, Scope... scopeArr) {
-            zzac.zzb((Object) api, (Object) "Api must not be null");
-            zzac.zzb((Object) o, (Object) "Null options are not permitted for this Api");
-            this.zzazj.put(api, o);
-            zza((Api) api, (ApiOptions) o, scopeArr);
-            return this;
-        }
-
-        public Builder addApiIfAvailable(@NonNull Api<? extends NotRequiredOptions> api, Scope... scopeArr) {
-            zzac.zzb((Object) api, (Object) "Api must not be null");
-            this.zzazj.put(api, null);
-            zza((Api) api, null, scopeArr);
-            return this;
-        }
-
-        public Builder addConnectionCallbacks(@NonNull ConnectionCallbacks connectionCallbacks) {
-            zzac.zzb((Object) connectionCallbacks, (Object) "Listener must not be null");
-            this.zzazp.add(connectionCallbacks);
-            return this;
-        }
-
-        public Builder addOnConnectionFailedListener(@NonNull OnConnectionFailedListener onConnectionFailedListener) {
-            zzac.zzb((Object) onConnectionFailedListener, (Object) "Listener must not be null");
-            this.zzazq.add(onConnectionFailedListener);
-            return this;
-        }
-
-        public Builder addScope(@NonNull Scope scope) {
-            zzac.zzb((Object) scope, (Object) "Scope must not be null");
-            this.zzazd.add(scope);
-            return this;
-        }
-
-        public GoogleApiClient build() {
-            zzac.zzb(!this.zzazj.isEmpty(), (Object) "must call addApi() to add at least one API");
-            GoogleApiClient zzvq = zzvq();
-            synchronized (GoogleApiClient.zzazc) {
-                GoogleApiClient.zzazc.add(zzvq);
+            GoogleApiClient com_google_android_gms_internal_zzbco = new zzbco(this.mContext, new ReentrantLock(), this.zzrO, zzpn, this.zzaBd, this.zzaBe, arrayMap, this.zzaBf, this.zzaBg, arrayMap2, this.zzaBb, zzbco.zza(arrayMap2.values(), true), arrayList, false);
+            synchronized (GoogleApiClient.zzaAS) {
+                GoogleApiClient.zzaAS.add(com_google_android_gms_internal_zzbco);
             }
-            if (this.zzazl >= 0) {
-                zzf(zzvq);
+            if (this.zzaBb >= 0) {
+                zzbat.zza(this.zzaBa).zza(this.zzaBb, com_google_android_gms_internal_zzbco, this.zzaBc);
             }
-            return zzvq;
+            return com_google_android_gms_internal_zzbco;
         }
 
-        public Builder enableAutoManage(@NonNull FragmentActivity fragmentActivity, int i, @Nullable OnConnectionFailedListener onConnectionFailedListener) {
-            return zza(new zzabd(fragmentActivity), i, onConnectionFailedListener);
+        public final Builder enableAutoManage(@NonNull FragmentActivity fragmentActivity, int i, @Nullable OnConnectionFailedListener onConnectionFailedListener) {
+            zzbdq com_google_android_gms_internal_zzbdq = new zzbdq(fragmentActivity);
+            zzbo.zzb(i >= 0, (Object) "clientId must be non-negative");
+            this.zzaBb = i;
+            this.zzaBc = onConnectionFailedListener;
+            this.zzaBa = com_google_android_gms_internal_zzbdq;
+            return this;
         }
 
-        public Builder enableAutoManage(@NonNull FragmentActivity fragmentActivity, @Nullable OnConnectionFailedListener onConnectionFailedListener) {
+        public final Builder enableAutoManage(@NonNull FragmentActivity fragmentActivity, @Nullable OnConnectionFailedListener onConnectionFailedListener) {
             return enableAutoManage(fragmentActivity, 0, onConnectionFailedListener);
         }
 
-        public Builder setAccountName(String str) {
-            this.zzahh = str == null ? null : new Account(str, "com.google");
+        public final Builder setAccountName(String str) {
+            this.zzajb = str == null ? null : new Account(str, "com.google");
             return this;
         }
 
-        public Builder setGravityForPopups(int i) {
-            this.zzazf = i;
+        public final Builder setGravityForPopups(int i) {
+            this.zzaAV = i;
             return this;
         }
 
-        public Builder setHandler(@NonNull Handler handler) {
-            zzac.zzb((Object) handler, (Object) "Handler must not be null");
-            this.zzrs = handler.getLooper();
+        public final Builder setHandler(@NonNull Handler handler) {
+            zzbo.zzb((Object) handler, (Object) "Handler must not be null");
+            this.zzrO = handler.getLooper();
             return this;
         }
 
-        public Builder setViewForPopups(@NonNull View view) {
-            zzac.zzb((Object) view, (Object) "View must not be null");
-            this.zzazg = view;
+        public final Builder setViewForPopups(@NonNull View view) {
+            zzbo.zzb((Object) view, (Object) "View must not be null");
+            this.zzaAW = view;
             return this;
         }
 
-        public Builder useDefaultAccount() {
+        public final Builder useDefaultAccount() {
             return setAccountName("<<default account>>");
         }
 
-        public Builder zze(Account account) {
-            this.zzahh = account;
+        public final Builder zze(Account account) {
+            this.zzajb = account;
             return this;
         }
 
-        public zzg zzvp() {
-            zzbaj com_google_android_gms_internal_zzbaj = zzbaj.zzbEl;
-            if (this.zzazj.containsKey(zzbah.API)) {
-                com_google_android_gms_internal_zzbaj = (zzbaj) this.zzazj.get(zzbah.API);
+        public final zzq zzpn() {
+            zzctk com_google_android_gms_internal_zzctk = zzctk.zzbCM;
+            if (this.zzaAZ.containsKey(zzctf.API)) {
+                com_google_android_gms_internal_zzctk = (zzctk) this.zzaAZ.get(zzctf.API);
             }
-            return new zzg(this.zzahh, this.zzazd, this.zzazi, this.zzazf, this.zzazg, this.zzaiq, this.zzazh, com_google_android_gms_internal_zzbaj);
+            return new zzq(this.zzajb, this.zzaAT, this.zzaAY, this.zzaAV, this.zzaAW, this.zzake, this.zzaAX, com_google_android_gms_internal_zzctk);
         }
     }
 
@@ -286,10 +272,10 @@ public abstract class GoogleApiClient {
     }
 
     public static void dumpAll(String str, FileDescriptor fileDescriptor, PrintWriter printWriter, String[] strArr) {
-        synchronized (zzazc) {
+        synchronized (zzaAS) {
             String concat = String.valueOf(str).concat("  ");
             int i = 0;
-            for (GoogleApiClient googleApiClient : zzazc) {
+            for (GoogleApiClient googleApiClient : zzaAS) {
                 int i2 = i + 1;
                 printWriter.append(str).append("GoogleApiClient#").println(i);
                 googleApiClient.dump(concat, fileDescriptor, printWriter, strArr);
@@ -298,10 +284,10 @@ public abstract class GoogleApiClient {
         }
     }
 
-    public static Set<GoogleApiClient> zzvm() {
+    public static Set<GoogleApiClient> zzpk() {
         Set<GoogleApiClient> set;
-        synchronized (zzazc) {
-            set = zzazc;
+        synchronized (zzaAS) {
+            set = zzaAS;
         }
         return set;
     }
@@ -360,11 +346,7 @@ public abstract class GoogleApiClient {
         throw new UnsupportedOperationException();
     }
 
-    public <A extends zzb, R extends Result, T extends zzaad.zza<R, A>> T zza(@NonNull T t) {
-        throw new UnsupportedOperationException();
-    }
-
-    public void zza(zzabx com_google_android_gms_internal_zzabx) {
+    public void zza(zzber com_google_android_gms_internal_zzber) {
         throw new UnsupportedOperationException();
     }
 
@@ -372,23 +354,27 @@ public abstract class GoogleApiClient {
         throw new UnsupportedOperationException();
     }
 
-    public boolean zza(zzabq com_google_android_gms_internal_zzabq) {
+    public boolean zza(zzbeh com_google_android_gms_internal_zzbeh) {
         throw new UnsupportedOperationException();
     }
 
-    public <A extends zzb, T extends zzaad.zza<? extends Result, A>> T zzb(@NonNull T t) {
+    public void zzb(zzber com_google_android_gms_internal_zzber) {
         throw new UnsupportedOperationException();
     }
 
-    public void zzb(zzabx com_google_android_gms_internal_zzabx) {
+    public <A extends zzb, R extends Result, T extends zzbax<R, A>> T zzd(@NonNull T t) {
         throw new UnsupportedOperationException();
     }
 
-    public <L> zzabh<L> zzr(@NonNull L l) {
+    public <A extends zzb, T extends zzbax<? extends Result, A>> T zze(@NonNull T t) {
         throw new UnsupportedOperationException();
     }
 
-    public void zzvn() {
+    public <L> zzbdv<L> zzp(@NonNull L l) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void zzpl() {
         throw new UnsupportedOperationException();
     }
 }

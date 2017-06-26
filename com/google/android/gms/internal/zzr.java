@@ -1,4 +1,8 @@
 package com.google.android.gms.internal;
 
-public class zzr extends zzs {
+public enum zzr {
+    LOW,
+    NORMAL,
+    HIGH,
+    IMMEDIATE
 }

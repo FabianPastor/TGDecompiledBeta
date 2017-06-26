@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Build.VERSION;
 import android.provider.Settings.Secure;
 import android.text.TextUtils;
+import com.google.android.gms.measurement.AppMeasurement.Param;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -142,7 +143,7 @@ public class CheckUpdateTask extends AsyncTask<Void, String, JSONArray> {
                     largerVersionCode = false;
                 }
                 boolean newerApkFile;
-                if (entry.getInt("version") == versionCode && VersionHelper.isNewerThanLastUpdateTime(this.context, entry.getLong("timestamp"))) {
+                if (entry.getInt("version") == versionCode && VersionHelper.isNewerThanLastUpdateTime(this.context, entry.getLong(Param.TIMESTAMP))) {
                     newerApkFile = true;
                 } else {
                     newerApkFile = false;

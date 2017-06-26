@@ -5,7 +5,7 @@ public final class Dot extends PatternItem {
         super(1, null);
     }
 
-    public String toString() {
+    public final String toString() {
         return "[Dot]";
     }
 }

@@ -34,6 +34,7 @@ import android.opengl.EGLSurface;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
@@ -325,6 +326,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             } else {
                                 buffer.offset[a] = audioPresentationTimeNs;
                                 buffer.read[a] = readResult;
+                                FileLog.d("time = " + audioPresentationTimeNs);
                                 a++;
                             }
                         }
@@ -343,10 +345,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             };
         }
 
-        public void startRecording(File outputFile, int width, int height, int bitRate, EGLContext sharedContext) {
+        public void startRecording(File outputFile, int size, int bitRate, EGLContext sharedContext) {
             this.videoFile = outputFile;
-            this.videoWidth = width;
-            this.videoHeight = height;
+            this.videoWidth = size;
+            this.videoHeight = size;
             this.videoBitrate = bitRate;
             this.sharedEglContext = sharedContext;
             synchronized (this.sync) {
@@ -421,15 +423,15 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         }
                     }
                     long startWriteTime = input.offset[input.lastWroteBuffer];
-                    int count = 0;
-                    for (int a = input.lastWroteBuffer; a < input.results; a++) {
-                        if (inputBuffer.remaining() < input.read[a]) {
-                            input.lastWroteBuffer = a;
-                            input = null;
-                            break;
+                    for (int a = input.lastWroteBuffer; a <= input.results; a++) {
+                        if (a < input.results) {
+                            if (inputBuffer.remaining() < input.read[a]) {
+                                input.lastWroteBuffer = a;
+                                input = null;
+                                break;
+                            }
+                            inputBuffer.put(input.buffer, a * 2048, input.read[a]);
                         }
-                        inputBuffer.put(input.buffer, a * 2048, input.read[a]);
-                        count++;
                         if (a >= input.results - 1) {
                             this.buffersToWrite.remove(input);
                             if (this.running) {
@@ -443,7 +445,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             input = (AudioBufferInfo) this.buffersToWrite.get(0);
                         }
                     }
-                    this.audioEncoder.queueInputBuffer(inputBufferIndex, 0, inputBuffer.position(), (startWriteTime - this.audioStartTime) / 1000, isLast ? 4 : 0);
+                    this.audioEncoder.queueInputBuffer(inputBufferIndex, 0, inputBuffer.position(), startWriteTime == 0 ? 0 : (startWriteTime - this.audioStartTime) / 1000, isLast ? 4 : 0);
                 }
             }
         }
@@ -507,10 +509,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             GLES20.glUniform1f(this.alphaHandle, InstantCameraView.this.cameraTextureAlpha);
             GLES20.glBindTexture(36197, InstantCameraView.this.cameraTexture[0]);
             GLES20.glDrawArrays(5, 0, 4);
-            GLES20.glDisableVertexAttribArray(this.positionHandle);
-            GLES20.glDisableVertexAttribArray(this.textureHandle);
-            GLES20.glBindTexture(36197, 0);
-            GLES20.glUseProgram(0);
             EGLExt.eglPresentationTimeANDROID(this.eglDisplay, this.eglSurface, this.currentTimestamp);
             EGL14.eglSwapBuffers(this.eglDisplay, this.eglSurface);
             if (InstantCameraView.this.oldCameraTexture[0] != 0 && InstantCameraView.this.cameraTextureAlpha < 1.0f) {
@@ -675,7 +673,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
                 this.audioRecorder = new AudioRecord(1, 44100, 16, 2, bufferSize);
                 this.audioRecorder.startRecording();
-                new Thread(this.recorderRunnable).start();
+                Thread thread = new Thread(this.recorderRunnable);
+                thread.setPriority(10);
+                thread.start();
                 this.audioBufferInfo = new BufferInfo();
                 this.videoBufferInfo = new BufferInfo();
                 MediaFormat audioFormat = new MediaFormat();
@@ -688,13 +688,13 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 this.audioEncoder = MediaCodec.createEncoderByType("audio/mp4a-latm");
                 this.audioEncoder.configure(audioFormat, null, null, 1);
                 this.audioEncoder.start();
+                this.videoEncoder = MediaCodec.createEncoderByType("video/avc");
                 MediaFormat format = MediaFormat.createVideoFormat("video/avc", this.videoWidth, this.videoHeight);
                 format.setInteger("color-format", NUM);
                 MediaFormat mediaFormat = format;
                 mediaFormat.setInteger("bitrate", this.videoBitrate);
                 format.setInteger("frame-rate", 30);
                 format.setInteger("i-frame-interval", 1);
-                this.videoEncoder = MediaCodec.createEncoderByType("video/avc");
                 this.videoEncoder.configure(format, null, null, 1);
                 this.surface = this.videoEncoder.createInputSurface();
                 this.videoEncoder.start();
@@ -772,6 +772,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         }
                         return;
                     } else {
+                        FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(EGL14.eglGetError()));
                         throw new RuntimeException("eglMakeCurrent failed");
                     }
                 }
@@ -796,12 +797,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void drainEncoder(boolean endOfStream) throws Exception {
+            MediaFormat newFormat;
             if (endOfStream) {
                 this.videoEncoder.signalEndOfInputStream();
             }
             ByteBuffer[] encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
             while (true) {
-                MediaFormat newFormat;
                 ByteBuffer encodedData;
                 int encoderStatus = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
                 if (encoderStatus == -1) {
@@ -1039,8 +1040,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             }
                             GLES20.glGenTextures(1, InstantCameraView.this.cameraTexture, 0);
                             GLES20.glBindTexture(36197, InstantCameraView.this.cameraTexture[0]);
-                            GLES20.glTexParameterf(36197, 10241, 9729.0f);
-                            GLES20.glTexParameterf(36197, Task.EXTRAS_LIMIT_BYTES, 9729.0f);
+                            GLES20.glTexParameteri(36197, 10241, 9729);
+                            GLES20.glTexParameteri(36197, Task.EXTRAS_LIMIT_BYTES, 9729);
                             GLES20.glTexParameteri(36197, 10242, 33071);
                             GLES20.glTexParameteri(36197, 10243, 33071);
                             Matrix.setIdentityM(InstantCameraView.this.mMVPMatrix, 0);
@@ -1109,7 +1110,20 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             if ((this.eglContext.equals(this.egl10.eglGetCurrentContext()) && this.eglSurface.equals(this.egl10.eglGetCurrentSurface(12377))) || this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
                 this.cameraSurface.updateTexImage();
                 if (!this.recording) {
-                    this.videoEncoder.startRecording(InstantCameraView.this.cameraFile, PsExtractor.VIDEO_STREAM_MASK, PsExtractor.VIDEO_STREAM_MASK, 400000, EGL14.eglGetCurrentContext());
+                    int resolution;
+                    int bitrate;
+                    String model = Build.DEVICE;
+                    if (model == null) {
+                        model = "";
+                    }
+                    if (model.startsWith("zeroflte") || model.startsWith("zenlte")) {
+                        resolution = 320;
+                        bitrate = 600000;
+                    } else {
+                        resolution = PsExtractor.VIDEO_STREAM_MASK;
+                        bitrate = 400000;
+                    }
+                    this.videoEncoder.startRecording(InstantCameraView.this.cameraFile, resolution, bitrate, EGL14.eglGetCurrentContext());
                     this.recording = true;
                     int orientation = this.currentSession.getCurrentOrientation();
                     if (orientation == 90 || orientation == 270) {
@@ -1130,10 +1144,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 GLES20.glUniformMatrix4fv(this.textureMatrixHandle, 1, false, InstantCameraView.this.mSTMatrix, 0);
                 GLES20.glUniformMatrix4fv(this.vertexMatrixHandle, 1, false, InstantCameraView.this.mMVPMatrix, 0);
                 GLES20.glDrawArrays(5, 0, 4);
-                GLES20.glDisableVertexAttribArray(this.positionHandle);
-                GLES20.glDisableVertexAttribArray(this.textureHandle);
-                GLES20.glBindTexture(36197, 0);
-                GLES20.glUseProgram(0);
                 this.egl10.eglSwapBuffers(this.eglDisplay, this.eglSurface);
                 return;
             }
@@ -1176,8 +1186,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         InstantCameraView.this.cameraReady = false;
                         GLES20.glGenTextures(1, InstantCameraView.this.cameraTexture, 0);
                         GLES20.glBindTexture(36197, InstantCameraView.this.cameraTexture[0]);
-                        GLES20.glTexParameterf(36197, 10241, 9729.0f);
-                        GLES20.glTexParameterf(36197, Task.EXTRAS_LIMIT_BYTES, 9729.0f);
+                        GLES20.glTexParameteri(36197, 10241, 9729);
+                        GLES20.glTexParameteri(36197, Task.EXTRAS_LIMIT_BYTES, 9729);
                         GLES20.glTexParameteri(36197, 10242, 33071);
                         GLES20.glTexParameteri(36197, 10243, 33071);
                         this.cameraSurface = new SurfaceTexture(InstantCameraView.this.cameraTexture[0]);
@@ -1850,6 +1860,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
             }
         }
+        FileLog.d("preview w = " + this.previewSize.mWidth + " h = " + this.previewSize.mHeight);
         return true;
     }
 

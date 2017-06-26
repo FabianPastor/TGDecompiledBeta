@@ -1,162 +1,155 @@
 package com.google.android.gms.maps.model.internal;
 
-import android.os.Binder;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.os.RemoteException;
+import com.google.android.gms.dynamic.IObjectWrapper.zza;
+import com.google.android.gms.internal.zzee;
+import com.google.android.gms.internal.zzef;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
+import java.util.List;
 
-public interface zze extends IInterface {
-
-    public static abstract class zza extends Binder implements zze {
-
-        private static class zza implements zze {
-            private IBinder zzrk;
-
-            zza(IBinder iBinder) {
-                this.zzrk = iBinder;
-            }
-
-            public void activate() throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    this.zzrk.transact(3, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public IBinder asBinder() {
-                return this.zzrk;
-            }
-
-            public String getName() throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    this.zzrk.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                    String readString = obtain2.readString();
-                    return readString;
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public String getShortName() throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    this.zzrk.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
-                    String readString = obtain2.readString();
-                    return readString;
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public int hashCodeRemote() throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    this.zzrk.transact(5, obtain, obtain2, 0);
-                    obtain2.readException();
-                    int readInt = obtain2.readInt();
-                    return readInt;
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public boolean zza(zze com_google_android_gms_maps_model_internal_zze) throws RemoteException {
-                boolean z = false;
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    obtain.writeStrongBinder(com_google_android_gms_maps_model_internal_zze != null ? com_google_android_gms_maps_model_internal_zze.asBinder() : null);
-                    this.zzrk.transact(4, obtain, obtain2, 0);
-                    obtain2.readException();
-                    if (obtain2.readInt() != 0) {
-                        z = true;
-                    }
-                    obtain2.recycle();
-                    obtain.recycle();
-                    return z;
-                } catch (Throwable th) {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
+public abstract class zze extends zzee implements zzd {
+    public static zzd zzab(IBinder iBinder) {
+        if (iBinder == null) {
+            return null;
         }
-
-        public static zze zzem(IBinder iBinder) {
-            if (iBinder == null) {
-                return null;
-            }
-            IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-            return (queryLocalInterface == null || !(queryLocalInterface instanceof zze)) ? new zza(iBinder) : (zze) queryLocalInterface;
-        }
-
-        public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-            String name;
-            switch (i) {
-                case 1:
-                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    name = getName();
-                    parcel2.writeNoException();
-                    parcel2.writeString(name);
-                    return true;
-                case 2:
-                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    name = getShortName();
-                    parcel2.writeNoException();
-                    parcel2.writeString(name);
-                    return true;
-                case 3:
-                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    activate();
-                    parcel2.writeNoException();
-                    return true;
-                case 4:
-                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    boolean zza = zza(zzem(parcel.readStrongBinder()));
-                    parcel2.writeNoException();
-                    parcel2.writeInt(zza ? 1 : 0);
-                    return true;
-                case 5:
-                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    int hashCodeRemote = hashCodeRemote();
-                    parcel2.writeNoException();
-                    parcel2.writeInt(hashCodeRemote);
-                    return true;
-                case 1598968902:
-                    parcel2.writeString("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    return true;
-                default:
-                    return super.onTransact(i, parcel, parcel2, i2);
-            }
-        }
+        IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.maps.model.internal.ICircleDelegate");
+        return queryLocalInterface instanceof zzd ? (zzd) queryLocalInterface : new zzf(iBinder);
     }
 
-    void activate() throws RemoteException;
-
-    String getName() throws RemoteException;
-
-    String getShortName() throws RemoteException;
-
-    int hashCodeRemote() throws RemoteException;
-
-    boolean zza(zze com_google_android_gms_maps_model_internal_zze) throws RemoteException;
+    public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
+        if (zza(i, parcel, parcel2, i2)) {
+            return true;
+        }
+        float strokeWidth;
+        int strokeColor;
+        boolean isVisible;
+        IInterface queryLocalInterface;
+        switch (i) {
+            case 1:
+                remove();
+                parcel2.writeNoException();
+                break;
+            case 2:
+                String id = getId();
+                parcel2.writeNoException();
+                parcel2.writeString(id);
+                break;
+            case 3:
+                setCenter((LatLng) zzef.zza(parcel, LatLng.CREATOR));
+                parcel2.writeNoException();
+                break;
+            case 4:
+                Parcelable center = getCenter();
+                parcel2.writeNoException();
+                zzef.zzb(parcel2, center);
+                break;
+            case 5:
+                setRadius(parcel.readDouble());
+                parcel2.writeNoException();
+                break;
+            case 6:
+                double radius = getRadius();
+                parcel2.writeNoException();
+                parcel2.writeDouble(radius);
+                break;
+            case 7:
+                setStrokeWidth(parcel.readFloat());
+                parcel2.writeNoException();
+                break;
+            case 8:
+                strokeWidth = getStrokeWidth();
+                parcel2.writeNoException();
+                parcel2.writeFloat(strokeWidth);
+                break;
+            case 9:
+                setStrokeColor(parcel.readInt());
+                parcel2.writeNoException();
+                break;
+            case 10:
+                strokeColor = getStrokeColor();
+                parcel2.writeNoException();
+                parcel2.writeInt(strokeColor);
+                break;
+            case 11:
+                setFillColor(parcel.readInt());
+                parcel2.writeNoException();
+                break;
+            case 12:
+                strokeColor = getFillColor();
+                parcel2.writeNoException();
+                parcel2.writeInt(strokeColor);
+                break;
+            case 13:
+                setZIndex(parcel.readFloat());
+                parcel2.writeNoException();
+                break;
+            case 14:
+                strokeWidth = getZIndex();
+                parcel2.writeNoException();
+                parcel2.writeFloat(strokeWidth);
+                break;
+            case 15:
+                setVisible(zzef.zza(parcel));
+                parcel2.writeNoException();
+                break;
+            case 16:
+                isVisible = isVisible();
+                parcel2.writeNoException();
+                zzef.zza(parcel2, isVisible);
+                break;
+            case 17:
+                zzd com_google_android_gms_maps_model_internal_zzd;
+                IBinder readStrongBinder = parcel.readStrongBinder();
+                if (readStrongBinder == null) {
+                    com_google_android_gms_maps_model_internal_zzd = null;
+                } else {
+                    queryLocalInterface = readStrongBinder.queryLocalInterface("com.google.android.gms.maps.model.internal.ICircleDelegate");
+                    com_google_android_gms_maps_model_internal_zzd = queryLocalInterface instanceof zzd ? (zzd) queryLocalInterface : new zzf(readStrongBinder);
+                }
+                isVisible = zzb(com_google_android_gms_maps_model_internal_zzd);
+                parcel2.writeNoException();
+                zzef.zza(parcel2, isVisible);
+                break;
+            case 18:
+                strokeColor = hashCodeRemote();
+                parcel2.writeNoException();
+                parcel2.writeInt(strokeColor);
+                break;
+            case 19:
+                setClickable(zzef.zza(parcel));
+                parcel2.writeNoException();
+                break;
+            case 20:
+                isVisible = isClickable();
+                parcel2.writeNoException();
+                zzef.zza(parcel2, isVisible);
+                break;
+            case 21:
+                setStrokePattern(parcel.createTypedArrayList(PatternItem.CREATOR));
+                parcel2.writeNoException();
+                break;
+            case 22:
+                List strokePattern = getStrokePattern();
+                parcel2.writeNoException();
+                parcel2.writeTypedList(strokePattern);
+                break;
+            case 23:
+                setTag(zza.zzM(parcel.readStrongBinder()));
+                parcel2.writeNoException();
+                break;
+            case 24:
+                queryLocalInterface = getTag();
+                parcel2.writeNoException();
+                zzef.zza(parcel2, queryLocalInterface);
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
 }

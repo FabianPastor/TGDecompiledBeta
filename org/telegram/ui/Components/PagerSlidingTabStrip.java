@@ -41,6 +41,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private int underlineHeight = AndroidUtilities.dp(2.0f);
 
     public interface IconTabProvider {
+        boolean canScrollToTab(int i);
+
         void customOnDraw(Canvas canvas, int i);
 
         Drawable getPageIconDrawable(int i);
@@ -130,6 +132,13 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         });
     }
 
+    public View getTab(int position) {
+        if (position < 0 || position >= this.tabsContainer.getChildCount()) {
+            return null;
+        }
+        return this.tabsContainer.getChildAt(position);
+    }
+
     private void addIconTab(final int position, Drawable drawable) {
         boolean z = true;
         ImageView tab = new ImageView(getContext()) {
@@ -145,7 +154,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         tab.setScaleType(ScaleType.CENTER);
         tab.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                PagerSlidingTabStrip.this.pager.setCurrentItem(position);
+                if (!(PagerSlidingTabStrip.this.pager.getAdapter() instanceof IconTabProvider) || ((IconTabProvider) PagerSlidingTabStrip.this.pager.getAdapter()).canScrollToTab(position)) {
+                    PagerSlidingTabStrip.this.pager.setCurrentItem(position);
+                }
             }
         });
         this.tabsContainer.addView(tab);

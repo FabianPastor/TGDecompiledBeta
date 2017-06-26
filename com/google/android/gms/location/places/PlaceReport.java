@@ -4,86 +4,83 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.zzaa;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.common.internal.zzbe;
+import com.google.android.gms.common.internal.zzbg;
+import com.google.android.gms.common.internal.zzbo;
 import com.google.firebase.analytics.FirebaseAnalytics.Param;
+import java.util.Arrays;
 
 public class PlaceReport extends zza implements ReflectedParcelable {
     public static final Creator<PlaceReport> CREATOR = new zzl();
     private final String mTag;
-    private final String zzacO;
-    final int zzaiI;
-    private final String zzblD;
+    private final String zzaeK;
+    private int zzaku;
+    private final String zzbjI;
 
     PlaceReport(int i, String str, String str2, String str3) {
-        this.zzaiI = i;
-        this.zzblD = str;
+        this.zzaku = i;
+        this.zzbjI = str;
         this.mTag = str2;
-        this.zzacO = str3;
+        this.zzaeK = str3;
     }
 
     public static PlaceReport create(String str, String str2) {
-        return zzj(str, str2, "unknown");
-    }
-
-    private static boolean zzeU(String str) {
-        boolean z = true;
-        switch (str.hashCode()) {
+        boolean z = false;
+        String str3 = "unknown";
+        zzbo.zzu(str);
+        zzbo.zzcF(str2);
+        zzbo.zzcF(str3);
+        boolean z2 = true;
+        switch (str3.hashCode()) {
             case -1436706272:
-                if (str.equals("inferredGeofencing")) {
-                    z = true;
+                if (str3.equals("inferredGeofencing")) {
+                    z2 = true;
                     break;
                 }
                 break;
             case -1194968642:
-                if (str.equals("userReported")) {
-                    z = true;
+                if (str3.equals("userReported")) {
+                    z2 = true;
                     break;
                 }
                 break;
             case -284840886:
-                if (str.equals("unknown")) {
-                    z = false;
+                if (str3.equals("unknown")) {
+                    z2 = false;
                     break;
                 }
                 break;
             case -262743844:
-                if (str.equals("inferredReverseGeocoding")) {
-                    z = true;
+                if (str3.equals("inferredReverseGeocoding")) {
+                    z2 = true;
                     break;
                 }
                 break;
             case 1164924125:
-                if (str.equals("inferredSnappedToRoad")) {
-                    z = true;
+                if (str3.equals("inferredSnappedToRoad")) {
+                    z2 = true;
                     break;
                 }
                 break;
             case 1287171955:
-                if (str.equals("inferredRadioSignals")) {
-                    z = true;
+                if (str3.equals("inferredRadioSignals")) {
+                    z2 = true;
                     break;
                 }
                 break;
         }
-        switch (z) {
+        switch (z2) {
             case false:
             case true:
             case true:
             case true:
             case true:
             case true:
-                return true;
-            default:
-                return false;
+                z = true;
+                break;
         }
-    }
-
-    public static PlaceReport zzj(String str, String str2, String str3) {
-        zzac.zzw(str);
-        zzac.zzdr(str2);
-        zzac.zzdr(str3);
-        zzac.zzb(zzeU(str3), (Object) "Invalid source");
+        zzbo.zzb(z, (Object) "Invalid source");
         return new PlaceReport(1, str, str2, str3);
     }
 
@@ -92,15 +89,11 @@ public class PlaceReport extends zza implements ReflectedParcelable {
             return false;
         }
         PlaceReport placeReport = (PlaceReport) obj;
-        return zzaa.equal(this.zzblD, placeReport.zzblD) && zzaa.equal(this.mTag, placeReport.mTag) && zzaa.equal(this.zzacO, placeReport.zzacO);
+        return zzbe.equal(this.zzbjI, placeReport.zzbjI) && zzbe.equal(this.mTag, placeReport.mTag) && zzbe.equal(this.zzaeK, placeReport.zzaeK);
     }
 
     public String getPlaceId() {
-        return this.zzblD;
-    }
-
-    public String getSource() {
-        return this.zzacO;
+        return this.zzbjI;
     }
 
     public String getTag() {
@@ -108,20 +101,25 @@ public class PlaceReport extends zza implements ReflectedParcelable {
     }
 
     public int hashCode() {
-        return zzaa.hashCode(this.zzblD, this.mTag, this.zzacO);
+        return Arrays.hashCode(new Object[]{this.zzbjI, this.mTag, this.zzaeK});
     }
 
     public String toString() {
-        zzaa.zza zzv = zzaa.zzv(this);
-        zzv.zzg("placeId", this.zzblD);
-        zzv.zzg("tag", this.mTag);
-        if (!"unknown".equals(this.zzacO)) {
-            zzv.zzg(Param.SOURCE, this.zzacO);
+        zzbg zzt = zzbe.zzt(this);
+        zzt.zzg("placeId", this.zzbjI);
+        zzt.zzg("tag", this.mTag);
+        if (!"unknown".equals(this.zzaeK)) {
+            zzt.zzg(Param.SOURCE, this.zzaeK);
         }
-        return zzv.toString();
+        return zzt.toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zzl.zza(this, parcel, i);
+        int zze = zzd.zze(parcel);
+        zzd.zzc(parcel, 1, this.zzaku);
+        zzd.zza(parcel, 2, getPlaceId(), false);
+        zzd.zza(parcel, 3, getTag(), false);
+        zzd.zza(parcel, 4, this.zzaeK, false);
+        zzd.zzI(parcel, zze);
     }
 }

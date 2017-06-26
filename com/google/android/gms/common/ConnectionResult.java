@@ -7,8 +7,10 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import android.support.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.common.internal.zzbe;
 import com.google.android.gms.iid.InstanceID;
+import java.util.Arrays;
 
 public final class ConnectionResult extends zza {
     public static final int API_UNAVAILABLE = 16;
@@ -34,21 +36,21 @@ public final class ConnectionResult extends zza {
     public static final int SIGN_IN_REQUIRED = 4;
     public static final int SUCCESS = 0;
     public static final int TIMEOUT = 14;
-    public static final ConnectionResult zzayj = new ConnectionResult(0);
+    public static final ConnectionResult zzazX = new ConnectionResult(0);
     private final PendingIntent mPendingIntent;
-    final int zzaiI;
-    private final int zzavD;
-    private final String zzayk;
+    private int zzaku;
+    private final int zzaxu;
+    private final String zzazY;
 
     public ConnectionResult(int i) {
         this(i, null, null);
     }
 
     ConnectionResult(int i, int i2, PendingIntent pendingIntent, String str) {
-        this.zzaiI = i;
-        this.zzavD = i2;
+        this.zzaku = i;
+        this.zzaxu = i2;
         this.mPendingIntent = pendingIntent;
-        this.zzayk = str;
+        this.zzazY = str;
     }
 
     public ConnectionResult(int i, PendingIntent pendingIntent) {
@@ -114,7 +116,7 @@ public final class ConnectionResult extends zza {
         }
     }
 
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         if (obj == this) {
             return true;
         }
@@ -122,46 +124,51 @@ public final class ConnectionResult extends zza {
             return false;
         }
         ConnectionResult connectionResult = (ConnectionResult) obj;
-        return this.zzavD == connectionResult.zzavD && zzaa.equal(this.mPendingIntent, connectionResult.mPendingIntent) && zzaa.equal(this.zzayk, connectionResult.zzayk);
+        return this.zzaxu == connectionResult.zzaxu && zzbe.equal(this.mPendingIntent, connectionResult.mPendingIntent) && zzbe.equal(this.zzazY, connectionResult.zzazY);
     }
 
-    public int getErrorCode() {
-        return this.zzavD;
-    }
-
-    @Nullable
-    public String getErrorMessage() {
-        return this.zzayk;
+    public final int getErrorCode() {
+        return this.zzaxu;
     }
 
     @Nullable
-    public PendingIntent getResolution() {
+    public final String getErrorMessage() {
+        return this.zzazY;
+    }
+
+    @Nullable
+    public final PendingIntent getResolution() {
         return this.mPendingIntent;
     }
 
-    public boolean hasResolution() {
-        return (this.zzavD == 0 || this.mPendingIntent == null) ? false : true;
+    public final boolean hasResolution() {
+        return (this.zzaxu == 0 || this.mPendingIntent == null) ? false : true;
     }
 
-    public int hashCode() {
-        return zzaa.hashCode(Integer.valueOf(this.zzavD), this.mPendingIntent, this.zzayk);
+    public final int hashCode() {
+        return Arrays.hashCode(new Object[]{Integer.valueOf(this.zzaxu), this.mPendingIntent, this.zzazY});
     }
 
-    public boolean isSuccess() {
-        return this.zzavD == 0;
+    public final boolean isSuccess() {
+        return this.zzaxu == 0;
     }
 
-    public void startResolutionForResult(Activity activity, int i) throws SendIntentException {
+    public final void startResolutionForResult(Activity activity, int i) throws SendIntentException {
         if (hasResolution()) {
             activity.startIntentSenderForResult(this.mPendingIntent.getIntentSender(), i, null, 0, 0, 0);
         }
     }
 
-    public String toString() {
-        return zzaa.zzv(this).zzg("statusCode", getStatusString(this.zzavD)).zzg("resolution", this.mPendingIntent).zzg("message", this.zzayk).toString();
+    public final String toString() {
+        return zzbe.zzt(this).zzg("statusCode", getStatusString(this.zzaxu)).zzg("resolution", this.mPendingIntent).zzg("message", this.zzazY).toString();
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzb.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zzc(parcel, 1, this.zzaku);
+        zzd.zzc(parcel, 2, getErrorCode());
+        zzd.zza(parcel, 3, getResolution(), i, false);
+        zzd.zza(parcel, 4, getErrorMessage(), false);
+        zzd.zzI(parcel, zze);
     }
 }

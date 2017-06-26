@@ -47,6 +47,9 @@ public class DataSettingsActivity extends BaseFragment {
     private int mediaDownloadSectionRow;
     private int mobileDownloadRow;
     private int mobileUsageRow;
+    private int proxyRow;
+    private int proxySection2Row;
+    private int proxySectionRow;
     private int roamingDownloadRow;
     private int roamingUsageRow;
     private int rowCount;
@@ -72,7 +75,7 @@ public class DataSettingsActivity extends BaseFragment {
             String value;
             switch (holder.getItemViewType()) {
                 case 0:
-                    if (position == DataSettingsActivity.this.callsSection2Row || (position == DataSettingsActivity.this.usageSection2Row && DataSettingsActivity.this.usageSection2Row == -1)) {
+                    if (position == DataSettingsActivity.this.proxySection2Row) {
                         holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
@@ -108,6 +111,9 @@ public class DataSettingsActivity extends BaseFragment {
                     } else if (position == DataSettingsActivity.this.wifiUsageRow) {
                         textCell.setText(LocaleController.getString("WiFiUsage", R.string.WiFiUsage), true);
                         return;
+                    } else if (position == DataSettingsActivity.this.proxyRow) {
+                        textCell.setText(LocaleController.getString("ProxySettings", R.string.ProxySettings), true);
+                        return;
                     } else {
                         return;
                     }
@@ -121,6 +127,9 @@ public class DataSettingsActivity extends BaseFragment {
                         return;
                     } else if (position == DataSettingsActivity.this.callsSectionRow) {
                         headerCell.setText(LocaleController.getString("Calls", R.string.Calls));
+                        return;
+                    } else if (position == DataSettingsActivity.this.proxySectionRow) {
+                        headerCell.setText(LocaleController.getString("Proxy", R.string.Proxy));
                         return;
                     } else {
                         return;
@@ -194,7 +203,7 @@ public class DataSettingsActivity extends BaseFragment {
 
         public boolean isEnabled(ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            return position == DataSettingsActivity.this.wifiDownloadRow || position == DataSettingsActivity.this.mobileDownloadRow || position == DataSettingsActivity.this.roamingDownloadRow || position == DataSettingsActivity.this.storageUsageRow || position == DataSettingsActivity.this.useLessDataForCallsRow || position == DataSettingsActivity.this.mobileUsageRow || position == DataSettingsActivity.this.roamingUsageRow || position == DataSettingsActivity.this.wifiUsageRow;
+            return position == DataSettingsActivity.this.wifiDownloadRow || position == DataSettingsActivity.this.mobileDownloadRow || position == DataSettingsActivity.this.roamingDownloadRow || position == DataSettingsActivity.this.storageUsageRow || position == DataSettingsActivity.this.useLessDataForCallsRow || position == DataSettingsActivity.this.mobileUsageRow || position == DataSettingsActivity.this.roamingUsageRow || position == DataSettingsActivity.this.wifiUsageRow || position == DataSettingsActivity.this.proxyRow;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -221,16 +230,16 @@ public class DataSettingsActivity extends BaseFragment {
         }
 
         public int getItemViewType(int position) {
-            if (position == DataSettingsActivity.this.mediaDownloadSection2Row || position == DataSettingsActivity.this.usageSection2Row || position == DataSettingsActivity.this.callsSection2Row) {
+            if (position == DataSettingsActivity.this.mediaDownloadSection2Row || position == DataSettingsActivity.this.usageSection2Row || position == DataSettingsActivity.this.callsSection2Row || position == DataSettingsActivity.this.proxySection2Row) {
                 return 0;
             }
-            if (position == DataSettingsActivity.this.storageUsageRow || position == DataSettingsActivity.this.useLessDataForCallsRow || position == DataSettingsActivity.this.roamingUsageRow || position == DataSettingsActivity.this.wifiUsageRow || position == DataSettingsActivity.this.mobileUsageRow) {
+            if (position == DataSettingsActivity.this.storageUsageRow || position == DataSettingsActivity.this.useLessDataForCallsRow || position == DataSettingsActivity.this.roamingUsageRow || position == DataSettingsActivity.this.wifiUsageRow || position == DataSettingsActivity.this.mobileUsageRow || position == DataSettingsActivity.this.proxyRow) {
                 return 1;
             }
             if (position == DataSettingsActivity.this.wifiDownloadRow || position == DataSettingsActivity.this.mobileDownloadRow || position == DataSettingsActivity.this.roamingDownloadRow) {
                 return 3;
             }
-            if (position == DataSettingsActivity.this.mediaDownloadSectionRow || position == DataSettingsActivity.this.callsSectionRow || position == DataSettingsActivity.this.usageSectionRow) {
+            if (position == DataSettingsActivity.this.mediaDownloadSectionRow || position == DataSettingsActivity.this.callsSectionRow || position == DataSettingsActivity.this.usageSectionRow || position == DataSettingsActivity.this.proxySectionRow) {
                 return 2;
             }
             return 1;
@@ -270,24 +279,33 @@ public class DataSettingsActivity extends BaseFragment {
         i = this.rowCount;
         this.rowCount = i + 1;
         this.roamingUsageRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.usageSection2Row = i;
         if (MessagesController.getInstance().callsEnabled) {
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.usageSection2Row = i;
             i = this.rowCount;
             this.rowCount = i + 1;
             this.callsSectionRow = i;
             i = this.rowCount;
             this.rowCount = i + 1;
             this.useLessDataForCallsRow = i;
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.callsSection2Row = i;
         } else {
-            this.usageSection2Row = -1;
+            this.callsSection2Row = -1;
             this.callsSectionRow = -1;
             this.useLessDataForCallsRow = -1;
         }
         i = this.rowCount;
         this.rowCount = i + 1;
-        this.callsSection2Row = i;
+        this.proxySectionRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.proxyRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.proxySection2Row = i;
         return true;
     }
 
@@ -297,6 +315,7 @@ public class DataSettingsActivity extends BaseFragment {
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
+        this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
@@ -465,6 +484,8 @@ public class DataSettingsActivity extends BaseFragment {
                     DataSettingsActivity.this.presentFragment(new DataUsageActivity(2));
                 } else if (position == DataSettingsActivity.this.wifiUsageRow) {
                     DataSettingsActivity.this.presentFragment(new DataUsageActivity(1));
+                } else if (position == DataSettingsActivity.this.proxyRow) {
+                    DataSettingsActivity.this.presentFragment(new ProxySettingsActivity());
                 }
             }
         });

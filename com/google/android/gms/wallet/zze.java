@@ -2,24 +2,29 @@ package com.google.android.gms.wallet;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
+import android.support.v4.internal.view.SupportMenu;
+import com.google.android.gms.common.internal.safeparcel.zzb;
 
-public final class zze extends zza {
-    public static final Creator<zze> CREATOR = new zzf();
-    LoyaltyWalletObject zzbPT;
-    OfferWalletObject zzbPU;
-    GiftCardWalletObject zzbPV;
-
-    zze() {
+public final class zze implements Creator<CountrySpecification> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzb.zzd(parcel);
+        String str = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
+                case 2:
+                    str = zzb.zzq(parcel, readInt);
+                    break;
+                default:
+                    zzb.zzb(parcel, readInt);
+                    break;
+            }
+        }
+        zzb.zzF(parcel, zzd);
+        return new CountrySpecification(str);
     }
 
-    zze(LoyaltyWalletObject loyaltyWalletObject, OfferWalletObject offerWalletObject, GiftCardWalletObject giftCardWalletObject) {
-        this.zzbPT = loyaltyWalletObject;
-        this.zzbPU = offerWalletObject;
-        this.zzbPV = giftCardWalletObject;
-    }
-
-    public void writeToParcel(Parcel parcel, int i) {
-        zzf.zza(this, parcel, i);
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new CountrySpecification[i];
     }
 }

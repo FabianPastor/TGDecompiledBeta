@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Point;
@@ -30,6 +31,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import java.io.BufferedReader;
@@ -49,6 +51,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.LocaleController.LocaleInfo;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -72,6 +75,7 @@ import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.ChatInvite;
+import org.telegram.tgnet.TLRPC.LangPackString;
 import org.telegram.tgnet.TLRPC.MessageMedia;
 import org.telegram.tgnet.TLRPC.TL_contacts_resolveUsername;
 import org.telegram.tgnet.TLRPC.TL_contacts_resolvedPeer;
@@ -79,11 +83,13 @@ import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputGameShortName;
 import org.telegram.tgnet.TLRPC.TL_inputMediaGame;
 import org.telegram.tgnet.TLRPC.TL_inputStickerSetShortName;
+import org.telegram.tgnet.TLRPC.TL_langpack_getStrings;
 import org.telegram.tgnet.TLRPC.TL_messages_checkChatInvite;
 import org.telegram.tgnet.TLRPC.TL_messages_importChatInvite;
 import org.telegram.tgnet.TLRPC.TL_userContact_old2;
 import org.telegram.tgnet.TLRPC.Updates;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.TLRPC.Vector;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -92,6 +98,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.DrawerLayoutAdapter;
+import org.telegram.ui.Cells.LanguageCell;
 import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.JoinGroupAlert;
 import org.telegram.ui.Components.LayoutHelper;
@@ -119,8 +126,11 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     private ArrayList<Uri> documentsUrisArray;
     private DrawerLayoutAdapter drawerLayoutAdapter;
     protected DrawerLayoutContainer drawerLayoutContainer;
+    private HashMap<String, String> englishLocaleStrings;
     private boolean finished;
     private ActionBarLayout layersActionBarLayout;
+    private boolean loadingLocaleDialog;
+    private AlertDialog localeDialog;
     private Runnable lockRunnable;
     private OnGlobalLayoutListener onGlobalLayoutListener;
     private Intent passcodeSaveIntent;
@@ -133,6 +143,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     private FrameLayout shadowTablet;
     private FrameLayout shadowTabletSide;
     private RecyclerListView sideMenu;
+    private HashMap<String, String> systemLocaleStrings;
     private boolean tabletFullSize;
     private String videoPath;
     private AlertDialog visibleDialog;
@@ -160,7 +171,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 finish();
                 return;
             } else if (!(intent == null || intent.getBooleanExtra("fromIntro", false) || !ApplicationLoader.applicationContext.getSharedPreferences("logininfo2", 0).getAll().isEmpty())) {
-                startActivity(new Intent(this, IntroActivity.class));
+                Intent intent2 = new Intent(this, IntroActivity.class);
+                intent2.setData(intent.getData());
+                startActivity(intent2);
                 super.onCreate(savedInstanceState);
                 finish();
                 return;
@@ -364,6 +377,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     LaunchActivity.this.presentFragment(new ContactsActivity(null));
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 7) {
+                    if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                        LaunchActivity.this.showLanguageAlert(true);
+                        return;
+                    }
                     try {
                         Intent intent = new Intent("android.intent.action.SEND");
                         intent.setType("text/plain");
@@ -403,6 +420,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didSetNewWallpapper);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didSetPasscode);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.reloadInterface);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.suggestedLangpack);
         if (this.actionBarLayout.fragmentsStack.isEmpty()) {
             if (UserConfig.isClientActivated()) {
                 DialogsActivity dialogsActivity = new DialogsActivity(null);
@@ -911,6 +929,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword) {
+        if (AndroidUtilities.handleProxyIntent(this, intent)) {
+            return true;
+        }
         int flags = intent.getFlags();
         if (fromPassword || !(AndroidUtilities.needShowPasscode(true) || UserConfig.isWaitingForPasscodeEnter)) {
             String[] args;
@@ -1931,6 +1952,14 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             this.visibleDialog.setCanceledOnTouchOutside(true);
             this.visibleDialog.setOnDismissListener(new OnDismissListener() {
                 public void onDismiss(DialogInterface dialog) {
+                    if (LaunchActivity.this.visibleDialog != null && LaunchActivity.this.visibleDialog == LaunchActivity.this.localeDialog) {
+                        try {
+                            Toast.makeText(LaunchActivity.this, LaunchActivity.this.getStringForLanguageAlert(LocaleController.getInstance().getCurrentLocaleInfo().shortName.equals("en") ? LaunchActivity.this.englishLocaleStrings : LaunchActivity.this.systemLocaleStrings, "ChangeLanguageLater", R.string.ChangeLanguageLater), 1).show();
+                        } catch (Exception e) {
+                            FileLog.e("tmessages", e);
+                        }
+                        LaunchActivity.this.localeDialog = null;
+                    }
                     LaunchActivity.this.visibleDialog = null;
                 }
             });
@@ -2037,6 +2066,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didSetNewWallpapper);
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didSetPasscode);
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.reloadInterface);
+            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.suggestedLangpack);
         }
     }
 
@@ -2226,6 +2256,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
 
     protected void onResume() {
         super.onResume();
+        showLanguageAlert(false);
         ApplicationLoader.mainInterfacePaused = false;
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
@@ -2396,7 +2427,183 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             } catch (Throwable e2) {
                 FileLog.e(e2);
             }
-        } else if (id != NotificationCenter.reloadInterface) {
+        } else if (id == NotificationCenter.reloadInterface) {
+            rebuildAllFragments(true);
+        } else if (id == NotificationCenter.suggestedLangpack) {
+            showLanguageAlert(false);
+        }
+    }
+
+    private String getStringForLanguageAlert(HashMap<String, String> map, String key, int intKey) {
+        String value = (String) map.get(key);
+        if (value == null) {
+            return LocaleController.getString(key, intKey);
+        }
+        return value;
+    }
+
+    private void showLanguageAlertInternal(LocaleInfo systemInfo, LocaleInfo englishInfo, String systemLang) {
+        LocaleInfo localeInfo;
+        this.loadingLocaleDialog = false;
+        boolean firstSystem = systemInfo.builtIn || LocaleController.getInstance().isCurrentLocalLocale();
+        Builder builder = new Builder(this);
+        builder.setTitle(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguage", R.string.ChooseYourLanguage));
+        builder.setSubtitle(getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguage", R.string.ChooseYourLanguage));
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(1);
+        final LanguageCell[] cells = new LanguageCell[2];
+        final LocaleInfo[] selectedLanguage = new LocaleInfo[1];
+        LocaleInfo[] locales = new LocaleInfo[2];
+        String englishName = getStringForLanguageAlert(this.systemLocaleStrings, "English", R.string.English);
+        if (firstSystem) {
+            localeInfo = systemInfo;
+        } else {
+            localeInfo = englishInfo;
+        }
+        locales[0] = localeInfo;
+        if (firstSystem) {
+            localeInfo = englishInfo;
+        } else {
+            localeInfo = systemInfo;
+        }
+        locales[1] = localeInfo;
+        if (!firstSystem) {
+            systemInfo = englishInfo;
+        }
+        selectedLanguage[0] = systemInfo;
+        int a = 0;
+        while (a < 2) {
+            cells[a] = new LanguageCell(this, true);
+            cells[a].setLanguage(locales[a], locales[a] == englishInfo ? englishName : null, true);
+            cells[a].setTag(Integer.valueOf(a));
+            cells[a].setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 2));
+            cells[a].setLanguageSelected(a == 0);
+            linearLayout.addView(cells[a], LayoutHelper.createLinear(-1, 48));
+            cells[a].setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
+                    Integer tag = (Integer) v.getTag();
+                    selectedLanguage[0] = ((LanguageCell) v).getCurrentLocale();
+                    for (int a = 0; a < cells.length; a++) {
+                        boolean z;
+                        LanguageCell languageCell = cells[a];
+                        if (a == tag.intValue()) {
+                            z = true;
+                        } else {
+                            z = false;
+                        }
+                        languageCell.setLanguageSelected(z);
+                    }
+                }
+            });
+            a++;
+        }
+        LanguageCell cell = new LanguageCell(this, true);
+        cell.setValue(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguageOther", R.string.ChooseYourLanguageOther), getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguageOther", R.string.ChooseYourLanguageOther));
+        cell.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                LaunchActivity.this.localeDialog = null;
+                LaunchActivity.this.drawerLayoutContainer.closeDrawer(true);
+                LaunchActivity.this.presentFragment(new LanguageSelectActivity());
+                if (LaunchActivity.this.visibleDialog != null) {
+                    LaunchActivity.this.visibleDialog.dismiss();
+                    LaunchActivity.this.visibleDialog = null;
+                }
+            }
+        });
+        linearLayout.addView(cell, LayoutHelper.createLinear(-1, 48));
+        builder.setView(linearLayout);
+        builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                LocaleController.getInstance().applyLanguage(selectedLanguage[0], true);
+                LaunchActivity.this.rebuildAllFragments(true);
+            }
+        });
+        this.localeDialog = showAlertDialog(builder);
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putString("language_showed2", systemLang).commit();
+    }
+
+    private void showLanguageAlert(boolean force) {
+        if (!this.loadingLocaleDialog) {
+            String showedLang = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getString("language_showed2", "");
+            final String systemLang = LocaleController.getSystemLocaleStringIso639().toLowerCase();
+            if (force || !showedLang.equals(systemLang)) {
+                final LocaleInfo[] infos = new LocaleInfo[2];
+                String arg;
+                if (systemLang.contains("-")) {
+                    arg = systemLang.split("-")[0];
+                } else {
+                    arg = systemLang;
+                }
+                for (int a = 0; a < LocaleController.getInstance().languages.size(); a++) {
+                    LocaleInfo info = (LocaleInfo) LocaleController.getInstance().languages.get(a);
+                    if (info.shortName.equals("en")) {
+                        infos[0] = info;
+                    }
+                    if (info.shortName.equals(systemLang) || info.shortName.equals(arg)) {
+                        infos[1] = info;
+                    }
+                    if (infos[0] != null && infos[1] != null) {
+                        break;
+                    }
+                }
+                if (infos[0] != null && infos[1] != null && infos[0] != infos[1]) {
+                    this.systemLocaleStrings = null;
+                    this.englishLocaleStrings = null;
+                    this.loadingLocaleDialog = true;
+                    TL_langpack_getStrings req = new TL_langpack_getStrings();
+                    req.lang_code = infos[1].shortName;
+                    req.keys.add("English");
+                    req.keys.add("ChooseYourLanguage");
+                    req.keys.add("ChooseYourLanguageOther");
+                    req.keys.add("ChangeLanguageLater");
+                    ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                        public void run(TLObject response, TL_error error) {
+                            final HashMap<String, String> keys = new HashMap();
+                            if (response != null) {
+                                Vector vector = (Vector) response;
+                                for (int a = 0; a < vector.objects.size(); a++) {
+                                    LangPackString string = (LangPackString) vector.objects.get(a);
+                                    keys.put(string.key, string.value);
+                                }
+                            }
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    LaunchActivity.this.systemLocaleStrings = keys;
+                                    if (LaunchActivity.this.englishLocaleStrings != null && LaunchActivity.this.systemLocaleStrings != null) {
+                                        LaunchActivity.this.showLanguageAlertInternal(infos[1], infos[0], systemLang);
+                                    }
+                                }
+                            });
+                        }
+                    }, 8);
+                    req = new TL_langpack_getStrings();
+                    req.lang_code = infos[0].shortName;
+                    req.keys.add("English");
+                    req.keys.add("ChooseYourLanguage");
+                    req.keys.add("ChooseYourLanguageOther");
+                    req.keys.add("ChangeLanguageLater");
+                    ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                        public void run(TLObject response, TL_error error) {
+                            final HashMap<String, String> keys = new HashMap();
+                            if (response != null) {
+                                Vector vector = (Vector) response;
+                                for (int a = 0; a < vector.objects.size(); a++) {
+                                    LangPackString string = (LangPackString) vector.objects.get(a);
+                                    keys.put(string.key, string.value);
+                                }
+                            }
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    LaunchActivity.this.englishLocaleStrings = keys;
+                                    if (LaunchActivity.this.englishLocaleStrings != null && LaunchActivity.this.systemLocaleStrings != null) {
+                                        LaunchActivity.this.showLanguageAlertInternal(infos[1], infos[0], systemLang);
+                                    }
+                                }
+                            });
+                        }
+                    }, 8);
+                }
+            }
         }
     }
 
@@ -2446,15 +2653,54 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     }
 
     private void updateCurrentConnectionState() {
-        String text = null;
+        String title = null;
+        String subtitle = null;
+        Runnable action = null;
         if (this.currentConnectionState == 2) {
-            text = LocaleController.getString("WaitingForNetwork", R.string.WaitingForNetwork);
+            title = LocaleController.getString("WaitingForNetwork", R.string.WaitingForNetwork);
         } else if (this.currentConnectionState == 1) {
-            text = LocaleController.getString("Connecting", R.string.Connecting);
+            title = LocaleController.getString("Connecting", R.string.Connecting);
+            action = new Runnable() {
+                public void run() {
+                    if (AndroidUtilities.isTablet()) {
+                        if (!LaunchActivity.layerFragmentsStack.isEmpty() && (LaunchActivity.layerFragmentsStack.get(LaunchActivity.layerFragmentsStack.size() - 1) instanceof ProxySettingsActivity)) {
+                            return;
+                        }
+                    } else if (!LaunchActivity.mainFragmentsStack.isEmpty() && (LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1) instanceof ProxySettingsActivity)) {
+                        return;
+                    }
+                    LaunchActivity.this.presentFragment(new ProxySettingsActivity());
+                }
+            };
+        } else if (this.currentConnectionState == 5) {
+            title = LocaleController.getString("Updating", R.string.Updating);
         } else if (this.currentConnectionState == 4) {
-            text = LocaleController.getString("Updating", R.string.Updating);
+            title = LocaleController.getString("ConnectingToProxy", R.string.ConnectingToProxy);
+            subtitle = LocaleController.getString("ConnectingToProxyTapToDisable", R.string.ConnectingToProxyTapToDisable);
+            action = new Runnable() {
+                public void run() {
+                    if (LaunchActivity.this.actionBarLayout != null && !LaunchActivity.this.actionBarLayout.fragmentsStack.isEmpty()) {
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                        BaseFragment fragment = (BaseFragment) LaunchActivity.this.actionBarLayout.fragmentsStack.get(LaunchActivity.this.actionBarLayout.fragmentsStack.size() - 1);
+                        Builder builder = new Builder(LaunchActivity.this);
+                        builder.setTitle(LocaleController.getString("Proxy", R.string.Proxy));
+                        builder.setMessage(LocaleController.formatString("ConnectingToProxyDisableAlert", R.string.ConnectingToProxyDisableAlert, preferences.getString("proxy_ip", "")));
+                        builder.setPositiveButton(LocaleController.getString("ConnectingToProxyDisable", R.string.ConnectingToProxyDisable), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+                                editor.putBoolean("proxy_enabled", false);
+                                editor.commit();
+                                ConnectionsManager.native_setProxySettings("", 0, "", "");
+                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
+                            }
+                        });
+                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                        fragment.showDialog(builder.create());
+                    }
+                }
+            };
         }
-        this.actionBarLayout.setTitleOverlayText(text);
+        this.actionBarLayout.setTitleOverlayText(title, subtitle, action);
     }
 
     protected void onSaveInstanceState(Bundle outState) {
@@ -2850,20 +3096,16 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
 
     public void rebuildAllFragments(boolean last) {
         if (this.layersActionBarLayout != null) {
-            this.layersActionBarLayout.rebuildAllFragmentViews(last);
-            this.layersActionBarLayout.showLastFragment();
-            return;
+            this.layersActionBarLayout.rebuildAllFragmentViews(last, true);
+        } else {
+            this.actionBarLayout.rebuildAllFragmentViews(last, true);
         }
-        this.actionBarLayout.rebuildAllFragmentViews(last);
-        this.actionBarLayout.showLastFragment();
     }
 
     public void onRebuildAllFragments(ActionBarLayout layout) {
         if (AndroidUtilities.isTablet() && layout == this.layersActionBarLayout) {
-            this.rightActionBarLayout.rebuildAllFragmentViews(true);
-            this.rightActionBarLayout.showLastFragment();
-            this.actionBarLayout.rebuildAllFragmentViews(true);
-            this.actionBarLayout.showLastFragment();
+            this.rightActionBarLayout.rebuildAllFragmentViews(true, true);
+            this.actionBarLayout.rebuildAllFragmentViews(true, true);
         }
         this.drawerLayoutAdapter.notifyDataSetChanged();
     }

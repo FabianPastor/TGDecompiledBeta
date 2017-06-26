@@ -2,24 +2,33 @@ package com.google.android.gms.wallet;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
+import android.support.v4.internal.view.SupportMenu;
+import com.google.android.gms.common.internal.safeparcel.zzb;
 
-public final class zzw extends zza {
-    public static final Creator<zzw> CREATOR = new zzx();
-    Cart zzbRB;
-    String zzbRC;
-    String zzbRD;
-
-    private zzw() {
+public final class zzw implements Creator<PaymentMethodToken> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzb.zzd(parcel);
+        int i = 0;
+        String str = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
+                case 2:
+                    i = zzb.zzg(parcel, readInt);
+                    break;
+                case 3:
+                    str = zzb.zzq(parcel, readInt);
+                    break;
+                default:
+                    zzb.zzb(parcel, readInt);
+                    break;
+            }
+        }
+        zzb.zzF(parcel, zzd);
+        return new PaymentMethodToken(i, str);
     }
 
-    zzw(Cart cart, String str, String str2) {
-        this.zzbRB = cart;
-        this.zzbRC = str;
-        this.zzbRD = str2;
-    }
-
-    public void writeToParcel(Parcel parcel, int i) {
-        zzx.zza(this, parcel, i);
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new PaymentMethodToken[i];
     }
 }

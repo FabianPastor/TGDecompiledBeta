@@ -1,76 +1,113 @@
 package com.google.android.gms.common.internal;
 
-import android.util.Log;
+import android.accounts.Account;
+import android.content.Context;
+import android.view.View;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.GoogleApiClient.Builder;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.internal.zzctk;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public final class zzq {
-    public static final int zzaGp = (23 - " PII_LOG".length());
-    private static final String zzaGq = null;
-    private final String zzaGr;
-    private final String zzaGs;
+    private final Set<Scope> zzaAT;
+    private final int zzaAV;
+    private final View zzaAW;
+    private final String zzaAX;
+    private final Set<Scope> zzaHk;
+    private final Map<Api<?>, zzr> zzaHl;
+    private final zzctk zzaHm;
+    private Integer zzaHn;
+    private final Account zzajb;
+    private final String zzake;
 
-    public zzq(String str) {
-        this(str, null);
-    }
-
-    public zzq(String str, String str2) {
-        zzac.zzb((Object) str, (Object) "log tag cannot be null");
-        zzac.zzb(str.length() <= 23, "tag \"%s\" is longer than the %d character maximum", str, Integer.valueOf(23));
-        this.zzaGr = str;
-        if (str2 == null || str2.length() <= 0) {
-            this.zzaGs = null;
-        } else {
-            this.zzaGs = str2;
+    public zzq(Account account, Set<Scope> set, Map<Api<?>, zzr> map, int i, View view, String str, String str2, zzctk com_google_android_gms_internal_zzctk) {
+        Map map2;
+        this.zzajb = account;
+        this.zzaAT = set == null ? Collections.EMPTY_SET : Collections.unmodifiableSet(set);
+        if (map == null) {
+            map2 = Collections.EMPTY_MAP;
         }
-    }
-
-    private String zzdq(String str) {
-        return this.zzaGs == null ? str : this.zzaGs.concat(str);
-    }
-
-    public void zzE(String str, String str2) {
-        if (zzcW(3)) {
-            Log.d(str, zzdq(str2));
+        this.zzaHl = map2;
+        this.zzaAW = view;
+        this.zzaAV = i;
+        this.zzake = str;
+        this.zzaAX = str2;
+        this.zzaHm = com_google_android_gms_internal_zzctk;
+        Set hashSet = new HashSet(this.zzaAT);
+        for (zzr com_google_android_gms_common_internal_zzr : this.zzaHl.values()) {
+            hashSet.addAll(com_google_android_gms_common_internal_zzr.zzame);
         }
+        this.zzaHk = Collections.unmodifiableSet(hashSet);
     }
 
-    public void zzF(String str, String str2) {
-        if (zzcW(5)) {
-            Log.w(str, zzdq(str2));
+    public static zzq zzaA(Context context) {
+        return new Builder(context).zzpn();
+    }
+
+    public final Account getAccount() {
+        return this.zzajb;
+    }
+
+    @Deprecated
+    public final String getAccountName() {
+        return this.zzajb != null ? this.zzajb.name : null;
+    }
+
+    public final Set<Scope> zzc(Api<?> api) {
+        zzr com_google_android_gms_common_internal_zzr = (zzr) this.zzaHl.get(api);
+        if (com_google_android_gms_common_internal_zzr == null || com_google_android_gms_common_internal_zzr.zzame.isEmpty()) {
+            return this.zzaAT;
         }
+        Set<Scope> hashSet = new HashSet(this.zzaAT);
+        hashSet.addAll(com_google_android_gms_common_internal_zzr.zzame);
+        return hashSet;
     }
 
-    public void zzG(String str, String str2) {
-        if (zzcW(6)) {
-            Log.e(str, zzdq(str2));
-        }
+    public final void zzc(Integer num) {
+        this.zzaHn = num;
     }
 
-    public void zzb(String str, String str2, Throwable th) {
-        if (zzcW(4)) {
-            Log.i(str, zzdq(str2), th);
-        }
+    public final Account zzrl() {
+        return this.zzajb != null ? this.zzajb : new Account("<<default account>>", "com.google");
     }
 
-    public void zzc(String str, String str2, Throwable th) {
-        if (zzcW(5)) {
-            Log.w(str, zzdq(str2), th);
-        }
+    public final int zzrm() {
+        return this.zzaAV;
     }
 
-    public boolean zzcW(int i) {
-        return Log.isLoggable(this.zzaGr, i);
+    public final Set<Scope> zzrn() {
+        return this.zzaAT;
     }
 
-    public void zzd(String str, String str2, Throwable th) {
-        if (zzcW(6)) {
-            Log.e(str, zzdq(str2), th);
-        }
+    public final Set<Scope> zzro() {
+        return this.zzaHk;
     }
 
-    public void zze(String str, String str2, Throwable th) {
-        if (zzcW(7)) {
-            Log.e(str, zzdq(str2), th);
-            Log.wtf(str, zzdq(str2), th);
-        }
+    public final Map<Api<?>, zzr> zzrp() {
+        return this.zzaHl;
+    }
+
+    public final String zzrq() {
+        return this.zzake;
+    }
+
+    public final String zzrr() {
+        return this.zzaAX;
+    }
+
+    public final View zzrs() {
+        return this.zzaAW;
+    }
+
+    public final zzctk zzrt() {
+        return this.zzaHm;
+    }
+
+    public final Integer zzru() {
+        return this.zzaHn;
     }
 }

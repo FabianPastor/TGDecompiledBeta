@@ -2,57 +2,34 @@ package com.google.android.gms.vision.barcode;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
 import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
-import com.google.android.gms.vision.barcode.Barcode.Sms;
+import com.google.android.gms.vision.barcode.Barcode.Phone;
 
-public class zzk implements Creator<Sms> {
-    static void zza(Sms sms, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zzc(parcel, 1, sms.versionCode);
-        zzc.zza(parcel, 2, sms.message, false);
-        zzc.zza(parcel, 3, sms.phoneNumber, false);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzjJ(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzod(i);
-    }
-
-    public Sms zzjJ(Parcel parcel) {
-        String str = null;
-        int zzaY = zzb.zzaY(parcel);
+public final class zzk implements Creator<Phone> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzb.zzd(parcel);
         int i = 0;
-        String str2 = null;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
-                case 1:
-                    i = zzb.zzg(parcel, zzaX);
-                    break;
+        String str = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
                 case 2:
-                    str2 = zzb.zzq(parcel, zzaX);
+                    i = zzb.zzg(parcel, readInt);
                     break;
                 case 3:
-                    str = zzb.zzq(parcel, zzaX);
+                    str = zzb.zzq(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaX);
+                    zzb.zzb(parcel, readInt);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new Sms(i, str2, str);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
+        zzb.zzF(parcel, zzd);
+        return new Phone(i, str);
     }
 
-    public Sms[] zzod(int i) {
-        return new Sms[i];
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new Phone[i];
     }
 }

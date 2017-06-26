@@ -8,7 +8,6 @@ import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PreviewCallback;
-import android.os.Build.VERSION;
 import android.os.SystemClock;
 import android.support.annotation.RequiresPermission;
 import android.util.Log;
@@ -17,7 +16,6 @@ import android.view.WindowManager;
 import com.google.android.gms.common.images.Size;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.IOException;
-import java.lang.Thread.State;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,24 +29,24 @@ public class CameraSource {
     @SuppressLint({"InlinedApi"})
     public static final int CAMERA_FACING_FRONT = 1;
     private Context mContext;
-    private int zzMA;
-    private final Object zzbNP;
-    private Camera zzbNQ;
-    private int zzbNR;
-    private Size zzbNS;
-    private float zzbNT;
-    private int zzbNU;
-    private int zzbNV;
-    private boolean zzbNW;
-    private SurfaceTexture zzbNX;
-    private boolean zzbNY;
-    private Thread zzbNZ;
-    private zzb zzbOa;
-    private Map<byte[], ByteBuffer> zzbOb;
+    private int zzOa;
+    private final Object zzbMm;
+    private Camera zzbMn;
+    private int zzbMo;
+    private Size zzbMp;
+    private float zzbMq;
+    private int zzbMr;
+    private int zzbMs;
+    private boolean zzbMt;
+    private SurfaceTexture zzbMu;
+    private boolean zzbMv;
+    private Thread zzbMw;
+    private zzb zzbMx;
+    private Map<byte[], ByteBuffer> zzbMy;
 
     public static class Builder {
-        private final Detector<?> zzbOc;
-        private CameraSource zzbOd = new CameraSource();
+        private CameraSource zzbMA = new CameraSource();
+        private final Detector<?> zzbMz;
 
         public Builder(Context context, Detector<?> detector) {
             if (context == null) {
@@ -56,27 +54,27 @@ public class CameraSource {
             } else if (detector == null) {
                 throw new IllegalArgumentException("No detector supplied.");
             } else {
-                this.zzbOc = detector;
-                this.zzbOd.mContext = context;
+                this.zzbMz = detector;
+                this.zzbMA.mContext = context;
             }
         }
 
         public CameraSource build() {
-            CameraSource cameraSource = this.zzbOd;
-            CameraSource cameraSource2 = this.zzbOd;
+            CameraSource cameraSource = this.zzbMA;
+            CameraSource cameraSource2 = this.zzbMA;
             cameraSource2.getClass();
-            cameraSource.zzbOa = new zzb(cameraSource2, this.zzbOc);
-            return this.zzbOd;
+            cameraSource.zzbMx = new zzb(cameraSource2, this.zzbMz);
+            return this.zzbMA;
         }
 
         public Builder setAutoFocusEnabled(boolean z) {
-            this.zzbOd.zzbNW = z;
+            this.zzbMA.zzbMt = z;
             return this;
         }
 
         public Builder setFacing(int i) {
             if (i == 0 || i == 1) {
-                this.zzbOd.zzbNR = i;
+                this.zzbMA.zzbMo = i;
                 return this;
             }
             throw new IllegalArgumentException("Invalid camera: " + i);
@@ -86,7 +84,7 @@ public class CameraSource {
             if (f <= 0.0f) {
                 throw new IllegalArgumentException("Invalid fps: " + f);
             }
-            this.zzbOd.zzbNT = f;
+            this.zzbMA.zzbMq = f;
             return this;
         }
 
@@ -94,8 +92,8 @@ public class CameraSource {
             if (i <= 0 || i > 1000000 || i2 <= 0 || i2 > 1000000) {
                 throw new IllegalArgumentException("Invalid preview size: " + i + "x" + i2);
             }
-            this.zzbOd.zzbNU = i;
-            this.zzbOd.zzbNV = i2;
+            this.zzbMA.zzbMr = i;
+            this.zzbMA.zzbMs = i2;
             return this;
         }
     }
@@ -108,62 +106,57 @@ public class CameraSource {
         void onShutter();
     }
 
-    private class zza implements PreviewCallback {
-        final /* synthetic */ CameraSource zzbOe;
+    class zza implements PreviewCallback {
+        private /* synthetic */ CameraSource zzbMB;
 
         private zza(CameraSource cameraSource) {
-            this.zzbOe = cameraSource;
+            this.zzbMB = cameraSource;
         }
 
-        public void onPreviewFrame(byte[] bArr, Camera camera) {
-            this.zzbOe.zzbOa.zza(bArr, camera);
+        public final void onPreviewFrame(byte[] bArr, Camera camera) {
+            this.zzbMB.zzbMx.zza(bArr, camera);
         }
     }
 
-    private class zzb implements Runnable {
-        static final /* synthetic */ boolean $assertionsDisabled = (!CameraSource.class.desiredAssertionStatus());
+    class zzb implements Runnable {
         private boolean mActive = true;
-        private long zzafe = SystemClock.elapsedRealtime();
-        private Detector<?> zzbOc;
-        final /* synthetic */ CameraSource zzbOe;
-        private long zzbOf;
-        private int zzbOg = 0;
-        private ByteBuffer zzbOh;
-        private final Object zzrJ = new Object();
+        private final Object mLock = new Object();
+        private long zzagZ = SystemClock.elapsedRealtime();
+        private /* synthetic */ CameraSource zzbMB;
+        private long zzbMC;
+        private int zzbMD = 0;
+        private ByteBuffer zzbME;
+        private Detector<?> zzbMz;
 
         zzb(CameraSource cameraSource, Detector<?> detector) {
-            this.zzbOe = cameraSource;
-            this.zzbOc = detector;
+            this.zzbMB = cameraSource;
+            this.zzbMz = detector;
         }
 
         @SuppressLint({"Assert"})
-        void release() {
-            if ($assertionsDisabled || this.zzbOe.zzbNZ.getState() == State.TERMINATED) {
-                this.zzbOc.release();
-                this.zzbOc = null;
-                return;
-            }
-            throw new AssertionError();
+        final void release() {
+            this.zzbMz.release();
+            this.zzbMz = null;
         }
 
         /* JADX WARNING: inconsistent code. */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         @SuppressLint({"InlinedApi"})
-        public void run() {
+        public final void run() {
             while (true) {
-                synchronized (this.zzrJ) {
-                    while (this.mActive && this.zzbOh == null) {
+                synchronized (this.mLock) {
+                    while (this.mActive && this.zzbME == null) {
                         try {
-                            this.zzrJ.wait();
+                            this.mLock.wait();
                         } catch (Throwable e) {
                             Log.d("CameraSource", "Frame processing loop terminated.", e);
                             return;
                         }
                     }
                     if (this.mActive) {
-                        Frame build = new com.google.android.gms.vision.Frame.Builder().setImageData(this.zzbOh, this.zzbOe.zzbNS.getWidth(), this.zzbOe.zzbNS.getHeight(), 17).setId(this.zzbOg).setTimestampMillis(this.zzbOf).setRotation(this.zzbOe.zzMA).build();
-                        ByteBuffer byteBuffer = this.zzbOh;
-                        this.zzbOh = null;
+                        Frame build = new com.google.android.gms.vision.Frame.Builder().setImageData(this.zzbME, this.zzbMB.zzbMp.getWidth(), this.zzbMB.zzbMp.getHeight(), 17).setId(this.zzbMD).setTimestampMillis(this.zzbMC).setRotation(this.zzbMB.zzOa).build();
+                        ByteBuffer byteBuffer = this.zzbME;
+                        this.zzbME = null;
                     } else {
                         return;
                     }
@@ -171,24 +164,24 @@ public class CameraSource {
             }
         }
 
-        void setActive(boolean z) {
-            synchronized (this.zzrJ) {
+        final void setActive(boolean z) {
+            synchronized (this.mLock) {
                 this.mActive = z;
-                this.zzrJ.notifyAll();
+                this.mLock.notifyAll();
             }
         }
 
-        void zza(byte[] bArr, Camera camera) {
-            synchronized (this.zzrJ) {
-                if (this.zzbOh != null) {
-                    camera.addCallbackBuffer(this.zzbOh.array());
-                    this.zzbOh = null;
+        final void zza(byte[] bArr, Camera camera) {
+            synchronized (this.mLock) {
+                if (this.zzbME != null) {
+                    camera.addCallbackBuffer(this.zzbME.array());
+                    this.zzbME = null;
                 }
-                if (this.zzbOe.zzbOb.containsKey(bArr)) {
-                    this.zzbOf = SystemClock.elapsedRealtime() - this.zzafe;
-                    this.zzbOg++;
-                    this.zzbOh = (ByteBuffer) this.zzbOe.zzbOb.get(bArr);
-                    this.zzrJ.notifyAll();
+                if (this.zzbMB.zzbMy.containsKey(bArr)) {
+                    this.zzbMC = SystemClock.elapsedRealtime() - this.zzagZ;
+                    this.zzbMD++;
+                    this.zzbME = (ByteBuffer) this.zzbMB.zzbMy.get(bArr);
+                    this.mLock.notifyAll();
                     return;
                 }
                 Log.d("CameraSource", "Skipping frame. Could not find ByteBuffer associated with the image data from the camera.");
@@ -196,95 +189,134 @@ public class CameraSource {
         }
     }
 
-    private class zzc implements android.hardware.Camera.PictureCallback {
-        final /* synthetic */ CameraSource zzbOe;
-        private PictureCallback zzbOi;
+    class zzc implements android.hardware.Camera.PictureCallback {
+        private /* synthetic */ CameraSource zzbMB;
+        private PictureCallback zzbMF;
 
         private zzc(CameraSource cameraSource) {
-            this.zzbOe = cameraSource;
+            this.zzbMB = cameraSource;
         }
 
-        public void onPictureTaken(byte[] bArr, Camera camera) {
-            if (this.zzbOi != null) {
-                this.zzbOi.onPictureTaken(bArr);
+        public final void onPictureTaken(byte[] bArr, Camera camera) {
+            if (this.zzbMF != null) {
+                this.zzbMF.onPictureTaken(bArr);
             }
-            synchronized (this.zzbOe.zzbNP) {
-                if (this.zzbOe.zzbNQ != null) {
-                    this.zzbOe.zzbNQ.startPreview();
+            synchronized (this.zzbMB.zzbMm) {
+                if (this.zzbMB.zzbMn != null) {
+                    this.zzbMB.zzbMn.startPreview();
                 }
             }
         }
     }
 
-    private class zzd implements android.hardware.Camera.ShutterCallback {
-        private ShutterCallback zzbOj;
+    static class zzd implements android.hardware.Camera.ShutterCallback {
+        private ShutterCallback zzbMG;
 
-        private zzd(CameraSource cameraSource) {
+        private zzd() {
         }
 
-        public void onShutter() {
-            if (this.zzbOj != null) {
-                this.zzbOj.onShutter();
+        public final void onShutter() {
+            if (this.zzbMG != null) {
+                this.zzbMG.onShutter();
             }
         }
     }
 
     static class zze {
-        private Size zzbOk;
-        private Size zzbOl;
+        private Size zzbMH;
+        private Size zzbMI;
 
         public zze(Camera.Size size, Camera.Size size2) {
-            this.zzbOk = new Size(size.width, size.height);
+            this.zzbMH = new Size(size.width, size.height);
             if (size2 != null) {
-                this.zzbOl = new Size(size2.width, size2.height);
+                this.zzbMI = new Size(size2.width, size2.height);
             }
         }
 
-        public Size zzTN() {
-            return this.zzbOk;
+        public final Size zzDK() {
+            return this.zzbMH;
         }
 
-        public Size zzTO() {
-            return this.zzbOl;
+        public final Size zzDL() {
+            return this.zzbMI;
         }
     }
 
     private CameraSource() {
-        this.zzbNP = new Object();
-        this.zzbNR = 0;
-        this.zzbNT = BitmapDescriptorFactory.HUE_ORANGE;
-        this.zzbNU = 1024;
-        this.zzbNV = 768;
-        this.zzbNW = false;
-        this.zzbOb = new HashMap();
+        this.zzbMm = new Object();
+        this.zzbMo = 0;
+        this.zzbMq = BitmapDescriptorFactory.HUE_ORANGE;
+        this.zzbMr = 1024;
+        this.zzbMs = 768;
+        this.zzbMt = false;
+        this.zzbMy = new HashMap();
     }
 
     @SuppressLint({"InlinedApi"})
-    private Camera zzTM() {
-        int zznP = zznP(this.zzbNR);
-        if (zznP == -1) {
-            throw new RuntimeException("Could not find requested camera.");
+    private final Camera zzDJ() throws IOException {
+        int i;
+        int i2 = 0;
+        int i3 = this.zzbMo;
+        CameraInfo cameraInfo = new CameraInfo();
+        for (i = 0; i < Camera.getNumberOfCameras(); i++) {
+            Camera.getCameraInfo(i, cameraInfo);
+            if (cameraInfo.facing == i3) {
+                i3 = i;
+                break;
+            }
         }
-        Camera open = Camera.open(zznP);
-        zze zza = zza(open, this.zzbNU, this.zzbNV);
+        i3 = -1;
+        if (i3 == -1) {
+            throw new IOException("Could not find requested camera.");
+        }
+        Camera open = Camera.open(i3);
+        zze zza = zza(open, this.zzbMr, this.zzbMs);
         if (zza == null) {
-            throw new RuntimeException("Could not find suitable preview size.");
+            throw new IOException("Could not find suitable preview size.");
         }
-        Size zzTO = zza.zzTO();
-        this.zzbNS = zza.zzTN();
-        int[] zza2 = zza(open, this.zzbNT);
+        Size zzDL = zza.zzDL();
+        this.zzbMp = zza.zzDK();
+        int[] zza2 = zza(open, this.zzbMq);
         if (zza2 == null) {
-            throw new RuntimeException("Could not find suitable preview frames per second range.");
+            throw new IOException("Could not find suitable preview frames per second range.");
         }
         Parameters parameters = open.getParameters();
-        if (zzTO != null) {
-            parameters.setPictureSize(zzTO.getWidth(), zzTO.getHeight());
+        if (zzDL != null) {
+            parameters.setPictureSize(zzDL.getWidth(), zzDL.getHeight());
         }
-        parameters.setPreviewSize(this.zzbNS.getWidth(), this.zzbNS.getHeight());
+        parameters.setPreviewSize(this.zzbMp.getWidth(), this.zzbMp.getHeight());
         parameters.setPreviewFpsRange(zza2[0], zza2[1]);
         parameters.setPreviewFormat(17);
-        zza(open, parameters, zznP);
-        if (this.zzbNW) {
+        i = ((WindowManager) this.mContext.getSystemService("window")).getDefaultDisplay().getRotation();
+        switch (i) {
+            case 0:
+                break;
+            case 1:
+                i2 = 90;
+                break;
+            case 2:
+                i2 = 180;
+                break;
+            case 3:
+                i2 = 270;
+                break;
+            default:
+                Log.e("CameraSource", "Bad rotation value: " + i);
+                break;
+        }
+        CameraInfo cameraInfo2 = new CameraInfo();
+        Camera.getCameraInfo(i3, cameraInfo2);
+        if (cameraInfo2.facing == 1) {
+            i2 = (cameraInfo2.orientation + i2) % 360;
+            i = (360 - i2) % 360;
+        } else {
+            i = ((cameraInfo2.orientation - i2) + 360) % 360;
+            i2 = i;
+        }
+        this.zzOa = i2 / 90;
+        open.setDisplayOrientation(i);
+        parameters.setRotation(i2);
+        if (this.zzbMt) {
             if (parameters.getSupportedFocusModes().contains("continuous-video")) {
                 parameters.setFocusMode("continuous-video");
             } else {
@@ -293,41 +325,19 @@ public class CameraSource {
         }
         open.setParameters(parameters);
         open.setPreviewCallbackWithBuffer(new zza());
-        open.addCallbackBuffer(zza(this.zzbNS));
-        open.addCallbackBuffer(zza(this.zzbNS));
-        open.addCallbackBuffer(zza(this.zzbNS));
-        open.addCallbackBuffer(zza(this.zzbNS));
+        open.addCallbackBuffer(zza(this.zzbMp));
+        open.addCallbackBuffer(zza(this.zzbMp));
+        open.addCallbackBuffer(zza(this.zzbMp));
+        open.addCallbackBuffer(zza(this.zzbMp));
         return open;
     }
 
-    static zze zza(Camera camera, int i, int i2) {
-        List<zze> zza = zza(camera);
+    private static zze zza(Camera camera, int i, int i2) {
         zze com_google_android_gms_vision_CameraSource_zze = null;
-        int i3 = ConnectionsManager.DEFAULT_DATACENTER_ID;
-        for (zze com_google_android_gms_vision_CameraSource_zze2 : zza) {
-            zze com_google_android_gms_vision_CameraSource_zze3;
-            int i4;
-            Size zzTN = com_google_android_gms_vision_CameraSource_zze2.zzTN();
-            int abs = Math.abs(zzTN.getHeight() - i2) + Math.abs(zzTN.getWidth() - i);
-            if (abs < i3) {
-                int i5 = abs;
-                com_google_android_gms_vision_CameraSource_zze3 = com_google_android_gms_vision_CameraSource_zze2;
-                i4 = i5;
-            } else {
-                i4 = i3;
-                com_google_android_gms_vision_CameraSource_zze3 = com_google_android_gms_vision_CameraSource_zze;
-            }
-            i3 = i4;
-            com_google_android_gms_vision_CameraSource_zze = com_google_android_gms_vision_CameraSource_zze3;
-        }
-        return com_google_android_gms_vision_CameraSource_zze;
-    }
-
-    static List<zze> zza(Camera camera) {
         Parameters parameters = camera.getParameters();
         List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
         List<Camera.Size> supportedPictureSizes = parameters.getSupportedPictureSizes();
-        List<zze> arrayList = new ArrayList();
+        List arrayList = new ArrayList();
         for (Camera.Size size : supportedPreviewSizes) {
             float f = ((float) size.width) / ((float) size.height);
             for (Camera.Size size2 : supportedPictureSizes) {
@@ -343,57 +353,45 @@ public class CameraSource {
                 arrayList.add(new zze(size3, null));
             }
         }
-        return arrayList;
-    }
-
-    private void zza(Camera camera, Parameters parameters, int i) {
-        int i2;
-        int rotation = ((WindowManager) this.mContext.getSystemService("window")).getDefaultDisplay().getRotation();
-        switch (rotation) {
-            case 0:
-                rotation = 0;
-                break;
-            case 1:
-                rotation = 90;
-                break;
-            case 2:
-                rotation = 180;
-                break;
-            case 3:
-                rotation = 270;
-                break;
-            default:
-                Log.e("CameraSource", "Bad rotation value: " + rotation);
-                rotation = 0;
-                break;
+        int i3 = ConnectionsManager.DEFAULT_DATACENTER_ID;
+        ArrayList arrayList2 = (ArrayList) arrayList;
+        int size4 = arrayList2.size();
+        int i4 = 0;
+        while (i4 < size4) {
+            zze com_google_android_gms_vision_CameraSource_zze2;
+            int i5;
+            int i6 = i4 + 1;
+            zze com_google_android_gms_vision_CameraSource_zze3 = (zze) arrayList2.get(i4);
+            Size zzDK = com_google_android_gms_vision_CameraSource_zze3.zzDK();
+            i4 = Math.abs(zzDK.getHeight() - i2) + Math.abs(zzDK.getWidth() - i);
+            if (i4 < i3) {
+                int i7 = i4;
+                com_google_android_gms_vision_CameraSource_zze2 = com_google_android_gms_vision_CameraSource_zze3;
+                i5 = i7;
+            } else {
+                i5 = i3;
+                com_google_android_gms_vision_CameraSource_zze2 = com_google_android_gms_vision_CameraSource_zze;
+            }
+            i3 = i5;
+            com_google_android_gms_vision_CameraSource_zze = com_google_android_gms_vision_CameraSource_zze2;
+            i4 = i6;
         }
-        CameraInfo cameraInfo = new CameraInfo();
-        Camera.getCameraInfo(i, cameraInfo);
-        if (cameraInfo.facing == 1) {
-            i2 = (rotation + cameraInfo.orientation) % 360;
-            rotation = (360 - i2) % 360;
-        } else {
-            rotation = ((cameraInfo.orientation - rotation) + 360) % 360;
-            i2 = rotation;
-        }
-        this.zzMA = i2 / 90;
-        camera.setDisplayOrientation(rotation);
-        parameters.setRotation(i2);
+        return com_google_android_gms_vision_CameraSource_zze;
     }
 
     @SuppressLint({"InlinedApi"})
-    private byte[] zza(Size size) {
+    private final byte[] zza(Size size) {
         Object obj = new byte[(((int) Math.ceil(((double) ((long) (ImageFormat.getBitsPerPixel(17) * (size.getHeight() * size.getWidth())))) / 8.0d)) + 1)];
         ByteBuffer wrap = ByteBuffer.wrap(obj);
         if (wrap.hasArray() && wrap.array() == obj) {
-            this.zzbOb.put(obj, wrap);
+            this.zzbMy.put(obj, wrap);
             return obj;
         }
         throw new IllegalStateException("Failed to create valid buffer for camera source.");
     }
 
     @SuppressLint({"InlinedApi"})
-    static int[] zza(Camera camera, float f) {
+    private static int[] zza(Camera camera, float f) {
         int i = (int) (1000.0f * f);
         int[] iArr = null;
         int i2 = ConnectionsManager.DEFAULT_DATACENTER_ID;
@@ -415,46 +413,34 @@ public class CameraSource {
         return iArr;
     }
 
-    private static int zznP(int i) {
-        CameraInfo cameraInfo = new CameraInfo();
-        for (int i2 = 0; i2 < Camera.getNumberOfCameras(); i2++) {
-            Camera.getCameraInfo(i2, cameraInfo);
-            if (cameraInfo.facing == i) {
-                return i2;
-            }
-        }
-        return -1;
-    }
-
     public int getCameraFacing() {
-        return this.zzbNR;
+        return this.zzbMo;
     }
 
     public Size getPreviewSize() {
-        return this.zzbNS;
+        return this.zzbMp;
     }
 
     public void release() {
-        synchronized (this.zzbNP) {
+        synchronized (this.zzbMm) {
             stop();
-            this.zzbOa.release();
+            this.zzbMx.release();
         }
     }
 
     @RequiresPermission("android.permission.CAMERA")
     public CameraSource start() throws IOException {
-        synchronized (this.zzbNP) {
-            if (this.zzbNQ != null) {
+        synchronized (this.zzbMm) {
+            if (this.zzbMn != null) {
             } else {
-                this.zzbNQ = zzTM();
-                int i = VERSION.SDK_INT;
-                this.zzbNX = new SurfaceTexture(100);
-                this.zzbNQ.setPreviewTexture(this.zzbNX);
-                this.zzbNY = true;
-                this.zzbNQ.startPreview();
-                this.zzbNZ = new Thread(this.zzbOa);
-                this.zzbOa.setActive(true);
-                this.zzbNZ.start();
+                this.zzbMn = zzDJ();
+                this.zzbMu = new SurfaceTexture(100);
+                this.zzbMn.setPreviewTexture(this.zzbMu);
+                this.zzbMv = true;
+                this.zzbMn.startPreview();
+                this.zzbMw = new Thread(this.zzbMx);
+                this.zzbMx.setActive(true);
+                this.zzbMw.start();
             }
         }
         return this;
@@ -462,60 +448,60 @@ public class CameraSource {
 
     @RequiresPermission("android.permission.CAMERA")
     public CameraSource start(SurfaceHolder surfaceHolder) throws IOException {
-        synchronized (this.zzbNP) {
-            if (this.zzbNQ != null) {
+        synchronized (this.zzbMm) {
+            if (this.zzbMn != null) {
             } else {
-                this.zzbNQ = zzTM();
-                this.zzbNQ.setPreviewDisplay(surfaceHolder);
-                this.zzbNQ.startPreview();
-                this.zzbNZ = new Thread(this.zzbOa);
-                this.zzbOa.setActive(true);
-                this.zzbNZ.start();
-                this.zzbNY = false;
+                this.zzbMn = zzDJ();
+                this.zzbMn.setPreviewDisplay(surfaceHolder);
+                this.zzbMn.startPreview();
+                this.zzbMw = new Thread(this.zzbMx);
+                this.zzbMx.setActive(true);
+                this.zzbMw.start();
+                this.zzbMv = false;
             }
         }
         return this;
     }
 
     public void stop() {
-        synchronized (this.zzbNP) {
-            this.zzbOa.setActive(false);
-            if (this.zzbNZ != null) {
+        synchronized (this.zzbMm) {
+            this.zzbMx.setActive(false);
+            if (this.zzbMw != null) {
                 try {
-                    this.zzbNZ.join();
+                    this.zzbMw.join();
                 } catch (InterruptedException e) {
                     Log.d("CameraSource", "Frame processing thread interrupted on release.");
                 }
-                this.zzbNZ = null;
+                this.zzbMw = null;
             }
-            if (this.zzbNQ != null) {
-                this.zzbNQ.stopPreview();
-                this.zzbNQ.setPreviewCallbackWithBuffer(null);
+            if (this.zzbMn != null) {
+                this.zzbMn.stopPreview();
+                this.zzbMn.setPreviewCallbackWithBuffer(null);
                 try {
-                    if (this.zzbNY) {
-                        this.zzbNQ.setPreviewTexture(null);
+                    if (this.zzbMv) {
+                        this.zzbMn.setPreviewTexture(null);
                     } else {
-                        this.zzbNQ.setPreviewDisplay(null);
+                        this.zzbMn.setPreviewDisplay(null);
                     }
                 } catch (Exception e2) {
                     String valueOf = String.valueOf(e2);
                     Log.e("CameraSource", new StringBuilder(String.valueOf(valueOf).length() + 32).append("Failed to clear camera preview: ").append(valueOf).toString());
                 }
-                this.zzbNQ.release();
-                this.zzbNQ = null;
+                this.zzbMn.release();
+                this.zzbMn = null;
             }
-            this.zzbOb.clear();
+            this.zzbMy.clear();
         }
     }
 
     public void takePicture(ShutterCallback shutterCallback, PictureCallback pictureCallback) {
-        synchronized (this.zzbNP) {
-            if (this.zzbNQ != null) {
+        synchronized (this.zzbMm) {
+            if (this.zzbMn != null) {
                 android.hardware.Camera.ShutterCallback com_google_android_gms_vision_CameraSource_zzd = new zzd();
-                com_google_android_gms_vision_CameraSource_zzd.zzbOj = shutterCallback;
+                com_google_android_gms_vision_CameraSource_zzd.zzbMG = shutterCallback;
                 android.hardware.Camera.PictureCallback com_google_android_gms_vision_CameraSource_zzc = new zzc();
-                com_google_android_gms_vision_CameraSource_zzc.zzbOi = pictureCallback;
-                this.zzbNQ.takePicture(com_google_android_gms_vision_CameraSource_zzd, null, null, com_google_android_gms_vision_CameraSource_zzc);
+                com_google_android_gms_vision_CameraSource_zzc.zzbMF = pictureCallback;
+                this.zzbMn.takePicture(com_google_android_gms_vision_CameraSource_zzd, null, null, com_google_android_gms_vision_CameraSource_zzc);
             }
         }
     }

@@ -1,204 +1,66 @@
 package com.google.android.gms.internal;
 
-import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
-import android.text.TextUtils;
-import java.util.Collections;
-import java.util.Map;
+import android.net.TrafficStats;
+import android.os.Process;
+import android.os.SystemClock;
+import java.util.concurrent.BlockingQueue;
 
-public abstract class zzl<T> implements Comparable<zzl<T>> {
-    private final zza zzC;
-    private final int zzD;
-    private final String zzE;
-    private final int zzF;
-    private final com.google.android.gms.internal.zzn.zza zzG;
-    private Integer zzH;
-    private zzm zzI;
-    private boolean zzJ;
-    private boolean zzK;
-    private boolean zzL;
-    private boolean zzM;
-    private zzp zzN;
-    private com.google.android.gms.internal.zzb.zza zzO;
+public final class zzl extends Thread {
+    private final zzb zzi;
+    private final zzw zzj;
+    private volatile boolean zzk = false;
+    private final BlockingQueue<zzp<?>> zzw;
+    private final zzk zzx;
 
-    public enum zza {
-        LOW,
-        NORMAL,
-        HIGH,
-        IMMEDIATE
+    public zzl(BlockingQueue<zzp<?>> blockingQueue, zzk com_google_android_gms_internal_zzk, zzb com_google_android_gms_internal_zzb, zzw com_google_android_gms_internal_zzw) {
+        this.zzw = blockingQueue;
+        this.zzx = com_google_android_gms_internal_zzk;
+        this.zzi = com_google_android_gms_internal_zzb;
+        this.zzj = com_google_android_gms_internal_zzw;
     }
 
-    public zzl(int i, String str, com.google.android.gms.internal.zzn.zza com_google_android_gms_internal_zzn_zza) {
-        this.zzC = zza.zzaj ? new zza() : null;
-        this.zzJ = true;
-        this.zzK = false;
-        this.zzL = false;
-        this.zzM = false;
-        this.zzO = null;
-        this.zzD = i;
-        this.zzE = str;
-        this.zzG = com_google_android_gms_internal_zzn_zza;
-        zza(new zze());
-        this.zzF = zzb(str);
+    public final void quit() {
+        this.zzk = true;
+        interrupt();
     }
 
-    private static int zzb(String str) {
-        if (!TextUtils.isEmpty(str)) {
-            Uri parse = Uri.parse(str);
-            if (parse != null) {
-                String host = parse.getHost();
-                if (host != null) {
-                    return host.hashCode();
+    public final void run() {
+        Process.setThreadPriority(10);
+        while (true) {
+            long elapsedRealtime = SystemClock.elapsedRealtime();
+            try {
+                zzp com_google_android_gms_internal_zzp = (zzp) this.zzw.take();
+                try {
+                    com_google_android_gms_internal_zzp.zzb("network-queue-take");
+                    TrafficStats.setThreadStatsTag(com_google_android_gms_internal_zzp.zzc());
+                    zzn zza = this.zzx.zza(com_google_android_gms_internal_zzp);
+                    com_google_android_gms_internal_zzp.zzb("network-http-complete");
+                    if (zza.zzz && com_google_android_gms_internal_zzp.zzl()) {
+                        com_google_android_gms_internal_zzp.zzc("not-modified");
+                    } else {
+                        zzt zza2 = com_google_android_gms_internal_zzp.zza(zza);
+                        com_google_android_gms_internal_zzp.zzb("network-parse-complete");
+                        if (com_google_android_gms_internal_zzp.zzh() && zza2.zzae != null) {
+                            this.zzi.zza(com_google_android_gms_internal_zzp.getUrl(), zza2.zzae);
+                            com_google_android_gms_internal_zzp.zzb("network-cache-written");
+                        }
+                        com_google_android_gms_internal_zzp.zzk();
+                        this.zzj.zza(com_google_android_gms_internal_zzp, zza2);
+                    }
+                } catch (zzaa e) {
+                    e.zza(SystemClock.elapsedRealtime() - elapsedRealtime);
+                    this.zzj.zza(com_google_android_gms_internal_zzp, e);
+                } catch (Throwable e2) {
+                    zzab.zza(e2, "Unhandled exception %s", e2.toString());
+                    zzaa com_google_android_gms_internal_zzaa = new zzaa(e2);
+                    com_google_android_gms_internal_zzaa.zza(SystemClock.elapsedRealtime() - elapsedRealtime);
+                    this.zzj.zza(com_google_android_gms_internal_zzp, com_google_android_gms_internal_zzaa);
+                }
+            } catch (InterruptedException e3) {
+                if (this.zzk) {
+                    return;
                 }
             }
         }
-        return 0;
-    }
-
-    public /* synthetic */ int compareTo(Object obj) {
-        return zzc((zzl) obj);
-    }
-
-    public Map<String, String> getHeaders() throws zza {
-        return Collections.emptyMap();
-    }
-
-    public int getMethod() {
-        return this.zzD;
-    }
-
-    public String getUrl() {
-        return this.zzE;
-    }
-
-    public String toString() {
-        return "[ ] " + getUrl() + " " + ("0x" + Integer.toHexString(zzf())) + " " + zzo() + " " + this.zzH;
-    }
-
-    public final zzl<?> zza(int i) {
-        this.zzH = Integer.valueOf(i);
-        return this;
-    }
-
-    public zzl<?> zza(com.google.android.gms.internal.zzb.zza com_google_android_gms_internal_zzb_zza) {
-        this.zzO = com_google_android_gms_internal_zzb_zza;
-        return this;
-    }
-
-    public zzl<?> zza(zzm com_google_android_gms_internal_zzm) {
-        this.zzI = com_google_android_gms_internal_zzm;
-        return this;
-    }
-
-    public zzl<?> zza(zzp com_google_android_gms_internal_zzp) {
-        this.zzN = com_google_android_gms_internal_zzp;
-        return this;
-    }
-
-    protected abstract zzn<T> zza(zzj com_google_android_gms_internal_zzj);
-
-    protected abstract void zza(T t);
-
-    protected zzs zzb(zzs com_google_android_gms_internal_zzs) {
-        return com_google_android_gms_internal_zzs;
-    }
-
-    public int zzc(zzl<T> com_google_android_gms_internal_zzl_T) {
-        zza zzo = zzo();
-        zza zzo2 = com_google_android_gms_internal_zzl_T.zzo();
-        return zzo == zzo2 ? this.zzH.intValue() - com_google_android_gms_internal_zzl_T.zzH.intValue() : zzo2.ordinal() - zzo.ordinal();
-    }
-
-    public void zzc(zzs com_google_android_gms_internal_zzs) {
-        if (this.zzG != null) {
-            this.zzG.zze(com_google_android_gms_internal_zzs);
-        }
-    }
-
-    public void zzc(String str) {
-        if (zza.zzaj) {
-            this.zzC.zza(str, Thread.currentThread().getId());
-        }
-    }
-
-    void zzd(final String str) {
-        if (this.zzI != null) {
-            this.zzI.zzf(this);
-        }
-        if (zza.zzaj) {
-            final long id = Thread.currentThread().getId();
-            if (Looper.myLooper() != Looper.getMainLooper()) {
-                new Handler(Looper.getMainLooper()).post(new Runnable(this) {
-                    final /* synthetic */ zzl zzR;
-
-                    public void run() {
-                        this.zzR.zzC.zza(str, id);
-                        this.zzR.zzC.zzd(toString());
-                    }
-                });
-                return;
-            }
-            this.zzC.zza(str, id);
-            this.zzC.zzd(toString());
-        }
-    }
-
-    public int zzf() {
-        return this.zzF;
-    }
-
-    public String zzg() {
-        return getUrl();
-    }
-
-    public com.google.android.gms.internal.zzb.zza zzh() {
-        return this.zzO;
-    }
-
-    @Deprecated
-    public String zzi() {
-        return zzl();
-    }
-
-    @Deprecated
-    public byte[] zzj() throws zza {
-        return null;
-    }
-
-    protected String zzk() {
-        return "UTF-8";
-    }
-
-    public String zzl() {
-        return "application/x-www-form-urlencoded; charset=" + zzk();
-    }
-
-    public byte[] zzm() throws zza {
-        return null;
-    }
-
-    public final boolean zzn() {
-        return this.zzJ;
-    }
-
-    public zza zzo() {
-        return zza.NORMAL;
-    }
-
-    public final int zzp() {
-        return this.zzN.zzc();
-    }
-
-    public zzp zzq() {
-        return this.zzN;
-    }
-
-    public void zzr() {
-        this.zzL = true;
-    }
-
-    public boolean zzs() {
-        return this.zzL;
     }
 }

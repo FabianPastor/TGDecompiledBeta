@@ -1,67 +1,29 @@
 package com.google.android.gms.common.util;
 
-import android.os.ParcelFileDescriptor;
-import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.util.HashMap;
 
 public final class zzp {
-    public static void closeQuietly(Closeable closeable) {
-        if (closeable != null) {
-            try {
-                closeable.close();
-            } catch (IOException e) {
+    public static void zza(StringBuilder stringBuilder, HashMap<String, String> hashMap) {
+        stringBuilder.append("{");
+        Object obj = 1;
+        for (String str : hashMap.keySet()) {
+            Object obj2;
+            if (obj == null) {
+                stringBuilder.append(",");
+                obj2 = obj;
+            } else {
+                obj2 = null;
+            }
+            String str2 = (String) hashMap.get(str);
+            stringBuilder.append("\"").append(str).append("\":");
+            if (str2 == null) {
+                stringBuilder.append("null");
+                obj = obj2;
+            } else {
+                stringBuilder.append("\"").append(str2).append("\"");
+                obj = obj2;
             }
         }
-    }
-
-    public static long zza(InputStream inputStream, OutputStream outputStream) throws IOException {
-        return zza(inputStream, outputStream, false);
-    }
-
-    public static long zza(InputStream inputStream, OutputStream outputStream, boolean z) throws IOException {
-        return zza(inputStream, outputStream, z, 1024);
-    }
-
-    public static long zza(InputStream inputStream, OutputStream outputStream, boolean z, int i) throws IOException {
-        byte[] bArr = new byte[i];
-        long j = 0;
-        while (true) {
-            try {
-                int read = inputStream.read(bArr, 0, i);
-                if (read == -1) {
-                    break;
-                }
-                j += (long) read;
-                outputStream.write(bArr, 0, read);
-            } finally {
-                if (z) {
-                    closeQuietly(inputStream);
-                    closeQuietly(outputStream);
-                }
-            }
-        }
-        return j;
-    }
-
-    public static void zza(ParcelFileDescriptor parcelFileDescriptor) {
-        if (parcelFileDescriptor != null) {
-            try {
-                parcelFileDescriptor.close();
-            } catch (IOException e) {
-            }
-        }
-    }
-
-    public static byte[] zza(InputStream inputStream, boolean z) throws IOException {
-        OutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        zza(inputStream, byteArrayOutputStream, z);
-        return byteArrayOutputStream.toByteArray();
-    }
-
-    public static byte[] zzj(InputStream inputStream) throws IOException {
-        return zza(inputStream, true);
+        stringBuilder.append("}");
     }
 }

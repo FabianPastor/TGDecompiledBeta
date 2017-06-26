@@ -6,8 +6,8 @@ import android.util.Log;
 import com.google.firebase.iid.zzb;
 import java.util.Iterator;
 
-public abstract class GcmListenerService extends zzb {
-    static void zzD(Bundle bundle) {
+public class GcmListenerService extends zzb {
+    static void zzt(Bundle bundle) {
         Iterator it = bundle.keySet().iterator();
         while (it.hasNext()) {
             String str = (String) it.next();
@@ -15,29 +15,6 @@ public abstract class GcmListenerService extends zzb {
                 it.remove();
             }
         }
-    }
-
-    private void zzl(Intent intent) {
-        Bundle extras = intent.getExtras();
-        extras.remove("message_type");
-        extras.remove("android.support.content.wakelockid");
-        if (zza.zzE(extras)) {
-            if (zza.zzbu(this)) {
-                zza.zzF(extras);
-            } else {
-                zza.zzbt(this).zzG(extras);
-                return;
-            }
-        }
-        String string = extras.getString("from");
-        extras.remove("from");
-        zzD(extras);
-        onMessageReceived(string, extras);
-    }
-
-    private static String zzm(Intent intent) {
-        String stringExtra = intent.getStringExtra("google.message_id");
-        return stringExtra == null ? intent.getStringExtra("message_id") : stringExtra;
     }
 
     public void handleIntent(Intent intent) {
@@ -51,7 +28,7 @@ public abstract class GcmListenerService extends zzb {
             switch (stringExtra.hashCode()) {
                 case -2062414158:
                     if (stringExtra.equals(GoogleCloudMessaging.MESSAGE_TYPE_DELETED)) {
-                        obj = 1;
+                        int i = 1;
                         break;
                     }
                     break;
@@ -76,7 +53,22 @@ public abstract class GcmListenerService extends zzb {
             }
             switch (obj) {
                 case null:
-                    zzl(intent);
+                    Bundle extras = intent.getExtras();
+                    extras.remove("message_type");
+                    extras.remove("android.support.content.wakelockid");
+                    Object obj2 = ("1".equals(zza.zze(extras, "gcm.n.e")) || zza.zze(extras, "gcm.n.icon") != null) ? 1 : null;
+                    if (obj2 != null) {
+                        if (zza.zzaY(this)) {
+                            zza.zzu(extras);
+                        } else {
+                            zza.zzaX(this).zzv(extras);
+                            return;
+                        }
+                    }
+                    stringExtra = extras.getString("from");
+                    extras.remove("from");
+                    zzt(extras);
+                    onMessageReceived(stringExtra, extras);
                     return;
                 case 1:
                     onDeletedMessages();
@@ -85,7 +77,11 @@ public abstract class GcmListenerService extends zzb {
                     onMessageSent(intent.getStringExtra("google.message_id"));
                     return;
                 case 3:
-                    onSendError(zzm(intent), intent.getStringExtra("error"));
+                    stringExtra = intent.getStringExtra("google.message_id");
+                    if (stringExtra == null) {
+                        stringExtra = intent.getStringExtra("message_id");
+                    }
+                    onSendError(stringExtra, intent.getStringExtra("error"));
                     return;
                 default:
                     String str = "GcmListenerService";

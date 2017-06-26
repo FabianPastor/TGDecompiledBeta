@@ -17,4 +17,5 @@
     <string name="common_open_on_phone">Ouvrir sur le téléphone</string>
     <string name="common_signin_button_text">Connexion</string>
     <string name="common_signin_button_text_long">Se connecter avec Google</string>
+    <string name="wallet_buy_button_place_holder">Acheter avec Google</string>
 </resources>

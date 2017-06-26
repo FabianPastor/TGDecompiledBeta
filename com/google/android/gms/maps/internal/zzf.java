@@ -1,71 +1,114 @@
 package com.google.android.gms.maps.internal;
 
-import android.os.Binder;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.os.RemoteException;
+import com.google.android.gms.dynamic.IObjectWrapper;
+import com.google.android.gms.internal.zzed;
+import com.google.android.gms.internal.zzef;
+import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.StreetViewPanoramaOptions;
+import com.google.android.gms.maps.model.internal.zza;
+import com.google.android.gms.maps.model.internal.zzb;
 
-public interface zzf extends IInterface {
-
-    public static abstract class zza extends Binder implements zzf {
-
-        private static class zza implements zzf {
-            private IBinder zzrk;
-
-            zza(IBinder iBinder) {
-                this.zzrk = iBinder;
-            }
-
-            public IBinder asBinder() {
-                return this.zzrk;
-            }
-
-            public void onCameraIdle() throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IOnCameraIdleListener");
-                    this.zzrk.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-        }
-
-        public zza() {
-            attachInterface(this, "com.google.android.gms.maps.internal.IOnCameraIdleListener");
-        }
-
-        public static zzf zzdA(IBinder iBinder) {
-            if (iBinder == null) {
-                return null;
-            }
-            IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.maps.internal.IOnCameraIdleListener");
-            return (queryLocalInterface == null || !(queryLocalInterface instanceof zzf)) ? new zza(iBinder) : (zzf) queryLocalInterface;
-        }
-
-        public IBinder asBinder() {
-            return this;
-        }
-
-        public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-            switch (i) {
-                case 1:
-                    parcel.enforceInterface("com.google.android.gms.maps.internal.IOnCameraIdleListener");
-                    onCameraIdle();
-                    parcel2.writeNoException();
-                    return true;
-                case 1598968902:
-                    parcel2.writeString("com.google.android.gms.maps.internal.IOnCameraIdleListener");
-                    return true;
-                default:
-                    return super.onTransact(i, parcel, parcel2, i2);
-            }
-        }
+public final class zzf extends zzed implements zze {
+    zzf(IBinder iBinder) {
+        super(iBinder, "com.google.android.gms.maps.internal.ICreator");
     }
 
-    void onCameraIdle() throws RemoteException;
+    public final IMapFragmentDelegate zzH(IObjectWrapper iObjectWrapper) throws RemoteException {
+        IMapFragmentDelegate iMapFragmentDelegate;
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (IInterface) iObjectWrapper);
+        Parcel zza = zza(2, zzZ);
+        IBinder readStrongBinder = zza.readStrongBinder();
+        if (readStrongBinder == null) {
+            iMapFragmentDelegate = null;
+        } else {
+            IInterface queryLocalInterface = readStrongBinder.queryLocalInterface("com.google.android.gms.maps.internal.IMapFragmentDelegate");
+            iMapFragmentDelegate = queryLocalInterface instanceof IMapFragmentDelegate ? (IMapFragmentDelegate) queryLocalInterface : new zzj(readStrongBinder);
+        }
+        zza.recycle();
+        return iMapFragmentDelegate;
+    }
+
+    public final IStreetViewPanoramaFragmentDelegate zzI(IObjectWrapper iObjectWrapper) throws RemoteException {
+        IStreetViewPanoramaFragmentDelegate iStreetViewPanoramaFragmentDelegate;
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (IInterface) iObjectWrapper);
+        Parcel zza = zza(8, zzZ);
+        IBinder readStrongBinder = zza.readStrongBinder();
+        if (readStrongBinder == null) {
+            iStreetViewPanoramaFragmentDelegate = null;
+        } else {
+            IInterface queryLocalInterface = readStrongBinder.queryLocalInterface("com.google.android.gms.maps.internal.IStreetViewPanoramaFragmentDelegate");
+            iStreetViewPanoramaFragmentDelegate = queryLocalInterface instanceof IStreetViewPanoramaFragmentDelegate ? (IStreetViewPanoramaFragmentDelegate) queryLocalInterface : new zzbt(readStrongBinder);
+        }
+        zza.recycle();
+        return iStreetViewPanoramaFragmentDelegate;
+    }
+
+    public final IMapViewDelegate zza(IObjectWrapper iObjectWrapper, GoogleMapOptions googleMapOptions) throws RemoteException {
+        IMapViewDelegate iMapViewDelegate;
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (IInterface) iObjectWrapper);
+        zzef.zza(zzZ, (Parcelable) googleMapOptions);
+        Parcel zza = zza(3, zzZ);
+        IBinder readStrongBinder = zza.readStrongBinder();
+        if (readStrongBinder == null) {
+            iMapViewDelegate = null;
+        } else {
+            IInterface queryLocalInterface = readStrongBinder.queryLocalInterface("com.google.android.gms.maps.internal.IMapViewDelegate");
+            iMapViewDelegate = queryLocalInterface instanceof IMapViewDelegate ? (IMapViewDelegate) queryLocalInterface : new zzk(readStrongBinder);
+        }
+        zza.recycle();
+        return iMapViewDelegate;
+    }
+
+    public final IStreetViewPanoramaViewDelegate zza(IObjectWrapper iObjectWrapper, StreetViewPanoramaOptions streetViewPanoramaOptions) throws RemoteException {
+        IStreetViewPanoramaViewDelegate iStreetViewPanoramaViewDelegate;
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (IInterface) iObjectWrapper);
+        zzef.zza(zzZ, (Parcelable) streetViewPanoramaOptions);
+        Parcel zza = zza(7, zzZ);
+        IBinder readStrongBinder = zza.readStrongBinder();
+        if (readStrongBinder == null) {
+            iStreetViewPanoramaViewDelegate = null;
+        } else {
+            IInterface queryLocalInterface = readStrongBinder.queryLocalInterface("com.google.android.gms.maps.internal.IStreetViewPanoramaViewDelegate");
+            iStreetViewPanoramaViewDelegate = queryLocalInterface instanceof IStreetViewPanoramaViewDelegate ? (IStreetViewPanoramaViewDelegate) queryLocalInterface : new zzbu(readStrongBinder);
+        }
+        zza.recycle();
+        return iStreetViewPanoramaViewDelegate;
+    }
+
+    public final void zzi(IObjectWrapper iObjectWrapper, int i) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (IInterface) iObjectWrapper);
+        zzZ.writeInt(i);
+        zzb(6, zzZ);
+    }
+
+    public final ICameraUpdateFactoryDelegate zzwh() throws RemoteException {
+        ICameraUpdateFactoryDelegate iCameraUpdateFactoryDelegate;
+        Parcel zza = zza(4, zzZ());
+        IBinder readStrongBinder = zza.readStrongBinder();
+        if (readStrongBinder == null) {
+            iCameraUpdateFactoryDelegate = null;
+        } else {
+            IInterface queryLocalInterface = readStrongBinder.queryLocalInterface("com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate");
+            iCameraUpdateFactoryDelegate = queryLocalInterface instanceof ICameraUpdateFactoryDelegate ? (ICameraUpdateFactoryDelegate) queryLocalInterface : new zzb(readStrongBinder);
+        }
+        zza.recycle();
+        return iCameraUpdateFactoryDelegate;
+    }
+
+    public final zza zzwi() throws RemoteException {
+        Parcel zza = zza(5, zzZ());
+        zza zzaa = zzb.zzaa(zza.readStrongBinder());
+        zza.recycle();
+        return zzaa;
+    }
 }

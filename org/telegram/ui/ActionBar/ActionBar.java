@@ -40,11 +40,13 @@ public class ActionBar extends FrameLayout {
     protected int itemsActionModeColor;
     protected int itemsBackgroundColor;
     protected int itemsColor;
+    private CharSequence lastSubtitle;
     private CharSequence lastTitle;
     private ActionBarMenu menu;
     private boolean occupyStatusBar;
     protected BaseFragment parentFragment;
     private SimpleTextView subtitleTextView;
+    private Runnable titleActionRunnable;
     private SimpleTextView titleTextView;
 
     public static class ActionBarMenuOnItemClick {
@@ -62,6 +64,13 @@ public class ActionBar extends FrameLayout {
         this.addToContainer = true;
         this.interceptTouches = true;
         this.castShadows = true;
+        setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                if (ActionBar.this.titleActionRunnable != null) {
+                    ActionBar.this.titleActionRunnable.run();
+                }
+            }
+        });
     }
 
     private void createBackButtonImage() {
@@ -131,6 +140,7 @@ public class ActionBar extends FrameLayout {
             createSubtitleTextView();
         }
         if (this.subtitleTextView != null) {
+            this.lastSubtitle = value;
             SimpleTextView simpleTextView = this.subtitleTextView;
             int i = (TextUtils.isEmpty(value) || this.isSearchFieldVisible) ? 8 : 0;
             simpleTextView.setVisibility(i);
@@ -584,18 +594,32 @@ public class ActionBar extends FrameLayout {
         this.allowOverlayTitle = value;
     }
 
-    public void setTitleOverlayText(String text) {
+    public void setTitleOverlayText(String title, String subtitle, Runnable action) {
+        int i = 0;
         if (this.allowOverlayTitle && this.parentFragment.parentLayout != null) {
-            CharSequence textToSet = text != null ? text : this.lastTitle;
+            CharSequence textToSet = title != null ? title : this.lastTitle;
             if (textToSet != null && this.titleTextView == null) {
                 createTitleTextView();
             }
             if (this.titleTextView != null) {
                 SimpleTextView simpleTextView = this.titleTextView;
-                int i = (textToSet == null || this.isSearchFieldVisible) ? 4 : 0;
-                simpleTextView.setVisibility(i);
+                int i2 = (textToSet == null || this.isSearchFieldVisible) ? 4 : 0;
+                simpleTextView.setVisibility(i2);
                 this.titleTextView.setText(textToSet);
             }
+            textToSet = subtitle != null ? subtitle : this.lastSubtitle;
+            if (textToSet != null && this.subtitleTextView == null) {
+                createSubtitleTextView();
+            }
+            if (this.subtitleTextView != null) {
+                SimpleTextView simpleTextView2 = this.subtitleTextView;
+                if (TextUtils.isEmpty(textToSet) || this.isSearchFieldVisible) {
+                    i = 8;
+                }
+                simpleTextView2.setVisibility(i);
+                this.subtitleTextView.setText(textToSet);
+            }
+            this.titleActionRunnable = action;
         }
     }
 

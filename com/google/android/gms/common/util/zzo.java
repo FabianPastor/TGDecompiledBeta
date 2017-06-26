@@ -1,50 +1,112 @@
 package com.google.android.gms.common.util;
 
-import java.net.URI;
-import java.net.URLDecoder;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import android.support.v4.view.MotionEventCompat;
+import android.text.TextUtils;
+import java.util.Iterator;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class zzo {
-    private static final Pattern zzaIi = Pattern.compile("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
-    private static final Pattern zzaIj = Pattern.compile("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$");
-    private static final Pattern zzaIk = Pattern.compile("^((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)$");
+public final class zzo {
+    private static final Pattern zzaJU = Pattern.compile("\\\\.");
+    private static final Pattern zzaJV = Pattern.compile("[\\\\\"/\b\f\n\r\t]");
 
-    private static String decode(String str, String str2) {
-        if (str2 == null) {
-            str2 = "ISO-8859-1";
+    public static boolean zzc(Object obj, Object obj2) {
+        if (obj == null && obj2 == null) {
+            return true;
         }
-        try {
-            return URLDecoder.decode(str, str2);
-        } catch (Throwable e) {
-            throw new IllegalArgumentException(e);
+        if (obj == null || obj2 == null) {
+            return false;
+        }
+        if ((obj instanceof JSONObject) && (obj2 instanceof JSONObject)) {
+            JSONObject jSONObject = (JSONObject) obj;
+            JSONObject jSONObject2 = (JSONObject) obj2;
+            if (jSONObject.length() != jSONObject2.length()) {
+                return false;
+            }
+            Iterator keys = jSONObject.keys();
+            while (keys.hasNext()) {
+                String str = (String) keys.next();
+                if (!jSONObject2.has(str)) {
+                    return false;
+                }
+                try {
+                    if (!zzc(jSONObject.get(str), jSONObject2.get(str))) {
+                        return false;
+                    }
+                } catch (JSONException e) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (!(obj instanceof JSONArray) || !(obj2 instanceof JSONArray)) {
+            return obj.equals(obj2);
+        } else {
+            JSONArray jSONArray = (JSONArray) obj;
+            JSONArray jSONArray2 = (JSONArray) obj2;
+            if (jSONArray.length() != jSONArray2.length()) {
+                return false;
+            }
+            int i = 0;
+            while (i < jSONArray.length()) {
+                try {
+                    if (!zzc(jSONArray.get(i), jSONArray2.get(i))) {
+                        return false;
+                    }
+                    i++;
+                } catch (JSONException e2) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 
-    public static Map<String, String> zza(URI uri, String str) {
-        Map<String, String> emptyMap = Collections.emptyMap();
-        String rawQuery = uri.getRawQuery();
-        if (rawQuery == null || rawQuery.length() <= 0) {
-            return emptyMap;
+    public static String zzcK(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return str;
         }
-        Map<String, String> hashMap = new HashMap();
-        Scanner scanner = new Scanner(rawQuery);
-        scanner.useDelimiter("&");
-        while (scanner.hasNext()) {
-            String[] split = scanner.next().split("=");
-            if (split.length == 0 || split.length > 2) {
-                throw new IllegalArgumentException("bad parameter");
+        Matcher matcher = zzaJV.matcher(str);
+        StringBuffer stringBuffer = null;
+        while (matcher.find()) {
+            if (stringBuffer == null) {
+                stringBuffer = new StringBuffer();
             }
-            String decode = decode(split[0], str);
-            Object obj = null;
-            if (split.length == 2) {
-                obj = decode(split[1], str);
+            switch (matcher.group().charAt(0)) {
+                case '\b':
+                    matcher.appendReplacement(stringBuffer, "\\\\b");
+                    break;
+                case '\t':
+                    matcher.appendReplacement(stringBuffer, "\\\\t");
+                    break;
+                case '\n':
+                    matcher.appendReplacement(stringBuffer, "\\\\n");
+                    break;
+                case '\f':
+                    matcher.appendReplacement(stringBuffer, "\\\\f");
+                    break;
+                case '\r':
+                    matcher.appendReplacement(stringBuffer, "\\\\r");
+                    break;
+                case '\"':
+                    matcher.appendReplacement(stringBuffer, "\\\\\\\"");
+                    break;
+                case MotionEventCompat.AXIS_GENERIC_16 /*47*/:
+                    matcher.appendReplacement(stringBuffer, "\\\\/");
+                    break;
+                case '\\':
+                    matcher.appendReplacement(stringBuffer, "\\\\\\\\");
+                    break;
+                default:
+                    break;
             }
-            hashMap.put(decode, obj);
         }
-        return hashMap;
+        if (stringBuffer == null) {
+            return str;
+        }
+        matcher.appendTail(stringBuffer);
+        return stringBuffer.toString();
     }
 }

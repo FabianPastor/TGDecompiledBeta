@@ -2,46 +2,42 @@ package com.google.android.gms.wallet;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
 import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
+import com.google.android.gms.wallet.wobs.CommonWalletObject;
 
-public class zzv implements Creator<zzu> {
-    static void zza(zzu com_google_android_gms_wallet_zzu, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zza(parcel, 2, com_google_android_gms_wallet_zzu.zzbRA, false);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzkp(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzoL(i);
-    }
-
-    public zzu zzkp(Parcel parcel) {
-        int zzaY = zzb.zzaY(parcel);
+public final class zzv implements Creator<OfferWalletObject> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        CommonWalletObject commonWalletObject = null;
+        int zzd = zzb.zzd(parcel);
         String str = null;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
+        int i = 0;
+        String str2 = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
+                case 1:
+                    i = zzb.zzg(parcel, readInt);
+                    break;
                 case 2:
-                    str = zzb.zzq(parcel, zzaX);
+                    str = zzb.zzq(parcel, readInt);
+                    break;
+                case 3:
+                    str2 = zzb.zzq(parcel, readInt);
+                    break;
+                case 4:
+                    commonWalletObject = (CommonWalletObject) zzb.zza(parcel, readInt, CommonWalletObject.CREATOR);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaX);
+                    zzb.zzb(parcel, readInt);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new zzu(str);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
+        zzb.zzF(parcel, zzd);
+        return new OfferWalletObject(i, str, str2, commonWalletObject);
     }
 
-    public zzu[] zzoL(int i) {
-        return new zzu[i];
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new OfferWalletObject[i];
     }
 }

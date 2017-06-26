@@ -4,40 +4,44 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.common.internal.zzbo;
 
 public final class Scope extends zza implements ReflectedParcelable {
-    public static final Creator<Scope> CREATOR = new zzg();
-    final int zzaiI;
-    private final String zzazw;
+    public static final Creator<Scope> CREATOR = new zze();
+    private final String zzaBl;
+    private int zzaku;
 
     Scope(int i, String str) {
-        zzac.zzh(str, "scopeUri must not be null or empty");
-        this.zzaiI = i;
-        this.zzazw = str;
+        zzbo.zzh(str, "scopeUri must not be null or empty");
+        this.zzaku = i;
+        this.zzaBl = str;
     }
 
     public Scope(String str) {
         this(1, str);
     }
 
-    public boolean equals(Object obj) {
-        return this == obj ? true : !(obj instanceof Scope) ? false : this.zzazw.equals(((Scope) obj).zzazw);
+    public final boolean equals(Object obj) {
+        return this == obj ? true : !(obj instanceof Scope) ? false : this.zzaBl.equals(((Scope) obj).zzaBl);
     }
 
-    public int hashCode() {
-        return this.zzazw.hashCode();
+    public final int hashCode() {
+        return this.zzaBl.hashCode();
     }
 
-    public String toString() {
-        return this.zzazw;
+    public final String toString() {
+        return this.zzaBl;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzg.zza(this, parcel, i);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zzc(parcel, 1, this.zzaku);
+        zzd.zza(parcel, 2, this.zzaBl, false);
+        zzd.zzI(parcel, zze);
     }
 
-    public String zzvt() {
-        return this.zzazw;
+    public final String zzpp() {
+        return this.zzaBl;
     }
 }

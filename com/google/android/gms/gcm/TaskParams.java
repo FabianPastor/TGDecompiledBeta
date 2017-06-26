@@ -7,7 +7,7 @@ import java.util.List;
 public class TaskParams {
     private final Bundle extras;
     private final String tag;
-    private final List<Uri> zzbhf;
+    private final List<Uri> zzbgo;
 
     public TaskParams(String str) {
         this(str, null, null);
@@ -20,7 +20,7 @@ public class TaskParams {
     public TaskParams(String str, Bundle bundle, List<Uri> list) {
         this.tag = str;
         this.extras = bundle;
-        this.zzbhf = list;
+        this.zzbgo = list;
     }
 
     public Bundle getExtras() {

@@ -1,57 +1,39 @@
 package com.google.android.gms.internal;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.RemoteException;
-import android.util.Log;
-import com.google.android.gms.dynamic.zze;
-import com.google.android.gms.dynamite.DynamiteModule;
-import com.google.android.gms.dynamite.DynamiteModule.zza;
-import com.google.android.gms.vision.barcode.Barcode;
-import java.nio.ByteBuffer;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import android.support.v4.internal.view.SupportMenu;
+import com.google.android.gms.common.internal.safeparcel.zzb;
+import java.util.ArrayList;
 
-public class zzbgq extends zzbhc<zzbgr> {
-    private final zzbgo zzbMK;
-
-    public zzbgq(Context context, zzbgo com_google_android_gms_internal_zzbgo) {
-        super(context, "BarcodeNativeHandle");
-        this.zzbMK = com_google_android_gms_internal_zzbgo;
-        zzSq();
-    }
-
-    protected void zzSn() throws RemoteException {
-        ((zzbgr) zzSq()).zzSo();
-    }
-
-    protected zzbgr zza(DynamiteModule dynamiteModule, Context context) throws RemoteException, zza {
-        return zzbgs.zza.zzfh(dynamiteModule.zzdX("com.google.android.gms.vision.barcode.ChimeraNativeBarcodeDetectorCreator")).zza(zze.zzA(context), this.zzbMK);
-    }
-
-    public Barcode[] zza(Bitmap bitmap, zzbhd com_google_android_gms_internal_zzbhd) {
-        if (!isOperational()) {
-            return new Barcode[0];
+public final class zzbgq implements Creator<zzbgn> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        String str = null;
+        int zzd = zzb.zzd(parcel);
+        int i = 0;
+        ArrayList arrayList = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
+                case 1:
+                    i = zzb.zzg(parcel, readInt);
+                    break;
+                case 2:
+                    arrayList = zzb.zzc(parcel, readInt, zzbgo.CREATOR);
+                    break;
+                case 3:
+                    str = zzb.zzq(parcel, readInt);
+                    break;
+                default:
+                    zzb.zzb(parcel, readInt);
+                    break;
+            }
         }
-        try {
-            return ((zzbgr) zzSq()).zzb(zze.zzA(bitmap), com_google_android_gms_internal_zzbhd);
-        } catch (Throwable e) {
-            Log.e("BarcodeNativeHandle", "Error calling native barcode detector", e);
-            return new Barcode[0];
-        }
+        zzb.zzF(parcel, zzd);
+        return new zzbgn(i, arrayList, str);
     }
 
-    public Barcode[] zza(ByteBuffer byteBuffer, zzbhd com_google_android_gms_internal_zzbhd) {
-        if (!isOperational()) {
-            return new Barcode[0];
-        }
-        try {
-            return ((zzbgr) zzSq()).zza(zze.zzA(byteBuffer), com_google_android_gms_internal_zzbhd);
-        } catch (Throwable e) {
-            Log.e("BarcodeNativeHandle", "Error calling native barcode detector", e);
-            return new Barcode[0];
-        }
-    }
-
-    protected /* synthetic */ Object zzb(DynamiteModule dynamiteModule, Context context) throws RemoteException, zza {
-        return zza(dynamiteModule, context);
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new zzbgn[i];
     }
 }

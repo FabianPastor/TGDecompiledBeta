@@ -95,6 +95,7 @@ import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -203,7 +204,7 @@ public class LoginActivity extends BaseFragment {
             this.cancelButton.setOnClickListener(new OnClickListener(LoginActivity.this) {
                 public void onClick(View view) {
                     if (LoginActivityPasswordView.this.has_recovery) {
-                        LoginActivity.this.needShowProgress();
+                        LoginActivity.this.needShowProgress(0);
                         ConnectionsManager.getInstance().sendRequest(new TL_auth_requestPasswordRecovery(), new RequestDelegate() {
                             public void run(final TLObject response, final TL_error error) {
                                 AndroidUtilities.runOnUIThread(new Runnable() {
@@ -267,7 +268,7 @@ public class LoginActivity extends BaseFragment {
                     builder.setTitle(LocaleController.getString("ResetMyAccountWarning", R.string.ResetMyAccountWarning));
                     builder.setPositiveButton(LocaleController.getString("ResetMyAccountWarningReset", R.string.ResetMyAccountWarningReset), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            LoginActivity.this.needShowProgress();
+                            LoginActivity.this.needShowProgress(0);
                             TL_account_deleteAccount req = new TL_account_deleteAccount();
                             req.reason = "Forgot password";
                             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -377,7 +378,7 @@ public class LoginActivity extends BaseFragment {
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
-                LoginActivity.this.needShowProgress();
+                LoginActivity.this.needShowProgress(0);
                 byte[] hash = new byte[((this.current_salt.length * 2) + oldPasswordBytes.length)];
                 System.arraycopy(this.current_salt, 0, hash, 0, this.current_salt.length);
                 System.arraycopy(oldPasswordBytes, 0, hash, this.current_salt.length, oldPasswordBytes.length);
@@ -592,7 +593,7 @@ public class LoginActivity extends BaseFragment {
                     onPasscodeError(false);
                     return;
                 }
-                this.this$0.needShowProgress();
+                this.this$0.needShowProgress(0);
                 TL_auth_recoverPassword req = new TL_auth_recoverPassword();
                 req.code = code;
                 ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -787,7 +788,7 @@ public class LoginActivity extends BaseFragment {
                 req.phone_number = this.requestPhone;
                 req.first_name = this.firstNameField.getText().toString();
                 req.last_name = this.lastNameField.getText().toString();
-                LoginActivity.this.needShowProgress();
+                LoginActivity.this.needShowProgress(0);
                 ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                     public void run(final TLObject response, final TL_error error) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
@@ -955,7 +956,7 @@ public class LoginActivity extends BaseFragment {
                         builder.setTitle(LocaleController.getString("ResetMyAccountWarning", R.string.ResetMyAccountWarning));
                         builder.setPositiveButton(LocaleController.getString("ResetMyAccountWarningReset", R.string.ResetMyAccountWarningReset), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                LoginActivityResetWaitView.this.this$0.needShowProgress();
+                                LoginActivityResetWaitView.this.this$0.needShowProgress(0);
                                 TL_account_deleteAccount req = new TL_account_deleteAccount();
                                 req.reason = "Forgot password";
                                 ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -1225,11 +1226,10 @@ public class LoginActivity extends BaseFragment {
             params.putString("ephone", this.emailPhone);
             params.putString("phoneFormated", this.requestPhone);
             this.nextPressed = true;
-            LoginActivity.this.needShowProgress();
             TL_auth_resendCode req = new TL_auth_resendCode();
             req.phone_number = this.requestPhone;
             req.phone_code_hash = this.phoneHash;
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            int reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, final TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -1256,6 +1256,7 @@ public class LoginActivity extends BaseFragment {
                     });
                 }
             }, 10);
+            LoginActivity.this.needShowProgress(0);
         }
 
         public String getHeaderName() {
@@ -1490,8 +1491,7 @@ public class LoginActivity extends BaseFragment {
                 req.phone_code = code;
                 req.phone_code_hash = this.phoneHash;
                 destroyTimer();
-                LoginActivity.this.needShowProgress();
-                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                int reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                     public void run(final TLObject response, final TL_error error) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
@@ -1601,6 +1601,7 @@ public class LoginActivity extends BaseFragment {
                         });
                     }
                 }, 10);
+                LoginActivity.this.needShowProgress(0);
             }
         }
 
@@ -1813,9 +1814,9 @@ public class LoginActivity extends BaseFragment {
                                 }
                                 if (!ok) {
                                     textToSet = text.substring(1, text.length()) + PhoneView.this.phoneField.getText().toString();
-                                    EditText access$600 = PhoneView.this.codeField;
+                                    EditText access$700 = PhoneView.this.codeField;
                                     text = text.substring(0, 1);
-                                    access$600.setText(text);
+                                    access$700.setText(text);
                                 }
                             }
                             String country = (String) PhoneView.this.codesMap.get(text);
@@ -1935,11 +1936,11 @@ public class LoginActivity extends BaseFragment {
                         }
                         PhoneView.this.phoneField.setText(builder);
                         if (start >= 0) {
-                            HintEditText access$400 = PhoneView.this.phoneField;
+                            HintEditText access$500 = PhoneView.this.phoneField;
                             if (start > PhoneView.this.phoneField.length()) {
                                 start = PhoneView.this.phoneField.length();
                             }
-                            access$400.setSelection(start);
+                            access$500.setSelection(start);
                         }
                         PhoneView.this.phoneField.onTextChange();
                         PhoneView.this.ignoreOnPhoneChange = false;
@@ -2141,8 +2142,7 @@ public class LoginActivity extends BaseFragment {
                     }
                     params.putString("phoneFormated", phone);
                     this.nextPressed = true;
-                    LoginActivity.this.needShowProgress();
-                    ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    LoginActivity.this.needShowProgress(ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                         public void run(final TLObject response, final TL_error error) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
@@ -2170,7 +2170,7 @@ public class LoginActivity extends BaseFragment {
                                 }
                             });
                         }
-                    }, 27);
+                    }, 27));
                 }
             }
         }
@@ -2312,7 +2312,9 @@ public class LoginActivity extends BaseFragment {
                 }
             }
         });
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        ActionBarMenu menu = this.actionBar.createMenu();
+        this.actionBar.setAllowOverlayTitle(true);
+        this.doneButton = menu.addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.fragmentView = new ScrollView(context);
         ScrollView scrollView = this.fragmentView;
         scrollView.setFillViewport(true);
@@ -2547,13 +2549,21 @@ public class LoginActivity extends BaseFragment {
         }
     }
 
-    private void needShowProgress() {
+    private void needShowProgress(final int reqiestId) {
         if (getParentActivity() != null && !getParentActivity().isFinishing() && this.progressDialog == null) {
-            this.progressDialog = new AlertDialog(getParentActivity(), 1);
-            this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
+            Builder builder = new Builder(getParentActivity(), 1);
+            builder.setMessage(LocaleController.getString("Loading", R.string.Loading));
+            if (reqiestId != 0) {
+                builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ConnectionsManager.getInstance().cancelRequest(reqiestId, true);
+                        LoginActivity.this.progressDialog = null;
+                    }
+                });
+            }
+            this.progressDialog = builder.show();
             this.progressDialog.setCanceledOnTouchOutside(false);
             this.progressDialog.setCancelable(false);
-            this.progressDialog.show();
         }
     }
 

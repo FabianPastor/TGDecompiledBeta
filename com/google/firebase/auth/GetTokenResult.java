@@ -3,14 +3,14 @@ package com.google.firebase.auth;
 import android.support.annotation.Nullable;
 
 public class GetTokenResult {
-    private String zzaiJ;
+    private String zzakv;
 
     public GetTokenResult(String str) {
-        this.zzaiJ = str;
+        this.zzakv = str;
     }
 
     @Nullable
     public String getToken() {
-        return this.zzaiJ;
+        return this.zzakv;
     }
 }

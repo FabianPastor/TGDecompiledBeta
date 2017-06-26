@@ -203,12 +203,12 @@ public class RecyclerListView extends RecyclerView {
                             this.letterLayout = new StaticLayout(newLetter, this.letterPaint, 1000, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             this.oldLetterLayout = null;
                             if (this.letterLayout.getLineCount() > 0) {
+                                float lWidth = this.letterLayout.getLineWidth(0);
+                                float lleft = this.letterLayout.getLineLeft(0);
                                 if (LocaleController.isRTL) {
-                                    float lWidth = this.letterLayout.getLineWidth(0);
-                                    float lleft = this.letterLayout.getLineLeft(0);
-                                    this.textX = ((float) AndroidUtilities.dp(10.0f)) + ((((float) AndroidUtilities.dp(88.0f)) - (this.letterLayout.getLineWidth(0) - this.letterLayout.getLineLeft(0))) / 2.0f);
+                                    this.textX = (((float) AndroidUtilities.dp(10.0f)) + ((((float) AndroidUtilities.dp(88.0f)) - this.letterLayout.getLineWidth(0)) / 2.0f)) - this.letterLayout.getLineLeft(0);
                                 } else {
-                                    this.textX = (((float) AndroidUtilities.dp(88.0f)) - (this.letterLayout.getLineWidth(0) - this.letterLayout.getLineLeft(0))) / 2.0f;
+                                    this.textX = ((((float) AndroidUtilities.dp(88.0f)) - this.letterLayout.getLineWidth(0)) / 2.0f) - this.letterLayout.getLineLeft(0);
                                 }
                                 this.textY = (float) ((AndroidUtilities.dp(88.0f) - this.letterLayout.getHeight()) / 2);
                             }
@@ -715,7 +715,7 @@ public class RecyclerListView extends RecyclerView {
                     RecyclerListView.this.onScrollListener.onScrolled(recyclerView, dx, dy);
                 }
                 if (RecyclerListView.this.selectorPosition != -1) {
-                    RecyclerListView.this.selectorRect.offset(0, -dy);
+                    RecyclerListView.this.selectorRect.offset(-dx, -dy);
                     RecyclerListView.this.selectorDrawable.setBounds(RecyclerListView.this.selectorRect);
                     RecyclerListView.this.invalidate();
                 } else {
@@ -898,6 +898,9 @@ public class RecyclerListView extends RecyclerView {
     }
 
     public boolean onInterceptTouchEvent(MotionEvent e) {
+        if (!isEnabled()) {
+            return false;
+        }
         if (this.disallowInterceptTouchEvents) {
             requestDisallowInterceptTouchEvent(true);
         }

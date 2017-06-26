@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 public final class PaymentInstrumentType {
     public static final int AMEX = 3;
-    public static final int CHROME_PROXY_CARD_TYPE = 2;
     public static final int DISCOVER = 4;
     public static final int JCB = 5;
     public static final int MASTER_CARD = 2;

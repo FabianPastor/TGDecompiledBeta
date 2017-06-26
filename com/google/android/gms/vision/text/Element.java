@@ -2,19 +2,19 @@ package com.google.android.gms.vision.text;
 
 import android.graphics.Point;
 import android.graphics.Rect;
-import com.google.android.gms.internal.zzbkq;
+import com.google.android.gms.internal.fs;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Element implements Text {
-    private zzbkq zzbPp;
+    private fs zzbNL;
 
-    Element(zzbkq com_google_android_gms_internal_zzbkq) {
-        this.zzbPp = com_google_android_gms_internal_zzbkq;
+    Element(fs fsVar) {
+        this.zzbNL = fsVar;
     }
 
     public Rect getBoundingBox() {
-        return zza.zza((Text) this);
+        return zzc.zza((Text) this);
     }
 
     public List<? extends Text> getComponents() {
@@ -22,14 +22,14 @@ public class Element implements Text {
     }
 
     public Point[] getCornerPoints() {
-        return zza.zza(this.zzbPp.zzbPA);
+        return zzc.zza(this.zzbNL.zzbNW);
     }
 
     public String getLanguage() {
-        return this.zzbPp.zzbPu;
+        return this.zzbNL.zzbNQ;
     }
 
     public String getValue() {
-        return this.zzbPp.zzbPD;
+        return this.zzbNL.zzbNZ;
     }
 }

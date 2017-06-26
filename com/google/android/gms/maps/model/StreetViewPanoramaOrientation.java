@@ -3,8 +3,10 @@ package com.google.android.gms.maps.model;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.zzaa;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.common.internal.zzbe;
+import com.google.android.gms.common.internal.zzbo;
+import java.util.Arrays;
 
 public class StreetViewPanoramaOrientation extends zza {
     public static final Creator<StreetViewPanoramaOrientation> CREATOR = new zzp();
@@ -20,16 +22,16 @@ public class StreetViewPanoramaOrientation extends zza {
             this.tilt = streetViewPanoramaOrientation.tilt;
         }
 
-        public Builder bearing(float f) {
+        public final Builder bearing(float f) {
             this.bearing = f;
             return this;
         }
 
-        public StreetViewPanoramaOrientation build() {
+        public final StreetViewPanoramaOrientation build() {
             return new StreetViewPanoramaOrientation(this.tilt, this.bearing);
         }
 
-        public Builder tilt(float f) {
+        public final Builder tilt(float f) {
             this.tilt = f;
             return this;
         }
@@ -37,7 +39,7 @@ public class StreetViewPanoramaOrientation extends zza {
 
     public StreetViewPanoramaOrientation(float f, float f2) {
         boolean z = -90.0f <= f && f <= 90.0f;
-        zzac.zzb(z, (Object) "Tilt needs to be between -90 and 90 inclusive");
+        zzbo.zzb(z, "Tilt needs to be between -90 and 90 inclusive: " + f);
         this.tilt = 0.0f + f;
         if (((double) f2) <= 0.0d) {
             f2 = (f2 % 360.0f) + 360.0f;
@@ -65,14 +67,17 @@ public class StreetViewPanoramaOrientation extends zza {
     }
 
     public int hashCode() {
-        return zzaa.hashCode(Float.valueOf(this.tilt), Float.valueOf(this.bearing));
+        return Arrays.hashCode(new Object[]{Float.valueOf(this.tilt), Float.valueOf(this.bearing)});
     }
 
     public String toString() {
-        return zzaa.zzv(this).zzg("tilt", Float.valueOf(this.tilt)).zzg("bearing", Float.valueOf(this.bearing)).toString();
+        return zzbe.zzt(this).zzg("tilt", Float.valueOf(this.tilt)).zzg("bearing", Float.valueOf(this.bearing)).toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zzp.zza(this, parcel, i);
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.tilt);
+        zzd.zza(parcel, 3, this.bearing);
+        zzd.zzI(parcel, zze);
     }
 }
