@@ -3938,9 +3938,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             this.chatAttachAlert = new ChatAttachAlert(getParentActivity(), this);
             this.chatAttachAlert.setDelegate(new ChatAttachViewDelegate() {
                 public void didPressedButton(int button) {
-                    if (ChatActivity.this.getParentActivity() != null) {
+                    if (ChatActivity.this.getParentActivity() != null && ChatActivity.this.chatAttachAlert != null) {
                         if (button == 7 || (button == 4 && !ChatActivity.this.chatAttachAlert.getSelectedPhotos().isEmpty())) {
-                            ChatActivity.this.chatAttachAlert.dismiss();
                             HashMap<Integer, PhotoEntry> selectedPhotos = ChatActivity.this.chatAttachAlert.getSelectedPhotos();
                             if (!selectedPhotos.isEmpty()) {
                                 ArrayList<String> photos = new ArrayList();

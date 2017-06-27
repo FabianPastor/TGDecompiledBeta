@@ -1176,6 +1176,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 ChannelParticipant channelParticipant;
                 boolean allowKick = false;
                 boolean allowSetAdmin = false;
+                boolean canEditAdmin = false;
                 if (ProfileActivity.this.sortedUsers.isEmpty()) {
                     user = (ChatParticipant) ProfileActivity.this.info.participants.participants.get((position - ProfileActivity.this.emptyRowChat2) - 1);
                 } else {
@@ -1188,10 +1189,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         return false;
                     }
                     User u = MessagesController.getInstance().getUser(Integer.valueOf(user.user_id));
-                    if ((channelParticipant instanceof TL_channelParticipant) || (channelParticipant instanceof TL_channelParticipantBanned)) {
-                        allowSetAdmin = true;
+                    allowSetAdmin = (channelParticipant instanceof TL_channelParticipant) || (channelParticipant instanceof TL_channelParticipantBanned);
+                    if (((channelParticipant instanceof TL_channelParticipantAdmin) || (channelParticipant instanceof TL_channelParticipantCreator)) && !channelParticipant.can_edit) {
+                        canEditAdmin = false;
                     } else {
-                        allowSetAdmin = false;
+                        canEditAdmin = true;
                     }
                 } else {
                     channelParticipant = null;
@@ -1214,7 +1216,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         items.add(LocaleController.getString("SetAsAdmin", R.string.SetAsAdmin));
                         actions.add(Integer.valueOf(0));
                     }
-                    if (ChatObject.canBlockUsers(ProfileActivity.this.currentChat) && (channelParticipant.can_edit || allowSetAdmin)) {
+                    if (ChatObject.canBlockUsers(ProfileActivity.this.currentChat) && canEditAdmin) {
                         items.add(LocaleController.getString("KickFromSupergroup", R.string.KickFromSupergroup));
                         actions.add(Integer.valueOf(1));
                         items.add(LocaleController.getString("KickFromGroup", R.string.KickFromGroup));

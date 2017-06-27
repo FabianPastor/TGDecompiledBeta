@@ -82,7 +82,6 @@ import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ManageChatTextCell;
 import org.telegram.ui.Cells.ManageChatUserCell;
 import org.telegram.ui.Cells.ManageChatUserCell.ManageChatUserCellDelegate;
-import org.telegram.ui.Cells.ProfileSearchCell;
 import org.telegram.ui.Cells.RadioCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
@@ -645,13 +644,20 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     ((ManageChatUserCell) view).setDelegate(new ManageChatUserCellDelegate() {
                         public boolean onOptionsButtonCheck(ManageChatUserCell cell, boolean click) {
-                            return ChannelUsersActivity.this.createMenuForParticipant((ChannelParticipant) SearchAdapter.this.getItem(((Integer) cell.getTag()).intValue()), !click);
+                            if (!(SearchAdapter.this.getItem(((Integer) cell.getTag()).intValue()) instanceof ChannelParticipant)) {
+                                return false;
+                            }
+                            boolean z;
+                            ChannelParticipant participant = (ChannelParticipant) SearchAdapter.this.getItem(((Integer) cell.getTag()).intValue());
+                            ChannelUsersActivity channelUsersActivity = ChannelUsersActivity.this;
+                            if (click) {
+                                z = false;
+                            } else {
+                                z = true;
+                            }
+                            return channelUsersActivity.createMenuForParticipant(participant, z);
                         }
                     });
-                    break;
-                case 1:
-                    view = new ProfileSearchCell(this.mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 default:
                     view = new GraySectionCell(this.mContext);
@@ -661,27 +667,23 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            User user;
-            String un;
-            CharSequence name;
-            String u;
-            int idx;
-            CharSequence username;
             Throwable e;
-            Object username2;
-            ProfileSearchCell profileSearchCell;
-            boolean z;
-            int count;
-            boolean ok;
-            String nameSearch;
+            Object username;
             switch (holder.getItemViewType()) {
                 case 0:
-                    user = MessagesController.getInstance().getUser(Integer.valueOf(((ChannelParticipant) getItem(position)).user_id));
-                    un = user.username;
-                    name = null;
-                    count = this.searchAdapterHelper.getGroupSearch().size();
-                    ok = false;
-                    nameSearch = null;
+                    CharSequence username2;
+                    CharSequence username3;
+                    String foundUserName;
+                    CharSequence spannableStringBuilder;
+                    String u;
+                    int idx;
+                    ManageChatUserCell userCell;
+                    User user = MessagesController.getInstance().getUser(Integer.valueOf(((ChannelParticipant) getItem(position)).user_id));
+                    String un = user.username;
+                    CharSequence name = null;
+                    int count = this.searchAdapterHelper.getGroupSearch().size();
+                    boolean ok = false;
+                    String nameSearch = null;
                     if (count != 0) {
                         if (count + 1 > position) {
                             nameSearch = this.searchAdapterHelper.getLastFoundChannel();
@@ -700,63 +702,53 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                             }
                         }
                     }
-                    if (nameSearch != null) {
-                        u = UserObject.getUserName(user);
-                        name = new SpannableStringBuilder(u);
-                        idx = u.toLowerCase().indexOf(nameSearch);
-                        if (idx != -1) {
-                            ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
-                        }
-                    }
-                    ManageChatUserCell userCell = (ManageChatUserCell) holder.itemView;
-                    userCell.setTag(Integer.valueOf(position));
-                    userCell.setData(user, name, null);
-                    return;
-                case 1:
-                    CharSequence username3;
-                    String foundUserName;
-                    user = (User) getItem(position);
-                    un = user.username;
-                    name = null;
-                    int pos = position;
-                    ok = false;
-                    nameSearch = null;
-                    count = this.searchAdapterHelper.getGroupSearch().size();
-                    if (count != 0) {
-                        position -= count + 1;
-                    }
-                    count = this.searchAdapterHelper.getGroupSearch2().size();
-                    if (count != 0) {
-                        position -= count + 1;
-                    }
-                    count = this.searchResult.size();
-                    if (count != 0) {
-                        if (count + 1 > position) {
-                            ok = true;
-                            name = (CharSequence) this.searchResultNames.get(position - 1);
-                            if (name != null && un != null && un.length() > 0 && name.toString().startsWith("@" + un)) {
-                                username = name;
-                                name = null;
-                                username3 = username;
-                            }
-                        } else {
-                            position -= count + 1;
-                            username3 = null;
-                        }
-                        if (!ok) {
-                            count = this.searchAdapterHelper.getGlobalSearch().size();
-                            if (count != 0 && count + 1 > position) {
-                                foundUserName = this.searchAdapterHelper.getLastFoundUsername();
-                                if (foundUserName.startsWith("@")) {
-                                    foundUserName = foundUserName.substring(1);
+                    if (!ok) {
+                        count = this.searchResult.size();
+                        if (count != 0) {
+                            if (count + 1 > position) {
+                                ok = true;
+                                name = (CharSequence) this.searchResultNames.get(position - 1);
+                                if (name != null && un != null && un.length() > 0 && name.toString().startsWith("@" + un)) {
+                                    username2 = name;
+                                    name = null;
+                                    username3 = username2;
                                 }
-                                try {
-                                    username = new SpannableStringBuilder(un);
+                            } else {
+                                position -= count + 1;
+                                username3 = null;
+                            }
+                            if (!ok) {
+                                count = this.searchAdapterHelper.getGlobalSearch().size();
+                                if (count != 0 && count + 1 > position) {
+                                    foundUserName = this.searchAdapterHelper.getLastFoundUsername();
+                                    if (foundUserName.startsWith("@")) {
+                                        foundUserName = foundUserName.substring(1);
+                                    }
                                     try {
-                                        ((SpannableStringBuilder) username).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
-                                    } catch (Exception e2) {
-                                        e = e2;
-                                        username2 = un;
+                                        spannableStringBuilder = new SpannableStringBuilder(un);
+                                        try {
+                                            ((SpannableStringBuilder) spannableStringBuilder).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
+                                        } catch (Exception e2) {
+                                            e = e2;
+                                            username = un;
+                                            FileLog.e(e);
+                                            if (nameSearch != null) {
+                                                u = UserObject.getUserName(user);
+                                                name = new SpannableStringBuilder(u);
+                                                idx = u.toLowerCase().indexOf(nameSearch);
+                                                if (idx != -1) {
+                                                    ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
+                                                }
+                                            }
+                                            userCell = (ManageChatUserCell) holder.itemView;
+                                            userCell.setTag(Integer.valueOf(position));
+                                            userCell.setData(user, name, username2);
+                                            return;
+                                        }
+                                    } catch (Exception e3) {
+                                        e = e3;
+                                        username2 = username3;
+                                        username = un;
                                         FileLog.e(e);
                                         if (nameSearch != null) {
                                             u = UserObject.getUserName(user);
@@ -766,21 +758,11 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                                 ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
                                             }
                                         }
-                                        profileSearchCell = holder.itemView;
-                                        profileSearchCell.setData(user, null, name, username, false);
-                                        if (pos == getItemCount() - 1) {
-                                            z = false;
-                                        } else {
-                                            z = true;
-                                        }
-                                        profileSearchCell.useSeparator = z;
+                                        userCell = (ManageChatUserCell) holder.itemView;
+                                        userCell.setTag(Integer.valueOf(position));
+                                        userCell.setData(user, name, username2);
                                         return;
                                     }
-                                } catch (Exception e3) {
-                                    e = e3;
-                                    username = username3;
-                                    username2 = un;
-                                    FileLog.e(e);
                                     if (nameSearch != null) {
                                         u = UserObject.getUserName(user);
                                         name = new SpannableStringBuilder(u);
@@ -789,53 +771,26 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                             ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
                                         }
                                     }
-                                    profileSearchCell = holder.itemView;
-                                    profileSearchCell.setData(user, null, name, username, false);
-                                    if (pos == getItemCount() - 1) {
-                                        z = true;
-                                    } else {
-                                        z = false;
-                                    }
-                                    profileSearchCell.useSeparator = z;
+                                    userCell = (ManageChatUserCell) holder.itemView;
+                                    userCell.setTag(Integer.valueOf(position));
+                                    userCell.setData(user, name, username2);
                                     return;
                                 }
-                                if (nameSearch != null) {
-                                    u = UserObject.getUserName(user);
-                                    name = new SpannableStringBuilder(u);
-                                    idx = u.toLowerCase().indexOf(nameSearch);
-                                    if (idx != -1) {
-                                        ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
-                                    }
-                                }
-                                profileSearchCell = holder.itemView;
-                                profileSearchCell.setData(user, null, name, username, false);
-                                if (pos == getItemCount() - 1) {
-                                    z = true;
-                                } else {
-                                    z = false;
-                                }
-                                profileSearchCell.useSeparator = z;
-                                return;
                             }
-                        }
-                        username = username3;
-                        if (nameSearch != null) {
-                            u = UserObject.getUserName(user);
-                            name = new SpannableStringBuilder(u);
-                            idx = u.toLowerCase().indexOf(nameSearch);
-                            if (idx != -1) {
-                                ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
+                            username2 = username3;
+                            if (nameSearch != null) {
+                                u = UserObject.getUserName(user);
+                                name = new SpannableStringBuilder(u);
+                                idx = u.toLowerCase().indexOf(nameSearch);
+                                if (idx != -1) {
+                                    ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
+                                }
                             }
+                            userCell = (ManageChatUserCell) holder.itemView;
+                            userCell.setTag(Integer.valueOf(position));
+                            userCell.setData(user, name, username2);
+                            return;
                         }
-                        profileSearchCell = holder.itemView;
-                        profileSearchCell.setData(user, null, name, username, false);
-                        if (pos == getItemCount() - 1) {
-                            z = false;
-                        } else {
-                            z = true;
-                        }
-                        profileSearchCell.useSeparator = z;
-                        return;
                     }
                     username3 = null;
                     if (ok) {
@@ -844,8 +799,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         if (foundUserName.startsWith("@")) {
                             foundUserName = foundUserName.substring(1);
                         }
-                        username = new SpannableStringBuilder(un);
-                        ((SpannableStringBuilder) username).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
+                        spannableStringBuilder = new SpannableStringBuilder(un);
+                        ((SpannableStringBuilder) spannableStringBuilder).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
                         if (nameSearch != null) {
                             u = UserObject.getUserName(user);
                             name = new SpannableStringBuilder(u);
@@ -854,17 +809,12 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                 ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
                             }
                         }
-                        profileSearchCell = holder.itemView;
-                        profileSearchCell.setData(user, null, name, username, false);
-                        if (pos == getItemCount() - 1) {
-                            z = true;
-                        } else {
-                            z = false;
-                        }
-                        profileSearchCell.useSeparator = z;
+                        userCell = (ManageChatUserCell) holder.itemView;
+                        userCell.setTag(Integer.valueOf(position));
+                        userCell.setData(user, name, username2);
                         return;
                     }
-                    username = username3;
+                    username2 = username3;
                     if (nameSearch != null) {
                         u = UserObject.getUserName(user);
                         name = new SpannableStringBuilder(u);
@@ -873,34 +823,31 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                             ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
                         }
                     }
-                    profileSearchCell = holder.itemView;
-                    profileSearchCell.setData(user, null, name, username, false);
-                    if (pos == getItemCount() - 1) {
-                        z = false;
-                    } else {
-                        z = true;
-                    }
-                    profileSearchCell.useSeparator = z;
+                    userCell = (ManageChatUserCell) holder.itemView;
+                    userCell.setTag(Integer.valueOf(position));
+                    userCell.setData(user, name, username2);
                     return;
-                case 2:
-                    GraySectionCell sectionCell = (GraySectionCell) holder.itemView;
-                    if (position == this.groupStartRow) {
-                        if (ChannelUsersActivity.this.type == 0) {
-                            sectionCell.setText(LocaleController.getString("ChannelRestrictedUsers", R.string.ChannelRestrictedUsers).toUpperCase());
+                case 1:
+                    GraySectionCell sectionCell = holder.itemView;
+                    if (position != this.groupStartRow) {
+                        if (position == this.group2StartRow) {
+                            sectionCell.setText(LocaleController.getString("ChannelBlockedUsers", R.string.ChannelBlockedUsers).toUpperCase());
                             return;
                         }
-                        sectionCell.setText(LocaleController.getString("ChannelMembers", R.string.ChannelMembers).toUpperCase());
+                        if (position == this.globalStartRow) {
+                            sectionCell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch).toUpperCase());
+                            return;
+                        }
+                        if (position == this.contactsStartRow) {
+                            sectionCell.setText(LocaleController.getString("Contacts", R.string.Contacts).toUpperCase());
+                            return;
+                        }
                         return;
-                    } else if (position == this.group2StartRow) {
-                        sectionCell.setText(LocaleController.getString("ChannelBlockedUsers", R.string.ChannelBlockedUsers).toUpperCase());
-                        return;
-                    } else if (position == this.globalStartRow) {
-                        sectionCell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch).toUpperCase());
-                        return;
-                    } else if (position == this.contactsStartRow) {
-                        sectionCell.setText(LocaleController.getString("Contacts", R.string.Contacts).toUpperCase());
+                    } else if (ChannelUsersActivity.this.type == 0) {
+                        sectionCell.setText(LocaleController.getString("ChannelRestrictedUsers", R.string.ChannelRestrictedUsers).toUpperCase());
                         return;
                     } else {
+                        sectionCell.setText(LocaleController.getString("ChannelMembers", R.string.ChannelMembers).toUpperCase());
                         return;
                     }
                 default:
@@ -910,12 +857,9 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
 
         public int getItemViewType(int i) {
             if (i == this.globalStartRow || i == this.groupStartRow || i == this.contactsStartRow || i == this.group2StartRow) {
-                return 2;
+                return 1;
             }
-            if (getItem(i) instanceof ChannelParticipant) {
-                return 0;
-            }
-            return 1;
+            return 0;
         }
     }
 
@@ -1350,10 +1294,12 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     }
 
     private boolean createMenuForParticipant(final ChannelParticipant participant, boolean resultOnly) {
-        if (participant == null || this.selectType != 0 || participant.user_id == UserConfig.getClientUserId()) {
+        if (participant == null || this.selectType != 0) {
             return false;
         }
-        Builder builder;
+        if (participant.user_id == UserConfig.getClientUserId()) {
+            return false;
+        }
         if (this.type == 2) {
             boolean allowSetAdmin;
             ArrayList<String> items;
@@ -1363,6 +1309,12 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 allowSetAdmin = true;
             } else {
                 allowSetAdmin = false;
+            }
+            boolean canEditAdmin;
+            if (((participant instanceof TL_channelParticipantAdmin) || (participant instanceof TL_channelParticipantCreator)) && !participant.can_edit) {
+                canEditAdmin = false;
+            } else {
+                canEditAdmin = true;
             }
             if (resultOnly) {
                 items = null;
@@ -1379,7 +1331,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 actions.add(Integer.valueOf(0));
             }
             if (this.currentChat.megagroup) {
-                if (ChatObject.canBlockUsers(this.currentChat) && (!allowSetAdmin || participant.can_edit)) {
+                if (ChatObject.canBlockUsers(this.currentChat) && canEditAdmin) {
                     if (resultOnly) {
                         return true;
                     }
@@ -1398,7 +1350,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             if (actions == null || actions.isEmpty()) {
                 return false;
             }
-            builder = new Builder(getParentActivity());
+            Builder builder = new Builder(getParentActivity());
             builder.setItems((CharSequence[]) items.toArray(new CharSequence[actions.size()]), new OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, final int i) {
                     if (((Integer) actions.get(i)).intValue() == 2) {
@@ -1451,60 +1403,60 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 }
             });
             showDialog(builder.create());
-        } else {
-            CharSequence[] items2 = null;
-            if (this.type == 0 && ChatObject.canBlockUsers(this.currentChat)) {
-                if (resultOnly) {
-                    return true;
-                }
-                items2 = new CharSequence[]{LocaleController.getString("Unban", R.string.Unban)};
-            } else if (this.type == 1 && ChatObject.canAddAdmins(this.currentChat) && participant.can_edit) {
-                if (resultOnly) {
-                    return true;
-                }
-                items2 = new CharSequence[]{LocaleController.getString("ChannelRemoveUserAdmin", R.string.ChannelRemoveUserAdmin)};
+            return true;
+        }
+        CharSequence[] items2 = null;
+        if (this.type == 0 && ChatObject.canBlockUsers(this.currentChat)) {
+            if (resultOnly) {
+                return true;
             }
-            if (items2 == null) {
-                return false;
+            items2 = new CharSequence[]{LocaleController.getString("Unban", R.string.Unban)};
+        } else if (this.type == 1 && ChatObject.canAddAdmins(this.currentChat) && participant.can_edit) {
+            if (resultOnly) {
+                return true;
             }
-            builder = new Builder(getParentActivity());
-            builder.setItems(items2, new OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (i != 0) {
-                        return;
-                    }
-                    if (ChannelUsersActivity.this.type == 0) {
-                        ChannelUsersActivity.this.participants.remove(participant);
-                        ChannelUsersActivity.this.updateRows();
-                        ChannelUsersActivity.this.listViewAdapter.notifyDataSetChanged();
-                        TL_channels_editBanned req = new TL_channels_editBanned();
-                        req.user_id = MessagesController.getInputUser(participant.user_id);
-                        req.channel = MessagesController.getInputChannel(ChannelUsersActivity.this.chatId);
-                        req.banned_rights = new TL_channelBannedRights();
-                        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                            public void run(TLObject response, TL_error error) {
-                                if (response != null) {
-                                    final Updates updates = (Updates) response;
-                                    MessagesController.getInstance().processUpdates(updates, false);
-                                    if (!updates.chats.isEmpty()) {
-                                        AndroidUtilities.runOnUIThread(new Runnable() {
-                                            public void run() {
-                                                MessagesController.getInstance().loadFullChat(((Chat) updates.chats.get(0)).id, 0, true);
-                                            }
-                                        }, 1000);
-                                    }
+            items2 = new CharSequence[]{LocaleController.getString("ChannelRemoveUserAdmin", R.string.ChannelRemoveUserAdmin)};
+        }
+        if (items2 == null) {
+            return false;
+        }
+        builder = new Builder(getParentActivity());
+        builder.setItems(items2, new OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i != 0) {
+                    return;
+                }
+                if (ChannelUsersActivity.this.type == 0) {
+                    ChannelUsersActivity.this.participants.remove(participant);
+                    ChannelUsersActivity.this.updateRows();
+                    ChannelUsersActivity.this.listViewAdapter.notifyDataSetChanged();
+                    TL_channels_editBanned req = new TL_channels_editBanned();
+                    req.user_id = MessagesController.getInputUser(participant.user_id);
+                    req.channel = MessagesController.getInputChannel(ChannelUsersActivity.this.chatId);
+                    req.banned_rights = new TL_channelBannedRights();
+                    ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                        public void run(TLObject response, TL_error error) {
+                            if (response != null) {
+                                final Updates updates = (Updates) response;
+                                MessagesController.getInstance().processUpdates(updates, false);
+                                if (!updates.chats.isEmpty()) {
+                                    AndroidUtilities.runOnUIThread(new Runnable() {
+                                        public void run() {
+                                            MessagesController.getInstance().loadFullChat(((Chat) updates.chats.get(0)).id, 0, true);
+                                        }
+                                    }, 1000);
                                 }
                             }
-                        });
-                    } else if (ChannelUsersActivity.this.type == 1) {
-                        MessagesController.setUserAdminRole(ChannelUsersActivity.this.chatId, MessagesController.getInstance().getUser(Integer.valueOf(participant.user_id)), new TL_channelAdminRights(), ChannelUsersActivity.this.currentChat.megagroup, ChannelUsersActivity.this);
-                    } else if (ChannelUsersActivity.this.type == 2) {
-                        MessagesController.getInstance().deleteUserFromChat(ChannelUsersActivity.this.chatId, MessagesController.getInstance().getUser(Integer.valueOf(participant.user_id)), null);
-                    }
+                        }
+                    });
+                } else if (ChannelUsersActivity.this.type == 1) {
+                    MessagesController.setUserAdminRole(ChannelUsersActivity.this.chatId, MessagesController.getInstance().getUser(Integer.valueOf(participant.user_id)), new TL_channelAdminRights(), ChannelUsersActivity.this.currentChat.megagroup, ChannelUsersActivity.this);
+                } else if (ChannelUsersActivity.this.type == 2) {
+                    MessagesController.getInstance().deleteUserFromChat(ChannelUsersActivity.this.chatId, MessagesController.getInstance().getUser(Integer.valueOf(participant.user_id)), null);
                 }
-            });
-            showDialog(builder.create());
-        }
+            }
+        });
+        showDialog(builder.create());
         return true;
     }
 

@@ -6030,6 +6030,7 @@ Error: java.util.NoSuchElementException
     public void getDialogs(final int offset, final int count) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
+                Message message;
                 messages_Dialogs dialogs = new messages_Dialogs();
                 ArrayList<EncryptedChat> encryptedChats = new ArrayList();
                 ArrayList<Integer> usersToLoad = new ArrayList();
@@ -6040,7 +6041,6 @@ Error: java.util.NoSuchElementException
                 HashMap<Long, Message> replyMessageOwners = new HashMap();
                 SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
                 while (cursor.next()) {
-                    Message message;
                     TL_dialog dialog = new TL_dialog();
                     dialog.id = cursor.longValue(0);
                     dialog.top_message = cursor.intValue(1);
@@ -6321,37 +6321,13 @@ Error: java.util.NoSuchElementException
                     }
                     cursor.dispose();
                     if (!unpinnedDialogs.isEmpty()) {
-                        int minDate = 0;
-                        cursor = MessagesStorage.this.database.queryFinalized("SELECT min(date), min(date_i) FROM dialogs WHERE (date != 0 OR date_i != 0) AND pinned = 0", new Object[0]);
-                        if (cursor.next()) {
-                            int date = cursor.intValue(0);
-                            int date_i = cursor.intValue(1);
-                            if (date != 0 && date_i != 0) {
-                                minDate = Math.min(date, date_i);
-                            } else if (date == 0) {
-                                minDate = date_i;
-                            } else {
-                                minDate = date;
-                            }
-                        }
-                        cursor.dispose();
                         SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("UPDATE dialogs SET pinned = ? WHERE did = ?");
                         for (int a = 0; a < unpinnedDialogs.size(); a++) {
                             long did = ((Long) unpinnedDialogs.get(a)).longValue();
-                            int dialogDate = 0;
-                            cursor = MessagesStorage.this.database.queryFinalized("SELECT date FROM dialogs WHERE did = " + did, new Object[0]);
-                            if (cursor.next()) {
-                                dialogDate = cursor.intValue(0);
-                            }
-                            cursor.dispose();
-                            if (dialogDate <= minDate) {
-                                MessagesStorage.this.database.executeFast("DELETE FROM dialogs WHERE did = " + did).stepThis().dispose();
-                            } else {
-                                state.requery();
-                                state.bindInteger(1, 0);
-                                state.bindLong(2, did);
-                                state.step();
-                            }
+                            state.requery();
+                            state.bindInteger(1, 0);
+                            state.bindLong(2, did);
+                            state.step();
                         }
                         state.dispose();
                     }
@@ -6366,24 +6342,6 @@ Error: java.util.NoSuchElementException
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 try {
-                    if (pinned == 0 && ((int) did) != 0) {
-                        int dialogDate = 0;
-                        int minDate = 0;
-                        SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT date FROM dialogs WHERE did = " + did, new Object[0]);
-                        if (cursor.next()) {
-                            dialogDate = cursor.intValue(0);
-                        }
-                        cursor.dispose();
-                        cursor = MessagesStorage.this.database.queryFinalized("SELECT min(date) FROM dialogs WHERE date != 0 AND pinned = 0", new Object[0]);
-                        if (cursor.next()) {
-                            minDate = cursor.intValue(0);
-                        }
-                        cursor.dispose();
-                        if (dialogDate <= minDate) {
-                            MessagesStorage.this.database.executeFast("DELETE FROM dialogs WHERE did = " + did).stepThis().dispose();
-                            return;
-                        }
-                    }
                     SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("UPDATE dialogs SET pinned = ? WHERE did = ?");
                     state.bindInteger(1, pinned);
                     state.bindLong(2, did);

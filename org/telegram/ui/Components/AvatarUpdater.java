@@ -56,22 +56,28 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
     }
 
     public void openCamera() {
-        try {
-            Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE");
-            File image = AndroidUtilities.generatePicturePath();
-            if (image != null) {
-                if (VERSION.SDK_INT >= 24) {
-                    takePictureIntent.putExtra("output", FileProvider.getUriForFile(this.parentFragment.getParentActivity(), "org.telegram.messenger.beta.provider", image));
-                    takePictureIntent.addFlags(2);
-                    takePictureIntent.addFlags(1);
-                } else {
-                    takePictureIntent.putExtra("output", Uri.fromFile(image));
+        if (this.parentFragment != null && this.parentFragment.getParentActivity() != null) {
+            try {
+                if (VERSION.SDK_INT < 23 || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.CAMERA") == 0) {
+                    Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE");
+                    File image = AndroidUtilities.generatePicturePath();
+                    if (image != null) {
+                        if (VERSION.SDK_INT >= 24) {
+                            takePictureIntent.putExtra("output", FileProvider.getUriForFile(this.parentFragment.getParentActivity(), "org.telegram.messenger.beta.provider", image));
+                            takePictureIntent.addFlags(2);
+                            takePictureIntent.addFlags(1);
+                        } else {
+                            takePictureIntent.putExtra("output", Uri.fromFile(image));
+                        }
+                        this.currentPicturePath = image.getAbsolutePath();
+                    }
+                    this.parentFragment.startActivityForResult(takePictureIntent, 13);
+                    return;
                 }
-                this.currentPicturePath = image.getAbsolutePath();
+                this.parentFragment.getParentActivity().requestPermissions(new String[]{"android.permission.CAMERA"}, 19);
+            } catch (Throwable e) {
+                FileLog.e(e);
             }
-            this.parentFragment.startActivityForResult(takePictureIntent, 13);
-        } catch (Throwable e) {
-            FileLog.e(e);
         }
     }
 

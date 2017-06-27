@@ -40,9 +40,9 @@ final class zzcfs implements Runnable {
         HttpURLConnection httpURLConnection2;
         OutputStream outputStream2;
         Throwable th;
-        Map map2;
         int i2 = 0;
         this.zzbrf.zzwq();
+        Map map2;
         try {
             URLConnection openConnection = this.zzJw.openConnection();
             if (openConnection instanceof HttpURLConnection) {

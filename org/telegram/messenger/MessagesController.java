@@ -2158,8 +2158,6 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll, long taskId, TLObject taskRequest) {
-        TL_channels_deleteMessages req;
-        long newTaskId;
         NativeByteBuffer data;
         Throwable e;
         final int i;
@@ -2188,8 +2186,10 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
+            long newTaskId;
             NativeByteBuffer data2;
             if (channelId != 0) {
+                TL_channels_deleteMessages req;
                 if (taskRequest != null) {
                     req = (TL_channels_deleteMessages) taskRequest;
                     newTaskId = taskId;
@@ -3225,44 +3225,69 @@ public class MessagesController implements NotificationCenterDelegate {
             TL_messages_getDialogs req = new TL_messages_getDialogs();
             req.limit = count;
             req.exclude_pinned = true;
-            boolean found = false;
-            for (int a = this.dialogs.size() - 1; a >= 0; a--) {
-                TL_dialog dialog = (TL_dialog) this.dialogs.get(a);
-                if (!dialog.pinned) {
-                    int high_id = (int) (dialog.id >> 32);
-                    if (!(((int) dialog.id) == 0 || high_id == 1 || dialog.top_message <= 0)) {
-                        MessageObject message = (MessageObject) this.dialogMessage.get(Long.valueOf(dialog.id));
-                        if (message != null && message.getId() > 0) {
-                            int id;
-                            req.offset_date = message.messageOwner.date;
-                            req.offset_id = message.messageOwner.id;
-                            if (message.messageOwner.to_id.channel_id != 0) {
-                                id = -message.messageOwner.to_id.channel_id;
-                            } else if (message.messageOwner.to_id.chat_id != 0) {
-                                id = -message.messageOwner.to_id.chat_id;
-                            } else {
-                                id = message.messageOwner.to_id.user_id;
-                            }
-                            req.offset_peer = getInputPeer(id);
-                            found = true;
-                            if (!found) {
-                                req.offset_peer = new TL_inputPeerEmpty();
-                            }
-                            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                                public void run(TLObject response, TL_error error) {
-                                    if (error == null) {
-                                        MessagesController.this.processLoadedDialogs((messages_Dialogs) response, null, 0, count, 0, false, false, false);
-                                    }
+            if (UserConfig.dialogsLoadOffsetId == -1) {
+                boolean found = false;
+                for (int a = this.dialogs.size() - 1; a >= 0; a--) {
+                    TL_dialog dialog = (TL_dialog) this.dialogs.get(a);
+                    if (!dialog.pinned) {
+                        int high_id = (int) (dialog.id >> 32);
+                        if (!(((int) dialog.id) == 0 || high_id == 1 || dialog.top_message <= 0)) {
+                            MessageObject message = (MessageObject) this.dialogMessage.get(Long.valueOf(dialog.id));
+                            if (message != null && message.getId() > 0) {
+                                int id;
+                                req.offset_date = message.messageOwner.date;
+                                req.offset_id = message.messageOwner.id;
+                                if (message.messageOwner.to_id.channel_id != 0) {
+                                    id = -message.messageOwner.to_id.channel_id;
+                                } else if (message.messageOwner.to_id.chat_id != 0) {
+                                    id = -message.messageOwner.to_id.chat_id;
+                                } else {
+                                    id = message.messageOwner.to_id.user_id;
                                 }
-                            });
+                                req.offset_peer = getInputPeer(id);
+                                found = true;
+                                if (!found) {
+                                    req.offset_peer = new TL_inputPeerEmpty();
+                                }
+                            }
                         }
                     }
                 }
+                if (found) {
+                    req.offset_peer = new TL_inputPeerEmpty();
+                }
+            } else if (UserConfig.dialogsLoadOffsetId == ConnectionsManager.DEFAULT_DATACENTER_ID) {
+                this.dialogsEndReached = true;
+                this.serverDialogsEndReached = true;
+                this.loadingDialogs = false;
+                NotificationCenter.getInstance().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
+                return;
+            } else {
+                req.offset_id = UserConfig.dialogsLoadOffsetId;
+                req.offset_date = UserConfig.dialogsLoadOffsetDate;
+                if (req.offset_id == 0) {
+                    req.offset_peer = new TL_inputPeerEmpty();
+                } else {
+                    if (UserConfig.dialogsLoadOffsetChannelId != 0) {
+                        req.offset_peer = new TL_inputPeerChannel();
+                        req.offset_peer.channel_id = UserConfig.dialogsLoadOffsetChannelId;
+                    } else if (UserConfig.dialogsLoadOffsetUserId != 0) {
+                        req.offset_peer = new TL_inputPeerUser();
+                        req.offset_peer.user_id = UserConfig.dialogsLoadOffsetUserId;
+                    } else {
+                        req.offset_peer = new TL_inputPeerChat();
+                        req.offset_peer.chat_id = UserConfig.dialogsLoadOffsetChatId;
+                    }
+                    req.offset_peer.access_hash = UserConfig.dialogsLoadOffsetAccess;
+                }
             }
-            if (found) {
-                req.offset_peer = new TL_inputPeerEmpty();
-            }
-            ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
+            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                public void run(TLObject response, TL_error error) {
+                    if (error == null) {
+                        MessagesController.this.processLoadedDialogs((messages_Dialogs) response, null, 0, count, 0, false, false, false);
+                    }
+                }
+            });
         }
     }
 
@@ -3270,6 +3295,7 @@ public class MessagesController implements NotificationCenterDelegate {
         if (!this.migratingDialogs && offset != -1) {
             this.migratingDialogs = true;
             TL_messages_getDialogs req = new TL_messages_getDialogs();
+            req.exclude_pinned = true;
             req.limit = 100;
             req.offset_id = offset;
             req.offset_date = offsetDate;
@@ -3299,52 +3325,59 @@ public class MessagesController implements NotificationCenterDelegate {
                                     Message message;
                                     int offsetId;
                                     TL_dialog dialog;
-                                    if (dialogsRes.dialogs.size() == 100) {
-                                        Message lastMessage = null;
-                                        for (a = 0; a < dialogsRes.messages.size(); a++) {
-                                            message = (Message) dialogsRes.messages.get(a);
-                                            if (lastMessage == null || message.date < lastMessage.date) {
-                                                lastMessage = message;
+                                    UserConfig.totalDialogsLoadCount += dialogsRes.dialogs.size();
+                                    Message lastMessage = null;
+                                    for (a = 0; a < dialogsRes.messages.size(); a++) {
+                                        message = (Message) dialogsRes.messages.get(a);
+                                        if (lastMessage == null || message.date < lastMessage.date) {
+                                            lastMessage = message;
+                                        }
+                                    }
+                                    UserConfig.migrateOffsetDate = lastMessage.date;
+                                    Chat chat;
+                                    if (lastMessage.to_id.channel_id != 0) {
+                                        UserConfig.migrateOffsetChannelId = lastMessage.to_id.channel_id;
+                                        UserConfig.migrateOffsetChatId = 0;
+                                        UserConfig.migrateOffsetUserId = 0;
+                                        for (a = 0; a < dialogsRes.chats.size(); a++) {
+                                            chat = (Chat) dialogsRes.chats.get(a);
+                                            if (chat.id == UserConfig.migrateOffsetChannelId) {
+                                                UserConfig.migrateOffsetAccess = chat.access_hash;
+                                                break;
                                             }
                                         }
+                                    } else if (lastMessage.to_id.chat_id != 0) {
+                                        UserConfig.migrateOffsetChatId = lastMessage.to_id.chat_id;
+                                        UserConfig.migrateOffsetChannelId = 0;
+                                        UserConfig.migrateOffsetUserId = 0;
+                                        for (a = 0; a < dialogsRes.chats.size(); a++) {
+                                            chat = (Chat) dialogsRes.chats.get(a);
+                                            if (chat.id == UserConfig.migrateOffsetChatId) {
+                                                UserConfig.migrateOffsetAccess = chat.access_hash;
+                                                break;
+                                            }
+                                        }
+                                    } else if (lastMessage.to_id.user_id != 0) {
+                                        UserConfig.migrateOffsetUserId = lastMessage.to_id.user_id;
+                                        UserConfig.migrateOffsetChatId = 0;
+                                        UserConfig.migrateOffsetChannelId = 0;
+                                        for (a = 0; a < dialogsRes.users.size(); a++) {
+                                            User user = (User) dialogsRes.users.get(a);
+                                            if (user.id == UserConfig.migrateOffsetUserId) {
+                                                UserConfig.migrateOffsetAccess = user.access_hash;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if (dialogsRes.dialogs.size() >= 100) {
                                         offsetId = lastMessage.id;
-                                        UserConfig.migrateOffsetDate = lastMessage.date;
-                                        Chat chat;
-                                        if (lastMessage.to_id.channel_id != 0) {
-                                            UserConfig.migrateOffsetChannelId = lastMessage.to_id.channel_id;
-                                            UserConfig.migrateOffsetChatId = 0;
-                                            UserConfig.migrateOffsetUserId = 0;
-                                            for (a = 0; a < dialogsRes.chats.size(); a++) {
-                                                chat = (Chat) dialogsRes.chats.get(a);
-                                                if (chat.id == UserConfig.migrateOffsetChannelId) {
-                                                    UserConfig.migrateOffsetAccess = chat.access_hash;
-                                                    break;
-                                                }
-                                            }
-                                        } else if (lastMessage.to_id.chat_id != 0) {
-                                            UserConfig.migrateOffsetChatId = lastMessage.to_id.chat_id;
-                                            UserConfig.migrateOffsetChannelId = 0;
-                                            UserConfig.migrateOffsetUserId = 0;
-                                            for (a = 0; a < dialogsRes.chats.size(); a++) {
-                                                chat = (Chat) dialogsRes.chats.get(a);
-                                                if (chat.id == UserConfig.migrateOffsetChatId) {
-                                                    UserConfig.migrateOffsetAccess = chat.access_hash;
-                                                    break;
-                                                }
-                                            }
-                                        } else if (lastMessage.to_id.user_id != 0) {
-                                            UserConfig.migrateOffsetUserId = lastMessage.to_id.user_id;
-                                            UserConfig.migrateOffsetChatId = 0;
-                                            UserConfig.migrateOffsetChannelId = 0;
-                                            for (a = 0; a < dialogsRes.users.size(); a++) {
-                                                User user = (User) dialogsRes.users.get(a);
-                                                if (user.id == UserConfig.migrateOffsetUserId) {
-                                                    UserConfig.migrateOffsetAccess = user.access_hash;
-                                                    break;
-                                                }
-                                            }
-                                        }
                                     } else {
+                                        UserConfig.dialogsLoadOffsetId = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                                        UserConfig.dialogsLoadOffsetDate = UserConfig.migrateOffsetDate;
+                                        UserConfig.dialogsLoadOffsetUserId = UserConfig.migrateOffsetUserId;
+                                        UserConfig.dialogsLoadOffsetChatId = UserConfig.migrateOffsetChatId;
+                                        UserConfig.dialogsLoadOffsetChannelId = UserConfig.migrateOffsetChannelId;
+                                        UserConfig.dialogsLoadOffsetAccess = UserConfig.migrateOffsetAccess;
                                         offsetId = -1;
                                     }
                                     StringBuilder stringBuilder = new StringBuilder(dialogsRes.dialogs.size() * 12);
@@ -3395,6 +3428,12 @@ public class MessagesController implements NotificationCenterDelegate {
                                         while (a < dialogsRes.messages.size()) {
                                             message = (Message) dialogsRes.messages.get(a);
                                             if (message.date < date) {
+                                                UserConfig.dialogsLoadOffsetId = UserConfig.migrateOffsetId;
+                                                UserConfig.dialogsLoadOffsetDate = UserConfig.migrateOffsetDate;
+                                                UserConfig.dialogsLoadOffsetUserId = UserConfig.migrateOffsetUserId;
+                                                UserConfig.dialogsLoadOffsetChatId = UserConfig.migrateOffsetChatId;
+                                                UserConfig.dialogsLoadOffsetChannelId = UserConfig.migrateOffsetChannelId;
+                                                UserConfig.dialogsLoadOffsetAccess = UserConfig.migrateOffsetAccess;
                                                 offsetId = -1;
                                                 dialogsRes.messages.remove(a);
                                                 a--;
@@ -3436,9 +3475,9 @@ public class MessagesController implements NotificationCenterDelegate {
         final boolean z = resetEnd;
         final int i2 = count;
         final int i3 = offset;
+        final boolean z2 = fromCache;
+        final boolean z3 = migrate;
         final ArrayList<EncryptedChat> arrayList = encChats;
-        final boolean z2 = migrate;
-        final boolean z3 = fromCache;
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 if (!MessagesController.this.firstGettingTask) {
@@ -3454,14 +3493,20 @@ public class MessagesController implements NotificationCenterDelegate {
                             if (z) {
                                 MessagesController.this.dialogsEndReached = false;
                                 MessagesController.this.serverDialogsEndReached = false;
+                            } else if (UserConfig.dialogsLoadOffsetId == ConnectionsManager.DEFAULT_DATACENTER_ID) {
+                                MessagesController.this.dialogsEndReached = true;
+                                MessagesController.this.serverDialogsEndReached = true;
+                            } else {
+                                MessagesController.this.loadDialogs(0, i2, false);
                             }
                             NotificationCenter.getInstance().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
-                            MessagesController.this.loadDialogs(0, i2, false);
                         }
                     });
                     return;
                 }
                 int a;
+                Chat chat;
+                User user;
                 Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
@@ -3478,9 +3523,12 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (i == 1) {
                     MessagesController.this.nextDialogsCacheOffset = i3 + i2;
                 }
+                Message lastMessage = null;
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
-                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
+                    if (lastMessage == null || message.date < lastMessage.date) {
+                        lastMessage = message;
+                    }
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
                         chat = (Chat) chatsDict.get(Integer.valueOf(message.to_id.channel_id));
@@ -3504,6 +3552,50 @@ public class MessagesController implements NotificationCenterDelegate {
                         messageObject = new MessageObject(message, usersDict, chatsDict, false);
                         new_dialogMessage.put(Long.valueOf(messageObject.getDialogId()), messageObject);
                     }
+                }
+                if (!(z2 || z3 || UserConfig.dialogsLoadOffsetId == -1 || i != 0)) {
+                    if (lastMessage != null) {
+                        UserConfig.totalDialogsLoadCount += org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size();
+                        UserConfig.dialogsLoadOffsetId = lastMessage.id;
+                        UserConfig.dialogsLoadOffsetDate = lastMessage.date;
+                        if (lastMessage.to_id.channel_id != 0) {
+                            UserConfig.dialogsLoadOffsetChannelId = lastMessage.to_id.channel_id;
+                            UserConfig.dialogsLoadOffsetChatId = 0;
+                            UserConfig.dialogsLoadOffsetUserId = 0;
+                            for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.chats.size(); a++) {
+                                chat = (Chat) org_telegram_tgnet_TLRPC_messages_Dialogs.chats.get(a);
+                                if (chat.id == UserConfig.dialogsLoadOffsetChannelId) {
+                                    UserConfig.dialogsLoadOffsetAccess = chat.access_hash;
+                                    break;
+                                }
+                            }
+                        } else if (lastMessage.to_id.chat_id != 0) {
+                            UserConfig.dialogsLoadOffsetChatId = lastMessage.to_id.chat_id;
+                            UserConfig.dialogsLoadOffsetChannelId = 0;
+                            UserConfig.dialogsLoadOffsetUserId = 0;
+                            for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.chats.size(); a++) {
+                                chat = (Chat) org_telegram_tgnet_TLRPC_messages_Dialogs.chats.get(a);
+                                if (chat.id == UserConfig.dialogsLoadOffsetChatId) {
+                                    UserConfig.dialogsLoadOffsetAccess = chat.access_hash;
+                                    break;
+                                }
+                            }
+                        } else if (lastMessage.to_id.user_id != 0) {
+                            UserConfig.dialogsLoadOffsetUserId = lastMessage.to_id.user_id;
+                            UserConfig.dialogsLoadOffsetChatId = 0;
+                            UserConfig.dialogsLoadOffsetChannelId = 0;
+                            for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.users.size(); a++) {
+                                user = (User) org_telegram_tgnet_TLRPC_messages_Dialogs.users.get(a);
+                                if (user.id == UserConfig.dialogsLoadOffsetUserId) {
+                                    UserConfig.dialogsLoadOffsetAccess = user.access_hash;
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        UserConfig.dialogsLoadOffsetId = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                    }
+                    UserConfig.saveConfig(false);
                 }
                 final ArrayList<TL_dialog> dialogsToReload = new ArrayList();
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
@@ -3561,7 +3653,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
                         message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                         if (message.action instanceof TL_messageActionChatDeleteUser) {
-                            User user = (User) usersDict.get(Integer.valueOf(message.action.user_id));
+                            user = (User) usersDict.get(Integer.valueOf(message.action.user_id));
                             if (user != null && user.bot) {
                                 message.reply_markup = new TL_replyKeyboardHide();
                             }
@@ -3611,15 +3703,15 @@ public class MessagesController implements NotificationCenterDelegate {
                                 MessagesController.this.putEncryptedChat(encryptedChat, true);
                             }
                         }
-                        if (!z2) {
+                        if (!z3) {
                             MessagesController.this.loadingDialogs = false;
                         }
                         boolean added = false;
-                        int lastDialogDate = (!z2 || MessagesController.this.dialogs.isEmpty()) ? 0 : ((TL_dialog) MessagesController.this.dialogs.get(MessagesController.this.dialogs.size() - 1)).last_message_date;
+                        int lastDialogDate = (!z3 || MessagesController.this.dialogs.isEmpty()) ? 0 : ((TL_dialog) MessagesController.this.dialogs.get(MessagesController.this.dialogs.size() - 1)).last_message_date;
                         for (Entry<Long, TL_dialog> pair : new_dialogs_dict.entrySet()) {
                             Long key = (Long) pair.getKey();
                             TL_dialog value = (TL_dialog) pair.getValue();
-                            if (!z2 || lastDialogDate == 0 || value.last_message_date >= lastDialogDate) {
+                            if (!z3 || lastDialogDate == 0 || value.last_message_date >= lastDialogDate) {
                                 TL_dialog currentDialog = (TL_dialog) MessagesController.this.dialogs_dict.get(key);
                                 if (i != 1 && (value.draft instanceof TL_draftMessage)) {
                                     DraftQuery.saveDraft(value.id, value.draft, null, false);
@@ -3681,19 +3773,22 @@ public class MessagesController implements NotificationCenterDelegate {
                         }
                         MessagesController.this.dialogs.clear();
                         MessagesController.this.dialogs.addAll(MessagesController.this.dialogs_dict.values());
-                        MessagesController.this.sortDialogs(z2 ? chatsDict : null);
-                        if (!(i == 2 || z2)) {
+                        MessagesController.this.sortDialogs(z3 ? chatsDict : null);
+                        if (!(i == 2 || z3)) {
                             MessagesController messagesController = MessagesController.this;
                             boolean z = (org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size() == 0 || org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size() != i2) && i == 0;
                             messagesController.dialogsEndReached = z;
-                            if (!z3) {
+                            if (!z2) {
                                 messagesController = MessagesController.this;
                                 z = (org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size() == 0 || org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size() != i2) && i == 0;
                                 messagesController.serverDialogsEndReached = z;
                             }
                         }
+                        if (!(z2 || z3 || UserConfig.totalDialogsLoadCount >= 400 || UserConfig.dialogsLoadOffsetId == -1 || UserConfig.dialogsLoadOffsetId == ConnectionsManager.DEFAULT_DATACENTER_ID)) {
+                            MessagesController.this.loadDialogs(0, 100, false);
+                        }
                         NotificationCenter.getInstance().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
-                        if (z2) {
+                        if (z3) {
                             UserConfig.migrateOffsetId = i3;
                             UserConfig.saveConfig(false);
                             MessagesController.this.migratingDialogs = false;
@@ -3922,6 +4017,7 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 int a;
+                Chat chat;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 HashMap<Integer, User> usersDict = new HashMap();
@@ -3936,7 +4032,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     chatsDict.put(Integer.valueOf(c.id), c);
                 }
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
-                    Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -6762,7 +6857,6 @@ public class MessagesController implements NotificationCenterDelegate {
         AbstractMap usersDict;
         int a;
         AbstractMap chatsDict;
-        Iterator it;
         long currentTime = System.currentTimeMillis();
         final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
         HashMap<Long, WebPage> webPages = new HashMap();
@@ -6816,6 +6910,7 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         int interfaceUpdateMask = 0;
         for (int c = 0; c < updates.size(); c++) {
+            Iterator it;
             Update update = (Update) updates.get(c);
             FileLog.d("process update " + update);
             Message message;
