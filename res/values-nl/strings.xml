@@ -545,7 +545,7 @@
     <string name="EncryptionKeyLink">https://telegram.org/faq#secret-chats</string>
     <string name="EncryptionProcessing">Encryptiesleutels uitwisselen</string>
     <string name="EncryptionRejected">Geheime chat geannuleerd</string>
-    <string name="English">Nederlands</string>
+    <string name="English">Engels</string>
     <string name="Enhance">Verbeteren</string>
     <string name="EnterChannelName">Kanaalnaam</string>
     <string name="EnterCurrentPasscode">Huidige toegangscode invoeren</string>
@@ -1613,8 +1613,8 @@
     <string name="WhenUsingMobileData">Bij mobiele verbinding</string>
     <string name="WhoCanAddMe">Wie kan me toevoegen aan groepchats?</string>
     <string name="WhoCanAddMeInfo">Je kunt nauwkeurig bepalen wie je aan groepen en kanalen mag toevoegen.</string>
-    <string name="WhoCanAddMembers">Wie kan leden toevoegen?</string>
-    <string name="WhoCanAddMembersAdmins">Alleen beheerders</string>
+    <string name="WhoCanAddMembers">Leden toevoegen</string>
+    <string name="WhoCanAddMembersAdmins">Beheerders</string>
     <string name="WhoCanAddMembersAllMembers">Alle leden</string>
     <string name="WhoCanCallMe">Wie kan mij bellen?</string>
     <string name="WhoCanCallMeInfo">Je kunt inperken wie jou mag bellen.</string>

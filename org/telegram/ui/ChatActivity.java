@@ -8970,89 +8970,258 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     private void createDeleteMessagesAlert(MessageObject finalSelectedObject, int loadParticipant) {
-        int i;
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        String str = "AreYouSureDeleteMessages";
-        Object[] objArr = new Object[1];
-        String str2 = "messages";
-        if (finalSelectedObject != null) {
-            i = 1;
-        } else {
-            i = this.selectedMessagesIds[0].size() + this.selectedMessagesIds[1].size();
-        }
-        objArr[0] = LocaleController.formatPluralString(str2, i);
-        builder.setMessage(LocaleController.formatString(str, R.string.AreYouSureDeleteMessages, objArr));
-        builder.setTitle(LocaleController.getString("Message", R.string.Message));
-        boolean[] checks = new boolean[3];
-        boolean[] deleteForAll = new boolean[1];
-        User user = null;
-        boolean z;
-        int currentDate;
-        int a;
-        MessageObject msg;
-        boolean exit;
-        View frameLayout;
-        CheckBoxCell cell;
-        final boolean[] zArr;
-        if (this.currentChat != null && this.currentChat.megagroup) {
-            z = false;
-            boolean canBan = ChatObject.canBlockUsers(this.currentChat);
-            currentDate = ConnectionsManager.getInstance().getCurrentTime();
+        if (getParentActivity() != null) {
+            int i;
+            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+            String str = "AreYouSureDeleteMessages";
+            Object[] objArr = new Object[1];
+            String str2 = "messages";
             if (finalSelectedObject != null) {
-                if (finalSelectedObject.messageOwner.action == null || (finalSelectedObject.messageOwner.action instanceof TL_messageActionEmpty)) {
-                    user = MessagesController.getInstance().getUser(Integer.valueOf(finalSelectedObject.messageOwner.from_id));
-                }
-                if (!finalSelectedObject.isSendError() && finalSelectedObject.getDialogId() == this.mergeDialogId && ((finalSelectedObject.messageOwner.action == null || (finalSelectedObject.messageOwner.action instanceof TL_messageActionEmpty)) && finalSelectedObject.isOut() && currentDate - finalSelectedObject.messageOwner.date <= 172800)) {
-                    z = true;
-                } else {
-                    z = false;
-                }
+                i = 1;
             } else {
-                int from_id = -1;
-                for (a = 1; a >= 0; a--) {
-                    for (Entry<Integer, MessageObject> entry : this.selectedMessagesIds[a].entrySet()) {
-                        msg = (MessageObject) entry.getValue();
-                        if (from_id == -1) {
-                            from_id = msg.messageOwner.from_id;
-                        }
-                        if (from_id >= 0) {
-                            if (from_id != msg.messageOwner.from_id) {
+                i = this.selectedMessagesIds[0].size() + this.selectedMessagesIds[1].size();
+            }
+            objArr[0] = LocaleController.formatPluralString(str2, i);
+            builder.setMessage(LocaleController.formatString(str, R.string.AreYouSureDeleteMessages, objArr));
+            builder.setTitle(LocaleController.getString("Message", R.string.Message));
+            boolean[] checks = new boolean[3];
+            boolean[] deleteForAll = new boolean[1];
+            User user = null;
+            boolean z;
+            int currentDate;
+            int a;
+            MessageObject msg;
+            boolean exit;
+            View frameLayout;
+            CheckBoxCell cell;
+            final boolean[] zArr;
+            if (this.currentChat != null && this.currentChat.megagroup) {
+                z = false;
+                boolean canBan = ChatObject.canBlockUsers(this.currentChat);
+                currentDate = ConnectionsManager.getInstance().getCurrentTime();
+                if (finalSelectedObject != null) {
+                    if (finalSelectedObject.messageOwner.action == null || (finalSelectedObject.messageOwner.action instanceof TL_messageActionEmpty)) {
+                        user = MessagesController.getInstance().getUser(Integer.valueOf(finalSelectedObject.messageOwner.from_id));
+                    }
+                    if (!finalSelectedObject.isSendError() && finalSelectedObject.getDialogId() == this.mergeDialogId && ((finalSelectedObject.messageOwner.action == null || (finalSelectedObject.messageOwner.action instanceof TL_messageActionEmpty)) && finalSelectedObject.isOut() && currentDate - finalSelectedObject.messageOwner.date <= 172800)) {
+                        z = true;
+                    } else {
+                        z = false;
+                    }
+                } else {
+                    int from_id = -1;
+                    for (a = 1; a >= 0; a--) {
+                        for (Entry<Integer, MessageObject> entry : this.selectedMessagesIds[a].entrySet()) {
+                            msg = (MessageObject) entry.getValue();
+                            if (from_id == -1) {
+                                from_id = msg.messageOwner.from_id;
                             }
+                            if (from_id >= 0) {
+                                if (from_id != msg.messageOwner.from_id) {
+                                }
+                            }
+                            from_id = -2;
                         }
-                        from_id = -2;
+                        if (from_id == -2) {
+                            break;
+                        }
                     }
-                    if (from_id == -2) {
-                        break;
-                    }
-                }
-                exit = false;
-                for (a = 1; a >= 0; a--) {
-                    for (Entry<Integer, MessageObject> entry2 : this.selectedMessagesIds[a].entrySet()) {
-                        msg = (MessageObject) entry2.getValue();
-                        if (a != 1) {
-                            if (a == 0 && !msg.isOut()) {
+                    exit = false;
+                    for (a = 1; a >= 0; a--) {
+                        for (Entry<Integer, MessageObject> entry2 : this.selectedMessagesIds[a].entrySet()) {
+                            msg = (MessageObject) entry2.getValue();
+                            if (a != 1) {
+                                if (a == 0 && !msg.isOut()) {
+                                    z = false;
+                                    exit = true;
+                                    break;
+                                }
+                            } else if (!msg.isOut() || msg.messageOwner.action != null) {
                                 z = false;
                                 exit = true;
                                 break;
+                            } else if (currentDate - msg.messageOwner.date <= 172800) {
+                                z = true;
                             }
-                        } else if (!msg.isOut() || msg.messageOwner.action != null) {
-                            z = false;
-                            exit = true;
+                        }
+                        if (exit) {
                             break;
-                        } else if (currentDate - msg.messageOwner.date <= 172800) {
-                            z = true;
                         }
                     }
-                    if (exit) {
-                        break;
+                    if (from_id != -1) {
+                        user = MessagesController.getInstance().getUser(Integer.valueOf(from_id));
                     }
                 }
-                if (from_id != -1) {
-                    user = MessagesController.getInstance().getUser(Integer.valueOf(from_id));
+                int dp;
+                if (user == null || user.id == UserConfig.getClientUserId() || loadParticipant == 2) {
+                    if (z) {
+                        frameLayout = new FrameLayout(getParentActivity());
+                        cell = new CheckBoxCell(getParentActivity(), true);
+                        cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                        if (this.currentChat != null) {
+                            cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), "", false, false);
+                        } else {
+                            cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(this.currentUser)), "", false, false);
+                        }
+                        if (LocaleController.isRTL) {
+                            i = AndroidUtilities.dp(16.0f);
+                        } else {
+                            i = AndroidUtilities.dp(8.0f);
+                        }
+                        if (LocaleController.isRTL) {
+                            dp = AndroidUtilities.dp(8.0f);
+                        } else {
+                            dp = AndroidUtilities.dp(16.0f);
+                        }
+                        cell.setPadding(i, 0, dp, 0);
+                        frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
+                        zArr = deleteForAll;
+                        cell.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                boolean z;
+                                CheckBoxCell cell = (CheckBoxCell) v;
+                                boolean[] zArr = zArr;
+                                if (zArr[0]) {
+                                    z = false;
+                                } else {
+                                    z = true;
+                                }
+                                zArr[0] = z;
+                                cell.setChecked(zArr[0], true);
+                            }
+                        });
+                        builder.setView(frameLayout);
+                    } else {
+                        user = null;
+                    }
+                } else if (loadParticipant != 1 || this.currentChat.creator) {
+                    frameLayout = new FrameLayout(getParentActivity());
+                    int num = 0;
+                    a = 0;
+                    while (a < 3) {
+                        if (canBan || a != 0) {
+                            cell = new CheckBoxCell(getParentActivity(), true);
+                            cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                            cell.setTag(Integer.valueOf(a));
+                            if (a == 0) {
+                                cell.setText(LocaleController.getString("DeleteBanUser", R.string.DeleteBanUser), "", false, false);
+                            } else if (a == 1) {
+                                cell.setText(LocaleController.getString("DeleteReportSpam", R.string.DeleteReportSpam), "", false, false);
+                            } else if (a == 2) {
+                                cell.setText(LocaleController.formatString("DeleteAllFrom", R.string.DeleteAllFrom, ContactsController.formatName(user.first_name, user.last_name)), "", false, false);
+                            }
+                            if (LocaleController.isRTL) {
+                                i = AndroidUtilities.dp(16.0f);
+                            } else {
+                                i = AndroidUtilities.dp(8.0f);
+                            }
+                            if (LocaleController.isRTL) {
+                                dp = AndroidUtilities.dp(8.0f);
+                            } else {
+                                dp = AndroidUtilities.dp(16.0f);
+                            }
+                            cell.setPadding(i, 0, dp, 0);
+                            frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) (num * 48), 0.0f, 0.0f));
+                            zArr = checks;
+                            cell.setOnClickListener(new View.OnClickListener() {
+                                public void onClick(View v) {
+                                    if (v.isEnabled()) {
+                                        CheckBoxCell cell = (CheckBoxCell) v;
+                                        Integer num = (Integer) cell.getTag();
+                                        zArr[num.intValue()] = !zArr[num.intValue()];
+                                        cell.setChecked(zArr[num.intValue()], true);
+                                    }
+                                }
+                            });
+                            num++;
+                        }
+                        a++;
+                    }
+                    builder.setView(frameLayout);
+                } else {
+                    AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(getParentActivity(), 1)};
+                    TLObject req = new TL_channels_getParticipant();
+                    req.channel = MessagesController.getInputChannel(this.currentChat);
+                    req.user_id = MessagesController.getInputUser(user);
+                    final AlertDialog[] alertDialogArr = progressDialog;
+                    final MessageObject messageObject = finalSelectedObject;
+                    int requestId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                        public void run(final TLObject response, TL_error error) {
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    try {
+                                        alertDialogArr[0].dismiss();
+                                    } catch (Throwable th) {
+                                    }
+                                    alertDialogArr[0] = null;
+                                    int loadType = 2;
+                                    if (response != null) {
+                                        TL_channels_channelParticipant participant = response;
+                                        if (!((participant.participant instanceof TL_channelParticipantAdmin) || (participant.participant instanceof TL_channelParticipantCreator))) {
+                                            loadType = 0;
+                                        }
+                                    }
+                                    ChatActivity.this.createDeleteMessagesAlert(messageObject, loadType);
+                                }
+                            });
+                        }
+                    });
+                    if (requestId != 0) {
+                        alertDialogArr = progressDialog;
+                        final int i2 = requestId;
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                if (alertDialogArr[0] != null) {
+                                    alertDialogArr[0].setMessage(LocaleController.getString("Loading", R.string.Loading));
+                                    alertDialogArr[0].setCanceledOnTouchOutside(false);
+                                    alertDialogArr[0].setCancelable(false);
+                                    alertDialogArr[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            ConnectionsManager.getInstance().cancelRequest(i2, true);
+                                            try {
+                                                dialog.dismiss();
+                                            } catch (Throwable e) {
+                                                FileLog.e(e);
+                                            }
+                                        }
+                                    });
+                                    ChatActivity.this.showDialog(alertDialogArr[0]);
+                                }
+                            }
+                        }, 1000);
+                        return;
+                    }
+                    return;
                 }
-            }
-            int dp;
-            if (user == null || user.id == UserConfig.getClientUserId() || loadParticipant == 2) {
+            } else if (!ChatObject.isChannel(this.currentChat) && this.currentEncryptedChat == null) {
+                z = false;
+                currentDate = ConnectionsManager.getInstance().getCurrentTime();
+                if ((this.currentUser != null && this.currentUser.id != UserConfig.getClientUserId()) || this.currentChat != null) {
+                    if (finalSelectedObject == null) {
+                        exit = false;
+                        for (a = 1; a >= 0; a--) {
+                            for (Entry<Integer, MessageObject> entry22 : this.selectedMessagesIds[a].entrySet()) {
+                                msg = (MessageObject) entry22.getValue();
+                                if (msg.messageOwner.action == null) {
+                                    if (!msg.isOut() && (this.currentChat == null || (!this.currentChat.creator && (!this.currentChat.admin || !this.currentChat.admins_enabled)))) {
+                                        exit = true;
+                                        z = false;
+                                        break;
+                                    } else if (!z && currentDate - msg.messageOwner.date <= 172800) {
+                                        z = true;
+                                    }
+                                }
+                            }
+                            if (exit) {
+                                break;
+                            }
+                        }
+                    } else if (finalSelectedObject.isSendError() || (!(finalSelectedObject.messageOwner.action == null || (finalSelectedObject.messageOwner.action instanceof TL_messageActionEmpty)) || ((!finalSelectedObject.isOut() && (this.currentChat == null || !(this.currentChat.creator || (this.currentChat.admin && this.currentChat.admins_enabled)))) || currentDate - finalSelectedObject.messageOwner.date > 172800))) {
+                        z = false;
+                    } else {
+                        z = true;
+                    }
+                }
                 if (z) {
                     frameLayout = new FrameLayout(getParentActivity());
                     cell = new CheckBoxCell(getParentActivity(), true);
@@ -9062,17 +9231,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     } else {
                         cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(this.currentUser)), "", false, false);
                     }
-                    if (LocaleController.isRTL) {
-                        i = AndroidUtilities.dp(16.0f);
-                    } else {
-                        i = AndroidUtilities.dp(8.0f);
-                    }
-                    if (LocaleController.isRTL) {
-                        dp = AndroidUtilities.dp(8.0f);
-                    } else {
-                        dp = AndroidUtilities.dp(16.0f);
-                    }
-                    cell.setPadding(i, 0, dp, 0);
+                    cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
                     frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
                     zArr = deleteForAll;
                     cell.setOnClickListener(new View.OnClickListener() {
@@ -9090,231 +9249,74 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         }
                     });
                     builder.setView(frameLayout);
-                } else {
-                    user = null;
-                }
-            } else if (loadParticipant != 1 || this.currentChat.creator) {
-                frameLayout = new FrameLayout(getParentActivity());
-                int num = 0;
-                a = 0;
-                while (a < 3) {
-                    if (canBan || a != 0) {
-                        cell = new CheckBoxCell(getParentActivity(), true);
-                        cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                        cell.setTag(Integer.valueOf(a));
-                        if (a == 0) {
-                            cell.setText(LocaleController.getString("DeleteBanUser", R.string.DeleteBanUser), "", false, false);
-                        } else if (a == 1) {
-                            cell.setText(LocaleController.getString("DeleteReportSpam", R.string.DeleteReportSpam), "", false, false);
-                        } else if (a == 2) {
-                            cell.setText(LocaleController.formatString("DeleteAllFrom", R.string.DeleteAllFrom, ContactsController.formatName(user.first_name, user.last_name)), "", false, false);
-                        }
-                        if (LocaleController.isRTL) {
-                            i = AndroidUtilities.dp(16.0f);
-                        } else {
-                            i = AndroidUtilities.dp(8.0f);
-                        }
-                        if (LocaleController.isRTL) {
-                            dp = AndroidUtilities.dp(8.0f);
-                        } else {
-                            dp = AndroidUtilities.dp(16.0f);
-                        }
-                        cell.setPadding(i, 0, dp, 0);
-                        frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) (num * 48), 0.0f, 0.0f));
-                        zArr = checks;
-                        cell.setOnClickListener(new View.OnClickListener() {
-                            public void onClick(View v) {
-                                if (v.isEnabled()) {
-                                    CheckBoxCell cell = (CheckBoxCell) v;
-                                    Integer num = (Integer) cell.getTag();
-                                    zArr[num.intValue()] = !zArr[num.intValue()];
-                                    cell.setChecked(zArr[num.intValue()], true);
-                                }
-                            }
-                        });
-                        num++;
-                    }
-                    a++;
-                }
-                builder.setView(frameLayout);
-            } else {
-                AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(getParentActivity(), 1)};
-                TLObject req = new TL_channels_getParticipant();
-                req.channel = MessagesController.getInputChannel(this.currentChat);
-                req.user_id = MessagesController.getInputUser(user);
-                final AlertDialog[] alertDialogArr = progressDialog;
-                final MessageObject messageObject = finalSelectedObject;
-                int requestId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                    public void run(final TLObject response, TL_error error) {
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                try {
-                                    alertDialogArr[0].dismiss();
-                                } catch (Throwable th) {
-                                }
-                                alertDialogArr[0] = null;
-                                int loadType = 2;
-                                if (response != null) {
-                                    TL_channels_channelParticipant participant = response;
-                                    if (!((participant.participant instanceof TL_channelParticipantAdmin) || (participant.participant instanceof TL_channelParticipantCreator))) {
-                                        loadType = 0;
-                                    }
-                                }
-                                ChatActivity.this.createDeleteMessagesAlert(messageObject, loadType);
-                            }
-                        });
-                    }
-                });
-                if (requestId != 0) {
-                    alertDialogArr = progressDialog;
-                    final int i2 = requestId;
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            if (alertDialogArr[0] != null) {
-                                alertDialogArr[0].setMessage(LocaleController.getString("Loading", R.string.Loading));
-                                alertDialogArr[0].setCanceledOnTouchOutside(false);
-                                alertDialogArr[0].setCancelable(false);
-                                alertDialogArr[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        ConnectionsManager.getInstance().cancelRequest(i2, true);
-                                        try {
-                                            dialog.dismiss();
-                                        } catch (Throwable e) {
-                                            FileLog.e(e);
-                                        }
-                                    }
-                                });
-                                ChatActivity.this.showDialog(alertDialogArr[0]);
-                            }
-                        }
-                    }, 1000);
-                    return;
-                }
-                return;
-            }
-        } else if (!ChatObject.isChannel(this.currentChat) && this.currentEncryptedChat == null) {
-            z = false;
-            currentDate = ConnectionsManager.getInstance().getCurrentTime();
-            if ((this.currentUser != null && this.currentUser.id != UserConfig.getClientUserId()) || this.currentChat != null) {
-                if (finalSelectedObject == null) {
-                    exit = false;
-                    for (a = 1; a >= 0; a--) {
-                        for (Entry<Integer, MessageObject> entry22 : this.selectedMessagesIds[a].entrySet()) {
-                            msg = (MessageObject) entry22.getValue();
-                            if (msg.messageOwner.action == null) {
-                                if (!msg.isOut() && (this.currentChat == null || (!this.currentChat.creator && (!this.currentChat.admin || !this.currentChat.admins_enabled)))) {
-                                    exit = true;
-                                    z = false;
-                                    break;
-                                } else if (!z && currentDate - msg.messageOwner.date <= 172800) {
-                                    z = true;
-                                }
-                            }
-                        }
-                        if (exit) {
-                            break;
-                        }
-                    }
-                } else if (finalSelectedObject.isSendError() || (!(finalSelectedObject.messageOwner.action == null || (finalSelectedObject.messageOwner.action instanceof TL_messageActionEmpty)) || ((!finalSelectedObject.isOut() && (this.currentChat == null || !(this.currentChat.creator || (this.currentChat.admin && this.currentChat.admins_enabled)))) || currentDate - finalSelectedObject.messageOwner.date > 172800))) {
-                    z = false;
-                } else {
-                    z = true;
                 }
             }
-            if (z) {
-                frameLayout = new FrameLayout(getParentActivity());
-                cell = new CheckBoxCell(getParentActivity(), true);
-                cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                if (this.currentChat != null) {
-                    cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), "", false, false);
-                } else {
-                    cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(this.currentUser)), "", false, false);
-                }
-                cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
-                frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
-                zArr = deleteForAll;
-                cell.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        boolean z;
-                        CheckBoxCell cell = (CheckBoxCell) v;
-                        boolean[] zArr = zArr;
-                        if (zArr[0]) {
-                            z = false;
-                        } else {
-                            z = true;
-                        }
-                        zArr[0] = z;
-                        cell.setChecked(zArr[0], true);
-                    }
-                });
-                builder.setView(frameLayout);
-            }
-        }
-        final User userFinal = user;
-        final MessageObject messageObject2 = finalSelectedObject;
-        final boolean[] zArr2 = deleteForAll;
-        final boolean[] zArr3 = checks;
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                ArrayList<Integer> ids = null;
-                ArrayList<Long> random_ids;
-                if (messageObject2 != null) {
-                    ids = new ArrayList();
-                    ids.add(Integer.valueOf(messageObject2.getId()));
-                    random_ids = null;
-                    if (!(ChatActivity.this.currentEncryptedChat == null || messageObject2.messageOwner.random_id == 0 || messageObject2.type == 10)) {
-                        random_ids = new ArrayList();
-                        random_ids.add(Long.valueOf(messageObject2.messageOwner.random_id));
-                    }
-                    MessagesController.getInstance().deleteMessages(ids, random_ids, ChatActivity.this.currentEncryptedChat, messageObject2.messageOwner.to_id.channel_id, zArr2[0]);
-                } else {
-                    for (int a = 1; a >= 0; a--) {
-                        MessageObject msg;
-                        ids = new ArrayList(ChatActivity.this.selectedMessagesIds[a].keySet());
+            final User userFinal = user;
+            final MessageObject messageObject2 = finalSelectedObject;
+            final boolean[] zArr2 = deleteForAll;
+            final boolean[] zArr3 = checks;
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    ArrayList<Integer> ids = null;
+                    ArrayList<Long> random_ids;
+                    if (messageObject2 != null) {
+                        ids = new ArrayList();
+                        ids.add(Integer.valueOf(messageObject2.getId()));
                         random_ids = null;
-                        int channelId = 0;
-                        if (!ids.isEmpty()) {
-                            msg = (MessageObject) ChatActivity.this.selectedMessagesIds[a].get(ids.get(0));
-                            if (null == null && msg.messageOwner.to_id.channel_id != 0) {
-                                channelId = msg.messageOwner.to_id.channel_id;
-                            }
-                        }
-                        if (ChatActivity.this.currentEncryptedChat != null) {
+                        if (!(ChatActivity.this.currentEncryptedChat == null || messageObject2.messageOwner.random_id == 0 || messageObject2.type == 10)) {
                             random_ids = new ArrayList();
-                            for (Entry<Integer, MessageObject> entry : ChatActivity.this.selectedMessagesIds[a].entrySet()) {
-                                msg = (MessageObject) entry.getValue();
-                                if (!(msg.messageOwner.random_id == 0 || msg.type == 10)) {
-                                    random_ids.add(Long.valueOf(msg.messageOwner.random_id));
+                            random_ids.add(Long.valueOf(messageObject2.messageOwner.random_id));
+                        }
+                        MessagesController.getInstance().deleteMessages(ids, random_ids, ChatActivity.this.currentEncryptedChat, messageObject2.messageOwner.to_id.channel_id, zArr2[0]);
+                    } else {
+                        for (int a = 1; a >= 0; a--) {
+                            MessageObject msg;
+                            ids = new ArrayList(ChatActivity.this.selectedMessagesIds[a].keySet());
+                            random_ids = null;
+                            int channelId = 0;
+                            if (!ids.isEmpty()) {
+                                msg = (MessageObject) ChatActivity.this.selectedMessagesIds[a].get(ids.get(0));
+                                if (null == null && msg.messageOwner.to_id.channel_id != 0) {
+                                    channelId = msg.messageOwner.to_id.channel_id;
                                 }
                             }
-                        }
-                        MessagesController.getInstance().deleteMessages(ids, random_ids, ChatActivity.this.currentEncryptedChat, channelId, zArr2[0]);
-                    }
-                    ChatActivity.this.actionBar.hideActionMode();
-                    ChatActivity.this.updatePinnedMessageView(true);
-                }
-                if (userFinal != null) {
-                    if (zArr3[0]) {
-                        MessagesController.getInstance().deleteUserFromChat(ChatActivity.this.currentChat.id, userFinal, ChatActivity.this.info);
-                    }
-                    if (zArr3[1]) {
-                        TL_channels_reportSpam req = new TL_channels_reportSpam();
-                        req.channel = MessagesController.getInputChannel(ChatActivity.this.currentChat);
-                        req.user_id = MessagesController.getInputUser(userFinal);
-                        req.id = ids;
-                        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                            public void run(TLObject response, TL_error error) {
+                            if (ChatActivity.this.currentEncryptedChat != null) {
+                                random_ids = new ArrayList();
+                                for (Entry<Integer, MessageObject> entry : ChatActivity.this.selectedMessagesIds[a].entrySet()) {
+                                    msg = (MessageObject) entry.getValue();
+                                    if (!(msg.messageOwner.random_id == 0 || msg.type == 10)) {
+                                        random_ids.add(Long.valueOf(msg.messageOwner.random_id));
+                                    }
+                                }
                             }
-                        });
+                            MessagesController.getInstance().deleteMessages(ids, random_ids, ChatActivity.this.currentEncryptedChat, channelId, zArr2[0]);
+                        }
+                        ChatActivity.this.actionBar.hideActionMode();
+                        ChatActivity.this.updatePinnedMessageView(true);
                     }
-                    if (zArr3[2]) {
-                        MessagesController.getInstance().deleteUserChannelHistory(ChatActivity.this.currentChat, userFinal, 0);
+                    if (userFinal != null) {
+                        if (zArr3[0]) {
+                            MessagesController.getInstance().deleteUserFromChat(ChatActivity.this.currentChat.id, userFinal, ChatActivity.this.info);
+                        }
+                        if (zArr3[1]) {
+                            TL_channels_reportSpam req = new TL_channels_reportSpam();
+                            req.channel = MessagesController.getInputChannel(ChatActivity.this.currentChat);
+                            req.user_id = MessagesController.getInputUser(userFinal);
+                            req.id = ids;
+                            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                public void run(TLObject response, TL_error error) {
+                                }
+                            });
+                        }
+                        if (zArr3[2]) {
+                            MessagesController.getInstance().deleteUserChannelHistory(ChatActivity.this.currentChat, userFinal, 0);
+                        }
                     }
                 }
-            }
-        });
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-        showDialog(builder.create());
+            });
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            showDialog(builder.create());
+        }
     }
 
     private void createMenu(View v, boolean single) {

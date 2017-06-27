@@ -429,6 +429,9 @@ public class ChannelRightsEditActivity extends BaseFragment {
                 this.deleteMessagesRow = i;
                 i = this.rowCount;
                 this.rowCount = i + 1;
+                this.addUsersRow = i;
+                i = this.rowCount;
+                this.rowCount = i + 1;
                 this.addAdminsRow = i;
             }
         } else if (type == 1) {
@@ -501,11 +504,7 @@ public class ChannelRightsEditActivity extends BaseFragment {
                             access$200.post_messages = false;
                         } else {
                             access$200 = ChannelRightsEditActivity.this.adminRights;
-                            TL_channelAdminRights access$2002 = ChannelRightsEditActivity.this.adminRights;
-                            TL_channelAdminRights access$2003 = ChannelRightsEditActivity.this.adminRights;
-                            ChannelRightsEditActivity.this.adminRights.invite_link = false;
-                            access$2003.invite_users = false;
-                            access$2002.ban_users = false;
+                            ChannelRightsEditActivity.this.adminRights.ban_users = false;
                             access$200.pin_messages = false;
                         }
                         MessagesController.setUserAdminRole(ChannelRightsEditActivity.this.chatId, ChannelRightsEditActivity.this.currentUser, ChannelRightsEditActivity.this.adminRights, ChannelRightsEditActivity.this.isMegagroup, ChannelRightsEditActivity.this.getFragmentForAlert(1));

@@ -205,6 +205,10 @@ public class ManageChatUserCell extends FrameLayout {
         }
     }
 
+    public void recycle() {
+        this.avatarImageView.getImageReceiver().cancelLoadImage();
+    }
+
     public void setDelegate(ManageChatUserCellDelegate manageChatUserCellDelegate) {
         this.delegate = manageChatUserCellDelegate;
     }

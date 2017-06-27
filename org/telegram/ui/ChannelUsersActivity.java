@@ -366,6 +366,12 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             }
         }
 
+        public void onViewRecycled(ViewHolder holder) {
+            if (holder.itemView instanceof ManageChatUserCell) {
+                ((ManageChatUserCell) holder.itemView).recycle();
+            }
+        }
+
         public int getItemViewType(int position) {
             if (position == ChannelUsersActivity.this.addNewRow || position == ChannelUsersActivity.this.addNew2Row) {
                 return 2;
@@ -668,17 +674,23 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
 
         public void onBindViewHolder(ViewHolder holder, int position) {
             CharSequence username;
-            CharSequence username2;
             Throwable e;
-            Object username3;
+            Object username2;
             String u;
-            ManageChatUserCell userCell;
+            int idx;
             switch (holder.getItemViewType()) {
                 case 0:
+                    User user;
+                    CharSequence username3;
                     String foundUserName;
                     CharSequence spannableStringBuilder;
-                    int idx;
-                    User user = MessagesController.getInstance().getUser(Integer.valueOf(((ChannelParticipant) getItem(position)).user_id));
+                    ManageChatUserCell userCell;
+                    TLObject object = getItem(position);
+                    if (object instanceof User) {
+                        user = (User) object;
+                    } else {
+                        user = MessagesController.getInstance().getUser(Integer.valueOf(((ChannelParticipant) object).user_id));
+                    }
                     String un = user.username;
                     CharSequence name = null;
                     int count = this.searchAdapterHelper.getGroupSearch().size();
@@ -709,13 +721,13 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                 ok = true;
                                 name = (CharSequence) this.searchResultNames.get(position - 1);
                                 if (name != null && un != null && un.length() > 0 && name.toString().startsWith("@" + un)) {
-                                    username = name;
+                                    username3 = name;
                                     name = null;
-                                    username2 = username;
+                                    username = username3;
                                 }
                             } else {
                                 position -= count + 1;
-                                username2 = null;
+                                username = null;
                             }
                             if (!ok) {
                                 count = this.searchAdapterHelper.getGlobalSearch().size();
@@ -730,7 +742,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                             ((SpannableStringBuilder) spannableStringBuilder).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
                                         } catch (Exception e2) {
                                             e = e2;
-                                            username3 = un;
+                                            username2 = un;
                                             FileLog.e(e);
                                             if (nameSearch != null) {
                                                 u = UserObject.getUserName(user);
@@ -742,13 +754,13 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                             }
                                             userCell = (ManageChatUserCell) holder.itemView;
                                             userCell.setTag(Integer.valueOf(position));
-                                            userCell.setData(user, name, username);
+                                            userCell.setData(user, name, username3);
                                             return;
                                         }
                                     } catch (Exception e3) {
                                         e = e3;
-                                        username = username2;
-                                        username3 = un;
+                                        username3 = username;
+                                        username2 = un;
                                         FileLog.e(e);
                                         if (nameSearch != null) {
                                             u = UserObject.getUserName(user);
@@ -760,7 +772,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                         }
                                         userCell = (ManageChatUserCell) holder.itemView;
                                         userCell.setTag(Integer.valueOf(position));
-                                        userCell.setData(user, name, username);
+                                        userCell.setData(user, name, username3);
                                         return;
                                     }
                                     if (nameSearch != null) {
@@ -773,11 +785,11 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                     }
                                     userCell = (ManageChatUserCell) holder.itemView;
                                     userCell.setTag(Integer.valueOf(position));
-                                    userCell.setData(user, name, username);
+                                    userCell.setData(user, name, username3);
                                     return;
                                 }
                             }
-                            username = username2;
+                            username3 = username;
                             if (nameSearch != null) {
                                 u = UserObject.getUserName(user);
                                 name = new SpannableStringBuilder(u);
@@ -788,11 +800,11 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                             }
                             userCell = (ManageChatUserCell) holder.itemView;
                             userCell.setTag(Integer.valueOf(position));
-                            userCell.setData(user, name, username);
+                            userCell.setData(user, name, username3);
                             return;
                         }
                     }
-                    username2 = null;
+                    username = null;
                     if (ok) {
                         count = this.searchAdapterHelper.getGlobalSearch().size();
                         foundUserName = this.searchAdapterHelper.getLastFoundUsername();
@@ -811,10 +823,10 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         }
                         userCell = (ManageChatUserCell) holder.itemView;
                         userCell.setTag(Integer.valueOf(position));
-                        userCell.setData(user, name, username);
+                        userCell.setData(user, name, username3);
                         return;
                     }
-                    username = username2;
+                    username3 = username;
                     if (nameSearch != null) {
                         u = UserObject.getUserName(user);
                         name = new SpannableStringBuilder(u);
@@ -825,7 +837,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     }
                     userCell = (ManageChatUserCell) holder.itemView;
                     userCell.setTag(Integer.valueOf(position));
-                    userCell.setData(user, name, username);
+                    userCell.setData(user, name, username3);
                     return;
                 case 1:
                     GraySectionCell sectionCell = holder.itemView;
@@ -852,6 +864,12 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     }
                 default:
                     return;
+            }
+        }
+
+        public void onViewRecycled(ViewHolder holder) {
+            if (holder.itemView instanceof ManageChatUserCell) {
+                ((ManageChatUserCell) holder.itemView).recycle();
             }
         }
 
@@ -976,11 +994,11 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 this.rowCount = i + 1;
                 this.participantsInfoRow = i;
             } else if (this.type == 2) {
-                if (this.selectType == 0 && !this.currentChat.megagroup && this.currentChat.creator) {
+                if (this.selectType == 0 && !this.currentChat.megagroup && ChatObject.canAddUsers(this.currentChat)) {
                     i = this.rowCount;
                     this.rowCount = i + 1;
                     this.addNewRow = i;
-                    if ((this.currentChat.flags & 64) == 0) {
+                    if ((this.currentChat.flags & 64) == 0 && ChatObject.canAddViaLink(this.currentChat)) {
                         i = this.rowCount;
                         this.rowCount = i + 1;
                         this.addNew2Row = i;
@@ -997,9 +1015,11 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     this.rowCount += this.participants.size();
                     this.participantsEndRow = this.rowCount;
                 }
-                i = this.rowCount;
-                this.rowCount = i + 1;
-                this.participantsInfoRow = i;
+                if (this.rowCount != 0) {
+                    i = this.rowCount;
+                    this.rowCount = i + 1;
+                    this.participantsInfoRow = i;
+                }
             }
         }
     }
@@ -1330,22 +1350,19 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 items.add(LocaleController.getString("SetAsAdmin", R.string.SetAsAdmin));
                 actions.add(Integer.valueOf(0));
             }
-            if (this.currentChat.megagroup) {
-                if (ChatObject.canBlockUsers(this.currentChat) && canEditAdmin) {
-                    if (resultOnly) {
-                        return true;
-                    }
+            if (ChatObject.canBlockUsers(this.currentChat) && canEditAdmin) {
+                if (resultOnly) {
+                    return true;
+                }
+                if (this.currentChat.megagroup) {
                     items.add(LocaleController.getString("KickFromSupergroup", R.string.KickFromSupergroup));
                     actions.add(Integer.valueOf(1));
                     items.add(LocaleController.getString("KickFromGroup", R.string.KickFromGroup));
                     actions.add(Integer.valueOf(2));
+                } else {
+                    items.add(LocaleController.getString("ChannelRemoveUser", R.string.ChannelRemoveUser));
+                    actions.add(Integer.valueOf(2));
                 }
-            } else if (this.currentChat.creator) {
-                if (resultOnly) {
-                    return true;
-                }
-                items.add(LocaleController.getString("ChannelRemoveUser", R.string.ChannelRemoveUser));
-                actions.add(Integer.valueOf(2));
             }
             if (actions == null || actions.isEmpty()) {
                 return false;

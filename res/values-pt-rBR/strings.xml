@@ -528,7 +528,7 @@
     <string name="EmpryUsersPlaceholder">Adicionar Usuários</string>
     <string name="EnableAnimations">Permitir Animações</string>
     <string name="EnableProxyAlert">Você tem certeza que deseja habilitar o proxy?</string>
-    <string name="EnableProxyAlert2">Você pode alterar o servidor do Proxy nas Configurações (em Dados e Armazenamento).</string>
+    <string name="EnableProxyAlert2">Você pode alterar o servidor do Proxy nas Configurações (Dados e Armazenamento).</string>
     <string name="Enabled">Ativado</string>
     <string name="EnabledPasswordText">Você habilitou a verificação em duas etapas. Toda vez que você entrar na sua conta em um novo aparelho, será preciso digitar a senha que você configurar aqui.</string>
     <string name="EncryptedChatStartedIncoming">Você entrou no chat secreto</string>

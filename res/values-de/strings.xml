@@ -545,7 +545,7 @@
     <string name="EncryptionKeyLink">https://telegram.org/faq/de#geheime-chats</string>
     <string name="EncryptionProcessing">Tausche Schlüssel aus...</string>
     <string name="EncryptionRejected">Geheimer Chat beendet</string>
-    <string name="English">Deutsch</string>
+    <string name="English">Englisch</string>
     <string name="Enhance">Verbessern</string>
     <string name="EnterChannelName">Kanalname</string>
     <string name="EnterCurrentPasscode">Aktuellen Pincode eingeben</string>

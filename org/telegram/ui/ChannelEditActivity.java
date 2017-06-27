@@ -143,6 +143,12 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
             return new Holder(view);
         }
 
+        public void onViewRecycled(ViewHolder holder) {
+            if (holder.itemView instanceof ManageChatUserCell) {
+                ((ManageChatUserCell) holder.itemView).recycle();
+            }
+        }
+
         public void onBindViewHolder(ViewHolder holder, int i) {
             String str = null;
             switch (holder.getItemViewType()) {

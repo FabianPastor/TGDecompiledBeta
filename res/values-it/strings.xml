@@ -332,7 +332,7 @@
     <string name="ChannelPublicInfo">I canali pubblici possono essere trovati nella ricerca, chiunque può unirsi.</string>
     <string name="ChannelRemoveUser">Rimuovi dal canale</string>
     <string name="ChannelRemoveUserAdmin">Rimuovi amministratore</string>
-    <string name="ChannelRestrictedUsers">Utenti bloccati</string>
+    <string name="ChannelRestrictedUsers">Utenti limitati</string>
     <string name="ChannelSettings">Impostazioni</string>
     <string name="ChannelSignMessages">Firma messaggi</string>
     <string name="ChannelSignMessagesInfo">Aggiungi i nomi degli amministratori nei messaggi da loro pubblicati.</string>

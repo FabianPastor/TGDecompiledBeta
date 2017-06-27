@@ -65,6 +65,10 @@ public class ChatObject {
         return chat != null && (chat.creator || (chat.admin_rights != null && chat.admin_rights.invite_link));
     }
 
+    public static boolean canAddUsers(Chat chat) {
+        return chat != null && (chat.creator || (chat.admin_rights != null && chat.admin_rights.invite_users));
+    }
+
     public static boolean canEditInfo(Chat chat) {
         return chat != null && (chat.creator || (chat.admin_rights != null && chat.admin_rights.change_info));
     }
