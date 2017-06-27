@@ -99,7 +99,6 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     private SearchAdapter searchListViewAdapter;
     private boolean searchWas;
     private boolean searching;
-    private int selectedUser;
     private ArrayList<Integer> sortedUsers;
     private boolean usersEndReached;
 
@@ -713,12 +712,11 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         }
         final ChannelParticipant channelParticipantFinal = channelParticipant;
         final TL_chatChannelParticipant userFinal = user;
-        this.selectedUser = user.user_id;
         Builder builder = new Builder(getParentActivity());
         builder.setItems((CharSequence[]) items.toArray(new CharSequence[items.size()]), new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, final int i) {
                 if (((Integer) actions.get(i)).intValue() == 2) {
-                    MessagesController.getInstance().deleteUserFromChat(ChannelEditActivity.this.chat_id, MessagesController.getInstance().getUser(Integer.valueOf(ChannelEditActivity.this.selectedUser)), ChannelEditActivity.this.info);
+                    MessagesController.getInstance().deleteUserFromChat(ChannelEditActivity.this.chat_id, MessagesController.getInstance().getUser(Integer.valueOf(uid)), ChannelEditActivity.this.info);
                     return;
                 }
                 ChannelRightsEditActivity fragment = new ChannelRightsEditActivity(channelParticipantFinal.user_id, ChannelEditActivity.this.chat_id, channelParticipantFinal.admin_rights, channelParticipantFinal.banned_rights, ((Integer) actions.get(i)).intValue(), true);

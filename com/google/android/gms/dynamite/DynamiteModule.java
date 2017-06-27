@@ -129,10 +129,10 @@ public final class DynamiteModule {
     }
 
     public static DynamiteModule zza(Context context, zzd com_google_android_gms_dynamite_DynamiteModule_zzd, String str) throws zzc {
-        zzi zza;
         zza com_google_android_gms_dynamite_DynamiteModule_zza = (zza) zzaSJ.get();
         zza com_google_android_gms_dynamite_DynamiteModule_zza2 = new zza();
         zzaSJ.set(com_google_android_gms_dynamite_DynamiteModule_zza2);
+        zzi zza;
         DynamiteModule zzG;
         try {
             zza = com_google_android_gms_dynamite_DynamiteModule_zzd.zza(context, str, zzaSK);
