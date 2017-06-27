@@ -56,6 +56,7 @@ public class ManageChatUserCell extends FrameLayout {
         this.nameTextView = new SimpleTextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.nameTextView.setTextSize(17);
+        this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         SimpleTextView simpleTextView = this.nameTextView;
         if (LocaleController.isRTL) {
             i = 5;

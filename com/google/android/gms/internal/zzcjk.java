@@ -73,11 +73,11 @@ public final class zzcjk extends zzchi {
 
     public static Object zzD(Object obj) {
         ObjectOutputStream objectOutputStream;
-        ObjectInputStream objectInputStream;
         Throwable th;
         if (obj == null) {
             return null;
         }
+        ObjectInputStream objectInputStream;
         try {
             OutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);

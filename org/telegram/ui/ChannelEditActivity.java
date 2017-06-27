@@ -326,7 +326,6 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                     }
                     String un = user.username;
                     CharSequence name = null;
-                    int count = this.searchAdapterHelper.getGroupSearch().size();
                     String nameSearch = this.searchAdapterHelper.getLastFoundChannel();
                     if (nameSearch != null) {
                         String u = UserObject.getUserName(user);

@@ -28,7 +28,6 @@ public class hh {
     private static String[] zzbUj = new String[0];
 
     public static long getLong(ContentResolver contentResolver, String str, long j) {
-        Long valueOf;
         Object zzb = zzb(contentResolver);
         Long l = (Long) zza(zzbUf, str, Long.valueOf(0));
         if (l != null) {
@@ -40,6 +39,7 @@ public class hh {
             Object obj = l;
             j2 = 0;
         } else {
+            Long valueOf;
             try {
                 long parseLong = Long.parseLong(zza);
                 valueOf = Long.valueOf(parseLong);

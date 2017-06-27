@@ -32,6 +32,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocaleController.LocaleInfo;
@@ -190,7 +191,9 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         if (LocaleController.isRTL) {
             this.icons = new int[]{R.drawable.intro7, R.drawable.intro6, R.drawable.intro5, R.drawable.intro4, R.drawable.intro3, R.drawable.intro2, R.drawable.intro1};
             this.titles = new int[]{R.string.Page7Title, R.string.Page6Title, R.string.Page5Title, R.string.Page4Title, R.string.Page3Title, R.string.Page2Title, R.string.Page1Title};
+            this.titlesString = new String[]{"Page7Title", "Page6Title", "Page5Title", "Page4Title", "Page3Title", "Page2Title", "Page1Title"};
             this.messages = new int[]{R.string.Page7Message, R.string.Page6Message, R.string.Page5Message, R.string.Page4Message, R.string.Page3Message, R.string.Page2Message, R.string.Page1Message};
+            this.messagesString = new String[]{"Page7Message", "Page6Message", "Page5Message", "Page4Message", "Page3Message", "Page2Message", "Page1Message"};
         } else {
             this.icons = new int[]{R.drawable.intro1, R.drawable.intro2, R.drawable.intro3, R.drawable.intro4, R.drawable.intro5, R.drawable.intro6, R.drawable.intro7};
             this.titles = new int[]{R.string.Page1Title, R.string.Page2Title, R.string.Page3Title, R.string.Page4Title, R.string.Page5Title, R.string.Page6Title, R.string.Page7Title};
@@ -377,15 +380,17 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     private void checkContinueText() {
         LocaleInfo englishInfo = null;
         LocaleInfo systemInfo = null;
-        String systemLang = LocaleController.getSystemLocaleStringIso639();
+        LocaleInfo currentLocaleInfo = LocaleController.getInstance().getCurrentLocaleInfo();
+        String systemLang = LocaleController.getSystemLocaleStringIso639().toLowerCase();
         String arg;
         if (systemLang.contains("-")) {
             arg = systemLang.split("-")[0];
         } else {
             arg = systemLang;
         }
-        for (int a = 0; a < LocaleController.getInstance().remoteLanguages.size(); a++) {
-            LocaleInfo info = (LocaleInfo) LocaleController.getInstance().remoteLanguages.get(a);
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putString("language_showed2", LocaleController.getSystemLocaleStringIso639().toLowerCase()).commit();
+        for (int a = 0; a < LocaleController.getInstance().languages.size(); a++) {
+            LocaleInfo info = (LocaleInfo) LocaleController.getInstance().languages.get(a);
             if (info.shortName.equals("en")) {
                 englishInfo = info;
             }
@@ -397,29 +402,28 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
             }
         }
         if (englishInfo != null && systemInfo != null && englishInfo != systemInfo) {
-            this.localeInfo = systemInfo;
             TL_langpack_getStrings req = new TL_langpack_getStrings();
-            req.lang_code = systemInfo.shortName;
+            if (systemInfo != currentLocaleInfo) {
+                req.lang_code = systemInfo.shortName;
+                this.localeInfo = systemInfo;
+            } else {
+                req.lang_code = englishInfo.shortName;
+                this.localeInfo = englishInfo;
+            }
             req.keys.add("ContinueOnThisLanguage");
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                     if (response != null) {
                         Vector vector = (Vector) response;
-                        if (vector.objects.isEmpty()) {
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    IntroActivity.this.textView.setText(LocaleController.getString("ContinueOnThisLanguage", R.string.ContinueOnThisLanguage));
-                                }
-                            });
-                            return;
-                        }
-                        final LangPackString string = (LangPackString) vector.objects.get(0);
-                        if (string instanceof TL_langPackString) {
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    IntroActivity.this.textView.setText(string.value);
-                                }
-                            });
+                        if (!vector.objects.isEmpty()) {
+                            final LangPackString string = (LangPackString) vector.objects.get(0);
+                            if (string instanceof TL_langPackString) {
+                                AndroidUtilities.runOnUIThread(new Runnable() {
+                                    public void run() {
+                                        IntroActivity.this.textView.setText(string.value);
+                                    }
+                                });
+                            }
                         }
                     }
                 }

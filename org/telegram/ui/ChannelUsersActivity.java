@@ -641,6 +641,15 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             View view;
             switch (viewType) {
                 case 0:
+                    view = new ManageChatUserCell(this.mContext, 2, ChannelUsersActivity.this.selectType == 0);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    ((ManageChatUserCell) view).setDelegate(new ManageChatUserCellDelegate() {
+                        public boolean onOptionsButtonCheck(ManageChatUserCell cell, boolean click) {
+                            return ChannelUsersActivity.this.createMenuForParticipant((ChannelParticipant) SearchAdapter.this.getItem(((Integer) cell.getTag()).intValue()), !click);
+                        }
+                    });
+                    break;
+                case 1:
                     view = new ProfileSearchCell(this.mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
@@ -653,29 +662,26 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
 
         public void onBindViewHolder(ViewHolder holder, int position) {
             User user;
-            CharSequence username;
-            CharSequence username2;
-            Throwable e;
-            Object username3;
+            String un;
+            CharSequence name;
             String u;
             int idx;
+            CharSequence username;
+            Throwable e;
+            Object username2;
             ProfileSearchCell profileSearchCell;
             boolean z;
+            int count;
+            boolean ok;
+            String nameSearch;
             switch (holder.getItemViewType()) {
                 case 0:
-                    String foundUserName;
-                    TLObject object = getItem(position);
-                    if (object instanceof User) {
-                        user = (User) object;
-                    } else {
-                        user = MessagesController.getInstance().getUser(Integer.valueOf(((ChannelParticipant) object).user_id));
-                    }
-                    String un = user.username;
-                    CharSequence name = null;
-                    int pos = position;
-                    int count = this.searchAdapterHelper.getGroupSearch().size();
-                    boolean ok = false;
-                    String nameSearch = null;
+                    user = MessagesController.getInstance().getUser(Integer.valueOf(((ChannelParticipant) getItem(position)).user_id));
+                    un = user.username;
+                    name = null;
+                    count = this.searchAdapterHelper.getGroupSearch().size();
+                    ok = false;
+                    nameSearch = null;
                     if (count != 0) {
                         if (count + 1 > position) {
                             nameSearch = this.searchAdapterHelper.getLastFoundChannel();
@@ -689,64 +695,68 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         if (count != 0) {
                             if (count + 1 > position) {
                                 nameSearch = this.searchAdapterHelper.getLastFoundChannel2();
-                                ok = true;
                             } else {
                                 position -= count + 1;
                             }
                         }
                     }
-                    if (!ok) {
-                        count = this.searchResult.size();
-                        if (count != 0) {
-                            if (count + 1 > position) {
-                                ok = true;
-                                name = (CharSequence) this.searchResultNames.get(position - 1);
-                                if (name != null && un != null && un.length() > 0 && name.toString().startsWith("@" + un)) {
-                                    username = name;
-                                    name = null;
-                                    username2 = username;
-                                }
-                            } else {
-                                position -= count + 1;
-                                username2 = null;
+                    if (nameSearch != null) {
+                        u = UserObject.getUserName(user);
+                        name = new SpannableStringBuilder(u);
+                        idx = u.toLowerCase().indexOf(nameSearch);
+                        if (idx != -1) {
+                            ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
+                        }
+                    }
+                    ManageChatUserCell userCell = (ManageChatUserCell) holder.itemView;
+                    userCell.setTag(Integer.valueOf(position));
+                    userCell.setData(user, name, null);
+                    return;
+                case 1:
+                    CharSequence username3;
+                    String foundUserName;
+                    user = (User) getItem(position);
+                    un = user.username;
+                    name = null;
+                    int pos = position;
+                    ok = false;
+                    nameSearch = null;
+                    count = this.searchAdapterHelper.getGroupSearch().size();
+                    if (count != 0) {
+                        position -= count + 1;
+                    }
+                    count = this.searchAdapterHelper.getGroupSearch2().size();
+                    if (count != 0) {
+                        position -= count + 1;
+                    }
+                    count = this.searchResult.size();
+                    if (count != 0) {
+                        if (count + 1 > position) {
+                            ok = true;
+                            name = (CharSequence) this.searchResultNames.get(position - 1);
+                            if (name != null && un != null && un.length() > 0 && name.toString().startsWith("@" + un)) {
+                                username = name;
+                                name = null;
+                                username3 = username;
                             }
-                            if (!ok) {
-                                count = this.searchAdapterHelper.getGlobalSearch().size();
-                                if (count != 0 && count + 1 > position) {
-                                    foundUserName = this.searchAdapterHelper.getLastFoundUsername();
-                                    if (foundUserName.startsWith("@")) {
-                                        foundUserName = foundUserName.substring(1);
-                                    }
+                        } else {
+                            position -= count + 1;
+                            username3 = null;
+                        }
+                        if (!ok) {
+                            count = this.searchAdapterHelper.getGlobalSearch().size();
+                            if (count != 0 && count + 1 > position) {
+                                foundUserName = this.searchAdapterHelper.getLastFoundUsername();
+                                if (foundUserName.startsWith("@")) {
+                                    foundUserName = foundUserName.substring(1);
+                                }
+                                try {
+                                    username = new SpannableStringBuilder(un);
                                     try {
-                                        username = new SpannableStringBuilder(un);
-                                        try {
-                                            ((SpannableStringBuilder) username).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
-                                        } catch (Exception e2) {
-                                            e = e2;
-                                            username3 = un;
-                                            FileLog.e(e);
-                                            if (nameSearch != null) {
-                                                u = UserObject.getUserName(user);
-                                                name = new SpannableStringBuilder(u);
-                                                idx = u.toLowerCase().indexOf(nameSearch);
-                                                if (idx != -1) {
-                                                    ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
-                                                }
-                                            }
-                                            profileSearchCell = holder.itemView;
-                                            profileSearchCell.setData(user, null, name, username, false);
-                                            if (pos == getItemCount() - 1) {
-                                                z = true;
-                                            } else {
-                                                z = false;
-                                            }
-                                            profileSearchCell.useSeparator = z;
-                                            return;
-                                        }
-                                    } catch (Exception e3) {
-                                        e = e3;
-                                        username = username2;
-                                        username3 = un;
+                                        ((SpannableStringBuilder) username).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
+                                    } catch (Exception e2) {
+                                        e = e2;
+                                        username2 = un;
                                         FileLog.e(e);
                                         if (nameSearch != null) {
                                             u = UserObject.getUserName(user);
@@ -766,6 +776,11 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                         profileSearchCell.useSeparator = z;
                                         return;
                                     }
+                                } catch (Exception e3) {
+                                    e = e3;
+                                    username = username3;
+                                    username2 = un;
+                                    FileLog.e(e);
                                     if (nameSearch != null) {
                                         u = UserObject.getUserName(user);
                                         name = new SpannableStringBuilder(u);
@@ -784,28 +799,45 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                     profileSearchCell.useSeparator = z;
                                     return;
                                 }
-                            }
-                            username = username2;
-                            if (nameSearch != null) {
-                                u = UserObject.getUserName(user);
-                                name = new SpannableStringBuilder(u);
-                                idx = u.toLowerCase().indexOf(nameSearch);
-                                if (idx != -1) {
-                                    ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
+                                if (nameSearch != null) {
+                                    u = UserObject.getUserName(user);
+                                    name = new SpannableStringBuilder(u);
+                                    idx = u.toLowerCase().indexOf(nameSearch);
+                                    if (idx != -1) {
+                                        ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
+                                    }
                                 }
+                                profileSearchCell = holder.itemView;
+                                profileSearchCell.setData(user, null, name, username, false);
+                                if (pos == getItemCount() - 1) {
+                                    z = true;
+                                } else {
+                                    z = false;
+                                }
+                                profileSearchCell.useSeparator = z;
+                                return;
                             }
-                            profileSearchCell = holder.itemView;
-                            profileSearchCell.setData(user, null, name, username, false);
-                            if (pos == getItemCount() - 1) {
-                                z = false;
-                            } else {
-                                z = true;
-                            }
-                            profileSearchCell.useSeparator = z;
-                            return;
                         }
+                        username = username3;
+                        if (nameSearch != null) {
+                            u = UserObject.getUserName(user);
+                            name = new SpannableStringBuilder(u);
+                            idx = u.toLowerCase().indexOf(nameSearch);
+                            if (idx != -1) {
+                                ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
+                            }
+                        }
+                        profileSearchCell = holder.itemView;
+                        profileSearchCell.setData(user, null, name, username, false);
+                        if (pos == getItemCount() - 1) {
+                            z = false;
+                        } else {
+                            z = true;
+                        }
+                        profileSearchCell.useSeparator = z;
+                        return;
                     }
-                    username2 = null;
+                    username3 = null;
                     if (ok) {
                         count = this.searchAdapterHelper.getGlobalSearch().size();
                         foundUserName = this.searchAdapterHelper.getLastFoundUsername();
@@ -832,7 +864,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         profileSearchCell.useSeparator = z;
                         return;
                     }
-                    username = username2;
+                    username = username3;
                     if (nameSearch != null) {
                         u = UserObject.getUserName(user);
                         name = new SpannableStringBuilder(u);
@@ -850,7 +882,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     }
                     profileSearchCell.useSeparator = z;
                     return;
-                case 1:
+                case 2:
                     GraySectionCell sectionCell = (GraySectionCell) holder.itemView;
                     if (position == this.groupStartRow) {
                         if (ChannelUsersActivity.this.type == 0) {
@@ -878,9 +910,12 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
 
         public int getItemViewType(int i) {
             if (i == this.globalStartRow || i == this.groupStartRow || i == this.contactsStartRow || i == this.group2StartRow) {
-                return 1;
+                return 2;
             }
-            return 0;
+            if (getItem(i) instanceof ChannelParticipant) {
+                return 0;
+            }
+            return 1;
         }
     }
 

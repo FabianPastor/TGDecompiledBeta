@@ -1906,6 +1906,7 @@ public class LocaleController {
                                 LocaleController.this.loadingRemoteLanguages = false;
                                 Vector res = response;
                                 HashMap<String, LocaleInfo> remoteLoaded = new HashMap();
+                                LocaleController.this.remoteLanguages.clear();
                                 for (a = 0; a < res.objects.size(); a++) {
                                     TL_langPackLanguage language = (TL_langPackLanguage) res.objects.get(a);
                                     LocaleInfo localeInfo = new LocaleInfo();
@@ -1915,7 +1916,6 @@ public class LocaleController {
                                     localeInfo.pathToFile = "remote";
                                     LocaleInfo existing = (LocaleInfo) LocaleController.this.languagesDict.get(localeInfo.getKey());
                                     if (existing == null) {
-                                        LocaleController.this.remoteLanguages.add(localeInfo);
                                         LocaleController.this.languages.add(localeInfo);
                                         LocaleController.this.languagesDict.put(localeInfo.getKey(), localeInfo);
                                     } else {
@@ -1923,7 +1923,8 @@ public class LocaleController {
                                         existing.name = localeInfo.name;
                                         existing.pathToFile = localeInfo.pathToFile;
                                     }
-                                    remoteLoaded.put(localeInfo.getKey(), localeInfo);
+                                    LocaleController.this.remoteLanguages.add(localeInfo);
+                                    remoteLoaded.put(localeInfo.getKey(), existing);
                                 }
                                 a = 0;
                                 while (a < LocaleController.this.languages.size()) {
