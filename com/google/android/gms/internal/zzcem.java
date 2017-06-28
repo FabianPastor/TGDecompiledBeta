@@ -199,13 +199,13 @@ final class zzcem extends zzchi {
 
     @WorkerThread
     private static boolean zza(zzcfk com_google_android_gms_internal_zzcfk, SQLiteDatabase sQLiteDatabase, String str) {
+        Cursor query;
         Object e;
         Throwable th;
         Cursor cursor = null;
         if (com_google_android_gms_internal_zzcfk == null) {
             throw new IllegalArgumentException("Monitor must not be null");
         }
-        Cursor query;
         try {
             SQLiteDatabase sQLiteDatabase2 = sQLiteDatabase;
             query = sQLiteDatabase2.query("SQLITE_MASTER", new String[]{"name"}, "name=?", new String[]{str}, null, null, null);
@@ -916,7 +916,6 @@ final class zzcem extends zzchi {
 
     @WorkerThread
     public final zzcen zza(long j, String str, boolean z, boolean z2, boolean z3, boolean z4, boolean z5) {
-        Cursor query;
         Object e;
         Throwable th;
         zzbo.zzcF(str);
@@ -924,6 +923,7 @@ final class zzcem extends zzchi {
         zzkD();
         String[] strArr = new String[]{str};
         zzcen com_google_android_gms_internal_zzcen = new zzcen();
+        Cursor query;
         try {
             SQLiteDatabase writableDatabase = getWritableDatabase();
             query = writableDatabase.query("apps", new String[]{"day", "daily_events_count", "daily_public_events_count", "daily_conversions_count", "daily_error_events_count", "daily_realtime_events_count"}, "app_id=?", new String[]{str}, null, null, null);
@@ -1947,10 +1947,10 @@ final class zzcem extends zzchi {
 
     @WorkerThread
     public final String zzyc() {
-        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
+        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from queue order by has_realtime desc, rowid asc limit 1;", null);
             try {
