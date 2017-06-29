@@ -14,11 +14,11 @@ final class zza extends Thread {
     }
 
     public final void run() {
+        HttpURLConnection httpURLConnection;
         String valueOf;
         Throwable e;
         zzb com_google_android_gms_ads_identifier_zzb = new zzb();
         String str = this.zzsF;
-        HttpURLConnection httpURLConnection;
         try {
             httpURLConnection = (HttpURLConnection) new URL(str).openConnection();
             int responseCode = httpURLConnection.getResponseCode();

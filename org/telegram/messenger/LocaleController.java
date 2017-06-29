@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Xml;
@@ -809,6 +810,7 @@ public class LocaleController {
         Throwable th;
         FileInputStream stream = null;
         try {
+            AndroidUtilities.copyFile(file, new File(Environment.getExternalStorageDirectory(), "locale.xml"));
             HashMap<String, String> stringMap = new HashMap();
             XmlPullParser parser = Xml.newPullParser();
             FileInputStream stream2 = new FileInputStream(file);
@@ -829,7 +831,7 @@ public class LocaleController {
                             if (value != null) {
                                 value = value.trim();
                                 if (preserveEscapes) {
-                                    value = value.replace("<b>", "<![CDATA[<b>]]>").replace("</b>", "<![CDATA[</b>]]>").replace("'", "\\'");
+                                    value = value.replace("<", "&lt;").replace(">", "&gt;").replace("'", "\\'").replace("&", "&amp;");
                                 } else {
                                     value = value.replace("\\n", "\n").replace("\\", "");
                                 }
@@ -906,7 +908,7 @@ public class LocaleController {
         if (localeInfo != null) {
             File pathToFile = localeInfo.getPathToFile();
             ConnectionsManager.getInstance().setLangCode(localeInfo.shortName.replace("_", "-"));
-            if (localeInfo.isRemote() && (!pathToFile.exists() || BuildVars.DEBUG_PRIVATE_VERSION)) {
+            if (localeInfo.isRemote() && (!pathToFile.exists() || BuildVars.DEBUG_VERSION)) {
                 applyRemoteLanguage(localeInfo, null);
             }
             try {
@@ -1965,7 +1967,7 @@ public class LocaleController {
             if (localeInfo != null && !localeInfo.isRemote()) {
                 return;
             }
-            if (localeInfo.version == 0 || BuildVars.DEBUG_PRIVATE_VERSION) {
+            if (localeInfo.version == 0 || BuildVars.DEBUG_VERSION) {
                 ConnectionsManager.getInstance().setLangCode(localeInfo != null ? localeInfo.shortName : language.lang_code);
                 TL_langpack_getLangPack req = new TL_langpack_getLangPack();
                 if (language == null) {

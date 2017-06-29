@@ -77,6 +77,7 @@ public class ConnectionsManager {
     public static final int RequestFlagWithoutLogin = 8;
     private static AsyncTask currentTask;
     private static final int dnsConfigVersion = 0;
+    private static long lastDnsRequestTime;
     private boolean appPaused = true;
     private int appResumeCount;
     private int connectionState = native_getConnectionState();
@@ -614,7 +615,11 @@ public class ConnectionsManager {
     }
 
     public static void onRequestNewServerIpAndPort(int second) {
-        if (currentTask == null) {
+        if (currentTask != null) {
+            return;
+        }
+        if (second == 1 || Math.abs(lastDnsRequestTime - System.currentTimeMillis()) >= 10000) {
+            lastDnsRequestTime = System.currentTimeMillis();
             if (second == 1) {
                 DnsTxtLoadTask task = new DnsTxtLoadTask();
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});

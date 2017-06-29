@@ -887,10 +887,14 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 }
                 PhotoViewer.this.bottomTouchEnabled = true;
             }
-            if (child == PhotoViewer.this.aspectRatioFrameLayout || !super.drawChild(canvas, child, drawingTime)) {
-                return false;
+            try {
+                if (child == PhotoViewer.this.aspectRatioFrameLayout || !super.drawChild(canvas, child, drawingTime)) {
+                    return false;
+                }
+                return true;
+            } catch (Throwable th) {
+                return true;
             }
-            return true;
         }
     }
 

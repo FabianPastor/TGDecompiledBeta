@@ -95,21 +95,21 @@ public class UserConfig {
                 editor.putBoolean("notificationsConverted", notificationsConverted);
                 editor.putBoolean("allowScreenCapture", allowScreenCapture);
                 editor.putBoolean("pinnedDialogsLoaded", pinnedDialogsLoaded);
-                editor.putInt("2migrateOffsetId", migrateOffsetId);
+                editor.putInt("3migrateOffsetId", migrateOffsetId);
                 if (migrateOffsetId != -1) {
-                    editor.putInt("2migrateOffsetDate", migrateOffsetDate);
-                    editor.putInt("2migrateOffsetUserId", migrateOffsetUserId);
-                    editor.putInt("2migrateOffsetChatId", migrateOffsetChatId);
-                    editor.putInt("2migrateOffsetChannelId", migrateOffsetChannelId);
-                    editor.putLong("2migrateOffsetAccess", migrateOffsetAccess);
+                    editor.putInt("3migrateOffsetDate", migrateOffsetDate);
+                    editor.putInt("3migrateOffsetUserId", migrateOffsetUserId);
+                    editor.putInt("3migrateOffsetChatId", migrateOffsetChatId);
+                    editor.putInt("3migrateOffsetChannelId", migrateOffsetChannelId);
+                    editor.putLong("3migrateOffsetAccess", migrateOffsetAccess);
                 }
-                editor.putInt("totalDialogsLoadCount", totalDialogsLoadCount);
-                editor.putInt("dialogsLoadOffsetId", dialogsLoadOffsetId);
-                editor.putInt("dialogsLoadOffsetDate", dialogsLoadOffsetDate);
-                editor.putInt("dialogsLoadOffsetUserId", dialogsLoadOffsetUserId);
-                editor.putInt("dialogsLoadOffsetChatId", dialogsLoadOffsetChatId);
-                editor.putInt("dialogsLoadOffsetChannelId", dialogsLoadOffsetChannelId);
-                editor.putLong("dialogsLoadOffsetAccess", dialogsLoadOffsetAccess);
+                editor.putInt("2totalDialogsLoadCount", totalDialogsLoadCount);
+                editor.putInt("2dialogsLoadOffsetId", dialogsLoadOffsetId);
+                editor.putInt("2dialogsLoadOffsetDate", dialogsLoadOffsetDate);
+                editor.putInt("2dialogsLoadOffsetUserId", dialogsLoadOffsetUserId);
+                editor.putInt("2dialogsLoadOffsetChatId", dialogsLoadOffsetChatId);
+                editor.putInt("2dialogsLoadOffsetChannelId", dialogsLoadOffsetChannelId);
+                editor.putLong("2dialogsLoadOffsetAccess", dialogsLoadOffsetAccess);
                 if (tmpPassword != null) {
                     data = new SerializedData();
                     tmpPassword.serializeToStream(data);
@@ -251,21 +251,21 @@ public class UserConfig {
                 if (passcodeHash.length() > 0 && lastPauseTime == 0) {
                     lastPauseTime = (int) ((System.currentTimeMillis() / 1000) - 600);
                 }
-                migrateOffsetId = preferences.getInt("2migrateOffsetId", 0);
+                migrateOffsetId = preferences.getInt("3migrateOffsetId", 0);
                 if (migrateOffsetId != -1) {
-                    migrateOffsetDate = preferences.getInt("2migrateOffsetDate", 0);
-                    migrateOffsetUserId = preferences.getInt("2migrateOffsetUserId", 0);
-                    migrateOffsetChatId = preferences.getInt("2migrateOffsetChatId", 0);
-                    migrateOffsetChannelId = preferences.getInt("2migrateOffsetChannelId", 0);
-                    migrateOffsetAccess = preferences.getLong("2migrateOffsetAccess", 0);
+                    migrateOffsetDate = preferences.getInt("3migrateOffsetDate", 0);
+                    migrateOffsetUserId = preferences.getInt("3migrateOffsetUserId", 0);
+                    migrateOffsetChatId = preferences.getInt("3migrateOffsetChatId", 0);
+                    migrateOffsetChannelId = preferences.getInt("3migrateOffsetChannelId", 0);
+                    migrateOffsetAccess = preferences.getLong("3migrateOffsetAccess", 0);
                 }
-                dialogsLoadOffsetId = preferences.getInt("dialogsLoadOffsetId", -1);
-                totalDialogsLoadCount = preferences.getInt("totalDialogsLoadCount", 0);
-                dialogsLoadOffsetDate = preferences.getInt("dialogsLoadOffsetDate", -1);
-                dialogsLoadOffsetUserId = preferences.getInt("dialogsLoadOffsetUserId", -1);
-                dialogsLoadOffsetChatId = preferences.getInt("dialogsLoadOffsetChatId", -1);
-                dialogsLoadOffsetChannelId = preferences.getInt("dialogsLoadOffsetChannelId", -1);
-                dialogsLoadOffsetAccess = preferences.getLong("dialogsLoadOffsetAccess", -1);
+                dialogsLoadOffsetId = preferences.getInt("2dialogsLoadOffsetId", -1);
+                totalDialogsLoadCount = preferences.getInt("2totalDialogsLoadCount", 0);
+                dialogsLoadOffsetDate = preferences.getInt("2dialogsLoadOffsetDate", -1);
+                dialogsLoadOffsetUserId = preferences.getInt("2dialogsLoadOffsetUserId", -1);
+                dialogsLoadOffsetChatId = preferences.getInt("2dialogsLoadOffsetChatId", -1);
+                dialogsLoadOffsetChannelId = preferences.getInt("2dialogsLoadOffsetChannelId", -1);
+                dialogsLoadOffsetAccess = preferences.getLong("2dialogsLoadOffsetAccess", -1);
                 String string = preferences.getString("tmpPassword", null);
                 if (string != null) {
                     bytes = Base64.decode(string, 0);
