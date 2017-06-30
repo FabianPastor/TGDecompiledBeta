@@ -591,6 +591,7 @@ final class zzcem extends zzchi {
 
     @WorkerThread
     public final zzcej zzH(String str, String str2) {
+        Cursor query;
         Object e;
         Cursor cursor;
         Throwable th;
@@ -598,7 +599,6 @@ final class zzcem extends zzchi {
         zzbo.zzcF(str2);
         zzjC();
         zzkD();
-        Cursor query;
         try {
             query = getWritableDatabase().query("conditional_properties", new String[]{"origin", Param.VALUE, "active", "trigger_event_name", "trigger_timeout", "timed_out_event", "creation_timestamp", "triggered_event", "triggered_timestamp", "time_to_live", "expired_event"}, "app_id=? and name=?", new String[]{str, str2}, null, null, null);
             try {
@@ -684,6 +684,7 @@ final class zzcem extends zzchi {
     }
 
     final Map<Integer, List<zzcjm>> zzJ(String str, String str2) {
+        Cursor query;
         Object e;
         Throwable th;
         zzkD();
@@ -691,7 +692,6 @@ final class zzcem extends zzchi {
         zzbo.zzcF(str);
         zzbo.zzcF(str2);
         Map<Integer, List<zzcjm>> arrayMap = new ArrayMap();
-        Cursor query;
         try {
             query = getWritableDatabase().query("event_filters", new String[]{"audience_id", "data"}, "app_id=? AND event_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -825,7 +825,6 @@ final class zzcem extends zzchi {
 
     @WorkerThread
     protected final long zzL(String str, String str2) {
-        long zza;
         Object e;
         zzbo.zzcF(str);
         zzbo.zzcF(str2);
@@ -833,6 +832,7 @@ final class zzcem extends zzchi {
         zzkD();
         SQLiteDatabase writableDatabase = getWritableDatabase();
         writableDatabase.beginTransaction();
+        long zza;
         try {
             zza = zza(new StringBuilder(String.valueOf(str2).length() + 32).append("select ").append(str2).append(" from app2 where app_id=?").toString(), new String[]{str}, -1);
             if (zza == -1) {
@@ -1947,10 +1947,10 @@ final class zzcem extends zzchi {
 
     @WorkerThread
     public final String zzyc() {
-        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
+        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from queue order by has_realtime desc, rowid asc limit 1;", null);
             try {

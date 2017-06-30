@@ -258,7 +258,7 @@
     <string name="ChangePhoneNumberOccupied">The number %1$s is already connected to a Telegram account. Please delete that account before migrating to the new number.</string>
     <string name="ChangePublicLimitReached">Sorry, you have reserved too many public usernames. You can revoke the link from one of your older groups or channels, or create a private entity instead.</string>
     <string name="ChangeRecoveryEmail">Change Recovery E-Mail</string>
-    <string name="ChannelAddAdmin">Add Administrator</string>
+    <string name="ChannelAddAdmin">Add administrator</string>
     <string name="ChannelAddMembers">Add members</string>
     <string name="ChannelAddTo">Add %1$s to the channel?</string>
     <string name="ChannelAddUserAdminAlert">Are you sure you want to make %1$s an administrator?</string>
@@ -271,7 +271,7 @@
     <string name="ChannelAlertText">Channels are a new tool for broadcasting your messages to large audiences.</string>
     <string name="ChannelAlertTitle">What is a Channel?</string>
     <string name="ChannelBlacklist">Blacklist</string>
-    <string name="ChannelBlockUser">Ban User</string>
+    <string name="ChannelBlockUser">Ban user</string>
     <string name="ChannelBlockedUsers">Banned users</string>
     <string name="ChannelBroadcast">Broadcast</string>
     <string name="ChannelCantOpenBanned">Unfortunately, you were banned from participating in public groups.</string>
@@ -558,10 +558,10 @@
     <string name="ErrorOccurred">An error occurred.</string>
     <string name="ErrorSendRestrictedMedia">Sorry, the admins of this group have restricted you from sending media.</string>
     <string name="ErrorSendRestrictedStickers">Sorry, the admins of this group have restricted you from sending stickers.</string>
-    <string name="EventLog">Event Log</string>
+    <string name="EventLog">Recent Actions</string>
     <string name="EventLogAdded">un1 added un2</string>
     <string name="EventLogAllAdmins">All admins</string>
-    <string name="EventLogAllEvents">All events</string>
+    <string name="EventLogAllEvents">All actions</string>
     <string name="EventLogChangedChannelLink">un1 changed the channel link:</string>
     <string name="EventLogChangedGroupLink">un1 changed the group link:</string>
     <string name="EventLogChannelJoined">un1 joined the channel</string>
@@ -576,11 +576,11 @@
     <string name="EventLogEditedGroupPhoto">un1 set a new group photo</string>
     <string name="EventLogEditedGroupTitle">un1 renamed the group to \"%1$s\"</string>
     <string name="EventLogEditedMessages">un1 edited this message:</string>
-    <string name="EventLogEmpty">&lt;b&gt;No events here yet&lt;/b&gt;\n\nThe group\'s members and admins\nhave not taken any service actions\nin the last 48 hours.</string>
-    <string name="EventLogEmptyChannel">&lt;b&gt;No events here yet&lt;/b&gt;\n\nThe channel\'s admins\nhave not taken any service actions\nin the last 48 hours.</string>
-    <string name="EventLogEmptySearch">&lt;b&gt;No events found&lt;/b&gt;\n\nNo recent events that match your query\nhave been found.</string>
-    <string name="EventLogEmptyTextSearch">No recent events that contain \'&lt;b&gt;%1$s&lt;/b&gt;\' have been found.</string>
-    <string name="EventLogFilterAll">All events</string>
+    <string name="EventLogEmpty">&lt;b&gt;No actions here yet&lt;/b&gt;\n\nThe group\'s members and admins\nhave not taken any service actions\nin the last 48 hours.</string>
+    <string name="EventLogEmptyChannel">&lt;b&gt;No actions here yet&lt;/b&gt;\n\nThe channel\'s admins\nhave not taken any service actions\nin the last 48 hours.</string>
+    <string name="EventLogEmptySearch">&lt;b&gt;No actions found&lt;/b&gt;\n\nNo recent actions that match your query\nhave been found.</string>
+    <string name="EventLogEmptyTextSearch">No recent actions that contain \'&lt;b&gt;%1$s&lt;/b&gt;\' have been found.</string>
+    <string name="EventLogFilterAll">All actions</string>
     <string name="EventLogFilterChannelInfo">Channel info</string>
     <string name="EventLogFilterDeletedMessages">Deleted messages</string>
     <string name="EventLogFilterEditedMessages">Edited messages</string>
@@ -594,7 +594,7 @@
     <string name="EventLogGroupJoined">un1 joined the group</string>
     <string name="EventLogInfoDetail">This is a list of all service actions taken by the group\'s members and admins in the last 48 hours.</string>
     <string name="EventLogInfoDetailChannel">This is a list of all service actions taken by the channel\'s admins in the last 48 hours.</string>
-    <string name="EventLogInfoTitle">What is the Event Log?</string>
+    <string name="EventLogInfoTitle">What is the Recent Actions?</string>
     <string name="EventLogLeftChannel">un1 left the channel</string>
     <string name="EventLogLeftGroup">un1 left the group</string>
     <string name="EventLogOriginalCaption">Original caption</string>
@@ -623,7 +623,7 @@
     <string name="EventLogRestrictedSendMessages">Send messages</string>
     <string name="EventLogRestrictedSendStickers">Send stickers &amp; GIFs</string>
     <string name="EventLogRestrictedUntil">changed restrictions for %1$s\n\nDuration: %2$s</string>
-    <string name="EventLogSelectedEvents">Selected events</string>
+    <string name="EventLogSelectedEvents">Selected actions</string>
     <string name="EventLogToggledInvitesOff">un1 disabled group invites</string>
     <string name="EventLogToggledInvitesOn">un1 enabled group invites</string>
     <string name="EventLogToggledSignaturesOff">un1 disabled signatures</string>

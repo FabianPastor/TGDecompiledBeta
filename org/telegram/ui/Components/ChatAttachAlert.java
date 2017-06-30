@@ -954,7 +954,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                         }
 
                                         public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
-                                            if (ChatAttachAlert.this.cameraFile != null) {
+                                            if (ChatAttachAlert.this.cameraFile != null && ChatAttachAlert.this.baseFragment != null) {
                                                 AndroidUtilities.addMediaToGallery(ChatAttachAlert.this.cameraFile.getAbsolutePath());
                                                 ChatAttachAlert.this.baseFragment.sendMedia((PhotoEntry) ChatAttachAlert.this.cameraPhoto.get(0), videoEditedInfo);
                                                 ChatAttachAlert.this.closeCamera(false);
@@ -1054,6 +1054,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                         }
 
                                         public boolean scaleToFill() {
+                                            if (ChatAttachAlert.this.baseFragment == null || ChatAttachAlert.this.baseFragment.getParentActivity() == null) {
+                                                return false;
+                                            }
                                             int locked = System.getInt(ChatAttachAlert.this.baseFragment.getParentActivity().getContentResolver(), "accelerometer_rotation", 0);
                                             if (sameTakePictureOrientation || locked == 1) {
                                                 return true;

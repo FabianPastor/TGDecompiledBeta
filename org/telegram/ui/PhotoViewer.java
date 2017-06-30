@@ -2304,7 +2304,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
 
     private VideoEditedInfo getCurrentVideoEditedInfo() {
         int i = -1;
-        if (this.captionItem == null || this.captionItem.getVisibility() != 0 || VERSION.SDK_INT < 16) {
+        if (this.captionItem == null || this.captionItem.getVisibility() != 0 || VERSION.SDK_INT < 16 || this.currentPlayingVideoFile == null) {
             return null;
         }
         VideoEditedInfo videoEditedInfo = new VideoEditedInfo();
@@ -2406,10 +2406,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
 
     @SuppressLint({"NewApi"})
     private void preparePlayer(File file, boolean playWhenReady, boolean preview) {
+        if (!preview) {
+            this.currentPlayingVideoFile = file;
+        }
         if (this.parentActivity != null && VERSION.SDK_INT >= 16) {
-            if (!preview) {
-                this.currentPlayingVideoFile = file;
-            }
             this.inPreview = preview;
             releasePlayer();
             if (this.videoTextureView == null) {

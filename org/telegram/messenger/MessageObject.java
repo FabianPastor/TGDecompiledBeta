@@ -945,6 +945,8 @@ public class MessageObject {
             int i2 = mid[0];
             mid[0] = i2 + 1;
             message.id = i2;
+            message.reply_to_msg_id = 0;
+            message.flags &= -32769;
             messageObjects.add(messageObjects.size() - 1, new MessageObject(message, null, null, true, this.eventId));
             if (chat.megagroup) {
                 message.flags |= Integer.MIN_VALUE;

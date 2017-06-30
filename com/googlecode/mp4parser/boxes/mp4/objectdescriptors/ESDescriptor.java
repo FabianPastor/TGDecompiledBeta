@@ -26,6 +26,7 @@ public class ESDescriptor extends BaseDescriptor {
     int streamPriority;
 
     public void parseDetail(ByteBuffer bb) throws IOException {
+        BaseDescriptor descriptor;
         long read;
         this.esId = IsoTypeReader.readUInt16(bb);
         int data = IsoTypeReader.readUInt8(bb);
@@ -46,7 +47,6 @@ public class ESDescriptor extends BaseDescriptor {
         int baseSize = (((((getSizeBytes() + 1) + 2) + 1) + (this.streamDependenceFlag == 1 ? 2 : 0)) + (this.URLFlag == 1 ? this.URLLength + 1 : 0)) + (this.oCRstreamFlag == 1 ? 2 : 0);
         int begin = bb.position();
         if (getSize() > baseSize + 2) {
-            BaseDescriptor descriptor;
             descriptor = ObjectDescriptorFactory.createFrom(-1, bb);
             read = (long) (bb.position() - begin);
             log.finer(descriptor + " - ESDescriptor1 read: " + read + ", size: " + (descriptor != null ? Integer.valueOf(descriptor.getSize()) : null));
