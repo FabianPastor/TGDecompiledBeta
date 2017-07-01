@@ -72,11 +72,11 @@ public final class zzcjk extends zzchi {
     }
 
     public static Object zzD(Object obj) {
-        ObjectOutputStream objectOutputStream;
         Throwable th;
         if (obj == null) {
             return null;
         }
+        ObjectOutputStream objectOutputStream;
         ObjectInputStream objectInputStream;
         try {
             OutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -729,11 +729,11 @@ public final class zzcjk extends zzchi {
     }
 
     final <T extends Parcelable> T zzb(byte[] bArr, Creator<T> creator) {
+        T t;
         if (bArr == null) {
             return null;
         }
         Parcel obtain = Parcel.obtain();
-        T t;
         try {
             obtain.unmarshall(bArr, 0, bArr.length);
             obtain.setDataPosition(0);

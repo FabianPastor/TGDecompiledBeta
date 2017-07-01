@@ -394,7 +394,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
             if (info.shortName.equals("en")) {
                 englishInfo = info;
             }
-            if (info.shortName.equals(systemLang) || info.shortName.equals(arg)) {
+            if (info.shortName.replace("_", "-").equals(systemLang) || info.shortName.equals(arg)) {
                 systemInfo = info;
             }
             if (englishInfo != null && systemInfo != null) {
@@ -404,10 +404,10 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         if (englishInfo != null && systemInfo != null && englishInfo != systemInfo) {
             TL_langpack_getStrings req = new TL_langpack_getStrings();
             if (systemInfo != currentLocaleInfo) {
-                req.lang_code = systemInfo.shortName;
+                req.lang_code = systemInfo.shortName.replace("_", "-");
                 this.localeInfo = systemInfo;
             } else {
-                req.lang_code = englishInfo.shortName;
+                req.lang_code = englishInfo.shortName.replace("_", "-");
                 this.localeInfo = englishInfo;
             }
             req.keys.add("ContinueOnThisLanguage");

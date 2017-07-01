@@ -393,8 +393,8 @@ Error: java.util.NoSuchElementException
         if (pathString == null) {
             return false;
         }
-        String path;
         while (true) {
+            String path;
             String newPath = Utilities.readlink(pathString);
             if (newPath != null && !newPath.equals(pathString)) {
                 pathString = newPath;

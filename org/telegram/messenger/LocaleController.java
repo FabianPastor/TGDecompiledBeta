@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Xml;
@@ -538,7 +537,7 @@ public class LocaleController {
         }
         for (a = 0; a < this.remoteLanguages.size(); a++) {
             locale = (LocaleInfo) this.remoteLanguages.get(a);
-            LocaleInfo existingLocale = (LocaleInfo) this.languagesDict.get(locale.getKey());
+            LocaleInfo existingLocale = getLanguageFromDict(locale.getKey());
             if (existingLocale != null) {
                 existingLocale.pathToFile = locale.pathToFile;
                 existingLocale.version = locale.version;
@@ -554,19 +553,19 @@ public class LocaleController {
         try {
             String lang = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getString("language", null);
             if (lang != null) {
-                currentInfo = (LocaleInfo) this.languagesDict.get(lang);
+                currentInfo = getLanguageFromDict(lang);
                 if (currentInfo != null) {
                     override = true;
                 }
             }
             if (currentInfo == null && this.systemDefaultLocale.getLanguage() != null) {
-                currentInfo = (LocaleInfo) this.languagesDict.get(this.systemDefaultLocale.getLanguage());
+                currentInfo = getLanguageFromDict(this.systemDefaultLocale.getLanguage());
             }
             if (currentInfo == null) {
-                currentInfo = (LocaleInfo) this.languagesDict.get(getLocaleString(this.systemDefaultLocale));
-            }
-            if (currentInfo == null) {
-                currentInfo = (LocaleInfo) this.languagesDict.get("en");
+                currentInfo = getLanguageFromDict(getLocaleString(this.systemDefaultLocale));
+                if (currentInfo == null) {
+                    currentInfo = getLanguageFromDict("en");
+                }
             }
             applyLanguage(currentInfo, override);
         } catch (Throwable e) {
@@ -577,6 +576,13 @@ public class LocaleController {
         } catch (Throwable e2) {
             FileLog.e(e2);
         }
+    }
+
+    private LocaleInfo getLanguageFromDict(String key) {
+        if (key == null) {
+            return null;
+        }
+        return (LocaleInfo) this.languagesDict.get(key.toLowerCase().replace("-", "_"));
     }
 
     private void addRules(String[] languages, PluralRules rules) {
@@ -698,7 +704,7 @@ public class LocaleController {
             if (!AndroidUtilities.copyFile(file, finalFile)) {
                 return false;
             }
-            LocaleInfo localeInfo = (LocaleInfo) this.languagesDict.get(languageCode);
+            LocaleInfo localeInfo = getLanguageFromDict(languageCode);
             if (localeInfo == null) {
                 localeInfo = new LocaleInfo();
                 localeInfo.name = languageName;
@@ -752,17 +758,17 @@ public class LocaleController {
             return false;
         }
         if (this.currentLocaleInfo == localeInfo) {
-            LocaleInfo localeInfo2 = null;
+            LocaleInfo info = null;
             if (this.systemDefaultLocale.getLanguage() != null) {
-                localeInfo2 = (LocaleInfo) this.languagesDict.get(this.systemDefaultLocale.getLanguage());
+                info = getLanguageFromDict(this.systemDefaultLocale.getLanguage());
             }
-            if (localeInfo2 == null) {
-                localeInfo2 = (LocaleInfo) this.languagesDict.get(getLocaleString(this.systemDefaultLocale));
+            if (info == null) {
+                info = getLanguageFromDict(getLocaleString(this.systemDefaultLocale));
             }
-            if (localeInfo2 == null) {
-                localeInfo2 = (LocaleInfo) this.languagesDict.get("en");
+            if (info == null) {
+                info = getLanguageFromDict("en");
             }
-            applyLanguage(localeInfo2, true);
+            applyLanguage(info, true);
         }
         this.otherLanguages.remove(localeInfo);
         this.languages.remove(localeInfo);
@@ -810,7 +816,6 @@ public class LocaleController {
         Throwable th;
         FileInputStream stream = null;
         try {
-            AndroidUtilities.copyFile(file, new File(Environment.getExternalStorageDirectory(), "locale.xml"));
             HashMap<String, String> stringMap = new HashMap();
             XmlPullParser parser = Xml.newPullParser();
             FileInputStream stream2 = new FileInputStream(file);
@@ -1850,7 +1855,7 @@ public class LocaleController {
             final HashMap<String, String> valuesToSet = getLocaleFileStrings(finalFile);
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
-                    LocaleInfo localeInfo = (LocaleInfo) LocaleController.this.languagesDict.get(difference.lang_code);
+                    LocaleInfo localeInfo = LocaleController.this.getLanguageFromDict(difference.lang_code);
                     if (localeInfo != null) {
                         localeInfo.version = difference.version;
                     }
@@ -1916,7 +1921,7 @@ public class LocaleController {
                                     localeInfo.name = language.native_name;
                                     localeInfo.shortName = language.lang_code.replace('-', '_').toLowerCase();
                                     localeInfo.pathToFile = "remote";
-                                    LocaleInfo existing = (LocaleInfo) LocaleController.this.languagesDict.get(localeInfo.getKey());
+                                    LocaleInfo existing = LocaleController.this.getLanguageFromDict(localeInfo.getKey());
                                     if (existing == null) {
                                         LocaleController.this.languages.add(localeInfo);
                                         LocaleController.this.languagesDict.put(localeInfo.getKey(), localeInfo);
@@ -1930,22 +1935,22 @@ public class LocaleController {
                                 }
                                 a = 0;
                                 while (a < LocaleController.this.languages.size()) {
-                                    LocaleInfo localeInfo2 = (LocaleInfo) LocaleController.this.languages.get(a);
-                                    if (!localeInfo2.isBuiltIn() && localeInfo2.isRemote() && ((LocaleInfo) remoteLoaded.get(localeInfo2.getKey())) == null) {
+                                    LocaleInfo info = (LocaleInfo) LocaleController.this.languages.get(a);
+                                    if (!info.isBuiltIn() && info.isRemote() && ((LocaleInfo) remoteLoaded.get(info.getKey())) == null) {
                                         LocaleController.this.languages.remove(a);
-                                        LocaleController.this.languagesDict.remove(localeInfo2.getKey());
+                                        LocaleController.this.languagesDict.remove(info.getKey());
                                         a--;
-                                        if (localeInfo2 == LocaleController.this.currentLocaleInfo) {
+                                        if (info == LocaleController.this.currentLocaleInfo) {
                                             if (LocaleController.this.systemDefaultLocale.getLanguage() != null) {
-                                                localeInfo2 = (LocaleInfo) LocaleController.this.languagesDict.get(LocaleController.this.systemDefaultLocale.getLanguage());
+                                                info = LocaleController.this.getLanguageFromDict(LocaleController.this.systemDefaultLocale.getLanguage());
                                             }
-                                            if (localeInfo2 == null) {
-                                                localeInfo2 = (LocaleInfo) LocaleController.this.languagesDict.get(LocaleController.this.getLocaleString(LocaleController.this.systemDefaultLocale));
+                                            if (info == null) {
+                                                info = LocaleController.this.getLanguageFromDict(LocaleController.this.getLocaleString(LocaleController.this.systemDefaultLocale));
                                             }
-                                            if (localeInfo2 == null) {
-                                                localeInfo2 = (LocaleInfo) LocaleController.this.languagesDict.get("en");
+                                            if (info == null) {
+                                                info = LocaleController.this.getLanguageFromDict("en");
                                             }
-                                            LocaleController.this.applyLanguage(localeInfo2, true);
+                                            LocaleController.this.applyLanguage(info, true);
                                             NotificationCenter.getInstance().postNotificationName(NotificationCenter.reloadInterface, new Object[0]);
                                         }
                                     }

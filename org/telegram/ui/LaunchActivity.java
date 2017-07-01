@@ -2443,167 +2443,175 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     }
 
     private void showLanguageAlertInternal(LocaleInfo systemInfo, LocaleInfo englishInfo, String systemLang) {
-        LocaleInfo localeInfo;
-        this.loadingLocaleDialog = false;
-        boolean firstSystem = systemInfo.builtIn || LocaleController.getInstance().isCurrentLocalLocale();
-        Builder builder = new Builder(this);
-        builder.setTitle(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguage", R.string.ChooseYourLanguage));
-        builder.setSubtitle(getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguage", R.string.ChooseYourLanguage));
-        LinearLayout linearLayout = new LinearLayout(this);
-        linearLayout.setOrientation(1);
-        final LanguageCell[] cells = new LanguageCell[2];
-        final LocaleInfo[] selectedLanguage = new LocaleInfo[1];
-        LocaleInfo[] locales = new LocaleInfo[2];
-        String englishName = getStringForLanguageAlert(this.systemLocaleStrings, "English", R.string.English);
-        if (firstSystem) {
-            localeInfo = systemInfo;
-        } else {
-            localeInfo = englishInfo;
-        }
-        locales[0] = localeInfo;
-        if (firstSystem) {
-            localeInfo = englishInfo;
-        } else {
-            localeInfo = systemInfo;
-        }
-        locales[1] = localeInfo;
-        if (!firstSystem) {
-            systemInfo = englishInfo;
-        }
-        selectedLanguage[0] = systemInfo;
-        int a = 0;
-        while (a < 2) {
-            cells[a] = new LanguageCell(this, true);
-            cells[a].setLanguage(locales[a], locales[a] == englishInfo ? englishName : null, true);
-            cells[a].setTag(Integer.valueOf(a));
-            cells[a].setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 2));
-            cells[a].setLanguageSelected(a == 0);
-            linearLayout.addView(cells[a], LayoutHelper.createLinear(-1, 48));
-            cells[a].setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {
-                    Integer tag = (Integer) v.getTag();
-                    selectedLanguage[0] = ((LanguageCell) v).getCurrentLocale();
-                    for (int a = 0; a < cells.length; a++) {
-                        boolean z;
-                        LanguageCell languageCell = cells[a];
-                        if (a == tag.intValue()) {
-                            z = true;
-                        } else {
-                            z = false;
+        try {
+            LocaleInfo localeInfo;
+            this.loadingLocaleDialog = false;
+            boolean firstSystem = systemInfo.builtIn || LocaleController.getInstance().isCurrentLocalLocale();
+            Builder builder = new Builder(this);
+            builder.setTitle(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguage", R.string.ChooseYourLanguage));
+            builder.setSubtitle(getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguage", R.string.ChooseYourLanguage));
+            LinearLayout linearLayout = new LinearLayout(this);
+            linearLayout.setOrientation(1);
+            final LanguageCell[] cells = new LanguageCell[2];
+            final LocaleInfo[] selectedLanguage = new LocaleInfo[1];
+            LocaleInfo[] locales = new LocaleInfo[2];
+            String englishName = getStringForLanguageAlert(this.systemLocaleStrings, "English", R.string.English);
+            if (firstSystem) {
+                localeInfo = systemInfo;
+            } else {
+                localeInfo = englishInfo;
+            }
+            locales[0] = localeInfo;
+            if (firstSystem) {
+                localeInfo = englishInfo;
+            } else {
+                localeInfo = systemInfo;
+            }
+            locales[1] = localeInfo;
+            if (!firstSystem) {
+                systemInfo = englishInfo;
+            }
+            selectedLanguage[0] = systemInfo;
+            int a = 0;
+            while (a < 2) {
+                cells[a] = new LanguageCell(this, true);
+                cells[a].setLanguage(locales[a], locales[a] == englishInfo ? englishName : null, true);
+                cells[a].setTag(Integer.valueOf(a));
+                cells[a].setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 2));
+                cells[a].setLanguageSelected(a == 0);
+                linearLayout.addView(cells[a], LayoutHelper.createLinear(-1, 48));
+                cells[a].setOnClickListener(new OnClickListener() {
+                    public void onClick(View v) {
+                        Integer tag = (Integer) v.getTag();
+                        selectedLanguage[0] = ((LanguageCell) v).getCurrentLocale();
+                        for (int a = 0; a < cells.length; a++) {
+                            boolean z;
+                            LanguageCell languageCell = cells[a];
+                            if (a == tag.intValue()) {
+                                z = true;
+                            } else {
+                                z = false;
+                            }
+                            languageCell.setLanguageSelected(z);
                         }
-                        languageCell.setLanguageSelected(z);
+                    }
+                });
+                a++;
+            }
+            LanguageCell cell = new LanguageCell(this, true);
+            cell.setValue(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguageOther", R.string.ChooseYourLanguageOther), getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguageOther", R.string.ChooseYourLanguageOther));
+            cell.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
+                    LaunchActivity.this.localeDialog = null;
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(true);
+                    LaunchActivity.this.presentFragment(new LanguageSelectActivity());
+                    if (LaunchActivity.this.visibleDialog != null) {
+                        LaunchActivity.this.visibleDialog.dismiss();
+                        LaunchActivity.this.visibleDialog = null;
                     }
                 }
             });
-            a++;
-        }
-        LanguageCell cell = new LanguageCell(this, true);
-        cell.setValue(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguageOther", R.string.ChooseYourLanguageOther), getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguageOther", R.string.ChooseYourLanguageOther));
-        cell.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                LaunchActivity.this.localeDialog = null;
-                LaunchActivity.this.drawerLayoutContainer.closeDrawer(true);
-                LaunchActivity.this.presentFragment(new LanguageSelectActivity());
-                if (LaunchActivity.this.visibleDialog != null) {
-                    LaunchActivity.this.visibleDialog.dismiss();
-                    LaunchActivity.this.visibleDialog = null;
+            linearLayout.addView(cell, LayoutHelper.createLinear(-1, 48));
+            builder.setView(linearLayout);
+            builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    LocaleController.getInstance().applyLanguage(selectedLanguage[0], true);
+                    LaunchActivity.this.rebuildAllFragments(true);
                 }
-            }
-        });
-        linearLayout.addView(cell, LayoutHelper.createLinear(-1, 48));
-        builder.setView(linearLayout);
-        builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                LocaleController.getInstance().applyLanguage(selectedLanguage[0], true);
-                LaunchActivity.this.rebuildAllFragments(true);
-            }
-        });
-        this.localeDialog = showAlertDialog(builder);
-        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putString("language_showed2", systemLang).commit();
+            });
+            this.localeDialog = showAlertDialog(builder);
+            ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putString("language_showed2", systemLang).commit();
+        } catch (Throwable e) {
+            FileLog.e(e);
+        }
     }
 
     private void showLanguageAlert(boolean force) {
-        if (!this.loadingLocaleDialog) {
-            String showedLang = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getString("language_showed2", "");
-            final String systemLang = LocaleController.getSystemLocaleStringIso639().toLowerCase();
-            if (force || !showedLang.equals(systemLang)) {
-                final LocaleInfo[] infos = new LocaleInfo[2];
-                String arg;
-                if (systemLang.contains("-")) {
-                    arg = systemLang.split("-")[0];
-                } else {
-                    arg = systemLang;
-                }
-                for (int a = 0; a < LocaleController.getInstance().languages.size(); a++) {
-                    LocaleInfo info = (LocaleInfo) LocaleController.getInstance().languages.get(a);
-                    if (info.shortName.equals("en")) {
-                        infos[0] = info;
+        try {
+            if (!this.loadingLocaleDialog) {
+                String showedLang = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getString("language_showed2", "");
+                final String systemLang = LocaleController.getSystemLocaleStringIso639().toLowerCase();
+                if (force || !showedLang.equals(systemLang)) {
+                    final LocaleInfo[] infos = new LocaleInfo[2];
+                    String arg;
+                    if (systemLang.contains("-")) {
+                        arg = systemLang.split("-")[0];
+                    } else {
+                        arg = systemLang;
                     }
-                    if (info.shortName.equals(systemLang) || info.shortName.equals(arg)) {
-                        infos[1] = info;
+                    for (int a = 0; a < LocaleController.getInstance().languages.size(); a++) {
+                        LocaleInfo info = (LocaleInfo) LocaleController.getInstance().languages.get(a);
+                        if (info.shortName.equals("en")) {
+                            infos[0] = info;
+                        }
+                        if (info.shortName.replace("_", "-").equals(systemLang) || info.shortName.equals(arg)) {
+                            infos[1] = info;
+                        }
+                        if (infos[0] != null && infos[1] != null) {
+                            break;
+                        }
                     }
-                    if (infos[0] != null && infos[1] != null) {
-                        break;
-                    }
-                }
-                if (infos[0] != null && infos[1] != null && infos[0] != infos[1]) {
-                    this.systemLocaleStrings = null;
-                    this.englishLocaleStrings = null;
-                    this.loadingLocaleDialog = true;
-                    TL_langpack_getStrings req = new TL_langpack_getStrings();
-                    req.lang_code = infos[1].shortName;
-                    req.keys.add("English");
-                    req.keys.add("ChooseYourLanguage");
-                    req.keys.add("ChooseYourLanguageOther");
-                    req.keys.add("ChangeLanguageLater");
-                    ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                        public void run(TLObject response, TL_error error) {
-                            final HashMap<String, String> keys = new HashMap();
-                            if (response != null) {
-                                Vector vector = (Vector) response;
-                                for (int a = 0; a < vector.objects.size(); a++) {
-                                    LangPackString string = (LangPackString) vector.objects.get(a);
-                                    keys.put(string.key, string.value);
-                                }
-                            }
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    LaunchActivity.this.systemLocaleStrings = keys;
-                                    if (LaunchActivity.this.englishLocaleStrings != null && LaunchActivity.this.systemLocaleStrings != null) {
-                                        LaunchActivity.this.showLanguageAlertInternal(infos[1], infos[0], systemLang);
+                    if (infos[0] != null && infos[1] != null && infos[0] != infos[1]) {
+                        this.systemLocaleStrings = null;
+                        this.englishLocaleStrings = null;
+                        this.loadingLocaleDialog = true;
+                        TL_langpack_getStrings req = new TL_langpack_getStrings();
+                        req.lang_code = infos[1].shortName.replace("_", "-");
+                        req.keys.add("English");
+                        req.keys.add("ChooseYourLanguage");
+                        req.keys.add("ChooseYourLanguageOther");
+                        req.keys.add("ChangeLanguageLater");
+                        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                            public void run(TLObject response, TL_error error) {
+                                final HashMap<String, String> keys = new HashMap();
+                                if (response != null) {
+                                    Vector vector = (Vector) response;
+                                    for (int a = 0; a < vector.objects.size(); a++) {
+                                        LangPackString string = (LangPackString) vector.objects.get(a);
+                                        keys.put(string.key, string.value);
                                     }
                                 }
-                            });
-                        }
-                    }, 8);
-                    req = new TL_langpack_getStrings();
-                    req.lang_code = infos[0].shortName;
-                    req.keys.add("English");
-                    req.keys.add("ChooseYourLanguage");
-                    req.keys.add("ChooseYourLanguageOther");
-                    req.keys.add("ChangeLanguageLater");
-                    ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                        public void run(TLObject response, TL_error error) {
-                            final HashMap<String, String> keys = new HashMap();
-                            if (response != null) {
-                                Vector vector = (Vector) response;
-                                for (int a = 0; a < vector.objects.size(); a++) {
-                                    LangPackString string = (LangPackString) vector.objects.get(a);
-                                    keys.put(string.key, string.value);
-                                }
+                                AndroidUtilities.runOnUIThread(new Runnable() {
+                                    public void run() {
+                                        LaunchActivity.this.systemLocaleStrings = keys;
+                                        if (LaunchActivity.this.englishLocaleStrings != null && LaunchActivity.this.systemLocaleStrings != null) {
+                                            LaunchActivity.this.showLanguageAlertInternal(infos[1], infos[0], systemLang);
+                                        }
+                                    }
+                                });
                             }
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    LaunchActivity.this.englishLocaleStrings = keys;
-                                    if (LaunchActivity.this.englishLocaleStrings != null && LaunchActivity.this.systemLocaleStrings != null) {
-                                        LaunchActivity.this.showLanguageAlertInternal(infos[1], infos[0], systemLang);
+                        }, 8);
+                        req = new TL_langpack_getStrings();
+                        req.lang_code = infos[0].shortName.replace("_", "-");
+                        req.keys.add("English");
+                        req.keys.add("ChooseYourLanguage");
+                        req.keys.add("ChooseYourLanguageOther");
+                        req.keys.add("ChangeLanguageLater");
+                        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                            public void run(TLObject response, TL_error error) {
+                                final HashMap<String, String> keys = new HashMap();
+                                if (response != null) {
+                                    Vector vector = (Vector) response;
+                                    for (int a = 0; a < vector.objects.size(); a++) {
+                                        LangPackString string = (LangPackString) vector.objects.get(a);
+                                        keys.put(string.key, string.value);
                                     }
                                 }
-                            });
-                        }
-                    }, 8);
+                                AndroidUtilities.runOnUIThread(new Runnable() {
+                                    public void run() {
+                                        LaunchActivity.this.englishLocaleStrings = keys;
+                                        if (LaunchActivity.this.englishLocaleStrings != null && LaunchActivity.this.systemLocaleStrings != null) {
+                                            LaunchActivity.this.showLanguageAlertInternal(infos[1], infos[0], systemLang);
+                                        }
+                                    }
+                                });
+                            }
+                        }, 8);
+                    }
                 }
             }
+        } catch (Throwable e) {
+            FileLog.e(e);
         }
     }
 
