@@ -1,6 +1,5 @@
 package org.telegram.ui;
 
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.StateListAnimator;
 import android.app.Activity;
@@ -67,7 +66,6 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
 
     private class BottomPagesView extends View {
         private float animatedProgress;
-        private AnimatorSet animatorSet;
         private int currentPage;
         private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
         private Paint paint = new Paint(1);
@@ -81,20 +79,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
 
         public void setPageOffset(int position, float offset) {
             this.progress = offset;
-            if (this.animatorSet != null) {
-                this.animatorSet.cancel();
-                this.animatorSet = null;
-            }
             this.scrollPosition = position;
-            invalidate();
-        }
-
-        public float getAnimatedProgress() {
-            return this.animatedProgress;
-        }
-
-        public void setAnimatedProgress(float value) {
-            this.animatedProgress = value;
             invalidate();
         }
 
@@ -117,9 +102,6 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
             }
             this.paint.setColor(-13851168);
             x = this.currentPage * AndroidUtilities.dp(11.0f);
-            if (this.animatorSet != null) {
-                this.progress = this.animatedProgress;
-            }
             if (this.progress == 0.0f) {
                 this.rect.set((float) x, 0.0f, (float) (AndroidUtilities.dp(5.0f) + x), (float) AndroidUtilities.dp(5.0f));
             } else if (this.scrollPosition >= this.currentPage) {
@@ -337,7 +319,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
             frameLayout3.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
             FrameLayout frameLayout4 = new FrameLayout(this);
             frameLayout4.setBackgroundResource(R.drawable.btnshadow);
-            frameLayout4.addView(frameLayout, LayoutHelper.createFrame(-1, -1.0f));
+            frameLayout4.addView(scrollView, LayoutHelper.createFrame(-1, -1.0f));
             frameLayout3.addView(frameLayout4, LayoutHelper.createFrame(498, 528, 17));
         } else {
             setRequestedOrientation(1);

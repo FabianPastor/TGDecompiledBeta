@@ -96,6 +96,7 @@
         <item>#4991cc</item>
         <item>#527da3</item>
         <item>#33000000</item>
+        <item>#000000</item>
         <item>@style/Theme.TMessages.TimePicker</item>
         <item>@style/Theme.TMessages.Dialog.Alert</item>
         <item>@style/Theme.TMessages.Dialog.Alert</item>
@@ -141,6 +142,7 @@
         <item>?unknown_ref: 0</item>
         <item>false</item>
         <item>#99000000</item>
+        <item>#000000</item>
     </style>
     <style name="Theme.TMessages.Start">
         <item>?unknown_ref: 106000b</item>
@@ -155,6 +157,7 @@
         <item>@style/ActionBar.Transparent.TMessages.Start</item>
         <item>#527da3</item>
         <item>#426482</item>
+        <item>#000000</item>
     </style>
     <style name="Theme.TMessages.TimePicker">
         <item>#408bc8</item>

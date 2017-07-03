@@ -947,10 +947,10 @@ public class MessageObject {
             message.id = i2;
             message.reply_to_msg_id = 0;
             message.flags &= -32769;
-            messageObjects.add(messageObjects.size() - 1, new MessageObject(message, null, null, true, this.eventId));
             if (chat.megagroup) {
                 message.flags |= Integer.MIN_VALUE;
             }
+            messageObjects.add(messageObjects.size() - 1, new MessageObject(message, null, null, true, this.eventId));
         }
         messageObjects.add(messageObjects.size() - 1, this);
         if (this.messageText == null) {

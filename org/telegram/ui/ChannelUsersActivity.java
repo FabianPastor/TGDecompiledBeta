@@ -678,13 +678,13 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             CharSequence username2;
             Throwable e;
             Object username3;
-            String u;
+            int idx;
+            ManageChatUserCell userCell;
             switch (holder.getItemViewType()) {
                 case 0:
                     String foundUserName;
                     CharSequence spannableStringBuilder;
-                    int idx;
-                    ManageChatUserCell userCell;
+                    String u;
                     TLObject object = getItem(position);
                     if (object instanceof User) {
                         user = (User) object;

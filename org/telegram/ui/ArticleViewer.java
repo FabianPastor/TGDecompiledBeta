@@ -5060,540 +5060,542 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
 
     public void setParentActivity(Activity activity, BaseFragment fragment) {
         this.parentFragment = fragment;
-        if (this.parentActivity != activity) {
-            this.parentActivity = activity;
-            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("articles", 0);
-            this.selectedFontSize = sharedPreferences.getInt("font_size", 2);
-            this.selectedFont = sharedPreferences.getInt("font_type", 0);
-            this.selectedColor = sharedPreferences.getInt("font_color", 0);
-            this.nightModeEnabled = sharedPreferences.getBoolean("nightModeEnabled", false);
-            this.backgroundPaint = new Paint();
-            this.layerShadowDrawable = activity.getResources().getDrawable(R.drawable.layer_shadow);
-            this.slideDotDrawable = activity.getResources().getDrawable(R.drawable.slide_dot_small);
-            this.slideDotBigDrawable = activity.getResources().getDrawable(R.drawable.slide_dot_big);
-            this.scrimPaint = new Paint();
-            this.windowView = new WindowView(activity);
-            this.windowView.setWillNotDraw(false);
-            this.windowView.setClipChildren(true);
-            this.windowView.setFocusable(false);
-            this.containerView = new FrameLayout(activity);
-            this.windowView.addView(this.containerView, LayoutHelper.createFrame(-1, -1, 51));
-            this.containerView.setFitsSystemWindows(true);
-            if (VERSION.SDK_INT >= 21) {
-                this.containerView.setOnApplyWindowInsetsListener(new OnApplyWindowInsetsListener() {
-                    @SuppressLint({"NewApi"})
-                    public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
-                        WindowInsets oldInsets = (WindowInsets) ArticleViewer.this.lastInsets;
-                        ArticleViewer.this.lastInsets = insets;
-                        if (oldInsets == null || !oldInsets.toString().equals(insets.toString())) {
-                            ArticleViewer.this.windowView.requestLayout();
-                        }
-                        return insets.consumeSystemWindowInsets();
+        if (this.parentActivity == activity) {
+            updatePaintColors();
+            return;
+        }
+        this.parentActivity = activity;
+        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("articles", 0);
+        this.selectedFontSize = sharedPreferences.getInt("font_size", 2);
+        this.selectedFont = sharedPreferences.getInt("font_type", 0);
+        this.selectedColor = sharedPreferences.getInt("font_color", 0);
+        this.nightModeEnabled = sharedPreferences.getBoolean("nightModeEnabled", false);
+        this.backgroundPaint = new Paint();
+        this.layerShadowDrawable = activity.getResources().getDrawable(R.drawable.layer_shadow);
+        this.slideDotDrawable = activity.getResources().getDrawable(R.drawable.slide_dot_small);
+        this.slideDotBigDrawable = activity.getResources().getDrawable(R.drawable.slide_dot_big);
+        this.scrimPaint = new Paint();
+        this.windowView = new WindowView(activity);
+        this.windowView.setWillNotDraw(false);
+        this.windowView.setClipChildren(true);
+        this.windowView.setFocusable(false);
+        this.containerView = new FrameLayout(activity);
+        this.windowView.addView(this.containerView, LayoutHelper.createFrame(-1, -1, 51));
+        this.containerView.setFitsSystemWindows(true);
+        if (VERSION.SDK_INT >= 21) {
+            this.containerView.setOnApplyWindowInsetsListener(new OnApplyWindowInsetsListener() {
+                @SuppressLint({"NewApi"})
+                public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+                    WindowInsets oldInsets = (WindowInsets) ArticleViewer.this.lastInsets;
+                    ArticleViewer.this.lastInsets = insets;
+                    if (oldInsets == null || !oldInsets.toString().equals(insets.toString())) {
+                        ArticleViewer.this.windowView.requestLayout();
                     }
-                });
-            }
-            this.containerView.setSystemUiVisibility(1028);
-            this.photoContainerBackground = new View(activity);
-            this.photoContainerBackground.setVisibility(4);
-            this.photoContainerBackground.setBackgroundDrawable(this.photoBackgroundDrawable);
-            this.windowView.addView(this.photoContainerBackground, LayoutHelper.createFrame(-1, -1, 51));
-            this.animatingImageView = new ClippingImageView(activity);
-            this.animatingImageView.setAnimationValues(this.animationValues);
-            this.animatingImageView.setVisibility(8);
-            this.windowView.addView(this.animatingImageView, LayoutHelper.createFrame(40, 40.0f));
-            this.photoContainerView = new FrameLayoutDrawer(activity) {
-                protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-                    super.onLayout(changed, left, top, right, bottom);
-                    int y = (bottom - top) - ArticleViewer.this.captionTextView.getMeasuredHeight();
-                    if (ArticleViewer.this.bottomLayout.getVisibility() == 0) {
-                        y -= ArticleViewer.this.bottomLayout.getMeasuredHeight();
-                    }
-                    ArticleViewer.this.captionTextView.layout(0, y, ArticleViewer.this.captionTextView.getMeasuredWidth(), ArticleViewer.this.captionTextView.getMeasuredHeight() + y);
-                }
-            };
-            this.photoContainerView.setVisibility(4);
-            this.photoContainerView.setWillNotDraw(false);
-            this.windowView.addView(this.photoContainerView, LayoutHelper.createFrame(-1, -1, 51));
-            this.fullscreenVideoContainer = new FrameLayout(activity);
-            this.fullscreenVideoContainer.setBackgroundColor(-16777216);
-            this.fullscreenVideoContainer.setVisibility(4);
-            this.windowView.addView(this.fullscreenVideoContainer, LayoutHelper.createFrame(-1, -1.0f));
-            this.fullscreenAspectRatioView = new AspectRatioFrameLayout(activity);
-            this.fullscreenAspectRatioView.setVisibility(8);
-            this.fullscreenVideoContainer.addView(this.fullscreenAspectRatioView, LayoutHelper.createFrame(-1, -1, 17));
-            this.fullscreenTextureView = new TextureView(activity);
-            if (VERSION.SDK_INT >= 21) {
-                this.barBackground = new View(activity);
-                this.barBackground.setBackgroundColor(-16777216);
-                this.windowView.addView(this.barBackground);
-            }
-            this.listView = new RecyclerListView(activity) {
-                protected void onLayout(boolean changed, int l, int t, int r, int b) {
-                    super.onLayout(changed, l, t, r, b);
-                    int count = getChildCount();
-                    for (int a = 0; a < count; a++) {
-                        View child = getChildAt(a);
-                        if ((child.getTag() instanceof Integer) && ((Integer) child.getTag()).intValue() == 90 && child.getBottom() < getMeasuredHeight()) {
-                            int height = getMeasuredHeight();
-                            child.layout(0, height - child.getMeasuredHeight(), child.getMeasuredWidth(), height);
-                            return;
-                        }
-                    }
-                }
-            };
-            RecyclerListView recyclerListView = this.listView;
-            LayoutManager linearLayoutManager = new LinearLayoutManager(this.parentActivity, 1, false);
-            this.layoutManager = linearLayoutManager;
-            recyclerListView.setLayoutManager(linearLayoutManager);
-            recyclerListView = this.listView;
-            Adapter webpageAdapter = new WebpageAdapter(this.parentActivity);
-            this.adapter = webpageAdapter;
-            recyclerListView.setAdapter(webpageAdapter);
-            this.listView.setClipToPadding(false);
-            this.listView.setPadding(0, AndroidUtilities.dp(56.0f), 0, 0);
-            this.listView.setTopGlowOffset(AndroidUtilities.dp(56.0f));
-            this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-            this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-                public boolean onItemClick(View view, int position) {
-                    return false;
+                    return insets.consumeSystemWindowInsets();
                 }
             });
-            this.listView.setOnItemClickListener(new OnItemClickListener() {
-                public void onItemClick(View view, int position) {
-                    if (position != ArticleViewer.this.blocks.size() || ArticleViewer.this.currentPage == null) {
-                        if (position >= 0 && position < ArticleViewer.this.blocks.size()) {
-                            PageBlock pageBlock = (PageBlock) ArticleViewer.this.blocks.get(position);
-                            if (pageBlock instanceof TL_pageBlockChannel) {
-                                MessagesController.openByUserName(pageBlock.channel.username, ArticleViewer.this.parentFragment, 2);
-                                ArticleViewer.this.close(false, true);
-                            }
+        }
+        this.containerView.setSystemUiVisibility(1028);
+        this.photoContainerBackground = new View(activity);
+        this.photoContainerBackground.setVisibility(4);
+        this.photoContainerBackground.setBackgroundDrawable(this.photoBackgroundDrawable);
+        this.windowView.addView(this.photoContainerBackground, LayoutHelper.createFrame(-1, -1, 51));
+        this.animatingImageView = new ClippingImageView(activity);
+        this.animatingImageView.setAnimationValues(this.animationValues);
+        this.animatingImageView.setVisibility(8);
+        this.windowView.addView(this.animatingImageView, LayoutHelper.createFrame(40, 40.0f));
+        this.photoContainerView = new FrameLayoutDrawer(activity) {
+            protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+                super.onLayout(changed, left, top, right, bottom);
+                int y = (bottom - top) - ArticleViewer.this.captionTextView.getMeasuredHeight();
+                if (ArticleViewer.this.bottomLayout.getVisibility() == 0) {
+                    y -= ArticleViewer.this.bottomLayout.getMeasuredHeight();
+                }
+                ArticleViewer.this.captionTextView.layout(0, y, ArticleViewer.this.captionTextView.getMeasuredWidth(), ArticleViewer.this.captionTextView.getMeasuredHeight() + y);
+            }
+        };
+        this.photoContainerView.setVisibility(4);
+        this.photoContainerView.setWillNotDraw(false);
+        this.windowView.addView(this.photoContainerView, LayoutHelper.createFrame(-1, -1, 51));
+        this.fullscreenVideoContainer = new FrameLayout(activity);
+        this.fullscreenVideoContainer.setBackgroundColor(-16777216);
+        this.fullscreenVideoContainer.setVisibility(4);
+        this.windowView.addView(this.fullscreenVideoContainer, LayoutHelper.createFrame(-1, -1.0f));
+        this.fullscreenAspectRatioView = new AspectRatioFrameLayout(activity);
+        this.fullscreenAspectRatioView.setVisibility(8);
+        this.fullscreenVideoContainer.addView(this.fullscreenAspectRatioView, LayoutHelper.createFrame(-1, -1, 17));
+        this.fullscreenTextureView = new TextureView(activity);
+        if (VERSION.SDK_INT >= 21) {
+            this.barBackground = new View(activity);
+            this.barBackground.setBackgroundColor(-16777216);
+            this.windowView.addView(this.barBackground);
+        }
+        this.listView = new RecyclerListView(activity) {
+            protected void onLayout(boolean changed, int l, int t, int r, int b) {
+                super.onLayout(changed, l, t, r, b);
+                int count = getChildCount();
+                for (int a = 0; a < count; a++) {
+                    View child = getChildAt(a);
+                    if ((child.getTag() instanceof Integer) && ((Integer) child.getTag()).intValue() == 90 && child.getBottom() < getMeasuredHeight()) {
+                        int height = getMeasuredHeight();
+                        child.layout(0, height - child.getMeasuredHeight(), child.getMeasuredWidth(), height);
+                        return;
+                    }
+                }
+            }
+        };
+        RecyclerListView recyclerListView = this.listView;
+        LayoutManager linearLayoutManager = new LinearLayoutManager(this.parentActivity, 1, false);
+        this.layoutManager = linearLayoutManager;
+        recyclerListView.setLayoutManager(linearLayoutManager);
+        recyclerListView = this.listView;
+        Adapter webpageAdapter = new WebpageAdapter(this.parentActivity);
+        this.adapter = webpageAdapter;
+        recyclerListView.setAdapter(webpageAdapter);
+        this.listView.setClipToPadding(false);
+        this.listView.setPadding(0, AndroidUtilities.dp(56.0f), 0, 0);
+        this.listView.setTopGlowOffset(AndroidUtilities.dp(56.0f));
+        this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
+        this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+            public boolean onItemClick(View view, int position) {
+                return false;
+            }
+        });
+        this.listView.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(View view, int position) {
+                if (position != ArticleViewer.this.blocks.size() || ArticleViewer.this.currentPage == null) {
+                    if (position >= 0 && position < ArticleViewer.this.blocks.size()) {
+                        PageBlock pageBlock = (PageBlock) ArticleViewer.this.blocks.get(position);
+                        if (pageBlock instanceof TL_pageBlockChannel) {
+                            MessagesController.openByUserName(pageBlock.channel.username, ArticleViewer.this.parentFragment, 2);
+                            ArticleViewer.this.close(false, true);
                         }
-                    } else if (ArticleViewer.this.previewsReqId == 0) {
-                        TLObject object = MessagesController.getInstance().getUserOrChat("previews");
-                        if (object instanceof TL_user) {
-                            ArticleViewer.this.openPreviewsChat((User) object, ArticleViewer.this.currentPage.id);
-                            return;
-                        }
-                        final long pageId = ArticleViewer.this.currentPage.id;
-                        ArticleViewer.this.showProgressView(true);
-                        TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
-                        req.username = "previews";
-                        ArticleViewer.this.previewsReqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                            public void run(final TLObject response, TL_error error) {
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public void run() {
-                                        if (ArticleViewer.this.previewsReqId != 0) {
-                                            ArticleViewer.this.previewsReqId = 0;
-                                            ArticleViewer.this.showProgressView(false);
-                                            if (response != null) {
-                                                TL_contacts_resolvedPeer res = response;
-                                                MessagesController.getInstance().putUsers(res.users, false);
-                                                MessagesStorage.getInstance().putUsersAndChats(res.users, res.chats, false, true);
-                                                if (!res.users.isEmpty()) {
-                                                    ArticleViewer.this.openPreviewsChat((User) res.users.get(0), pageId);
-                                                }
+                    }
+                } else if (ArticleViewer.this.previewsReqId == 0) {
+                    TLObject object = MessagesController.getInstance().getUserOrChat("previews");
+                    if (object instanceof TL_user) {
+                        ArticleViewer.this.openPreviewsChat((User) object, ArticleViewer.this.currentPage.id);
+                        return;
+                    }
+                    final long pageId = ArticleViewer.this.currentPage.id;
+                    ArticleViewer.this.showProgressView(true);
+                    TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
+                    req.username = "previews";
+                    ArticleViewer.this.previewsReqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                        public void run(final TLObject response, TL_error error) {
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    if (ArticleViewer.this.previewsReqId != 0) {
+                                        ArticleViewer.this.previewsReqId = 0;
+                                        ArticleViewer.this.showProgressView(false);
+                                        if (response != null) {
+                                            TL_contacts_resolvedPeer res = response;
+                                            MessagesController.getInstance().putUsers(res.users, false);
+                                            MessagesStorage.getInstance().putUsersAndChats(res.users, res.chats, false, true);
+                                            if (!res.users.isEmpty()) {
+                                                ArticleViewer.this.openPreviewsChat((User) res.users.get(0), pageId);
                                             }
                                         }
                                     }
-                                });
-                            }
-                        });
-                    }
-                }
-            });
-            this.listView.setOnScrollListener(new OnScrollListener() {
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    if (ArticleViewer.this.listView.getChildCount() != 0) {
-                        ArticleViewer.this.checkScroll(dy);
-                    }
-                }
-            });
-            this.headerView = new FrameLayout(activity);
-            this.headerView.setOnTouchListener(new OnTouchListener() {
-                public boolean onTouch(View v, MotionEvent event) {
-                    return true;
-                }
-            });
-            this.headerView.setBackgroundColor(-16777216);
-            this.containerView.addView(this.headerView, LayoutHelper.createFrame(-1, 56.0f));
-            this.backButton = new ImageView(activity);
-            this.backButton.setScaleType(ScaleType.CENTER);
-            this.backDrawable = new BackDrawable(false);
-            this.backDrawable.setAnimationTime(200.0f);
-            this.backDrawable.setColor(-5000269);
-            this.backDrawable.setRotated(false);
-            this.backButton.setImageDrawable(this.backDrawable);
-            this.backButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
-            this.headerView.addView(this.backButton, LayoutHelper.createFrame(54, 56.0f));
-            this.backButton.setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {
-                    ArticleViewer.this.close(true, true);
-                }
-            });
-            LinearLayout settingsContainer = new LinearLayout(this.parentActivity);
-            settingsContainer.setPadding(0, AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f));
-            settingsContainer.setOrientation(1);
-            int a = 0;
-            while (a < 3) {
-                this.colorCells[a] = new ColorCell(this, this.parentActivity);
-                switch (a) {
-                    case 0:
-                        this.nightModeImageView = new ImageView(this.parentActivity);
-                        this.nightModeImageView.setScaleType(ScaleType.CENTER);
-                        this.nightModeImageView.setImageResource(R.drawable.moon);
-                        ImageView imageView = this.nightModeImageView;
-                        int i = (!this.nightModeEnabled || this.selectedColor == 2) ? -3355444 : -15428119;
-                        imageView.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
-                        this.nightModeImageView.setBackgroundDrawable(Theme.createSelectorDrawable(251658240));
-                        this.colorCells[a].addView(this.nightModeImageView, LayoutHelper.createFrame(48, 48, 53));
-                        this.nightModeImageView.setOnClickListener(new OnClickListener() {
-                            public void onClick(View v) {
-                                ArticleViewer.this.nightModeEnabled = !ArticleViewer.this.nightModeEnabled;
-                                ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().putBoolean("nightModeEnabled", ArticleViewer.this.nightModeEnabled).commit();
-                                ArticleViewer.this.updateNightModeButton();
-                                ArticleViewer.this.updatePaintColors();
-                                ArticleViewer.this.adapter.notifyDataSetChanged();
-                                if (ArticleViewer.this.nightModeEnabled) {
-                                    ArticleViewer.this.showNightModeHint();
                                 }
+                            });
+                        }
+                    });
+                }
+            }
+        });
+        this.listView.setOnScrollListener(new OnScrollListener() {
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (ArticleViewer.this.listView.getChildCount() != 0) {
+                    ArticleViewer.this.checkScroll(dy);
+                }
+            }
+        });
+        this.headerView = new FrameLayout(activity);
+        this.headerView.setOnTouchListener(new OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        this.headerView.setBackgroundColor(-16777216);
+        this.containerView.addView(this.headerView, LayoutHelper.createFrame(-1, 56.0f));
+        this.backButton = new ImageView(activity);
+        this.backButton.setScaleType(ScaleType.CENTER);
+        this.backDrawable = new BackDrawable(false);
+        this.backDrawable.setAnimationTime(200.0f);
+        this.backDrawable.setColor(-5000269);
+        this.backDrawable.setRotated(false);
+        this.backButton.setImageDrawable(this.backDrawable);
+        this.backButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+        this.headerView.addView(this.backButton, LayoutHelper.createFrame(54, 56.0f));
+        this.backButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                ArticleViewer.this.close(true, true);
+            }
+        });
+        LinearLayout settingsContainer = new LinearLayout(this.parentActivity);
+        settingsContainer.setPadding(0, AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f));
+        settingsContainer.setOrientation(1);
+        int a = 0;
+        while (a < 3) {
+            this.colorCells[a] = new ColorCell(this, this.parentActivity);
+            switch (a) {
+                case 0:
+                    this.nightModeImageView = new ImageView(this.parentActivity);
+                    this.nightModeImageView.setScaleType(ScaleType.CENTER);
+                    this.nightModeImageView.setImageResource(R.drawable.moon);
+                    ImageView imageView = this.nightModeImageView;
+                    int i = (!this.nightModeEnabled || this.selectedColor == 2) ? -3355444 : -15428119;
+                    imageView.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+                    this.nightModeImageView.setBackgroundDrawable(Theme.createSelectorDrawable(251658240));
+                    this.colorCells[a].addView(this.nightModeImageView, LayoutHelper.createFrame(48, 48, 53));
+                    this.nightModeImageView.setOnClickListener(new OnClickListener() {
+                        public void onClick(View v) {
+                            ArticleViewer.this.nightModeEnabled = !ArticleViewer.this.nightModeEnabled;
+                            ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().putBoolean("nightModeEnabled", ArticleViewer.this.nightModeEnabled).commit();
+                            ArticleViewer.this.updateNightModeButton();
+                            ArticleViewer.this.updatePaintColors();
+                            ArticleViewer.this.adapter.notifyDataSetChanged();
+                            if (ArticleViewer.this.nightModeEnabled) {
+                                ArticleViewer.this.showNightModeHint();
                             }
-                        });
-                        this.colorCells[a].setTextAndColor(LocaleController.getString("ColorWhite", R.string.ColorWhite), -1);
-                        break;
-                    case 1:
-                        this.colorCells[a].setTextAndColor(LocaleController.getString("ColorSepia", R.string.ColorSepia), -1382967);
-                        break;
-                    case 2:
-                        this.colorCells[a].setTextAndColor(LocaleController.getString("ColorDark", R.string.ColorDark), -14474461);
-                        break;
-                }
-                this.colorCells[a].select(a == this.selectedColor);
-                this.colorCells[a].setTag(Integer.valueOf(a));
-                this.colorCells[a].setOnClickListener(new OnClickListener() {
-                    public void onClick(View v) {
-                        int num = ((Integer) v.getTag()).intValue();
-                        ArticleViewer.this.selectedColor = num;
-                        int a = 0;
-                        while (a < 3) {
-                            ArticleViewer.this.colorCells[a].select(a == num);
-                            a++;
                         }
-                        ArticleViewer.this.updateNightModeButton();
-                        ArticleViewer.this.updatePaintColors();
-                        ArticleViewer.this.adapter.notifyDataSetChanged();
-                    }
-                });
-                settingsContainer.addView(this.colorCells[a], LayoutHelper.createLinear(-1, 48));
-                a++;
+                    });
+                    this.colorCells[a].setTextAndColor(LocaleController.getString("ColorWhite", R.string.ColorWhite), -1);
+                    break;
+                case 1:
+                    this.colorCells[a].setTextAndColor(LocaleController.getString("ColorSepia", R.string.ColorSepia), -1382967);
+                    break;
+                case 2:
+                    this.colorCells[a].setTextAndColor(LocaleController.getString("ColorDark", R.string.ColorDark), -14474461);
+                    break;
             }
-            updateNightModeButton();
-            View divider = new View(this.parentActivity);
-            divider.setBackgroundColor(-2039584);
-            settingsContainer.addView(divider, LayoutHelper.createLinear(-1, 1, 15.0f, 4.0f, 15.0f, 4.0f));
-            divider.getLayoutParams().height = 1;
-            a = 0;
-            while (a < 2) {
-                this.fontCells[a] = new FontCell(this, this.parentActivity);
-                switch (a) {
-                    case 0:
-                        this.fontCells[a].setTextAndTypeface("Roboto", Typeface.DEFAULT);
-                        break;
-                    case 1:
-                        this.fontCells[a].setTextAndTypeface("Serif", Typeface.SERIF);
-                        break;
-                }
-                this.fontCells[a].select(a == this.selectedFont);
-                this.fontCells[a].setTag(Integer.valueOf(a));
-                this.fontCells[a].setOnClickListener(new OnClickListener() {
-                    public void onClick(View v) {
-                        int num = ((Integer) v.getTag()).intValue();
-                        ArticleViewer.this.selectedFont = num;
-                        int a = 0;
-                        while (a < 2) {
-                            ArticleViewer.this.fontCells[a].select(a == num);
-                            a++;
-                        }
-                        ArticleViewer.this.updatePaintFonts();
-                        ArticleViewer.this.adapter.notifyDataSetChanged();
-                    }
-                });
-                settingsContainer.addView(this.fontCells[a], LayoutHelper.createLinear(-1, 48));
-                a++;
-            }
-            divider = new View(this.parentActivity);
-            divider.setBackgroundColor(-2039584);
-            settingsContainer.addView(divider, LayoutHelper.createLinear(-1, 1, 15.0f, 4.0f, 15.0f, 4.0f));
-            divider.getLayoutParams().height = 1;
-            View textView = new TextView(this.parentActivity);
-            textView.setTextColor(-14606047);
-            textView.setTextSize(1, 16.0f);
-            textView.setLines(1);
-            textView.setMaxLines(1);
-            textView.setSingleLine(true);
-            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-            textView.setText(LocaleController.getString("FontSize", R.string.FontSize));
-            settingsContainer.addView(textView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 17, 12, 17, 0));
-            settingsContainer.addView(new SizeChooseView(this.parentActivity), LayoutHelper.createLinear(-1, 38, 0.0f, 0.0f, 0.0f, 1.0f));
-            this.settingsButton = new ActionBarMenuItem(this.parentActivity, null, Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, -1);
-            this.settingsButton.setPopupAnimationEnabled(false);
-            this.settingsButton.setLayoutInScreen(true);
-            textView = new TextView(this.parentActivity);
-            textView.setTextSize(1, 18.0f);
-            textView.setText("Aa");
-            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            textView.setTextColor(-5000269);
-            textView.setGravity(17);
-            this.settingsButton.addView(textView, LayoutHelper.createFrame(-1, -1.0f));
-            this.settingsButton.addSubItem(settingsContainer, AndroidUtilities.dp(220.0f), -2);
-            this.settingsButton.redrawPopup(-1);
-            this.headerView.addView(this.settingsButton, LayoutHelper.createFrame(48, 56.0f, 53, 0.0f, 0.0f, 56.0f, 0.0f));
-            this.shareContainer = new FrameLayout(activity);
-            this.headerView.addView(this.shareContainer, LayoutHelper.createFrame(48, 56, 53));
-            this.shareContainer.setOnClickListener(new OnClickListener() {
+            this.colorCells[a].select(a == this.selectedColor);
+            this.colorCells[a].setTag(Integer.valueOf(a));
+            this.colorCells[a].setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
-                    if (ArticleViewer.this.currentPage != null && ArticleViewer.this.parentActivity != null) {
-                        ArticleViewer.this.showDialog(new ShareAlert(ArticleViewer.this.parentActivity, null, ArticleViewer.this.currentPage.url, false, ArticleViewer.this.currentPage.url, true));
-                        ArticleViewer.this.hideActionBar();
+                    int num = ((Integer) v.getTag()).intValue();
+                    ArticleViewer.this.selectedColor = num;
+                    int a = 0;
+                    while (a < 3) {
+                        ArticleViewer.this.colorCells[a].select(a == num);
+                        a++;
                     }
+                    ArticleViewer.this.updateNightModeButton();
+                    ArticleViewer.this.updatePaintColors();
+                    ArticleViewer.this.adapter.notifyDataSetChanged();
                 }
             });
-            this.shareButton = new ImageView(activity);
-            this.shareButton.setScaleType(ScaleType.CENTER);
-            this.shareButton.setImageResource(R.drawable.ic_share_article);
-            this.shareButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
-            this.shareContainer.addView(this.shareButton, LayoutHelper.createFrame(48, 56.0f));
-            this.progressView = new ContextProgressView(activity, 2);
-            this.progressView.setVisibility(8);
-            this.shareContainer.addView(this.progressView, LayoutHelper.createFrame(48, 56.0f));
-            this.windowLayoutParams = new LayoutParams();
-            this.windowLayoutParams.height = -1;
-            this.windowLayoutParams.format = -3;
-            this.windowLayoutParams.width = -1;
-            this.windowLayoutParams.gravity = 51;
-            this.windowLayoutParams.type = 99;
-            if (VERSION.SDK_INT >= 21) {
-                this.windowLayoutParams.flags = -NUM;
-            } else {
-                this.windowLayoutParams.flags = 8;
+            settingsContainer.addView(this.colorCells[a], LayoutHelper.createLinear(-1, 48));
+            a++;
+        }
+        updateNightModeButton();
+        View divider = new View(this.parentActivity);
+        divider.setBackgroundColor(-2039584);
+        settingsContainer.addView(divider, LayoutHelper.createLinear(-1, 1, 15.0f, 4.0f, 15.0f, 4.0f));
+        divider.getLayoutParams().height = 1;
+        a = 0;
+        while (a < 2) {
+            this.fontCells[a] = new FontCell(this, this.parentActivity);
+            switch (a) {
+                case 0:
+                    this.fontCells[a].setTextAndTypeface("Roboto", Typeface.DEFAULT);
+                    break;
+                case 1:
+                    this.fontCells[a].setTextAndTypeface("Serif", Typeface.SERIF);
+                    break;
             }
-            if (progressDrawables == null) {
-                progressDrawables = new Drawable[4];
-                progressDrawables[0] = this.parentActivity.getResources().getDrawable(R.drawable.circle_big);
-                progressDrawables[1] = this.parentActivity.getResources().getDrawable(R.drawable.cancel_big);
-                progressDrawables[2] = this.parentActivity.getResources().getDrawable(R.drawable.load_big);
-                progressDrawables[3] = this.parentActivity.getResources().getDrawable(R.drawable.play_big);
+            this.fontCells[a].select(a == this.selectedFont);
+            this.fontCells[a].setTag(Integer.valueOf(a));
+            this.fontCells[a].setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
+                    int num = ((Integer) v.getTag()).intValue();
+                    ArticleViewer.this.selectedFont = num;
+                    int a = 0;
+                    while (a < 2) {
+                        ArticleViewer.this.fontCells[a].select(a == num);
+                        a++;
+                    }
+                    ArticleViewer.this.updatePaintFonts();
+                    ArticleViewer.this.adapter.notifyDataSetChanged();
+                }
+            });
+            settingsContainer.addView(this.fontCells[a], LayoutHelper.createLinear(-1, 48));
+            a++;
+        }
+        divider = new View(this.parentActivity);
+        divider.setBackgroundColor(-2039584);
+        settingsContainer.addView(divider, LayoutHelper.createLinear(-1, 1, 15.0f, 4.0f, 15.0f, 4.0f));
+        divider.getLayoutParams().height = 1;
+        View textView = new TextView(this.parentActivity);
+        textView.setTextColor(-14606047);
+        textView.setTextSize(1, 16.0f);
+        textView.setLines(1);
+        textView.setMaxLines(1);
+        textView.setSingleLine(true);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        textView.setText(LocaleController.getString("FontSize", R.string.FontSize));
+        settingsContainer.addView(textView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 17, 12, 17, 0));
+        settingsContainer.addView(new SizeChooseView(this.parentActivity), LayoutHelper.createLinear(-1, 38, 0.0f, 0.0f, 0.0f, 1.0f));
+        this.settingsButton = new ActionBarMenuItem(this.parentActivity, null, Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, -1);
+        this.settingsButton.setPopupAnimationEnabled(false);
+        this.settingsButton.setLayoutInScreen(true);
+        textView = new TextView(this.parentActivity);
+        textView.setTextSize(1, 18.0f);
+        textView.setText("Aa");
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textView.setTextColor(-5000269);
+        textView.setGravity(17);
+        this.settingsButton.addView(textView, LayoutHelper.createFrame(-1, -1.0f));
+        this.settingsButton.addSubItem(settingsContainer, AndroidUtilities.dp(220.0f), -2);
+        this.settingsButton.redrawPopup(-1);
+        this.headerView.addView(this.settingsButton, LayoutHelper.createFrame(48, 56.0f, 53, 0.0f, 0.0f, 56.0f, 0.0f));
+        this.shareContainer = new FrameLayout(activity);
+        this.headerView.addView(this.shareContainer, LayoutHelper.createFrame(48, 56, 53));
+        this.shareContainer.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                if (ArticleViewer.this.currentPage != null && ArticleViewer.this.parentActivity != null) {
+                    ArticleViewer.this.showDialog(new ShareAlert(ArticleViewer.this.parentActivity, null, ArticleViewer.this.currentPage.url, false, ArticleViewer.this.currentPage.url, true));
+                    ArticleViewer.this.hideActionBar();
+                }
             }
-            this.scroller = new Scroller(activity);
-            this.blackPaint.setColor(-16777216);
-            this.actionBar = new ActionBar(activity);
-            this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            this.actionBar.setOccupyStatusBar(false);
-            this.actionBar.setTitleColor(-1);
-            this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, false);
-            this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-            this.actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, Integer.valueOf(1), Integer.valueOf(1)));
-            this.photoContainerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
-            this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
-                public void onItemClick(int id) {
-                    int i = 1;
-                    if (id == -1) {
-                        ArticleViewer.this.closePhoto(true);
-                    } else if (id == 1) {
-                        if (VERSION.SDK_INT < 23 || ArticleViewer.this.parentActivity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") == 0) {
-                            File f = ArticleViewer.this.getMediaFile(ArticleViewer.this.currentIndex);
-                            if (f == null || !f.exists()) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(ArticleViewer.this.parentActivity);
-                                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                                builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
-                                ArticleViewer.this.showDialog(builder.create());
-                                return;
-                            }
-                            String file = f.toString();
-                            Context access$1900 = ArticleViewer.this.parentActivity;
-                            if (!ArticleViewer.this.isMediaVideo(ArticleViewer.this.currentIndex)) {
-                                i = 0;
-                            }
-                            MediaController.saveFile(file, access$1900, i, null, null);
+        });
+        this.shareButton = new ImageView(activity);
+        this.shareButton.setScaleType(ScaleType.CENTER);
+        this.shareButton.setImageResource(R.drawable.ic_share_article);
+        this.shareButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+        this.shareContainer.addView(this.shareButton, LayoutHelper.createFrame(48, 56.0f));
+        this.progressView = new ContextProgressView(activity, 2);
+        this.progressView.setVisibility(8);
+        this.shareContainer.addView(this.progressView, LayoutHelper.createFrame(48, 56.0f));
+        this.windowLayoutParams = new LayoutParams();
+        this.windowLayoutParams.height = -1;
+        this.windowLayoutParams.format = -3;
+        this.windowLayoutParams.width = -1;
+        this.windowLayoutParams.gravity = 51;
+        this.windowLayoutParams.type = 99;
+        if (VERSION.SDK_INT >= 21) {
+            this.windowLayoutParams.flags = -NUM;
+        } else {
+            this.windowLayoutParams.flags = 8;
+        }
+        if (progressDrawables == null) {
+            progressDrawables = new Drawable[4];
+            progressDrawables[0] = this.parentActivity.getResources().getDrawable(R.drawable.circle_big);
+            progressDrawables[1] = this.parentActivity.getResources().getDrawable(R.drawable.cancel_big);
+            progressDrawables[2] = this.parentActivity.getResources().getDrawable(R.drawable.load_big);
+            progressDrawables[3] = this.parentActivity.getResources().getDrawable(R.drawable.play_big);
+        }
+        this.scroller = new Scroller(activity);
+        this.blackPaint.setColor(-16777216);
+        this.actionBar = new ActionBar(activity);
+        this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+        this.actionBar.setOccupyStatusBar(false);
+        this.actionBar.setTitleColor(-1);
+        this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, false);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, Integer.valueOf(1), Integer.valueOf(1)));
+        this.photoContainerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
+            public void onItemClick(int id) {
+                int i = 1;
+                if (id == -1) {
+                    ArticleViewer.this.closePhoto(true);
+                } else if (id == 1) {
+                    if (VERSION.SDK_INT < 23 || ArticleViewer.this.parentActivity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") == 0) {
+                        File f = ArticleViewer.this.getMediaFile(ArticleViewer.this.currentIndex);
+                        if (f == null || !f.exists()) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ArticleViewer.this.parentActivity);
+                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                            builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
+                            ArticleViewer.this.showDialog(builder.create());
                             return;
                         }
-                        ArticleViewer.this.parentActivity.requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 4);
-                    } else if (id == 2) {
-                        ArticleViewer.this.onSharePressed();
-                    } else if (id == 3) {
-                        try {
-                            AndroidUtilities.openForView(ArticleViewer.this.getMedia(ArticleViewer.this.currentIndex), ArticleViewer.this.parentActivity);
-                            ArticleViewer.this.closePhoto(false);
-                        } catch (Throwable e) {
-                            FileLog.e(e);
+                        String file = f.toString();
+                        Context access$1900 = ArticleViewer.this.parentActivity;
+                        if (!ArticleViewer.this.isMediaVideo(ArticleViewer.this.currentIndex)) {
+                            i = 0;
                         }
+                        MediaController.saveFile(file, access$1900, i, null, null);
+                        return;
+                    }
+                    ArticleViewer.this.parentActivity.requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 4);
+                } else if (id == 2) {
+                    ArticleViewer.this.onSharePressed();
+                } else if (id == 3) {
+                    try {
+                        AndroidUtilities.openForView(ArticleViewer.this.getMedia(ArticleViewer.this.currentIndex), ArticleViewer.this.parentActivity);
+                        ArticleViewer.this.closePhoto(false);
+                    } catch (Throwable e) {
+                        FileLog.e(e);
                     }
                 }
+            }
 
-                public boolean canOpenMenu() {
-                    File f = ArticleViewer.this.getMediaFile(ArticleViewer.this.currentIndex);
-                    return f != null && f.exists();
+            public boolean canOpenMenu() {
+                File f = ArticleViewer.this.getMediaFile(ArticleViewer.this.currentIndex);
+                return f != null && f.exists();
+            }
+        });
+        ActionBarMenu menu = this.actionBar.createMenu();
+        menu.addItem(2, (int) R.drawable.share);
+        this.menuItem = menu.addItem(0, (int) R.drawable.ic_ab_other);
+        this.menuItem.setLayoutInScreen(true);
+        this.menuItem.addSubItem(3, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+        this.menuItem.addSubItem(1, LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
+        this.bottomLayout = new FrameLayout(this.parentActivity);
+        this.bottomLayout.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+        this.photoContainerView.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
+        this.captionTextViewOld = new TextView(activity);
+        this.captionTextViewOld.setMaxLines(10);
+        this.captionTextViewOld.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+        this.captionTextViewOld.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f));
+        this.captionTextViewOld.setLinkTextColor(-1);
+        this.captionTextViewOld.setTextColor(-1);
+        this.captionTextViewOld.setGravity(19);
+        this.captionTextViewOld.setTextSize(1, 16.0f);
+        this.captionTextViewOld.setVisibility(4);
+        this.photoContainerView.addView(this.captionTextViewOld, LayoutHelper.createFrame(-1, -2, 83));
+        TextView textView2 = new TextView(activity);
+        this.captionTextViewNew = textView2;
+        this.captionTextView = textView2;
+        this.captionTextViewNew.setMaxLines(10);
+        this.captionTextViewNew.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+        this.captionTextViewNew.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f));
+        this.captionTextViewNew.setLinkTextColor(-1);
+        this.captionTextViewNew.setTextColor(-1);
+        this.captionTextViewNew.setGravity(19);
+        this.captionTextViewNew.setTextSize(1, 16.0f);
+        this.captionTextViewNew.setVisibility(4);
+        this.photoContainerView.addView(this.captionTextViewNew, LayoutHelper.createFrame(-1, -2, 83));
+        this.radialProgressViews[0] = new RadialProgressView(activity, this.photoContainerView);
+        this.radialProgressViews[0].setBackgroundState(0, false);
+        this.radialProgressViews[1] = new RadialProgressView(activity, this.photoContainerView);
+        this.radialProgressViews[1].setBackgroundState(0, false);
+        this.radialProgressViews[2] = new RadialProgressView(activity, this.photoContainerView);
+        this.radialProgressViews[2].setBackgroundState(0, false);
+        this.videoPlayerSeekbar = new SeekBar(activity);
+        this.videoPlayerSeekbar.setColors(NUM, -1, -1);
+        this.videoPlayerSeekbar.setDelegate(new SeekBarDelegate() {
+            public void onSeekBarDrag(float progress) {
+                if (ArticleViewer.this.videoPlayer != null) {
+                    ArticleViewer.this.videoPlayer.seekTo((long) ((int) (((float) ArticleViewer.this.videoPlayer.getDuration()) * progress)));
                 }
-            });
-            ActionBarMenu menu = this.actionBar.createMenu();
-            menu.addItem(2, (int) R.drawable.share);
-            this.menuItem = menu.addItem(0, (int) R.drawable.ic_ab_other);
-            this.menuItem.setLayoutInScreen(true);
-            this.menuItem.addSubItem(3, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
-            this.menuItem.addSubItem(1, LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
-            this.bottomLayout = new FrameLayout(this.parentActivity);
-            this.bottomLayout.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            this.photoContainerView.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
-            this.captionTextViewOld = new TextView(activity);
-            this.captionTextViewOld.setMaxLines(10);
-            this.captionTextViewOld.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            this.captionTextViewOld.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f));
-            this.captionTextViewOld.setLinkTextColor(-1);
-            this.captionTextViewOld.setTextColor(-1);
-            this.captionTextViewOld.setGravity(19);
-            this.captionTextViewOld.setTextSize(1, 16.0f);
-            this.captionTextViewOld.setVisibility(4);
-            this.photoContainerView.addView(this.captionTextViewOld, LayoutHelper.createFrame(-1, -2, 83));
-            TextView textView2 = new TextView(activity);
-            this.captionTextViewNew = textView2;
-            this.captionTextView = textView2;
-            this.captionTextViewNew.setMaxLines(10);
-            this.captionTextViewNew.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            this.captionTextViewNew.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f));
-            this.captionTextViewNew.setLinkTextColor(-1);
-            this.captionTextViewNew.setTextColor(-1);
-            this.captionTextViewNew.setGravity(19);
-            this.captionTextViewNew.setTextSize(1, 16.0f);
-            this.captionTextViewNew.setVisibility(4);
-            this.photoContainerView.addView(this.captionTextViewNew, LayoutHelper.createFrame(-1, -2, 83));
-            this.radialProgressViews[0] = new RadialProgressView(activity, this.photoContainerView);
-            this.radialProgressViews[0].setBackgroundState(0, false);
-            this.radialProgressViews[1] = new RadialProgressView(activity, this.photoContainerView);
-            this.radialProgressViews[1].setBackgroundState(0, false);
-            this.radialProgressViews[2] = new RadialProgressView(activity, this.photoContainerView);
-            this.radialProgressViews[2].setBackgroundState(0, false);
-            this.videoPlayerSeekbar = new SeekBar(activity);
-            this.videoPlayerSeekbar.setColors(NUM, -1, -1);
-            this.videoPlayerSeekbar.setDelegate(new SeekBarDelegate() {
-                public void onSeekBarDrag(float progress) {
-                    if (ArticleViewer.this.videoPlayer != null) {
-                        ArticleViewer.this.videoPlayer.seekTo((long) ((int) (((float) ArticleViewer.this.videoPlayer.getDuration()) * progress)));
-                    }
+            }
+        });
+        this.videoPlayerControlFrameLayout = new FrameLayout(activity) {
+            public boolean onTouchEvent(MotionEvent event) {
+                int x = (int) event.getX();
+                int y = (int) event.getY();
+                if (!ArticleViewer.this.videoPlayerSeekbar.onTouch(event.getAction(), event.getX() - ((float) AndroidUtilities.dp(48.0f)), event.getY())) {
+                    return super.onTouchEvent(event);
                 }
-            });
-            this.videoPlayerControlFrameLayout = new FrameLayout(activity) {
-                public boolean onTouchEvent(MotionEvent event) {
-                    int x = (int) event.getX();
-                    int y = (int) event.getY();
-                    if (!ArticleViewer.this.videoPlayerSeekbar.onTouch(event.getAction(), event.getX() - ((float) AndroidUtilities.dp(48.0f)), event.getY())) {
-                        return super.onTouchEvent(event);
-                    }
-                    getParent().requestDisallowInterceptTouchEvent(true);
-                    invalidate();
-                    return true;
-                }
+                getParent().requestDisallowInterceptTouchEvent(true);
+                invalidate();
+                return true;
+            }
 
-                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                    long duration;
-                    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-                    if (ArticleViewer.this.videoPlayer != null) {
-                        duration = ArticleViewer.this.videoPlayer.getDuration();
-                        if (duration == C.TIME_UNSET) {
-                            duration = 0;
-                        }
-                    } else {
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                long duration;
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                if (ArticleViewer.this.videoPlayer != null) {
+                    duration = ArticleViewer.this.videoPlayer.getDuration();
+                    if (duration == C.TIME_UNSET) {
                         duration = 0;
                     }
-                    duration /= 1000;
-                    ArticleViewer.this.videoPlayerSeekbar.setSize((getMeasuredWidth() - AndroidUtilities.dp(64.0f)) - ((int) Math.ceil((double) ArticleViewer.this.videoPlayerTime.getPaint().measureText(String.format("%02d:%02d / %02d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60), Long.valueOf(duration / 60), Long.valueOf(duration % 60)})))), getMeasuredHeight());
+                } else {
+                    duration = 0;
                 }
-
-                protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-                    super.onLayout(changed, left, top, right, bottom);
-                    float progress = 0.0f;
-                    if (ArticleViewer.this.videoPlayer != null) {
-                        progress = ((float) ArticleViewer.this.videoPlayer.getCurrentPosition()) / ((float) ArticleViewer.this.videoPlayer.getDuration());
-                    }
-                    ArticleViewer.this.videoPlayerSeekbar.setProgress(progress);
-                }
-
-                protected void onDraw(Canvas canvas) {
-                    canvas.save();
-                    canvas.translate((float) AndroidUtilities.dp(48.0f), 0.0f);
-                    ArticleViewer.this.videoPlayerSeekbar.draw(canvas);
-                    canvas.restore();
-                }
-            };
-            this.videoPlayerControlFrameLayout.setWillNotDraw(false);
-            this.bottomLayout.addView(this.videoPlayerControlFrameLayout, LayoutHelper.createFrame(-1, -1, 51));
-            this.videoPlayButton = new ImageView(activity);
-            this.videoPlayButton.setScaleType(ScaleType.CENTER);
-            this.videoPlayerControlFrameLayout.addView(this.videoPlayButton, LayoutHelper.createFrame(48, 48, 51));
-            this.videoPlayButton.setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {
-                    if (ArticleViewer.this.videoPlayer == null) {
-                        return;
-                    }
-                    if (ArticleViewer.this.isPlaying) {
-                        ArticleViewer.this.videoPlayer.pause();
-                    } else {
-                        ArticleViewer.this.videoPlayer.play();
-                    }
-                }
-            });
-            this.videoPlayerTime = new TextView(activity);
-            this.videoPlayerTime.setTextColor(-1);
-            this.videoPlayerTime.setGravity(16);
-            this.videoPlayerTime.setTextSize(1, 13.0f);
-            this.videoPlayerControlFrameLayout.addView(this.videoPlayerTime, LayoutHelper.createFrame(-2, -1.0f, 53, 0.0f, 0.0f, 8.0f, 0.0f));
-            this.gestureDetector = new GestureDetector(activity, this);
-            this.gestureDetector.setOnDoubleTapListener(this);
-            ImageReceiverDelegate imageReceiverDelegate = new ImageReceiverDelegate() {
-                public void didSetImage(ImageReceiver imageReceiver, boolean set, boolean thumb) {
-                    if (imageReceiver != ArticleViewer.this.centerImage || !set || !ArticleViewer.this.scaleToFill()) {
-                        return;
-                    }
-                    if (ArticleViewer.this.wasLayout) {
-                        ArticleViewer.this.setScaleToFill();
-                    } else {
-                        ArticleViewer.this.dontResetZoomOnFirstLayout = true;
-                    }
-                }
-            };
-            this.centerImage.setParentView(this.photoContainerView);
-            this.centerImage.setCrossfadeAlpha((byte) 2);
-            this.centerImage.setInvalidateAll(true);
-            this.centerImage.setDelegate(imageReceiverDelegate);
-            this.leftImage.setParentView(this.photoContainerView);
-            this.leftImage.setCrossfadeAlpha((byte) 2);
-            this.leftImage.setInvalidateAll(true);
-            this.leftImage.setDelegate(imageReceiverDelegate);
-            this.rightImage.setParentView(this.photoContainerView);
-            this.rightImage.setCrossfadeAlpha((byte) 2);
-            this.rightImage.setInvalidateAll(true);
-            this.rightImage.setDelegate(imageReceiverDelegate);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidReset);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidStarted);
-            int color = getSelectedColor();
-            if (color == 0) {
-                this.backgroundPaint.setColor(-1);
-                this.listView.setGlowColor(-657673);
-            } else if (color == 1) {
-                this.backgroundPaint.setColor(-659492);
-                this.listView.setGlowColor(-659492);
-            } else if (color == 2) {
-                this.backgroundPaint.setColor(-15461356);
-                this.listView.setGlowColor(-15461356);
+                duration /= 1000;
+                ArticleViewer.this.videoPlayerSeekbar.setSize((getMeasuredWidth() - AndroidUtilities.dp(64.0f)) - ((int) Math.ceil((double) ArticleViewer.this.videoPlayerTime.getPaint().measureText(String.format("%02d:%02d / %02d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60), Long.valueOf(duration / 60), Long.valueOf(duration % 60)})))), getMeasuredHeight());
             }
-            for (a = 0; a < Theme.chat_ivStatesDrawable.length; a++) {
-                Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][0], getTextColor(), false);
-                Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][0], getTextColor(), true);
-                Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][1], getTextColor(), false);
-                Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][1], getTextColor(), true);
+
+            protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+                super.onLayout(changed, left, top, right, bottom);
+                float progress = 0.0f;
+                if (ArticleViewer.this.videoPlayer != null) {
+                    progress = ((float) ArticleViewer.this.videoPlayer.getCurrentPosition()) / ((float) ArticleViewer.this.videoPlayer.getDuration());
+                }
+                ArticleViewer.this.videoPlayerSeekbar.setProgress(progress);
             }
+
+            protected void onDraw(Canvas canvas) {
+                canvas.save();
+                canvas.translate((float) AndroidUtilities.dp(48.0f), 0.0f);
+                ArticleViewer.this.videoPlayerSeekbar.draw(canvas);
+                canvas.restore();
+            }
+        };
+        this.videoPlayerControlFrameLayout.setWillNotDraw(false);
+        this.bottomLayout.addView(this.videoPlayerControlFrameLayout, LayoutHelper.createFrame(-1, -1, 51));
+        this.videoPlayButton = new ImageView(activity);
+        this.videoPlayButton.setScaleType(ScaleType.CENTER);
+        this.videoPlayerControlFrameLayout.addView(this.videoPlayButton, LayoutHelper.createFrame(48, 48, 51));
+        this.videoPlayButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                if (ArticleViewer.this.videoPlayer == null) {
+                    return;
+                }
+                if (ArticleViewer.this.isPlaying) {
+                    ArticleViewer.this.videoPlayer.pause();
+                } else {
+                    ArticleViewer.this.videoPlayer.play();
+                }
+            }
+        });
+        this.videoPlayerTime = new TextView(activity);
+        this.videoPlayerTime.setTextColor(-1);
+        this.videoPlayerTime.setGravity(16);
+        this.videoPlayerTime.setTextSize(1, 13.0f);
+        this.videoPlayerControlFrameLayout.addView(this.videoPlayerTime, LayoutHelper.createFrame(-2, -1.0f, 53, 0.0f, 0.0f, 8.0f, 0.0f));
+        this.gestureDetector = new GestureDetector(activity, this);
+        this.gestureDetector.setOnDoubleTapListener(this);
+        ImageReceiverDelegate imageReceiverDelegate = new ImageReceiverDelegate() {
+            public void didSetImage(ImageReceiver imageReceiver, boolean set, boolean thumb) {
+                if (imageReceiver != ArticleViewer.this.centerImage || !set || !ArticleViewer.this.scaleToFill()) {
+                    return;
+                }
+                if (ArticleViewer.this.wasLayout) {
+                    ArticleViewer.this.setScaleToFill();
+                } else {
+                    ArticleViewer.this.dontResetZoomOnFirstLayout = true;
+                }
+            }
+        };
+        this.centerImage.setParentView(this.photoContainerView);
+        this.centerImage.setCrossfadeAlpha((byte) 2);
+        this.centerImage.setInvalidateAll(true);
+        this.centerImage.setDelegate(imageReceiverDelegate);
+        this.leftImage.setParentView(this.photoContainerView);
+        this.leftImage.setCrossfadeAlpha((byte) 2);
+        this.leftImage.setInvalidateAll(true);
+        this.leftImage.setDelegate(imageReceiverDelegate);
+        this.rightImage.setParentView(this.photoContainerView);
+        this.rightImage.setCrossfadeAlpha((byte) 2);
+        this.rightImage.setInvalidateAll(true);
+        this.rightImage.setDelegate(imageReceiverDelegate);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidReset);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidStarted);
+        int color = getSelectedColor();
+        if (color == 0) {
+            this.backgroundPaint.setColor(-1);
+            this.listView.setGlowColor(-657673);
+        } else if (color == 1) {
+            this.backgroundPaint.setColor(-659492);
+            this.listView.setGlowColor(-659492);
+        } else if (color == 2) {
+            this.backgroundPaint.setColor(-15461356);
+            this.listView.setGlowColor(-15461356);
+        }
+        for (a = 0; a < Theme.chat_ivStatesDrawable.length; a++) {
+            Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][0], getTextColor(), false);
+            Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][0], getTextColor(), true);
+            Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][1], getTextColor(), false);
+            Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][1], getTextColor(), true);
         }
     }
 
@@ -5717,6 +5719,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         if (this.parentActivity == null || ((this.isVisible && !this.collapsed) || messageObject == null)) {
             return false;
         }
+        WindowManager wm;
         LayoutParams layoutParams;
         final AnimatorSet animatorSet;
         Animator[] animatorArr;
@@ -5777,7 +5780,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         String webPageUrl = webPage.url.toLowerCase();
         String anchor = null;
         for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
-            WindowManager wm;
             MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
             if (entity instanceof TL_messageEntityUrl) {
                 try {

@@ -4970,9 +4970,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (this.currentEditMode == 2) {
             this.photoFilterView.onTouch(ev);
             return true;
-        } else if (this.currentEditMode == 1) {
+        } else if (this.qualityChooseView != null && this.qualityChooseView.getVisibility() == 0) {
             return true;
         } else {
+            if (this.currentEditMode == 1) {
+                return true;
+            }
             if (this.captionEditText.isPopupShowing() || this.captionEditText.isKeyboardVisible()) {
                 if (ev.getAction() == 1) {
                     closeCaptionEnter(true);

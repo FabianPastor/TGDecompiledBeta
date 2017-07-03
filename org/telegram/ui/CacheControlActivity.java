@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -381,9 +382,18 @@ public class CacheControlActivity extends BaseFragment {
                     Builder builder;
                     if (position == CacheControlActivity.this.keepMediaRow) {
                         builder = new Builder(CacheControlActivity.this.getParentActivity());
-                        builder.setItems(new CharSequence[]{LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever)}, new OnClickListener() {
+                        builder.setItems(new CharSequence[]{LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever)}, new OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putInt("keep_media", which).commit();
+                                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+                                if (which == 0) {
+                                    editor.putInt("keep_media", 3).commit();
+                                } else if (which == 1) {
+                                    editor.putInt("keep_media", 0).commit();
+                                } else if (which == 2) {
+                                    editor.putInt("keep_media", 1).commit();
+                                } else if (which == 3) {
+                                    editor.putInt("keep_media", 2).commit();
+                                }
                                 if (CacheControlActivity.this.listAdapter != null) {
                                     CacheControlActivity.this.listAdapter.notifyDataSetChanged();
                                 }

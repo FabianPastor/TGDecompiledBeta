@@ -41,7 +41,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -93,7 +92,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
     private boolean isNeverShare;
     private GroupCreateDividerItemDecoration itemDecoration;
     private RecyclerListView listView;
-    private int maxCount = DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS;
+    private int maxCount = MessagesController.getInstance().maxMegagroupCount;
     private ScrollView scrollView;
     private boolean searchWas;
     private boolean searching;

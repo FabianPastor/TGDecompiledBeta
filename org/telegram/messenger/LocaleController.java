@@ -913,7 +913,7 @@ public class LocaleController {
         if (localeInfo != null) {
             File pathToFile = localeInfo.getPathToFile();
             ConnectionsManager.getInstance().setLangCode(localeInfo.shortName.replace("_", "-"));
-            if (localeInfo.isRemote() && (!pathToFile.exists() || BuildVars.DEBUG_VERSION)) {
+            if (localeInfo.isRemote() && !pathToFile.exists()) {
                 applyRemoteLanguage(localeInfo, null);
             }
             try {

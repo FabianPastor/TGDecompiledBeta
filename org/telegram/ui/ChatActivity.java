@@ -1711,6 +1711,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         this.cantDeleteMessagesCount = 0;
         this.hasOwnBackground = true;
         if (this.chatAttachAlert != null) {
+            try {
+                if (this.chatAttachAlert.isShowing()) {
+                    this.chatAttachAlert.dismiss();
+                }
+            } catch (Exception e) {
+            }
             this.chatAttachAlert.onDestroy();
             this.chatAttachAlert = null;
         }
@@ -3729,8 +3735,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (this.currentEncryptedChat != null && VERSION.SDK_INT >= 23 && (UserConfig.passcodeHash.length() == 0 || UserConfig.allowScreenCapture)) {
                 getParentActivity().getWindow().setFlags(8192, 8192);
             }
-        } catch (Throwable e) {
-            FileLog.e(e);
+        } catch (Throwable e2) {
+            FileLog.e(e2);
         }
         fixLayoutInternal();
         return this.fragmentView;
