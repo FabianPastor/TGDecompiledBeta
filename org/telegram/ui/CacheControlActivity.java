@@ -121,6 +121,8 @@ public class CacheControlActivity extends BaseFragment {
                             value = LocaleController.formatPluralString("Weeks", 1);
                         } else if (keepMedia == 1) {
                             value = LocaleController.formatPluralString("Months", 1);
+                        } else if (keepMedia == 3) {
+                            value = LocaleController.formatPluralString("Days", 3);
                         } else {
                             value = LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever);
                         }

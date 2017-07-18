@@ -525,7 +525,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     TL_phone_requestCall reqCall = new TL_phone_requestCall();
                     reqCall.user_id = MessagesController.getInputUser(VoIPService.this.user);
                     reqCall.protocol = new TL_phoneCallProtocol();
-                    reqCall.protocol.udp_p2p = VoIPService.this.getSharedPreferences("mainconfig", 0).getBoolean("calls_p2p", true);
+                    reqCall.protocol.udp_p2p = true;
                     reqCall.protocol.udp_reflector = true;
                     reqCall.protocol.min_layer = 65;
                     reqCall.protocol.max_layer = 65;
@@ -773,6 +773,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     public void declineIncomingCall(int reason, final Runnable onDone) {
         boolean wasNotConnected = true;
         if (this.currentState == 14) {
+            dispatchStateChanged(10);
             this.endCallAfterRequest = true;
         } else if (this.currentState != 10 && this.currentState != 11) {
             dispatchStateChanged(10);
@@ -995,6 +996,12 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     private void processAcceptedCall() {
+        if (!this.isProximityNear) {
+            Vibrator vibrator = (Vibrator) getSystemService("vibrator");
+            if (vibrator.hasVibrator()) {
+                vibrator.vibrate(100);
+            }
+        }
         dispatchStateChanged(12);
         BigInteger p = new BigInteger(1, MessagesStorage.secretPBytes);
         BigInteger i_authKey = new BigInteger(1, this.call.g_b);
@@ -1099,9 +1106,11 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             voIPController.setRemoteEndpoints(endpoints, z);
             SharedPreferences prefs = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
             if (prefs.getBoolean("proxy_enabled", false)) {
-                String server = prefs.getString("proxy_ip", null);
-                if (server != null) {
-                    this.controller.setProxy(server, prefs.getInt("proxy_port", 0), prefs.getString("proxy_user", null), prefs.getString("proxy_pass", null));
+                if (prefs.getBoolean("proxy_enabled_calls", false)) {
+                    String server = prefs.getString("proxy_ip", null);
+                    if (server != null) {
+                        this.controller.setProxy(server, prefs.getInt("proxy_port", 0), prefs.getString("proxy_user", null), prefs.getString("proxy_pass", null));
+                    }
                 }
             }
             this.controller.start();

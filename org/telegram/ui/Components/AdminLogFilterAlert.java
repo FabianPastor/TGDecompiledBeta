@@ -443,11 +443,8 @@ public class AdminLogFilterAlert extends BottomSheet {
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
                 boolean isChecked;
-                int count;
                 int a;
-                View child;
                 ViewHolder holder;
-                int pos;
                 if (view instanceof CheckBoxCell) {
                     CheckBoxCell cell = (CheckBoxCell) view;
                     isChecked = cell.isChecked();
@@ -465,6 +462,9 @@ public class AdminLogFilterAlert extends BottomSheet {
                     TL_channelAdminLogEventsFilter access$100011;
                     TL_channelAdminLogEventsFilter access$100012;
                     TL_channelAdminLogEventsFilter access$100013;
+                    int count;
+                    View child;
+                    int pos;
                     boolean z;
                     if (position == 0) {
                         if (isChecked) {
@@ -639,21 +639,6 @@ public class AdminLogFilterAlert extends BottomSheet {
                         AdminLogFilterAlert.this.selectedAdmins.remove(Integer.valueOf(user.id));
                     } else {
                         AdminLogFilterAlert.this.selectedAdmins.put(Integer.valueOf(user.id), user);
-                    }
-                    if (AdminLogFilterAlert.this.selectedAdmins.isEmpty()) {
-                        AdminLogFilterAlert.this.selectedAdmins = null;
-                        count = AdminLogFilterAlert.this.listView.getChildCount();
-                        for (a = 0; a < count; a++) {
-                            child = AdminLogFilterAlert.this.listView.getChildAt(a);
-                            holder = AdminLogFilterAlert.this.listView.findContainingViewHolder(child);
-                            pos = holder.getAdapterPosition();
-                            if (holder.getItemViewType() == 2) {
-                                ((CheckBoxUserCell) child).setChecked(true, true);
-                            } else if (pos == AdminLogFilterAlert.this.allAdminsRow) {
-                                ((CheckBoxCell) holder.itemView).setChecked(true, true);
-                            }
-                        }
-                        return;
                     }
                     checkBoxUserCell.setChecked(!isChecked, true);
                 }

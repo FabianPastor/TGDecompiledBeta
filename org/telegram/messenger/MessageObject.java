@@ -684,19 +684,17 @@ public class MessageObject {
                 r0.append('\n').append(n.add_admins ? '+' : '-').append(' ');
                 r0.append(LocaleController.getString("EventLogPromotedAddAdmins", R.string.EventLogPromotedAddAdmins));
             }
-            if (chat.megagroup) {
-                if (o.ban_users != n.ban_users) {
-                    r0.append('\n').append(n.ban_users ? '+' : '-').append(' ');
-                    r0.append(LocaleController.getString("EventLogPromotedBanUsers", R.string.EventLogPromotedBanUsers));
-                }
-                if (o.invite_users != n.invite_users) {
-                    r0.append('\n').append(n.invite_users ? '+' : '-').append(' ');
-                    r0.append(LocaleController.getString("EventLogPromotedAddUsers", R.string.EventLogPromotedAddUsers));
-                }
-                if (o.pin_messages != n.pin_messages) {
-                    r0.append('\n').append(n.pin_messages ? '+' : '-').append(' ');
-                    r0.append(LocaleController.getString("EventLogPromotedPinMessages", R.string.EventLogPromotedPinMessages));
-                }
+            if (chat.megagroup && o.ban_users != n.ban_users) {
+                r0.append('\n').append(n.ban_users ? '+' : '-').append(' ');
+                r0.append(LocaleController.getString("EventLogPromotedBanUsers", R.string.EventLogPromotedBanUsers));
+            }
+            if (o.invite_users != n.invite_users) {
+                r0.append('\n').append(n.invite_users ? '+' : '-').append(' ');
+                r0.append(LocaleController.getString("EventLogPromotedAddUsers", R.string.EventLogPromotedAddUsers));
+            }
+            if (chat.megagroup && o.pin_messages != n.pin_messages) {
+                r0.append('\n').append(n.pin_messages ? '+' : '-').append(' ');
+                r0.append(LocaleController.getString("EventLogPromotedPinMessages", R.string.EventLogPromotedPinMessages));
             }
             this.messageText = r0.toString();
         } else if (event.action instanceof TL_channelAdminLogEventActionParticipantToggleBan) {

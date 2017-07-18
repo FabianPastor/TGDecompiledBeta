@@ -1208,6 +1208,7 @@ public final class R {
         public static final int EditAdmin = NUM;
         public static final int EditAdminAddAdmins = NUM;
         public static final int EditAdminAddUsers = NUM;
+        public static final int EditAdminAddUsersViaLink = NUM;
         public static final int EditAdminBanUsers = NUM;
         public static final int EditAdminCantEdit = NUM;
         public static final int EditAdminChangeChannelInfo = NUM;
@@ -2226,6 +2227,8 @@ public final class R {
         public static final int UseLessDataNever = NUM;
         public static final int UseLessDataOnMobile = NUM;
         public static final int UseProxyAddress = NUM;
+        public static final int UseProxyForCalls = NUM;
+        public static final int UseProxyForCallsInfo = NUM;
         public static final int UseProxyInfo = NUM;
         public static final int UseProxyPassword = NUM;
         public static final int UseProxyPort = NUM;

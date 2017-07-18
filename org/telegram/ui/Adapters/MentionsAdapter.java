@@ -558,7 +558,7 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     public void searchUsernameOrHashtag(String text, int position, ArrayList<MessageObject> messageObjects) {
-        if (text == null || text.length() == 0) {
+        if (TextUtils.isEmpty(text)) {
             searchForContextBot(null, null);
             this.delegate.needChangePanelVisibility(false);
             this.lastText = null;
@@ -685,7 +685,8 @@ public class MentionsAdapter extends SelectionAdapter {
                         }
                     }
                 }
-                if (!(this.info == null || this.info.participants == null)) {
+                Chat chat = this.parentFragment.getCurrentChat();
+                if (!(chat == null || this.info == null || this.info.participants == null || (ChatObject.isChannel(chat) && !chat.megagroup))) {
                     for (a = 0; a < this.info.participants.participants.size(); a++) {
                         user = MessagesController.getInstance().getUser(Integer.valueOf(((ChatParticipant) this.info.participants.participants.get(a)).user_id));
                         if (!(user == null || UserObject.isUserSelf(user) || newResultsHashMap.containsKey(Integer.valueOf(user.id)))) {

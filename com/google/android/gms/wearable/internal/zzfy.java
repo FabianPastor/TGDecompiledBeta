@@ -27,11 +27,11 @@ final class zzfy implements Runnable {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public final void run() {
-        ParcelFileDescriptor open;
         if (Log.isLoggable("WearableClient", 2)) {
             Log.v("WearableClient", "Executing receiveFileFromChannelTask");
         }
         if ("file".equals(this.zzbzR.getScheme())) {
+            ParcelFileDescriptor open;
             Object file = new File(this.zzbzR.getPath());
             try {
                 open = ParcelFileDescriptor.open(file, (this.zzbSj ? ConnectionsManager.FileTypeVideo : 0) | 671088640);

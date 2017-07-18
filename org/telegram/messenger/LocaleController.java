@@ -816,88 +816,102 @@ public class LocaleController {
         Throwable th;
         FileInputStream stream = null;
         try {
-            HashMap<String, String> stringMap = new HashMap();
-            XmlPullParser parser = Xml.newPullParser();
-            FileInputStream stream2 = new FileInputStream(file);
-            try {
-                parser.setInput(stream2, "UTF-8");
-                String name = null;
-                String value = null;
-                String attrName = null;
-                for (int eventType = parser.getEventType(); eventType != 1; eventType = parser.next()) {
-                    if (eventType == 2) {
-                        name = parser.getName();
-                        if (parser.getAttributeCount() > 0) {
-                            attrName = parser.getAttributeValue(0);
-                        }
-                    } else if (eventType == 4) {
-                        if (attrName != null) {
-                            value = parser.getText();
-                            if (value != null) {
-                                value = value.trim();
-                                if (preserveEscapes) {
-                                    value = value.replace("<", "&lt;").replace(">", "&gt;").replace("'", "\\'").replace("&", "&amp;");
-                                } else {
-                                    value = value.replace("\\n", "\n").replace("\\", "");
+            HashMap<String, String> stringMap;
+            if (file.exists()) {
+                stringMap = new HashMap();
+                XmlPullParser parser = Xml.newPullParser();
+                FileInputStream stream2 = new FileInputStream(file);
+                try {
+                    parser.setInput(stream2, "UTF-8");
+                    String name = null;
+                    String value = null;
+                    String attrName = null;
+                    for (int eventType = parser.getEventType(); eventType != 1; eventType = parser.next()) {
+                        if (eventType == 2) {
+                            name = parser.getName();
+                            if (parser.getAttributeCount() > 0) {
+                                attrName = parser.getAttributeValue(0);
+                            }
+                        } else if (eventType == 4) {
+                            if (attrName != null) {
+                                value = parser.getText();
+                                if (value != null) {
+                                    value = value.trim();
+                                    if (preserveEscapes) {
+                                        value = value.replace("<", "&lt;").replace(">", "&gt;").replace("'", "\\'").replace("&", "&amp;");
+                                    } else {
+                                        value = value.replace("\\n", "\n").replace("\\", "");
+                                    }
                                 }
                             }
+                        } else if (eventType == 3) {
+                            value = null;
+                            attrName = null;
+                            name = null;
                         }
-                    } else if (eventType == 3) {
-                        value = null;
-                        attrName = null;
-                        name = null;
+                        if (!(name == null || !name.equals("string") || value == null || attrName == null || value.length() == 0 || attrName.length() == 0)) {
+                            stringMap.put(attrName, value);
+                            name = null;
+                            value = null;
+                            attrName = null;
+                        }
                     }
-                    if (!(name == null || !name.equals("string") || value == null || attrName == null || value.length() == 0 || attrName.length() == 0)) {
-                        stringMap.put(attrName, value);
-                        name = null;
-                        value = null;
-                        attrName = null;
+                    if (stream2 != null) {
+                        try {
+                            stream2.close();
+                        } catch (Throwable e2) {
+                            FileLog.e(e2);
+                        }
                     }
-                }
-                if (stream2 != null) {
+                    stream = stream2;
+                    return stringMap;
+                } catch (Exception e3) {
+                    e2 = e3;
+                    stream = stream2;
                     try {
-                        stream2.close();
-                    } catch (Throwable e2) {
                         FileLog.e(e2);
-                    }
-                }
-                stream = stream2;
-                return stringMap;
-            } catch (Exception e3) {
-                e2 = e3;
-                stream = stream2;
-                try {
-                    FileLog.e(e2);
-                    if (stream != null) {
-                        try {
-                            stream.close();
-                        } catch (Throwable e22) {
-                            FileLog.e(e22);
+                        if (stream != null) {
+                            try {
+                                stream.close();
+                            } catch (Throwable e22) {
+                                FileLog.e(e22);
+                            }
                         }
-                    }
-                    return new HashMap();
-                } catch (Throwable th2) {
-                    th = th2;
-                    if (stream != null) {
-                        try {
-                            stream.close();
-                        } catch (Throwable e222) {
-                            FileLog.e(e222);
+                        return new HashMap();
+                    } catch (Throwable th2) {
+                        th = th2;
+                        if (stream != null) {
+                            try {
+                                stream.close();
+                            } catch (Throwable e222) {
+                                FileLog.e(e222);
+                            }
                         }
+                        throw th;
+                    }
+                } catch (Throwable th3) {
+                    th = th3;
+                    stream = stream2;
+                    if (stream != null) {
+                        stream.close();
                     }
                     throw th;
                 }
-            } catch (Throwable th3) {
-                th = th3;
-                stream = stream2;
-                if (stream != null) {
-                    stream.close();
-                }
-                throw th;
+            }
+            stringMap = new HashMap();
+            if (stream == null) {
+                return stringMap;
+            }
+            try {
+                stream.close();
+                return stringMap;
+            } catch (Throwable e2222) {
+                FileLog.e(e2222);
+                return stringMap;
             }
         } catch (Exception e4) {
-            e222 = e4;
-            FileLog.e(e222);
+            e2222 = e4;
+            FileLog.e(e2222);
             if (stream != null) {
                 stream.close();
             }

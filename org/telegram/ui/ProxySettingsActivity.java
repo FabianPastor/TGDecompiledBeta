@@ -58,6 +58,9 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
     private ScrollView scrollView;
     private ShadowSectionCell sectionCell;
     private ActionBarMenuItem shareItem;
+    private TextCheckCell useForCallsCell;
+    private TextInfoPrivacyCell useForCallsInfoCell;
+    private boolean useProxyForCalls;
     private boolean useProxySettings;
 
     public void onResume() {
@@ -74,6 +77,7 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.proxySettingsChanged);
         Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
         editor.putBoolean("proxy_enabled", this.useProxySettings);
+        editor.putBoolean("proxy_enabled_calls", this.useProxyForCalls);
         String address = this.inputFields[0].getText().toString();
         String password = this.inputFields[3].getText().toString();
         String user = this.inputFields[2].getText().toString();
@@ -94,6 +98,7 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
     public View createView(Context context) {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
         this.useProxySettings = preferences.getBoolean("proxy_enabled", false);
+        this.useProxyForCalls = preferences.getBoolean("proxy_enabled_calls", false);
         this.actionBar.setTitle(LocaleController.getString("ProxySettings", R.string.ProxySettings));
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
@@ -161,6 +166,10 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
             public void onClick(View v) {
                 ProxySettingsActivity.this.useProxySettings = !ProxySettingsActivity.this.useProxySettings;
                 ProxySettingsActivity.this.checkCell1.setChecked(ProxySettingsActivity.this.useProxySettings);
+                if (!ProxySettingsActivity.this.useProxySettings) {
+                    ProxySettingsActivity.this.useForCallsCell.setChecked(false);
+                }
+                ProxySettingsActivity.this.useForCallsCell.setEnabled(ProxySettingsActivity.this.useProxySettings);
             }
         });
         this.sectionCell = new ShadowSectionCell(context);
@@ -291,6 +300,21 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
         this.bottomCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         this.bottomCell.setText(LocaleController.getString("UseProxyInfo", R.string.UseProxyInfo));
         this.linearLayout2.addView(this.bottomCell, LayoutHelper.createLinear(-1, -2));
+        this.useForCallsCell = new TextCheckCell(context);
+        this.useForCallsCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
+        this.useForCallsCell.setTextAndCheck(LocaleController.getString("UseProxyForCalls", R.string.UseProxyForCalls), this.useProxyForCalls, false);
+        this.useForCallsCell.setEnabled(this.useProxySettings);
+        this.linearLayout2.addView(this.useForCallsCell, LayoutHelper.createLinear(-1, -2));
+        this.useForCallsCell.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                ProxySettingsActivity.this.useProxyForCalls = !ProxySettingsActivity.this.useProxyForCalls;
+                ProxySettingsActivity.this.useForCallsCell.setChecked(ProxySettingsActivity.this.useProxyForCalls);
+            }
+        });
+        this.useForCallsInfoCell = new TextInfoPrivacyCell(context);
+        this.useForCallsInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+        this.useForCallsInfoCell.setText(LocaleController.getString("UseProxyForCallsInfo", R.string.UseProxyForCallsInfo));
+        this.linearLayout2.addView(this.useForCallsInfoCell, LayoutHelper.createLinear(-1, -2));
         checkShareButton();
         return this.fragmentView;
     }

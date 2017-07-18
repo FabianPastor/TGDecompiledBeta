@@ -87,7 +87,6 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
     private static final String TAG = "tg-voip-ui";
     private View acceptBtn;
     private CallSwipeView acceptSwipe;
-    private int audioBitrate = 25;
     private ImageView blurOverlayView1;
     private ImageView blurOverlayView2;
     private Bitmap blurredPhoto1;
@@ -120,7 +119,6 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
     private String lastStateText;
     private CheckableImageView micToggle;
     private TextView nameText;
-    private int packetLossPercent = 5;
     private BackupImageView photoView;
     private AnimatorSet retryAnim;
     private boolean retrying;
@@ -1057,6 +1055,8 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                     VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipRequesting", R.string.VoipRequesting), true);
                 } else if (state == 10) {
                     VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipHangingUp", R.string.VoipHangingUp), true);
+                    VoIPActivity.this.endBtnIcon.setAlpha(0.5f);
+                    VoIPActivity.this.endBtn.setEnabled(false);
                 } else if (state == 11) {
                     VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipCallEnded", R.string.VoipCallEnded), false);
                     VoIPActivity.this.stateText.postDelayed(new Runnable() {

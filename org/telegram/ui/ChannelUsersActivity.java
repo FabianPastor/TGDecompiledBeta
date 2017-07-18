@@ -675,13 +675,13 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         public void onBindViewHolder(ViewHolder holder, int position) {
             User user;
             CharSequence username;
-            CharSequence username2;
             Throwable e;
-            Object username3;
+            Object username2;
             int idx;
             ManageChatUserCell userCell;
             switch (holder.getItemViewType()) {
                 case 0:
+                    CharSequence username3;
                     String foundUserName;
                     CharSequence spannableStringBuilder;
                     String u;
@@ -723,11 +723,11 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                 if (name != null && un != null && un.length() > 0 && name.toString().startsWith("@" + un)) {
                                     username = name;
                                     name = null;
-                                    username2 = username;
+                                    username3 = username;
                                 }
                             } else {
                                 position -= count + 1;
-                                username2 = null;
+                                username3 = null;
                             }
                             if (!ok) {
                                 count = this.searchAdapterHelper.getGlobalSearch().size();
@@ -742,7 +742,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                             ((SpannableStringBuilder) spannableStringBuilder).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
                                         } catch (Exception e2) {
                                             e = e2;
-                                            username3 = un;
+                                            username2 = un;
                                             FileLog.e(e);
                                             if (nameSearch != null) {
                                                 u = UserObject.getUserName(user);
@@ -759,8 +759,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                         }
                                     } catch (Exception e3) {
                                         e = e3;
-                                        username = username2;
-                                        username3 = un;
+                                        username = username3;
+                                        username2 = un;
                                         FileLog.e(e);
                                         if (nameSearch != null) {
                                             u = UserObject.getUserName(user);
@@ -789,7 +789,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                     return;
                                 }
                             }
-                            username = username2;
+                            username = username3;
                             if (nameSearch != null) {
                                 u = UserObject.getUserName(user);
                                 name = new SpannableStringBuilder(u);
@@ -804,7 +804,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                             return;
                         }
                     }
-                    username2 = null;
+                    username3 = null;
                     if (ok) {
                         count = this.searchAdapterHelper.getGlobalSearch().size();
                         foundUserName = this.searchAdapterHelper.getLastFoundUsername();
@@ -826,7 +826,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         userCell.setData(user, name, username);
                         return;
                     }
-                    username = username2;
+                    username = username3;
                     if (nameSearch != null) {
                         u = UserObject.getUserName(user);
                         name = new SpannableStringBuilder(u);

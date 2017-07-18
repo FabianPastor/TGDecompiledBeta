@@ -64,6 +64,7 @@ public class ChannelRightsEditActivity extends BaseFragment {
     private int deleteMessagesRow;
     private int editMesagesRow;
     private int embedLinksRow;
+    private boolean isDemocracy;
     private boolean isMegagroup;
     private RecyclerListView listView;
     private ListAdapter listViewAdapter;
@@ -238,7 +239,11 @@ public class ChannelRightsEditActivity extends BaseFragment {
                     } else if (position == ChannelRightsEditActivity.this.banUsersRow) {
                         checkCell.setTextAndCheck(LocaleController.getString("EditAdminBanUsers", R.string.EditAdminBanUsers), ChannelRightsEditActivity.this.adminRights.ban_users, true);
                     } else if (position == ChannelRightsEditActivity.this.addUsersRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminAddUsers", R.string.EditAdminAddUsers), ChannelRightsEditActivity.this.adminRights.invite_users, true);
+                        if (ChannelRightsEditActivity.this.isDemocracy) {
+                            checkCell.setTextAndCheck(LocaleController.getString("EditAdminAddUsersViaLink", R.string.EditAdminAddUsersViaLink), ChannelRightsEditActivity.this.adminRights.invite_users, true);
+                        } else {
+                            checkCell.setTextAndCheck(LocaleController.getString("EditAdminAddUsers", R.string.EditAdminAddUsers), ChannelRightsEditActivity.this.adminRights.invite_users, true);
+                        }
                     } else if (position == ChannelRightsEditActivity.this.pinMessagesRow) {
                         checkCell.setTextAndCheck(LocaleController.getString("EditAdminPinMessages", R.string.EditAdminPinMessages), ChannelRightsEditActivity.this.adminRights.pin_messages, true);
                     } else if (position == ChannelRightsEditActivity.this.viewMessagesRow) {
@@ -403,17 +408,16 @@ public class ChannelRightsEditActivity extends BaseFragment {
                 i = this.rowCount;
                 this.rowCount = i + 1;
                 this.banUsersRow = i;
-                if (!chat.democracy) {
-                    i = this.rowCount;
-                    this.rowCount = i + 1;
-                    this.addUsersRow = i;
-                }
+                i = this.rowCount;
+                this.rowCount = i + 1;
+                this.addUsersRow = i;
                 i = this.rowCount;
                 this.rowCount = i + 1;
                 this.pinMessagesRow = i;
                 i = this.rowCount;
                 this.rowCount = i + 1;
                 this.addAdminsRow = i;
+                this.isDemocracy = chat.democracy;
             } else {
                 i = this.rowCount;
                 this.rowCount = i + 1;

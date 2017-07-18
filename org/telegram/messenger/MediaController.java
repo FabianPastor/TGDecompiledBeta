@@ -23,6 +23,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
@@ -1686,6 +1687,9 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             this.useFrontSpeaker = false;
                             startRecording(this.raiseChat.getDialogId(), null);
                         }
+                        if (this.useFrontSpeaker) {
+                            setUseFrontSpeaker(true);
+                        }
                         this.ignoreOnPause = true;
                         if (!(!this.proximityHasDifferentValues || this.proximityWakeLock == null || this.proximityWakeLock.isHeld())) {
                             this.proximityWakeLock.acquire();
@@ -1696,7 +1700,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                     if (!(!this.proximityHasDifferentValues || this.proximityWakeLock == null || this.proximityWakeLock.isHeld())) {
                         this.proximityWakeLock.acquire();
                     }
-                    this.useFrontSpeaker = true;
+                    setUseFrontSpeaker(true);
                     startAudioAgain(false);
                     this.ignoreOnPause = true;
                 }
@@ -1709,7 +1713,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                     if (!(!this.proximityHasDifferentValues || this.proximityWakeLock == null || this.proximityWakeLock.isHeld())) {
                         this.proximityWakeLock.acquire();
                     }
-                    this.useFrontSpeaker = true;
+                    setUseFrontSpeaker(true);
                     startAudioAgain(false);
                     this.ignoreOnPause = true;
                 }
@@ -1739,6 +1743,17 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 this.timeSinceRaise = 0;
             }
         }
+    }
+
+    private void setUseFrontSpeaker(boolean value) {
+        this.useFrontSpeaker = value;
+        AudioManager audioManager = NotificationsController.getInstance().audioManager;
+        if (this.useFrontSpeaker) {
+            audioManager.setBluetoothScoOn(false);
+            audioManager.setSpeakerphoneOn(false);
+            return;
+        }
+        audioManager.setSpeakerphoneOn(true);
     }
 
     public void startRecordingIfFromSpeaker() {

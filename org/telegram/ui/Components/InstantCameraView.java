@@ -326,7 +326,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             } else {
                                 buffer.offset[a] = audioPresentationTimeNs;
                                 buffer.read[a] = readResult;
-                                FileLog.d("time = " + audioPresentationTimeNs);
                                 a++;
                             }
                         }
@@ -509,6 +508,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             GLES20.glUniform1f(this.alphaHandle, InstantCameraView.this.cameraTextureAlpha);
             GLES20.glBindTexture(36197, InstantCameraView.this.cameraTexture[0]);
             GLES20.glDrawArrays(5, 0, 4);
+            GLES20.glDisableVertexAttribArray(this.positionHandle);
+            GLES20.glDisableVertexAttribArray(this.textureHandle);
+            GLES20.glBindTexture(36197, 0);
+            GLES20.glUseProgram(0);
+            FileLog.e("frame time = " + this.currentTimestamp);
             EGLExt.eglPresentationTimeANDROID(this.eglDisplay, this.eglSurface, this.currentTimestamp);
             EGL14.eglSwapBuffers(this.eglDisplay, this.eglSurface);
             if (InstantCameraView.this.oldCameraTexture[0] != 0 && InstantCameraView.this.cameraTextureAlpha < 1.0f) {
@@ -673,9 +677,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
                 this.audioRecorder = new AudioRecord(1, 44100, 16, 2, bufferSize);
                 this.audioRecorder.startRecording();
-                Thread thread = new Thread(this.recorderRunnable);
-                thread.setPriority(10);
-                thread.start();
+                new Thread(this.recorderRunnable).start();
                 this.audioBufferInfo = new BufferInfo();
                 this.videoBufferInfo = new BufferInfo();
                 MediaFormat audioFormat = new MediaFormat();
@@ -1144,6 +1146,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 GLES20.glUniformMatrix4fv(this.textureMatrixHandle, 1, false, InstantCameraView.this.mSTMatrix, 0);
                 GLES20.glUniformMatrix4fv(this.vertexMatrixHandle, 1, false, InstantCameraView.this.mMVPMatrix, 0);
                 GLES20.glDrawArrays(5, 0, 4);
+                GLES20.glDisableVertexAttribArray(this.positionHandle);
+                GLES20.glDisableVertexAttribArray(this.textureHandle);
+                GLES20.glBindTexture(36197, 0);
+                GLES20.glUseProgram(0);
                 this.egl10.eglSwapBuffers(this.eglDisplay, this.eglSurface);
                 return;
             }
