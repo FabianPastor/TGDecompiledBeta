@@ -258,7 +258,7 @@
     <string name="ChangePhoneNumberOccupied">Die Telefonnummer %1$s ist bereits ein Telegram Konto. Bitte lösche es, bevor du mit der Übertragung auf das neue Konto startest.</string>
     <string name="ChangePublicLimitReached">Du hast leider zu viele öffentliche Benutzernamen erstellt. Du kannst jederzeit den Link einer älteren Gruppe oder eines Kanals entfernen.</string>
     <string name="ChangeRecoveryEmail">E‑Mail-Adresse zur Wiederherstellung ändern</string>
-    <string name="ChannelAddAdmin">Administrator hinzufügen</string>
+    <string name="ChannelAddAdmin">Admin hinzufügen</string>
     <string name="ChannelAddMembers">Mitglieder hinzufügen</string>
     <string name="ChannelAddTo">%1$s zum Kanal hinzufügen?</string>
     <string name="ChannelAddUserAdminAlert">Sicher, dass %1$s ein Administrator werden soll?</string>
@@ -503,6 +503,7 @@
     <string name="EditAdmin">Admin bearbeiten</string>
     <string name="EditAdminAddAdmins">Neue Admins hinfügen</string>
     <string name="EditAdminAddUsers">Nutzer hinzufügen</string>
+    <string name="EditAdminAddUsersViaLink">Nutzer per Link einladen</string>
     <string name="EditAdminBanUsers">Nutzer sperren</string>
     <string name="EditAdminCantEdit">Du kannst die Rechte dieses Admins nicht bearbeiten.</string>
     <string name="EditAdminChangeChannelInfo">Kanal-Info ändern</string>
@@ -558,10 +559,10 @@
     <string name="ErrorOccurred">Es ist ein Fehler aufgetreten.</string>
     <string name="ErrorSendRestrictedMedia">Die Admins dieser Gruppe haben dir die Berechtigung entzogen, Medien zu senden.</string>
     <string name="ErrorSendRestrictedStickers">Die Admins dieser Gruppe haben dir die Berechtigung entzogen, Sticker zu senden.</string>
-    <string name="EventLog">Ereignisanzeige</string>
+    <string name="EventLog">Letzte Aktionen</string>
     <string name="EventLogAdded">un1 hat un2 hinzugefügt</string>
     <string name="EventLogAllAdmins">Alle Admins</string>
-    <string name="EventLogAllEvents">Alle Ereignisse</string>
+    <string name="EventLogAllEvents">Alle Aktionen</string>
     <string name="EventLogChangedChannelLink">un1 hat den Kanal-Link geändert:</string>
     <string name="EventLogChangedGroupLink">un1 hat den Gruppen-Link geändert:</string>
     <string name="EventLogChannelJoined">un1 ist dem Kanal beigetreten</string>
@@ -576,11 +577,11 @@
     <string name="EventLogEditedGroupPhoto">un1 hat das Gruppenbild geändert</string>
     <string name="EventLogEditedGroupTitle">un1 hat die Gruppe \"%1$s\" umbenannt</string>
     <string name="EventLogEditedMessages">un1 hat diese Nachricht bearbeitet:</string>
-    <string name="EventLogEmpty">&lt;b&gt;Noch keine Ereignisse!&lt;/b&gt;\n\nMitglieder und Admins\nhaben noch keine Aktionen in den \nletzten 48 Stunden durchgeführt.</string>
-    <string name="EventLogEmptyChannel">&lt;b&gt;Noch keine Ereignisse!&lt;/b&gt;\n\nMitglieder und Admins\nhaben noch keine Aktionen\nin den letzten 48 Stunden durchgeführt.</string>
-    <string name="EventLogEmptySearch">&lt;b&gt;Keine Ereignisse gefunden&lt;/b&gt;\n\nKeine kürzlichen Ereignisse gefunden,\ndie deinen Suchbegriff beinhalten.</string>
-    <string name="EventLogEmptyTextSearch">Keine kürzlichen Ereignisse gefunden, die \'&lt;b&gt;%1$s&lt;/b&gt;\' beinhalten.</string>
-    <string name="EventLogFilterAll">Alle Ereignisse</string>
+    <string name="EventLogEmpty">&lt;b&gt;Noch keine Aktionen!&lt;/b&gt;\n\nMitglieder und Admins\nhaben noch keine Aktionen in den\nletzten 48 Stunden durchgeführt.</string>
+    <string name="EventLogEmptyChannel">&lt;b&gt;Noch keine Aktionen!&lt;/b&gt;\n\nMitglieder und Admins\nhaben noch keine Aktionen\nin den letzten 48 Stunden durchgeführt.</string>
+    <string name="EventLogEmptySearch">&lt;b&gt;Keine Aktionen gefunden&lt;/b&gt;\n\nKeine kürzlichen Ereignisse gefunden,\ndie deinen Suchbegriff beinhalten.</string>
+    <string name="EventLogEmptyTextSearch">Keine kürzlichen Aktionen gefunden, die \'&lt;b&gt;%1$s&lt;/b&gt;\' beinhalten.</string>
+    <string name="EventLogFilterAll">Alle Aktionen</string>
     <string name="EventLogFilterChannelInfo">Kanal-Info</string>
     <string name="EventLogFilterDeletedMessages">Gelöschte Nachrichten</string>
     <string name="EventLogFilterEditedMessages">Bearbeitete Nachrichten</string>
@@ -594,7 +595,7 @@
     <string name="EventLogGroupJoined">un1 ist der Gruppe beigetreten</string>
     <string name="EventLogInfoDetail">Das ist eine Liste aller Aktionen, die von Gruppenmitgliedern und Admins in den letzten 48 Stunden durchgeführt wurden.</string>
     <string name="EventLogInfoDetailChannel">Das ist eine Liste aller Aktionen, die von Gruppenmitgliedern und Admins in den letzten 48 Stunden durchgeführt wurden.</string>
-    <string name="EventLogInfoTitle">Was ist die Ereignisanzeige?</string>
+    <string name="EventLogInfoTitle">Was sind letzte Aktionen?</string>
     <string name="EventLogLeftChannel">un1 hat den Kanal verlassen</string>
     <string name="EventLogLeftGroup">un1 hat die Gruppe verlassen</string>
     <string name="EventLogOriginalCaption">Original-Beschriftung</string>
@@ -623,7 +624,7 @@
     <string name="EventLogRestrictedSendMessages">Nachrichten senden</string>
     <string name="EventLogRestrictedSendStickers">Sticker &amp; GIFs senden</string>
     <string name="EventLogRestrictedUntil">hat Einschränkungen für %1$s geändert\n\nDauer: %2$s</string>
-    <string name="EventLogSelectedEvents">Ausgewählte Ereignisse</string>
+    <string name="EventLogSelectedEvents">Ausgewählte Aktionen</string>
     <string name="EventLogToggledInvitesOff">un1 hat Gruppeneinladungen deaktiviert</string>
     <string name="EventLogToggledInvitesOn">un1 hat Gruppeneinladungen aktiviert</string>
     <string name="EventLogToggledSignaturesOff">un1 hat Unterschriften deaktiviert</string>
@@ -1134,7 +1135,7 @@
     <string name="Page5Title">Leistungsstark</string>
     <string name="Page6Message">&lt;b&gt;Telegram&lt;/b&gt; kannst du vom Handy\nTablet oder auch Computer\nsynchronisiert benutzen.</string>
     <string name="Page6Title">Cloud-Basiert</string>
-    <string name="Page7Message">&lt;b&gt;Telegram&lt;/b&gt;-Nachrichten sind stark verschlüsselt\nundkönnen sich selbst zerstören.</string>
+    <string name="Page7Message">&lt;b&gt;Telegram&lt;/b&gt;-Nachrichten sind stark verschlüsselt\nund können sich selbst zerstören.</string>
     <string name="Page7Title">Vertraulich</string>
     <string name="PaintDelete">Löschen</string>
     <string name="PaintDraw">Zeichnen</string>
@@ -1481,6 +1482,8 @@
     <string name="TextCopied">Text in die Zwischenablage kopiert</string>
     <string name="TextSize">Textgröße für Nachrichten</string>
     <string name="Theme">Thema</string>
+    <string name="ThemeBlue">Blau</string>
+    <string name="ThemeDark">Dunkel</string>
     <string name="ThemePreview">Vorschau</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">Bearbeitungszeit leider abgelaufen.</string>
@@ -1521,6 +1524,8 @@
     <string name="UseLessDataNever">Niemals</string>
     <string name="UseLessDataOnMobile">Nur über Mobilfunk</string>
     <string name="UseProxyAddress">Server</string>
+    <string name="UseProxyForCalls">Proxy für Anrufe benutzen</string>
+    <string name="UseProxyForCallsInfo">Proxyserver können die Qualität von Anrufen beinflussen.</string>
     <string name="UseProxyInfo">SOCKS5 Proxy-Einstellungen</string>
     <string name="UseProxyPassword">Kennwort</string>
     <string name="UseProxyPort">Port</string>

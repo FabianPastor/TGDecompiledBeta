@@ -405,7 +405,7 @@
     <string name="ContactsPermissionAlert">1Telegram1에 권한을 부여하여 주소록에 있는 분들과 연결하세요.</string>
     <string name="ContactsPermissionAlertContinue">계속</string>
     <string name="ContactsPermissionAlertNotNow">아직 안됨</string>
-    <string name="ContinueOnThisLanguage">영어로 진행</string>
+    <string name="ContinueOnThisLanguage">한국어로 진행</string>
     <string name="Contrast">대비</string>
     <string name="ConvertGroup">슈퍼그룹으로 변환</string>
     <string name="ConvertGroupAlert">이 작업은 되돌릴 수 없습니다. 슈퍼그룹에서 일반그룹방으로 다운 그레이드는 불가능 합니다.</string>
@@ -503,6 +503,7 @@
     <string name="EditAdmin">관리자 수정</string>
     <string name="EditAdminAddAdmins">새 관리자 추가</string>
     <string name="EditAdminAddUsers">사용자 추가</string>
+    <string name="EditAdminAddUsersViaLink">링크를 통하여 사용자 초대</string>
     <string name="EditAdminBanUsers">사용자 차단</string>
     <string name="EditAdminCantEdit">이 관리자의 권한을 수정할 수 없습니다.</string>
     <string name="EditAdminChangeChannelInfo">채널 정보 수정</string>
@@ -545,7 +546,7 @@
     <string name="EncryptionKeyLink">https://telegram.org/faq#secret-chats</string>
     <string name="EncryptionProcessing">암호키 교환중...</string>
     <string name="EncryptionRejected">비밀대화가 끝났습니다</string>
-    <string name="English">영어</string>
+    <string name="English">한국어</string>
     <string name="Enhance">향상</string>
     <string name="EnterChannelName">채널명</string>
     <string name="EnterCurrentPasscode">현재 잠금코드 입력</string>
@@ -558,10 +559,10 @@
     <string name="ErrorOccurred">오류가 발생했습니다.</string>
     <string name="ErrorSendRestrictedMedia">죄송합니다, 그룹의 관리자가 회원님의 미디어 전송을 제한했습니다.</string>
     <string name="ErrorSendRestrictedStickers">죄송합니다, 그룹의 관리자가 회원님의 스티커 전송을 제한했습니다.</string>
-    <string name="EventLog">이벤트 로그</string>
+    <string name="EventLog">최근 활동</string>
     <string name="EventLogAdded">un1님이 un2님을 초대했습니다</string>
-    <string name="EventLogAllAdmins">모든 관맂</string>
-    <string name="EventLogAllEvents">모든 이벤트</string>
+    <string name="EventLogAllAdmins">모든 관리자</string>
+    <string name="EventLogAllEvents">모든 활동</string>
     <string name="EventLogChangedChannelLink">un1님이 채널링크를 변경했습니다:</string>
     <string name="EventLogChangedGroupLink">un1님이 그룹링크를 변경했습니다:</string>
     <string name="EventLogChannelJoined">un1님이 채널에 참여했습니다.</string>
@@ -580,7 +581,7 @@
     <string name="EventLogEmptyChannel">&lt;b&gt;아직 이벤트가 없습니다.&lt;/b&gt;\n\n이 채널 관리자는\n지난 48시간내에\n 아무런 활동이 없었습니다.</string>
     <string name="EventLogEmptySearch">&lt;b&gt;이벤트를 찾을 수 없습니다.&lt;/b&gt;\n\n검색한 이벤트를 찾을 수 없습니다.</string>
     <string name="EventLogEmptyTextSearch">\'1%1$s1\' 에 대한 최근 이벤트를 찾을 수 없습니다.</string>
-    <string name="EventLogFilterAll">모든 이벤트</string>
+    <string name="EventLogFilterAll">모든 활동</string>
     <string name="EventLogFilterChannelInfo">채널 정보</string>
     <string name="EventLogFilterDeletedMessages">메시지 삭제</string>
     <string name="EventLogFilterEditedMessages">메시지 수정</string>
@@ -594,7 +595,7 @@
     <string name="EventLogGroupJoined">un1 님이 그룹에 참여했습니다</string>
     <string name="EventLogInfoDetail">그룹 사용자와 관리자의 지난 48시간동안 활동 리스트입니다.</string>
     <string name="EventLogInfoDetailChannel">채널 관리자의 지난 48시간동안 활동 리스트입니다.</string>
-    <string name="EventLogInfoTitle">이벤트 로그란?</string>
+    <string name="EventLogInfoTitle">최근 활동이란 무엇인가요?</string>
     <string name="EventLogLeftChannel">un1님이 채널에서 나갔습니다.</string>
     <string name="EventLogLeftGroup">un1님이 그룹에서 나갔습니다.</string>
     <string name="EventLogOriginalCaption">원본 캡션</string>
@@ -623,7 +624,7 @@
     <string name="EventLogRestrictedSendMessages">메시지 전송</string>
     <string name="EventLogRestrictedSendStickers">스티커 &amp; GIF 전송</string>
     <string name="EventLogRestrictedUntil">%1$s 님에 대한 제한을 변경했습니다.\n\n기한: %2$s</string>
-    <string name="EventLogSelectedEvents">선택된 이벤트</string>
+    <string name="EventLogSelectedEvents">선택한 활동</string>
     <string name="EventLogToggledInvitesOff">un1 님이 그룹 초대를 불허함</string>
     <string name="EventLogToggledInvitesOn">un1 님이 그룹 초대를 허용함</string>
     <string name="EventLogToggledSignaturesOff">un1 님이 서명을 불허함</string>
@@ -807,12 +808,12 @@
     <string name="KeepMediaInfo">이 기간 동안 클라우드 채팅방에서 &lt;b&gt;접근하지 않은&lt;/b&gt; 사진이나 동영상, 기타 파일 등은 공간 절약을 위해 이 기기에서 삭제됩니다.\n\n모든 파일은 Telegram 클라우드에 여전히 남으며 필요하시면 언제든 다시 다운로드하실 수 있습니다.</string>
     <string name="KickFromBroadcast">리스트에서 제외</string>
     <string name="KickFromGroup">그룹에서 내보내기</string>
-    <string name="KickFromSupergroup">제한된 사용자</string>
+    <string name="KickFromSupergroup">사용자 제한</string>
     <string name="Language">언어</string>
     <string name="LanguageCode">ko</string>
     <string name="LanguageCustom">사용자 지정</string>
     <string name="LanguageName">한국어</string>
-    <string name="LanguageNameInEnglish">Korean</string>
+    <string name="LanguageNameInEnglish">한국어</string>
     <string name="LastName">성(선택)</string>
     <string name="LastSeen">마지막 접속:</string>
     <string name="LastSeenContacts">내 대화상대</string>
@@ -1481,6 +1482,8 @@
     <string name="TextCopied">클립보드로 텍스트가 복하되었습니다.</string>
     <string name="TextSize">채팅 글자 크기</string>
     <string name="Theme">테마</string>
+    <string name="ThemeBlue">파랑</string>
+    <string name="ThemeDark">다크</string>
     <string name="ThemePreview">테마 미리보기</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">죄송합니다, 수정가능시간이 만료되었습니다.</string>
@@ -1521,6 +1524,8 @@
     <string name="UseLessDataNever">거부</string>
     <string name="UseLessDataOnMobile">모바일 데이터로만 가능</string>
     <string name="UseProxyAddress">서버</string>
+    <string name="UseProxyForCalls">Use proxy for calls</string>
+    <string name="UseProxyForCallsInfo">Proxy servers may degrade the quality of your calls.</string>
     <string name="UseProxyInfo">SOCKS5 프록시 설정</string>
     <string name="UseProxyPassword">비밀번호</string>
     <string name="UseProxyPort">포트</string>

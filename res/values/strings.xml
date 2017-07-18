@@ -503,6 +503,7 @@
     <string name="EditAdmin">Edit Admin</string>
     <string name="EditAdminAddAdmins">Add New Admins</string>
     <string name="EditAdminAddUsers">Add Users</string>
+    <string name="EditAdminAddUsersViaLink">Invite Users via Link</string>
     <string name="EditAdminBanUsers">Ban Users</string>
     <string name="EditAdminCantEdit">You cannot edit rights of this admin.</string>
     <string name="EditAdminChangeChannelInfo">Change Channel Info</string>
@@ -1481,6 +1482,8 @@
     <string name="TextCopied">Text copied to clipboard</string>
     <string name="TextSize">Messages Text Size</string>
     <string name="Theme">Theme</string>
+    <string name="ThemeBlue">Blue</string>
+    <string name="ThemeDark">Dark</string>
     <string name="ThemePreview">Theme Preview</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">Sorry, editing time expired.</string>
@@ -1521,6 +1524,8 @@
     <string name="UseLessDataNever">Never</string>
     <string name="UseLessDataOnMobile">Only on mobile data</string>
     <string name="UseProxyAddress">Server</string>
+    <string name="UseProxyForCalls">Use proxy for calls</string>
+    <string name="UseProxyForCallsInfo">Proxy servers may degrade the quality of your calls.</string>
     <string name="UseProxyInfo">SOCKS5 proxy settings</string>
     <string name="UseProxyPassword">Password</string>
     <string name="UseProxyPort">Port</string>
@@ -1749,11 +1754,6 @@
     <string name="hockeyapp_update_dialog_positive_button">Show</string>
     <string name="hockeyapp_update_dialog_title">Update Available</string>
     <string name="hockeyapp_update_mandatory_toast">%s is available and is a mandatory update!</string>
-    <string name="EditAdminAddUsersViaLink">Invite Users via Link</string>
-    <string name="ThemeBlue">Blue</string>
-    <string name="ThemeDark">Dark</string>
-    <string name="UseProxyForCalls">Use proxy for calls</string>
-    <string name="UseProxyForCallsInfo">Proxy servers may degrade the quality of your calls.</string>
     <string name="default_web_client_id">760348033671-jiv412evc1r36rl4k7vhl1ba83atdmot.apps.googleusercontent.com</string>
     <string name="firebase_database_url">https://tmessages2.firebaseio.com</string>
     <string name="gcm_defaultSenderId">760348033671</string>

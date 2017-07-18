@@ -271,7 +271,7 @@
     <string name="ChannelAlertText">Los canales son una nueva herramienta para difundir tus mensajes a grandes audiencias.</string>
     <string name="ChannelAlertTitle">¿Qué es un canal?</string>
     <string name="ChannelBlacklist">Suspendidos</string>
-    <string name="ChannelBlockUser">Suspender</string>
+    <string name="ChannelBlockUser">Suspender usuario</string>
     <string name="ChannelBlockedUsers">Usuarios suspendidos</string>
     <string name="ChannelBroadcast">Difundir</string>
     <string name="ChannelCantOpenBanned">Lamentablemente, fuiste suspendido de participar en grupos públicos.</string>
@@ -503,6 +503,7 @@
     <string name="EditAdmin">Editar administrador</string>
     <string name="EditAdminAddAdmins">Añadir administradores</string>
     <string name="EditAdminAddUsers">Añadir usuarios</string>
+    <string name="EditAdminAddUsersViaLink">Invitar con un enlace</string>
     <string name="EditAdminBanUsers">Suspender usuarios</string>
     <string name="EditAdminCantEdit">No puedes editar los privilegios de este administrador.</string>
     <string name="EditAdminChangeChannelInfo">Cambiar información del canal</string>
@@ -528,7 +529,7 @@
     <string name="EmpryUsersPlaceholder">Añadir usuarios</string>
     <string name="EnableAnimations">Activar animaciones</string>
     <string name="EnableProxyAlert">¿Quieres activar este proxy?</string>
-    <string name="EnableProxyAlert2">Puedes cambiar tu servidor proxy más tarde, en los Ajustes (Datos y almacenamiento).</string>
+    <string name="EnableProxyAlert2">Puedes cambiar tu servidor proxy más tarde en los Ajustes (Datos y almacenamiento).</string>
     <string name="Enabled">Activadas</string>
     <string name="EnabledPasswordText">Tienes activada la verificación en dos pasos.\nNecesitarás la contraseña que configuraste para iniciar tu sesión en Telegram.</string>
     <string name="EncryptedChatStartedIncoming">Te uniste al chat secreto.</string>
@@ -558,10 +559,10 @@
     <string name="ErrorOccurred">Ocurrió un error.</string>
     <string name="ErrorSendRestrictedMedia">Los administradores del grupo han restringido que envíes multimedia.</string>
     <string name="ErrorSendRestrictedStickers">Los administradores del grupo han restringido que envíes stickers.</string>
-    <string name="EventLog">Registro de eventos</string>
+    <string name="EventLog">Acciones recientes</string>
     <string name="EventLogAdded">un1 añadió a un2</string>
     <string name="EventLogAllAdmins">Todos los administradores</string>
-    <string name="EventLogAllEvents">Todos los eventos</string>
+    <string name="EventLogAllEvents">Todas las acciones</string>
     <string name="EventLogChangedChannelLink">un1 cambió el enlace del canal:</string>
     <string name="EventLogChangedGroupLink">un1 cambió el enlace del grupo:</string>
     <string name="EventLogChannelJoined">un1 se unió al canal</string>
@@ -576,11 +577,11 @@
     <string name="EventLogEditedGroupPhoto">un1 puso una nueva foto del grupo</string>
     <string name="EventLogEditedGroupTitle">un1 renombró el grupo a “%1$s”</string>
     <string name="EventLogEditedMessages">un1 editó este mensaje:</string>
-    <string name="EventLogEmpty">&lt;b&gt;Aún no hay eventos&lt;/b&gt;\n\nLos miembros y administradores del grupo\nno han realizado acciones de servicio\nen las últimas 48 horas.</string>
+    <string name="EventLogEmpty">&lt;b&gt;Aún no hay eventos&lt;/b&gt;\n\nLos administradores del grupo\nno han realizado acciones de servicio\nen las últimas 48 horas.</string>
     <string name="EventLogEmptyChannel">&lt;b&gt;Aún no hay eventos&lt;/b&gt;\n\nLos administradores del canal\nno han realizado acciones de servicio\nen las últimas 48 horas.</string>
-    <string name="EventLogEmptySearch">&lt;b&gt;No se encontraron eventos&lt;/b&gt;\n\nNo se encontraron eventos que coincidan con tu solicitud.</string>
-    <string name="EventLogEmptyTextSearch">No se han encontrado eventos que contengan “&lt;b&gt;%1$s&lt;/b&gt;”.</string>
-    <string name="EventLogFilterAll">Todos los eventos</string>
+    <string name="EventLogEmptySearch">&lt;b&gt;No se encontraron acciones&lt;/b&gt;\n\nNo se encontraron acciones recientes\nque coincidan con tu solicitud.</string>
+    <string name="EventLogEmptyTextSearch">No se encontraron acciones recientes que contengan \'&lt;b&gt;%1$s&lt;/b&gt;.</string>
+    <string name="EventLogFilterAll">Todas las acciones</string>
     <string name="EventLogFilterChannelInfo">Información del canal</string>
     <string name="EventLogFilterDeletedMessages">Mensajes eliminados</string>
     <string name="EventLogFilterEditedMessages">Mensajes editados</string>
@@ -594,7 +595,7 @@
     <string name="EventLogGroupJoined">un1 se unió al grupo</string>
     <string name="EventLogInfoDetail">Esta es una lista de las acciones de servicio realizadas por los miembros y administradores del grupo en las últimas 48 horas.</string>
     <string name="EventLogInfoDetailChannel">Esta es una lista de las acciones de servicio realizadas por los administradores del canal en las últimas 48 horas.</string>
-    <string name="EventLogInfoTitle">¿Qué es un registro de eventos?</string>
+    <string name="EventLogInfoTitle">¿Qué son las acciones recientes?</string>
     <string name="EventLogLeftChannel">un1 dejó el canal</string>
     <string name="EventLogLeftGroup">un1 dejó el grupo</string>
     <string name="EventLogOriginalCaption">Comentario original</string>
@@ -623,7 +624,7 @@
     <string name="EventLogRestrictedSendMessages">Enviar mensajes</string>
     <string name="EventLogRestrictedSendStickers">Enviar stickers y GIF</string>
     <string name="EventLogRestrictedUntil">cambió las restricciones para %1$s\n\nDuración: %2$s</string>
-    <string name="EventLogSelectedEvents">Eventos seleccionados</string>
+    <string name="EventLogSelectedEvents">Acciones seleccionadas</string>
     <string name="EventLogToggledInvitesOff">un1 desactivó las invitaciones</string>
     <string name="EventLogToggledInvitesOn">un1 activó las invitaciones</string>
     <string name="EventLogToggledSignaturesOff">un1 desactivó las firmas</string>
@@ -1481,6 +1482,8 @@
     <string name="TextCopied">Texto copiado al portapapeles</string>
     <string name="TextSize">Tamaño del texto</string>
     <string name="Theme">Tema</string>
+    <string name="ThemeBlue">Azul</string>
+    <string name="ThemeDark">Oscuro</string>
     <string name="ThemePreview">Vista previa del tema</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">Terminó el tiempo de edición.</string>
@@ -1521,6 +1524,8 @@
     <string name="UseLessDataNever">Nunca</string>
     <string name="UseLessDataOnMobile">Sólo datos móviles</string>
     <string name="UseProxyAddress">Servidor</string>
+    <string name="UseProxyForCalls">Usar proxy para llamadas</string>
+    <string name="UseProxyForCallsInfo">El proxy puede disminuir la calidad de tus llamadas.</string>
     <string name="UseProxyInfo">Ajustes de proxy SOCKS5</string>
     <string name="UseProxyPassword">Contraseña</string>
     <string name="UseProxyPort">Puerto</string>

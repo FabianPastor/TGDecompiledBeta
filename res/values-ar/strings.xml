@@ -258,7 +258,7 @@
     <string name="ChangePhoneNumberOccupied">الرقم %1$s لديه حساب تيليجرام مسبقًا. يرجى حذف هذا الحساب قبل محاولة تغيير رقمك.</string>
     <string name="ChangePublicLimitReached">المعذرة، قمت بحجز معرفات عامة كثيرة. يمكنك إلغاء بعض روابط مجموعاتك وقنواتك القديمة، أو قم بجعلها خاصة.</string>
     <string name="ChangeRecoveryEmail">غيّر البريد الإلكتروني لإسترداد الحساب</string>
-    <string name="ChannelAddAdmin">إضافة إداري</string>
+    <string name="ChannelAddAdmin">إضافة مشرف</string>
     <string name="ChannelAddMembers">إضافة مشارك</string>
     <string name="ChannelAddTo">هل ترغب بإضافة %1$s للقناة؟</string>
     <string name="ChannelAddUserAdminAlert">هل أنت متأكد من رغبتك في تعيين %1$s كإداري؟</string>
@@ -405,7 +405,7 @@
     <string name="ContactsPermissionAlert">لتستطيع التواصل بشكل سلس مع الجميع، قم بالسماح لـ &lt;b&gt;تيليجرام&lt;/b&gt; بالوصول إلى جهات الاتصال الخاصة بك.</string>
     <string name="ContactsPermissionAlertContinue">الاستمرار</string>
     <string name="ContactsPermissionAlertNotNow">ليس الآن</string>
-    <string name="ContinueOnThisLanguage">استمر بالإنجليزية</string>
+    <string name="ContinueOnThisLanguage">استمر بالعربية</string>
     <string name="Contrast">التباين</string>
     <string name="ConvertGroup">التحويل إلى مجموعة خارقة</string>
     <string name="ConvertGroupAlert">هذا القرار لا يمكن الرجوع عنه. لن تتمكن من إرجاع المجموعات الخارقة لتصبح مجموعات عادية.</string>
@@ -503,6 +503,7 @@
     <string name="EditAdmin">عدل على المشرف</string>
     <string name="EditAdminAddAdmins">إضافة مشرفين جدد</string>
     <string name="EditAdminAddUsers">إضافة مستخدمين</string>
+    <string name="EditAdminAddUsersViaLink">دعوة مستخدمين من خلال الرابط</string>
     <string name="EditAdminBanUsers">حظر مستخدمين</string>
     <string name="EditAdminCantEdit">لا يمكنك التعديل على حقوق هذا المشرف.</string>
     <string name="EditAdminChangeChannelInfo">غير معلومات القناة</string>
@@ -558,7 +559,7 @@
     <string name="ErrorOccurred">حدث خطأ.</string>
     <string name="ErrorSendRestrictedMedia">المعذرة، مشرفو هذه المجموعة قاموا بوضع قيد يمنعك من إرسال الوسائط.</string>
     <string name="ErrorSendRestrictedStickers">المعذرة، مشرفو هذه المجموعة قاموا بوضع قيد يمنعك من إرسال الملصقات.</string>
-    <string name="EventLog">سجل الحدث</string>
+    <string name="EventLog">الأفعال الحديثة</string>
     <string name="EventLogAdded">un1 قام بإضافة un2</string>
     <string name="EventLogAllAdmins">كافة المشرفين</string>
     <string name="EventLogAllEvents">كافة الأحداث</string>
@@ -594,7 +595,7 @@
     <string name="EventLogGroupJoined">un1 انضم للمجموعة</string>
     <string name="EventLogInfoDetail">هذه قائمة بجميع العمليات التي قام بها أعضاء المجموعة ومشرفيها خلال 48 ساعة.</string>
     <string name="EventLogInfoDetailChannel">هذه قائمة بجميع العمليات التي قام بها أعضاء القناة ومشرفيها خلال 48 ساعة.</string>
-    <string name="EventLogInfoTitle">ما هو سجل الحدث؟</string>
+    <string name="EventLogInfoTitle">What is the Recent Actions?</string>
     <string name="EventLogLeftChannel">un1 غادر القناة</string>
     <string name="EventLogLeftGroup">un1 غادر المجموعة</string>
     <string name="EventLogOriginalCaption">التعليق الأصلي</string>
@@ -1481,6 +1482,8 @@
     <string name="TextCopied">تم نسخ النص للحافظة</string>
     <string name="TextSize">حجم نص الرسائل</string>
     <string name="Theme">نمط</string>
+    <string name="ThemeBlue">أزرق</string>
+    <string name="ThemeDark">داكن</string>
     <string name="ThemePreview">معاينة النمط</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">المعذرة، انتهت مدة التعديل على الرسائل.</string>
@@ -1521,6 +1524,8 @@
     <string name="UseLessDataNever">أبدًا</string>
     <string name="UseLessDataOnMobile">فقط على البيانات الخلوية</string>
     <string name="UseProxyAddress">الخادم</string>
+    <string name="UseProxyForCalls">Use proxy for calls</string>
+    <string name="UseProxyForCallsInfo">Proxy servers may degrade the quality of your calls.</string>
     <string name="UseProxyInfo">إعدادات بروكسي SOCKS 5</string>
     <string name="UseProxyPassword">كلمة المرور</string>
     <string name="UseProxyPort">المنفذ</string>

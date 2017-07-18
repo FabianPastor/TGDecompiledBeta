@@ -85,15 +85,15 @@ public final class zzad implements zzk {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public final zzn zza(zzp<?> com_google_android_gms_internal_zzp_) throws zzaa {
-        HttpResponse zza;
-        String valueOf;
+        int statusCode;
         Throwable e;
         long elapsedRealtime = SystemClock.elapsedRealtime();
         while (true) {
-            int statusCode;
             HttpResponse httpResponse = null;
             Map emptyMap = Collections.emptyMap();
+            HttpResponse zza;
             byte[] zza2;
+            String valueOf;
             try {
                 Map hashMap = new HashMap();
                 zzc zze = com_google_android_gms_internal_zzp_.zze();

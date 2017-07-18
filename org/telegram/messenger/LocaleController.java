@@ -81,6 +81,7 @@ public class LocaleController {
     private boolean loadingRemoteLanguages;
     private HashMap<String, String> localeValues = new HashMap();
     private ArrayList<LocaleInfo> otherLanguages = new ArrayList();
+    private boolean reloadLastFile;
     public ArrayList<LocaleInfo> remoteLanguages = new ArrayList();
     private Locale systemDefaultLocale;
     private HashMap<String, String> translitChars;
@@ -617,7 +618,7 @@ public class LocaleController {
     }
 
     public void reloadCurrentRemoteLocale() {
-        applyRemoteLanguage(this.currentLocaleInfo, null);
+        applyRemoteLanguage(this.currentLocaleInfo, null, true);
     }
 
     private String getLocaleString(Locale locale) {
@@ -814,15 +815,16 @@ public class LocaleController {
     private HashMap<String, String> getLocaleFileStrings(File file, boolean preserveEscapes) {
         Throwable e;
         Throwable th;
-        FileInputStream stream = null;
+        FileInputStream fileInputStream = null;
+        this.reloadLastFile = false;
         try {
             HashMap<String, String> stringMap;
             if (file.exists()) {
                 stringMap = new HashMap();
                 XmlPullParser parser = Xml.newPullParser();
-                FileInputStream stream2 = new FileInputStream(file);
+                FileInputStream stream = new FileInputStream(file);
                 try {
-                    parser.setInput(stream2, "UTF-8");
+                    parser.setInput(stream, "UTF-8");
                     String name = null;
                     String value = null;
                     String attrName = null;
@@ -838,9 +840,14 @@ public class LocaleController {
                                 if (value != null) {
                                     value = value.trim();
                                     if (preserveEscapes) {
-                                        value = value.replace("<", "&lt;").replace(">", "&gt;").replace("'", "\\'").replace("&", "&amp;");
+                                        value = value.replace("<", "&lt;").replace(">", "&gt;").replace("'", "\\'").replace("& ", "&amp; ");
                                     } else {
                                         value = value.replace("\\n", "\n").replace("\\", "");
+                                        String old = value;
+                                        value = value.replace("&lt;", "<");
+                                        if (!(this.reloadLastFile || value.equals(old))) {
+                                            this.reloadLastFile = true;
+                                        }
                                     }
                                 }
                             }
@@ -856,23 +863,24 @@ public class LocaleController {
                             attrName = null;
                         }
                     }
-                    if (stream2 != null) {
+                    if (stream != null) {
                         try {
-                            stream2.close();
+                            stream.close();
                         } catch (Throwable e2) {
                             FileLog.e(e2);
                         }
                     }
-                    stream = stream2;
+                    fileInputStream = stream;
                     return stringMap;
                 } catch (Exception e3) {
                     e2 = e3;
-                    stream = stream2;
+                    fileInputStream = stream;
                     try {
                         FileLog.e(e2);
-                        if (stream != null) {
+                        this.reloadLastFile = true;
+                        if (fileInputStream != null) {
                             try {
-                                stream.close();
+                                fileInputStream.close();
                             } catch (Throwable e22) {
                                 FileLog.e(e22);
                             }
@@ -880,9 +888,9 @@ public class LocaleController {
                         return new HashMap();
                     } catch (Throwable th2) {
                         th = th2;
-                        if (stream != null) {
+                        if (fileInputStream != null) {
                             try {
-                                stream.close();
+                                fileInputStream.close();
                             } catch (Throwable e222) {
                                 FileLog.e(e222);
                             }
@@ -891,19 +899,19 @@ public class LocaleController {
                     }
                 } catch (Throwable th3) {
                     th = th3;
-                    stream = stream2;
-                    if (stream != null) {
-                        stream.close();
+                    fileInputStream = stream;
+                    if (fileInputStream != null) {
+                        fileInputStream.close();
                     }
                     throw th;
                 }
             }
             stringMap = new HashMap();
-            if (stream == null) {
+            if (fileInputStream == null) {
                 return stringMap;
             }
             try {
-                stream.close();
+                fileInputStream.close();
                 return stringMap;
             } catch (Throwable e2222) {
                 FileLog.e(e2222);
@@ -912,8 +920,9 @@ public class LocaleController {
         } catch (Exception e4) {
             e2222 = e4;
             FileLog.e(e2222);
-            if (stream != null) {
-                stream.close();
+            this.reloadLastFile = true;
+            if (fileInputStream != null) {
+                fileInputStream.close();
             }
             return new HashMap();
         }
@@ -928,7 +937,7 @@ public class LocaleController {
             File pathToFile = localeInfo.getPathToFile();
             ConnectionsManager.getInstance().setLangCode(localeInfo.shortName.replace("_", "-"));
             if (localeInfo.isRemote() && !pathToFile.exists()) {
-                applyRemoteLanguage(localeInfo, null);
+                applyRemoteLanguage(localeInfo, null, false);
             }
             try {
                 Locale newLocale;
@@ -961,6 +970,10 @@ public class LocaleController {
                 config.locale = this.currentLocale;
                 ApplicationLoader.applicationContext.getResources().updateConfiguration(config, ApplicationLoader.applicationContext.getResources().getDisplayMetrics());
                 this.changingConfiguration = false;
+                if (this.reloadLastFile) {
+                    reloadCurrentRemoteLocale();
+                    this.reloadLastFile = false;
+                }
             } catch (Throwable e) {
                 FileLog.e(e);
                 this.changingConfiguration = false;
@@ -1981,12 +1994,12 @@ public class LocaleController {
         }
     }
 
-    public void applyRemoteLanguage(LocaleInfo localeInfo, TL_langPackLanguage language) {
+    public void applyRemoteLanguage(LocaleInfo localeInfo, TL_langPackLanguage language, boolean force) {
         if (localeInfo != null || language != null) {
             if (localeInfo != null && !localeInfo.isRemote()) {
                 return;
             }
-            if (localeInfo.version == 0 || BuildVars.DEBUG_VERSION) {
+            if (localeInfo.version == 0 || BuildVars.DEBUG_VERSION || force) {
                 ConnectionsManager.getInstance().setLangCode(localeInfo != null ? localeInfo.shortName : language.lang_code);
                 TL_langpack_getLangPack req = new TL_langpack_getLangPack();
                 if (language == null) {

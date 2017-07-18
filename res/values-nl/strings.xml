@@ -271,7 +271,7 @@
     <string name="ChannelAlertText">Kanalen zijn een nieuwe functie om berichten naar een groot publiek te sturen.</string>
     <string name="ChannelAlertTitle">Wat is een kanaal?</string>
     <string name="ChannelBlacklist">Blacklist</string>
-    <string name="ChannelBlockUser">Nieuwe beperking</string>
+    <string name="ChannelBlockUser">Blokkeer gebruiker</string>
     <string name="ChannelBlockedUsers">Geblokkeerde gebruikers</string>
     <string name="ChannelBroadcast">Massabericht</string>
     <string name="ChannelCantOpenBanned">Helaas ben je geblokkeerd van deelname in publieke groepen.</string>
@@ -503,6 +503,7 @@
     <string name="EditAdmin">Beheerder wijzigen</string>
     <string name="EditAdminAddAdmins">Beheerders toevoegen</string>
     <string name="EditAdminAddUsers">Leden toevoegen</string>
+    <string name="EditAdminAddUsersViaLink">Uitnodigen via link</string>
     <string name="EditAdminBanUsers">Leden blokkeren</string>
     <string name="EditAdminCantEdit">Je kunt de machtigingen van deze beheerder niet aanpassen.</string>
     <string name="EditAdminChangeChannelInfo">Informatie aanpassen</string>
@@ -558,7 +559,7 @@
     <string name="ErrorOccurred">Er is een fout opgetreden.</string>
     <string name="ErrorSendRestrictedMedia">De beheerders van deze groep hebben je beperkt in het sturen van media.</string>
     <string name="ErrorSendRestrictedStickers">De beheerders van deze groep hebben je beperkt in het sturen van stickers.</string>
-    <string name="EventLog">Logboek</string>
+    <string name="EventLog">Recente gebeurtenissen</string>
     <string name="EventLogAdded">un1 heeft un2 toegevoegd</string>
     <string name="EventLogAllAdmins">Alle beheerders</string>
     <string name="EventLogAllEvents">Alle gebeurtenissen</string>
@@ -578,7 +579,7 @@
     <string name="EventLogEditedMessages">bericht door un1 bewerkt:</string>
     <string name="EventLogEmpty">&lt;b&gt;Nog geen gebeurtenissen&lt;/b&gt;\n\nBeheerders en leden\nhebben geen acties uitgevoerd\nin de afgelopen 48 uur.</string>
     <string name="EventLogEmptyChannel">&lt;b&gt;Nog geen gebeurtenissen&lt;/b&gt;\n\nBeheerders\nhebben geen acties uitgevoerd\nin de afgelopen 48 uur.</string>
-    <string name="EventLogEmptySearch">&lt;b&gt;Geen gebeurtenissen gevonden&lt;/b&gt;\n\nGeen recente gebeurtenissen gevonden voor je zoekopdracht.</string>
+    <string name="EventLogEmptySearch">&lt;b&gt;Geen gebeurtenissen&lt;/b&gt;\n\nGeen recente gebeurtenissen gevonden\nvoor je zoekopdracht.</string>
     <string name="EventLogEmptyTextSearch">Geen recente gebeurtenissen met inhoud \'&lt;b&gt;%1$s&lt;/b&gt;\' gevonden</string>
     <string name="EventLogFilterAll">Alle gebeurtenissen</string>
     <string name="EventLogFilterChannelInfo">Kanaalinformatie</string>
@@ -1481,6 +1482,8 @@
     <string name="TextCopied">Tekst gekopieerd naar klembord.</string>
     <string name="TextSize">Tekstgrootte berichten</string>
     <string name="Theme">Thema</string>
+    <string name="ThemeBlue">Blauw</string>
+    <string name="ThemeDark">Donker</string>
     <string name="ThemePreview">Thema-voorbeeld</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">Wijzigen kan niet meer.</string>
@@ -1521,11 +1524,13 @@
     <string name="UseLessDataNever">Nooit</string>
     <string name="UseLessDataOnMobile">Alleen bij mobiele verbinding</string>
     <string name="UseProxyAddress">Server</string>
+    <string name="UseProxyForCalls">Gebruik voor oproepen</string>
+    <string name="UseProxyForCallsInfo">Je oproepkwaliteit kan slechter worden door het gebruik van een proxy-server.</string>
     <string name="UseProxyInfo">SOCKS5 proxy-instellingen</string>
     <string name="UseProxyPassword">Wachtwoord</string>
     <string name="UseProxyPort">Poort</string>
     <string name="UseProxySettings">Gebruik proxy-instellingen</string>
-    <string name="UseProxyUsername">Gebruikersnaam</string>
+    <string name="UseProxyUsername">Gebruiker</string>
     <string name="UserAlreadyInGroup">Gebruiker is al een groepslid</string>
     <string name="UserRestricted">Je mag deze actie niet uitvoeren.</string>
     <string name="UserRestrictions">Gebruikersbeperkingen</string>

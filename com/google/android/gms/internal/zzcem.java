@@ -754,7 +754,6 @@ final class zzcem extends zzchi {
     }
 
     final Map<Integer, List<zzcjp>> zzK(String str, String str2) {
-        Cursor query;
         Object e;
         Throwable th;
         zzkD();
@@ -762,6 +761,7 @@ final class zzcem extends zzchi {
         zzbo.zzcF(str);
         zzbo.zzcF(str2);
         Map<Integer, List<zzcjp>> arrayMap = new ArrayMap();
+        Cursor query;
         try {
             query = getWritableDatabase().query("property_filters", new String[]{"audience_id", "data"}, "app_id=? AND property_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -825,6 +825,7 @@ final class zzcem extends zzchi {
 
     @WorkerThread
     protected final long zzL(String str, String str2) {
+        long zza;
         Object e;
         zzbo.zzcF(str);
         zzbo.zzcF(str2);
@@ -832,7 +833,6 @@ final class zzcem extends zzchi {
         zzkD();
         SQLiteDatabase writableDatabase = getWritableDatabase();
         writableDatabase.beginTransaction();
-        long zza;
         try {
             zza = zza(new StringBuilder(String.valueOf(str2).length() + 32).append("select ").append(str2).append(" from app2 where app_id=?").toString(), new String[]{str}, -1);
             if (zza == -1) {
@@ -1361,13 +1361,13 @@ final class zzcem extends zzchi {
     }
 
     public final List<zzcej> zzc(String str, String[] strArr) {
+        Cursor query;
         Object e;
         Cursor cursor;
         Throwable th;
         zzjC();
         zzkD();
         List<zzcej> arrayList = new ArrayList();
-        Cursor query;
         try {
             String[] strArr2 = new String[]{"app_id", "origin", "name", Param.VALUE, "active", "trigger_event_name", "trigger_timeout", "timed_out_event", "creation_timestamp", "triggered_event", "triggered_timestamp", "time_to_live", "expired_event"};
             zzcel.zzxv();
@@ -1854,6 +1854,7 @@ final class zzcem extends zzchi {
 
     @WorkerThread
     public final List<Pair<zzcjy, Long>> zzl(String str, int i, int i2) {
+        Cursor query;
         List<Pair<zzcjy, Long>> arrayList;
         Object e;
         Cursor cursor;
@@ -1867,7 +1868,6 @@ final class zzcem extends zzchi {
         }
         zzbo.zzaf(z);
         zzbo.zzcF(str);
-        Cursor query;
         try {
             query = getWritableDatabase().query("queue", new String[]{"rowid", "data"}, "app_id=?", new String[]{str}, null, null, "rowid", String.valueOf(i));
             try {

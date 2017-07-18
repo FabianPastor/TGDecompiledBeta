@@ -72,7 +72,7 @@
     <string name="ActionYouScoredInGame">Hai totalizzato %1$s a un2</string>
     <string name="Add">Aggiungi</string>
     <string name="AddAdminErrorBlacklisted">Spiacenti, non puoi aggiungere questo utente come amministratore perché è bloccato e non puoi sbloccarlo.</string>
-    <string name="AddAdminErrorNotAMember">Spiacenti, non puoi aggiungere questo utente come amministratore perché non è un membro del gruppo e non sei autorizzato ad inviarlo.</string>
+    <string name="AddAdminErrorNotAMember">Spiacenti, non puoi aggiungere questo utente come amministratore perché non è un membro del gruppo e non sei autorizzato ad invitarlo.</string>
     <string name="AddBannedErrorAdmin">Spiacenti, non puoi bloccare questo utente perché è un amministratore in questo gruppo e non sei autorizzato a degradarlo.</string>
     <string name="AddCaption">Aggiungi una didascalia...</string>
     <string name="AddContact">Aggiungi</string>
@@ -503,6 +503,7 @@
     <string name="EditAdmin">Modifica amministratore</string>
     <string name="EditAdminAddAdmins">Aggiungere amministratori</string>
     <string name="EditAdminAddUsers">Aggiungere utenti</string>
+    <string name="EditAdminAddUsersViaLink">Invitare utenti tramite link</string>
     <string name="EditAdminBanUsers">Bloccare utenti</string>
     <string name="EditAdminCantEdit">Non puoi modificare i diritti di questo amministratore.</string>
     <string name="EditAdminChangeChannelInfo">Cambiare le info del canale</string>
@@ -558,10 +559,10 @@
     <string name="ErrorOccurred">Si è verificato un errore.</string>
     <string name="ErrorSendRestrictedMedia">Spiacenti, gli amministratori di questo gruppo ti hanno vietato di inviare media.</string>
     <string name="ErrorSendRestrictedStickers">Spiacenti, gli amministratori di questo gruppo ti hanno vietato di inviare sticker.</string>
-    <string name="EventLog">Registro eventi</string>
+    <string name="EventLog">Azioni recenti</string>
     <string name="EventLogAdded">un1 ha aggiunto un2</string>
     <string name="EventLogAllAdmins">Tutti gli amministratori</string>
-    <string name="EventLogAllEvents">Tutti gli eventi</string>
+    <string name="EventLogAllEvents">Tutte le azioni</string>
     <string name="EventLogChangedChannelLink">un1 ha modificato il link del canale:</string>
     <string name="EventLogChangedGroupLink">un1 ha modificato il link del gruppo:</string>
     <string name="EventLogChannelJoined">un1 si è unito al canale</string>
@@ -576,11 +577,11 @@
     <string name="EventLogEditedGroupPhoto">un1 ha impostato una nuova foto del gruppo</string>
     <string name="EventLogEditedGroupTitle">un1 ha rinominato il gruppo in \"%1$s\"</string>
     <string name="EventLogEditedMessages">un1 ha modificato questo messaggio:</string>
-    <string name="EventLogEmpty">&lt;b&gt;Ancora nessun evento&lt;/b&gt;\n\nI membri e gli amministratori del\ngruppo non hanno eseguito azioni\ndi servizio nelle ultime 48 ore.</string>
-    <string name="EventLogEmptyChannel">&lt;b&gt;Ancora nessun evento&lt;/b&gt;\n\nGli amministratori del canale non\nhanno eseguito azioni di servizio\nnelle ultime 48 ore.</string>
-    <string name="EventLogEmptySearch">&lt;b&gt;Nessun evento trovato&lt;/b&gt;\n\nNon sono stati trovati eventi\nrecenti che rispondono alla tua richiesta.</string>
-    <string name="EventLogEmptyTextSearch">Non sono stati trovati eventi recenti contenenti \'&lt;b&gt;%1$s&lt;/b&gt;\' .</string>
-    <string name="EventLogFilterAll">Tutti gli eventi</string>
+    <string name="EventLogEmpty">&lt;b&gt;Ancora nessuna azione&lt;/b&gt;\n\nI membri e gli amministratori del\ngruppo non hanno eseguito azioni\ndi servizio nelle ultime 48 ore.</string>
+    <string name="EventLogEmptyChannel">&lt;b&gt;Ancora nessuna azione&lt;/b&gt;\n\nGli amministratori del canale non\nhanno eseguito azioni di servizio\nnelle ultime 48 ore.</string>
+    <string name="EventLogEmptySearch">&lt;b&gt;Nessuna azione trovata&lt;/b&gt;\n\nNon sono state trovate azioni\nrecenti che rispondono alla tua richiesta.</string>
+    <string name="EventLogEmptyTextSearch">Non sono state trovate azioni recenti contenenti \'&lt;b&gt;%1$s&lt;/b&gt;\' .</string>
+    <string name="EventLogFilterAll">Tutte le azioni</string>
     <string name="EventLogFilterChannelInfo">Info canale</string>
     <string name="EventLogFilterDeletedMessages">Messaggi eliminati</string>
     <string name="EventLogFilterEditedMessages">Messaggi modificati</string>
@@ -594,7 +595,7 @@
     <string name="EventLogGroupJoined">un1 si è unito al gruppo</string>
     <string name="EventLogInfoDetail">Questa è una lista di tutte le azioni di servizio effettuate dai membri e dagli amministratori del gruppo nelle ultime 48 ore.</string>
     <string name="EventLogInfoDetailChannel">Questa è una lista di tutte le azioni di servizio eseguite dagli amministratori del canale nelle ultime 48 ore.</string>
-    <string name="EventLogInfoTitle">Cos\'è il registro eventi?</string>
+    <string name="EventLogInfoTitle">Cosa sono le azioni recenti?</string>
     <string name="EventLogLeftChannel">un1 ha lasciato il canale</string>
     <string name="EventLogLeftGroup">un1 ha lasciato il gruppo</string>
     <string name="EventLogOriginalCaption">Didascalia originale</string>
@@ -623,7 +624,7 @@
     <string name="EventLogRestrictedSendMessages">Inviare messaggi</string>
     <string name="EventLogRestrictedSendStickers">Inviare sticker e GIF</string>
     <string name="EventLogRestrictedUntil">ha cambiato le restrizioni di %1$s\n\nDurata: %2$s</string>
-    <string name="EventLogSelectedEvents">Eventi selezionati</string>
+    <string name="EventLogSelectedEvents">Azioni selezionate</string>
     <string name="EventLogToggledInvitesOff">un1 ha disattivato gli inviti del gruppo</string>
     <string name="EventLogToggledInvitesOn">un1 ha attivato gli inviti del gruppo</string>
     <string name="EventLogToggledSignaturesOff">un1 ha disattivato le firme</string>
@@ -1481,6 +1482,8 @@
     <string name="TextCopied">Testo copiato negli appunti</string>
     <string name="TextSize">Dimensione testo messaggi</string>
     <string name="Theme">Tema</string>
+    <string name="ThemeBlue">Blu</string>
+    <string name="ThemeDark">Scuro</string>
     <string name="ThemePreview">Anteprima tema</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">Spiacenti, tempo di modifica scaduto.</string>
@@ -1521,6 +1524,8 @@
     <string name="UseLessDataNever">Mai</string>
     <string name="UseLessDataOnMobile">Solo con i dati cellulare</string>
     <string name="UseProxyAddress">Server</string>
+    <string name="UseProxyForCalls">Usa il proxy per le chiamate</string>
+    <string name="UseProxyForCallsInfo">I server proxy potrebbero ridurre la qualità delle tue chiamate.</string>
     <string name="UseProxyInfo">Impostazioni proxy SOCKS5</string>
     <string name="UseProxyPassword">Password</string>
     <string name="UseProxyPort">Porta</string>
