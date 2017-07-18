@@ -1750,6 +1750,8 @@
     <string name="hockeyapp_update_dialog_title">Update Available</string>
     <string name="hockeyapp_update_mandatory_toast">%s is available and is a mandatory update!</string>
     <string name="EditAdminAddUsersViaLink">Invite Users via Link</string>
+    <string name="ThemeBlue">Blue</string>
+    <string name="ThemeDark">Dark</string>
     <string name="UseProxyForCalls">Use proxy for calls</string>
     <string name="UseProxyForCallsInfo">Proxy servers may degrade the quality of your calls.</string>
     <string name="default_web_client_id">760348033671-jiv412evc1r36rl4k7vhl1ba83atdmot.apps.googleusercontent.com</string>

@@ -103,7 +103,7 @@ public class ThemeCell extends FrameLayout {
         Throwable e;
         Throwable th;
         this.currentThemeInfo = themeInfo;
-        String text = themeInfo.name;
+        String text = themeInfo.getName();
         if (text.endsWith(".attheme")) {
             text = text.substring(0, text.lastIndexOf(46));
         }

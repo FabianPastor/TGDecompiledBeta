@@ -659,6 +659,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 this.delegate.needChangePanelVisibility(false);
             } else if (foundType == 0) {
                 User user;
+                Chat chat;
                 ArrayList<Integer> users = new ArrayList();
                 for (a = 0; a < Math.min(100, messageObjects.size()); a++) {
                     int from_id = ((MessageObject) messageObjects.get(a)).messageOwner.from_id;
@@ -685,7 +686,13 @@ public class MentionsAdapter extends SelectionAdapter {
                         }
                     }
                 }
-                Chat chat = this.parentFragment.getCurrentChat();
+                if (this.parentFragment != null) {
+                    chat = this.parentFragment.getCurrentChat();
+                } else if (this.info != null) {
+                    chat = MessagesController.getInstance().getChat(Integer.valueOf(this.info.id));
+                } else {
+                    chat = null;
+                }
                 if (!(chat == null || this.info == null || this.info.participants == null || (ChatObject.isChannel(chat) && !chat.megagroup))) {
                     for (a = 0; a < this.info.participants.participants.size(); a++) {
                         user = MessagesController.getInstance().getUser(Integer.valueOf(((ChatParticipant) this.info.participants.participants.get(a)).user_id));

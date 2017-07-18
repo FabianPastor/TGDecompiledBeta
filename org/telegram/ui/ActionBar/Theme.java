@@ -777,6 +777,19 @@ public class Theme {
             }
         }
 
+        public String getName() {
+            if ("Default".equals(this.name)) {
+                return LocaleController.getString("Default", R.string.Default);
+            }
+            if ("Blue".equals(this.name)) {
+                return LocaleController.getString("ThemeBlue", R.string.ThemeBlue);
+            }
+            if ("Dark".equals(this.name)) {
+                return LocaleController.getString("ThemeDark", R.string.ThemeDark);
+            }
+            return this.name;
+        }
+
         public static ThemeInfo createWithJson(JSONObject object) {
             if (object == null) {
                 return null;
@@ -1310,7 +1323,7 @@ public class Theme {
         defaultColors.put(key_calls_ratingStar, Integer.valueOf(Integer.MIN_VALUE));
         defaultColors.put(key_calls_ratingStarSelected, Integer.valueOf(-11888682));
         ThemeInfo themeInfo = new ThemeInfo();
-        themeInfo.name = LocaleController.getString("Default", R.string.Default);
+        themeInfo.name = "Default";
         ArrayList arrayList = themes;
         defaultTheme = themeInfo;
         currentTheme = themeInfo;
@@ -1771,7 +1784,7 @@ public class Theme {
     }
 
     public static String getCurrentThemeName() {
-        String text = currentTheme.name;
+        String text = currentTheme.getName();
         if (text.endsWith(".attheme")) {
             return text.substring(0, text.lastIndexOf(46));
         }

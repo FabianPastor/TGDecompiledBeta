@@ -222,6 +222,7 @@ public class EmbedBottomSheet extends BottomSheet {
         this.videoView = new WebPlayerView(context, true, false, new WebPlayerViewDelegate() {
             public void onInitFailed() {
                 EmbedBottomSheet.this.webView.setVisibility(0);
+                EmbedBottomSheet.this.webView.setKeepScreenOn(true);
                 EmbedBottomSheet.this.videoView.setVisibility(4);
                 EmbedBottomSheet.this.videoView.getControlsView().setVisibility(4);
                 EmbedBottomSheet.this.videoView.getTextureView().setVisibility(4);
@@ -558,6 +559,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 }
                 EmbedBottomSheet.this.progressBar.setVisibility(0);
                 EmbedBottomSheet.this.webView.setVisibility(0);
+                EmbedBottomSheet.this.webView.setKeepScreenOn(true);
                 EmbedBottomSheet.this.videoView.setVisibility(4);
                 EmbedBottomSheet.this.videoView.getControlsView().setVisibility(4);
                 EmbedBottomSheet.this.videoView.getTextureView().setVisibility(4);

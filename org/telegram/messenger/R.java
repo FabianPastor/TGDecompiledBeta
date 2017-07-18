@@ -2187,6 +2187,8 @@ public final class R {
         public static final int TextCopied = NUM;
         public static final int TextSize = NUM;
         public static final int Theme = NUM;
+        public static final int ThemeBlue = NUM;
+        public static final int ThemeDark = NUM;
         public static final int ThemePreview = NUM;
         public static final int TimeToEdit = NUM;
         public static final int TimeToEditExpired = NUM;
