@@ -492,8 +492,8 @@
     <string name="DirectShare">Compartilhamento Direto</string>
     <string name="DirectShareInfo">Mostrar chats recentes no menu compartilhar</string>
     <string name="Disabled">Desativado</string>
-    <string name="DisappearingPhoto">Foto temporal</string>
-    <string name="DisappearingVideo">Vídeo temporal</string>
+    <string name="DisappearingPhoto">Foto Secreta</string>
+    <string name="DisappearingVideo">Vídeo Secreto</string>
     <string name="DiscardChanges">Descartar mudanças?</string>
     <string name="DiscardVideoMessageDescription">Você tem certeza que deseja parar de gravar e descartar sua mensagem de vídeo?</string>
     <string name="DiscardVideoMessageTitle">Descartar Mensagem de Vídeo</string>

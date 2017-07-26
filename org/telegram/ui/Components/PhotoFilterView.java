@@ -1450,7 +1450,7 @@ public class PhotoFilterView extends FrameLayout {
     private void updateSelectedBlurType() {
         Drawable drawable;
         if (this.blurType == 0) {
-            drawable = this.blurOffButton.getContext().getDrawable(R.drawable.blur_off).mutate();
+            drawable = this.blurOffButton.getContext().getResources().getDrawable(R.drawable.blur_off).mutate();
             drawable.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
             this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             this.blurOffButton.setTextColor(-11420173);
@@ -1461,7 +1461,7 @@ public class PhotoFilterView extends FrameLayout {
         } else if (this.blurType == 1) {
             this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_off, 0, 0);
             this.blurOffButton.setTextColor(-1);
-            drawable = this.blurOffButton.getContext().getDrawable(R.drawable.blur_radial).mutate();
+            drawable = this.blurOffButton.getContext().getResources().getDrawable(R.drawable.blur_radial).mutate();
             drawable.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
             this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             this.blurRadialButton.setTextColor(-11420173);
@@ -1472,7 +1472,7 @@ public class PhotoFilterView extends FrameLayout {
             this.blurOffButton.setTextColor(-1);
             this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_radial, 0, 0);
             this.blurRadialButton.setTextColor(-1);
-            drawable = this.blurOffButton.getContext().getDrawable(R.drawable.blur_linear).mutate();
+            drawable = this.blurOffButton.getContext().getResources().getDrawable(R.drawable.blur_linear).mutate();
             drawable.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
             this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             this.blurLinearButton.setTextColor(-11420173);

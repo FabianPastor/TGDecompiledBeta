@@ -1784,12 +1784,12 @@ public class MessagesStorage {
         });
     }
 
-    public void createTaskForSecretChat(long did, int time, int readTime, int isOut, ArrayList<Long> random_ids) {
+    public void createTaskForSecretChat(int chatId, int time, int readTime, int isOut, ArrayList<Long> random_ids) {
         final ArrayList<Long> arrayList = random_ids;
-        final long j = did;
-        final int i = isOut;
-        final int i2 = time;
-        final int i3 = readTime;
+        final int i = chatId;
+        final int i2 = isOut;
+        final int i3 = time;
+        final int i4 = readTime;
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 int minDate = ConnectionsManager.DEFAULT_DATACENTER_ID;
@@ -1800,7 +1800,7 @@ public class MessagesStorage {
                     ArrayList<Long> midsArray = new ArrayList();
                     StringBuilder mids = new StringBuilder();
                     if (arrayList == null) {
-                        cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT mid, ttl FROM messages WHERE uid = %d AND out = %d AND read_state != 0 AND ttl > 0 AND date <= %d AND send_state = 0 AND media != 1", new Object[]{Long.valueOf(j), Integer.valueOf(i), Integer.valueOf(i2)}), new Object[0]);
+                        cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT mid, ttl FROM messages WHERE uid = %d AND out = %d AND read_state != 0 AND ttl > 0 AND date <= %d AND send_state = 0 AND media != 1", new Object[]{Long.valueOf(((long) i) << 32), Integer.valueOf(i2), Integer.valueOf(i3)}), new Object[0]);
                     } else {
                         String ids = TextUtils.join(",", arrayList);
                         cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.mid, m.ttl FROM messages as m INNER JOIN randoms as r ON m.mid = r.mid WHERE r.random_id IN (%s)", new Object[]{ids}), new Object[0]);
@@ -1813,10 +1813,10 @@ public class MessagesStorage {
                         }
                         if (ttl > 0) {
                             int i;
-                            if (i2 > i3) {
-                                i = i2;
-                            } else {
+                            if (i3 > i4) {
                                 i = i3;
+                            } else {
+                                i = i4;
                             }
                             int date = i + ttl;
                             minDate = Math.min(minDate, date);
@@ -4770,12 +4770,12 @@ Error: java.util.NoSuchElementException
 
     private void putMessagesInternal(ArrayList<Message> messages, boolean withTransaction, boolean doNotUpdateDialogDate, int downloadMask, boolean ifNoLastMessage) {
         Message lastMessage;
-        SQLiteCursor cursor;
         int a;
         Integer type;
         Integer count;
         if (ifNoLastMessage) {
             try {
+                SQLiteCursor cursor;
                 lastMessage = (Message) messages.get(0);
                 if (lastMessage.dialog_id == 0) {
                     if (lastMessage.to_id.user_id != 0) {
