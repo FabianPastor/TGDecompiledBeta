@@ -1055,7 +1055,7 @@ public class SecretMediaViewer implements NotificationCenterDelegate, OnGestureL
                 this.velocityTracker = null;
             }
             this.closeTime = System.currentTimeMillis();
-            if ((this.currentMessageObject.messageOwner.media.photo instanceof TL_photoEmpty) || (this.currentMessageObject.messageOwner.media.document instanceof TL_documentEmpty)) {
+            if (this.currentProvider == null || (this.currentMessageObject.messageOwner.media.photo instanceof TL_photoEmpty) || (this.currentMessageObject.messageOwner.media.document instanceof TL_documentEmpty)) {
                 object = null;
             } else {
                 object = this.currentProvider.getPlaceForPhoto(this.currentMessageObject, null, 0);
