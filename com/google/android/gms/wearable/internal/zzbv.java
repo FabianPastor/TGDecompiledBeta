@@ -5,11 +5,11 @@ import com.google.android.gms.wearable.DataItem;
 
 public final class zzbv implements DataEvent {
     private int zzamr;
-    private DataItem zzbSz;
+    private DataItem zzbSB;
 
     public zzbv(DataEvent dataEvent) {
         this.zzamr = dataEvent.getType();
-        this.zzbSz = (DataItem) dataEvent.getDataItem().freeze();
+        this.zzbSB = (DataItem) dataEvent.getDataItem().freeze();
     }
 
     public final /* bridge */ /* synthetic */ Object freeze() {
@@ -17,7 +17,7 @@ public final class zzbv implements DataEvent {
     }
 
     public final DataItem getDataItem() {
-        return this.zzbSz;
+        return this.zzbSB;
     }
 
     public final int getType() {

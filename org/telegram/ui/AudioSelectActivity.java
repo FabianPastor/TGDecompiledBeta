@@ -29,6 +29,7 @@ import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.Message;
+import org.telegram.tgnet.TLRPC.MessageMedia;
 import org.telegram.tgnet.TLRPC.Peer;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
@@ -252,6 +253,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                         message.message = "-1";
                         message.attachPath = audioEntry.path;
                         message.media = new TL_messageMediaDocument();
+                        MessageMedia messageMedia = message.media;
+                        messageMedia.flags |= 3;
                         message.media.document = new TL_document();
                         message.flags |= 768;
                         String ext = FileLoader.getFileExtension(file);

@@ -1,40 +1,22 @@
 package com.google.android.gms.internal;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.Api.zzb;
-import com.google.android.gms.common.api.Result;
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.util.concurrent.TimeUnit;
+import android.os.Parcel;
+import android.os.RemoteException;
+import com.google.android.gms.common.api.Status;
 
-public interface zzbdo {
-    ConnectionResult blockingConnect();
+public abstract class zzbdo extends zzee implements zzbdn {
+    public zzbdo() {
+        attachInterface(this, "com.google.android.gms.common.api.internal.IStatusCallback");
+    }
 
-    ConnectionResult blockingConnect(long j, TimeUnit timeUnit);
-
-    void connect();
-
-    void disconnect();
-
-    void dump(String str, FileDescriptor fileDescriptor, PrintWriter printWriter, String[] strArr);
-
-    @Nullable
-    ConnectionResult getConnectionResult(@NonNull Api<?> api);
-
-    boolean isConnected();
-
-    boolean isConnecting();
-
-    boolean zza(zzbeh com_google_android_gms_internal_zzbeh);
-
-    <A extends zzb, R extends Result, T extends zzbax<R, A>> T zzd(@NonNull T t);
-
-    <A extends zzb, T extends zzbax<? extends Result, A>> T zze(@NonNull T t);
-
-    void zzpE();
-
-    void zzpl();
+    public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
+        if (zza(i, parcel, parcel2, i2)) {
+            return true;
+        }
+        if (i != 1) {
+            return false;
+        }
+        zzu((Status) zzef.zza(parcel, Status.CREATOR));
+        return true;
+    }
 }

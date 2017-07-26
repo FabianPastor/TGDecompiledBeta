@@ -2,7 +2,7 @@ package com.google.android.gms.flags.impl;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import com.google.android.gms.internal.zzcaf;
+import com.google.android.gms.internal.zzcag;
 
 public final class zzj {
     private static SharedPreferences zzaXQ = null;
@@ -11,7 +11,7 @@ public final class zzj {
         SharedPreferences sharedPreferences;
         synchronized (SharedPreferences.class) {
             if (zzaXQ == null) {
-                zzaXQ = (SharedPreferences) zzcaf.zzb(new zzk(context));
+                zzaXQ = (SharedPreferences) zzcag.zzb(new zzk(context));
             }
             sharedPreferences = zzaXQ;
         }

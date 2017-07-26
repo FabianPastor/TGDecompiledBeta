@@ -13,8 +13,8 @@ import java.util.Map;
 public final class zzj {
     private static Map<String, zzj> zzbgQ = new ArrayMap();
     static String zzbgW;
-    private static zzr zzckB;
-    private static zzl zzckC;
+    private static zzr zzckF;
+    private static zzl zzckG;
     private Context mContext;
     private KeyPair zzbgT;
     private String zzbgU = "";
@@ -24,12 +24,12 @@ public final class zzj {
         this.zzbgU = str;
     }
 
-    public static zzr zzJQ() {
-        return zzckB;
+    public static zzr zzJT() {
+        return zzckF;
     }
 
-    public static zzl zzJR() {
-        return zzckC;
+    public static zzl zzJU() {
+        return zzckG;
     }
 
     public static synchronized zzj zzb(Context context, Bundle bundle) {
@@ -38,9 +38,9 @@ public final class zzj {
             String string = bundle == null ? "" : bundle.getString("subtype");
             String str = string == null ? "" : string;
             Context applicationContext = context.getApplicationContext();
-            if (zzckB == null) {
-                zzckB = new zzr(applicationContext);
-                zzckC = new zzl(applicationContext);
+            if (zzckF == null) {
+                zzckF = new zzr(applicationContext);
+                zzckG = new zzl(applicationContext);
             }
             zzbgW = Integer.toString(FirebaseInstanceId.zzbF(applicationContext));
             com_google_firebase_iid_zzj = (zzj) zzbgQ.get(str);
@@ -53,7 +53,7 @@ public final class zzj {
     }
 
     public final long getCreationTime() {
-        return zzckB.zzhk(this.zzbgU);
+        return zzckF.zzhk(this.zzbgU);
     }
 
     public final String getToken(String str, String str2, Bundle bundle) throws IOException {
@@ -64,16 +64,16 @@ public final class zzj {
         if (bundle.getString("ttl") != null || "jwt".equals(bundle.getString("type"))) {
             obj = null;
         } else {
-            zzs zzp = zzckB.zzp(this.zzbgU, str, str2);
+            zzs zzp = zzckF.zzp(this.zzbgU, str, str2);
             if (!(zzp == null || zzp.zzhp(zzbgW))) {
-                return zzp.zzbPH;
+                return zzp.zzbPJ;
             }
         }
         String zzc = zzc(str, str2, bundle);
         if (zzc == null || r0 == null) {
             return zzc;
         }
-        zzckB.zza(this.zzbgU, str, str2, zzc, zzbgW);
+        zzckF.zza(this.zzbgU, str, str2, zzc, zzbgW);
         return zzc;
     }
 
@@ -81,7 +81,7 @@ public final class zzj {
         if (Looper.getMainLooper() == Looper.myLooper()) {
             throw new IOException("MAIN_THREAD");
         }
-        zzckB.zzg(this.zzbgU, str, str2);
+        zzckF.zzg(this.zzbgU, str, str2);
         if (bundle == null) {
             bundle = new Bundle();
         }
@@ -99,7 +99,7 @@ public final class zzj {
         }
         bundle.putString("subtype", str);
         bundle.putString("X-subtype", str);
-        Intent zza = zzckC.zza(bundle, zzvK());
+        Intent zza = zzckG.zza(bundle, zzvK());
         if (zza == null) {
             throw new IOException("SERVICE_NOT_AVAILABLE");
         }
@@ -121,16 +121,16 @@ public final class zzj {
 
     final KeyPair zzvK() {
         if (this.zzbgT == null) {
-            this.zzbgT = zzckB.zzhn(this.zzbgU);
+            this.zzbgT = zzckF.zzhn(this.zzbgU);
         }
         if (this.zzbgT == null) {
-            this.zzbgT = zzckB.zzhl(this.zzbgU);
+            this.zzbgT = zzckF.zzhl(this.zzbgU);
         }
         return this.zzbgT;
     }
 
     public final void zzvL() {
-        zzckB.zzhm(this.zzbgU);
+        zzckF.zzhm(this.zzbgU);
         this.zzbgT = null;
     }
 }

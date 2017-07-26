@@ -9,8 +9,8 @@ import com.google.android.gms.wallet.wobs.CommonWalletObject;
 public final class OfferWalletObject extends zza {
     public static final Creator<OfferWalletObject> CREATOR = new zzv();
     private final int zzaku;
-    private CommonWalletObject zzbOB;
-    private String zzbPF;
+    private CommonWalletObject zzbOD;
+    private String zzbPH;
 
     OfferWalletObject() {
         this.zzaku = 3;
@@ -18,20 +18,20 @@ public final class OfferWalletObject extends zza {
 
     OfferWalletObject(int i, String str, String str2, CommonWalletObject commonWalletObject) {
         this.zzaku = i;
-        this.zzbPF = str2;
+        this.zzbPH = str2;
         if (i < 3) {
-            this.zzbOB = CommonWalletObject.zzDT().zzgi(str).zzDU();
+            this.zzbOD = CommonWalletObject.zzDU().zzgi(str).zzDV();
         } else {
-            this.zzbOB = commonWalletObject;
+            this.zzbOD = commonWalletObject;
         }
     }
 
     public final String getId() {
-        return this.zzbOB.getId();
+        return this.zzbOD.getId();
     }
 
     public final String getRedemptionCode() {
-        return this.zzbPF;
+        return this.zzbPH;
     }
 
     public final int getVersionCode() {
@@ -42,8 +42,8 @@ public final class OfferWalletObject extends zza {
         int zze = zzd.zze(parcel);
         zzd.zzc(parcel, 1, getVersionCode());
         zzd.zza(parcel, 2, null, false);
-        zzd.zza(parcel, 3, this.zzbPF, false);
-        zzd.zza(parcel, 4, this.zzbOB, i, false);
+        zzd.zza(parcel, 3, this.zzbPH, false);
+        zzd.zza(parcel, 4, this.zzbOD, i, false);
         zzd.zzI(parcel, zze);
     }
 }

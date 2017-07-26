@@ -2,29 +2,70 @@ package com.google.android.gms.internal;
 
 import java.io.IOException;
 
-public final class adj {
-    public static final String[] EMPTY_STRING_ARRAY = new String[0];
-    private static int zzcsj = 11;
-    private static int zzcsk = 12;
-    private static int zzcsl = 16;
-    private static int zzcsm = 26;
-    public static final int[] zzcsn = new int[0];
-    public static final long[] zzcso = new long[0];
-    public static final float[] zzcsp = new float[0];
-    private static double[] zzcsq = new double[0];
-    public static final boolean[] zzcsr = new boolean[0];
-    public static final byte[][] zzcss = new byte[0][];
-    public static final byte[] zzcst = new byte[0];
+public abstract class adj<M extends adj<M>> extends adp {
+    protected adl zzcsd;
 
-    public static final int zzb(acx com_google_android_gms_internal_acx, int i) throws IOException {
-        int i2 = 1;
-        int position = com_google_android_gms_internal_acx.getPosition();
-        com_google_android_gms_internal_acx.zzcm(i);
-        while (com_google_android_gms_internal_acx.zzLy() == i) {
-            com_google_android_gms_internal_acx.zzcm(i);
-            i2++;
+    public /* synthetic */ Object clone() throws CloneNotSupportedException {
+        return zzLO();
+    }
+
+    public M zzLO() throws CloneNotSupportedException {
+        adj com_google_android_gms_internal_adj = (adj) super.zzLP();
+        adn.zza(this, com_google_android_gms_internal_adj);
+        return com_google_android_gms_internal_adj;
+    }
+
+    public /* synthetic */ adp zzLP() throws CloneNotSupportedException {
+        return (adj) clone();
+    }
+
+    public final <T> T zza(adk<M, T> com_google_android_gms_internal_adk_M__T) {
+        if (this.zzcsd == null) {
+            return null;
         }
-        com_google_android_gms_internal_acx.zzq(position, i);
+        adm zzcx = this.zzcsd.zzcx(com_google_android_gms_internal_adk_M__T.tag >>> 3);
+        return zzcx != null ? zzcx.zzb(com_google_android_gms_internal_adk_M__T) : null;
+    }
+
+    public void zza(adh com_google_android_gms_internal_adh) throws IOException {
+        if (this.zzcsd != null) {
+            for (int i = 0; i < this.zzcsd.size(); i++) {
+                this.zzcsd.zzcy(i).zza(com_google_android_gms_internal_adh);
+            }
+        }
+    }
+
+    protected final boolean zza(adg com_google_android_gms_internal_adg, int i) throws IOException {
+        int position = com_google_android_gms_internal_adg.getPosition();
+        if (!com_google_android_gms_internal_adg.zzcm(i)) {
+            return false;
+        }
+        int i2 = i >>> 3;
+        adr com_google_android_gms_internal_adr = new adr(i, com_google_android_gms_internal_adg.zzp(position, com_google_android_gms_internal_adg.getPosition() - position));
+        adm com_google_android_gms_internal_adm = null;
+        if (this.zzcsd == null) {
+            this.zzcsd = new adl();
+        } else {
+            com_google_android_gms_internal_adm = this.zzcsd.zzcx(i2);
+        }
+        if (com_google_android_gms_internal_adm == null) {
+            com_google_android_gms_internal_adm = new adm();
+            this.zzcsd.zza(i2, com_google_android_gms_internal_adm);
+        }
+        com_google_android_gms_internal_adm.zza(com_google_android_gms_internal_adr);
+        return true;
+    }
+
+    protected int zzn() {
+        int i = 0;
+        if (this.zzcsd == null) {
+            return 0;
+        }
+        int i2 = 0;
+        while (i < this.zzcsd.size()) {
+            i2 += this.zzcsd.zzcy(i).zzn();
+            i++;
+        }
         return i2;
     }
 }

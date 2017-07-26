@@ -2,14 +2,14 @@ package com.google.android.gms.internal;
 
 final class zzcjd implements Runnable {
     private /* synthetic */ long zzbot;
-    private /* synthetic */ zzciz zzbuu;
+    private /* synthetic */ zzcja zzbuu;
 
-    zzcjd(zzciz com_google_android_gms_internal_zzciz, long j) {
-        this.zzbuu = com_google_android_gms_internal_zzciz;
+    zzcjd(zzcja com_google_android_gms_internal_zzcja, long j) {
+        this.zzbuu = com_google_android_gms_internal_zzcja;
         this.zzbot = j;
     }
 
     public final void run() {
-        this.zzbuu.zzaf(this.zzbot);
+        this.zzbuu.zzae(this.zzbot);
     }
 }

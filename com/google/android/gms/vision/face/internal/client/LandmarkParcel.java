@@ -6,7 +6,7 @@ import com.google.android.apps.common.proguard.UsedByNative;
 import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.internal.safeparcel.zzd;
 
-@UsedByNative
+@UsedByNative("wrapper.cc")
 public final class LandmarkParcel extends zza {
     public static final Creator<LandmarkParcel> CREATOR = new zzi();
     public final int type;

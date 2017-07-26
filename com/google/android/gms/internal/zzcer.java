@@ -1,23 +1,52 @@
 package com.google.android.gms.internal;
 
-import android.os.Looper;
+import android.os.Handler;
+import com.google.android.gms.common.internal.zzbo;
 
-final class zzcer implements Runnable {
-    private /* synthetic */ zzceq zzbpB;
+abstract class zzcer {
+    private static volatile Handler zzagY;
+    private volatile long zzagZ;
+    private final zzcgl zzboe;
+    private boolean zzbpA = true;
+    private final Runnable zzv = new zzces(this);
 
-    zzcer(zzceq com_google_android_gms_internal_zzceq) {
-        this.zzbpB = com_google_android_gms_internal_zzceq;
+    zzcer(zzcgl com_google_android_gms_internal_zzcgl) {
+        zzbo.zzu(com_google_android_gms_internal_zzcgl);
+        this.zzboe = com_google_android_gms_internal_zzcgl;
     }
 
-    public final void run() {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            this.zzbpB.zzboe.zzwE().zzj(this);
-            return;
+    private final Handler getHandler() {
+        if (zzagY != null) {
+            return zzagY;
         }
-        boolean zzbo = this.zzbpB.zzbo();
-        this.zzbpB.zzagZ = 0;
-        if (zzbo && this.zzbpB.zzbpA) {
-            this.zzbpB.run();
+        Handler handler;
+        synchronized (zzcer.class) {
+            if (zzagY == null) {
+                zzagY = new Handler(this.zzboe.getContext().getMainLooper());
+            }
+            handler = zzagY;
+        }
+        return handler;
+    }
+
+    public final void cancel() {
+        this.zzagZ = 0;
+        getHandler().removeCallbacks(this.zzv);
+    }
+
+    public abstract void run();
+
+    public final boolean zzbo() {
+        return this.zzagZ != 0;
+    }
+
+    public final void zzs(long j) {
+        cancel();
+        if (j >= 0) {
+            this.zzagZ = this.zzboe.zzkq().currentTimeMillis();
+            if (!getHandler().postDelayed(this.zzv, j)) {
+                this.zzboe.zzwF().zzyx().zzj("Failed to schedule delayed post. time", Long.valueOf(j));
+            }
         }
     }
 }

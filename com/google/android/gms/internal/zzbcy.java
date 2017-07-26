@@ -1,28 +1,23 @@
 package com.google.android.gms.internal;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
+abstract class zzbcy {
+    private final zzbcw zzaDZ;
 
-final class zzbcy extends Handler {
-    private /* synthetic */ zzbcw zzaEa;
-
-    zzbcy(zzbcw com_google_android_gms_internal_zzbcw, Looper looper) {
-        this.zzaEa = com_google_android_gms_internal_zzbcw;
-        super(looper);
+    protected zzbcy(zzbcw com_google_android_gms_internal_zzbcw) {
+        this.zzaDZ = com_google_android_gms_internal_zzbcw;
     }
 
-    public final void handleMessage(Message message) {
-        switch (message.what) {
-            case 1:
-                ((zzbcx) message.obj).zzc(this.zzaEa);
-                return;
-            case 2:
-                throw ((RuntimeException) message.obj);
-            default:
-                Log.w("GACStateManager", "Unknown message id: " + message.what);
-                return;
+    public final void zzc(zzbcx com_google_android_gms_internal_zzbcx) {
+        com_google_android_gms_internal_zzbcx.zzaCv.lock();
+        try {
+            if (com_google_android_gms_internal_zzbcx.zzaDV == this.zzaDZ) {
+                zzpV();
+                com_google_android_gms_internal_zzbcx.zzaCv.unlock();
+            }
+        } finally {
+            com_google_android_gms_internal_zzbcx.zzaCv.unlock();
         }
     }
+
+    protected abstract void zzpV();
 }

@@ -40,7 +40,7 @@ public final class WalletConstants {
     @Deprecated
     public static final int THEME_HOLO_LIGHT = 1;
     public static final int THEME_LIGHT = 1;
-    private static Account zzbPT = new Account("ACCOUNT_NO_WALLET", "com.google");
+    private static Account zzbPV = new Account("ACCOUNT_NO_WALLET", "com.google");
 
     @Retention(RetentionPolicy.SOURCE)
     public @interface CardNetwork {

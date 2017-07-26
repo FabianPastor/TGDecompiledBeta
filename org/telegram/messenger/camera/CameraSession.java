@@ -359,7 +359,16 @@ public class CameraSession {
     protected void configureRecorder(int quality, MediaRecorder recorder) {
         CameraInfo info = new CameraInfo();
         Camera.getCameraInfo(this.cameraInfo.cameraId, info);
-        recorder.setOrientationHint(getDisplayOrientation(info, false));
+        int displayOrientation = getDisplayOrientation(info, false);
+        int outputOrientation = 0;
+        if (this.jpegOrientation != -1) {
+            if (info.facing == 1) {
+                outputOrientation = ((info.orientation - this.jpegOrientation) + 360) % 360;
+            } else {
+                outputOrientation = (info.orientation + this.jpegOrientation) % 360;
+            }
+        }
+        recorder.setOrientationHint(outputOrientation);
         int highProfile = getHigh();
         boolean canGoHigh = CamcorderProfile.hasProfile(this.cameraInfo.cameraId, highProfile);
         boolean canGoLow = CamcorderProfile.hasProfile(this.cameraInfo.cameraId, 0);

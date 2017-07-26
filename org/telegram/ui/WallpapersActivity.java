@@ -377,7 +377,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                 this.progressView.setVisibility(0);
                 this.loadingSize = size;
                 this.selectedColor = 0;
-                FileLoader.getInstance().loadFile(size, null, true);
+                FileLoader.getInstance().loadFile(size, null, 1);
                 this.backgroundImage.setBackgroundColor(0);
                 return;
             }

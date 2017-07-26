@@ -1887,41 +1887,43 @@ public class LocaleController {
                         localeInfo.version = difference.version;
                     }
                     LocaleController.this.saveOtherLanguages();
-                    try {
-                        Locale newLocale;
-                        String[] args = localeInfo.shortName.split("_");
-                        if (args.length == 1) {
-                            newLocale = new Locale(localeInfo.shortName);
-                        } else {
-                            newLocale = new Locale(args[0], args[1]);
-                        }
-                        if (newLocale != null) {
-                            LocaleController.this.languageOverride = localeInfo.shortName;
-                            Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
-                            editor.putString("language", localeInfo.getKey());
-                            editor.commit();
-                        }
-                        if (newLocale != null) {
-                            LocaleController.this.localeValues = valuesToSet;
-                            LocaleController.this.currentLocale = newLocale;
-                            LocaleController.this.currentLocaleInfo = localeInfo;
-                            LocaleController.this.currentPluralRules = (PluralRules) LocaleController.this.allRules.get(LocaleController.this.currentLocale.getLanguage());
-                            if (LocaleController.this.currentPluralRules == null) {
-                                LocaleController.this.currentPluralRules = (PluralRules) LocaleController.this.allRules.get("en");
+                    if (LocaleController.this.currentLocaleInfo == null || !LocaleController.this.currentLocaleInfo.isLocal()) {
+                        try {
+                            Locale newLocale;
+                            String[] args = localeInfo.shortName.split("_");
+                            if (args.length == 1) {
+                                newLocale = new Locale(localeInfo.shortName);
+                            } else {
+                                newLocale = new Locale(args[0], args[1]);
                             }
-                            LocaleController.this.changingConfiguration = true;
-                            Locale.setDefault(LocaleController.this.currentLocale);
-                            Configuration config = new Configuration();
-                            config.locale = LocaleController.this.currentLocale;
-                            ApplicationLoader.applicationContext.getResources().updateConfiguration(config, ApplicationLoader.applicationContext.getResources().getDisplayMetrics());
+                            if (newLocale != null) {
+                                LocaleController.this.languageOverride = localeInfo.shortName;
+                                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+                                editor.putString("language", localeInfo.getKey());
+                                editor.commit();
+                            }
+                            if (newLocale != null) {
+                                LocaleController.this.localeValues = valuesToSet;
+                                LocaleController.this.currentLocale = newLocale;
+                                LocaleController.this.currentLocaleInfo = localeInfo;
+                                LocaleController.this.currentPluralRules = (PluralRules) LocaleController.this.allRules.get(LocaleController.this.currentLocale.getLanguage());
+                                if (LocaleController.this.currentPluralRules == null) {
+                                    LocaleController.this.currentPluralRules = (PluralRules) LocaleController.this.allRules.get("en");
+                                }
+                                LocaleController.this.changingConfiguration = true;
+                                Locale.setDefault(LocaleController.this.currentLocale);
+                                Configuration config = new Configuration();
+                                config.locale = LocaleController.this.currentLocale;
+                                ApplicationLoader.applicationContext.getResources().updateConfiguration(config, ApplicationLoader.applicationContext.getResources().getDisplayMetrics());
+                                LocaleController.this.changingConfiguration = false;
+                            }
+                        } catch (Throwable e) {
+                            FileLog.e(e);
                             LocaleController.this.changingConfiguration = false;
                         }
-                    } catch (Throwable e) {
-                        FileLog.e(e);
-                        LocaleController.this.changingConfiguration = false;
+                        LocaleController.this.recreateFormatters();
+                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.reloadInterface, new Object[0]);
                     }
-                    LocaleController.this.recreateFormatters();
-                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.reloadInterface, new Object[0]);
                 }
             });
         } catch (Exception e) {

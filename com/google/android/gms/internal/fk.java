@@ -2,69 +2,50 @@ package com.google.android.gms.internal;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 
-public final class fk implements Creator<fj> {
-    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        int i = 0;
-        String str = null;
-        int zzd = zzb.zzd(parcel);
-        float f = 0.0f;
-        int i2 = 0;
-        boolean z = false;
-        int i3 = 0;
-        String str2 = null;
-        fd fdVar = null;
-        fd fdVar2 = null;
-        fd fdVar3 = null;
-        fs[] fsVarArr = null;
-        while (parcel.dataPosition() < zzd) {
-            int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
-                case 2:
-                    fsVarArr = (fs[]) zzb.zzb(parcel, readInt, fs.CREATOR);
-                    break;
-                case 3:
-                    fdVar3 = (fd) zzb.zza(parcel, readInt, fd.CREATOR);
-                    break;
-                case 4:
-                    fdVar2 = (fd) zzb.zza(parcel, readInt, fd.CREATOR);
-                    break;
-                case 5:
-                    fdVar = (fd) zzb.zza(parcel, readInt, fd.CREATOR);
-                    break;
-                case 6:
-                    str2 = zzb.zzq(parcel, readInt);
-                    break;
-                case 7:
-                    f = zzb.zzl(parcel, readInt);
-                    break;
-                case 8:
-                    str = zzb.zzq(parcel, readInt);
-                    break;
-                case 9:
-                    i3 = zzb.zzg(parcel, readInt);
-                    break;
-                case 10:
-                    z = zzb.zzc(parcel, readInt);
-                    break;
-                case 11:
-                    i2 = zzb.zzg(parcel, readInt);
-                    break;
-                case 12:
-                    i = zzb.zzg(parcel, readInt);
-                    break;
-                default:
-                    zzb.zzb(parcel, readInt);
-                    break;
-            }
-        }
-        zzb.zzF(parcel, zzd);
-        return new fj(fsVarArr, fdVar3, fdVar2, fdVar, str2, f, str, i3, z, i2, i);
+public final class fk extends zza {
+    public static final Creator<fk> CREATOR = new fl();
+    public final String zzbNS;
+    public final ft[] zzbNX;
+    public final fe zzbNY;
+    private fe zzbNZ;
+    private fe zzbOa;
+    public final String zzbOb;
+    private float zzbOc;
+    private int zzbOd;
+    public final boolean zzbOe;
+    public final int zzbOf;
+    public final int zzbOg;
+
+    public fk(ft[] ftVarArr, fe feVar, fe feVar2, fe feVar3, String str, float f, String str2, int i, boolean z, int i2, int i3) {
+        this.zzbNX = ftVarArr;
+        this.zzbNY = feVar;
+        this.zzbNZ = feVar2;
+        this.zzbOa = feVar3;
+        this.zzbOb = str;
+        this.zzbOc = f;
+        this.zzbNS = str2;
+        this.zzbOd = i;
+        this.zzbOe = z;
+        this.zzbOf = i2;
+        this.zzbOg = i3;
     }
 
-    public final /* synthetic */ Object[] newArray(int i) {
-        return new fj[i];
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.zzbNX, i, false);
+        zzd.zza(parcel, 3, this.zzbNY, i, false);
+        zzd.zza(parcel, 4, this.zzbNZ, i, false);
+        zzd.zza(parcel, 5, this.zzbOa, i, false);
+        zzd.zza(parcel, 6, this.zzbOb, false);
+        zzd.zza(parcel, 7, this.zzbOc);
+        zzd.zza(parcel, 8, this.zzbNS, false);
+        zzd.zzc(parcel, 9, this.zzbOd);
+        zzd.zza(parcel, 10, this.zzbOe);
+        zzd.zzc(parcel, 11, this.zzbOf);
+        zzd.zzc(parcel, 12, this.zzbOg);
+        zzd.zzI(parcel, zze);
     }
 }

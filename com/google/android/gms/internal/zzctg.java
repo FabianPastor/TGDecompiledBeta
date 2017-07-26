@@ -1,19 +1,18 @@
 package com.google.android.gms.internal;
 
-import android.content.Context;
-import android.os.Looper;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.Api.zza;
-import com.google.android.gms.common.api.Api.zze;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.internal.zzq;
+import com.google.android.gms.common.api.Api.zzf;
+import com.google.android.gms.common.api.Scope;
 
-final class zzctg extends zza<zzctt, zzctk> {
-    zzctg() {
-    }
-
-    public final /* synthetic */ zze zza(Context context, Looper looper, zzq com_google_android_gms_common_internal_zzq, Object obj, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
-        zzctk com_google_android_gms_internal_zzctk = (zzctk) obj;
-        return new zzctt(context, looper, true, com_google_android_gms_common_internal_zzq, com_google_android_gms_internal_zzctk == null ? zzctk.zzbCM : com_google_android_gms_internal_zzctk, connectionCallbacks, onConnectionFailedListener);
-    }
+public final class zzctg {
+    public static final Api<zzctl> API = new Api("SignIn.API", zzajS, zzajR);
+    private static Api<zzctj> zzaMc = new Api("SignIn.INTERNAL_API", zzbCK, zzbCJ);
+    private static zzf<zzctu> zzajR = new zzf();
+    public static final zza<zzctu, zzctl> zzajS = new zzcth();
+    private static Scope zzalV = new Scope(Scopes.PROFILE);
+    private static Scope zzalW = new Scope("email");
+    private static zzf<zzctu> zzbCJ = new zzf();
+    private static zza<zzctu, zzctj> zzbCK = new zzcti();
 }

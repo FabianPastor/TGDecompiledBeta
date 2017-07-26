@@ -1,19 +1,21 @@
 package com.google.android.gms.internal;
 
-import android.content.ComponentName;
-import android.content.Context;
-
 final class zzcit implements Runnable {
-    private /* synthetic */ zzcip zzbuk;
+    private /* synthetic */ zzciq zzbuk;
+    private /* synthetic */ zzcfd zzbul;
 
-    zzcit(zzcip com_google_android_gms_internal_zzcip) {
-        this.zzbuk = com_google_android_gms_internal_zzcip;
+    zzcit(zzciq com_google_android_gms_internal_zzciq, zzcfd com_google_android_gms_internal_zzcfd) {
+        this.zzbuk = com_google_android_gms_internal_zzciq;
+        this.zzbul = com_google_android_gms_internal_zzcfd;
     }
 
     public final void run() {
-        zzcic com_google_android_gms_internal_zzcic = this.zzbuk.zzbua;
-        Context context = this.zzbuk.zzbua.getContext();
-        zzcel.zzxE();
-        com_google_android_gms_internal_zzcic.onServiceDisconnected(new ComponentName(context, "com.google.android.gms.measurement.AppMeasurementService"));
+        synchronized (this.zzbuk) {
+            this.zzbuk.zzbuh = false;
+            if (!this.zzbuk.zzbua.isConnected()) {
+                this.zzbuk.zzbua.zzwF().zzyC().log("Connected to remote service");
+                this.zzbuk.zzbua.zza(this.zzbul);
+            }
+        }
     }
 }

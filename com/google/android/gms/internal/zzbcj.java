@@ -1,20 +1,29 @@
 package com.google.android.gms.internal;
 
-import android.support.annotation.BinderThread;
-import java.lang.ref.WeakReference;
+import android.support.annotation.WorkerThread;
+import com.google.android.gms.common.api.Api.zze;
+import java.util.ArrayList;
 
-final class zzbcj extends zzcto {
-    private final WeakReference<zzbcc> zzaDq;
+final class zzbcj extends zzbcn {
+    private /* synthetic */ zzbcd zzaDp;
+    private final ArrayList<zze> zzaDv;
 
-    zzbcj(zzbcc com_google_android_gms_internal_zzbcc) {
-        this.zzaDq = new WeakReference(com_google_android_gms_internal_zzbcc);
+    public zzbcj(zzbcd com_google_android_gms_internal_zzbcd, ArrayList<zze> arrayList) {
+        this.zzaDp = com_google_android_gms_internal_zzbcd;
+        super(com_google_android_gms_internal_zzbcd);
+        this.zzaDv = arrayList;
     }
 
-    @BinderThread
-    public final void zzb(zzctw com_google_android_gms_internal_zzctw) {
-        zzbcc com_google_android_gms_internal_zzbcc = (zzbcc) this.zzaDq.get();
-        if (com_google_android_gms_internal_zzbcc != null) {
-            com_google_android_gms_internal_zzbcc.zzaCZ.zza(new zzbck(this, com_google_android_gms_internal_zzbcc, com_google_android_gms_internal_zzbcc, com_google_android_gms_internal_zzctw));
+    @WorkerThread
+    public final void zzpV() {
+        this.zzaDp.zzaCZ.zzaCl.zzaDG = this.zzaDp.zzqb();
+        ArrayList arrayList = this.zzaDv;
+        int size = arrayList.size();
+        int i = 0;
+        while (i < size) {
+            Object obj = arrayList.get(i);
+            i++;
+            ((zze) obj).zza(this.zzaDp.zzaDl, this.zzaDp.zzaCZ.zzaCl.zzaDG);
         }
     }
 }

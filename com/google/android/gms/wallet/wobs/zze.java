@@ -8,25 +8,25 @@ import java.util.ArrayList;
 
 public final class zze extends zza {
     public static final Creator<zze> CREATOR = new zzf();
-    private String zzbQF;
-    private String zzbQG;
-    private ArrayList<zzc> zzbQH;
+    private String zzbQH;
+    private String zzbQI;
+    private ArrayList<zzc> zzbQJ;
 
     zze() {
-        this.zzbQH = new ArrayList();
+        this.zzbQJ = new ArrayList();
     }
 
     zze(String str, String str2, ArrayList<zzc> arrayList) {
-        this.zzbQF = str;
-        this.zzbQG = str2;
-        this.zzbQH = arrayList;
+        this.zzbQH = str;
+        this.zzbQI = str2;
+        this.zzbQJ = arrayList;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
         int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.zzbQF, false);
-        zzd.zza(parcel, 3, this.zzbQG, false);
-        zzd.zzc(parcel, 4, this.zzbQH, false);
+        zzd.zza(parcel, 2, this.zzbQH, false);
+        zzd.zza(parcel, 3, this.zzbQI, false);
+        zzd.zzc(parcel, 4, this.zzbQJ, false);
         zzd.zzI(parcel, zze);
     }
 }

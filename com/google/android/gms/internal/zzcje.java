@@ -1,26 +1,15 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.common.internal.zzbo;
-import com.google.android.gms.common.util.zze;
+final class zzcje implements Runnable {
+    private /* synthetic */ long zzbot;
+    private /* synthetic */ zzcja zzbuu;
 
-final class zzcje {
-    private long mStartTime;
-    private final zze zzvy;
-
-    public zzcje(zze com_google_android_gms_common_util_zze) {
-        zzbo.zzu(com_google_android_gms_common_util_zze);
-        this.zzvy = com_google_android_gms_common_util_zze;
+    zzcje(zzcja com_google_android_gms_internal_zzcja, long j) {
+        this.zzbuu = com_google_android_gms_internal_zzcja;
+        this.zzbot = j;
     }
 
-    public final void clear() {
-        this.mStartTime = 0;
-    }
-
-    public final void start() {
-        this.mStartTime = this.zzvy.elapsedRealtime();
-    }
-
-    public final boolean zzu(long j) {
-        return this.mStartTime == 0 || this.zzvy.elapsedRealtime() - this.mStartTime >= j;
+    public final void run() {
+        this.zzbuu.zzaf(this.zzbot);
     }
 }

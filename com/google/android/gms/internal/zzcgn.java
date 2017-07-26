@@ -1,16 +1,22 @@
 package com.google.android.gms.internal;
 
-import java.util.List;
-import java.util.Map;
+import java.util.concurrent.Callable;
 
-final class zzcgn implements zzcfq {
-    private /* synthetic */ zzcgk zzbsY;
+final class zzcgn implements Callable<String> {
+    private /* synthetic */ String zzbjh;
+    private /* synthetic */ zzcgl zzbsY;
 
-    zzcgn(zzcgk com_google_android_gms_internal_zzcgk) {
-        this.zzbsY = com_google_android_gms_internal_zzcgk;
+    zzcgn(zzcgl com_google_android_gms_internal_zzcgl, String str) {
+        this.zzbsY = com_google_android_gms_internal_zzcgl;
+        this.zzbjh = str;
     }
 
-    public final void zza(String str, int i, Throwable th, byte[] bArr, Map<String, List<String>> map) {
-        this.zzbsY.zza(i, th, bArr);
+    public final /* synthetic */ Object call() throws Exception {
+        zzceg zzdQ = this.zzbsY.zzwz().zzdQ(this.zzbjh);
+        if (zzdQ != null) {
+            return zzdQ.getAppInstanceId();
+        }
+        this.zzbsY.zzwF().zzyz().log("App info was null when attempting to get app instance id");
+        return null;
     }
 }

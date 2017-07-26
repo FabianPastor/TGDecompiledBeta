@@ -172,11 +172,13 @@
     <string name="AttachMediaRestrictedForever">Os administradores do grupo restringiram você de enviar mídias aqui</string>
     <string name="AttachMusic">Música</string>
     <string name="AttachPhoto">Foto</string>
+    <string name="AttachPhotoExpired">A foto expirou</string>
     <string name="AttachRound">Mensagem de vídeo</string>
     <string name="AttachSticker">Sticker</string>
     <string name="AttachStickersRestricted">Os administradores do grupo restringiram você de enviar stickers aqui até %1$s</string>
     <string name="AttachStickersRestrictedForever">Os administradores do grupo restringiram você de enviar stickers aqui</string>
     <string name="AttachVideo">Vídeo</string>
+    <string name="AttachVideoExpired">O vídeo expirou</string>
     <string name="AudioAutodownload">Mensagens de voz</string>
     <string name="AudioTitle">Música Compartilhada</string>
     <string name="AudioUnknownArtist">Artista desconhecido</string>
@@ -490,6 +492,8 @@
     <string name="DirectShare">Compartilhamento Direto</string>
     <string name="DirectShareInfo">Mostrar chats recentes no menu compartilhar</string>
     <string name="Disabled">Desativado</string>
+    <string name="DisappearingPhoto">Foto temporal</string>
+    <string name="DisappearingVideo">Vídeo temporal</string>
     <string name="DiscardChanges">Descartar mudanças?</string>
     <string name="DiscardVideoMessageDescription">Você tem certeza que deseja parar de gravar e descartar sua mensagem de vídeo?</string>
     <string name="DiscardVideoMessageTitle">Descartar Mensagem de Vídeo</string>
@@ -907,7 +911,9 @@
     <string name="MessageLifetime">Tempo de autodestruição</string>
     <string name="MessageLifetimeChanged">%1$s estabeleceu o tempo de autodestruição para %2$s</string>
     <string name="MessageLifetimeChangedOutgoing">Você estabeleceu o tempo de autodestruição para %1$s</string>
+    <string name="MessageLifetimePhoto">Se você definir um temporizador, a foto irá se auto-destruir após ser vista.</string>
     <string name="MessageLifetimeRemoved">%1$s desativou o temporizador de autodestruição</string>
+    <string name="MessageLifetimeVideo">Se você definir um temporizador, o vídeo irá se auto-destruir após ser visto.</string>
     <string name="MessageLifetimeYouRemoved">Você desativou o temporizador de autodestruição</string>
     <string name="MessageNotifications">Notificações de mensagens</string>
     <string name="MessagePreview">Prévia da Mensagem</string>
@@ -1072,6 +1078,8 @@
     <string name="NotificationMessageNoText">%1$s te enviou uma mensagem</string>
     <string name="NotificationMessagePhoto">%1$s te enviou uma foto</string>
     <string name="NotificationMessageRound">%1$s enviou uma mensagem de vídeo</string>
+    <string name="NotificationMessageSDPhoto">%1$s te enviou uma foto auto-destrutiva</string>
+    <string name="NotificationMessageSDVideo">%1$s te enviou um video auto-destrutivo</string>
     <string name="NotificationMessageSticker">%1$s lhe enviou um sticker</string>
     <string name="NotificationMessageStickerEmoji">%1$s lhe enviou um %2$s sticker</string>
     <string name="NotificationMessageText">%1$s: %2$s</string>
@@ -1135,8 +1143,6 @@
     <string name="Page5Title">Poderoso</string>
     <string name="Page6Message">O &lt;b&gt;Telegram&lt;/b&gt; te permite acessar suas mensagens \nde múltiplos dispositivos.</string>
     <string name="Page6Title">Baseado na nuvem</string>
-    <string name="Page7Message">O &lt;b&gt;Telegram&lt;/b&gt; possui mensagens fortemente criptografadas\ne que podem se auto-destruir.</string>
-    <string name="Page7Title">Privado</string>
     <string name="PaintDelete">Apagar</string>
     <string name="PaintDraw">Desenhar</string>
     <string name="PaintDuplicate">Duplicar</string>
@@ -1532,6 +1538,9 @@
     <string name="UseProxySettings">Usar configurações de proxy</string>
     <string name="UseProxyUsername">Nome de Usuário</string>
     <string name="UserAlreadyInGroup">Este usuário já está neste grupo</string>
+    <string name="UserBio">Bio</string>
+    <string name="UserBioEmpty">Nenhuma</string>
+    <string name="UserBioInfo">Você pode adicionar algumas linhas sobre você. Qualquer um que abra seu perfil verá esse texto.</string>
     <string name="UserRestricted">Você não tem permissão para isso.</string>
     <string name="UserRestrictions">Restrições do Usuário</string>
     <string name="UserRestrictionsBlock">Banir e remover do grupo</string>

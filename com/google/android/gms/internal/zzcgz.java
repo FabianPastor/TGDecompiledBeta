@@ -1,18 +1,23 @@
 package com.google.android.gms.internal;
 
-final class zzcgz implements Runnable {
-    private /* synthetic */ zzceg zzbte;
-    private /* synthetic */ zzcgp zzbtf;
-    private /* synthetic */ zzcey zzbtj;
+import java.util.List;
+import java.util.concurrent.Callable;
 
-    zzcgz(zzcgp com_google_android_gms_internal_zzcgp, zzcey com_google_android_gms_internal_zzcey, zzceg com_google_android_gms_internal_zzceg) {
-        this.zzbtf = com_google_android_gms_internal_zzcgp;
-        this.zzbtj = com_google_android_gms_internal_zzcey;
-        this.zzbte = com_google_android_gms_internal_zzceg;
+final class zzcgz implements Callable<List<zzcek>> {
+    private /* synthetic */ String zzbjh;
+    private /* synthetic */ zzcgq zzbtf;
+    private /* synthetic */ String zzbth;
+    private /* synthetic */ String zzbti;
+
+    zzcgz(zzcgq com_google_android_gms_internal_zzcgq, String str, String str2, String str3) {
+        this.zzbtf = com_google_android_gms_internal_zzcgq;
+        this.zzbjh = str;
+        this.zzbth = str2;
+        this.zzbti = str3;
     }
 
-    public final void run() {
+    public final /* synthetic */ Object call() throws Exception {
         this.zzbtf.zzboe.zzze();
-        this.zzbtf.zzboe.zzb(this.zzbtj, this.zzbte);
+        return this.zzbtf.zzboe.zzwz().zzi(this.zzbjh, this.zzbth, this.zzbti);
     }
 }

@@ -5,15 +5,15 @@ import com.google.android.gms.wearable.DataApi.DeleteDataItemsResult;
 
 public final class zzbt implements DeleteDataItemsResult {
     private final Status mStatus;
-    private final int zzbSA;
+    private final int zzbSC;
 
     public zzbt(Status status, int i) {
         this.mStatus = status;
-        this.zzbSA = i;
+        this.zzbSC = i;
     }
 
     public final int getNumDeleted() {
-        return this.zzbSA;
+        return this.zzbSC;
     }
 
     public final Status getStatus() {

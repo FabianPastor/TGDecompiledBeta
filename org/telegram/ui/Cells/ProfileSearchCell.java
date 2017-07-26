@@ -382,7 +382,7 @@ public class ProfileSearchCell extends BaseCell {
             this.lastName = this.chat.title;
         }
         this.lastAvatar = photo;
-        this.avatarImage.setImage(photo, "50_50", this.avatarDrawable, null, false);
+        this.avatarImage.setImage(photo, "50_50", this.avatarDrawable, null, 0);
         if (getMeasuredWidth() == 0 && getMeasuredHeight() == 0) {
             requestLayout();
         } else {

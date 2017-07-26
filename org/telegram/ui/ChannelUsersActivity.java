@@ -48,6 +48,7 @@ import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.ChannelParticipant;
 import org.telegram.tgnet.TLRPC.Chat;
+import org.telegram.tgnet.TLRPC.ChatFull;
 import org.telegram.tgnet.TLRPC.TL_channelAdminRights;
 import org.telegram.tgnet.TLRPC.TL_channelBannedRights;
 import org.telegram.tgnet.TLRPC.TL_channelParticipant;
@@ -673,18 +674,18 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            User user;
-            CharSequence username;
             Throwable e;
-            Object username2;
-            String u;
+            Object username;
             int idx;
+            ManageChatUserCell userCell;
             switch (holder.getItemViewType()) {
                 case 0:
+                    User user;
+                    CharSequence username2;
                     CharSequence username3;
                     String foundUserName;
                     CharSequence spannableStringBuilder;
-                    ManageChatUserCell userCell;
+                    String u;
                     TLObject object = getItem(position);
                     if (object instanceof User) {
                         user = (User) object;
@@ -721,9 +722,9 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                 ok = true;
                                 name = (CharSequence) this.searchResultNames.get(position - 1);
                                 if (name != null && un != null && un.length() > 0 && name.toString().startsWith("@" + un)) {
-                                    username = name;
+                                    username2 = name;
                                     name = null;
-                                    username3 = username;
+                                    username3 = username2;
                                 }
                             } else {
                                 position -= count + 1;
@@ -742,7 +743,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                             ((SpannableStringBuilder) spannableStringBuilder).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
                                         } catch (Exception e2) {
                                             e = e2;
-                                            username2 = un;
+                                            username = un;
                                             FileLog.e(e);
                                             if (nameSearch != null) {
                                                 u = UserObject.getUserName(user);
@@ -754,13 +755,13 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                             }
                                             userCell = (ManageChatUserCell) holder.itemView;
                                             userCell.setTag(Integer.valueOf(position));
-                                            userCell.setData(user, name, username);
+                                            userCell.setData(user, name, username2);
                                             return;
                                         }
                                     } catch (Exception e3) {
                                         e = e3;
-                                        username = username3;
-                                        username2 = un;
+                                        username2 = username3;
+                                        username = un;
                                         FileLog.e(e);
                                         if (nameSearch != null) {
                                             u = UserObject.getUserName(user);
@@ -772,7 +773,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                         }
                                         userCell = (ManageChatUserCell) holder.itemView;
                                         userCell.setTag(Integer.valueOf(position));
-                                        userCell.setData(user, name, username);
+                                        userCell.setData(user, name, username2);
                                         return;
                                     }
                                     if (nameSearch != null) {
@@ -785,11 +786,11 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                     }
                                     userCell = (ManageChatUserCell) holder.itemView;
                                     userCell.setTag(Integer.valueOf(position));
-                                    userCell.setData(user, name, username);
+                                    userCell.setData(user, name, username2);
                                     return;
                                 }
                             }
-                            username = username3;
+                            username2 = username3;
                             if (nameSearch != null) {
                                 u = UserObject.getUserName(user);
                                 name = new SpannableStringBuilder(u);
@@ -800,7 +801,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                             }
                             userCell = (ManageChatUserCell) holder.itemView;
                             userCell.setTag(Integer.valueOf(position));
-                            userCell.setData(user, name, username);
+                            userCell.setData(user, name, username2);
                             return;
                         }
                     }
@@ -823,10 +824,10 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         }
                         userCell = (ManageChatUserCell) holder.itemView;
                         userCell.setTag(Integer.valueOf(position));
-                        userCell.setData(user, name, username);
+                        userCell.setData(user, name, username2);
                         return;
                     }
-                    username = username3;
+                    username2 = username3;
                     if (nameSearch != null) {
                         u = UserObject.getUserName(user);
                         name = new SpannableStringBuilder(u);
@@ -837,7 +838,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     }
                     userCell = (ManageChatUserCell) holder.itemView;
                     userCell.setTag(Integer.valueOf(position));
-                    userCell.setData(user, name, username);
+                    userCell.setData(user, name, username2);
                     return;
                 case 1:
                     GraySectionCell sectionCell = holder.itemView;
@@ -1478,13 +1479,17 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     }
 
     public void didReceivedNotification(int id, Object... args) {
-        if (id == NotificationCenter.chatInfoDidLoaded && args[0].id == this.chatId) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    ChannelUsersActivity.this.firstEndReached = false;
-                    ChannelUsersActivity.this.getChannelParticipants(0, Callback.DEFAULT_DRAG_ANIMATION_DURATION);
-                }
-            });
+        if (id == NotificationCenter.chatInfoDidLoaded) {
+            ChatFull chatFull = args[0];
+            boolean byChannelUsers = ((Boolean) args[2]).booleanValue();
+            if (chatFull.id == this.chatId && !byChannelUsers) {
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public void run() {
+                        ChannelUsersActivity.this.firstEndReached = false;
+                        ChannelUsersActivity.this.getChannelParticipants(0, Callback.DEFAULT_DRAG_ANIMATION_DURATION);
+                    }
+                });
+            }
         }
     }
 
@@ -1509,8 +1514,9 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             }
             TL_channels_getParticipants req = new TL_channels_getParticipants();
             req.channel = MessagesController.getInputChannel(this.chatId);
+            final boolean byEndReached = this.firstEndReached;
             if (this.type == 0) {
-                if (this.firstEndReached) {
+                if (byEndReached) {
                     req.filter = new TL_channelParticipantsKicked();
                 } else {
                     req.filter = new TL_channelParticipantsBanned();
@@ -1554,9 +1560,10 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                 if (ChannelUsersActivity.this.type != 0) {
                                     ChannelUsersActivity.this.participantsMap.clear();
                                     ChannelUsersActivity.this.participants = res.participants;
-                                } else if (ChannelUsersActivity.this.firstEndReached) {
+                                } else if (byEndReached) {
                                     ChannelUsersActivity.this.participants2 = res.participants;
                                 } else {
+                                    ChannelUsersActivity.this.participants2 = new ArrayList();
                                     ChannelUsersActivity.this.participantsMap.clear();
                                     ChannelUsersActivity.this.participants = res.participants;
                                     if (changeFirst) {

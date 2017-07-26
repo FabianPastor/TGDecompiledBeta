@@ -59,7 +59,7 @@ public abstract class zzd<T extends IInterface> {
     private ConnectionResult zzaGZ;
     private boolean zzaHa;
     protected AtomicInteger zzaHb;
-    private final Looper zzrO;
+    private final Looper zzrM;
 
     protected zzd(Context context, Looper looper, int i, zzf com_google_android_gms_common_internal_zzf, zzg com_google_android_gms_common_internal_zzg, String str) {
         this(context, looper, zzae.zzaC(context), zze.zzoW(), i, (zzf) zzbo.zzu(com_google_android_gms_common_internal_zzf), (zzg) zzbo.zzu(com_google_android_gms_common_internal_zzg), null);
@@ -74,7 +74,7 @@ public abstract class zzd<T extends IInterface> {
         this.zzaHa = false;
         this.zzaHb = new AtomicInteger(0);
         this.mContext = (Context) zzbo.zzb((Object) context, (Object) "Context must not be null");
-        this.zzrO = (Looper) zzbo.zzb((Object) looper, (Object) "Looper must not be null");
+        this.zzrM = (Looper) zzbo.zzb((Object) looper, (Object) "Looper must not be null");
         this.zzaGN = (zzae) zzbo.zzb((Object) com_google_android_gms_common_internal_zzae, (Object) "Supervisor must not be null");
         this.zzaCF = (zze) zzbo.zzb((Object) com_google_android_gms_common_zze, (Object) "API availability must not be null");
         this.mHandler = new zzh(this, looper);
@@ -277,7 +277,7 @@ public abstract class zzd<T extends IInterface> {
     }
 
     public final Looper getLooper() {
-        return this.zzrO;
+        return this.zzrM;
     }
 
     public final boolean isConnected() {

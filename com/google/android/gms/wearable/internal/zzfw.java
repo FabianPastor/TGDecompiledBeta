@@ -22,8 +22,8 @@ import com.google.android.gms.common.internal.zzj;
 import com.google.android.gms.common.internal.zzq;
 import com.google.android.gms.common.internal.zzz;
 import com.google.android.gms.common.zze;
-import com.google.android.gms.internal.zzbay;
-import com.google.android.gms.internal.zzbdv;
+import com.google.android.gms.internal.zzbaz;
+import com.google.android.gms.internal.zzbdw;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.CapabilityApi.CapabilityListener;
 import com.google.android.gms.wearable.ChannelApi.ChannelListener;
@@ -43,15 +43,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
 public final class zzfw extends zzz<zzdn> {
-    private final zzdp<Object> zzbTe;
-    private final zzdp<Object> zzbTf;
-    private final zzdp<ChannelListener> zzbTg;
-    private final zzdp<DataListener> zzbTh;
-    private final zzdp<MessageListener> zzbTi;
-    private final zzdp<NodeListener> zzbTj;
-    private final zzdp<Object> zzbTk;
-    private final zzdp<CapabilityListener> zzbTl;
-    private final zzgh zzbTm;
+    private final zzdp<Object> zzbTg;
+    private final zzdp<Object> zzbTh;
+    private final zzdp<ChannelListener> zzbTi;
+    private final zzdp<DataListener> zzbTj;
+    private final zzdp<MessageListener> zzbTk;
+    private final zzdp<NodeListener> zzbTl;
+    private final zzdp<Object> zzbTm;
+    private final zzdp<CapabilityListener> zzbTn;
+    private final zzgh zzbTo;
     private final ExecutorService zzbrV;
 
     public zzfw(Context context, Looper looper, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener, zzq com_google_android_gms_common_internal_zzq) {
@@ -60,16 +60,16 @@ public final class zzfw extends zzz<zzdn> {
 
     private zzfw(Context context, Looper looper, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener, zzq com_google_android_gms_common_internal_zzq, ExecutorService executorService, zzgh com_google_android_gms_wearable_internal_zzgh) {
         super(context, looper, 14, com_google_android_gms_common_internal_zzq, connectionCallbacks, onConnectionFailedListener);
-        this.zzbTe = new zzdp();
-        this.zzbTf = new zzdp();
         this.zzbTg = new zzdp();
         this.zzbTh = new zzdp();
         this.zzbTi = new zzdp();
         this.zzbTj = new zzdp();
         this.zzbTk = new zzdp();
         this.zzbTl = new zzdp();
+        this.zzbTm = new zzdp();
+        this.zzbTn = new zzdp();
         this.zzbrV = (ExecutorService) zzbo.zzu(executorService);
-        this.zzbTm = com_google_android_gms_wearable_internal_zzgh;
+        this.zzbTo = com_google_android_gms_wearable_internal_zzgh;
     }
 
     protected final void zza(int i, IBinder iBinder, Bundle bundle, int i2) {
@@ -77,14 +77,14 @@ public final class zzfw extends zzz<zzdn> {
             Log.d("WearableClient", "onPostInitHandler: statusCode " + i);
         }
         if (i == 0) {
-            this.zzbTe.zzam(iBinder);
-            this.zzbTf.zzam(iBinder);
             this.zzbTg.zzam(iBinder);
             this.zzbTh.zzam(iBinder);
             this.zzbTi.zzam(iBinder);
             this.zzbTj.zzam(iBinder);
             this.zzbTk.zzam(iBinder);
             this.zzbTl.zzam(iBinder);
+            this.zzbTm.zzam(iBinder);
+            this.zzbTn.zzam(iBinder);
         }
         super.zza(i, iBinder, bundle, i2);
     }
@@ -116,59 +116,59 @@ public final class zzfw extends zzz<zzdn> {
         super.zza(com_google_android_gms_common_internal_zzj);
     }
 
-    public final void zza(zzbay<GetFdForAssetResult> com_google_android_gms_internal_zzbay_com_google_android_gms_wearable_DataApi_GetFdForAssetResult, Asset asset) throws RemoteException {
-        ((zzdn) zzrf()).zza(new zzfn(com_google_android_gms_internal_zzbay_com_google_android_gms_wearable_DataApi_GetFdForAssetResult), asset);
+    public final void zza(zzbaz<GetFdForAssetResult> com_google_android_gms_internal_zzbaz_com_google_android_gms_wearable_DataApi_GetFdForAssetResult, Asset asset) throws RemoteException {
+        ((zzdn) zzrf()).zza(new zzfn(com_google_android_gms_internal_zzbaz_com_google_android_gms_wearable_DataApi_GetFdForAssetResult), asset);
     }
 
-    public final void zza(zzbay<Status> com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, CapabilityListener capabilityListener) throws RemoteException {
-        this.zzbTl.zza(this, com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, capabilityListener);
+    public final void zza(zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, CapabilityListener capabilityListener) throws RemoteException {
+        this.zzbTn.zza(this, com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, capabilityListener);
     }
 
-    public final void zza(zzbay<Status> com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, CapabilityListener capabilityListener, zzbdv<CapabilityListener> com_google_android_gms_internal_zzbdv_com_google_android_gms_wearable_CapabilityApi_CapabilityListener, IntentFilter[] intentFilterArr) throws RemoteException {
-        this.zzbTl.zza(this, com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, capabilityListener, zzga.zze(com_google_android_gms_internal_zzbdv_com_google_android_gms_wearable_CapabilityApi_CapabilityListener, intentFilterArr));
+    public final void zza(zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, CapabilityListener capabilityListener, zzbdw<CapabilityListener> com_google_android_gms_internal_zzbdw_com_google_android_gms_wearable_CapabilityApi_CapabilityListener, IntentFilter[] intentFilterArr) throws RemoteException {
+        this.zzbTn.zza(this, com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, capabilityListener, zzga.zze(com_google_android_gms_internal_zzbdw_com_google_android_gms_wearable_CapabilityApi_CapabilityListener, intentFilterArr));
     }
 
-    public final void zza(zzbay<Status> com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, ChannelListener channelListener, zzbdv<ChannelListener> com_google_android_gms_internal_zzbdv_com_google_android_gms_wearable_ChannelApi_ChannelListener, String str, IntentFilter[] intentFilterArr) throws RemoteException {
+    public final void zza(zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, ChannelListener channelListener, zzbdw<ChannelListener> com_google_android_gms_internal_zzbdw_com_google_android_gms_wearable_ChannelApi_ChannelListener, String str, IntentFilter[] intentFilterArr) throws RemoteException {
         if (str == null) {
-            this.zzbTg.zza(this, com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, channelListener, zzga.zzd(com_google_android_gms_internal_zzbdv_com_google_android_gms_wearable_ChannelApi_ChannelListener, intentFilterArr));
+            this.zzbTi.zza(this, com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, channelListener, zzga.zzd(com_google_android_gms_internal_zzbdw_com_google_android_gms_wearable_ChannelApi_ChannelListener, intentFilterArr));
             return;
         }
-        this.zzbTg.zza(this, com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, new zzeu(str, channelListener), zzga.zza(com_google_android_gms_internal_zzbdv_com_google_android_gms_wearable_ChannelApi_ChannelListener, str, intentFilterArr));
+        this.zzbTi.zza(this, com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, new zzeu(str, channelListener), zzga.zza(com_google_android_gms_internal_zzbdw_com_google_android_gms_wearable_ChannelApi_ChannelListener, str, intentFilterArr));
     }
 
-    public final void zza(zzbay<Status> com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, ChannelListener channelListener, String str) throws RemoteException {
+    public final void zza(zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, ChannelListener channelListener, String str) throws RemoteException {
         if (str == null) {
-            this.zzbTg.zza(this, com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, channelListener);
+            this.zzbTi.zza(this, com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, channelListener);
             return;
         }
-        this.zzbTg.zza(this, com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, new zzeu(str, channelListener));
+        this.zzbTi.zza(this, com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, new zzeu(str, channelListener));
     }
 
-    public final void zza(zzbay<Status> com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, DataListener dataListener) throws RemoteException {
-        this.zzbTh.zza(this, com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, dataListener);
+    public final void zza(zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, DataListener dataListener) throws RemoteException {
+        this.zzbTj.zza(this, com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, dataListener);
     }
 
-    public final void zza(zzbay<Status> com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, DataListener dataListener, zzbdv<DataListener> com_google_android_gms_internal_zzbdv_com_google_android_gms_wearable_DataApi_DataListener, IntentFilter[] intentFilterArr) throws RemoteException {
-        this.zzbTh.zza(this, com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, dataListener, zzga.zza(com_google_android_gms_internal_zzbdv_com_google_android_gms_wearable_DataApi_DataListener, intentFilterArr));
+    public final void zza(zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, DataListener dataListener, zzbdw<DataListener> com_google_android_gms_internal_zzbdw_com_google_android_gms_wearable_DataApi_DataListener, IntentFilter[] intentFilterArr) throws RemoteException {
+        this.zzbTj.zza(this, com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, dataListener, zzga.zza(com_google_android_gms_internal_zzbdw_com_google_android_gms_wearable_DataApi_DataListener, intentFilterArr));
     }
 
-    public final void zza(zzbay<Status> com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, MessageListener messageListener) throws RemoteException {
-        this.zzbTi.zza(this, com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, messageListener);
+    public final void zza(zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, MessageListener messageListener) throws RemoteException {
+        this.zzbTk.zza(this, com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, messageListener);
     }
 
-    public final void zza(zzbay<Status> com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, MessageListener messageListener, zzbdv<MessageListener> com_google_android_gms_internal_zzbdv_com_google_android_gms_wearable_MessageApi_MessageListener, IntentFilter[] intentFilterArr) throws RemoteException {
-        this.zzbTi.zza(this, com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, messageListener, zzga.zzb(com_google_android_gms_internal_zzbdv_com_google_android_gms_wearable_MessageApi_MessageListener, intentFilterArr));
+    public final void zza(zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, MessageListener messageListener, zzbdw<MessageListener> com_google_android_gms_internal_zzbdw_com_google_android_gms_wearable_MessageApi_MessageListener, IntentFilter[] intentFilterArr) throws RemoteException {
+        this.zzbTk.zza(this, com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, messageListener, zzga.zzb(com_google_android_gms_internal_zzbdw_com_google_android_gms_wearable_MessageApi_MessageListener, intentFilterArr));
     }
 
-    public final void zza(zzbay<Status> com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, NodeListener nodeListener) throws RemoteException {
-        this.zzbTj.zza(this, com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, nodeListener);
+    public final void zza(zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, NodeListener nodeListener) throws RemoteException {
+        this.zzbTl.zza(this, com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, nodeListener);
     }
 
-    public final void zza(zzbay<Status> com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, NodeListener nodeListener, zzbdv<NodeListener> com_google_android_gms_internal_zzbdv_com_google_android_gms_wearable_NodeApi_NodeListener, IntentFilter[] intentFilterArr) throws RemoteException {
-        this.zzbTj.zza(this, com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, nodeListener, zzga.zzc(com_google_android_gms_internal_zzbdv_com_google_android_gms_wearable_NodeApi_NodeListener, intentFilterArr));
+    public final void zza(zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, NodeListener nodeListener, zzbdw<NodeListener> com_google_android_gms_internal_zzbdw_com_google_android_gms_wearable_NodeApi_NodeListener, IntentFilter[] intentFilterArr) throws RemoteException {
+        this.zzbTl.zza(this, com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, nodeListener, zzga.zzc(com_google_android_gms_internal_zzbdw_com_google_android_gms_wearable_NodeApi_NodeListener, intentFilterArr));
     }
 
-    public final void zza(zzbay<DataItemResult> com_google_android_gms_internal_zzbay_com_google_android_gms_wearable_DataApi_DataItemResult, PutDataRequest putDataRequest) throws RemoteException {
+    public final void zza(zzbaz<DataItemResult> com_google_android_gms_internal_zzbaz_com_google_android_gms_wearable_DataApi_DataItemResult, PutDataRequest putDataRequest) throws RemoteException {
         for (Entry value : putDataRequest.getAssets().entrySet()) {
             Asset asset = (Asset) value.getValue();
             if (asset.getData() == null && asset.getDigest() == null && asset.getFd() == null && asset.getUri() == null) {
@@ -206,7 +206,7 @@ public final class zzfw extends zzz<zzdn> {
                 try {
                     zzt.putAsset((String) value2.getKey(), Asset.createFromFd(getContext().getContentResolver().openFileDescriptor(asset2.getUri(), "r")));
                 } catch (FileNotFoundException e2) {
-                    new zzfr(com_google_android_gms_internal_zzbay_com_google_android_gms_wearable_DataApi_DataItemResult, arrayList).zza(new zzem(WearableStatusCodes.ASSET_UNAVAILABLE, null));
+                    new zzfr(com_google_android_gms_internal_zzbaz_com_google_android_gms_wearable_DataApi_DataItemResult, arrayList).zza(new zzem(WearableStatusCodes.ASSET_UNAVAILABLE, null));
                     String valueOf6 = String.valueOf(asset2.getUri());
                     Log.w("WearableClient", new StringBuilder(String.valueOf(valueOf6).length() + 28).append("Couldn't resolve asset URI: ").append(valueOf6).toString());
                     return;
@@ -215,33 +215,33 @@ public final class zzfw extends zzz<zzdn> {
                 zzt.putAsset((String) value2.getKey(), asset2);
             }
         }
-        ((zzdn) zzrf()).zza(new zzfr(com_google_android_gms_internal_zzbay_com_google_android_gms_wearable_DataApi_DataItemResult, arrayList), zzt);
+        ((zzdn) zzrf()).zza(new zzfr(com_google_android_gms_internal_zzbaz_com_google_android_gms_wearable_DataApi_DataItemResult, arrayList), zzt);
     }
 
-    public final void zza(zzbay<Status> com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, String str, Uri uri, long j, long j2) {
+    public final void zza(zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, String str, Uri uri, long j, long j2) {
         try {
             ExecutorService executorService = this.zzbrV;
-            zzbo.zzu(com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status);
+            zzbo.zzu(com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status);
             zzbo.zzu(str);
             zzbo.zzu(uri);
             zzbo.zzb(j >= 0, "startOffset is negative: %s", Long.valueOf(j));
             zzbo.zzb(j2 >= -1, "invalid length: %s", Long.valueOf(j2));
-            executorService.execute(new zzfz(this, uri, com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, str, j, j2));
+            executorService.execute(new zzfz(this, uri, com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, str, j, j2));
         } catch (RuntimeException e) {
-            com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status.zzr(new Status(8));
+            com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status.zzr(new Status(8));
             throw e;
         }
     }
 
-    public final void zza(zzbay<Status> com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, String str, Uri uri, boolean z) {
+    public final void zza(zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, String str, Uri uri, boolean z) {
         try {
             ExecutorService executorService = this.zzbrV;
-            zzbo.zzu(com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status);
+            zzbo.zzu(com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status);
             zzbo.zzu(str);
             zzbo.zzu(uri);
-            executorService.execute(new zzfy(this, uri, com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status, z, str));
+            executorService.execute(new zzfy(this, uri, com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status, z, str));
         } catch (RuntimeException e) {
-            com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status.zzr(new Status(8));
+            com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status.zzr(new Status(8));
             throw e;
         }
     }
@@ -263,10 +263,10 @@ public final class zzfw extends zzz<zzdn> {
     }
 
     public final boolean zzpe() {
-        return !this.zzbTm.zzgm("com.google.android.wearable.app.cn");
+        return !this.zzbTo.zzgm("com.google.android.wearable.app.cn");
     }
 
     protected final String zzqZ() {
-        return this.zzbTm.zzgm("com.google.android.wearable.app.cn") ? "com.google.android.wearable.app.cn" : "com.google.android.gms";
+        return this.zzbTo.zzgm("com.google.android.wearable.app.cn") ? "com.google.android.wearable.app.cn" : "com.google.android.gms";
     }
 }

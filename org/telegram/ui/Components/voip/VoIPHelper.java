@@ -240,7 +240,7 @@ public class VoIPHelper {
         final Runnable runnable = onDismiss;
         final View btn = new Builder(context).setTitle(LocaleController.getString("CallMessageReportProblem", R.string.CallMessageReportProblem)).setView(linearLayout).setPositiveButton(LocaleController.getString("Send", R.string.Send), new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                TL_phone_setCallRating req = new TL_phone_setCallRating();
+                final TL_phone_setCallRating req = new TL_phone_setCallRating();
                 req.rating = view2.getRating();
                 if (req.rating < 5) {
                     req.comment = view3.getText().toString();
@@ -254,7 +254,7 @@ public class VoIPHelper {
                     public void run(TLObject response, TL_error error) {
                         if (response instanceof TL_updates) {
                             MessagesController.getInstance().processUpdates((TL_updates) response, false);
-                            if (includeLogs[0] && log.exists()) {
+                            if (includeLogs[0] && log.exists() && req.rating < 4) {
                                 SendMessagesHelper.prepareSendingDocument(log.getAbsolutePath(), log.getAbsolutePath(), null, "text/plain", 4244000, null, null);
                                 Toast.makeText(context2, LocaleController.getString("CallReportSent", R.string.CallReportSent), 1).show();
                             }

@@ -16,15 +16,15 @@ public final class Landmark {
     public static final int RIGHT_EYE = 10;
     public static final int RIGHT_MOUTH = 11;
     private final int zzamr;
-    private final PointF zzbNh;
+    private final PointF zzbNj;
 
     public Landmark(PointF pointF, int i) {
-        this.zzbNh = pointF;
+        this.zzbNj = pointF;
         this.zzamr = i;
     }
 
     public final PointF getPosition() {
-        return this.zzbNh;
+        return this.zzbNj;
     }
 
     public final int getType() {

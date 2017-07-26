@@ -7,18 +7,18 @@ import java.net.URL;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 final class zza extends Thread {
-    private /* synthetic */ String zzsF;
+    private /* synthetic */ String zzsD;
 
     zza(AdvertisingIdClient advertisingIdClient, String str) {
-        this.zzsF = str;
+        this.zzsD = str;
     }
 
     public final void run() {
-        HttpURLConnection httpURLConnection;
         String valueOf;
         Throwable e;
         zzb com_google_android_gms_ads_identifier_zzb = new zzb();
-        String str = this.zzsF;
+        String str = this.zzsD;
+        HttpURLConnection httpURLConnection;
         try {
             httpURLConnection = (HttpURLConnection) new URL(str).openConnection();
             int responseCode = httpURLConnection.getResponseCode();

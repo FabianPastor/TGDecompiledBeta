@@ -6,7 +6,7 @@ import android.view.View;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient.Builder;
 import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.internal.zzctk;
+import com.google.android.gms.internal.zzctl;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
@@ -19,12 +19,12 @@ public final class zzq {
     private final String zzaAX;
     private final Set<Scope> zzaHk;
     private final Map<Api<?>, zzr> zzaHl;
-    private final zzctk zzaHm;
+    private final zzctl zzaHm;
     private Integer zzaHn;
     private final Account zzajb;
     private final String zzake;
 
-    public zzq(Account account, Set<Scope> set, Map<Api<?>, zzr> map, int i, View view, String str, String str2, zzctk com_google_android_gms_internal_zzctk) {
+    public zzq(Account account, Set<Scope> set, Map<Api<?>, zzr> map, int i, View view, String str, String str2, zzctl com_google_android_gms_internal_zzctl) {
         Map map2;
         this.zzajb = account;
         this.zzaAT = set == null ? Collections.EMPTY_SET : Collections.unmodifiableSet(set);
@@ -36,7 +36,7 @@ public final class zzq {
         this.zzaAV = i;
         this.zzake = str;
         this.zzaAX = str2;
-        this.zzaHm = com_google_android_gms_internal_zzctk;
+        this.zzaHm = com_google_android_gms_internal_zzctl;
         Set hashSet = new HashSet(this.zzaAT);
         for (zzr com_google_android_gms_common_internal_zzr : this.zzaHl.values()) {
             hashSet.addAll(com_google_android_gms_common_internal_zzr.zzame);
@@ -103,7 +103,7 @@ public final class zzq {
         return this.zzaAW;
     }
 
-    public final zzctk zzrt() {
+    public final zzctl zzrt() {
         return this.zzaHm;
     }
 

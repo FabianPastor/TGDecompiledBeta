@@ -31,6 +31,7 @@ public class CheckBox extends View {
     private int color;
     private boolean drawBackground;
     private Bitmap drawBitmap;
+    private boolean hasBorder;
     private boolean isCheckAnimation = true;
     private boolean isChecked;
     private float progress;
@@ -75,6 +76,10 @@ public class CheckBox extends View {
 
     public void setDrawBackground(boolean value) {
         this.drawBackground = value;
+    }
+
+    public void setHasBorder(boolean value) {
+        this.hasBorder = value;
     }
 
     public void setCheckOffset(int value) {
@@ -171,6 +176,9 @@ public class CheckBox extends View {
                     canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad - ((float) AndroidUtilities.dp(1.0f)), backgroundPaint);
                 }
                 paint.setColor(this.color);
+                if (this.hasBorder) {
+                    rad -= (float) AndroidUtilities.dp(2.0f);
+                }
                 this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad, paint);
                 this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (1.0f - roundProgress) * rad, eraser);
                 canvas.drawBitmap(this.drawBitmap, 0.0f, 0.0f, null);

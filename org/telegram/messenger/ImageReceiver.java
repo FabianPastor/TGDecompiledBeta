@@ -40,7 +40,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private byte crossfadeAlpha;
     private boolean crossfadeWithThumb;
     private float currentAlpha;
-    private boolean currentCacheOnly;
+    private int currentCacheType;
     private String currentExt;
     private String currentFilter;
     private String currentHttpUrl;
@@ -54,6 +54,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private FileLocation currentThumbLocation;
     private ImageReceiverDelegate delegate;
     private Rect drawRegion;
+    private boolean forceCrossfade;
     private boolean forcePreview;
     private int imageH;
     private int imageW;
@@ -64,6 +65,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private boolean isPressed;
     private boolean isVisible;
     private long lastUpdateAlphaTime;
+    private boolean manualAlphaAnimator;
     private boolean needsQualityThumb;
     private int orientation;
     private float overrideAlpha;
@@ -83,7 +85,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
     }
 
     private class SetImageBackup {
-        public boolean cacheOnly;
+        public int cacheType;
         public String ext;
         public TLObject fileLocation;
         public String filter;
@@ -121,27 +123,27 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.canceledLoading = true;
     }
 
-    public void setImage(TLObject path, String filter, Drawable thumb, String ext, boolean cacheOnly) {
-        setImage(path, null, filter, thumb, null, null, 0, ext, cacheOnly);
+    public void setImage(TLObject path, String filter, Drawable thumb, String ext, int cacheType) {
+        setImage(path, null, filter, thumb, null, null, 0, ext, cacheType);
     }
 
-    public void setImage(TLObject path, String filter, Drawable thumb, int size, String ext, boolean cacheOnly) {
-        setImage(path, null, filter, thumb, null, null, size, ext, cacheOnly);
+    public void setImage(TLObject path, String filter, Drawable thumb, int size, String ext, int cacheType) {
+        setImage(path, null, filter, thumb, null, null, size, ext, cacheType);
     }
 
     public void setImage(String httpUrl, String filter, Drawable thumb, String ext, int size) {
-        setImage(null, httpUrl, filter, thumb, null, null, size, ext, true);
+        setImage(null, httpUrl, filter, thumb, null, null, size, ext, 1);
     }
 
-    public void setImage(TLObject fileLocation, String filter, FileLocation thumbLocation, String thumbFilter, String ext, boolean cacheOnly) {
-        setImage(fileLocation, null, filter, null, thumbLocation, thumbFilter, 0, ext, cacheOnly);
+    public void setImage(TLObject fileLocation, String filter, FileLocation thumbLocation, String thumbFilter, String ext, int cacheType) {
+        setImage(fileLocation, null, filter, null, thumbLocation, thumbFilter, 0, ext, cacheType);
     }
 
-    public void setImage(TLObject fileLocation, String filter, FileLocation thumbLocation, String thumbFilter, int size, String ext, boolean cacheOnly) {
-        setImage(fileLocation, null, filter, null, thumbLocation, thumbFilter, size, ext, cacheOnly);
+    public void setImage(TLObject fileLocation, String filter, FileLocation thumbLocation, String thumbFilter, int size, String ext, int cacheType) {
+        setImage(fileLocation, null, filter, null, thumbLocation, thumbFilter, size, ext, cacheType);
     }
 
-    public void setImage(TLObject fileLocation, String httpUrl, String filter, Drawable thumb, FileLocation thumbLocation, String thumbFilter, int size, String ext, boolean cacheOnly) {
+    public void setImage(TLObject fileLocation, String httpUrl, String filter, Drawable thumb, FileLocation thumbLocation, String thumbFilter, int size, String ext, int cacheType) {
         if (this.setImageBackup != null) {
             this.setImageBackup.fileLocation = null;
             this.setImageBackup.httpUrl = null;
@@ -208,7 +210,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             this.currentFilter = filter;
             this.currentThumbFilter = thumbFilter;
             this.currentSize = size;
-            this.currentCacheOnly = cacheOnly;
+            this.currentCacheType = cacheType;
             this.currentThumbLocation = thumbLocation;
             this.staticThumb = thumb;
             this.bitmapShader = null;
@@ -240,7 +242,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.currentImageLocation = null;
         this.currentHttpUrl = null;
         this.currentFilter = null;
-        this.currentCacheOnly = false;
+        this.currentCacheType = 0;
         this.staticThumb = thumb;
         this.currentAlpha = 1.0f;
         this.currentThumbLocation = null;
@@ -347,7 +349,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.currentHttpUrl = null;
         this.currentFilter = null;
         this.currentSize = 0;
-        this.currentCacheOnly = false;
+        this.currentCacheType = 0;
         this.bitmapShader = null;
         this.bitmapShaderThumb = null;
         if (this.setImageBackup != null) {
@@ -396,7 +398,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             this.setImageBackup.thumbFilter = this.currentThumbFilter;
             this.setImageBackup.size = this.currentSize;
             this.setImageBackup.ext = this.currentExt;
-            this.setImageBackup.cacheOnly = this.currentCacheOnly;
+            this.setImageBackup.cacheType = this.currentCacheType;
         }
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didReplacedPhotoInMemCache);
         clearImage();
@@ -410,7 +412,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         if (this.setImageBackup == null || (this.setImageBackup.fileLocation == null && this.setImageBackup.httpUrl == null && this.setImageBackup.thumbLocation == null && this.setImageBackup.thumb == null)) {
             return false;
         }
-        setImage(this.setImageBackup.fileLocation, this.setImageBackup.httpUrl, this.setImageBackup.filter, this.setImageBackup.thumb, this.setImageBackup.thumbLocation, this.setImageBackup.thumbFilter, this.setImageBackup.size, this.setImageBackup.ext, this.setImageBackup.cacheOnly);
+        setImage(this.setImageBackup.fileLocation, this.setImageBackup.httpUrl, this.setImageBackup.filter, this.setImageBackup.thumb, this.setImageBackup.thumbLocation, this.setImageBackup.thumbFilter, this.setImageBackup.size, this.setImageBackup.ext, this.setImageBackup.cacheType);
         return true;
     }
 
@@ -510,7 +512,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                         ImageLoader.getInstance().removeImage(this.currentThumbKey);
                         this.currentThumbKey = null;
                     }
-                    setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentCacheOnly);
+                    setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentCacheType);
                     FileLog.e(e);
                 }
                 canvas.restore();
@@ -556,7 +558,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                             ImageLoader.getInstance().removeImage(this.currentThumbKey);
                             this.currentThumbKey = null;
                         }
-                        setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentCacheOnly);
+                        setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentCacheType);
                         FileLog.e(e2);
                     }
                 }
@@ -596,7 +598,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                             ImageLoader.getInstance().removeImage(this.currentThumbKey);
                             this.currentThumbKey = null;
                         }
-                        setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentCacheOnly);
+                        setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentCacheType);
                         FileLog.e(e22);
                     }
                 }
@@ -617,7 +619,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
     }
 
     private void checkAlphaAnimation(boolean skip) {
-        if (this.currentAlpha != 1.0f) {
+        if (!this.manualAlphaAnimator && this.currentAlpha != 1.0f) {
             if (!skip) {
                 long dt = System.currentTimeMillis() - this.lastUpdateAlphaTime;
                 if (dt > 18) {
@@ -705,8 +707,16 @@ public class ImageReceiver implements NotificationCenterDelegate {
         }
     }
 
+    public void setManualAlphaAnimator(boolean value) {
+        this.manualAlphaAnimator = value;
+    }
+
     public float getCurrentAlpha() {
         return this.currentAlpha;
+    }
+
+    public void setCurrentAlpha(float value) {
+        this.currentAlpha = value;
     }
 
     public Bitmap getBitmap() {
@@ -719,6 +729,16 @@ public class ImageReceiver implements NotificationCenterDelegate {
         if (this.currentImage instanceof BitmapDrawable) {
             return ((BitmapDrawable) this.currentImage).getBitmap();
         }
+        if (this.currentThumb instanceof BitmapDrawable) {
+            return ((BitmapDrawable) this.currentThumb).getBitmap();
+        }
+        if (this.staticThumb instanceof BitmapDrawable) {
+            return ((BitmapDrawable) this.staticThumb).getBitmap();
+        }
+        return null;
+    }
+
+    public Bitmap getThumbBitmap() {
         if (this.currentThumb instanceof BitmapDrawable) {
             return ((BitmapDrawable) this.currentThumb).getBitmap();
         }
@@ -901,12 +921,16 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return this.currentHttpUrl;
     }
 
-    public boolean getCacheOnly() {
-        return this.currentCacheOnly;
+    public int getCacheType() {
+        return this.currentCacheType;
     }
 
     public void setForcePreview(boolean value) {
         this.forcePreview = value;
+    }
+
+    public void setForceCrossfade(boolean value) {
+        this.forceCrossfade = value;
     }
 
     public boolean isForcePreview() {
@@ -1049,9 +1073,9 @@ public class ImageReceiver implements NotificationCenterDelegate {
             } else {
                 this.bitmapShader = new BitmapShader(bitmap.getBitmap(), TileMode.CLAMP, TileMode.CLAMP);
             }
-            if (memCache || this.forcePreview) {
+            if ((memCache || this.forcePreview) && !this.forceCrossfade) {
                 this.currentAlpha = 1.0f;
-            } else if ((this.currentThumb == null && this.staticThumb == null) || this.currentAlpha == 1.0f) {
+            } else if ((this.currentThumb == null && this.staticThumb == null) || this.currentAlpha == 1.0f || this.forceCrossfade) {
                 this.currentAlpha = 0.0f;
                 this.lastUpdateAlphaTime = System.currentTimeMillis();
                 if (this.currentThumb == null && this.staticThumb == null) {

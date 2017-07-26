@@ -60,6 +60,8 @@ import android.util.StateSet;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.EdgeEffect;
@@ -113,6 +115,7 @@ public class AndroidUtilities {
     private static RectF bitmapRect;
     private static final Object callLock = new Object();
     private static ContentObserver callLogContentObserver;
+    public static DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
     public static float density = 1.0f;
     public static DisplayMetrics displayMetrics = new DisplayMetrics();
     public static Point displaySize = new Point();
@@ -123,6 +126,7 @@ public class AndroidUtilities {
     public static int leftBaseline = (isTablet() ? 80 : 72);
     private static Field mAttachInfoField;
     private static Field mStableInsetsField;
+    public static OvershootInterpolator overshootInterpolator = new OvershootInterpolator();
     public static Integer photoSize = null;
     private static int prevOrientation = -10;
     public static int roundMessageSize;
@@ -729,11 +733,7 @@ Error: java.util.NoSuchElementException
 
     public static int getPhotoSize() {
         if (photoSize == null) {
-            if (VERSION.SDK_INT >= 16) {
-                photoSize = Integer.valueOf(1280);
-            } else {
-                photoSize = Integer.valueOf(800);
-            }
+            photoSize = Integer.valueOf(1280);
         }
         return photoSize.intValue();
     }
@@ -1172,7 +1172,7 @@ Error: java.util.NoSuchElementException
         if (reset) {
             ForegroundDetector.getInstance().resetBackgroundVar();
         }
-        return UserConfig.passcodeHash.length() > 0 && wasInBackground && (UserConfig.appLocked || !(UserConfig.autoLockIn == 0 || UserConfig.lastPauseTime == 0 || UserConfig.appLocked || UserConfig.lastPauseTime + UserConfig.autoLockIn > ConnectionsManager.getInstance().getCurrentTime()));
+        return UserConfig.passcodeHash.length() > 0 && wasInBackground && (UserConfig.appLocked || (!(UserConfig.autoLockIn == 0 || UserConfig.lastPauseTime == 0 || UserConfig.appLocked || UserConfig.lastPauseTime + UserConfig.autoLockIn > ConnectionsManager.getInstance().getCurrentTime()) || ConnectionsManager.getInstance().getCurrentTime() + 5 < UserConfig.lastPauseTime));
     }
 
     public static void shakeView(final View view, final float x, final int num) {

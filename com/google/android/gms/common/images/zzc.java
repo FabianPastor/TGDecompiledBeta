@@ -4,8 +4,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.widget.ImageView;
 import com.google.android.gms.common.internal.zzbe;
-import com.google.android.gms.internal.zzbff;
-import com.google.android.gms.internal.zzbfk;
+import com.google.android.gms.internal.zzbfg;
+import com.google.android.gms.internal.zzbfl;
 import java.lang.ref.WeakReference;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
@@ -46,8 +46,8 @@ public final class zzc extends zza {
         if (imageView != null) {
             Drawable drawable2;
             Object obj = (z2 || z3) ? null : 1;
-            if (obj != null && (imageView instanceof zzbfk)) {
-                int zzqY = ((zzbfk) imageView).zzqY();
+            if (obj != null && (imageView instanceof zzbfl)) {
+                int zzqY = ((zzbfl) imageView).zzqY();
                 if (this.zzaGh != 0 && zzqY == this.zzaGh) {
                     return;
                 }
@@ -57,24 +57,24 @@ public final class zzc extends zza {
                 drawable2 = imageView.getDrawable();
                 if (drawable2 == null) {
                     drawable2 = null;
-                } else if (drawable2 instanceof zzbff) {
-                    drawable2 = ((zzbff) drawable2).zzqW();
+                } else if (drawable2 instanceof zzbfg) {
+                    drawable2 = ((zzbfg) drawable2).zzqW();
                 }
-                drawable2 = new zzbff(drawable2, drawable);
+                drawable2 = new zzbfg(drawable2, drawable);
             } else {
                 drawable2 = drawable;
             }
             imageView.setImageDrawable(drawable2);
-            if (imageView instanceof zzbfk) {
-                zzbfk com_google_android_gms_internal_zzbfk = (zzbfk) imageView;
+            if (imageView instanceof zzbfl) {
+                zzbfl com_google_android_gms_internal_zzbfl = (zzbfl) imageView;
                 if (z3) {
                     uri = this.zzaGf.uri;
                 }
-                com_google_android_gms_internal_zzbfk.zzo(uri);
-                com_google_android_gms_internal_zzbfk.zzax(obj != null ? this.zzaGh : 0);
+                com_google_android_gms_internal_zzbfl.zzo(uri);
+                com_google_android_gms_internal_zzbfl.zzax(obj != null ? this.zzaGh : 0);
             }
             if (zzc) {
-                ((zzbff) drawable2).startTransition(Callback.DEFAULT_SWIPE_ANIMATION_DURATION);
+                ((zzbfg) drawable2).startTransition(Callback.DEFAULT_SWIPE_ANIMATION_DURATION);
             }
         }
     }

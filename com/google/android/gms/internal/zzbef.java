@@ -1,14 +1,14 @@
 package com.google.android.gms.internal;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import android.support.annotation.NonNull;
+import com.google.android.gms.common.api.Api.zzb;
 
 public final class zzbef {
-    private static final ExecutorService zzaEb = new ThreadPoolExecutor(0, 4, 60, TimeUnit.SECONDS, new LinkedBlockingQueue(), new zzbgv("GAC_Transform"));
+    public final zzbee<zzb, ?> zzaBu;
+    public final zzbey<zzb, ?> zzaBv;
 
-    public static ExecutorService zzqj() {
-        return zzaEb;
+    public zzbef(@NonNull zzbee<zzb, ?> com_google_android_gms_internal_zzbee_com_google_android_gms_common_api_Api_zzb__, @NonNull zzbey<zzb, ?> com_google_android_gms_internal_zzbey_com_google_android_gms_common_api_Api_zzb__) {
+        this.zzaBu = com_google_android_gms_internal_zzbee_com_google_android_gms_common_api_Api_zzb__;
+        this.zzaBv = com_google_android_gms_internal_zzbey_com_google_android_gms_common_api_Api_zzb__;
     }
 }

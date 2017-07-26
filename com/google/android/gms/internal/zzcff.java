@@ -1,275 +1,144 @@
 package com.google.android.gms.internal;
 
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Build.VERSION;
-import android.support.annotation.WorkerThread;
-import android.text.TextUtils;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.common.util.zze;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.stripe.android.model.Card;
-import java.math.BigInteger;
-import java.util.Locale;
+import android.os.IBinder;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.os.RemoteException;
+import java.util.List;
 
-public final class zzcff extends zzchi {
-    private String mAppId;
-    private String zzXB;
-    private String zzaeH;
-    private String zzaeI;
-    private String zzboB;
-    private long zzboF;
-    private int zzbqC;
-    private long zzbqD;
-    private int zzbqE;
-
-    zzcff(zzcgk com_google_android_gms_internal_zzcgk) {
-        super(com_google_android_gms_internal_zzcgk);
+public final class zzcff extends zzed implements zzcfd {
+    zzcff(IBinder iBinder) {
+        super(iBinder, "com.google.android.gms.measurement.internal.IMeasurementService");
     }
 
-    @WorkerThread
-    private final String zzwK() {
-        super.zzjC();
-        try {
-            return FirebaseInstanceId.getInstance().getId();
-        } catch (IllegalStateException e) {
-            super.zzwF().zzyz().log("Failed to retrieve Firebase Instance Id");
-            return null;
-        }
+    public final List<zzcji> zza(zzceh com_google_android_gms_internal_zzceh, boolean z) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) com_google_android_gms_internal_zzceh);
+        zzef.zza(zzZ, z);
+        zzZ = zza(7, zzZ);
+        List createTypedArrayList = zzZ.createTypedArrayList(zzcji.CREATOR);
+        zzZ.recycle();
+        return createTypedArrayList;
     }
 
-    public final /* bridge */ /* synthetic */ Context getContext() {
-        return super.getContext();
+    public final List<zzcek> zza(String str, String str2, zzceh com_google_android_gms_internal_zzceh) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzZ.writeString(str);
+        zzZ.writeString(str2);
+        zzef.zza(zzZ, (Parcelable) com_google_android_gms_internal_zzceh);
+        zzZ = zza(16, zzZ);
+        List createTypedArrayList = zzZ.createTypedArrayList(zzcek.CREATOR);
+        zzZ.recycle();
+        return createTypedArrayList;
     }
 
-    final String getGmpAppId() {
-        zzkD();
-        return this.zzXB;
+    public final List<zzcji> zza(String str, String str2, String str3, boolean z) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzZ.writeString(str);
+        zzZ.writeString(str2);
+        zzZ.writeString(str3);
+        zzef.zza(zzZ, z);
+        zzZ = zza(15, zzZ);
+        List createTypedArrayList = zzZ.createTypedArrayList(zzcji.CREATOR);
+        zzZ.recycle();
+        return createTypedArrayList;
     }
 
-    @WorkerThread
-    final zzceg zzdV(String str) {
-        super.zzjC();
-        String zzhl = zzhl();
-        String gmpAppId = getGmpAppId();
-        zzkD();
-        String str2 = this.zzaeI;
-        long zzyv = (long) zzyv();
-        zzkD();
-        String str3 = this.zzboB;
-        long zzwP = zzcel.zzwP();
-        zzkD();
-        super.zzjC();
-        if (this.zzbqD == 0) {
-            this.zzbqD = this.zzboe.zzwB().zzI(super.getContext(), super.getContext().getPackageName());
-        }
-        long j = this.zzbqD;
-        boolean isEnabled = this.zzboe.isEnabled();
-        boolean z = !super.zzwG().zzbrC;
-        String zzwK = zzwK();
-        zzkD();
-        long zzyY = this.zzboe.zzyY();
-        zzkD();
-        return new zzceg(zzhl, gmpAppId, str2, zzyv, str3, zzwP, j, str, isEnabled, z, zzwK, 0, zzyY, this.zzbqE);
+    public final List<zzcji> zza(String str, String str2, boolean z, zzceh com_google_android_gms_internal_zzceh) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzZ.writeString(str);
+        zzZ.writeString(str2);
+        zzef.zza(zzZ, z);
+        zzef.zza(zzZ, (Parcelable) com_google_android_gms_internal_zzceh);
+        zzZ = zza(14, zzZ);
+        List createTypedArrayList = zzZ.createTypedArrayList(zzcji.CREATOR);
+        zzZ.recycle();
+        return createTypedArrayList;
     }
 
-    final String zzhl() {
-        zzkD();
-        return this.mAppId;
+    public final void zza(long j, String str, String str2, String str3) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzZ.writeLong(j);
+        zzZ.writeString(str);
+        zzZ.writeString(str2);
+        zzZ.writeString(str3);
+        zzb(10, zzZ);
     }
 
-    public final /* bridge */ /* synthetic */ void zzjC() {
-        super.zzjC();
+    public final void zza(zzceh com_google_android_gms_internal_zzceh) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) com_google_android_gms_internal_zzceh);
+        zzb(4, zzZ);
     }
 
-    protected final void zzjD() {
-        int i = 1;
-        String str = "unknown";
-        String str2 = Card.UNKNOWN;
-        int i2 = Integer.MIN_VALUE;
-        String str3 = Card.UNKNOWN;
-        String packageName = super.getContext().getPackageName();
-        PackageManager packageManager = super.getContext().getPackageManager();
-        if (packageManager == null) {
-            super.zzwF().zzyx().zzj("PackageManager is null, app identity information might be inaccurate. appId", zzcfk.zzdZ(packageName));
-        } else {
-            try {
-                str = packageManager.getInstallerPackageName(packageName);
-            } catch (IllegalArgumentException e) {
-                super.zzwF().zzyx().zzj("Error retrieving app installer package name. appId", zzcfk.zzdZ(packageName));
-            }
-            if (str == null) {
-                str = "manual_install";
-            } else if ("com.android.vending".equals(str)) {
-                str = "";
-            }
-            try {
-                PackageInfo packageInfo = packageManager.getPackageInfo(super.getContext().getPackageName(), 0);
-                if (packageInfo != null) {
-                    CharSequence applicationLabel = packageManager.getApplicationLabel(packageInfo.applicationInfo);
-                    if (!TextUtils.isEmpty(applicationLabel)) {
-                        str3 = applicationLabel.toString();
-                    }
-                    str2 = packageInfo.versionName;
-                    i2 = packageInfo.versionCode;
-                }
-            } catch (NameNotFoundException e2) {
-                super.zzwF().zzyx().zze("Error retrieving package info. appId, appName", zzcfk.zzdZ(packageName), str3);
-            }
-        }
-        this.mAppId = packageName;
-        this.zzboB = str;
-        this.zzaeI = str2;
-        this.zzbqC = i2;
-        this.zzaeH = str3;
-        this.zzbqD = 0;
-        zzcel.zzxE();
-        Status zzaz = zzbdl.zzaz(super.getContext());
-        int i3 = (zzaz == null || !zzaz.isSuccess()) ? 0 : 1;
-        if (i3 == 0) {
-            if (zzaz == null) {
-                super.zzwF().zzyx().log("GoogleService failed to initialize (no status)");
-            } else {
-                super.zzwF().zzyx().zze("GoogleService failed to initialize, status", Integer.valueOf(zzaz.getStatusCode()), zzaz.getStatusMessage());
-            }
-        }
-        if (i3 != 0) {
-            Boolean zzdN = super.zzwH().zzdN("firebase_analytics_collection_enabled");
-            if (super.zzwH().zzxF()) {
-                super.zzwF().zzyB().log("Collection disabled with firebase_analytics_collection_deactivated=1");
-                i3 = 0;
-            } else if (zzdN != null && !zzdN.booleanValue()) {
-                super.zzwF().zzyB().log("Collection disabled with firebase_analytics_collection_enabled=0");
-                i3 = 0;
-            } else if (zzdN == null && zzcel.zzqB()) {
-                super.zzwF().zzyB().log("Collection disabled with google_app_measurement_enable=0");
-                i3 = 0;
-            } else {
-                super.zzwF().zzyD().log("Collection enabled");
-                i3 = 1;
-            }
-        } else {
-            i3 = 0;
-        }
-        this.zzXB = "";
-        this.zzboF = 0;
-        zzcel.zzxE();
-        try {
-            String zzqA = zzbdl.zzqA();
-            if (TextUtils.isEmpty(zzqA)) {
-                zzqA = "";
-            }
-            this.zzXB = zzqA;
-            if (i3 != 0) {
-                super.zzwF().zzyD().zze("App package, google app id", this.mAppId, this.zzXB);
-            }
-        } catch (IllegalStateException e3) {
-            super.zzwF().zzyx().zze("getGoogleAppId or isMeasurementEnabled failed with exception. appId", zzcfk.zzdZ(packageName), e3);
-        }
-        if (VERSION.SDK_INT >= 16) {
-            if (!zzbgx.zzaN(super.getContext())) {
-                i = 0;
-            }
-            this.zzbqE = i;
-            return;
-        }
-        this.zzbqE = 0;
+    public final void zza(zzcek com_google_android_gms_internal_zzcek, zzceh com_google_android_gms_internal_zzceh) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) com_google_android_gms_internal_zzcek);
+        zzef.zza(zzZ, (Parcelable) com_google_android_gms_internal_zzceh);
+        zzb(12, zzZ);
     }
 
-    public final /* bridge */ /* synthetic */ zze zzkq() {
-        return super.zzkq();
+    public final void zza(zzcez com_google_android_gms_internal_zzcez, zzceh com_google_android_gms_internal_zzceh) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) com_google_android_gms_internal_zzcez);
+        zzef.zza(zzZ, (Parcelable) com_google_android_gms_internal_zzceh);
+        zzb(1, zzZ);
     }
 
-    public final /* bridge */ /* synthetic */ zzcfi zzwA() {
-        return super.zzwA();
+    public final void zza(zzcez com_google_android_gms_internal_zzcez, String str, String str2) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) com_google_android_gms_internal_zzcez);
+        zzZ.writeString(str);
+        zzZ.writeString(str2);
+        zzb(5, zzZ);
     }
 
-    public final /* bridge */ /* synthetic */ zzcjk zzwB() {
-        return super.zzwB();
+    public final void zza(zzcji com_google_android_gms_internal_zzcji, zzceh com_google_android_gms_internal_zzceh) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) com_google_android_gms_internal_zzcji);
+        zzef.zza(zzZ, (Parcelable) com_google_android_gms_internal_zzceh);
+        zzb(2, zzZ);
     }
 
-    public final /* bridge */ /* synthetic */ zzcge zzwC() {
-        return super.zzwC();
+    public final byte[] zza(zzcez com_google_android_gms_internal_zzcez, String str) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) com_google_android_gms_internal_zzcez);
+        zzZ.writeString(str);
+        zzZ = zza(9, zzZ);
+        byte[] createByteArray = zzZ.createByteArray();
+        zzZ.recycle();
+        return createByteArray;
     }
 
-    public final /* bridge */ /* synthetic */ zzciz zzwD() {
-        return super.zzwD();
+    public final void zzb(zzceh com_google_android_gms_internal_zzceh) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) com_google_android_gms_internal_zzceh);
+        zzb(6, zzZ);
     }
 
-    public final /* bridge */ /* synthetic */ zzcgf zzwE() {
-        return super.zzwE();
+    public final void zzb(zzcek com_google_android_gms_internal_zzcek) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) com_google_android_gms_internal_zzcek);
+        zzb(13, zzZ);
     }
 
-    public final /* bridge */ /* synthetic */ zzcfk zzwF() {
-        return super.zzwF();
+    public final String zzc(zzceh com_google_android_gms_internal_zzceh) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (Parcelable) com_google_android_gms_internal_zzceh);
+        zzZ = zza(11, zzZ);
+        String readString = zzZ.readString();
+        zzZ.recycle();
+        return readString;
     }
 
-    public final /* bridge */ /* synthetic */ zzcfv zzwG() {
-        return super.zzwG();
-    }
-
-    public final /* bridge */ /* synthetic */ zzcel zzwH() {
-        return super.zzwH();
-    }
-
-    public final /* bridge */ /* synthetic */ void zzwo() {
-        super.zzwo();
-    }
-
-    public final /* bridge */ /* synthetic */ void zzwp() {
-        super.zzwp();
-    }
-
-    public final /* bridge */ /* synthetic */ void zzwq() {
-        super.zzwq();
-    }
-
-    public final /* bridge */ /* synthetic */ zzceb zzwr() {
-        return super.zzwr();
-    }
-
-    public final /* bridge */ /* synthetic */ zzcei zzws() {
-        return super.zzws();
-    }
-
-    public final /* bridge */ /* synthetic */ zzchk zzwt() {
-        return super.zzwt();
-    }
-
-    public final /* bridge */ /* synthetic */ zzcff zzwu() {
-        return super.zzwu();
-    }
-
-    public final /* bridge */ /* synthetic */ zzces zzwv() {
-        return super.zzwv();
-    }
-
-    public final /* bridge */ /* synthetic */ zzcic zzww() {
-        return super.zzww();
-    }
-
-    public final /* bridge */ /* synthetic */ zzchy zzwx() {
-        return super.zzwx();
-    }
-
-    public final /* bridge */ /* synthetic */ zzcfg zzwy() {
-        return super.zzwy();
-    }
-
-    public final /* bridge */ /* synthetic */ zzcem zzwz() {
-        return super.zzwz();
-    }
-
-    @WorkerThread
-    final String zzyu() {
-        super.zzwB().zzzt().nextBytes(new byte[16]);
-        return String.format(Locale.US, "%032x", new Object[]{new BigInteger(1, r0)});
-    }
-
-    final int zzyv() {
-        zzkD();
-        return this.zzbqC;
+    public final List<zzcek> zzk(String str, String str2, String str3) throws RemoteException {
+        Parcel zzZ = zzZ();
+        zzZ.writeString(str);
+        zzZ.writeString(str2);
+        zzZ.writeString(str3);
+        zzZ = zza(17, zzZ);
+        List createTypedArrayList = zzZ.createTypedArrayList(zzcek.CREATOR);
+        zzZ.recycle();
+        return createTypedArrayList;
     }
 }

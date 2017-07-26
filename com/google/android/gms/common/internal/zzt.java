@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import com.google.android.gms.internal.zzbds;
+import com.google.android.gms.internal.zzbdt;
 
 public abstract class zzt implements OnClickListener {
     public static zzt zza(Activity activity, Intent intent, int i) {
@@ -18,8 +18,8 @@ public abstract class zzt implements OnClickListener {
         return new zzv(intent, fragment, i);
     }
 
-    public static zzt zza(@NonNull zzbds com_google_android_gms_internal_zzbds, Intent intent, int i) {
-        return new zzw(intent, com_google_android_gms_internal_zzbds, 2);
+    public static zzt zza(@NonNull zzbdt com_google_android_gms_internal_zzbdt, Intent intent, int i) {
+        return new zzw(intent, com_google_android_gms_internal_zzbdt, 2);
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {

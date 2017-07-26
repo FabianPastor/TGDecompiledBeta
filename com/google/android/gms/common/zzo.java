@@ -21,7 +21,7 @@ import com.google.android.gms.common.internal.zzbd;
 import com.google.android.gms.common.util.zzj;
 import com.google.android.gms.common.util.zzq;
 import com.google.android.gms.common.util.zzw;
-import com.google.android.gms.internal.zzbgz;
+import com.google.android.gms.internal.zzbha;
 import java.io.InputStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -31,7 +31,7 @@ public class zzo {
     @Deprecated
     public static final String GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms";
     @Deprecated
-    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = 11011000;
+    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = 11020000;
     public static final String GOOGLE_PLAY_STORE_PACKAGE = "com.android.vending";
     private static boolean zzaAo = false;
     private static boolean zzaAp = false;
@@ -214,7 +214,7 @@ public class zzo {
     public static boolean zzaw(Context context) {
         if (!zzaAr) {
             try {
-                PackageInfo packageInfo = zzbgz.zzaP(context).getPackageInfo("com.google.android.gms", 64);
+                PackageInfo packageInfo = zzbha.zzaP(context).getPackageInfo("com.google.android.gms", 64);
                 if (packageInfo != null) {
                     zzp.zzax(context);
                     if (zzp.zza(packageInfo, zzj.zzaAk[1]) != null) {

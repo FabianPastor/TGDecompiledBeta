@@ -8,13 +8,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 final class zzs {
-    private static final long zzckN = TimeUnit.DAYS.toMillis(7);
+    private static final long zzckR = TimeUnit.DAYS.toMillis(7);
     private long timestamp;
-    final String zzbPH;
+    final String zzbPJ;
     private String zzbgW;
 
     private zzs(String str, String str2, long j) {
-        this.zzbPH = str;
+        this.zzbPJ = str;
         this.zzbgW = str2;
         this.timestamp = j;
     }
@@ -51,6 +51,6 @@ final class zzs {
     }
 
     final boolean zzhp(String str) {
-        return System.currentTimeMillis() > this.timestamp + zzckN || !str.equals(this.zzbgW);
+        return System.currentTimeMillis() > this.timestamp + zzckR || !str.equals(this.zzbgW);
     }
 }

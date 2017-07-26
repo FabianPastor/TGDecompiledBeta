@@ -12,12 +12,12 @@ import android.support.annotation.WorkerThread;
 import android.support.v4.util.ArrayMap;
 import com.google.android.gms.common.annotation.KeepForSdk;
 import com.google.android.gms.common.internal.zzbo;
-import com.google.android.gms.internal.zzbdl;
-import com.google.android.gms.internal.zzcel;
-import com.google.android.gms.internal.zzcgk;
-import com.google.android.gms.internal.zzchk;
-import com.google.android.gms.internal.zzcjh;
-import com.google.android.gms.internal.zzcjk;
+import com.google.android.gms.internal.zzbdm;
+import com.google.android.gms.internal.zzcem;
+import com.google.android.gms.internal.zzcgl;
+import com.google.android.gms.internal.zzchl;
+import com.google.android.gms.internal.zzcji;
+import com.google.android.gms.internal.zzcjl;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +28,7 @@ public class AppMeasurement {
     public static final String CRASH_ORIGIN = "crash";
     @KeepForSdk
     public static final String FCM_ORIGIN = "fcm";
-    private final zzcgk zzboe;
+    private final zzcgl zzboe;
 
     public static class ConditionalUserProperty {
         @Keep
@@ -71,7 +71,7 @@ public class AppMeasurement {
             this.mCreationTimestamp = conditionalUserProperty.mCreationTimestamp;
             this.mName = conditionalUserProperty.mName;
             if (conditionalUserProperty.mValue != null) {
-                this.mValue = zzcjk.zzD(conditionalUserProperty.mValue);
+                this.mValue = zzcjl.zzD(conditionalUserProperty.mValue);
                 if (this.mValue == null) {
                     this.mValue = conditionalUserProperty.mValue;
                 }
@@ -139,7 +139,7 @@ public class AppMeasurement {
         }
 
         public static String zzdF(String str) {
-            return zzcjk.zza(str, zzbof, zzbog);
+            return zzcjl.zza(str, zzbof, zzbog);
         }
     }
 
@@ -156,7 +156,7 @@ public class AppMeasurement {
         }
 
         public static String zzdF(String str) {
-            return zzcjk.zza(str, zzboh, zzboi);
+            return zzcjl.zza(str, zzboh, zzboi);
         }
     }
 
@@ -171,20 +171,20 @@ public class AppMeasurement {
         }
 
         public static String zzdF(String str) {
-            return zzcjk.zza(str, zzbom, zzbon);
+            return zzcjl.zza(str, zzbom, zzbon);
         }
     }
 
-    public AppMeasurement(zzcgk com_google_android_gms_internal_zzcgk) {
-        zzbo.zzu(com_google_android_gms_internal_zzcgk);
-        this.zzboe = com_google_android_gms_internal_zzcgk;
+    public AppMeasurement(zzcgl com_google_android_gms_internal_zzcgl) {
+        zzbo.zzu(com_google_android_gms_internal_zzcgl);
+        this.zzboe = com_google_android_gms_internal_zzcgl;
     }
 
     @Keep
     @RequiresPermission(allOf = {"android.permission.INTERNET", "android.permission.ACCESS_NETWORK_STATE", "android.permission.WAKE_LOCK"})
     @Deprecated
     public static AppMeasurement getInstance(Context context) {
-        return zzcgk.zzbj(context).zzyS();
+        return zzcgl.zzbj(context).zzyS();
     }
 
     @Keep
@@ -248,7 +248,7 @@ public class AppMeasurement {
     @Nullable
     public String getGmpAppId() {
         try {
-            return zzbdl.zzqA();
+            return zzbdm.zzqA();
         } catch (IllegalStateException e) {
             this.zzboe.zzwF().zzyx().zzj("getGoogleAppId failed with exception", e);
             return null;
@@ -259,7 +259,7 @@ public class AppMeasurement {
     @WorkerThread
     protected int getMaxUserProperties(@Size(min = 1) @NonNull String str) {
         this.zzboe.zzwt();
-        return zzchk.getMaxUserProperties(str);
+        return zzchl.getMaxUserProperties(str);
     }
 
     @Keep
@@ -271,10 +271,10 @@ public class AppMeasurement {
     @WorkerThread
     @KeepForSdk
     public Map<String, Object> getUserProperties(boolean z) {
-        List<zzcjh> zzao = this.zzboe.zzwt().zzao(z);
+        List<zzcji> zzao = this.zzboe.zzwt().zzao(z);
         Map<String, Object> arrayMap = new ArrayMap(zzao.size());
-        for (zzcjh com_google_android_gms_internal_zzcjh : zzao) {
-            arrayMap.put(com_google_android_gms_internal_zzcjh.name, com_google_android_gms_internal_zzcjh.getValue());
+        for (zzcji com_google_android_gms_internal_zzcji : zzao) {
+            arrayMap.put(com_google_android_gms_internal_zzcji.name, com_google_android_gms_internal_zzcji.getValue());
         }
         return arrayMap;
     }
@@ -289,12 +289,12 @@ public class AppMeasurement {
         if (bundle == null) {
             bundle = new Bundle();
         }
-        zzcel.zzxE();
+        zzcem.zzxE();
         if (!"_iap".equals(str)) {
             int zzep = this.zzboe.zzwB().zzep(str);
             if (zzep != 0) {
                 this.zzboe.zzwB();
-                this.zzboe.zzwB().zza(zzep, "_ev", zzcjk.zza(str, zzcel.zzxh(), true), str != null ? str.length() : 0);
+                this.zzboe.zzwB().zza(zzep, "_ev", zzcjl.zza(str, zzcem.zzxh(), true), str != null ? str.length() : 0);
                 return;
             }
         }
@@ -357,7 +357,7 @@ public class AppMeasurement {
         int zzer = this.zzboe.zzwB().zzer(str);
         if (zzer != 0) {
             this.zzboe.zzwB();
-            this.zzboe.zzwB().zza(zzer, "_ev", zzcjk.zza(str, zzcel.zzxi(), true), str != null ? str.length() : 0);
+            this.zzboe.zzwB().zza(zzer, "_ev", zzcjl.zza(str, zzcem.zzxi(), true), str != null ? str.length() : 0);
             return;
         }
         setUserPropertyInternal("app", str, str2);

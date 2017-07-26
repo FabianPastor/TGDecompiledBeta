@@ -10,61 +10,61 @@ import com.google.android.gms.identity.intents.model.UserAddress;
 
 public final class MaskedWallet extends zza implements ReflectedParcelable {
     public static final Creator<MaskedWallet> CREATOR = new zzq();
-    String zzbOo;
-    String zzbOp;
+    String zzbOq;
     String zzbOr;
-    private zza zzbOs;
-    private zza zzbOt;
-    String[] zzbOu;
-    UserAddress zzbOv;
-    UserAddress zzbOw;
-    InstrumentInfo[] zzbOx;
-    private LoyaltyWalletObject[] zzbPm;
-    private OfferWalletObject[] zzbPn;
+    String zzbOt;
+    private zza zzbOu;
+    private zza zzbOv;
+    String[] zzbOw;
+    UserAddress zzbOx;
+    UserAddress zzbOy;
+    InstrumentInfo[] zzbOz;
+    private LoyaltyWalletObject[] zzbPo;
+    private OfferWalletObject[] zzbPp;
 
     public final class Builder {
-        final /* synthetic */ MaskedWallet zzbPo;
+        final /* synthetic */ MaskedWallet zzbPq;
 
         private Builder(MaskedWallet maskedWallet) {
-            this.zzbPo = maskedWallet;
+            this.zzbPq = maskedWallet;
         }
 
         public final MaskedWallet build() {
-            return this.zzbPo;
+            return this.zzbPq;
         }
 
         public final Builder setBuyerBillingAddress(UserAddress userAddress) {
-            this.zzbPo.zzbOv = userAddress;
+            this.zzbPq.zzbOx = userAddress;
             return this;
         }
 
         public final Builder setBuyerShippingAddress(UserAddress userAddress) {
-            this.zzbPo.zzbOw = userAddress;
+            this.zzbPq.zzbOy = userAddress;
             return this;
         }
 
         public final Builder setEmail(String str) {
-            this.zzbPo.zzbOr = str;
+            this.zzbPq.zzbOt = str;
             return this;
         }
 
         public final Builder setGoogleTransactionId(String str) {
-            this.zzbPo.zzbOo = str;
+            this.zzbPq.zzbOq = str;
             return this;
         }
 
         public final Builder setInstrumentInfos(InstrumentInfo[] instrumentInfoArr) {
-            this.zzbPo.zzbOx = instrumentInfoArr;
+            this.zzbPq.zzbOz = instrumentInfoArr;
             return this;
         }
 
         public final Builder setMerchantTransactionId(String str) {
-            this.zzbPo.zzbOp = str;
+            this.zzbPq.zzbOr = str;
             return this;
         }
 
         public final Builder setPaymentDescriptions(String[] strArr) {
-            this.zzbPo.zzbOu = strArr;
+            this.zzbPq.zzbOw = strArr;
             return this;
         }
     }
@@ -73,17 +73,17 @@ public final class MaskedWallet extends zza implements ReflectedParcelable {
     }
 
     MaskedWallet(String str, String str2, String[] strArr, String str3, zza com_google_android_gms_wallet_zza, zza com_google_android_gms_wallet_zza2, LoyaltyWalletObject[] loyaltyWalletObjectArr, OfferWalletObject[] offerWalletObjectArr, UserAddress userAddress, UserAddress userAddress2, InstrumentInfo[] instrumentInfoArr) {
-        this.zzbOo = str;
-        this.zzbOp = str2;
-        this.zzbOu = strArr;
-        this.zzbOr = str3;
-        this.zzbOs = com_google_android_gms_wallet_zza;
-        this.zzbOt = com_google_android_gms_wallet_zza2;
-        this.zzbPm = loyaltyWalletObjectArr;
-        this.zzbPn = offerWalletObjectArr;
-        this.zzbOv = userAddress;
-        this.zzbOw = userAddress2;
-        this.zzbOx = instrumentInfoArr;
+        this.zzbOq = str;
+        this.zzbOr = str2;
+        this.zzbOw = strArr;
+        this.zzbOt = str3;
+        this.zzbOu = com_google_android_gms_wallet_zza;
+        this.zzbOv = com_google_android_gms_wallet_zza2;
+        this.zzbPo = loyaltyWalletObjectArr;
+        this.zzbPp = offerWalletObjectArr;
+        this.zzbOx = userAddress;
+        this.zzbOy = userAddress2;
+        this.zzbOz = instrumentInfoArr;
     }
 
     public static Builder newBuilderFrom(MaskedWallet maskedWallet) {
@@ -91,52 +91,52 @@ public final class MaskedWallet extends zza implements ReflectedParcelable {
         MaskedWallet maskedWallet2 = new MaskedWallet();
         maskedWallet2.getClass();
         Builder email = new Builder().setGoogleTransactionId(maskedWallet.getGoogleTransactionId()).setMerchantTransactionId(maskedWallet.getMerchantTransactionId()).setPaymentDescriptions(maskedWallet.getPaymentDescriptions()).setInstrumentInfos(maskedWallet.getInstrumentInfos()).setEmail(maskedWallet.getEmail());
-        email.zzbPo.zzbPm = maskedWallet.zzbPm;
-        email.zzbPo.zzbPn = maskedWallet.zzbPn;
+        email.zzbPq.zzbPo = maskedWallet.zzbPo;
+        email.zzbPq.zzbPp = maskedWallet.zzbPp;
         return email.setBuyerBillingAddress(maskedWallet.getBuyerBillingAddress()).setBuyerShippingAddress(maskedWallet.getBuyerShippingAddress());
     }
 
     public final UserAddress getBuyerBillingAddress() {
-        return this.zzbOv;
-    }
-
-    public final UserAddress getBuyerShippingAddress() {
-        return this.zzbOw;
-    }
-
-    public final String getEmail() {
-        return this.zzbOr;
-    }
-
-    public final String getGoogleTransactionId() {
-        return this.zzbOo;
-    }
-
-    public final InstrumentInfo[] getInstrumentInfos() {
         return this.zzbOx;
     }
 
+    public final UserAddress getBuyerShippingAddress() {
+        return this.zzbOy;
+    }
+
+    public final String getEmail() {
+        return this.zzbOt;
+    }
+
+    public final String getGoogleTransactionId() {
+        return this.zzbOq;
+    }
+
+    public final InstrumentInfo[] getInstrumentInfos() {
+        return this.zzbOz;
+    }
+
     public final String getMerchantTransactionId() {
-        return this.zzbOp;
+        return this.zzbOr;
     }
 
     public final String[] getPaymentDescriptions() {
-        return this.zzbOu;
+        return this.zzbOw;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
         int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.zzbOo, false);
-        zzd.zza(parcel, 3, this.zzbOp, false);
-        zzd.zza(parcel, 4, this.zzbOu, false);
-        zzd.zza(parcel, 5, this.zzbOr, false);
-        zzd.zza(parcel, 6, this.zzbOs, i, false);
-        zzd.zza(parcel, 7, this.zzbOt, i, false);
-        zzd.zza(parcel, 8, this.zzbPm, i, false);
-        zzd.zza(parcel, 9, this.zzbPn, i, false);
-        zzd.zza(parcel, 10, this.zzbOv, i, false);
-        zzd.zza(parcel, 11, this.zzbOw, i, false);
-        zzd.zza(parcel, 12, this.zzbOx, i, false);
+        zzd.zza(parcel, 2, this.zzbOq, false);
+        zzd.zza(parcel, 3, this.zzbOr, false);
+        zzd.zza(parcel, 4, this.zzbOw, false);
+        zzd.zza(parcel, 5, this.zzbOt, false);
+        zzd.zza(parcel, 6, this.zzbOu, i, false);
+        zzd.zza(parcel, 7, this.zzbOv, i, false);
+        zzd.zza(parcel, 8, this.zzbPo, i, false);
+        zzd.zza(parcel, 9, this.zzbPp, i, false);
+        zzd.zza(parcel, 10, this.zzbOx, i, false);
+        zzd.zza(parcel, 11, this.zzbOy, i, false);
+        zzd.zza(parcel, 12, this.zzbOz, i, false);
         zzd.zzI(parcel, zze);
     }
 }

@@ -1,10 +1,10 @@
 package com.google.android.gms.common.api;
 
-import com.google.android.gms.internal.zzbbd;
+import com.google.android.gms.internal.zzbbe;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Batch extends zzbbd<BatchResult> {
+public final class Batch extends zzbbe<BatchResult> {
     private final Object mLock;
     private int zzaAC;
     private boolean zzaAD;

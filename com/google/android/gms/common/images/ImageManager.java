@@ -16,7 +16,7 @@ import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.widget.ImageView;
 import com.google.android.gms.common.annotation.KeepName;
-import com.google.android.gms.internal.zzbfl;
+import com.google.android.gms.internal.zzbfm;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,7 +33,7 @@ public final class ImageManager {
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final ExecutorService zzaFU = Executors.newFixedThreadPool(4);
     private final zza zzaFV = null;
-    private final zzbfl zzaFW = new zzbfl();
+    private final zzbfm zzaFW = new zzbfm();
     private final Map<zza, ImageReceiver> zzaFX = new HashMap();
     private final Map<Uri, ImageReceiver> zzaFY = new HashMap();
     private final Map<Uri, Long> zzaFZ = new HashMap();
@@ -181,14 +181,14 @@ public final class ImageManager {
         private final Uri mUri;
         private /* synthetic */ ImageManager zzaGb;
         private boolean zzaGe;
-        private final CountDownLatch zztL;
+        private final CountDownLatch zztJ;
 
         public zzd(ImageManager imageManager, Uri uri, Bitmap bitmap, boolean z, CountDownLatch countDownLatch) {
             this.zzaGb = imageManager;
             this.mUri = uri;
             this.mBitmap = bitmap;
             this.zzaGe = z;
-            this.zztL = countDownLatch;
+            this.zztJ = countDownLatch;
         }
 
         public final void run() {
@@ -222,7 +222,7 @@ public final class ImageManager {
                     }
                 }
             }
-            this.zztL.countDown();
+            this.zztJ.countDown();
             synchronized (ImageManager.zzaFR) {
                 ImageManager.zzaFS.remove(this.mUri);
             }

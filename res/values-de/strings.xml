@@ -172,11 +172,13 @@
     <string name="AttachMediaRestrictedForever">Die Admins dieser Gruppe haben dir die Berechtigung entzogen, Medien zu senden</string>
     <string name="AttachMusic">Musik</string>
     <string name="AttachPhoto">Bild</string>
+    <string name="AttachPhotoExpired">Bild ist abgelaufen</string>
     <string name="AttachRound">Videonachricht</string>
     <string name="AttachSticker">Sticker</string>
     <string name="AttachStickersRestricted">Die Admins dieser Gruppe haben dir die Berechtigung entzogen, Sticker bis %1$s zu senden</string>
     <string name="AttachStickersRestrictedForever">Die Admins dieser Gruppe haben dir die Berechtigung entzogen, Sticker zu senden</string>
     <string name="AttachVideo">Video</string>
+    <string name="AttachVideoExpired">Video ist abgelaufen</string>
     <string name="AudioAutodownload">Sprachnachrichten</string>
     <string name="AudioTitle">Geteilte Musik</string>
     <string name="AudioUnknownArtist">Unbekannter Künstler</string>
@@ -490,6 +492,8 @@
     <string name="DirectShare">Direktes Teilen</string>
     <string name="DirectShareInfo">Letzte Chats im Teilen-Menü anzeigen</string>
     <string name="Disabled">Deaktiviert</string>
+    <string name="DisappearingPhoto">Geheimes Bild</string>
+    <string name="DisappearingVideo">Geheimes Video</string>
     <string name="DiscardChanges">Änderungen verwerfen?</string>
     <string name="DiscardVideoMessageDescription">Möchtest du die Aufnahme beenden und wirklich die Videonachricht dadurch verwerfen?</string>
     <string name="DiscardVideoMessageTitle">Videonachricht verwerfen</string>
@@ -907,7 +911,9 @@
     <string name="MessageLifetime">Selbstzerstörungs-Timer</string>
     <string name="MessageLifetimeChanged">%1$s hat den Selbstzerstörungs-Timer auf %2$s gesetzt</string>
     <string name="MessageLifetimeChangedOutgoing">Du hast den Selbstzerstörungs-Timer auf %1$s gesetzt</string>
+    <string name="MessageLifetimePhoto">Bild wird nach Ablauf der Zeit selbst zerstört.</string>
     <string name="MessageLifetimeRemoved">%1$s hat den Selbstzerstörungs-Timer deaktiviert</string>
+    <string name="MessageLifetimeVideo">Video wird nach Ablauf der Zeit selbst zerstört.</string>
     <string name="MessageLifetimeYouRemoved">Du hast den Selbstzerstörungs-Timer deaktiviert</string>
     <string name="MessageNotifications">Nachrichten</string>
     <string name="MessagePreview">Vorschau</string>
@@ -1072,6 +1078,8 @@
     <string name="NotificationMessageNoText">%1$s hat dir eine Nachricht gesendet</string>
     <string name="NotificationMessagePhoto">%1$s hat dir ein Bild gesendet</string>
     <string name="NotificationMessageRound">%1$s hat dir eine Videonachricht gesendet</string>
+    <string name="NotificationMessageSDPhoto">%1$s hat dir ein selbstzerstörendes Bild gesendet</string>
+    <string name="NotificationMessageSDVideo">%1$s hat dir ein selbstzerstörendes Video gesendet</string>
     <string name="NotificationMessageSticker">%1$s hat dir einen Sticker gesendet</string>
     <string name="NotificationMessageStickerEmoji">%1$s hat dir einen %2$s Sticker gesendet</string>
     <string name="NotificationMessageText">%1$s: %2$s</string>
@@ -1135,8 +1143,6 @@
     <string name="Page5Title">Leistungsstark</string>
     <string name="Page6Message">&lt;b&gt;Telegram&lt;/b&gt; kannst du vom Handy\nTablet oder auch Computer\nsynchronisiert benutzen.</string>
     <string name="Page6Title">Cloud-Basiert</string>
-    <string name="Page7Message">&lt;b&gt;Telegram&lt;/b&gt;-Nachrichten sind stark verschlüsselt\nund können sich selbst zerstören.</string>
-    <string name="Page7Title">Vertraulich</string>
     <string name="PaintDelete">Löschen</string>
     <string name="PaintDraw">Zeichnen</string>
     <string name="PaintDuplicate">Klonen</string>
@@ -1532,6 +1538,9 @@
     <string name="UseProxySettings">Proxy-Einstellungen benutzen</string>
     <string name="UseProxyUsername">Benutzername</string>
     <string name="UserAlreadyInGroup">Nutzer befindet sich schon in der Gruppe</string>
+    <string name="UserBio">Bio</string>
+    <string name="UserBioEmpty">Keine</string>
+    <string name="UserBioInfo">Hier kannst du etwas über dich schreiben. Jeder der dein Profil öffnet, kann diesen Text lesen.</string>
     <string name="UserRestricted">Du kannst diese Aktion nicht durchführen.</string>
     <string name="UserRestrictions">Nutzerbeschränkungen</string>
     <string name="UserRestrictionsBlock">Sperren und aus der Gruppe entfernen</string>

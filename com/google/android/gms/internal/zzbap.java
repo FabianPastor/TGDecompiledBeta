@@ -1,39 +1,32 @@
 package com.google.android.gms.internal;
 
-import android.os.DeadObjectException;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import com.google.android.gms.common.api.Api.zzb;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.TaskCompletionSource;
 
-public final class zzbap<TResult> extends zzbal {
-    private final zzbep<zzb, TResult> zzaBw;
-    private final zzbel zzaBx;
-    private final TaskCompletionSource<TResult> zzalE;
+public final class zzbap extends zzban {
+    private zzbee<zzb, ?> zzaBu;
+    private zzbey<zzb, ?> zzaBv;
 
-    public zzbap(int i, zzbep<zzb, TResult> com_google_android_gms_internal_zzbep_com_google_android_gms_common_api_Api_zzb__TResult, TaskCompletionSource<TResult> taskCompletionSource, zzbel com_google_android_gms_internal_zzbel) {
-        super(i);
-        this.zzalE = taskCompletionSource;
-        this.zzaBw = com_google_android_gms_internal_zzbep_com_google_android_gms_common_api_Api_zzb__TResult;
-        this.zzaBx = com_google_android_gms_internal_zzbel;
+    public zzbap(zzbef com_google_android_gms_internal_zzbef, TaskCompletionSource<Void> taskCompletionSource) {
+        super(3, taskCompletionSource);
+        this.zzaBu = com_google_android_gms_internal_zzbef.zzaBu;
+        this.zzaBv = com_google_android_gms_internal_zzbef.zzaBv;
     }
 
-    public final void zza(@NonNull zzbbs com_google_android_gms_internal_zzbbs, boolean z) {
-        com_google_android_gms_internal_zzbbs.zza(this.zzalE, z);
+    public final /* bridge */ /* synthetic */ void zza(@NonNull zzbbt com_google_android_gms_internal_zzbbt, boolean z) {
     }
 
-    public final void zza(zzbdc<?> com_google_android_gms_internal_zzbdc_) throws DeadObjectException {
-        try {
-            this.zzaBw.zza(com_google_android_gms_internal_zzbdc_.zzpJ(), this.zzalE);
-        } catch (DeadObjectException e) {
-            throw e;
-        } catch (RemoteException e2) {
-            zzp(zzbal.zza(e2));
+    public final void zzb(zzbdd<?> com_google_android_gms_internal_zzbdd_) throws RemoteException {
+        this.zzaBu.zzb(com_google_android_gms_internal_zzbdd_.zzpJ(), this.zzalE);
+        if (this.zzaBu.zzqG() != null) {
+            com_google_android_gms_internal_zzbdd_.zzqs().put(this.zzaBu.zzqG(), new zzbef(this.zzaBu, this.zzaBv));
         }
     }
 
-    public final void zzp(@NonNull Status status) {
-        this.zzalE.trySetException(this.zzaBx.zzq(status));
+    public final /* bridge */ /* synthetic */ void zzp(@NonNull Status status) {
+        super.zzp(status);
     }
 }

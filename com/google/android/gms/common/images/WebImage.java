@@ -15,14 +15,14 @@ public final class WebImage extends zza {
     public static final Creator<WebImage> CREATOR = new zze();
     private int zzaku;
     private final Uri zzauQ;
-    private final int zzrY;
-    private final int zzrZ;
+    private final int zzrW;
+    private final int zzrX;
 
     WebImage(int i, Uri uri, int i2, int i3) {
         this.zzaku = i;
         this.zzauQ = uri;
-        this.zzrY = i2;
-        this.zzrZ = i3;
+        this.zzrW = i2;
+        this.zzrX = i3;
     }
 
     public WebImage(Uri uri) throws IllegalArgumentException {
@@ -61,11 +61,11 @@ public final class WebImage extends zza {
             return false;
         }
         WebImage webImage = (WebImage) obj;
-        return zzbe.equal(this.zzauQ, webImage.zzauQ) && this.zzrY == webImage.zzrY && this.zzrZ == webImage.zzrZ;
+        return zzbe.equal(this.zzauQ, webImage.zzauQ) && this.zzrW == webImage.zzrW && this.zzrX == webImage.zzrX;
     }
 
     public final int getHeight() {
-        return this.zzrZ;
+        return this.zzrX;
     }
 
     public final Uri getUrl() {
@@ -73,26 +73,26 @@ public final class WebImage extends zza {
     }
 
     public final int getWidth() {
-        return this.zzrY;
+        return this.zzrW;
     }
 
     public final int hashCode() {
-        return Arrays.hashCode(new Object[]{this.zzauQ, Integer.valueOf(this.zzrY), Integer.valueOf(this.zzrZ)});
+        return Arrays.hashCode(new Object[]{this.zzauQ, Integer.valueOf(this.zzrW), Integer.valueOf(this.zzrX)});
     }
 
     public final JSONObject toJson() {
         JSONObject jSONObject = new JSONObject();
         try {
             jSONObject.put("url", this.zzauQ.toString());
-            jSONObject.put("width", this.zzrY);
-            jSONObject.put("height", this.zzrZ);
+            jSONObject.put("width", this.zzrW);
+            jSONObject.put("height", this.zzrX);
         } catch (JSONException e) {
         }
         return jSONObject;
     }
 
     public final String toString() {
-        return String.format(Locale.US, "Image %dx%d %s", new Object[]{Integer.valueOf(this.zzrY), Integer.valueOf(this.zzrZ), this.zzauQ.toString()});
+        return String.format(Locale.US, "Image %dx%d %s", new Object[]{Integer.valueOf(this.zzrW), Integer.valueOf(this.zzrX), this.zzauQ.toString()});
     }
 
     public final void writeToParcel(Parcel parcel, int i) {

@@ -8,15 +8,12 @@ import com.google.android.gms.wallet.IsReadyToPayRequest;
 import com.google.android.gms.wallet.Wallet.zza;
 
 final class gs extends zza<BooleanResult> {
-    private /* synthetic */ IsReadyToPayRequest zzbQC;
-
-    gs(gk gkVar, GoogleApiClient googleApiClient, IsReadyToPayRequest isReadyToPayRequest) {
-        this.zzbQC = isReadyToPayRequest;
+    gs(gl glVar, GoogleApiClient googleApiClient) {
         super(googleApiClient);
     }
 
-    protected final void zza(gt gtVar) {
-        gtVar.zza(this.zzbQC, (zzbay) this);
+    protected final void zza(gu guVar) {
+        guVar.zza(IsReadyToPayRequest.newBuilder().build(), (zzbaz) this);
     }
 
     protected final /* synthetic */ Result zzb(Status status) {

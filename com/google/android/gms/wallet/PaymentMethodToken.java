@@ -7,29 +7,29 @@ import com.google.android.gms.common.internal.safeparcel.zzd;
 
 public final class PaymentMethodToken extends zza {
     public static final Creator<PaymentMethodToken> CREATOR = new zzw();
-    private int zzbPG;
-    private String zzbPH;
+    private int zzbPI;
+    private String zzbPJ;
 
     private PaymentMethodToken() {
     }
 
     PaymentMethodToken(int i, String str) {
-        this.zzbPG = i;
-        this.zzbPH = str;
+        this.zzbPI = i;
+        this.zzbPJ = str;
     }
 
     public final int getPaymentMethodTokenizationType() {
-        return this.zzbPG;
+        return this.zzbPI;
     }
 
     public final String getToken() {
-        return this.zzbPH;
+        return this.zzbPJ;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
         int zze = zzd.zze(parcel);
-        zzd.zzc(parcel, 2, this.zzbPG);
-        zzd.zza(parcel, 3, this.zzbPH, false);
+        zzd.zzc(parcel, 2, this.zzbPI);
+        zzd.zza(parcel, 3, this.zzbPJ, false);
         zzd.zzI(parcel, zze);
     }
 }

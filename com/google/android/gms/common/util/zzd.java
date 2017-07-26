@@ -5,7 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import com.google.android.gms.internal.zzbgz;
+import com.google.android.gms.internal.zzbha;
 
 public final class zzd {
     public static int zzA(Context context, String str) {
@@ -20,7 +20,7 @@ public final class zzd {
     @Nullable
     private static PackageInfo zzB(Context context, String str) {
         try {
-            return zzbgz.zzaP(context).getPackageInfo(str, 128);
+            return zzbha.zzaP(context).getPackageInfo(str, 128);
         } catch (NameNotFoundException e) {
             return null;
         }
@@ -29,7 +29,7 @@ public final class zzd {
     public static boolean zzC(Context context, String str) {
         "com.google.android.gms".equals(str);
         try {
-            return (zzbgz.zzaP(context).getApplicationInfo(str, 0).flags & 2097152) != 0;
+            return (zzbha.zzaP(context).getApplicationInfo(str, 0).flags & 2097152) != 0;
         } catch (NameNotFoundException e) {
             return false;
         }

@@ -1,18 +1,25 @@
 package com.google.android.gms.internal;
 
-import android.support.annotation.NonNull;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.Status;
+import android.os.Bundle;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import java.util.concurrent.atomic.AtomicReference;
 
-final class zzbcr implements OnConnectionFailedListener {
-    private /* synthetic */ zzbem zzaDP;
+final class zzbcr implements ConnectionCallbacks {
+    private /* synthetic */ zzbcp zzaDN;
+    private /* synthetic */ AtomicReference zzaDO;
+    private /* synthetic */ zzben zzaDP;
 
-    zzbcr(zzbco com_google_android_gms_internal_zzbco, zzbem com_google_android_gms_internal_zzbem) {
-        this.zzaDP = com_google_android_gms_internal_zzbem;
+    zzbcr(zzbcp com_google_android_gms_internal_zzbcp, AtomicReference atomicReference, zzben com_google_android_gms_internal_zzben) {
+        this.zzaDN = com_google_android_gms_internal_zzbcp;
+        this.zzaDO = atomicReference;
+        this.zzaDP = com_google_android_gms_internal_zzben;
     }
 
-    public final void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        this.zzaDP.setResult(new Status(8));
+    public final void onConnected(Bundle bundle) {
+        this.zzaDN.zza((GoogleApiClient) this.zzaDO.get(), this.zzaDP, true);
+    }
+
+    public final void onConnectionSuspended(int i) {
     }
 }

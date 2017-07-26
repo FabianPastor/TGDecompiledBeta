@@ -6,7 +6,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.WorkSource;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import com.google.android.gms.internal.zzbgz;
+import com.google.android.gms.internal.zzbha;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +28,7 @@ public final class zzx {
             return null;
         }
         try {
-            ApplicationInfo applicationInfo = zzbgz.zzaP(context).getApplicationInfo(str, 0);
+            ApplicationInfo applicationInfo = zzbha.zzaP(context).getApplicationInfo(str, 0);
             if (applicationInfo != null) {
                 return zze(applicationInfo.uid, str);
             }
@@ -70,7 +70,7 @@ public final class zzx {
     }
 
     public static boolean zzaM(Context context) {
-        return (context == null || context.getPackageManager() == null || zzbgz.zzaP(context).checkPermission("android.permission.UPDATE_DEVICE_STATS", context.getPackageName()) != 0) ? false : true;
+        return (context == null || context.getPackageManager() == null || zzbha.zzaP(context).checkPermission("android.permission.UPDATE_DEVICE_STATS", context.getPackageName()) != 0) ? false : true;
     }
 
     public static List<String> zzb(@Nullable WorkSource workSource) {

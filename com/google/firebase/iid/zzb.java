@@ -14,18 +14,18 @@ public abstract class zzb extends Service {
     private final Object mLock = new Object();
     @VisibleForTesting
     final ExecutorService zzbrV = Executors.newSingleThreadExecutor();
-    private Binder zzcjZ;
-    private int zzcka;
-    private int zzckb = 0;
+    private Binder zzckd;
+    private int zzcke;
+    private int zzckf = 0;
 
     private final void zzm(Intent intent) {
         if (intent != null) {
             WakefulBroadcastReceiver.completeWakefulIntent(intent);
         }
         synchronized (this.mLock) {
-            this.zzckb--;
-            if (this.zzckb == 0) {
-                stopSelfResult(this.zzcka);
+            this.zzckf--;
+            if (this.zzckf == 0) {
+                stopSelfResult(this.zzcke);
             }
         }
     }
@@ -36,16 +36,16 @@ public abstract class zzb extends Service {
         if (Log.isLoggable("EnhancedIntentService", 3)) {
             Log.d("EnhancedIntentService", "Service received bind request");
         }
-        if (this.zzcjZ == null) {
-            this.zzcjZ = new zzf(this);
+        if (this.zzckd == null) {
+            this.zzckd = new zzf(this);
         }
-        return this.zzcjZ;
+        return this.zzckd;
     }
 
     public final int onStartCommand(Intent intent, int i, int i2) {
         synchronized (this.mLock) {
-            this.zzcka = i2;
-            this.zzckb++;
+            this.zzcke = i2;
+            this.zzckf++;
         }
         Intent zzn = zzn(intent);
         if (zzn == null) {

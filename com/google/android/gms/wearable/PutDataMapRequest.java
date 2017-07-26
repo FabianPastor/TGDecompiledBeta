@@ -2,18 +2,18 @@ package com.google.android.gms.wearable;
 
 import android.net.Uri;
 import android.util.Log;
-import com.google.android.gms.internal.adg;
-import com.google.android.gms.internal.hb;
+import com.google.android.gms.internal.adp;
 import com.google.android.gms.internal.hc;
+import com.google.android.gms.internal.hd;
 
 public class PutDataMapRequest {
-    private final DataMap zzbRd = new DataMap();
-    private final PutDataRequest zzbRe;
+    private final DataMap zzbRf = new DataMap();
+    private final PutDataRequest zzbRg;
 
     private PutDataMapRequest(PutDataRequest putDataRequest, DataMap dataMap) {
-        this.zzbRe = putDataRequest;
+        this.zzbRg = putDataRequest;
         if (dataMap != null) {
-            this.zzbRd.putAll(dataMap);
+            this.zzbRf.putAll(dataMap);
         }
     }
 
@@ -30,13 +30,13 @@ public class PutDataMapRequest {
     }
 
     public PutDataRequest asPutDataRequest() {
-        hc zza = hb.zza(this.zzbRd);
-        this.zzbRe.setData(adg.zzc(zza.zzbTD));
-        int size = zza.zzbTE.size();
+        hd zza = hc.zza(this.zzbRf);
+        this.zzbRg.setData(adp.zzc(zza.zzbTF));
+        int size = zza.zzbTG.size();
         int i = 0;
         while (i < size) {
             String num = Integer.toString(i);
-            Asset asset = (Asset) zza.zzbTE.get(i);
+            Asset asset = (Asset) zza.zzbTG.get(i);
             String valueOf;
             if (num == null) {
                 valueOf = String.valueOf(asset);
@@ -51,27 +51,27 @@ public class PutDataMapRequest {
                     String valueOf2 = String.valueOf(asset);
                     Log.d(str2, new StringBuilder((String.valueOf(num).length() + 33) + String.valueOf(valueOf2).length()).append("asPutDataRequest: adding asset: ").append(num).append(" ").append(valueOf2).toString());
                 }
-                this.zzbRe.putAsset(num, asset);
+                this.zzbRg.putAsset(num, asset);
                 i++;
             }
         }
-        return this.zzbRe;
+        return this.zzbRg;
     }
 
     public DataMap getDataMap() {
-        return this.zzbRd;
+        return this.zzbRf;
     }
 
     public Uri getUri() {
-        return this.zzbRe.getUri();
+        return this.zzbRg.getUri();
     }
 
     public boolean isUrgent() {
-        return this.zzbRe.isUrgent();
+        return this.zzbRg.isUrgent();
     }
 
     public PutDataMapRequest setUrgent() {
-        this.zzbRe.setUrgent();
+        this.zzbRg.setUrgent();
         return this;
     }
 }

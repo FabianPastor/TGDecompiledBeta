@@ -244,6 +244,15 @@ public class NumberPicker extends LinearLayout {
         throw new IllegalArgumentException("minHeight > maxHeight");
     }
 
+    public void setTextColor(int color) {
+        this.mInputText.setTextColor(color);
+        this.mSelectorWheelPaint.setColor(color);
+    }
+
+    public void setSelectorColor(int color) {
+        this.mSelectionDivider.setColor(color);
+    }
+
     public NumberPicker(Context context) {
         super(context);
         this.mLongPressUpdateInterval = DEFAULT_LONG_PRESS_UPDATE_INTERVAL;

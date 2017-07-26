@@ -6,13 +6,13 @@ import com.google.android.gms.common.api.Api.zzf;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.internal.zzbax;
-import com.google.android.gms.internal.zzcbd;
+import com.google.android.gms.internal.zzbay;
+import com.google.android.gms.internal.zzcbe;
 
 public final class Address {
     public static final Api<AddressOptions> API = new Api("Address.API", zzajS, zzajR);
-    private static zzf<zzcbd> zzajR = new zzf();
-    private static final com.google.android.gms.common.api.Api.zza<zzcbd, AddressOptions> zzajS = new zza();
+    private static zzf<zzcbe> zzajR = new zzf();
+    private static final com.google.android.gms.common.api.Api.zza<zzcbe, AddressOptions> zzajS = new zza();
 
     public static final class AddressOptions implements HasOptions {
         public final int theme;
@@ -26,7 +26,7 @@ public final class Address {
         }
     }
 
-    static abstract class zza extends zzbax<Status, zzcbd> {
+    static abstract class zza extends zzbay<Status, zzcbe> {
         public zza(GoogleApiClient googleApiClient) {
             super(Address.API, googleApiClient);
         }

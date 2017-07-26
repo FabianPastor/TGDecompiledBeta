@@ -1,25 +1,20 @@
 package com.google.android.gms.internal;
 
 import android.os.Bundle;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import java.util.concurrent.atomic.AtomicReference;
+import com.google.android.gms.common.internal.zzad;
 
-final class zzbcq implements ConnectionCallbacks {
-    private /* synthetic */ zzbco zzaDN;
-    private /* synthetic */ AtomicReference zzaDO;
-    private /* synthetic */ zzbem zzaDP;
+final class zzbcq implements zzad {
+    private /* synthetic */ zzbcp zzaDN;
 
-    zzbcq(zzbco com_google_android_gms_internal_zzbco, AtomicReference atomicReference, zzbem com_google_android_gms_internal_zzbem) {
-        this.zzaDN = com_google_android_gms_internal_zzbco;
-        this.zzaDO = atomicReference;
-        this.zzaDP = com_google_android_gms_internal_zzbem;
+    zzbcq(zzbcp com_google_android_gms_internal_zzbcp) {
+        this.zzaDN = com_google_android_gms_internal_zzbcp;
     }
 
-    public final void onConnected(Bundle bundle) {
-        this.zzaDN.zza((GoogleApiClient) this.zzaDO.get(), this.zzaDP, true);
+    public final boolean isConnected() {
+        return this.zzaDN.isConnected();
     }
 
-    public final void onConnectionSuspended(int i) {
+    public final Bundle zzoC() {
+        return null;
     }
 }

@@ -1,41 +1,50 @@
 package com.google.android.gms.internal;
 
-import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.Api.ApiOptions;
-import com.google.android.gms.common.api.Api.zza;
-import com.google.android.gms.common.api.Api.zze;
-import com.google.android.gms.common.api.GoogleApi;
-import com.google.android.gms.common.internal.zzq;
+import android.support.annotation.Nullable;
+import com.google.android.gms.common.ConnectionResult;
 
-public final class zzbbn<O extends ApiOptions> extends GoogleApi<O> {
-    private final zza<? extends zzctj, zzctk> zzaBe;
-    private final zzq zzaCA;
-    private final zze zzaCy;
-    private final zzbbh zzaCz;
+final class zzbbn implements zzbdq {
+    private /* synthetic */ zzbbk zzaCx;
 
-    public zzbbn(@NonNull Context context, Api<O> api, Looper looper, @NonNull zze com_google_android_gms_common_api_Api_zze, @NonNull zzbbh com_google_android_gms_internal_zzbbh, zzq com_google_android_gms_common_internal_zzq, zza<? extends zzctj, zzctk> com_google_android_gms_common_api_Api_zza__extends_com_google_android_gms_internal_zzctj__com_google_android_gms_internal_zzctk) {
-        super(context, api, looper);
-        this.zzaCy = com_google_android_gms_common_api_Api_zze;
-        this.zzaCz = com_google_android_gms_internal_zzbbh;
-        this.zzaCA = com_google_android_gms_common_internal_zzq;
-        this.zzaBe = com_google_android_gms_common_api_Api_zza__extends_com_google_android_gms_internal_zzctj__com_google_android_gms_internal_zzctk;
-        this.zzaAN.zzb((GoogleApi) this);
+    private zzbbn(zzbbk com_google_android_gms_internal_zzbbk) {
+        this.zzaCx = com_google_android_gms_internal_zzbbk;
     }
 
-    public final zze zza(Looper looper, zzbdc<O> com_google_android_gms_internal_zzbdc_O) {
-        this.zzaCz.zza(com_google_android_gms_internal_zzbdc_O);
-        return this.zzaCy;
+    public final void zzc(@NonNull ConnectionResult connectionResult) {
+        this.zzaCx.zzaCv.lock();
+        try {
+            this.zzaCx.zzaCt = connectionResult;
+            this.zzaCx.zzpF();
+        } finally {
+            this.zzaCx.zzaCv.unlock();
+        }
     }
 
-    public final zzbei zza(Context context, Handler handler) {
-        return new zzbei(context, handler, this.zzaCA, this.zzaBe);
+    public final void zze(int i, boolean z) {
+        this.zzaCx.zzaCv.lock();
+        try {
+            if (this.zzaCx.zzaCu) {
+                this.zzaCx.zzaCu = false;
+                this.zzaCx.zzd(i, z);
+                return;
+            }
+            this.zzaCx.zzaCu = true;
+            this.zzaCx.zzaCm.onConnectionSuspended(i);
+            this.zzaCx.zzaCv.unlock();
+        } finally {
+            this.zzaCx.zzaCv.unlock();
+        }
     }
 
-    public final zze zzpJ() {
-        return this.zzaCy;
+    public final void zzm(@Nullable Bundle bundle) {
+        this.zzaCx.zzaCv.lock();
+        try {
+            this.zzaCx.zzaCt = ConnectionResult.zzazX;
+            this.zzaCx.zzpF();
+        } finally {
+            this.zzaCx.zzaCv.unlock();
+        }
     }
 }

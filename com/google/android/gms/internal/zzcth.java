@@ -8,11 +8,12 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.internal.zzq;
 
-final class zzcth extends zza<zzctt, zzcti> {
+final class zzcth extends zza<zzctu, zzctl> {
     zzcth() {
     }
 
     public final /* synthetic */ zze zza(Context context, Looper looper, zzq com_google_android_gms_common_internal_zzq, Object obj, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
-        return new zzctt(context, looper, false, com_google_android_gms_common_internal_zzq, ((zzcti) obj).zzAp(), connectionCallbacks, onConnectionFailedListener);
+        zzctl com_google_android_gms_internal_zzctl = (zzctl) obj;
+        return new zzctu(context, looper, true, com_google_android_gms_common_internal_zzq, com_google_android_gms_internal_zzctl == null ? zzctl.zzbCM : com_google_android_gms_internal_zzctl, connectionCallbacks, onConnectionFailedListener);
     }
 }

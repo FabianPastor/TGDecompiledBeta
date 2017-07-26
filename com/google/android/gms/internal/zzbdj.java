@@ -1,38 +1,40 @@
 package com.google.android.gms.internal;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
+import android.os.Looper;
+import android.support.annotation.NonNull;
+import com.google.android.gms.common.api.Api.ApiOptions;
+import com.google.android.gms.common.api.Api.zzb;
+import com.google.android.gms.common.api.GoogleApi;
+import com.google.android.gms.common.api.Result;
 
-public final class zzbdj extends BroadcastReceiver {
-    private Context mContext;
-    private final zzbdk zzaEA;
+public final class zzbdj<O extends ApiOptions> extends zzbbz {
+    private final GoogleApi<O> zzaEz;
 
-    public zzbdj(zzbdk com_google_android_gms_internal_zzbdk) {
-        this.zzaEA = com_google_android_gms_internal_zzbdk;
+    public zzbdj(GoogleApi<O> googleApi) {
+        super("Method is not supported by connectionless client. APIs supporting connectionless client must not call this method.");
+        this.zzaEz = googleApi;
     }
 
-    public final void onReceive(Context context, Intent intent) {
-        Uri data = intent.getData();
-        Object obj = null;
-        if (data != null) {
-            obj = data.getSchemeSpecificPart();
-        }
-        if ("com.google.android.gms".equals(obj)) {
-            this.zzaEA.zzpA();
-            unregister();
-        }
+    public final Context getContext() {
+        return this.zzaEz.getApplicationContext();
     }
 
-    public final void setContext(Context context) {
-        this.mContext = context;
+    public final Looper getLooper() {
+        return this.zzaEz.getLooper();
     }
 
-    public final synchronized void unregister() {
-        if (this.mContext != null) {
-            this.mContext.unregisterReceiver(this);
-        }
-        this.mContext = null;
+    public final void zza(zzbes com_google_android_gms_internal_zzbes) {
+    }
+
+    public final void zzb(zzbes com_google_android_gms_internal_zzbes) {
+    }
+
+    public final <A extends zzb, R extends Result, T extends zzbay<R, A>> T zzd(@NonNull T t) {
+        return this.zzaEz.zza((zzbay) t);
+    }
+
+    public final <A extends zzb, T extends zzbay<? extends Result, A>> T zze(@NonNull T t) {
+        return this.zzaEz.zzb((zzbay) t);
     }
 }

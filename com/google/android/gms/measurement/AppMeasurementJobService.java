@@ -6,16 +6,16 @@ import android.app.job.JobService;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.MainThread;
-import com.google.android.gms.internal.zzciv;
-import com.google.android.gms.internal.zzciy;
+import com.google.android.gms.internal.zzciw;
+import com.google.android.gms.internal.zzciz;
 
 @TargetApi(24)
-public final class AppMeasurementJobService extends JobService implements zzciy {
-    private zzciv zzbop;
+public final class AppMeasurementJobService extends JobService implements zzciz {
+    private zzciw zzbop;
 
-    private final zzciv zzwm() {
+    private final zzciw zzwm() {
         if (this.zzbop == null) {
-            this.zzbop = new zzciv(this);
+            this.zzbop = new zzciw(this);
         }
         return this.zzbop;
     }

@@ -10,24 +10,24 @@ import sun.misc.Unsafe;
 
 final class zze {
     private static final Logger logger = Logger.getLogger(zze.class.getName());
-    private static final Unsafe zzcrE = zzLt();
-    private static final Class<?> zzcrF = zzhP("libcore.io.Memory");
-    private static final boolean zzcrG = (zzhP("org.robolectric.Robolectric") != null);
-    private static final boolean zzcrH = zzg(Long.TYPE);
-    private static final boolean zzcrI = zzg(Integer.TYPE);
-    private static final zzd zzcrJ;
-    private static final boolean zzcrK = zzLw();
-    private static final boolean zzcrL = zzLv();
-    private static final long zzcrM;
-    private static final boolean zzcrN;
-    private static final boolean zzcrx = zzLu();
-    private static final long zzcry = ((long) (zzcrx ? zzcrJ.zzcrO.arrayBaseOffset(byte[].class) : -1));
+    private static final boolean zzcrB = zzLx();
+    private static final long zzcrC = ((long) (zzcrB ? zzcrN.zzcrS.arrayBaseOffset(byte[].class) : -1));
+    private static final Unsafe zzcrI = zzLw();
+    private static final Class<?> zzcrJ = zzhR("libcore.io.Memory");
+    private static final boolean zzcrK = (zzhR("org.robolectric.Robolectric") != null);
+    private static final boolean zzcrL = zzg(Long.TYPE);
+    private static final boolean zzcrM = zzg(Integer.TYPE);
+    private static final zzd zzcrN;
+    private static final boolean zzcrO = zzLz();
+    private static final boolean zzcrP = zzLy();
+    private static final long zzcrQ;
+    private static final boolean zzcrR;
 
     static abstract class zzd {
-        Unsafe zzcrO;
+        Unsafe zzcrS;
 
         zzd(Unsafe unsafe) {
-            this.zzcrO = unsafe;
+            this.zzcrS = unsafe;
         }
     }
 
@@ -54,32 +54,36 @@ final class zze {
     static {
         Field zza;
         boolean z = true;
-        zzd com_google_protobuf_zze_zzb = zzcrE == null ? null : zzLx() ? zzcrH ? new zzb(zzcrE) : zzcrI ? new zza(zzcrE) : null : new zzc(zzcrE);
-        zzcrJ = com_google_protobuf_zze_zzb;
-        if (zzLx()) {
+        zzd com_google_protobuf_zze_zzb = zzcrI == null ? null : zzLA() ? zzcrL ? new zzb(zzcrI) : zzcrM ? new zza(zzcrI) : null : new zzc(zzcrI);
+        zzcrN = com_google_protobuf_zze_zzb;
+        if (zzLA()) {
             zza = zza(Buffer.class, "effectiveDirectAddress");
         }
         zza = zza(Buffer.class, "address");
-        long objectFieldOffset = (zza == null || zzcrJ == null) ? -1 : zzcrJ.zzcrO.objectFieldOffset(zza);
-        zzcrM = objectFieldOffset;
+        long objectFieldOffset = (zza == null || zzcrN == null) ? -1 : zzcrN.zzcrS.objectFieldOffset(zza);
+        zzcrQ = objectFieldOffset;
         if (ByteOrder.nativeOrder() != ByteOrder.BIG_ENDIAN) {
             z = false;
         }
-        zzcrN = z;
+        zzcrR = z;
     }
 
     private zze() {
     }
 
-    static boolean zzLr() {
-        return zzcrx;
+    private static boolean zzLA() {
+        return (zzcrJ == null || zzcrK) ? false : true;
     }
 
-    static long zzLs() {
-        return zzcry;
+    static boolean zzLu() {
+        return zzcrB;
     }
 
-    private static Unsafe zzLt() {
+    static long zzLv() {
+        return zzcrC;
+    }
+
+    private static Unsafe zzLw() {
         try {
             return (Unsafe) AccessController.doPrivileged(new zzf());
         } catch (Throwable th) {
@@ -87,12 +91,12 @@ final class zze {
         }
     }
 
-    private static boolean zzLu() {
-        if (zzcrE == null) {
+    private static boolean zzLx() {
+        if (zzcrI == null) {
             return false;
         }
         try {
-            Class cls = zzcrE.getClass();
+            Class cls = zzcrI.getClass();
             cls.getMethod("objectFieldOffset", new Class[]{Field.class});
             cls.getMethod("arrayBaseOffset", new Class[]{Class.class});
             cls.getMethod("getInt", new Class[]{Object.class, Long.TYPE});
@@ -101,7 +105,7 @@ final class zze {
             cls.getMethod("putLong", new Class[]{Object.class, Long.TYPE, Long.TYPE});
             cls.getMethod("getObject", new Class[]{Object.class, Long.TYPE});
             cls.getMethod("putObject", new Class[]{Object.class, Long.TYPE, Object.class});
-            if (zzLx()) {
+            if (zzLA()) {
                 return true;
             }
             cls.getMethod("getByte", new Class[]{Object.class, Long.TYPE});
@@ -120,12 +124,12 @@ final class zze {
         }
     }
 
-    private static boolean zzLv() {
-        if (zzcrE == null) {
+    private static boolean zzLy() {
+        if (zzcrI == null) {
             return false;
         }
         try {
-            zzcrE.getClass().getMethod("copyMemory", new Class[]{Object.class, Long.TYPE, Object.class, Long.TYPE, Long.TYPE});
+            zzcrI.getClass().getMethod("copyMemory", new Class[]{Object.class, Long.TYPE, Object.class, Long.TYPE, Long.TYPE});
             return true;
         } catch (Throwable th) {
             logger.logp(Level.WARNING, "com.google.protobuf.UnsafeUtil", "supportsUnsafeCopyMemory", "copyMemory is missing from platform - proto runtime falling back to safer methods.");
@@ -133,15 +137,15 @@ final class zze {
         }
     }
 
-    private static boolean zzLw() {
-        if (zzcrE == null) {
+    private static boolean zzLz() {
+        if (zzcrI == null) {
             return false;
         }
         try {
-            Class cls = zzcrE.getClass();
+            Class cls = zzcrI.getClass();
             cls.getMethod("objectFieldOffset", new Class[]{Field.class});
             cls.getMethod("getLong", new Class[]{Object.class, Long.TYPE});
-            if (zzLx()) {
+            if (zzLA()) {
                 return true;
             }
             cls.getMethod("getByte", new Class[]{Long.TYPE});
@@ -159,10 +163,6 @@ final class zze {
         }
     }
 
-    private static boolean zzLx() {
-        return (zzcrF == null || zzcrG) ? false : true;
-    }
-
     private static Field zza(Class<?> cls, String str) {
         try {
             Field declaredField = cls.getDeclaredField(str);
@@ -174,11 +174,11 @@ final class zze {
     }
 
     private static boolean zzg(Class<?> cls) {
-        if (!zzLx()) {
+        if (!zzLA()) {
             return false;
         }
         try {
-            Class cls2 = zzcrF;
+            Class cls2 = zzcrJ;
             cls2.getMethod("peekLong", new Class[]{cls, Boolean.TYPE});
             cls2.getMethod("pokeLong", new Class[]{cls, Long.TYPE, Boolean.TYPE});
             cls2.getMethod("pokeInt", new Class[]{cls, Integer.TYPE, Boolean.TYPE});
@@ -193,7 +193,7 @@ final class zze {
         }
     }
 
-    private static <T> Class<T> zzhP(String str) {
+    private static <T> Class<T> zzhR(String str) {
         try {
             return Class.forName(str);
         } catch (Throwable th) {

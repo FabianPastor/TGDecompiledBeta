@@ -1,16 +1,20 @@
 package com.google.android.gms.internal;
 
-final class zzbck extends zzbcx {
-    private /* synthetic */ zzbcc zzaDw;
-    private /* synthetic */ zzctw zzaDx;
+import android.support.annotation.BinderThread;
+import java.lang.ref.WeakReference;
 
-    zzbck(zzbcj com_google_android_gms_internal_zzbcj, zzbcv com_google_android_gms_internal_zzbcv, zzbcc com_google_android_gms_internal_zzbcc, zzctw com_google_android_gms_internal_zzctw) {
-        this.zzaDw = com_google_android_gms_internal_zzbcc;
-        this.zzaDx = com_google_android_gms_internal_zzctw;
-        super(com_google_android_gms_internal_zzbcv);
+final class zzbck extends zzctp {
+    private final WeakReference<zzbcd> zzaDq;
+
+    zzbck(zzbcd com_google_android_gms_internal_zzbcd) {
+        this.zzaDq = new WeakReference(com_google_android_gms_internal_zzbcd);
     }
 
-    public final void zzpV() {
-        this.zzaDw.zza(this.zzaDx);
+    @BinderThread
+    public final void zzb(zzctx com_google_android_gms_internal_zzctx) {
+        zzbcd com_google_android_gms_internal_zzbcd = (zzbcd) this.zzaDq.get();
+        if (com_google_android_gms_internal_zzbcd != null) {
+            com_google_android_gms_internal_zzbcd.zzaCZ.zza(new zzbcl(this, com_google_android_gms_internal_zzbcd, com_google_android_gms_internal_zzbcd, com_google_android_gms_internal_zzctx));
+        }
     }
 }

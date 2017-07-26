@@ -3,20 +3,20 @@ package com.google.android.gms.wearable;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
-import com.google.android.gms.internal.adf;
-import com.google.android.gms.internal.hb;
+import com.google.android.gms.internal.ado;
 import com.google.android.gms.internal.hc;
 import com.google.android.gms.internal.hd;
+import com.google.android.gms.internal.he;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DataMapItem {
     private final Uri mUri;
-    private final DataMap zzbRd;
+    private final DataMap zzbRf;
 
     private DataMapItem(DataItem dataItem) {
         this.mUri = dataItem.getUri();
-        this.zzbRd = zza((DataItem) dataItem.freeze());
+        this.zzbRf = zza((DataItem) dataItem.freeze());
     }
 
     public static DataMapItem fromDataItem(DataItem dataItem) {
@@ -44,8 +44,8 @@ public class DataMapItem {
                     }
                     arrayList.add(Asset.createFromRef(dataItemAsset.getId()));
                 }
-                return hb.zza(new hc(hd.zzy(dataItem.getData()), arrayList));
-            } catch (adf e2) {
+                return hc.zza(new hd(he.zzy(dataItem.getData()), arrayList));
+            } catch (ado e2) {
                 e = e2;
             } catch (NullPointerException e3) {
                 e = e3;
@@ -59,7 +59,7 @@ public class DataMapItem {
     }
 
     public DataMap getDataMap() {
-        return this.zzbRd;
+        return this.zzbRf;
     }
 
     public Uri getUri() {

@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import com.google.android.gms.common.internal.zzai;
 import com.google.android.gms.common.util.zzj;
-import com.google.android.gms.internal.zzbgz;
+import com.google.android.gms.internal.zzbha;
 
 public class zze {
     public static final String GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms";
@@ -66,7 +66,7 @@ public class zze {
         stringBuilder.append("-");
         if (context != null) {
             try {
-                stringBuilder.append(zzbgz.zzaP(context).getPackageInfo(context.getPackageName(), 0).versionCode);
+                stringBuilder.append(zzbha.zzaP(context).getPackageInfo(context.getPackageName(), 0).versionCode);
             } catch (NameNotFoundException e) {
             }
         }

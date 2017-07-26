@@ -1,8 +1,22 @@
 package com.google.android.gms.internal;
 
-import android.os.IInterface;
+import android.os.Parcel;
 import android.os.RemoteException;
 
-public interface zzbfy extends IInterface {
-    void zza(zzbfw com_google_android_gms_internal_zzbfw) throws RemoteException;
+public abstract class zzbfy extends zzee implements zzbfx {
+    public zzbfy() {
+        attachInterface(this, "com.google.android.gms.common.internal.service.ICommonCallbacks");
+    }
+
+    public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
+        if (zza(i, parcel, parcel2, i2)) {
+            return true;
+        }
+        if (i != 1) {
+            return false;
+        }
+        zzaC(parcel.readInt());
+        parcel2.writeNoException();
+        return true;
+    }
 }

@@ -9,22 +9,22 @@ import com.google.android.gms.common.util.zzq;
 
 public final class FirebaseInstanceIdInternalReceiver extends WakefulBroadcastReceiver {
     private static boolean zzbfB = false;
-    private static zzh zzckv;
-    private static zzh zzckw;
+    private static zzh zzckA;
+    private static zzh zzckz;
 
     static synchronized zzh zzH(Context context, String str) {
         zzh com_google_firebase_iid_zzh;
         synchronized (FirebaseInstanceIdInternalReceiver.class) {
             if ("com.google.firebase.MESSAGING_EVENT".equals(str)) {
-                if (zzckw == null) {
-                    zzckw = new zzh(context, str);
+                if (zzckA == null) {
+                    zzckA = new zzh(context, str);
                 }
-                com_google_firebase_iid_zzh = zzckw;
+                com_google_firebase_iid_zzh = zzckA;
             } else {
-                if (zzckv == null) {
-                    zzckv = new zzh(context, str);
+                if (zzckz == null) {
+                    zzckz = new zzh(context, str);
                 }
-                com_google_firebase_iid_zzh = zzckv;
+                com_google_firebase_iid_zzh = zzckz;
             }
         }
         return com_google_firebase_iid_zzh;
@@ -43,7 +43,7 @@ public final class FirebaseInstanceIdInternalReceiver extends WakefulBroadcastRe
                     zzH(context, intent.getAction()).zza(intent2, goAsync());
                     return;
                 } else {
-                    zzq.zzJU().zza(context, intent.getAction(), intent2);
+                    zzq.zzJX().zza(context, intent.getAction(), intent2);
                     return;
                 }
             }

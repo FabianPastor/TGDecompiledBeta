@@ -1,28 +1,37 @@
 package com.google.android.gms.internal;
 
 import android.os.DeadObjectException;
+import android.os.RemoteException;
 import android.support.annotation.NonNull;
-import com.google.android.gms.common.api.Api.zzb;
-import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.TaskCompletionSource;
 
-public final class zzban<A extends zzbax<? extends Result, zzb>> extends zzbal {
-    private A zzaBt;
+abstract class zzban extends zzbam {
+    protected final TaskCompletionSource<Void> zzalE;
 
-    public zzban(int i, A a) {
+    public zzban(int i, TaskCompletionSource<Void> taskCompletionSource) {
         super(i);
-        this.zzaBt = a;
+        this.zzalE = taskCompletionSource;
     }
 
-    public final void zza(@NonNull zzbbs com_google_android_gms_internal_zzbbs, boolean z) {
-        com_google_android_gms_internal_zzbbs.zza(this.zzaBt, z);
+    public void zza(@NonNull zzbbt com_google_android_gms_internal_zzbbt, boolean z) {
     }
 
-    public final void zza(zzbdc<?> com_google_android_gms_internal_zzbdc_) throws DeadObjectException {
-        this.zzaBt.zzb(com_google_android_gms_internal_zzbdc_.zzpJ());
+    public final void zza(zzbdd<?> com_google_android_gms_internal_zzbdd_) throws DeadObjectException {
+        try {
+            zzb(com_google_android_gms_internal_zzbdd_);
+        } catch (RemoteException e) {
+            zzp(zzbam.zza(e));
+            throw e;
+        } catch (RemoteException e2) {
+            zzp(zzbam.zza(e2));
+        }
     }
 
-    public final void zzp(@NonNull Status status) {
-        this.zzaBt.zzr(status);
+    protected abstract void zzb(zzbdd<?> com_google_android_gms_internal_zzbdd_) throws RemoteException;
+
+    public void zzp(@NonNull Status status) {
+        this.zzalE.trySetException(new ApiException(status));
     }
 }

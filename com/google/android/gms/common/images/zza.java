@@ -6,7 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import com.google.android.gms.common.internal.zzc;
-import com.google.android.gms.internal.zzbfl;
+import com.google.android.gms.internal.zzbfm;
 
 public abstract class zza {
     final zzb zzaGf;
@@ -27,13 +27,13 @@ public abstract class zza {
         zza(new BitmapDrawable(context.getResources(), bitmap), z, false, true);
     }
 
-    final void zza(Context context, zzbfl com_google_android_gms_internal_zzbfl) {
+    final void zza(Context context, zzbfm com_google_android_gms_internal_zzbfm) {
         if (this.zzaGl) {
             zza(null, false, true, false);
         }
     }
 
-    final void zza(Context context, zzbfl com_google_android_gms_internal_zzbfl, boolean z) {
+    final void zza(Context context, zzbfm com_google_android_gms_internal_zzbfm, boolean z) {
         Drawable drawable = null;
         if (this.zzaGh != 0) {
             drawable = context.getResources().getDrawable(this.zzaGh);

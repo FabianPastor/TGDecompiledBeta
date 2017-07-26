@@ -2,19 +2,13 @@ package com.google.android.gms.internal;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 
-public final class fo implements Creator<fn> {
-    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        int zzd = zzb.zzd(parcel);
-        while (parcel.dataPosition() < zzd) {
-            zzb.zzb(parcel, parcel.readInt());
-        }
-        zzb.zzF(parcel, zzd);
-        return new fn();
-    }
+public final class fo extends zza {
+    public static final Creator<fo> CREATOR = new fp();
 
-    public final /* synthetic */ Object[] newArray(int i) {
-        return new fn[i];
+    public final void writeToParcel(Parcel parcel, int i) {
+        zzd.zzI(parcel, zzd.zze(parcel));
     }
 }

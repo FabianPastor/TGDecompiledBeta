@@ -1,26 +1,24 @@
 package com.google.android.gms.internal;
 
-public final class zzbdx<L> {
-    private final L mListener;
-    private final String zzaEP;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import com.google.android.gms.common.internal.zzbo;
 
-    zzbdx(L l, String str) {
-        this.mListener = l;
-        this.zzaEP = str;
+final class zzbdx extends Handler {
+    private /* synthetic */ zzbdw zzaEO;
+
+    public zzbdx(zzbdw com_google_android_gms_internal_zzbdw, Looper looper) {
+        this.zzaEO = com_google_android_gms_internal_zzbdw;
+        super(looper);
     }
 
-    public final boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
+    public final void handleMessage(Message message) {
+        boolean z = true;
+        if (message.what != 1) {
+            z = false;
         }
-        if (!(obj instanceof zzbdx)) {
-            return false;
-        }
-        zzbdx com_google_android_gms_internal_zzbdx = (zzbdx) obj;
-        return this.mListener == com_google_android_gms_internal_zzbdx.mListener && this.zzaEP.equals(com_google_android_gms_internal_zzbdx.zzaEP);
-    }
-
-    public final int hashCode() {
-        return (System.identityHashCode(this.mListener) * 31) + this.zzaEP.hashCode();
+        zzbo.zzaf(z);
+        this.zzaEO.zzb((zzbdz) message.obj);
     }
 }

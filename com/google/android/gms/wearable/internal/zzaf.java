@@ -7,15 +7,15 @@ import com.google.android.gms.wearable.ChannelApi.OpenChannelResult;
 
 final class zzaf implements OpenChannelResult {
     private final Status mStatus;
-    private final Channel zzbSd;
+    private final Channel zzbSf;
 
     zzaf(Status status, Channel channel) {
         this.mStatus = (Status) zzbo.zzu(status);
-        this.zzbSd = channel;
+        this.zzbSf = channel;
     }
 
     public final Channel getChannel() {
-        return this.zzbSd;
+        return this.zzbSf;
     }
 
     public final Status getStatus() {

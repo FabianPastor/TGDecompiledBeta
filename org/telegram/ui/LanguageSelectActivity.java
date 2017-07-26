@@ -115,19 +115,7 @@ public class LanguageSelectActivity extends BaseFragment {
     }
 
     public boolean onFragmentCreate() {
-        this.sortedLanguages = new ArrayList(LocaleController.getInstance().languages);
-        final LocaleInfo currentLocale = LocaleController.getInstance().getCurrentLocaleInfo();
-        Collections.sort(this.sortedLanguages, new Comparator<LocaleInfo>() {
-            public int compare(LocaleInfo o, LocaleInfo o2) {
-                if (o == currentLocale) {
-                    return -1;
-                }
-                if (o2 == currentLocale) {
-                    return 1;
-                }
-                return o.name.compareTo(o2.name);
-            }
-        });
+        fillLanguages();
         return super.onFragmentCreate();
     }
 
@@ -222,6 +210,7 @@ public class LanguageSelectActivity extends BaseFragment {
                 builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (LocaleController.getInstance().deleteLanguage(finalLocaleInfo)) {
+                            LanguageSelectActivity.this.fillLanguages();
                             if (LanguageSelectActivity.this.searchResult != null) {
                                 LanguageSelectActivity.this.searchResult.remove(finalLocaleInfo);
                             }
@@ -247,6 +236,22 @@ public class LanguageSelectActivity extends BaseFragment {
             }
         });
         return this.fragmentView;
+    }
+
+    private void fillLanguages() {
+        this.sortedLanguages = new ArrayList(LocaleController.getInstance().languages);
+        final LocaleInfo currentLocale = LocaleController.getInstance().getCurrentLocaleInfo();
+        Collections.sort(this.sortedLanguages, new Comparator<LocaleInfo>() {
+            public int compare(LocaleInfo o, LocaleInfo o2) {
+                if (o == currentLocale) {
+                    return -1;
+                }
+                if (o2 == currentLocale) {
+                    return 1;
+                }
+                return o.name.compareTo(o2.name);
+            }
+        });
     }
 
     public void onResume() {

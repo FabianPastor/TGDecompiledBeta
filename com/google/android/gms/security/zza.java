@@ -9,16 +9,16 @@ import com.google.android.gms.security.ProviderInstaller.ProviderInstallListener
 
 final class zza extends AsyncTask<Void, Void, Integer> {
     private /* synthetic */ ProviderInstallListener zzbCI;
-    private /* synthetic */ Context zztH;
+    private /* synthetic */ Context zztF;
 
     zza(Context context, ProviderInstallListener providerInstallListener) {
-        this.zztH = context;
+        this.zztF = context;
         this.zzbCI = providerInstallListener;
     }
 
     private final Integer zzb(Void... voidArr) {
         try {
-            ProviderInstaller.installIfNeeded(this.zztH);
+            ProviderInstaller.installIfNeeded(this.zztF);
             return Integer.valueOf(0);
         } catch (GooglePlayServicesRepairableException e) {
             return Integer.valueOf(e.getConnectionStatusCode());
@@ -38,6 +38,6 @@ final class zza extends AsyncTask<Void, Void, Integer> {
             return;
         }
         ProviderInstaller.zzbCG;
-        this.zzbCI.onProviderInstallFailed(num.intValue(), zze.zza(this.zztH, num.intValue(), "pi"));
+        this.zzbCI.onProviderInstallFailed(num.intValue(), zze.zza(this.zztF, num.intValue(), "pi"));
     }
 }

@@ -13,14 +13,14 @@ import java.util.Arrays;
 public class Asset extends zza implements ReflectedParcelable {
     public static final Creator<Asset> CREATOR = new zze();
     private Uri uri;
-    private String zzbQV;
-    private ParcelFileDescriptor zzbQW;
+    private String zzbQX;
+    private ParcelFileDescriptor zzbQY;
     private byte[] zzbdY;
 
     Asset(byte[] bArr, String str, ParcelFileDescriptor parcelFileDescriptor, Uri uri) {
         this.zzbdY = bArr;
-        this.zzbQV = str;
-        this.zzbQW = parcelFileDescriptor;
+        this.zzbQX = str;
+        this.zzbQY = parcelFileDescriptor;
         this.uri = uri;
     }
 
@@ -60,7 +60,7 @@ public class Asset extends zza implements ReflectedParcelable {
             return false;
         }
         Asset asset = (Asset) obj;
-        return Arrays.equals(this.zzbdY, asset.zzbdY) && zzbe.equal(this.zzbQV, asset.zzbQV) && zzbe.equal(this.zzbQW, asset.zzbQW) && zzbe.equal(this.uri, asset.uri);
+        return Arrays.equals(this.zzbdY, asset.zzbdY) && zzbe.equal(this.zzbQX, asset.zzbQX) && zzbe.equal(this.zzbQY, asset.zzbQY) && zzbe.equal(this.uri, asset.uri);
     }
 
     public final byte[] getData() {
@@ -68,11 +68,11 @@ public class Asset extends zza implements ReflectedParcelable {
     }
 
     public String getDigest() {
-        return this.zzbQV;
+        return this.zzbQX;
     }
 
     public ParcelFileDescriptor getFd() {
-        return this.zzbQW;
+        return this.zzbQY;
     }
 
     public Uri getUri() {
@@ -80,26 +80,26 @@ public class Asset extends zza implements ReflectedParcelable {
     }
 
     public int hashCode() {
-        return Arrays.deepHashCode(new Object[]{this.zzbdY, this.zzbQV, this.zzbQW, this.uri});
+        return Arrays.deepHashCode(new Object[]{this.zzbdY, this.zzbQX, this.zzbQY, this.uri});
     }
 
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Asset[@");
         stringBuilder.append(Integer.toHexString(hashCode()));
-        if (this.zzbQV == null) {
+        if (this.zzbQX == null) {
             stringBuilder.append(", nodigest");
         } else {
             stringBuilder.append(", ");
-            stringBuilder.append(this.zzbQV);
+            stringBuilder.append(this.zzbQX);
         }
         if (this.zzbdY != null) {
             stringBuilder.append(", size=");
             stringBuilder.append(this.zzbdY.length);
         }
-        if (this.zzbQW != null) {
+        if (this.zzbQY != null) {
             stringBuilder.append(", fd=");
-            stringBuilder.append(this.zzbQW);
+            stringBuilder.append(this.zzbQY);
         }
         if (this.uri != null) {
             stringBuilder.append(", uri=");
@@ -114,7 +114,7 @@ public class Asset extends zza implements ReflectedParcelable {
         int zze = zzd.zze(parcel);
         zzd.zza(parcel, 2, this.zzbdY, false);
         zzd.zza(parcel, 3, getDigest(), false);
-        zzd.zza(parcel, 4, this.zzbQW, i2, false);
+        zzd.zza(parcel, 4, this.zzbQY, i2, false);
         zzd.zza(parcel, 5, this.uri, i2, false);
         zzd.zzI(parcel, zze);
     }

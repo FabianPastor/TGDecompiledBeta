@@ -1,29 +1,17 @@
 package com.google.android.gms.internal;
 
-import android.support.annotation.WorkerThread;
-import com.google.android.gms.common.api.Api.zze;
-import java.util.ArrayList;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.internal.zzj;
 
-final class zzbci extends zzbcm {
-    private /* synthetic */ zzbcc zzaDp;
-    private final ArrayList<zze> zzaDv;
+final class zzbci extends zzbcy {
+    private /* synthetic */ zzj zzaDu;
 
-    public zzbci(zzbcc com_google_android_gms_internal_zzbcc, ArrayList<zze> arrayList) {
-        this.zzaDp = com_google_android_gms_internal_zzbcc;
-        super(com_google_android_gms_internal_zzbcc);
-        this.zzaDv = arrayList;
+    zzbci(zzbcg com_google_android_gms_internal_zzbcg, zzbcw com_google_android_gms_internal_zzbcw, zzj com_google_android_gms_common_internal_zzj) {
+        this.zzaDu = com_google_android_gms_common_internal_zzj;
+        super(com_google_android_gms_internal_zzbcw);
     }
 
-    @WorkerThread
     public final void zzpV() {
-        this.zzaDp.zzaCZ.zzaCl.zzaDG = this.zzaDp.zzqb();
-        ArrayList arrayList = this.zzaDv;
-        int size = arrayList.size();
-        int i = 0;
-        while (i < size) {
-            Object obj = arrayList.get(i);
-            i++;
-            ((zze) obj).zza(this.zzaDp.zzaDl, this.zzaDp.zzaCZ.zzaCl.zzaDG);
-        }
+        this.zzaDu.zzf(new ConnectionResult(16, null));
     }
 }

@@ -108,7 +108,7 @@ public class StickerView extends EntityView {
                 this.centerImage.setAspectFit(true);
                 this.centerImage.setInvalidateAll(true);
                 this.centerImage.setParentView(this.containerView);
-                this.centerImage.setImage((TLObject) sticker, null, sticker.thumb.location, null, "webp", true);
+                this.centerImage.setImage((TLObject) sticker, null, sticker.thumb.location, null, "webp", 1);
                 updatePosition();
             }
         }
@@ -117,7 +117,7 @@ public class StickerView extends EntityView {
         this.centerImage.setAspectFit(true);
         this.centerImage.setInvalidateAll(true);
         this.centerImage.setParentView(this.containerView);
-        this.centerImage.setImage((TLObject) sticker, null, sticker.thumb.location, null, "webp", true);
+        this.centerImage.setImage((TLObject) sticker, null, sticker.thumb.location, null, "webp", 1);
         updatePosition();
     }
 

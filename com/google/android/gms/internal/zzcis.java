@@ -1,21 +1,17 @@
 package com.google.android.gms.internal;
 
-final class zzcis implements Runnable {
-    private /* synthetic */ zzcip zzbuk;
-    private /* synthetic */ zzcfc zzbul;
+import android.content.ComponentName;
 
-    zzcis(zzcip com_google_android_gms_internal_zzcip, zzcfc com_google_android_gms_internal_zzcfc) {
-        this.zzbuk = com_google_android_gms_internal_zzcip;
-        this.zzbul = com_google_android_gms_internal_zzcfc;
+final class zzcis implements Runnable {
+    private /* synthetic */ ComponentName val$name;
+    private /* synthetic */ zzciq zzbuk;
+
+    zzcis(zzciq com_google_android_gms_internal_zzciq, ComponentName componentName) {
+        this.zzbuk = com_google_android_gms_internal_zzciq;
+        this.val$name = componentName;
     }
 
     public final void run() {
-        synchronized (this.zzbuk) {
-            this.zzbuk.zzbuh = false;
-            if (!this.zzbuk.zzbua.isConnected()) {
-                this.zzbuk.zzbua.zzwF().zzyC().log("Connected to remote service");
-                this.zzbuk.zzbua.zza(this.zzbul);
-            }
-        }
+        this.zzbuk.zzbua.onServiceDisconnected(this.val$name);
     }
 }

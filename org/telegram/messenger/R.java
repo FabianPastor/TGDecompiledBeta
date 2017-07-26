@@ -3,8 +3,6 @@ package org.telegram.messenger;
 public final class R {
 
     public static final class anim {
-        public static final int icon_anim_fade_in = NUM;
-        public static final int icon_anim_fade_out = NUM;
         public static final int no_animation = NUM;
         public static final int popup_in = NUM;
         public static final int popup_out = NUM;
@@ -147,14 +145,12 @@ public final class R {
         public static final int bar_selector_style = NUM;
         public static final int bar_selector_white = NUM;
         public static final int bg_voip_icon_btn = NUM;
+        public static final int bigcheck = NUM;
         public static final int blockpanel = NUM;
         public static final int bluecounter = NUM;
         public static final int blur_linear = NUM;
-        public static final int blur_linear_active = NUM;
         public static final int blur_off = NUM;
-        public static final int blur_off_active = NUM;
         public static final int blur_radial = NUM;
-        public static final int blur_radial_active = NUM;
         public static final int boog_group = NUM;
         public static final int book_bot = NUM;
         public static final int book_channel = NUM;
@@ -189,7 +185,6 @@ public final class R {
         public static final int chats_unpin = NUM;
         public static final int checkbig = NUM;
         public static final int circle = NUM;
-        public static final int circle1 = NUM;
         public static final int circle_big = NUM;
         public static final int cloud = NUM;
         public static final int cloud_big = NUM;
@@ -229,6 +224,7 @@ public final class R {
         public static final int fab_highlight_dark = NUM;
         public static final int field_carret = NUM;
         public static final int field_carret_empty = NUM;
+        public static final int flame_small = NUM;
         public static final int flash_auto = NUM;
         public static final int flash_off = NUM;
         public static final int flash_on = NUM;
@@ -342,13 +338,6 @@ public final class R {
         public static final int inline_video_pause = NUM;
         public static final int inline_video_play = NUM;
         public static final int instant_camera = NUM;
-        public static final int intro1 = NUM;
-        public static final int intro2 = NUM;
-        public static final int intro3 = NUM;
-        public static final int intro4 = NUM;
-        public static final int intro5 = NUM;
-        public static final int intro6 = NUM;
-        public static final int intro7 = NUM;
         public static final int intro_fast_arrow = NUM;
         public static final int intro_fast_arrow_shadow = NUM;
         public static final int intro_fast_body = NUM;
@@ -487,13 +476,12 @@ public final class R {
         public static final int photo_flip = NUM;
         public static final int photo_outline = NUM;
         public static final int photo_paint = NUM;
-        public static final int photo_paint2 = NUM;
         public static final int photo_paint_brush = NUM;
         public static final int photo_paint_text = NUM;
         public static final int photo_placeholder_in = NUM;
         public static final int photo_sticker = NUM;
         public static final int photo_text = NUM;
-        public static final int photo_text2 = NUM;
+        public static final int photo_timer = NUM;
         public static final int photo_tools = NUM;
         public static final int photo_undo = NUM;
         public static final int photo_w = NUM;
@@ -577,22 +565,9 @@ public final class R {
         public static final int tip3 = NUM;
         public static final int tip4 = NUM;
         public static final int tool_blur = NUM;
-        public static final int tool_brightness = NUM;
-        public static final int tool_contrast = NUM;
         public static final int tool_cropfix = NUM;
-        public static final int tool_cropfix_active = NUM;
         public static final int tool_curve = NUM;
-        public static final int tool_details = NUM;
-        public static final int tool_enhance = NUM;
-        public static final int tool_fade = NUM;
-        public static final int tool_grain = NUM;
-        public static final int tool_highlights = NUM;
         public static final int tool_rotate = NUM;
-        public static final int tool_saturation = NUM;
-        public static final int tool_shadows = NUM;
-        public static final int tool_tint = NUM;
-        public static final int tool_vignette = NUM;
-        public static final int tool_warmth = NUM;
         public static final int transparent = NUM;
         public static final int verified_area = NUM;
         public static final int verified_check = NUM;
@@ -602,6 +577,8 @@ public final class R {
         public static final int video_480 = NUM;
         public static final int video_720 = NUM;
         public static final int video_actions = NUM;
+        public static final int video_cropleft = NUM;
+        public static final int video_cropright = NUM;
         public static final int video_edit_play = NUM;
         public static final int video_mute = NUM;
         public static final int video_play = NUM;
@@ -877,11 +854,13 @@ public final class R {
         public static final int AttachMediaRestrictedForever = NUM;
         public static final int AttachMusic = NUM;
         public static final int AttachPhoto = NUM;
+        public static final int AttachPhotoExpired = NUM;
         public static final int AttachRound = NUM;
         public static final int AttachSticker = NUM;
         public static final int AttachStickersRestricted = NUM;
         public static final int AttachStickersRestrictedForever = NUM;
         public static final int AttachVideo = NUM;
+        public static final int AttachVideoExpired = NUM;
         public static final int AudioAutodownload = NUM;
         public static final int AudioTitle = NUM;
         public static final int AudioUnknownArtist = NUM;
@@ -1195,6 +1174,8 @@ public final class R {
         public static final int DirectShare = NUM;
         public static final int DirectShareInfo = NUM;
         public static final int Disabled = NUM;
+        public static final int DisappearingPhoto = NUM;
+        public static final int DisappearingVideo = NUM;
         public static final int DiscardChanges = NUM;
         public static final int DiscardVideoMessageDescription = NUM;
         public static final int DiscardVideoMessageTitle = NUM;
@@ -1612,7 +1593,9 @@ public final class R {
         public static final int MessageLifetime = NUM;
         public static final int MessageLifetimeChanged = NUM;
         public static final int MessageLifetimeChangedOutgoing = NUM;
+        public static final int MessageLifetimePhoto = NUM;
         public static final int MessageLifetimeRemoved = NUM;
+        public static final int MessageLifetimeVideo = NUM;
         public static final int MessageLifetimeYouRemoved = NUM;
         public static final int MessageNotifications = NUM;
         public static final int MessagePreview = NUM;
@@ -1777,6 +1760,8 @@ public final class R {
         public static final int NotificationMessageNoText = NUM;
         public static final int NotificationMessagePhoto = NUM;
         public static final int NotificationMessageRound = NUM;
+        public static final int NotificationMessageSDPhoto = NUM;
+        public static final int NotificationMessageSDVideo = NUM;
         public static final int NotificationMessageSticker = NUM;
         public static final int NotificationMessageStickerEmoji = NUM;
         public static final int NotificationMessageText = NUM;
@@ -1840,8 +1825,6 @@ public final class R {
         public static final int Page5Title = NUM;
         public static final int Page6Message = NUM;
         public static final int Page6Title = NUM;
-        public static final int Page7Message = NUM;
-        public static final int Page7Title = NUM;
         public static final int PaintDelete = NUM;
         public static final int PaintDraw = NUM;
         public static final int PaintDuplicate = NUM;
@@ -2237,6 +2220,9 @@ public final class R {
         public static final int UseProxySettings = NUM;
         public static final int UseProxyUsername = NUM;
         public static final int UserAlreadyInGroup = NUM;
+        public static final int UserBio = NUM;
+        public static final int UserBioEmpty = NUM;
+        public static final int UserBioInfo = NUM;
         public static final int UserRestricted = NUM;
         public static final int UserRestrictions = NUM;
         public static final int UserRestrictionsBlock = NUM;

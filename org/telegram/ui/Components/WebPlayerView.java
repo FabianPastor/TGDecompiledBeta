@@ -1878,7 +1878,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         if (thumb != null) {
             PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(thumb.sizes, 80, true);
             if (photoSize != null) {
-                this.controlsView.imageReceiver.setImage(null, null, thumb != null ? photoSize.location : null, thumb != null ? "80_80_b" : null, 0, null, true);
+                this.controlsView.imageReceiver.setImage(null, null, thumb != null ? photoSize.location : null, thumb != null ? "80_80_b" : null, 0, null, 1);
                 this.drawImage = true;
             }
         } else {

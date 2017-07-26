@@ -3,13 +3,13 @@ package com.google.android.gms.common.internal;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import com.google.android.gms.internal.zzbgz;
+import com.google.android.gms.internal.zzbha;
 
 public final class zzbd {
     private static boolean zzRk;
     private static String zzaIf;
     private static int zzaIg;
-    private static Object zzuH = new Object();
+    private static Object zzuF = new Object();
 
     public static String zzaD(Context context) {
         zzaF(context);
@@ -22,13 +22,13 @@ public final class zzbd {
     }
 
     private static void zzaF(Context context) {
-        synchronized (zzuH) {
+        synchronized (zzuF) {
             if (zzRk) {
                 return;
             }
             zzRk = true;
             try {
-                Bundle bundle = zzbgz.zzaP(context).getApplicationInfo(context.getPackageName(), 128).metaData;
+                Bundle bundle = zzbha.zzaP(context).getApplicationInfo(context.getPackageName(), 128).metaData;
                 if (bundle == null) {
                     return;
                 }

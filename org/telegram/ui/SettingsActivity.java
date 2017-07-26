@@ -27,6 +27,7 @@ import android.support.annotation.NonNull;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
@@ -87,6 +88,7 @@ import org.telegram.tgnet.TLRPC.TL_help_getSupport;
 import org.telegram.tgnet.TLRPC.TL_help_support;
 import org.telegram.tgnet.TLRPC.TL_photos_photo;
 import org.telegram.tgnet.TLRPC.TL_photos_uploadProfilePhoto;
+import org.telegram.tgnet.TLRPC.TL_userFull;
 import org.telegram.tgnet.TLRPC.TL_userProfilePhoto;
 import org.telegram.tgnet.TLRPC.TL_userProfilePhotoEmpty;
 import org.telegram.tgnet.TLRPC.User;
@@ -133,6 +135,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private BackupImageView avatarImage;
     private AvatarUpdater avatarUpdater = new AvatarUpdater();
     private int backgroundRow;
+    private int bioRow;
     private int clearLogsRow;
     private int contactsReimportRow;
     private int contactsSectionRow;
@@ -341,12 +344,23 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         return;
                     } else if (position == SettingsActivity.this.usernameRow) {
                         user = UserConfig.getCurrentUser();
-                        if (user == null || user.username == null || user.username.length() == 0) {
+                        if (user == null || TextUtils.isEmpty(user.username)) {
                             value = LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty);
                         } else {
                             value = "@" + user.username;
                         }
-                        textCell3.setTextAndValue(value, LocaleController.getString("Username", R.string.Username), false);
+                        textCell3.setTextAndValue(value, LocaleController.getString("Username", R.string.Username), true);
+                        return;
+                    } else if (position == SettingsActivity.this.bioRow) {
+                        TL_userFull userFull = MessagesController.getInstance().getUserFull(UserConfig.getClientUserId());
+                        if (userFull == null) {
+                            value = LocaleController.getString("Loading", R.string.Loading);
+                        } else if (userFull == null || TextUtils.isEmpty(userFull.about)) {
+                            value = LocaleController.getString("UserBioEmpty", R.string.UserBioEmpty);
+                        } else {
+                            value = userFull.about;
+                        }
+                        textCell3.setTextAndValue(value, LocaleController.getString("UserBio", R.string.UserBio), false);
                         return;
                     } else {
                         return;
@@ -358,7 +372,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         public boolean isEnabled(ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            if (position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.numberRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.usernameRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow || position == SettingsActivity.this.versionRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.dataRow || position == SettingsActivity.this.themeRow || position == SettingsActivity.this.dumpCallStatsRow) {
+            if (position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.numberRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.usernameRow || position == SettingsActivity.this.bioRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow || position == SettingsActivity.this.versionRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.dataRow || position == SettingsActivity.this.themeRow || position == SettingsActivity.this.dumpCallStatsRow) {
                 return true;
             }
             return false;
@@ -443,7 +457,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (position == SettingsActivity.this.versionRow) {
                 return 5;
             }
-            if (position == SettingsActivity.this.numberRow || position == SettingsActivity.this.usernameRow) {
+            if (position == SettingsActivity.this.numberRow || position == SettingsActivity.this.usernameRow || position == SettingsActivity.this.bioRow) {
                 return 6;
             }
             if (position == SettingsActivity.this.settingsSectionRow2 || position == SettingsActivity.this.messagesSectionRow2 || position == SettingsActivity.this.supportSectionRow2 || position == SettingsActivity.this.numberSectionRow) {
@@ -505,6 +519,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         };
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.updateInterfaces);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.featuredStickersDidLoaded);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.userInfoDidLoaded);
         this.rowCount = 0;
         int i = this.rowCount;
         this.rowCount = i + 1;
@@ -521,6 +536,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         i = this.rowCount;
         this.rowCount = i + 1;
         this.usernameRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.bioRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
         this.settingsSectionRow = i;
@@ -625,6 +643,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         MessagesController.getInstance().cancelLoadFullUser(UserConfig.getClientUserId());
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.updateInterfaces);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.featuredStickersDidLoaded);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.userInfoDidLoaded);
         this.avatarUpdater.clear();
     }
 
@@ -692,12 +711,18 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(false);
         RecyclerListView recyclerListView = this.listView;
-        LayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
-        this.layoutManager = linearLayoutManager;
-        recyclerListView.setLayoutManager(linearLayoutManager);
+        LayoutManager anonymousClass4 = new LinearLayoutManager(context, 1, false) {
+            public boolean supportsPredictiveItemAnimations() {
+                return false;
+            }
+        };
+        this.layoutManager = anonymousClass4;
+        recyclerListView.setLayoutManager(anonymousClass4);
         this.listView.setGlowColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
+        this.listView.setItemAnimator(null);
+        this.listView.setLayoutAnimation(null);
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
                 Builder builder;
@@ -853,6 +878,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         }
                     } else if (position == SettingsActivity.this.usernameRow) {
                         SettingsActivity.this.presentFragment(new ChangeUsernameActivity());
+                    } else if (position == SettingsActivity.this.bioRow) {
+                        if (MessagesController.getInstance().getUserFull(UserConfig.getClientUserId()) != null) {
+                            SettingsActivity.this.presentFragment(new ChangeBioActivity());
+                        }
                     } else if (position == SettingsActivity.this.numberRow) {
                         SettingsActivity.this.presentFragment(new ChangePhoneHelpActivity());
                     } else if (position == SettingsActivity.this.stickersRow) {
@@ -1275,8 +1304,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if ((mask & 2) != 0 || (mask & 1) != 0) {
                 updateUserData();
             }
-        } else if (id == NotificationCenter.featuredStickersDidLoaded && this.listAdapter != null) {
-            this.listAdapter.notifyItemChanged(this.stickersRow);
+        } else if (id == NotificationCenter.featuredStickersDidLoaded) {
+            if (this.listAdapter != null) {
+                this.listAdapter.notifyItemChanged(this.stickersRow);
+            }
+        } else if (id == NotificationCenter.userInfoDidLoaded && args[0].intValue() == UserConfig.getClientUserId()) {
+            this.listAdapter.notifyItemChanged(this.bioRow);
         }
     }
 

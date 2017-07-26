@@ -30,7 +30,7 @@ public class GoogleSignInAccount extends zza implements ReflectedParcelable {
     private static zze zzalN = zzi.zzrY();
     private static Comparator<Scope> zzalU = new zza();
     private int versionCode;
-    private String zzIk;
+    private String zzIi;
     private String zzakX;
     private String zzakY;
     private List<Scope> zzakz;
@@ -44,7 +44,7 @@ public class GoogleSignInAccount extends zza implements ReflectedParcelable {
 
     GoogleSignInAccount(int i, String str, String str2, String str3, String str4, Uri uri, String str5, long j, String str6, List<Scope> list, String str7, String str8) {
         this.versionCode = i;
-        this.zzIk = str;
+        this.zzIi = str;
         this.zzaln = str2;
         this.zzalO = str3;
         this.zzalP = str4;
@@ -164,7 +164,7 @@ public class GoogleSignInAccount extends zza implements ReflectedParcelable {
 
     @Nullable
     public String getId() {
-        return this.zzIk;
+        return this.zzIi;
     }
 
     @Nullable

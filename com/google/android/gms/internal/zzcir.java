@@ -1,17 +1,21 @@
 package com.google.android.gms.internal;
 
-import android.content.ComponentName;
-
 final class zzcir implements Runnable {
-    private /* synthetic */ ComponentName val$name;
-    private /* synthetic */ zzcip zzbuk;
+    private /* synthetic */ zzcfd zzbuj;
+    private /* synthetic */ zzciq zzbuk;
 
-    zzcir(zzcip com_google_android_gms_internal_zzcip, ComponentName componentName) {
-        this.zzbuk = com_google_android_gms_internal_zzcip;
-        this.val$name = componentName;
+    zzcir(zzciq com_google_android_gms_internal_zzciq, zzcfd com_google_android_gms_internal_zzcfd) {
+        this.zzbuk = com_google_android_gms_internal_zzciq;
+        this.zzbuj = com_google_android_gms_internal_zzcfd;
     }
 
     public final void run() {
-        this.zzbuk.zzbua.onServiceDisconnected(this.val$name);
+        synchronized (this.zzbuk) {
+            this.zzbuk.zzbuh = false;
+            if (!this.zzbuk.zzbua.isConnected()) {
+                this.zzbuk.zzbua.zzwF().zzyD().log("Connected to service");
+                this.zzbuk.zzbua.zza(this.zzbuj);
+            }
+        }
     }
 }

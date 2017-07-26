@@ -34,7 +34,7 @@ public abstract class GcmTaskService extends Service {
     private final Set<String> zzbfE = new HashSet();
     private int zzbfF;
     private Messenger zzbfG;
-    private ExecutorService zzqH;
+    private ExecutorService zzqF;
 
     @TargetApi(21)
     class zza extends Handler {
@@ -161,7 +161,7 @@ public abstract class GcmTaskService extends Service {
 
     private final void zza(zzb com_google_android_gms_gcm_GcmTaskService_zzb) {
         try {
-            this.zzqH.execute(com_google_android_gms_gcm_GcmTaskService_zzb);
+            this.zzqF.execute(com_google_android_gms_gcm_GcmTaskService_zzb);
         } catch (Throwable e) {
             Log.e("GcmTaskService", "Executor is shutdown. onDestroy was called but main looper had an unprocessed start task message. The task will be retried with backoff delay.", e);
             com_google_android_gms_gcm_GcmTaskService_zzb.zzbg(1);
@@ -194,7 +194,7 @@ public abstract class GcmTaskService extends Service {
     @CallSuper
     public void onCreate() {
         super.onCreate();
-        this.zzqH = Executors.newFixedThreadPool(2, new zzb(this));
+        this.zzqF = Executors.newFixedThreadPool(2, new zzb(this));
         this.zzbfG = new Messenger(new zza(this, Looper.getMainLooper()));
         this.componentName = new ComponentName(this, getClass());
     }
@@ -202,7 +202,7 @@ public abstract class GcmTaskService extends Service {
     @CallSuper
     public void onDestroy() {
         super.onDestroy();
-        List shutdownNow = this.zzqH.shutdownNow();
+        List shutdownNow = this.zzqF.shutdownNow();
         if (!shutdownNow.isEmpty()) {
             Log.e("GcmTaskService", "Shutting down, but not all tasks are finished executing. Remaining: " + shutdownNow.size());
         }

@@ -1,16 +1,18 @@
 package com.google.android.gms.internal;
 
 final class zzcgt implements Runnable {
-    private /* synthetic */ zzcgp zzbtf;
-    private /* synthetic */ zzcej zzbtg;
+    private /* synthetic */ zzceh zzbte;
+    private /* synthetic */ zzcgq zzbtf;
+    private /* synthetic */ zzcek zzbtg;
 
-    zzcgt(zzcgp com_google_android_gms_internal_zzcgp, zzcej com_google_android_gms_internal_zzcej) {
-        this.zzbtf = com_google_android_gms_internal_zzcgp;
-        this.zzbtg = com_google_android_gms_internal_zzcej;
+    zzcgt(zzcgq com_google_android_gms_internal_zzcgq, zzcek com_google_android_gms_internal_zzcek, zzceh com_google_android_gms_internal_zzceh) {
+        this.zzbtf = com_google_android_gms_internal_zzcgq;
+        this.zzbtg = com_google_android_gms_internal_zzcek;
+        this.zzbte = com_google_android_gms_internal_zzceh;
     }
 
     public final void run() {
         this.zzbtf.zzboe.zzze();
-        this.zzbtf.zzboe.zze(this.zzbtg);
+        this.zzbtf.zzboe.zzb(this.zzbtg, this.zzbte);
     }
 }

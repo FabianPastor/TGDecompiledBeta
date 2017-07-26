@@ -1,8 +1,10 @@
 package com.google.android.gms.internal;
 
-import android.os.RemoteException;
+import android.graphics.drawable.Drawable;
+import android.support.v4.util.LruCache;
 
-public class zzbfm extends zzbfx {
-    public void zzaC(int i) throws RemoteException {
+public final class zzbfm extends LruCache<Object, Drawable> {
+    public zzbfm() {
+        super(10);
     }
 }

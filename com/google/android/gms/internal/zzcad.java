@@ -4,60 +4,52 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
-import com.google.android.gms.dynamic.IObjectWrapper;
+import com.google.android.gms.dynamic.IObjectWrapper.zza;
 
-public final class zzcad extends zzed implements zzcab {
-    zzcad(IBinder iBinder) {
-        super(iBinder, "com.google.android.gms.flags.IFlagProvider");
+public abstract class zzcad extends zzee implements zzcac {
+    public zzcad() {
+        attachInterface(this, "com.google.android.gms.flags.IFlagProvider");
     }
 
-    public final boolean getBooleanFlagValue(String str, boolean z, int i) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzZ.writeString(str);
-        zzef.zza(zzZ, z);
-        zzZ.writeInt(i);
-        zzZ = zza(2, zzZ);
-        boolean zza = zzef.zza(zzZ);
-        zzZ.recycle();
-        return zza;
+    public static zzcac asInterface(IBinder iBinder) {
+        if (iBinder == null) {
+            return null;
+        }
+        IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.flags.IFlagProvider");
+        return queryLocalInterface instanceof zzcac ? (zzcac) queryLocalInterface : new zzcae(iBinder);
     }
 
-    public final int getIntFlagValue(String str, int i, int i2) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzZ.writeString(str);
-        zzZ.writeInt(i);
-        zzZ.writeInt(i2);
-        zzZ = zza(3, zzZ);
-        int readInt = zzZ.readInt();
-        zzZ.recycle();
-        return readInt;
-    }
-
-    public final long getLongFlagValue(String str, long j, int i) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzZ.writeString(str);
-        zzZ.writeLong(j);
-        zzZ.writeInt(i);
-        zzZ = zza(4, zzZ);
-        long readLong = zzZ.readLong();
-        zzZ.recycle();
-        return readLong;
-    }
-
-    public final String getStringFlagValue(String str, String str2, int i) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzZ.writeString(str);
-        zzZ.writeString(str2);
-        zzZ.writeInt(i);
-        zzZ = zza(5, zzZ);
-        String readString = zzZ.readString();
-        zzZ.recycle();
-        return readString;
-    }
-
-    public final void init(IObjectWrapper iObjectWrapper) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzef.zza(zzZ, (IInterface) iObjectWrapper);
-        zzb(1, zzZ);
+    public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
+        if (zza(i, parcel, parcel2, i2)) {
+            return true;
+        }
+        switch (i) {
+            case 1:
+                init(zza.zzM(parcel.readStrongBinder()));
+                parcel2.writeNoException();
+                return true;
+            case 2:
+                boolean booleanFlagValue = getBooleanFlagValue(parcel.readString(), zzef.zza(parcel), parcel.readInt());
+                parcel2.writeNoException();
+                zzef.zza(parcel2, booleanFlagValue);
+                return true;
+            case 3:
+                int intFlagValue = getIntFlagValue(parcel.readString(), parcel.readInt(), parcel.readInt());
+                parcel2.writeNoException();
+                parcel2.writeInt(intFlagValue);
+                return true;
+            case 4:
+                long longFlagValue = getLongFlagValue(parcel.readString(), parcel.readLong(), parcel.readInt());
+                parcel2.writeNoException();
+                parcel2.writeLong(longFlagValue);
+                return true;
+            case 5:
+                String stringFlagValue = getStringFlagValue(parcel.readString(), parcel.readString(), parcel.readInt());
+                parcel2.writeNoException();
+                parcel2.writeString(stringFlagValue);
+                return true;
+            default:
+                return false;
+        }
     }
 }

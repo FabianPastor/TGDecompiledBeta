@@ -7,35 +7,35 @@ import android.util.Log;
 import com.google.android.gms.common.util.DynamiteApi;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.zzn;
-import com.google.android.gms.internal.zzcac;
+import com.google.android.gms.internal.zzcad;
 
 @DynamiteApi
-public class FlagProviderImpl extends zzcac {
-    private SharedPreferences zzBV;
-    private boolean zzuJ = false;
+public class FlagProviderImpl extends zzcad {
+    private SharedPreferences zzBT;
+    private boolean zzuH = false;
 
     public boolean getBooleanFlagValue(String str, boolean z, int i) {
-        return !this.zzuJ ? z : zzb.zza(this.zzBV, str, Boolean.valueOf(z)).booleanValue();
+        return !this.zzuH ? z : zzb.zza(this.zzBT, str, Boolean.valueOf(z)).booleanValue();
     }
 
     public int getIntFlagValue(String str, int i, int i2) {
-        return !this.zzuJ ? i : zzd.zza(this.zzBV, str, Integer.valueOf(i)).intValue();
+        return !this.zzuH ? i : zzd.zza(this.zzBT, str, Integer.valueOf(i)).intValue();
     }
 
     public long getLongFlagValue(String str, long j, int i) {
-        return !this.zzuJ ? j : zzf.zza(this.zzBV, str, Long.valueOf(j)).longValue();
+        return !this.zzuH ? j : zzf.zza(this.zzBT, str, Long.valueOf(j)).longValue();
     }
 
     public String getStringFlagValue(String str, String str2, int i) {
-        return !this.zzuJ ? str2 : zzh.zza(this.zzBV, str, str2);
+        return !this.zzuH ? str2 : zzh.zza(this.zzBT, str, str2);
     }
 
     public void init(IObjectWrapper iObjectWrapper) {
         Context context = (Context) zzn.zzE(iObjectWrapper);
-        if (!this.zzuJ) {
+        if (!this.zzuH) {
             try {
-                this.zzBV = zzj.zzaW(context.createPackageContext("com.google.android.gms", 0));
-                this.zzuJ = true;
+                this.zzBT = zzj.zzaW(context.createPackageContext("com.google.android.gms", 0));
+                this.zzuH = true;
             } catch (NameNotFoundException e) {
             } catch (Exception e2) {
                 String str = "FlagProviderImpl";

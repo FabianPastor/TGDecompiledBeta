@@ -1,58 +1,14 @@
 package com.google.android.gms.internal;
 
-import android.support.annotation.Nullable;
-import com.google.android.gms.common.api.Api.ApiOptions.Optional;
+import com.google.android.gms.common.api.Api.zze;
+import com.google.android.gms.common.internal.zzal;
 
-public final class zzctk implements Optional {
-    public static final zzctk zzbCM = new zzctk(false, false, null, false, null, false, null, null);
-    private final boolean zzalh = false;
-    private final String zzali = null;
-    private final boolean zzama = false;
-    private final String zzamb = null;
-    private final boolean zzbCN = false;
-    private final boolean zzbCO = false;
-    private final Long zzbCP = null;
-    private final Long zzbCQ = null;
+public interface zzctk extends zze {
+    void connect();
 
-    static {
-        zzctl com_google_android_gms_internal_zzctl = new zzctl();
-    }
+    void zzAq();
 
-    private zzctk(boolean z, boolean z2, String str, boolean z3, String str2, boolean z4, Long l, Long l2) {
-    }
+    void zza(zzal com_google_android_gms_common_internal_zzal, boolean z);
 
-    public final String getServerClientId() {
-        return this.zzali;
-    }
-
-    public final boolean isIdTokenRequested() {
-        return this.zzalh;
-    }
-
-    public final boolean zzAr() {
-        return this.zzbCN;
-    }
-
-    public final boolean zzAs() {
-        return this.zzama;
-    }
-
-    @Nullable
-    public final String zzAt() {
-        return this.zzamb;
-    }
-
-    public final boolean zzAu() {
-        return this.zzbCO;
-    }
-
-    @Nullable
-    public final Long zzAv() {
-        return this.zzbCP;
-    }
-
-    @Nullable
-    public final Long zzAw() {
-        return this.zzbCQ;
-    }
+    void zza(zzctq com_google_android_gms_internal_zzctq);
 }

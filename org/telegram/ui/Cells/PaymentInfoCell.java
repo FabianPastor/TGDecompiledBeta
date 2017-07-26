@@ -86,6 +86,6 @@ public class PaymentInfoCell extends FrameLayout {
         this.detailTextView.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 10.0f : 123.0f, 33.0f, LocaleController.isRTL ? 123.0f : 10.0f, 0.0f));
         this.detailExTextView.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 10.0f : 123.0f, 90.0f, LocaleController.isRTL ? 123.0f : 10.0f, 0.0f));
         this.imageView.setVisibility(0);
-        this.imageView.getImageReceiver().setImage(invoice.photo, null, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)}), null, null, null, -1, null, true);
+        this.imageView.getImageReceiver().setImage(invoice.photo, null, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)}), null, null, null, -1, null, 1);
     }
 }

@@ -1,26 +1,23 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.common.api.Releasable;
-import com.google.android.gms.common.api.Result;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.data.DataHolder;
 
-public class zzbbx implements Releasable, Result {
-    private Status mStatus;
-    protected final DataHolder zzaCX;
+public abstract class zzbbx<L> implements zzbdz<L> {
+    private final DataHolder zzaCX;
 
-    protected zzbbx(DataHolder dataHolder, Status status) {
-        this.mStatus = status;
+    protected zzbbx(DataHolder dataHolder) {
         this.zzaCX = dataHolder;
     }
 
-    public Status getStatus() {
-        return this.mStatus;
-    }
+    protected abstract void zza(L l, DataHolder dataHolder);
 
-    public void release() {
+    public final void zzpT() {
         if (this.zzaCX != null) {
             this.zzaCX.close();
         }
+    }
+
+    public final void zzq(L l) {
+        zza(l, this.zzaCX);
     }
 }

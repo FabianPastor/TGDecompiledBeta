@@ -1,29 +1,37 @@
 package com.google.android.gms.internal;
 
-import android.support.annotation.WorkerThread;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 
-abstract class zzbcm implements Runnable {
-    private /* synthetic */ zzbcc zzaDp;
+final class zzbcm implements ConnectionCallbacks, OnConnectionFailedListener {
+    private /* synthetic */ zzbcd zzaDp;
 
-    private zzbcm(zzbcc com_google_android_gms_internal_zzbcc) {
-        this.zzaDp = com_google_android_gms_internal_zzbcc;
+    private zzbcm(zzbcd com_google_android_gms_internal_zzbcd) {
+        this.zzaDp = com_google_android_gms_internal_zzbcd;
     }
 
-    @WorkerThread
-    public void run() {
+    public final void onConnected(Bundle bundle) {
+        this.zzaDp.zzaDh.zza(new zzbck(this.zzaDp));
+    }
+
+    public final void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         this.zzaDp.zzaCv.lock();
         try {
-            if (!Thread.interrupted()) {
-                zzpV();
-                this.zzaDp.zzaCv.unlock();
+            if (this.zzaDp.zzd(connectionResult)) {
+                this.zzaDp.zzpZ();
+                this.zzaDp.zzpX();
+            } else {
+                this.zzaDp.zze(connectionResult);
             }
-        } catch (RuntimeException e) {
-            this.zzaDp.zzaCZ.zza(e);
-        } finally {
+            this.zzaDp.zzaCv.unlock();
+        } catch (Throwable th) {
             this.zzaDp.zzaCv.unlock();
         }
     }
 
-    @WorkerThread
-    protected abstract void zzpV();
+    public final void onConnectionSuspended(int i) {
+    }
 }

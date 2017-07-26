@@ -2,41 +2,45 @@ package com.google.android.gms.internal;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.common.internal.zzbo;
 
-public final class zzcez implements Creator<zzcey> {
-    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        String str = null;
-        int zzd = zzb.zzd(parcel);
-        long j = 0;
-        zzcev com_google_android_gms_internal_zzcev = null;
-        String str2 = null;
-        while (parcel.dataPosition() < zzd) {
-            int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
-                case 2:
-                    str2 = zzb.zzq(parcel, readInt);
-                    break;
-                case 3:
-                    com_google_android_gms_internal_zzcev = (zzcev) zzb.zza(parcel, readInt, zzcev.CREATOR);
-                    break;
-                case 4:
-                    str = zzb.zzq(parcel, readInt);
-                    break;
-                case 5:
-                    j = zzb.zzi(parcel, readInt);
-                    break;
-                default:
-                    zzb.zzb(parcel, readInt);
-                    break;
-            }
-        }
-        zzb.zzF(parcel, zzd);
-        return new zzcey(str2, com_google_android_gms_internal_zzcev, str, j);
+public final class zzcez extends zza {
+    public static final Creator<zzcez> CREATOR = new zzcfa();
+    public final String name;
+    public final zzcew zzbpM;
+    public final long zzbpN;
+    public final String zzbpc;
+
+    zzcez(zzcez com_google_android_gms_internal_zzcez, long j) {
+        zzbo.zzu(com_google_android_gms_internal_zzcez);
+        this.name = com_google_android_gms_internal_zzcez.name;
+        this.zzbpM = com_google_android_gms_internal_zzcez.zzbpM;
+        this.zzbpc = com_google_android_gms_internal_zzcez.zzbpc;
+        this.zzbpN = j;
     }
 
-    public final /* synthetic */ Object[] newArray(int i) {
-        return new zzcey[i];
+    public zzcez(String str, zzcew com_google_android_gms_internal_zzcew, String str2, long j) {
+        this.name = str;
+        this.zzbpM = com_google_android_gms_internal_zzcew;
+        this.zzbpc = str2;
+        this.zzbpN = j;
+    }
+
+    public final String toString() {
+        String str = this.zzbpc;
+        String str2 = this.name;
+        String valueOf = String.valueOf(this.zzbpM);
+        return new StringBuilder(((String.valueOf(str).length() + 21) + String.valueOf(str2).length()) + String.valueOf(valueOf).length()).append("origin=").append(str).append(",name=").append(str2).append(",params=").append(valueOf).toString();
+    }
+
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zza(parcel, 2, this.name, false);
+        zzd.zza(parcel, 3, this.zzbpM, i, false);
+        zzd.zza(parcel, 4, this.zzbpc, false);
+        zzd.zza(parcel, 5, this.zzbpN);
+        zzd.zzI(parcel, zze);
     }
 }

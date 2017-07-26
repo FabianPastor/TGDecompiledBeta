@@ -8,17 +8,17 @@ import com.google.android.gms.common.internal.safeparcel.zzd;
 public final class zzei extends zza {
     public static final Creator<zzei> CREATOR = new zzej();
     public final int statusCode;
-    public final zzak zzbSh;
+    public final zzak zzbSj;
 
     public zzei(int i, zzak com_google_android_gms_wearable_internal_zzak) {
         this.statusCode = i;
-        this.zzbSh = com_google_android_gms_wearable_internal_zzak;
+        this.zzbSj = com_google_android_gms_wearable_internal_zzak;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
         int zze = zzd.zze(parcel);
         zzd.zzc(parcel, 2, this.statusCode);
-        zzd.zza(parcel, 3, this.zzbSh, i, false);
+        zzd.zza(parcel, 3, this.zzbSj, i, false);
         zzd.zzI(parcel, zze);
     }
 }

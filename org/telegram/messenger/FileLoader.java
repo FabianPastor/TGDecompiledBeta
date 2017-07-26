@@ -359,45 +359,39 @@ public class FileLoader {
         return result[0].booleanValue();
     }
 
-    public void loadFile(PhotoSize photo, String ext, boolean cacheOnly) {
-        boolean z;
-        FileLocation fileLocation = photo.location;
-        int i = photo.size;
-        if (cacheOnly || ((photo != null && photo.size == 0) || photo.location.key != null)) {
-            z = true;
-        } else {
-            z = false;
+    public void loadFile(PhotoSize photo, String ext, int cacheType) {
+        if (cacheType == 0 && ((photo != null && photo.size == 0) || photo.location.key != null)) {
+            cacheType = 1;
         }
-        loadFile(null, null, fileLocation, ext, i, false, z);
+        loadFile(null, null, photo.location, ext, photo.size, false, cacheType);
     }
 
-    public void loadFile(Document document, boolean force, boolean cacheOnly) {
-        boolean z;
-        if (cacheOnly || !(document == null || document.key == null)) {
-            z = true;
-        } else {
-            z = false;
+    public void loadFile(Document document, boolean force, int cacheType) {
+        if (!(cacheType != 0 || document == null || document.key == null)) {
+            cacheType = 1;
         }
-        loadFile(document, null, null, null, 0, force, z);
+        loadFile(document, null, null, null, 0, force, cacheType);
     }
 
-    public void loadFile(TL_webDocument document, boolean force, boolean cacheOnly) {
-        loadFile(null, document, null, null, 0, force, cacheOnly);
+    public void loadFile(TL_webDocument document, boolean force, int cacheType) {
+        loadFile(null, document, null, null, 0, force, cacheType);
     }
 
-    public void loadFile(FileLocation location, String ext, int size, boolean cacheOnly) {
-        boolean z = cacheOnly || size == 0 || !(location == null || location.key == null);
-        loadFile(null, null, location, ext, size, true, z);
+    public void loadFile(FileLocation location, String ext, int size, int cacheType) {
+        if (cacheType == 0 && (size == 0 || !(location == null || location.key == null))) {
+            cacheType = 1;
+        }
+        loadFile(null, null, location, ext, size, true, cacheType);
     }
 
-    private void loadFile(Document document, TL_webDocument webDocument, FileLocation location, String locationExt, int locationSize, boolean force, boolean cacheOnly) {
+    private void loadFile(Document document, TL_webDocument webDocument, FileLocation location, String locationExt, int locationSize, boolean force, int cacheType) {
         final FileLocation fileLocation = location;
         final String str = locationExt;
         final Document document2 = document;
         final TL_webDocument tL_webDocument = webDocument;
         final boolean z = force;
         final int i = locationSize;
-        final boolean z2 = cacheOnly;
+        final int i2 = cacheType;
         this.fileLoaderQueue.postRunnable(new Runnable() {
             public void run() {
                 String fileName = null;
@@ -438,8 +432,10 @@ public class FileLoader {
                                 type = 3;
                             }
                         }
-                        if (!z2) {
+                        if (i2 == 0) {
                             storeDir = FileLoader.this.getDirectory(type);
+                        } else if (i2 == 2) {
+                            operation.setEncryptFile(true);
                         }
                         operation.setPaths(storeDir, tempDir);
                         final String finalFileName = fileName;
@@ -660,6 +656,8 @@ public class FileLoader {
     }
 
     public static File getPathToMessage(Message message) {
+        boolean z = false;
+        boolean z2 = true;
         if (message == null) {
             return new File("");
         }
@@ -676,32 +674,37 @@ public class FileLoader {
                 }
             }
         } else if (message.media instanceof TL_messageMediaDocument) {
-            return getPathToAttach(message.media.document);
-        } else {
-            if (message.media instanceof TL_messageMediaPhoto) {
-                sizes = message.media.photo.sizes;
+            TLObject tLObject = message.media.document;
+            if (message.media.ttl_seconds != 0) {
+                z = true;
+            }
+            return getPathToAttach(tLObject, z);
+        } else if (message.media instanceof TL_messageMediaPhoto) {
+            sizes = message.media.photo.sizes;
+            if (sizes.size() > 0) {
+                sizeFull = getClosestPhotoSizeWithSize(sizes, AndroidUtilities.getPhotoSize());
+                if (sizeFull != null) {
+                    if (message.media.ttl_seconds == 0) {
+                        z2 = false;
+                    }
+                    return getPathToAttach(sizeFull, z2);
+                }
+            }
+        } else if (message.media instanceof TL_messageMediaWebPage) {
+            if (message.media.webpage.document != null) {
+                return getPathToAttach(message.media.webpage.document);
+            }
+            if (message.media.webpage.photo != null) {
+                sizes = message.media.webpage.photo.sizes;
                 if (sizes.size() > 0) {
                     sizeFull = getClosestPhotoSizeWithSize(sizes, AndroidUtilities.getPhotoSize());
                     if (sizeFull != null) {
                         return getPathToAttach(sizeFull);
                     }
                 }
-            } else if (message.media instanceof TL_messageMediaWebPage) {
-                if (message.media.webpage.document != null) {
-                    return getPathToAttach(message.media.webpage.document);
-                }
-                if (message.media.webpage.photo != null) {
-                    sizes = message.media.webpage.photo.sizes;
-                    if (sizes.size() > 0) {
-                        sizeFull = getClosestPhotoSizeWithSize(sizes, AndroidUtilities.getPhotoSize());
-                        if (sizeFull != null) {
-                            return getPathToAttach(sizeFull);
-                        }
-                    }
-                }
-            } else if (message.media instanceof TL_messageMediaInvoice) {
-                return getPathToAttach(((TL_messageMediaInvoice) message.media).photo, true);
             }
+        } else if (message.media instanceof TL_messageMediaInvoice) {
+            return getPathToAttach(((TL_messageMediaInvoice) message.media).photo, true);
         }
         return new File("");
     }
@@ -825,6 +828,10 @@ public class FileLoader {
         return "";
     }
 
+    public static File getInternalCacheDir() {
+        return ApplicationLoader.applicationContext.getCacheDir();
+    }
+
     public static String getDocumentExtension(Document document) {
         String fileName = getDocumentFileName(document);
         int idx = fileName.lastIndexOf(46);
@@ -935,13 +942,30 @@ public class FileLoader {
                 public void run() {
                     for (int a = 0; a < files.size(); a++) {
                         File file = (File) files.get(a);
-                        if (file.exists()) {
+                        File encrypted = new File(file.getAbsolutePath() + ".enc");
+                        if (encrypted.exists()) {
+                            try {
+                                if (!encrypted.delete()) {
+                                    encrypted.deleteOnExit();
+                                }
+                            } catch (Throwable e) {
+                                FileLog.e(e);
+                            }
+                            try {
+                                File key = new File(FileLoader.getInternalCacheDir(), file.getName() + ".enc.key");
+                                if (!key.delete()) {
+                                    key.deleteOnExit();
+                                }
+                            } catch (Throwable e2) {
+                                FileLog.e(e2);
+                            }
+                        } else if (file.exists()) {
                             try {
                                 if (!file.delete()) {
                                     file.deleteOnExit();
                                 }
-                            } catch (Throwable e) {
-                                FileLog.e(e);
+                            } catch (Throwable e22) {
+                                FileLog.e(e22);
                             }
                         }
                         try {
@@ -949,8 +973,8 @@ public class FileLoader {
                             if (qFile.exists() && !qFile.delete()) {
                                 qFile.deleteOnExit();
                             }
-                        } catch (Throwable e2) {
-                            FileLog.e(e2);
+                        } catch (Throwable e222) {
+                            FileLog.e(e222);
                         }
                     }
                     if (type == 2) {

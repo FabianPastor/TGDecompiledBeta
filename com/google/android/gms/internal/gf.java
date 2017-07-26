@@ -1,72 +1,25 @@
 package com.google.android.gms.internal;
 
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.IInterface;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.os.RemoteException;
 import com.google.android.gms.wallet.FullWalletRequest;
 import com.google.android.gms.wallet.IsReadyToPayRequest;
 import com.google.android.gms.wallet.MaskedWalletRequest;
 import com.google.android.gms.wallet.NotifyTransactionStatusRequest;
 
-public final class gf extends zzed implements ge {
-    gf(IBinder iBinder) {
-        super(iBinder, "com.google.android.gms.wallet.internal.IOwService");
-    }
+public interface gf extends IInterface {
+    void zza(Bundle bundle, gj gjVar) throws RemoteException;
 
-    public final void zza(Bundle bundle, gi giVar) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzef.zza(zzZ, (Parcelable) bundle);
-        zzef.zza(zzZ, (IInterface) giVar);
-        zzc(5, zzZ);
-    }
+    void zza(FullWalletRequest fullWalletRequest, Bundle bundle, gj gjVar) throws RemoteException;
 
-    public final void zza(FullWalletRequest fullWalletRequest, Bundle bundle, gi giVar) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzef.zza(zzZ, (Parcelable) fullWalletRequest);
-        zzef.zza(zzZ, (Parcelable) bundle);
-        zzef.zza(zzZ, (IInterface) giVar);
-        zzc(2, zzZ);
-    }
+    void zza(IsReadyToPayRequest isReadyToPayRequest, Bundle bundle, gj gjVar) throws RemoteException;
 
-    public final void zza(IsReadyToPayRequest isReadyToPayRequest, Bundle bundle, gi giVar) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzef.zza(zzZ, (Parcelable) isReadyToPayRequest);
-        zzef.zza(zzZ, (Parcelable) bundle);
-        zzef.zza(zzZ, (IInterface) giVar);
-        zzc(14, zzZ);
-    }
+    void zza(MaskedWalletRequest maskedWalletRequest, Bundle bundle, gj gjVar) throws RemoteException;
 
-    public final void zza(MaskedWalletRequest maskedWalletRequest, Bundle bundle, gi giVar) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzef.zza(zzZ, (Parcelable) maskedWalletRequest);
-        zzef.zza(zzZ, (Parcelable) bundle);
-        zzef.zza(zzZ, (IInterface) giVar);
-        zzc(1, zzZ);
-    }
+    void zza(NotifyTransactionStatusRequest notifyTransactionStatusRequest, Bundle bundle) throws RemoteException;
 
-    public final void zza(NotifyTransactionStatusRequest notifyTransactionStatusRequest, Bundle bundle) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzef.zza(zzZ, (Parcelable) notifyTransactionStatusRequest);
-        zzef.zza(zzZ, (Parcelable) bundle);
-        zzc(4, zzZ);
-    }
+    void zza(String str, String str2, Bundle bundle, gj gjVar) throws RemoteException;
 
-    public final void zza(String str, String str2, Bundle bundle, gi giVar) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzZ.writeString(str);
-        zzZ.writeString(str2);
-        zzef.zza(zzZ, (Parcelable) bundle);
-        zzef.zza(zzZ, (IInterface) giVar);
-        zzc(3, zzZ);
-    }
-
-    public final void zzb(Bundle bundle, gi giVar) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzef.zza(zzZ, (Parcelable) bundle);
-        zzef.zza(zzZ, (IInterface) giVar);
-        zzc(11, zzZ);
-    }
+    void zzb(Bundle bundle, gj gjVar) throws RemoteException;
 }

@@ -4,11 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.MainThread;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import com.google.android.gms.internal.zzcgb;
-import com.google.android.gms.internal.zzcgd;
+import com.google.android.gms.internal.zzcgc;
+import com.google.android.gms.internal.zzcge;
 
-public final class AppMeasurementReceiver extends WakefulBroadcastReceiver implements zzcgd {
-    private zzcgb zzboo;
+public final class AppMeasurementReceiver extends WakefulBroadcastReceiver implements zzcge {
+    private zzcgc zzboo;
 
     @MainThread
     public final void doStartService(Context context, Intent intent) {
@@ -18,7 +18,7 @@ public final class AppMeasurementReceiver extends WakefulBroadcastReceiver imple
     @MainThread
     public final void onReceive(Context context, Intent intent) {
         if (this.zzboo == null) {
-            this.zzboo = new zzcgb(this);
+            this.zzboo = new zzcgc(this);
         }
         this.zzboo.onReceive(context, intent);
     }

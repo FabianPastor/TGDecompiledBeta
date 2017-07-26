@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class zzef {
-    private static final ClassLoader zzrH = zzef.class.getClassLoader();
+    private static final ClassLoader zzrF = zzef.class.getClassLoader();
 
     private zzef() {
     }
@@ -43,7 +43,7 @@ public class zzef {
     }
 
     public static ArrayList zzb(Parcel parcel) {
-        return parcel.readArrayList(zzrH);
+        return parcel.readArrayList(zzrF);
     }
 
     public static void zzb(Parcel parcel, Parcelable parcelable) {
@@ -56,6 +56,6 @@ public class zzef {
     }
 
     public static HashMap zzc(Parcel parcel) {
-        return parcel.readHashMap(zzrH);
+        return parcel.readHashMap(zzrF);
     }
 }

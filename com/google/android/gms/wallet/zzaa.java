@@ -7,10 +7,10 @@ import com.google.android.gms.common.api.Api.zze;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.internal.zzq;
-import com.google.android.gms.internal.gt;
+import com.google.android.gms.internal.gu;
 import com.google.android.gms.wallet.Wallet.WalletOptions;
 
-final class zzaa extends zza<gt, WalletOptions> {
+final class zzaa extends zza<gu, WalletOptions> {
     zzaa() {
     }
 
@@ -19,6 +19,6 @@ final class zzaa extends zza<gt, WalletOptions> {
         if (walletOptions == null) {
             walletOptions = new WalletOptions();
         }
-        return new gt(context, looper, com_google_android_gms_common_internal_zzq, connectionCallbacks, onConnectionFailedListener, walletOptions.environment, walletOptions.theme, walletOptions.zzbPQ);
+        return new gu(context, looper, com_google_android_gms_common_internal_zzq, connectionCallbacks, onConnectionFailedListener, walletOptions.environment, walletOptions.theme, walletOptions.zzbPS);
     }
 }

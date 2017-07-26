@@ -22,23 +22,23 @@ import java.util.concurrent.TimeUnit;
 public class PutDataRequest extends zza {
     public static final Creator<PutDataRequest> CREATOR = new zzh();
     public static final String WEAR_URI_SCHEME = "wear";
-    private static final long zzbRf = TimeUnit.MINUTES.toMillis(30);
-    private static final Random zzbRg = new SecureRandom();
+    private static final long zzbRh = TimeUnit.MINUTES.toMillis(30);
+    private static final Random zzbRi = new SecureRandom();
     private final Uri mUri;
-    private final Bundle zzbRh;
-    private long zzbRi;
+    private final Bundle zzbRj;
+    private long zzbRk;
     private byte[] zzbdY;
 
     private PutDataRequest(Uri uri) {
-        this(uri, new Bundle(), null, zzbRf);
+        this(uri, new Bundle(), null, zzbRh);
     }
 
     PutDataRequest(Uri uri, Bundle bundle, byte[] bArr, long j) {
         this.mUri = uri;
-        this.zzbRh = bundle;
-        this.zzbRh.setClassLoader(DataItemAssetParcelable.class.getClassLoader());
+        this.zzbRj = bundle;
+        this.zzbRj.setClassLoader(DataItemAssetParcelable.class.getClassLoader());
         this.zzbdY = bArr;
-        this.zzbRi = j;
+        this.zzbRk = j;
     }
 
     public static PutDataRequest create(String str) {
@@ -64,7 +64,7 @@ public class PutDataRequest extends zza {
         if (!str.endsWith("/")) {
             stringBuilder.append("/");
         }
-        stringBuilder.append("PN").append(zzbRg.nextLong());
+        stringBuilder.append("PN").append(zzbRi.nextLong());
         return new PutDataRequest(zzgj(stringBuilder.toString()));
     }
 
@@ -85,13 +85,13 @@ public class PutDataRequest extends zza {
     }
 
     public Asset getAsset(String str) {
-        return (Asset) this.zzbRh.getParcelable(str);
+        return (Asset) this.zzbRj.getParcelable(str);
     }
 
     public Map<String, Asset> getAssets() {
         Map hashMap = new HashMap();
-        for (String str : this.zzbRh.keySet()) {
-            hashMap.put(str, (Asset) this.zzbRh.getParcelable(str));
+        for (String str : this.zzbRj.keySet()) {
+            hashMap.put(str, (Asset) this.zzbRj.getParcelable(str));
         }
         return Collections.unmodifiableMap(hashMap);
     }
@@ -105,22 +105,22 @@ public class PutDataRequest extends zza {
     }
 
     public boolean hasAsset(String str) {
-        return this.zzbRh.containsKey(str);
+        return this.zzbRj.containsKey(str);
     }
 
     public boolean isUrgent() {
-        return this.zzbRi == 0;
+        return this.zzbRk == 0;
     }
 
     public PutDataRequest putAsset(String str, Asset asset) {
         zzbo.zzu(str);
         zzbo.zzu(asset);
-        this.zzbRh.putParcelable(str, asset);
+        this.zzbRj.putParcelable(str, asset);
         return this;
     }
 
     public PutDataRequest removeAsset(String str) {
-        this.zzbRh.remove(str);
+        this.zzbRj.remove(str);
         return this;
     }
 
@@ -130,7 +130,7 @@ public class PutDataRequest extends zza {
     }
 
     public PutDataRequest setUrgent() {
-        this.zzbRi = 0;
+        this.zzbRk = 0;
         return this;
     }
 
@@ -142,14 +142,14 @@ public class PutDataRequest extends zza {
         StringBuilder stringBuilder = new StringBuilder("PutDataRequest[");
         String valueOf = String.valueOf(this.zzbdY == null ? "null" : Integer.valueOf(this.zzbdY.length));
         stringBuilder.append(new StringBuilder(String.valueOf(valueOf).length() + 7).append("dataSz=").append(valueOf).toString());
-        stringBuilder.append(", numAssets=" + this.zzbRh.size());
+        stringBuilder.append(", numAssets=" + this.zzbRj.size());
         valueOf = String.valueOf(this.mUri);
         stringBuilder.append(new StringBuilder(String.valueOf(valueOf).length() + 6).append(", uri=").append(valueOf).toString());
-        stringBuilder.append(", syncDeadline=" + this.zzbRi);
+        stringBuilder.append(", syncDeadline=" + this.zzbRk);
         if (z) {
             stringBuilder.append("]\n  assets: ");
-            for (String valueOf2 : this.zzbRh.keySet()) {
-                String valueOf3 = String.valueOf(this.zzbRh.getParcelable(valueOf2));
+            for (String valueOf2 : this.zzbRj.keySet()) {
+                String valueOf3 = String.valueOf(this.zzbRj.getParcelable(valueOf2));
                 stringBuilder.append(new StringBuilder((String.valueOf(valueOf2).length() + 7) + String.valueOf(valueOf3).length()).append("\n    ").append(valueOf2).append(": ").append(valueOf3).toString());
             }
             stringBuilder.append("\n  ]");
@@ -162,9 +162,9 @@ public class PutDataRequest extends zza {
     public void writeToParcel(Parcel parcel, int i) {
         int zze = zzd.zze(parcel);
         zzd.zza(parcel, 2, getUri(), i, false);
-        zzd.zza(parcel, 4, this.zzbRh, false);
+        zzd.zza(parcel, 4, this.zzbRj, false);
         zzd.zza(parcel, 5, getData(), false);
-        zzd.zza(parcel, 6, this.zzbRi);
+        zzd.zza(parcel, 6, this.zzbRk);
         zzd.zzI(parcel, zze);
     }
 }

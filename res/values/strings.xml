@@ -172,11 +172,13 @@
     <string name="AttachMediaRestrictedForever">The admins of this group have restricted you from sending media here</string>
     <string name="AttachMusic">Music</string>
     <string name="AttachPhoto">Photo</string>
+    <string name="AttachPhotoExpired">Photo has expired</string>
     <string name="AttachRound">Video message</string>
     <string name="AttachSticker">Sticker</string>
     <string name="AttachStickersRestricted">The admins of this group have restricted you from sending stickers here until %1$s</string>
     <string name="AttachStickersRestrictedForever">The admins of this group have restricted you from sending stickers here</string>
     <string name="AttachVideo">Video</string>
+    <string name="AttachVideoExpired">Video has expired</string>
     <string name="AudioAutodownload">Voice messages</string>
     <string name="AudioTitle">Shared Music</string>
     <string name="AudioUnknownArtist">Unknown artist</string>
@@ -490,6 +492,8 @@
     <string name="DirectShare">Direct Share</string>
     <string name="DirectShareInfo">Show recent chats in share menu</string>
     <string name="Disabled">Disabled</string>
+    <string name="DisappearingPhoto">Secret Photo</string>
+    <string name="DisappearingVideo">Secret Video</string>
     <string name="DiscardChanges">Discard changes?</string>
     <string name="DiscardVideoMessageDescription">Are you sure you want to stop recording and discard your video message?</string>
     <string name="DiscardVideoMessageTitle">Discard Video Message</string>
@@ -907,7 +911,9 @@
     <string name="MessageLifetime">Self-Destruct Timer</string>
     <string name="MessageLifetimeChanged">%1$s set the self-destruct timer to %2$s</string>
     <string name="MessageLifetimeChangedOutgoing">You set the self-destruct timer to %1$s</string>
+    <string name="MessageLifetimePhoto">If you set a timer, the photo will self-destruct after it was viewed.</string>
     <string name="MessageLifetimeRemoved">%1$s disabled the self-destruct timer</string>
+    <string name="MessageLifetimeVideo">If you set a timer, the video will self-destruct after it was viewed.</string>
     <string name="MessageLifetimeYouRemoved">You disabled the self-destruct timer</string>
     <string name="MessageNotifications">Message notifications</string>
     <string name="MessagePreview">Message Preview</string>
@@ -1072,6 +1078,8 @@
     <string name="NotificationMessageNoText">%1$s sent you a message</string>
     <string name="NotificationMessagePhoto">%1$s sent you a photo</string>
     <string name="NotificationMessageRound">%1$s sent you a video message</string>
+    <string name="NotificationMessageSDPhoto">%1$s sent you a self-destructing photo</string>
+    <string name="NotificationMessageSDVideo">%1$s sent you a self-destructing video</string>
     <string name="NotificationMessageSticker">%1$s sent you a sticker</string>
     <string name="NotificationMessageStickerEmoji">%1$s sent you a %2$s sticker</string>
     <string name="NotificationMessageText">%1$s: %2$s</string>
@@ -1135,8 +1143,6 @@
     <string name="Page5Title">Powerful</string>
     <string name="Page6Message">&lt;b&gt;Telegram&lt;/b&gt; lets you access your messages\nfrom multiple devices.</string>
     <string name="Page6Title">Cloud-Based</string>
-    <string name="Page7Message">&lt;b&gt;Telegram&lt;/b&gt; messages are heavily encrypted\nand can self-destruct.</string>
-    <string name="Page7Title">Private</string>
     <string name="PaintDelete">Delete</string>
     <string name="PaintDraw">Draw</string>
     <string name="PaintDuplicate">Duplicate</string>
@@ -1532,6 +1538,9 @@
     <string name="UseProxySettings">Use proxy settings</string>
     <string name="UseProxyUsername">Username</string>
     <string name="UserAlreadyInGroup">This user is already in this group</string>
+    <string name="UserBio">Bio</string>
+    <string name="UserBioEmpty">None</string>
+    <string name="UserBioInfo">You can add a few lines about yourself. Anyone who opens your profile will see this text.</string>
     <string name="UserRestricted">Sorry, you are not allowed to do this.</string>
     <string name="UserRestrictions">User Restrictions</string>
     <string name="UserRestrictionsBlock">Ban and remove from group</string>

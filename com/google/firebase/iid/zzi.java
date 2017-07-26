@@ -4,22 +4,22 @@ import android.support.annotation.Nullable;
 
 @Deprecated
 public final class zzi {
-    private final FirebaseInstanceId zzckq;
+    private final FirebaseInstanceId zzcku;
 
     private zzi(FirebaseInstanceId firebaseInstanceId) {
-        this.zzckq = firebaseInstanceId;
+        this.zzcku = firebaseInstanceId;
     }
 
-    public static zzi zzJM() {
+    public static zzi zzJP() {
         return new zzi(FirebaseInstanceId.getInstance());
     }
 
     public final String getId() {
-        return this.zzckq.getId();
+        return this.zzcku.getId();
     }
 
     @Nullable
     public final String getToken() {
-        return this.zzckq.getToken();
+        return this.zzcku.getToken();
     }
 }

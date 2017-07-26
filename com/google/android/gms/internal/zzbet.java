@@ -1,44 +1,46 @@
 package com.google.android.gms.internal;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
+import android.support.annotation.WorkerThread;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Result;
 
-final class zzbet extends Handler {
-    private /* synthetic */ zzber zzaFi;
+final class zzbet implements Runnable {
+    private /* synthetic */ Result zzaFh;
+    private /* synthetic */ zzbes zzaFi;
 
-    public zzbet(zzber com_google_android_gms_internal_zzber, Looper looper) {
-        this.zzaFi = com_google_android_gms_internal_zzber;
-        super(looper);
+    zzbet(zzbes com_google_android_gms_internal_zzbes, Result result) {
+        this.zzaFi = com_google_android_gms_internal_zzbes;
+        this.zzaFh = result;
     }
 
-    public final void handleMessage(Message message) {
-        switch (message.what) {
-            case 0:
-                PendingResult pendingResult = (PendingResult) message.obj;
-                synchronized (this.zzaFi.zzaBW) {
-                    if (pendingResult == null) {
-                        this.zzaFi.zzaFb.zzv(new Status(13, "Transform returned null"));
-                    } else if (pendingResult instanceof zzbeg) {
-                        this.zzaFi.zzaFb.zzv(((zzbeg) pendingResult).getStatus());
-                    } else {
-                        this.zzaFi.zzaFb.zza(pendingResult);
-                    }
-                }
-                return;
-            case 1:
-                RuntimeException runtimeException = (RuntimeException) message.obj;
-                String str = "TransformedResultImpl";
-                String str2 = "Runtime exception on the transformation worker thread: ";
-                String valueOf = String.valueOf(runtimeException.getMessage());
-                Log.e(str, valueOf.length() != 0 ? str2.concat(valueOf) : new String(str2));
-                throw runtimeException;
-            default:
-                Log.e("TransformedResultImpl", "TransformationResultHandler received unknown message type: " + message.what);
-                return;
+    @WorkerThread
+    public final void run() {
+        GoogleApiClient googleApiClient;
+        try {
+            zzbbe.zzaBV.set(Boolean.valueOf(true));
+            this.zzaFi.zzaFf.sendMessage(this.zzaFi.zzaFf.obtainMessage(0, this.zzaFi.zzaFa.onSuccess(this.zzaFh)));
+            zzbbe.zzaBV.set(Boolean.valueOf(false));
+            zzbes.zzc(this.zzaFh);
+            googleApiClient = (GoogleApiClient) this.zzaFi.zzaBY.get();
+            if (googleApiClient != null) {
+                googleApiClient.zzb(this.zzaFi);
+            }
+        } catch (RuntimeException e) {
+            this.zzaFi.zzaFf.sendMessage(this.zzaFi.zzaFf.obtainMessage(1, e));
+            zzbbe.zzaBV.set(Boolean.valueOf(false));
+            zzbes.zzc(this.zzaFh);
+            googleApiClient = (GoogleApiClient) this.zzaFi.zzaBY.get();
+            if (googleApiClient != null) {
+                googleApiClient.zzb(this.zzaFi);
+            }
+        } catch (Throwable th) {
+            Throwable th2 = th;
+            zzbbe.zzaBV.set(Boolean.valueOf(false));
+            zzbes.zzc(this.zzaFh);
+            googleApiClient = (GoogleApiClient) this.zzaFi.zzaBY.get();
+            if (googleApiClient != null) {
+                googleApiClient.zzb(this.zzaFi);
+            }
         }
     }
 }

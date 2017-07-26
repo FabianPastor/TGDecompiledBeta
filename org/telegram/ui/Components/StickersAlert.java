@@ -529,7 +529,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                             if (!set) {
                                 StickersAlert.this.stickerEmojiTextView.setText(Emoji.replaceEmoji(StickersQuery.getEmojiForSticker(StickersAlert.this.selectedSticker.id), StickersAlert.this.stickerEmojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE), false));
                             }
-                            StickersAlert.this.stickerImageView.getImageReceiver().setImage(StickersAlert.this.selectedSticker, null, StickersAlert.this.selectedSticker.thumb.location, null, "webp", true);
+                            StickersAlert.this.stickerImageView.getImageReceiver().setImage(StickersAlert.this.selectedSticker, null, StickersAlert.this.selectedSticker.thumb.location, null, "webp", 1);
                             layoutParams = (FrameLayout.LayoutParams) StickersAlert.this.stickerPreviewLayout.getLayoutParams();
                             layoutParams.topMargin = StickersAlert.this.scrollOffsetY;
                             StickersAlert.this.stickerPreviewLayout.setLayoutParams(layoutParams);
@@ -543,7 +543,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                     if (set) {
                         StickersAlert.this.stickerEmojiTextView.setText(Emoji.replaceEmoji(StickersQuery.getEmojiForSticker(StickersAlert.this.selectedSticker.id), StickersAlert.this.stickerEmojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE), false));
                     }
-                    StickersAlert.this.stickerImageView.getImageReceiver().setImage(StickersAlert.this.selectedSticker, null, StickersAlert.this.selectedSticker.thumb.location, null, "webp", true);
+                    StickersAlert.this.stickerImageView.getImageReceiver().setImage(StickersAlert.this.selectedSticker, null, StickersAlert.this.selectedSticker.thumb.location, null, "webp", 1);
                     layoutParams = (FrameLayout.LayoutParams) StickersAlert.this.stickerPreviewLayout.getLayoutParams();
                     layoutParams.topMargin = StickersAlert.this.scrollOffsetY;
                     StickersAlert.this.stickerPreviewLayout.setLayoutParams(layoutParams);

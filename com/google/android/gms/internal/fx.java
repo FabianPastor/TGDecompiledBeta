@@ -2,24 +2,29 @@ package com.google.android.gms.internal;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
+import android.support.v4.internal.view.SupportMenu;
+import com.google.android.gms.common.internal.safeparcel.zzb;
 
-public final class fx extends zza {
-    public static final Creator<fx> CREATOR = new fy();
-    private byte[] zzbPW;
-
-    fx() {
-        this(new byte[0]);
+public final class fx implements Creator<fw> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzb.zzd(parcel);
+        byte[] bArr = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
+                case 2:
+                    bArr = zzb.zzt(parcel, readInt);
+                    break;
+                default:
+                    zzb.zzb(parcel, readInt);
+                    break;
+            }
+        }
+        zzb.zzF(parcel, zzd);
+        return new fw(bArr);
     }
 
-    public fx(byte[] bArr) {
-        this.zzbPW = bArr;
-    }
-
-    public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.zzbPW, false);
-        zzd.zzI(parcel, zze);
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new fw[i];
     }
 }

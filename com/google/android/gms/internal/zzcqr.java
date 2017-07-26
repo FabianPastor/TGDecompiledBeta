@@ -1,4 +1,6 @@
 package com.google.android.gms.internal;
 
-interface zzcqr {
+final class zzcqr {
+    zzcqr() {
+    }
 }

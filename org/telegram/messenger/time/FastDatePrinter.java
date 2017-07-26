@@ -466,7 +466,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
                     }
                     rule = new CharacterLiteral(sub.charAt(0));
                     break;
-                case TLRPC.LAYER /*68*/:
+                case 'D':
                     rule = selectNumberRule(6, tokenLen);
                     break;
                 case 'E':
@@ -478,7 +478,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
                     }
                     rule = new TextField(7, strArr);
                     break;
-                case 'F':
+                case TLRPC.LAYER /*70*/:
                     rule = selectNumberRule(8, tokenLen);
                     break;
                 case 'G':

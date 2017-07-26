@@ -19,13 +19,13 @@ public class PhotoEditorSeekBar extends View {
     private int thumbSize = AndroidUtilities.dp(16.0f);
 
     public interface PhotoEditorSeekBarDelegate {
-        void onProgressChanged();
+        void onProgressChanged(int i, int i2);
     }
 
     public PhotoEditorSeekBar(Context context) {
         super(context);
-        this.innerPaint.setColor(-NUM);
-        this.outerPaint.setColor(-11292945);
+        this.innerPaint.setColor(-11711155);
+        this.outerPaint.setColor(-1);
     }
 
     public void setDelegate(PhotoEditorSeekBarDelegate delegate) {
@@ -67,7 +67,7 @@ public class PhotoEditorSeekBar extends View {
             }
             this.progress = thumbX / ((float) (getMeasuredWidth() - this.thumbSize));
             if (this.delegate != null) {
-                this.delegate.onProgressChanged();
+                this.delegate.onProgressChanged(((Integer) getTag()).intValue(), getProgress());
             }
             invalidate();
             return true;
@@ -87,7 +87,7 @@ public class PhotoEditorSeekBar extends View {
         this.progress = ((float) (progress - this.minValue)) / ((float) (this.maxValue - this.minValue));
         invalidate();
         if (notify && this.delegate != null) {
-            this.delegate.onProgressChanged();
+            this.delegate.onProgressChanged(((Integer) getTag()).intValue(), getProgress());
         }
     }
 

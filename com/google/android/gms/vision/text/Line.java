@@ -2,21 +2,21 @@ package com.google.android.gms.vision.text;
 
 import android.graphics.Point;
 import android.graphics.Rect;
-import com.google.android.gms.internal.fj;
-import com.google.android.gms.internal.fs;
+import com.google.android.gms.internal.fk;
+import com.google.android.gms.internal.ft;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Line implements Text {
-    private fj zzbNM;
-    private List<Element> zzbNN;
+    private fk zzbNO;
+    private List<Element> zzbNP;
 
-    Line(fj fjVar) {
-        this.zzbNM = fjVar;
+    Line(fk fkVar) {
+        this.zzbNO = fkVar;
     }
 
     public float getAngle() {
-        return this.zzbNM.zzbNW.zzbNU;
+        return this.zzbNO.zzbNY.zzbNW;
     }
 
     public Rect getBoundingBox() {
@@ -24,31 +24,31 @@ public class Line implements Text {
     }
 
     public List<? extends Text> getComponents() {
-        if (this.zzbNM.zzbNV.length == 0) {
+        if (this.zzbNO.zzbNX.length == 0) {
             return new ArrayList(0);
         }
-        if (this.zzbNN == null) {
-            this.zzbNN = new ArrayList(this.zzbNM.zzbNV.length);
-            for (fs element : this.zzbNM.zzbNV) {
-                this.zzbNN.add(new Element(element));
+        if (this.zzbNP == null) {
+            this.zzbNP = new ArrayList(this.zzbNO.zzbNX.length);
+            for (ft element : this.zzbNO.zzbNX) {
+                this.zzbNP.add(new Element(element));
             }
         }
-        return this.zzbNN;
+        return this.zzbNP;
     }
 
     public Point[] getCornerPoints() {
-        return zzc.zza(this.zzbNM.zzbNW);
+        return zzc.zza(this.zzbNO.zzbNY);
     }
 
     public String getLanguage() {
-        return this.zzbNM.zzbNQ;
+        return this.zzbNO.zzbNS;
     }
 
     public String getValue() {
-        return this.zzbNM.zzbNZ;
+        return this.zzbNO.zzbOb;
     }
 
     public boolean isVertical() {
-        return this.zzbNM.zzbOc;
+        return this.zzbNO.zzbOe;
     }
 }

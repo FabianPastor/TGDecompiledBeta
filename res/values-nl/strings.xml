@@ -172,11 +172,13 @@
     <string name="AttachMediaRestrictedForever">Je bent beperkt in het sturen van media door de groepsbeheerders.</string>
     <string name="AttachMusic">Muziek</string>
     <string name="AttachPhoto">Foto</string>
+    <string name="AttachPhotoExpired">Foto is verlopen</string>
     <string name="AttachRound">Videobericht</string>
     <string name="AttachSticker">Sticker</string>
     <string name="AttachStickersRestricted">Je bent beperkt in het sturen van stickers door de groepsbeheerders tot %1$s</string>
     <string name="AttachStickersRestrictedForever">Je bent beperkt in het sturen van stickers door de groepsbeheerders.</string>
     <string name="AttachVideo">Video</string>
+    <string name="AttachVideoExpired">Video is verlopen</string>
     <string name="AudioAutodownload">Spraakberichten</string>
     <string name="AudioTitle">Gedeelde muziek</string>
     <string name="AudioUnknownArtist">Onbekende artiest</string>
@@ -490,6 +492,8 @@
     <string name="DirectShare">Snel delen</string>
     <string name="DirectShareInfo">Recente chats in snel delen weergeven</string>
     <string name="Disabled">Uitgeschakeld</string>
+    <string name="DisappearingPhoto">Geheime foto</string>
+    <string name="DisappearingVideo">Geheime video</string>
     <string name="DiscardChanges">Wijzigingen negeren?</string>
     <string name="DiscardVideoMessageDescription">Wil je stoppen met opnemen en je videobericht weggooien?</string>
     <string name="DiscardVideoMessageTitle">Videobericht weggooien</string>
@@ -907,7 +911,9 @@
     <string name="MessageLifetime">Zelfvernietigingstimer</string>
     <string name="MessageLifetimeChanged">%1$s heeft de zelfvernietigingstimer ingesteld op %2$s</string>
     <string name="MessageLifetimeChangedOutgoing">Je hebt de zelfvernietigingstimer ingesteld op %1$s</string>
+    <string name="MessageLifetimePhoto">Als je een timer instelt vernietigt de foto zichzelf na het bekijken.</string>
     <string name="MessageLifetimeRemoved">%1$s heeft de zelfvernietigingstimer uitgeschakeld</string>
+    <string name="MessageLifetimeVideo">Als je een timer instelt vernietigt de video zichzelf na het bekijken.</string>
     <string name="MessageLifetimeYouRemoved">Je hebt de zelfvernietigingstimer uitgeschakeld</string>
     <string name="MessageNotifications">Berichtmeldingen</string>
     <string name="MessagePreview">Voorbeeld</string>
@@ -1072,6 +1078,8 @@
     <string name="NotificationMessageNoText">%1$s heeft je een bericht gestuurd</string>
     <string name="NotificationMessagePhoto">%1$s heeft je een foto gestuurd</string>
     <string name="NotificationMessageRound">%1$s heeft je een videobericht gestuurd</string>
+    <string name="NotificationMessageSDPhoto">%1$s heeft je een zelfvernietigende foto gestuurd</string>
+    <string name="NotificationMessageSDVideo">%1$s heeft je een zelfvernietigende video gestuurd</string>
     <string name="NotificationMessageSticker">%1$s heeft je een sticker gestuurd</string>
     <string name="NotificationMessageStickerEmoji">%1$s heeft je een %2$s sticker gestuurd</string>
     <string name="NotificationMessageText">%1$s: %2$s</string>
@@ -1135,8 +1143,6 @@
     <string name="Page5Title">Krachtig</string>
     <string name="Page6Message">&lt;b&gt;Telegram&lt;/b&gt; biedt toegang tot je berichten\nvanaf meerdere apparaten.</string>
     <string name="Page6Title">In de cloud</string>
-    <string name="Page7Message">&lt;b&gt;Telegram&lt;/b&gt; berichten zijn sterk versleuteld\nen kunnen zichzelf vernietigen.</string>
-    <string name="Page7Title">Privé</string>
     <string name="PaintDelete">Verwijder</string>
     <string name="PaintDraw">Tekenen</string>
     <string name="PaintDuplicate">Klonen</string>
@@ -1532,6 +1538,9 @@
     <string name="UseProxySettings">Gebruik proxy-instellingen</string>
     <string name="UseProxyUsername">Gebruiker</string>
     <string name="UserAlreadyInGroup">Gebruiker is al een groepslid</string>
+    <string name="UserBio">Bio</string>
+    <string name="UserBioEmpty">Geen</string>
+    <string name="UserBioInfo">Je kunt hier wat over jezelf vertellen. Iedereen die je profiel opent kan deze tekst zien.</string>
     <string name="UserRestricted">Je mag deze actie niet uitvoeren.</string>
     <string name="UserRestrictions">Gebruikersbeperkingen</string>
     <string name="UserRestrictionsBlock">Blokkeer en verwijder uit groep</string>

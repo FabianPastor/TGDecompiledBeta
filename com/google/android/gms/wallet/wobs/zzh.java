@@ -7,36 +7,36 @@ import com.google.android.gms.common.internal.safeparcel.zzd;
 
 public final class zzh extends zza {
     public static final Creator<zzh> CREATOR = new zzi();
-    private String zzbOF;
-    private int zzbQJ;
-    private String zzbQK;
-    private double zzbQL;
-    private long zzbQM;
-    private int zzbQN;
+    private String zzbOH;
+    private int zzbQL;
+    private String zzbQM;
+    private double zzbQN;
+    private long zzbQO;
+    private int zzbQP;
 
     zzh() {
-        this.zzbQN = -1;
-        this.zzbQJ = -1;
-        this.zzbQL = -1.0d;
+        this.zzbQP = -1;
+        this.zzbQL = -1;
+        this.zzbQN = -1.0d;
     }
 
     zzh(int i, String str, double d, String str2, long j, int i2) {
-        this.zzbQJ = i;
-        this.zzbQK = str;
-        this.zzbQL = d;
-        this.zzbOF = str2;
-        this.zzbQM = j;
-        this.zzbQN = i2;
+        this.zzbQL = i;
+        this.zzbQM = str;
+        this.zzbQN = d;
+        this.zzbOH = str2;
+        this.zzbQO = j;
+        this.zzbQP = i2;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
         int zze = zzd.zze(parcel);
-        zzd.zzc(parcel, 2, this.zzbQJ);
-        zzd.zza(parcel, 3, this.zzbQK, false);
-        zzd.zza(parcel, 4, this.zzbQL);
-        zzd.zza(parcel, 5, this.zzbOF, false);
-        zzd.zza(parcel, 6, this.zzbQM);
-        zzd.zzc(parcel, 7, this.zzbQN);
+        zzd.zzc(parcel, 2, this.zzbQL);
+        zzd.zza(parcel, 3, this.zzbQM, false);
+        zzd.zza(parcel, 4, this.zzbQN);
+        zzd.zza(parcel, 5, this.zzbOH, false);
+        zzd.zza(parcel, 6, this.zzbQO);
+        zzd.zzc(parcel, 7, this.zzbQP);
         zzd.zzI(parcel, zze);
     }
 }

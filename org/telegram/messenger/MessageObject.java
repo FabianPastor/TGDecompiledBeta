@@ -64,6 +64,7 @@ import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeImageSize;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
+import org.telegram.tgnet.TLRPC.TL_documentEmpty;
 import org.telegram.tgnet.TLRPC.TL_game;
 import org.telegram.tgnet.TLRPC.TL_inputMessageEntityMentionName;
 import org.telegram.tgnet.TLRPC.TL_inputStickerSetEmpty;
@@ -88,6 +89,7 @@ import org.telegram.tgnet.TLRPC.TL_messageActionLoginUnknownLocation;
 import org.telegram.tgnet.TLRPC.TL_messageActionPaymentSent;
 import org.telegram.tgnet.TLRPC.TL_messageActionPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
+import org.telegram.tgnet.TLRPC.TL_messageActionScreenshotTaken;
 import org.telegram.tgnet.TLRPC.TL_messageActionTTLChange;
 import org.telegram.tgnet.TLRPC.TL_messageActionUserJoined;
 import org.telegram.tgnet.TLRPC.TL_messageActionUserUpdatedPhoto;
@@ -126,6 +128,7 @@ import org.telegram.tgnet.TLRPC.TL_peerChannel;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
 import org.telegram.tgnet.TLRPC.TL_photo;
+import org.telegram.tgnet.TLRPC.TL_photoEmpty;
 import org.telegram.tgnet.TLRPC.TL_photoSize;
 import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
@@ -385,6 +388,12 @@ public class MessageObject {
                             this.messageText = LocaleController.formatString("MessageLifetimeRemoved", R.string.MessageLifetimeRemoved, UserObject.getFirstName(fromUser));
                         }
                     }
+                } else if (message.action instanceof TL_messageActionScreenshotTaken) {
+                    if (isOut()) {
+                        this.messageText = LocaleController.formatString("ActionTakeScreenshootYou", R.string.ActionTakeScreenshootYou, new Object[0]);
+                    } else {
+                        this.messageText = replaceWithLink(LocaleController.getString("ActionTakeScreenshoot", R.string.ActionTakeScreenshoot), "un1", fromUser);
+                    }
                 } else if (message.action instanceof TL_messageActionCreatedBroadcastList) {
                     this.messageText = LocaleController.formatString("YouCreatedBroadcastList", R.string.YouCreatedBroadcastList, new Object[0]);
                 } else if (message.action instanceof TL_messageActionChannelCreate) {
@@ -453,7 +462,7 @@ public class MessageObject {
             this.messageText = message.message;
         } else if (message.media instanceof TL_messageMediaPhoto) {
             this.messageText = LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
-        } else if (isVideo()) {
+        } else if (isVideo() || ((message.media instanceof TL_messageMediaDocument) && (message.media.document instanceof TL_documentEmpty) && message.media.ttl_seconds != 0)) {
             this.messageText = LocaleController.getString("AttachVideo", R.string.AttachVideo);
         } else if (isVoice()) {
             this.messageText = LocaleController.getString("AttachAudio", R.string.AttachAudio);
@@ -1250,6 +1259,9 @@ public class MessageObject {
                 if (TextUtils.isEmpty(this.messageText) && this.eventId == 0) {
                     this.messageText = "Empty message";
                 }
+            } else if (this.messageOwner.media.ttl_seconds != 0 && ((this.messageOwner.media.photo instanceof TL_photoEmpty) || (this.messageOwner.media.document instanceof TL_documentEmpty))) {
+                this.contentType = 1;
+                this.type = 10;
             } else if (this.messageOwner.media instanceof TL_messageMediaPhoto) {
                 this.type = 1;
             } else if ((this.messageOwner.media instanceof TL_messageMediaGeo) || (this.messageOwner.media instanceof TL_messageMediaVenue)) {
@@ -1373,24 +1385,23 @@ public class MessageObject {
     }
 
     public static boolean isRoundVideoDocument(Document document) {
-        if (VERSION.SDK_INT < 16 || document == null || document.mime_type == null || !document.mime_type.equals(MimeTypes.VIDEO_MP4)) {
-            return false;
-        }
-        int width = 0;
-        int height = 0;
-        boolean round = false;
-        for (int a = 0; a < document.attributes.size(); a++) {
-            DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
-            if (attribute instanceof TL_documentAttributeVideo) {
-                width = attribute.w;
-                height = attribute.w;
-                round = attribute.round_message;
+        if (!(document == null || document.mime_type == null || !document.mime_type.equals(MimeTypes.VIDEO_MP4))) {
+            int width = 0;
+            int height = 0;
+            boolean round = false;
+            for (int a = 0; a < document.attributes.size(); a++) {
+                DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+                if (attribute instanceof TL_documentAttributeVideo) {
+                    width = attribute.w;
+                    height = attribute.w;
+                    round = attribute.round_message;
+                }
+            }
+            if (round && width <= 1280 && height <= 1280) {
+                return true;
             }
         }
-        if (!round || width > 1280 || height > 1280) {
-            return false;
-        }
-        return true;
+        return false;
     }
 
     public static boolean isNewGifDocument(Document document) {
@@ -2067,12 +2078,24 @@ public class MessageObject {
         return this.messageOwner.id;
     }
 
+    public static boolean shouldEncryptPhotoOrVideo(Message message) {
+        return ((message instanceof TL_message) && (((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)) && message.media.ttl_seconds != 0)) || ((message instanceof TL_message_secret) && (((message.media instanceof TL_messageMediaPhoto) || isVideoMessage(message)) && message.ttl > 0 && message.ttl <= 60));
+    }
+
+    public boolean shouldEncryptPhotoOrVideo() {
+        return shouldEncryptPhotoOrVideo(this.messageOwner);
+    }
+
+    public static boolean isSecretPhotoOrVideo(Message message) {
+        return ((message instanceof TL_message) && (((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)) && message.media.ttl_seconds != 0)) || ((message instanceof TL_message_secret) && (((message.media instanceof TL_messageMediaPhoto) || isRoundVideoMessage(message) || isVideoMessage(message)) && message.ttl > 0 && message.ttl <= 60));
+    }
+
     public boolean isSecretPhoto() {
-        return (this.messageOwner instanceof TL_message_secret) && (((this.messageOwner.media instanceof TL_messageMediaPhoto) || isRoundVideo()) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60);
+        return ((this.messageOwner instanceof TL_message) && (((this.messageOwner.media instanceof TL_messageMediaPhoto) || (this.messageOwner.media instanceof TL_messageMediaDocument)) && this.messageOwner.media.ttl_seconds != 0)) || ((this.messageOwner instanceof TL_message_secret) && (((this.messageOwner.media instanceof TL_messageMediaPhoto) || isRoundVideo() || isVideo()) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60));
     }
 
     public boolean isSecretMedia() {
-        return (this.messageOwner instanceof TL_message_secret) && ((((this.messageOwner.media instanceof TL_messageMediaPhoto) || isRoundVideo()) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60) || isVoice() || isVideo());
+        return ((this.messageOwner instanceof TL_message) && (((this.messageOwner.media instanceof TL_messageMediaPhoto) || (this.messageOwner.media instanceof TL_messageMediaDocument)) && this.messageOwner.media.ttl_seconds != 0)) || ((this.messageOwner instanceof TL_message_secret) && ((((this.messageOwner.media instanceof TL_messageMediaPhoto) || isRoundVideo()) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60) || isVoice() || isVideo()));
     }
 
     public static void setUnreadFlags(Message message, int flag) {
@@ -2145,14 +2168,19 @@ public class MessageObject {
         return this.messageOwner.send_state == 0 || this.messageOwner.id > 0;
     }
 
+    public int getSecretTimeLeft() {
+        int secondsLeft = this.messageOwner.ttl;
+        if (this.messageOwner.destroyTime != 0) {
+            return Math.max(0, this.messageOwner.destroyTime - ConnectionsManager.getInstance().getCurrentTime());
+        }
+        return secondsLeft;
+    }
+
     public String getSecretTimeString() {
         if (!isSecretMedia()) {
             return null;
         }
-        int secondsLeft = this.messageOwner.ttl;
-        if (this.messageOwner.destroyTime != 0) {
-            secondsLeft = Math.max(0, this.messageOwner.destroyTime - ConnectionsManager.getInstance().getCurrentTime());
-        }
+        int secondsLeft = getSecretTimeLeft();
         if (secondsLeft < 60) {
             return secondsLeft + "s";
         }
@@ -2245,7 +2273,7 @@ public class MessageObject {
         for (int a = 0; a < document.attributes.size(); a++) {
             DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
             if (attribute instanceof TL_documentAttributeVideo) {
-                if (VERSION.SDK_INT >= 16 && attribute.round_message) {
+                if (attribute.round_message) {
                     return false;
                 }
                 isVideo = true;
@@ -2287,16 +2315,10 @@ public class MessageObject {
     }
 
     public static boolean isRoundVideoMessage(Message message) {
-        if (VERSION.SDK_INT < 16) {
-            return false;
-        }
         if (message.media instanceof TL_messageMediaWebPage) {
             return isRoundVideoDocument(message.media.webpage.document);
         }
-        if (message.media == null || message.media.document == null || !isRoundVideoDocument(message.media.document)) {
-            return false;
-        }
-        return true;
+        return (message.media == null || message.media.document == null || !isRoundVideoDocument(message.media.document)) ? false : true;
     }
 
     public static boolean isVoiceMessage(Message message) {
@@ -2506,18 +2528,14 @@ public class MessageObject {
     }
 
     public boolean isRoundVideo() {
-        boolean z = true;
-        if (VERSION.SDK_INT < 16) {
-            return false;
-        }
         if (this.isRoundVideoCached == 0) {
             int i = (this.type == 5 || isRoundVideoMessage(this.messageOwner)) ? 1 : 2;
             this.isRoundVideoCached = i;
         }
-        if (this.isRoundVideoCached != 1) {
-            z = false;
+        if (this.isRoundVideoCached == 1) {
+            return true;
         }
-        return z;
+        return false;
     }
 
     public boolean hasPhotoStickers() {
@@ -2585,6 +2603,9 @@ public class MessageObject {
         for (int a = 0; a < document.attributes.size(); a++) {
             DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
             if (attribute instanceof TL_documentAttributeAudio) {
+                return attribute.duration;
+            }
+            if (attribute instanceof TL_documentAttributeVideo) {
                 return attribute.duration;
             }
         }
@@ -2770,16 +2791,29 @@ public class MessageObject {
     public void checkMediaExistance() {
         this.attachPathExists = false;
         this.mediaExists = false;
+        File file;
         if (this.type == 1) {
             if (FileLoader.getClosestPhotoSizeWithSize(this.photoThumbs, AndroidUtilities.getPhotoSize()) != null) {
-                this.mediaExists = FileLoader.getPathToMessage(this.messageOwner).exists();
+                file = FileLoader.getPathToMessage(this.messageOwner);
+                if (isSecretPhoto()) {
+                    this.mediaExists = new File(file.getAbsolutePath() + ".enc").exists();
+                }
+                if (!this.mediaExists) {
+                    this.mediaExists = file.exists();
+                }
             }
         } else if (this.type == 8 || this.type == 3 || this.type == 9 || this.type == 2 || this.type == 14 || this.type == 5) {
             if (this.messageOwner.attachPath != null && this.messageOwner.attachPath.length() > 0) {
                 this.attachPathExists = new File(this.messageOwner.attachPath).exists();
             }
             if (!this.attachPathExists) {
-                this.mediaExists = FileLoader.getPathToMessage(this.messageOwner).exists();
+                file = FileLoader.getPathToMessage(this.messageOwner);
+                if (this.type == 3 && isSecretPhoto()) {
+                    this.mediaExists = new File(file.getAbsolutePath() + ".enc").exists();
+                }
+                if (!this.mediaExists) {
+                    this.mediaExists = file.exists();
+                }
             }
         } else {
             Document document = getDocument();

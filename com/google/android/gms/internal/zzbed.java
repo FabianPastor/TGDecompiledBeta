@@ -1,23 +1,15 @@
 package com.google.android.gms.internal;
 
-import android.os.RemoteException;
-import com.google.android.gms.common.api.Api.zzb;
-import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.android.gms.common.api.GoogleApi;
 
-public abstract class zzbed<A extends zzb, L> {
-    private final zzbdv<L> zzaEU;
+public final class zzbed {
+    public final zzbam zzaER;
+    public final int zzaES;
+    public final GoogleApi<?> zzaET;
 
-    protected zzbed(zzbdv<L> com_google_android_gms_internal_zzbdv_L) {
-        this.zzaEU = com_google_android_gms_internal_zzbdv_L;
-    }
-
-    protected abstract void zzb(A a, TaskCompletionSource<Void> taskCompletionSource) throws RemoteException;
-
-    public final zzbdx<L> zzqG() {
-        return this.zzaEU.zzqG();
-    }
-
-    public final void zzqH() {
-        this.zzaEU.clear();
+    public zzbed(zzbam com_google_android_gms_internal_zzbam, int i, GoogleApi<?> googleApi) {
+        this.zzaER = com_google_android_gms_internal_zzbam;
+        this.zzaES = i;
+        this.zzaET = googleApi;
     }
 }

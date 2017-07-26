@@ -2,13 +2,33 @@ package com.google.android.gms.internal;
 
 import java.io.IOException;
 
-public final class zzcjx extends ada<zzcjx> {
-    public zzcjy[] zzbvB;
+public final class zzcjx extends adj<zzcjx> {
+    private static volatile zzcjx[] zzbvz;
+    public String name;
+    public String zzaIF;
+    private Float zzbuA;
+    public Double zzbuB;
+    public Long zzbvA;
 
     public zzcjx() {
-        this.zzbvB = zzcjy.zzzD();
-        this.zzcrZ = null;
-        this.zzcsi = -1;
+        this.name = null;
+        this.zzaIF = null;
+        this.zzbvA = null;
+        this.zzbuA = null;
+        this.zzbuB = null;
+        this.zzcsd = null;
+        this.zzcsm = -1;
+    }
+
+    public static zzcjx[] zzzC() {
+        if (zzbvz == null) {
+            synchronized (adn.zzcsl) {
+                if (zzbvz == null) {
+                    zzbvz = new zzcjx[0];
+                }
+            }
+        }
+        return zzbvz;
     }
 
     public final boolean equals(Object obj) {
@@ -19,40 +39,76 @@ public final class zzcjx extends ada<zzcjx> {
             return false;
         }
         zzcjx com_google_android_gms_internal_zzcjx = (zzcjx) obj;
-        return !ade.equals(this.zzbvB, com_google_android_gms_internal_zzcjx.zzbvB) ? false : (this.zzcrZ == null || this.zzcrZ.isEmpty()) ? com_google_android_gms_internal_zzcjx.zzcrZ == null || com_google_android_gms_internal_zzcjx.zzcrZ.isEmpty() : this.zzcrZ.equals(com_google_android_gms_internal_zzcjx.zzcrZ);
+        if (this.name == null) {
+            if (com_google_android_gms_internal_zzcjx.name != null) {
+                return false;
+            }
+        } else if (!this.name.equals(com_google_android_gms_internal_zzcjx.name)) {
+            return false;
+        }
+        if (this.zzaIF == null) {
+            if (com_google_android_gms_internal_zzcjx.zzaIF != null) {
+                return false;
+            }
+        } else if (!this.zzaIF.equals(com_google_android_gms_internal_zzcjx.zzaIF)) {
+            return false;
+        }
+        if (this.zzbvA == null) {
+            if (com_google_android_gms_internal_zzcjx.zzbvA != null) {
+                return false;
+            }
+        } else if (!this.zzbvA.equals(com_google_android_gms_internal_zzcjx.zzbvA)) {
+            return false;
+        }
+        if (this.zzbuA == null) {
+            if (com_google_android_gms_internal_zzcjx.zzbuA != null) {
+                return false;
+            }
+        } else if (!this.zzbuA.equals(com_google_android_gms_internal_zzcjx.zzbuA)) {
+            return false;
+        }
+        if (this.zzbuB == null) {
+            if (com_google_android_gms_internal_zzcjx.zzbuB != null) {
+                return false;
+            }
+        } else if (!this.zzbuB.equals(com_google_android_gms_internal_zzcjx.zzbuB)) {
+            return false;
+        }
+        return (this.zzcsd == null || this.zzcsd.isEmpty()) ? com_google_android_gms_internal_zzcjx.zzcsd == null || com_google_android_gms_internal_zzcjx.zzcsd.isEmpty() : this.zzcsd.equals(com_google_android_gms_internal_zzcjx.zzcsd);
     }
 
     public final int hashCode() {
-        int hashCode = (((getClass().getName().hashCode() + 527) * 31) + ade.hashCode(this.zzbvB)) * 31;
-        int hashCode2 = (this.zzcrZ == null || this.zzcrZ.isEmpty()) ? 0 : this.zzcrZ.hashCode();
-        return hashCode2 + hashCode;
+        int i = 0;
+        int hashCode = ((this.zzbuB == null ? 0 : this.zzbuB.hashCode()) + (((this.zzbuA == null ? 0 : this.zzbuA.hashCode()) + (((this.zzbvA == null ? 0 : this.zzbvA.hashCode()) + (((this.zzaIF == null ? 0 : this.zzaIF.hashCode()) + (((this.name == null ? 0 : this.name.hashCode()) + ((getClass().getName().hashCode() + 527) * 31)) * 31)) * 31)) * 31)) * 31)) * 31;
+        if (!(this.zzcsd == null || this.zzcsd.isEmpty())) {
+            i = this.zzcsd.hashCode();
+        }
+        return hashCode + i;
     }
 
-    public final /* synthetic */ adg zza(acx com_google_android_gms_internal_acx) throws IOException {
+    public final /* synthetic */ adp zza(adg com_google_android_gms_internal_adg) throws IOException {
         while (true) {
-            int zzLy = com_google_android_gms_internal_acx.zzLy();
-            switch (zzLy) {
+            int zzLB = com_google_android_gms_internal_adg.zzLB();
+            switch (zzLB) {
                 case 0:
                     break;
                 case 10:
-                    int zzb = adj.zzb(com_google_android_gms_internal_acx, 10);
-                    zzLy = this.zzbvB == null ? 0 : this.zzbvB.length;
-                    Object obj = new zzcjy[(zzb + zzLy)];
-                    if (zzLy != 0) {
-                        System.arraycopy(this.zzbvB, 0, obj, 0, zzLy);
-                    }
-                    while (zzLy < obj.length - 1) {
-                        obj[zzLy] = new zzcjy();
-                        com_google_android_gms_internal_acx.zza(obj[zzLy]);
-                        com_google_android_gms_internal_acx.zzLy();
-                        zzLy++;
-                    }
-                    obj[zzLy] = new zzcjy();
-                    com_google_android_gms_internal_acx.zza(obj[zzLy]);
-                    this.zzbvB = obj;
+                    this.name = com_google_android_gms_internal_adg.readString();
+                    continue;
+                case 18:
+                    this.zzaIF = com_google_android_gms_internal_adg.readString();
+                    continue;
+                case 24:
+                    this.zzbvA = Long.valueOf(com_google_android_gms_internal_adg.zzLH());
+                    continue;
+                case 37:
+                    this.zzbuA = Float.valueOf(Float.intBitsToFloat(com_google_android_gms_internal_adg.zzLI()));
+                    continue;
+                case 41:
+                    this.zzbuB = Double.valueOf(Double.longBitsToDouble(com_google_android_gms_internal_adg.zzLJ()));
                     continue;
                 default:
-                    if (!super.zza(com_google_android_gms_internal_acx, zzLy)) {
+                    if (!super.zza(com_google_android_gms_internal_adg, zzLB)) {
                         break;
                     }
                     continue;
@@ -61,26 +117,44 @@ public final class zzcjx extends ada<zzcjx> {
         }
     }
 
-    public final void zza(acy com_google_android_gms_internal_acy) throws IOException {
-        if (this.zzbvB != null && this.zzbvB.length > 0) {
-            for (adg com_google_android_gms_internal_adg : this.zzbvB) {
-                if (com_google_android_gms_internal_adg != null) {
-                    com_google_android_gms_internal_acy.zza(1, com_google_android_gms_internal_adg);
-                }
-            }
+    public final void zza(adh com_google_android_gms_internal_adh) throws IOException {
+        if (this.name != null) {
+            com_google_android_gms_internal_adh.zzl(1, this.name);
         }
-        super.zza(com_google_android_gms_internal_acy);
+        if (this.zzaIF != null) {
+            com_google_android_gms_internal_adh.zzl(2, this.zzaIF);
+        }
+        if (this.zzbvA != null) {
+            com_google_android_gms_internal_adh.zzb(3, this.zzbvA.longValue());
+        }
+        if (this.zzbuA != null) {
+            com_google_android_gms_internal_adh.zzc(4, this.zzbuA.floatValue());
+        }
+        if (this.zzbuB != null) {
+            com_google_android_gms_internal_adh.zza(5, this.zzbuB.doubleValue());
+        }
+        super.zza(com_google_android_gms_internal_adh);
     }
 
     protected final int zzn() {
         int zzn = super.zzn();
-        if (this.zzbvB != null && this.zzbvB.length > 0) {
-            for (adg com_google_android_gms_internal_adg : this.zzbvB) {
-                if (com_google_android_gms_internal_adg != null) {
-                    zzn += acy.zzb(1, com_google_android_gms_internal_adg);
-                }
-            }
+        if (this.name != null) {
+            zzn += adh.zzm(1, this.name);
         }
-        return zzn;
+        if (this.zzaIF != null) {
+            zzn += adh.zzm(2, this.zzaIF);
+        }
+        if (this.zzbvA != null) {
+            zzn += adh.zze(3, this.zzbvA.longValue());
+        }
+        if (this.zzbuA != null) {
+            this.zzbuA.floatValue();
+            zzn += adh.zzct(4) + 4;
+        }
+        if (this.zzbuB == null) {
+            return zzn;
+        }
+        this.zzbuB.doubleValue();
+        return zzn + (adh.zzct(5) + 8);
     }
 }

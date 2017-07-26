@@ -26,7 +26,6 @@ import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -69,9 +68,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     private boolean singlePhoto;
 
     public interface PhotoAlbumPickerActivityDelegate {
-        void didSelectPhotos(ArrayList<String> arrayList, ArrayList<String> arrayList2, ArrayList<PhotoEntry> arrayList3, ArrayList<ArrayList<InputDocument>> arrayList4, ArrayList<SearchImage> arrayList5);
-
-        void didSelectVideo(String str, VideoEditedInfo videoEditedInfo, long j, long j2, String str2);
+        void didSelectPhotos(ArrayList<String> arrayList, ArrayList<String> arrayList2, ArrayList<Integer> arrayList3, ArrayList<PhotoEntry> arrayList4, ArrayList<ArrayList<InputDocument>> arrayList5, ArrayList<SearchImage> arrayList6);
 
         void startPhotoSelectActivity();
     }
@@ -345,6 +342,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
             ArrayList<String> photos = new ArrayList();
             ArrayList<PhotoEntry> videos = new ArrayList();
             ArrayList<String> captions = new ArrayList();
+            ArrayList<Integer> ttls = new ArrayList();
             ArrayList<ArrayList<InputDocument>> masks = new ArrayList();
             for (Entry<Integer, PhotoEntry> entry : this.selectedPhotos.entrySet()) {
                 PhotoEntry photoEntry = (PhotoEntry) entry.getValue();
@@ -354,10 +352,12 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                     photos.add(photoEntry.imagePath);
                     captions.add(photoEntry.caption != null ? photoEntry.caption.toString() : null);
                     masks.add(!photoEntry.stickers.isEmpty() ? new ArrayList(photoEntry.stickers) : null);
+                    ttls.add(Integer.valueOf(photoEntry.ttl));
                 } else if (photoEntry.path != null) {
                     photos.add(photoEntry.path);
                     captions.add(photoEntry.caption != null ? photoEntry.caption.toString() : null);
                     masks.add(!photoEntry.stickers.isEmpty() ? new ArrayList(photoEntry.stickers) : null);
+                    ttls.add(Integer.valueOf(photoEntry.ttl));
                 }
             }
             ArrayList<SearchImage> webPhotos = new ArrayList();
@@ -369,6 +369,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                     photos.add(searchImage.imagePath);
                     captions.add(searchImage.caption != null ? searchImage.caption.toString() : null);
                     masks.add(!searchImage.stickers.isEmpty() ? new ArrayList(searchImage.stickers) : null);
+                    ttls.add(Integer.valueOf(searchImage.ttl));
                 } else {
                     webPhotos.add(searchImage);
                 }
@@ -400,7 +401,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
             if (gifChanged) {
                 MessagesStorage.getInstance().putWebRecent(this.recentGifImages);
             }
-            this.delegate.didSelectPhotos(photos, captions, videos, masks, webPhotos);
+            this.delegate.didSelectPhotos(photos, captions, ttls, videos, masks, webPhotos);
         }
     }
 
@@ -451,11 +452,6 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 if (!canceled) {
                     PhotoAlbumPickerActivity.this.sendSelectedPhotos();
                 }
-            }
-
-            public void didSelectVideo(String path, VideoEditedInfo info, long estimatedSize, long estimatedDuration, String caption) {
-                PhotoAlbumPickerActivity.this.removeSelfFromStack();
-                PhotoAlbumPickerActivity.this.delegate.didSelectVideo(path, info, estimatedSize, estimatedDuration, caption);
             }
         });
         presentFragment(fragment);

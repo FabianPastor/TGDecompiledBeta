@@ -9,9 +9,9 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.common.internal.zzbo;
 import com.google.android.gms.common.internal.zzq;
 import com.google.android.gms.identity.intents.Address.AddressOptions;
-import com.google.android.gms.internal.zzcbd;
+import com.google.android.gms.internal.zzcbe;
 
-final class zza extends com.google.android.gms.common.api.Api.zza<zzcbd, AddressOptions> {
+final class zza extends com.google.android.gms.common.api.Api.zza<zzcbe, AddressOptions> {
     zza() {
     }
 
@@ -21,6 +21,6 @@ final class zza extends com.google.android.gms.common.api.Api.zza<zzcbd, Address
         if (addressOptions == null) {
             addressOptions = new AddressOptions();
         }
-        return new zzcbd((Activity) context, looper, com_google_android_gms_common_internal_zzq, addressOptions.theme, connectionCallbacks, onConnectionFailedListener);
+        return new zzcbe((Activity) context, looper, com_google_android_gms_common_internal_zzq, addressOptions.theme, connectionCallbacks, onConnectionFailedListener);
     }
 }

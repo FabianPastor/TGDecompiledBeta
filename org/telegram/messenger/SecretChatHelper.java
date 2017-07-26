@@ -858,6 +858,8 @@ public class SecretChatHelper {
                         return null;
                     }
                     newMessage.media = new TL_messageMediaPhoto();
+                    r5 = newMessage.media;
+                    r5.flags |= 3;
                     newMessage.media.caption = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : "";
                     newMessage.media.photo = new TL_photo();
                     newMessage.media.photo.date = newMessage.date;
@@ -890,6 +892,8 @@ public class SecretChatHelper {
                         return null;
                     }
                     newMessage.media = new TL_messageMediaDocument();
+                    r5 = newMessage.media;
+                    r5.flags |= 3;
                     newMessage.media.document = new TL_documentEncrypted();
                     newMessage.media.document.key = decryptedMessage.media.key;
                     newMessage.media.document.iv = decryptedMessage.media.iv;
@@ -930,6 +934,8 @@ public class SecretChatHelper {
                         return null;
                     }
                     newMessage.media = new TL_messageMediaDocument();
+                    r5 = newMessage.media;
+                    r5.flags |= 3;
                     newMessage.media.caption = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : "";
                     newMessage.media.document = new TL_documentEncrypted();
                     newMessage.media.document.id = file.id;
@@ -975,6 +981,8 @@ public class SecretChatHelper {
                     return newMessage;
                 } else if (decryptedMessage.media instanceof TL_decryptedMessageMediaExternalDocument) {
                     newMessage.media = new TL_messageMediaDocument();
+                    r5 = newMessage.media;
+                    r5.flags |= 3;
                     newMessage.media.caption = "";
                     newMessage.media.document = new TL_document();
                     newMessage.media.document.id = decryptedMessage.media.id;
@@ -995,6 +1003,8 @@ public class SecretChatHelper {
                         return null;
                     }
                     newMessage.media = new TL_messageMediaDocument();
+                    r5 = newMessage.media;
+                    r5.flags |= 3;
                     newMessage.media.document = new TL_documentEncrypted();
                     newMessage.media.document.key = decryptedMessage.media.key;
                     newMessage.media.document.iv = decryptedMessage.media.iv;
@@ -1095,7 +1105,7 @@ public class SecretChatHelper {
                 } else if (serviceMessage.action instanceof TL_decryptedMessageActionReadMessages) {
                     if (!serviceMessage.action.random_ids.isEmpty()) {
                         int time = ConnectionsManager.getInstance().getCurrentTime();
-                        MessagesStorage.getInstance().createTaskForSecretChat(chat.id, time, time, 1, serviceMessage.action.random_ids);
+                        MessagesStorage.getInstance().createTaskForSecretChat((long) chat.id, time, time, 1, serviceMessage.action.random_ids);
                     }
                 } else if (serviceMessage.action instanceof TL_decryptedMessageActionNotifyLayer) {
                     applyPeerLayer(chat, serviceMessage.action.layer);

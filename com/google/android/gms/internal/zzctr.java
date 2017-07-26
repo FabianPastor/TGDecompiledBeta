@@ -1,13 +1,42 @@
 package com.google.android.gms.internal;
 
-import android.os.IInterface;
+import android.os.Parcel;
 import android.os.RemoteException;
-import com.google.android.gms.common.internal.zzal;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.Status;
 
-public interface zzctr extends IInterface {
-    void zza(zzal com_google_android_gms_common_internal_zzal, int i, boolean z) throws RemoteException;
+public abstract class zzctr extends zzee implements zzctq {
+    public zzctr() {
+        attachInterface(this, "com.google.android.gms.signin.internal.ISignInCallbacks");
+    }
 
-    void zza(zzctu com_google_android_gms_internal_zzctu, zzctp com_google_android_gms_internal_zzctp) throws RemoteException;
-
-    void zzbv(int i) throws RemoteException;
+    public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
+        if (zza(i, parcel, parcel2, i2)) {
+            return true;
+        }
+        switch (i) {
+            case 3:
+                zzef.zza(parcel, ConnectionResult.CREATOR);
+                zzef.zza(parcel, zzctn.CREATOR);
+                break;
+            case 4:
+                zzef.zza(parcel, Status.CREATOR);
+                break;
+            case 6:
+                zzef.zza(parcel, Status.CREATOR);
+                break;
+            case 7:
+                zzef.zza(parcel, Status.CREATOR);
+                zzef.zza(parcel, GoogleSignInAccount.CREATOR);
+                break;
+            case 8:
+                zzb((zzctx) zzef.zza(parcel, zzctx.CREATOR));
+                break;
+            default:
+                return false;
+        }
+        parcel2.writeNoException();
+        return true;
+    }
 }

@@ -1,14 +1,21 @@
 package com.google.android.gms.internal;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import android.os.RemoteException;
 
-public final class zzbzz {
-    private final Collection<zzbzt> zzBR = new ArrayList();
-    private final Collection<zzbzy> zzBS = new ArrayList();
-    private final Collection<zzbzy> zzBT = new ArrayList();
+public final class zzbzz extends zzbzu<String> {
+    public zzbzz(int i, String str, String str2) {
+        super(0, str, str2);
+    }
 
-    public final void zza(zzbzt com_google_android_gms_internal_zzbzt) {
-        this.zzBR.add(com_google_android_gms_internal_zzbzt);
+    private final String zze(zzcac com_google_android_gms_internal_zzcac) {
+        try {
+            return com_google_android_gms_internal_zzcac.getStringFlagValue(getKey(), (String) zzdI(), getSource());
+        } catch (RemoteException e) {
+            return (String) zzdI();
+        }
+    }
+
+    public final /* synthetic */ Object zza(zzcac com_google_android_gms_internal_zzcac) {
+        return zze(com_google_android_gms_internal_zzcac);
     }
 }

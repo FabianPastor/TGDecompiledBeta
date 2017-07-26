@@ -8,20 +8,20 @@ import com.google.android.gms.common.internal.safeparcel.zzd;
 public final class zzcr extends zza {
     public static final Creator<zzcr> CREATOR = new zzcq();
     private int statusCode;
-    private boolean zzbSI;
-    private boolean zzbSJ;
+    private boolean zzbSK;
+    private boolean zzbSL;
 
     public zzcr(int i, boolean z, boolean z2) {
         this.statusCode = i;
-        this.zzbSI = z;
-        this.zzbSJ = z2;
+        this.zzbSK = z;
+        this.zzbSL = z2;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
         int zze = zzd.zze(parcel);
         zzd.zzc(parcel, 2, this.statusCode);
-        zzd.zza(parcel, 3, this.zzbSI);
-        zzd.zza(parcel, 4, this.zzbSJ);
+        zzd.zza(parcel, 3, this.zzbSK);
+        zzd.zza(parcel, 4, this.zzbSL);
         zzd.zzI(parcel, zze);
     }
 }

@@ -13,9 +13,9 @@ public final class InstrumentInfo extends zza {
     public static final int CARD_CLASS_PREPAID = 3;
     public static final int CARD_CLASS_UNKNOWN = 0;
     public static final Creator<InstrumentInfo> CREATOR = new zzj();
-    private String zzbOI;
-    private String zzbOJ;
-    private int zzbOK;
+    private String zzbOK;
+    private String zzbOL;
+    private int zzbOM;
 
     @Retention(RetentionPolicy.SOURCE)
     public @interface CardClass {
@@ -25,28 +25,28 @@ public final class InstrumentInfo extends zza {
     }
 
     public InstrumentInfo(String str, String str2, int i) {
-        this.zzbOI = str;
-        this.zzbOJ = str2;
-        this.zzbOK = i;
+        this.zzbOK = str;
+        this.zzbOL = str2;
+        this.zzbOM = i;
     }
 
     public final int getCardClass() {
-        switch (this.zzbOK) {
+        switch (this.zzbOM) {
             case 1:
             case 2:
             case 3:
-                return this.zzbOK;
+                return this.zzbOM;
             default:
                 return 0;
         }
     }
 
     public final String getInstrumentDetails() {
-        return this.zzbOJ;
+        return this.zzbOL;
     }
 
     public final String getInstrumentType() {
-        return this.zzbOI;
+        return this.zzbOK;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {

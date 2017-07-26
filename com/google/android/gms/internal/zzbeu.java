@@ -1,43 +1,44 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.common.api.Api.zzc;
-import com.google.android.gms.common.api.Api.zze;
-import com.google.android.gms.common.api.Result;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
 
-public final class zzbeu {
-    public static final Status zzaFj = new Status(8, "The connection to Google Play services was lost");
-    private static final zzbbd<?>[] zzaFk = new zzbbd[0];
-    private final Map<zzc<?>, zze> zzaDF;
-    final Set<zzbbd<?>> zzaFl = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap()));
-    private final zzbew zzaFm = new zzbev(this);
+final class zzbeu extends Handler {
+    private /* synthetic */ zzbes zzaFi;
 
-    public zzbeu(Map<zzc<?>, zze> map) {
-        this.zzaDF = map;
+    public zzbeu(zzbes com_google_android_gms_internal_zzbes, Looper looper) {
+        this.zzaFi = com_google_android_gms_internal_zzbes;
+        super(looper);
     }
 
-    public final void release() {
-        for (zzbbd com_google_android_gms_internal_zzbbd : (zzbbd[]) this.zzaFl.toArray(zzaFk)) {
-            com_google_android_gms_internal_zzbbd.zza(null);
-            com_google_android_gms_internal_zzbbd.zzpo();
-            if (com_google_android_gms_internal_zzbbd.zzpB()) {
-                this.zzaFl.remove(com_google_android_gms_internal_zzbbd);
-            }
-        }
-    }
-
-    final void zzb(zzbbd<? extends Result> com_google_android_gms_internal_zzbbd__extends_com_google_android_gms_common_api_Result) {
-        this.zzaFl.add(com_google_android_gms_internal_zzbbd__extends_com_google_android_gms_common_api_Result);
-        com_google_android_gms_internal_zzbbd__extends_com_google_android_gms_common_api_Result.zza(this.zzaFm);
-    }
-
-    public final void zzqM() {
-        for (zzbbd zzs : (zzbbd[]) this.zzaFl.toArray(zzaFk)) {
-            zzs.zzs(zzaFj);
+    public final void handleMessage(Message message) {
+        switch (message.what) {
+            case 0:
+                PendingResult pendingResult = (PendingResult) message.obj;
+                synchronized (this.zzaFi.zzaBW) {
+                    if (pendingResult == null) {
+                        this.zzaFi.zzaFb.zzv(new Status(13, "Transform returned null"));
+                    } else if (pendingResult instanceof zzbeh) {
+                        this.zzaFi.zzaFb.zzv(((zzbeh) pendingResult).getStatus());
+                    } else {
+                        this.zzaFi.zzaFb.zza(pendingResult);
+                    }
+                }
+                return;
+            case 1:
+                RuntimeException runtimeException = (RuntimeException) message.obj;
+                String str = "TransformedResultImpl";
+                String str2 = "Runtime exception on the transformation worker thread: ";
+                String valueOf = String.valueOf(runtimeException.getMessage());
+                Log.e(str, valueOf.length() != 0 ? str2.concat(valueOf) : new String(str2));
+                throw runtimeException;
+            default:
+                Log.e("TransformedResultImpl", "TransformationResultHandler received unknown message type: " + message.what);
+                return;
         }
     }
 }

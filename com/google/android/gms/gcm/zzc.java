@@ -22,8 +22,8 @@ final class zzc extends Handler {
         if ("com.google.android.c2dm.intent.REGISTRATION".equals(intent.getAction())) {
             this.zzbfU.zzbfS.add(intent);
         } else if (!this.zzbfU.zze(intent)) {
-            intent.setPackage(this.zzbfU.zzqF.getPackageName());
-            this.zzbfU.zzqF.sendBroadcast(intent);
+            intent.setPackage(this.zzbfU.zzqD.getPackageName());
+            this.zzbfU.zzqD.sendBroadcast(intent);
         }
     }
 }

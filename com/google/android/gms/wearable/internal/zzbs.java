@@ -6,15 +6,15 @@ import com.google.android.gms.wearable.DataItem;
 
 public final class zzbs implements DataItemResult {
     private final Status mStatus;
-    private final DataItem zzbSz;
+    private final DataItem zzbSB;
 
     public zzbs(Status status, DataItem dataItem) {
         this.mStatus = status;
-        this.zzbSz = dataItem;
+        this.zzbSB = dataItem;
     }
 
     public final DataItem getDataItem() {
-        return this.zzbSz;
+        return this.zzbSB;
     }
 
     public final Status getStatus() {

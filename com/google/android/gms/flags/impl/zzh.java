@@ -2,12 +2,12 @@ package com.google.android.gms.flags.impl;
 
 import android.content.SharedPreferences;
 import android.util.Log;
-import com.google.android.gms.internal.zzcaf;
+import com.google.android.gms.internal.zzcag;
 
 public final class zzh extends zza<String> {
     public static String zza(SharedPreferences sharedPreferences, String str, String str2) {
         try {
-            return (String) zzcaf.zzb(new zzi(sharedPreferences, str, str2));
+            return (String) zzcag.zzb(new zzi(sharedPreferences, str, str2));
         } catch (Exception e) {
             String str3 = "FlagDataUtils";
             String str4 = "Flag value not available, returning default: ";

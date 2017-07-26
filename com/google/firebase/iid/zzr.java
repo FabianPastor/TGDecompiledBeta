@@ -17,23 +17,23 @@ import java.security.spec.X509EncodedKeySpec;
 
 final class zzr {
     SharedPreferences zzbho;
-    private Context zzqF;
+    private Context zzqD;
 
     public zzr(Context context) {
         this(context, "com.google.android.gms.appid");
     }
 
     private zzr(Context context, String str) {
-        this.zzqF = context;
+        this.zzqD = context;
         this.zzbho = context.getSharedPreferences(str, 0);
         String valueOf = String.valueOf(str);
         String valueOf2 = String.valueOf("-no-backup");
-        File file = new File(zzu.getNoBackupFilesDir(this.zzqF), valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf));
+        File file = new File(zzu.getNoBackupFilesDir(this.zzqD), valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf));
         if (!file.exists()) {
             try {
                 if (file.createNewFile() && !isEmpty()) {
                     Log.i("InstanceID/Store", "App restored, clearing state");
-                    FirebaseInstanceId.zza(this.zzqF, this);
+                    FirebaseInstanceId.zza(this.zzqD, this);
                 }
             } catch (IOException e) {
                 if (Log.isLoggable("InstanceID/Store", 3)) {
@@ -136,14 +136,14 @@ final class zzr {
                 e = e2;
                 string = String.valueOf(e);
                 Log.w("InstanceID/Store", new StringBuilder(String.valueOf(string).length() + 19).append("Invalid key stored ").append(string).toString());
-                FirebaseInstanceId.zza(this.zzqF, this);
+                FirebaseInstanceId.zza(this.zzqD, this);
                 keyPair = null;
                 return keyPair;
             } catch (NoSuchAlgorithmException e3) {
                 e = e3;
                 string = String.valueOf(e);
                 Log.w("InstanceID/Store", new StringBuilder(String.valueOf(string).length() + 19).append("Invalid key stored ").append(string).toString());
-                FirebaseInstanceId.zza(this.zzqF, this);
+                FirebaseInstanceId.zza(this.zzqD, this);
                 keyPair = null;
                 return keyPair;
             }

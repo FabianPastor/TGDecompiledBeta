@@ -5,15 +5,15 @@ import com.google.android.gms.common.internal.zzbo;
 import com.google.firebase.FirebaseException;
 
 public class FirebaseAuthException extends FirebaseException {
-    private final String zzbWj;
+    private final String zzbWl;
 
     public FirebaseAuthException(@NonNull String str, @NonNull String str2) {
         super(str2);
-        this.zzbWj = zzbo.zzcF(str);
+        this.zzbWl = zzbo.zzcF(str);
     }
 
     @NonNull
     public String getErrorCode() {
-        return this.zzbWj;
+        return this.zzbWl;
     }
 }

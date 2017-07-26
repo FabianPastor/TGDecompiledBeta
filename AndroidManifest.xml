@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="10305" android:versionName="4.1.1" android:installLocation="auto" package="org.telegram.messenger.beta" platformBuildVersionCode="25" platformBuildVersionName="7.1.1">
-    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="25" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="10405" android:versionName="4.2.0" android:installLocation="auto" package="org.telegram.messenger.beta" platformBuildVersionCode="25" platformBuildVersionName="7.1.1">
+    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="25" />
     <uses-feature android:name="android.hardware.location.gps" android:required="false" />
     <uses-feature android:name="android.hardware.location.network" android:required="false" />
     <uses-feature android:name="android.hardware.location" android:required="false" />
@@ -167,7 +167,7 @@
             </intent-filter>
         </activity>
         <activity android:name="org.telegram.ui.ManageSpaceActivity" android:launchMode="singleTask" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:windowSoftInputMode="adjustPan|adjustNothing" android:hardwareAccelerated="@bool/useHardwareAcceleration" />
-        <activity android:name="org.telegram.ui.IntroActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+        <activity android:name="org.telegram.ui.IntroActivity" android:launchMode="singleTask" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
         <activity android:name="org.telegram.messenger.OpenChatReceiver" android:exported="true" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
         <activity android:theme="@style/Theme_TMessages_PopupNotification" android:name="org.telegram.ui.PopupNotificationActivity" android:taskAffinity="" android:excludeFromRecents="true" android:launchMode="singleTask" android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" android:windowSoftInputMode="stateHidden|stateAlwaysHidden|adjustResize|adjustNothing" android:resizeableActivity="false" />
         <activity android:name="org.telegram.messenger.GoogleVoiceClientActivity" android:exported="true">

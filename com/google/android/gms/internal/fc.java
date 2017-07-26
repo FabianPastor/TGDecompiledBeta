@@ -2,45 +2,43 @@ package com.google.android.gms.internal;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.vision.Frame;
 
-public final class fc implements Creator<fb> {
-    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        int i = 0;
-        int zzd = zzb.zzd(parcel);
-        long j = 0;
-        int i2 = 0;
-        int i3 = 0;
-        int i4 = 0;
-        while (parcel.dataPosition() < zzd) {
-            int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
-                case 2:
-                    i4 = zzb.zzg(parcel, readInt);
-                    break;
-                case 3:
-                    i3 = zzb.zzg(parcel, readInt);
-                    break;
-                case 4:
-                    i2 = zzb.zzg(parcel, readInt);
-                    break;
-                case 5:
-                    j = zzb.zzi(parcel, readInt);
-                    break;
-                case 6:
-                    i = zzb.zzg(parcel, readInt);
-                    break;
-                default:
-                    zzb.zzb(parcel, readInt);
-                    break;
-            }
-        }
-        zzb.zzF(parcel, zzd);
-        return new fb(i4, i3, i2, j, i);
+public final class fc extends zza {
+    public static final Creator<fc> CREATOR = new fd();
+    public int height;
+    private int id;
+    public int rotation;
+    public int width;
+    private long zzbiv;
+
+    public fc(int i, int i2, int i3, long j, int i4) {
+        this.width = i;
+        this.height = i2;
+        this.id = i3;
+        this.zzbiv = j;
+        this.rotation = i4;
     }
 
-    public final /* synthetic */ Object[] newArray(int i) {
-        return new fb[i];
+    public static fc zzc(Frame frame) {
+        fc fcVar = new fc();
+        fcVar.width = frame.getMetadata().getWidth();
+        fcVar.height = frame.getMetadata().getHeight();
+        fcVar.rotation = frame.getMetadata().getRotation();
+        fcVar.id = frame.getMetadata().getId();
+        fcVar.zzbiv = frame.getMetadata().getTimestampMillis();
+        return fcVar;
+    }
+
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zzc(parcel, 2, this.width);
+        zzd.zzc(parcel, 3, this.height);
+        zzd.zzc(parcel, 4, this.id);
+        zzd.zza(parcel, 5, this.zzbiv);
+        zzd.zzc(parcel, 6, this.rotation);
+        zzd.zzI(parcel, zze);
     }
 }

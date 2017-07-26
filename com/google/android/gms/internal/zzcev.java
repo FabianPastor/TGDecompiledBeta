@@ -1,43 +1,35 @@
 package com.google.android.gms.internal;
 
-import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
-import java.util.Iterator;
+import com.google.android.gms.common.internal.zzbo;
 
-public final class zzcev extends zza implements Iterable<String> {
-    public static final Creator<zzcev> CREATOR = new zzcex();
-    private final Bundle zzbpJ;
+final class zzcev {
+    final String mAppId;
+    final String mName;
+    final long zzbpG;
+    final long zzbpH;
+    final long zzbpI;
 
-    zzcev(Bundle bundle) {
-        this.zzbpJ = bundle;
+    zzcev(String str, String str2, long j, long j2, long j3) {
+        boolean z = true;
+        zzbo.zzcF(str);
+        zzbo.zzcF(str2);
+        zzbo.zzaf(j >= 0);
+        if (j2 < 0) {
+            z = false;
+        }
+        zzbo.zzaf(z);
+        this.mAppId = str;
+        this.mName = str2;
+        this.zzbpG = j;
+        this.zzbpH = j2;
+        this.zzbpI = j3;
     }
 
-    final Object get(String str) {
-        return this.zzbpJ.get(str);
+    final zzcev zzab(long j) {
+        return new zzcev(this.mAppId, this.mName, this.zzbpG, this.zzbpH, j);
     }
 
-    public final Iterator<String> iterator() {
-        return new zzcew(this);
-    }
-
-    public final int size() {
-        return this.zzbpJ.size();
-    }
-
-    public final String toString() {
-        return this.zzbpJ.toString();
-    }
-
-    public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, zzyt(), false);
-        zzd.zzI(parcel, zze);
-    }
-
-    public final Bundle zzyt() {
-        return new Bundle(this.zzbpJ);
+    final zzcev zzys() {
+        return new zzcev(this.mAppId, this.mName, this.zzbpG + 1, this.zzbpH + 1, this.zzbpI);
     }
 }

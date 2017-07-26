@@ -3,22 +3,22 @@ package com.google.android.gms.vision;
 import android.util.SparseArray;
 
 public final class zzc {
-    private static int zzbMW = 0;
-    private static final Object zzuH = new Object();
-    private SparseArray<Integer> zzbMX = new SparseArray();
-    private SparseArray<Integer> zzbMY = new SparseArray();
+    private static int zzbMY = 0;
+    private static final Object zzuF = new Object();
+    private SparseArray<Integer> zzbMZ = new SparseArray();
+    private SparseArray<Integer> zzbNa = new SparseArray();
 
     public final int zzbL(int i) {
         int intValue;
-        synchronized (zzuH) {
-            Integer num = (Integer) this.zzbMX.get(i);
+        synchronized (zzuF) {
+            Integer num = (Integer) this.zzbMZ.get(i);
             if (num != null) {
                 intValue = num.intValue();
             } else {
-                intValue = zzbMW;
-                zzbMW++;
-                this.zzbMX.append(i, Integer.valueOf(intValue));
-                this.zzbMY.append(intValue, Integer.valueOf(i));
+                intValue = zzbMY;
+                zzbMY++;
+                this.zzbMZ.append(i, Integer.valueOf(intValue));
+                this.zzbNa.append(intValue, Integer.valueOf(i));
             }
         }
         return intValue;
@@ -26,8 +26,8 @@ public final class zzc {
 
     public final int zzbM(int i) {
         int intValue;
-        synchronized (zzuH) {
-            intValue = ((Integer) this.zzbMY.get(i)).intValue();
+        synchronized (zzuF) {
+            intValue = ((Integer) this.zzbNa.get(i)).intValue();
         }
         return intValue;
     }

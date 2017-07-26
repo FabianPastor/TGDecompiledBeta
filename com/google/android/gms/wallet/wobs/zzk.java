@@ -8,19 +8,19 @@ import com.google.android.gms.common.internal.safeparcel.zzd;
 public final class zzk extends zza {
     public static final Creator<zzk> CREATOR = new zzl();
     private String body;
-    private String zzbQO;
+    private String zzbQQ;
 
     zzk() {
     }
 
     public zzk(String str, String str2) {
-        this.zzbQO = str;
+        this.zzbQQ = str;
         this.body = str2;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
         int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.zzbQO, false);
+        zzd.zza(parcel, 2, this.zzbQQ, false);
         zzd.zza(parcel, 3, this.body, false);
         zzd.zzI(parcel, zze);
     }

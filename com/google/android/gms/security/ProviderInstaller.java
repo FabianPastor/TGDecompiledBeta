@@ -14,7 +14,7 @@ public class ProviderInstaller {
     public static final String PROVIDER_NAME = "GmsCore_OpenSSL";
     private static final zze zzbCG = zze.zzoW();
     private static Method zzbCH = null;
-    private static final Object zzuH = new Object();
+    private static final Object zzuF = new Object();
 
     public interface ProviderInstallListener {
         void onProviderInstallFailed(int i, Intent intent);
@@ -30,7 +30,7 @@ public class ProviderInstaller {
             Log.e("ProviderInstaller", "Failed to get remote context");
             throw new GooglePlayServicesNotAvailableException(8);
         }
-        synchronized (zzuH) {
+        synchronized (zzuF) {
             try {
                 if (zzbCH == null) {
                     zzbCH = remoteContext.getClassLoader().loadClass("com.google.android.gms.common.security.ProviderInstallerImpl").getMethod("insertProvider", new Class[]{Context.class});

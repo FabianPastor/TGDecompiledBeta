@@ -48,7 +48,7 @@ public class VideoTimelineView extends View {
 
         void onLeftProgressChanged(float f);
 
-        void onRifhtProgressChanged(float f);
+        void onRightProgressChanged(float f);
     }
 
     public VideoTimelineView(Context context) {
@@ -179,7 +179,7 @@ public class VideoTimelineView extends View {
                     }
                 }
                 if (this.delegate != null) {
-                    this.delegate.onRifhtProgressChanged(this.progressRight);
+                    this.delegate.onRightProgressChanged(this.progressRight);
                 }
                 invalidate();
                 return true;

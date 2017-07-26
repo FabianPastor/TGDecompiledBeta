@@ -1431,6 +1431,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         ArrayList<MessageObject> arr;
         boolean enc;
         int loadIndex;
+        int a;
         ActionBarMenuItem actionBarMenuItem;
         int i;
         if (id == NotificationCenter.mediaDidLoaded) {
@@ -1442,7 +1443,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 arr = args[2];
                 enc = ((int) this.dialog_id) == 0;
                 loadIndex = uid == this.dialog_id ? 0 : 1;
-                for (int a = 0; a < arr.size(); a++) {
+                for (a = 0; a < arr.size(); a++) {
                     this.sharedMediaData[type].addMessage((MessageObject) arr.get(a), false, enc);
                 }
                 this.sharedMediaData[type].endReached[loadIndex] = ((Boolean) args[5]).booleanValue();
@@ -1537,10 +1538,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 arr = (ArrayList) args[1];
                 enc = ((int) this.dialog_id) == 0;
                 updated = false;
-                Iterator it2 = arr.iterator();
-                while (it2.hasNext()) {
-                    MessageObject obj = (MessageObject) it2.next();
-                    if (obj.messageOwner.media != null) {
+                for (a = 0; a < arr.size(); a++) {
+                    MessageObject obj = (MessageObject) arr.get(a);
+                    if (!(obj.messageOwner.media == null || obj.isSecretPhoto())) {
                         type = SharedMediaQuery.getMediaType(obj.messageOwner);
                         if (type == -1) {
                             return;
@@ -1978,7 +1978,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         FileLoader.getInstance().cancelLoadFile(cell.getMessage().getDocument());
                         cell.updateFileExistIcon();
                     } else {
-                        FileLoader.getInstance().loadFile(cell.getMessage().getDocument(), false, false);
+                        FileLoader.getInstance().loadFile(cell.getMessage().getDocument(), false, 0);
                         cell.updateFileExistIcon();
                     }
                 }
@@ -1987,7 +1987,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     WebPage webPage = message.messageOwner.media.webpage;
                     String link = null;
                     if (!(webPage == null || (webPage instanceof TL_webPageEmpty))) {
-                        if (VERSION.SDK_INT < 16 || webPage.embed_url == null || webPage.embed_url.length() == 0) {
+                        if (webPage.embed_url == null || webPage.embed_url.length() == 0) {
                             link = webPage.url;
                         } else {
                             openWebView(webPage);

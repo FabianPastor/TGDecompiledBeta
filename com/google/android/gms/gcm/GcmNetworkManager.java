@@ -76,7 +76,7 @@ public class GcmNetworkManager {
         intent.setPackage(zzbd);
         intent.putExtra("app", this.mPendingIntent);
         intent.putExtra(Param.SOURCE, 4);
-        intent.putExtra("source_version", 11011000);
+        intent.putExtra("source_version", 11020000);
         return intent;
     }
 

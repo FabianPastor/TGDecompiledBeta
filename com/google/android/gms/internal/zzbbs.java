@@ -1,57 +1,71 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Result;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.TaskCompletionSource;
+import android.support.annotation.NonNull;
+import android.support.v4.util.ArrayMap;
+import android.util.Log;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.zza;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.WeakHashMap;
 
-public final class zzbbs {
-    private final Map<zzbbd<?>, Boolean> zzaCR = Collections.synchronizedMap(new WeakHashMap());
-    private final Map<TaskCompletionSource<?>, Boolean> zzaCS = Collections.synchronizedMap(new WeakHashMap());
+final class zzbbs implements OnCompleteListener<Void> {
+    private /* synthetic */ zzbbp zzaCP;
+    private zzbei zzaCQ;
 
-    private final void zza(boolean z, Status status) {
-        synchronized (this.zzaCR) {
-            Map hashMap = new HashMap(this.zzaCR);
-        }
-        synchronized (this.zzaCS) {
-            Map hashMap2 = new HashMap(this.zzaCS);
-        }
-        for (Entry entry : hashMap.entrySet()) {
-            if (z || ((Boolean) entry.getValue()).booleanValue()) {
-                ((zzbbd) entry.getKey()).zzs(status);
+    zzbbs(zzbbp com_google_android_gms_internal_zzbbp, zzbei com_google_android_gms_internal_zzbei) {
+        this.zzaCP = com_google_android_gms_internal_zzbbp;
+        this.zzaCQ = com_google_android_gms_internal_zzbei;
+    }
+
+    final void cancel() {
+        this.zzaCQ.zzmF();
+    }
+
+    public final void onComplete(@NonNull Task<Void> task) {
+        this.zzaCP.zzaCv.lock();
+        try {
+            if (this.zzaCP.zzaCK) {
+                if (task.isSuccessful()) {
+                    this.zzaCP.zzaCM = new ArrayMap(this.zzaCP.zzaCC.size());
+                    for (zzbbo zzph : this.zzaCP.zzaCC.values()) {
+                        this.zzaCP.zzaCM.put(zzph.zzph(), ConnectionResult.zzazX);
+                    }
+                } else if (task.getException() instanceof zza) {
+                    zza com_google_android_gms_common_api_zza = (zza) task.getException();
+                    if (this.zzaCP.zzaCI) {
+                        this.zzaCP.zzaCM = new ArrayMap(this.zzaCP.zzaCC.size());
+                        for (zzbbo com_google_android_gms_internal_zzbbo : this.zzaCP.zzaCC.values()) {
+                            zzbat zzph2 = com_google_android_gms_internal_zzbbo.zzph();
+                            ConnectionResult zza = com_google_android_gms_common_api_zza.zza(com_google_android_gms_internal_zzbbo);
+                            if (this.zzaCP.zza(com_google_android_gms_internal_zzbbo, zza)) {
+                                this.zzaCP.zzaCM.put(zzph2, new ConnectionResult(16));
+                            } else {
+                                this.zzaCP.zzaCM.put(zzph2, zza);
+                            }
+                        }
+                    } else {
+                        this.zzaCP.zzaCM = com_google_android_gms_common_api_zza.zzpf();
+                    }
+                } else {
+                    Log.e("ConnectionlessGAC", "Unexpected availability exception", task.getException());
+                    this.zzaCP.zzaCM = Collections.emptyMap();
+                }
+                if (this.zzaCP.isConnected()) {
+                    this.zzaCP.zzaCL.putAll(this.zzaCP.zzaCM);
+                    if (this.zzaCP.zzpN() == null) {
+                        this.zzaCP.zzpL();
+                        this.zzaCP.zzpM();
+                        this.zzaCP.zzaCG.signalAll();
+                    }
+                }
+                this.zzaCQ.zzmF();
+                this.zzaCP.zzaCv.unlock();
+                return;
             }
+            this.zzaCQ.zzmF();
+        } finally {
+            this.zzaCP.zzaCv.unlock();
         }
-        for (Entry entry2 : hashMap2.entrySet()) {
-            if (z || ((Boolean) entry2.getValue()).booleanValue()) {
-                ((TaskCompletionSource) entry2.getKey()).trySetException(new ApiException(status));
-            }
-        }
-    }
-
-    final void zza(zzbbd<? extends Result> com_google_android_gms_internal_zzbbd__extends_com_google_android_gms_common_api_Result, boolean z) {
-        this.zzaCR.put(com_google_android_gms_internal_zzbbd__extends_com_google_android_gms_common_api_Result, Boolean.valueOf(z));
-        com_google_android_gms_internal_zzbbd__extends_com_google_android_gms_common_api_Result.zza(new zzbbt(this, com_google_android_gms_internal_zzbbd__extends_com_google_android_gms_common_api_Result));
-    }
-
-    final <TResult> void zza(TaskCompletionSource<TResult> taskCompletionSource, boolean z) {
-        this.zzaCS.put(taskCompletionSource, Boolean.valueOf(z));
-        taskCompletionSource.getTask().addOnCompleteListener(new zzbbu(this, taskCompletionSource));
-    }
-
-    final boolean zzpO() {
-        return (this.zzaCR.isEmpty() && this.zzaCS.isEmpty()) ? false : true;
-    }
-
-    public final void zzpP() {
-        zza(false, zzbda.zzaEc);
-    }
-
-    public final void zzpQ() {
-        zza(true, zzbeu.zzaFj);
     }
 }

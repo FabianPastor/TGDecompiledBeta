@@ -1,21 +1,17 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.measurement.AppMeasurement.zzb;
+final class zzcib implements Runnable {
+    private /* synthetic */ zzchz zzbtQ;
+    private /* synthetic */ zzcic zzbtR;
 
-final class zzcib extends zzb {
-    public boolean zzbtS;
-
-    public zzcib(zzcib com_google_android_gms_internal_zzcib) {
-        this.zzboj = com_google_android_gms_internal_zzcib.zzboj;
-        this.zzbok = com_google_android_gms_internal_zzcib.zzbok;
-        this.zzbol = com_google_android_gms_internal_zzcib.zzbol;
-        this.zzbtS = com_google_android_gms_internal_zzcib.zzbtS;
+    zzcib(zzchz com_google_android_gms_internal_zzchz, zzcic com_google_android_gms_internal_zzcic) {
+        this.zzbtQ = com_google_android_gms_internal_zzchz;
+        this.zzbtR = com_google_android_gms_internal_zzcic;
     }
 
-    public zzcib(String str, String str2, long j) {
-        this.zzboj = str;
-        this.zzbok = str2;
-        this.zzbol = j;
-        this.zzbtS = false;
+    public final void run() {
+        this.zzbtQ.zza(this.zzbtR);
+        this.zzbtQ.zzbtE = null;
+        this.zzbtQ.zzww().zza(null);
     }
 }

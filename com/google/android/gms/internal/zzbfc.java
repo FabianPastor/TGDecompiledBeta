@@ -1,7 +1,7 @@
 package com.google.android.gms.internal;
 
-final class zzbfc extends zzbey<Float> {
-    zzbfc(String str, Float f) {
-        super(str, f);
+final class zzbfc extends zzbez<Integer> {
+    zzbfc(String str, Integer num) {
+        super(str, num);
     }
 }

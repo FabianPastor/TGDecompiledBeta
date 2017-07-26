@@ -7,11 +7,11 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.util.SparseArray;
-import com.google.android.gms.internal.fb;
-import com.google.android.gms.internal.fj;
-import com.google.android.gms.internal.fl;
-import com.google.android.gms.internal.fp;
+import com.google.android.gms.internal.fc;
+import com.google.android.gms.internal.fk;
+import com.google.android.gms.internal.fm;
 import com.google.android.gms.internal.fq;
+import com.google.android.gms.internal.fr;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.Frame.Metadata;
@@ -20,18 +20,18 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 public final class TextRecognizer extends Detector<TextBlock> {
-    private final fp zzbNS;
+    private final fq zzbNU;
 
     public static class Builder {
         private Context mContext;
-        private fq zzbNT = new fq();
+        private fr zzbNV = new fr();
 
         public Builder(Context context) {
             this.mContext = context;
         }
 
         public TextRecognizer build() {
-            return new TextRecognizer(new fp(this.mContext, this.zzbNT));
+            return new TextRecognizer(new fq(this.mContext, this.zzbNV));
         }
     }
 
@@ -39,20 +39,20 @@ public final class TextRecognizer extends Detector<TextBlock> {
         throw new IllegalStateException("Default constructor called");
     }
 
-    private TextRecognizer(fp fpVar) {
-        this.zzbNS = fpVar;
+    private TextRecognizer(fq fqVar) {
+        this.zzbNU = fqVar;
     }
 
-    private static SparseArray<TextBlock> zza(fj[] fjVarArr) {
+    private static SparseArray<TextBlock> zza(fk[] fkVarArr) {
         int i = 0;
         SparseArray sparseArray = new SparseArray();
-        for (fj fjVar : fjVarArr) {
-            SparseArray sparseArray2 = (SparseArray) sparseArray.get(fjVar.zzbOd);
+        for (fk fkVar : fkVarArr) {
+            SparseArray sparseArray2 = (SparseArray) sparseArray.get(fkVar.zzbOf);
             if (sparseArray2 == null) {
                 sparseArray2 = new SparseArray();
-                sparseArray.append(fjVar.zzbOd, sparseArray2);
+                sparseArray.append(fkVar.zzbOf, sparseArray2);
             }
-            sparseArray2.append(fjVar.zzbOe, fjVar);
+            sparseArray2.append(fkVar.zzbOg, fkVar);
         }
         SparseArray<TextBlock> sparseArray3 = new SparseArray(sparseArray.size());
         while (i < sparseArray.size()) {
@@ -63,14 +63,14 @@ public final class TextRecognizer extends Detector<TextBlock> {
     }
 
     public final SparseArray<TextBlock> detect(Frame frame) {
-        fl flVar = new fl(new Rect());
+        fm fmVar = new fm(new Rect());
         if (frame == null) {
             throw new IllegalArgumentException("No frame supplied.");
         }
         Bitmap bitmap;
         int i;
         int i2;
-        fb zzc = fb.zzc(frame);
+        fc zzc = fc.zzc(frame);
         if (frame.getBitmap() != null) {
             bitmap = frame.getBitmap();
         } else {
@@ -119,9 +119,9 @@ public final class TextRecognizer extends Detector<TextBlock> {
             zzc.width = i2;
             zzc.height = i;
         }
-        if (!flVar.zzbOf.isEmpty()) {
+        if (!fmVar.zzbOh.isEmpty()) {
             Rect rect;
-            Rect rect2 = flVar.zzbOf;
+            Rect rect2 = fmVar.zzbOh;
             i = frame.getMetadata().getWidth();
             i2 = frame.getMetadata().getHeight();
             switch (zzc.rotation) {
@@ -138,18 +138,18 @@ public final class TextRecognizer extends Detector<TextBlock> {
                     rect = rect2;
                     break;
             }
-            flVar.zzbOf.set(rect);
+            fmVar.zzbOh.set(rect);
         }
         zzc.rotation = 0;
-        return zza(this.zzbNS.zza(bitmap, zzc, flVar));
+        return zza(this.zzbNU.zza(bitmap, zzc, fmVar));
     }
 
     public final boolean isOperational() {
-        return this.zzbNS.isOperational();
+        return this.zzbNU.isOperational();
     }
 
     public final void release() {
         super.release();
-        this.zzbNS.zzDP();
+        this.zzbNU.zzDQ();
     }
 }

@@ -31,12 +31,16 @@ import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.DraftMessage;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.TL_dialog;
+import org.telegram.tgnet.TLRPC.TL_documentEmpty;
 import org.telegram.tgnet.TLRPC.TL_encryptedChat;
 import org.telegram.tgnet.TLRPC.TL_encryptedChatDiscarded;
 import org.telegram.tgnet.TLRPC.TL_encryptedChatRequested;
 import org.telegram.tgnet.TLRPC.TL_encryptedChatWaiting;
+import org.telegram.tgnet.TLRPC.TL_messageMediaDocument;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGame;
+import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageService;
+import org.telegram.tgnet.TLRPC.TL_photoEmpty;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
@@ -419,6 +423,10 @@ public class DialogCell extends BaseCell {
                             stringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_chats_nameMessage)), 0, name.length() + 1, 33);
                         }
                         messageString = Emoji.replaceEmoji(stringBuilder, Theme.dialogs_messagePaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+                    } else if ((this.message.messageOwner.media instanceof TL_messageMediaPhoto) && (this.message.messageOwner.media.photo instanceof TL_photoEmpty) && this.message.messageOwner.media.ttl_seconds != 0) {
+                        messageString = LocaleController.getString("AttachPhotoExpired", R.string.AttachPhotoExpired);
+                    } else if ((this.message.messageOwner.media instanceof TL_messageMediaDocument) && (this.message.messageOwner.media.document instanceof TL_documentEmpty) && this.message.messageOwner.media.ttl_seconds != 0) {
+                        messageString = LocaleController.getString("AttachVideoExpired", R.string.AttachVideoExpired);
                     } else if (this.message.caption != null) {
                         messageString = this.message.caption;
                     } else {
@@ -728,18 +736,28 @@ public class DialogCell extends BaseCell {
             this.drawPin = this.customDialog.pinned;
             this.dialogMuted = this.customDialog.muted;
             this.avatarDrawable.setInfo(this.customDialog.id, this.customDialog.name, null, false);
-            this.avatarImage.setImage(null, "50_50", this.avatarDrawable, null, false);
+            this.avatarImage.setImage((TLObject) null, "50_50", this.avatarDrawable, null, 0);
         } else {
             TL_dialog dialog;
             boolean z;
             if (this.isDialogCell) {
                 dialog = (TL_dialog) MessagesController.getInstance().dialogs_dict.get(Long.valueOf(this.currentDialogId));
                 if (dialog != null && mask == 0) {
+                    int i;
                     this.message = (MessageObject) MessagesController.getInstance().dialogMessage.get(Long.valueOf(dialog.id));
-                    z = this.message != null && this.message.isUnread();
+                    if (this.message == null || !this.message.isUnread()) {
+                        z = false;
+                    } else {
+                        z = true;
+                    }
                     this.lastUnreadState = z;
                     this.unreadCount = dialog.unread_count;
-                    this.currentEditDate = this.message != null ? this.message.messageOwner.edit_date : 0;
+                    if (this.message != null) {
+                        i = this.message.messageOwner.edit_date;
+                    } else {
+                        i = 0;
+                    }
+                    this.currentEditDate = i;
                     this.lastMessageDate = dialog.last_message_date;
                     this.drawPin = dialog.pinned;
                     if (this.message != null) {
@@ -789,7 +807,11 @@ public class DialogCell extends BaseCell {
                     return;
                 }
             }
-            z = this.isDialogCell && MessagesController.getInstance().isDialogMuted(this.currentDialogId);
+            if (this.isDialogCell && MessagesController.getInstance().isDialogMuted(this.currentDialogId)) {
+                z = true;
+            } else {
+                z = false;
+            }
             this.dialogMuted = z;
             this.user = null;
             this.chat = null;
@@ -826,7 +848,7 @@ public class DialogCell extends BaseCell {
                 }
                 this.avatarDrawable.setInfo(this.chat);
             }
-            this.avatarImage.setImage(photo, "50_50", this.avatarDrawable, null, false);
+            this.avatarImage.setImage(photo, "50_50", this.avatarDrawable, null, 0);
         }
         if (getMeasuredWidth() == 0 && getMeasuredHeight() == 0) {
             requestLayout();

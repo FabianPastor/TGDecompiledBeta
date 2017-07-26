@@ -47,6 +47,7 @@ public class ActionBar extends FrameLayout {
     protected BaseFragment parentFragment;
     private SimpleTextView subtitleTextView;
     private Runnable titleActionRunnable;
+    private int titleRightMargin;
     private SimpleTextView titleTextView;
 
     public static class ActionBarMenuOnItemClick {
@@ -156,6 +157,10 @@ public class ActionBar extends FrameLayout {
             this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             addView(this.titleTextView, 0, LayoutHelper.createFrame(-2, -2, 51));
         }
+    }
+
+    public void setTitleRightMargin(int value) {
+        this.titleRightMargin = value;
     }
 
     public void setTitle(CharSequence value) {
@@ -476,7 +481,7 @@ public class ActionBar extends FrameLayout {
         if (!((this.titleTextView == null || this.titleTextView.getVisibility() == 8) && (this.subtitleTextView == null || this.subtitleTextView.getVisibility() == 8))) {
             SimpleTextView simpleTextView;
             int i;
-            int availableWidth = ((width - (this.menu != null ? this.menu.getMeasuredWidth() : 0)) - AndroidUtilities.dp(16.0f)) - textLeft;
+            int availableWidth = (((width - (this.menu != null ? this.menu.getMeasuredWidth() : 0)) - AndroidUtilities.dp(16.0f)) - textLeft) - this.titleRightMargin;
             if (!(this.titleTextView == null || this.titleTextView.getVisibility() == 8)) {
                 simpleTextView = this.titleTextView;
                 i = (AndroidUtilities.isTablet() || getResources().getConfiguration().orientation != 2) ? 20 : 18;

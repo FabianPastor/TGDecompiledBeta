@@ -38,7 +38,7 @@ public final class FirebaseInstanceIdReceiver extends WakefulBroadcastReceiver {
                 }
                 FirebaseInstanceIdInternalReceiver.zzH(context, str).zza(intent, goAsync());
             } else {
-                i = zzq.zzJU().zza(context, str, intent);
+                i = zzq.zzJX().zza(context, str, intent);
             }
         }
         if (isOrderedBroadcast()) {

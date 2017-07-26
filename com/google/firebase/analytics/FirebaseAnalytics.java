@@ -10,12 +10,12 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
 import android.support.annotation.Size;
 import com.google.android.gms.common.internal.zzbo;
-import com.google.android.gms.internal.zzcgk;
+import com.google.android.gms.internal.zzcgl;
 import com.google.android.gms.tasks.Task;
 
 @Keep
 public final class FirebaseAnalytics {
-    private final zzcgk zzboe;
+    private final zzcgl zzboe;
 
     public static class Event {
         public static final String ADD_PAYMENT_INFO = "add_payment_info";
@@ -112,15 +112,15 @@ public final class FirebaseAnalytics {
         }
     }
 
-    public FirebaseAnalytics(zzcgk com_google_android_gms_internal_zzcgk) {
-        zzbo.zzu(com_google_android_gms_internal_zzcgk);
-        this.zzboe = com_google_android_gms_internal_zzcgk;
+    public FirebaseAnalytics(zzcgl com_google_android_gms_internal_zzcgl) {
+        zzbo.zzu(com_google_android_gms_internal_zzcgl);
+        this.zzboe = com_google_android_gms_internal_zzcgl;
     }
 
     @Keep
     @RequiresPermission(allOf = {"android.permission.INTERNET", "android.permission.ACCESS_NETWORK_STATE", "android.permission.WAKE_LOCK"})
     public static FirebaseAnalytics getInstance(Context context) {
-        return zzcgk.zzbj(context).zzyT();
+        return zzcgl.zzbj(context).zzyT();
     }
 
     public final Task<String> getAppInstanceId() {

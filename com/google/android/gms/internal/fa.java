@@ -1,79 +1,31 @@
 package com.google.android.gms.internal;
 
-import android.content.Context;
+import android.os.IBinder;
+import android.os.IInterface;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.os.RemoteException;
-import android.util.Log;
-import com.google.android.gms.dynamite.DynamiteModule;
-import com.google.android.gms.dynamite.DynamiteModule.zzc;
+import com.google.android.gms.dynamic.IObjectWrapper;
 
-public abstract class fa<T> {
-    private final Context mContext;
-    private final Object mLock = new Object();
-    private final String mTag;
-    private boolean zzbNJ = false;
-    private T zzbNK;
-
-    public fa(Context context, String str) {
-        this.mContext = context;
-        this.mTag = str;
+public final class fa extends zzed implements ez {
+    fa(IBinder iBinder) {
+        super(iBinder, "com.google.android.gms.vision.barcode.internal.client.INativeBarcodeDetectorCreator");
     }
 
-    public final boolean isOperational() {
-        return zzDQ() != null;
-    }
-
-    protected abstract void zzDN() throws RemoteException;
-
-    public final void zzDP() {
-        synchronized (this.mLock) {
-            if (this.zzbNK == null) {
-                return;
-            }
-            try {
-                zzDN();
-            } catch (Throwable e) {
-                Log.e(this.mTag, "Could not finalize native handle", e);
-            }
+    public final ex zza(IObjectWrapper iObjectWrapper, eu euVar) throws RemoteException {
+        ex exVar;
+        Parcel zzZ = zzZ();
+        zzef.zza(zzZ, (IInterface) iObjectWrapper);
+        zzef.zza(zzZ, (Parcelable) euVar);
+        Parcel zza = zza(1, zzZ);
+        IBinder readStrongBinder = zza.readStrongBinder();
+        if (readStrongBinder == null) {
+            exVar = null;
+        } else {
+            IInterface queryLocalInterface = readStrongBinder.queryLocalInterface("com.google.android.gms.vision.barcode.internal.client.INativeBarcodeDetector");
+            exVar = queryLocalInterface instanceof ex ? (ex) queryLocalInterface : new ey(readStrongBinder);
         }
+        zza.recycle();
+        return exVar;
     }
-
-    protected final T zzDQ() {
-        T t;
-        Throwable e;
-        synchronized (this.mLock) {
-            if (this.zzbNK != null) {
-                t = this.zzbNK;
-            } else {
-                try {
-                    this.zzbNK = zza(DynamiteModule.zza(this.mContext, DynamiteModule.zzaSO, "com.google.android.gms.vision.dynamite"), this.mContext);
-                } catch (zzc e2) {
-                    e = e2;
-                    Log.e(this.mTag, "Error creating remote native handle", e);
-                    if (!!this.zzbNJ) {
-                    }
-                    Log.w(this.mTag, "Native handle is now available.");
-                    t = this.zzbNK;
-                    return t;
-                } catch (RemoteException e3) {
-                    e = e3;
-                    Log.e(this.mTag, "Error creating remote native handle", e);
-                    if (!this.zzbNJ) {
-                    }
-                    Log.w(this.mTag, "Native handle is now available.");
-                    t = this.zzbNK;
-                    return t;
-                }
-                if (!this.zzbNJ && this.zzbNK == null) {
-                    Log.w(this.mTag, "Native handle not yet available. Reverting to no-op handle.");
-                    this.zzbNJ = true;
-                } else if (this.zzbNJ && this.zzbNK != null) {
-                    Log.w(this.mTag, "Native handle is now available.");
-                }
-                t = this.zzbNK;
-            }
-        }
-        return t;
-    }
-
-    protected abstract T zza(DynamiteModule dynamiteModule, Context context) throws RemoteException, zzc;
 }

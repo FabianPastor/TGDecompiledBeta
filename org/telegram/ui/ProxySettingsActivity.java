@@ -96,7 +96,7 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
     }
 
     public View createView(Context context) {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+        final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
         this.useProxySettings = preferences.getBoolean("proxy_enabled", false);
         this.useProxyForCalls = preferences.getBoolean("proxy_enabled_calls", false);
         this.actionBar.setTitle(LocaleController.getString("ProxySettings", R.string.ProxySettings));
@@ -168,6 +168,7 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
                 ProxySettingsActivity.this.checkCell1.setChecked(ProxySettingsActivity.this.useProxySettings);
                 if (!ProxySettingsActivity.this.useProxySettings) {
                     ProxySettingsActivity.this.useForCallsCell.setChecked(false);
+                    preferences.edit().putBoolean("proxy_enabled_calls", false).apply();
                 }
                 ProxySettingsActivity.this.useForCallsCell.setEnabled(ProxySettingsActivity.this.useProxySettings);
             }

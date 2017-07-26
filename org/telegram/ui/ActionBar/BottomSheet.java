@@ -77,6 +77,7 @@ public class BottomSheet extends Dialog {
     private CharSequence title;
     private int touchSlop;
     private boolean useFastDismiss;
+    private boolean useHardwareLayer = true;
 
     public static class BottomSheetCell extends FrameLayout {
         private ImageView imageView;
@@ -191,6 +192,11 @@ public class BottomSheet extends Dialog {
 
         public Builder setTag(int tag) {
             this.bottomSheet.tag = tag;
+            return this;
+        }
+
+        public Builder setUseHardwareLayer(boolean value) {
+            this.bottomSheet.useHardwareLayer = value;
             return this;
         }
 
@@ -611,49 +617,47 @@ public class BottomSheet extends Dialog {
         }
         this.containerView.setVisibility(4);
         this.container.addView(this.containerView, 0, LayoutHelper.createFrame(-1, -2, 80));
+        int topOffset = 0;
+        if (this.title != null) {
+            TextView titleView = new TextView(getContext());
+            titleView.setLines(1);
+            titleView.setSingleLine(true);
+            titleView.setText(this.title);
+            titleView.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
+            titleView.setTextSize(1, 16.0f);
+            titleView.setEllipsize(TruncateAt.MIDDLE);
+            titleView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), AndroidUtilities.dp(8.0f));
+            titleView.setGravity(16);
+            this.containerView.addView(titleView, LayoutHelper.createFrame(-1, 48.0f));
+            titleView.setOnTouchListener(new OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    return true;
+                }
+            });
+            topOffset = 0 + 48;
+        }
         if (this.customView != null) {
             if (this.customView.getParent() != null) {
                 ((ViewGroup) this.customView.getParent()).removeView(this.customView);
             }
-            this.containerView.addView(this.customView, LayoutHelper.createFrame(-1, -2, 51));
-        } else {
-            int topOffset = 0;
-            if (this.title != null) {
-                TextView titleView = new TextView(getContext());
-                titleView.setLines(1);
-                titleView.setSingleLine(true);
-                titleView.setText(this.title);
-                titleView.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
-                titleView.setTextSize(1, 16.0f);
-                titleView.setEllipsize(TruncateAt.MIDDLE);
-                titleView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), AndroidUtilities.dp(8.0f));
-                titleView.setGravity(16);
-                this.containerView.addView(titleView, LayoutHelper.createFrame(-1, 48.0f));
-                titleView.setOnTouchListener(new OnTouchListener() {
-                    public boolean onTouch(View v, MotionEvent event) {
-                        return true;
-                    }
-                });
-                topOffset = 0 + 48;
-            }
-            if (this.items != null) {
-                int a = 0;
-                while (a < this.items.length) {
-                    if (this.items[a] != null) {
-                        BottomSheetCell cell = new BottomSheetCell(getContext(), 0);
-                        cell.setTextAndIcon(this.items[a], this.itemIcons != null ? this.itemIcons[a] : 0);
-                        this.containerView.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) topOffset, 0.0f, 0.0f));
-                        topOffset += 48;
-                        cell.setTag(Integer.valueOf(a));
-                        cell.setOnClickListener(new View.OnClickListener() {
-                            public void onClick(View v) {
-                                BottomSheet.this.dismissWithButtonClick(((Integer) v.getTag()).intValue());
-                            }
-                        });
-                        this.itemViews.add(cell);
-                    }
-                    a++;
+            this.containerView.addView(this.customView, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, (float) topOffset, 0.0f, 0.0f));
+        } else if (this.items != null) {
+            int a = 0;
+            while (a < this.items.length) {
+                if (this.items[a] != null) {
+                    BottomSheetCell cell = new BottomSheetCell(getContext(), 0);
+                    cell.setTextAndIcon(this.items[a], this.itemIcons != null ? this.itemIcons[a] : 0);
+                    this.containerView.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) topOffset, 0.0f, 0.0f));
+                    topOffset += 48;
+                    cell.setTag(Integer.valueOf(a));
+                    cell.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            BottomSheet.this.dismissWithButtonClick(((Integer) v.getTag()).intValue());
+                        }
+                    });
+                    this.itemViews.add(cell);
                 }
+                a++;
             }
         }
         WindowManager.LayoutParams params = window.getAttributes();
@@ -670,6 +674,10 @@ public class BottomSheet extends Dialog {
 
     public void setShowWithoutAnimation(boolean value) {
         this.showWithoutAnimation = value;
+    }
+
+    public void setBackgroundColor(int color) {
+        this.shadowDrawable.setColorFilter(color, Mode.MULTIPLY);
     }
 
     public void show() {
@@ -762,7 +770,7 @@ public class BottomSheet extends Dialog {
         if (!this.dismissed) {
             this.containerView.setVisibility(0);
             if (!onCustomOpenAnimation()) {
-                if (VERSION.SDK_INT >= 20) {
+                if (VERSION.SDK_INT >= 20 && this.useHardwareLayer) {
                     this.container.setLayerType(2, null);
                 }
                 this.containerView.setTranslationY((float) this.containerView.getMeasuredHeight());
@@ -781,7 +789,9 @@ public class BottomSheet extends Dialog {
                             if (BottomSheet.this.delegate != null) {
                                 BottomSheet.this.delegate.onOpenAnimationEnd();
                             }
-                            BottomSheet.this.container.setLayerType(0, null);
+                            if (BottomSheet.this.useHardwareLayer) {
+                                BottomSheet.this.container.setLayerType(0, null);
+                            }
                         }
                     }
 

@@ -1,10 +1,21 @@
 package com.google.android.gms.internal;
 
-import android.graphics.drawable.Drawable;
-import android.support.v4.util.LruCache;
+import android.net.Uri;
+import android.widget.ImageView;
 
-public final class zzbfl extends LruCache<Object, Drawable> {
-    public zzbfl() {
-        super(10);
+public final class zzbfl extends ImageView {
+    private Uri zzaGE;
+    private int zzaGF;
+
+    public final void zzax(int i) {
+        this.zzaGF = i;
+    }
+
+    public final void zzo(Uri uri) {
+        this.zzaGE = uri;
+    }
+
+    public final int zzqY() {
+        return this.zzaGF;
     }
 }

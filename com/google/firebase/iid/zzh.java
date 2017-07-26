@@ -15,12 +15,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public final class zzh implements ServiceConnection {
-    private final Intent zzckl;
-    private final ScheduledExecutorService zzckm;
-    private final Queue<zzd> zzckn;
-    private zzf zzcko;
-    private boolean zzckp;
-    private final Context zzqF;
+    private final Intent zzckp;
+    private final ScheduledExecutorService zzckq;
+    private final Queue<zzd> zzckr;
+    private zzf zzcks;
+    private boolean zzckt;
+    private final Context zzqD;
 
     public zzh(Context context, String str) {
         this(context, str, new ScheduledThreadPoolExecutor(0));
@@ -28,32 +28,32 @@ public final class zzh implements ServiceConnection {
 
     @VisibleForTesting
     private zzh(Context context, String str, ScheduledExecutorService scheduledExecutorService) {
-        this.zzckn = new LinkedList();
-        this.zzckp = false;
-        this.zzqF = context.getApplicationContext();
-        this.zzckl = new Intent(str).setPackage(this.zzqF.getPackageName());
-        this.zzckm = scheduledExecutorService;
+        this.zzckr = new LinkedList();
+        this.zzckt = false;
+        this.zzqD = context.getApplicationContext();
+        this.zzckp = new Intent(str).setPackage(this.zzqD.getPackageName());
+        this.zzckq = scheduledExecutorService;
     }
 
-    private final synchronized void zzJL() {
+    private final synchronized void zzJO() {
         if (Log.isLoggable("EnhancedIntentService", 3)) {
             Log.d("EnhancedIntentService", "flush queue called");
         }
-        while (!this.zzckn.isEmpty()) {
+        while (!this.zzckr.isEmpty()) {
             if (Log.isLoggable("EnhancedIntentService", 3)) {
                 Log.d("EnhancedIntentService", "found intent to be delivered");
             }
-            if (this.zzcko == null || !this.zzcko.isBinderAlive()) {
+            if (this.zzcks == null || !this.zzcks.isBinderAlive()) {
                 if (Log.isLoggable("EnhancedIntentService", 3)) {
-                    Log.d("EnhancedIntentService", "binder is dead. start connection? " + (!this.zzckp));
+                    Log.d("EnhancedIntentService", "binder is dead. start connection? " + (!this.zzckt));
                 }
-                if (!this.zzckp) {
-                    this.zzckp = true;
+                if (!this.zzckt) {
+                    this.zzckt = true;
                     try {
-                        if (!zza.zzrU().zza(this.zzqF, this.zzckl, this, 65)) {
+                        if (!zza.zzrU().zza(this.zzqD, this.zzckp, this, 65)) {
                             Log.e("EnhancedIntentService", "binding to the service failed");
-                            while (!this.zzckn.isEmpty()) {
-                                ((zzd) this.zzckn.poll()).finish();
+                            while (!this.zzckr.isEmpty()) {
+                                ((zzd) this.zzckr.poll()).finish();
                             }
                         }
                     } catch (Throwable e) {
@@ -64,20 +64,20 @@ public final class zzh implements ServiceConnection {
                 if (Log.isLoggable("EnhancedIntentService", 3)) {
                     Log.d("EnhancedIntentService", "binder is alive, sending the intent.");
                 }
-                this.zzcko.zza((zzd) this.zzckn.poll());
+                this.zzcks.zza((zzd) this.zzckr.poll());
             }
         }
     }
 
     public final void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         synchronized (this) {
-            this.zzckp = false;
-            this.zzcko = (zzf) iBinder;
+            this.zzckt = false;
+            this.zzcks = (zzf) iBinder;
             if (Log.isLoggable("EnhancedIntentService", 3)) {
                 String valueOf = String.valueOf(componentName);
                 Log.d("EnhancedIntentService", new StringBuilder(String.valueOf(valueOf).length() + 20).append("onServiceConnected: ").append(valueOf).toString());
             }
-            zzJL();
+            zzJO();
         }
     }
 
@@ -86,14 +86,14 @@ public final class zzh implements ServiceConnection {
             String valueOf = String.valueOf(componentName);
             Log.d("EnhancedIntentService", new StringBuilder(String.valueOf(valueOf).length() + 23).append("onServiceDisconnected: ").append(valueOf).toString());
         }
-        zzJL();
+        zzJO();
     }
 
     public final synchronized void zza(Intent intent, PendingResult pendingResult) {
         if (Log.isLoggable("EnhancedIntentService", 3)) {
             Log.d("EnhancedIntentService", "new intent queued in the bind-strategy delivery");
         }
-        this.zzckn.add(new zzd(intent, pendingResult, this.zzckm));
-        zzJL();
+        this.zzckr.add(new zzd(intent, pendingResult, this.zzckq));
+        zzJO();
     }
 }

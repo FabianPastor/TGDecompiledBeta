@@ -1,24 +1,19 @@
 package com.google.android.gms.internal;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicReference;
 
-final class zzchv implements Callable<String> {
-    private /* synthetic */ zzchk zzbtt;
+final class zzchv implements Runnable {
+    private /* synthetic */ zzchl zzbtt;
+    private /* synthetic */ AtomicReference zzbtv;
+    private /* synthetic */ boolean zzbtw;
 
-    zzchv(zzchk com_google_android_gms_internal_zzchk) {
-        this.zzbtt = com_google_android_gms_internal_zzchk;
+    zzchv(zzchl com_google_android_gms_internal_zzchl, AtomicReference atomicReference, boolean z) {
+        this.zzbtt = com_google_android_gms_internal_zzchl;
+        this.zzbtv = atomicReference;
+        this.zzbtw = z;
     }
 
-    public final /* synthetic */ Object call() throws Exception {
-        Object zzyH = this.zzbtt.zzwG().zzyH();
-        if (zzyH == null) {
-            zzyH = this.zzbtt.zzwt().zzac(120000);
-            if (zzyH == null) {
-                throw new TimeoutException();
-            }
-            this.zzbtt.zzwG().zzee(zzyH);
-        }
-        return zzyH;
+    public final void run() {
+        this.zzbtt.zzww().zza(this.zzbtv, this.zzbtw);
     }
 }

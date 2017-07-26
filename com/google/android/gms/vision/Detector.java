@@ -4,30 +4,30 @@ import android.util.SparseArray;
 import com.google.android.gms.vision.Frame.Metadata;
 
 public abstract class Detector<T> {
-    private final Object zzbMJ = new Object();
-    private Processor<T> zzbMK;
+    private final Object zzbML = new Object();
+    private Processor<T> zzbMM;
 
     public static class Detections<T> {
-        private SparseArray<T> zzbML;
-        private Metadata zzbMM;
-        private boolean zzbMN;
+        private SparseArray<T> zzbMN;
+        private Metadata zzbMO;
+        private boolean zzbMP;
 
         public Detections(SparseArray<T> sparseArray, Metadata metadata, boolean z) {
-            this.zzbML = sparseArray;
-            this.zzbMM = metadata;
-            this.zzbMN = z;
+            this.zzbMN = sparseArray;
+            this.zzbMO = metadata;
+            this.zzbMP = z;
         }
 
         public boolean detectorIsOperational() {
-            return this.zzbMN;
+            return this.zzbMP;
         }
 
         public SparseArray<T> getDetectedItems() {
-            return this.zzbML;
+            return this.zzbMN;
         }
 
         public Metadata getFrameMetadata() {
-            return this.zzbMM;
+            return this.zzbMO;
         }
     }
 
@@ -44,21 +44,21 @@ public abstract class Detector<T> {
     }
 
     public void receiveFrame(Frame frame) {
-        synchronized (this.zzbMJ) {
-            if (this.zzbMK == null) {
+        synchronized (this.zzbML) {
+            if (this.zzbMM == null) {
                 throw new IllegalStateException("Detector processor must first be set with setProcessor in order to receive detection results.");
             }
             Metadata metadata = new Metadata(frame.getMetadata());
-            metadata.zzDM();
-            this.zzbMK.receiveDetections(new Detections(detect(frame), metadata, isOperational()));
+            metadata.zzDN();
+            this.zzbMM.receiveDetections(new Detections(detect(frame), metadata, isOperational()));
         }
     }
 
     public void release() {
-        synchronized (this.zzbMJ) {
-            if (this.zzbMK != null) {
-                this.zzbMK.release();
-                this.zzbMK = null;
+        synchronized (this.zzbML) {
+            if (this.zzbMM != null) {
+                this.zzbMM.release();
+                this.zzbMM = null;
             }
         }
     }
@@ -68,6 +68,6 @@ public abstract class Detector<T> {
     }
 
     public void setProcessor(Processor<T> processor) {
-        this.zzbMK = processor;
+        this.zzbMM = processor;
     }
 }

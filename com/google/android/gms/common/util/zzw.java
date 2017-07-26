@@ -5,12 +5,12 @@ import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 import com.google.android.gms.common.zzp;
-import com.google.android.gms.internal.zzbgz;
+import com.google.android.gms.internal.zzbha;
 
 public final class zzw {
     @TargetApi(19)
     public static boolean zzb(Context context, int i, String str) {
-        return zzbgz.zzaP(context).zzf(i, str);
+        return zzbha.zzaP(context).zzf(i, str);
     }
 
     public static boolean zzf(Context context, int i) {

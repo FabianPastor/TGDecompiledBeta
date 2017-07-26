@@ -23,12 +23,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
@@ -109,6 +111,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private int currentChatId;
     private int currentPage;
     private Paint dotPaint;
+    private DragListener dragListener;
     private ArrayList<GridView> emojiGrids = new ArrayList();
     private int emojiSize;
     private LinearLayout emojiTab;
@@ -185,6 +188,16 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private boolean trendingLoaded;
     private int trendingTabNum = -2;
     private ArrayList<View> views = new ArrayList();
+
+    public interface DragListener {
+        void onDrag(int i);
+
+        void onDragCancel();
+
+        void onDragEnd(float f);
+
+        void onDragStart();
+    }
 
     private class EmojiColorPickerView extends View {
         private Drawable arrowDrawable = getResources().getDrawable(R.drawable.stickers_back_arrow);
@@ -1369,22 +1382,86 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             this.stickersWrap.addView(this.stickersEmptyView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 48.0f, 0.0f, 0.0f));
             this.stickersGridView.setEmptyView(this.stickersEmptyView);
             this.stickersTab = new ScrollSlidingTabStrip(context) {
+                float downX;
+                float downY;
+                boolean draggingHorizontally;
+                boolean draggingVertically;
                 boolean first = true;
                 float lastTranslateX;
                 float lastX;
                 boolean startedScroll;
+                final int touchslop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+                VelocityTracker vTracker;
 
                 public boolean onInterceptTouchEvent(MotionEvent ev) {
                     if (getParent() != null) {
                         getParent().requestDisallowInterceptTouchEvent(true);
                     }
+                    if (ev.getAction() == 0) {
+                        this.draggingHorizontally = false;
+                        this.draggingVertically = false;
+                        this.downX = ev.getRawX();
+                        this.downY = ev.getRawY();
+                    } else if (!(this.draggingVertically || this.draggingHorizontally || EmojiView.this.dragListener == null || Math.abs(ev.getRawY() - this.downY) < ((float) this.touchslop))) {
+                        this.draggingVertically = true;
+                        this.downY = ev.getRawY();
+                        EmojiView.this.dragListener.onDragStart();
+                        if (!this.startedScroll) {
+                            return true;
+                        }
+                        EmojiView.this.pager.endFakeDrag();
+                        this.startedScroll = false;
+                        return true;
+                    }
                     return super.onInterceptTouchEvent(ev);
                 }
 
                 public boolean onTouchEvent(MotionEvent ev) {
+                    boolean z = false;
                     if (this.first) {
                         this.first = false;
                         this.lastX = ev.getX();
+                    }
+                    if (ev.getAction() == 0) {
+                        this.draggingHorizontally = false;
+                        this.draggingVertically = false;
+                        this.downX = ev.getRawX();
+                        this.downY = ev.getRawY();
+                    } else if (!(this.draggingVertically || this.draggingHorizontally || EmojiView.this.dragListener == null)) {
+                        if (Math.abs(ev.getRawX() - this.downX) >= ((float) this.touchslop)) {
+                            this.draggingHorizontally = true;
+                        } else if (Math.abs(ev.getRawY() - this.downY) >= ((float) this.touchslop)) {
+                            this.draggingVertically = true;
+                            this.downY = ev.getRawY();
+                            EmojiView.this.dragListener.onDragStart();
+                            if (this.startedScroll) {
+                                EmojiView.this.pager.endFakeDrag();
+                                this.startedScroll = false;
+                            }
+                        }
+                    }
+                    if (this.draggingVertically) {
+                        if (this.vTracker == null) {
+                            this.vTracker = VelocityTracker.obtain();
+                        }
+                        this.vTracker.addMovement(ev);
+                        if (ev.getAction() == 1 || ev.getAction() == 3) {
+                            this.vTracker.computeCurrentVelocity(1000);
+                            float velocity = this.vTracker.getYVelocity();
+                            this.vTracker.recycle();
+                            this.vTracker = null;
+                            if (ev.getAction() == 1) {
+                                EmojiView.this.dragListener.onDragEnd(velocity);
+                            } else {
+                                EmojiView.this.dragListener.onDragCancel();
+                            }
+                            this.first = true;
+                            this.draggingHorizontally = false;
+                            this.draggingVertically = false;
+                            return true;
+                        }
+                        EmojiView.this.dragListener.onDrag(Math.round(ev.getRawY() - this.downY));
+                        return true;
                     }
                     float newTranslationX = EmojiView.this.stickersTab.getTranslationX();
                     if (EmojiView.this.stickersTab.getScrollX() == 0 && newTranslationX == 0.0f) {
@@ -1414,15 +1491,17 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     this.lastX = ev.getX();
                     if (ev.getAction() == 3 || ev.getAction() == 1) {
                         this.first = true;
+                        this.draggingHorizontally = false;
+                        this.draggingVertically = false;
                         if (this.startedScroll) {
                             EmojiView.this.pager.endFakeDrag();
                             this.startedScroll = false;
                         }
                     }
                     if (this.startedScroll || super.onTouchEvent(ev)) {
-                        return true;
+                        z = true;
                     }
-                    return false;
+                    return z;
                 }
             };
             this.stickersTab.setUnderlineHeight(AndroidUtilities.dp(1.0f));
@@ -2066,6 +2145,10 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         this.listener = value;
     }
 
+    public void setDragListener(DragListener dragListener) {
+        this.dragListener = dragListener;
+    }
+
     public void invalidateViews() {
         for (int a = 0; a < this.emojiGrids.size(); a++) {
             ((GridView) this.emojiGrids.get(a)).invalidateViews();
@@ -2293,6 +2376,10 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 FileLog.e(e);
             }
         }
+    }
+
+    public boolean areThereAnyStickers() {
+        return this.stickersGridAdapter != null && this.stickersGridAdapter.getItemCount() > 0;
     }
 
     public void didReceivedNotification(int id, Object... args) {

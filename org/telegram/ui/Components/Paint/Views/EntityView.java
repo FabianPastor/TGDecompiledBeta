@@ -16,7 +16,6 @@ import org.telegram.ui.Components.Point;
 import org.telegram.ui.Components.Rect;
 
 public class EntityView extends FrameLayout {
-    private boolean announcedDragging = false;
     private boolean announcedSelection = false;
     private EntityViewDelegate delegate;
     private GestureDetector gestureDetector;
@@ -35,13 +34,9 @@ public class EntityView extends FrameLayout {
     public interface EntityViewDelegate {
         boolean allowInteraction(EntityView entityView);
 
-        void onBeganEntityDragging(EntityView entityView);
-
         boolean onEntityLongClicked(EntityView entityView);
 
         boolean onEntitySelected(EntityView entityView);
-
-        void onFinishedEntityDragging(EntityView entityView);
     }
 
     public class SelectionView extends FrameLayout {
@@ -124,12 +119,6 @@ public class EntityView extends FrameLayout {
                             EntityView.this.rotate((float) Math.toDegrees((double) angle));
                             EntityView.this.previousLocationX = event.getRawX();
                             EntityView.this.previousLocationY = event.getRawY();
-                            if (!EntityView.this.announcedDragging) {
-                                EntityView.this.announcedDragging = true;
-                                if (EntityView.this.delegate != null) {
-                                    EntityView.this.delegate.onBeganEntityDragging(EntityView.this);
-                                }
-                            }
                             handled = true;
                             break;
                         }
@@ -205,12 +194,6 @@ public class EntityView extends FrameLayout {
         pan(translation);
         this.previousLocationX = x;
         this.previousLocationY = y;
-        if (!this.announcedDragging) {
-            this.announcedDragging = true;
-            if (this.delegate != null) {
-                this.delegate.onBeganEntityDragging(this);
-            }
-        }
         this.hasPanned = true;
         return true;
     }
@@ -219,15 +202,11 @@ public class EntityView extends FrameLayout {
         if (!(this.recognizedLongPress || this.hasPanned || this.hasTransformed || this.announcedSelection || this.delegate == null)) {
             this.delegate.onEntitySelected(this);
         }
-        if (this.announcedDragging && this.delegate != null) {
-            this.delegate.onFinishedEntityDragging(this);
-        }
         this.recognizedLongPress = false;
         this.hasPanned = false;
         this.hasTransformed = false;
         this.hasReleased = true;
         this.announcedSelection = false;
-        this.announcedDragging = false;
     }
 
     public boolean onTouchEvent(MotionEvent event) {

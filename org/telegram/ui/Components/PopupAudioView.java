@@ -180,7 +180,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
                 invalidate();
             }
         } else if (this.buttonState == 2) {
-            FileLoader.getInstance().loadFile(this.currentMessageObject.getDocument(), true, false);
+            FileLoader.getInstance().loadFile(this.currentMessageObject.getDocument(), true, 0);
             this.buttonState = 4;
             invalidate();
         } else if (this.buttonState == 3) {
@@ -218,7 +218,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
 
     public void downloadAudioIfNeed() {
         if (this.buttonState == 2) {
-            FileLoader.getInstance().loadFile(this.currentMessageObject.getDocument(), true, false);
+            FileLoader.getInstance().loadFile(this.currentMessageObject.getDocument(), true, 0);
             this.buttonState = 3;
             invalidate();
         }

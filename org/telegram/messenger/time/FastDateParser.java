@@ -468,11 +468,11 @@ public class FastDateParser implements DateParser, Serializable {
                     return new CopyQuotedStrategy(formatField.substring(1, formatField.length() - 1));
                 }
                 break;
-            case TLRPC.LAYER /*68*/:
+            case 'D':
                 return DAY_OF_YEAR_STRATEGY;
             case 'E':
                 return getLocaleSpecificStrategy(7, definingCalendar);
-            case 'F':
+            case TLRPC.LAYER /*70*/:
                 return DAY_OF_WEEK_IN_MONTH_STRATEGY;
             case 'G':
                 return getLocaleSpecificStrategy(0, definingCalendar);

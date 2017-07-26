@@ -49,7 +49,7 @@ public class ArchivedStickerSetCell extends FrameLayout {
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 40.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, 71.0f, 10.0f, 71.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         this.valueTextView.setTextSize(1, 13.0f);
@@ -69,26 +69,26 @@ public class ArchivedStickerSetCell extends FrameLayout {
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 40.0f : 71.0f, 35.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, 71.0f, 35.0f, 71.0f, 0.0f));
         this.imageView = new BackupImageView(context);
         this.imageView.setAspectFit(true);
-        View view2 = this.imageView;
+        view = this.imageView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view2, LayoutHelper.createFrame(48, 48.0f, i | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(48, 48.0f, i | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
         if (needCheckBox) {
             this.checkBox = new Switch(context);
             this.checkBox.setDuplicateParentStateEnabled(false);
             this.checkBox.setFocusable(false);
             this.checkBox.setFocusableInTouchMode(false);
-            View view3 = this.checkBox;
+            View view2 = this.checkBox;
             if (!LocaleController.isRTL) {
                 i3 = 5;
             }
-            addView(view3, LayoutHelper.createFrame(-2, -2.0f, i3 | 16, 14.0f, 0.0f, 14.0f, 0.0f));
+            addView(view2, LayoutHelper.createFrame(-2, -2.0f, i3 | 16, 14.0f, 0.0f, 14.0f, 0.0f));
         }
     }
 

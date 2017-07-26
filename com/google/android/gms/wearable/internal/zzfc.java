@@ -1,18 +1,18 @@
 package com.google.android.gms.wearable.internal;
 
-import com.google.android.gms.internal.zzbay;
+import com.google.android.gms.internal.zzbaz;
 
 class zzfc<T> extends zza {
-    private zzbay<T> zzajL;
+    private zzbaz<T> zzajL;
 
-    public zzfc(zzbay<T> com_google_android_gms_internal_zzbay_T) {
-        this.zzajL = com_google_android_gms_internal_zzbay_T;
+    public zzfc(zzbaz<T> com_google_android_gms_internal_zzbaz_T) {
+        this.zzajL = com_google_android_gms_internal_zzbaz_T;
     }
 
     public final void zzR(T t) {
-        zzbay com_google_android_gms_internal_zzbay = this.zzajL;
-        if (com_google_android_gms_internal_zzbay != null) {
-            com_google_android_gms_internal_zzbay.setResult(t);
+        zzbaz com_google_android_gms_internal_zzbaz = this.zzajL;
+        if (com_google_android_gms_internal_zzbaz != null) {
+            com_google_android_gms_internal_zzbaz.setResult(t);
             this.zzajL = null;
         }
     }

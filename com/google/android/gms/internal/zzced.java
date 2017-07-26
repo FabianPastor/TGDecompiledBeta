@@ -2,16 +2,16 @@ package com.google.android.gms.internal;
 
 final class zzced implements Runnable {
     private /* synthetic */ long zzbot;
-    private /* synthetic */ zzceb zzbou;
-    private /* synthetic */ String zztF;
+    private /* synthetic */ zzcec zzbou;
+    private /* synthetic */ String zztD;
 
-    zzced(zzceb com_google_android_gms_internal_zzceb, String str, long j) {
-        this.zzbou = com_google_android_gms_internal_zzceb;
-        this.zztF = str;
+    zzced(zzcec com_google_android_gms_internal_zzcec, String str, long j) {
+        this.zzbou = com_google_android_gms_internal_zzcec;
+        this.zztD = str;
         this.zzbot = j;
     }
 
     public final void run() {
-        this.zzbou.zze(this.zztF, this.zzbot);
+        this.zzbou.zzd(this.zztD, this.zzbot);
     }
 }

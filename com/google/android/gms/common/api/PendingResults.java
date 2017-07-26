@@ -2,13 +2,13 @@ package com.google.android.gms.common.api;
 
 import android.os.Looper;
 import com.google.android.gms.common.internal.zzbo;
-import com.google.android.gms.internal.zzbbd;
-import com.google.android.gms.internal.zzbeb;
-import com.google.android.gms.internal.zzbem;
+import com.google.android.gms.internal.zzbbe;
+import com.google.android.gms.internal.zzbec;
+import com.google.android.gms.internal.zzben;
 
 public final class PendingResults {
 
-    static final class zza<R extends Result> extends zzbbd<R> {
+    static final class zza<R extends Result> extends zzbbe<R> {
         private final R zzaBi;
 
         public zza(R r) {
@@ -24,7 +24,7 @@ public final class PendingResults {
         }
     }
 
-    static final class zzb<R extends Result> extends zzbbd<R> {
+    static final class zzb<R extends Result> extends zzbbe<R> {
         private final R zzaBj;
 
         public zzb(GoogleApiClient googleApiClient, R r) {
@@ -37,7 +37,7 @@ public final class PendingResults {
         }
     }
 
-    static final class zzc<R extends Result> extends zzbbd<R> {
+    static final class zzc<R extends Result> extends zzbbe<R> {
         public zzc(GoogleApiClient googleApiClient) {
             super(googleApiClient);
         }
@@ -51,9 +51,9 @@ public final class PendingResults {
     }
 
     public static PendingResult<Status> canceledPendingResult() {
-        PendingResult com_google_android_gms_internal_zzbem = new zzbem(Looper.getMainLooper());
-        com_google_android_gms_internal_zzbem.cancel();
-        return com_google_android_gms_internal_zzbem;
+        PendingResult com_google_android_gms_internal_zzben = new zzben(Looper.getMainLooper());
+        com_google_android_gms_internal_zzben.cancel();
+        return com_google_android_gms_internal_zzben;
     }
 
     public static <R extends Result> PendingResult<R> canceledPendingResult(R r) {
@@ -68,14 +68,14 @@ public final class PendingResults {
         zzbo.zzb((Object) r, (Object) "Result must not be null");
         PendingResult com_google_android_gms_common_api_PendingResults_zzc = new zzc(null);
         com_google_android_gms_common_api_PendingResults_zzc.setResult(r);
-        return new zzbeb(com_google_android_gms_common_api_PendingResults_zzc);
+        return new zzbec(com_google_android_gms_common_api_PendingResults_zzc);
     }
 
     public static PendingResult<Status> immediatePendingResult(Status status) {
         zzbo.zzb((Object) status, (Object) "Result must not be null");
-        PendingResult com_google_android_gms_internal_zzbem = new zzbem(Looper.getMainLooper());
-        com_google_android_gms_internal_zzbem.setResult(status);
-        return com_google_android_gms_internal_zzbem;
+        PendingResult com_google_android_gms_internal_zzben = new zzben(Looper.getMainLooper());
+        com_google_android_gms_internal_zzben.setResult(status);
+        return com_google_android_gms_internal_zzben;
     }
 
     public static <R extends Result> PendingResult<R> zza(R r, GoogleApiClient googleApiClient) {
@@ -88,15 +88,15 @@ public final class PendingResults {
 
     public static PendingResult<Status> zza(Status status, GoogleApiClient googleApiClient) {
         zzbo.zzb((Object) status, (Object) "Result must not be null");
-        PendingResult com_google_android_gms_internal_zzbem = new zzbem(googleApiClient);
-        com_google_android_gms_internal_zzbem.setResult(status);
-        return com_google_android_gms_internal_zzbem;
+        PendingResult com_google_android_gms_internal_zzben = new zzben(googleApiClient);
+        com_google_android_gms_internal_zzben.setResult(status);
+        return com_google_android_gms_internal_zzben;
     }
 
     public static <R extends Result> OptionalPendingResult<R> zzb(R r, GoogleApiClient googleApiClient) {
         zzbo.zzb((Object) r, (Object) "Result must not be null");
         PendingResult com_google_android_gms_common_api_PendingResults_zzc = new zzc(googleApiClient);
         com_google_android_gms_common_api_PendingResults_zzc.setResult(r);
-        return new zzbeb(com_google_android_gms_common_api_PendingResults_zzc);
+        return new zzbec(com_google_android_gms_common_api_PendingResults_zzc);
     }
 }

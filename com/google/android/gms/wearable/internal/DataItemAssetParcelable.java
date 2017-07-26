@@ -12,17 +12,17 @@ import com.google.android.gms.wearable.DataItemAsset;
 @KeepName
 public class DataItemAssetParcelable extends zza implements ReflectedParcelable, DataItemAsset {
     public static final Creator<DataItemAssetParcelable> CREATOR = new zzby();
-    private final String zzBP;
-    private final String zzIk;
+    private final String zzBN;
+    private final String zzIi;
 
     public DataItemAssetParcelable(DataItemAsset dataItemAsset) {
-        this.zzIk = (String) zzbo.zzu(dataItemAsset.getId());
-        this.zzBP = (String) zzbo.zzu(dataItemAsset.getDataItemKey());
+        this.zzIi = (String) zzbo.zzu(dataItemAsset.getId());
+        this.zzBN = (String) zzbo.zzu(dataItemAsset.getDataItemKey());
     }
 
     DataItemAssetParcelable(String str, String str2) {
-        this.zzIk = str;
-        this.zzBP = str2;
+        this.zzIi = str;
+        this.zzBN = str2;
     }
 
     public /* bridge */ /* synthetic */ Object freeze() {
@@ -30,11 +30,11 @@ public class DataItemAssetParcelable extends zza implements ReflectedParcelable,
     }
 
     public String getDataItemKey() {
-        return this.zzBP;
+        return this.zzBN;
     }
 
     public String getId() {
-        return this.zzIk;
+        return this.zzIi;
     }
 
     public boolean isDataValid() {
@@ -46,14 +46,14 @@ public class DataItemAssetParcelable extends zza implements ReflectedParcelable,
         stringBuilder.append("DataItemAssetParcelable[");
         stringBuilder.append("@");
         stringBuilder.append(Integer.toHexString(hashCode()));
-        if (this.zzIk == null) {
+        if (this.zzIi == null) {
             stringBuilder.append(",noid");
         } else {
             stringBuilder.append(",");
-            stringBuilder.append(this.zzIk);
+            stringBuilder.append(this.zzIi);
         }
         stringBuilder.append(", key=");
-        stringBuilder.append(this.zzBP);
+        stringBuilder.append(this.zzBN);
         stringBuilder.append("]");
         return stringBuilder.toString();
     }

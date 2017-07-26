@@ -3,21 +3,21 @@ package com.google.android.gms.internal;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-final class zzcgy implements Callable<List<zzcej>> {
-    private /* synthetic */ String zzbjh;
-    private /* synthetic */ zzcgp zzbtf;
+final class zzcgy implements Callable<List<zzcek>> {
+    private /* synthetic */ zzceh zzbte;
+    private /* synthetic */ zzcgq zzbtf;
     private /* synthetic */ String zzbth;
     private /* synthetic */ String zzbti;
 
-    zzcgy(zzcgp com_google_android_gms_internal_zzcgp, String str, String str2, String str3) {
-        this.zzbtf = com_google_android_gms_internal_zzcgp;
-        this.zzbjh = str;
-        this.zzbth = str2;
-        this.zzbti = str3;
+    zzcgy(zzcgq com_google_android_gms_internal_zzcgq, zzceh com_google_android_gms_internal_zzceh, String str, String str2) {
+        this.zzbtf = com_google_android_gms_internal_zzcgq;
+        this.zzbte = com_google_android_gms_internal_zzceh;
+        this.zzbth = str;
+        this.zzbti = str2;
     }
 
     public final /* synthetic */ Object call() throws Exception {
         this.zzbtf.zzboe.zzze();
-        return this.zzbtf.zzboe.zzwz().zzi(this.zzbjh, this.zzbth, this.zzbti);
+        return this.zzbtf.zzboe.zzwz().zzi(this.zzbte.packageName, this.zzbth, this.zzbti);
     }
 }

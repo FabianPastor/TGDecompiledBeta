@@ -2,44 +2,34 @@ package com.google.android.gms.internal;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
-import com.google.android.gms.common.internal.zzbr;
+import android.support.v4.internal.view.SupportMenu;
+import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.internal.zzbp;
 
-public final class zzctw extends zza {
-    public static final Creator<zzctw> CREATOR = new zzctx();
-    private final ConnectionResult zzaBQ;
-    private int zzaku;
-    private final zzbr zzbCV;
-
-    public zzctw(int i) {
-        this(new ConnectionResult(8, null), null);
+public final class zzctw implements Creator<zzctv> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzb.zzd(parcel);
+        int i = 0;
+        zzbp com_google_android_gms_common_internal_zzbp = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (SupportMenu.USER_MASK & readInt) {
+                case 1:
+                    i = zzb.zzg(parcel, readInt);
+                    break;
+                case 2:
+                    com_google_android_gms_common_internal_zzbp = (zzbp) zzb.zza(parcel, readInt, zzbp.CREATOR);
+                    break;
+                default:
+                    zzb.zzb(parcel, readInt);
+                    break;
+            }
+        }
+        zzb.zzF(parcel, zzd);
+        return new zzctv(i, com_google_android_gms_common_internal_zzbp);
     }
 
-    zzctw(int i, ConnectionResult connectionResult, zzbr com_google_android_gms_common_internal_zzbr) {
-        this.zzaku = i;
-        this.zzaBQ = connectionResult;
-        this.zzbCV = com_google_android_gms_common_internal_zzbr;
-    }
-
-    private zzctw(ConnectionResult connectionResult, zzbr com_google_android_gms_common_internal_zzbr) {
-        this(1, connectionResult, null);
-    }
-
-    public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zzc(parcel, 1, this.zzaku);
-        zzd.zza(parcel, 2, this.zzaBQ, i, false);
-        zzd.zza(parcel, 3, this.zzbCV, i, false);
-        zzd.zzI(parcel, zze);
-    }
-
-    public final zzbr zzAx() {
-        return this.zzbCV;
-    }
-
-    public final ConnectionResult zzpz() {
-        return this.zzaBQ;
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new zzctv[i];
     }
 }

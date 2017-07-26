@@ -2,34 +2,28 @@ package com.google.android.gms.internal;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 import com.google.android.gms.common.internal.zzbp;
 
-public final class zzctv implements Creator<zzctu> {
-    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        int zzd = zzb.zzd(parcel);
-        int i = 0;
-        zzbp com_google_android_gms_common_internal_zzbp = null;
-        while (parcel.dataPosition() < zzd) {
-            int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
-                case 1:
-                    i = zzb.zzg(parcel, readInt);
-                    break;
-                case 2:
-                    com_google_android_gms_common_internal_zzbp = (zzbp) zzb.zza(parcel, readInt, zzbp.CREATOR);
-                    break;
-                default:
-                    zzb.zzb(parcel, readInt);
-                    break;
-            }
-        }
-        zzb.zzF(parcel, zzd);
-        return new zzctu(i, com_google_android_gms_common_internal_zzbp);
+public final class zzctv extends zza {
+    public static final Creator<zzctv> CREATOR = new zzctw();
+    private int zzaku;
+    private zzbp zzbCU;
+
+    zzctv(int i, zzbp com_google_android_gms_common_internal_zzbp) {
+        this.zzaku = i;
+        this.zzbCU = com_google_android_gms_common_internal_zzbp;
     }
 
-    public final /* synthetic */ Object[] newArray(int i) {
-        return new zzctu[i];
+    public zzctv(zzbp com_google_android_gms_common_internal_zzbp) {
+        this(1, com_google_android_gms_common_internal_zzbp);
+    }
+
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zzc(parcel, 1, this.zzaku);
+        zzd.zza(parcel, 2, this.zzbCU, i, false);
+        zzd.zzI(parcel, zze);
     }
 }

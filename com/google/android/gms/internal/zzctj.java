@@ -1,14 +1,12 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.common.api.Api.zze;
-import com.google.android.gms.common.internal.zzal;
+import android.os.Bundle;
+import com.google.android.gms.common.api.Api.ApiOptions.HasOptions;
 
-public interface zzctj extends zze {
-    void connect();
+public final class zzctj implements HasOptions {
+    private final Bundle zzbCL;
 
-    void zzAq();
-
-    void zza(zzal com_google_android_gms_common_internal_zzal, boolean z);
-
-    void zza(zzctp com_google_android_gms_internal_zzctp);
+    public final Bundle zzAp() {
+        return this.zzbCL;
+    }
 }

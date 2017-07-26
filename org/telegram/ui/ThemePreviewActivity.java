@@ -45,6 +45,7 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.Message;
+import org.telegram.tgnet.TLRPC.MessageMedia;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
 import org.telegram.tgnet.TLRPC.TL_fileLocationUnavailable;
@@ -279,6 +280,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.from_id = 0;
             message.id = 5;
             message.media = new TL_messageMediaDocument();
+            MessageMedia messageMedia = message.media;
+            messageMedia.flags |= 3;
             message.media.document = new TL_document();
             message.media.document.mime_type = MimeTypes.AUDIO_MP4;
             message.media.document.thumb = new TL_photoSizeEmpty();
@@ -315,6 +318,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.from_id = UserConfig.getClientUserId();
             message.id = 1;
             message.media = new TL_messageMediaDocument();
+            messageMedia = message.media;
+            messageMedia.flags |= 3;
             message.media.document = new TL_document();
             message.media.document.mime_type = "audio/ogg";
             message.media.document.thumb = new TL_photoSizeEmpty();
@@ -341,6 +346,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.from_id = 0;
             message.id = 1;
             message.media = new TL_messageMediaPhoto();
+            messageMedia = message.media;
+            messageMedia.flags |= 3;
             message.media.photo = new TL_photo();
             message.media.photo.has_stickers = false;
             message.media.photo.id = 1;

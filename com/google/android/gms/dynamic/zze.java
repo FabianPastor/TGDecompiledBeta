@@ -10,14 +10,14 @@ final class zze implements zzi {
     private /* synthetic */ FrameLayout zzaSx;
     private /* synthetic */ LayoutInflater zzaSy;
     private /* synthetic */ ViewGroup zzaSz;
-    private /* synthetic */ Bundle zzxX;
+    private /* synthetic */ Bundle zzxV;
 
     zze(zza com_google_android_gms_dynamic_zza, FrameLayout frameLayout, LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         this.zzaSv = com_google_android_gms_dynamic_zza;
         this.zzaSx = frameLayout;
         this.zzaSy = layoutInflater;
         this.zzaSz = viewGroup;
-        this.zzxX = bundle;
+        this.zzxV = bundle;
     }
 
     public final int getState() {
@@ -26,6 +26,6 @@ final class zze implements zzi {
 
     public final void zzb(LifecycleDelegate lifecycleDelegate) {
         this.zzaSx.removeAllViews();
-        this.zzaSx.addView(this.zzaSv.zzaSr.onCreateView(this.zzaSy, this.zzaSz, this.zzxX));
+        this.zzaSx.addView(this.zzaSv.zzaSr.onCreateView(this.zzaSy, this.zzaSz, this.zzxV));
     }
 }

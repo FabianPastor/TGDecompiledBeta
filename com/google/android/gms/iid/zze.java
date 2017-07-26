@@ -48,10 +48,10 @@ public final class zze {
     private int zzbhk;
     private int zzbhl;
     private long zzbhm;
-    private Context zzqF;
+    private Context zzqD;
 
     public zze(Context context) {
-        this.zzqF = context;
+        this.zzqD = context;
     }
 
     private final void zzB(Object obj) {
@@ -119,14 +119,14 @@ public final class zze {
             this.zzbhi = SystemClock.elapsedRealtime();
             Intent intent2 = new Intent(zzbha ? "com.google.iid.TOKEN_REQUEST" : "com.google.android.c2dm.intent.REGISTER");
             intent2.setPackage(zzbgZ);
-            bundle.putString("gmsv", Integer.toString(zzbe(this.zzqF)));
+            bundle.putString("gmsv", Integer.toString(zzbe(this.zzqD)));
             bundle.putString("osv", Integer.toString(VERSION.SDK_INT));
-            bundle.putString("app_ver", Integer.toString(InstanceID.zzba(this.zzqF)));
-            bundle.putString("app_ver_name", InstanceID.zzbb(this.zzqF));
-            bundle.putString("cliv", "iid-11011000");
+            bundle.putString("app_ver", Integer.toString(InstanceID.zzba(this.zzqD)));
+            bundle.putString("app_ver_name", InstanceID.zzbb(this.zzqD));
+            bundle.putString("cliv", "iid-11020000");
             bundle.putString("appid", InstanceID.zza(keyPair));
             bundle.putString("pub2", InstanceID.zzj(keyPair.getPublic().getEncoded()));
-            bundle.putString("sig", zza(keyPair, this.zzqF.getPackageName(), valueOf));
+            bundle.putString("sig", zza(keyPair, this.zzqD.getPackageName(), valueOf));
             intent2.putExtras(bundle);
             zzg(intent2);
             this.zzbhi = SystemClock.elapsedRealtime();
@@ -175,11 +175,11 @@ public final class zze {
                             Log.d("InstanceID/Rpc", "Registered GSF callback receiver");
                         }
                         IntentFilter intentFilter = new IntentFilter("com.google.android.c2dm.intent.REGISTRATION");
-                        intentFilter.addCategory(this.zzqF.getPackageName());
-                        this.zzqF.registerReceiver(zzbhe, intentFilter, "com.google.android.c2dm.permission.SEND", null);
+                        intentFilter.addCategory(this.zzqD.getPackageName());
+                        this.zzqD.registerReceiver(zzbhe, intentFilter, "com.google.android.c2dm.permission.SEND", null);
                     }
                 }
-                this.zzqF.sendBroadcast(intent2);
+                this.zzqD.sendBroadcast(intent2);
             } else {
                 intent2.putExtra("google.messenger", this.zzbfT);
                 intent2.putExtra("messenger2", "1");
@@ -195,9 +195,9 @@ public final class zze {
                     }
                 }
                 if (zzbha) {
-                    this.zzqF.sendBroadcast(intent2);
+                    this.zzqD.sendBroadcast(intent2);
                 } else {
-                    this.zzqF.startService(intent2);
+                    this.zzqD.startService(intent2);
                 }
             }
             conditionVariable.block(30000);
@@ -302,7 +302,7 @@ public final class zze {
         if (this.zzbfP == null) {
             Intent intent2 = new Intent();
             intent2.setPackage("com.google.example.invalidpackage");
-            this.zzbfP = PendingIntent.getBroadcast(this.zzqF, 0, intent2, 0);
+            this.zzbfP = PendingIntent.getBroadcast(this.zzqD, 0, intent2, 0);
         }
         intent.putExtra("app", this.zzbfP);
     }
@@ -338,7 +338,7 @@ public final class zze {
 
     private final void zzvN() {
         if (this.zzbfT == null) {
-            zzbd(this.zzqF);
+            zzbd(this.zzqD);
             this.zzbfT = new Messenger(new zzf(this, Looper.getMainLooper()));
         }
     }
@@ -474,14 +474,14 @@ public final class zze {
                     if (split2.length > 4) {
                         Context context;
                         if ("SYNC".equals(split2[3])) {
-                            context = this.zzqF;
+                            context = this.zzqD;
                             Intent intent2 = new Intent("com.google.android.gms.iid.InstanceID");
                             intent2.putExtra("CMD", "SYNC");
                             intent2.setClassName(context, "com.google.android.gms.gcm.GcmReceiver");
                             context.sendBroadcast(intent2);
                         } else if ("RST".equals(split2[3])) {
-                            context = this.zzqF;
-                            InstanceID.getInstance(this.zzqF);
+                            context = this.zzqD;
+                            InstanceID.getInstance(this.zzqD);
                             InstanceIDListenerService.zza(context, InstanceID.zzvM());
                             intent.removeExtra("registration_id");
                             zzi(stringExtra, intent);

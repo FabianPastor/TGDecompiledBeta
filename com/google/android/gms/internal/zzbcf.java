@@ -1,61 +1,46 @@
 package com.google.android.gms.internal;
 
-import android.support.annotation.WorkerThread;
+import android.os.Looper;
+import android.support.annotation.NonNull;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Api.zze;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.internal.zzbo;
 import com.google.android.gms.common.internal.zzj;
-import java.util.Map;
+import java.lang.ref.WeakReference;
 
-final class zzbcf extends zzbcm {
-    final /* synthetic */ zzbcc zzaDp;
-    private final Map<zze, zzbce> zzaDr;
+final class zzbcf implements zzj {
+    private final boolean zzaCj;
+    private final WeakReference<zzbcd> zzaDq;
+    private final Api<?> zzayW;
 
-    public zzbcf(zzbcc com_google_android_gms_internal_zzbcc, Map<zze, zzbce> map) {
-        this.zzaDp = com_google_android_gms_internal_zzbcc;
-        super(com_google_android_gms_internal_zzbcc);
-        this.zzaDr = map;
+    public zzbcf(zzbcd com_google_android_gms_internal_zzbcd, Api<?> api, boolean z) {
+        this.zzaDq = new WeakReference(com_google_android_gms_internal_zzbcd);
+        this.zzayW = api;
+        this.zzaCj = z;
     }
 
-    @WorkerThread
-    public final void zzpV() {
-        int i;
-        int i2 = 1;
-        int i3 = 0;
-        int i4 = 1;
-        int i5 = 0;
-        for (zze com_google_android_gms_common_api_Api_zze : this.zzaDr.keySet()) {
-            if (!com_google_android_gms_common_api_Api_zze.zzpe()) {
-                i = 0;
-                i4 = i5;
-            } else if (!((zzbce) this.zzaDr.get(com_google_android_gms_common_api_Api_zze)).zzaCj) {
-                i = 1;
-                break;
-            } else {
-                i = i4;
-                i4 = 1;
+    public final void zzf(@NonNull ConnectionResult connectionResult) {
+        boolean z = false;
+        zzbcd com_google_android_gms_internal_zzbcd = (zzbcd) this.zzaDq.get();
+        if (com_google_android_gms_internal_zzbcd != null) {
+            if (Looper.myLooper() == com_google_android_gms_internal_zzbcd.zzaCZ.zzaCl.getLooper()) {
+                z = true;
             }
-            i5 = i4;
-            i4 = i;
-        }
-        i2 = i5;
-        i = 0;
-        if (i2 != 0) {
-            i3 = this.zzaDp.zzaCF.isGooglePlayServicesAvailable(this.zzaDp.mContext);
-        }
-        if (i3 == 0 || (r0 == 0 && i4 == 0)) {
-            if (this.zzaDp.zzaDj) {
-                this.zzaDp.zzaDh.connect();
-            }
-            for (zze com_google_android_gms_common_api_Api_zze2 : this.zzaDr.keySet()) {
-                zzj com_google_android_gms_common_internal_zzj = (zzj) this.zzaDr.get(com_google_android_gms_common_api_Api_zze2);
-                if (!com_google_android_gms_common_api_Api_zze2.zzpe() || i3 == 0) {
-                    com_google_android_gms_common_api_Api_zze2.zza(com_google_android_gms_common_internal_zzj);
-                } else {
-                    this.zzaDp.zzaCZ.zza(new zzbch(this, this.zzaDp, com_google_android_gms_common_internal_zzj));
+            zzbo.zza(z, (Object) "onReportServiceBinding must be called on the GoogleApiClient handler thread");
+            com_google_android_gms_internal_zzbcd.zzaCv.lock();
+            try {
+                if (com_google_android_gms_internal_zzbcd.zzan(0)) {
+                    if (!connectionResult.isSuccess()) {
+                        com_google_android_gms_internal_zzbcd.zzb(connectionResult, this.zzayW, this.zzaCj);
+                    }
+                    if (com_google_android_gms_internal_zzbcd.zzpW()) {
+                        com_google_android_gms_internal_zzbcd.zzpX();
+                    }
+                    com_google_android_gms_internal_zzbcd.zzaCv.unlock();
                 }
+            } finally {
+                com_google_android_gms_internal_zzbcd.zzaCv.unlock();
             }
-            return;
         }
-        this.zzaDp.zzaCZ.zza(new zzbcg(this, this.zzaDp, new ConnectionResult(i3, null)));
     }
 }

@@ -30,6 +30,7 @@ import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterMusic;
 import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterPhotoVideo;
 import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterUrl;
 import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterVoice;
+import org.telegram.tgnet.TLRPC.TL_message;
 import org.telegram.tgnet.TLRPC.TL_messageEntityEmail;
 import org.telegram.tgnet.TLRPC.TL_messageEntityTextUrl;
 import org.telegram.tgnet.TLRPC.TL_messageEntityUrl;
@@ -155,7 +156,7 @@ public class SharedMediaQuery {
             return 0;
         }
         if (message.media instanceof TL_messageMediaDocument) {
-            if (MessageObject.isVoiceMessage(message)) {
+            if (MessageObject.isVoiceMessage(message) || MessageObject.isRoundVideoMessage(message)) {
                 return 2;
             }
             if (MessageObject.isVideoMessage(message)) {
@@ -182,6 +183,9 @@ public class SharedMediaQuery {
     }
 
     public static boolean canAddMessageToMedia(Message message) {
+        if ((message instanceof TL_message) && (((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)) && message.media.ttl_seconds != 0)) {
+            return false;
+        }
         if ((message instanceof TL_message_secret) && (message.media instanceof TL_messageMediaPhoto) && message.ttl != 0 && message.ttl <= 60) {
             return false;
         }

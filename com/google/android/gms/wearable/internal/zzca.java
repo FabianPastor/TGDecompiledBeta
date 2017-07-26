@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 
 public final class zzca implements DataItem {
     private Uri mUri;
-    private Map<String, DataItemAsset> zzbSC;
+    private Map<String, DataItemAsset> zzbSE;
     private byte[] zzbdY;
 
     public zzca(DataItem dataItem) {
@@ -23,7 +23,7 @@ public final class zzca implements DataItem {
                 hashMap.put((String) entry.getKey(), (DataItemAsset) ((DataItemAsset) entry.getValue()).freeze());
             }
         }
-        this.zzbSC = Collections.unmodifiableMap(hashMap);
+        this.zzbSE = Collections.unmodifiableMap(hashMap);
     }
 
     public final /* bridge */ /* synthetic */ Object freeze() {
@@ -31,7 +31,7 @@ public final class zzca implements DataItem {
     }
 
     public final Map<String, DataItemAsset> getAssets() {
-        return this.zzbSC;
+        return this.zzbSE;
     }
 
     public final byte[] getData() {
@@ -57,11 +57,11 @@ public final class zzca implements DataItem {
         stringBuilder.append(new StringBuilder(String.valueOf(valueOf).length() + 4).append("uri=").append(valueOf).toString());
         valueOf = String.valueOf(this.zzbdY == null ? "null" : Integer.valueOf(this.zzbdY.length));
         stringBuilder.append(new StringBuilder(String.valueOf(valueOf).length() + 9).append(", dataSz=").append(valueOf).toString());
-        stringBuilder.append(", numAssets=" + this.zzbSC.size());
-        if (isLoggable && !this.zzbSC.isEmpty()) {
+        stringBuilder.append(", numAssets=" + this.zzbSE.size());
+        if (isLoggable && !this.zzbSE.isEmpty()) {
             stringBuilder.append(", assets=[");
             String str = "";
-            for (Entry entry : this.zzbSC.entrySet()) {
+            for (Entry entry : this.zzbSE.entrySet()) {
                 String str2 = (String) entry.getKey();
                 valueOf = String.valueOf(((DataItemAsset) entry.getValue()).getId());
                 stringBuilder.append(new StringBuilder(((String.valueOf(str).length() + 2) + String.valueOf(str2).length()) + String.valueOf(valueOf).length()).append(str).append(str2).append(": ").append(valueOf).toString());

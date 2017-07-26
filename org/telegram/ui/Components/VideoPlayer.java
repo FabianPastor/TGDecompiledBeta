@@ -31,8 +31,8 @@ import org.telegram.messenger.exoplayer2.trackselection.MappingTrackSelector;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelectionArray;
 import org.telegram.messenger.exoplayer2.upstream.DataSource.Factory;
 import org.telegram.messenger.exoplayer2.upstream.DefaultBandwidthMeter;
-import org.telegram.messenger.exoplayer2.upstream.DefaultDataSourceFactory;
 import org.telegram.messenger.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import org.telegram.messenger.secretmedia.ExtendedDefaultDataSourceFactory;
 
 @SuppressLint({"NewApi"})
 public class VideoPlayer implements EventListener, VideoListener {
@@ -45,7 +45,7 @@ public class VideoPlayer implements EventListener, VideoListener {
     private boolean lastReportedPlayWhenReady;
     private int lastReportedPlaybackState = 1;
     private Handler mainHandler = new Handler();
-    private Factory mediaDataSourceFactory = new DefaultDataSourceFactory(ApplicationLoader.applicationContext, BANDWIDTH_METER, new DefaultHttpDataSourceFactory("Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)", BANDWIDTH_METER));
+    private Factory mediaDataSourceFactory = new ExtendedDefaultDataSourceFactory(ApplicationLoader.applicationContext, BANDWIDTH_METER, new DefaultHttpDataSourceFactory("Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)", BANDWIDTH_METER));
     private SimpleExoPlayer player;
     private TextureView textureView;
     private MappingTrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(BANDWIDTH_METER));

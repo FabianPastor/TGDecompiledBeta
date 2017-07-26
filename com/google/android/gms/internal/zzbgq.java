@@ -2,38 +2,32 @@ package com.google.android.gms.internal;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
-import java.util.ArrayList;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzd;
 
-public final class zzbgq implements Creator<zzbgn> {
-    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        String str = null;
-        int zzd = zzb.zzd(parcel);
-        int i = 0;
-        ArrayList arrayList = null;
-        while (parcel.dataPosition() < zzd) {
-            int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
-                case 1:
-                    i = zzb.zzg(parcel, readInt);
-                    break;
-                case 2:
-                    arrayList = zzb.zzc(parcel, readInt, zzbgo.CREATOR);
-                    break;
-                case 3:
-                    str = zzb.zzq(parcel, readInt);
-                    break;
-                default:
-                    zzb.zzb(parcel, readInt);
-                    break;
-            }
-        }
-        zzb.zzF(parcel, zzd);
-        return new zzbgn(i, arrayList, str);
+public final class zzbgq extends zza {
+    public static final Creator<zzbgq> CREATOR = new zzbgn();
+    final String key;
+    private int versionCode;
+    final zzbgj<?, ?> zzaIV;
+
+    zzbgq(int i, String str, zzbgj<?, ?> com_google_android_gms_internal_zzbgj___) {
+        this.versionCode = i;
+        this.key = str;
+        this.zzaIV = com_google_android_gms_internal_zzbgj___;
     }
 
-    public final /* synthetic */ Object[] newArray(int i) {
-        return new zzbgn[i];
+    zzbgq(String str, zzbgj<?, ?> com_google_android_gms_internal_zzbgj___) {
+        this.versionCode = 1;
+        this.key = str;
+        this.zzaIV = com_google_android_gms_internal_zzbgj___;
+    }
+
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzd.zze(parcel);
+        zzd.zzc(parcel, 1, this.versionCode);
+        zzd.zza(parcel, 2, this.key, false);
+        zzd.zza(parcel, 3, this.zzaIV, i, false);
+        zzd.zzI(parcel, zze);
     }
 }

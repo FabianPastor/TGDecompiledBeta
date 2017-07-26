@@ -25,62 +25,62 @@ import java.util.concurrent.TimeUnit;
 @KeepForSdkWithMembers
 public class AdvertisingIdClient {
     private final Context mContext;
+    private Object zzsA;
     @Nullable
-    private zzfd zzsA;
-    private boolean zzsB;
-    private Object zzsC;
+    private zza zzsB;
+    private long zzsC;
     @Nullable
-    private zza zzsD;
-    private long zzsE;
+    private com.google.android.gms.common.zza zzsx;
     @Nullable
-    private com.google.android.gms.common.zza zzsz;
+    private zzfd zzsy;
+    private boolean zzsz;
 
     public static final class Info {
-        private final String zzsK;
-        private final boolean zzsL;
+        private final String zzsI;
+        private final boolean zzsJ;
 
         public Info(String str, boolean z) {
-            this.zzsK = str;
-            this.zzsL = z;
+            this.zzsI = str;
+            this.zzsJ = z;
         }
 
         public final String getId() {
-            return this.zzsK;
+            return this.zzsI;
         }
 
         public final boolean isLimitAdTrackingEnabled() {
-            return this.zzsL;
+            return this.zzsJ;
         }
 
         public final String toString() {
-            String str = this.zzsK;
-            return new StringBuilder(String.valueOf(str).length() + 7).append("{").append(str).append("}").append(this.zzsL).toString();
+            String str = this.zzsI;
+            return new StringBuilder(String.valueOf(str).length() + 7).append("{").append(str).append("}").append(this.zzsJ).toString();
         }
     }
 
     static class zza extends Thread {
-        private WeakReference<AdvertisingIdClient> zzsG;
-        private long zzsH;
-        CountDownLatch zzsI = new CountDownLatch(1);
-        boolean zzsJ = false;
+        private WeakReference<AdvertisingIdClient> zzsE;
+        private long zzsF;
+        CountDownLatch zzsG = new CountDownLatch(1);
+        boolean zzsH = false;
 
         public zza(AdvertisingIdClient advertisingIdClient, long j) {
-            this.zzsG = new WeakReference(advertisingIdClient);
-            this.zzsH = j;
+            this.zzsE = new WeakReference(advertisingIdClient);
+            this.zzsF = j;
             start();
         }
 
         private final void disconnect() {
-            AdvertisingIdClient advertisingIdClient = (AdvertisingIdClient) this.zzsG.get();
+            AdvertisingIdClient advertisingIdClient = (AdvertisingIdClient) this.zzsE.get();
             if (advertisingIdClient != null) {
                 advertisingIdClient.finish();
-                this.zzsJ = true;
+                this.zzsH = true;
             }
         }
 
         public final void run() {
             try {
-                if (!this.zzsI.await(this.zzsH, TimeUnit.MILLISECONDS)) {
+                if (!this.zzsG.await(this.zzsF, TimeUnit.MILLISECONDS)) {
                     disconnect();
                 }
             } catch (InterruptedException e) {
@@ -94,7 +94,7 @@ public class AdvertisingIdClient {
     }
 
     public AdvertisingIdClient(Context context, long j, boolean z) {
-        this.zzsC = new Object();
+        this.zzsA = new Object();
         zzbo.zzu(context);
         if (z) {
             Context applicationContext = context.getApplicationContext();
@@ -105,8 +105,8 @@ public class AdvertisingIdClient {
         } else {
             this.mContext = context;
         }
-        this.zzsB = false;
-        this.zzsE = j;
+        this.zzsz = false;
+        this.zzsC = j;
     }
 
     @Nullable
@@ -145,12 +145,12 @@ public class AdvertisingIdClient {
     private final void start(boolean z) throws IOException, IllegalStateException, GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
         zzbo.zzcG("Calling this from your main thread can lead to deadlock");
         synchronized (this) {
-            if (this.zzsB) {
+            if (this.zzsz) {
                 finish();
             }
-            this.zzsz = zzd(this.mContext);
-            this.zzsA = zza(this.mContext, this.zzsz);
-            this.zzsB = true;
+            this.zzsx = zzd(this.mContext);
+            this.zzsy = zza(this.mContext, this.zzsx);
+            this.zzsz = true;
             if (z) {
                 zzaj();
             }
@@ -189,16 +189,16 @@ public class AdvertisingIdClient {
     }
 
     private final void zzaj() {
-        synchronized (this.zzsC) {
-            if (this.zzsD != null) {
-                this.zzsD.zzsI.countDown();
+        synchronized (this.zzsA) {
+            if (this.zzsB != null) {
+                this.zzsB.zzsG.countDown();
                 try {
-                    this.zzsD.join();
+                    this.zzsB.join();
                 } catch (InterruptedException e) {
                 }
             }
-            if (this.zzsE > 0) {
-                this.zzsD = new zza(this, this.zzsE);
+            if (this.zzsC > 0) {
+                this.zzsB = new zza(this, this.zzsC);
             }
         }
     }
@@ -238,21 +238,21 @@ public class AdvertisingIdClient {
     public void finish() {
         zzbo.zzcG("Calling this from your main thread can lead to deadlock");
         synchronized (this) {
-            if (this.mContext == null || this.zzsz == null) {
+            if (this.mContext == null || this.zzsx == null) {
             } else {
                 try {
-                    if (this.zzsB) {
+                    if (this.zzsz) {
                         com.google.android.gms.common.stats.zza.zzrU();
-                        this.mContext.unbindService(this.zzsz);
+                        this.mContext.unbindService(this.zzsx);
                     }
                 } catch (Throwable e) {
                     Log.i("AdvertisingIdClient", "AdvertisingIdClient unbindService failed.", e);
                 } catch (Throwable e2) {
                     Log.i("AdvertisingIdClient", "AdvertisingIdClient unbindService failed.", e2);
                 }
-                this.zzsB = false;
-                this.zzsA = null;
-                this.zzsz = null;
+                this.zzsz = false;
+                this.zzsy = null;
+                this.zzsx = null;
             }
         }
     }
@@ -261,15 +261,15 @@ public class AdvertisingIdClient {
         Info info;
         zzbo.zzcG("Calling this from your main thread can lead to deadlock");
         synchronized (this) {
-            if (!this.zzsB) {
-                synchronized (this.zzsC) {
-                    if (this.zzsD == null || !this.zzsD.zzsJ) {
+            if (!this.zzsz) {
+                synchronized (this.zzsA) {
+                    if (this.zzsB == null || !this.zzsB.zzsH) {
                         throw new IOException("AdvertisingIdClient is not connected.");
                     }
                 }
                 try {
                     start(false);
-                    if (!this.zzsB) {
+                    if (!this.zzsz) {
                         throw new IOException("AdvertisingIdClient cannot reconnect.");
                     }
                 } catch (Throwable e) {
@@ -279,9 +279,9 @@ public class AdvertisingIdClient {
                     throw new IOException("AdvertisingIdClient cannot reconnect.", e2);
                 }
             }
-            zzbo.zzu(this.zzsz);
-            zzbo.zzu(this.zzsA);
-            info = new Info(this.zzsA.getId(), this.zzsA.zzb(true));
+            zzbo.zzu(this.zzsx);
+            zzbo.zzu(this.zzsy);
+            info = new Info(this.zzsy.getId(), this.zzsy.zzb(true));
         }
         zzaj();
         return info;

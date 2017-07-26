@@ -1,44 +1,79 @@
 package com.google.android.gms.internal;
 
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
-import com.google.android.gms.vision.Frame;
+import android.content.Context;
+import android.os.RemoteException;
+import android.util.Log;
+import com.google.android.gms.dynamite.DynamiteModule;
+import com.google.android.gms.dynamite.DynamiteModule.zzc;
 
-public final class fb extends zza {
-    public static final Creator<fb> CREATOR = new fc();
-    public int height;
-    private int id;
-    public int rotation;
-    public int width;
-    private long zzbiv;
+public abstract class fb<T> {
+    private final Context mContext;
+    private final Object mLock = new Object();
+    private final String mTag;
+    private boolean zzbNL = false;
+    private T zzbNM;
 
-    public fb(int i, int i2, int i3, long j, int i4) {
-        this.width = i;
-        this.height = i2;
-        this.id = i3;
-        this.zzbiv = j;
-        this.rotation = i4;
+    public fb(Context context, String str) {
+        this.mContext = context;
+        this.mTag = str;
     }
 
-    public static fb zzc(Frame frame) {
-        fb fbVar = new fb();
-        fbVar.width = frame.getMetadata().getWidth();
-        fbVar.height = frame.getMetadata().getHeight();
-        fbVar.rotation = frame.getMetadata().getRotation();
-        fbVar.id = frame.getMetadata().getId();
-        fbVar.zzbiv = frame.getMetadata().getTimestampMillis();
-        return fbVar;
+    public final boolean isOperational() {
+        return zzDR() != null;
     }
 
-    public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zzc(parcel, 2, this.width);
-        zzd.zzc(parcel, 3, this.height);
-        zzd.zzc(parcel, 4, this.id);
-        zzd.zza(parcel, 5, this.zzbiv);
-        zzd.zzc(parcel, 6, this.rotation);
-        zzd.zzI(parcel, zze);
+    protected abstract void zzDO() throws RemoteException;
+
+    public final void zzDQ() {
+        synchronized (this.mLock) {
+            if (this.zzbNM == null) {
+                return;
+            }
+            try {
+                zzDO();
+            } catch (Throwable e) {
+                Log.e(this.mTag, "Could not finalize native handle", e);
+            }
+        }
     }
+
+    protected final T zzDR() {
+        T t;
+        Throwable e;
+        synchronized (this.mLock) {
+            if (this.zzbNM != null) {
+                t = this.zzbNM;
+            } else {
+                try {
+                    this.zzbNM = zza(DynamiteModule.zza(this.mContext, DynamiteModule.zzaSO, "com.google.android.gms.vision.dynamite"), this.mContext);
+                } catch (zzc e2) {
+                    e = e2;
+                    Log.e(this.mTag, "Error creating remote native handle", e);
+                    if (!!this.zzbNL) {
+                    }
+                    Log.w(this.mTag, "Native handle is now available.");
+                    t = this.zzbNM;
+                    return t;
+                } catch (RemoteException e3) {
+                    e = e3;
+                    Log.e(this.mTag, "Error creating remote native handle", e);
+                    if (!this.zzbNL) {
+                    }
+                    Log.w(this.mTag, "Native handle is now available.");
+                    t = this.zzbNM;
+                    return t;
+                }
+                if (!this.zzbNL && this.zzbNM == null) {
+                    Log.w(this.mTag, "Native handle not yet available. Reverting to no-op handle.");
+                    this.zzbNL = true;
+                } else if (this.zzbNL && this.zzbNM != null) {
+                    Log.w(this.mTag, "Native handle is now available.");
+                }
+                t = this.zzbNM;
+            }
+        }
+        return t;
+    }
+
+    protected abstract T zza(DynamiteModule dynamiteModule, Context context) throws RemoteException, zzc;
 }

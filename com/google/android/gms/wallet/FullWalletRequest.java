@@ -8,33 +8,33 @@ import com.google.android.gms.common.internal.safeparcel.zzd;
 
 public final class FullWalletRequest extends zza implements ReflectedParcelable {
     public static final Creator<FullWalletRequest> CREATOR = new zzh();
-    String zzbOo;
-    String zzbOp;
-    Cart zzbOz;
+    Cart zzbOB;
+    String zzbOq;
+    String zzbOr;
 
     public final class Builder {
-        private /* synthetic */ FullWalletRequest zzbOA;
+        private /* synthetic */ FullWalletRequest zzbOC;
 
         private Builder(FullWalletRequest fullWalletRequest) {
-            this.zzbOA = fullWalletRequest;
+            this.zzbOC = fullWalletRequest;
         }
 
         public final FullWalletRequest build() {
-            return this.zzbOA;
+            return this.zzbOC;
         }
 
         public final Builder setCart(Cart cart) {
-            this.zzbOA.zzbOz = cart;
+            this.zzbOC.zzbOB = cart;
             return this;
         }
 
         public final Builder setGoogleTransactionId(String str) {
-            this.zzbOA.zzbOo = str;
+            this.zzbOC.zzbOq = str;
             return this;
         }
 
         public final Builder setMerchantTransactionId(String str) {
-            this.zzbOA.zzbOp = str;
+            this.zzbOC.zzbOr = str;
             return this;
         }
     }
@@ -43,9 +43,9 @@ public final class FullWalletRequest extends zza implements ReflectedParcelable 
     }
 
     FullWalletRequest(String str, String str2, Cart cart) {
-        this.zzbOo = str;
-        this.zzbOp = str2;
-        this.zzbOz = cart;
+        this.zzbOq = str;
+        this.zzbOr = str2;
+        this.zzbOB = cart;
     }
 
     public static Builder newBuilder() {
@@ -55,22 +55,22 @@ public final class FullWalletRequest extends zza implements ReflectedParcelable 
     }
 
     public final Cart getCart() {
-        return this.zzbOz;
+        return this.zzbOB;
     }
 
     public final String getGoogleTransactionId() {
-        return this.zzbOo;
+        return this.zzbOq;
     }
 
     public final String getMerchantTransactionId() {
-        return this.zzbOp;
+        return this.zzbOr;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
         int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.zzbOo, false);
-        zzd.zza(parcel, 3, this.zzbOp, false);
-        zzd.zza(parcel, 4, this.zzbOz, i, false);
+        zzd.zza(parcel, 2, this.zzbOq, false);
+        zzd.zza(parcel, 3, this.zzbOr, false);
+        zzd.zza(parcel, 4, this.zzbOB, i, false);
         zzd.zzI(parcel, zze);
     }
 }

@@ -1,21 +1,24 @@
 package com.google.android.gms.internal;
 
-import android.net.Uri;
-import android.widget.ImageView;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Drawable.ConstantState;
 
-public final class zzbfk extends ImageView {
-    private Uri zzaGE;
-    private int zzaGF;
+final class zzbfk extends ConstantState {
+    int mChangingConfigurations;
+    int zzaGD;
 
-    public final void zzax(int i) {
-        this.zzaGF = i;
+    zzbfk(zzbfk com_google_android_gms_internal_zzbfk) {
+        if (com_google_android_gms_internal_zzbfk != null) {
+            this.mChangingConfigurations = com_google_android_gms_internal_zzbfk.mChangingConfigurations;
+            this.zzaGD = com_google_android_gms_internal_zzbfk.zzaGD;
+        }
     }
 
-    public final void zzo(Uri uri) {
-        this.zzaGE = uri;
+    public final int getChangingConfigurations() {
+        return this.mChangingConfigurations;
     }
 
-    public final int zzqY() {
-        return this.zzaGF;
+    public final Drawable newDrawable() {
+        return new zzbfg(this);
     }
 }

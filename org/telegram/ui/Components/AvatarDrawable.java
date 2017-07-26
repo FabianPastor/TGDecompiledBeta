@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -147,21 +146,17 @@ public class AvatarDrawable extends Drawable {
                     lastch = Integer.valueOf(lastName.codePointAt(a));
                     a--;
                 }
-                if (VERSION.SDK_INT >= 16) {
-                    this.stringBuilder.append("‌");
-                }
+                this.stringBuilder.append("‌");
                 this.stringBuilder.appendCodePoint(lastch.intValue());
             } else if (firstName != null && firstName.length() > 0) {
                 a = firstName.length() - 1;
                 while (a >= 0) {
-                    if (firstName.charAt(a) != ' ' || a == firstName.length() - 1 || firstName.charAt(a + 1) == ' ') {
-                        a--;
-                    } else {
-                        if (VERSION.SDK_INT >= 16) {
-                            this.stringBuilder.append("‌");
-                        }
+                    if (firstName.charAt(a) == ' ' && a != firstName.length() - 1 && firstName.charAt(a + 1) != ' ') {
+                        this.stringBuilder.append("‌");
                         this.stringBuilder.appendCodePoint(firstName.codePointAt(a + 1));
+                        break;
                     }
+                    a--;
                 }
             }
         }

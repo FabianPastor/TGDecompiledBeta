@@ -2,93 +2,40 @@ package com.google.android.gms.internal;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.IInterface;
-import android.os.Parcel;
 import android.os.RemoteException;
-import com.google.android.gms.dynamic.IObjectWrapper.zza;
+import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.wallet.MaskedWallet;
 import com.google.android.gms.wallet.MaskedWalletRequest;
 import com.google.android.gms.wallet.fragment.WalletFragmentInitParams;
 import com.google.android.gms.wallet.fragment.WalletFragmentOptions;
 
-public abstract class ga extends zzee implements fz {
-    public static fz zzal(IBinder iBinder) {
-        if (iBinder == null) {
-            return null;
-        }
-        IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.wallet.fragment.internal.IWalletFragmentDelegate");
-        return queryLocalInterface instanceof fz ? (fz) queryLocalInterface : new gb(iBinder);
-    }
+public interface ga extends IInterface {
+    int getState() throws RemoteException;
 
-    public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-        if (zza(i, parcel, parcel2, i2)) {
-            return true;
-        }
-        switch (i) {
-            case 1:
-                zza(zza.zzM(parcel.readStrongBinder()), (WalletFragmentOptions) zzef.zza(parcel, WalletFragmentOptions.CREATOR), (Bundle) zzef.zza(parcel, Bundle.CREATOR));
-                parcel2.writeNoException();
-                break;
-            case 2:
-                onCreate((Bundle) zzef.zza(parcel, Bundle.CREATOR));
-                parcel2.writeNoException();
-                break;
-            case 3:
-                IInterface onCreateView = onCreateView(zza.zzM(parcel.readStrongBinder()), zza.zzM(parcel.readStrongBinder()), (Bundle) zzef.zza(parcel, Bundle.CREATOR));
-                parcel2.writeNoException();
-                zzef.zza(parcel2, onCreateView);
-                break;
-            case 4:
-                onStart();
-                parcel2.writeNoException();
-                break;
-            case 5:
-                onResume();
-                parcel2.writeNoException();
-                break;
-            case 6:
-                onPause();
-                parcel2.writeNoException();
-                break;
-            case 7:
-                onStop();
-                parcel2.writeNoException();
-                break;
-            case 8:
-                Bundle bundle = (Bundle) zzef.zza(parcel, Bundle.CREATOR);
-                onSaveInstanceState(bundle);
-                parcel2.writeNoException();
-                zzef.zzb(parcel2, bundle);
-                break;
-            case 9:
-                onActivityResult(parcel.readInt(), parcel.readInt(), (Intent) zzef.zza(parcel, Intent.CREATOR));
-                parcel2.writeNoException();
-                break;
-            case 10:
-                initialize((WalletFragmentInitParams) zzef.zza(parcel, WalletFragmentInitParams.CREATOR));
-                parcel2.writeNoException();
-                break;
-            case 11:
-                updateMaskedWalletRequest((MaskedWalletRequest) zzef.zza(parcel, MaskedWalletRequest.CREATOR));
-                parcel2.writeNoException();
-                break;
-            case 12:
-                setEnabled(zzef.zza(parcel));
-                parcel2.writeNoException();
-                break;
-            case 13:
-                int state = getState();
-                parcel2.writeNoException();
-                parcel2.writeInt(state);
-                break;
-            case 14:
-                updateMaskedWallet((MaskedWallet) zzef.zza(parcel, MaskedWallet.CREATOR));
-                parcel2.writeNoException();
-                break;
-            default:
-                return false;
-        }
-        return true;
-    }
+    void initialize(WalletFragmentInitParams walletFragmentInitParams) throws RemoteException;
+
+    void onActivityResult(int i, int i2, Intent intent) throws RemoteException;
+
+    void onCreate(Bundle bundle) throws RemoteException;
+
+    IObjectWrapper onCreateView(IObjectWrapper iObjectWrapper, IObjectWrapper iObjectWrapper2, Bundle bundle) throws RemoteException;
+
+    void onPause() throws RemoteException;
+
+    void onResume() throws RemoteException;
+
+    void onSaveInstanceState(Bundle bundle) throws RemoteException;
+
+    void onStart() throws RemoteException;
+
+    void onStop() throws RemoteException;
+
+    void setEnabled(boolean z) throws RemoteException;
+
+    void updateMaskedWallet(MaskedWallet maskedWallet) throws RemoteException;
+
+    void updateMaskedWalletRequest(MaskedWalletRequest maskedWalletRequest) throws RemoteException;
+
+    void zza(IObjectWrapper iObjectWrapper, WalletFragmentOptions walletFragmentOptions, Bundle bundle) throws RemoteException;
 }

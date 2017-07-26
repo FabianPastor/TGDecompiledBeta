@@ -1,26 +1,12 @@
 package com.google.android.gms.internal;
 
-import android.app.Activity;
-import android.support.v4.app.FragmentActivity;
-import com.google.android.gms.common.internal.zzbo;
+import android.os.Bundle;
+import com.google.android.gms.common.ConnectionResult;
 
-public final class zzbdq {
-    private final Object zzaEF;
+public interface zzbdq {
+    void zzc(ConnectionResult connectionResult);
 
-    public zzbdq(Activity activity) {
-        zzbo.zzb((Object) activity, (Object) "Activity must not be null");
-        this.zzaEF = activity;
-    }
+    void zze(int i, boolean z);
 
-    public final boolean zzqC() {
-        return this.zzaEF instanceof FragmentActivity;
-    }
-
-    public final Activity zzqD() {
-        return (Activity) this.zzaEF;
-    }
-
-    public final FragmentActivity zzqE() {
-        return (FragmentActivity) this.zzaEF;
-    }
+    void zzm(Bundle bundle);
 }

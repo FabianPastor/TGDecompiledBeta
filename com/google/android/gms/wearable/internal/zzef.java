@@ -6,15 +6,15 @@ import com.google.android.gms.wearable.NodeApi.GetLocalNodeResult;
 
 public final class zzef implements GetLocalNodeResult {
     private final Status mStatus;
-    private final Node zzbSX;
+    private final Node zzbSZ;
 
     public zzef(Status status, Node node) {
         this.mStatus = status;
-        this.zzbSX = node;
+        this.zzbSZ = node;
     }
 
     public final Node getNode() {
-        return this.zzbSX;
+        return this.zzbSZ;
     }
 
     public final Status getStatus() {

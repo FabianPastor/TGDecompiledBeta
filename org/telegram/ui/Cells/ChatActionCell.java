@@ -18,9 +18,12 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.PhotoSize;
+import org.telegram.tgnet.TLRPC.TL_documentEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageActionUserUpdatedPhoto;
+import org.telegram.tgnet.TLRPC.TL_photoEmpty;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.PhotoViewer;
@@ -107,11 +110,11 @@ public class ChatActionCell extends BaseCell {
                 }
                 this.avatarDrawable.setInfo(id, null, null, false);
                 if (this.currentMessageObject.messageOwner.action instanceof TL_messageActionUserUpdatedPhoto) {
-                    this.imageReceiver.setImage(this.currentMessageObject.messageOwner.action.newUserPhoto.photo_small, "50_50", this.avatarDrawable, null, false);
+                    this.imageReceiver.setImage(this.currentMessageObject.messageOwner.action.newUserPhoto.photo_small, "50_50", this.avatarDrawable, null, 0);
                 } else {
                     PhotoSize photo = FileLoader.getClosestPhotoSizeWithSize(this.currentMessageObject.photoThumbs, AndroidUtilities.dp(64.0f));
                     if (photo != null) {
-                        this.imageReceiver.setImage(photo.location, "50_50", this.avatarDrawable, null, false);
+                        this.imageReceiver.setImage(photo.location, "50_50", this.avatarDrawable, null, 0);
                     } else {
                         this.imageReceiver.setImageBitmap(this.avatarDrawable);
                     }
@@ -249,10 +252,16 @@ public class ChatActionCell extends BaseCell {
         int width = Math.max(AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE), MeasureSpec.getSize(widthMeasureSpec));
         if (width != this.previousWidth) {
             CharSequence text;
-            if (this.currentMessageObject != null) {
-                text = this.currentMessageObject.messageText;
-            } else {
+            if (this.currentMessageObject == null) {
                 text = this.customText;
+            } else if (this.currentMessageObject.messageOwner == null || this.currentMessageObject.messageOwner.media == null || this.currentMessageObject.messageOwner.media.ttl_seconds == 0) {
+                text = this.currentMessageObject.messageText;
+            } else if (this.currentMessageObject.messageOwner.media.photo instanceof TL_photoEmpty) {
+                text = LocaleController.getString("AttachPhotoExpired", R.string.AttachPhotoExpired);
+            } else if (this.currentMessageObject.messageOwner.media.document instanceof TL_documentEmpty) {
+                text = LocaleController.getString("AttachVideoExpired", R.string.AttachVideoExpired);
+            } else {
+                text = this.currentMessageObject.messageText;
             }
             this.previousWidth = width;
             createLayout(text, width);

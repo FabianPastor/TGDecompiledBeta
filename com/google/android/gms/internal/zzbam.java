@@ -1,37 +1,31 @@
 package com.google.android.gms.internal;
 
+import android.os.Build.VERSION;
 import android.os.DeadObjectException;
 import android.os.RemoteException;
+import android.os.TransactionTooLargeException;
 import android.support.annotation.NonNull;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.TaskCompletionSource;
 
-abstract class zzbam extends zzbal {
-    protected final TaskCompletionSource<Void> zzalE;
+public abstract class zzbam {
+    private int zzamr;
 
-    public zzbam(int i, TaskCompletionSource<Void> taskCompletionSource) {
-        super(i);
-        this.zzalE = taskCompletionSource;
+    public zzbam(int i) {
+        this.zzamr = i;
     }
 
-    public void zza(@NonNull zzbbs com_google_android_gms_internal_zzbbs, boolean z) {
-    }
-
-    public final void zza(zzbdc<?> com_google_android_gms_internal_zzbdc_) throws DeadObjectException {
-        try {
-            zzb(com_google_android_gms_internal_zzbdc_);
-        } catch (RemoteException e) {
-            zzp(zzbal.zza(e));
-            throw e;
-        } catch (RemoteException e2) {
-            zzp(zzbal.zza(e2));
+    private static Status zza(RemoteException remoteException) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (VERSION.SDK_INT >= 15 && (remoteException instanceof TransactionTooLargeException)) {
+            stringBuilder.append("TransactionTooLargeException: ");
         }
+        stringBuilder.append(remoteException.getLocalizedMessage());
+        return new Status(8, stringBuilder.toString());
     }
 
-    protected abstract void zzb(zzbdc<?> com_google_android_gms_internal_zzbdc_) throws RemoteException;
+    public abstract void zza(@NonNull zzbbt com_google_android_gms_internal_zzbbt, boolean z);
 
-    public void zzp(@NonNull Status status) {
-        this.zzalE.trySetException(new ApiException(status));
-    }
+    public abstract void zza(zzbdd<?> com_google_android_gms_internal_zzbdd_) throws DeadObjectException;
+
+    public abstract void zzp(@NonNull Status status);
 }

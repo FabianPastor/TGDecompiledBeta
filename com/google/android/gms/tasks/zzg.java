@@ -6,23 +6,23 @@ import java.util.concurrent.Executor;
 final class zzg<TResult> implements zzk<TResult> {
     private final Object mLock = new Object();
     private final Executor zzbEo;
-    private OnFailureListener zzbLW;
+    private OnFailureListener zzbLY;
 
     public zzg(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
         this.zzbEo = executor;
-        this.zzbLW = onFailureListener;
+        this.zzbLY = onFailureListener;
     }
 
     public final void cancel() {
         synchronized (this.mLock) {
-            this.zzbLW = null;
+            this.zzbLY = null;
         }
     }
 
     public final void onComplete(@NonNull Task<TResult> task) {
         if (!task.isSuccessful()) {
             synchronized (this.mLock) {
-                if (this.zzbLW == null) {
+                if (this.zzbLY == null) {
                     return;
                 }
                 this.zzbEo.execute(new zzh(this, task));

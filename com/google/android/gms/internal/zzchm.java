@@ -1,17 +1,15 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.measurement.AppMeasurement.ConditionalUserProperty;
-
 final class zzchm implements Runnable {
-    private /* synthetic */ zzchk zzbtt;
-    private /* synthetic */ ConditionalUserProperty zzbtu;
+    private /* synthetic */ boolean val$enabled;
+    private /* synthetic */ zzchl zzbtt;
 
-    zzchm(zzchk com_google_android_gms_internal_zzchk, ConditionalUserProperty conditionalUserProperty) {
-        this.zzbtt = com_google_android_gms_internal_zzchk;
-        this.zzbtu = conditionalUserProperty;
+    zzchm(zzchl com_google_android_gms_internal_zzchl, boolean z) {
+        this.zzbtt = com_google_android_gms_internal_zzchl;
+        this.val$enabled = z;
     }
 
     public final void run() {
-        this.zzbtt.zzb(this.zzbtu);
+        this.zzbtt.zzan(this.val$enabled);
     }
 }

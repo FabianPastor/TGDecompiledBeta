@@ -8,33 +8,33 @@ import com.google.android.gms.common.api.Api.zzf;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.internal.fu;
-import com.google.android.gms.internal.gk;
-import com.google.android.gms.internal.gt;
-import com.google.android.gms.internal.gz;
+import com.google.android.gms.internal.fv;
+import com.google.android.gms.internal.gl;
+import com.google.android.gms.internal.gu;
 import com.google.android.gms.internal.ha;
-import com.google.android.gms.internal.zzbax;
+import com.google.android.gms.internal.hb;
+import com.google.android.gms.internal.zzbay;
 import com.google.android.gms.wallet.wobs.zzs;
 import java.util.Locale;
 
 public final class Wallet {
     public static final Api<WalletOptions> API = new Api("Wallet.API", zzajS, zzajR);
-    public static final Payments Payments = new gk();
-    private static final zzf<gt> zzajR = new zzf();
-    private static final com.google.android.gms.common.api.Api.zza<gt, WalletOptions> zzajS = new zzaa();
-    private static zzs zzbPO = new ha();
-    private static fu zzbPP = new gz();
+    public static final Payments Payments = new gl();
+    private static final zzf<gu> zzajR = new zzf();
+    private static final com.google.android.gms.common.api.Api.zza<gu, WalletOptions> zzajS = new zzaa();
+    private static zzs zzbPQ = new hb();
+    private static fv zzbPR = new ha();
 
     public static final class WalletOptions implements HasOptions {
         public final int environment;
         public final int theme;
         @VisibleForTesting
-        final boolean zzbPQ;
+        final boolean zzbPS;
 
         public static final class Builder {
             private int mTheme = 0;
-            private int zzbPR = 3;
-            private boolean zzbPS = true;
+            private int zzbPT = 3;
+            private boolean zzbPU = true;
 
             public final WalletOptions build() {
                 return new WalletOptions();
@@ -42,7 +42,7 @@ public final class Wallet {
 
             public final Builder setEnvironment(int i) {
                 if (i == 0 || i == 0 || i == 2 || i == 1 || i == 3) {
-                    this.zzbPR = i;
+                    this.zzbPT = i;
                     return this;
                 }
                 throw new IllegalArgumentException(String.format(Locale.US, "Invalid environment value %d", new Object[]{Integer.valueOf(i)}));
@@ -58,7 +58,7 @@ public final class Wallet {
 
             @Deprecated
             public final Builder useGoogleWallet() {
-                this.zzbPS = false;
+                this.zzbPU = false;
                 return this;
             }
         }
@@ -68,13 +68,13 @@ public final class Wallet {
         }
 
         private WalletOptions(Builder builder) {
-            this.environment = builder.zzbPR;
+            this.environment = builder.zzbPT;
             this.theme = builder.mTheme;
-            this.zzbPQ = builder.zzbPS;
+            this.zzbPS = builder.zzbPU;
         }
     }
 
-    public static abstract class zza<R extends Result> extends zzbax<R, gt> {
+    public static abstract class zza<R extends Result> extends zzbay<R, gu> {
         public zza(GoogleApiClient googleApiClient) {
             super(Wallet.API, googleApiClient);
         }
@@ -84,7 +84,7 @@ public final class Wallet {
         }
 
         @VisibleForTesting
-        protected abstract void zza(gt gtVar) throws RemoteException;
+        protected abstract void zza(gu guVar) throws RemoteException;
     }
 
     public static abstract class zzb extends zza<Status> {

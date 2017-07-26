@@ -4,11 +4,11 @@ import android.os.Bundle;
 
 final class zzd implements zzi {
     private /* synthetic */ zza zzaSv;
-    private /* synthetic */ Bundle zzxX;
+    private /* synthetic */ Bundle zzxV;
 
     zzd(zza com_google_android_gms_dynamic_zza, Bundle bundle) {
         this.zzaSv = com_google_android_gms_dynamic_zza;
-        this.zzxX = bundle;
+        this.zzxV = bundle;
     }
 
     public final int getState() {
@@ -16,6 +16,6 @@ final class zzd implements zzi {
     }
 
     public final void zzb(LifecycleDelegate lifecycleDelegate) {
-        this.zzaSv.zzaSr.onCreate(this.zzxX);
+        this.zzaSv.zzaSr.onCreate(this.zzxV);
     }
 }

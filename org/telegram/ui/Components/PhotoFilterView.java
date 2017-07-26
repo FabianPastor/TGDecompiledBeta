@@ -1,23 +1,18 @@
 package org.telegram.ui.Components;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.SurfaceTexture;
+import android.graphics.drawable.Drawable;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.os.Build.VERSION;
 import android.os.Looper;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
@@ -28,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.android.gms.gcm.Task;
@@ -52,16 +48,15 @@ import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Cells.PhotoEditRadioCell;
 import org.telegram.ui.Cells.PhotoEditToolCell;
 import org.telegram.ui.Components.PhotoEditorSeekBar.PhotoEditorSeekBarDelegate;
 import org.telegram.ui.Components.PhotoFilterBlurControl.PhotoFilterLinearBlurControlDelegate;
 import org.telegram.ui.Components.PhotoFilterCurvesControl.PhotoFilterCurvesControlDelegate;
 import org.telegram.ui.Components.RecyclerListView.Holder;
-import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 @SuppressLint({"NewApi"})
@@ -74,67 +69,52 @@ public class PhotoFilterView extends FrameLayout {
     private float blurExcludeBlurSize = 0.15f;
     private Point blurExcludePoint = new Point(0.5f, 0.5f);
     private float blurExcludeSize = 0.35f;
+    private ImageView blurItem;
     private FrameLayout blurLayout;
     private TextView blurLinearButton;
     private TextView blurOffButton;
     private TextView blurRadialButton;
-    private int blurTool = 11;
     private int blurType = 0;
     private TextView cancelTextView;
     private int contrastTool = 2;
     private float contrastValue = 0.0f;
+    private ImageView curveItem;
     private FrameLayout curveLayout;
-    private TextView[] curveTextView = new TextView[4];
+    private RadioButton[] curveRadioButton = new RadioButton[4];
     private PhotoFilterCurvesControl curvesControl;
-    private int curvesTool = 13;
     private CurvesToolValue curvesToolValue = new CurvesToolValue();
     private TextView doneTextView;
-    private FrameLayout editView;
     private EGLThread eglThread;
     private int enhanceTool = 0;
     private float enhanceValue = 0.0f;
     private int exposureTool = 1;
     private float exposureValue = 0.0f;
-    private int fadeTool = 6;
+    private int fadeTool = 5;
     private float fadeValue = 0.0f;
-    private int grainTool = 10;
+    private int grainTool = 9;
     private float grainValue = 0.0f;
-    private int highlightsTool = 7;
+    private int highlightsTool = 6;
     private float highlightsValue = 0.0f;
-    private TextView infoTextView;
     private int orientation;
-    private TextView paramTextView;
-    private float previousValue;
-    private int previousValueInt;
-    private int previousValueInt2;
     private RecyclerListView recyclerListView;
-    private int saturationTool = 4;
+    private int saturationTool = 3;
     private float saturationValue = 0.0f;
-    private int selectedTintMode;
-    private int selectedTool = -1;
-    private int shadowsTool = 8;
+    private int selectedTool;
+    private int shadowsTool = 7;
     private float shadowsValue = 0.0f;
-    private int sharpenTool = 12;
+    private int sharpenTool = 10;
     private float sharpenValue = 0.0f;
     private boolean showOriginal;
     private TextureView textureView;
-    private LinearLayout tintButtonsContainer;
-    private final int[] tintHighlighsColors = new int[]{0, -1076602, -1388894, -859780, -5968466, -7742235, -13726776, -3303195};
-    private TextView tintHighlightsButton;
     private int tintHighlightsColor = 0;
-    private FrameLayout tintLayout;
-    private final int[] tintShadowColors = new int[]{0, -45747, -753630, -13056, -8269183, -9321002, -16747844, -10080879};
-    private TextView tintShadowsButton;
+    private int tintHighlightsTool = 12;
     private int tintShadowsColor = 0;
-    private int tintTool = 5;
-    private int toolCellWidth;
-    private ToolsAdapter toolsAdapter;
+    private int tintShadowsTool = 11;
     private FrameLayout toolsView;
-    private PhotoEditorSeekBar valueSeekBar;
-    private TextView valueTextView;
-    private int vignetteTool = 9;
+    private ImageView tuneItem;
+    private int vignetteTool = 8;
     private float vignetteValue = 0.0f;
-    private int warmthTool = 3;
+    private int warmthTool = 4;
     private float warmthValue = 0.0f;
 
     public static class CurvesToolValue {
@@ -1081,7 +1061,7 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         public int getItemCount() {
-            return 14;
+            return 13;
         }
 
         public long getItemId(int i) {
@@ -1089,57 +1069,130 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            return new Holder(new PhotoEditToolCell(this.mContext, PhotoFilterView.this.toolCellWidth));
+            View view;
+            if (i == 0) {
+                View cell = new PhotoEditToolCell(this.mContext);
+                view = cell;
+                cell.setSeekBarDelegate(new PhotoEditorSeekBarDelegate() {
+                    public void onProgressChanged(int i, int progress) {
+                        if (i == PhotoFilterView.this.enhanceTool) {
+                            PhotoFilterView.this.enhanceValue = (float) progress;
+                        } else if (i == PhotoFilterView.this.highlightsTool) {
+                            PhotoFilterView.this.highlightsValue = (float) progress;
+                        } else if (i == PhotoFilterView.this.contrastTool) {
+                            PhotoFilterView.this.contrastValue = (float) progress;
+                        } else if (i == PhotoFilterView.this.exposureTool) {
+                            PhotoFilterView.this.exposureValue = (float) progress;
+                        } else if (i == PhotoFilterView.this.warmthTool) {
+                            PhotoFilterView.this.warmthValue = (float) progress;
+                        } else if (i == PhotoFilterView.this.saturationTool) {
+                            PhotoFilterView.this.saturationValue = (float) progress;
+                        } else if (i == PhotoFilterView.this.vignetteTool) {
+                            PhotoFilterView.this.vignetteValue = (float) progress;
+                        } else if (i == PhotoFilterView.this.shadowsTool) {
+                            PhotoFilterView.this.shadowsValue = (float) progress;
+                        } else if (i == PhotoFilterView.this.grainTool) {
+                            PhotoFilterView.this.grainValue = (float) progress;
+                        } else if (i == PhotoFilterView.this.sharpenTool) {
+                            PhotoFilterView.this.sharpenValue = (float) progress;
+                        } else if (i == PhotoFilterView.this.fadeTool) {
+                            PhotoFilterView.this.fadeValue = (float) progress;
+                        }
+                        if (PhotoFilterView.this.eglThread != null) {
+                            PhotoFilterView.this.eglThread.requestRender(true);
+                        }
+                    }
+                });
+            } else {
+                view = new PhotoEditRadioCell(this.mContext);
+                view.setOnClickListener(new OnClickListener() {
+                    public void onClick(View v) {
+                        PhotoEditRadioCell cell = (PhotoEditRadioCell) v;
+                        if (((Integer) cell.getTag()).intValue() == PhotoFilterView.this.tintShadowsTool) {
+                            PhotoFilterView.this.tintShadowsColor = cell.getCurrentColor();
+                        } else {
+                            PhotoFilterView.this.tintHighlightsColor = cell.getCurrentColor();
+                        }
+                        if (PhotoFilterView.this.eglThread != null) {
+                            PhotoFilterView.this.eglThread.requestRender(false);
+                        }
+                    }
+                });
+            }
+            return new Holder(view);
         }
 
         public boolean isEnabled(ViewHolder holder) {
             return false;
         }
 
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            if (i == PhotoFilterView.this.enhanceTool) {
-                ((PhotoEditToolCell) viewHolder.itemView).setIconAndTextAndValue((int) R.drawable.tool_enhance, LocaleController.getString("Enhance", R.string.Enhance), PhotoFilterView.this.enhanceValue);
-            } else if (i == PhotoFilterView.this.highlightsTool) {
-                ((PhotoEditToolCell) viewHolder.itemView).setIconAndTextAndValue((int) R.drawable.tool_highlights, LocaleController.getString("Highlights", R.string.Highlights), PhotoFilterView.this.highlightsValue);
-            } else if (i == PhotoFilterView.this.contrastTool) {
-                ((PhotoEditToolCell) viewHolder.itemView).setIconAndTextAndValue((int) R.drawable.tool_contrast, LocaleController.getString("Contrast", R.string.Contrast), PhotoFilterView.this.contrastValue);
-            } else if (i == PhotoFilterView.this.exposureTool) {
-                ((PhotoEditToolCell) viewHolder.itemView).setIconAndTextAndValue((int) R.drawable.tool_brightness, LocaleController.getString("Exposure", R.string.Exposure), PhotoFilterView.this.exposureValue);
-            } else if (i == PhotoFilterView.this.warmthTool) {
-                ((PhotoEditToolCell) viewHolder.itemView).setIconAndTextAndValue((int) R.drawable.tool_warmth, LocaleController.getString("Warmth", R.string.Warmth), PhotoFilterView.this.warmthValue);
-            } else if (i == PhotoFilterView.this.saturationTool) {
-                ((PhotoEditToolCell) viewHolder.itemView).setIconAndTextAndValue((int) R.drawable.tool_saturation, LocaleController.getString("Saturation", R.string.Saturation), PhotoFilterView.this.saturationValue);
-            } else if (i == PhotoFilterView.this.vignetteTool) {
-                ((PhotoEditToolCell) viewHolder.itemView).setIconAndTextAndValue((int) R.drawable.tool_vignette, LocaleController.getString("Vignette", R.string.Vignette), PhotoFilterView.this.vignetteValue);
-            } else if (i == PhotoFilterView.this.shadowsTool) {
-                ((PhotoEditToolCell) viewHolder.itemView).setIconAndTextAndValue((int) R.drawable.tool_shadows, LocaleController.getString("Shadows", R.string.Shadows), PhotoFilterView.this.shadowsValue);
-            } else if (i == PhotoFilterView.this.grainTool) {
-                ((PhotoEditToolCell) viewHolder.itemView).setIconAndTextAndValue((int) R.drawable.tool_grain, LocaleController.getString("Grain", R.string.Grain), PhotoFilterView.this.grainValue);
-            } else if (i == PhotoFilterView.this.sharpenTool) {
-                ((PhotoEditToolCell) viewHolder.itemView).setIconAndTextAndValue((int) R.drawable.tool_details, LocaleController.getString("Sharpen", R.string.Sharpen), PhotoFilterView.this.sharpenValue);
-            } else if (i == PhotoFilterView.this.tintTool) {
-                PhotoEditToolCell photoEditToolCell = (PhotoEditToolCell) viewHolder.itemView;
-                String string = LocaleController.getString("Tint", R.string.Tint);
-                String str = (PhotoFilterView.this.tintHighlightsColor == 0 && PhotoFilterView.this.tintShadowsColor == 0) ? "" : "◆";
-                photoEditToolCell.setIconAndTextAndValue((int) R.drawable.tool_tint, string, str);
-            } else if (i == PhotoFilterView.this.fadeTool) {
-                ((PhotoEditToolCell) viewHolder.itemView).setIconAndTextAndValue((int) R.drawable.tool_fade, LocaleController.getString("Fade", R.string.Fade), PhotoFilterView.this.fadeValue);
-            } else if (i == PhotoFilterView.this.curvesTool) {
-                ((PhotoEditToolCell) viewHolder.itemView).setIconAndTextAndValue((int) R.drawable.tool_curve, LocaleController.getString("Curves", R.string.Curves), PhotoFilterView.this.curvesToolValue.shouldBeSkipped() ? "" : "◆");
-            } else if (i == PhotoFilterView.this.blurTool) {
-                String value = "";
-                if (PhotoFilterView.this.blurType == 1) {
-                    value = "R";
-                } else if (PhotoFilterView.this.blurType == 2) {
-                    value = "L";
-                }
-                ((PhotoEditToolCell) viewHolder.itemView).setIconAndTextAndValue((int) R.drawable.tool_blur, LocaleController.getString("Blur", R.string.Blur), value);
+        public void onBindViewHolder(ViewHolder holder, int i) {
+            switch (holder.getItemViewType()) {
+                case 0:
+                    PhotoEditToolCell cell = holder.itemView;
+                    cell.setTag(Integer.valueOf(i));
+                    if (i == PhotoFilterView.this.enhanceTool) {
+                        cell.setIconAndTextAndValue(LocaleController.getString("Enhance", R.string.Enhance), PhotoFilterView.this.enhanceValue, 0, PhotoFilterView.curveGranularity);
+                        return;
+                    } else if (i == PhotoFilterView.this.highlightsTool) {
+                        cell.setIconAndTextAndValue(LocaleController.getString("Highlights", R.string.Highlights), PhotoFilterView.this.highlightsValue, -100, PhotoFilterView.curveGranularity);
+                        return;
+                    } else if (i == PhotoFilterView.this.contrastTool) {
+                        cell.setIconAndTextAndValue(LocaleController.getString("Contrast", R.string.Contrast), PhotoFilterView.this.contrastValue, -100, PhotoFilterView.curveGranularity);
+                        return;
+                    } else if (i == PhotoFilterView.this.exposureTool) {
+                        cell.setIconAndTextAndValue(LocaleController.getString("Exposure", R.string.Exposure), PhotoFilterView.this.exposureValue, -100, PhotoFilterView.curveGranularity);
+                        return;
+                    } else if (i == PhotoFilterView.this.warmthTool) {
+                        cell.setIconAndTextAndValue(LocaleController.getString("Warmth", R.string.Warmth), PhotoFilterView.this.warmthValue, -100, PhotoFilterView.curveGranularity);
+                        return;
+                    } else if (i == PhotoFilterView.this.saturationTool) {
+                        cell.setIconAndTextAndValue(LocaleController.getString("Saturation", R.string.Saturation), PhotoFilterView.this.saturationValue, -100, PhotoFilterView.curveGranularity);
+                        return;
+                    } else if (i == PhotoFilterView.this.vignetteTool) {
+                        cell.setIconAndTextAndValue(LocaleController.getString("Vignette", R.string.Vignette), PhotoFilterView.this.vignetteValue, 0, PhotoFilterView.curveGranularity);
+                        return;
+                    } else if (i == PhotoFilterView.this.shadowsTool) {
+                        cell.setIconAndTextAndValue(LocaleController.getString("Shadows", R.string.Shadows), PhotoFilterView.this.shadowsValue, -100, PhotoFilterView.curveGranularity);
+                        return;
+                    } else if (i == PhotoFilterView.this.grainTool) {
+                        cell.setIconAndTextAndValue(LocaleController.getString("Grain", R.string.Grain), PhotoFilterView.this.grainValue, 0, PhotoFilterView.curveGranularity);
+                        return;
+                    } else if (i == PhotoFilterView.this.sharpenTool) {
+                        cell.setIconAndTextAndValue(LocaleController.getString("Sharpen", R.string.Sharpen), PhotoFilterView.this.sharpenValue, 0, PhotoFilterView.curveGranularity);
+                        return;
+                    } else if (i == PhotoFilterView.this.fadeTool) {
+                        cell.setIconAndTextAndValue(LocaleController.getString("Fade", R.string.Fade), PhotoFilterView.this.fadeValue, 0, PhotoFilterView.curveGranularity);
+                        return;
+                    } else {
+                        return;
+                    }
+                case 1:
+                    PhotoEditRadioCell cell2 = holder.itemView;
+                    cell2.setTag(Integer.valueOf(i));
+                    if (i == PhotoFilterView.this.tintShadowsTool) {
+                        cell2.setIconAndTextAndValue(LocaleController.getString("TintShadows", R.string.TintShadows), 0, PhotoFilterView.this.tintShadowsColor);
+                        return;
+                    } else if (i == PhotoFilterView.this.tintHighlightsTool) {
+                        cell2.setIconAndTextAndValue(LocaleController.getString("TintHighlights", R.string.TintHighlights), 0, PhotoFilterView.this.tintHighlightsColor);
+                        return;
+                    } else {
+                        return;
+                    }
+                default:
+                    return;
             }
+        }
+
+        public int getItemViewType(int position) {
+            if (position == PhotoFilterView.this.tintShadowsTool || position == PhotoFilterView.this.tintHighlightsTool) {
+                return 1;
+            }
+            return 0;
         }
     }
 
     public PhotoFilterView(Context context, Bitmap bitmap, int rotation) {
-        int i;
         super(context);
         this.bitmapToEdit = bitmap;
         this.orientation = rotation;
@@ -1205,7 +1258,7 @@ public class PhotoFilterView extends FrameLayout {
         this.curvesControl.setVisibility(4);
         addView(this.curvesControl, LayoutHelper.createFrame(-1, -1, 51));
         this.toolsView = new FrameLayout(context);
-        addView(this.toolsView, LayoutHelper.createFrame(-1, 126, 83));
+        addView(this.toolsView, LayoutHelper.createFrame(-1, 186, 83));
         FrameLayout frameLayout = new FrameLayout(context);
         frameLayout.setBackgroundColor(-16777216);
         this.toolsView.addView(frameLayout, LayoutHelper.createFrame(-1, 48, 83));
@@ -1227,297 +1280,119 @@ public class PhotoFilterView extends FrameLayout {
         this.doneTextView.setText(LocaleController.getString("Done", R.string.Done).toUpperCase());
         this.doneTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(this.doneTextView, LayoutHelper.createFrame(-2, -1, 53));
-        this.toolCellWidth = calculateMaxToolCellWidth();
+        LinearLayout linearLayout = new LinearLayout(context);
+        frameLayout.addView(linearLayout, LayoutHelper.createFrame(-2, -1, 1));
+        this.tuneItem = new ImageView(context);
+        this.tuneItem.setScaleType(ScaleType.CENTER);
+        this.tuneItem.setImageResource(R.drawable.photo_tools);
+        this.tuneItem.setColorFilter(new PorterDuffColorFilter(-9649153, Mode.MULTIPLY));
+        this.tuneItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+        linearLayout.addView(this.tuneItem, LayoutHelper.createLinear(56, 48));
+        this.tuneItem.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                PhotoFilterView.this.selectedTool = 0;
+                PhotoFilterView.this.tuneItem.setColorFilter(new PorterDuffColorFilter(-9649153, Mode.MULTIPLY));
+                PhotoFilterView.this.blurItem.setColorFilter(null);
+                PhotoFilterView.this.curveItem.setColorFilter(null);
+                PhotoFilterView.this.switchMode();
+            }
+        });
+        this.blurItem = new ImageView(context);
+        this.blurItem.setScaleType(ScaleType.CENTER);
+        this.blurItem.setImageResource(R.drawable.tool_blur);
+        this.blurItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+        linearLayout.addView(this.blurItem, LayoutHelper.createLinear(56, 48));
+        this.blurItem.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                PhotoFilterView.this.selectedTool = 1;
+                PhotoFilterView.this.tuneItem.setColorFilter(null);
+                PhotoFilterView.this.blurItem.setColorFilter(new PorterDuffColorFilter(-9649153, Mode.MULTIPLY));
+                PhotoFilterView.this.curveItem.setColorFilter(null);
+                PhotoFilterView.this.switchMode();
+            }
+        });
+        this.curveItem = new ImageView(context);
+        this.curveItem.setScaleType(ScaleType.CENTER);
+        this.curveItem.setImageResource(R.drawable.tool_curve);
+        this.curveItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+        linearLayout.addView(this.curveItem, LayoutHelper.createLinear(56, 48));
+        this.curveItem.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                PhotoFilterView.this.selectedTool = 2;
+                PhotoFilterView.this.tuneItem.setColorFilter(null);
+                PhotoFilterView.this.blurItem.setColorFilter(null);
+                PhotoFilterView.this.curveItem.setColorFilter(new PorterDuffColorFilter(-9649153, Mode.MULTIPLY));
+                PhotoFilterView.this.switchMode();
+            }
+        });
         this.recyclerListView = new RecyclerListView(context);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        layoutManager.setOrientation(0);
+        layoutManager.setOrientation(1);
         this.recyclerListView.setLayoutManager(layoutManager);
         this.recyclerListView.setClipToPadding(false);
-        this.recyclerListView.setPadding(AndroidUtilities.dp(15.0f), 0, 0, 0);
-        this.recyclerListView.setTag(Integer.valueOf(12));
         this.recyclerListView.setOverScrollMode(2);
-        RecyclerListView recyclerListView = this.recyclerListView;
-        Adapter toolsAdapter = new ToolsAdapter(context);
-        this.toolsAdapter = toolsAdapter;
-        recyclerListView.setAdapter(toolsAdapter);
-        this.toolsView.addView(this.recyclerListView, LayoutHelper.createFrame(-1, 60, 51));
-        this.recyclerListView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(View view, int position) {
-                PhotoFilterView.this.selectedTool = position;
-                if (position == PhotoFilterView.this.enhanceTool) {
-                    PhotoFilterView.this.previousValue = PhotoFilterView.this.enhanceValue;
-                    PhotoFilterView.this.valueSeekBar.setMinMax(0, PhotoFilterView.curveGranularity);
-                    PhotoFilterView.this.paramTextView.setText(LocaleController.getString("Enhance", R.string.Enhance));
-                } else if (position == PhotoFilterView.this.highlightsTool) {
-                    PhotoFilterView.this.previousValue = PhotoFilterView.this.highlightsValue;
-                    PhotoFilterView.this.valueSeekBar.setMinMax(-100, PhotoFilterView.curveGranularity);
-                    PhotoFilterView.this.paramTextView.setText(LocaleController.getString("Highlights", R.string.Highlights));
-                } else if (position == PhotoFilterView.this.contrastTool) {
-                    PhotoFilterView.this.previousValue = PhotoFilterView.this.contrastValue;
-                    PhotoFilterView.this.valueSeekBar.setMinMax(-100, PhotoFilterView.curveGranularity);
-                    PhotoFilterView.this.paramTextView.setText(LocaleController.getString("Contrast", R.string.Contrast));
-                } else if (position == PhotoFilterView.this.exposureTool) {
-                    PhotoFilterView.this.previousValue = PhotoFilterView.this.exposureValue;
-                    PhotoFilterView.this.valueSeekBar.setMinMax(-100, PhotoFilterView.curveGranularity);
-                    PhotoFilterView.this.paramTextView.setText(LocaleController.getString("Exposure", R.string.Exposure));
-                } else if (position == PhotoFilterView.this.warmthTool) {
-                    PhotoFilterView.this.previousValue = PhotoFilterView.this.warmthValue;
-                    PhotoFilterView.this.valueSeekBar.setMinMax(-100, PhotoFilterView.curveGranularity);
-                    PhotoFilterView.this.paramTextView.setText(LocaleController.getString("Warmth", R.string.Warmth));
-                } else if (position == PhotoFilterView.this.saturationTool) {
-                    PhotoFilterView.this.previousValue = PhotoFilterView.this.saturationValue;
-                    PhotoFilterView.this.valueSeekBar.setMinMax(-100, PhotoFilterView.curveGranularity);
-                    PhotoFilterView.this.paramTextView.setText(LocaleController.getString("Saturation", R.string.Saturation));
-                } else if (position == PhotoFilterView.this.vignetteTool) {
-                    PhotoFilterView.this.previousValue = PhotoFilterView.this.vignetteValue;
-                    PhotoFilterView.this.valueSeekBar.setMinMax(0, PhotoFilterView.curveGranularity);
-                    PhotoFilterView.this.paramTextView.setText(LocaleController.getString("Vignette", R.string.Vignette));
-                } else if (position == PhotoFilterView.this.shadowsTool) {
-                    PhotoFilterView.this.previousValue = PhotoFilterView.this.shadowsValue;
-                    PhotoFilterView.this.valueSeekBar.setMinMax(-100, PhotoFilterView.curveGranularity);
-                    PhotoFilterView.this.paramTextView.setText(LocaleController.getString("Shadows", R.string.Shadows));
-                } else if (position == PhotoFilterView.this.grainTool) {
-                    PhotoFilterView.this.previousValue = PhotoFilterView.this.grainValue;
-                    PhotoFilterView.this.valueSeekBar.setMinMax(0, PhotoFilterView.curveGranularity);
-                    PhotoFilterView.this.paramTextView.setText(LocaleController.getString("Grain", R.string.Grain));
-                } else if (position == PhotoFilterView.this.fadeTool) {
-                    PhotoFilterView.this.previousValue = PhotoFilterView.this.fadeValue;
-                    PhotoFilterView.this.valueSeekBar.setMinMax(0, PhotoFilterView.curveGranularity);
-                    PhotoFilterView.this.paramTextView.setText(LocaleController.getString("Fade", R.string.Fade));
-                } else if (position == PhotoFilterView.this.sharpenTool) {
-                    PhotoFilterView.this.previousValue = PhotoFilterView.this.sharpenValue;
-                    PhotoFilterView.this.valueSeekBar.setMinMax(0, PhotoFilterView.curveGranularity);
-                    PhotoFilterView.this.paramTextView.setText(LocaleController.getString("Sharpen", R.string.Sharpen));
-                } else if (position == PhotoFilterView.this.blurTool) {
-                    PhotoFilterView.this.previousValueInt = PhotoFilterView.this.blurType;
-                } else if (position == PhotoFilterView.this.tintTool) {
-                    PhotoFilterView.this.previousValueInt = PhotoFilterView.this.tintShadowsColor;
-                    PhotoFilterView.this.previousValueInt2 = PhotoFilterView.this.tintHighlightsColor;
-                } else if (position == PhotoFilterView.this.curvesTool) {
-                    PhotoFilterView.this.curvesToolValue.luminanceCurve.saveValues();
-                    PhotoFilterView.this.curvesToolValue.redCurve.saveValues();
-                    PhotoFilterView.this.curvesToolValue.greenCurve.saveValues();
-                    PhotoFilterView.this.curvesToolValue.blueCurve.saveValues();
-                }
-                PhotoFilterView.this.valueSeekBar.setProgress((int) PhotoFilterView.this.previousValue, false);
-                PhotoFilterView.this.updateValueTextView();
-                PhotoFilterView.this.switchToOrFromEditMode();
-            }
-        });
-        this.editView = new FrameLayout(context);
-        this.editView.setVisibility(8);
-        addView(this.editView, LayoutHelper.createFrame(-1, 126, 83));
-        frameLayout = new FrameLayout(context);
-        frameLayout.setBackgroundColor(-16777216);
-        this.editView.addView(frameLayout, LayoutHelper.createFrame(-1, 48, 83));
-        ImageView imageView = new ImageView(context);
-        imageView.setImageResource(R.drawable.edit_cancel);
-        imageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
-        imageView.setPadding(AndroidUtilities.dp(22.0f), 0, AndroidUtilities.dp(22.0f), 0);
-        frameLayout.addView(imageView, LayoutHelper.createFrame(-2, -1, 51));
-        imageView.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.enhanceTool) {
-                    PhotoFilterView.this.enhanceValue = PhotoFilterView.this.previousValue;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.highlightsTool) {
-                    PhotoFilterView.this.highlightsValue = PhotoFilterView.this.previousValue;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.contrastTool) {
-                    PhotoFilterView.this.contrastValue = PhotoFilterView.this.previousValue;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.exposureTool) {
-                    PhotoFilterView.this.exposureValue = PhotoFilterView.this.previousValue;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.warmthTool) {
-                    PhotoFilterView.this.warmthValue = PhotoFilterView.this.previousValue;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.saturationTool) {
-                    PhotoFilterView.this.saturationValue = PhotoFilterView.this.previousValue;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.vignetteTool) {
-                    PhotoFilterView.this.vignetteValue = PhotoFilterView.this.previousValue;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.shadowsTool) {
-                    PhotoFilterView.this.shadowsValue = PhotoFilterView.this.previousValue;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.grainTool) {
-                    PhotoFilterView.this.grainValue = PhotoFilterView.this.previousValue;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.sharpenTool) {
-                    PhotoFilterView.this.sharpenValue = PhotoFilterView.this.previousValue;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.fadeTool) {
-                    PhotoFilterView.this.fadeValue = PhotoFilterView.this.previousValue;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.blurTool) {
-                    PhotoFilterView.this.blurType = PhotoFilterView.this.previousValueInt;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.tintTool) {
-                    PhotoFilterView.this.tintShadowsColor = PhotoFilterView.this.previousValueInt;
-                    PhotoFilterView.this.tintHighlightsColor = PhotoFilterView.this.previousValueInt2;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.curvesTool) {
-                    PhotoFilterView.this.curvesToolValue.luminanceCurve.restoreValues();
-                    PhotoFilterView.this.curvesToolValue.redCurve.restoreValues();
-                    PhotoFilterView.this.curvesToolValue.greenCurve.restoreValues();
-                    PhotoFilterView.this.curvesToolValue.blueCurve.restoreValues();
-                }
-                if (PhotoFilterView.this.eglThread != null) {
-                    PhotoFilterView.this.eglThread.requestRender(PhotoFilterView.this.selectedTool != PhotoFilterView.this.blurTool);
-                }
-                PhotoFilterView.this.switchToOrFromEditMode();
-            }
-        });
-        imageView = new ImageView(context);
-        imageView.setImageResource(R.drawable.edit_done);
-        imageView.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
-        imageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
-        imageView.setPadding(AndroidUtilities.dp(22.0f), AndroidUtilities.dp(1.0f), AndroidUtilities.dp(22.0f), 0);
-        frameLayout.addView(imageView, LayoutHelper.createFrame(-2, -1, 53));
-        imageView.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                PhotoFilterView.this.toolsAdapter.notifyDataSetChanged();
-                PhotoFilterView.this.switchToOrFromEditMode();
-            }
-        });
-        this.infoTextView = new TextView(context);
-        this.infoTextView.setTextSize(1, 20.0f);
-        this.infoTextView.setTextColor(-1);
-        frameLayout.addView(this.infoTextView, LayoutHelper.createFrame(-2, -2.0f, 1, 0.0f, 9.0f, 0.0f, 0.0f));
-        this.paramTextView = new TextView(context);
-        this.paramTextView.setTextSize(1, 12.0f);
-        this.paramTextView.setTextColor(-8355712);
-        frameLayout.addView(this.paramTextView, LayoutHelper.createFrame(-2, -2.0f, 1, 0.0f, 26.0f, 0.0f, 0.0f));
-        this.valueTextView = new TextView(context);
-        this.valueTextView.setTextSize(1, 20.0f);
-        this.valueTextView.setTextColor(-1);
-        frameLayout.addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, 1, 0.0f, 3.0f, 0.0f, 0.0f));
-        this.valueSeekBar = new PhotoEditorSeekBar(context);
-        this.valueSeekBar.setDelegate(new PhotoEditorSeekBarDelegate() {
-            public void onProgressChanged() {
-                int progress = PhotoFilterView.this.valueSeekBar.getProgress();
-                if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.enhanceTool) {
-                    PhotoFilterView.this.enhanceValue = (float) progress;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.highlightsTool) {
-                    PhotoFilterView.this.highlightsValue = (float) progress;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.contrastTool) {
-                    PhotoFilterView.this.contrastValue = (float) progress;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.exposureTool) {
-                    PhotoFilterView.this.exposureValue = (float) progress;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.warmthTool) {
-                    PhotoFilterView.this.warmthValue = (float) progress;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.saturationTool) {
-                    PhotoFilterView.this.saturationValue = (float) progress;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.vignetteTool) {
-                    PhotoFilterView.this.vignetteValue = (float) progress;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.shadowsTool) {
-                    PhotoFilterView.this.shadowsValue = (float) progress;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.grainTool) {
-                    PhotoFilterView.this.grainValue = (float) progress;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.sharpenTool) {
-                    PhotoFilterView.this.sharpenValue = (float) progress;
-                } else if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.fadeTool) {
-                    PhotoFilterView.this.fadeValue = (float) progress;
-                }
-                PhotoFilterView.this.updateValueTextView();
-                if (PhotoFilterView.this.eglThread != null) {
-                    PhotoFilterView.this.eglThread.requestRender(true);
-                }
-            }
-        });
-        FrameLayout frameLayout2 = this.editView;
-        View view = this.valueSeekBar;
-        int i2 = AndroidUtilities.isTablet() ? 498 : -1;
-        if (AndroidUtilities.isTablet()) {
-            i = 49;
-        } else {
-            i = 51;
-        }
-        frameLayout2.addView(view, LayoutHelper.createFrame(i2, BitmapDescriptorFactory.HUE_YELLOW, i, 14.0f, 10.0f, 14.0f, 0.0f));
+        this.recyclerListView.setAdapter(new ToolsAdapter(context));
+        this.toolsView.addView(this.recyclerListView, LayoutHelper.createFrame(-1, 120, 51));
         this.curveLayout = new FrameLayout(context);
-        this.editView.addView(this.curveLayout, LayoutHelper.createFrame(-1, 78, 1));
+        this.curveLayout.setVisibility(4);
+        this.toolsView.addView(this.curveLayout, LayoutHelper.createFrame(-1, 78.0f, 1, 0.0f, 40.0f, 0.0f, 0.0f));
         LinearLayout curveTextViewContainer = new LinearLayout(context);
         curveTextViewContainer.setOrientation(0);
-        this.curveLayout.addView(curveTextViewContainer, LayoutHelper.createFrame(-2, 28, 1));
+        this.curveLayout.addView(curveTextViewContainer, LayoutHelper.createFrame(-2, -2, 1));
         int a = 0;
         while (a < 4) {
-            this.curveTextView[a] = new TextView(context);
-            this.curveTextView[a].setTextSize(1, 14.0f);
-            this.curveTextView[a].setGravity(16);
-            this.curveTextView[a].setTag(Integer.valueOf(a));
+            FrameLayout frameLayout1 = new FrameLayout(context);
+            frameLayout1.setTag(Integer.valueOf(a));
+            this.curveRadioButton[a] = new RadioButton(context);
+            this.curveRadioButton[a].setSize(AndroidUtilities.dp(20.0f));
+            frameLayout1.addView(this.curveRadioButton[a], LayoutHelper.createFrame(30, 30, 49));
+            TextView curveTextView = new TextView(context);
+            curveTextView.setTextSize(1, 12.0f);
+            curveTextView.setGravity(16);
+            String str;
             if (a == 0) {
-                this.curveTextView[a].setText(LocaleController.getString("CurvesAll", R.string.CurvesAll).toUpperCase());
+                str = LocaleController.getString("CurvesAll", R.string.CurvesAll);
+                curveTextView.setText(str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase());
+                curveTextView.setTextColor(-1);
+                this.curveRadioButton[a].setColor(-1, -1);
             } else if (a == 1) {
-                this.curveTextView[a].setText(LocaleController.getString("CurvesRed", R.string.CurvesRed).toUpperCase());
+                str = LocaleController.getString("CurvesRed", R.string.CurvesRed);
+                curveTextView.setText(str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase());
+                curveTextView.setTextColor(-1684147);
+                this.curveRadioButton[a].setColor(-1684147, -1684147);
             } else if (a == 2) {
-                this.curveTextView[a].setText(LocaleController.getString("CurvesGreen", R.string.CurvesGreen).toUpperCase());
+                str = LocaleController.getString("CurvesGreen", R.string.CurvesGreen);
+                curveTextView.setText(str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase());
+                curveTextView.setTextColor(-10831009);
+                this.curveRadioButton[a].setColor(-10831009, -10831009);
             } else if (a == 3) {
-                this.curveTextView[a].setText(LocaleController.getString("CurvesBlue", R.string.CurvesBlue).toUpperCase());
+                str = LocaleController.getString("CurvesBlue", R.string.CurvesBlue);
+                curveTextView.setText(str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase());
+                curveTextView.setTextColor(-12734994);
+                this.curveRadioButton[a].setColor(-12734994, -12734994);
             }
-            this.curveTextView[a].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            curveTextViewContainer.addView(this.curveTextView[a], LayoutHelper.createLinear(-2, 28, a == 0 ? 0.0f : BitmapDescriptorFactory.HUE_ORANGE, 0.0f, 0.0f, 0.0f));
-            this.curveTextView[a].setOnClickListener(new OnClickListener() {
+            frameLayout1.addView(curveTextView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 38.0f, 0.0f, 0.0f));
+            curveTextViewContainer.addView(frameLayout1, LayoutHelper.createLinear(-2, -2, a == 0 ? 0.0f : BitmapDescriptorFactory.HUE_ORANGE, 0.0f, 0.0f, 0.0f));
+            frameLayout1.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
                     int num = ((Integer) v.getTag()).intValue();
+                    PhotoFilterView.this.curvesToolValue.activeType = num;
                     int a = 0;
                     while (a < 4) {
-                        PhotoFilterView.this.curveTextView[a].setTextColor(a == num ? -1 : -8355712);
+                        PhotoFilterView.this.curveRadioButton[a].setChecked(a == num, true);
                         a++;
                     }
-                    PhotoFilterView.this.curvesToolValue.activeType = num;
                     PhotoFilterView.this.curvesControl.invalidate();
                 }
             });
             a++;
         }
-        this.tintLayout = new FrameLayout(context);
-        this.editView.addView(this.tintLayout, LayoutHelper.createFrame(-1, 78, 1));
-        LinearLayout tintTextViewContainer = new LinearLayout(context);
-        tintTextViewContainer.setOrientation(0);
-        this.tintLayout.addView(tintTextViewContainer, LayoutHelper.createFrame(-2, 28, 1));
-        this.tintShadowsButton = new TextView(context);
-        this.tintShadowsButton.setTextSize(1, 14.0f);
-        this.tintShadowsButton.setGravity(16);
-        this.tintShadowsButton.setText(LocaleController.getString("TintShadows", R.string.TintShadows).toUpperCase());
-        this.tintShadowsButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        tintTextViewContainer.addView(this.tintShadowsButton, LayoutHelper.createLinear(-2, 28));
-        this.tintShadowsButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                PhotoFilterView.this.selectedTintMode = 0;
-                PhotoFilterView.this.updateSelectedTintButton(true);
-            }
-        });
-        this.tintHighlightsButton = new TextView(context);
-        this.tintHighlightsButton.setTextSize(1, 14.0f);
-        this.tintHighlightsButton.setGravity(16);
-        this.tintHighlightsButton.setText(LocaleController.getString("TintHighlights", R.string.TintHighlights).toUpperCase());
-        this.tintHighlightsButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        tintTextViewContainer.addView(this.tintHighlightsButton, LayoutHelper.createLinear(-2, 28, 100.0f, 0.0f, 0.0f, 0.0f));
-        this.tintHighlightsButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                PhotoFilterView.this.selectedTintMode = 1;
-                PhotoFilterView.this.updateSelectedTintButton(true);
-            }
-        });
-        this.tintButtonsContainer = new LinearLayout(context);
-        this.tintButtonsContainer.setOrientation(0);
-        this.tintButtonsContainer.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
-        this.tintLayout.addView(this.tintButtonsContainer, LayoutHelper.createFrame(-1, 50.0f, 51, 0.0f, 24.0f, 0.0f, 0.0f));
-        for (a = 0; a < this.tintShadowColors.length; a++) {
-            RadioButton radioButton = new RadioButton(context);
-            radioButton.setSize(AndroidUtilities.dp(20.0f));
-            radioButton.setTag(Integer.valueOf(a));
-            this.tintButtonsContainer.addView(radioButton, LayoutHelper.createLinear(0, -1, 1.0f / ((float) this.tintShadowColors.length)));
-            radioButton.setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {
-                    RadioButton radioButton = (RadioButton) v;
-                    if (PhotoFilterView.this.selectedTintMode == 0) {
-                        PhotoFilterView.this.tintShadowsColor = PhotoFilterView.this.tintShadowColors[((Integer) radioButton.getTag()).intValue()];
-                    } else {
-                        PhotoFilterView.this.tintHighlightsColor = PhotoFilterView.this.tintHighlighsColors[((Integer) radioButton.getTag()).intValue()];
-                    }
-                    PhotoFilterView.this.updateSelectedTintButton(true);
-                    if (PhotoFilterView.this.eglThread != null) {
-                        PhotoFilterView.this.eglThread.requestRender(false);
-                    }
-                }
-            });
-        }
         this.blurLayout = new FrameLayout(context);
-        this.editView.addView(this.blurLayout, LayoutHelper.createFrame(280, BitmapDescriptorFactory.HUE_YELLOW, 1, 0.0f, 10.0f, 0.0f, 0.0f));
+        this.blurLayout.setVisibility(4);
+        this.toolsView.addView(this.blurLayout, LayoutHelper.createFrame(280, BitmapDescriptorFactory.HUE_YELLOW, 1, 0.0f, 40.0f, 0.0f, 0.0f));
         this.blurOffButton = new TextView(context);
-        this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_off_active, 0, 0);
         this.blurOffButton.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
         this.blurOffButton.setTextSize(1, 13.0f);
-        this.blurOffButton.setTextColor(-11420173);
         this.blurOffButton.setGravity(1);
         this.blurOffButton.setText(LocaleController.getString("BlurOff", R.string.BlurOff));
         this.blurLayout.addView(this.blurOffButton, LayoutHelper.createFrame(80, BitmapDescriptorFactory.HUE_YELLOW));
@@ -1532,10 +1407,8 @@ public class PhotoFilterView extends FrameLayout {
             }
         });
         this.blurRadialButton = new TextView(context);
-        this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_radial, 0, 0);
         this.blurRadialButton.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
         this.blurRadialButton.setTextSize(1, 13.0f);
-        this.blurRadialButton.setTextColor(-1);
         this.blurRadialButton.setGravity(1);
         this.blurRadialButton.setText(LocaleController.getString("BlurRadial", R.string.BlurRadial));
         this.blurLayout.addView(this.blurRadialButton, LayoutHelper.createFrame(80, 80.0f, 51, 100.0f, 0.0f, 0.0f, 0.0f));
@@ -1551,10 +1424,8 @@ public class PhotoFilterView extends FrameLayout {
             }
         });
         this.blurLinearButton = new TextView(context);
-        this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_linear, 0, 0);
         this.blurLinearButton.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
         this.blurLinearButton.setTextSize(1, 13.0f);
-        this.blurLinearButton.setTextColor(-1);
         this.blurLinearButton.setGravity(1);
         this.blurLinearButton.setText(LocaleController.getString("BlurLinear", R.string.BlurLinear));
         this.blurLayout.addView(this.blurLinearButton, LayoutHelper.createFrame(80, 80.0f, 51, 200.0f, 0.0f, 0.0f, 0.0f));
@@ -1569,30 +1440,19 @@ public class PhotoFilterView extends FrameLayout {
                 }
             }
         });
+        updateSelectedBlurType();
         if (VERSION.SDK_INT >= 21) {
             ((LayoutParams) this.textureView.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
             ((LayoutParams) this.curvesControl.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
         }
     }
 
-    private int calculateMaxToolCellWidth() {
-        int i = 0;
-        String[] titles = new String[]{LocaleController.getString("Enhance", R.string.Enhance), LocaleController.getString("Exposure", R.string.Exposure), LocaleController.getString("Contrast", R.string.Contrast), LocaleController.getString("Warmth", R.string.Warmth), LocaleController.getString("Saturation", R.string.Saturation), LocaleController.getString("Tint", R.string.Tint), LocaleController.getString("Fade", R.string.Fade), LocaleController.getString("Highlights", R.string.Highlights), LocaleController.getString("Shadows", R.string.Shadows), LocaleController.getString("Vignette", R.string.Vignette), LocaleController.getString("Grain", R.string.Grain), LocaleController.getString("Blur", R.string.Blur), LocaleController.getString("Sharpen", R.string.Sharpen), LocaleController.getString("Curves", R.string.Curves)};
-        Paint paint = new Paint();
-        paint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        paint.setTextSize(TypedValue.applyDimension(1, 10.0f, getResources().getDisplayMetrics()));
-        float maxWidth = 0.0f;
-        int length = titles.length;
-        while (i < length) {
-            maxWidth = Math.max(paint.measureText(titles[i]), maxWidth);
-            i++;
-        }
-        return (int) Math.max((float) AndroidUtilities.dp(56.0f), ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) + maxWidth);
-    }
-
     private void updateSelectedBlurType() {
+        Drawable drawable;
         if (this.blurType == 0) {
-            this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_off_active, 0, 0);
+            drawable = this.blurOffButton.getContext().getDrawable(R.drawable.blur_off).mutate();
+            drawable.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
+            this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             this.blurOffButton.setTextColor(-11420173);
             this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_radial, 0, 0);
             this.blurRadialButton.setTextColor(-1);
@@ -1601,7 +1461,9 @@ public class PhotoFilterView extends FrameLayout {
         } else if (this.blurType == 1) {
             this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_off, 0, 0);
             this.blurOffButton.setTextColor(-1);
-            this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_radial_active, 0, 0);
+            drawable = this.blurOffButton.getContext().getDrawable(R.drawable.blur_radial).mutate();
+            drawable.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
+            this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             this.blurRadialButton.setTextColor(-11420173);
             this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_linear, 0, 0);
             this.blurLinearButton.setTextColor(-1);
@@ -1610,69 +1472,10 @@ public class PhotoFilterView extends FrameLayout {
             this.blurOffButton.setTextColor(-1);
             this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_radial, 0, 0);
             this.blurRadialButton.setTextColor(-1);
-            this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_linear_active, 0, 0);
+            drawable = this.blurOffButton.getContext().getDrawable(R.drawable.blur_linear).mutate();
+            drawable.setColorFilter(new PorterDuffColorFilter(-11420173, Mode.MULTIPLY));
+            this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             this.blurLinearButton.setTextColor(-11420173);
-        }
-    }
-
-    private void updateSelectedTintButton(boolean animated) {
-        int i;
-        int i2 = -8355712;
-        TextView textView = this.tintHighlightsButton;
-        if (this.selectedTintMode == 1) {
-            i = -1;
-        } else {
-            i = -8355712;
-        }
-        textView.setTextColor(i);
-        TextView textView2 = this.tintShadowsButton;
-        if (this.selectedTintMode != 1) {
-            i2 = -1;
-        }
-        textView2.setTextColor(i2);
-        int childCount = this.tintButtonsContainer.getChildCount();
-        for (int a = 0; a < childCount; a++) {
-            View child = this.tintButtonsContainer.getChildAt(a);
-            if (child instanceof RadioButton) {
-                RadioButton radioButton = (RadioButton) child;
-                int num = ((Integer) radioButton.getTag()).intValue();
-                radioButton.setChecked((this.selectedTintMode == 0 ? this.tintShadowsColor : this.tintHighlightsColor) == (this.selectedTintMode == 0 ? this.tintShadowColors[num] : this.tintHighlighsColors[num]), animated);
-                i2 = num == 0 ? -1 : this.selectedTintMode == 0 ? this.tintShadowColors[num] : this.tintHighlighsColors[num];
-                i = num == 0 ? -1 : this.selectedTintMode == 0 ? this.tintShadowColors[num] : this.tintHighlighsColors[num];
-                radioButton.setColor(i2, i);
-            }
-        }
-    }
-
-    private void updateValueTextView() {
-        int value = 0;
-        if (this.selectedTool == this.enhanceTool) {
-            value = (int) this.enhanceValue;
-        } else if (this.selectedTool == this.highlightsTool) {
-            value = (int) this.highlightsValue;
-        } else if (this.selectedTool == this.contrastTool) {
-            value = (int) this.contrastValue;
-        } else if (this.selectedTool == this.exposureTool) {
-            value = (int) this.exposureValue;
-        } else if (this.selectedTool == this.warmthTool) {
-            value = (int) this.warmthValue;
-        } else if (this.selectedTool == this.saturationTool) {
-            value = (int) this.saturationValue;
-        } else if (this.selectedTool == this.vignetteTool) {
-            value = (int) this.vignetteValue;
-        } else if (this.selectedTool == this.shadowsTool) {
-            value = (int) this.shadowsValue;
-        } else if (this.selectedTool == this.grainTool) {
-            value = (int) this.grainValue;
-        } else if (this.selectedTool == this.sharpenTool) {
-            value = (int) this.sharpenValue;
-        } else if (this.selectedTool == this.fadeTool) {
-            value = (int) this.fadeValue;
-        }
-        if (value > 0) {
-            this.valueTextView.setText("+" + value);
-        } else {
-            this.valueTextView.setText("" + value);
         }
     }
 
@@ -1700,103 +1503,40 @@ public class PhotoFilterView extends FrameLayout {
         }
     }
 
-    public void switchToOrFromEditMode() {
-        View viewFrom;
-        View viewTo;
-        if (this.editView.getVisibility() == 8) {
-            viewFrom = this.toolsView;
-            viewTo = this.editView;
-            if (this.selectedTool == this.blurTool || this.selectedTool == this.tintTool || this.selectedTool == this.curvesTool) {
-                int i;
-                FrameLayout frameLayout = this.blurLayout;
-                if (this.selectedTool == this.blurTool) {
-                    i = 0;
-                } else {
-                    i = 4;
-                }
-                frameLayout.setVisibility(i);
-                frameLayout = this.tintLayout;
-                if (this.selectedTool == this.tintTool) {
-                    i = 0;
-                } else {
-                    i = 4;
-                }
-                frameLayout.setVisibility(i);
-                frameLayout = this.curveLayout;
-                if (this.selectedTool == this.curvesTool) {
-                    i = 0;
-                } else {
-                    i = 4;
-                }
-                frameLayout.setVisibility(i);
-                if (this.selectedTool == this.blurTool) {
-                    this.infoTextView.setText(LocaleController.getString("Blur", R.string.Blur));
-                    if (this.blurType != 0) {
-                        this.blurControl.setVisibility(0);
-                    }
-                } else if (this.selectedTool == this.curvesTool) {
-                    this.infoTextView.setText(LocaleController.getString("Curves", R.string.Curves));
-                    this.curvesControl.setVisibility(0);
-                    this.curvesToolValue.activeType = 0;
-                    int a = 0;
-                    while (a < 4) {
-                        this.curveTextView[a].setTextColor(a == 0 ? -1 : -8355712);
-                        a++;
-                    }
-                } else {
-                    this.selectedTintMode = 0;
-                    updateSelectedTintButton(false);
-                    this.infoTextView.setText(LocaleController.getString("Tint", R.string.Tint));
-                }
-                this.infoTextView.setVisibility(0);
-                this.valueSeekBar.setVisibility(4);
-                this.paramTextView.setVisibility(4);
-                this.valueTextView.setVisibility(4);
-                updateSelectedBlurType();
-            } else {
-                this.tintLayout.setVisibility(4);
-                this.curveLayout.setVisibility(4);
-                this.blurLayout.setVisibility(4);
-                this.valueSeekBar.setVisibility(0);
-                this.infoTextView.setVisibility(4);
-                this.paramTextView.setVisibility(0);
-                this.valueTextView.setVisibility(0);
-                this.blurControl.setVisibility(4);
-                this.curvesControl.setVisibility(4);
-            }
-        } else {
-            this.selectedTool = -1;
-            viewFrom = this.editView;
-            viewTo = this.toolsView;
+    public void switchMode() {
+        if (this.selectedTool == 0) {
             this.blurControl.setVisibility(4);
+            this.blurLayout.setVisibility(4);
+            this.curveLayout.setVisibility(4);
             this.curvesControl.setVisibility(4);
-        }
-        AnimatorSet animatorSet = new AnimatorSet();
-        Animator[] animatorArr = new Animator[1];
-        animatorArr[0] = ObjectAnimator.ofFloat(viewFrom, "translationY", new float[]{0.0f, (float) AndroidUtilities.dp(126.0f)});
-        animatorSet.playTogether(animatorArr);
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
-                viewFrom.setVisibility(8);
-                viewTo.setVisibility(0);
-                viewTo.setTranslationY((float) AndroidUtilities.dp(126.0f));
-                AnimatorSet animatorSet = new AnimatorSet();
-                Animator[] animatorArr = new Animator[1];
-                animatorArr[0] = ObjectAnimator.ofFloat(viewTo, "translationY", new float[]{0.0f});
-                animatorSet.playTogether(animatorArr);
-                animatorSet.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animation) {
-                        if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.enhanceTool) {
-                            PhotoFilterView.this.checkEnhance();
-                        }
-                    }
-                });
-                animatorSet.setDuration(200);
-                animatorSet.start();
+            this.recyclerListView.setVisibility(0);
+        } else if (this.selectedTool == 1) {
+            this.recyclerListView.setVisibility(4);
+            this.curveLayout.setVisibility(4);
+            this.curvesControl.setVisibility(4);
+            this.blurLayout.setVisibility(0);
+            if (this.blurType != 0) {
+                this.blurControl.setVisibility(0);
             }
-        });
-        animatorSet.setDuration(200);
-        animatorSet.start();
+            updateSelectedBlurType();
+        } else if (this.selectedTool == 2) {
+            this.recyclerListView.setVisibility(4);
+            this.blurLayout.setVisibility(4);
+            this.blurControl.setVisibility(4);
+            this.curveLayout.setVisibility(0);
+            this.curvesControl.setVisibility(0);
+            this.curvesToolValue.activeType = 0;
+            for (int a = 0; a < 4; a++) {
+                boolean z;
+                RadioButton radioButton = this.curveRadioButton[a];
+                if (a == 0) {
+                    z = true;
+                } else {
+                    z = false;
+                }
+                radioButton.setChecked(z, false);
+            }
+        }
     }
 
     public void shutdown() {
@@ -1820,7 +1560,7 @@ public class PhotoFilterView extends FrameLayout {
             float bitmapW;
             float bitmapH;
             viewWidth -= AndroidUtilities.dp(28.0f);
-            viewHeight -= (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.dp(154.0f);
+            viewHeight -= (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.dp(214.0f);
             if (this.orientation % 360 == 90 || this.orientation % 360 == 270) {
                 bitmapW = (float) this.bitmapToEdit.getHeight();
                 bitmapH = (float) this.bitmapToEdit.getWidth();
@@ -1846,7 +1586,7 @@ public class PhotoFilterView extends FrameLayout {
             layoutParams.height = (int) bitmapH;
             this.curvesControl.setActualArea((float) bitmapX, (float) (bitmapY - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)), (float) layoutParams.width, (float) layoutParams.height);
             this.blurControl.setActualAreaSize((float) layoutParams.width, (float) layoutParams.height);
-            ((LayoutParams) this.blurControl.getLayoutParams()).height = AndroidUtilities.dp(28.0f) + viewHeight;
+            ((LayoutParams) this.blurControl.getLayoutParams()).height = AndroidUtilities.dp(38.0f) + viewHeight;
             ((LayoutParams) this.curvesControl.getLayoutParams()).height = AndroidUtilities.dp(28.0f) + viewHeight;
             if (AndroidUtilities.isTablet()) {
                 int total = AndroidUtilities.dp(86.0f) * 10;
@@ -1927,38 +1667,11 @@ public class PhotoFilterView extends FrameLayout {
         return this.toolsView;
     }
 
-    public FrameLayout getEditView() {
-        return this.editView;
-    }
-
     public TextView getDoneTextView() {
         return this.doneTextView;
     }
 
     public TextView getCancelTextView() {
         return this.cancelTextView;
-    }
-
-    public void setEditViewFirst() {
-        this.selectedTool = 0;
-        this.previousValue = this.enhanceValue;
-        this.enhanceValue = 50.0f;
-        this.valueSeekBar.setMinMax(0, curveGranularity);
-        this.paramTextView.setText(LocaleController.getString("Enhance", R.string.Enhance));
-        this.editView.setVisibility(0);
-        this.toolsView.setVisibility(8);
-        this.valueSeekBar.setProgress(50, false);
-        updateValueTextView();
-    }
-
-    private void checkEnhance() {
-        if (this.enhanceValue == 0.0f) {
-            AnimatorSet AnimatorSet = new AnimatorSet();
-            AnimatorSet.setDuration(200);
-            Animator[] animatorArr = new Animator[1];
-            animatorArr[0] = ObjectAnimator.ofInt(this.valueSeekBar, "progress", new int[]{50});
-            AnimatorSet.playTogether(animatorArr);
-            AnimatorSet.start();
-        }
     }
 }

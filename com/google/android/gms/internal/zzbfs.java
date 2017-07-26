@@ -1,16 +1,15 @@
 package com.google.android.gms.internal;
 
 import android.os.RemoteException;
-import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.api.Api.zzb;
+import com.google.android.gms.common.api.GoogleApiClient;
 
-final class zzbfs extends zzbfm {
-    private final zzbay<Status> zzaIz;
-
-    public zzbfs(zzbay<Status> com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status) {
-        this.zzaIz = com_google_android_gms_internal_zzbay_com_google_android_gms_common_api_Status;
+final class zzbfs extends zzbfv {
+    zzbfs(zzbfr com_google_android_gms_internal_zzbfr, GoogleApiClient googleApiClient) {
+        super(googleApiClient);
     }
 
-    public final void zzaC(int i) throws RemoteException {
-        this.zzaIz.setResult(new Status(i));
+    protected final /* synthetic */ void zza(zzb com_google_android_gms_common_api_Api_zzb) throws RemoteException {
+        ((zzbfz) ((zzbfw) com_google_android_gms_common_api_Api_zzb).zzrf()).zza(new zzbft(this));
     }
 }

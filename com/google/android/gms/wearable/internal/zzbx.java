@@ -3,12 +3,12 @@ package com.google.android.gms.wearable.internal;
 import com.google.android.gms.wearable.DataItemAsset;
 
 public final class zzbx implements DataItemAsset {
-    private final String zzBP;
-    private final String zzIk;
+    private final String zzBN;
+    private final String zzIi;
 
     public zzbx(DataItemAsset dataItemAsset) {
-        this.zzIk = dataItemAsset.getId();
-        this.zzBP = dataItemAsset.getDataItemKey();
+        this.zzIi = dataItemAsset.getId();
+        this.zzBN = dataItemAsset.getDataItemKey();
     }
 
     public final /* bridge */ /* synthetic */ Object freeze() {
@@ -16,11 +16,11 @@ public final class zzbx implements DataItemAsset {
     }
 
     public final String getDataItemKey() {
-        return this.zzBP;
+        return this.zzBN;
     }
 
     public final String getId() {
-        return this.zzIk;
+        return this.zzIi;
     }
 
     public final boolean isDataValid() {
@@ -32,14 +32,14 @@ public final class zzbx implements DataItemAsset {
         stringBuilder.append("DataItemAssetEntity[");
         stringBuilder.append("@");
         stringBuilder.append(Integer.toHexString(hashCode()));
-        if (this.zzIk == null) {
+        if (this.zzIi == null) {
             stringBuilder.append(",noid");
         } else {
             stringBuilder.append(",");
-            stringBuilder.append(this.zzIk);
+            stringBuilder.append(this.zzIi);
         }
         stringBuilder.append(", key=");
-        stringBuilder.append(this.zzBP);
+        stringBuilder.append(this.zzBN);
         stringBuilder.append("]");
         return stringBuilder.toString();
     }

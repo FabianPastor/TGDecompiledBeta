@@ -1,24 +1,22 @@
 package com.google.android.gms.internal;
 
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
+import android.content.Context;
 
-public final class zzbha extends zza {
-    public static final Creator<zzbha> CREATOR = new zzbhb();
-    public final int type;
-    public final int versionCode;
-    public final float x;
-    public final float y;
+public final class zzbha {
+    private static zzbha zzaKk = new zzbha();
+    private zzbgz zzaKj = null;
 
-    public zzbha(int i, float f, float f2, int i2) {
-        this.versionCode = i;
-        this.x = f;
-        this.y = f2;
-        this.type = i2;
+    private final synchronized zzbgz zzaO(Context context) {
+        if (this.zzaKj == null) {
+            if (context.getApplicationContext() != null) {
+                context = context.getApplicationContext();
+            }
+            this.zzaKj = new zzbgz(context);
+        }
+        return this.zzaKj;
     }
 
-    public void writeToParcel(Parcel parcel, int i) {
-        zzbhb.zza(this, parcel, i);
+    public static zzbgz zzaP(Context context) {
+        return zzaKk.zzaO(context);
     }
 }

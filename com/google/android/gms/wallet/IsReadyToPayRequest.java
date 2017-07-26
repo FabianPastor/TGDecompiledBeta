@@ -8,27 +8,27 @@ import java.util.ArrayList;
 
 public final class IsReadyToPayRequest extends zza {
     public static final Creator<IsReadyToPayRequest> CREATOR = new zzl();
-    ArrayList<Integer> zzbOL;
-    private String zzbOM;
-    private String zzbON;
+    ArrayList<Integer> zzbON;
+    private String zzbOO;
+    private String zzbOP;
 
     public final class Builder {
-        private /* synthetic */ IsReadyToPayRequest zzbOO;
+        private /* synthetic */ IsReadyToPayRequest zzbOQ;
 
         private Builder(IsReadyToPayRequest isReadyToPayRequest) {
-            this.zzbOO = isReadyToPayRequest;
+            this.zzbOQ = isReadyToPayRequest;
         }
 
         public final Builder addAllowedCardNetwork(int i) {
-            if (this.zzbOO.zzbOL == null) {
-                this.zzbOO.zzbOL = new ArrayList();
+            if (this.zzbOQ.zzbON == null) {
+                this.zzbOQ.zzbON = new ArrayList();
             }
-            this.zzbOO.zzbOL.add(Integer.valueOf(i));
+            this.zzbOQ.zzbON.add(Integer.valueOf(i));
             return this;
         }
 
         public final IsReadyToPayRequest build() {
-            return this.zzbOO;
+            return this.zzbOQ;
         }
     }
 
@@ -36,9 +36,9 @@ public final class IsReadyToPayRequest extends zza {
     }
 
     IsReadyToPayRequest(ArrayList<Integer> arrayList, String str, String str2) {
-        this.zzbOL = arrayList;
-        this.zzbOM = str;
-        this.zzbON = str2;
+        this.zzbON = arrayList;
+        this.zzbOO = str;
+        this.zzbOP = str2;
     }
 
     public static Builder newBuilder() {
@@ -48,14 +48,14 @@ public final class IsReadyToPayRequest extends zza {
     }
 
     public final ArrayList<Integer> getAllowedCardNetworks() {
-        return this.zzbOL;
+        return this.zzbON;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
         int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.zzbOL, false);
-        zzd.zza(parcel, 4, this.zzbOM, false);
-        zzd.zza(parcel, 5, this.zzbON, false);
+        zzd.zza(parcel, 2, this.zzbON, false);
+        zzd.zza(parcel, 4, this.zzbOO, false);
+        zzd.zza(parcel, 5, this.zzbOP, false);
         zzd.zzI(parcel, zze);
     }
 }

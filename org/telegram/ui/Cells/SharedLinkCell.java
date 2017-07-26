@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build.VERSION;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -251,9 +250,9 @@ public class SharedLinkCell extends FrameLayout {
             }
             String filter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(maxPhotoWidth), Integer.valueOf(maxPhotoWidth)});
             if (photoExist || MediaController.getInstance().canDownloadMedia(1) || FileLoader.getInstance().isLoadingFile(fileName)) {
-                this.linkImageView.setImage(currentPhotoObject.location, filter, currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(maxPhotoWidth), Integer.valueOf(maxPhotoWidth)}), 0, null, false);
+                this.linkImageView.setImage(currentPhotoObject.location, filter, currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(maxPhotoWidth), Integer.valueOf(maxPhotoWidth)}), 0, null, 0);
             } else if (currentPhotoObjectThumb != null) {
-                this.linkImageView.setImage(null, null, currentPhotoObjectThumb.location, String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(maxPhotoWidth), Integer.valueOf(maxPhotoWidth)}), 0, null, false);
+                this.linkImageView.setImage(null, null, currentPhotoObjectThumb.location, String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(maxPhotoWidth), Integer.valueOf(maxPhotoWidth)}), 0, null, 0);
             } else {
                 this.linkImageView.setImageBitmap((Drawable) null);
             }
@@ -346,7 +345,7 @@ public class SharedLinkCell extends FrameLayout {
                         } else if (this.linkPreviewPressed) {
                             try {
                                 WebPage webPage = (this.pressedLink != 0 || this.message.messageOwner.media == null) ? null : this.message.messageOwner.media.webpage;
-                                if (webPage == null || VERSION.SDK_INT < 16 || webPage.embed_url == null || webPage.embed_url.length() == 0) {
+                                if (webPage == null || webPage.embed_url == null || webPage.embed_url.length() == 0) {
                                     Browser.openUrl(getContext(), (String) this.links.get(this.pressedLink));
                                     resetPressedLink();
                                     result = true;

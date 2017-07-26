@@ -47,11 +47,11 @@ public final class zzl {
     private int zzbhk;
     private int zzbhl;
     private long zzbhm;
-    private final SimpleArrayMap<String, zzp> zzckE = new SimpleArrayMap();
-    private Context zzqF;
+    private final SimpleArrayMap<String, zzp> zzckI = new SimpleArrayMap();
+    private Context zzqD;
 
     public zzl(Context context) {
-        this.zzqF = context;
+        this.zzqD = context;
     }
 
     private static String zza(KeyPair keyPair, String... strArr) {
@@ -94,14 +94,14 @@ public final class zzl {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private final void zzah(String str, String str2) {
-        synchronized (this.zzckE) {
+        synchronized (this.zzckI) {
             if (str == null) {
-                for (int i = 0; i < this.zzckE.size(); i++) {
-                    ((zzp) this.zzckE.valueAt(i)).onError(str2);
+                for (int i = 0; i < this.zzckI.size(); i++) {
+                    ((zzp) this.zzckI.valueAt(i)).onError(str2);
                 }
-                this.zzckE.clear();
+                this.zzckI.clear();
             } else {
-                zzp com_google_firebase_iid_zzp = (zzp) this.zzckE.remove(str);
+                zzp com_google_firebase_iid_zzp = (zzp) this.zzckI.remove(str);
                 if (com_google_firebase_iid_zzp == null) {
                     String str3 = "InstanceID/Rpc";
                     String str4 = "Missing callback for ";
@@ -117,8 +117,8 @@ public final class zzl {
     private final Intent zzb(Bundle bundle, KeyPair keyPair) throws IOException {
         String zzvO = zzvO();
         zzo com_google_firebase_iid_zzo = new zzo();
-        synchronized (this.zzckE) {
-            this.zzckE.put(zzvO, com_google_firebase_iid_zzo);
+        synchronized (this.zzckI) {
+            this.zzckI.put(zzvO, com_google_firebase_iid_zzo);
         }
         long elapsedRealtime = SystemClock.elapsedRealtime();
         if (this.zzbhm == 0 || elapsedRealtime > this.zzbhm) {
@@ -129,16 +129,16 @@ public final class zzl {
             this.zzbhi = SystemClock.elapsedRealtime();
             Intent intent = new Intent(zzbha ? "com.google.iid.TOKEN_REQUEST" : "com.google.android.c2dm.intent.REGISTER");
             intent.setPackage(zzbgZ);
-            bundle.putString("gmsv", Integer.toString(FirebaseInstanceId.zzO(this.zzqF, zzbd(this.zzqF))));
+            bundle.putString("gmsv", Integer.toString(FirebaseInstanceId.zzO(this.zzqD, zzbd(this.zzqD))));
             bundle.putString("osv", Integer.toString(VERSION.SDK_INT));
-            bundle.putString("app_ver", Integer.toString(FirebaseInstanceId.zzbF(this.zzqF)));
-            bundle.putString("app_ver_name", FirebaseInstanceId.zzbb(this.zzqF));
-            bundle.putString("cliv", "fiid-11011000");
+            bundle.putString("app_ver", Integer.toString(FirebaseInstanceId.zzbF(this.zzqD)));
+            bundle.putString("app_ver_name", FirebaseInstanceId.zzbb(this.zzqD));
+            bundle.putString("cliv", "fiid-11020000");
             bundle.putString("appid", FirebaseInstanceId.zza(keyPair));
             bundle.putString("pub2", FirebaseInstanceId.zzj(keyPair.getPublic().getEncoded()));
-            bundle.putString("sig", zza(keyPair, this.zzqF.getPackageName(), r0));
+            bundle.putString("sig", zza(keyPair, this.zzqD.getPackageName(), r0));
             intent.putExtras(bundle);
-            zzd(this.zzqF, intent);
+            zzd(this.zzqD, intent);
             this.zzbhi = SystemClock.elapsedRealtime();
             intent.putExtra("kid", new StringBuilder(String.valueOf(zzvO).length() + 5).append("|ID|").append(zzvO).append("|").toString());
             intent.putExtra("X-kid", new StringBuilder(String.valueOf(zzvO).length() + 5).append("|ID|").append(zzvO).append("|").toString());
@@ -155,11 +155,11 @@ public final class zzl {
                             Log.d("InstanceID/Rpc", "Registered GSF callback receiver");
                         }
                         IntentFilter intentFilter = new IntentFilter("com.google.android.c2dm.intent.REGISTRATION");
-                        intentFilter.addCategory(this.zzqF.getPackageName());
-                        this.zzqF.registerReceiver(zzbhe, intentFilter, "com.google.android.c2dm.permission.SEND", null);
+                        intentFilter.addCategory(this.zzqD.getPackageName());
+                        this.zzqD.registerReceiver(zzbhe, intentFilter, "com.google.android.c2dm.permission.SEND", null);
                     }
                 }
-                this.zzqF.startService(intent);
+                this.zzqD.startService(intent);
             } else {
                 intent.putExtra("google.messenger", this.zzbfT);
                 if (!(this.zzbhg == null && this.zzbhh == null)) {
@@ -178,20 +178,20 @@ public final class zzl {
                     }
                 }
                 if (zzbha) {
-                    this.zzqF.sendBroadcast(intent);
+                    this.zzqD.sendBroadcast(intent);
                 } else {
-                    this.zzqF.startService(intent);
+                    this.zzqD.startService(intent);
                 }
             }
             try {
-                Intent zzJT = com_google_firebase_iid_zzo.zzJT();
-                synchronized (this.zzckE) {
-                    this.zzckE.remove(zzvO);
+                Intent zzJW = com_google_firebase_iid_zzo.zzJW();
+                synchronized (this.zzckI) {
+                    this.zzckI.remove(zzvO);
                 }
-                return zzJT;
+                return zzJW;
             } catch (Throwable th) {
-                synchronized (this.zzckE) {
-                    this.zzckE.remove(zzvO);
+                synchronized (this.zzckI) {
+                    this.zzckI.remove(zzvO);
                 }
             }
         } else {
@@ -201,8 +201,8 @@ public final class zzl {
     }
 
     private final void zzb(String str, Intent intent) {
-        synchronized (this.zzckE) {
-            zzp com_google_firebase_iid_zzp = (zzp) this.zzckE.remove(str);
+        synchronized (this.zzckI) {
+            zzp com_google_firebase_iid_zzp = (zzp) this.zzckI.remove(str);
             if (com_google_firebase_iid_zzp == null) {
                 String str2 = "InstanceID/Rpc";
                 String str3 = "Missing callback for ";
@@ -272,7 +272,7 @@ public final class zzl {
 
     private final void zzvN() {
         if (this.zzbfT == null) {
-            zzbd(this.zzqF);
+            zzbd(this.zzqD);
             this.zzbfT = new Messenger(new zzm(this, Looper.getMainLooper()));
         }
     }
@@ -404,11 +404,11 @@ public final class zzl {
                     stringExtra2 = split[2];
                     if (split.length > 4) {
                         if ("SYNC".equals(split[3])) {
-                            FirebaseInstanceId.zzbG(this.zzqF);
+                            FirebaseInstanceId.zzbG(this.zzqD);
                         } else if ("RST".equals(split[3])) {
-                            Context context = this.zzqF;
-                            zzj.zzb(this.zzqF, null);
-                            FirebaseInstanceId.zza(context, zzj.zzJQ());
+                            Context context = this.zzqD;
+                            zzj.zzb(this.zzqD, null);
+                            FirebaseInstanceId.zza(context, zzj.zzJT());
                             intent.removeExtra("registration_id");
                             zzb(stringExtra2, intent);
                             return;

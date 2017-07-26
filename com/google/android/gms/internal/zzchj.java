@@ -1,15 +1,31 @@
 package com.google.android.gms.internal;
 
-import android.content.Context;
-import com.google.android.gms.common.internal.zzbo;
+abstract class zzchj extends zzchi {
+    private boolean zzafK;
 
-public final class zzchj {
-    final Context mContext;
+    zzchj(zzcgl com_google_android_gms_internal_zzcgl) {
+        super(com_google_android_gms_internal_zzcgl);
+        this.zzboe.zzb(this);
+    }
 
-    public zzchj(Context context) {
-        zzbo.zzu(context);
-        Context applicationContext = context.getApplicationContext();
-        zzbo.zzu(applicationContext);
-        this.mContext = applicationContext;
+    public final void initialize() {
+        if (this.zzafK) {
+            throw new IllegalStateException("Can't initialize twice");
+        }
+        zzjD();
+        this.zzboe.zzzd();
+        this.zzafK = true;
+    }
+
+    final boolean isInitialized() {
+        return this.zzafK;
+    }
+
+    protected abstract void zzjD();
+
+    protected final void zzkD() {
+        if (!isInitialized()) {
+            throw new IllegalStateException("Not initialized");
+        }
     }
 }

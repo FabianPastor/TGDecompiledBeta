@@ -17,7 +17,6 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.ActionMode;
 import android.view.KeyEvent;
@@ -166,18 +165,25 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
         if (!UserConfig.isClientActivated()) {
             Intent intent = getIntent();
-            if (intent != null && intent.getAction() != null && ("android.intent.action.SEND".equals(intent.getAction()) || intent.getAction().equals("android.intent.action.SEND_MULTIPLE"))) {
-                super.onCreate(savedInstanceState);
-                finish();
-                return;
-            } else if (!(intent == null || intent.getBooleanExtra("fromIntro", false) || !ApplicationLoader.applicationContext.getSharedPreferences("logininfo2", 0).getAll().isEmpty())) {
-                Intent intent2 = new Intent(this, IntroActivity.class);
-                intent2.setData(intent.getData());
-                startActivity(intent2);
-                super.onCreate(savedInstanceState);
-                finish();
-                return;
+            if (intent == null || intent.getAction() == null || !("android.intent.action.SEND".equals(intent.getAction()) || intent.getAction().equals("android.intent.action.SEND_MULTIPLE"))) {
+                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                long crashed_time = preferences.getLong("intro_crashed_time", 0);
+                boolean fromIntro = intent.getBooleanExtra("fromIntro", false);
+                if (fromIntro) {
+                    preferences.edit().putLong("intro_crashed_time", 0).commit();
+                }
+                if (Math.abs(crashed_time - System.currentTimeMillis()) >= 120000 && intent != null && !fromIntro && ApplicationLoader.applicationContext.getSharedPreferences("logininfo2", 0).getAll().isEmpty()) {
+                    Intent intent2 = new Intent(this, IntroActivity.class);
+                    intent2.setData(intent.getData());
+                    startActivity(intent2);
+                    super.onCreate(savedInstanceState);
+                    finish();
+                    return;
+                }
             }
+            super.onCreate(savedInstanceState);
+            finish();
+            return;
         }
         requestWindowFeature(1);
         setTheme(R.style.Theme.TMessages);
@@ -437,10 +443,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     if (fragmentName != null) {
                         ChatActivity chat;
                         BaseFragment settings;
-                        GroupCreateFinalActivity group;
+                        BaseFragment groupCreateFinalActivity;
                         ChannelCreateActivity channel;
                         ChannelEditActivity channel2;
-                        BaseFragment profileActivity;
                         Bundle args = savedInstanceState.getBundle("args");
                         Object obj = -1;
                         switch (fragmentName.hashCode()) {
@@ -477,9 +482,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                         break;
                                     case 2:
                                         if (args != null) {
-                                            group = new GroupCreateFinalActivity(args);
-                                            if (this.actionBarLayout.addFragmentToStack(group)) {
-                                                group.restoreSelfArgs(savedInstanceState);
+                                            groupCreateFinalActivity = new GroupCreateFinalActivity(args);
+                                            if (this.actionBarLayout.addFragmentToStack(groupCreateFinalActivity)) {
+                                                groupCreateFinalActivity.restoreSelfArgs(savedInstanceState);
                                                 break;
                                             }
                                         }
@@ -504,9 +509,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                         break;
                                     case 5:
                                         if (args != null) {
-                                            profileActivity = new ProfileActivity(args);
-                                            if (this.actionBarLayout.addFragmentToStack(profileActivity)) {
-                                                profileActivity.restoreSelfArgs(savedInstanceState);
+                                            groupCreateFinalActivity = new ProfileActivity(args);
+                                            if (this.actionBarLayout.addFragmentToStack(groupCreateFinalActivity)) {
+                                                groupCreateFinalActivity.restoreSelfArgs(savedInstanceState);
                                                 break;
                                             }
                                         }
@@ -539,9 +544,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                         break;
                                     case 2:
                                         if (args != null) {
-                                            group = new GroupCreateFinalActivity(args);
-                                            if (this.actionBarLayout.addFragmentToStack(group)) {
-                                                group.restoreSelfArgs(savedInstanceState);
+                                            groupCreateFinalActivity = new GroupCreateFinalActivity(args);
+                                            if (this.actionBarLayout.addFragmentToStack(groupCreateFinalActivity)) {
+                                                groupCreateFinalActivity.restoreSelfArgs(savedInstanceState);
                                                 break;
                                             }
                                         }
@@ -566,9 +571,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                         break;
                                     case 5:
                                         if (args != null) {
-                                            profileActivity = new ProfileActivity(args);
-                                            if (this.actionBarLayout.addFragmentToStack(profileActivity)) {
-                                                profileActivity.restoreSelfArgs(savedInstanceState);
+                                            groupCreateFinalActivity = new ProfileActivity(args);
+                                            if (this.actionBarLayout.addFragmentToStack(groupCreateFinalActivity)) {
+                                                groupCreateFinalActivity.restoreSelfArgs(savedInstanceState);
                                                 break;
                                             }
                                         }
@@ -601,9 +606,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                         break;
                                     case 2:
                                         if (args != null) {
-                                            group = new GroupCreateFinalActivity(args);
-                                            if (this.actionBarLayout.addFragmentToStack(group)) {
-                                                group.restoreSelfArgs(savedInstanceState);
+                                            groupCreateFinalActivity = new GroupCreateFinalActivity(args);
+                                            if (this.actionBarLayout.addFragmentToStack(groupCreateFinalActivity)) {
+                                                groupCreateFinalActivity.restoreSelfArgs(savedInstanceState);
                                                 break;
                                             }
                                         }
@@ -628,9 +633,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                         break;
                                     case 5:
                                         if (args != null) {
-                                            profileActivity = new ProfileActivity(args);
-                                            if (this.actionBarLayout.addFragmentToStack(profileActivity)) {
-                                                profileActivity.restoreSelfArgs(savedInstanceState);
+                                            groupCreateFinalActivity = new ProfileActivity(args);
+                                            if (this.actionBarLayout.addFragmentToStack(groupCreateFinalActivity)) {
+                                                groupCreateFinalActivity.restoreSelfArgs(savedInstanceState);
                                                 break;
                                             }
                                         }
@@ -663,9 +668,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                         break;
                                     case 2:
                                         if (args != null) {
-                                            group = new GroupCreateFinalActivity(args);
-                                            if (this.actionBarLayout.addFragmentToStack(group)) {
-                                                group.restoreSelfArgs(savedInstanceState);
+                                            groupCreateFinalActivity = new GroupCreateFinalActivity(args);
+                                            if (this.actionBarLayout.addFragmentToStack(groupCreateFinalActivity)) {
+                                                groupCreateFinalActivity.restoreSelfArgs(savedInstanceState);
                                                 break;
                                             }
                                         }
@@ -690,9 +695,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                         break;
                                     case 5:
                                         if (args != null) {
-                                            profileActivity = new ProfileActivity(args);
-                                            if (this.actionBarLayout.addFragmentToStack(profileActivity)) {
-                                                profileActivity.restoreSelfArgs(savedInstanceState);
+                                            groupCreateFinalActivity = new ProfileActivity(args);
+                                            if (this.actionBarLayout.addFragmentToStack(groupCreateFinalActivity)) {
+                                                groupCreateFinalActivity.restoreSelfArgs(savedInstanceState);
                                                 break;
                                             }
                                         }
@@ -722,9 +727,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                 break;
                             case 2:
                                 if (args != null) {
-                                    group = new GroupCreateFinalActivity(args);
-                                    if (this.actionBarLayout.addFragmentToStack(group)) {
-                                        group.restoreSelfArgs(savedInstanceState);
+                                    groupCreateFinalActivity = new GroupCreateFinalActivity(args);
+                                    if (this.actionBarLayout.addFragmentToStack(groupCreateFinalActivity)) {
+                                        groupCreateFinalActivity.restoreSelfArgs(savedInstanceState);
                                         break;
                                     }
                                 }
@@ -749,9 +754,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                 break;
                             case 5:
                                 if (args != null) {
-                                    profileActivity = new ProfileActivity(args);
-                                    if (this.actionBarLayout.addFragmentToStack(profileActivity)) {
-                                        profileActivity.restoreSelfArgs(savedInstanceState);
+                                    groupCreateFinalActivity = new ProfileActivity(args);
+                                    if (this.actionBarLayout.addFragmentToStack(groupCreateFinalActivity)) {
+                                        groupCreateFinalActivity.restoreSelfArgs(savedInstanceState);
                                         break;
                                     }
                                 }
@@ -900,7 +905,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     private void showPasscodeActivity() {
         if (this.passcodeView != null) {
             UserConfig.appLocked = true;
-            if (PhotoViewer.getInstance().isVisible()) {
+            if (SecretMediaViewer.getInstance().isVisible()) {
+                SecretMediaViewer.getInstance().closePhoto(false, false);
+            } else if (PhotoViewer.getInstance().isVisible()) {
                 PhotoViewer.getInstance().closePhoto(false, true);
             } else if (ArticleViewer.getInstance().isVisible()) {
                 ArticleViewer.getInstance().close(false, true);
@@ -1179,7 +1186,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                 if (!(parcelable instanceof Uri)) {
                                     parcelable = Uri.parse(parcelable.toString());
                                 }
-                                path = AndroidUtilities.getPath((Uri) parcelable);
+                                uri = (Uri) parcelable;
+                                path = AndroidUtilities.getPath(uri);
                                 String originalPath = parcelable.toString();
                                 if (originalPath == null) {
                                     originalPath = path;
@@ -1194,6 +1202,12 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                     }
                                     this.documentsPathsArray.add(path);
                                     this.documentsOriginalPathsArray.add(originalPath);
+                                } else {
+                                    if (this.documentsUrisArray == null) {
+                                        this.documentsUrisArray = new ArrayList();
+                                    }
+                                    this.documentsUrisArray.add(uri);
+                                    this.documentsMimeType = type;
                                 }
                             }
                         } else {
@@ -1514,7 +1528,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     boolean removeLast = AndroidUtilities.isTablet() ? this.layersActionBarLayout.fragmentsStack.size() > 0 && (this.layersActionBarLayout.fragmentsStack.get(this.layersActionBarLayout.fragmentsStack.size() - 1) instanceof DialogsActivity) : this.actionBarLayout.fragmentsStack.size() > 1 && (this.actionBarLayout.fragmentsStack.get(this.actionBarLayout.fragmentsStack.size() - 1) instanceof DialogsActivity);
                     this.actionBarLayout.presentFragment(dialogsActivity, removeLast, true, true);
                     pushOpened = true;
-                    if (PhotoViewer.getInstance().isVisible()) {
+                    if (SecretMediaViewer.getInstance().isVisible()) {
+                        SecretMediaViewer.getInstance().closePhoto(false, false);
+                    } else if (PhotoViewer.getInstance().isVisible()) {
                         PhotoViewer.getInstance().closePhoto(false, true);
                     } else if (ArticleViewer.getInstance().isVisible()) {
                         ArticleViewer.getInstance().close(false, true);
@@ -1671,7 +1687,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                     });
                                     boolean removeLast = AndroidUtilities.isTablet() ? LaunchActivity.this.layersActionBarLayout.fragmentsStack.size() > 0 && (LaunchActivity.this.layersActionBarLayout.fragmentsStack.get(LaunchActivity.this.layersActionBarLayout.fragmentsStack.size() - 1) instanceof DialogsActivity) : LaunchActivity.this.actionBarLayout.fragmentsStack.size() > 1 && (LaunchActivity.this.actionBarLayout.fragmentsStack.get(LaunchActivity.this.actionBarLayout.fragmentsStack.size() - 1) instanceof DialogsActivity);
                                     LaunchActivity.this.actionBarLayout.presentFragment(fragment, removeLast, true, true);
-                                    if (PhotoViewer.getInstance().isVisible()) {
+                                    if (SecretMediaViewer.getInstance().isVisible()) {
+                                        SecretMediaViewer.getInstance().closePhoto(false, false);
+                                    } else if (PhotoViewer.getInstance().isVisible()) {
                                         PhotoViewer.getInstance().closePhoto(false, true);
                                     } else if (ArticleViewer.getInstance().isVisible()) {
                                         ArticleViewer.getInstance().close(false, true);
@@ -1995,30 +2013,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             }
             if (MessagesController.checkCanOpenChat(args, dialogsFragment)) {
                 BaseFragment chatActivity = new ChatActivity(args);
-                if (this.videoPath == null) {
-                    this.actionBarLayout.presentFragment(chatActivity, dialogsFragment != null, dialogsFragment == null, true);
-                    if (this.photoPathsArray != null) {
-                        ArrayList<String> captions = null;
-                        if (this.sendingText != null && this.sendingText.length() <= Callback.DEFAULT_DRAG_ANIMATION_DURATION && this.photoPathsArray.size() == 1) {
-                            captions = new ArrayList();
-                            captions.add(this.sendingText);
-                            this.sendingText = null;
-                        }
-                        SendMessagesHelper.prepareSendingPhotos(null, this.photoPathsArray, dialog_id, null, captions, null, null, false);
-                    }
-                    if (this.sendingText != null) {
-                        SendMessagesHelper.prepareSendingText(this.sendingText, dialog_id);
-                    }
-                    if (!(this.documentsPathsArray == null && this.documentsUrisArray == null)) {
-                        SendMessagesHelper.prepareSendingDocuments(this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, this.documentsMimeType, dialog_id, null, null);
-                    }
-                    if (!(this.contactsToSend == null || this.contactsToSend.isEmpty())) {
-                        Iterator it = this.contactsToSend.iterator();
-                        while (it.hasNext()) {
-                            SendMessagesHelper.getInstance().sendMessage((User) it.next(), dialog_id, null, null, null);
-                        }
-                    }
-                } else if (VERSION.SDK_INT >= 16) {
+                if (this.videoPath != null) {
                     if (!AndroidUtilities.isTablet()) {
                         this.actionBarLayout.addFragmentToStack(chatActivity, dialogsFragment != null ? this.actionBarLayout.fragmentsStack.size() - 1 : this.actionBarLayout.fragmentsStack.size());
                     } else if (this.tabletFullSize) {
@@ -2038,7 +2033,27 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     }
                 } else {
                     this.actionBarLayout.presentFragment(chatActivity, dialogsFragment != null, dialogsFragment == null, true);
-                    SendMessagesHelper.prepareSendingVideo(this.videoPath, 0, 0, 0, 0, null, dialog_id, null, null);
+                    if (this.photoPathsArray != null) {
+                        ArrayList<String> captions = null;
+                        if (this.sendingText != null && this.sendingText.length() <= Callback.DEFAULT_DRAG_ANIMATION_DURATION && this.photoPathsArray.size() == 1) {
+                            captions = new ArrayList();
+                            captions.add(this.sendingText);
+                            this.sendingText = null;
+                        }
+                        SendMessagesHelper.prepareSendingPhotos(null, this.photoPathsArray, dialog_id, null, captions, null, null, false, null);
+                    }
+                    if (this.sendingText != null) {
+                        SendMessagesHelper.prepareSendingText(this.sendingText, dialog_id);
+                    }
+                    if (!(this.documentsPathsArray == null && this.documentsUrisArray == null)) {
+                        SendMessagesHelper.prepareSendingDocuments(this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, this.documentsMimeType, dialog_id, null, null);
+                    }
+                    if (!(this.contactsToSend == null || this.contactsToSend.isEmpty())) {
+                        Iterator it = this.contactsToSend.iterator();
+                        while (it.hasNext()) {
+                            SendMessagesHelper.getInstance().sendMessage((User) it.next(), dialog_id, null, null, null);
+                        }
+                    }
                 }
                 this.photoPathsArray = null;
                 this.videoPath = null;
@@ -2213,7 +2228,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
 
     protected void onDestroy() {
         PhotoViewer.getInstance().destroyPhotoViewer();
-        SecretPhotoViewer.getInstance().destroyPhotoViewer();
+        SecretMediaViewer.getInstance().destroyPhotoViewer();
         ArticleViewer.getInstance().destroyArticleViewer();
         StickerPreviewViewer.getInstance().destroy();
         PipRoundVideoView pipRoundVideoView = PipRoundVideoView.getInstance();
@@ -2240,12 +2255,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         }
         try {
             if (this.onGlobalLayoutListener != null) {
-                View view = getWindow().getDecorView().getRootView();
-                if (VERSION.SDK_INT < 16) {
-                    view.getViewTreeObserver().removeGlobalOnLayoutListener(this.onGlobalLayoutListener);
-                } else {
-                    view.getViewTreeObserver().removeOnGlobalLayoutListener(this.onGlobalLayoutListener);
-                }
+                getWindow().getDecorView().getRootView().getViewTreeObserver().removeOnGlobalLayoutListener(this.onGlobalLayoutListener);
             }
         } catch (Throwable e2) {
             FileLog.e(e2);
@@ -2758,6 +2768,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     public void onBackPressed() {
         if (this.passcodeView.getVisibility() == 0) {
             finish();
+        } else if (SecretMediaViewer.getInstance().isVisible()) {
+            SecretMediaViewer.getInstance().closePhoto(true, false);
         } else if (PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().closePhoto(true, false);
         } else if (ArticleViewer.getInstance().isVisible()) {
@@ -2819,7 +2831,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     }
 
     public boolean onPreIme() {
-        if (PhotoViewer.getInstance().isVisible()) {
+        if (SecretMediaViewer.getInstance().isVisible()) {
+            SecretMediaViewer.getInstance().closePhoto(true, false);
+            return true;
+        } else if (PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().closePhoto(true, false);
             return true;
         } else if (!ArticleViewer.getInstance().isVisible()) {
@@ -2830,7 +2845,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         }
     }
 
-    public boolean onKeyUp(int keyCode, @NonNull KeyEvent event) {
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == 82 && !UserConfig.isWaitingForPasscodeEnter) {
             if (PhotoViewer.getInstance().isVisible()) {
                 return super.onKeyUp(keyCode, event);

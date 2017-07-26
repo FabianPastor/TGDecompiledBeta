@@ -1,18 +1,29 @@
 package com.google.android.gms.internal;
 
-import java.lang.ref.WeakReference;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
 
-final class zzbcu extends zzbdk {
-    private WeakReference<zzbco> zzaDR;
+final class zzbcu extends Handler {
+    private /* synthetic */ zzbcp zzaDN;
 
-    zzbcu(zzbco com_google_android_gms_internal_zzbco) {
-        this.zzaDR = new WeakReference(com_google_android_gms_internal_zzbco);
+    zzbcu(zzbcp com_google_android_gms_internal_zzbcp, Looper looper) {
+        this.zzaDN = com_google_android_gms_internal_zzbcp;
+        super(looper);
     }
 
-    public final void zzpA() {
-        zzbco com_google_android_gms_internal_zzbco = (zzbco) this.zzaDR.get();
-        if (com_google_android_gms_internal_zzbco != null) {
-            com_google_android_gms_internal_zzbco.resume();
+    public final void handleMessage(Message message) {
+        switch (message.what) {
+            case 1:
+                this.zzaDN.zzqd();
+                return;
+            case 2:
+                this.zzaDN.resume();
+                return;
+            default:
+                Log.w("GoogleApiClientImpl", "Unknown message id: " + message.what);
+                return;
         }
     }
 }

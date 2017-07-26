@@ -7,15 +7,15 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.MainThread;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import com.google.android.gms.internal.zzciv;
-import com.google.android.gms.internal.zzciy;
+import com.google.android.gms.internal.zzciw;
+import com.google.android.gms.internal.zzciz;
 
-public final class AppMeasurementService extends Service implements zzciy {
-    private zzciv zzbop;
+public final class AppMeasurementService extends Service implements zzciz {
+    private zzciw zzbop;
 
-    private final zzciv zzwm() {
+    private final zzciw zzwm() {
         if (this.zzbop == null) {
-            this.zzbop = new zzciv(this);
+            this.zzbop = new zzciw(this);
         }
         return this.zzbop;
     }

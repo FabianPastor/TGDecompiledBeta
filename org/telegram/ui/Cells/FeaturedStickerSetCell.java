@@ -151,13 +151,13 @@ public class FeaturedStickerSetCell extends FrameLayout {
                 }
             }
         };
-        this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
         this.addButton.setGravity(17);
         this.addButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
         this.addButton.setTextSize(1, 14.0f);
         this.addButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.addButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
         this.addButton.setText(LocaleController.getString("Add", R.string.Add).toUpperCase());
+        this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
         view = this.addButton;
         if (!LocaleController.isRTL) {
             i3 = 5;

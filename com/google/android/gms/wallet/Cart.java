@@ -10,51 +10,51 @@ import java.util.List;
 
 public final class Cart extends zza implements ReflectedParcelable {
     public static final Creator<Cart> CREATOR = new zzd();
-    String zzbOk;
-    String zzbOl;
-    ArrayList<LineItem> zzbOm;
+    String zzbOm;
+    String zzbOn;
+    ArrayList<LineItem> zzbOo;
 
     public final class Builder {
-        private /* synthetic */ Cart zzbOn;
+        private /* synthetic */ Cart zzbOp;
 
         private Builder(Cart cart) {
-            this.zzbOn = cart;
+            this.zzbOp = cart;
         }
 
         public final Builder addLineItem(LineItem lineItem) {
-            this.zzbOn.zzbOm.add(lineItem);
+            this.zzbOp.zzbOo.add(lineItem);
             return this;
         }
 
         public final Cart build() {
-            return this.zzbOn;
+            return this.zzbOp;
         }
 
         public final Builder setCurrencyCode(String str) {
-            this.zzbOn.zzbOl = str;
+            this.zzbOp.zzbOn = str;
             return this;
         }
 
         public final Builder setLineItems(List<LineItem> list) {
-            this.zzbOn.zzbOm.clear();
-            this.zzbOn.zzbOm.addAll(list);
+            this.zzbOp.zzbOo.clear();
+            this.zzbOp.zzbOo.addAll(list);
             return this;
         }
 
         public final Builder setTotalPrice(String str) {
-            this.zzbOn.zzbOk = str;
+            this.zzbOp.zzbOm = str;
             return this;
         }
     }
 
     Cart() {
-        this.zzbOm = new ArrayList();
+        this.zzbOo = new ArrayList();
     }
 
     Cart(String str, String str2, ArrayList<LineItem> arrayList) {
-        this.zzbOk = str;
-        this.zzbOl = str2;
-        this.zzbOm = arrayList;
+        this.zzbOm = str;
+        this.zzbOn = str2;
+        this.zzbOo = arrayList;
     }
 
     public static Builder newBuilder() {
@@ -64,22 +64,22 @@ public final class Cart extends zza implements ReflectedParcelable {
     }
 
     public final String getCurrencyCode() {
-        return this.zzbOl;
+        return this.zzbOn;
     }
 
     public final ArrayList<LineItem> getLineItems() {
-        return this.zzbOm;
+        return this.zzbOo;
     }
 
     public final String getTotalPrice() {
-        return this.zzbOk;
+        return this.zzbOm;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
         int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.zzbOk, false);
-        zzd.zza(parcel, 3, this.zzbOl, false);
-        zzd.zzc(parcel, 4, this.zzbOm, false);
+        zzd.zza(parcel, 2, this.zzbOm, false);
+        zzd.zza(parcel, 3, this.zzbOn, false);
+        zzd.zzc(parcel, 4, this.zzbOo, false);
         zzd.zzI(parcel, zze);
     }
 }

@@ -74,13 +74,15 @@ public class AboutLinkCell extends FrameLayout {
         invalidate();
     }
 
-    public void setTextAndIcon(String text, int resId) {
+    public void setTextAndIcon(String text, int resId, boolean parseLinks) {
         if (text == null || text.length() == 0) {
             setVisibility(8);
         } else if (text == null || this.oldText == null || !text.equals(this.oldText)) {
             this.oldText = text;
             this.stringBuilder = new SpannableStringBuilder(this.oldText);
-            MessageObject.addLinks(false, this.stringBuilder, false);
+            if (parseLinks) {
+                MessageObject.addLinks(false, this.stringBuilder, false);
+            }
             Emoji.replaceEmoji(this.stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             requestLayout();
             if (resId == 0) {

@@ -1,4 +1,7 @@
 package com.google.android.gms.internal;
 
-interface zzbfe {
+final class zzbfe extends zzbez<String> {
+    zzbfe(String str, String str2) {
+        super(str, str2);
+    }
 }

@@ -6,7 +6,7 @@ import java.util.Set;
 
 public final class zzw implements CapabilityInfo {
     private final String mName;
-    private final Set<Node> zzbRY;
+    private final Set<Node> zzbSa;
 
     public zzw(CapabilityInfo capabilityInfo) {
         this(capabilityInfo.getName(), capabilityInfo.getNodes());
@@ -14,7 +14,7 @@ public final class zzw implements CapabilityInfo {
 
     private zzw(String str, Set<Node> set) {
         this.mName = str;
-        this.zzbRY = set;
+        this.zzbSa = set;
     }
 
     public final String getName() {
@@ -22,6 +22,6 @@ public final class zzw implements CapabilityInfo {
     }
 
     public final Set<Node> getNodes() {
-        return this.zzbRY;
+        return this.zzbSa;
     }
 }

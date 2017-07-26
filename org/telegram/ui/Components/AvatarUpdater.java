@@ -85,7 +85,7 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
         if (VERSION.SDK_INT < 23 || this.parentFragment == null || this.parentFragment.getParentActivity() == null || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
             PhotoAlbumPickerActivity fragment = new PhotoAlbumPickerActivity(true, false, false, null);
             fragment.setDelegate(new PhotoAlbumPickerActivityDelegate() {
-                public void didSelectPhotos(ArrayList<String> photos, ArrayList<String> arrayList, ArrayList<PhotoEntry> arrayList2, ArrayList<ArrayList<InputDocument>> arrayList3, ArrayList<SearchImage> arrayList4) {
+                public void didSelectPhotos(ArrayList<String> photos, ArrayList<String> arrayList, ArrayList<Integer> arrayList2, ArrayList<PhotoEntry> arrayList3, ArrayList<ArrayList<InputDocument>> arrayList4, ArrayList<SearchImage> arrayList5) {
                     if (!photos.isEmpty()) {
                         AvatarUpdater.this.processBitmap(ImageLoader.loadBitmap((String) photos.get(0), null, 800.0f, 800.0f, true));
                     }
@@ -99,9 +99,6 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
                     } catch (Throwable e) {
                         FileLog.e(e);
                     }
-                }
-
-                public void didSelectVideo(String path, VideoEditedInfo info, long estimatedSize, long estimatedDuration, String caption) {
                 }
             });
             this.parentFragment.presentFragment(fragment);

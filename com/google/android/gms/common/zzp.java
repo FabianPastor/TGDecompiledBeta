@@ -6,7 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 import com.google.android.gms.common.internal.zzbo;
-import com.google.android.gms.internal.zzbgz;
+import com.google.android.gms.internal.zzbha;
 
 public class zzp {
     private static zzp zzaAu;
@@ -78,7 +78,7 @@ public class zzp {
 
     private final boolean zzct(String str) {
         try {
-            PackageInfo packageInfo = zzbgz.zzaP(this.mContext).getPackageInfo(str, 64);
+            PackageInfo packageInfo = zzbha.zzaP(this.mContext).getPackageInfo(str, 64);
             if (packageInfo == null) {
                 return false;
             }
@@ -97,7 +97,7 @@ public class zzp {
 
     @Deprecated
     public final boolean zza(PackageManager packageManager, int i) {
-        String[] packagesForUid = zzbgz.zzaP(this.mContext).getPackagesForUid(i);
+        String[] packagesForUid = zzbha.zzaP(this.mContext).getPackagesForUid(i);
         if (packagesForUid == null || packagesForUid.length == 0) {
             return false;
         }

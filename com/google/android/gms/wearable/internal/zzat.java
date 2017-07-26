@@ -8,15 +8,15 @@ import java.io.OutputStream;
 
 final class zzat implements GetOutputStreamResult {
     private final Status mStatus;
-    private final OutputStream zzbSn;
+    private final OutputStream zzbSp;
 
     zzat(Status status, OutputStream outputStream) {
         this.mStatus = (Status) zzbo.zzu(status);
-        this.zzbSn = outputStream;
+        this.zzbSp = outputStream;
     }
 
     public final OutputStream getOutputStream() {
-        return this.zzbSn;
+        return this.zzbSp;
     }
 
     public final Status getStatus() {
@@ -24,9 +24,9 @@ final class zzat implements GetOutputStreamResult {
     }
 
     public final void release() {
-        if (this.zzbSn != null) {
+        if (this.zzbSp != null) {
             try {
-                this.zzbSn.close();
+                this.zzbSp.close();
             } catch (IOException e) {
             }
         }

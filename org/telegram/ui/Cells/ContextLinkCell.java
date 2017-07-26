@@ -34,6 +34,7 @@ import org.telegram.tgnet.TLRPC.BotInlineResult;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.FileLocation;
+import org.telegram.tgnet.TLRPC.MessageMedia;
 import org.telegram.tgnet.TLRPC.Peer;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_botInlineMessageMediaGeo;
@@ -244,14 +245,14 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                     } else {
                         fileLocation = null;
                     }
-                    imageReceiver.setImage(tLObject, null, fileLocation, currentPhotoFilter, this.documentAttach.size, ext, false);
+                    imageReceiver.setImage(tLObject, null, fileLocation, currentPhotoFilter, this.documentAttach.size, ext, 0);
                 } else {
-                    this.linkImageView.setImage(null, url, null, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, currentPhotoFilter, -1, ext, true);
+                    this.linkImageView.setImage(null, url, null, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, currentPhotoFilter, -1, ext, 1);
                 }
             } else if (this.currentPhotoObject != null) {
-                this.linkImageView.setImage(this.currentPhotoObject.location, currentPhotoFilter, currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, currentPhotoFilterThumb, this.currentPhotoObject.size, ext, false);
+                this.linkImageView.setImage(this.currentPhotoObject.location, currentPhotoFilter, currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, currentPhotoFilterThumb, this.currentPhotoObject.size, ext, 0);
             } else {
-                this.linkImageView.setImage(null, url, currentPhotoFilter, null, currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, currentPhotoFilterThumb, -1, ext, true);
+                this.linkImageView.setImage(null, url, currentPhotoFilter, null, currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, currentPhotoFilterThumb, -1, ext, 1);
             }
             this.drawLinkImageView = true;
         }
@@ -323,6 +324,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             message.date = (int) (System.currentTimeMillis() / 1000);
             message.message = "-1";
             message.media = new TL_messageMediaDocument();
+            MessageMedia messageMedia = message.media;
+            messageMedia.flags |= 3;
             message.media.document = new TL_document();
             message.flags |= 768;
             if (this.documentAttach != null) {
@@ -507,7 +510,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         } else if (this.buttonState == 2) {
             this.radialProgress.setProgress(0.0f, false);
             if (this.documentAttach != null) {
-                FileLoader.getInstance().loadFile(this.documentAttach, true, false);
+                FileLoader.getInstance().loadFile(this.documentAttach, true, 0);
             } else {
                 ImageLoader.getInstance().loadHttpFile(this.inlineResult.content_url, this.documentAttachType == 5 ? "mp3" : "ogg");
             }

@@ -1,12 +1,12 @@
 package com.google.android.gms.common.images;
 
 public final class Size {
-    private final int zzrY;
-    private final int zzrZ;
+    private final int zzrW;
+    private final int zzrX;
 
     public Size(int i, int i2) {
-        this.zzrY = i;
-        this.zzrZ = i2;
+        this.zzrW = i;
+        this.zzrX = i2;
     }
 
     public static Size parseSize(String str) throws NumberFormatException {
@@ -42,23 +42,23 @@ public final class Size {
             return false;
         }
         Size size = (Size) obj;
-        return this.zzrY == size.zzrY && this.zzrZ == size.zzrZ;
+        return this.zzrW == size.zzrW && this.zzrX == size.zzrX;
     }
 
     public final int getHeight() {
-        return this.zzrZ;
+        return this.zzrX;
     }
 
     public final int getWidth() {
-        return this.zzrY;
+        return this.zzrW;
     }
 
     public final int hashCode() {
-        return this.zzrZ ^ ((this.zzrY << 16) | (this.zzrY >>> 16));
+        return this.zzrX ^ ((this.zzrW << 16) | (this.zzrW >>> 16));
     }
 
     public final String toString() {
-        int i = this.zzrY;
-        return i + "x" + this.zzrZ;
+        int i = this.zzrW;
+        return i + "x" + this.zzrX;
     }
 }

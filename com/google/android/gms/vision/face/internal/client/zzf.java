@@ -6,7 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.RemoteException;
 import com.google.android.gms.dynamic.IObjectWrapper;
-import com.google.android.gms.internal.fb;
+import com.google.android.gms.internal.fc;
 import com.google.android.gms.internal.zzed;
 import com.google.android.gms.internal.zzef;
 
@@ -15,7 +15,7 @@ public final class zzf extends zzed implements zze {
         super(iBinder, "com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
     }
 
-    public final void zzDO() throws RemoteException {
+    public final void zzDP() throws RemoteException {
         zzb(3, zzZ());
     }
 
@@ -28,10 +28,10 @@ public final class zzf extends zzed implements zze {
         return zza;
     }
 
-    public final FaceParcel[] zzc(IObjectWrapper iObjectWrapper, fb fbVar) throws RemoteException {
+    public final FaceParcel[] zzc(IObjectWrapper iObjectWrapper, fc fcVar) throws RemoteException {
         Parcel zzZ = zzZ();
         zzef.zza(zzZ, (IInterface) iObjectWrapper);
-        zzef.zza(zzZ, (Parcelable) fbVar);
+        zzef.zza(zzZ, (Parcelable) fcVar);
         Parcel zza = zza(1, zzZ);
         FaceParcel[] faceParcelArr = (FaceParcel[]) zza.createTypedArray(FaceParcel.CREATOR);
         zza.recycle();

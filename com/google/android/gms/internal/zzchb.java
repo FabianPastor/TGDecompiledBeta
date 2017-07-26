@@ -1,20 +1,18 @@
 package com.google.android.gms.internal;
 
-import java.util.concurrent.Callable;
-
-final class zzchb implements Callable<byte[]> {
+final class zzchb implements Runnable {
     private /* synthetic */ String zzbjh;
-    private /* synthetic */ zzcgp zzbtf;
-    private /* synthetic */ zzcey zzbtj;
+    private /* synthetic */ zzcgq zzbtf;
+    private /* synthetic */ zzcez zzbtj;
 
-    zzchb(zzcgp com_google_android_gms_internal_zzcgp, zzcey com_google_android_gms_internal_zzcey, String str) {
-        this.zzbtf = com_google_android_gms_internal_zzcgp;
-        this.zzbtj = com_google_android_gms_internal_zzcey;
+    zzchb(zzcgq com_google_android_gms_internal_zzcgq, zzcez com_google_android_gms_internal_zzcez, String str) {
+        this.zzbtf = com_google_android_gms_internal_zzcgq;
+        this.zzbtj = com_google_android_gms_internal_zzcez;
         this.zzbjh = str;
     }
 
-    public final /* synthetic */ Object call() throws Exception {
+    public final void run() {
         this.zzbtf.zzboe.zzze();
-        return this.zzbtf.zzboe.zza(this.zzbtj, this.zzbjh);
+        this.zzbtf.zzboe.zzb(this.zzbtj, this.zzbjh);
     }
 }

@@ -16,7 +16,7 @@ import java.util.Map.Entry;
 public final class zzcb extends zza implements DataItem {
     public static final Creator<zzcb> CREATOR = new zzcc();
     private final Uri mUri;
-    private final Map<String, DataItemAsset> zzbSC;
+    private final Map<String, DataItemAsset> zzbSE;
     private byte[] zzbdY;
 
     zzcb(Uri uri, Bundle bundle, byte[] bArr) {
@@ -26,7 +26,7 @@ public final class zzcb extends zza implements DataItem {
         for (String str : bundle.keySet()) {
             hashMap.put(str, (DataItemAssetParcelable) bundle.getParcelable(str));
         }
-        this.zzbSC = hashMap;
+        this.zzbSE = hashMap;
         this.zzbdY = bArr;
     }
 
@@ -35,7 +35,7 @@ public final class zzcb extends zza implements DataItem {
     }
 
     public final Map<String, DataItemAsset> getAssets() {
-        return this.zzbSC;
+        return this.zzbSE;
     }
 
     public final byte[] getData() {
@@ -62,13 +62,13 @@ public final class zzcb extends zza implements DataItem {
         stringBuilder.append(Integer.toHexString(hashCode()));
         String valueOf = String.valueOf(this.zzbdY == null ? "null" : Integer.valueOf(this.zzbdY.length));
         stringBuilder.append(new StringBuilder(String.valueOf(valueOf).length() + 8).append(",dataSz=").append(valueOf).toString());
-        stringBuilder.append(", numAssets=" + this.zzbSC.size());
+        stringBuilder.append(", numAssets=" + this.zzbSE.size());
         valueOf = String.valueOf(this.mUri);
         stringBuilder.append(new StringBuilder(String.valueOf(valueOf).length() + 6).append(", uri=").append(valueOf).toString());
         if (isLoggable) {
             stringBuilder.append("]\n  assets: ");
-            for (String valueOf2 : this.zzbSC.keySet()) {
-                String valueOf3 = String.valueOf(this.zzbSC.get(valueOf2));
+            for (String valueOf2 : this.zzbSE.keySet()) {
+                String valueOf3 = String.valueOf(this.zzbSE.get(valueOf2));
                 stringBuilder.append(new StringBuilder((String.valueOf(valueOf2).length() + 7) + String.valueOf(valueOf3).length()).append("\n    ").append(valueOf2).append(": ").append(valueOf3).toString());
             }
             stringBuilder.append("\n  ]");
@@ -83,7 +83,7 @@ public final class zzcb extends zza implements DataItem {
         zzd.zza(parcel, 2, getUri(), i, false);
         Bundle bundle = new Bundle();
         bundle.setClassLoader(DataItemAssetParcelable.class.getClassLoader());
-        for (Entry entry : this.zzbSC.entrySet()) {
+        for (Entry entry : this.zzbSE.entrySet()) {
             bundle.putParcelable((String) entry.getKey(), new DataItemAssetParcelable((DataItemAsset) entry.getValue()));
         }
         zzd.zza(parcel, 4, bundle, false);

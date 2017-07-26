@@ -1,60 +1,26 @@
 package com.google.android.gms.internal;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.MainThread;
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
+import android.support.v4.app.FragmentActivity;
+import com.google.android.gms.common.internal.zzbo;
 
-public class zzbdr {
-    protected final zzbds zzaEG;
+public final class zzbdr {
+    private final Object zzaEF;
 
-    protected zzbdr(zzbds com_google_android_gms_internal_zzbds) {
-        this.zzaEG = com_google_android_gms_internal_zzbds;
+    public zzbdr(Activity activity) {
+        zzbo.zzb((Object) activity, (Object) "Activity must not be null");
+        this.zzaEF = activity;
     }
 
-    protected static zzbds zzb(zzbdq com_google_android_gms_internal_zzbdq) {
-        return com_google_android_gms_internal_zzbdq.zzqC() ? zzben.zza(com_google_android_gms_internal_zzbdq.zzqE()) : zzbdt.zzo(com_google_android_gms_internal_zzbdq.zzqD());
+    public final boolean zzqC() {
+        return this.zzaEF instanceof FragmentActivity;
     }
 
-    public static zzbds zzn(Activity activity) {
-        return zzb(new zzbdq(activity));
+    public final Activity zzqD() {
+        return (Activity) this.zzaEF;
     }
 
-    @MainThread
-    public void dump(String str, FileDescriptor fileDescriptor, PrintWriter printWriter, String[] strArr) {
-    }
-
-    public final Activity getActivity() {
-        return this.zzaEG.zzqF();
-    }
-
-    @MainThread
-    public void onActivityResult(int i, int i2, Intent intent) {
-    }
-
-    @MainThread
-    public void onCreate(Bundle bundle) {
-    }
-
-    @MainThread
-    public void onDestroy() {
-    }
-
-    @MainThread
-    public void onResume() {
-    }
-
-    @MainThread
-    public void onSaveInstanceState(Bundle bundle) {
-    }
-
-    @MainThread
-    public void onStart() {
-    }
-
-    @MainThread
-    public void onStop() {
+    public final FragmentActivity zzqE() {
+        return (FragmentActivity) this.zzaEF;
     }
 }

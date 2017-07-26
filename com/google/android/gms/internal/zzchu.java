@@ -1,19 +1,21 @@
 package com.google.android.gms.internal;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 final class zzchu implements Runnable {
-    private /* synthetic */ zzchk zzbtt;
-    private /* synthetic */ AtomicReference zzbtv;
-    private /* synthetic */ boolean zzbtw;
+    private /* synthetic */ String val$name;
+    private /* synthetic */ Object zzbtD;
+    private /* synthetic */ String zzbth;
+    private /* synthetic */ zzchl zzbtt;
+    private /* synthetic */ long zzbty;
 
-    zzchu(zzchk com_google_android_gms_internal_zzchk, AtomicReference atomicReference, boolean z) {
-        this.zzbtt = com_google_android_gms_internal_zzchk;
-        this.zzbtv = atomicReference;
-        this.zzbtw = z;
+    zzchu(zzchl com_google_android_gms_internal_zzchl, String str, String str2, Object obj, long j) {
+        this.zzbtt = com_google_android_gms_internal_zzchl;
+        this.zzbth = str;
+        this.val$name = str2;
+        this.zzbtD = obj;
+        this.zzbty = j;
     }
 
     public final void run() {
-        this.zzbtt.zzww().zza(this.zzbtv, this.zzbtw);
+        this.zzbtt.zza(this.zzbth, this.val$name, this.zzbtD, this.zzbty);
     }
 }

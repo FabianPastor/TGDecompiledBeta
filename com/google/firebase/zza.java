@@ -1,8 +1,8 @@
 package com.google.firebase;
 
-import com.google.android.gms.internal.zzbaw;
+import com.google.android.gms.internal.zzbax;
 
-final class zza implements zzbaw {
+final class zza implements zzbax {
     zza() {
     }
 

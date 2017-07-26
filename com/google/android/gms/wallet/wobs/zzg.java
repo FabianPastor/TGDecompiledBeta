@@ -9,25 +9,25 @@ public final class zzg extends zza {
     public static final Creator<zzg> CREATOR = new zzj();
     private String label;
     private String type;
-    private zzm zzbPc;
-    private zzh zzbQI;
+    private zzm zzbPe;
+    private zzh zzbQK;
 
     zzg() {
     }
 
     zzg(String str, zzh com_google_android_gms_wallet_wobs_zzh, String str2, zzm com_google_android_gms_wallet_wobs_zzm) {
         this.label = str;
-        this.zzbQI = com_google_android_gms_wallet_wobs_zzh;
+        this.zzbQK = com_google_android_gms_wallet_wobs_zzh;
         this.type = str2;
-        this.zzbPc = com_google_android_gms_wallet_wobs_zzm;
+        this.zzbPe = com_google_android_gms_wallet_wobs_zzm;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
         int zze = zzd.zze(parcel);
         zzd.zza(parcel, 2, this.label, false);
-        zzd.zza(parcel, 3, this.zzbQI, i, false);
+        zzd.zza(parcel, 3, this.zzbQK, i, false);
         zzd.zza(parcel, 4, this.type, false);
-        zzd.zza(parcel, 5, this.zzbPc, i, false);
+        zzd.zza(parcel, 5, this.zzbPe, i, false);
         zzd.zzI(parcel, zze);
     }
 }

@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.internal.zzbda;
+import com.google.android.gms.internal.zzbdb;
 
 public class GoogleApiActivity extends Activity implements OnCancelListener {
     private int zzaAR = 0;
@@ -34,7 +34,7 @@ public class GoogleApiActivity extends Activity implements OnCancelListener {
             this.zzaAR = 0;
             setResult(i2, intent);
             if (booleanExtra) {
-                zzbda zzay = zzbda.zzay(this);
+                zzbdb zzay = zzbdb.zzay(this);
                 switch (i2) {
                     case -1:
                         zzay.zzps();

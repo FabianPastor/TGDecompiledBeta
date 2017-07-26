@@ -575,7 +575,6 @@ public class ChannelRightsEditActivity extends BaseFragment {
                 } else if (position == ChannelRightsEditActivity.this.removeAdminRow) {
                     if (ChannelRightsEditActivity.this.currentType == 0) {
                         MessagesController.setUserAdminRole(ChannelRightsEditActivity.this.chatId, ChannelRightsEditActivity.this.currentUser, new TL_channelAdminRights(), ChannelRightsEditActivity.this.isMegagroup, ChannelRightsEditActivity.this.getFragmentForAlert(0));
-                        ChannelRightsEditActivity.this.finishFragment();
                     } else if (ChannelRightsEditActivity.this.currentType == 1) {
                         ChannelRightsEditActivity.this.bannedRights = new TL_channelBannedRights();
                         ChannelRightsEditActivity.this.bannedRights.view_messages = true;
@@ -588,11 +587,11 @@ public class ChannelRightsEditActivity extends BaseFragment {
                         ChannelRightsEditActivity.this.bannedRights.embed_links = true;
                         ChannelRightsEditActivity.this.bannedRights.until_date = 0;
                         MessagesController.setUserBannedRole(ChannelRightsEditActivity.this.chatId, ChannelRightsEditActivity.this.currentUser, ChannelRightsEditActivity.this.bannedRights, ChannelRightsEditActivity.this.isMegagroup, ChannelRightsEditActivity.this.getFragmentForAlert(0));
-                        ChannelRightsEditActivity.this.finishFragment();
                     }
                     if (ChannelRightsEditActivity.this.delegate != null) {
                         ChannelRightsEditActivity.this.delegate.didSetRights(0, ChannelRightsEditActivity.this.adminRights, ChannelRightsEditActivity.this.bannedRights);
                     }
+                    ChannelRightsEditActivity.this.finishFragment();
                 } else if (position == ChannelRightsEditActivity.this.untilDateRow) {
                     if (ChannelRightsEditActivity.this.getParentActivity() != null) {
                         Calendar calendar = Calendar.getInstance();

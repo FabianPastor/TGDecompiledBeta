@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 public final class zzbgr implements Creator<zzbgo> {
     public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        ArrayList arrayList = null;
+        String str = null;
         int zzd = zzb.zzd(parcel);
         int i = 0;
-        String str = null;
+        ArrayList arrayList = null;
         while (parcel.dataPosition() < zzd) {
             int readInt = parcel.readInt();
             switch (SupportMenu.USER_MASK & readInt) {
@@ -19,10 +19,10 @@ public final class zzbgr implements Creator<zzbgo> {
                     i = zzb.zzg(parcel, readInt);
                     break;
                 case 2:
-                    str = zzb.zzq(parcel, readInt);
+                    arrayList = zzb.zzc(parcel, readInt, zzbgp.CREATOR);
                     break;
                 case 3:
-                    arrayList = zzb.zzc(parcel, readInt, zzbgp.CREATOR);
+                    str = zzb.zzq(parcel, readInt);
                     break;
                 default:
                     zzb.zzb(parcel, readInt);
@@ -30,7 +30,7 @@ public final class zzbgr implements Creator<zzbgo> {
             }
         }
         zzb.zzF(parcel, zzd);
-        return new zzbgo(i, str, arrayList);
+        return new zzbgo(i, arrayList, str);
     }
 
     public final /* synthetic */ Object[] newArray(int i) {

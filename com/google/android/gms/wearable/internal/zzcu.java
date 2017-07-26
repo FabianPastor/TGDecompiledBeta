@@ -10,17 +10,17 @@ import com.google.android.gms.wearable.ConnectionConfiguration;
 public final class zzcu extends zza {
     public static final Creator<zzcu> CREATOR = new zzcv();
     private int statusCode;
-    private ConnectionConfiguration zzbSK;
+    private ConnectionConfiguration zzbSM;
 
     public zzcu(int i, ConnectionConfiguration connectionConfiguration) {
         this.statusCode = i;
-        this.zzbSK = connectionConfiguration;
+        this.zzbSM = connectionConfiguration;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
         int zze = zzd.zze(parcel);
         zzd.zzc(parcel, 2, this.statusCode);
-        zzd.zza(parcel, 3, this.zzbSK, i, false);
+        zzd.zza(parcel, 3, this.zzbSM, i, false);
         zzd.zzI(parcel, zze);
     }
 }

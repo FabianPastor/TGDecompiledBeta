@@ -1,17 +1,13 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.common.ConnectionResult;
-
 final class zzbdf implements Runnable {
-    private /* synthetic */ zzbdc zzaEv;
-    private /* synthetic */ ConnectionResult zzaEw;
+    private /* synthetic */ zzbdd zzaEv;
 
-    zzbdf(zzbdc com_google_android_gms_internal_zzbdc, ConnectionResult connectionResult) {
-        this.zzaEv = com_google_android_gms_internal_zzbdc;
-        this.zzaEw = connectionResult;
+    zzbdf(zzbdd com_google_android_gms_internal_zzbdd) {
+        this.zzaEv = com_google_android_gms_internal_zzbdd;
     }
 
     public final void run() {
-        this.zzaEv.onConnectionFailed(this.zzaEw);
+        this.zzaEv.zzqr();
     }
 }

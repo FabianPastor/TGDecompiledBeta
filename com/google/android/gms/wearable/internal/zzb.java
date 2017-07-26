@@ -6,18 +6,18 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.internal.zzbo;
-import com.google.android.gms.internal.zzbdv;
+import com.google.android.gms.internal.zzbdw;
 
 final class zzb<T> extends zzn<Status> {
     private T mListener;
-    private zzbdv<T> zzaEU;
-    private zzc<T> zzbRG;
+    private zzbdw<T> zzaEU;
+    private zzc<T> zzbRI;
 
-    private zzb(GoogleApiClient googleApiClient, T t, zzbdv<T> com_google_android_gms_internal_zzbdv_T, zzc<T> com_google_android_gms_wearable_internal_zzc_T) {
+    private zzb(GoogleApiClient googleApiClient, T t, zzbdw<T> com_google_android_gms_internal_zzbdw_T, zzc<T> com_google_android_gms_wearable_internal_zzc_T) {
         super(googleApiClient);
         this.mListener = zzbo.zzu(t);
-        this.zzaEU = (zzbdv) zzbo.zzu(com_google_android_gms_internal_zzbdv_T);
-        this.zzbRG = (zzc) zzbo.zzu(com_google_android_gms_wearable_internal_zzc_T);
+        this.zzaEU = (zzbdw) zzbo.zzu(com_google_android_gms_internal_zzbdw_T);
+        this.zzbRI = (zzc) zzbo.zzu(com_google_android_gms_wearable_internal_zzc_T);
     }
 
     static <T> PendingResult<Status> zza(GoogleApiClient googleApiClient, zzc<T> com_google_android_gms_wearable_internal_zzc_T, T t) {
@@ -25,7 +25,7 @@ final class zzb<T> extends zzn<Status> {
     }
 
     protected final /* synthetic */ void zza(com.google.android.gms.common.api.Api.zzb com_google_android_gms_common_api_Api_zzb) throws RemoteException {
-        this.zzbRG.zza((zzfw) com_google_android_gms_common_api_Api_zzb, this, this.mListener, this.zzaEU);
+        this.zzbRI.zza((zzfw) com_google_android_gms_common_api_Api_zzb, this, this.mListener, this.zzaEU);
         this.mListener = null;
         this.zzaEU = null;
     }

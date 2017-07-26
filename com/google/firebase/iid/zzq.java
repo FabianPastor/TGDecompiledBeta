@@ -15,24 +15,24 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public final class zzq {
-    private static zzq zzckI;
-    private final SimpleArrayMap<String, String> zzckJ = new SimpleArrayMap();
-    private Boolean zzckK = null;
+    private static zzq zzckM;
+    private final SimpleArrayMap<String, String> zzckN = new SimpleArrayMap();
+    private Boolean zzckO = null;
     @VisibleForTesting
-    final Queue<Intent> zzckL = new LinkedList();
+    final Queue<Intent> zzckP = new LinkedList();
     @VisibleForTesting
-    private Queue<Intent> zzckM = new LinkedList();
+    private Queue<Intent> zzckQ = new LinkedList();
 
     private zzq() {
     }
 
-    public static synchronized zzq zzJU() {
+    public static synchronized zzq zzJX() {
         zzq com_google_firebase_iid_zzq;
         synchronized (zzq.class) {
-            if (zzckI == null) {
-                zzckI = new zzq();
+            if (zzckM == null) {
+                zzckM = new zzq();
             }
-            com_google_firebase_iid_zzq = zzckI;
+            com_google_firebase_iid_zzq = zzckM;
         }
         return com_google_firebase_iid_zzq;
     }
@@ -55,17 +55,17 @@ public final class zzq {
     private final int zzf(Context context, Intent intent) {
         String str;
         ComponentName startWakefulService;
-        synchronized (this.zzckJ) {
-            str = (String) this.zzckJ.get(intent.getAction());
+        synchronized (this.zzckN) {
+            str = (String) this.zzckN.get(intent.getAction());
         }
         if (str == null) {
             ResolveInfo resolveService = context.getPackageManager().resolveService(intent, 0);
             if (resolveService == null || resolveService.serviceInfo == null) {
                 Log.e("FirebaseInstanceId", "Failed to resolve target intent service, skipping classname enforcement");
-                if (this.zzckK == null) {
-                    this.zzckK = Boolean.valueOf(context.checkCallingOrSelfPermission("android.permission.WAKE_LOCK") == 0);
+                if (this.zzckO == null) {
+                    this.zzckO = Boolean.valueOf(context.checkCallingOrSelfPermission("android.permission.WAKE_LOCK") == 0);
                 }
-                if (this.zzckK.booleanValue()) {
+                if (this.zzckO.booleanValue()) {
                     startWakefulService = WakefulBroadcastReceiver.startWakefulService(context, intent);
                 } else {
                     startWakefulService = context.startService(intent);
@@ -82,12 +82,12 @@ public final class zzq {
                 String valueOf = String.valueOf(serviceInfo.packageName);
                 str = String.valueOf(serviceInfo.name);
                 Log.e("FirebaseInstanceId", new StringBuilder((String.valueOf(valueOf).length() + 94) + String.valueOf(str).length()).append("Error resolving target intent service, skipping classname enforcement. Resolved service was: ").append(valueOf).append("/").append(str).toString());
-                if (this.zzckK == null) {
+                if (this.zzckO == null) {
                     if (context.checkCallingOrSelfPermission("android.permission.WAKE_LOCK") == 0) {
                     }
-                    this.zzckK = Boolean.valueOf(context.checkCallingOrSelfPermission("android.permission.WAKE_LOCK") == 0);
+                    this.zzckO = Boolean.valueOf(context.checkCallingOrSelfPermission("android.permission.WAKE_LOCK") == 0);
                 }
-                if (this.zzckK.booleanValue()) {
+                if (this.zzckO.booleanValue()) {
                     startWakefulService = context.startService(intent);
                     Log.d("FirebaseInstanceId", "Missing wake lock permission, service start may be delayed");
                 } else {
@@ -105,8 +105,8 @@ public final class zzq {
                 str = String.valueOf(str);
                 str = str.length() != 0 ? valueOf2.concat(str) : new String(valueOf2);
             }
-            synchronized (this.zzckJ) {
-                this.zzckJ.put(intent.getAction(), str);
+            synchronized (this.zzckN) {
+                this.zzckN.put(intent.getAction(), str);
             }
         }
         if (Log.isLoggable("FirebaseInstanceId", 3)) {
@@ -117,12 +117,12 @@ public final class zzq {
         }
         intent.setClassName(context.getPackageName(), str);
         try {
-            if (this.zzckK == null) {
+            if (this.zzckO == null) {
                 if (context.checkCallingOrSelfPermission("android.permission.WAKE_LOCK") == 0) {
                 }
-                this.zzckK = Boolean.valueOf(context.checkCallingOrSelfPermission("android.permission.WAKE_LOCK") == 0);
+                this.zzckO = Boolean.valueOf(context.checkCallingOrSelfPermission("android.permission.WAKE_LOCK") == 0);
             }
-            if (this.zzckK.booleanValue()) {
+            if (this.zzckO.booleanValue()) {
                 startWakefulService = WakefulBroadcastReceiver.startWakefulService(context, intent);
             } else {
                 startWakefulService = context.startService(intent);
@@ -143,8 +143,8 @@ public final class zzq {
         }
     }
 
-    public final Intent zzJV() {
-        return (Intent) this.zzckM.poll();
+    public final Intent zzJY() {
+        return (Intent) this.zzckQ.poll();
     }
 
     public final int zza(Context context, String str, Intent intent) {
@@ -165,10 +165,10 @@ public final class zzq {
         }
         switch (obj) {
             case null:
-                this.zzckL.offer(intent);
+                this.zzckP.offer(intent);
                 break;
             case 1:
-                this.zzckM.offer(intent);
+                this.zzckQ.offer(intent);
                 break;
             default:
                 String str2 = "FirebaseInstanceId";

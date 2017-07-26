@@ -4,12 +4,12 @@ import com.google.android.gms.wearable.CapabilityApi.CapabilityListener;
 import com.google.android.gms.wearable.CapabilityInfo;
 
 final class zzv implements CapabilityListener {
-    private CapabilityListener zzbRW;
-    private String zzbRX;
+    private CapabilityListener zzbRY;
+    private String zzbRZ;
 
     zzv(CapabilityListener capabilityListener, String str) {
-        this.zzbRW = capabilityListener;
-        this.zzbRX = str;
+        this.zzbRY = capabilityListener;
+        this.zzbRZ = str;
     }
 
     public final boolean equals(Object obj) {
@@ -20,14 +20,14 @@ final class zzv implements CapabilityListener {
             return false;
         }
         zzv com_google_android_gms_wearable_internal_zzv = (zzv) obj;
-        return this.zzbRW.equals(com_google_android_gms_wearable_internal_zzv.zzbRW) ? this.zzbRX.equals(com_google_android_gms_wearable_internal_zzv.zzbRX) : false;
+        return this.zzbRY.equals(com_google_android_gms_wearable_internal_zzv.zzbRY) ? this.zzbRZ.equals(com_google_android_gms_wearable_internal_zzv.zzbRZ) : false;
     }
 
     public final int hashCode() {
-        return (this.zzbRW.hashCode() * 31) + this.zzbRX.hashCode();
+        return (this.zzbRY.hashCode() * 31) + this.zzbRZ.hashCode();
     }
 
     public final void onCapabilityChanged(CapabilityInfo capabilityInfo) {
-        this.zzbRW.onCapabilityChanged(capabilityInfo);
+        this.zzbRY.onCapabilityChanged(capabilityInfo);
     }
 }

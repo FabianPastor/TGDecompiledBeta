@@ -1,121 +1,51 @@
 package com.google.android.gms.internal;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningAppProcessInfo;
-import android.app.Application;
-import android.app.Application.ActivityLifecycleCallbacks;
-import android.content.ComponentCallbacks2;
-import android.content.res.Configuration;
-import android.os.Bundle;
-import com.google.android.gms.common.util.zzq;
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
+import android.support.v4.util.ArrayMap;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApi;
+import com.google.android.gms.common.api.zza;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import java.util.Set;
 
-public final class zzbav implements ActivityLifecycleCallbacks, ComponentCallbacks2 {
-    private static final zzbav zzaBJ = new zzbav();
-    private final ArrayList<zzbaw> mListeners = new ArrayList();
-    private final AtomicBoolean zzaBK = new AtomicBoolean();
-    private final AtomicBoolean zzaBL = new AtomicBoolean();
-    private boolean zzafK = false;
+public final class zzbav {
+    private final ArrayMap<zzbat<?>, ConnectionResult> zzaAB = new ArrayMap();
+    private final TaskCompletionSource<Void> zzaBG = new TaskCompletionSource();
+    private int zzaBH;
+    private boolean zzaBI = false;
 
-    private zzbav() {
-    }
-
-    public static void zza(Application application) {
-        synchronized (zzaBJ) {
-            if (!zzaBJ.zzafK) {
-                application.registerActivityLifecycleCallbacks(zzaBJ);
-                application.registerComponentCallbacks(zzaBJ);
-                zzaBJ.zzafK = true;
-            }
+    public zzbav(Iterable<? extends GoogleApi<?>> iterable) {
+        for (GoogleApi zzph : iterable) {
+            this.zzaAB.put(zzph.zzph(), null);
         }
+        this.zzaBH = this.zzaAB.keySet().size();
     }
 
-    private final void zzac(boolean z) {
-        synchronized (zzaBJ) {
-            ArrayList arrayList = this.mListeners;
-            int size = arrayList.size();
-            int i = 0;
-            while (i < size) {
-                Object obj = arrayList.get(i);
-                i++;
-                ((zzbaw) obj).zzac(z);
-            }
+    public final Task<Void> getTask() {
+        return this.zzaBG.getTask();
+    }
+
+    public final void zza(zzbat<?> com_google_android_gms_internal_zzbat_, ConnectionResult connectionResult) {
+        this.zzaAB.put(com_google_android_gms_internal_zzbat_, connectionResult);
+        this.zzaBH--;
+        if (!connectionResult.isSuccess()) {
+            this.zzaBI = true;
         }
-    }
-
-    public static zzbav zzpv() {
-        return zzaBJ;
-    }
-
-    public final void onActivityCreated(Activity activity, Bundle bundle) {
-        boolean compareAndSet = this.zzaBK.compareAndSet(true, false);
-        this.zzaBL.set(true);
-        if (compareAndSet) {
-            zzac(false);
+        if (this.zzaBH != 0) {
+            return;
         }
-    }
-
-    public final void onActivityDestroyed(Activity activity) {
-    }
-
-    public final void onActivityPaused(Activity activity) {
-    }
-
-    public final void onActivityResumed(Activity activity) {
-        boolean compareAndSet = this.zzaBK.compareAndSet(true, false);
-        this.zzaBL.set(true);
-        if (compareAndSet) {
-            zzac(false);
+        if (this.zzaBI) {
+            this.zzaBG.setException(new zza(this.zzaAB));
+            return;
         }
+        this.zzaBG.setResult(null);
     }
 
-    public final void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+    public final Set<zzbat<?>> zzpt() {
+        return this.zzaAB.keySet();
     }
 
-    public final void onActivityStarted(Activity activity) {
-    }
-
-    public final void onActivityStopped(Activity activity) {
-    }
-
-    public final void onConfigurationChanged(Configuration configuration) {
-    }
-
-    public final void onLowMemory() {
-    }
-
-    public final void onTrimMemory(int i) {
-        if (i == 20 && this.zzaBK.compareAndSet(false, true)) {
-            this.zzaBL.set(true);
-            zzac(true);
-        }
-    }
-
-    public final void zza(zzbaw com_google_android_gms_internal_zzbaw) {
-        synchronized (zzaBJ) {
-            this.mListeners.add(com_google_android_gms_internal_zzbaw);
-        }
-    }
-
-    @TargetApi(16)
-    public final boolean zzab(boolean z) {
-        if (!this.zzaBL.get()) {
-            if (!zzq.zzrZ()) {
-                return true;
-            }
-            RunningAppProcessInfo runningAppProcessInfo = new RunningAppProcessInfo();
-            ActivityManager.getMyMemoryState(runningAppProcessInfo);
-            if (!this.zzaBL.getAndSet(true) && runningAppProcessInfo.importance > 100) {
-                this.zzaBK.set(true);
-            }
-        }
-        return this.zzaBK.get();
-    }
-
-    public final boolean zzpw() {
-        return this.zzaBK.get();
+    public final void zzpu() {
+        this.zzaBG.setResult(null);
     }
 }

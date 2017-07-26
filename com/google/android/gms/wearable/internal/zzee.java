@@ -7,15 +7,15 @@ import java.util.List;
 
 public final class zzee implements GetConnectedNodesResult {
     private final Status mStatus;
-    private final List<Node> zzbSW;
+    private final List<Node> zzbSY;
 
     public zzee(Status status, List<Node> list) {
         this.mStatus = status;
-        this.zzbSW = list;
+        this.zzbSY = list;
     }
 
     public final List<Node> getNodes() {
-        return this.zzbSW;
+        return this.zzbSY;
     }
 
     public final Status getStatus() {

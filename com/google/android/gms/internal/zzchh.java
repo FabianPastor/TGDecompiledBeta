@@ -1,106 +1,31 @@
 package com.google.android.gms.internal;
 
-import android.content.Context;
-import com.google.android.gms.common.internal.zzbo;
-import com.google.android.gms.common.util.zze;
+import com.google.android.gms.measurement.AppMeasurement.zzb;
 
-class zzchh {
-    protected final zzcgk zzboe;
+final class zzchh implements Runnable {
+    private /* synthetic */ String zzbjh;
+    private /* synthetic */ zzcgq zzbtf;
+    private /* synthetic */ String zzbtl;
+    private /* synthetic */ String zzbtm;
+    private /* synthetic */ long zzbtn;
 
-    zzchh(zzcgk com_google_android_gms_internal_zzcgk) {
-        zzbo.zzu(com_google_android_gms_internal_zzcgk);
-        this.zzboe = com_google_android_gms_internal_zzcgk;
+    zzchh(zzcgq com_google_android_gms_internal_zzcgq, String str, String str2, String str3, long j) {
+        this.zzbtf = com_google_android_gms_internal_zzcgq;
+        this.zzbtl = str;
+        this.zzbjh = str2;
+        this.zzbtm = str3;
+        this.zzbtn = j;
     }
 
-    public Context getContext() {
-        return this.zzboe.getContext();
-    }
-
-    public void zzjC() {
-        this.zzboe.zzwE().zzjC();
-    }
-
-    public zze zzkq() {
-        return this.zzboe.zzkq();
-    }
-
-    public zzcfi zzwA() {
-        return this.zzboe.zzwA();
-    }
-
-    public zzcjk zzwB() {
-        return this.zzboe.zzwB();
-    }
-
-    public zzcge zzwC() {
-        return this.zzboe.zzwC();
-    }
-
-    public zzciz zzwD() {
-        return this.zzboe.zzwD();
-    }
-
-    public zzcgf zzwE() {
-        return this.zzboe.zzwE();
-    }
-
-    public zzcfk zzwF() {
-        return this.zzboe.zzwF();
-    }
-
-    public zzcfv zzwG() {
-        return this.zzboe.zzwG();
-    }
-
-    public zzcel zzwH() {
-        return this.zzboe.zzwH();
-    }
-
-    public void zzwo() {
-        zzcgk.zzwo();
-    }
-
-    public void zzwp() {
-        zzcel.zzxE();
-    }
-
-    public void zzwq() {
-        this.zzboe.zzwE().zzwq();
-    }
-
-    public zzceb zzwr() {
-        return this.zzboe.zzwr();
-    }
-
-    public zzcei zzws() {
-        return this.zzboe.zzws();
-    }
-
-    public zzchk zzwt() {
-        return this.zzboe.zzwt();
-    }
-
-    public zzcff zzwu() {
-        return this.zzboe.zzwu();
-    }
-
-    public zzces zzwv() {
-        return this.zzboe.zzwv();
-    }
-
-    public zzcic zzww() {
-        return this.zzboe.zzww();
-    }
-
-    public zzchy zzwx() {
-        return this.zzboe.zzwx();
-    }
-
-    public zzcfg zzwy() {
-        return this.zzboe.zzwy();
-    }
-
-    public zzcem zzwz() {
-        return this.zzboe.zzwz();
+    public final void run() {
+        if (this.zzbtl == null) {
+            this.zzbtf.zzboe.zzwx().zza(this.zzbjh, null);
+            return;
+        }
+        zzb com_google_android_gms_measurement_AppMeasurement_zzb = new zzb();
+        com_google_android_gms_measurement_AppMeasurement_zzb.zzboj = this.zzbtm;
+        com_google_android_gms_measurement_AppMeasurement_zzb.zzbok = this.zzbtl;
+        com_google_android_gms_measurement_AppMeasurement_zzb.zzbol = this.zzbtn;
+        this.zzbtf.zzboe.zzwx().zza(this.zzbjh, com_google_android_gms_measurement_AppMeasurement_zzb);
     }
 }

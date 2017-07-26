@@ -12,38 +12,38 @@ import java.util.Arrays;
 
 public final class FirebaseOptions {
     private final String zzaoM;
-    private final String zzbVh;
-    private final String zzbVi;
     private final String zzbVj;
     private final String zzbVk;
     private final String zzbVl;
     private final String zzbVm;
+    private final String zzbVn;
+    private final String zzbVo;
 
     public static final class Builder {
         private String zzaoM;
-        private String zzbVh;
-        private String zzbVi;
         private String zzbVj;
         private String zzbVk;
         private String zzbVl;
         private String zzbVm;
+        private String zzbVn;
+        private String zzbVo;
 
         public Builder(FirebaseOptions firebaseOptions) {
             this.zzaoM = firebaseOptions.zzaoM;
-            this.zzbVh = firebaseOptions.zzbVh;
-            this.zzbVi = firebaseOptions.zzbVi;
             this.zzbVj = firebaseOptions.zzbVj;
             this.zzbVk = firebaseOptions.zzbVk;
             this.zzbVl = firebaseOptions.zzbVl;
             this.zzbVm = firebaseOptions.zzbVm;
+            this.zzbVn = firebaseOptions.zzbVn;
+            this.zzbVo = firebaseOptions.zzbVo;
         }
 
         public final FirebaseOptions build() {
-            return new FirebaseOptions(this.zzaoM, this.zzbVh, this.zzbVi, this.zzbVj, this.zzbVk, this.zzbVl, this.zzbVm);
+            return new FirebaseOptions(this.zzaoM, this.zzbVj, this.zzbVk, this.zzbVl, this.zzbVm, this.zzbVn, this.zzbVo);
         }
 
         public final Builder setApiKey(@NonNull String str) {
-            this.zzbVh = zzbo.zzh(str, "ApiKey must be set.");
+            this.zzbVj = zzbo.zzh(str, "ApiKey must be set.");
             return this;
         }
 
@@ -53,22 +53,22 @@ public final class FirebaseOptions {
         }
 
         public final Builder setDatabaseUrl(@Nullable String str) {
-            this.zzbVi = str;
-            return this;
-        }
-
-        public final Builder setGcmSenderId(@Nullable String str) {
             this.zzbVk = str;
             return this;
         }
 
-        public final Builder setProjectId(@Nullable String str) {
+        public final Builder setGcmSenderId(@Nullable String str) {
             this.zzbVm = str;
             return this;
         }
 
+        public final Builder setProjectId(@Nullable String str) {
+            this.zzbVo = str;
+            return this;
+        }
+
         public final Builder setStorageBucket(@Nullable String str) {
-            this.zzbVl = str;
+            this.zzbVn = str;
             return this;
         }
     }
@@ -76,12 +76,12 @@ public final class FirebaseOptions {
     private FirebaseOptions(@NonNull String str, @NonNull String str2, @Nullable String str3, @Nullable String str4, @Nullable String str5, @Nullable String str6, @Nullable String str7) {
         zzbo.zza(!zzt.zzcL(str), (Object) "ApplicationId must be set.");
         this.zzaoM = str;
-        this.zzbVh = str2;
-        this.zzbVi = str3;
-        this.zzbVj = str4;
-        this.zzbVk = str5;
-        this.zzbVl = str6;
-        this.zzbVm = str7;
+        this.zzbVj = str2;
+        this.zzbVk = str3;
+        this.zzbVl = str4;
+        this.zzbVm = str5;
+        this.zzbVn = str6;
+        this.zzbVo = str7;
     }
 
     public static FirebaseOptions fromResource(Context context) {
@@ -95,11 +95,11 @@ public final class FirebaseOptions {
             return false;
         }
         FirebaseOptions firebaseOptions = (FirebaseOptions) obj;
-        return zzbe.equal(this.zzaoM, firebaseOptions.zzaoM) && zzbe.equal(this.zzbVh, firebaseOptions.zzbVh) && zzbe.equal(this.zzbVi, firebaseOptions.zzbVi) && zzbe.equal(this.zzbVj, firebaseOptions.zzbVj) && zzbe.equal(this.zzbVk, firebaseOptions.zzbVk) && zzbe.equal(this.zzbVl, firebaseOptions.zzbVl) && zzbe.equal(this.zzbVm, firebaseOptions.zzbVm);
+        return zzbe.equal(this.zzaoM, firebaseOptions.zzaoM) && zzbe.equal(this.zzbVj, firebaseOptions.zzbVj) && zzbe.equal(this.zzbVk, firebaseOptions.zzbVk) && zzbe.equal(this.zzbVl, firebaseOptions.zzbVl) && zzbe.equal(this.zzbVm, firebaseOptions.zzbVm) && zzbe.equal(this.zzbVn, firebaseOptions.zzbVn) && zzbe.equal(this.zzbVo, firebaseOptions.zzbVo);
     }
 
     public final String getApiKey() {
-        return this.zzbVh;
+        return this.zzbVj;
     }
 
     public final String getApplicationId() {
@@ -107,26 +107,26 @@ public final class FirebaseOptions {
     }
 
     public final String getDatabaseUrl() {
-        return this.zzbVi;
-    }
-
-    public final String getGcmSenderId() {
         return this.zzbVk;
     }
 
-    public final String getProjectId() {
+    public final String getGcmSenderId() {
         return this.zzbVm;
     }
 
+    public final String getProjectId() {
+        return this.zzbVo;
+    }
+
     public final String getStorageBucket() {
-        return this.zzbVl;
+        return this.zzbVn;
     }
 
     public final int hashCode() {
-        return Arrays.hashCode(new Object[]{this.zzaoM, this.zzbVh, this.zzbVi, this.zzbVj, this.zzbVk, this.zzbVl, this.zzbVm});
+        return Arrays.hashCode(new Object[]{this.zzaoM, this.zzbVj, this.zzbVk, this.zzbVl, this.zzbVm, this.zzbVn, this.zzbVo});
     }
 
     public final String toString() {
-        return zzbe.zzt(this).zzg("applicationId", this.zzaoM).zzg("apiKey", this.zzbVh).zzg("databaseUrl", this.zzbVi).zzg("gcmSenderId", this.zzbVk).zzg("storageBucket", this.zzbVl).zzg("projectId", this.zzbVm).toString();
+        return zzbe.zzt(this).zzg("applicationId", this.zzaoM).zzg("apiKey", this.zzbVj).zzg("databaseUrl", this.zzbVk).zzg("gcmSenderId", this.zzbVm).zzg("storageBucket", this.zzbVn).zzg("projectId", this.zzbVo).toString();
     }
 }

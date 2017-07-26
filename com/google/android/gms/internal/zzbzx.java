@@ -2,20 +2,20 @@ package com.google.android.gms.internal;
 
 import android.os.RemoteException;
 
-public final class zzbzx extends zzbzt<Long> {
-    public zzbzx(int i, String str, Long l) {
-        super(0, str, l);
+public final class zzbzx extends zzbzu<Integer> {
+    public zzbzx(int i, String str, Integer num) {
+        super(0, str, num);
     }
 
-    private final Long zzd(zzcab com_google_android_gms_internal_zzcab) {
+    private final Integer zzc(zzcac com_google_android_gms_internal_zzcac) {
         try {
-            return Long.valueOf(com_google_android_gms_internal_zzcab.getLongFlagValue(getKey(), ((Long) zzdI()).longValue(), getSource()));
+            return Integer.valueOf(com_google_android_gms_internal_zzcac.getIntFlagValue(getKey(), ((Integer) zzdI()).intValue(), getSource()));
         } catch (RemoteException e) {
-            return (Long) zzdI();
+            return (Integer) zzdI();
         }
     }
 
-    public final /* synthetic */ Object zza(zzcab com_google_android_gms_internal_zzcab) {
-        return zzd(com_google_android_gms_internal_zzcab);
+    public final /* synthetic */ Object zza(zzcac com_google_android_gms_internal_zzcac) {
+        return zzc(com_google_android_gms_internal_zzcac);
     }
 }

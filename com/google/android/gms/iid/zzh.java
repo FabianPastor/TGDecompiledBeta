@@ -17,23 +17,23 @@ import java.security.spec.X509EncodedKeySpec;
 
 public final class zzh {
     private SharedPreferences zzbho;
-    private Context zzqF;
+    private Context zzqD;
 
     public zzh(Context context) {
         this(context, "com.google.android.gms.appid");
     }
 
     private zzh(Context context, String str) {
-        this.zzqF = context;
+        this.zzqD = context;
         this.zzbho = context.getSharedPreferences(str, 0);
         String valueOf = String.valueOf(str);
         String valueOf2 = String.valueOf("-no-backup");
-        File file = new File(zzu.getNoBackupFilesDir(this.zzqF), valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf));
+        File file = new File(zzu.getNoBackupFilesDir(this.zzqD), valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf));
         if (!file.exists()) {
             try {
                 if (file.createNewFile() && !isEmpty()) {
                     Log.i("InstanceID/Store", "App restored, clearing state");
-                    InstanceIDListenerService.zza(this.zzqF, this);
+                    InstanceIDListenerService.zza(this.zzqD, this);
                 }
             } catch (IOException e) {
                 if (Log.isLoggable("InstanceID/Store", 3)) {
@@ -122,13 +122,13 @@ public final class zzh {
             e = e2;
             str2 = String.valueOf(e);
             Log.w("InstanceID/Store", new StringBuilder(String.valueOf(str2).length() + 19).append("Invalid key stored ").append(str2).toString());
-            InstanceIDListenerService.zza(this.zzqF, this);
+            InstanceIDListenerService.zza(this.zzqD, this);
             return null;
         } catch (NoSuchAlgorithmException e3) {
             e = e3;
             str2 = String.valueOf(e);
             Log.w("InstanceID/Store", new StringBuilder(String.valueOf(str2).length() + 19).append("Invalid key stored ").append(str2).toString());
-            InstanceIDListenerService.zza(this.zzqF, this);
+            InstanceIDListenerService.zza(this.zzqD, this);
             return null;
         }
     }

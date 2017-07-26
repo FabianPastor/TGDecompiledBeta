@@ -10,15 +10,15 @@ public class Frame {
     public static final int ROTATION_270 = 3;
     public static final int ROTATION_90 = 1;
     private Bitmap mBitmap;
-    private Metadata zzbMT;
-    private ByteBuffer zzbMU;
+    private Metadata zzbMV;
+    private ByteBuffer zzbMW;
 
     public static class Builder {
-        private Frame zzbMV = new Frame();
+        private Frame zzbMX = new Frame();
 
         public Frame build() {
-            if (this.zzbMV.zzbMU != null || this.zzbMV.mBitmap != null) {
-                return this.zzbMV;
+            if (this.zzbMX.zzbMW != null || this.zzbMX.mBitmap != null) {
+                return this.zzbMX;
             }
             throw new IllegalStateException("Missing image data.  Call either setBitmap or setImageData to specify the image");
         }
@@ -26,15 +26,15 @@ public class Frame {
         public Builder setBitmap(Bitmap bitmap) {
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
-            this.zzbMV.mBitmap = bitmap;
-            Metadata metadata = this.zzbMV.getMetadata();
-            metadata.zzrY = width;
-            metadata.zzrZ = height;
+            this.zzbMX.mBitmap = bitmap;
+            Metadata metadata = this.zzbMX.getMetadata();
+            metadata.zzrW = width;
+            metadata.zzrX = height;
             return this;
         }
 
         public Builder setId(int i) {
-            this.zzbMV.getMetadata().mId = i;
+            this.zzbMX.getMetadata().mId = i;
             return this;
         }
 
@@ -48,10 +48,10 @@ public class Frame {
                     case 16:
                     case 17:
                     case 842094169:
-                        this.zzbMV.zzbMU = byteBuffer;
-                        Metadata metadata = this.zzbMV.getMetadata();
-                        metadata.zzrY = i;
-                        metadata.zzrZ = i2;
+                        this.zzbMX.zzbMW = byteBuffer;
+                        Metadata metadata = this.zzbMX.getMetadata();
+                        metadata.zzrW = i;
+                        metadata.zzrX = i2;
                         metadata.format = i3;
                         return this;
                     default:
@@ -61,12 +61,12 @@ public class Frame {
         }
 
         public Builder setRotation(int i) {
-            this.zzbMV.getMetadata().zzOa = i;
+            this.zzbMX.getMetadata().zzOa = i;
             return this;
         }
 
         public Builder setTimestampMillis(long j) {
-            this.zzbMV.getMetadata().zzbcV = j;
+            this.zzbMX.getMetadata().zzbcV = j;
             return this;
         }
     }
@@ -76,12 +76,12 @@ public class Frame {
         private int mId;
         private int zzOa;
         private long zzbcV;
-        private int zzrY;
-        private int zzrZ;
+        private int zzrW;
+        private int zzrX;
 
         public Metadata(Metadata metadata) {
-            this.zzrY = metadata.getWidth();
-            this.zzrZ = metadata.getHeight();
+            this.zzrW = metadata.getWidth();
+            this.zzrX = metadata.getHeight();
             this.mId = metadata.getId();
             this.zzbcV = metadata.getTimestampMillis();
             this.zzOa = metadata.getRotation();
@@ -92,7 +92,7 @@ public class Frame {
         }
 
         public int getHeight() {
-            return this.zzrZ;
+            return this.zzrX;
         }
 
         public int getId() {
@@ -108,22 +108,22 @@ public class Frame {
         }
 
         public int getWidth() {
-            return this.zzrY;
+            return this.zzrW;
         }
 
-        public final void zzDM() {
+        public final void zzDN() {
             if (this.zzOa % 2 != 0) {
-                int i = this.zzrY;
-                this.zzrY = this.zzrZ;
-                this.zzrZ = i;
+                int i = this.zzrW;
+                this.zzrW = this.zzrX;
+                this.zzrX = i;
             }
             this.zzOa = 0;
         }
     }
 
     private Frame() {
-        this.zzbMT = new Metadata();
-        this.zzbMU = null;
+        this.zzbMV = new Metadata();
+        this.zzbMW = null;
         this.mBitmap = null;
     }
 
@@ -134,7 +134,7 @@ public class Frame {
     public ByteBuffer getGrayscaleImageData() {
         int i = 0;
         if (this.mBitmap == null) {
-            return this.zzbMU;
+            return this.zzbMW;
         }
         int width = this.mBitmap.getWidth();
         int height = this.mBitmap.getHeight();
@@ -149,6 +149,6 @@ public class Frame {
     }
 
     public Metadata getMetadata() {
-        return this.zzbMT;
+        return this.zzbMV;
     }
 }

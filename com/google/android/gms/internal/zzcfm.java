@@ -1,31 +1,20 @@
 package com.google.android.gms.internal;
 
-public final class zzcfm {
-    private final int mPriority;
-    private /* synthetic */ zzcfk zzbqW;
-    private final boolean zzbqX;
-    private final boolean zzbqY;
+final class zzcfm implements Runnable {
+    private /* synthetic */ String zzbqV;
+    private /* synthetic */ zzcfl zzbqW;
 
-    zzcfm(zzcfk com_google_android_gms_internal_zzcfk, int i, boolean z, boolean z2) {
-        this.zzbqW = com_google_android_gms_internal_zzcfk;
-        this.mPriority = i;
-        this.zzbqX = z;
-        this.zzbqY = z2;
+    zzcfm(zzcfl com_google_android_gms_internal_zzcfl, String str) {
+        this.zzbqW = com_google_android_gms_internal_zzcfl;
+        this.zzbqV = str;
     }
 
-    public final void log(String str) {
-        this.zzbqW.zza(this.mPriority, this.zzbqX, this.zzbqY, str, null, null, null);
-    }
-
-    public final void zzd(String str, Object obj, Object obj2, Object obj3) {
-        this.zzbqW.zza(this.mPriority, this.zzbqX, this.zzbqY, str, obj, obj2, obj3);
-    }
-
-    public final void zze(String str, Object obj, Object obj2) {
-        this.zzbqW.zza(this.mPriority, this.zzbqX, this.zzbqY, str, obj, obj2, null);
-    }
-
-    public final void zzj(String str, Object obj) {
-        this.zzbqW.zza(this.mPriority, this.zzbqX, this.zzbqY, str, obj, null, null);
+    public final void run() {
+        zzcfw zzwG = this.zzbqW.zzboe.zzwG();
+        if (zzwG.isInitialized()) {
+            zzwG.zzbrj.zzf(this.zzbqV, 1);
+        } else {
+            this.zzbqW.zzk(6, "Persisted config not initialized. Not logging error/warn");
+        }
     }
 }

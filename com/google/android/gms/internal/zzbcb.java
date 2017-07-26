@@ -1,14 +1,14 @@
 package com.google.android.gms.internal;
 
-final class zzbcb extends zzbcx {
-    private /* synthetic */ zzbbz zzaDb;
+final class zzbcb extends zzbcy {
+    private /* synthetic */ zzbca zzaDb;
 
-    zzbcb(zzbbz com_google_android_gms_internal_zzbbz, zzbcv com_google_android_gms_internal_zzbcv) {
-        this.zzaDb = com_google_android_gms_internal_zzbbz;
-        super(com_google_android_gms_internal_zzbcv);
+    zzbcb(zzbca com_google_android_gms_internal_zzbca, zzbcw com_google_android_gms_internal_zzbcw) {
+        this.zzaDb = com_google_android_gms_internal_zzbca;
+        super(com_google_android_gms_internal_zzbcw);
     }
 
     public final void zzpV() {
-        this.zzaDb.zzaCZ.zzaDY.zzm(null);
+        this.zzaDb.onConnectionSuspended(1);
     }
 }

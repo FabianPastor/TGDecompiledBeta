@@ -109,7 +109,7 @@ public class CameraController implements OnInfoListener {
                                 List<Size> list = params.getSupportedPreviewSizes();
                                 for (a = 0; a < list.size(); a++) {
                                     size = (Size) list.get(a);
-                                    if (size.height < 2160 && size.width < 2160) {
+                                    if ((size.width != 1280 || size.height == 720) && size.height < 2160 && size.width < 2160) {
                                         cameraInfo.previewSizes.add(new Size(size.width, size.height));
                                         FileLog.e("preview size = " + size.width + " " + size.height);
                                     }
@@ -117,13 +117,32 @@ public class CameraController implements OnInfoListener {
                                 list = params.getSupportedPictureSizes();
                                 for (a = 0; a < list.size(); a++) {
                                     size = (Size) list.get(a);
-                                    if (!"samsung".equals(Build.MANUFACTURER) || !"jflteuc".equals(Build.PRODUCT) || size.width < 2048) {
+                                    if ((size.width != 1280 || size.height == 720) && !("samsung".equals(Build.MANUFACTURER) && "jflteuc".equals(Build.PRODUCT) && size.width >= 2048)) {
                                         cameraInfo.pictureSizes.add(new Size(size.width, size.height));
                                         FileLog.e("picture size = " + size.width + " " + size.height);
                                     }
                                 }
                                 camera.release();
                                 result.add(cameraInfo);
+                                Comparator<Size> comparator = new Comparator<Size>() {
+                                    public int compare(Size o1, Size o2) {
+                                        if (o1.mWidth < o2.mWidth) {
+                                            return 1;
+                                        }
+                                        if (o1.mWidth > o2.mWidth) {
+                                            return -1;
+                                        }
+                                        if (o1.mHeight < o2.mHeight) {
+                                            return 1;
+                                        }
+                                        if (o1.mHeight > o2.mHeight) {
+                                            return -1;
+                                        }
+                                        return 0;
+                                    }
+                                };
+                                Collections.sort(cameraInfo.previewSizes, comparator);
+                                Collections.sort(cameraInfo.pictureSizes, comparator);
                             }
                             CameraController.this.cameraInfos = result;
                         }
@@ -607,19 +626,18 @@ public class CameraController implements OnInfoListener {
                     }
                     try {
                         tempRecorder.release();
-                    } catch (Throwable e2) {
-                        FileLog.e(e2);
-                    }
-                    try {
-                        camera.reconnect();
-                        camera.startPreview();
+                        try {
+                            camera.reconnect();
+                            camera.startPreview();
+                        } catch (Throwable e2) {
+                            FileLog.e(e2);
+                        }
                         try {
                             session.stopVideoRecording();
                         } catch (Throwable e22) {
                             FileLog.e(e22);
                         }
-                    } catch (Throwable e222) {
-                        FileLog.e(e222);
+                    } catch (Exception e3) {
                         return;
                     }
                 }
@@ -627,8 +645,8 @@ public class CameraController implements OnInfoListener {
                     Parameters params = camera.getParameters();
                     params.setFlashMode("off");
                     camera.setParameters(params);
-                } catch (Throwable e2222) {
-                    FileLog.e(e2222);
+                } catch (Throwable e222) {
+                    FileLog.e(e222);
                 }
                 CameraController.this.threadPool.execute(new Runnable() {
                     public void run() {

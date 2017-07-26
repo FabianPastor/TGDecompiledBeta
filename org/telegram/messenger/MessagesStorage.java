@@ -58,8 +58,10 @@ import org.telegram.tgnet.TLRPC.TL_contact;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageActionScreenshotMessages;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageActionSetMessageTTL;
 import org.telegram.tgnet.TLRPC.TL_dialog;
+import org.telegram.tgnet.TLRPC.TL_documentEmpty;
 import org.telegram.tgnet.TLRPC.TL_inputMediaGame;
 import org.telegram.tgnet.TLRPC.TL_inputMessageEntityMentionName;
+import org.telegram.tgnet.TLRPC.TL_message;
 import org.telegram.tgnet.TLRPC.TL_messageActionGameScore;
 import org.telegram.tgnet.TLRPC.TL_messageActionPaymentSent;
 import org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
@@ -1605,7 +1607,95 @@ public class MessagesStorage {
         }
     }
 
-    public void getNewTask(final ArrayList<Integer> oldTask) {
+    public void emptyMessagesMedia(final ArrayList<Integer> mids) {
+        this.storageQueue.postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    NativeByteBuffer data;
+                    Message message;
+                    ArrayList<File> filesToDelete = new ArrayList();
+                    final ArrayList<Message> messages = new ArrayList();
+                    SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT data, mid, date, uid FROM messages WHERE mid IN (%s)", new Object[]{TextUtils.join(",", mids)}), new Object[0]);
+                    while (cursor.next()) {
+                        data = cursor.byteBufferValue(0);
+                        if (data != null) {
+                            message = Message.TLdeserialize(data, data.readInt32(false), false);
+                            data.reuse();
+                            if (message.media == null) {
+                                continue;
+                            } else {
+                                File file;
+                                if (message.media.document != null) {
+                                    file = FileLoader.getPathToAttach(message.media.document, true);
+                                    if (file != null && file.toString().length() > 0) {
+                                        filesToDelete.add(file);
+                                    }
+                                    file = FileLoader.getPathToAttach(message.media.document.thumb, true);
+                                    if (file != null && file.toString().length() > 0) {
+                                        filesToDelete.add(file);
+                                    }
+                                    message.media.document = new TL_documentEmpty();
+                                } else if (message.media.photo != null) {
+                                    Iterator it = message.media.photo.sizes.iterator();
+                                    while (it.hasNext()) {
+                                        file = FileLoader.getPathToAttach((PhotoSize) it.next(), true);
+                                        if (file != null && file.toString().length() > 0) {
+                                            filesToDelete.add(file);
+                                        }
+                                    }
+                                    message.media.photo = new TL_photoEmpty();
+                                }
+                                message.media.flags &= -2;
+                                message.id = cursor.intValue(1);
+                                message.date = cursor.intValue(2);
+                                message.dialog_id = cursor.longValue(3);
+                                messages.add(message);
+                            }
+                        }
+                    }
+                    cursor.dispose();
+                    if (!messages.isEmpty()) {
+                        SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?)");
+                        for (int a = 0; a < messages.size(); a++) {
+                            message = (Message) messages.get(a);
+                            data = new NativeByteBuffer(message.getObjectSize());
+                            message.serializeToStream(data);
+                            state.requery();
+                            state.bindLong(1, (long) message.id);
+                            state.bindLong(2, message.dialog_id);
+                            state.bindInteger(3, MessageObject.getUnreadFlags(message));
+                            state.bindInteger(4, message.send_state);
+                            state.bindInteger(5, message.date);
+                            state.bindByteBuffer(6, data);
+                            state.bindInteger(7, MessageObject.isOut(message) ? 1 : 0);
+                            state.bindInteger(8, message.ttl);
+                            if ((message.flags & 1024) != 0) {
+                                state.bindInteger(9, message.views);
+                            } else {
+                                state.bindInteger(9, MessagesStorage.this.getMessageMediaType(message));
+                            }
+                            state.bindInteger(10, 0);
+                            state.step();
+                            data.reuse();
+                        }
+                        state.dispose();
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                for (int a = 0; a < messages.size(); a++) {
+                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.updateMessageMedia, messages.get(a));
+                                }
+                            }
+                        });
+                    }
+                    FileLoader.getInstance().deleteFiles(filesToDelete, 0);
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+            }
+        });
+    }
+
+    public void getNewTask(final ArrayList<Integer> oldTask, int channelId) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 try {
@@ -1614,18 +1704,25 @@ public class MessagesStorage {
                         MessagesStorage.this.database.executeFast(String.format(Locale.US, "DELETE FROM enc_tasks_v2 WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
                     }
                     int date = 0;
+                    int channelId = -1;
                     ArrayList<Integer> arr = null;
                     SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT mid, date FROM enc_tasks_v2 WHERE date = (SELECT min(date) FROM enc_tasks_v2)", new Object[0]);
                     while (cursor.next()) {
-                        Integer mid = Integer.valueOf(cursor.intValue(0));
+                        long mid = cursor.longValue(0);
+                        if (channelId == -1) {
+                            channelId = (int) (mid >> 32);
+                            if (channelId < 0) {
+                                channelId = 0;
+                            }
+                        }
                         date = cursor.intValue(1);
                         if (arr == null) {
                             arr = new ArrayList();
                         }
-                        arr.add(mid);
+                        arr.add(Integer.valueOf((int) mid));
                     }
                     cursor.dispose();
-                    MessagesController.getInstance().processLoadedDeleteTask(date, arr);
+                    MessagesController.getInstance().processLoadedDeleteTask(date, arr, channelId);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -1633,39 +1730,93 @@ public class MessagesStorage {
         });
     }
 
-    public void createTaskForSecretChat(int chat_id, int time, int readTime, int isOut, ArrayList<Long> random_ids) {
+    public void createTaskForMid(int messageId, int channelId, int time, int readTime, int ttl, boolean inner) {
+        final int i = time;
+        final int i2 = readTime;
+        final int i3 = ttl;
+        final int i4 = messageId;
+        final int i5 = channelId;
+        final boolean z = inner;
+        this.storageQueue.postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    int i;
+                    if (i > i2) {
+                        i = i;
+                    } else {
+                        i = i2;
+                    }
+                    int minDate = i + i3;
+                    SparseArray<ArrayList<Long>> messages = new SparseArray();
+                    final ArrayList<Long> midsArray = new ArrayList();
+                    long mid = (long) i4;
+                    if (i5 != 0) {
+                        mid |= ((long) i5) << 32;
+                    }
+                    midsArray.add(Long.valueOf(mid));
+                    messages.put(minDate, midsArray);
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            if (!z) {
+                                MessagesStorage.getInstance().markMessagesContentAsRead(midsArray, 0);
+                            }
+                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesReadContent, midsArray);
+                        }
+                    });
+                    SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO enc_tasks_v2 VALUES(?, ?)");
+                    for (int a = 0; a < messages.size(); a++) {
+                        int key = messages.keyAt(a);
+                        ArrayList<Long> arr = (ArrayList) messages.get(key);
+                        for (int b = 0; b < arr.size(); b++) {
+                            state.requery();
+                            state.bindLong(1, ((Long) arr.get(b)).longValue());
+                            state.bindInteger(2, key);
+                            state.step();
+                        }
+                    }
+                    state.dispose();
+                    MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE messages SET ttl = 0 WHERE mid = %d", new Object[]{Long.valueOf(mid)})).stepThis().dispose();
+                    MessagesController.getInstance().didAddedNewTask(minDate, messages);
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+            }
+        });
+    }
+
+    public void createTaskForSecretChat(long did, int time, int readTime, int isOut, ArrayList<Long> random_ids) {
         final ArrayList<Long> arrayList = random_ids;
-        final int i = chat_id;
-        final int i2 = isOut;
-        final int i3 = time;
-        final int i4 = readTime;
+        final long j = did;
+        final int i = isOut;
+        final int i2 = time;
+        final int i3 = readTime;
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 int minDate = ConnectionsManager.DEFAULT_DATACENTER_ID;
                 try {
                     SQLiteCursor cursor;
-                    ArrayList<Integer> arr;
-                    SparseArray<ArrayList<Integer>> messages = new SparseArray();
-                    final ArrayList<Long> midsArray = new ArrayList();
+                    ArrayList<Long> arr;
+                    SparseArray<ArrayList<Long>> messages = new SparseArray();
+                    ArrayList<Long> midsArray = new ArrayList();
                     StringBuilder mids = new StringBuilder();
                     if (arrayList == null) {
-                        cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT mid, ttl FROM messages WHERE uid = %d AND out = %d AND read_state != 0 AND ttl > 0 AND date <= %d AND send_state = 0 AND media != 1", new Object[]{Long.valueOf(((long) i) << 32), Integer.valueOf(i2), Integer.valueOf(i3)}), new Object[0]);
+                        cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT mid, ttl FROM messages WHERE uid = %d AND out = %d AND read_state != 0 AND ttl > 0 AND date <= %d AND send_state = 0 AND media != 1", new Object[]{Long.valueOf(j), Integer.valueOf(i), Integer.valueOf(i2)}), new Object[0]);
                     } else {
                         String ids = TextUtils.join(",", arrayList);
                         cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.mid, m.ttl FROM messages as m INNER JOIN randoms as r ON m.mid = r.mid WHERE r.random_id IN (%s)", new Object[]{ids}), new Object[0]);
                     }
                     while (cursor.next()) {
                         int ttl = cursor.intValue(1);
-                        int mid = cursor.intValue(0);
+                        long mid = (long) cursor.intValue(0);
                         if (arrayList != null) {
-                            midsArray.add(Long.valueOf((long) mid));
+                            midsArray.add(Long.valueOf(mid));
                         }
                         if (ttl > 0) {
                             int i;
-                            if (i3 > i4) {
-                                i = i3;
+                            if (i2 > i3) {
+                                i = i2;
                             } else {
-                                i = i4;
+                                i = i3;
                             }
                             int date = i + ttl;
                             minDate = Math.min(minDate, date);
@@ -1678,15 +1829,16 @@ public class MessagesStorage {
                                 mids.append(",");
                             }
                             mids.append(mid);
-                            arr.add(Integer.valueOf(mid));
+                            arr.add(Long.valueOf(mid));
                         }
                     }
                     cursor.dispose();
                     if (arrayList != null) {
+                        final ArrayList<Long> arrayList = midsArray;
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                MessagesStorage.getInstance().markMessagesContentAsRead(midsArray);
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesReadContent, midsArray);
+                                MessagesStorage.getInstance().markMessagesContentAsRead(arrayList, 0);
+                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesReadContent, arrayList);
                             }
                         });
                     }
@@ -1698,7 +1850,7 @@ public class MessagesStorage {
                             arr = (ArrayList) messages.get(key);
                             for (int b = 0; b < arr.size(); b++) {
                                 state.requery();
-                                state.bindInteger(1, ((Integer) arr.get(b)).intValue());
+                                state.bindLong(1, ((Long) arr.get(b)).longValue());
                                 state.bindInteger(2, key);
                                 state.step();
                             }
@@ -2239,7 +2391,7 @@ Error: java.util.NoSuchElementException
             L_0x0080:
                 throw r5;
                 */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.37.run():void");
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.39.run():void");
             }
         });
         try {
@@ -3101,7 +3253,7 @@ Error: java.util.NoSuchElementException
                                 if ((message.flags & 1024) != 0) {
                                     message.views = cursor.intValue(7);
                                 }
-                                if (lower_id != 0) {
+                                if (lower_id != 0 && message.ttl == 0) {
                                     message.ttl = cursor.intValue(8);
                                 }
                                 res.messages.add(message);
@@ -3153,7 +3305,7 @@ Error: java.util.NoSuchElementException
                                 if (lower_id == 0 && !cursor.isNull(5)) {
                                     message.random_id = cursor.longValue(5);
                                 }
-                                if (!(((int) j) != 0 || message.media == null || message.media.photo == null)) {
+                                if (MessageObject.isSecretPhotoOrVideo(message)) {
                                     try {
                                         SQLiteCursor cursor2 = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT date FROM enc_tasks_v2 WHERE mid = %d", new Object[]{Integer.valueOf(message.id)}), new Object[0]);
                                         if (cursor2.next()) {
@@ -3163,6 +3315,8 @@ Error: java.util.NoSuchElementException
                                     } catch (Throwable e) {
                                         FileLog.e(e);
                                     }
+                                } else {
+                                    continue;
                                 }
                             }
                         }
@@ -3391,83 +3545,85 @@ Error: java.util.NoSuchElementException
                     /*
                     r7 = this;
                     r4 = 0;
-                    r5 = r3;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r2 = org.telegram.messenger.Utilities.MD5(r5);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    if (r2 == 0) goto L_0x0079;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r5 = r3;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r2 = org.telegram.messenger.Utilities.MD5(r5);	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    if (r2 == 0) goto L_0x007b;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
                 L_0x0009:
-                    r3 = 0;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r5 = r4;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r5 = r5 instanceof org.telegram.tgnet.TLRPC.Photo;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    if (r5 == 0) goto L_0x0028;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r3 = 0;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = r4;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = r5 instanceof org.telegram.tgnet.TLRPC.Photo;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    if (r5 == 0) goto L_0x0029;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
                 L_0x0010:
-                    r3 = new org.telegram.tgnet.TLRPC$TL_messageMediaPhoto;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r3.<init>();	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r5 = "";	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r3.caption = r5;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r5 = r4;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r5 = (org.telegram.tgnet.TLRPC.Photo) r5;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r3.photo = r5;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                L_0x0020:
-                    if (r3 != 0) goto L_0x0049;
-                L_0x0022:
-                    if (r4 == 0) goto L_0x0027;
-                L_0x0024:
+                    r3 = new org.telegram.tgnet.TLRPC$TL_messageMediaPhoto;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r3.<init>();	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = r4;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = (org.telegram.tgnet.TLRPC.Photo) r5;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r3.photo = r5;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = r3.flags;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = r5 | 1;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r3.flags = r5;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                L_0x0021:
+                    if (r3 != 0) goto L_0x004b;
+                L_0x0023:
+                    if (r4 == 0) goto L_0x0028;
+                L_0x0025:
                     r4.dispose();
-                L_0x0027:
-                    return;
                 L_0x0028:
-                    r5 = r4;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r5 = r5 instanceof org.telegram.tgnet.TLRPC.Document;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    if (r5 == 0) goto L_0x0020;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                L_0x002e:
-                    r3 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r3.<init>();	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r5 = "";	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r3.caption = r5;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r5 = r4;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r5 = (org.telegram.tgnet.TLRPC.Document) r5;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r3.document = r5;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    goto L_0x0020;
-                L_0x003f:
+                    return;
+                L_0x0029:
+                    r5 = r4;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = r5 instanceof org.telegram.tgnet.TLRPC.Document;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    if (r5 == 0) goto L_0x0021;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                L_0x002f:
+                    r3 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r3.<init>();	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = r4;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = (org.telegram.tgnet.TLRPC.Document) r5;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r3.document = r5;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = r3.flags;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = r5 | 1;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r3.flags = r5;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    goto L_0x0021;
+                L_0x0041:
                     r1 = move-exception;
-                    org.telegram.messenger.FileLog.e(r1);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    if (r4 == 0) goto L_0x0027;
-                L_0x0045:
+                    org.telegram.messenger.FileLog.e(r1);	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    if (r4 == 0) goto L_0x0028;
+                L_0x0047:
                     r4.dispose();
-                    goto L_0x0027;
-                L_0x0049:
-                    r5 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r5 = r5.database;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r6 = "REPLACE INTO sent_files_v2 VALUES(?, ?, ?)";	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r4 = r5.executeFast(r6);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r4.requery();	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r0 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r5 = r3.getObjectSize();	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r0.<init>(r5);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r3.serializeToStream(r0);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r5 = 1;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r4.bindString(r5, r2);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r5 = 2;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r6 = r5;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r4.bindInteger(r5, r6);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r5 = 3;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r4.bindByteBuffer(r5, r0);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r4.step();	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                    r0.reuse();	 Catch:{ Exception -> 0x003f, all -> 0x007f }
-                L_0x0079:
-                    if (r4 == 0) goto L_0x0027;
+                    goto L_0x0028;
+                L_0x004b:
+                    r5 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = r5.database;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r6 = "REPLACE INTO sent_files_v2 VALUES(?, ?, ?)";	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r4 = r5.executeFast(r6);	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r4.requery();	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r0 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = r3.getObjectSize();	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r0.<init>(r5);	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r3.serializeToStream(r0);	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = 1;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r4.bindString(r5, r2);	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = 2;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r6 = r5;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r4.bindInteger(r5, r6);	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r5 = 3;	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r4.bindByteBuffer(r5, r0);	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r4.step();	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
+                    r0.reuse();	 Catch:{ Exception -> 0x0041, all -> 0x0081 }
                 L_0x007b:
+                    if (r4 == 0) goto L_0x0028;
+                L_0x007d:
                     r4.dispose();
-                    goto L_0x0027;
-                L_0x007f:
+                    goto L_0x0028;
+                L_0x0081:
                     r5 = move-exception;
-                    if (r4 == 0) goto L_0x0085;
-                L_0x0082:
+                    if (r4 == 0) goto L_0x0087;
+                L_0x0084:
                     r4.dispose();
-                L_0x0085:
+                L_0x0087:
                     throw r5;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.52.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.54.run():void");
                 }
             });
         }
@@ -3548,7 +3704,7 @@ Error: java.util.NoSuchElementException
                 L_0x0056:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.53.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.55.run():void");
                 }
             });
         }
@@ -3613,7 +3769,7 @@ Error: java.util.NoSuchElementException
                 L_0x0037:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.54.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.56.run():void");
                 }
             });
         }
@@ -3678,7 +3834,7 @@ Error: java.util.NoSuchElementException
                 L_0x0037:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.55.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.57.run():void");
                 }
             });
         }
@@ -3906,7 +4062,7 @@ Error: java.util.NoSuchElementException
                 L_0x0161:
                     throw r7;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.56.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.58.run():void");
                 }
             });
         }
@@ -4397,6 +4553,7 @@ Error: java.util.NoSuchElementException
                         downloadObject.id = cursor.longValue(0);
                         NativeByteBuffer data = cursor.byteBufferValue(2);
                         if (data != null) {
+                            boolean z;
                             MessageMedia messageMedia = MessageMedia.TLdeserialize(data, data.readInt32(false), false);
                             data.reuse();
                             if (messageMedia.document != null) {
@@ -4404,6 +4561,12 @@ Error: java.util.NoSuchElementException
                             } else if (messageMedia.photo != null) {
                                 downloadObject.object = FileLoader.getClosestPhotoSizeWithSize(messageMedia.photo.sizes, AndroidUtilities.getPhotoSize());
                             }
+                            if (messageMedia.ttl_seconds != 0) {
+                                z = true;
+                            } else {
+                                z = false;
+                            }
+                            downloadObject.secret = z;
                         }
                         objects.add(downloadObject);
                     }
@@ -4421,6 +4584,9 @@ Error: java.util.NoSuchElementException
     }
 
     private int getMessageMediaType(Message message) {
+        if ((message instanceof TL_message) && (((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)) && message.media.ttl_seconds != 0)) {
+            return 1;
+        }
         if ((message instanceof TL_message_secret) && (((message.media instanceof TL_messageMediaPhoto) && message.ttl > 0 && message.ttl <= 60) || MessageObject.isVoiceMessage(message) || MessageObject.isVideoMessage(message) || MessageObject.isRoundVideoMessage(message))) {
             return 1;
         }
@@ -4820,41 +4986,45 @@ Error: java.util.NoSuchElementException
                         id = message.media.document.id;
                         type2 = 2;
                         object = new TL_messageMediaDocument();
-                        object.caption = "";
                         object.document = message.media.document;
+                        object.flags |= 1;
                     }
                 } else if (MessageObject.isRoundVideoMessage(message)) {
                     if ((downloadMask & 64) != 0 && message.media.document.size < 5242880) {
                         id = message.media.document.id;
                         type2 = 64;
                         object = new TL_messageMediaDocument();
-                        object.caption = "";
                         object.document = message.media.document;
+                        object.flags |= 1;
                     }
                 } else if (message.media instanceof TL_messageMediaPhoto) {
                     if (!((downloadMask & 1) == 0 || FileLoader.getClosestPhotoSizeWithSize(message.media.photo.sizes, AndroidUtilities.getPhotoSize()) == null)) {
                         id = message.media.photo.id;
                         type2 = 1;
                         object = new TL_messageMediaPhoto();
-                        object.caption = "";
                         object.photo = message.media.photo;
+                        object.flags |= 1;
                     }
                 } else if (MessageObject.isVideoMessage(message)) {
                     if ((downloadMask & 4) != 0) {
                         id = message.media.document.id;
                         type2 = 4;
                         object = new TL_messageMediaDocument();
-                        object.caption = "";
                         object.document = message.media.document;
+                        object.flags |= 1;
                     }
                 } else if (!(!(message.media instanceof TL_messageMediaDocument) || MessageObject.isMusicMessage(message) || MessageObject.isGifDocument(message.media.document) || (downloadMask & 8) == 0)) {
                     id = message.media.document.id;
                     type2 = 8;
                     object = new TL_messageMediaDocument();
-                    object.caption = "";
                     object.document = message.media.document;
+                    object.flags |= 1;
                 }
                 if (object != null) {
+                    if (message.media.ttl_seconds != 0) {
+                        object.ttl_seconds = message.media.ttl_seconds;
+                        object.flags |= 4;
+                    }
                     downloadMediaMask |= type2;
                     state4.requery();
                     data = new NativeByteBuffer(object.getObjectSize());
@@ -5040,6 +5210,7 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
+        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -5092,7 +5263,6 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
-        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {
@@ -5325,12 +5495,27 @@ Error: java.util.NoSuchElementException
         }
     }
 
-    public void markMessagesContentAsRead(final ArrayList<Long> mids) {
+    public void markMessagesContentAsRead(final ArrayList<Long> mids, final int date) {
         if (mids != null && !mids.isEmpty()) {
             this.storageQueue.postRunnable(new Runnable() {
                 public void run() {
                     try {
-                        MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 2 WHERE mid IN (%s)", new Object[]{TextUtils.join(",", mids)})).stepThis().dispose();
+                        String midsStr = TextUtils.join(",", mids);
+                        MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 2 WHERE mid IN (%s)", new Object[]{midsStr})).stepThis().dispose();
+                        if (date != 0) {
+                            SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT mid, ttl FROM messages WHERE mid IN (%s) AND ttl > 0", new Object[]{midsStr}), new Object[0]);
+                            ArrayList<Integer> arrayList = null;
+                            while (cursor.next()) {
+                                if (arrayList == null) {
+                                    arrayList = new ArrayList();
+                                }
+                                arrayList.add(Integer.valueOf(cursor.intValue(0)));
+                            }
+                            if (arrayList != null) {
+                                MessagesStorage.this.emptyMessagesMedia(arrayList);
+                            }
+                            cursor.dispose();
+                        }
                     } catch (Throwable e) {
                         FileLog.e(e);
                     }
@@ -5626,12 +5811,12 @@ Error: java.util.NoSuchElementException
             if (message.media instanceof TL_messageMediaUnsupported_old) {
                 if (message.media.bytes.length == 0) {
                     message.media.bytes = new byte[1];
-                    message.media.bytes[0] = (byte) 68;
+                    message.media.bytes[0] = (byte) 70;
                 }
             } else if (message.media instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 message.media.bytes = new byte[1];
-                message.media.bytes[0] = (byte) 68;
+                message.media.bytes[0] = (byte) 70;
                 message.flags |= 512;
             }
         }
@@ -5912,11 +6097,11 @@ Error: java.util.NoSuchElementException
                             state.bindInteger(5, message.date);
                             state.bindByteBuffer(6, (NativeByteBuffer) nativeByteBuffer);
                             state.bindInteger(7, MessageObject.isOut(message) ? 1 : 0);
-                            state.bindInteger(8, 0);
+                            state.bindInteger(8, message.ttl);
                             if ((message.flags & 1024) != 0) {
                                 state.bindInteger(9, message.views);
                             } else {
-                                state.bindInteger(9, 0);
+                                state.bindInteger(9, MessagesStorage.this.getMessageMediaType(message));
                             }
                             state.bindInteger(10, 0);
                             state.step();

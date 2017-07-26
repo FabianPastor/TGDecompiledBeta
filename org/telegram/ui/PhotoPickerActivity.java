@@ -124,8 +124,6 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     public interface PhotoPickerActivityDelegate {
         void actionButtonPressed(boolean z);
 
-        void didSelectVideo(String str, VideoEditedInfo videoEditedInfo, long j, long j2, String str2);
-
         void selectedPhotosChanged();
     }
 
@@ -193,9 +191,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                 PhotoEntry photoEntry = (PhotoEntry) PhotoPickerActivity.this.selectedAlbum.photos.get(index);
                                 if (PhotoPickerActivity.this.selectedPhotos.containsKey(Integer.valueOf(photoEntry.imageId))) {
                                     PhotoPickerActivity.this.selectedPhotos.remove(Integer.valueOf(photoEntry.imageId));
-                                    photoEntry.imagePath = null;
-                                    photoEntry.thumbPath = null;
-                                    photoEntry.stickers.clear();
+                                    photoEntry.reset();
                                     PhotoPickerActivity.this.updatePhotoAtIndex(index);
                                 } else {
                                     PhotoPickerActivity.this.selectedPhotos.put(Integer.valueOf(photoEntry.imageId), photoEntry);

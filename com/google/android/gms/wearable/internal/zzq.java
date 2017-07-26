@@ -8,16 +8,16 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.wearable.CapabilityApi.GetAllCapabilitiesResult;
 
 final class zzq extends zzn<GetAllCapabilitiesResult> {
-    private /* synthetic */ int zzbRU;
+    private /* synthetic */ int zzbRW;
 
     zzq(zzo com_google_android_gms_wearable_internal_zzo, GoogleApiClient googleApiClient, int i) {
-        this.zzbRU = i;
+        this.zzbRW = i;
         super(googleApiClient);
     }
 
     protected final /* synthetic */ void zza(zzb com_google_android_gms_common_api_Api_zzb) throws RemoteException {
         zzfw com_google_android_gms_wearable_internal_zzfw = (zzfw) com_google_android_gms_common_api_Api_zzb;
-        ((zzdn) com_google_android_gms_wearable_internal_zzfw.zzrf()).zza(new zzfg(this), this.zzbRU);
+        ((zzdn) com_google_android_gms_wearable_internal_zzfw.zzrf()).zza(new zzfg(this), this.zzbRW);
     }
 
     protected final /* synthetic */ Result zzb(Status status) {

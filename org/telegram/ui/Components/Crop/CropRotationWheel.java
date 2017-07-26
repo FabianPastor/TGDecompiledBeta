@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
@@ -112,7 +114,7 @@ public class CropRotationWheel extends FrameLayout {
     }
 
     public void setAspectLock(boolean enabled) {
-        this.aspectRatioButton.setImageResource(enabled ? R.drawable.tool_cropfix_active : R.drawable.tool_cropfix);
+        this.aspectRatioButton.setColorFilter(enabled ? new PorterDuffColorFilter(-11420173, Mode.MULTIPLY) : null);
     }
 
     public boolean onTouchEvent(MotionEvent ev) {

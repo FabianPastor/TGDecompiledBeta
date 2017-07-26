@@ -99,7 +99,7 @@ public class StickerPreviewViewer {
         }
 
         protected void onDraw(Canvas canvas) {
-            StickerPreviewViewer.getInstance().onDraw(canvas);
+            StickerPreviewViewer.this.onDraw(canvas);
         }
     }
 
@@ -416,7 +416,7 @@ public class StickerPreviewViewer {
                 }
             }
             this.currentSet = newSet;
-            this.centerImage.setImage((TLObject) sticker, null, sticker.thumb.location, null, "webp", true);
+            this.centerImage.setImage((TLObject) sticker, null, sticker.thumb.location, null, "webp", 1);
             this.stickerEmojiLayout = null;
             for (a = 0; a < sticker.attributes.size(); a++) {
                 attribute = (DocumentAttribute) sticker.attributes.get(a);
@@ -503,7 +503,7 @@ public class StickerPreviewViewer {
             this.backgroundDrawable.draw(canvas);
             canvas.save();
             int size = (int) (((float) Math.min(this.containerView.getWidth(), this.containerView.getHeight())) / 1.8f);
-            canvas.translate((float) (this.containerView.getWidth() / 2), (float) Math.max((size / 2) + AndroidUtilities.statusBarHeight, (this.containerView.getHeight() - this.keyboardHeight) / 2));
+            canvas.translate((float) (this.containerView.getWidth() / 2), (float) Math.max((this.stickerEmojiLayout != null ? AndroidUtilities.dp(40.0f) : 0) + (AndroidUtilities.statusBarHeight + (size / 2)), (this.containerView.getHeight() - this.keyboardHeight) / 2));
             if (this.centerImage.getBitmap() != null) {
                 size = (int) (((float) size) * ((0.8f * this.showProgress) / 0.8f));
                 this.centerImage.setAlpha(this.showProgress);

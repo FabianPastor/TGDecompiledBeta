@@ -1,31 +1,24 @@
 package com.google.android.gms.internal;
 
-import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import java.util.Iterator;
 
-public final class zzcex implements Creator<zzcev> {
-    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        int zzd = zzb.zzd(parcel);
-        Bundle bundle = null;
-        while (parcel.dataPosition() < zzd) {
-            int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
-                case 2:
-                    bundle = zzb.zzs(parcel, readInt);
-                    break;
-                default:
-                    zzb.zzb(parcel, readInt);
-                    break;
-            }
-        }
-        zzb.zzF(parcel, zzd);
-        return new zzcev(bundle);
+final class zzcex implements Iterator<String> {
+    private Iterator<String> zzbpK = this.zzbpL.zzbpJ.keySet().iterator();
+    private /* synthetic */ zzcew zzbpL;
+
+    zzcex(zzcew com_google_android_gms_internal_zzcew) {
+        this.zzbpL = com_google_android_gms_internal_zzcew;
     }
 
-    public final /* synthetic */ Object[] newArray(int i) {
-        return new zzcev[i];
+    public final boolean hasNext() {
+        return this.zzbpK.hasNext();
+    }
+
+    public final /* synthetic */ Object next() {
+        return (String) this.zzbpK.next();
+    }
+
+    public final void remove() {
+        throw new UnsupportedOperationException("Remove not supported");
     }
 }

@@ -1,90 +1,95 @@
 package com.google.android.gms.internal;
 
-import android.os.Bundle;
-import android.os.DeadObjectException;
+import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.Api.zzb;
-import com.google.android.gms.common.api.Api.zze;
-import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.common.internal.zzbo;
-import com.google.android.gms.common.internal.zzbx;
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.util.concurrent.TimeUnit;
 
-public final class zzbbz implements zzbcv {
-    private final zzbcw zzaCZ;
-    private boolean zzaDa = false;
+public class zzbbz extends GoogleApiClient {
+    private final UnsupportedOperationException zzaCY;
 
-    public zzbbz(zzbcw com_google_android_gms_internal_zzbcw) {
-        this.zzaCZ = com_google_android_gms_internal_zzbcw;
+    public zzbbz(String str) {
+        this.zzaCY = new UnsupportedOperationException(str);
     }
 
-    public final void begin() {
+    public ConnectionResult blockingConnect() {
+        throw this.zzaCY;
     }
 
-    public final void connect() {
-        if (this.zzaDa) {
-            this.zzaDa = false;
-            this.zzaCZ.zza(new zzbcb(this, this));
-        }
+    public ConnectionResult blockingConnect(long j, @NonNull TimeUnit timeUnit) {
+        throw this.zzaCY;
     }
 
-    public final boolean disconnect() {
-        if (this.zzaDa) {
-            return false;
-        }
-        if (this.zzaCZ.zzaCl.zzqf()) {
-            this.zzaDa = true;
-            for (zzber zzqK : this.zzaCZ.zzaCl.zzaDK) {
-                zzqK.zzqK();
-            }
-            return false;
-        }
-        this.zzaCZ.zzg(null);
-        return true;
+    public PendingResult<Status> clearDefaultAccountAndReconnect() {
+        throw this.zzaCY;
     }
 
-    public final void onConnected(Bundle bundle) {
+    public void connect() {
+        throw this.zzaCY;
     }
 
-    public final void onConnectionSuspended(int i) {
-        this.zzaCZ.zzg(null);
-        this.zzaCZ.zzaDY.zze(i, this.zzaDa);
+    public void disconnect() {
+        throw this.zzaCY;
     }
 
-    public final void zza(ConnectionResult connectionResult, Api<?> api, boolean z) {
+    public void dump(String str, FileDescriptor fileDescriptor, PrintWriter printWriter, String[] strArr) {
+        throw this.zzaCY;
     }
 
-    public final <A extends zzb, R extends Result, T extends zzbax<R, A>> T zzd(T t) {
-        return zze(t);
+    @NonNull
+    public ConnectionResult getConnectionResult(@NonNull Api<?> api) {
+        throw this.zzaCY;
     }
 
-    public final <A extends zzb, T extends zzbax<? extends Result, A>> T zze(T t) {
-        try {
-            this.zzaCZ.zzaCl.zzaDL.zzb(t);
-            zzbco com_google_android_gms_internal_zzbco = this.zzaCZ.zzaCl;
-            zzb com_google_android_gms_common_api_Api_zzb = (zze) com_google_android_gms_internal_zzbco.zzaDF.get(t.zzpd());
-            zzbo.zzb((Object) com_google_android_gms_common_api_Api_zzb, (Object) "Appropriate Api was not requested.");
-            if (com_google_android_gms_common_api_Api_zzb.isConnected() || !this.zzaCZ.zzaDU.containsKey(t.zzpd())) {
-                if (com_google_android_gms_common_api_Api_zzb instanceof zzbx) {
-                    zzbx com_google_android_gms_common_internal_zzbx = (zzbx) com_google_android_gms_common_api_Api_zzb;
-                    com_google_android_gms_common_api_Api_zzb = null;
-                }
-                t.zzb(com_google_android_gms_common_api_Api_zzb);
-                return t;
-            }
-            t.zzr(new Status(17));
-            return t;
-        } catch (DeadObjectException e) {
-            this.zzaCZ.zza(new zzbca(this, this));
-        }
+    public boolean hasConnectedApi(@NonNull Api<?> api) {
+        throw this.zzaCY;
     }
 
-    final void zzpU() {
-        if (this.zzaDa) {
-            this.zzaDa = false;
-            this.zzaCZ.zzaCl.zzaDL.release();
-            disconnect();
-        }
+    public boolean isConnected() {
+        throw this.zzaCY;
+    }
+
+    public boolean isConnecting() {
+        throw this.zzaCY;
+    }
+
+    public boolean isConnectionCallbacksRegistered(@NonNull ConnectionCallbacks connectionCallbacks) {
+        throw this.zzaCY;
+    }
+
+    public boolean isConnectionFailedListenerRegistered(@NonNull OnConnectionFailedListener onConnectionFailedListener) {
+        throw this.zzaCY;
+    }
+
+    public void reconnect() {
+        throw this.zzaCY;
+    }
+
+    public void registerConnectionCallbacks(@NonNull ConnectionCallbacks connectionCallbacks) {
+        throw this.zzaCY;
+    }
+
+    public void registerConnectionFailedListener(@NonNull OnConnectionFailedListener onConnectionFailedListener) {
+        throw this.zzaCY;
+    }
+
+    public void stopAutoManage(@NonNull FragmentActivity fragmentActivity) {
+        throw this.zzaCY;
+    }
+
+    public void unregisterConnectionCallbacks(@NonNull ConnectionCallbacks connectionCallbacks) {
+        throw this.zzaCY;
+    }
+
+    public void unregisterConnectionFailedListener(@NonNull OnConnectionFailedListener onConnectionFailedListener) {
+        throw this.zzaCY;
     }
 }

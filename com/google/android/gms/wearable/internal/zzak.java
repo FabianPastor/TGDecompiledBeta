@@ -21,11 +21,11 @@ public final class zzak extends zza implements Channel {
     public static final Creator<zzak> CREATOR = new zzau();
     private final String mPath;
     private final String zzakv;
-    private final String zzbRc;
+    private final String zzbRe;
 
     public zzak(String str, String str2, String str3) {
         this.zzakv = (String) zzbo.zzu(str);
-        this.zzbRc = (String) zzbo.zzu(str2);
+        this.zzbRe = (String) zzbo.zzu(str2);
         this.mPath = (String) zzbo.zzu(str3);
     }
 
@@ -49,7 +49,7 @@ public final class zzak extends zza implements Channel {
             return false;
         }
         zzak com_google_android_gms_wearable_internal_zzak = (zzak) obj;
-        return this.zzakv.equals(com_google_android_gms_wearable_internal_zzak.zzakv) && zzbe.equal(com_google_android_gms_wearable_internal_zzak.zzbRc, this.zzbRc) && zzbe.equal(com_google_android_gms_wearable_internal_zzak.mPath, this.mPath);
+        return this.zzakv.equals(com_google_android_gms_wearable_internal_zzak.zzakv) && zzbe.equal(com_google_android_gms_wearable_internal_zzak.zzbRe, this.zzbRe) && zzbe.equal(com_google_android_gms_wearable_internal_zzak.mPath, this.mPath);
     }
 
     public final PendingResult<GetInputStreamResult> getInputStream(GoogleApiClient googleApiClient) {
@@ -57,7 +57,7 @@ public final class zzak extends zza implements Channel {
     }
 
     public final String getNodeId() {
-        return this.zzbRc;
+        return this.zzbRe;
     }
 
     public final PendingResult<GetOutputStreamResult> getOutputStream(GoogleApiClient googleApiClient) {
@@ -100,7 +100,7 @@ public final class zzak extends zza implements Channel {
 
     public final String toString() {
         String str = this.zzakv;
-        String str2 = this.zzbRc;
+        String str2 = this.zzbRe;
         String str3 = this.mPath;
         return new StringBuilder(((String.valueOf(str).length() + 43) + String.valueOf(str2).length()) + String.valueOf(str3).length()).append("ChannelImpl{, token='").append(str).append("', nodeId='").append(str2).append("', path='").append(str3).append("'}").toString();
     }

@@ -6,8 +6,8 @@ import java.util.Queue;
 
 final class zzl<TResult> {
     private final Object mLock = new Object();
-    private Queue<zzk<TResult>> zzbMa;
-    private boolean zzbMb;
+    private Queue<zzk<TResult>> zzbMc;
+    private boolean zzbMd;
 
     zzl() {
     }
@@ -16,19 +16,19 @@ final class zzl<TResult> {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public final void zza(@NonNull Task<TResult> task) {
         synchronized (this.mLock) {
-            if (this.zzbMa == null || this.zzbMb) {
+            if (this.zzbMc == null || this.zzbMd) {
             } else {
-                this.zzbMb = true;
+                this.zzbMd = true;
             }
         }
     }
 
     public final void zza(@NonNull zzk<TResult> com_google_android_gms_tasks_zzk_TResult) {
         synchronized (this.mLock) {
-            if (this.zzbMa == null) {
-                this.zzbMa = new ArrayDeque();
+            if (this.zzbMc == null) {
+                this.zzbMc = new ArrayDeque();
             }
-            this.zzbMa.add(com_google_android_gms_tasks_zzk_TResult);
+            this.zzbMc.add(com_google_android_gms_tasks_zzk_TResult);
         }
     }
 }

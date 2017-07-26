@@ -200,12 +200,7 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
             this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
                 public void onGlobalLayout() {
                     ManageSpaceActivity.this.needLayout();
-                    if (ManageSpaceActivity.this.actionBarLayout == null) {
-                        return;
-                    }
-                    if (VERSION.SDK_INT < 16) {
-                        ManageSpaceActivity.this.actionBarLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    } else {
+                    if (ManageSpaceActivity.this.actionBarLayout != null) {
                         ManageSpaceActivity.this.actionBarLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     }
                 }

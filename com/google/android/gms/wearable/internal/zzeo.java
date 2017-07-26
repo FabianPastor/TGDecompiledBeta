@@ -10,7 +10,7 @@ import com.google.android.gms.common.internal.safeparcel.zzd;
 public final class zzeo extends zza {
     public static final Creator<zzeo> CREATOR = new zzep();
     private int zzaku;
-    private zzdk zzbRH;
+    private zzdk zzbRJ;
 
     zzeo(int i, IBinder iBinder) {
         zzdk com_google_android_gms_wearable_internal_zzdk = null;
@@ -20,21 +20,21 @@ public final class zzeo extends zza {
                 IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.wearable.internal.IWearableListener");
                 com_google_android_gms_wearable_internal_zzdk = queryLocalInterface instanceof zzdk ? (zzdk) queryLocalInterface : new zzdm(iBinder);
             }
-            this.zzbRH = com_google_android_gms_wearable_internal_zzdk;
+            this.zzbRJ = com_google_android_gms_wearable_internal_zzdk;
             return;
         }
-        this.zzbRH = null;
+        this.zzbRJ = null;
     }
 
     public zzeo(zzdk com_google_android_gms_wearable_internal_zzdk) {
         this.zzaku = 1;
-        this.zzbRH = com_google_android_gms_wearable_internal_zzdk;
+        this.zzbRJ = com_google_android_gms_wearable_internal_zzdk;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
         int zze = zzd.zze(parcel);
         zzd.zzc(parcel, 1, this.zzaku);
-        zzd.zza(parcel, 2, this.zzbRH == null ? null : this.zzbRH.asBinder(), false);
+        zzd.zza(parcel, 2, this.zzbRJ == null ? null : this.zzbRJ.asBinder(), false);
         zzd.zzI(parcel, zze);
     }
 }

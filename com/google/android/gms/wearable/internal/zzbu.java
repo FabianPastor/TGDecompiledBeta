@@ -10,17 +10,17 @@ import java.io.InputStream;
 public final class zzbu implements GetFdForAssetResult {
     private volatile boolean mClosed = false;
     private final Status mStatus;
-    private volatile ParcelFileDescriptor zzbSB;
-    private volatile InputStream zzbSm;
+    private volatile ParcelFileDescriptor zzbSD;
+    private volatile InputStream zzbSo;
 
     public zzbu(Status status, ParcelFileDescriptor parcelFileDescriptor) {
         this.mStatus = status;
-        this.zzbSB = parcelFileDescriptor;
+        this.zzbSD = parcelFileDescriptor;
     }
 
     public final ParcelFileDescriptor getFd() {
         if (!this.mClosed) {
-            return this.zzbSB;
+            return this.zzbSD;
         }
         throw new IllegalStateException("Cannot access the file descriptor after release().");
     }
@@ -28,13 +28,13 @@ public final class zzbu implements GetFdForAssetResult {
     public final InputStream getInputStream() {
         if (this.mClosed) {
             throw new IllegalStateException("Cannot access the input stream after release().");
-        } else if (this.zzbSB == null) {
+        } else if (this.zzbSD == null) {
             return null;
         } else {
-            if (this.zzbSm == null) {
-                this.zzbSm = new AutoCloseInputStream(this.zzbSB);
+            if (this.zzbSo == null) {
+                this.zzbSo = new AutoCloseInputStream(this.zzbSD);
             }
-            return this.zzbSm;
+            return this.zzbSo;
         }
     }
 
@@ -43,19 +43,19 @@ public final class zzbu implements GetFdForAssetResult {
     }
 
     public final void release() {
-        if (this.zzbSB != null) {
+        if (this.zzbSD != null) {
             if (this.mClosed) {
                 throw new IllegalStateException("releasing an already released result.");
             }
             try {
-                if (this.zzbSm != null) {
-                    this.zzbSm.close();
+                if (this.zzbSo != null) {
+                    this.zzbSo.close();
                 } else {
-                    this.zzbSB.close();
+                    this.zzbSD.close();
                 }
                 this.mClosed = true;
-                this.zzbSB = null;
-                this.zzbSm = null;
+                this.zzbSD = null;
+                this.zzbSo = null;
             } catch (IOException e) {
             }
         }

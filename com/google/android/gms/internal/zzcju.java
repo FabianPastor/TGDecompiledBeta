@@ -1,33 +1,28 @@
 package com.google.android.gms.internal;
 
-import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.IOException;
 
-public final class zzcju extends ada<zzcju> {
-    private static volatile zzcju[] zzbvr;
-    public Integer zzbuI;
-    public zzcjz zzbvs;
-    public zzcjz zzbvt;
-    public Boolean zzbvu;
+public final class zzcju extends adj<zzcju> {
+    private static volatile zzcju[] zzbvq;
+    public String key;
+    public String value;
 
     public zzcju() {
-        this.zzbuI = null;
-        this.zzbvs = null;
-        this.zzbvt = null;
-        this.zzbvu = null;
-        this.zzcrZ = null;
-        this.zzcsi = -1;
+        this.key = null;
+        this.value = null;
+        this.zzcsd = null;
+        this.zzcsm = -1;
     }
 
-    public static zzcju[] zzzA() {
-        if (zzbvr == null) {
-            synchronized (ade.zzcsh) {
-                if (zzbvr == null) {
-                    zzbvr = new zzcju[0];
+    public static zzcju[] zzzz() {
+        if (zzbvq == null) {
+            synchronized (adn.zzcsl) {
+                if (zzbvq == null) {
+                    zzbvq = new zzcju[0];
                 }
             }
         }
-        return zzbvr;
+        return zzbvq;
     }
 
     public final boolean equals(Object obj) {
@@ -38,72 +33,46 @@ public final class zzcju extends ada<zzcju> {
             return false;
         }
         zzcju com_google_android_gms_internal_zzcju = (zzcju) obj;
-        if (this.zzbuI == null) {
-            if (com_google_android_gms_internal_zzcju.zzbuI != null) {
+        if (this.key == null) {
+            if (com_google_android_gms_internal_zzcju.key != null) {
                 return false;
             }
-        } else if (!this.zzbuI.equals(com_google_android_gms_internal_zzcju.zzbuI)) {
+        } else if (!this.key.equals(com_google_android_gms_internal_zzcju.key)) {
             return false;
         }
-        if (this.zzbvs == null) {
-            if (com_google_android_gms_internal_zzcju.zzbvs != null) {
+        if (this.value == null) {
+            if (com_google_android_gms_internal_zzcju.value != null) {
                 return false;
             }
-        } else if (!this.zzbvs.equals(com_google_android_gms_internal_zzcju.zzbvs)) {
+        } else if (!this.value.equals(com_google_android_gms_internal_zzcju.value)) {
             return false;
         }
-        if (this.zzbvt == null) {
-            if (com_google_android_gms_internal_zzcju.zzbvt != null) {
-                return false;
-            }
-        } else if (!this.zzbvt.equals(com_google_android_gms_internal_zzcju.zzbvt)) {
-            return false;
-        }
-        if (this.zzbvu == null) {
-            if (com_google_android_gms_internal_zzcju.zzbvu != null) {
-                return false;
-            }
-        } else if (!this.zzbvu.equals(com_google_android_gms_internal_zzcju.zzbvu)) {
-            return false;
-        }
-        return (this.zzcrZ == null || this.zzcrZ.isEmpty()) ? com_google_android_gms_internal_zzcju.zzcrZ == null || com_google_android_gms_internal_zzcju.zzcrZ.isEmpty() : this.zzcrZ.equals(com_google_android_gms_internal_zzcju.zzcrZ);
+        return (this.zzcsd == null || this.zzcsd.isEmpty()) ? com_google_android_gms_internal_zzcju.zzcsd == null || com_google_android_gms_internal_zzcju.zzcsd.isEmpty() : this.zzcsd.equals(com_google_android_gms_internal_zzcju.zzcsd);
     }
 
     public final int hashCode() {
         int i = 0;
-        int hashCode = ((this.zzbvu == null ? 0 : this.zzbvu.hashCode()) + (((this.zzbvt == null ? 0 : this.zzbvt.hashCode()) + (((this.zzbvs == null ? 0 : this.zzbvs.hashCode()) + (((this.zzbuI == null ? 0 : this.zzbuI.hashCode()) + ((getClass().getName().hashCode() + 527) * 31)) * 31)) * 31)) * 31)) * 31;
-        if (!(this.zzcrZ == null || this.zzcrZ.isEmpty())) {
-            i = this.zzcrZ.hashCode();
+        int hashCode = ((this.value == null ? 0 : this.value.hashCode()) + (((this.key == null ? 0 : this.key.hashCode()) + ((getClass().getName().hashCode() + 527) * 31)) * 31)) * 31;
+        if (!(this.zzcsd == null || this.zzcsd.isEmpty())) {
+            i = this.zzcsd.hashCode();
         }
         return hashCode + i;
     }
 
-    public final /* synthetic */ adg zza(acx com_google_android_gms_internal_acx) throws IOException {
+    public final /* synthetic */ adp zza(adg com_google_android_gms_internal_adg) throws IOException {
         while (true) {
-            int zzLy = com_google_android_gms_internal_acx.zzLy();
-            switch (zzLy) {
+            int zzLB = com_google_android_gms_internal_adg.zzLB();
+            switch (zzLB) {
                 case 0:
                     break;
-                case 8:
-                    this.zzbuI = Integer.valueOf(com_google_android_gms_internal_acx.zzLD());
+                case 10:
+                    this.key = com_google_android_gms_internal_adg.readString();
                     continue;
                 case 18:
-                    if (this.zzbvs == null) {
-                        this.zzbvs = new zzcjz();
-                    }
-                    com_google_android_gms_internal_acx.zza(this.zzbvs);
-                    continue;
-                case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
-                    if (this.zzbvt == null) {
-                        this.zzbvt = new zzcjz();
-                    }
-                    com_google_android_gms_internal_acx.zza(this.zzbvt);
-                    continue;
-                case 32:
-                    this.zzbvu = Boolean.valueOf(com_google_android_gms_internal_acx.zzLB());
+                    this.value = com_google_android_gms_internal_adg.readString();
                     continue;
                 default:
-                    if (!super.zza(com_google_android_gms_internal_acx, zzLy)) {
+                    if (!super.zza(com_google_android_gms_internal_adg, zzLB)) {
                         break;
                     }
                     continue;
@@ -112,37 +81,21 @@ public final class zzcju extends ada<zzcju> {
         }
     }
 
-    public final void zza(acy com_google_android_gms_internal_acy) throws IOException {
-        if (this.zzbuI != null) {
-            com_google_android_gms_internal_acy.zzr(1, this.zzbuI.intValue());
+    public final void zza(adh com_google_android_gms_internal_adh) throws IOException {
+        if (this.key != null) {
+            com_google_android_gms_internal_adh.zzl(1, this.key);
         }
-        if (this.zzbvs != null) {
-            com_google_android_gms_internal_acy.zza(2, this.zzbvs);
+        if (this.value != null) {
+            com_google_android_gms_internal_adh.zzl(2, this.value);
         }
-        if (this.zzbvt != null) {
-            com_google_android_gms_internal_acy.zza(3, this.zzbvt);
-        }
-        if (this.zzbvu != null) {
-            com_google_android_gms_internal_acy.zzk(4, this.zzbvu.booleanValue());
-        }
-        super.zza(com_google_android_gms_internal_acy);
+        super.zza(com_google_android_gms_internal_adh);
     }
 
     protected final int zzn() {
         int zzn = super.zzn();
-        if (this.zzbuI != null) {
-            zzn += acy.zzs(1, this.zzbuI.intValue());
+        if (this.key != null) {
+            zzn += adh.zzm(1, this.key);
         }
-        if (this.zzbvs != null) {
-            zzn += acy.zzb(2, this.zzbvs);
-        }
-        if (this.zzbvt != null) {
-            zzn += acy.zzb(3, this.zzbvt);
-        }
-        if (this.zzbvu == null) {
-            return zzn;
-        }
-        this.zzbvu.booleanValue();
-        return zzn + (acy.zzct(4) + 1);
+        return this.value != null ? zzn + adh.zzm(2, this.value) : zzn;
     }
 }

@@ -10,8 +10,8 @@ public final class zza extends com.google.android.gms.common.internal.safeparcel
     private String name;
     private String phoneNumber;
     private String zzVJ;
-    private String zzbOi;
-    private String zzbOj;
+    private String zzbOk;
+    private String zzbOl;
     private String zzbgE;
     private String zzbgF;
     private String zzbgG;
@@ -28,8 +28,8 @@ public final class zza extends com.google.android.gms.common.internal.safeparcel
         this.zzbgF = str3;
         this.zzbgG = str4;
         this.zzVJ = str5;
-        this.zzbOi = str6;
-        this.zzbOj = str7;
+        this.zzbOk = str6;
+        this.zzbOl = str7;
         this.zzbgL = str8;
         this.phoneNumber = str9;
         this.zzbgN = z;
@@ -43,8 +43,8 @@ public final class zza extends com.google.android.gms.common.internal.safeparcel
         zzd.zza(parcel, 4, this.zzbgF, false);
         zzd.zza(parcel, 5, this.zzbgG, false);
         zzd.zza(parcel, 6, this.zzVJ, false);
-        zzd.zza(parcel, 7, this.zzbOi, false);
-        zzd.zza(parcel, 8, this.zzbOj, false);
+        zzd.zza(parcel, 7, this.zzbOk, false);
+        zzd.zza(parcel, 8, this.zzbOl, false);
         zzd.zza(parcel, 9, this.zzbgL, false);
         zzd.zza(parcel, 10, this.phoneNumber, false);
         zzd.zza(parcel, 11, this.zzbgN);

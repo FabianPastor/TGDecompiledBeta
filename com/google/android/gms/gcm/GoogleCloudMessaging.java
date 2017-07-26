@@ -43,7 +43,7 @@ public class GoogleCloudMessaging {
     private Map<String, Handler> zzbfQ = Collections.synchronizedMap(new HashMap());
     private final BlockingQueue<Intent> zzbfS = new LinkedBlockingQueue();
     private Messenger zzbfT = new Messenger(new zzc(this, Looper.getMainLooper()));
-    private Context zzqF;
+    private Context zzqD;
 
     public static synchronized GoogleCloudMessaging getInstance(Context context) {
         GoogleCloudMessaging googleCloudMessaging;
@@ -51,7 +51,7 @@ public class GoogleCloudMessaging {
             if (zzbfO == null) {
                 googleCloudMessaging = new GoogleCloudMessaging();
                 zzbfO = googleCloudMessaging;
-                googleCloudMessaging.zzqF = context.getApplicationContext();
+                googleCloudMessaging.zzqD = context.getApplicationContext();
             }
             googleCloudMessaging = zzbfO;
         }
@@ -62,11 +62,11 @@ public class GoogleCloudMessaging {
     private final Intent zza(Bundle bundle, boolean z) throws IOException {
         if (Looper.getMainLooper() == Looper.myLooper()) {
             throw new IOException("MAIN_THREAD");
-        } else if (zzaZ(this.zzqF) < 0) {
+        } else if (zzaZ(this.zzqD) < 0) {
             throw new IOException("Google Play Services missing");
         } else {
             Intent intent = new Intent(z ? "com.google.iid.TOKEN_REQUEST" : "com.google.android.c2dm.intent.REGISTER");
-            intent.setPackage(zze.zzbd(this.zzqF));
+            intent.setPackage(zze.zzbd(this.zzqD));
             zzf(intent);
             String valueOf = String.valueOf("google.rpc");
             String valueOf2 = String.valueOf(String.valueOf(zzbfR.getAndIncrement()));
@@ -74,9 +74,9 @@ public class GoogleCloudMessaging {
             intent.putExtras(bundle);
             intent.putExtra("google.messenger", this.zzbfT);
             if (z) {
-                this.zzqF.sendBroadcast(intent);
+                this.zzqD.sendBroadcast(intent);
             } else {
-                this.zzqF.startService(intent);
+                this.zzqD.startService(intent);
             }
             try {
                 return (Intent) this.zzbfS.poll(30000, TimeUnit.MILLISECONDS);
@@ -89,7 +89,7 @@ public class GoogleCloudMessaging {
     @Deprecated
     private final synchronized String zza(boolean z, String... strArr) throws IOException {
         String zzbd;
-        zzbd = zze.zzbd(this.zzqF);
+        zzbd = zze.zzbd(this.zzqD);
         if (zzbd == null) {
             throw new IOException("SERVICE_NOT_AVAILABLE");
         }
@@ -97,7 +97,7 @@ public class GoogleCloudMessaging {
         Bundle bundle = new Bundle();
         if (zzbd.contains(".gsf")) {
             bundle.putString("legacy.sender", zzc);
-            zzbd = InstanceID.getInstance(this.zzqF).getToken(zzc, INSTANCE_ID_SCOPE, bundle);
+            zzbd = InstanceID.getInstance(this.zzqD).getToken(zzc, INSTANCE_ID_SCOPE, bundle);
         } else {
             bundle.putString("sender", zzc);
             Intent zza = zza(bundle, z);
@@ -162,7 +162,7 @@ public class GoogleCloudMessaging {
         if (this.zzbfP == null) {
             Intent intent2 = new Intent();
             intent2.setPackage("com.google.example.invalidpackage");
-            this.zzbfP = PendingIntent.getBroadcast(this.zzqF, 0, intent2, 0);
+            this.zzbfP = PendingIntent.getBroadcast(this.zzqD, 0, intent2, 0);
         }
         intent.putExtra("app", this.zzbfP);
     }
@@ -191,7 +191,7 @@ public class GoogleCloudMessaging {
     @RequiresPermission("com.google.android.c2dm.permission.RECEIVE")
     @Deprecated
     public synchronized String register(String... strArr) throws IOException {
-        return zza(zze.zzbc(this.zzqF), strArr);
+        return zza(zze.zzbc(this.zzqD), strArr);
     }
 
     @RequiresPermission("com.google.android.c2dm.permission.RECEIVE")
@@ -199,7 +199,7 @@ public class GoogleCloudMessaging {
         if (str == null) {
             throw new IllegalArgumentException("Missing 'to'");
         }
-        String zzbd = zze.zzbd(this.zzqF);
+        String zzbd = zze.zzbd(this.zzqD);
         if (zzbd == null) {
             throw new IOException("SERVICE_NOT_AVAILABLE");
         }
@@ -216,7 +216,7 @@ public class GoogleCloudMessaging {
         String str3 = "google.from";
         int indexOf = str.indexOf(64);
         String substring = indexOf > 0 ? str.substring(0, indexOf) : str;
-        InstanceID.getInstance(this.zzqF);
+        InstanceID.getInstance(this.zzqD);
         intent.putExtra(str3, InstanceID.zzvM().zzf("", substring, INSTANCE_ID_SCOPE));
         if (zzbd.contains(".gsf")) {
             Bundle bundle2 = new Bundle();
@@ -230,10 +230,10 @@ public class GoogleCloudMessaging {
             }
             bundle2.putString("google.to", str);
             bundle2.putString("google.message_id", str2);
-            InstanceID.getInstance(this.zzqF).zzc(INSTANCE_ID_SCOPE, "upstream", bundle2);
+            InstanceID.getInstance(this.zzqD).zzc(INSTANCE_ID_SCOPE, "upstream", bundle2);
             return;
         }
-        this.zzqF.sendOrderedBroadcast(intent, "com.google.android.gtalkservice.permission.GTALK_SERVICE");
+        this.zzqD.sendOrderedBroadcast(intent, "com.google.android.gtalkservice.permission.GTALK_SERVICE");
     }
 
     @RequiresPermission("com.google.android.c2dm.permission.RECEIVE")
@@ -247,6 +247,6 @@ public class GoogleCloudMessaging {
         if (Looper.getMainLooper() == Looper.myLooper()) {
             throw new IOException("MAIN_THREAD");
         }
-        InstanceID.getInstance(this.zzqF).deleteInstanceID();
+        InstanceID.getInstance(this.zzqD).deleteInstanceID();
     }
 }

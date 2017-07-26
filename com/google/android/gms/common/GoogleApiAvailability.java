@@ -33,10 +33,10 @@ import com.google.android.gms.common.internal.zzs;
 import com.google.android.gms.common.internal.zzt;
 import com.google.android.gms.common.util.zzj;
 import com.google.android.gms.common.util.zzq;
-import com.google.android.gms.internal.zzbdj;
 import com.google.android.gms.internal.zzbdk;
-import com.google.android.gms.internal.zzbds;
-import com.google.android.gms.internal.zzbea;
+import com.google.android.gms.internal.zzbdl;
+import com.google.android.gms.internal.zzbdt;
+import com.google.android.gms.internal.zzbeb;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 
@@ -121,17 +121,17 @@ public class GoogleApiAvailability extends zze {
     }
 
     @Nullable
-    public static zzbdj zza(Context context, zzbdk com_google_android_gms_internal_zzbdk) {
+    public static zzbdk zza(Context context, zzbdl com_google_android_gms_internal_zzbdl) {
         IntentFilter intentFilter = new IntentFilter("android.intent.action.PACKAGE_ADDED");
         intentFilter.addDataScheme("package");
-        BroadcastReceiver com_google_android_gms_internal_zzbdj = new zzbdj(com_google_android_gms_internal_zzbdk);
-        context.registerReceiver(com_google_android_gms_internal_zzbdj, intentFilter);
-        com_google_android_gms_internal_zzbdj.setContext(context);
+        BroadcastReceiver com_google_android_gms_internal_zzbdk = new zzbdk(com_google_android_gms_internal_zzbdl);
+        context.registerReceiver(com_google_android_gms_internal_zzbdk, intentFilter);
+        com_google_android_gms_internal_zzbdk.setContext(context);
         if (zzo.zzy(context, "com.google.android.gms")) {
-            return com_google_android_gms_internal_zzbdj;
+            return com_google_android_gms_internal_zzbdk;
         }
-        com_google_android_gms_internal_zzbdk.zzpA();
-        com_google_android_gms_internal_zzbdj.unregister();
+        com_google_android_gms_internal_zzbdl.zzpA();
+        com_google_android_gms_internal_zzbdk.unregister();
         return null;
     }
 
@@ -218,7 +218,7 @@ public class GoogleApiAvailability extends zze {
         if (isGooglePlayServicesAvailable == 0) {
             return Tasks.forResult(null);
         }
-        zzbea zzp = zzbea.zzp(activity);
+        zzbeb zzp = zzbeb.zzp(activity);
         zzp.zzb(new ConnectionResult(isGooglePlayServicesAvailable, null), 0);
         return zzp.getTask();
     }
@@ -244,8 +244,8 @@ public class GoogleApiAvailability extends zze {
         zza(context, connectionResult.getErrorCode(), null, getErrorResolutionPendingIntent(context, connectionResult));
     }
 
-    public final boolean zza(Activity activity, @NonNull zzbds com_google_android_gms_internal_zzbds, int i, int i2, OnCancelListener onCancelListener) {
-        Dialog zza = zza((Context) activity, i, zzt.zza(com_google_android_gms_internal_zzbds, zze.zza(activity, i, "d"), 2), onCancelListener);
+    public final boolean zza(Activity activity, @NonNull zzbdt com_google_android_gms_internal_zzbdt, int i, int i2, OnCancelListener onCancelListener) {
+        Dialog zza = zza((Context) activity, i, zzt.zza(com_google_android_gms_internal_zzbdt, zze.zza(activity, i, "d"), 2), onCancelListener);
         if (zza == null) {
             return false;
         }

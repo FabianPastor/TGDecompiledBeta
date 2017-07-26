@@ -1,14 +1,15 @@
 package com.google.android.gms.internal;
 
-import android.support.annotation.WorkerThread;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.common.internal.zzal;
-import java.util.Set;
+final class zzbek implements Runnable {
+    private /* synthetic */ zzctx zzaDx;
+    private /* synthetic */ zzbej zzaEY;
 
-@WorkerThread
-public interface zzbek {
-    void zzb(zzal com_google_android_gms_common_internal_zzal, Set<Scope> set);
+    zzbek(zzbej com_google_android_gms_internal_zzbej, zzctx com_google_android_gms_internal_zzctx) {
+        this.zzaEY = com_google_android_gms_internal_zzbej;
+        this.zzaDx = com_google_android_gms_internal_zzctx;
+    }
 
-    void zzh(ConnectionResult connectionResult);
+    public final void run() {
+        this.zzaEY.zzc(this.zzaDx);
+    }
 }

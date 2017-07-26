@@ -1,23 +1,9 @@
 package com.google.android.gms.internal;
 
 import android.os.Bundle;
-import android.os.Parcel;
+import android.os.IInterface;
 import android.os.RemoteException;
 
-public abstract class gd extends zzee implements gc {
-    public gd() {
-        attachInterface(this, "com.google.android.gms.wallet.fragment.internal.IWalletFragmentStateListener");
-    }
-
-    public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-        if (zza(i, parcel, parcel2, i2)) {
-            return true;
-        }
-        if (i != 2) {
-            return false;
-        }
-        zza(parcel.readInt(), parcel.readInt(), (Bundle) zzef.zza(parcel, Bundle.CREATOR));
-        parcel2.writeNoException();
-        return true;
-    }
+public interface gd extends IInterface {
+    void zza(int i, int i2, Bundle bundle) throws RemoteException;
 }

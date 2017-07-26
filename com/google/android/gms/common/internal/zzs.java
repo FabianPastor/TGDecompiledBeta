@@ -11,7 +11,7 @@ import android.util.Log;
 import com.google.android.gms.R;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.util.zzj;
-import com.google.android.gms.internal.zzbgz;
+import com.google.android.gms.internal.zzbha;
 
 public final class zzs {
     private static final SimpleArrayMap<String, String> zzaHo = new SimpleArrayMap();
@@ -20,7 +20,7 @@ public final class zzs {
         CharSequence charSequence;
         String packageName = context.getPackageName();
         try {
-            return zzbgz.zzaP(context).zzcM(packageName).toString();
+            return zzbha.zzaP(context).zzcM(packageName).toString();
         } catch (NameNotFoundException e) {
             charSequence = context.getApplicationInfo().name;
             return TextUtils.isEmpty(charSequence) ? charSequence : packageName;

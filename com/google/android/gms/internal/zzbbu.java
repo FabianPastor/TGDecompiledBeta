@@ -1,20 +1,18 @@
 package com.google.android.gms.internal;
 
-import android.support.annotation.NonNull;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.android.gms.common.api.PendingResult.zza;
+import com.google.android.gms.common.api.Status;
 
-final class zzbbu implements OnCompleteListener<TResult> {
-    private /* synthetic */ zzbbs zzaCU;
-    private /* synthetic */ TaskCompletionSource zzaCV;
+final class zzbbu implements zza {
+    private /* synthetic */ zzbbe zzaCT;
+    private /* synthetic */ zzbbt zzaCU;
 
-    zzbbu(zzbbs com_google_android_gms_internal_zzbbs, TaskCompletionSource taskCompletionSource) {
-        this.zzaCU = com_google_android_gms_internal_zzbbs;
-        this.zzaCV = taskCompletionSource;
+    zzbbu(zzbbt com_google_android_gms_internal_zzbbt, zzbbe com_google_android_gms_internal_zzbbe) {
+        this.zzaCU = com_google_android_gms_internal_zzbbt;
+        this.zzaCT = com_google_android_gms_internal_zzbbe;
     }
 
-    public final void onComplete(@NonNull Task<TResult> task) {
-        this.zzaCU.zzaCS.remove(this.zzaCV);
+    public final void zzo(Status status) {
+        this.zzaCU.zzaCR.remove(this.zzaCT);
     }
 }

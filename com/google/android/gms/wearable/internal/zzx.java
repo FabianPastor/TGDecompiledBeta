@@ -7,15 +7,15 @@ import java.util.Map;
 
 public final class zzx implements GetAllCapabilitiesResult {
     private final Status mStatus;
-    private final Map<String, CapabilityInfo> zzbRZ;
+    private final Map<String, CapabilityInfo> zzbSb;
 
     public zzx(Status status, Map<String, CapabilityInfo> map) {
         this.mStatus = status;
-        this.zzbRZ = map;
+        this.zzbSb = map;
     }
 
     public final Map<String, CapabilityInfo> getAllCapabilities() {
-        return this.zzbRZ;
+        return this.zzbSb;
     }
 
     public final Status getStatus() {

@@ -25,11 +25,11 @@ public class Wearable {
     public static final NodeApi NodeApi = new zzdz();
     private static zzf<zzfw> zzajR = new zzf();
     private static final zza<zzfw, WearableOptions> zzajS = new zzj();
-    private static zzc zzbRj = new zzk();
-    private static zza zzbRk = new zzh();
-    private static zzf zzbRl = new zzbh();
-    private static zzi zzbRm = new zzey();
-    private static zzu zzbRn = new zzgi();
+    private static zzc zzbRl = new zzk();
+    private static zza zzbRm = new zzh();
+    private static zzf zzbRn = new zzbh();
+    private static zzi zzbRo = new zzey();
+    private static zzu zzbRp = new zzgi();
 
     public static final class WearableOptions implements Optional {
 

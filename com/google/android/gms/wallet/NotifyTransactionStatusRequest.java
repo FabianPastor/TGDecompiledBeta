@@ -11,38 +11,38 @@ import com.google.android.gms.common.internal.zzbo;
 public final class NotifyTransactionStatusRequest extends zza {
     public static final Creator<NotifyTransactionStatusRequest> CREATOR = new zzu();
     int status;
-    String zzbOo;
-    String zzbPD;
+    String zzbOq;
+    String zzbPF;
 
     public final class Builder {
-        private /* synthetic */ NotifyTransactionStatusRequest zzbPE;
+        private /* synthetic */ NotifyTransactionStatusRequest zzbPG;
 
         private Builder(NotifyTransactionStatusRequest notifyTransactionStatusRequest) {
-            this.zzbPE = notifyTransactionStatusRequest;
+            this.zzbPG = notifyTransactionStatusRequest;
         }
 
         public final NotifyTransactionStatusRequest build() {
             boolean z = true;
-            zzbo.zzb(!TextUtils.isEmpty(this.zzbPE.zzbOo), (Object) "googleTransactionId is required");
-            if (this.zzbPE.status <= 0 || this.zzbPE.status > 8) {
+            zzbo.zzb(!TextUtils.isEmpty(this.zzbPG.zzbOq), (Object) "googleTransactionId is required");
+            if (this.zzbPG.status <= 0 || this.zzbPG.status > 8) {
                 z = false;
             }
             zzbo.zzb(z, (Object) "status is an unrecognized value");
-            return this.zzbPE;
+            return this.zzbPG;
         }
 
         public final Builder setDetailedReason(String str) {
-            this.zzbPE.zzbPD = str;
+            this.zzbPG.zzbPF = str;
             return this;
         }
 
         public final Builder setGoogleTransactionId(String str) {
-            this.zzbPE.zzbOo = str;
+            this.zzbPG.zzbOq = str;
             return this;
         }
 
         public final Builder setStatus(int i) {
-            this.zzbPE.status = i;
+            this.zzbPG.status = i;
             return this;
         }
     }
@@ -65,9 +65,9 @@ public final class NotifyTransactionStatusRequest extends zza {
     }
 
     NotifyTransactionStatusRequest(String str, int i, String str2) {
-        this.zzbOo = str;
+        this.zzbOq = str;
         this.status = i;
-        this.zzbPD = str2;
+        this.zzbPF = str2;
     }
 
     public static Builder newBuilder() {
@@ -77,11 +77,11 @@ public final class NotifyTransactionStatusRequest extends zza {
     }
 
     public final String getDetailedReason() {
-        return this.zzbPD;
+        return this.zzbPF;
     }
 
     public final String getGoogleTransactionId() {
-        return this.zzbOo;
+        return this.zzbOq;
     }
 
     public final int getStatus() {
@@ -90,9 +90,9 @@ public final class NotifyTransactionStatusRequest extends zza {
 
     public final void writeToParcel(Parcel parcel, int i) {
         int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.zzbOo, false);
+        zzd.zza(parcel, 2, this.zzbOq, false);
         zzd.zzc(parcel, 3, this.status);
-        zzd.zza(parcel, 4, this.zzbPD, false);
+        zzd.zza(parcel, 4, this.zzbPF, false);
         zzd.zzI(parcel, zze);
     }
 }

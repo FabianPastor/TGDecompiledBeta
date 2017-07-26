@@ -2,20 +2,20 @@ package com.google.android.gms.internal;
 
 import android.os.RemoteException;
 
-public final class zzbzw extends zzbzt<Integer> {
-    public zzbzw(int i, String str, Integer num) {
-        super(0, str, num);
+public final class zzbzw extends zzbzu<Boolean> {
+    public zzbzw(int i, String str, Boolean bool) {
+        super(0, str, bool);
     }
 
-    private final Integer zzc(zzcab com_google_android_gms_internal_zzcab) {
+    private final Boolean zzb(zzcac com_google_android_gms_internal_zzcac) {
         try {
-            return Integer.valueOf(com_google_android_gms_internal_zzcab.getIntFlagValue(getKey(), ((Integer) zzdI()).intValue(), getSource()));
+            return Boolean.valueOf(com_google_android_gms_internal_zzcac.getBooleanFlagValue(getKey(), ((Boolean) zzdI()).booleanValue(), getSource()));
         } catch (RemoteException e) {
-            return (Integer) zzdI();
+            return (Boolean) zzdI();
         }
     }
 
-    public final /* synthetic */ Object zza(zzcab com_google_android_gms_internal_zzcab) {
-        return zzc(com_google_android_gms_internal_zzcab);
+    public final /* synthetic */ Object zza(zzcac com_google_android_gms_internal_zzcac) {
+        return zzb(com_google_android_gms_internal_zzcac);
     }
 }

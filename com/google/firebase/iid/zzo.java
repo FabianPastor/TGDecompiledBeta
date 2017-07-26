@@ -8,31 +8,31 @@ import java.io.IOException;
 
 final class zzo implements zzp {
     private Intent intent;
-    private final ConditionVariable zzckG;
-    private String zzckH;
+    private final ConditionVariable zzckK;
+    private String zzckL;
 
     private zzo() {
-        this.zzckG = new ConditionVariable();
+        this.zzckK = new ConditionVariable();
     }
 
     public final void onError(String str) {
-        this.zzckH = str;
-        this.zzckG.open();
+        this.zzckL = str;
+        this.zzckK.open();
     }
 
-    public final Intent zzJT() throws IOException {
-        if (!this.zzckG.block(30000)) {
+    public final Intent zzJW() throws IOException {
+        if (!this.zzckK.block(30000)) {
             Log.w("InstanceID/Rpc", "No response");
             throw new IOException(InstanceID.ERROR_TIMEOUT);
-        } else if (this.zzckH == null) {
+        } else if (this.zzckL == null) {
             return this.intent;
         } else {
-            throw new IOException(this.zzckH);
+            throw new IOException(this.zzckL);
         }
     }
 
     public final void zzq(Intent intent) {
         this.intent = intent;
-        this.zzckG.open();
+        this.zzckK.open();
     }
 }
