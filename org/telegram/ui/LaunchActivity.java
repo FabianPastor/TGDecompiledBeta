@@ -2009,50 +2009,47 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             } else if (lower_part > 0) {
                 args.putInt("user_id", lower_part);
             } else if (lower_part < 0) {
-                args.putInt("chat_id", -lower_part);
+                Bundle bundle = args;
+                bundle.putInt("chat_id", -lower_part);
             }
             if (MessagesController.checkCanOpenChat(args, dialogsFragment)) {
+                boolean z;
+                boolean z2;
                 BaseFragment chatActivity = new ChatActivity(args);
-                if (this.videoPath != null) {
-                    if (!AndroidUtilities.isTablet()) {
-                        this.actionBarLayout.addFragmentToStack(chatActivity, dialogsFragment != null ? this.actionBarLayout.fragmentsStack.size() - 1 : this.actionBarLayout.fragmentsStack.size());
-                    } else if (this.tabletFullSize) {
-                        this.actionBarLayout.presentFragment(chatActivity, false, true, false);
-                    } else {
-                        this.rightActionBarLayout.removeAllFragments();
-                        this.rightActionBarLayout.addFragmentToStack(chatActivity);
-                        this.rightActionBarLayout.setVisibility(0);
-                        this.rightActionBarLayout.showLastFragment();
-                    }
-                    if (!(chatActivity.openVideoEditor(this.videoPath, dialogsFragment != null, false) || AndroidUtilities.isTablet())) {
-                        if (dialogsFragment != null) {
-                            dialogsFragment.finishFragment(true);
-                        } else {
-                            this.actionBarLayout.showLastFragment();
-                        }
-                    }
+                ActionBarLayout actionBarLayout = this.actionBarLayout;
+                if (dialogsFragment != null) {
+                    z = true;
                 } else {
-                    this.actionBarLayout.presentFragment(chatActivity, dialogsFragment != null, dialogsFragment == null, true);
-                    if (this.photoPathsArray != null) {
-                        ArrayList<String> captions = null;
-                        if (this.sendingText != null && this.sendingText.length() <= Callback.DEFAULT_DRAG_ANIMATION_DURATION && this.photoPathsArray.size() == 1) {
-                            captions = new ArrayList();
-                            captions.add(this.sendingText);
-                            this.sendingText = null;
-                        }
-                        SendMessagesHelper.prepareSendingPhotos(null, this.photoPathsArray, dialog_id, null, captions, null, null, false, null);
+                    z = false;
+                }
+                if (dialogsFragment == null) {
+                    z2 = true;
+                } else {
+                    z2 = false;
+                }
+                actionBarLayout.presentFragment(chatActivity, z, z2, true);
+                if (this.videoPath != null) {
+                    chatActivity.openVideoEditor(this.videoPath);
+                }
+                if (this.photoPathsArray != null) {
+                    ArrayList<String> captions = null;
+                    if (this.sendingText != null && this.sendingText.length() <= Callback.DEFAULT_DRAG_ANIMATION_DURATION && this.photoPathsArray.size() == 1) {
+                        captions = new ArrayList();
+                        captions.add(this.sendingText);
+                        this.sendingText = null;
                     }
-                    if (this.sendingText != null) {
-                        SendMessagesHelper.prepareSendingText(this.sendingText, dialog_id);
-                    }
-                    if (!(this.documentsPathsArray == null && this.documentsUrisArray == null)) {
-                        SendMessagesHelper.prepareSendingDocuments(this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, this.documentsMimeType, dialog_id, null, null);
-                    }
-                    if (!(this.contactsToSend == null || this.contactsToSend.isEmpty())) {
-                        Iterator it = this.contactsToSend.iterator();
-                        while (it.hasNext()) {
-                            SendMessagesHelper.getInstance().sendMessage((User) it.next(), dialog_id, null, null, null);
-                        }
+                    SendMessagesHelper.prepareSendingPhotos(null, this.photoPathsArray, dialog_id, null, captions, null, null, false, null);
+                }
+                if (this.sendingText != null) {
+                    SendMessagesHelper.prepareSendingText(this.sendingText, dialog_id);
+                }
+                if (!(this.documentsPathsArray == null && this.documentsUrisArray == null)) {
+                    SendMessagesHelper.prepareSendingDocuments(this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, this.documentsMimeType, dialog_id, null, null);
+                }
+                if (!(this.contactsToSend == null || this.contactsToSend.isEmpty())) {
+                    Iterator it = this.contactsToSend.iterator();
+                    while (it.hasNext()) {
+                        SendMessagesHelper.getInstance().sendMessage((User) it.next(), dialog_id, null, null, null);
                     }
                 }
                 this.photoPathsArray = null;

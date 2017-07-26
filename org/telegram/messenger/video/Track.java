@@ -1,6 +1,5 @@
 package org.telegram.messenger.video;
 
-import android.annotation.TargetApi;
 import android.media.MediaCodec.BufferInfo;
 import android.media.MediaFormat;
 import com.coremedia.iso.boxes.AbstractMediaHeaderBox;
@@ -27,7 +26,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import org.telegram.messenger.exoplayer2.C;
 
-@TargetApi(16)
 public class Track {
     private static Map<Integer, Integer> samplingFrequencyIndexMap = new HashMap();
     private Date creationTime = new Date();

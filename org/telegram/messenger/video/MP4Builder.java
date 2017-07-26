@@ -1,6 +1,5 @@
 package org.telegram.messenger.video;
 
-import android.annotation.TargetApi;
 import android.media.MediaCodec.BufferInfo;
 import android.media.MediaFormat;
 import com.coremedia.iso.BoxParser;
@@ -44,7 +43,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-@TargetApi(16)
 public class MP4Builder {
     private Mp4Movie currentMp4Movie = null;
     private long dataOffset = 0;

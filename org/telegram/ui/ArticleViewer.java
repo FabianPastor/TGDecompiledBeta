@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -219,7 +218,6 @@ import org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate;
 import org.telegram.ui.Components.WebPlayerView;
 import org.telegram.ui.Components.WebPlayerView.WebPlayerViewDelegate;
 
-@TargetApi(16)
 public class ArticleViewer implements NotificationCenterDelegate, OnGestureListener, OnDoubleTapListener {
     @SuppressLint({"StaticFieldLeak"})
     private static volatile ArticleViewer Instance = null;
@@ -5821,6 +5819,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         if (this.parentActivity == null || ((this.isVisible && !this.collapsed) || messageObject == null)) {
             return false;
         }
+        LayoutParams layoutParams;
         final AnimatorSet animatorSet;
         Animator[] animatorArr;
         float[] fArr;
@@ -5881,7 +5880,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         String anchor = null;
         for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
             WindowManager wm;
-            LayoutParams layoutParams;
             MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
             if (entity instanceof TL_messageEntityUrl) {
                 try {

@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
@@ -66,12 +65,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
 
     public void selectTab(int num) {
         if (num >= 0 && num < this.tabCount) {
-            View tab = this.tabsContainer.getChildAt(num);
-            if (VERSION.SDK_INT >= 15) {
-                tab.callOnClick();
-            } else {
-                tab.performClick();
-            }
+            this.tabsContainer.getChildAt(num).performClick();
         }
     }
 

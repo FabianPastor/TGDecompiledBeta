@@ -56,7 +56,6 @@ import org.telegram.ui.ActionBar.BottomSheet.BottomSheetDelegate;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.WebPlayerView.WebPlayerViewDelegate;
 
-@TargetApi(16)
 public class EmbedBottomSheet extends BottomSheet {
     @SuppressLint({"StaticFieldLeak"})
     private static EmbedBottomSheet instance;

@@ -6253,133 +6253,138 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     boolean isAvc = true;
                     Container isoFile = new IsoFile(videoPath);
                     List<Box> boxes = Path.getPaths(isoFile, "/moov/trak/");
-                    boolean isMp4A = true;
                     if (Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/mp4a/") == null) {
-                        isMp4A = false;
+                        FileLog.d("video hasn't mp4a atom");
+                        return;
                     }
-                    if (isMp4A) {
-                        if (Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/avc1/") == null) {
-                            isAvc = false;
-                        }
-                        int b = 0;
-                        while (b < boxes.size()) {
-                            if (PhotoViewer.this.currentLoadingVideoRunnable == this) {
-                                TrackBox trackBox = (TrackBox) ((Box) boxes.get(b));
-                                long sampleSizes = 0;
-                                long trackBitrate = 0;
-                                try {
-                                    MediaBox mediaBox = trackBox.getMediaBox();
-                                    MediaHeaderBox mediaHeaderBox = mediaBox.getMediaHeaderBox();
-                                    long[] sizes = mediaBox.getMediaInformationBox().getSampleTableBox().getSampleSizeBox().getSampleSizes();
-                                    int a = 0;
-                                    while (a < sizes.length) {
-                                        if (PhotoViewer.this.currentLoadingVideoRunnable == this) {
-                                            sampleSizes += sizes[a];
-                                            a++;
-                                        } else {
-                                            return;
-                                        }
-                                    }
-                                    PhotoViewer.this.videoDuration = ((float) mediaHeaderBox.getDuration()) / ((float) mediaHeaderBox.getTimescale());
-                                    trackBitrate = (long) ((int) (((float) (8 * sampleSizes)) / PhotoViewer.this.videoDuration));
-                                } catch (Throwable e) {
-                                    FileLog.e(e);
-                                }
-                                try {
+                    if (Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/avc1/") == null) {
+                        FileLog.d("video hasn't avc1 atom");
+                        isAvc = false;
+                    }
+                    int b = 0;
+                    while (b < boxes.size()) {
+                        if (PhotoViewer.this.currentLoadingVideoRunnable == this) {
+                            TrackBox trackBox = (TrackBox) ((Box) boxes.get(b));
+                            long sampleSizes = 0;
+                            long trackBitrate = 0;
+                            try {
+                                MediaBox mediaBox = trackBox.getMediaBox();
+                                MediaHeaderBox mediaHeaderBox = mediaBox.getMediaHeaderBox();
+                                long[] sizes = mediaBox.getMediaInformationBox().getSampleTableBox().getSampleSizeBox().getSampleSizes();
+                                int a = 0;
+                                while (a < sizes.length) {
                                     if (PhotoViewer.this.currentLoadingVideoRunnable == this) {
-                                        TrackHeaderBox headerBox = trackBox.getTrackHeaderBox();
-                                        if (headerBox.getWidth() == 0.0d || headerBox.getHeight() == 0.0d) {
-                                            PhotoViewer.this.audioFramesSize = PhotoViewer.this.audioFramesSize + sampleSizes;
-                                        } else {
-                                            trackHeaderBox = headerBox;
-                                            PhotoViewer.this.originalBitrate = PhotoViewer.this.bitrate = (int) ((trackBitrate / 100000) * 100000);
-                                            if (PhotoViewer.this.bitrate > 900000) {
-                                                PhotoViewer.this.bitrate = 900000;
-                                            }
-                                            PhotoViewer.this.videoFramesSize = PhotoViewer.this.videoFramesSize + sampleSizes;
-                                        }
-                                        b++;
+                                        sampleSizes += sizes[a];
+                                        a++;
                                     } else {
                                         return;
                                     }
-                                } catch (Throwable e2) {
-                                    FileLog.e(e2);
+                                }
+                                PhotoViewer.this.videoDuration = ((float) mediaHeaderBox.getDuration()) / ((float) mediaHeaderBox.getTimescale());
+                                trackBitrate = (long) ((int) (((float) (8 * sampleSizes)) / PhotoViewer.this.videoDuration));
+                            } catch (Throwable e) {
+                                FileLog.e(e);
+                            }
+                            try {
+                                if (PhotoViewer.this.currentLoadingVideoRunnable == this) {
+                                    TrackHeaderBox headerBox = trackBox.getTrackHeaderBox();
+                                    if (headerBox.getWidth() == 0.0d || headerBox.getHeight() == 0.0d) {
+                                        PhotoViewer.this.audioFramesSize = PhotoViewer.this.audioFramesSize + sampleSizes;
+                                    } else {
+                                        trackHeaderBox = headerBox;
+                                        PhotoViewer.this.originalBitrate = PhotoViewer.this.bitrate = (int) ((trackBitrate / 100000) * 100000);
+                                        if (PhotoViewer.this.bitrate > 900000) {
+                                            PhotoViewer.this.bitrate = 900000;
+                                        }
+                                        PhotoViewer.this.videoFramesSize = PhotoViewer.this.videoFramesSize + sampleSizes;
+                                    }
+                                    b++;
+                                } else {
                                     return;
                                 }
+                            } catch (Throwable e2) {
+                                FileLog.e(e2);
+                                return;
                             }
-                            return;
                         }
-                        if (trackHeaderBox != null) {
-                            final boolean isAvcFinal = isAvc;
-                            TrackHeaderBox trackHeaderBoxFinal = trackHeaderBox;
-                            if (PhotoViewer.this.currentLoadingVideoRunnable == this) {
-                                PhotoViewer.this.currentLoadingVideoRunnable = null;
-                                final TrackHeaderBox trackHeaderBox2 = trackHeaderBoxFinal;
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public void run() {
-                                        if (PhotoViewer.this.parentActivity != null) {
-                                            Matrix matrix = trackHeaderBox2.getMatrix();
-                                            if (matrix.equals(Matrix.ROTATE_90)) {
-                                                PhotoViewer.this.rotationValue = 90;
-                                            } else if (matrix.equals(Matrix.ROTATE_180)) {
-                                                PhotoViewer.this.rotationValue = 180;
-                                            } else if (matrix.equals(Matrix.ROTATE_270)) {
-                                                PhotoViewer.this.rotationValue = 270;
-                                            } else {
-                                                PhotoViewer.this.rotationValue = 0;
-                                            }
-                                            PhotoViewer.this.resultWidth = PhotoViewer.this.originalWidth = (int) trackHeaderBox2.getWidth();
-                                            PhotoViewer.this.resultHeight = PhotoViewer.this.originalHeight = (int) trackHeaderBox2.getHeight();
-                                            if (isAvcFinal || !(PhotoViewer.this.resultWidth == PhotoViewer.this.originalWidth || PhotoViewer.this.resultHeight == PhotoViewer.this.originalHeight)) {
-                                                boolean z;
-                                                PhotoViewer.this.videoDuration = PhotoViewer.this.videoDuration * 1000.0f;
-                                                PhotoViewer.this.selectedCompression = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("compress_video2", 1);
-                                                if (PhotoViewer.this.originalWidth > 1280 || PhotoViewer.this.originalHeight > 1280) {
-                                                    PhotoViewer.this.compressionsCount = 5;
-                                                } else if (PhotoViewer.this.originalWidth > 848 || PhotoViewer.this.originalHeight > 848) {
-                                                    PhotoViewer.this.compressionsCount = 4;
-                                                } else if (PhotoViewer.this.originalWidth > 640 || PhotoViewer.this.originalHeight > 640) {
-                                                    PhotoViewer.this.compressionsCount = 3;
-                                                } else if (PhotoViewer.this.originalWidth > 480 || PhotoViewer.this.originalHeight > 480) {
-                                                    PhotoViewer.this.compressionsCount = 2;
+                        return;
+                    }
+                    if (trackHeaderBox == null) {
+                        FileLog.d("video hasn't trackHeaderBox atom");
+                        return;
+                    }
+                    final boolean isAvcFinal = isAvc;
+                    TrackHeaderBox trackHeaderBoxFinal = trackHeaderBox;
+                    if (PhotoViewer.this.currentLoadingVideoRunnable == this) {
+                        PhotoViewer.this.currentLoadingVideoRunnable = null;
+                        final TrackHeaderBox trackHeaderBox2 = trackHeaderBoxFinal;
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                if (PhotoViewer.this.parentActivity != null) {
+                                    Matrix matrix = trackHeaderBox2.getMatrix();
+                                    if (matrix.equals(Matrix.ROTATE_90)) {
+                                        PhotoViewer.this.rotationValue = 90;
+                                    } else if (matrix.equals(Matrix.ROTATE_180)) {
+                                        PhotoViewer.this.rotationValue = 180;
+                                    } else if (matrix.equals(Matrix.ROTATE_270)) {
+                                        PhotoViewer.this.rotationValue = 270;
+                                    } else {
+                                        PhotoViewer.this.rotationValue = 0;
+                                    }
+                                    PhotoViewer.this.resultWidth = PhotoViewer.this.originalWidth = (int) trackHeaderBox2.getWidth();
+                                    PhotoViewer.this.resultHeight = PhotoViewer.this.originalHeight = (int) trackHeaderBox2.getHeight();
+                                    if (isAvcFinal) {
+                                        boolean z;
+                                        PhotoViewer.this.videoDuration = PhotoViewer.this.videoDuration * 1000.0f;
+                                        PhotoViewer.this.selectedCompression = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("compress_video2", 1);
+                                        if (PhotoViewer.this.originalWidth > 1280 || PhotoViewer.this.originalHeight > 1280) {
+                                            PhotoViewer.this.compressionsCount = 5;
+                                        } else if (PhotoViewer.this.originalWidth > 848 || PhotoViewer.this.originalHeight > 848) {
+                                            PhotoViewer.this.compressionsCount = 4;
+                                        } else if (PhotoViewer.this.originalWidth > 640 || PhotoViewer.this.originalHeight > 640) {
+                                            PhotoViewer.this.compressionsCount = 3;
+                                        } else if (PhotoViewer.this.originalWidth > 480 || PhotoViewer.this.originalHeight > 480) {
+                                            PhotoViewer.this.compressionsCount = 2;
+                                        } else {
+                                            PhotoViewer.this.compressionsCount = 1;
+                                        }
+                                        PhotoViewer.this.updateWidthHeightBitrateForCompression();
+                                        PhotoViewer photoViewer = PhotoViewer.this;
+                                        if (PhotoViewer.this.compressionsCount > 1) {
+                                            z = true;
+                                        } else {
+                                            z = false;
+                                        }
+                                        photoViewer.setCompressItemEnabled(z, true);
+                                        FileLog.d("compressionsCount = " + PhotoViewer.this.compressionsCount + " w = " + PhotoViewer.this.originalWidth + " h = " + PhotoViewer.this.originalHeight);
+                                        if (VERSION.SDK_INT < 18 && PhotoViewer.this.compressItem.getTag() != null) {
+                                            try {
+                                                MediaCodecInfo codecInfo = MediaController.selectCodec("video/avc");
+                                                if (codecInfo == null) {
+                                                    FileLog.d("no codec info for video/avc");
+                                                    PhotoViewer.this.setCompressItemEnabled(false, true);
                                                 } else {
-                                                    PhotoViewer.this.compressionsCount = 1;
-                                                }
-                                                PhotoViewer.this.updateWidthHeightBitrateForCompression();
-                                                PhotoViewer photoViewer = PhotoViewer.this;
-                                                if (PhotoViewer.this.compressionsCount > 1) {
-                                                    z = true;
-                                                } else {
-                                                    z = false;
-                                                }
-                                                photoViewer.setCompressItemEnabled(z, true);
-                                                if (VERSION.SDK_INT < 18 && PhotoViewer.this.compressItem.getTag() != null) {
-                                                    try {
-                                                        MediaCodecInfo codecInfo = MediaController.selectCodec("video/avc");
-                                                        if (codecInfo == null) {
-                                                            PhotoViewer.this.setCompressItemEnabled(false, true);
-                                                        } else {
-                                                            String name = codecInfo.getName();
-                                                            if (name.equals("OMX.google.h264.encoder") || name.equals("OMX.ST.VFM.H264Enc") || name.equals("OMX.Exynos.avc.enc") || name.equals("OMX.MARVELL.VIDEO.HW.CODA7542ENCODER") || name.equals("OMX.MARVELL.VIDEO.H264ENCODER") || name.equals("OMX.k3.video.encoder.avc") || name.equals("OMX.TI.DUCATI1.VIDEO.H264E")) {
-                                                                PhotoViewer.this.setCompressItemEnabled(false, true);
-                                                            } else if (MediaController.selectColorFormat(codecInfo, "video/avc") == 0) {
-                                                                PhotoViewer.this.setCompressItemEnabled(false, true);
-                                                            }
-                                                        }
-                                                    } catch (Throwable e) {
+                                                    String name = codecInfo.getName();
+                                                    if (name.equals("OMX.google.h264.encoder") || name.equals("OMX.ST.VFM.H264Enc") || name.equals("OMX.Exynos.avc.enc") || name.equals("OMX.MARVELL.VIDEO.HW.CODA7542ENCODER") || name.equals("OMX.MARVELL.VIDEO.H264ENCODER") || name.equals("OMX.k3.video.encoder.avc") || name.equals("OMX.TI.DUCATI1.VIDEO.H264E")) {
+                                                        FileLog.d("unsupported encoder = " + name);
                                                         PhotoViewer.this.setCompressItemEnabled(false, true);
-                                                        FileLog.e(e);
+                                                    } else if (MediaController.selectColorFormat(codecInfo, "video/avc") == 0) {
+                                                        FileLog.d("no color format for video/avc");
+                                                        PhotoViewer.this.setCompressItemEnabled(false, true);
                                                     }
                                                 }
-                                                PhotoViewer.this.qualityChooseView.invalidate();
-                                                PhotoViewer.this.updateVideoInfo();
-                                                PhotoViewer.this.updateMuteButton();
+                                            } catch (Throwable e) {
+                                                PhotoViewer.this.setCompressItemEnabled(false, true);
+                                                FileLog.e(e);
                                             }
                                         }
+                                        PhotoViewer.this.qualityChooseView.invalidate();
+                                        PhotoViewer.this.updateVideoInfo();
+                                        PhotoViewer.this.updateMuteButton();
                                     }
-                                });
+                                }
                             }
-                        }
+                        });
                     }
                 }
             }

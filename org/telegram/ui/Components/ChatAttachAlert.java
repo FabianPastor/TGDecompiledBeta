@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -928,7 +927,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                         return thumb;
                                     }
 
-                                    @TargetApi(16)
                                     public boolean cancelButtonPressed() {
                                         if (!(!ChatAttachAlert.this.cameraOpened || ChatAttachAlert.this.cameraView == null || ChatAttachAlert.this.cameraFile == null)) {
                                             ChatAttachAlert.this.cameraFile.delete();
@@ -1018,7 +1016,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                 }
                                 ChatAttachAlert.this.cameraPhoto.add(new PhotoEntry(0, 0, 0, ChatAttachAlert.this.cameraFile.getAbsolutePath(), orientation, false));
                                 PhotoViewer.getInstance().openPhotoForSelect(ChatAttachAlert.this.cameraPhoto, 0, 2, new EmptyPhotoViewerProvider() {
-                                    @TargetApi(16)
                                     public boolean cancelButtonPressed() {
                                         if (!(!ChatAttachAlert.this.cameraOpened || ChatAttachAlert.this.cameraView == null || ChatAttachAlert.this.cameraFile == null)) {
                                             ChatAttachAlert.this.cameraFile.delete();
@@ -1365,7 +1362,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
     }
 
-    @TargetApi(16)
     private void openCamera() {
         if (this.cameraView != null) {
             this.animateCameraValues[0] = 0;
@@ -1402,7 +1398,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
     }
 
-    @TargetApi(16)
     public void closeCamera(boolean animated) {
         if (!this.takingPhoto && this.cameraView != null) {
             this.animateCameraValues[1] = AndroidUtilities.dp(80.0f) - this.cameraViewOffsetX;
@@ -1619,7 +1614,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
     }
 
-    @TargetApi(16)
     public void showCamera() {
         float f = 1.0f;
         if (!this.paused && this.mediaEnabled) {

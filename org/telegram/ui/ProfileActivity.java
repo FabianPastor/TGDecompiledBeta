@@ -1623,11 +1623,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         if (position == ProfileActivity.this.channelInfoRow) {
                             about = ProfileActivity.this.info.about;
                         } else {
-                            TL_userFull userFull = MessagesController.getInstance().getUserFull(ProfileActivity.this.botInfo.user_id);
+                            TL_userFull userFull = MessagesController.getInstance().getUserFull(ProfileActivity.this.user_id);
                             about = userFull != null ? userFull.about : null;
                         }
-                        if (about != null) {
-                            ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", about));
+                        if (!TextUtils.isEmpty(about)) {
+                            AndroidUtilities.addToClipboard(about);
                         }
                     } catch (Throwable e) {
                         FileLog.e(e);

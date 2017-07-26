@@ -21,12 +21,12 @@ public final class zzx {
 
     @Nullable
     public static WorkSource zzD(Context context, String str) {
-        if (context == null || context.getPackageManager() == null) {
-            return null;
-        }
         String str2;
         String str3;
         String valueOf;
+        if (context == null || context.getPackageManager() == null) {
+            return null;
+        }
         try {
             ApplicationInfo applicationInfo = zzbha.zzaP(context).getApplicationInfo(str, 0);
             if (applicationInfo != null) {

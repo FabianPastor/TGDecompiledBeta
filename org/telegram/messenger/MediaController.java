@@ -1,7 +1,6 @@
 package org.telegram.messenger;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
@@ -2521,7 +2520,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             }
                         }
 
-                        @TargetApi(16)
                         public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
                             if (MediaController.this.videoPlayer == null) {
                                 return false;
@@ -3195,6 +3193,10 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
 
     public static void saveFile(String fullPath, Context context, int type, String name, String mime) {
         Throwable e;
+        final AlertDialog finalProgress;
+        final int i;
+        final String str;
+        final String str2;
         if (fullPath != null) {
             File file = null;
             if (!(fullPath == null || fullPath.length() == 0)) {
@@ -3207,10 +3209,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 final File sourceFile = file;
                 final boolean[] cancelled = new boolean[1];
                 if (sourceFile.exists()) {
-                    final AlertDialog finalProgress;
-                    final int i;
-                    final String str;
-                    final String str2;
                     AlertDialog progressDialog = null;
                     if (context != null) {
                         try {
@@ -3738,6 +3736,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     public static void loadGalleryPhotosAlbums(final int guid) {
         Thread thread = new Thread(new Runnable() {
             public void run() {
+                Throwable e;
                 int imageIdColumn;
                 int bucketIdColumn;
                 int bucketNameColumn;
@@ -3766,8 +3765,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 String cameraFolder = null;
                 try {
                     cameraFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/";
-                } catch (Throwable e) {
-                    Throwable e2;
+                } catch (Throwable e2) {
                     FileLog.e(e2);
                 }
                 Integer num = null;
@@ -4264,7 +4262,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         return lastColorFormat;
     }
 
-    @TargetApi(16)
     private int selectTrack(MediaExtractor extractor, boolean audio) {
         int numTracks = extractor.getTrackCount();
         for (int i = 0; i < numTracks; i++) {
@@ -4316,7 +4313,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         });
     }
 
-    @TargetApi(16)
     private long readAndWriteTrack(MessageObject messageObject, MediaExtractor extractor, MP4Builder mediaMuxer, BufferInfo info, long start, long end, File file, boolean isAudio) throws Exception {
         int trackIndex = selectTrack(extractor, isAudio);
         if (trackIndex < 0) {
@@ -4416,7 +4412,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
 
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    @TargetApi(16)
     private boolean convertVideo(MessageObject messageObject) {
         long videoStartTime;
         Throwable e;

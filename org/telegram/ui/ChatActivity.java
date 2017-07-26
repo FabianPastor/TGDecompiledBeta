@@ -30,6 +30,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
@@ -5971,11 +5972,28 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
     }
 
-    public boolean openVideoEditor(String videoPath, boolean removeLast, boolean animated) {
+    public void openVideoEditor(String videoPath) {
+        if (getParentActivity() != null) {
+            Bitmap thumb = ThumbnailUtils.createVideoThumbnail(videoPath, 1);
+            PhotoViewer.getInstance().setParentActivity(getParentActivity());
+            ArrayList<Object> cameraPhoto = new ArrayList();
+            cameraPhoto.add(new PhotoEntry(0, 0, 0, videoPath, 0, true));
+            final Bitmap bitmap = thumb;
+            final ArrayList<Object> arrayList = cameraPhoto;
+            PhotoViewer.getInstance().openPhotoForSelect(cameraPhoto, 0, 2, new EmptyPhotoViewerProvider() {
+                public Bitmap getThumbForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+                    return bitmap;
+                }
+
+                public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
+                    ChatActivity.this.sendMedia((PhotoEntry) arrayList.get(0), videoEditedInfo);
+                }
+            }, this);
+            return;
+        }
         SendMessagesHelper.prepareSendingVideo(videoPath, 0, 0, 0, 0, null, this.dialog_id, this.replyingMessageObject, null, 0);
         showReplyPanel(false, null, null, null, false);
         DraftQuery.cleanDraft(this.dialog_id, true);
-        return false;
     }
 
     private void showAttachmentError() {
@@ -6035,7 +6053,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 if (this.paused) {
                     this.startVideoEdit = videoPath;
                 } else {
-                    openVideoEditor(videoPath, false, false);
+                    openVideoEditor(videoPath);
                 }
             } else {
                 SendMessagesHelper.prepareSendingPhoto(null, uri, this.dialog_id, this.replyingMessageObject, null, null, null, 0);
@@ -6072,7 +6090,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (this.paused) {
                 this.startVideoEdit = videoPath;
             } else {
-                openVideoEditor(videoPath, false, false);
+                openVideoEditor(videoPath);
             }
         } else if (requestCode == 21) {
             if (data == null || data.getData() == null) {
@@ -8224,7 +8242,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (this.hideAlertViewRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(this.hideAlertViewRunnable);
             }
-            Runnable anonymousClass81 = new Runnable() {
+            Runnable anonymousClass82 = new Runnable() {
                 public void run() {
                     if (ChatActivity.this.hideAlertViewRunnable == this && ChatActivity.this.alertView.getTag() == null) {
                         ChatActivity.this.alertView.setTag(Integer.valueOf(1));
@@ -8256,8 +8274,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                 }
             };
-            this.hideAlertViewRunnable = anonymousClass81;
-            AndroidUtilities.runOnUIThread(anonymousClass81, 3000);
+            this.hideAlertViewRunnable = anonymousClass82;
+            AndroidUtilities.runOnUIThread(anonymousClass82, 3000);
         }
     }
 
@@ -8637,7 +8655,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (this.startVideoEdit != null) {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
-                    ChatActivity.this.openVideoEditor(ChatActivity.this.startVideoEdit, false, false);
+                    ChatActivity.this.openVideoEditor(ChatActivity.this.startVideoEdit);
                     ChatActivity.this.startVideoEdit = null;
                 }
             });
