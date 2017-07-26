@@ -684,6 +684,7 @@ final class zzcen extends zzchj {
     }
 
     final Map<Integer, List<zzcjn>> zzJ(String str, String str2) {
+        Cursor query;
         Object e;
         Throwable th;
         zzkD();
@@ -691,7 +692,6 @@ final class zzcen extends zzchj {
         zzbo.zzcF(str);
         zzbo.zzcF(str2);
         Map<Integer, List<zzcjn>> arrayMap = new ArrayMap();
-        Cursor query;
         try {
             query = getWritableDatabase().query("event_filters", new String[]{"audience_id", "data"}, "app_id=? AND event_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -1666,12 +1666,12 @@ final class zzcen extends zzchj {
     }
 
     final Map<Integer, zzcka> zzdT(String str) {
+        Cursor query;
         Object e;
         Throwable th;
         zzkD();
         zzjC();
         zzbo.zzcF(str);
-        Cursor query;
         try {
             query = getWritableDatabase().query("audience_filter_values", new String[]{"audience_id", "current_results"}, "app_id=?", new String[]{str}, null, null, null);
             if (query.moveToFirst()) {
@@ -1735,6 +1735,7 @@ final class zzcen extends zzchj {
 
     @WorkerThread
     public final List<zzcjk> zzh(String str, String str2, String str3) {
+        String string;
         Object obj;
         Object e;
         Cursor cursor;
@@ -1763,7 +1764,6 @@ final class zzcen extends zzchj {
             try {
                 if (query.moveToFirst()) {
                     while (arrayList.size() < zzcem.zzxt()) {
-                        String string;
                         try {
                             String string2 = query.getString(0);
                             long j = query.getLong(1);

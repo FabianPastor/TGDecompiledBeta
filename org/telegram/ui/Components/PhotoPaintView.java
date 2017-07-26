@@ -658,6 +658,9 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     private void removeEntity(EntityView entityView) {
         if (entityView == this.currentEntityView) {
             this.currentEntityView.deselect();
+            if (this.editingText) {
+                closeTextEnter(false);
+            }
             this.currentEntityView = null;
             updateSettingsButton();
         }
