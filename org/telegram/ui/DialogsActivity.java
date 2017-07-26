@@ -938,7 +938,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 permissons.add("android.permission.READ_EXTERNAL_STORAGE");
                 permissons.add("android.permission.WRITE_EXTERNAL_STORAGE");
             }
-            activity.requestPermissions((String[]) permissons.toArray(new String[permissons.size()]), 1);
+            try {
+                activity.requestPermissions((String[]) permissons.toArray(new String[permissons.size()]), 1);
+            } catch (Exception e) {
+            }
         }
     }
 

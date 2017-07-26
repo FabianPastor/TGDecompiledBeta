@@ -367,7 +367,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         return;
                     } else if (i == ProfileActivity.this.usernameRow) {
                         user = MessagesController.getInstance().getUser(Integer.valueOf(ProfileActivity.this.user_id));
-                        if (user == null || user.username == null || user.username.length() == 0) {
+                        if (user == null || TextUtils.isEmpty(user.username)) {
                             text = "-";
                         } else {
                             text = "@" + user.username;
@@ -389,9 +389,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         return;
                     } else if (i == ProfileActivity.this.userInfoDetailedRow) {
                         userFull = MessagesController.getInstance().getUserFull(ProfileActivity.this.user_id);
-                        String about = userFull != null ? userFull.about : null;
                         textDetailCell.setMultiline(true);
-                        textDetailCell.setTextAndValueAndIcon(about, LocaleController.getString("UserBio", R.string.UserBio), R.drawable.profile_info, 11);
+                        textDetailCell.setTextAndValueAndIcon(userFull != null ? userFull.about : null, LocaleController.getString("UserBio", R.string.UserBio), R.drawable.profile_info, 11);
                         return;
                     } else {
                         return;
@@ -2545,11 +2544,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 this.phoneRow = i;
             }
             TL_userFull userFull = MessagesController.getInstance().getUserFull(user.id);
-            String about = userFull != null ? userFull.about : null;
             if (!(user == null || TextUtils.isEmpty(user.username))) {
                 hasUsername = true;
             }
-            if (about != null) {
+            if (!(userFull == null || TextUtils.isEmpty(userFull.about))) {
                 if (this.phoneRow != -1) {
                     i = this.rowCount;
                     this.rowCount = i + 1;
@@ -2570,9 +2568,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 this.rowCount = i + 1;
                 this.usernameRow = i;
             }
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.sectionRow = i;
+            if (!(this.phoneRow == -1 && this.userInfoRow == -1 && this.userInfoDetailedRow == -1 && this.usernameRow == -1)) {
+                i = this.rowCount;
+                this.rowCount = i + 1;
+                this.sectionRow = i;
+            }
             if (this.user_id != UserConfig.getClientUserId()) {
                 i = this.rowCount;
                 this.rowCount = i + 1;

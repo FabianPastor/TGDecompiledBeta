@@ -9,6 +9,7 @@ import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
+import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.view.MotionEvent;
@@ -75,20 +76,20 @@ public class AboutLinkCell extends FrameLayout {
     }
 
     public void setTextAndIcon(String text, int resId, boolean parseLinks) {
-        if (text == null || text.length() == 0) {
-            setVisibility(8);
-        } else if (text == null || this.oldText == null || !text.equals(this.oldText)) {
-            this.oldText = text;
-            this.stringBuilder = new SpannableStringBuilder(this.oldText);
-            if (parseLinks) {
-                MessageObject.addLinks(false, this.stringBuilder, false);
-            }
-            Emoji.replaceEmoji(this.stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
-            requestLayout();
-            if (resId == 0) {
-                this.imageView.setImageDrawable(null);
-            } else {
-                this.imageView.setImageResource(resId);
+        if (!TextUtils.isEmpty(text)) {
+            if (text == null || this.oldText == null || !text.equals(this.oldText)) {
+                this.oldText = text;
+                this.stringBuilder = new SpannableStringBuilder(this.oldText);
+                if (parseLinks) {
+                    MessageObject.addLinks(false, this.stringBuilder, false);
+                }
+                Emoji.replaceEmoji(this.stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+                requestLayout();
+                if (resId == 0) {
+                    this.imageView.setImageDrawable(null);
+                } else {
+                    this.imageView.setImageResource(resId);
+                }
             }
         }
     }
@@ -160,8 +161,10 @@ public class AboutLinkCell extends FrameLayout {
 
     @SuppressLint({"DrawAllocation"})
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        this.textLayout = new StaticLayout(this.stringBuilder, Theme.profile_aboutTextPaint, MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(87.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(this.textLayout.getHeight() + AndroidUtilities.dp(16.0f), NUM));
+        if (this.stringBuilder != null) {
+            this.textLayout = new StaticLayout(this.stringBuilder, Theme.profile_aboutTextPaint, MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(87.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        }
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.textLayout != null ? this.textLayout.getHeight() : AndroidUtilities.dp(20.0f)) + AndroidUtilities.dp(16.0f), NUM));
     }
 
     protected void onDraw(Canvas canvas) {

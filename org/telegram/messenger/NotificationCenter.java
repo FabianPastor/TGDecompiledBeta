@@ -2,7 +2,6 @@ package org.telegram.messenger;
 
 import android.util.SparseArray;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class NotificationCenter {
     public static final int FileDidFailUpload;
@@ -482,9 +481,8 @@ public class NotificationCenter {
     public void setAnimationInProgress(boolean value) {
         this.animationInProgress = value;
         if (!this.animationInProgress && !this.delayedPosts.isEmpty()) {
-            Iterator it = this.delayedPosts.iterator();
-            while (it.hasNext()) {
-                DelayedPost delayedPost = (DelayedPost) it.next();
+            for (int a = 0; a < this.delayedPosts.size(); a++) {
+                DelayedPost delayedPost = (DelayedPost) this.delayedPosts.get(a);
                 postNotificationNameInternal(delayedPost.id, true, delayedPost.args);
             }
             this.delayedPosts.clear();

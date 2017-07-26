@@ -12,7 +12,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -220,9 +219,9 @@ public class ActionBarLayout extends FrameLayout {
                 this.currentAnimation = null;
             }
             if (this.onCloseAnimationEndRunnable != null) {
-                onCloseAnimationEnd(false);
+                onCloseAnimationEnd();
             } else if (this.onOpenAnimationEndRunnable != null) {
-                onOpenAnimationEnd(false);
+                onOpenAnimationEnd();
             }
         }
         if (!this.fragmentsStack.isEmpty()) {
@@ -494,9 +493,9 @@ public class ActionBarLayout extends FrameLayout {
         }
     }
 
-    private void onAnimationEndCheck(boolean byCheck, boolean customAnimation) {
-        onCloseAnimationEnd(customAnimation);
-        onOpenAnimationEnd(customAnimation);
+    private void onAnimationEndCheck(boolean byCheck) {
+        onCloseAnimationEnd();
+        onOpenAnimationEnd();
         if (this.waitingForKeyboardCloseRunnable != null) {
             AndroidUtilities.cancelRunOnUIThread(this.waitingForKeyboardCloseRunnable);
             this.waitingForKeyboardCloseRunnable = null;
@@ -522,7 +521,7 @@ public class ActionBarLayout extends FrameLayout {
 
     public boolean checkTransitionAnimation() {
         if (this.transitionAnimationInProgress && this.transitionAnimationStartTime < System.currentTimeMillis() - 1500) {
-            onAnimationEndCheck(true, false);
+            onAnimationEndCheck(true);
         }
         return this.transitionAnimationInProgress;
     }
@@ -595,7 +594,7 @@ public class ActionBarLayout extends FrameLayout {
                     if (ActionBarLayout.this.animationProgress < 1.0f) {
                         ActionBarLayout.this.startLayoutAnimation(open, false);
                     } else {
-                        ActionBarLayout.this.onAnimationEndCheck(false, false);
+                        ActionBarLayout.this.onAnimationEndCheck(false);
                     }
                 }
             }
@@ -698,7 +697,7 @@ public class ActionBarLayout extends FrameLayout {
             this.currentAnimation.setDuration(200);
             this.currentAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
-                    ActionBarLayout.this.onAnimationEndCheck(false, true);
+                    ActionBarLayout.this.onAnimationEndCheck(false);
                 }
             });
             this.currentAnimation.start();
@@ -716,7 +715,7 @@ public class ActionBarLayout extends FrameLayout {
             fragment.onTransitionAnimationStart(true, false);
             AnimatorSet animation = fragment.onCustomTransitionAnimation(true, new Runnable() {
                 public void run() {
-                    ActionBarLayout.this.onAnimationEndCheck(false, true);
+                    ActionBarLayout.this.onAnimationEndCheck(false);
                 }
             });
             if (animation == null) {
@@ -868,7 +867,7 @@ public class ActionBarLayout extends FrameLayout {
                     };
                     AnimatorSet animation = currentFragment.onCustomTransitionAnimation(false, new Runnable() {
                         public void run() {
-                            ActionBarLayout.this.onAnimationEndCheck(false, true);
+                            ActionBarLayout.this.onAnimationEndCheck(false);
                         }
                     });
                     if (animation != null) {
@@ -923,7 +922,7 @@ public class ActionBarLayout extends FrameLayout {
                     }
 
                     public void onAnimationEnd(Animator animation) {
-                        ActionBarLayout.this.onAnimationEndCheck(false, true);
+                        ActionBarLayout.this.onAnimationEndCheck(false);
                     }
                 });
                 this.currentAnimation.start();
@@ -1058,21 +1057,12 @@ public class ActionBarLayout extends FrameLayout {
         this.inActionMode = false;
     }
 
-    private void onCloseAnimationEnd(boolean post) {
+    private void onCloseAnimationEnd() {
         if (this.transitionAnimationInProgress && this.onCloseAnimationEndRunnable != null) {
             this.transitionAnimationInProgress = false;
             this.transitionAnimationStartTime = 0;
-            if (post) {
-                new Handler().post(new Runnable() {
-                    public void run() {
-                        ActionBarLayout.this.onCloseAnimationEndRunnable.run();
-                        ActionBarLayout.this.onCloseAnimationEndRunnable = null;
-                    }
-                });
-            } else {
-                this.onCloseAnimationEndRunnable.run();
-                this.onCloseAnimationEndRunnable = null;
-            }
+            this.onCloseAnimationEndRunnable.run();
+            this.onCloseAnimationEndRunnable = null;
             checkNeedRebuild();
         }
     }
@@ -1084,21 +1074,12 @@ public class ActionBarLayout extends FrameLayout {
         }
     }
 
-    private void onOpenAnimationEnd(boolean post) {
+    private void onOpenAnimationEnd() {
         if (this.transitionAnimationInProgress && this.onOpenAnimationEndRunnable != null) {
             this.transitionAnimationInProgress = false;
             this.transitionAnimationStartTime = 0;
-            if (post) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        ActionBarLayout.this.onOpenAnimationEndRunnable.run();
-                        ActionBarLayout.this.onOpenAnimationEndRunnable = null;
-                    }
-                });
-            } else {
-                this.onOpenAnimationEndRunnable.run();
-                this.onOpenAnimationEndRunnable = null;
-            }
+            this.onOpenAnimationEndRunnable.run();
+            this.onOpenAnimationEndRunnable = null;
             checkNeedRebuild();
         }
     }
@@ -1111,9 +1092,9 @@ public class ActionBarLayout extends FrameLayout {
                     this.currentAnimation = null;
                 }
                 if (this.onCloseAnimationEndRunnable != null) {
-                    onCloseAnimationEnd(false);
+                    onCloseAnimationEnd();
                 } else if (this.onOpenAnimationEndRunnable != null) {
-                    onOpenAnimationEnd(false);
+                    onOpenAnimationEnd();
                 }
                 this.containerView.invalidate();
                 if (intent != null) {

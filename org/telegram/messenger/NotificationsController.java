@@ -33,6 +33,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.RemoteInput;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -1670,18 +1671,21 @@ public class NotificationsController {
                     mBuilder.setLargeIcon(img.getBitmap());
                 } else {
                     try {
-                        int i2;
-                        float scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
-                        Options options = new Options();
-                        if (scaleFactor < 1.0f) {
-                            i2 = 1;
-                        } else {
-                            i2 = (int) scaleFactor;
-                        }
-                        options.inSampleSize = i2;
-                        Bitmap bitmap = BitmapFactory.decodeFile(FileLoader.getPathToAttach(photoPath, true).toString(), options);
-                        if (bitmap != null) {
-                            mBuilder.setLargeIcon(bitmap);
+                        File file = FileLoader.getPathToAttach(photoPath, true);
+                        if (file.exists()) {
+                            int i2;
+                            float scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
+                            Options options = new Options();
+                            if (scaleFactor < 1.0f) {
+                                i2 = 1;
+                            } else {
+                                i2 = (int) scaleFactor;
+                            }
+                            options.inSampleSize = i2;
+                            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+                            if (bitmap != null) {
+                                mBuilder.setLargeIcon(bitmap);
+                            }
                         }
                     } catch (Throwable th) {
                     }
@@ -1798,6 +1802,7 @@ public class NotificationsController {
                 WearableExtender summaryExtender;
                 Builder builder;
                 BitmapDrawable img;
+                File file;
                 float scaleFactor;
                 Options options;
                 int i;
@@ -1909,17 +1914,20 @@ public class NotificationsController {
                             builder.setLargeIcon(img.getBitmap());
                         } else {
                             try {
-                                scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
-                                options = new Options();
-                                if (scaleFactor >= 1.0f) {
-                                    i = 1;
-                                } else {
-                                    i = (int) scaleFactor;
-                                }
-                                options.inSampleSize = i;
-                                bitmap = BitmapFactory.decodeFile(FileLoader.getPathToAttach(photoPath, true).toString(), options);
-                                if (bitmap != null) {
-                                    builder.setLargeIcon(bitmap);
+                                file = FileLoader.getPathToAttach(photoPath, true);
+                                if (file.exists()) {
+                                    scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
+                                    options = new Options();
+                                    if (scaleFactor >= 1.0f) {
+                                        i = 1;
+                                    } else {
+                                        i = (int) scaleFactor;
+                                    }
+                                    options.inSampleSize = i;
+                                    bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+                                    if (bitmap != null) {
+                                        builder.setLargeIcon(bitmap);
+                                    }
                                 }
                             } catch (Throwable th) {
                             }
@@ -2019,17 +2027,20 @@ public class NotificationsController {
                     if (photoPath != null) {
                         img = ImageLoader.getInstance().getImageFromMemory(photoPath, null, "50_50");
                         if (img == null) {
-                            scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
-                            options = new Options();
-                            if (scaleFactor >= 1.0f) {
-                                i = (int) scaleFactor;
-                            } else {
-                                i = 1;
-                            }
-                            options.inSampleSize = i;
-                            bitmap = BitmapFactory.decodeFile(FileLoader.getPathToAttach(photoPath, true).toString(), options);
-                            if (bitmap != null) {
-                                builder.setLargeIcon(bitmap);
+                            file = FileLoader.getPathToAttach(photoPath, true);
+                            if (file.exists()) {
+                                scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
+                                options = new Options();
+                                if (scaleFactor >= 1.0f) {
+                                    i = (int) scaleFactor;
+                                } else {
+                                    i = 1;
+                                }
+                                options.inSampleSize = i;
+                                bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+                                if (bitmap != null) {
+                                    builder.setLargeIcon(bitmap);
+                                }
                             }
                         } else {
                             builder.setLargeIcon(img.getBitmap());
