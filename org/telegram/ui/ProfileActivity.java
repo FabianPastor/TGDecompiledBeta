@@ -203,6 +203,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private int groupsInCommonRow;
     private ChatFull info;
     private int initialAnimationExtraHeight;
+    private boolean isBot;
     private LinearLayoutManager layoutManager;
     private int leaveChannelRow;
     private ListAdapter listAdapter;
@@ -575,7 +576,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     AboutLinkCell aboutLinkCell = holder.itemView;
                     if (i == ProfileActivity.this.userInfoRow) {
                         userFull = MessagesController.getInstance().getUserFull(ProfileActivity.this.user_id);
-                        aboutLinkCell.setTextAndIcon(userFull != null ? userFull.about : null, R.drawable.profile_info, false);
+                        aboutLinkCell.setTextAndIcon(userFull != null ? userFull.about : null, R.drawable.profile_info, ProfileActivity.this.isBot);
                         return;
                     } else if (i == ProfileActivity.this.channelInfoRow) {
                         text = ProfileActivity.this.info.about;
@@ -674,6 +675,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
             this.userBlocked = MessagesController.getInstance().blockedUsers.contains(Integer.valueOf(this.user_id));
             if (user.bot) {
+                this.isBot = true;
                 BotQuery.loadBotInfo(user.id, true, this.classGuid);
             }
             MessagesController.getInstance().loadFullUser(MessagesController.getInstance().getUser(Integer.valueOf(this.user_id)), this.classGuid, true);
@@ -794,11 +796,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     if (id == -1) {
                         ProfileActivity.this.finishFragment();
                     } else if (id == 2) {
-                        user = MessagesController.getInstance().getUser(Integer.valueOf(ProfileActivity.this.user_id));
-                        if (user == null) {
+                        if (MessagesController.getInstance().getUser(Integer.valueOf(ProfileActivity.this.user_id)) == null) {
                             return;
                         }
-                        if (!user.bot) {
+                        if (!ProfileActivity.this.isBot) {
                             builder = new Builder(ProfileActivity.this.getParentActivity());
                             if (ProfileActivity.this.userBlocked) {
                                 builder.setMessage(LocaleController.getString("AreYouSureUnblockContact", R.string.AreYouSureUnblockContact));
@@ -1268,8 +1269,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                     for (a = 0; a < ProfileActivity.this.info.participants.participants.size(); a++) {
                                         if (((TL_chatChannelParticipant) ProfileActivity.this.info.participants.participants.get(a)).channelParticipant.user_id == user.user_id) {
                                             if (ProfileActivity.this.info != null) {
-                                                ChatFull access$900 = ProfileActivity.this.info;
-                                                access$900.participants_count--;
+                                                ChatFull access$1000 = ProfileActivity.this.info;
+                                                access$1000.participants_count--;
                                             }
                                             ProfileActivity.this.info.participants.participants.remove(a);
                                             changed = true;
@@ -1342,13 +1343,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 public void onClick(View v) {
                     TL_channelBannedRights tL_channelBannedRights;
                     int access$600 = ProfileActivity.this.user_id;
-                    int access$3700 = ProfileActivity.this.banFromGroup;
+                    int access$3800 = ProfileActivity.this.banFromGroup;
                     if (ProfileActivity.this.currentChannelParticipant != null) {
                         tL_channelBannedRights = ProfileActivity.this.currentChannelParticipant.banned_rights;
                     } else {
                         tL_channelBannedRights = null;
                     }
-                    ChannelRightsEditActivity fragment = new ChannelRightsEditActivity(access$600, access$3700, null, tL_channelBannedRights, 1, true);
+                    ChannelRightsEditActivity fragment = new ChannelRightsEditActivity(access$600, access$3800, null, tL_channelBannedRights, 1, true);
                     fragment.setDelegate(new ChannelRightsEditActivityDelegate() {
                         public void didSetRights(int rights, TL_channelAdminRights rightsAdmin, TL_channelBannedRights rightsBanned) {
                             ProfileActivity.this.removeSelfFromStack();
@@ -2538,12 +2539,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             i = this.rowCount;
             this.rowCount = i + 1;
             this.emptyRow = i;
-            if ((user == null || !user.bot) && !TextUtils.isEmpty(user.phone)) {
+            if (!(this.isBot || TextUtils.isEmpty(user.phone))) {
                 i = this.rowCount;
                 this.rowCount = i + 1;
                 this.phoneRow = i;
             }
-            TL_userFull userFull = MessagesController.getInstance().getUserFull(user.id);
+            TL_userFull userFull = MessagesController.getInstance().getUserFull(this.user_id);
             if (!(user == null || TextUtils.isEmpty(user.username))) {
                 hasUsername = true;
             }
@@ -2553,7 +2554,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     this.rowCount = i + 1;
                     this.userSectionRow = i;
                 }
-                if (hasUsername) {
+                if (hasUsername || this.isBot) {
                     i = this.rowCount;
                     this.rowCount = i + 1;
                     this.userInfoRow = i;
@@ -2594,7 +2595,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 this.rowCount = i + 1;
                 this.groupsInCommonRow = i;
             }
-            if (user != null && !user.bot && this.currentEncryptedChat == null && user.id != UserConfig.getClientUserId()) {
+            if (user != null && !this.isBot && this.currentEncryptedChat == null && user.id != UserConfig.getClientUserId()) {
                 i = this.rowCount;
                 this.rowCount = i + 1;
                 this.startSecretChatRow = i;
@@ -2731,7 +2732,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     newString = LocaleController.getString("ChatYourSelfName", R.string.ChatYourSelfName);
                 } else if (user.id == 333000 || user.id == 777000) {
                     newString2 = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
-                } else if (user.bot) {
+                } else if (this.isBot) {
                     newString2 = LocaleController.getString("Bot", R.string.Bot);
                 } else {
                     newString2 = LocaleController.formatUserStatus(user);
@@ -2850,7 +2851,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     User user = MessagesController.getInstance().getUser(Integer.valueOf(this.user_id));
                     if (user != null) {
                         item = menu.addItem(10, (int) R.drawable.ic_ab_other);
-                        if (user.bot) {
+                        if (this.isBot) {
                             if (!user.bot_nochats) {
                                 item.addSubItem(9, LocaleController.getString("BotInvite", R.string.BotInvite));
                             }
@@ -2866,7 +2867,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                 string = LocaleController.getString("BlockContact", R.string.BlockContact);
                             }
                             item.addSubItem(2, string);
-                        } else if (user.bot) {
+                        } else if (this.isBot) {
                             item.addSubItem(2, !this.userBlocked ? LocaleController.getString("BotStop", R.string.BotStop) : LocaleController.getString("BotRestart", R.string.BotRestart));
                         } else {
                             item.addSubItem(2, !this.userBlocked ? LocaleController.getString("BlockContact", R.string.BlockContact) : LocaleController.getString("Unblock", R.string.Unblock));

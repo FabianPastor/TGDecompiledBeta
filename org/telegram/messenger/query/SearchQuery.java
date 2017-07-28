@@ -86,90 +86,90 @@ public class SearchQuery {
             Utilities.globalQueue.postRunnable(new Runnable() {
                 @SuppressLint({"NewApi"})
                 public void run() {
-                    int a;
-                    TL_topPeer hint;
-                    long did;
-                    ShortcutManager shortcutManager = (ShortcutManager) ApplicationLoader.applicationContext.getSystemService(ShortcutManager.class);
-                    List<ShortcutInfo> currentShortcuts = shortcutManager.getDynamicShortcuts();
-                    ArrayList<String> shortcutsToUpdate = new ArrayList();
-                    ArrayList<String> newShortcutsIds = new ArrayList();
-                    ArrayList<String> shortcutsToDelete = new ArrayList();
-                    if (!(currentShortcuts == null || currentShortcuts.isEmpty())) {
-                        newShortcutsIds.add("compose");
+                    try {
+                        int a;
+                        TL_topPeer hint;
+                        long did;
+                        String id;
+                        ShortcutManager shortcutManager = (ShortcutManager) ApplicationLoader.applicationContext.getSystemService(ShortcutManager.class);
+                        List<ShortcutInfo> currentShortcuts = shortcutManager.getDynamicShortcuts();
+                        ArrayList<String> shortcutsToUpdate = new ArrayList();
+                        ArrayList<String> newShortcutsIds = new ArrayList();
+                        ArrayList<String> shortcutsToDelete = new ArrayList();
+                        if (!(currentShortcuts == null || currentShortcuts.isEmpty())) {
+                            newShortcutsIds.add("compose");
+                            for (a = 0; a < hintsFinal.size(); a++) {
+                                hint = (TL_topPeer) hintsFinal.get(a);
+                                if (hint.peer.user_id != 0) {
+                                    did = (long) hint.peer.user_id;
+                                } else {
+                                    did = (long) (-hint.peer.chat_id);
+                                    if (did == 0) {
+                                        did = (long) (-hint.peer.channel_id);
+                                    }
+                                }
+                                newShortcutsIds.add("did" + did);
+                            }
+                            for (a = 0; a < currentShortcuts.size(); a++) {
+                                id = ((ShortcutInfo) currentShortcuts.get(a)).getId();
+                                if (!newShortcutsIds.remove(id)) {
+                                    shortcutsToDelete.add(id);
+                                }
+                                shortcutsToUpdate.add(id);
+                            }
+                            if (newShortcutsIds.isEmpty() && shortcutsToDelete.isEmpty()) {
+                                return;
+                            }
+                        }
+                        Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
+                        intent.setAction("new_dialog");
+                        ArrayList<ShortcutInfo> arrayList = new ArrayList();
+                        arrayList.add(new Builder(ApplicationLoader.applicationContext, "compose").setShortLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut)).setLongLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut)).setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.shortcut_compose)).setIntent(intent).build());
+                        if (shortcutsToUpdate.contains("compose")) {
+                            shortcutManager.updateShortcuts(arrayList);
+                        } else {
+                            shortcutManager.addDynamicShortcuts(arrayList);
+                        }
+                        arrayList.clear();
+                        if (!shortcutsToDelete.isEmpty()) {
+                            shortcutManager.removeDynamicShortcuts(shortcutsToDelete);
+                        }
                         for (a = 0; a < hintsFinal.size(); a++) {
+                            intent = new Intent(ApplicationLoader.applicationContext, OpenChatReceiver.class);
                             hint = (TL_topPeer) hintsFinal.get(a);
+                            User user = null;
+                            Chat chat = null;
                             if (hint.peer.user_id != 0) {
+                                intent.putExtra("userId", hint.peer.user_id);
+                                user = MessagesController.getInstance().getUser(Integer.valueOf(hint.peer.user_id));
                                 did = (long) hint.peer.user_id;
                             } else {
-                                did = (long) (-hint.peer.chat_id);
-                                if (did == 0) {
-                                    did = (long) (-hint.peer.channel_id);
+                                int chat_id = hint.peer.chat_id;
+                                if (chat_id == 0) {
+                                    chat_id = hint.peer.channel_id;
                                 }
+                                chat = MessagesController.getInstance().getChat(Integer.valueOf(chat_id));
+                                intent.putExtra("chatId", chat_id);
+                                did = (long) (-chat_id);
                             }
-                            newShortcutsIds.add("did" + did);
-                        }
-                        for (a = 0; a < currentShortcuts.size(); a++) {
-                            String id;
-                            id = ((ShortcutInfo) currentShortcuts.get(a)).getId();
-                            if (!newShortcutsIds.remove(id)) {
-                                shortcutsToDelete.add(id);
-                            }
-                            shortcutsToUpdate.add(id);
-                        }
-                        if (newShortcutsIds.isEmpty() && shortcutsToDelete.isEmpty()) {
-                            return;
-                        }
-                    }
-                    Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
-                    intent.setAction("new_dialog");
-                    ArrayList<ShortcutInfo> arrayList = new ArrayList();
-                    arrayList.add(new Builder(ApplicationLoader.applicationContext, "compose").setShortLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut)).setLongLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut)).setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.shortcut_compose)).setIntent(intent).build());
-                    if (shortcutsToUpdate.contains("compose")) {
-                        shortcutManager.updateShortcuts(arrayList);
-                    } else {
-                        shortcutManager.addDynamicShortcuts(arrayList);
-                    }
-                    arrayList.clear();
-                    if (!shortcutsToDelete.isEmpty()) {
-                        shortcutManager.removeDynamicShortcuts(shortcutsToDelete);
-                    }
-                    for (a = 0; a < hintsFinal.size(); a++) {
-                        intent = new Intent(ApplicationLoader.applicationContext, OpenChatReceiver.class);
-                        hint = (TL_topPeer) hintsFinal.get(a);
-                        User user = null;
-                        Chat chat = null;
-                        if (hint.peer.user_id != 0) {
-                            intent.putExtra("userId", hint.peer.user_id);
-                            user = MessagesController.getInstance().getUser(Integer.valueOf(hint.peer.user_id));
-                            did = (long) hint.peer.user_id;
-                        } else {
-                            int chat_id = hint.peer.chat_id;
-                            if (chat_id == 0) {
-                                chat_id = hint.peer.channel_id;
-                            }
-                            chat = MessagesController.getInstance().getChat(Integer.valueOf(chat_id));
-                            intent.putExtra("chatId", chat_id);
-                            did = (long) (-chat_id);
-                        }
-                        if (user != null || chat != null) {
-                            String name;
-                            TLObject photo = null;
-                            if (user != null) {
-                                name = ContactsController.formatName(user.first_name, user.last_name);
-                                if (user.photo != null) {
-                                    photo = user.photo.photo_small;
+                            if (user != null || chat != null) {
+                                String name;
+                                TLObject photo = null;
+                                if (user != null) {
+                                    name = ContactsController.formatName(user.first_name, user.last_name);
+                                    if (user.photo != null) {
+                                        photo = user.photo.photo_small;
+                                    }
+                                } else {
+                                    name = chat.title;
+                                    if (chat.photo != null) {
+                                        photo = chat.photo.photo_small;
+                                    }
                                 }
-                            } else {
-                                name = chat.title;
-                                if (chat.photo != null) {
-                                    photo = chat.photo.photo_small;
-                                }
-                            }
-                            intent.setAction("com.tmessages.openchat" + did);
-                            intent.addFlags(ConnectionsManager.FileTypeFile);
-                            Bitmap bitmap = null;
-                            if (photo != null) {
-                                try {
+                                intent.setAction("com.tmessages.openchat" + did);
+                                intent.addFlags(ConnectionsManager.FileTypeFile);
+                                Bitmap bitmap = null;
+                                if (photo != null) {
                                     bitmap = BitmapFactory.decodeFile(FileLoader.getPathToAttach(photo, true).toString());
                                     if (bitmap != null) {
                                         int size = AndroidUtilities.dp(48.0f);
@@ -192,28 +192,27 @@ public class SearchQuery {
                                         }
                                         bitmap = result;
                                     }
-                                } catch (Throwable e2) {
-                                    FileLog.e(e2);
                                 }
+                                id = "did" + did;
+                                if (TextUtils.isEmpty(name)) {
+                                    name = " ";
+                                }
+                                Builder builder = new Builder(ApplicationLoader.applicationContext, id).setShortLabel(name).setLongLabel(name).setIntent(intent);
+                                if (bitmap != null) {
+                                    builder.setIcon(Icon.createWithBitmap(bitmap));
+                                } else {
+                                    builder.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.shortcut_user));
+                                }
+                                arrayList.add(builder.build());
+                                if (shortcutsToUpdate.contains(id)) {
+                                    shortcutManager.updateShortcuts(arrayList);
+                                } else {
+                                    shortcutManager.addDynamicShortcuts(arrayList);
+                                }
+                                arrayList.clear();
                             }
-                            id = "did" + did;
-                            if (TextUtils.isEmpty(name)) {
-                                name = " ";
-                            }
-                            Builder builder = new Builder(ApplicationLoader.applicationContext, id).setShortLabel(name).setLongLabel(name).setIntent(intent);
-                            if (bitmap != null) {
-                                builder.setIcon(Icon.createWithBitmap(bitmap));
-                            } else {
-                                builder.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.shortcut_user));
-                            }
-                            arrayList.add(builder.build());
-                            if (shortcutsToUpdate.contains(id)) {
-                                shortcutManager.updateShortcuts(arrayList);
-                            } else {
-                                shortcutManager.addDynamicShortcuts(arrayList);
-                            }
-                            arrayList.clear();
                         }
+                    } catch (Throwable th) {
                     }
                 }
             });

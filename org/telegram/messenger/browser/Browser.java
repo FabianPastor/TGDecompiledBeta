@@ -5,11 +5,13 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import java.lang.ref.WeakReference;
+import java.util.List;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -134,23 +136,32 @@ public class Browser {
         }
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public static void openUrl(Context context, Uri uri, boolean allowCustom) {
         if (context != null && uri != null) {
             boolean internalUri = isInternalUri(uri);
             try {
                 String scheme = uri.getScheme() != null ? uri.getScheme().toLowerCase() : "";
                 if (allowCustom && MediaController.getInstance().canCustomTabs() && !internalUri && !scheme.equals("tel")) {
+                    List<ResolveInfo> allActivities = null;
+                    try {
+                        allActivities = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", uri), 0);
+                    } catch (Exception e) {
+                    }
+                    if (allActivities != null) {
+                    }
                     Intent share = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
                     share.setAction("android.intent.action.SEND");
                     Builder builder = new Builder(getSession());
                     builder.setToolbarColor(Theme.getColor(Theme.key_actionBarDefault));
                     builder.setShowTitle(true);
                     builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, share, 0), false);
-                    builder.build().launchUrl((Activity) context, uri);
+                    builder.build().launchUrl(context, uri);
                     return;
                 }
-            } catch (Throwable e) {
-                FileLog.e(e);
+            } catch (Throwable e2) {
+                FileLog.e(e2);
             }
             try {
                 Intent intent = new Intent("android.intent.action.VIEW", uri);
@@ -159,8 +170,8 @@ public class Browser {
                 }
                 intent.putExtra("com.android.browser.application_id", context.getPackageName());
                 context.startActivity(intent);
-            } catch (Throwable e2) {
-                FileLog.e(e2);
+            } catch (Throwable e22) {
+                FileLog.e(e22);
             }
         }
     }

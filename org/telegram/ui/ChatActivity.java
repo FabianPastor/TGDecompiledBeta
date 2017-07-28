@@ -181,6 +181,7 @@ import org.telegram.tgnet.TLRPC.TL_keyboardButtonGame;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonRow;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonSwitchInline;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonUrl;
+import org.telegram.tgnet.TLRPC.TL_message;
 import org.telegram.tgnet.TLRPC.TL_messageActionChatAddUser;
 import org.telegram.tgnet.TLRPC.TL_messageActionChatDeleteUser;
 import org.telegram.tgnet.TLRPC.TL_messageActionChatMigrateTo;
@@ -207,6 +208,7 @@ import org.telegram.tgnet.TLRPC.TL_photoEmpty;
 import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
 import org.telegram.tgnet.TLRPC.TL_replyKeyboardForceReply;
+import org.telegram.tgnet.TLRPC.TL_user;
 import org.telegram.tgnet.TLRPC.TL_userFull;
 import org.telegram.tgnet.TLRPC.TL_webPage;
 import org.telegram.tgnet.TLRPC.TL_webPageEmpty;
@@ -1703,6 +1705,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
     public View createView(Context context) {
         int a;
+        CharSequence oldMessage;
         boolean z;
         View fragmentContextView;
         boolean z2;
@@ -2293,6 +2296,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
         if (this.chatActivityEnterView != null) {
             this.chatActivityEnterView.onDestroy();
+            if (this.chatActivityEnterView.isEditingMessage()) {
+                oldMessage = null;
+            } else {
+                oldMessage = this.chatActivityEnterView.getFieldText();
+            }
+        } else {
+            oldMessage = null;
         }
         if (this.mentionsAdapter != null) {
             this.mentionsAdapter.onDestroy();
@@ -3646,6 +3656,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         } catch (Throwable e2) {
             FileLog.e(e2);
+        }
+        if (oldMessage != null) {
+            this.chatActivityEnterView.setFieldText(oldMessage);
         }
         fixLayoutInternal();
         return this.fragmentView;
@@ -5661,7 +5674,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         } else if ((inputStickerSet instanceof TL_inputStickerSetShortName) && !StickersQuery.isStickerPackInstalled(inputStickerSet.short_name)) {
                             return 7;
                         }
-                    } else if ((!messageObject.isRoundVideo() || (messageObject.isRoundVideo() && BuildVars.DEBUG_VERSION)) && ((messageObject.messageOwner.media instanceof TL_messageMediaPhoto) || messageObject.getDocument() != null || messageObject.isMusic() || messageObject.isVideo())) {
+                        return 9;
+                    }
+                    if ((!messageObject.isRoundVideo() || (messageObject.isRoundVideo() && BuildVars.DEBUG_VERSION)) && ((messageObject.messageOwner.media instanceof TL_messageMediaPhoto) || messageObject.getDocument() != null || messageObject.isMusic() || messageObject.isVideo())) {
                         canSave = false;
                         if (!(messageObject.messageOwner.attachPath == null || messageObject.messageOwner.attachPath.length() == 0 || !new File(messageObject.messageOwner.attachPath).exists())) {
                             canSave = true;
@@ -6139,7 +6154,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         sent = true;
                         String name = c.getString(0);
                         String number = c.getString(1);
-                        User user = new User();
+                        User user = new TL_user();
                         user.first_name = name;
                         user.last_name = "";
                         user.phone = number;
@@ -6378,7 +6393,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 if (dayArray == null) {
                                     dayArray = new ArrayList();
                                     this.messagesByDays.put(obj.dateKey, dayArray);
-                                    dateMsg = new Message();
+                                    dateMsg = new TL_message();
                                     dateMsg.message = LocaleController.formatDateChat((long) obj.messageOwner.date);
                                     dateMsg.id = 0;
                                     dateMsg.date = obj.messageOwner.date;
@@ -6425,7 +6440,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 }
                                 if (load_type == 2 && obj.getId() == this.first_unread_id) {
                                     if (approximateHeightSum > AndroidUtilities.displaySize.y / 2 || !this.forwardEndReached[0]) {
-                                        dateMsg = new Message();
+                                        dateMsg = new TL_message();
                                         dateMsg.message = "";
                                         dateMsg.id = 0;
                                         messageObject = new MessageObject(dateMsg, null, false);
@@ -6450,7 +6465,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     }
                                 }
                                 if (load_type != 2 && this.unreadMessageObject == null && this.createUnreadMessageAfterId != 0 && (((this.currentEncryptedChat == null && !obj.isOut() && obj.getId() >= this.createUnreadMessageAfterId) || !(this.currentEncryptedChat == null || obj.isOut() || obj.getId() > this.createUnreadMessageAfterId)) && (load_type == 1 || prevObj != null))) {
-                                    dateMsg = new Message();
+                                    dateMsg = new TL_message();
                                     dateMsg.message = "";
                                     dateMsg.id = 0;
                                     messageObject = new MessageObject(dateMsg, null, false);
@@ -6870,7 +6885,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             if (dayArray == null) {
                                 dayArray = new ArrayList();
                                 this.messagesByDays.put(obj.dateKey, dayArray);
-                                dateMsg = new Message();
+                                dateMsg = new TL_message();
                                 dateMsg.message = LocaleController.formatDateChat((long) obj.messageOwner.date);
                                 dateMsg.id = 0;
                                 dateMsg.date = obj.messageOwner.date;
@@ -6891,7 +6906,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         this.unreadMessageObject = null;
                                     }
                                     if (this.unreadMessageObject == null) {
-                                        dateMsg = new Message();
+                                        dateMsg = new TL_message();
                                         dateMsg.message = "";
                                         dateMsg.id = 0;
                                         messageObject = new MessageObject(dateMsg, null, false);
@@ -9426,10 +9441,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             } else if (type == 7) {
                                 if (this.selectedObject.isMask()) {
                                     items.add(LocaleController.getString("AddToMasks", R.string.AddToMasks));
+                                    options.add(Integer.valueOf(9));
                                 } else {
                                     items.add(LocaleController.getString("AddToStickers", R.string.AddToStickers));
+                                    options.add(Integer.valueOf(9));
+                                    items.add("Add to Favourites");
+                                    options.add(Integer.valueOf(20));
                                 }
-                                options.add(Integer.valueOf(9));
                             } else if (type == 8) {
                                 User user = MessagesController.getInstance().getUser(Integer.valueOf(this.selectedObject.messageOwner.media.user_id));
                                 if (!(user == null || user.id == UserConfig.getClientUserId() || ContactsController.getInstance().contactsDict.get(user.id) != null)) {
@@ -9442,6 +9460,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     items.add(LocaleController.getString("Call", R.string.Call));
                                     options.add(Integer.valueOf(17));
                                 }
+                            } else if (type == 9) {
+                                items.add("Add to Favourites");
+                                options.add(Integer.valueOf(20));
                             }
                             if (!this.selectedObject.isSecretPhoto()) {
                                 items.add(LocaleController.getString("Forward", R.string.Forward));
@@ -9550,6 +9571,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (this.selectedObject != null) {
             Bundle args;
             String path;
+            File file;
             AlertDialog.Builder builder;
             Intent intent;
             switch (option) {
@@ -9599,7 +9621,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 case 5:
                     File locFile = null;
                     if (!(this.selectedObject.messageOwner.attachPath == null || this.selectedObject.messageOwner.attachPath.length() == 0)) {
-                        File file = new File(this.selectedObject.messageOwner.attachPath);
+                        file = new File(this.selectedObject.messageOwner.attachPath);
                         if (file.exists()) {
                             locFile = file;
                         }
@@ -9668,7 +9690,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                     intent = new Intent("android.intent.action.SEND");
                     intent.setType(this.selectedObject.getDocument().mime_type);
-                    intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(new File(path)));
+                    file = new File(path);
+                    if (VERSION.SDK_INT >= 24) {
+                        intent.setFlags(1);
+                        intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(getParentActivity(), "org.telegram.messenger.beta.provider", file));
+                    } else {
+                        intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(file));
+                    }
                     getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
                     break;
                 case 7:

@@ -18,12 +18,64 @@ public class CustomTabsSessionToken {
                 Log.e(CustomTabsSessionToken.TAG, "RemoteException during ICustomTabsCallback transaction");
             }
         }
+
+        public void extraCallback(String callbackName, Bundle args) {
+            try {
+                CustomTabsSessionToken.this.mCallbackBinder.extraCallback(callbackName, args);
+            } catch (RemoteException e) {
+                Log.e(CustomTabsSessionToken.TAG, "RemoteException during ICustomTabsCallback transaction");
+            }
+        }
+
+        public void onMessageChannelReady(Bundle extras) {
+            try {
+                CustomTabsSessionToken.this.mCallbackBinder.onMessageChannelReady(extras);
+            } catch (RemoteException e) {
+                Log.e(CustomTabsSessionToken.TAG, "RemoteException during ICustomTabsCallback transaction");
+            }
+        }
+
+        public void onPostMessage(String message, Bundle extras) {
+            try {
+                CustomTabsSessionToken.this.mCallbackBinder.onPostMessage(message, extras);
+            } catch (RemoteException e) {
+                Log.e(CustomTabsSessionToken.TAG, "RemoteException during ICustomTabsCallback transaction");
+            }
+        }
     };
     private final ICustomTabsCallback mCallbackBinder;
 
+    static class DummyCallback extends Stub {
+        DummyCallback() {
+        }
+
+        public void onNavigationEvent(int navigationEvent, Bundle extras) {
+        }
+
+        public void extraCallback(String callbackName, Bundle args) {
+        }
+
+        public void onMessageChannelReady(Bundle extras) {
+        }
+
+        public void onPostMessage(String message, Bundle extras) {
+        }
+
+        public IBinder asBinder() {
+            return this;
+        }
+    }
+
     public static CustomTabsSessionToken getSessionTokenFromIntent(Intent intent) {
         IBinder binder = BundleCompat.getBinder(intent.getExtras(), CustomTabsIntent.EXTRA_SESSION);
-        return binder == null ? null : new CustomTabsSessionToken(Stub.asInterface(binder));
+        if (binder == null) {
+            return null;
+        }
+        return new CustomTabsSessionToken(Stub.asInterface(binder));
+    }
+
+    public static CustomTabsSessionToken createDummySessionTokenForTesting() {
+        return new CustomTabsSessionToken(new DummyCallback());
     }
 
     CustomTabsSessionToken(ICustomTabsCallback callbackBinder) {
@@ -47,5 +99,9 @@ public class CustomTabsSessionToken {
 
     public CustomTabsCallback getCallback() {
         return this.mCallback;
+    }
+
+    public boolean isAssociatedWith(CustomTabsSession session) {
+        return session.getBinder().equals(this.mCallbackBinder);
     }
 }

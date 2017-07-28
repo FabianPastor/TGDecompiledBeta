@@ -1308,7 +1308,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (this.listAdapter != null) {
                 this.listAdapter.notifyItemChanged(this.stickersRow);
             }
-        } else if (id == NotificationCenter.userInfoDidLoaded && args[0].intValue() == UserConfig.getClientUserId()) {
+        } else if (id == NotificationCenter.userInfoDidLoaded && args[0].intValue() == UserConfig.getClientUserId() && this.listAdapter != null) {
             this.listAdapter.notifyItemChanged(this.bioRow);
         }
     }

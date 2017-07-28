@@ -1848,20 +1848,30 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
-        String description;
-        TLObject document;
+        int maxWidth;
+        boolean z;
+        int dp;
+        int linkPreviewMaxWidth;
+        Photo photo;
         String type;
-        int duration;
+        boolean smallImage;
         TL_webDocument webDocument;
+        TL_webDocument webDocument2;
         Throwable e;
+        int restLinesCount;
         int a;
         int lineLeft;
         boolean authorIsRTL;
-        boolean hasRTL;
         int textWidth;
         int maxPhotoWidth;
+        DocumentAttribute attribute;
+        PhotoSize photoSize;
+        PhotoSize photoSize2;
+        int dp2;
         int durationWidth;
-        int seconds;
+        ArrayList arrayList;
+        String fileName;
+        boolean autoDownload;
         String str;
         CharSequence str2;
         String price;
@@ -1870,14 +1880,16 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         WebPage webPage;
         int rows;
         boolean fullWidth;
-        float f;
         int maxButtonWidth;
         int maxButtonsWidth;
         HashMap<String, BotButton> hashMap;
         HashMap<String, BotButton> oldByPosition;
+        TL_keyboardButtonRow row;
         int buttonsCount;
         int buttonWidth;
+        int b;
         ChatMessageCell chatMessageCell;
+        BotButton botButton;
         String key;
         String position;
         BotButton oldButton;
@@ -1890,13 +1902,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
             int i;
-            int dp;
-            int linkPreviewMaxWidth;
             int height;
             int width;
-            TL_keyboardButtonRow row;
-            int b;
-            BotButton botButton;
+            float f;
             int timeWidthTotal;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
@@ -1977,11 +1985,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
-            int maxWidth;
-            boolean z;
-            DocumentAttribute attribute;
-            String fileName;
-            boolean autoDownload;
             float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
@@ -2087,16 +2090,13 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     String site_name;
                     String title;
                     String author;
-                    Photo photo;
-                    boolean smallImage;
-                    TL_webDocument webDocument2;
+                    String description;
+                    TLObject document;
+                    int duration;
                     int additinalWidth;
                     int restLines;
-                    int restLinesCount;
-                    PhotoSize photoSize;
-                    PhotoSize photoSize2;
-                    int dp2;
-                    ArrayList arrayList;
+                    boolean hasRTL;
+                    int seconds;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.needDrawAvatar() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);

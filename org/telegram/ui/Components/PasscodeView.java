@@ -884,7 +884,10 @@ public class PasscodeView extends FrameLayout {
         if (getVisibility() != 0) {
             setAlpha(1.0f);
             setTranslationY(0.0f);
-            if (ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("selectedBackground", 1000001) == 1000001) {
+            if (Theme.isCustomTheme()) {
+                this.backgroundDrawable = Theme.getCachedWallpaper();
+                this.backgroundFrameLayout.setBackgroundColor(-NUM);
+            } else if (ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("selectedBackground", 1000001) == 1000001) {
                 this.backgroundFrameLayout.setBackgroundColor(-11436898);
             } else {
                 this.backgroundDrawable = Theme.getCachedWallpaper();
