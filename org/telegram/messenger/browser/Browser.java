@@ -144,12 +144,37 @@ public class Browser {
             try {
                 String scheme = uri.getScheme() != null ? uri.getScheme().toLowerCase() : "";
                 if (allowCustom && MediaController.getInstance().canCustomTabs() && !internalUri && !scheme.equals("tel")) {
-                    List<ResolveInfo> allActivities = null;
+                    String browserPackageName = null;
                     try {
-                        allActivities = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", uri), 0);
+                        browserPackageName = context.getPackageManager().resolveActivity(new Intent("android.intent.action.VIEW", Uri.parse("http://")), 65536).activityInfo.packageName;
                     } catch (Exception e) {
                     }
-                    if (allActivities != null) {
+                    List<ResolveInfo> list = null;
+                    try {
+                        list = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", uri), 0);
+                        int a;
+                        if (browserPackageName != null) {
+                            a = 0;
+                            while (a < list.size()) {
+                                if (browserPackageName.equals(((ResolveInfo) list.get(a)).activityInfo.packageName)) {
+                                    list.remove(a);
+                                    a--;
+                                }
+                                a++;
+                            }
+                        } else {
+                            a = 0;
+                            while (a < list.size()) {
+                                if (((ResolveInfo) list.get(a)).activityInfo.packageName.toLowerCase().contains("browser")) {
+                                    list.remove(a);
+                                    a--;
+                                }
+                                a++;
+                            }
+                        }
+                    } catch (Exception e2) {
+                    }
+                    if (list != null) {
                     }
                     Intent share = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
                     share.setAction("android.intent.action.SEND");
@@ -160,8 +185,8 @@ public class Browser {
                     builder.build().launchUrl(context, uri);
                     return;
                 }
-            } catch (Throwable e2) {
-                FileLog.e(e2);
+            } catch (Throwable e3) {
+                FileLog.e(e3);
             }
             try {
                 Intent intent = new Intent("android.intent.action.VIEW", uri);
@@ -170,8 +195,8 @@ public class Browser {
                 }
                 intent.putExtra("com.android.browser.application_id", context.getPackageName());
                 context.startActivity(intent);
-            } catch (Throwable e22) {
-                FileLog.e(e22);
+            } catch (Throwable e32) {
+                FileLog.e(e32);
             }
         }
     }
