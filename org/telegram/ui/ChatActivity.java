@@ -5674,9 +5674,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         } else if ((inputStickerSet instanceof TL_inputStickerSetShortName) && !StickersQuery.isStickerPackInstalled(inputStickerSet.short_name)) {
                             return 7;
                         }
-                        return 9;
-                    }
-                    if ((!messageObject.isRoundVideo() || (messageObject.isRoundVideo() && BuildVars.DEBUG_VERSION)) && ((messageObject.messageOwner.media instanceof TL_messageMediaPhoto) || messageObject.getDocument() != null || messageObject.isMusic() || messageObject.isVideo())) {
+                    } else if ((!messageObject.isRoundVideo() || (messageObject.isRoundVideo() && BuildVars.DEBUG_VERSION)) && ((messageObject.messageOwner.media instanceof TL_messageMediaPhoto) || messageObject.getDocument() != null || messageObject.isMusic() || messageObject.isVideo())) {
                         canSave = false;
                         if (!(messageObject.messageOwner.attachPath == null || messageObject.messageOwner.attachPath.length() == 0 || !new File(messageObject.messageOwner.attachPath).exists())) {
                             canSave = true;
@@ -9445,8 +9443,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 } else {
                                     items.add(LocaleController.getString("AddToStickers", R.string.AddToStickers));
                                     options.add(Integer.valueOf(9));
-                                    items.add("Add to Favourites");
-                                    options.add(Integer.valueOf(20));
                                 }
                             } else if (type == 8) {
                                 User user = MessagesController.getInstance().getUser(Integer.valueOf(this.selectedObject.messageOwner.media.user_id));
@@ -9460,9 +9456,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     items.add(LocaleController.getString("Call", R.string.Call));
                                     options.add(Integer.valueOf(17));
                                 }
-                            } else if (type == 9) {
-                                items.add("Add to Favourites");
-                                options.add(Integer.valueOf(20));
                             }
                             if (!this.selectedObject.isSecretPhoto()) {
                                 items.add(LocaleController.getString("Forward", R.string.Forward));

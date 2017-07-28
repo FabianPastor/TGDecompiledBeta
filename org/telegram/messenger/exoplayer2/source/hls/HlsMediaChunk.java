@@ -147,6 +147,7 @@ final class HlsMediaChunk extends MediaChunk {
     private void loadMedia() throws IOException, InterruptedException {
         DataSpec loadDataSpec;
         boolean skipLoadedBytes;
+        ExtractorInput input;
         if (this.isEncrypted) {
             loadDataSpec = this.dataSpec;
             skipLoadedBytes = this.bytesLoaded != 0;
@@ -159,7 +160,6 @@ final class HlsMediaChunk extends MediaChunk {
         } else if (this.timestampAdjuster.getFirstSampleTimestampUs() == Long.MAX_VALUE) {
             this.timestampAdjuster.setFirstSampleTimestampUs(this.startTimeUs);
         }
-        ExtractorInput input;
         try {
             input = new DefaultExtractorInput(this.dataSource, loadDataSpec.absoluteStreamPosition, this.dataSource.open(loadDataSpec));
             if (this.extractor == null) {

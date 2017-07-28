@@ -201,9 +201,8 @@ public final class zzag implements zzb {
 
     public final synchronized zzc zza(String str) {
         zzc com_google_android_gms_internal_zzc;
-        zzaj com_google_android_gms_internal_zzaj;
         IOException e;
-        zzaj com_google_android_gms_internal_zzaj2;
+        zzaj com_google_android_gms_internal_zzaj;
         Throwable th;
         NegativeArraySizeException e2;
         zzai com_google_android_gms_internal_zzai = (zzai) this.zzav.get(str);
@@ -211,11 +210,12 @@ public final class zzag implements zzb {
             com_google_android_gms_internal_zzc = null;
         } else {
             File zze = zze(str);
+            zzaj com_google_android_gms_internal_zzaj2;
             try {
-                com_google_android_gms_internal_zzaj = new zzaj(new BufferedInputStream(new FileInputStream(zze)));
+                com_google_android_gms_internal_zzaj2 = new zzaj(new BufferedInputStream(new FileInputStream(zze)));
                 try {
-                    zzai.zzf(com_google_android_gms_internal_zzaj);
-                    byte[] zza = zza((InputStream) com_google_android_gms_internal_zzaj, (int) (zze.length() - ((long) com_google_android_gms_internal_zzaj.zzaz)));
+                    zzai.zzf(com_google_android_gms_internal_zzaj2);
+                    byte[] zza = zza((InputStream) com_google_android_gms_internal_zzaj2, (int) (zze.length() - ((long) com_google_android_gms_internal_zzaj2.zzaz)));
                     zzc com_google_android_gms_internal_zzc2 = new zzc();
                     com_google_android_gms_internal_zzc2.data = zza;
                     com_google_android_gms_internal_zzc2.zza = com_google_android_gms_internal_zzai.zza;
@@ -225,20 +225,20 @@ public final class zzag implements zzb {
                     com_google_android_gms_internal_zzc2.zze = com_google_android_gms_internal_zzai.zze;
                     com_google_android_gms_internal_zzc2.zzf = com_google_android_gms_internal_zzai.zzf;
                     try {
-                        com_google_android_gms_internal_zzaj.close();
+                        com_google_android_gms_internal_zzaj2.close();
                         com_google_android_gms_internal_zzc = com_google_android_gms_internal_zzc2;
                     } catch (IOException e3) {
                         com_google_android_gms_internal_zzc = null;
                     }
                 } catch (IOException e4) {
                     e = e4;
-                    com_google_android_gms_internal_zzaj2 = com_google_android_gms_internal_zzaj;
+                    com_google_android_gms_internal_zzaj = com_google_android_gms_internal_zzaj2;
                     try {
                         zzab.zzb("%s: %s", zze.getAbsolutePath(), e.toString());
                         remove(str);
-                        if (com_google_android_gms_internal_zzaj2 != null) {
+                        if (com_google_android_gms_internal_zzaj != null) {
                             try {
-                                com_google_android_gms_internal_zzaj2.close();
+                                com_google_android_gms_internal_zzaj.close();
                             } catch (IOException e5) {
                                 com_google_android_gms_internal_zzc = null;
                             }
@@ -247,10 +247,10 @@ public final class zzag implements zzb {
                         return com_google_android_gms_internal_zzc;
                     } catch (Throwable th2) {
                         th = th2;
-                        com_google_android_gms_internal_zzaj = com_google_android_gms_internal_zzaj2;
-                        if (com_google_android_gms_internal_zzaj != null) {
+                        com_google_android_gms_internal_zzaj2 = com_google_android_gms_internal_zzaj;
+                        if (com_google_android_gms_internal_zzaj2 != null) {
                             try {
-                                com_google_android_gms_internal_zzaj.close();
+                                com_google_android_gms_internal_zzaj2.close();
                             } catch (IOException e6) {
                                 com_google_android_gms_internal_zzc = null;
                             }
@@ -262,9 +262,9 @@ public final class zzag implements zzb {
                     try {
                         zzab.zzb("%s: %s", zze.getAbsolutePath(), e2.toString());
                         remove(str);
-                        if (com_google_android_gms_internal_zzaj != null) {
+                        if (com_google_android_gms_internal_zzaj2 != null) {
                             try {
-                                com_google_android_gms_internal_zzaj.close();
+                                com_google_android_gms_internal_zzaj2.close();
                             } catch (IOException e8) {
                                 com_google_android_gms_internal_zzc = null;
                             }
@@ -273,37 +273,37 @@ public final class zzag implements zzb {
                         return com_google_android_gms_internal_zzc;
                     } catch (Throwable th3) {
                         th = th3;
-                        if (com_google_android_gms_internal_zzaj != null) {
-                            com_google_android_gms_internal_zzaj.close();
+                        if (com_google_android_gms_internal_zzaj2 != null) {
+                            com_google_android_gms_internal_zzaj2.close();
                         }
                         throw th;
                     }
                 }
             } catch (IOException e9) {
                 e = e9;
-                com_google_android_gms_internal_zzaj2 = null;
+                com_google_android_gms_internal_zzaj = null;
                 zzab.zzb("%s: %s", zze.getAbsolutePath(), e.toString());
+                remove(str);
+                if (com_google_android_gms_internal_zzaj != null) {
+                    com_google_android_gms_internal_zzaj.close();
+                }
+                com_google_android_gms_internal_zzc = null;
+                return com_google_android_gms_internal_zzc;
+            } catch (NegativeArraySizeException e10) {
+                e2 = e10;
+                com_google_android_gms_internal_zzaj2 = null;
+                zzab.zzb("%s: %s", zze.getAbsolutePath(), e2.toString());
                 remove(str);
                 if (com_google_android_gms_internal_zzaj2 != null) {
                     com_google_android_gms_internal_zzaj2.close();
                 }
                 com_google_android_gms_internal_zzc = null;
                 return com_google_android_gms_internal_zzc;
-            } catch (NegativeArraySizeException e10) {
-                e2 = e10;
-                com_google_android_gms_internal_zzaj = null;
-                zzab.zzb("%s: %s", zze.getAbsolutePath(), e2.toString());
-                remove(str);
-                if (com_google_android_gms_internal_zzaj != null) {
-                    com_google_android_gms_internal_zzaj.close();
-                }
-                com_google_android_gms_internal_zzc = null;
-                return com_google_android_gms_internal_zzc;
             } catch (Throwable th4) {
                 th = th4;
-                com_google_android_gms_internal_zzaj = null;
-                if (com_google_android_gms_internal_zzaj != null) {
-                    com_google_android_gms_internal_zzaj.close();
+                com_google_android_gms_internal_zzaj2 = null;
+                if (com_google_android_gms_internal_zzaj2 != null) {
+                    com_google_android_gms_internal_zzaj2.close();
                 }
                 throw th;
             }
