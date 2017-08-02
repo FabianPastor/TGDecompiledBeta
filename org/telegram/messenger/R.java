@@ -569,6 +569,7 @@ public final class R {
         public static final int tool_curve = NUM;
         public static final int tool_rotate = NUM;
         public static final int transparent = NUM;
+        public static final int usersearch = NUM;
         public static final int verified_area = NUM;
         public static final int verified_check = NUM;
         public static final int video_1080 = NUM;
@@ -2035,6 +2036,7 @@ public final class R {
         public static final int ScreenCaptureInfo = NUM;
         public static final int SdCard = NUM;
         public static final int Search = NUM;
+        public static final int SearchFrom = NUM;
         public static final int SearchGifs = NUM;
         public static final int SearchGifsTitle = NUM;
         public static final int SearchImages = NUM;

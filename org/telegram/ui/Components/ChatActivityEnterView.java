@@ -1618,6 +1618,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         setEmojiButtonImage();
     }
 
+    public void addEmojiToRecent(String code) {
+        createEmojiView();
+        this.emojiView.addEmojiToRecent(code);
+    }
+
     public void setOpenGifsTabFirst() {
         createEmojiView();
         StickersQuery.loadRecents(0, true, true);
@@ -2794,10 +2799,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    public void replaceWithText(int start, int len, CharSequence text) {
+    public void replaceWithText(int start, int len, CharSequence text, boolean parseEmoji) {
         try {
             SpannableStringBuilder builder = new SpannableStringBuilder(this.messageEditText.getText());
             builder.replace(start, start + len, text);
+            if (parseEmoji) {
+                Emoji.replaceEmoji(builder, this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            }
             this.messageEditText.setText(builder);
             this.messageEditText.setSelection(text.length() + start);
         } catch (Throwable e) {

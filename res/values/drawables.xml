@@ -1693,6 +1693,10 @@
     <drawable name="tool_rotate">res/drawable-xhdpi-v4/tool_rotate.png</drawable>
     <drawable name="tool_rotate">res/drawable-xxhdpi-v4/tool_rotate.png</drawable>
     <drawable name="transparent">res/drawable/transparent.xml</drawable>
+    <drawable name="usersearch">res/drawable-mdpi-v4/usersearch.png</drawable>
+    <drawable name="usersearch">res/drawable-hdpi-v4/usersearch.png</drawable>
+    <drawable name="usersearch">res/drawable-xhdpi-v4/usersearch.png</drawable>
+    <drawable name="usersearch">res/drawable-xxhdpi-v4/usersearch.png</drawable>
     <drawable name="verified_area">res/drawable-mdpi-v4/verified_area.png</drawable>
     <drawable name="verified_area">res/drawable-hdpi-v4/verified_area.png</drawable>
     <drawable name="verified_area">res/drawable-xhdpi-v4/verified_area.png</drawable>

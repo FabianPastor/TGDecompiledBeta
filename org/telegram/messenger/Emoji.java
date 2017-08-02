@@ -1,5 +1,6 @@
 package org.telegram.messenger;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
@@ -20,17 +21,25 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map.Entry;
 
 public class Emoji {
     private static int bigImgSize = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 40.0f : 32.0f);
     private static final int[][] cols = new int[][]{new int[]{15, 15, 15, 15}, new int[]{6, 6, 6, 6}, new int[]{8, 8, 8, 8}, new int[]{9, 9, 9, 9}, new int[]{10, 10, 10, 10}};
     private static int drawImgSize = AndroidUtilities.dp(20.0f);
     private static Bitmap[][] emojiBmp = ((Bitmap[][]) Array.newInstance(Bitmap.class, new int[]{5, 4}));
+    public static HashMap<String, String> emojiColor = new HashMap();
+    public static HashMap<String, Integer> emojiUseHistory = new HashMap();
     private static boolean inited = false;
     private static boolean[][] loadingEmoji = ((boolean[][]) Array.newInstance(Boolean.TYPE, new int[]{5, 4}));
     private static Paint placeholderPaint = new Paint();
+    public static ArrayList<String> recentEmoji = new ArrayList();
+    private static boolean recentEmojiLoaded = false;
     private static HashMap<CharSequence, DrawableInfo> rects = new HashMap();
     private static final int splitCount = 4;
 
@@ -153,6 +162,8 @@ public class Emoji {
             return this.size;
         }
     }
+
+    public static native Object[] getSuggestion(String str);
 
     static {
         int emojiFullSize;
@@ -440,5 +451,152 @@ public class Emoji {
             }
         }
         return s;
+    }
+
+    public static void addRecentEmoji(String code) {
+        Integer count = (Integer) emojiUseHistory.get(code);
+        if (count == null) {
+            count = Integer.valueOf(0);
+        }
+        if (count.intValue() == 0 && emojiUseHistory.size() > 50) {
+            for (int a = recentEmoji.size() - 1; a >= 0; a--) {
+                emojiUseHistory.remove((String) recentEmoji.get(a));
+                recentEmoji.remove(a);
+                if (emojiUseHistory.size() <= 50) {
+                    break;
+                }
+            }
+        }
+        emojiUseHistory.put(code, Integer.valueOf(count.intValue() + 1));
+    }
+
+    public static void sortEmoji() {
+        recentEmoji.clear();
+        for (Entry<String, Integer> entry : emojiUseHistory.entrySet()) {
+            recentEmoji.add(entry.getKey());
+        }
+        Collections.sort(recentEmoji, new Comparator<String>() {
+            public int compare(String lhs, String rhs) {
+                Integer count1 = (Integer) Emoji.emojiUseHistory.get(lhs);
+                Integer count2 = (Integer) Emoji.emojiUseHistory.get(rhs);
+                if (count1 == null) {
+                    count1 = Integer.valueOf(0);
+                }
+                if (count2 == null) {
+                    count2 = Integer.valueOf(0);
+                }
+                if (count1.intValue() > count2.intValue()) {
+                    return -1;
+                }
+                if (count1.intValue() < count2.intValue()) {
+                    return 1;
+                }
+                return 0;
+            }
+        });
+        while (recentEmoji.size() > 50) {
+            recentEmoji.remove(recentEmoji.size() - 1);
+        }
+    }
+
+    public static void saveRecentEmoji() {
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0);
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Entry<String, Integer> entry : emojiUseHistory.entrySet()) {
+            if (stringBuilder.length() != 0) {
+                stringBuilder.append(",");
+            }
+            stringBuilder.append((String) entry.getKey());
+            stringBuilder.append("=");
+            stringBuilder.append(entry.getValue());
+        }
+        preferences.edit().putString("emojis2", stringBuilder.toString()).commit();
+    }
+
+    public static void clearRecentEmoji() {
+        ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0).edit().putBoolean("filled_default", true).commit();
+        emojiUseHistory.clear();
+        recentEmoji.clear();
+        saveRecentEmoji();
+    }
+
+    public static void loadRecentEmoji() {
+        if (!recentEmojiLoaded) {
+            String str;
+            String[] args2;
+            int a;
+            recentEmojiLoaded = true;
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0);
+            try {
+                emojiUseHistory.clear();
+                if (preferences.contains("emojis")) {
+                    str = preferences.getString("emojis", "");
+                    if (str != null && str.length() > 0) {
+                        for (String arg : str.split(",")) {
+                            args2 = arg.split("=");
+                            long value = Utilities.parseLong(args2[0]).longValue();
+                            String string = "";
+                            for (a = 0; a < 4; a++) {
+                                string = String.valueOf((char) ((int) value)) + string;
+                                value >>= 16;
+                                if (value == 0) {
+                                    break;
+                                }
+                            }
+                            if (string.length() > 0) {
+                                emojiUseHistory.put(string, Utilities.parseInt(args2[1]));
+                            }
+                        }
+                    }
+                    preferences.edit().remove("emojis").commit();
+                    saveRecentEmoji();
+                } else {
+                    str = preferences.getString("emojis2", "");
+                    if (str != null && str.length() > 0) {
+                        for (String arg2 : str.split(",")) {
+                            args2 = arg2.split("=");
+                            emojiUseHistory.put(args2[0], Utilities.parseInt(args2[1]));
+                        }
+                    }
+                }
+                if (emojiUseHistory.isEmpty() && !preferences.getBoolean("filled_default", false)) {
+                    String[] newRecent = new String[]{"😂", "😘", "❤", "😍", "😊", "😁", "👍", "☺", "😔", "😄", "😭", "💋", "😒", "😳", "😜", "🙈", "😉", "😃", "😢", "😝", "😱", "😡", "😏", "😞", "😅", "😚", "🙊", "😌", "😀", "😋", "😆", "👌", "😐", "😕"};
+                    for (int i = 0; i < newRecent.length; i++) {
+                        emojiUseHistory.put(newRecent[i], Integer.valueOf(newRecent.length - i));
+                    }
+                    preferences.edit().putBoolean("filled_default", true).commit();
+                    saveRecentEmoji();
+                }
+                sortEmoji();
+            } catch (Throwable e) {
+                FileLog.e(e);
+            }
+            try {
+                str = preferences.getString(TtmlNode.ATTR_TTS_COLOR, "");
+                if (str != null && str.length() > 0) {
+                    String[] args = str.split(",");
+                    for (String arg22 : args) {
+                        args2 = arg22.split("=");
+                        emojiColor.put(args2[0], args2[1]);
+                    }
+                }
+            } catch (Throwable e2) {
+                FileLog.e(e2);
+            }
+        }
+    }
+
+    public static void saveEmojiColors() {
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0);
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Entry<String, String> entry : emojiColor.entrySet()) {
+            if (stringBuilder.length() != 0) {
+                stringBuilder.append(",");
+            }
+            stringBuilder.append((String) entry.getKey());
+            stringBuilder.append("=");
+            stringBuilder.append((String) entry.getValue());
+        }
+        preferences.edit().putString(TtmlNode.ATTR_TTS_COLOR, stringBuilder.toString()).commit();
     }
 }

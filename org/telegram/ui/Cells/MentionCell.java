@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
+import org.telegram.messenger.EmojiSuggestion;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
@@ -74,6 +75,21 @@ public class MentionCell extends LinearLayout {
         this.imageView.setVisibility(4);
         this.usernameTextView.setVisibility(4);
         this.nameTextView.setText(text);
+    }
+
+    public void invalidate() {
+        super.invalidate();
+        this.nameTextView.invalidate();
+    }
+
+    public void setEmojiSuggestion(EmojiSuggestion suggestion) {
+        this.imageView.setVisibility(4);
+        this.usernameTextView.setVisibility(4);
+        StringBuilder stringBuilder = new StringBuilder((suggestion.emoji.length() + suggestion.label.length()) + 3);
+        stringBuilder.append(suggestion.emoji);
+        stringBuilder.append("   ");
+        stringBuilder.append(suggestion.label);
+        this.nameTextView.setText(Emoji.replaceEmoji(stringBuilder, this.nameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
     }
 
     public void setBotCommand(String command, String help, User user) {

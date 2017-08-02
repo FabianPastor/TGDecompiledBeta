@@ -1852,24 +1852,24 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean z;
         int i;
         int dp;
-        String author;
         String description;
-        Photo photo;
         String type;
         int duration;
+        boolean smallImage;
         TL_webDocument webDocument;
-        int additinalWidth;
         int height;
-        int width;
         Throwable e;
         int restLinesCount;
         int a;
+        int lineLeft;
         boolean authorIsRTL;
         boolean hasRTL;
         int textWidth;
+        int maxPhotoWidth;
+        DocumentAttribute attribute;
         int durationWidth;
         ArrayList arrayList;
-        String fileName;
+        boolean autoDownload;
         int seconds;
         String str;
         CharSequence str2;
@@ -1889,7 +1889,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         int buttonWidth;
         int b;
         ChatMessageCell chatMessageCell;
-        BotButton botButton;
         String key;
         String position;
         BotButton oldButton;
@@ -1902,7 +1901,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
             int linkPreviewMaxWidth;
-            int lineLeft;
+            int width;
+            BotButton botButton;
             int timeWidthTotal;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
@@ -1983,9 +1983,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
-            int maxPhotoWidth;
-            DocumentAttribute attribute;
-            boolean autoDownload;
+            String fileName;
             float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
@@ -2090,9 +2088,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
                     String site_name;
                     String title;
+                    String author;
+                    Photo photo;
                     TLObject document;
-                    boolean smallImage;
                     TL_webDocument webDocument2;
+                    int additinalWidth;
                     int restLines;
                     PhotoSize photoSize;
                     PhotoSize photoSize2;

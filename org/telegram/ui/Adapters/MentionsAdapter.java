@@ -18,6 +18,8 @@ import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.Emoji;
+import org.telegram.messenger.EmojiSuggestion;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -80,6 +82,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private Location lastKnownLocation;
     private int lastPosition;
     private String lastText;
+    private boolean lastUsernameOnly;
     private LocationProvider locationProvider = new LocationProvider(new LocationProviderDelegate() {
         public void onLocationAcquired(Location location) {
             if (MentionsAdapter.this.foundContextBot != null && MentionsAdapter.this.foundContextBot.bot_inline_geo) {
@@ -114,6 +117,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private ArrayList<String> searchResultCommandsHelp;
     private ArrayList<User> searchResultCommandsUsers;
     private ArrayList<String> searchResultHashtags;
+    private ArrayList<EmojiSuggestion> searchResultSuggestions;
     private ArrayList<User> searchResultUsernames;
     private String searchingContextQuery;
     private String searchingContextUsername;
@@ -139,7 +143,7 @@ public class MentionsAdapter extends SelectionAdapter {
 
             public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
                 if (MentionsAdapter.this.lastText != null) {
-                    MentionsAdapter.this.searchUsernameOrHashtag(MentionsAdapter.this.lastText, MentionsAdapter.this.lastPosition, MentionsAdapter.this.messages);
+                    MentionsAdapter.this.searchUsernameOrHashtag(MentionsAdapter.this.lastText, MentionsAdapter.this.lastPosition, MentionsAdapter.this.messages, MentionsAdapter.this.lastUsernameOnly);
                 }
             }
         });
@@ -179,7 +183,7 @@ public class MentionsAdapter extends SelectionAdapter {
     public void setChatInfo(ChatFull chatParticipants) {
         this.info = chatParticipants;
         if (this.lastText != null) {
-            searchUsernameOrHashtag(this.lastText, this.lastPosition, this.messages);
+            searchUsernameOrHashtag(this.lastText, this.lastPosition, this.messages, this.lastUsernameOnly);
         }
     }
 
@@ -489,6 +493,7 @@ public class MentionsAdapter extends SelectionAdapter {
                                         MentionsAdapter.this.searchResultHashtags = null;
                                         MentionsAdapter.this.searchResultUsernames = null;
                                         MentionsAdapter.this.searchResultCommands = null;
+                                        MentionsAdapter.this.searchResultSuggestions = null;
                                         MentionsAdapter.this.searchResultCommandsHelp = null;
                                         MentionsAdapter.this.searchResultCommandsUsers = null;
                                         if (added) {
@@ -518,11 +523,11 @@ public class MentionsAdapter extends SelectionAdapter {
                                         } else {
                                             MentionsAdapter.this.notifyDataSetChanged();
                                         }
-                                        MentionsAdapterDelegate access$1400 = MentionsAdapter.this.delegate;
+                                        MentionsAdapterDelegate access$1500 = MentionsAdapter.this.delegate;
                                         if (!(MentionsAdapter.this.searchResultBotContext.isEmpty() && MentionsAdapter.this.searchResultBotContextSwitch == null)) {
                                             z = true;
                                         }
-                                        access$1400.needChangePanelVisibility(z);
+                                        access$1500.needChangePanelVisibility(z);
                                     }
                                 }
                             }
@@ -557,7 +562,7 @@ public class MentionsAdapter extends SelectionAdapter {
         }
     }
 
-    public void searchUsernameOrHashtag(String text, int position, ArrayList<MessageObject> messageObjects) {
+    public void searchUsernameOrHashtag(String text, int position, ArrayList<MessageObject> messageObjects, boolean usernameOnly) {
         if (TextUtils.isEmpty(text)) {
             searchForContextBot(null, null);
             this.delegate.needChangePanelVisibility(false);
@@ -571,10 +576,10 @@ public class MentionsAdapter extends SelectionAdapter {
             searchPostion--;
         }
         this.lastText = null;
+        this.lastUsernameOnly = usernameOnly;
         StringBuilder result = new StringBuilder();
         int foundType = -1;
-        boolean hasIllegalUsernameCharacters = false;
-        if (this.needBotContext && text.charAt(0) == '@') {
+        if (!usernameOnly && this.needBotContext && text.charAt(0) == '@') {
             int index = text.indexOf(32);
             int len = text.length();
             String username = null;
@@ -605,55 +610,62 @@ public class MentionsAdapter extends SelectionAdapter {
         }
         if (this.foundContextBot == null) {
             int dogPostion = -1;
-            a = searchPostion;
-            while (a >= 0) {
-                if (a < text.length()) {
-                    ch = text.charAt(a);
-                    if (a == 0 || text.charAt(a - 1) == ' ' || text.charAt(a - 1) == '\n') {
-                        if (ch != '@') {
-                            if (ch != '#') {
-                                if (a == 0 && this.botInfo != null && ch == '/') {
+            if (usernameOnly) {
+                result.append(text.substring(1));
+                this.resultStartPosition = 0;
+                this.resultLength = result.length();
+                foundType = 0;
+            } else {
+                a = searchPostion;
+                while (a >= 0) {
+                    if (a < text.length()) {
+                        ch = text.charAt(a);
+                        if (a == 0 || text.charAt(a - 1) == ' ' || text.charAt(a - 1) == '\n') {
+                            if (ch != '@') {
+                                if (ch != '#') {
+                                    if (a != 0 || this.botInfo == null || ch != '/') {
+                                        if (ch == ':' && result.length() > 0) {
+                                            foundType = 3;
+                                            this.resultStartPosition = a;
+                                            this.resultLength = result.length() + 1;
+                                            break;
+                                        }
+                                    }
                                     foundType = 2;
                                     this.resultStartPosition = a;
                                     this.resultLength = result.length() + 1;
                                     break;
+                                } else if (this.searchAdapterHelper.loadRecentHashtags()) {
+                                    foundType = 1;
+                                    this.resultStartPosition = a;
+                                    this.resultLength = result.length() + 1;
+                                    result.insert(0, ch);
+                                } else {
+                                    this.lastText = text;
+                                    this.lastPosition = position;
+                                    this.messages = messageObjects;
+                                    this.delegate.needChangePanelVisibility(false);
+                                    return;
                                 }
-                            } else if (this.searchAdapterHelper.loadRecentHashtags()) {
-                                foundType = 1;
-                                this.resultStartPosition = a;
-                                this.resultLength = result.length() + 1;
-                                result.insert(0, ch);
-                            } else {
-                                this.lastText = text;
-                                this.lastPosition = position;
-                                this.messages = messageObjects;
-                                this.delegate.needChangePanelVisibility(false);
-                                return;
-                            }
-                        } else if (this.needUsernames || (this.needBotContext && a == 0)) {
-                            if (hasIllegalUsernameCharacters) {
-                                this.delegate.needChangePanelVisibility(false);
-                                return;
-                            } else if (this.info != null || a == 0) {
-                                dogPostion = a;
-                                foundType = 0;
-                                this.resultStartPosition = a;
-                                this.resultLength = result.length() + 1;
-                            } else {
-                                this.lastText = text;
-                                this.lastPosition = position;
-                                this.messages = messageObjects;
-                                this.delegate.needChangePanelVisibility(false);
-                                return;
+                            } else if (this.needUsernames || (this.needBotContext && a == 0)) {
+                                if (this.info != null || a == 0) {
+                                    dogPostion = a;
+                                    foundType = 0;
+                                    this.resultStartPosition = a;
+                                    this.resultLength = result.length() + 1;
+                                } else {
+                                    this.lastText = text;
+                                    this.lastPosition = position;
+                                    this.messages = messageObjects;
+                                    this.delegate.needChangePanelVisibility(false);
+                                    return;
+                                }
                             }
                         }
+                        result.insert(0, ch);
                     }
-                    if ((ch < '0' || ch > '9') && ((ch < 'a' || ch > 'z') && ((ch < 'A' || ch > 'Z') && ch != '_'))) {
-                        hasIllegalUsernameCharacters = true;
-                    }
-                    result.insert(0, ch);
+                    a--;
                 }
-                a--;
             }
             if (foundType == -1) {
                 this.delegate.needChangePanelVisibility(false);
@@ -670,7 +682,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 String usernameString = result.toString().toLowerCase();
                 ArrayList<User> newResult = new ArrayList();
                 HashMap<Integer, User> newResultsHashMap = new HashMap();
-                if (this.needBotContext && dogPostion == 0 && !SearchQuery.inlineBots.isEmpty()) {
+                if (!usernameOnly && this.needBotContext && dogPostion == 0 && !SearchQuery.inlineBots.isEmpty()) {
                     int count = 0;
                     for (a = 0; a < SearchQuery.inlineBots.size(); a++) {
                         user = MessagesController.getInstance().getUser(Integer.valueOf(((TL_topPeer) SearchQuery.inlineBots.get(a)).peer.user_id));
@@ -717,6 +729,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 this.searchResultCommands = null;
                 this.searchResultCommandsHelp = null;
                 this.searchResultCommandsUsers = null;
+                this.searchResultSuggestions = null;
                 this.searchResultUsernames = newResult;
                 final HashMap<Integer, User> hashMap = newResultsHashMap;
                 final ArrayList<Integer> arrayList = users;
@@ -765,6 +778,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 this.searchResultCommands = null;
                 this.searchResultCommandsHelp = null;
                 this.searchResultCommandsUsers = null;
+                this.searchResultSuggestions = null;
                 notifyDataSetChanged();
                 this.delegate.needChangePanelVisibility(!newResult.isEmpty());
             } else if (foundType == 2) {
@@ -785,11 +799,42 @@ public class MentionsAdapter extends SelectionAdapter {
                 }
                 this.searchResultHashtags = null;
                 this.searchResultUsernames = null;
+                this.searchResultSuggestions = null;
                 this.searchResultCommands = newResult;
                 this.searchResultCommandsHelp = newResultHelp;
                 this.searchResultCommandsUsers = newResultUsers;
                 notifyDataSetChanged();
                 this.delegate.needChangePanelVisibility(!newResult.isEmpty());
+            } else if (foundType == 3) {
+                Object[] suggestions = Emoji.getSuggestion(result.toString());
+                if (suggestions != null) {
+                    this.searchResultSuggestions = new ArrayList();
+                    for (EmojiSuggestion suggestion : suggestions) {
+                        suggestion.emoji = suggestion.emoji.replace("️", "");
+                        this.searchResultSuggestions.add(suggestion);
+                    }
+                    Emoji.loadRecentEmoji();
+                    Collections.sort(this.searchResultSuggestions, new Comparator<EmojiSuggestion>() {
+                        public int compare(EmojiSuggestion o1, EmojiSuggestion o2) {
+                            Integer n1 = (Integer) Emoji.emojiUseHistory.get(o1.emoji);
+                            if (n1 == null) {
+                                n1 = Integer.valueOf(0);
+                            }
+                            Integer n2 = (Integer) Emoji.emojiUseHistory.get(o2.emoji);
+                            if (n2 == null) {
+                                n2 = Integer.valueOf(0);
+                            }
+                            return n2.compareTo(n1);
+                        }
+                    });
+                }
+                this.searchResultHashtags = null;
+                this.searchResultUsernames = null;
+                this.searchResultCommands = null;
+                this.searchResultCommandsHelp = null;
+                this.searchResultCommandsUsers = null;
+                notifyDataSetChanged();
+                this.delegate.needChangePanelVisibility(this.searchResultSuggestions != null);
             }
         }
     }
@@ -823,7 +868,10 @@ public class MentionsAdapter extends SelectionAdapter {
             if (this.searchResultHashtags != null) {
                 return this.searchResultHashtags.size();
             }
-            return this.searchResultCommands != null ? this.searchResultCommands.size() : 0;
+            if (this.searchResultCommands != null) {
+                return this.searchResultCommands.size();
+            }
+            return this.searchResultSuggestions != null ? this.searchResultSuggestions.size() : 0;
         }
     }
 
@@ -873,6 +921,11 @@ public class MentionsAdapter extends SelectionAdapter {
                 return null;
             }
             return this.searchResultHashtags.get(i);
+        } else if (this.searchResultSuggestions != null) {
+            if (i < 0 || i >= this.searchResultSuggestions.size()) {
+                return null;
+            }
+            return this.searchResultSuggestions.get(i);
         } else if (this.searchResultCommands == null || i < 0 || i >= this.searchResultCommands.size()) {
             return null;
         } else {
@@ -982,6 +1035,8 @@ public class MentionsAdapter extends SelectionAdapter {
             ((MentionCell) holder.itemView).setUser((User) this.searchResultUsernames.get(position));
         } else if (this.searchResultHashtags != null) {
             ((MentionCell) holder.itemView).setText((String) this.searchResultHashtags.get(position));
+        } else if (this.searchResultSuggestions != null) {
+            ((MentionCell) holder.itemView).setEmojiSuggestion((EmojiSuggestion) this.searchResultSuggestions.get(position));
         } else if (this.searchResultCommands != null) {
             ((MentionCell) holder.itemView).setBotCommand((String) this.searchResultCommands.get(position), (String) this.searchResultCommandsHelp.get(position), this.searchResultCommandsUsers != null ? (User) this.searchResultCommandsUsers.get(position) : null);
         }

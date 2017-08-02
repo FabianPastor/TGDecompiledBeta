@@ -1,7 +1,7 @@
 package org.telegram.messenger.query;
 
-import android.text.TextUtils;
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -16,6 +16,7 @@ import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterEmpty;
 import org.telegram.tgnet.TLRPC.TL_messages_messagesSlice;
 import org.telegram.tgnet.TLRPC.TL_messages_search;
+import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.messages_Messages;
 
 public class MessagesSearchQuery {
@@ -28,6 +29,7 @@ public class MessagesSearchQuery {
     private static boolean[] messagesSearchEndReached = new boolean[]{false, false};
     private static int reqId;
     private static ArrayList<MessageObject> searchResultMessages = new ArrayList();
+    private static HashMap<Integer, MessageObject>[] searchResultMessagesMap = new HashMap[]{new HashMap(), new HashMap()};
 
     private static int getMask() {
         int mask = 0;
@@ -40,11 +42,15 @@ public class MessagesSearchQuery {
         return mask;
     }
 
-    public static void searchMessagesInChat(String query, long dialog_id, long mergeDialogId, int guid, int direction) {
-        searchMessagesInChat(query, dialog_id, mergeDialogId, guid, direction, false);
+    public static boolean isMessageFound(int messageId, boolean mergeDialog) {
+        return searchResultMessagesMap[mergeDialog ? 1 : 0].containsKey(Integer.valueOf(messageId));
     }
 
-    private static void searchMessagesInChat(String query, long dialog_id, long mergeDialogId, int guid, int direction, boolean internal) {
+    public static void searchMessagesInChat(String query, long dialog_id, long mergeDialogId, int guid, int direction, User user) {
+        searchMessagesInChat(query, dialog_id, mergeDialogId, guid, direction, false, user);
+    }
+
+    private static void searchMessagesInChat(String query, long dialog_id, long mergeDialogId, int guid, int direction, boolean internal, User user) {
         final TL_messages_search req;
         int max_id = 0;
         long queryWithDialog = dialog_id;
@@ -57,7 +63,7 @@ public class MessagesSearchQuery {
             ConnectionsManager.getInstance().cancelRequest(mergeReqId, true);
             mergeReqId = 0;
         }
-        if (TextUtils.isEmpty(query)) {
+        if (query == null) {
             if (!searchResultMessages.isEmpty()) {
                 MessageObject messageObject;
                 if (direction == 1) {
@@ -109,6 +115,8 @@ public class MessagesSearchQuery {
             messagesSearchCount[1] = 0;
             iArr[0] = 0;
             searchResultMessages.clear();
+            searchResultMessagesMap[0].clear();
+            searchResultMessagesMap[1].clear();
         }
         if (!(!messagesSearchEndReached[0] || messagesSearchEndReached[1] || mergeDialogId == 0)) {
             queryWithDialog = mergeDialogId;
@@ -121,12 +129,17 @@ public class MessagesSearchQuery {
                     req.peer = inputPeer;
                     lastMergeDialogId = mergeDialogId;
                     req.limit = 1;
-                    req.q = query;
+                    req.q = query != null ? query : "";
+                    if (user != null) {
+                        req.from_id = MessagesController.getInputUser(user);
+                        req.flags |= 1;
+                    }
                     req.filter = new TL_inputMessagesFilterEmpty();
                     final long j = mergeDialogId;
                     final long j2 = dialog_id;
                     final int i = guid;
                     final int i2 = direction;
+                    final User user2 = user;
                     mergeReqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                         public void run(final TLObject response, TL_error error) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
@@ -137,7 +150,7 @@ public class MessagesSearchQuery {
                                             messages_Messages res = response;
                                             MessagesSearchQuery.messagesSearchEndReached[1] = res.messages.isEmpty();
                                             MessagesSearchQuery.messagesSearchCount[1] = res instanceof TL_messages_messagesSlice ? res.count : res.messages.size();
-                                            MessagesSearchQuery.searchMessagesInChat(req.q, j2, j, i, i2, true);
+                                            MessagesSearchQuery.searchMessagesInChat(req.q, j2, j, i, i2, true, user2);
                                         }
                                     }
                                 }
@@ -156,8 +169,12 @@ public class MessagesSearchQuery {
         req.peer = MessagesController.getInputPeer((int) queryWithDialog);
         if (req.peer != null) {
             req.limit = 21;
-            req.q = query;
+            req.q = query != null ? query : "";
             req.max_id = max_id;
+            if (user != null) {
+                req.from_id = MessagesController.getInputUser(user);
+                req.flags |= 1;
+            }
             req.filter = new TL_inputMessagesFilterEmpty();
             final int currentReqId = lastReqId + 1;
             lastReqId = currentReqId;
@@ -166,6 +183,7 @@ public class MessagesSearchQuery {
             final long j3 = dialog_id;
             final int i3 = guid;
             final long j4 = mergeDialogId;
+            final User user3 = user;
             reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -173,6 +191,7 @@ public class MessagesSearchQuery {
                             if (currentReqId == MessagesSearchQuery.lastReqId) {
                                 MessagesSearchQuery.reqId = 0;
                                 if (response != null) {
+                                    MessageObject messageObject;
                                     messages_Messages res = response;
                                     MessagesStorage.getInstance().putUsersAndChats(res.users, res.chats, true, true);
                                     MessagesController.getInstance().putUsers(res.users, false);
@@ -180,12 +199,23 @@ public class MessagesSearchQuery {
                                     if (req.max_id == 0 && j2 == j3) {
                                         MessagesSearchQuery.lastReturnedNum = 0;
                                         MessagesSearchQuery.searchResultMessages.clear();
+                                        MessagesSearchQuery.searchResultMessagesMap[0].clear();
+                                        MessagesSearchQuery.searchResultMessagesMap[1].clear();
                                         MessagesSearchQuery.messagesSearchCount[0] = 0;
                                     }
                                     boolean added = false;
                                     for (int a = 0; a < Math.min(res.messages.size(), 20); a++) {
+                                        int i;
                                         added = true;
-                                        MessagesSearchQuery.searchResultMessages.add(new MessageObject((Message) res.messages.get(a), null, false));
+                                        messageObject = new MessageObject((Message) res.messages.get(a), null, false);
+                                        MessagesSearchQuery.searchResultMessages.add(messageObject);
+                                        HashMap[] access$900 = MessagesSearchQuery.searchResultMessagesMap;
+                                        if (j2 == j3) {
+                                            i = 0;
+                                        } else {
+                                            i = 1;
+                                        }
+                                        access$900[i].put(Integer.valueOf(messageObject.getId()), messageObject);
                                     }
                                     MessagesSearchQuery.messagesSearchEndReached[j2 == j3 ? 0 : 1] = res.messages.size() != 21;
                                     MessagesSearchQuery.messagesSearchCount[j2 == j3 ? 0 : 1] = res instanceof TL_messages_messagesSlice ? res.count : res.messages.size();
@@ -195,11 +225,11 @@ public class MessagesSearchQuery {
                                         if (MessagesSearchQuery.lastReturnedNum >= MessagesSearchQuery.searchResultMessages.size()) {
                                             MessagesSearchQuery.lastReturnedNum = MessagesSearchQuery.searchResultMessages.size() - 1;
                                         }
-                                        MessageObject messageObject = (MessageObject) MessagesSearchQuery.searchResultMessages.get(MessagesSearchQuery.lastReturnedNum);
+                                        messageObject = (MessageObject) MessagesSearchQuery.searchResultMessages.get(MessagesSearchQuery.lastReturnedNum);
                                         NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatSearchResultsAvailable, Integer.valueOf(i3), Integer.valueOf(messageObject.getId()), Integer.valueOf(MessagesSearchQuery.getMask()), Long.valueOf(messageObject.getDialogId()), Integer.valueOf(MessagesSearchQuery.lastReturnedNum), Integer.valueOf(MessagesSearchQuery.messagesSearchCount[0] + MessagesSearchQuery.messagesSearchCount[1]));
                                     }
                                     if (j2 == j3 && MessagesSearchQuery.messagesSearchEndReached[0] && j4 != 0 && !MessagesSearchQuery.messagesSearchEndReached[1]) {
-                                        MessagesSearchQuery.searchMessagesInChat(MessagesSearchQuery.lastSearchQuery, j3, j4, i3, 0, true);
+                                        MessagesSearchQuery.searchMessagesInChat(MessagesSearchQuery.lastSearchQuery, j3, j4, i3, 0, true, user3);
                                     }
                                 }
                             }

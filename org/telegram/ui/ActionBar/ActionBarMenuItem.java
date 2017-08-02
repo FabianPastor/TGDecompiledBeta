@@ -6,6 +6,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.os.Build.VERSION;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
@@ -56,6 +57,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private Rect rect;
     private FrameLayout searchContainer;
     private EditText searchField;
+    private TextView searchFieldCaption;
     private View selectedMenuView;
     private Runnable showMenuRunnable;
     private int subMenuOpenSide;
@@ -79,6 +81,9 @@ public class ActionBarMenuItem extends FrameLayout {
         }
 
         public void onSearchPressed(EditText editText) {
+        }
+
+        public void onCaptionCleared() {
         }
     }
 
@@ -407,9 +412,41 @@ public class ActionBarMenuItem extends FrameLayout {
     public ActionBarMenuItem setIsSearchField(boolean value) {
         if (this.parentMenu != null) {
             if (value && this.searchContainer == null) {
-                this.searchContainer = new FrameLayout(getContext());
+                this.searchContainer = new FrameLayout(getContext()) {
+                    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                        int width;
+                        measureChildWithMargins(ActionBarMenuItem.this.clearButton, widthMeasureSpec, 0, heightMeasureSpec, 0);
+                        if (ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) {
+                            measureChildWithMargins(ActionBarMenuItem.this.searchFieldCaption, widthMeasureSpec, MeasureSpec.getSize(widthMeasureSpec) / 2, heightMeasureSpec, 0);
+                            width = ActionBarMenuItem.this.searchFieldCaption.getMeasuredWidth();
+                        } else {
+                            width = 0;
+                        }
+                        measureChildWithMargins(ActionBarMenuItem.this.searchField, widthMeasureSpec, width, heightMeasureSpec, 0);
+                        int w = MeasureSpec.getSize(widthMeasureSpec);
+                        int h = MeasureSpec.getSize(heightMeasureSpec);
+                        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
+                    }
+
+                    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+                        int x;
+                        super.onLayout(changed, left, top, right, bottom);
+                        if (ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) {
+                            x = ActionBarMenuItem.this.searchFieldCaption.getMeasuredWidth() + AndroidUtilities.dp(4.0f);
+                        } else {
+                            x = 0;
+                        }
+                        ActionBarMenuItem.this.searchField.layout(x, ActionBarMenuItem.this.searchField.getTop(), ActionBarMenuItem.this.searchField.getMeasuredWidth() + x, ActionBarMenuItem.this.searchField.getBottom());
+                    }
+                };
                 this.parentMenu.addView(this.searchContainer, 0, LayoutHelper.createLinear(0, -1, 1.0f, 6, 0, 0, 0));
                 this.searchContainer.setVisibility(8);
+                this.searchFieldCaption = new TextView(getContext());
+                this.searchFieldCaption.setTextSize(1, 18.0f);
+                this.searchFieldCaption.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSearch));
+                this.searchFieldCaption.setSingleLine(true);
+                this.searchFieldCaption.setVisibility(8);
+                this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 16, 0.0f, 5.0f, 0.0f, 0.0f));
                 this.searchField = new EditText(getContext());
                 this.searchField.setTextSize(1, 18.0f);
                 this.searchField.setHintTextColor(Theme.getColor(Theme.key_actionBarDefaultSearchPlaceholder));
@@ -418,22 +455,24 @@ public class ActionBarMenuItem extends FrameLayout {
                 this.searchField.setBackgroundResource(0);
                 this.searchField.setPadding(0, 0, 0, 0);
                 this.searchField.setInputType(this.searchField.getInputType() | 524288);
-                this.searchField.setCustomSelectionActionModeCallback(new Callback() {
-                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                        return false;
-                    }
+                if (VERSION.SDK_INT < 23) {
+                    this.searchField.setCustomSelectionActionModeCallback(new Callback() {
+                        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                            return false;
+                        }
 
-                    public void onDestroyActionMode(ActionMode mode) {
-                    }
+                        public void onDestroyActionMode(ActionMode mode) {
+                        }
 
-                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                        return false;
-                    }
+                        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                            return false;
+                        }
 
-                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                        return false;
-                    }
-                });
+                        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                            return false;
+                        }
+                    });
+                }
                 this.searchField.setOnEditorActionListener(new OnEditorActionListener() {
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                         if (event != null && ((event.getAction() == 1 && event.getKeyCode() == 84) || (event.getAction() == 0 && event.getKeyCode() == 66))) {
@@ -454,9 +493,9 @@ public class ActionBarMenuItem extends FrameLayout {
                             ActionBarMenuItem.this.listener.onTextChanged(ActionBarMenuItem.this.searchField);
                         }
                         if (ActionBarMenuItem.this.clearButton != null) {
-                            ImageView access$800 = ActionBarMenuItem.this.clearButton;
-                            float f = (s == null || s.length() == 0) ? 0.6f : 1.0f;
-                            access$800.setAlpha(f);
+                            ImageView access$600 = ActionBarMenuItem.this.clearButton;
+                            float f = (!TextUtils.isEmpty(s) || ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) ? 1.0f : 0.6f;
+                            access$600.setAlpha(f);
                         }
                     }
 
@@ -478,7 +517,17 @@ public class ActionBarMenuItem extends FrameLayout {
                 this.clearButton.setScaleType(ScaleType.CENTER);
                 this.clearButton.setOnClickListener(new OnClickListener() {
                     public void onClick(View v) {
-                        ActionBarMenuItem.this.searchField.setText("");
+                        if (ActionBarMenuItem.this.searchField.length() != 0) {
+                            ActionBarMenuItem.this.searchField.setText("");
+                        } else if (ActionBarMenuItem.this.searchFieldCaption != null && ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) {
+                            ActionBarMenuItem.this.searchFieldCaption.setVisibility(8);
+                            ImageView access$600 = ActionBarMenuItem.this.clearButton;
+                            float f = (ActionBarMenuItem.this.searchField.length() != 0 || ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) ? 1.0f : 0.6f;
+                            access$600.setAlpha(f);
+                            if (ActionBarMenuItem.this.listener != null) {
+                                ActionBarMenuItem.this.listener.onCaptionCleared();
+                            }
+                        }
                         ActionBarMenuItem.this.searchField.requestFocus();
                         AndroidUtilities.showKeyboard(ActionBarMenuItem.this.searchField);
                     }
@@ -490,8 +539,28 @@ public class ActionBarMenuItem extends FrameLayout {
         return this;
     }
 
+    public void setSearchFieldCaption(CharSequence caption) {
+        if (TextUtils.isEmpty(caption)) {
+            this.searchFieldCaption.setVisibility(8);
+        } else {
+            this.searchFieldCaption.setVisibility(0);
+            this.searchFieldCaption.setText(caption);
+        }
+        if (this.clearButton != null) {
+            ImageView imageView = this.clearButton;
+            float f = (this.searchField.length() != 0 || this.searchFieldCaption.getVisibility() == 0) ? 1.0f : 0.6f;
+            imageView.setAlpha(f);
+        }
+    }
+
     public boolean isSearchField() {
         return this.isSearchField;
+    }
+
+    public void clearSearchText() {
+        if (this.searchField != null) {
+            this.searchField.setText("");
+        }
     }
 
     public ActionBarMenuItem setActionBarMenuItemSearchListener(ActionBarMenuItemSearchListener listener) {
