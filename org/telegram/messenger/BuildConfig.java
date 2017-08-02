@@ -5,6 +5,6 @@ public final class BuildConfig {
     public static final String BUILD_TYPE = "debug";
     public static final boolean DEBUG = Boolean.parseBoolean("true");
     public static final String FLAVOR = "fat";
-    public static final int VERSION_CODE = 10505;
+    public static final int VERSION_CODE = 10515;
     public static final String VERSION_NAME = "4.2.2";
 }

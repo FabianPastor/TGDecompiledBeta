@@ -1848,29 +1848,28 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
-        int maxWidth;
-        boolean z;
-        int i;
         int dp;
+        int linkPreviewMaxWidth;
+        String author;
         String description;
+        Photo photo;
+        TLObject document;
         String type;
-        int duration;
-        boolean smallImage;
         TL_webDocument webDocument;
-        int height;
+        TL_webDocument webDocument2;
         Throwable e;
         int restLinesCount;
         int a;
         int lineLeft;
-        boolean authorIsRTL;
         boolean hasRTL;
         int textWidth;
         int maxPhotoWidth;
         DocumentAttribute attribute;
+        PhotoSize photoSize;
+        PhotoSize photoSize2;
+        int dp2;
         int durationWidth;
-        ArrayList arrayList;
         boolean autoDownload;
-        int seconds;
         String str;
         CharSequence str2;
         String price;
@@ -1882,13 +1881,13 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         float f;
         int maxButtonWidth;
         int maxButtonsWidth;
-        HashMap<String, BotButton> hashMap;
         HashMap<String, BotButton> oldByPosition;
         TL_keyboardButtonRow row;
         int buttonsCount;
         int buttonWidth;
         int b;
         ChatMessageCell chatMessageCell;
+        BotButton botButton;
         String key;
         String position;
         BotButton oldButton;
@@ -1900,9 +1899,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
-            int linkPreviewMaxWidth;
+            int i;
+            int height;
             int width;
-            BotButton botButton;
+            HashMap<String, BotButton> hashMap;
             int timeWidthTotal;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
@@ -1983,6 +1983,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
+            int maxWidth;
+            boolean z;
             String fileName;
             float scale;
             boolean photoExist;
@@ -2088,15 +2090,13 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
                     String site_name;
                     String title;
-                    String author;
-                    Photo photo;
-                    TLObject document;
-                    TL_webDocument webDocument2;
+                    int duration;
+                    boolean smallImage;
                     int additinalWidth;
                     int restLines;
-                    PhotoSize photoSize;
-                    PhotoSize photoSize2;
-                    int dp2;
+                    boolean authorIsRTL;
+                    ArrayList arrayList;
+                    int seconds;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.needDrawAvatar() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);

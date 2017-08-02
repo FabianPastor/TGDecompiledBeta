@@ -239,10 +239,10 @@ public class SearchAdapter extends SelectionAdapter {
         Object username;
         ProfileSearchCell profileSearchCell;
         boolean z;
-        UserCell userCell;
         if (holder.getItemViewType() == 0) {
             TLObject object = getItem(position);
             if (object != null) {
+                UserCell userCell;
                 int id = 0;
                 String un = null;
                 if (object instanceof User) {

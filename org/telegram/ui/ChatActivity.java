@@ -1912,6 +1912,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         ChatActivity.this.mentionsAdapter.searchUsernameOrHashtag(null, 0, null, false);
                         ChatActivity.this.searchingForUser = false;
                     }
+                    ChatActivity.this.mentionLayoutManager.setReverseLayout(false);
                     ChatActivity.this.searchingUserMessages = null;
                     ChatActivity.this.searchItem.getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
                     ChatActivity.this.searchItem.setSearchFieldCaption(null);
@@ -1957,6 +1958,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 public void onTextChanged(EditText editText) {
                     if (ChatActivity.this.searchingForUser) {
                         ChatActivity.this.mentionsAdapter.searchUsernameOrHashtag("@" + editText.getText().toString(), 0, ChatActivity.this.messages, true);
+                    } else if (!ChatActivity.this.searchingForUser && ChatActivity.this.searchingUserMessages == null && ChatActivity.this.searchUserButton != null && TextUtils.equals(editText.getText(), LocaleController.getString("SearchFrom", R.string.SearchFrom))) {
+                        ChatActivity.this.searchUserButton.callOnClick();
                     }
                 }
 
@@ -2038,14 +2041,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int width = MeasureSpec.getSize(widthMeasureSpec);
                 setMeasuredDimension(width, MeasureSpec.getSize(heightMeasureSpec));
-                SimpleTextView access$4300 = ChatActivity.this.actionModeTextView;
+                SimpleTextView access$4400 = ChatActivity.this.actionModeTextView;
                 int i = (AndroidUtilities.isTablet() || getResources().getConfiguration().orientation != 2) ? 20 : 18;
-                access$4300.setTextSize(i);
+                access$4400.setTextSize(i);
                 ChatActivity.this.actionModeTextView.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), Integer.MIN_VALUE));
                 if (ChatActivity.this.actionModeSubTextView.getVisibility() != 8) {
-                    access$4300 = ChatActivity.this.actionModeSubTextView;
+                    access$4400 = ChatActivity.this.actionModeSubTextView;
                     i = (AndroidUtilities.isTablet() || getResources().getConfiguration().orientation != 2) ? 16 : 14;
-                    access$4300.setTextSize(i);
+                    access$4400.setTextSize(i);
                     ChatActivity.this.actionModeSubTextView.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), Integer.MIN_VALUE));
                 }
             }
@@ -2190,13 +2193,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 int height;
                                 ChatActivity.this.mentionListViewIgnoreLayout = true;
                                 int maxHeight;
+                                int padding;
                                 if (ChatActivity.this.mentionsAdapter.isBotContext() && ChatActivity.this.mentionsAdapter.isMediaLayout()) {
                                     maxHeight = ChatActivity.this.mentionGridLayoutManager.getRowsCount(widthSize) * 102;
                                     if (ChatActivity.this.mentionsAdapter.isBotContext() && ChatActivity.this.mentionsAdapter.getBotContextSwitch() != null) {
                                         maxHeight += 34;
                                     }
                                     height = (heightSize - ChatActivity.this.chatActivityEnterView.getMeasuredHeight()) + (maxHeight != 0 ? AndroidUtilities.dp(2.0f) : 0);
-                                    ChatActivity.this.mentionListView.setPadding(0, Math.max(0, height - AndroidUtilities.dp(Math.min((float) maxHeight, 122.399994f))), 0, 0);
+                                    padding = Math.max(0, height - AndroidUtilities.dp(Math.min((float) maxHeight, 122.399994f)));
+                                    if (ChatActivity.this.mentionLayoutManager.getReverseLayout()) {
+                                        ChatActivity.this.mentionListView.setPadding(0, 0, 0, padding);
+                                    } else {
+                                        ChatActivity.this.mentionListView.setPadding(0, padding, 0, 0);
+                                    }
                                 } else {
                                     int size = ChatActivity.this.mentionsAdapter.getItemCount();
                                     maxHeight = 0;
@@ -2210,7 +2219,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         maxHeight = 0 + (size * 36);
                                     }
                                     height = (heightSize - ChatActivity.this.chatActivityEnterView.getMeasuredHeight()) + (maxHeight != 0 ? AndroidUtilities.dp(2.0f) : 0);
-                                    ChatActivity.this.mentionListView.setPadding(0, Math.max(0, height - AndroidUtilities.dp(Math.min((float) maxHeight, 122.399994f))), 0, 0);
+                                    padding = Math.max(0, height - AndroidUtilities.dp(Math.min((float) maxHeight, 122.399994f)));
+                                    if (ChatActivity.this.mentionLayoutManager.getReverseLayout()) {
+                                        ChatActivity.this.mentionListView.setPadding(0, 0, 0, padding);
+                                    } else {
+                                        ChatActivity.this.mentionListView.setPadding(0, padding, 0, 0);
+                                    }
                                 }
                                 layoutParams.height = height;
                                 layoutParams.topMargin = 0;
@@ -2472,10 +2486,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         ChatActivity.this.floatingDateView.setTag(Integer.valueOf(1));
                         ChatActivity.this.floatingDateAnimation = new AnimatorSet();
                         ChatActivity.this.floatingDateAnimation.setDuration(150);
-                        AnimatorSet access$8600 = ChatActivity.this.floatingDateAnimation;
+                        AnimatorSet access$8700 = ChatActivity.this.floatingDateAnimation;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.floatingDateView, "alpha", new float[]{1.0f});
-                        access$8600.playTogether(animatorArr);
+                        access$8700.playTogether(animatorArr);
                         ChatActivity.this.floatingDateAnimation.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animation) {
                                 if (animation.equals(ChatActivity.this.floatingDateAnimation)) {
@@ -2727,6 +2741,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 public void onDraw(Canvas canvas) {
                     if (ChatActivity.this.mentionListView.getChildCount() > 0) {
                         int top;
+                        if (ChatActivity.this.mentionLayoutManager.getReverseLayout()) {
+                            top = ChatActivity.this.mentionListViewScrollOffsetY + AndroidUtilities.dp(2.0f);
+                            Theme.chat_composeShadowDrawable.setBounds(0, top + Theme.chat_composeShadowDrawable.getIntrinsicHeight(), getMeasuredWidth(), top);
+                            Theme.chat_composeShadowDrawable.draw(canvas);
+                            canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) top, Theme.chat_composeBackgroundPaint);
+                            return;
+                        }
                         if (ChatActivity.this.mentionsAdapter.isBotContext() && ChatActivity.this.mentionsAdapter.isMediaLayout() && ChatActivity.this.mentionsAdapter.getBotContextSwitch() == null) {
                             top = ChatActivity.this.mentionListViewScrollOffsetY - AndroidUtilities.dp(4.0f);
                         } else {
@@ -2753,7 +2774,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 private int lastWidth;
 
                 public boolean onInterceptTouchEvent(MotionEvent event) {
-                    if (!ChatActivity.this.mentionListViewIsScrolling && ChatActivity.this.mentionListViewScrollOffsetY != 0 && event.getY() < ((float) ChatActivity.this.mentionListViewScrollOffsetY)) {
+                    if (ChatActivity.this.mentionLayoutManager.getReverseLayout()) {
+                        if (!(ChatActivity.this.mentionListViewIsScrolling || ChatActivity.this.mentionListViewScrollOffsetY == 0 || event.getY() <= ((float) ChatActivity.this.mentionListViewScrollOffsetY))) {
+                            return false;
+                        }
+                    } else if (!(ChatActivity.this.mentionListViewIsScrolling || ChatActivity.this.mentionListViewScrollOffsetY == 0 || event.getY() >= ((float) ChatActivity.this.mentionListViewScrollOffsetY))) {
                         return false;
                     }
                     boolean result = StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, ChatActivity.this.mentionListView, 0, null);
@@ -2764,10 +2789,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
 
                 public boolean onTouchEvent(MotionEvent event) {
-                    if (ChatActivity.this.mentionListViewIsScrolling || ChatActivity.this.mentionListViewScrollOffsetY == 0 || event.getY() >= ((float) ChatActivity.this.mentionListViewScrollOffsetY)) {
-                        return super.onTouchEvent(event);
+                    if (ChatActivity.this.mentionLayoutManager.getReverseLayout()) {
+                        if (!(ChatActivity.this.mentionListViewIsScrolling || ChatActivity.this.mentionListViewScrollOffsetY == 0 || event.getY() <= ((float) ChatActivity.this.mentionListViewScrollOffsetY))) {
+                            return false;
+                        }
+                    } else if (!(ChatActivity.this.mentionListViewIsScrolling || ChatActivity.this.mentionListViewScrollOffsetY == 0 || event.getY() >= ((float) ChatActivity.this.mentionListViewScrollOffsetY))) {
+                        return false;
                     }
-                    return false;
+                    return super.onTouchEvent(event);
                 }
 
                 public void requestLayout() {
@@ -2781,7 +2810,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     int height = b - t;
                     int newPosition = -1;
                     int newTop = 0;
-                    if (ChatActivity.this.mentionListView != null && ChatActivity.this.mentionListViewLastViewPosition >= 0 && width == this.lastWidth && height - this.lastHeight != 0) {
+                    if (!(ChatActivity.this.mentionLayoutManager.getReverseLayout() || ChatActivity.this.mentionListView == null || ChatActivity.this.mentionListViewLastViewPosition < 0 || width != this.lastWidth || height - this.lastHeight == 0)) {
                         newPosition = ChatActivity.this.mentionListViewLastViewPosition;
                         newTop = ((ChatActivity.this.mentionListViewLastViewTop + height) - this.lastHeight) - getPaddingTop();
                     }
@@ -3445,11 +3474,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         ChatActivity.this.mentionContainer.setTranslationY(0.0f);
                     }
                     if (ChatActivity.this.pagedownButton != null) {
-                        FrameLayout access$6900 = ChatActivity.this.pagedownButton;
+                        FrameLayout access$7000 = ChatActivity.this.pagedownButton;
                         if (ChatActivity.this.pagedownButton.getTag() == null) {
                             f = (float) AndroidUtilities.dp(100.0f);
                         }
-                        access$6900.setTranslationY(f);
+                        access$7000.setTranslationY(f);
                     }
                 }
             }
@@ -3565,6 +3594,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             this.searchContainer.addView(this.searchUserButton, LayoutHelper.createFrame(48, 48.0f, 53, 0.0f, 0.0f, 48.0f, 0.0f));
             this.searchUserButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
+                    ChatActivity.this.mentionLayoutManager.setReverseLayout(true);
                     ChatActivity.this.searchCalendarButton.setVisibility(8);
                     ChatActivity.this.searchUserButton.setVisibility(8);
                     ChatActivity.this.searchingForUser = true;
@@ -3850,7 +3880,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     private void mentionListViewUpdateLayout() {
-        int newOffset = 0;
         if (this.mentionListView.getChildCount() <= 0) {
             this.mentionListViewScrollOffsetY = 0;
             this.mentionListViewLastViewPosition = -1;
@@ -3858,6 +3887,28 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
         View child = this.mentionListView.getChildAt(this.mentionListView.getChildCount() - 1);
         Holder holder = (Holder) this.mentionListView.findContainingViewHolder(child);
+        int newOffset;
+        if (this.mentionLayoutManager.getReverseLayout()) {
+            if (holder != null) {
+                this.mentionListViewLastViewPosition = holder.getAdapterPosition();
+                this.mentionListViewLastViewTop = child.getBottom();
+            } else {
+                this.mentionListViewLastViewPosition = -1;
+            }
+            child = this.mentionListView.getChildAt(0);
+            holder = (Holder) this.mentionListView.findContainingViewHolder(child);
+            newOffset = (child.getBottom() >= this.mentionListView.getMeasuredHeight() || holder == null || holder.getAdapterPosition() != 0) ? this.mentionListView.getMeasuredHeight() : child.getBottom();
+            if (this.mentionListViewScrollOffsetY != newOffset) {
+                RecyclerListView recyclerListView = this.mentionListView;
+                this.mentionListViewScrollOffsetY = newOffset;
+                recyclerListView.setBottomGlowOffset(newOffset);
+                this.mentionListView.setTopGlowOffset(0);
+                this.mentionListView.invalidate();
+                this.mentionContainer.invalidate();
+                return;
+            }
+            return;
+        }
         if (holder != null) {
             this.mentionListViewLastViewPosition = holder.getAdapterPosition();
             this.mentionListViewLastViewTop = child.getTop();
@@ -3866,13 +3917,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
         child = this.mentionListView.getChildAt(0);
         holder = (Holder) this.mentionListView.findContainingViewHolder(child);
-        if (child.getTop() > 0 && holder != null && holder.getAdapterPosition() == 0) {
+        if (child.getTop() <= 0 || holder == null || holder.getAdapterPosition() != 0) {
+            newOffset = 0;
+        } else {
             newOffset = child.getTop();
         }
         if (this.mentionListViewScrollOffsetY != newOffset) {
-            RecyclerListView recyclerListView = this.mentionListView;
+            recyclerListView = this.mentionListView;
             this.mentionListViewScrollOffsetY = newOffset;
             recyclerListView.setTopGlowOffset(newOffset);
+            this.mentionListView.setBottomGlowOffset(0);
             this.mentionListView.invalidate();
             this.mentionContainer.invalidate();
         }
@@ -10332,7 +10386,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
     public void sendMedia(PhotoEntry photoEntry, VideoEditedInfo videoEditedInfo) {
         if (photoEntry.isVideo) {
-            SendMessagesHelper.prepareSendingVideo(photoEntry.path, videoEditedInfo.estimatedSize, videoEditedInfo.estimatedDuration, videoEditedInfo.resultWidth, videoEditedInfo.resultHeight, videoEditedInfo, this.dialog_id, this.replyingMessageObject, photoEntry.caption != null ? photoEntry.caption.toString() : null, photoEntry.ttl);
+            if (videoEditedInfo != null) {
+                SendMessagesHelper.prepareSendingVideo(photoEntry.path, videoEditedInfo.estimatedSize, videoEditedInfo.estimatedDuration, videoEditedInfo.resultWidth, videoEditedInfo.resultHeight, videoEditedInfo, this.dialog_id, this.replyingMessageObject, photoEntry.caption != null ? photoEntry.caption.toString() : null, photoEntry.ttl);
+            } else {
+                SendMessagesHelper.prepareSendingVideo(photoEntry.path, 0, 0, 0, 0, null, this.dialog_id, this.replyingMessageObject, photoEntry.caption != null ? photoEntry.caption.toString() : null, photoEntry.ttl);
+            }
             showReplyPanel(false, null, null, null, false);
             DraftQuery.cleanDraft(this.dialog_id, true);
         } else if (photoEntry.imagePath != null) {

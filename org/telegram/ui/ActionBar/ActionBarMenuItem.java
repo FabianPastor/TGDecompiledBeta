@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.os.Build.VERSION;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextUtils.TruncateAt;
 import android.text.TextWatcher;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
@@ -44,6 +45,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private ImageView clearButton;
     private ActionBarMenuItemDelegate delegate;
     protected ImageView iconView;
+    private boolean ignoreOnTextChange;
     private boolean isSearchField;
     private boolean layoutInScreen;
     private ActionBarMenuItemSearchListener listener;
@@ -445,8 +447,9 @@ public class ActionBarMenuItem extends FrameLayout {
                 this.searchFieldCaption.setTextSize(1, 18.0f);
                 this.searchFieldCaption.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSearch));
                 this.searchFieldCaption.setSingleLine(true);
+                this.searchFieldCaption.setEllipsize(TruncateAt.END);
                 this.searchFieldCaption.setVisibility(8);
-                this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 16, 0.0f, 5.0f, 0.0f, 0.0f));
+                this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 16, 0.0f, 5.5f, 0.0f, 0.0f));
                 this.searchField = new EditText(getContext());
                 this.searchField.setTextSize(1, 18.0f);
                 this.searchField.setHintTextColor(Theme.getColor(Theme.key_actionBarDefaultSearchPlaceholder));
@@ -489,6 +492,10 @@ public class ActionBarMenuItem extends FrameLayout {
                     }
 
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (ActionBarMenuItem.this.ignoreOnTextChange) {
+                            ActionBarMenuItem.this.ignoreOnTextChange = false;
+                            return;
+                        }
                         if (ActionBarMenuItem.this.listener != null) {
                             ActionBarMenuItem.this.listener.onTextChanged(ActionBarMenuItem.this.searchField);
                         }
@@ -551,6 +558,10 @@ public class ActionBarMenuItem extends FrameLayout {
             float f = (this.searchField.length() != 0 || this.searchFieldCaption.getVisibility() == 0) ? 1.0f : 0.6f;
             imageView.setAlpha(f);
         }
+    }
+
+    public void setIgnoreOnTextChange() {
+        this.ignoreOnTextChange = true;
     }
 
     public boolean isSearchField() {
