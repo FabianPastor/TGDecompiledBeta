@@ -16,7 +16,7 @@ public final class adq {
             String name;
             int length = stringBuffer.length();
             if (str != null) {
-                stringBuffer2.append(stringBuffer).append(zzhT(str)).append(" <\n");
+                stringBuffer2.append(stringBuffer).append(zzhR(str)).append(" <\n");
                 stringBuffer.append("  ");
             }
             Class cls = obj.getClass();
@@ -62,7 +62,7 @@ public final class adq {
             }
             return;
         }
-        stringBuffer2.append(stringBuffer).append(zzhT(str)).append(": ");
+        stringBuffer2.append(stringBuffer).append(zzhR(str)).append(": ");
         if (obj instanceof String) {
             String str2 = (String) obj;
             if (!str2.startsWith("http") && str2.length() > Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
@@ -131,7 +131,7 @@ public final class adq {
         }
     }
 
-    private static String zzhT(String str) {
+    private static String zzhR(String str) {
         StringBuffer stringBuffer = new StringBuffer();
         for (int i = 0; i < str.length(); i++) {
             char charAt = str.charAt(i);

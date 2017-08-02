@@ -7,8 +7,8 @@ import java.util.List;
 
 final class adm implements Cloneable {
     private Object value;
-    private adk<?, ?> zzcsj;
-    private List<adr> zzcsk = new ArrayList();
+    private adk<?, ?> zzcsu;
+    private List<adr> zzcsv = new ArrayList();
 
     adm() {
     }
@@ -19,14 +19,14 @@ final class adm implements Cloneable {
         return bArr;
     }
 
-    private adm zzLQ() {
+    private adm zzLP() {
         adm com_google_android_gms_internal_adm = new adm();
         try {
-            com_google_android_gms_internal_adm.zzcsj = this.zzcsj;
-            if (this.zzcsk == null) {
-                com_google_android_gms_internal_adm.zzcsk = null;
+            com_google_android_gms_internal_adm.zzcsu = this.zzcsu;
+            if (this.zzcsv == null) {
+                com_google_android_gms_internal_adm.zzcsv = null;
             } else {
-                com_google_android_gms_internal_adm.zzcsk.addAll(this.zzcsk);
+                com_google_android_gms_internal_adm.zzcsv.addAll(this.zzcsv);
             }
             if (this.value != null) {
                 if (this.value instanceof adp) {
@@ -66,7 +66,7 @@ final class adm implements Cloneable {
     }
 
     public final /* synthetic */ Object clone() throws CloneNotSupportedException {
-        return zzLQ();
+        return zzLP();
     }
 
     public final boolean equals(Object obj) {
@@ -78,10 +78,10 @@ final class adm implements Cloneable {
         }
         adm com_google_android_gms_internal_adm = (adm) obj;
         if (this.value != null && com_google_android_gms_internal_adm.value != null) {
-            return this.zzcsj == com_google_android_gms_internal_adm.zzcsj ? !this.zzcsj.zzcjG.isArray() ? this.value.equals(com_google_android_gms_internal_adm.value) : this.value instanceof byte[] ? Arrays.equals((byte[]) this.value, (byte[]) com_google_android_gms_internal_adm.value) : this.value instanceof int[] ? Arrays.equals((int[]) this.value, (int[]) com_google_android_gms_internal_adm.value) : this.value instanceof long[] ? Arrays.equals((long[]) this.value, (long[]) com_google_android_gms_internal_adm.value) : this.value instanceof float[] ? Arrays.equals((float[]) this.value, (float[]) com_google_android_gms_internal_adm.value) : this.value instanceof double[] ? Arrays.equals((double[]) this.value, (double[]) com_google_android_gms_internal_adm.value) : this.value instanceof boolean[] ? Arrays.equals((boolean[]) this.value, (boolean[]) com_google_android_gms_internal_adm.value) : Arrays.deepEquals((Object[]) this.value, (Object[]) com_google_android_gms_internal_adm.value) : false;
+            return this.zzcsu == com_google_android_gms_internal_adm.zzcsu ? !this.zzcsu.zzcjG.isArray() ? this.value.equals(com_google_android_gms_internal_adm.value) : this.value instanceof byte[] ? Arrays.equals((byte[]) this.value, (byte[]) com_google_android_gms_internal_adm.value) : this.value instanceof int[] ? Arrays.equals((int[]) this.value, (int[]) com_google_android_gms_internal_adm.value) : this.value instanceof long[] ? Arrays.equals((long[]) this.value, (long[]) com_google_android_gms_internal_adm.value) : this.value instanceof float[] ? Arrays.equals((float[]) this.value, (float[]) com_google_android_gms_internal_adm.value) : this.value instanceof double[] ? Arrays.equals((double[]) this.value, (double[]) com_google_android_gms_internal_adm.value) : this.value instanceof boolean[] ? Arrays.equals((boolean[]) this.value, (boolean[]) com_google_android_gms_internal_adm.value) : Arrays.deepEquals((Object[]) this.value, (Object[]) com_google_android_gms_internal_adm.value) : false;
         } else {
-            if (this.zzcsk != null && com_google_android_gms_internal_adm.zzcsk != null) {
-                return this.zzcsk.equals(com_google_android_gms_internal_adm.zzcsk);
+            if (this.zzcsv != null && com_google_android_gms_internal_adm.zzcsv != null) {
+                return this.zzcsv.equals(com_google_android_gms_internal_adm.zzcsv);
             }
             try {
                 return Arrays.equals(toByteArray(), com_google_android_gms_internal_adm.toByteArray());
@@ -101,25 +101,25 @@ final class adm implements Cloneable {
 
     final void zza(adh com_google_android_gms_internal_adh) throws IOException {
         if (this.value != null) {
-            this.zzcsj.zza(this.value, com_google_android_gms_internal_adh);
+            this.zzcsu.zza(this.value, com_google_android_gms_internal_adh);
             return;
         }
-        for (adr com_google_android_gms_internal_adr : this.zzcsk) {
+        for (adr com_google_android_gms_internal_adr : this.zzcsv) {
             com_google_android_gms_internal_adh.zzcu(com_google_android_gms_internal_adr.tag);
             com_google_android_gms_internal_adh.zzK(com_google_android_gms_internal_adr.zzbws);
         }
     }
 
     final void zza(adr com_google_android_gms_internal_adr) {
-        this.zzcsk.add(com_google_android_gms_internal_adr);
+        this.zzcsv.add(com_google_android_gms_internal_adr);
     }
 
     final <T> T zzb(adk<?, T> com_google_android_gms_internal_adk___T) {
         if (this.value == null) {
-            this.zzcsj = com_google_android_gms_internal_adk___T;
-            this.value = com_google_android_gms_internal_adk___T.zzX(this.zzcsk);
-            this.zzcsk = null;
-        } else if (!this.zzcsj.equals(com_google_android_gms_internal_adk___T)) {
+            this.zzcsu = com_google_android_gms_internal_adk___T;
+            this.value = com_google_android_gms_internal_adk___T.zzX(this.zzcsv);
+            this.zzcsv = null;
+        } else if (!this.zzcsu.equals(com_google_android_gms_internal_adk___T)) {
             throw new IllegalStateException("Tried to getExtension with a different Extension.");
         }
         return this.value;
@@ -127,10 +127,10 @@ final class adm implements Cloneable {
 
     final int zzn() {
         if (this.value != null) {
-            return this.zzcsj.zzav(this.value);
+            return this.zzcsu.zzav(this.value);
         }
         int i = 0;
-        for (adr com_google_android_gms_internal_adr : this.zzcsk) {
+        for (adr com_google_android_gms_internal_adr : this.zzcsv) {
             i = (com_google_android_gms_internal_adr.zzbws.length + (adh.zzcv(com_google_android_gms_internal_adr.tag) + 0)) + i;
         }
         return i;

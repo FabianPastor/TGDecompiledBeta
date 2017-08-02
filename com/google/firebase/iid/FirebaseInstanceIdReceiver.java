@@ -8,8 +8,6 @@ import android.util.Base64;
 import android.util.Log;
 
 public final class FirebaseInstanceIdReceiver extends WakefulBroadcastReceiver {
-    private static boolean zzbfB = false;
-
     public final void onReceive(Context context, Intent intent) {
         String str = null;
         int i = -1;

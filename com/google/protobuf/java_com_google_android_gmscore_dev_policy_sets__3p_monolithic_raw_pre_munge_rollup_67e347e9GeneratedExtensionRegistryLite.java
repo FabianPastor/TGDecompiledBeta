@@ -13,6 +13,6 @@ final class java_com_google_android_gmscore_dev_policy_sets__3p_monolithic_raw_p
     }
 
     static zzd getInstance() {
-        return zzc.zzLs();
+        return zzc.zzLr();
     }
 }

@@ -5,20 +5,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class zzd {
-    private static volatile boolean zzcrE = false;
-    private static final Class<?> zzcrF = zzLt();
-    static final zzd zzcrG = new zzd(true);
-    private final Map<Object, Object> zzcrH;
+    private static volatile boolean zzcrP = false;
+    private static final Class<?> zzcrQ = zzLs();
+    static final zzd zzcrR = new zzd(true);
+    private final Map<Object, Object> zzcrS;
 
     zzd() {
-        this.zzcrH = new HashMap();
+        this.zzcrS = new HashMap();
     }
 
     zzd(boolean z) {
-        this.zzcrH = Collections.emptyMap();
+        this.zzcrS = Collections.emptyMap();
     }
 
-    private static Class<?> zzLt() {
+    private static Class<?> zzLs() {
         try {
             return Class.forName("com.google.protobuf.Extension");
         } catch (ClassNotFoundException e) {

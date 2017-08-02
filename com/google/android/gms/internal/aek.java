@@ -3,38 +3,38 @@ package com.google.android.gms.internal;
 import java.io.IOException;
 
 public final class aek extends adj<aek> implements Cloneable {
-    private static volatile aek[] zzctY;
+    private static volatile aek[] zzcuj;
     private String key;
     private String value;
 
     public aek() {
         this.key = "";
         this.value = "";
-        this.zzcsd = null;
-        this.zzcsm = -1;
+        this.zzcso = null;
+        this.zzcsx = -1;
     }
 
-    public static aek[] zzMf() {
-        if (zzctY == null) {
-            synchronized (adn.zzcsl) {
-                if (zzctY == null) {
-                    zzctY = new aek[0];
+    public static aek[] zzMe() {
+        if (zzcuj == null) {
+            synchronized (adn.zzcsw) {
+                if (zzcuj == null) {
+                    zzcuj = new aek[0];
                 }
             }
         }
-        return zzctY;
+        return zzcuj;
     }
 
-    private aek zzMg() {
+    private aek zzMf() {
         try {
-            return (aek) super.zzLO();
+            return (aek) super.zzLN();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError(e);
         }
     }
 
     public final /* synthetic */ Object clone() throws CloneNotSupportedException {
-        return zzMg();
+        return zzMf();
     }
 
     public final boolean equals(Object obj) {
@@ -59,30 +59,30 @@ public final class aek extends adj<aek> implements Cloneable {
         } else if (!this.value.equals(com_google_android_gms_internal_aek.value)) {
             return false;
         }
-        return (this.zzcsd == null || this.zzcsd.isEmpty()) ? com_google_android_gms_internal_aek.zzcsd == null || com_google_android_gms_internal_aek.zzcsd.isEmpty() : this.zzcsd.equals(com_google_android_gms_internal_aek.zzcsd);
+        return (this.zzcso == null || this.zzcso.isEmpty()) ? com_google_android_gms_internal_aek.zzcso == null || com_google_android_gms_internal_aek.zzcso.isEmpty() : this.zzcso.equals(com_google_android_gms_internal_aek.zzcso);
     }
 
     public final int hashCode() {
         int i = 0;
         int hashCode = ((this.value == null ? 0 : this.value.hashCode()) + (((this.key == null ? 0 : this.key.hashCode()) + ((getClass().getName().hashCode() + 527) * 31)) * 31)) * 31;
-        if (!(this.zzcsd == null || this.zzcsd.isEmpty())) {
-            i = this.zzcsd.hashCode();
+        if (!(this.zzcso == null || this.zzcso.isEmpty())) {
+            i = this.zzcso.hashCode();
         }
         return hashCode + i;
     }
 
-    public final /* synthetic */ adj zzLO() throws CloneNotSupportedException {
+    public final /* synthetic */ adj zzLN() throws CloneNotSupportedException {
         return (aek) clone();
     }
 
-    public final /* synthetic */ adp zzLP() throws CloneNotSupportedException {
+    public final /* synthetic */ adp zzLO() throws CloneNotSupportedException {
         return (aek) clone();
     }
 
     public final /* synthetic */ adp zza(adg com_google_android_gms_internal_adg) throws IOException {
         while (true) {
-            int zzLB = com_google_android_gms_internal_adg.zzLB();
-            switch (zzLB) {
+            int zzLA = com_google_android_gms_internal_adg.zzLA();
+            switch (zzLA) {
                 case 0:
                     break;
                 case 10:
@@ -92,7 +92,7 @@ public final class aek extends adj<aek> implements Cloneable {
                     this.value = com_google_android_gms_internal_adg.readString();
                     continue;
                 default:
-                    if (!super.zza(com_google_android_gms_internal_adg, zzLB)) {
+                    if (!super.zza(com_google_android_gms_internal_adg, zzLA)) {
                         break;
                     }
                     continue;

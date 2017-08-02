@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -36,6 +37,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow.OnDispatchKeyEventListener;
+import org.telegram.ui.Components.CloseProgressDrawable2;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarMenuItem extends FrameLayout {
@@ -56,6 +58,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private ActionBarPopupWindowLayout popupLayout;
     private ActionBarPopupWindow popupWindow;
     private boolean processedPopupClick;
+    private CloseProgressDrawable2 progressDrawable;
     private Rect rect;
     private FrameLayout searchContainer;
     private EditText searchField;
@@ -379,7 +382,9 @@ public class ActionBarMenuItem extends FrameLayout {
             this.searchContainer.setVisibility(8);
             this.searchField.clearFocus();
             setVisibility(0);
-            AndroidUtilities.hideKeyboard(this.searchField);
+            if (openKeyboard) {
+                AndroidUtilities.hideKeyboard(this.searchField);
+            }
             if (this.listener == null) {
                 return false;
             }
@@ -450,7 +455,19 @@ public class ActionBarMenuItem extends FrameLayout {
                 this.searchFieldCaption.setEllipsize(TruncateAt.END);
                 this.searchFieldCaption.setVisibility(8);
                 this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 16, 0.0f, 5.5f, 0.0f, 0.0f));
-                this.searchField = new EditText(getContext());
+                this.searchField = new EditText(getContext()) {
+                    public boolean onKeyDown(int keyCode, KeyEvent event) {
+                        if (keyCode != 67 || ActionBarMenuItem.this.searchField.length() != 0 || ActionBarMenuItem.this.searchFieldCaption.getVisibility() != 0 || ActionBarMenuItem.this.searchFieldCaption.length() <= 0) {
+                            return super.onKeyDown(keyCode, event);
+                        }
+                        ActionBarMenuItem.this.clearButton.callOnClick();
+                        return true;
+                    }
+
+                    public boolean dispatchKeyEvent(KeyEvent event) {
+                        return super.dispatchKeyEvent(event);
+                    }
+                };
                 this.searchField.setTextSize(1, 18.0f);
                 this.searchField.setHintTextColor(Theme.getColor(Theme.key_actionBarDefaultSearchPlaceholder));
                 this.searchField.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSearch));
@@ -499,10 +516,7 @@ public class ActionBarMenuItem extends FrameLayout {
                         if (ActionBarMenuItem.this.listener != null) {
                             ActionBarMenuItem.this.listener.onTextChanged(ActionBarMenuItem.this.searchField);
                         }
-                        if (ActionBarMenuItem.this.clearButton != null) {
-                            ImageView access$600 = ActionBarMenuItem.this.clearButton;
-                            float f = (!TextUtils.isEmpty(s) || ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) ? 1.0f : 0.6f;
-                            access$600.setAlpha(f);
+                        if (ActionBarMenuItem.this.clearButton == null) {
                         }
                     }
 
@@ -519,7 +533,10 @@ public class ActionBarMenuItem extends FrameLayout {
                 this.searchField.setTextIsSelectable(false);
                 this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-1, 36.0f, 16, 0.0f, 0.0f, 48.0f, 0.0f));
                 this.clearButton = new ImageView(getContext());
-                this.clearButton.setImageResource(R.drawable.ic_close_white);
+                ImageView imageView = this.clearButton;
+                Drawable closeProgressDrawable2 = new CloseProgressDrawable2();
+                this.progressDrawable = closeProgressDrawable2;
+                imageView.setImageDrawable(closeProgressDrawable2);
                 this.clearButton.setColorFilter(new PorterDuffColorFilter(this.parentMenu.parentActionBar.itemsColor, Mode.MULTIPLY));
                 this.clearButton.setScaleType(ScaleType.CENTER);
                 this.clearButton.setOnClickListener(new OnClickListener() {
@@ -528,9 +545,6 @@ public class ActionBarMenuItem extends FrameLayout {
                             ActionBarMenuItem.this.searchField.setText("");
                         } else if (ActionBarMenuItem.this.searchFieldCaption != null && ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) {
                             ActionBarMenuItem.this.searchFieldCaption.setVisibility(8);
-                            ImageView access$600 = ActionBarMenuItem.this.clearButton;
-                            float f = (ActionBarMenuItem.this.searchField.length() != 0 || ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) ? 1.0f : 0.6f;
-                            access$600.setAlpha(f);
                             if (ActionBarMenuItem.this.listener != null) {
                                 ActionBarMenuItem.this.listener.onCaptionCleared();
                             }
@@ -546,6 +560,16 @@ public class ActionBarMenuItem extends FrameLayout {
         return this;
     }
 
+    public void setShowSearchProgress(boolean show) {
+        if (this.progressDrawable != null) {
+            if (show) {
+                this.progressDrawable.startAnimation();
+            } else {
+                this.progressDrawable.stopAnimation();
+            }
+        }
+    }
+
     public void setSearchFieldCaption(CharSequence caption) {
         if (TextUtils.isEmpty(caption)) {
             this.searchFieldCaption.setVisibility(8);
@@ -553,10 +577,7 @@ public class ActionBarMenuItem extends FrameLayout {
             this.searchFieldCaption.setVisibility(0);
             this.searchFieldCaption.setText(caption);
         }
-        if (this.clearButton != null) {
-            ImageView imageView = this.clearButton;
-            float f = (this.searchField.length() != 0 || this.searchFieldCaption.getVisibility() == 0) ? 1.0f : 0.6f;
-            imageView.setAlpha(f);
+        if (this.clearButton == null) {
         }
     }
 

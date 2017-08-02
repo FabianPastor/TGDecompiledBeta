@@ -17,13 +17,13 @@ public final class zzcjw extends adj<zzcjw> {
         this.zzbvx = null;
         this.zzbvy = null;
         this.count = null;
-        this.zzcsd = null;
-        this.zzcsm = -1;
+        this.zzcso = null;
+        this.zzcsx = -1;
     }
 
     public static zzcjw[] zzzB() {
         if (zzbvv == null) {
-            synchronized (adn.zzcsl) {
+            synchronized (adn.zzcsw) {
                 if (zzbvv == null) {
                     zzbvv = new zzcjw[0];
                 }
@@ -71,55 +71,55 @@ public final class zzcjw extends adj<zzcjw> {
         } else if (!this.count.equals(com_google_android_gms_internal_zzcjw.count)) {
             return false;
         }
-        return (this.zzcsd == null || this.zzcsd.isEmpty()) ? com_google_android_gms_internal_zzcjw.zzcsd == null || com_google_android_gms_internal_zzcjw.zzcsd.isEmpty() : this.zzcsd.equals(com_google_android_gms_internal_zzcjw.zzcsd);
+        return (this.zzcso == null || this.zzcso.isEmpty()) ? com_google_android_gms_internal_zzcjw.zzcso == null || com_google_android_gms_internal_zzcjw.zzcso.isEmpty() : this.zzcso.equals(com_google_android_gms_internal_zzcjw.zzcso);
     }
 
     public final int hashCode() {
         int i = 0;
         int hashCode = ((this.count == null ? 0 : this.count.hashCode()) + (((this.zzbvy == null ? 0 : this.zzbvy.hashCode()) + (((this.zzbvx == null ? 0 : this.zzbvx.hashCode()) + (((this.name == null ? 0 : this.name.hashCode()) + ((((getClass().getName().hashCode() + 527) * 31) + adn.hashCode(this.zzbvw)) * 31)) * 31)) * 31)) * 31)) * 31;
-        if (!(this.zzcsd == null || this.zzcsd.isEmpty())) {
-            i = this.zzcsd.hashCode();
+        if (!(this.zzcso == null || this.zzcso.isEmpty())) {
+            i = this.zzcso.hashCode();
         }
         return hashCode + i;
     }
 
     public final /* synthetic */ adp zza(adg com_google_android_gms_internal_adg) throws IOException {
         while (true) {
-            int zzLB = com_google_android_gms_internal_adg.zzLB();
-            switch (zzLB) {
+            int zzLA = com_google_android_gms_internal_adg.zzLA();
+            switch (zzLA) {
                 case 0:
                     break;
                 case 10:
                     int zzb = ads.zzb(com_google_android_gms_internal_adg, 10);
-                    zzLB = this.zzbvw == null ? 0 : this.zzbvw.length;
-                    Object obj = new zzcjx[(zzb + zzLB)];
-                    if (zzLB != 0) {
-                        System.arraycopy(this.zzbvw, 0, obj, 0, zzLB);
+                    zzLA = this.zzbvw == null ? 0 : this.zzbvw.length;
+                    Object obj = new zzcjx[(zzb + zzLA)];
+                    if (zzLA != 0) {
+                        System.arraycopy(this.zzbvw, 0, obj, 0, zzLA);
                     }
-                    while (zzLB < obj.length - 1) {
-                        obj[zzLB] = new zzcjx();
-                        com_google_android_gms_internal_adg.zza(obj[zzLB]);
-                        com_google_android_gms_internal_adg.zzLB();
-                        zzLB++;
+                    while (zzLA < obj.length - 1) {
+                        obj[zzLA] = new zzcjx();
+                        com_google_android_gms_internal_adg.zza(obj[zzLA]);
+                        com_google_android_gms_internal_adg.zzLA();
+                        zzLA++;
                     }
-                    obj[zzLB] = new zzcjx();
-                    com_google_android_gms_internal_adg.zza(obj[zzLB]);
+                    obj[zzLA] = new zzcjx();
+                    com_google_android_gms_internal_adg.zza(obj[zzLA]);
                     this.zzbvw = obj;
                     continue;
                 case 18:
                     this.name = com_google_android_gms_internal_adg.readString();
                     continue;
                 case 24:
-                    this.zzbvx = Long.valueOf(com_google_android_gms_internal_adg.zzLH());
+                    this.zzbvx = Long.valueOf(com_google_android_gms_internal_adg.zzLG());
                     continue;
                 case 32:
-                    this.zzbvy = Long.valueOf(com_google_android_gms_internal_adg.zzLH());
+                    this.zzbvy = Long.valueOf(com_google_android_gms_internal_adg.zzLG());
                     continue;
                 case MotionEventCompat.AXIS_GENERIC_9 /*40*/:
-                    this.count = Integer.valueOf(com_google_android_gms_internal_adg.zzLG());
+                    this.count = Integer.valueOf(com_google_android_gms_internal_adg.zzLF());
                     continue;
                 default:
-                    if (!super.zza(com_google_android_gms_internal_adg, zzLB)) {
+                    if (!super.zza(com_google_android_gms_internal_adg, zzLA)) {
                         break;
                     }
                     continue;

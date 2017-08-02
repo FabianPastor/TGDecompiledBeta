@@ -10,13 +10,13 @@ public final class hf extends adj<hf> {
     public hf() {
         this.name = "";
         this.zzbTJ = null;
-        this.zzcsd = null;
-        this.zzcsm = -1;
+        this.zzcso = null;
+        this.zzcsx = -1;
     }
 
     public static hf[] zzEa() {
         if (zzbTI == null) {
-            synchronized (adn.zzcsl) {
+            synchronized (adn.zzcsw) {
                 if (zzbTI == null) {
                     zzbTI = new hf[0];
                 }
@@ -47,22 +47,22 @@ public final class hf extends adj<hf> {
         } else if (!this.zzbTJ.equals(hfVar.zzbTJ)) {
             return false;
         }
-        return (this.zzcsd == null || this.zzcsd.isEmpty()) ? hfVar.zzcsd == null || hfVar.zzcsd.isEmpty() : this.zzcsd.equals(hfVar.zzcsd);
+        return (this.zzcso == null || this.zzcso.isEmpty()) ? hfVar.zzcso == null || hfVar.zzcso.isEmpty() : this.zzcso.equals(hfVar.zzcso);
     }
 
     public final int hashCode() {
         int i = 0;
         int hashCode = ((this.zzbTJ == null ? 0 : this.zzbTJ.hashCode()) + (((this.name == null ? 0 : this.name.hashCode()) + ((getClass().getName().hashCode() + 527) * 31)) * 31)) * 31;
-        if (!(this.zzcsd == null || this.zzcsd.isEmpty())) {
-            i = this.zzcsd.hashCode();
+        if (!(this.zzcso == null || this.zzcso.isEmpty())) {
+            i = this.zzcso.hashCode();
         }
         return hashCode + i;
     }
 
     public final /* synthetic */ adp zza(adg com_google_android_gms_internal_adg) throws IOException {
         while (true) {
-            int zzLB = com_google_android_gms_internal_adg.zzLB();
-            switch (zzLB) {
+            int zzLA = com_google_android_gms_internal_adg.zzLA();
+            switch (zzLA) {
                 case 0:
                     break;
                 case 10:
@@ -75,7 +75,7 @@ public final class hf extends adj<hf> {
                     com_google_android_gms_internal_adg.zza(this.zzbTJ);
                     continue;
                 default:
-                    if (!super.zza(com_google_android_gms_internal_adg, zzLB)) {
+                    if (!super.zza(com_google_android_gms_internal_adg, zzLA)) {
                         break;
                     }
                     continue;

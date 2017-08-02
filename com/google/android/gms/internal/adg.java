@@ -5,45 +5,45 @@ import org.telegram.tgnet.ConnectionsManager;
 
 public final class adg {
     private final byte[] buffer;
-    private int zzcrT;
-    private int zzcrU;
-    private int zzcrV;
-    private int zzcrW;
-    private int zzcrX;
-    private int zzcrY = ConnectionsManager.DEFAULT_DATACENTER_ID;
-    private int zzcrZ;
-    private int zzcsa = 64;
-    private int zzcsb = ConnectionsManager.FileTypeFile;
+    private int zzcse;
+    private int zzcsf;
+    private int zzcsg;
+    private int zzcsh;
+    private int zzcsi;
+    private int zzcsj = ConnectionsManager.DEFAULT_DATACENTER_ID;
+    private int zzcsk;
+    private int zzcsl = 64;
+    private int zzcsm = ConnectionsManager.FileTypeFile;
 
     private adg(byte[] bArr, int i, int i2) {
         this.buffer = bArr;
-        this.zzcrT = i;
-        this.zzcrU = i + i2;
-        this.zzcrW = i;
+        this.zzcse = i;
+        this.zzcsf = i + i2;
+        this.zzcsh = i;
     }
 
     public static adg zzH(byte[] bArr) {
         return zzb(bArr, 0, bArr.length);
     }
 
-    private final void zzLK() {
-        this.zzcrU += this.zzcrV;
-        int i = this.zzcrU;
-        if (i > this.zzcrY) {
-            this.zzcrV = i - this.zzcrY;
-            this.zzcrU -= this.zzcrV;
+    private final void zzLJ() {
+        this.zzcsf += this.zzcsg;
+        int i = this.zzcsf;
+        if (i > this.zzcsj) {
+            this.zzcsg = i - this.zzcsj;
+            this.zzcsf -= this.zzcsg;
             return;
         }
-        this.zzcrV = 0;
+        this.zzcsg = 0;
     }
 
-    private final byte zzLM() throws IOException {
-        if (this.zzcrW == this.zzcrU) {
-            throw ado.zzLR();
+    private final byte zzLL() throws IOException {
+        if (this.zzcsh == this.zzcsf) {
+            throw ado.zzLQ();
         }
         byte[] bArr = this.buffer;
-        int i = this.zzcrW;
-        this.zzcrW = i + 1;
+        int i = this.zzcsh;
+        this.zzcsh = i + 1;
         return bArr[i];
     }
 
@@ -53,168 +53,168 @@ public final class adg {
 
     private final void zzcq(int i) throws IOException {
         if (i < 0) {
-            throw ado.zzLS();
-        } else if (this.zzcrW + i > this.zzcrY) {
-            zzcq(this.zzcrY - this.zzcrW);
             throw ado.zzLR();
-        } else if (i <= this.zzcrU - this.zzcrW) {
-            this.zzcrW += i;
+        } else if (this.zzcsh + i > this.zzcsj) {
+            zzcq(this.zzcsj - this.zzcsh);
+            throw ado.zzLQ();
+        } else if (i <= this.zzcsf - this.zzcsh) {
+            this.zzcsh += i;
         } else {
-            throw ado.zzLR();
+            throw ado.zzLQ();
         }
     }
 
     public final int getPosition() {
-        return this.zzcrW - this.zzcrT;
+        return this.zzcsh - this.zzcse;
     }
 
     public final byte[] readBytes() throws IOException {
-        int zzLG = zzLG();
-        if (zzLG < 0) {
-            throw ado.zzLS();
-        } else if (zzLG == 0) {
-            return ads.zzcsx;
+        int zzLF = zzLF();
+        if (zzLF < 0) {
+            throw ado.zzLR();
+        } else if (zzLF == 0) {
+            return ads.zzcsI;
         } else {
-            if (zzLG > this.zzcrU - this.zzcrW) {
-                throw ado.zzLR();
+            if (zzLF > this.zzcsf - this.zzcsh) {
+                throw ado.zzLQ();
             }
-            Object obj = new byte[zzLG];
-            System.arraycopy(this.buffer, this.zzcrW, obj, 0, zzLG);
-            this.zzcrW = zzLG + this.zzcrW;
+            Object obj = new byte[zzLF];
+            System.arraycopy(this.buffer, this.zzcsh, obj, 0, zzLF);
+            this.zzcsh = zzLF + this.zzcsh;
             return obj;
         }
     }
 
     public final String readString() throws IOException {
-        int zzLG = zzLG();
-        if (zzLG < 0) {
-            throw ado.zzLS();
-        } else if (zzLG > this.zzcrU - this.zzcrW) {
+        int zzLF = zzLF();
+        if (zzLF < 0) {
             throw ado.zzLR();
+        } else if (zzLF > this.zzcsf - this.zzcsh) {
+            throw ado.zzLQ();
         } else {
-            String str = new String(this.buffer, this.zzcrW, zzLG, adn.UTF_8);
-            this.zzcrW = zzLG + this.zzcrW;
+            String str = new String(this.buffer, this.zzcsh, zzLF, adn.UTF_8);
+            this.zzcsh = zzLF + this.zzcsh;
             return str;
         }
     }
 
-    public final int zzLB() throws IOException {
-        if (this.zzcrW == this.zzcrU) {
-            this.zzcrX = 0;
+    public final int zzLA() throws IOException {
+        if (this.zzcsh == this.zzcsf) {
+            this.zzcsi = 0;
             return 0;
         }
-        this.zzcrX = zzLG();
-        if (this.zzcrX != 0) {
-            return this.zzcrX;
+        this.zzcsi = zzLF();
+        if (this.zzcsi != 0) {
+            return this.zzcsi;
         }
         throw new ado("Protocol message contained an invalid tag (zero).");
     }
 
-    public final long zzLC() throws IOException {
-        return zzLH();
-    }
-
-    public final int zzLD() throws IOException {
+    public final long zzLB() throws IOException {
         return zzLG();
     }
 
-    public final boolean zzLE() throws IOException {
-        return zzLG() != 0;
+    public final int zzLC() throws IOException {
+        return zzLF();
     }
 
-    public final long zzLF() throws IOException {
-        long zzLH = zzLH();
-        return (-(zzLH & 1)) ^ (zzLH >>> 1);
+    public final boolean zzLD() throws IOException {
+        return zzLF() != 0;
     }
 
-    public final int zzLG() throws IOException {
-        byte zzLM = zzLM();
-        if (zzLM >= (byte) 0) {
-            return zzLM;
+    public final long zzLE() throws IOException {
+        long zzLG = zzLG();
+        return (-(zzLG & 1)) ^ (zzLG >>> 1);
+    }
+
+    public final int zzLF() throws IOException {
+        byte zzLL = zzLL();
+        if (zzLL >= (byte) 0) {
+            return zzLL;
         }
-        int i = zzLM & 127;
-        byte zzLM2 = zzLM();
-        if (zzLM2 >= (byte) 0) {
-            return i | (zzLM2 << 7);
+        int i = zzLL & 127;
+        byte zzLL2 = zzLL();
+        if (zzLL2 >= (byte) 0) {
+            return i | (zzLL2 << 7);
         }
-        i |= (zzLM2 & 127) << 7;
-        zzLM2 = zzLM();
-        if (zzLM2 >= (byte) 0) {
-            return i | (zzLM2 << 14);
+        i |= (zzLL2 & 127) << 7;
+        zzLL2 = zzLL();
+        if (zzLL2 >= (byte) 0) {
+            return i | (zzLL2 << 14);
         }
-        i |= (zzLM2 & 127) << 14;
-        zzLM2 = zzLM();
-        if (zzLM2 >= (byte) 0) {
-            return i | (zzLM2 << 21);
+        i |= (zzLL2 & 127) << 14;
+        zzLL2 = zzLL();
+        if (zzLL2 >= (byte) 0) {
+            return i | (zzLL2 << 21);
         }
-        i |= (zzLM2 & 127) << 21;
-        zzLM2 = zzLM();
-        i |= zzLM2 << 28;
-        if (zzLM2 >= (byte) 0) {
+        i |= (zzLL2 & 127) << 21;
+        zzLL2 = zzLL();
+        i |= zzLL2 << 28;
+        if (zzLL2 >= (byte) 0) {
             return i;
         }
         for (int i2 = 0; i2 < 5; i2++) {
-            if (zzLM() >= (byte) 0) {
+            if (zzLL() >= (byte) 0) {
                 return i;
             }
         }
-        throw ado.zzLT();
+        throw ado.zzLS();
     }
 
-    public final long zzLH() throws IOException {
+    public final long zzLG() throws IOException {
         long j = 0;
         for (int i = 0; i < 64; i += 7) {
-            byte zzLM = zzLM();
-            j |= ((long) (zzLM & 127)) << i;
-            if ((zzLM & 128) == 0) {
+            byte zzLL = zzLL();
+            j |= ((long) (zzLL & 127)) << i;
+            if ((zzLL & 128) == 0) {
                 return j;
             }
         }
-        throw ado.zzLT();
+        throw ado.zzLS();
     }
 
-    public final int zzLI() throws IOException {
-        return (((zzLM() & 255) | ((zzLM() & 255) << 8)) | ((zzLM() & 255) << 16)) | ((zzLM() & 255) << 24);
+    public final int zzLH() throws IOException {
+        return (((zzLL() & 255) | ((zzLL() & 255) << 8)) | ((zzLL() & 255) << 16)) | ((zzLL() & 255) << 24);
     }
 
-    public final long zzLJ() throws IOException {
-        byte zzLM = zzLM();
-        byte zzLM2 = zzLM();
-        return ((((((((((long) zzLM2) & 255) << 8) | (((long) zzLM) & 255)) | ((((long) zzLM()) & 255) << 16)) | ((((long) zzLM()) & 255) << 24)) | ((((long) zzLM()) & 255) << 32)) | ((((long) zzLM()) & 255) << 40)) | ((((long) zzLM()) & 255) << 48)) | ((((long) zzLM()) & 255) << 56);
+    public final long zzLI() throws IOException {
+        byte zzLL = zzLL();
+        byte zzLL2 = zzLL();
+        return ((((((((((long) zzLL2) & 255) << 8) | (((long) zzLL) & 255)) | ((((long) zzLL()) & 255) << 16)) | ((((long) zzLL()) & 255) << 24)) | ((((long) zzLL()) & 255) << 32)) | ((((long) zzLL()) & 255) << 40)) | ((((long) zzLL()) & 255) << 48)) | ((((long) zzLL()) & 255) << 56);
     }
 
-    public final int zzLL() {
-        if (this.zzcrY == ConnectionsManager.DEFAULT_DATACENTER_ID) {
+    public final int zzLK() {
+        if (this.zzcsj == ConnectionsManager.DEFAULT_DATACENTER_ID) {
             return -1;
         }
-        return this.zzcrY - this.zzcrW;
+        return this.zzcsj - this.zzcsh;
     }
 
     public final void zza(adp com_google_android_gms_internal_adp) throws IOException {
-        int zzLG = zzLG();
-        if (this.zzcrZ >= this.zzcsa) {
-            throw ado.zzLU();
+        int zzLF = zzLF();
+        if (this.zzcsk >= this.zzcsl) {
+            throw ado.zzLT();
         }
-        zzLG = zzcn(zzLG);
-        this.zzcrZ++;
+        zzLF = zzcn(zzLF);
+        this.zzcsk++;
         com_google_android_gms_internal_adp.zza(this);
         zzcl(0);
-        this.zzcrZ--;
-        zzco(zzLG);
+        this.zzcsk--;
+        zzco(zzLF);
     }
 
     public final void zza(adp com_google_android_gms_internal_adp, int i) throws IOException {
-        if (this.zzcrZ >= this.zzcsa) {
-            throw ado.zzLU();
+        if (this.zzcsk >= this.zzcsl) {
+            throw ado.zzLT();
         }
-        this.zzcrZ++;
+        this.zzcsk++;
         com_google_android_gms_internal_adp.zza(this);
         zzcl((i << 3) | 4);
-        this.zzcrZ--;
+        this.zzcsk--;
     }
 
     public final void zzcl(int i) throws ado {
-        if (this.zzcrX != i) {
+        if (this.zzcsi != i) {
             throw new ado("Protocol message end-group tag did not match expected tag.");
         }
     }
@@ -222,76 +222,76 @@ public final class adg {
     public final boolean zzcm(int i) throws IOException {
         switch (i & 7) {
             case 0:
-                zzLG();
+                zzLF();
                 return true;
             case 1:
-                zzLJ();
+                zzLI();
                 return true;
             case 2:
-                zzcq(zzLG());
+                zzcq(zzLF());
                 return true;
             case 3:
                 break;
             case 4:
                 return false;
             case 5:
-                zzLI();
+                zzLH();
                 return true;
             default:
                 throw new ado("Protocol message tag had invalid wire type.");
         }
-        int zzLB;
+        int zzLA;
         do {
-            zzLB = zzLB();
-            if (zzLB != 0) {
+            zzLA = zzLA();
+            if (zzLA != 0) {
             }
             zzcl(((i >>> 3) << 3) | 4);
             return true;
-        } while (zzcm(zzLB));
+        } while (zzcm(zzLA));
         zzcl(((i >>> 3) << 3) | 4);
         return true;
     }
 
     public final int zzcn(int i) throws ado {
         if (i < 0) {
-            throw ado.zzLS();
-        }
-        int i2 = this.zzcrW + i;
-        int i3 = this.zzcrY;
-        if (i2 > i3) {
             throw ado.zzLR();
         }
-        this.zzcrY = i2;
-        zzLK();
+        int i2 = this.zzcsh + i;
+        int i3 = this.zzcsj;
+        if (i2 > i3) {
+            throw ado.zzLQ();
+        }
+        this.zzcsj = i2;
+        zzLJ();
         return i3;
     }
 
     public final void zzco(int i) {
-        this.zzcrY = i;
-        zzLK();
+        this.zzcsj = i;
+        zzLJ();
     }
 
     public final void zzcp(int i) {
-        zzq(i, this.zzcrX);
+        zzq(i, this.zzcsi);
     }
 
     public final byte[] zzp(int i, int i2) {
         if (i2 == 0) {
-            return ads.zzcsx;
+            return ads.zzcsI;
         }
         Object obj = new byte[i2];
-        System.arraycopy(this.buffer, this.zzcrT + i, obj, 0, i2);
+        System.arraycopy(this.buffer, this.zzcse + i, obj, 0, i2);
         return obj;
     }
 
     final void zzq(int i, int i2) {
-        if (i > this.zzcrW - this.zzcrT) {
-            throw new IllegalArgumentException("Position " + i + " is beyond current " + (this.zzcrW - this.zzcrT));
+        if (i > this.zzcsh - this.zzcse) {
+            throw new IllegalArgumentException("Position " + i + " is beyond current " + (this.zzcsh - this.zzcse));
         } else if (i < 0) {
             throw new IllegalArgumentException("Bad position " + i);
         } else {
-            this.zzcrW = this.zzcrT + i;
-            this.zzcrX = i2;
+            this.zzcsh = this.zzcse + i;
+            this.zzcsi = i2;
         }
     }
 }

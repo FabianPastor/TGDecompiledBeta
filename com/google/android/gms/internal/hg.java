@@ -10,13 +10,13 @@ public final class hg extends adj<hg> {
     public hg() {
         this.type = 1;
         this.zzbTL = null;
-        this.zzcsd = null;
-        this.zzcsm = -1;
+        this.zzcso = null;
+        this.zzcsx = -1;
     }
 
     public static hg[] zzEb() {
         if (zzbTK == null) {
-            synchronized (adn.zzcsl) {
+            synchronized (adn.zzcsw) {
                 if (zzbTK == null) {
                     zzbTK = new hg[0];
                 }
@@ -43,28 +43,28 @@ public final class hg extends adj<hg> {
         } else if (!this.zzbTL.equals(hgVar.zzbTL)) {
             return false;
         }
-        return (this.zzcsd == null || this.zzcsd.isEmpty()) ? hgVar.zzcsd == null || hgVar.zzcsd.isEmpty() : this.zzcsd.equals(hgVar.zzcsd);
+        return (this.zzcso == null || this.zzcso.isEmpty()) ? hgVar.zzcso == null || hgVar.zzcso.isEmpty() : this.zzcso.equals(hgVar.zzcso);
     }
 
     public final int hashCode() {
         int i = 0;
         int hashCode = ((this.zzbTL == null ? 0 : this.zzbTL.hashCode()) + ((((getClass().getName().hashCode() + 527) * 31) + this.type) * 31)) * 31;
-        if (!(this.zzcsd == null || this.zzcsd.isEmpty())) {
-            i = this.zzcsd.hashCode();
+        if (!(this.zzcso == null || this.zzcso.isEmpty())) {
+            i = this.zzcso.hashCode();
         }
         return hashCode + i;
     }
 
     public final /* synthetic */ adp zza(adg com_google_android_gms_internal_adg) throws IOException {
         while (true) {
-            int zzLB = com_google_android_gms_internal_adg.zzLB();
-            switch (zzLB) {
+            int zzLA = com_google_android_gms_internal_adg.zzLA();
+            switch (zzLA) {
                 case 0:
                     break;
                 case 8:
                     int position = com_google_android_gms_internal_adg.getPosition();
-                    int zzLG = com_google_android_gms_internal_adg.zzLG();
-                    switch (zzLG) {
+                    int zzLF = com_google_android_gms_internal_adg.zzLF();
+                    switch (zzLF) {
                         case 1:
                         case 2:
                         case 3:
@@ -80,11 +80,11 @@ public final class hg extends adj<hg> {
                         case 13:
                         case 14:
                         case 15:
-                            this.type = zzLG;
+                            this.type = zzLF;
                             break;
                         default:
                             com_google_android_gms_internal_adg.zzcp(position);
-                            zza(com_google_android_gms_internal_adg, zzLB);
+                            zza(com_google_android_gms_internal_adg, zzLA);
                             continue;
                     }
                 case 18:
@@ -94,7 +94,7 @@ public final class hg extends adj<hg> {
                     com_google_android_gms_internal_adg.zza(this.zzbTL);
                     continue;
                 default:
-                    if (!super.zza(com_google_android_gms_internal_adg, zzLB)) {
+                    if (!super.zza(com_google_android_gms_internal_adg, zzLA)) {
                         break;
                     }
                     continue;

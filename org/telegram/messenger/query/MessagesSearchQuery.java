@@ -14,6 +14,7 @@ import org.telegram.tgnet.TLRPC.InputPeer;
 import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterEmpty;
+import org.telegram.tgnet.TLRPC.TL_messages_channelMessages;
 import org.telegram.tgnet.TLRPC.TL_messages_messagesSlice;
 import org.telegram.tgnet.TLRPC.TL_messages_search;
 import org.telegram.tgnet.TLRPC.User;
@@ -108,6 +109,7 @@ public class MessagesSearchQuery {
             }
             return;
         } else if (firstQuery) {
+            NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatSearchResultsLoading, Integer.valueOf(guid));
             boolean[] zArr = messagesSearchEndReached;
             messagesSearchEndReached[1] = false;
             zArr[0] = false;
@@ -192,6 +194,7 @@ public class MessagesSearchQuery {
                                 MessagesSearchQuery.reqId = 0;
                                 if (response != null) {
                                     MessageObject messageObject;
+                                    int i;
                                     messages_Messages res = response;
                                     MessagesStorage.getInstance().putUsersAndChats(res.users, res.chats, true, true);
                                     MessagesController.getInstance().putUsers(res.users, false);
@@ -205,7 +208,6 @@ public class MessagesSearchQuery {
                                     }
                                     boolean added = false;
                                     for (int a = 0; a < Math.min(res.messages.size(), 20); a++) {
-                                        int i;
                                         added = true;
                                         messageObject = new MessageObject((Message) res.messages.get(a), null, false);
                                         MessagesSearchQuery.searchResultMessages.add(messageObject);
@@ -218,7 +220,10 @@ public class MessagesSearchQuery {
                                         access$900[i].put(Integer.valueOf(messageObject.getId()), messageObject);
                                     }
                                     MessagesSearchQuery.messagesSearchEndReached[j2 == j3 ? 0 : 1] = res.messages.size() != 21;
-                                    MessagesSearchQuery.messagesSearchCount[j2 == j3 ? 0 : 1] = res instanceof TL_messages_messagesSlice ? res.count : res.messages.size();
+                                    int[] access$300 = MessagesSearchQuery.messagesSearchCount;
+                                    i = j2 == j3 ? 0 : 1;
+                                    int size = ((res instanceof TL_messages_messagesSlice) || (res instanceof TL_messages_channelMessages)) ? res.count : res.messages.size();
+                                    access$300[i] = size;
                                     if (MessagesSearchQuery.searchResultMessages.isEmpty()) {
                                         NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatSearchResultsAvailable, Integer.valueOf(i3), Integer.valueOf(0), Integer.valueOf(MessagesSearchQuery.getMask()), Long.valueOf(0), Integer.valueOf(0), Integer.valueOf(0));
                                     } else if (added) {

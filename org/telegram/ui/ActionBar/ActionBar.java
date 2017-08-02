@@ -445,8 +445,12 @@ public class ActionBar extends FrameLayout {
     }
 
     public void closeSearchField() {
+        closeSearchField(true);
+    }
+
+    public void closeSearchField(boolean closeKeyboard) {
         if (this.isSearchFieldVisible && this.menu != null) {
-            this.menu.closeSearchField();
+            this.menu.closeSearchField(closeKeyboard);
         }
     }
 

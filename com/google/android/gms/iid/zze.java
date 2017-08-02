@@ -84,9 +84,9 @@ public final class zze {
     }
 
     private static boolean zza(PackageManager packageManager) {
-        for (ResolveInfo resolveInfo : packageManager.queryIntentServices(new Intent("com.google.android.c2dm.intent.REGISTER"), 0)) {
-            if (zza(packageManager, resolveInfo.serviceInfo.packageName, "com.google.android.c2dm.intent.REGISTER")) {
-                zzbha = false;
+        for (ResolveInfo resolveInfo : packageManager.queryBroadcastReceivers(new Intent("com.google.iid.TOKEN_REQUEST"), 0)) {
+            if (zza(packageManager, resolveInfo.activityInfo.packageName, "com.google.iid.TOKEN_REQUEST")) {
+                zzbha = true;
                 return true;
             }
         }
@@ -219,16 +219,6 @@ public final class zze {
         throw new IOException(InstanceID.ERROR_BACKOFF);
     }
 
-    private static boolean zzb(PackageManager packageManager) {
-        for (ResolveInfo resolveInfo : packageManager.queryBroadcastReceivers(new Intent("com.google.iid.TOKEN_REQUEST"), 0)) {
-            if (zza(packageManager, resolveInfo.activityInfo.packageName, "com.google.iid.TOKEN_REQUEST")) {
-                zzbha = true;
-                return true;
-            }
-        }
-        return false;
-    }
-
     private static boolean zzb(PackageManager packageManager, String str) {
         try {
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(str, 0);
@@ -253,18 +243,28 @@ public final class zze {
         }
         zzbhb = Process.myUid();
         PackageManager packageManager = context.getPackageManager();
-        if (zzq.isAtLeastO()) {
-            if (zzb(packageManager) || zza(packageManager)) {
+        if (!zzq.isAtLeastO()) {
+            boolean z;
+            for (ResolveInfo resolveInfo : packageManager.queryIntentServices(new Intent("com.google.android.c2dm.intent.REGISTER"), 0)) {
+                if (zza(packageManager, resolveInfo.serviceInfo.packageName, "com.google.android.c2dm.intent.REGISTER")) {
+                    zzbha = false;
+                    z = true;
+                    break;
+                }
+            }
+            z = false;
+            if (z) {
                 return zzbgZ;
             }
-        } else if (zza(packageManager) || zzb(packageManager)) {
+        }
+        if (zza(packageManager)) {
             return zzbgZ;
         }
         Log.w("InstanceID/Rpc", "Failed to resolve IID implementation package, falling back");
         if (zzb(packageManager, "com.google.android.gms")) {
             zzbha = zzq.isAtLeastO();
             return zzbgZ;
-        } else if (VERSION.SDK_INT >= 21 || !zzb(packageManager, "com.google.android.gsf")) {
+        } else if (zzq.zzse() || !zzb(packageManager, "com.google.android.gsf")) {
             Log.w("InstanceID/Rpc", "Google Play services is missing, unable to get tokens");
             return null;
         } else {

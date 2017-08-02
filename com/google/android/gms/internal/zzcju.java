@@ -10,13 +10,13 @@ public final class zzcju extends adj<zzcju> {
     public zzcju() {
         this.key = null;
         this.value = null;
-        this.zzcsd = null;
-        this.zzcsm = -1;
+        this.zzcso = null;
+        this.zzcsx = -1;
     }
 
     public static zzcju[] zzzz() {
         if (zzbvq == null) {
-            synchronized (adn.zzcsl) {
+            synchronized (adn.zzcsw) {
                 if (zzbvq == null) {
                     zzbvq = new zzcju[0];
                 }
@@ -47,22 +47,22 @@ public final class zzcju extends adj<zzcju> {
         } else if (!this.value.equals(com_google_android_gms_internal_zzcju.value)) {
             return false;
         }
-        return (this.zzcsd == null || this.zzcsd.isEmpty()) ? com_google_android_gms_internal_zzcju.zzcsd == null || com_google_android_gms_internal_zzcju.zzcsd.isEmpty() : this.zzcsd.equals(com_google_android_gms_internal_zzcju.zzcsd);
+        return (this.zzcso == null || this.zzcso.isEmpty()) ? com_google_android_gms_internal_zzcju.zzcso == null || com_google_android_gms_internal_zzcju.zzcso.isEmpty() : this.zzcso.equals(com_google_android_gms_internal_zzcju.zzcso);
     }
 
     public final int hashCode() {
         int i = 0;
         int hashCode = ((this.value == null ? 0 : this.value.hashCode()) + (((this.key == null ? 0 : this.key.hashCode()) + ((getClass().getName().hashCode() + 527) * 31)) * 31)) * 31;
-        if (!(this.zzcsd == null || this.zzcsd.isEmpty())) {
-            i = this.zzcsd.hashCode();
+        if (!(this.zzcso == null || this.zzcso.isEmpty())) {
+            i = this.zzcso.hashCode();
         }
         return hashCode + i;
     }
 
     public final /* synthetic */ adp zza(adg com_google_android_gms_internal_adg) throws IOException {
         while (true) {
-            int zzLB = com_google_android_gms_internal_adg.zzLB();
-            switch (zzLB) {
+            int zzLA = com_google_android_gms_internal_adg.zzLA();
+            switch (zzLA) {
                 case 0:
                     break;
                 case 10:
@@ -72,7 +72,7 @@ public final class zzcju extends adj<zzcju> {
                     this.value = com_google_android_gms_internal_adg.readString();
                     continue;
                 default:
-                    if (!super.zza(com_google_android_gms_internal_adg, zzLB)) {
+                    if (!super.zza(com_google_android_gms_internal_adg, zzLA)) {
                         break;
                     }
                     continue;

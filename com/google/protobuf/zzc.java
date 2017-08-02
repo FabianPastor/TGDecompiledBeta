@@ -1,9 +1,9 @@
 package com.google.protobuf;
 
 final class zzc {
-    private static Class<?> zzcrD = zzLr();
+    private static Class<?> zzcrO = zzLq();
 
-    private static Class<?> zzLr() {
+    private static Class<?> zzLq() {
         try {
             return Class.forName("com.google.protobuf.ExtensionRegistry");
         } catch (ClassNotFoundException e) {
@@ -11,13 +11,13 @@ final class zzc {
         }
     }
 
-    public static zzd zzLs() {
-        if (zzcrD != null) {
+    public static zzd zzLr() {
+        if (zzcrO != null) {
             try {
-                return (zzd) zzcrD.getMethod("getEmptyRegistry", new Class[0]).invoke(null, new Object[0]);
+                return (zzd) zzcrO.getMethod("getEmptyRegistry", new Class[0]).invoke(null, new Object[0]);
             } catch (Exception e) {
             }
         }
-        return zzd.zzcrG;
+        return zzd.zzcrR;
     }
 }

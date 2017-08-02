@@ -136,11 +136,10 @@ public class Browser {
         }
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     public static void openUrl(Context context, Uri uri, boolean allowCustom) {
         if (context != null && uri != null) {
-            boolean internalUri = isInternalUri(uri);
+            boolean[] forceBrowser = new boolean[]{false};
+            boolean internalUri = isInternalUri(uri, forceBrowser);
             try {
                 String scheme = uri.getScheme() != null ? uri.getScheme().toLowerCase() : "";
                 if (allowCustom && MediaController.getInstance().canCustomTabs() && !internalUri && !scheme.equals("tel")) {
@@ -174,38 +173,38 @@ public class Browser {
                         }
                     } catch (Exception e2) {
                     }
-                    if (list != null) {
+                    if (forceBrowser[0] || allActivities == null || allActivities.isEmpty()) {
+                        Intent intent = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
+                        intent.setAction("android.intent.action.SEND");
+                        Builder builder = new Builder(getSession());
+                        builder.setToolbarColor(Theme.getColor(Theme.key_actionBarDefault));
+                        builder.setShowTitle(true);
+                        builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, intent, 0), false);
+                        builder.build().launchUrl(context, uri);
+                        return;
                     }
-                    Intent share = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
-                    share.setAction("android.intent.action.SEND");
-                    Builder builder = new Builder(getSession());
-                    builder.setToolbarColor(Theme.getColor(Theme.key_actionBarDefault));
-                    builder.setShowTitle(true);
-                    builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, share, 0), false);
-                    builder.build().launchUrl(context, uri);
-                    return;
                 }
             } catch (Throwable e3) {
                 FileLog.e(e3);
             }
             try {
-                Intent intent = new Intent("android.intent.action.VIEW", uri);
+                Intent intent2 = new Intent("android.intent.action.VIEW", uri);
                 if (internalUri) {
-                    intent.setComponent(new ComponentName(context.getPackageName(), LaunchActivity.class.getName()));
+                    intent2.setComponent(new ComponentName(context.getPackageName(), LaunchActivity.class.getName()));
                 }
-                intent.putExtra("com.android.browser.application_id", context.getPackageName());
-                context.startActivity(intent);
+                intent2.putExtra("com.android.browser.application_id", context.getPackageName());
+                context.startActivity(intent2);
             } catch (Throwable e32) {
                 FileLog.e(e32);
             }
         }
     }
 
-    public static boolean isInternalUrl(String url) {
-        return isInternalUri(Uri.parse(url));
+    public static boolean isInternalUrl(String url, boolean[] forceBrowser) {
+        return isInternalUri(Uri.parse(url), forceBrowser);
     }
 
-    public static boolean isInternalUri(Uri uri) {
+    public static boolean isInternalUri(Uri uri, boolean[] forceBrowser) {
         String host = uri.getHost();
         host = host != null ? host.toLowerCase() : "";
         if ("tg".equals(uri.getScheme())) {
@@ -214,10 +213,13 @@ public class Browser {
         if ("telegram.me".equals(host) || "t.me".equals(host) || "telegram.dog".equals(host) || "telesco.pe".equals(host)) {
             String path = uri.getPath();
             if (path != null && path.length() > 1) {
-                if (path.toLowerCase().equals("/iv")) {
-                    return false;
+                if (path.lastIndexOf(47) <= 0 && !path.toLowerCase().equals("/iv")) {
+                    return true;
                 }
-                return true;
+                if (forceBrowser != null) {
+                    forceBrowser[0] = true;
+                }
+                return false;
             }
         }
         return false;

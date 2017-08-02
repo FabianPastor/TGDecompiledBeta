@@ -29,6 +29,7 @@ public class NotificationCenter {
     public static final int chatInfoCantLoad;
     public static final int chatInfoDidLoaded;
     public static final int chatSearchResultsAvailable;
+    public static final int chatSearchResultsLoading;
     public static final int closeChats;
     public static final int closeInCallActivity;
     public static final int closeOtherAppActivities;
@@ -284,6 +285,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         chatSearchResultsAvailable = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        chatSearchResultsLoading = i;
         i = totalEvents;
         totalEvents = i + 1;
         musicDidLoaded = i;

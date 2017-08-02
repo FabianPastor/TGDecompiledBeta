@@ -2175,7 +2175,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
     }
 
     public void showOpenUrlAlert(final String url, boolean ask) {
-        if (Browser.isInternalUrl(url) || !ask) {
+        if (Browser.isInternalUrl(url, null) || !ask) {
             Browser.openUrl(getParentActivity(), url, true);
             return;
         }

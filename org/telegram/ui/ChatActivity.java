@@ -1527,6 +1527,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.botInfoDidLoaded);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.botKeyboardDidLoaded);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatSearchResultsAvailable);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatSearchResultsLoading);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didUpdatedMessagesViews);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatInfoCantLoad);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didLoadedPinnedMessage);
@@ -1675,6 +1676,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.botInfoDidLoaded);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.botKeyboardDidLoaded);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatSearchResultsAvailable);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatSearchResultsLoading);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didUpdatedMessagesViews);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatInfoCantLoad);
@@ -1951,7 +1953,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
 
                 public void onSearchPressed(EditText editText) {
-                    ChatActivity.this.updateSearchButtons(0, 0, 0);
+                    ChatActivity.this.updateSearchButtons(0, 0, -1);
                     MessagesSearchQuery.searchMessagesInChat(editText.getText().toString(), ChatActivity.this.dialog_id, ChatActivity.this.mergeDialogId, ChatActivity.this.classGuid, 0, ChatActivity.this.searchingUserMessages);
                 }
 
@@ -3070,13 +3072,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             if (ChatActivity.this.searchingForUser && ChatActivity.this.searchContainer.getVisibility() == 0) {
                                 ChatActivity.this.searchingUserMessages = (User) object;
                                 if (ChatActivity.this.searchingUserMessages != null) {
-                                    if (ChatActivity.this.searchingUserMessages.username != null) {
-                                        name = "@" + ChatActivity.this.searchingUserMessages.username;
-                                    } else {
-                                        name = ChatActivity.this.searchingUserMessages.first_name;
-                                        if (name == null || name.length() == 0) {
-                                            name = ChatActivity.this.searchingUserMessages.last_name;
-                                        }
+                                    name = ChatActivity.this.searchingUserMessages.first_name;
+                                    if (TextUtils.isEmpty(name)) {
+                                        name = ChatActivity.this.searchingUserMessages.last_name;
                                     }
                                     ChatActivity.this.searchingForUser = false;
                                     String from = LocaleController.getString("SearchFrom", R.string.SearchFrom);
@@ -3108,8 +3106,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             ChatActivity.this.chatActivityEnterView.replaceWithText(start, len, spannableString, false);
                         } else if (object instanceof String) {
                             if (ChatActivity.this.mentionsAdapter.isBotCommands()) {
-                                SendMessagesHelper.getInstance().sendMessage((String) object, ChatActivity.this.dialog_id, null, null, false, null, null, null);
+                                SendMessagesHelper.getInstance().sendMessage((String) object, ChatActivity.this.dialog_id, ChatActivity.this.replyingMessageObject, null, false, null, null, null);
                                 ChatActivity.this.chatActivityEnterView.setFieldText("");
+                                ChatActivity.this.showReplyPanel(false, null, null, null, false);
                                 return;
                             }
                             ChatActivity.this.chatActivityEnterView.replaceWithText(start, len, object + " ", false);
@@ -3560,6 +3559,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 canvas.drawRect(0.0f, (float) bottom, (float) getMeasuredWidth(), (float) getMeasuredHeight(), Theme.chat_composeBackgroundPaint);
             }
         };
+        this.searchContainer.setOnTouchListener(new OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
         this.searchContainer.setWillNotDraw(false);
         this.searchContainer.setVisibility(4);
         this.searchContainer.setFocusable(true);
@@ -3599,6 +3603,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     ChatActivity.this.searchUserButton.setVisibility(8);
                     ChatActivity.this.searchingForUser = true;
                     ChatActivity.this.searchingUserMessages = null;
+                    ChatActivity.this.searchItem.getSearchField().setHint(LocaleController.getString("SearchMembers", R.string.SearchMembers));
                     ChatActivity.this.searchItem.setSearchFieldCaption(LocaleController.getString("SearchFrom", R.string.SearchFrom));
                     AndroidUtilities.showKeyboard(ChatActivity.this.searchItem.getSearchField());
                     ChatActivity.this.searchItem.clearSearchText();
@@ -4179,7 +4184,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 this.stickersAdapter = stickersAdapter;
                 recyclerListView.setAdapter(stickersAdapter);
                 recyclerListView = this.stickersListView;
-                OnItemClickListener anonymousClass57 = new OnItemClickListener() {
+                OnItemClickListener anonymousClass58 = new OnItemClickListener() {
                     public void onItemClick(View view, int position) {
                         Document document = ChatActivity.this.stickersAdapter.getItem(position);
                         if (document instanceof TL_document) {
@@ -4190,8 +4195,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         ChatActivity.this.chatActivityEnterView.setFieldText("");
                     }
                 };
-                this.stickersOnItemClickListener = anonymousClass57;
-                recyclerListView.setOnItemClickListener(anonymousClass57);
+                this.stickersOnItemClickListener = anonymousClass58;
+                recyclerListView.setOnItemClickListener(anonymousClass58);
             }
         }
     }
@@ -4281,13 +4286,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         this.voiceHintAnimation = null;
                     } else {
                         AndroidUtilities.cancelRunOnUIThread(this.voiceHintHideRunnable);
-                        Runnable anonymousClass60 = new Runnable() {
+                        Runnable anonymousClass61 = new Runnable() {
                             public void run() {
                                 ChatActivity.this.hideVoiceHint();
                             }
                         };
-                        this.voiceHintHideRunnable = anonymousClass60;
-                        AndroidUtilities.runOnUIThread(anonymousClass60, 2000);
+                        this.voiceHintHideRunnable = anonymousClass61;
+                        AndroidUtilities.runOnUIThread(anonymousClass61, 2000);
                         return;
                     }
                 } else if (this.voiceHintAnimation != null) {
@@ -5025,7 +5030,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (show) {
                 if (messageObjectToReply != null || messageObjectsToForward != null || webPage != null) {
                     if (this.searchItem != null && this.actionBar.isSearchFieldVisible()) {
-                        this.actionBar.closeSearchField();
+                        this.actionBar.closeSearchField(false);
                         this.chatActivityEnterView.setFieldFocused();
                     }
                     boolean openKeyboard = false;
@@ -8075,6 +8080,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     scrollToMessageId(messageId, 0, true, did == this.dialog_id ? 0 : 1, false);
                 }
                 updateSearchButtons(((Integer) args[2]).intValue(), ((Integer) args[4]).intValue(), ((Integer) args[5]).intValue());
+                if (this.searchItem != null) {
+                    this.searchItem.setShowSearchProgress(false);
+                }
+            }
+        } else if (id == NotificationCenter.chatSearchResultsLoading) {
+            if (this.classGuid == ((Integer) args[0]).intValue() && this.searchItem != null) {
+                this.searchItem.setShowSearchProgress(true);
             }
         } else if (id == NotificationCenter.didUpdatedMessagesViews) {
             SparseIntArray array = (SparseIntArray) args[0].get((int) this.dialog_id);
@@ -8196,8 +8208,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 f = 0.5f;
             }
             imageView2.setAlpha(f);
-            if (count == 0) {
+            if (count < 0) {
                 this.searchCountText.setText("");
+            } else if (count == 0) {
+                this.searchCountText.setText(LocaleController.getString("NoResult", R.string.NoResult));
             } else {
                 this.searchCountText.setText(LocaleController.formatString("Of", R.string.Of, Integer.valueOf(num + 1), Integer.valueOf(count)));
             }
@@ -8401,7 +8415,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (this.hideAlertViewRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(this.hideAlertViewRunnable);
             }
-            Runnable anonymousClass83 = new Runnable() {
+            Runnable anonymousClass84 = new Runnable() {
                 public void run() {
                     if (ChatActivity.this.hideAlertViewRunnable == this && ChatActivity.this.alertView.getTag() == null) {
                         ChatActivity.this.alertView.setTag(Integer.valueOf(1));
@@ -8433,8 +8447,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                 }
             };
-            this.hideAlertViewRunnable = anonymousClass83;
-            AndroidUtilities.runOnUIThread(anonymousClass83, 3000);
+            this.hideAlertViewRunnable = anonymousClass84;
+            AndroidUtilities.runOnUIThread(anonymousClass84, 3000);
         }
     }
 
@@ -10258,7 +10272,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         this.headerItem.setVisibility(8);
         this.attachItem.setVisibility(8);
         this.searchItem.setVisibility(0);
-        updateSearchButtons(0, 0, 0);
+        updateSearchButtons(0, 0, -1);
         updateBottomOverlay();
         this.openSearchKeyboard = text == null;
         this.searchItem.openSearch(this.openSearchKeyboard);
@@ -10441,7 +10455,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
     public void showOpenUrlAlert(final String url, boolean ask) {
         boolean z = true;
-        if (Browser.isInternalUrl(url) || !ask) {
+        if (Browser.isInternalUrl(url, null) || !ask) {
             Context parentActivity = getParentActivity();
             if (this.inlineReturn != 0) {
                 z = false;

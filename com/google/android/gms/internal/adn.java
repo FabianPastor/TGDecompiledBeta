@@ -6,7 +6,7 @@ import java.util.Arrays;
 public final class adn {
     private static Charset ISO_8859_1 = Charset.forName("ISO-8859-1");
     protected static final Charset UTF_8 = Charset.forName("UTF-8");
-    public static final Object zzcsl = new Object();
+    public static final Object zzcsw = new Object();
 
     public static boolean equals(float[] fArr, float[] fArr2) {
         return (fArr == null || fArr.length == 0) ? fArr2 == null || fArr2.length == 0 : Arrays.equals(fArr, fArr2);
@@ -80,8 +80,8 @@ public final class adn {
     }
 
     public static void zza(adj com_google_android_gms_internal_adj, adj com_google_android_gms_internal_adj2) {
-        if (com_google_android_gms_internal_adj.zzcsd != null) {
-            com_google_android_gms_internal_adj2.zzcsd = (adl) com_google_android_gms_internal_adj.zzcsd.clone();
+        if (com_google_android_gms_internal_adj.zzcso != null) {
+            com_google_android_gms_internal_adj2.zzcso = (adl) com_google_android_gms_internal_adj.zzcso.clone();
         }
     }
 

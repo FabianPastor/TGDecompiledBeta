@@ -180,7 +180,7 @@ public final class zzcgf extends zzchj {
         zzws.zzwz().zza(str, com_google_android_gms_internal_zzcjmArr);
         try {
             zzc.zzbvp = null;
-            byte[] bArr2 = new byte[zzc.zzLW()];
+            byte[] bArr2 = new byte[zzc.zzLV()];
             zzc.zza(adh.zzc(bArr2, 0, bArr2.length));
             bArr = bArr2;
         } catch (IOException e) {

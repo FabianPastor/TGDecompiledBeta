@@ -74,9 +74,9 @@ public final class zzl {
     }
 
     private static boolean zza(PackageManager packageManager) {
-        for (ResolveInfo resolveInfo : packageManager.queryIntentServices(new Intent("com.google.android.c2dm.intent.REGISTER"), 0)) {
-            if (zza(packageManager, resolveInfo.serviceInfo.packageName, "com.google.android.c2dm.intent.REGISTER")) {
-                zzbha = false;
+        for (ResolveInfo resolveInfo : packageManager.queryBroadcastReceivers(new Intent("com.google.iid.TOKEN_REQUEST"), 0)) {
+            if (zza(packageManager, resolveInfo.activityInfo.packageName, "com.google.iid.TOKEN_REQUEST")) {
+                zzbha = true;
                 return true;
             }
         }
@@ -229,21 +229,23 @@ public final class zzl {
         if (zzbgZ != null) {
             return zzbgZ;
         }
-        boolean z;
         zzbhb = Process.myUid();
         PackageManager packageManager = context.getPackageManager();
-        for (ResolveInfo resolveInfo : packageManager.queryBroadcastReceivers(new Intent("com.google.iid.TOKEN_REQUEST"), 0)) {
-            if (zza(packageManager, resolveInfo.activityInfo.packageName, "com.google.iid.TOKEN_REQUEST")) {
-                zzbha = true;
-                z = true;
-                break;
+        if (!zzq.isAtLeastO()) {
+            boolean z;
+            for (ResolveInfo resolveInfo : packageManager.queryIntentServices(new Intent("com.google.android.c2dm.intent.REGISTER"), 0)) {
+                if (zza(packageManager, resolveInfo.serviceInfo.packageName, "com.google.android.c2dm.intent.REGISTER")) {
+                    zzbha = false;
+                    z = true;
+                    break;
+                }
+            }
+            z = false;
+            if (z) {
+                return zzbgZ;
             }
         }
-        z = false;
-        if (z) {
-            return zzbgZ;
-        }
-        if (!zzq.isAtLeastO() && zza(packageManager)) {
+        if (zza(packageManager)) {
             return zzbgZ;
         }
         Log.w("InstanceID/Rpc", "Failed to resolve IID implementation package, falling back");

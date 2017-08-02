@@ -72,12 +72,12 @@ public final class zzcjl extends zzchj {
     }
 
     public static Object zzD(Object obj) {
-        ObjectInputStream objectInputStream;
         Throwable th;
         if (obj == null) {
             return null;
         }
         ObjectOutputStream objectOutputStream;
+        ObjectInputStream objectInputStream;
         try {
             OutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
@@ -729,11 +729,11 @@ public final class zzcjl extends zzchj {
     }
 
     final <T extends Parcelable> T zzb(byte[] bArr, Creator<T> creator) {
-        T t;
         if (bArr == null) {
             return null;
         }
         Parcel obtain = Parcel.obtain();
+        T t;
         try {
             obtain.unmarshall(bArr, 0, bArr.length);
             obtain.setDataPosition(0);
@@ -750,10 +750,10 @@ public final class zzcjl extends zzchj {
 
     public final byte[] zzb(zzcjy com_google_android_gms_internal_zzcjy) {
         try {
-            byte[] bArr = new byte[com_google_android_gms_internal_zzcjy.zzLW()];
+            byte[] bArr = new byte[com_google_android_gms_internal_zzcjy.zzLV()];
             adh zzc = adh.zzc(bArr, 0, bArr.length);
             com_google_android_gms_internal_zzcjy.zza(zzc);
-            zzc.zzLN();
+            zzc.zzLM();
             return bArr;
         } catch (IOException e) {
             super.zzwF().zzyx().zzj("Data loss. Failed to serialize batch", e);

@@ -143,14 +143,14 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
-    public void closeSearchField() {
+    public void closeSearchField(boolean closeKeyboard) {
         int count = getChildCount();
         for (int a = 0; a < count; a++) {
             View view = getChildAt(a);
             if (view instanceof ActionBarMenuItem) {
                 ActionBarMenuItem item = (ActionBarMenuItem) view;
                 if (item.isSearchField()) {
-                    this.parentActionBar.onSearchFieldVisibilityChanged(item.toggleSearch(false));
+                    this.parentActionBar.onSearchFieldVisibilityChanged(item.toggleSearch(closeKeyboard));
                     return;
                 }
             }

@@ -261,10 +261,10 @@ final class zzcen extends zzchj {
             return false;
         }
         try {
-            byte[] bArr = new byte[com_google_android_gms_internal_zzcjn.zzLW()];
+            byte[] bArr = new byte[com_google_android_gms_internal_zzcjn.zzLV()];
             adh zzc = adh.zzc(bArr, 0, bArr.length);
             com_google_android_gms_internal_zzcjn.zza(zzc);
-            zzc.zzLN();
+            zzc.zzLM();
             ContentValues contentValues = new ContentValues();
             contentValues.put("app_id", str);
             contentValues.put("audience_id", Integer.valueOf(i));
@@ -297,10 +297,10 @@ final class zzcen extends zzchj {
             return false;
         }
         try {
-            byte[] bArr = new byte[com_google_android_gms_internal_zzcjq.zzLW()];
+            byte[] bArr = new byte[com_google_android_gms_internal_zzcjq.zzLV()];
             adh zzc = adh.zzc(bArr, 0, bArr.length);
             com_google_android_gms_internal_zzcjq.zza(zzc);
-            zzc.zzLN();
+            zzc.zzLM();
             ContentValues contentValues = new ContentValues();
             contentValues.put("app_id", str);
             contentValues.put("audience_id", Integer.valueOf(i));
@@ -591,7 +591,6 @@ final class zzcen extends zzchj {
 
     @WorkerThread
     public final zzcek zzH(String str, String str2) {
-        Cursor query;
         Object e;
         Cursor cursor;
         Throwable th;
@@ -599,6 +598,7 @@ final class zzcen extends zzchj {
         zzbo.zzcF(str2);
         zzjC();
         zzkD();
+        Cursor query;
         try {
             query = getWritableDatabase().query("conditional_properties", new String[]{"origin", Param.VALUE, "active", "trigger_event_name", "trigger_timeout", "timed_out_event", "creation_timestamp", "triggered_event", "triggered_timestamp", "time_to_live", "expired_event"}, "app_id=? and name=?", new String[]{str, str2}, null, null, null);
             try {
@@ -754,6 +754,7 @@ final class zzcen extends zzchj {
     }
 
     final Map<Integer, List<zzcjq>> zzK(String str, String str2) {
+        Cursor query;
         Object e;
         Throwable th;
         zzkD();
@@ -761,7 +762,6 @@ final class zzcen extends zzchj {
         zzbo.zzcF(str);
         zzbo.zzcF(str2);
         Map<Integer, List<zzcjq>> arrayMap = new ArrayMap();
-        Cursor query;
         try {
             query = getWritableDatabase().query("property_filters", new String[]{"audience_id", "data"}, "app_id=? AND property_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -825,6 +825,7 @@ final class zzcen extends zzchj {
 
     @WorkerThread
     protected final long zzL(String str, String str2) {
+        long zza;
         Object e;
         zzbo.zzcF(str);
         zzbo.zzcF(str2);
@@ -832,7 +833,6 @@ final class zzcen extends zzchj {
         zzkD();
         SQLiteDatabase writableDatabase = getWritableDatabase();
         writableDatabase.beginTransaction();
-        long zza;
         try {
             zza = zza(new StringBuilder(String.valueOf(str2).length() + 32).append("select ").append(str2).append(" from app2 where app_id=?").toString(), new String[]{str}, -1);
             if (zza == -1) {
@@ -883,10 +883,10 @@ final class zzcen extends zzchj {
         zzbo.zzcF(com_google_android_gms_internal_zzcjz.zzaH);
         try {
             long j;
-            Object obj = new byte[com_google_android_gms_internal_zzcjz.zzLW()];
+            Object obj = new byte[com_google_android_gms_internal_zzcjz.zzLV()];
             adh zzc = adh.zzc(obj, 0, obj.length);
             com_google_android_gms_internal_zzcjz.zza(zzc);
-            zzc.zzLN();
+            zzc.zzLM();
             zzcjl zzwB = zzwB();
             zzbo.zzu(obj);
             zzwB.zzjC();
@@ -1200,10 +1200,10 @@ final class zzcen extends zzchj {
             i = i2;
         }
         try {
-            byte[] bArr = new byte[com_google_android_gms_internal_zzcjw.zzLW()];
+            byte[] bArr = new byte[com_google_android_gms_internal_zzcjw.zzLV()];
             adh zzc = adh.zzc(bArr, 0, bArr.length);
             com_google_android_gms_internal_zzcjw.zza(zzc);
-            zzc.zzLN();
+            zzc.zzLM();
             zzwF().zzyD().zze("Saving event, name, data size", zzwA().zzdW(com_google_android_gms_internal_zzceu.mName), Integer.valueOf(bArr.length));
             ContentValues contentValues = new ContentValues();
             contentValues.put("app_id", com_google_android_gms_internal_zzceu.mAppId);
@@ -1277,10 +1277,10 @@ final class zzcen extends zzchj {
             zzwF().zzyz().zzd("Storing bundle outside of the max uploading time span. appId, now, timestamp", zzcfl.zzdZ(com_google_android_gms_internal_zzcjz.zzaH), Long.valueOf(currentTimeMillis), com_google_android_gms_internal_zzcjz.zzbvI);
         }
         try {
-            byte[] bArr = new byte[com_google_android_gms_internal_zzcjz.zzLW()];
+            byte[] bArr = new byte[com_google_android_gms_internal_zzcjz.zzLV()];
             adh zzc = adh.zzc(bArr, 0, bArr.length);
             com_google_android_gms_internal_zzcjz.zza(zzc);
-            zzc.zzLN();
+            zzc.zzLM();
             bArr = zzwB().zzl(bArr);
             zzwF().zzyD().zzj("Saving bundle, size", Integer.valueOf(bArr.length));
             ContentValues contentValues = new ContentValues();
@@ -1361,13 +1361,13 @@ final class zzcen extends zzchj {
     }
 
     public final List<zzcek> zzc(String str, String[] strArr) {
-        Cursor query;
         Object e;
         Cursor cursor;
         Throwable th;
         zzjC();
         zzkD();
         List<zzcek> arrayList = new ArrayList();
+        Cursor query;
         try {
             String[] strArr2 = new String[]{"app_id", "origin", "name", Param.VALUE, "active", "trigger_event_name", "trigger_timeout", "timed_out_event", "creation_timestamp", "triggered_event", "triggered_timestamp", "time_to_live", "expired_event"};
             zzcem.zzxv();
@@ -1607,12 +1607,12 @@ final class zzcen extends zzchj {
 
     @WorkerThread
     public final byte[] zzdS(String str) {
+        Cursor query;
         Object e;
         Throwable th;
         zzbo.zzcF(str);
         zzjC();
         zzkD();
-        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"remote_config"}, "app_id=?", new String[]{str}, null, null, null);
             try {
@@ -1854,6 +1854,7 @@ final class zzcen extends zzchj {
 
     @WorkerThread
     public final List<Pair<zzcjz, Long>> zzl(String str, int i, int i2) {
+        Cursor query;
         List<Pair<zzcjz, Long>> arrayList;
         Object e;
         Cursor cursor;
@@ -1867,7 +1868,6 @@ final class zzcen extends zzchj {
         }
         zzbo.zzaf(z);
         zzbo.zzcF(str);
-        Cursor query;
         try {
             query = getWritableDatabase().query("queue", new String[]{"rowid", "data"}, "app_id=?", new String[]{str}, null, null, "rowid", String.valueOf(i));
             try {

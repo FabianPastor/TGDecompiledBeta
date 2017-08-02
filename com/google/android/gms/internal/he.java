@@ -7,8 +7,8 @@ public final class he extends adj<he> {
 
     public he() {
         this.zzbTH = hf.zzEa();
-        this.zzcsd = null;
-        this.zzcsm = -1;
+        this.zzcso = null;
+        this.zzcsx = -1;
     }
 
     public static he zzy(byte[] bArr) throws ado {
@@ -23,40 +23,40 @@ public final class he extends adj<he> {
             return false;
         }
         he heVar = (he) obj;
-        return !adn.equals(this.zzbTH, heVar.zzbTH) ? false : (this.zzcsd == null || this.zzcsd.isEmpty()) ? heVar.zzcsd == null || heVar.zzcsd.isEmpty() : this.zzcsd.equals(heVar.zzcsd);
+        return !adn.equals(this.zzbTH, heVar.zzbTH) ? false : (this.zzcso == null || this.zzcso.isEmpty()) ? heVar.zzcso == null || heVar.zzcso.isEmpty() : this.zzcso.equals(heVar.zzcso);
     }
 
     public final int hashCode() {
         int hashCode = (((getClass().getName().hashCode() + 527) * 31) + adn.hashCode(this.zzbTH)) * 31;
-        int hashCode2 = (this.zzcsd == null || this.zzcsd.isEmpty()) ? 0 : this.zzcsd.hashCode();
+        int hashCode2 = (this.zzcso == null || this.zzcso.isEmpty()) ? 0 : this.zzcso.hashCode();
         return hashCode2 + hashCode;
     }
 
     public final /* synthetic */ adp zza(adg com_google_android_gms_internal_adg) throws IOException {
         while (true) {
-            int zzLB = com_google_android_gms_internal_adg.zzLB();
-            switch (zzLB) {
+            int zzLA = com_google_android_gms_internal_adg.zzLA();
+            switch (zzLA) {
                 case 0:
                     break;
                 case 10:
                     int zzb = ads.zzb(com_google_android_gms_internal_adg, 10);
-                    zzLB = this.zzbTH == null ? 0 : this.zzbTH.length;
-                    Object obj = new hf[(zzb + zzLB)];
-                    if (zzLB != 0) {
-                        System.arraycopy(this.zzbTH, 0, obj, 0, zzLB);
+                    zzLA = this.zzbTH == null ? 0 : this.zzbTH.length;
+                    Object obj = new hf[(zzb + zzLA)];
+                    if (zzLA != 0) {
+                        System.arraycopy(this.zzbTH, 0, obj, 0, zzLA);
                     }
-                    while (zzLB < obj.length - 1) {
-                        obj[zzLB] = new hf();
-                        com_google_android_gms_internal_adg.zza(obj[zzLB]);
-                        com_google_android_gms_internal_adg.zzLB();
-                        zzLB++;
+                    while (zzLA < obj.length - 1) {
+                        obj[zzLA] = new hf();
+                        com_google_android_gms_internal_adg.zza(obj[zzLA]);
+                        com_google_android_gms_internal_adg.zzLA();
+                        zzLA++;
                     }
-                    obj[zzLB] = new hf();
-                    com_google_android_gms_internal_adg.zza(obj[zzLB]);
+                    obj[zzLA] = new hf();
+                    com_google_android_gms_internal_adg.zza(obj[zzLA]);
                     this.zzbTH = obj;
                     continue;
                 default:
-                    if (!super.zza(com_google_android_gms_internal_adg, zzLB)) {
+                    if (!super.zza(com_google_android_gms_internal_adg, zzLA)) {
                         break;
                     }
                     continue;

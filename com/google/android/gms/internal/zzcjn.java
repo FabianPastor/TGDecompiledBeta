@@ -17,13 +17,13 @@ public final class zzcjn extends adj<zzcjn> {
         this.zzbuO = zzcjo.zzzw();
         this.zzbuP = null;
         this.zzbuQ = null;
-        this.zzcsd = null;
-        this.zzcsm = -1;
+        this.zzcso = null;
+        this.zzcsx = -1;
     }
 
     public static zzcjn[] zzzv() {
         if (zzbuL == null) {
-            synchronized (adn.zzcsl) {
+            synchronized (adn.zzcsw) {
                 if (zzbuL == null) {
                     zzbuL = new zzcjn[0];
                 }
@@ -71,49 +71,49 @@ public final class zzcjn extends adj<zzcjn> {
         } else if (!this.zzbuQ.equals(com_google_android_gms_internal_zzcjn.zzbuQ)) {
             return false;
         }
-        return (this.zzcsd == null || this.zzcsd.isEmpty()) ? com_google_android_gms_internal_zzcjn.zzcsd == null || com_google_android_gms_internal_zzcjn.zzcsd.isEmpty() : this.zzcsd.equals(com_google_android_gms_internal_zzcjn.zzcsd);
+        return (this.zzcso == null || this.zzcso.isEmpty()) ? com_google_android_gms_internal_zzcjn.zzcso == null || com_google_android_gms_internal_zzcjn.zzcso.isEmpty() : this.zzcso.equals(com_google_android_gms_internal_zzcjn.zzcso);
     }
 
     public final int hashCode() {
         int i = 0;
         int hashCode = ((this.zzbuQ == null ? 0 : this.zzbuQ.hashCode()) + (((this.zzbuP == null ? 0 : this.zzbuP.hashCode()) + (((((this.zzbuN == null ? 0 : this.zzbuN.hashCode()) + (((this.zzbuM == null ? 0 : this.zzbuM.hashCode()) + ((getClass().getName().hashCode() + 527) * 31)) * 31)) * 31) + adn.hashCode(this.zzbuO)) * 31)) * 31)) * 31;
-        if (!(this.zzcsd == null || this.zzcsd.isEmpty())) {
-            i = this.zzcsd.hashCode();
+        if (!(this.zzcso == null || this.zzcso.isEmpty())) {
+            i = this.zzcso.hashCode();
         }
         return hashCode + i;
     }
 
     public final /* synthetic */ adp zza(adg com_google_android_gms_internal_adg) throws IOException {
         while (true) {
-            int zzLB = com_google_android_gms_internal_adg.zzLB();
-            switch (zzLB) {
+            int zzLA = com_google_android_gms_internal_adg.zzLA();
+            switch (zzLA) {
                 case 0:
                     break;
                 case 8:
-                    this.zzbuM = Integer.valueOf(com_google_android_gms_internal_adg.zzLG());
+                    this.zzbuM = Integer.valueOf(com_google_android_gms_internal_adg.zzLF());
                     continue;
                 case 18:
                     this.zzbuN = com_google_android_gms_internal_adg.readString();
                     continue;
                 case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
                     int zzb = ads.zzb(com_google_android_gms_internal_adg, 26);
-                    zzLB = this.zzbuO == null ? 0 : this.zzbuO.length;
-                    Object obj = new zzcjo[(zzb + zzLB)];
-                    if (zzLB != 0) {
-                        System.arraycopy(this.zzbuO, 0, obj, 0, zzLB);
+                    zzLA = this.zzbuO == null ? 0 : this.zzbuO.length;
+                    Object obj = new zzcjo[(zzb + zzLA)];
+                    if (zzLA != 0) {
+                        System.arraycopy(this.zzbuO, 0, obj, 0, zzLA);
                     }
-                    while (zzLB < obj.length - 1) {
-                        obj[zzLB] = new zzcjo();
-                        com_google_android_gms_internal_adg.zza(obj[zzLB]);
-                        com_google_android_gms_internal_adg.zzLB();
-                        zzLB++;
+                    while (zzLA < obj.length - 1) {
+                        obj[zzLA] = new zzcjo();
+                        com_google_android_gms_internal_adg.zza(obj[zzLA]);
+                        com_google_android_gms_internal_adg.zzLA();
+                        zzLA++;
                     }
-                    obj[zzLB] = new zzcjo();
-                    com_google_android_gms_internal_adg.zza(obj[zzLB]);
+                    obj[zzLA] = new zzcjo();
+                    com_google_android_gms_internal_adg.zza(obj[zzLA]);
                     this.zzbuO = obj;
                     continue;
                 case 32:
-                    this.zzbuP = Boolean.valueOf(com_google_android_gms_internal_adg.zzLE());
+                    this.zzbuP = Boolean.valueOf(com_google_android_gms_internal_adg.zzLD());
                     continue;
                 case 42:
                     if (this.zzbuQ == null) {
@@ -122,7 +122,7 @@ public final class zzcjn extends adj<zzcjn> {
                     com_google_android_gms_internal_adg.zza(this.zzbuQ);
                     continue;
                 default:
-                    if (!super.zza(com_google_android_gms_internal_adg, zzLB)) {
+                    if (!super.zza(com_google_android_gms_internal_adg, zzLA)) {
                         break;
                     }
                     continue;

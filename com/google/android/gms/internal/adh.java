@@ -8,11 +8,11 @@ import java.nio.ReadOnlyBufferException;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 
 public final class adh {
-    private final ByteBuffer zzcsc;
+    private final ByteBuffer zzcsn;
 
     private adh(ByteBuffer byteBuffer) {
-        this.zzcsc = byteBuffer;
-        this.zzcsc.order(ByteOrder.LITTLE_ENDIAN);
+        this.zzcsn = byteBuffer;
+        this.zzcsn.order(ByteOrder.LITTLE_ENDIAN);
     }
 
     private adh(byte[] bArr, int i, int i2) {
@@ -116,10 +116,10 @@ public final class adh {
     }
 
     private final void zzaQ(long j) throws IOException {
-        if (this.zzcsc.remaining() < 8) {
-            throw new adi(this.zzcsc.position(), this.zzcsc.limit());
+        if (this.zzcsn.remaining() < 8) {
+            throw new adi(this.zzcsn.position(), this.zzcsn.limit());
         }
-        this.zzcsc.putLong(j);
+        this.zzcsn.putLong(j);
     }
 
     private static long zzaR(long j) {
@@ -128,8 +128,8 @@ public final class adh {
 
     public static int zzb(int i, adp com_google_android_gms_internal_adp) {
         int zzct = zzct(i);
-        int zzLW = com_google_android_gms_internal_adp.zzLW();
-        return zzct + (zzLW + zzcv(zzLW));
+        int zzLV = com_google_android_gms_internal_adp.zzLV();
+        return zzct + (zzLV + zzcv(zzLV));
     }
 
     private static int zzb(CharSequence charSequence) {
@@ -222,11 +222,11 @@ public final class adh {
 
     private final void zzcs(int i) throws IOException {
         byte b = (byte) i;
-        if (this.zzcsc.hasRemaining()) {
-            this.zzcsc.put(b);
+        if (this.zzcsn.hasRemaining()) {
+            this.zzcsn.put(b);
             return;
         }
-        throw new adi(this.zzcsc.position(), this.zzcsc.limit());
+        throw new adi(this.zzcsn.position(), this.zzcsn.limit());
     }
 
     public static int zzct(int i) {
@@ -249,13 +249,13 @@ public final class adh {
         return zzct(i) + zzaP(zzaR(j));
     }
 
-    public static int zzhS(String str) {
+    public static int zzhQ(String str) {
         int zzb = zzb((CharSequence) str);
         return zzb + zzcv(zzb);
     }
 
     public static int zzm(int i, String str) {
-        return zzct(i) + zzhS(str);
+        return zzct(i) + zzhQ(str);
     }
 
     public static int zzs(int i, int i2) {
@@ -264,15 +264,15 @@ public final class adh {
 
     public final void zzK(byte[] bArr) throws IOException {
         int length = bArr.length;
-        if (this.zzcsc.remaining() >= length) {
-            this.zzcsc.put(bArr, 0, length);
+        if (this.zzcsn.remaining() >= length) {
+            this.zzcsn.put(bArr, 0, length);
             return;
         }
-        throw new adi(this.zzcsc.position(), this.zzcsc.limit());
+        throw new adi(this.zzcsn.position(), this.zzcsn.limit());
     }
 
-    public final void zzLN() {
-        if (this.zzcsc.remaining() != 0) {
+    public final void zzLM() {
+        if (this.zzcsn.remaining() != 0) {
             throw new IllegalStateException("Did not write as much data as expected.");
         }
     }
@@ -304,17 +304,17 @@ public final class adh {
     }
 
     public final void zzb(adp com_google_android_gms_internal_adp) throws IOException {
-        zzcu(com_google_android_gms_internal_adp.zzLV());
+        zzcu(com_google_android_gms_internal_adp.zzLU());
         com_google_android_gms_internal_adp.zza(this);
     }
 
     public final void zzc(int i, float f) throws IOException {
         zzt(i, 5);
         int floatToIntBits = Float.floatToIntBits(f);
-        if (this.zzcsc.remaining() < 4) {
-            throw new adi(this.zzcsc.position(), this.zzcsc.limit());
+        if (this.zzcsn.remaining() < 4) {
+            throw new adi(this.zzcsn.position(), this.zzcsn.limit());
         }
-        this.zzcsc.putInt(floatToIntBits);
+        this.zzcsn.putInt(floatToIntBits);
     }
 
     public final void zzc(int i, long j) throws IOException {
@@ -342,11 +342,11 @@ public final class adh {
             i2 = 1;
         }
         byte b = (byte) i2;
-        if (this.zzcsc.hasRemaining()) {
-            this.zzcsc.put(b);
+        if (this.zzcsn.hasRemaining()) {
+            this.zzcsn.put(b);
             return;
         }
-        throw new adi(this.zzcsc.position(), this.zzcsc.limit());
+        throw new adi(this.zzcsn.position(), this.zzcsn.limit());
     }
 
     public final void zzl(int i, String str) throws IOException {
@@ -354,22 +354,22 @@ public final class adh {
         try {
             int zzcv = zzcv(str.length());
             if (zzcv == zzcv(str.length() * 3)) {
-                int position = this.zzcsc.position();
-                if (this.zzcsc.remaining() < zzcv) {
-                    throw new adi(zzcv + position, this.zzcsc.limit());
+                int position = this.zzcsn.position();
+                if (this.zzcsn.remaining() < zzcv) {
+                    throw new adi(zzcv + position, this.zzcsn.limit());
                 }
-                this.zzcsc.position(position + zzcv);
-                zza((CharSequence) str, this.zzcsc);
-                int position2 = this.zzcsc.position();
-                this.zzcsc.position(position);
+                this.zzcsn.position(position + zzcv);
+                zza((CharSequence) str, this.zzcsn);
+                int position2 = this.zzcsn.position();
+                this.zzcsn.position(position);
                 zzcu((position2 - position) - zzcv);
-                this.zzcsc.position(position2);
+                this.zzcsn.position(position2);
                 return;
             }
             zzcu(zzb((CharSequence) str));
-            zza((CharSequence) str, this.zzcsc);
+            zza((CharSequence) str, this.zzcsn);
         } catch (Throwable e) {
-            adi com_google_android_gms_internal_adi = new adi(this.zzcsc.position(), this.zzcsc.limit());
+            adi com_google_android_gms_internal_adi = new adi(this.zzcsn.position(), this.zzcsn.limit());
             com_google_android_gms_internal_adi.initCause(e);
             throw com_google_android_gms_internal_adi;
         }

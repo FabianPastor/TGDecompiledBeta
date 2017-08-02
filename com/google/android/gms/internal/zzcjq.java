@@ -13,13 +13,13 @@ public final class zzcjq extends adj<zzcjq> {
         this.zzbuM = null;
         this.zzbvc = null;
         this.zzbvd = null;
-        this.zzcsd = null;
-        this.zzcsm = -1;
+        this.zzcso = null;
+        this.zzcsx = -1;
     }
 
     public static zzcjq[] zzzx() {
         if (zzbvb == null) {
-            synchronized (adn.zzcsl) {
+            synchronized (adn.zzcsw) {
                 if (zzbvb == null) {
                     zzbvb = new zzcjq[0];
                 }
@@ -57,26 +57,26 @@ public final class zzcjq extends adj<zzcjq> {
         } else if (!this.zzbvd.equals(com_google_android_gms_internal_zzcjq.zzbvd)) {
             return false;
         }
-        return (this.zzcsd == null || this.zzcsd.isEmpty()) ? com_google_android_gms_internal_zzcjq.zzcsd == null || com_google_android_gms_internal_zzcjq.zzcsd.isEmpty() : this.zzcsd.equals(com_google_android_gms_internal_zzcjq.zzcsd);
+        return (this.zzcso == null || this.zzcso.isEmpty()) ? com_google_android_gms_internal_zzcjq.zzcso == null || com_google_android_gms_internal_zzcjq.zzcso.isEmpty() : this.zzcso.equals(com_google_android_gms_internal_zzcjq.zzcso);
     }
 
     public final int hashCode() {
         int i = 0;
         int hashCode = ((this.zzbvd == null ? 0 : this.zzbvd.hashCode()) + (((this.zzbvc == null ? 0 : this.zzbvc.hashCode()) + (((this.zzbuM == null ? 0 : this.zzbuM.hashCode()) + ((getClass().getName().hashCode() + 527) * 31)) * 31)) * 31)) * 31;
-        if (!(this.zzcsd == null || this.zzcsd.isEmpty())) {
-            i = this.zzcsd.hashCode();
+        if (!(this.zzcso == null || this.zzcso.isEmpty())) {
+            i = this.zzcso.hashCode();
         }
         return hashCode + i;
     }
 
     public final /* synthetic */ adp zza(adg com_google_android_gms_internal_adg) throws IOException {
         while (true) {
-            int zzLB = com_google_android_gms_internal_adg.zzLB();
-            switch (zzLB) {
+            int zzLA = com_google_android_gms_internal_adg.zzLA();
+            switch (zzLA) {
                 case 0:
                     break;
                 case 8:
-                    this.zzbuM = Integer.valueOf(com_google_android_gms_internal_adg.zzLG());
+                    this.zzbuM = Integer.valueOf(com_google_android_gms_internal_adg.zzLF());
                     continue;
                 case 18:
                     this.zzbvc = com_google_android_gms_internal_adg.readString();
@@ -88,7 +88,7 @@ public final class zzcjq extends adj<zzcjq> {
                     com_google_android_gms_internal_adg.zza(this.zzbvd);
                     continue;
                 default:
-                    if (!super.zza(com_google_android_gms_internal_adg, zzLB)) {
+                    if (!super.zza(com_google_android_gms_internal_adg, zzLA)) {
                         break;
                     }
                     continue;

@@ -542,10 +542,10 @@ final class zzcej extends zzchj {
                 zzbo.zzcF(str);
                 zzbo.zzu(com_google_android_gms_internal_zzcka);
                 try {
-                    byte[] bArr = new byte[com_google_android_gms_internal_zzcka.zzLW()];
+                    byte[] bArr = new byte[com_google_android_gms_internal_zzcka.zzLV()];
                     adh zzc = adh.zzc(bArr, 0, bArr.length);
                     com_google_android_gms_internal_zzcka.zza(zzc);
-                    zzc.zzLN();
+                    zzc.zzLM();
                     ContentValues contentValues = new ContentValues();
                     contentValues.put("app_id", str);
                     contentValues.put("audience_id", Integer.valueOf(intValue));
