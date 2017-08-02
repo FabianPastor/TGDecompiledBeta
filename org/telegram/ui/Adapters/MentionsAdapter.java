@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.EmojiSuggestion;
 import org.telegram.messenger.LocaleController;
@@ -35,12 +36,16 @@ import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInfo;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
+import org.telegram.tgnet.TLRPC.ChannelParticipant;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.ChatFull;
 import org.telegram.tgnet.TLRPC.ChatParticipant;
 import org.telegram.tgnet.TLRPC.TL_botCommand;
 import org.telegram.tgnet.TLRPC.TL_botInlineMessageMediaAuto;
 import org.telegram.tgnet.TLRPC.TL_channelFull;
+import org.telegram.tgnet.TLRPC.TL_channelParticipantsSearch;
+import org.telegram.tgnet.TLRPC.TL_channels_channelParticipants;
+import org.telegram.tgnet.TLRPC.TL_channels_getParticipants;
 import org.telegram.tgnet.TLRPC.TL_contacts_resolveUsername;
 import org.telegram.tgnet.TLRPC.TL_contacts_resolvedPeer;
 import org.telegram.tgnet.TLRPC.TL_document;
@@ -69,6 +74,8 @@ public class MentionsAdapter extends SelectionAdapter {
     private boolean allowNewMentions = true;
     private HashMap<Integer, BotInfo> botInfo;
     private int botsCount;
+    private int channelLastReqId;
+    private int channelReqId;
     private boolean contextMedia;
     private int contextQueryReqid;
     private Runnable contextQueryRunnable;
@@ -110,6 +117,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private int resultLength;
     private int resultStartPosition;
     private SearchAdapterHelper searchAdapterHelper;
+    private Runnable searchGlobalRunnable;
     private ArrayList<BotInlineResult> searchResultBotContext;
     private HashMap<String, BotInlineResult> searchResultBotContextById;
     private TL_inlineBotSwitchPM searchResultBotContextSwitch;
@@ -119,6 +127,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private ArrayList<String> searchResultHashtags;
     private ArrayList<EmojiSuggestion> searchResultSuggestions;
     private ArrayList<User> searchResultUsernames;
+    private HashMap<Integer, User> searchResultUsernamesMap;
     private String searchingContextQuery;
     private String searchingContextUsername;
 
@@ -128,6 +137,12 @@ public class MentionsAdapter extends SelectionAdapter {
         void onContextClick(BotInlineResult botInlineResult);
 
         void onContextSearch(boolean z);
+    }
+
+    static /* synthetic */ int access$3004(MentionsAdapter x0) {
+        int i = x0.channelLastReqId + 1;
+        x0.channelLastReqId = i;
+        return i;
     }
 
     public MentionsAdapter(Context context, boolean darkTheme, long did, MentionsAdapterDelegate mentionsAdapterDelegate) {
@@ -492,18 +507,14 @@ public class MentionsAdapter extends SelectionAdapter {
                                         }
                                         MentionsAdapter.this.searchResultHashtags = null;
                                         MentionsAdapter.this.searchResultUsernames = null;
+                                        MentionsAdapter.this.searchResultUsernamesMap = null;
                                         MentionsAdapter.this.searchResultCommands = null;
                                         MentionsAdapter.this.searchResultSuggestions = null;
                                         MentionsAdapter.this.searchResultCommandsHelp = null;
                                         MentionsAdapter.this.searchResultCommandsUsers = null;
                                         if (added) {
-                                            boolean hasTop;
                                             int i;
-                                            if (MentionsAdapter.this.searchResultBotContextSwitch != null) {
-                                                hasTop = true;
-                                            } else {
-                                                hasTop = false;
-                                            }
+                                            boolean hasTop = MentionsAdapter.this.searchResultBotContextSwitch != null;
                                             MentionsAdapter mentionsAdapter = MentionsAdapter.this;
                                             int size = MentionsAdapter.this.searchResultBotContext.size() - res.results.size();
                                             if (hasTop) {
@@ -563,6 +574,14 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     public void searchUsernameOrHashtag(String text, int position, ArrayList<MessageObject> messageObjects, boolean usernameOnly) {
+        if (this.channelReqId != 0) {
+            ConnectionsManager.getInstance().cancelRequest(this.channelReqId, true);
+            this.channelReqId = 0;
+        }
+        if (this.searchGlobalRunnable != null) {
+            AndroidUtilities.cancelRunOnUIThread(this.searchGlobalRunnable);
+            this.searchGlobalRunnable = null;
+        }
         if (TextUtils.isEmpty(text)) {
             searchForContextBot(null, null);
             this.delegate.needChangePanelVisibility(false);
@@ -680,8 +699,10 @@ public class MentionsAdapter extends SelectionAdapter {
                     }
                 }
                 String usernameString = result.toString().toLowerCase();
+                boolean hasSpace = usernameString.indexOf(32) >= 0;
                 ArrayList<User> newResult = new ArrayList();
                 HashMap<Integer, User> newResultsHashMap = new HashMap();
+                HashMap<Integer, User> newMap = new HashMap();
                 if (!usernameOnly && this.needBotContext && dogPostion == 0 && !SearchQuery.inlineBots.isEmpty()) {
                     int count = 0;
                     for (a = 0; a < SearchQuery.inlineBots.size(); a++) {
@@ -708,18 +729,24 @@ public class MentionsAdapter extends SelectionAdapter {
                 if (!(chat == null || this.info == null || this.info.participants == null || (ChatObject.isChannel(chat) && !chat.megagroup))) {
                     for (a = 0; a < this.info.participants.participants.size(); a++) {
                         user = MessagesController.getInstance().getUser(Integer.valueOf(((ChatParticipant) this.info.participants.participants.get(a)).user_id));
-                        if (!(user == null || UserObject.isUserSelf(user) || newResultsHashMap.containsKey(Integer.valueOf(user.id)))) {
+                        if (user != null && ((usernameOnly || !UserObject.isUserSelf(user)) && !newResultsHashMap.containsKey(Integer.valueOf(user.id)))) {
                             if (usernameString.length() == 0) {
                                 if (!user.deleted && (this.allowNewMentions || !(this.allowNewMentions || user.username == null || user.username.length() == 0))) {
                                     newResult.add(user);
                                 }
                             } else if (user.username != null && user.username.length() > 0 && user.username.toLowerCase().startsWith(usernameString)) {
                                 newResult.add(user);
+                                newMap.put(Integer.valueOf(user.id), user);
                             } else if (this.allowNewMentions || !(user.username == null || user.username.length() == 0)) {
                                 if (user.first_name != null && user.first_name.length() > 0 && user.first_name.toLowerCase().startsWith(usernameString)) {
                                     newResult.add(user);
+                                    newMap.put(Integer.valueOf(user.id), user);
                                 } else if (user.last_name != null && user.last_name.length() > 0 && user.last_name.toLowerCase().startsWith(usernameString)) {
                                     newResult.add(user);
+                                    newMap.put(Integer.valueOf(user.id), user);
+                                } else if (hasSpace && ContactsController.formatName(user.first_name, user.last_name).toLowerCase().startsWith(usernameString)) {
+                                    newResult.add(user);
+                                    newMap.put(Integer.valueOf(user.id), user);
                                 }
                             }
                         }
@@ -731,6 +758,52 @@ public class MentionsAdapter extends SelectionAdapter {
                 this.searchResultCommandsUsers = null;
                 this.searchResultSuggestions = null;
                 this.searchResultUsernames = newResult;
+                this.searchResultUsernamesMap = newMap;
+                if (chat != null && chat.megagroup && usernameString.length() > 0) {
+                    final String str = usernameString;
+                    Runnable anonymousClass9 = new Runnable() {
+                        public void run() {
+                            if (MentionsAdapter.this.searchGlobalRunnable == this) {
+                                TL_channels_getParticipants req = new TL_channels_getParticipants();
+                                req.channel = MessagesController.getInputChannel(chat);
+                                req.limit = 20;
+                                req.offset = 0;
+                                req.filter = new TL_channelParticipantsSearch();
+                                req.filter.q = str;
+                                final int currentReqId = MentionsAdapter.access$3004(MentionsAdapter.this);
+                                MentionsAdapter.this.channelReqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                    public void run(final TLObject response, final TL_error error) {
+                                        AndroidUtilities.runOnUIThread(new Runnable() {
+                                            public void run() {
+                                                if (!(MentionsAdapter.this.channelReqId == 0 || currentReqId != MentionsAdapter.this.channelLastReqId || MentionsAdapter.this.searchResultUsernamesMap == null || MentionsAdapter.this.searchResultUsernames == null || error != null)) {
+                                                    TL_channels_channelParticipants res = response;
+                                                    MessagesController.getInstance().putUsers(res.users, false);
+                                                    if (!res.participants.isEmpty()) {
+                                                        for (int a = 0; a < res.participants.size(); a++) {
+                                                            ChannelParticipant participant = (ChannelParticipant) res.participants.get(a);
+                                                            if (!MentionsAdapter.this.searchResultUsernamesMap.containsKey(Integer.valueOf(participant.user_id))) {
+                                                                User user = MessagesController.getInstance().getUser(Integer.valueOf(participant.user_id));
+                                                                if (user != null) {
+                                                                    MentionsAdapter.this.searchResultUsernames.add(user);
+                                                                } else {
+                                                                    return;
+                                                                }
+                                                            }
+                                                        }
+                                                        MentionsAdapter.this.notifyDataSetChanged();
+                                                    }
+                                                }
+                                                MentionsAdapter.this.channelReqId = 0;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    };
+                    this.searchGlobalRunnable = anonymousClass9;
+                    AndroidUtilities.runOnUIThread(anonymousClass9, 200);
+                }
                 final HashMap<Integer, User> hashMap = newResultsHashMap;
                 final ArrayList<Integer> arrayList = users;
                 Collections.sort(this.searchResultUsernames, new Comparator<User>() {
@@ -775,6 +848,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 }
                 this.searchResultHashtags = newResult;
                 this.searchResultUsernames = null;
+                this.searchResultUsernamesMap = null;
                 this.searchResultCommands = null;
                 this.searchResultCommandsHelp = null;
                 this.searchResultCommandsUsers = null;
@@ -799,6 +873,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 }
                 this.searchResultHashtags = null;
                 this.searchResultUsernames = null;
+                this.searchResultUsernamesMap = null;
                 this.searchResultSuggestions = null;
                 this.searchResultCommands = newResult;
                 this.searchResultCommandsHelp = newResultHelp;
@@ -830,6 +905,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 }
                 this.searchResultHashtags = null;
                 this.searchResultUsernames = null;
+                this.searchResultUsernamesMap = null;
                 this.searchResultCommands = null;
                 this.searchResultCommandsHelp = null;
                 this.searchResultCommandsUsers = null;

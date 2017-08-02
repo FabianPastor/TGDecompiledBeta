@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import com.google.firebase.analytics.FirebaseAnalytics.Event;
 import java.lang.ref.WeakReference;
 import java.util.List;
 import org.telegram.messenger.ApplicationLoader;
@@ -213,7 +214,11 @@ public class Browser {
         if ("telegram.me".equals(host) || "t.me".equals(host) || "telegram.dog".equals(host) || "telesco.pe".equals(host)) {
             String path = uri.getPath();
             if (path != null && path.length() > 1) {
-                if (path.lastIndexOf(47) <= 0 && !path.toLowerCase().equals("/iv")) {
+                path = path.substring(1).toLowerCase();
+                if (path.startsWith("joinchat") || path.startsWith("addstickers") || path.startsWith("msg") || path.startsWith(Event.SHARE) || path.startsWith("confirmphone")) {
+                    return true;
+                }
+                if (path.lastIndexOf(47) <= 0 && !path.equals("iv")) {
                     return true;
                 }
                 if (forceBrowser != null) {

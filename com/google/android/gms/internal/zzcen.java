@@ -754,7 +754,6 @@ final class zzcen extends zzchj {
     }
 
     final Map<Integer, List<zzcjq>> zzK(String str, String str2) {
-        Cursor query;
         Object e;
         Throwable th;
         zzkD();
@@ -762,6 +761,7 @@ final class zzcen extends zzchj {
         zzbo.zzcF(str);
         zzbo.zzcF(str2);
         Map<Integer, List<zzcjq>> arrayMap = new ArrayMap();
+        Cursor query;
         try {
             query = getWritableDatabase().query("property_filters", new String[]{"audience_id", "data"}, "app_id=? AND property_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -1607,12 +1607,12 @@ final class zzcen extends zzchj {
 
     @WorkerThread
     public final byte[] zzdS(String str) {
-        Cursor query;
         Object e;
         Throwable th;
         zzbo.zzcF(str);
         zzjC();
         zzkD();
+        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"remote_config"}, "app_id=?", new String[]{str}, null, null, null);
             try {

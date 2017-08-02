@@ -1939,6 +1939,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     ChatActivity.this.updateVisibleRows();
                     ChatActivity.this.scrollToLastMessage(false);
                     ChatActivity.this.updateBottomOverlay();
+                    ChatActivity.this.updatePinnedMessageView(true);
                 }
 
                 public void onSearchExpand() {
@@ -8499,7 +8500,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
             }
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
-            if (this.info == null || this.info.pinned_msg_id == 0 || this.info.pinned_msg_id == preferences.getInt("pin_" + this.dialog_id, 0) || (this.actionBar != null && this.actionBar.isActionModeShowed())) {
+            if (this.info == null || this.info.pinned_msg_id == 0 || this.info.pinned_msg_id == preferences.getInt("pin_" + this.dialog_id, 0) || (this.actionBar != null && (this.actionBar.isActionModeShowed() || this.actionBar.isSearchFieldVisible()))) {
                 hidePinnedMessageView(animated);
             } else if (this.pinnedMessageObject != null) {
                 if (this.pinnedMessageView.getTag() != null) {
@@ -10281,6 +10282,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             this.searchItem.getSearchField().setSelection(this.searchItem.getSearchField().length());
             MessagesSearchQuery.searchMessagesInChat(text, this.dialog_id, this.mergeDialogId, this.classGuid, 0, this.searchingUserMessages);
         }
+        updatePinnedMessageView(true);
     }
 
     public void updatePhotoAtIndex(int index) {

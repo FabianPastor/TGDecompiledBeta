@@ -86,7 +86,7 @@ public class ActionBar extends FrameLayout {
             addView(this.backButtonImageView, LayoutHelper.createFrame(54, 54, 51));
             this.backButtonImageView.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
-                    if (ActionBar.this.isSearchFieldVisible) {
+                    if (!ActionBar.this.actionModeVisible && ActionBar.this.isSearchFieldVisible) {
                         ActionBar.this.closeSearchField();
                     } else if (ActionBar.this.actionBarMenuOnItemClick != null) {
                         ActionBar.this.actionBarMenuOnItemClick.onItemClick(-1);

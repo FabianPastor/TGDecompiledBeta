@@ -435,7 +435,6 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
             }
         });
         this.sectionCell = new ShadowSectionCell(context);
-        this.sectionCell.setSize(20);
         this.linearLayout.addView(this.sectionCell, LayoutHelper.createLinear(-1, -2));
         this.container1 = new FrameLayout(context);
         this.container1.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
@@ -560,7 +559,6 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
             this.adminnedChannelsLayout.setOrientation(1);
             this.linearLayout.addView(this.adminnedChannelsLayout, LayoutHelper.createLinear(-1, -2));
             this.adminedInfoCell = new ShadowSectionCell(context);
-            this.adminedInfoCell.setSize(20);
             this.linearLayout.addView(this.adminedInfoCell, LayoutHelper.createLinear(-1, -2));
             updatePrivatePublic();
         }
