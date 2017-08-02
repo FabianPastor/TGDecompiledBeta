@@ -825,7 +825,6 @@ final class zzcen extends zzchj {
 
     @WorkerThread
     protected final long zzL(String str, String str2) {
-        long zza;
         Object e;
         zzbo.zzcF(str);
         zzbo.zzcF(str2);
@@ -833,6 +832,7 @@ final class zzcen extends zzchj {
         zzkD();
         SQLiteDatabase writableDatabase = getWritableDatabase();
         writableDatabase.beginTransaction();
+        long zza;
         try {
             zza = zza(new StringBuilder(String.valueOf(str2).length() + 32).append("select ").append(str2).append(" from app2 where app_id=?").toString(), new String[]{str}, -1);
             if (zza == -1) {
@@ -1666,12 +1666,12 @@ final class zzcen extends zzchj {
     }
 
     final Map<Integer, zzcka> zzdT(String str) {
+        Cursor query;
         Object e;
         Throwable th;
         zzkD();
         zzjC();
         zzbo.zzcF(str);
-        Cursor query;
         try {
             query = getWritableDatabase().query("audience_filter_values", new String[]{"audience_id", "current_results"}, "app_id=?", new String[]{str}, null, null, null);
             if (query.moveToFirst()) {

@@ -138,21 +138,21 @@ public final class zzag implements zzb {
     }
 
     public final synchronized void initialize() {
-        BufferedInputStream bufferedInputStream;
         Throwable th;
         if (this.zzax.exists()) {
             File[] listFiles = this.zzax.listFiles();
             if (listFiles != null) {
                 for (File file : listFiles) {
-                    BufferedInputStream bufferedInputStream2 = null;
+                    BufferedInputStream bufferedInputStream = null;
+                    BufferedInputStream bufferedInputStream2;
                     try {
-                        bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
+                        bufferedInputStream2 = new BufferedInputStream(new FileInputStream(file));
                         try {
-                            zzai zzf = zzai.zzf(bufferedInputStream);
+                            zzai zzf = zzai.zzf(bufferedInputStream2);
                             zzf.size = file.length();
                             zza(zzf.key, zzf);
                             try {
-                                bufferedInputStream.close();
+                                bufferedInputStream2.close();
                             } catch (IOException e) {
                             }
                         } catch (IOException e2) {
@@ -161,24 +161,24 @@ public final class zzag implements zzb {
                                     file.delete();
                                 } catch (Throwable th2) {
                                     Throwable th3 = th2;
-                                    bufferedInputStream2 = bufferedInputStream;
+                                    bufferedInputStream = bufferedInputStream2;
                                     th = th3;
                                 }
                             }
-                            if (bufferedInputStream != null) {
+                            if (bufferedInputStream2 != null) {
                                 try {
-                                    bufferedInputStream.close();
+                                    bufferedInputStream2.close();
                                 } catch (IOException e3) {
                                 }
                             }
                         }
                     } catch (IOException e4) {
-                        bufferedInputStream = null;
+                        bufferedInputStream2 = null;
                         if (file != null) {
                             file.delete();
                         }
-                        if (bufferedInputStream != null) {
-                            bufferedInputStream.close();
+                        if (bufferedInputStream2 != null) {
+                            bufferedInputStream2.close();
                         }
                     } catch (Throwable th4) {
                         th = th4;
@@ -189,9 +189,9 @@ public final class zzag implements zzb {
             zzab.zzc("Unable to create cache dir %s", this.zzax.getAbsolutePath());
         }
         return;
-        if (bufferedInputStream2 != null) {
+        if (bufferedInputStream != null) {
             try {
-                bufferedInputStream2.close();
+                bufferedInputStream.close();
             } catch (IOException e5) {
             }
         }
