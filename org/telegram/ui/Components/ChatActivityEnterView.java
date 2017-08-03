@@ -2621,9 +2621,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
             user = (messageObject == null || ((int) this.dialog_id) >= 0) ? null : MessagesController.getInstance().getUser(Integer.valueOf(messageObject.messageOwner.from_id));
             if ((this.botCount != 1 || username) && user != null && user.bot && !command.contains("@")) {
-                SendMessagesHelper.getInstance().sendMessage(String.format(Locale.US, "%s@%s", new Object[]{command, user.username}), this.dialog_id, null, null, false, null, null, null);
+                SendMessagesHelper.getInstance().sendMessage(String.format(Locale.US, "%s@%s", new Object[]{command, user.username}), this.dialog_id, this.replyingMessageObject, null, false, null, null, null);
             } else {
-                SendMessagesHelper.getInstance().sendMessage(command, this.dialog_id, null, null, false, null, null, null);
+                SendMessagesHelper.getInstance().sendMessage(command, this.dialog_id, this.replyingMessageObject, null, false, null, null, null);
             }
         }
     }

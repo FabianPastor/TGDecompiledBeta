@@ -809,6 +809,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     ChatActivityEnterView chatActivityEnterView = ChatActivity.this.chatActivityEnterView;
                                     boolean z = ChatActivity.this.currentChat != null && ChatActivity.this.currentChat.megagroup;
                                     chatActivityEnterView.setCommand(messageObject, str, longPress, z);
+                                    if (!longPress && ChatActivity.this.chatActivityEnterView.getFieldText() == null) {
+                                        ChatActivity.this.showReplyPanel(false, null, null, null, false);
+                                    }
                                 }
                             } else {
                                 final String urlFinal = ((URLSpan) url).getURL();
@@ -1072,6 +1075,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             ChatActivity.this.presentFragment(fragment);
                         } else if (url.startsWith("/")) {
                             ChatActivity.this.chatActivityEnterView.setCommand(null, url, false, false);
+                            if (ChatActivity.this.chatActivityEnterView.getFieldText() == null) {
+                                ChatActivity.this.showReplyPanel(false, null, null, null, false);
+                            }
                         }
                     }
                 });
@@ -5033,6 +5039,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     if (this.searchItem != null && this.actionBar.isSearchFieldVisible()) {
                         this.actionBar.closeSearchField(false);
                         this.chatActivityEnterView.setFieldFocused();
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                if (ChatActivity.this.chatActivityEnterView != null) {
+                                    ChatActivity.this.chatActivityEnterView.openKeyboard();
+                                }
+                            }
+                        }, 100);
                     }
                     boolean openKeyboard = false;
                     if (!(messageObjectToReply == null || messageObjectToReply.getDialogId() == this.dialog_id)) {
@@ -8416,7 +8429,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (this.hideAlertViewRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(this.hideAlertViewRunnable);
             }
-            Runnable anonymousClass84 = new Runnable() {
+            Runnable anonymousClass85 = new Runnable() {
                 public void run() {
                     if (ChatActivity.this.hideAlertViewRunnable == this && ChatActivity.this.alertView.getTag() == null) {
                         ChatActivity.this.alertView.setTag(Integer.valueOf(1));
@@ -8448,8 +8461,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                 }
             };
-            this.hideAlertViewRunnable = anonymousClass84;
-            AndroidUtilities.runOnUIThread(anonymousClass84, 3000);
+            this.hideAlertViewRunnable = anonymousClass85;
+            AndroidUtilities.runOnUIThread(anonymousClass85, 3000);
         }
     }
 

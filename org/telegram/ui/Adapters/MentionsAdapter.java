@@ -598,6 +598,7 @@ public class MentionsAdapter extends SelectionAdapter {
         this.lastUsernameOnly = usernameOnly;
         StringBuilder result = new StringBuilder();
         int foundType = -1;
+        boolean hasIllegalUsernameCharacters = false;
         if (!usernameOnly && this.needBotContext && text.charAt(0) == '@') {
             int index = text.indexOf(32);
             int len = text.length();
@@ -681,6 +682,9 @@ public class MentionsAdapter extends SelectionAdapter {
                                 }
                             }
                         }
+                        if ((ch < '0' || ch > '9') && ((ch < 'a' || ch > 'z') && ((ch < 'A' || ch > 'Z') && ch != '_'))) {
+                            hasIllegalUsernameCharacters = true;
+                        }
                         result.insert(0, ch);
                     }
                     a--;
@@ -761,7 +765,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 this.searchResultUsernamesMap = newMap;
                 if (chat != null && chat.megagroup && usernameString.length() > 0) {
                     final String str = usernameString;
-                    Runnable anonymousClass9 = new Runnable() {
+                    AnonymousClass9 anonymousClass9 = new Runnable() {
                         public void run() {
                             if (MentionsAdapter.this.searchGlobalRunnable == this) {
                                 TL_channels_getParticipants req = new TL_channels_getParticipants();
@@ -880,7 +884,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 this.searchResultCommandsUsers = newResultUsers;
                 notifyDataSetChanged();
                 this.delegate.needChangePanelVisibility(!newResult.isEmpty());
-            } else if (foundType == 3) {
+            } else if (foundType == 3 && !hasIllegalUsernameCharacters) {
                 Object[] suggestions = Emoji.getSuggestion(result.toString());
                 if (suggestions != null) {
                     this.searchResultSuggestions = new ArrayList();

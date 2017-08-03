@@ -355,6 +355,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
+            User user;
             switch (holder.getItemViewType()) {
                 case 0:
                     GroupCreateSectionCell cell = (GroupCreateSectionCell) holder.itemView;
@@ -364,7 +365,6 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     }
                     return;
                 default:
-                    User user;
                     GroupCreateUserCell cell2 = holder.itemView;
                     CharSequence username = null;
                     CharSequence name = null;

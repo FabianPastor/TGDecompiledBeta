@@ -265,6 +265,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         private int videoHeight;
         private int videoTrackIndex;
         private int videoWidth;
+        private int zeroTimeStamps;
 
         private VideoRecorder() {
             this.videoConvertFirstWrite = true;
@@ -372,7 +373,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         /* JADX WARNING: inconsistent code. */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void frameAvailable(SurfaceTexture st, Integer cameraId) {
+        public void frameAvailable(SurfaceTexture st, Integer cameraId, long timestampInternal) {
             synchronized (this.sync) {
                 if (!this.ready) {
                 }
@@ -799,13 +800,16 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void drainEncoder(boolean endOfStream) throws Exception {
-            ByteBuffer encodedData;
             if (endOfStream) {
                 this.videoEncoder.signalEndOfInputStream();
             }
-            ByteBuffer[] encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
+            ByteBuffer[] encoderOutputBuffers = null;
+            if (VERSION.SDK_INT < 21) {
+                encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
+            }
             while (true) {
                 MediaFormat newFormat;
+                ByteBuffer encodedData;
                 int encoderStatus = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
                 if (encoderStatus == -1) {
                     if (!endOfStream) {
@@ -868,7 +872,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     }
                 }
             }
-            encoderOutputBuffers = this.audioEncoder.getOutputBuffers();
+            if (VERSION.SDK_INT < 21) {
+                encoderOutputBuffers = this.audioEncoder.getOutputBuffers();
+            }
             while (true) {
                 encoderStatus = this.audioEncoder.dequeueOutputBuffer(this.audioBufferInfo, 0);
                 if (encoderStatus == -1) {
@@ -1134,7 +1140,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         InstantCameraView.this.scaleY = temp;
                     }
                 }
-                this.videoEncoder.frameAvailable(this.cameraSurface, cameraId);
+                this.videoEncoder.frameAvailable(this.cameraSurface, cameraId, System.nanoTime());
                 this.cameraSurface.getTransformMatrix(InstantCameraView.this.mSTMatrix);
                 GLES20.glUseProgram(this.drawProgram);
                 GLES20.glActiveTexture(33984);
