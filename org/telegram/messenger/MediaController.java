@@ -3193,6 +3193,10 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
 
     public static void saveFile(String fullPath, Context context, int type, String name, String mime) {
         Throwable e;
+        final AlertDialog finalProgress;
+        final int i;
+        final String str;
+        final String str2;
         if (fullPath != null) {
             File file = null;
             if (!(fullPath == null || fullPath.length() == 0)) {
@@ -3205,10 +3209,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 final File sourceFile = file;
                 final boolean[] cancelled = new boolean[1];
                 if (sourceFile.exists()) {
-                    final AlertDialog finalProgress;
-                    final int i;
-                    final String str;
-                    final String str2;
                     AlertDialog progressDialog = null;
                     if (context != null) {
                         try {

@@ -71,7 +71,7 @@ public class TextColorThemeCell extends FrameLayout {
         if (this.currentColor != 0) {
             colorPaint.setColor(this.currentColor);
             colorPaint.setAlpha((int) (255.0f * this.alpha));
-            canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(48.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), colorPaint);
+            canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), colorPaint);
         }
     }
 }

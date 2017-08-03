@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import java.lang.ref.WeakReference;
 import java.util.List;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
@@ -143,19 +144,20 @@ public class Browser {
             try {
                 String scheme = uri.getScheme() != null ? uri.getScheme().toLowerCase() : "";
                 if (allowCustom && MediaController.getInstance().canCustomTabs() && !internalUri && !scheme.equals("tel")) {
-                    String browserPackageName = null;
+                    String str = null;
                     try {
-                        browserPackageName = context.getPackageManager().resolveActivity(new Intent("android.intent.action.VIEW", Uri.parse("http://")), 65536).activityInfo.packageName;
+                        str = context.getPackageManager().resolveActivity(new Intent("android.intent.action.VIEW", Uri.parse("http://")), 65536).activityInfo.packageName;
+                        FileLog.d("default browser name " + str);
                     } catch (Exception e) {
                     }
                     List<ResolveInfo> list = null;
                     try {
-                        list = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", uri), 0);
                         int a;
-                        if (browserPackageName != null) {
+                        list = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", uri), 0);
+                        if (str != null) {
                             a = 0;
                             while (a < list.size()) {
-                                if (browserPackageName.equals(((ResolveInfo) list.get(a)).activityInfo.packageName)) {
+                                if (str.equals(((ResolveInfo) list.get(a)).activityInfo.packageName)) {
                                     list.remove(a);
                                     a--;
                                 }
@@ -169,6 +171,11 @@ public class Browser {
                                     a--;
                                 }
                                 a++;
+                            }
+                        }
+                        if (BuildVars.DEBUG_VERSION) {
+                            for (a = 0; a < list.size(); a++) {
+                                FileLog.d("device has " + ((ResolveInfo) list.get(a)).activityInfo.packageName + " to open " + uri.toString());
                             }
                         }
                     } catch (Exception e2) {
