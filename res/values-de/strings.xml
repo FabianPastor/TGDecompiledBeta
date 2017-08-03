@@ -1353,6 +1353,7 @@
     <string name="ScreenCaptureInfo">Aktivierst du diese Funktion, so kannst du Screenshots in der App aufnehmen. Wenn du einen Pincode festgelegt hast, zeigt das System jedoch weiterhin deine Chats in der Liste der geöffneten App an.\n\nDu musst die App nach der Änderung neu starten.</string>
     <string name="SdCard">SD-Karte</string>
     <string name="Search">Suche</string>
+    <string name="SearchFrom">von:</string>
     <string name="SearchGifs">GIF-SUCHE</string>
     <string name="SearchGifsTitle">Suche GIFs</string>
     <string name="SearchImages">BILDERSUCHE</string>

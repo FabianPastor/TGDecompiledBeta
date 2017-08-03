@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import com.google.firebase.analytics.FirebaseAnalytics.Event;
 import java.lang.ref.WeakReference;
 import java.util.List;
 import org.telegram.messenger.ApplicationLoader;
@@ -211,14 +210,23 @@ public class Browser {
         if ("tg".equals(uri.getScheme())) {
             return true;
         }
-        if ("telegram.me".equals(host) || "t.me".equals(host) || "telegram.dog".equals(host) || "telesco.pe".equals(host)) {
-            String path = uri.getPath();
+        String path;
+        if ("telegram.dog".equals(host)) {
+            path = uri.getPath();
             if (path != null && path.length() > 1) {
                 path = path.substring(1).toLowerCase();
-                if (path.startsWith("joinchat") || path.startsWith("addstickers") || path.startsWith("msg") || path.startsWith(Event.SHARE) || path.startsWith("confirmphone")) {
+                if (!path.startsWith("blog") && !path.equals("iv") && !path.startsWith("faq") && !path.equals("apps")) {
                     return true;
                 }
-                if (path.lastIndexOf(47) <= 0 && !path.equals("iv")) {
+                if (forceBrowser != null) {
+                    forceBrowser[0] = true;
+                }
+                return false;
+            }
+        } else if ("telegram.me".equals(host) || "t.me".equals(host) || "telesco.pe".equals(host)) {
+            path = uri.getPath();
+            if (path != null && path.length() > 1) {
+                if (!path.substring(1).toLowerCase().equals("iv")) {
                     return true;
                 }
                 if (forceBrowser != null) {

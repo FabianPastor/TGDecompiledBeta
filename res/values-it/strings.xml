@@ -1353,6 +1353,7 @@
     <string name="ScreenCaptureInfo">Se attivata, puoi fare screenshot dell\'app, ma il sistema mostrerà le tue chat nella lista delle app recenti anche quando il codice di blocco è attivo.\n\nPotresti dover riavviare l\'app per rendere effettive le modifiche.</string>
     <string name="SdCard">Scheda SD</string>
     <string name="Search">Cerca</string>
+    <string name="SearchFrom">da:</string>
     <string name="SearchGifs">CERCA GIF</string>
     <string name="SearchGifsTitle">Cerca GIF</string>
     <string name="SearchImages">CERCA IMMAGINI</string>

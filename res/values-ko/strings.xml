@@ -1353,6 +1353,7 @@
     <string name="ScreenCaptureInfo">활성화시 앱내에서 화면 캡처가 가능합니다. 다만, 화면전환시 잠금코드가 활성화 되어져 있더라도 대화내용이 뜰 수 있습니다.\n\n적용이 안될시, 앱 재시작이 필요할 수도 있습니다.</string>
     <string name="SdCard">SD 카드</string>
     <string name="Search">검색</string>
+    <string name="SearchFrom">보낸 사람:</string>
     <string name="SearchGifs">GIF 검색</string>
     <string name="SearchGifsTitle">GIF 검색</string>
     <string name="SearchImages">이미지 검색</string>

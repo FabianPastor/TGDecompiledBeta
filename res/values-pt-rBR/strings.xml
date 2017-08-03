@@ -1353,6 +1353,7 @@
     <string name="ScreenCaptureInfo">Se ativado, você pode tirar capturas de tela do app, mas o sistema irá mostrar suas conversas ao alternar entre janelas mesmo que a senha no app esteja habilitada.\n\nTalvez você precise reiniciar o app para que isso tenha efeito.</string>
     <string name="SdCard">Cartão SD</string>
     <string name="Search">Busca</string>
+    <string name="SearchFrom">de:</string>
     <string name="SearchGifs">BUSCAR GIFS</string>
     <string name="SearchGifsTitle">Procurar GIFs</string>
     <string name="SearchImages">BUSCAR IMAGENS</string>

@@ -1353,6 +1353,7 @@
     <string name="ScreenCaptureInfo">إذا تم التفعيل، ستتمكن من التقاط صور للشاشة داخل التطبيق، لكن النظام سيعرض محادثاتك في شاشة تعدد المهام حتى في حال تفعيل رمز المرور.\n\nربما تحتاج لإعادة تشغيل التطبيق لتفعيل هذا الخيار.</string>
     <string name="SdCard">بطاقة الذاكرة</string>
     <string name="Search">بحث</string>
+    <string name="SearchFrom">من:</string>
     <string name="SearchGifs">ابحث عن صور متحركة</string>
     <string name="SearchGifsTitle">البحث عن صور متحركة</string>
     <string name="SearchImages">ابحث عن صور</string>

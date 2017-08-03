@@ -9735,12 +9735,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     private void processSelectedOption(int option) {
+        File file;
+        Intent intent;
         if (this.selectedObject != null) {
             Bundle args;
             String path;
-            File file;
             AlertDialog.Builder builder;
-            Intent intent;
             switch (option) {
                 case 0:
                     if (SendMessagesHelper.getInstance().retrySendMessage(this.selectedObject, false)) {
@@ -9859,8 +9859,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     intent.setType(this.selectedObject.getDocument().mime_type);
                     file = new File(path);
                     if (VERSION.SDK_INT >= 24) {
-                        intent.setFlags(1);
-                        intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(getParentActivity(), "org.telegram.messenger.beta.provider", file));
+                        try {
+                            intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(getParentActivity(), "org.telegram.messenger.beta.provider", file));
+                            intent.setFlags(1);
+                        } catch (Exception e) {
+                            intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(file));
+                        }
                     } else {
                         intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(file));
                     }
@@ -9910,6 +9914,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     getParentActivity().requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 4);
                     this.selectedObject = null;
                     return;
+                    break;
                 case 11:
                     Document document = this.selectedObject.getDocument();
                     MessagesController.getInstance().saveGif(document);
@@ -10043,8 +10048,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         intent.addFlags(268435456);
                         getParentActivity().startActivityForResult(intent, 500);
                         break;
-                    } catch (Throwable e) {
-                        FileLog.e(e);
+                    } catch (Throwable e2) {
+                        FileLog.e(e2);
                         break;
                     }
                 case 18:

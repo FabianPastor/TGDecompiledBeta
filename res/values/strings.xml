@@ -1353,6 +1353,7 @@
     <string name="ScreenCaptureInfo">If enabled, you can take screenshots of the app, but the system will display your chats in the task switcher even when the passcode is on.\n\nYou may need to restart the app for this to take effect.</string>
     <string name="SdCard">SD Card</string>
     <string name="Search">Search</string>
+    <string name="SearchFrom">from:</string>
     <string name="SearchGifs">FIND GIFS</string>
     <string name="SearchGifsTitle">Search GIFs</string>
     <string name="SearchImages">FIND IMAGES</string>
@@ -1763,7 +1764,6 @@
     <string name="hockeyapp_update_dialog_positive_button">Show</string>
     <string name="hockeyapp_update_dialog_title">Update Available</string>
     <string name="hockeyapp_update_mandatory_toast">%s is available and is a mandatory update!</string>
-    <string name="SearchFrom">from:</string>
     <string name="default_web_client_id">760348033671-jiv412evc1r36rl4k7vhl1ba83atdmot.apps.googleusercontent.com</string>
     <string name="firebase_database_url">https://tmessages2.firebaseio.com</string>
     <string name="gcm_defaultSenderId">760348033671</string>

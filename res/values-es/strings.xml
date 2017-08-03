@@ -1353,6 +1353,7 @@
     <string name="ScreenCaptureInfo">Si está activada, puedes hacer capturas de pantalla de la aplicación, pero el sistema mostrará tus chats en la multitarea aunque tengas activo el código de acceso.\n\nPuede ser necesario reiniciar la aplicación para que tenga efecto.</string>
     <string name="SdCard">Tarjeta SD</string>
     <string name="Search">Buscar</string>
+    <string name="SearchFrom">de:</string>
     <string name="SearchGifs">BUSCA GIF</string>
     <string name="SearchGifsTitle">Buscar GIF</string>
     <string name="SearchImages">BUSCA FOTOS</string>

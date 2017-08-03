@@ -425,7 +425,7 @@ public class ActionBarMenuItem extends FrameLayout {
                         measureChildWithMargins(ActionBarMenuItem.this.clearButton, widthMeasureSpec, 0, heightMeasureSpec, 0);
                         if (ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) {
                             measureChildWithMargins(ActionBarMenuItem.this.searchFieldCaption, widthMeasureSpec, MeasureSpec.getSize(widthMeasureSpec) / 2, heightMeasureSpec, 0);
-                            width = ActionBarMenuItem.this.searchFieldCaption.getMeasuredWidth();
+                            width = ActionBarMenuItem.this.searchFieldCaption.getMeasuredWidth() + AndroidUtilities.dp(4.0f);
                         } else {
                             width = 0;
                         }
@@ -438,7 +438,9 @@ public class ActionBarMenuItem extends FrameLayout {
                     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
                         int x;
                         super.onLayout(changed, left, top, right, bottom);
-                        if (ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) {
+                        if (LocaleController.isRTL) {
+                            x = 0;
+                        } else if (ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) {
                             x = ActionBarMenuItem.this.searchFieldCaption.getMeasuredWidth() + AndroidUtilities.dp(4.0f);
                         } else {
                             x = 0;
@@ -454,7 +456,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 this.searchFieldCaption.setSingleLine(true);
                 this.searchFieldCaption.setEllipsize(TruncateAt.END);
                 this.searchFieldCaption.setVisibility(8);
-                this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 16, 0.0f, 5.5f, 0.0f, 0.0f));
+                this.searchFieldCaption.setGravity(LocaleController.isRTL ? 5 : 3);
                 this.searchField = new EditText(getContext()) {
                     public boolean onKeyDown(int keyCode, KeyEvent event) {
                         if (keyCode != 67 || ActionBarMenuItem.this.searchField.length() != 0 || ActionBarMenuItem.this.searchFieldCaption.getVisibility() != 0 || ActionBarMenuItem.this.searchFieldCaption.length() <= 0) {
@@ -531,7 +533,13 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
                 this.searchField.setImeOptions(33554435);
                 this.searchField.setTextIsSelectable(false);
-                this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-1, 36.0f, 16, 0.0f, 0.0f, 48.0f, 0.0f));
+                if (LocaleController.isRTL) {
+                    this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-1, 36.0f, 16, 0.0f, 0.0f, 48.0f, 0.0f));
+                    this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 21, 0.0f, 5.5f, 48.0f, 0.0f));
+                } else {
+                    this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 19, 0.0f, 5.5f, 0.0f, 0.0f));
+                    this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-1, 36.0f, 16, 0.0f, 0.0f, 48.0f, 0.0f));
+                }
                 this.clearButton = new ImageView(getContext());
                 ImageView imageView = this.clearButton;
                 Drawable closeProgressDrawable2 = new CloseProgressDrawable2();

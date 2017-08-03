@@ -1353,6 +1353,7 @@
     <string name="ScreenCaptureInfo">Met deze functie kun je in-app schermafdrukken maken, wel zijn chats dan zichtbaar in taakbeheer, ook met een ingeschakelde toegangscode.\n\nHerstart de app om deze optie actief te maken.</string>
     <string name="SdCard">SD-kaart</string>
     <string name="Search">Zoeken</string>
+    <string name="SearchFrom">van:</string>
     <string name="SearchGifs">GIF\'S ZOEKEN</string>
     <string name="SearchGifsTitle">GIF\'s zoeken</string>
     <string name="SearchImages">ONLINE ZOEKEN</string>
