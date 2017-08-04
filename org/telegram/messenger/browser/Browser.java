@@ -144,38 +144,47 @@ public class Browser {
             try {
                 String scheme = uri.getScheme() != null ? uri.getScheme().toLowerCase() : "";
                 if (allowCustom && MediaController.getInstance().canCustomTabs() && !internalUri && !scheme.equals("tel")) {
-                    String str = null;
+                    int a;
+                    String[] browserPackageNames = null;
                     try {
-                        str = context.getPackageManager().resolveActivity(new Intent("android.intent.action.VIEW", Uri.parse("http://")), 65536).activityInfo.packageName;
-                        FileLog.d("default browser name " + str);
+                        List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", Uri.parse("http://www.google.com")), 0);
+                        if (!(list == null || list.isEmpty())) {
+                            browserPackageNames = new String[list.size()];
+                            for (a = 0; a < list.size(); a++) {
+                                browserPackageNames[a] = ((ResolveInfo) list.get(a)).activityInfo.packageName;
+                                FileLog.d("default browser name = " + browserPackageNames[a]);
+                            }
+                        }
                     } catch (Exception e) {
                     }
-                    List<ResolveInfo> list = null;
+                    List<ResolveInfo> allActivities = null;
                     try {
-                        int a;
-                        list = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", uri), 0);
-                        if (str != null) {
+                        allActivities = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", uri), 0);
+                        if (browserPackageNames != null) {
                             a = 0;
-                            while (a < list.size()) {
-                                if (str.equals(((ResolveInfo) list.get(a)).activityInfo.packageName)) {
-                                    list.remove(a);
-                                    a--;
+                            while (a < allActivities.size()) {
+                                for (String equals : browserPackageNames) {
+                                    if (equals.equals(((ResolveInfo) allActivities.get(a)).activityInfo.packageName)) {
+                                        allActivities.remove(a);
+                                        a--;
+                                        break;
+                                    }
                                 }
                                 a++;
                             }
                         } else {
                             a = 0;
-                            while (a < list.size()) {
-                                if (((ResolveInfo) list.get(a)).activityInfo.packageName.toLowerCase().contains("browser")) {
-                                    list.remove(a);
+                            while (a < allActivities.size()) {
+                                if (((ResolveInfo) allActivities.get(a)).activityInfo.packageName.toLowerCase().contains("browser") || ((ResolveInfo) allActivities.get(a)).activityInfo.packageName.toLowerCase().contains("chrome")) {
+                                    allActivities.remove(a);
                                     a--;
                                 }
                                 a++;
                             }
                         }
                         if (BuildVars.DEBUG_VERSION) {
-                            for (a = 0; a < list.size(); a++) {
-                                FileLog.d("device has " + ((ResolveInfo) list.get(a)).activityInfo.packageName + " to open " + uri.toString());
+                            for (a = 0; a < allActivities.size(); a++) {
+                                FileLog.d("device has " + ((ResolveInfo) allActivities.get(a)).activityInfo.packageName + " to open " + uri.toString());
                             }
                         }
                     } catch (Exception e2) {
