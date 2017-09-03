@@ -211,9 +211,9 @@ public class zzbgt extends zzbgl {
     }
 
     private final void zza(StringBuilder stringBuilder, Map<String, zzbgj<?, ?>> map, Parcel parcel) {
+        Entry entry;
         SparseArray sparseArray = new SparseArray();
-        for (Entry entry : map.entrySet()) {
-            Entry entry2;
+        for (Entry entry2 : map.entrySet()) {
             sparseArray.put(((zzbgj) entry2.getValue()).zzaIM, entry2);
         }
         stringBuilder.append('{');

@@ -129,11 +129,11 @@ public final class DynamiteModule {
     }
 
     public static DynamiteModule zza(Context context, zzd com_google_android_gms_dynamite_DynamiteModule_zzd, String str) throws zzc {
-        DynamiteModule zzG;
         zza com_google_android_gms_dynamite_DynamiteModule_zza = (zza) zzaSJ.get();
         zza com_google_android_gms_dynamite_DynamiteModule_zza2 = new zza();
         zzaSJ.set(com_google_android_gms_dynamite_DynamiteModule_zza2);
         zzi zza;
+        DynamiteModule zzG;
         try {
             zza = com_google_android_gms_dynamite_DynamiteModule_zzd.zza(context, str, zzaSK);
             Log.i("DynamiteModule", new StringBuilder((String.valueOf(str).length() + 68) + String.valueOf(str).length()).append("Considering local module ").append(str).append(":").append(zza.zzaSU).append(" and remote module ").append(str).append(":").append(zza.zzaSV).toString());

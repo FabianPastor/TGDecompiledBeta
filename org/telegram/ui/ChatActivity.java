@@ -2833,9 +2833,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             public void run() {
                                 messages_Messages res = response;
                                 if (error != null || res.messages.isEmpty()) {
-                                    ChatActivity.this.newMentionsCount = res.count;
+                                    if (res != null) {
+                                        ChatActivity.this.newMentionsCount = res.count;
+                                    } else {
+                                        ChatActivity.this.newMentionsCount = 0;
+                                    }
                                     MessagesStorage.getInstance().resetMentionsCount(ChatActivity.this.dialog_id, ChatActivity.this.newMentionsCount);
-                                    if (res.count == 0) {
+                                    if (ChatActivity.this.newMentionsCount == 0) {
                                         ChatActivity.this.hasAllMentionsLocal = true;
                                         ChatActivity.this.showMentiondownButton(false, true);
                                         return;
@@ -10115,11 +10119,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
     private void processSelectedOption(int option) {
         File file;
-        Intent intent;
         if (this.selectedObject != null) {
             Bundle args;
             String path;
             AlertDialog.Builder builder;
+            Intent intent;
             TLObject req;
             switch (option) {
                 case 0:
