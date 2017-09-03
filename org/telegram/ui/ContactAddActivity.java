@@ -9,7 +9,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -34,6 +33,7 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ContactAddActivity extends BaseFragment implements NotificationCenterDelegate {
@@ -42,8 +42,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     private AvatarDrawable avatarDrawable;
     private BackupImageView avatarImage;
     private View doneButton;
-    private EditText firstNameField;
-    private EditText lastNameField;
+    private EditTextBoldCursor firstNameField;
+    private EditTextBoldCursor lastNameField;
     private TextView nameTextView;
     private TextView onlineTextView;
     private String phone = null;
@@ -127,7 +127,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.onlineTextView.setEllipsize(TruncateAt.END);
         this.onlineTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         frameLayout.addView(this.onlineTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 80.0f, 32.0f, LocaleController.isRTL ? 80.0f : 0.0f, 0.0f));
-        this.firstNameField = new EditText(context);
+        this.firstNameField = new EditTextBoldCursor(context);
         this.firstNameField.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -139,7 +139,9 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.firstNameField.setInputType(49152);
         this.firstNameField.setImeOptions(5);
         this.firstNameField.setHint(LocaleController.getString("FirstName", R.string.FirstName));
-        AndroidUtilities.clearCursorDrawable(this.firstNameField);
+        this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
+        this.firstNameField.setCursorWidth(1.5f);
         linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
         this.firstNameField.setOnEditorActionListener(new OnEditorActionListener() {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -151,7 +153,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                 return true;
             }
         });
-        this.lastNameField = new EditText(context);
+        this.lastNameField = new EditTextBoldCursor(context);
         this.lastNameField.setTextSize(1, 18.0f);
         this.lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.lastNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -163,7 +165,9 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.lastNameField.setInputType(49152);
         this.lastNameField.setImeOptions(6);
         this.lastNameField.setHint(LocaleController.getString("LastName", R.string.LastName));
-        AndroidUtilities.clearCursorDrawable(this.lastNameField);
+        this.lastNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
+        this.lastNameField.setCursorWidth(1.5f);
         linearLayout.addView(this.lastNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 16.0f, 24.0f, 0.0f));
         this.lastNameField.setOnEditorActionListener(new OnEditorActionListener() {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {

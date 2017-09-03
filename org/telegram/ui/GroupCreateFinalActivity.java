@@ -18,7 +18,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import java.util.ArrayList;
@@ -56,6 +55,7 @@ import org.telegram.ui.Components.AvatarUpdater;
 import org.telegram.ui.Components.AvatarUpdater.AvatarUpdaterDelegate;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.ContextProgressView;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.GroupCreateDividerItemDecoration;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
@@ -74,7 +74,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     private ActionBarMenuItem doneItem;
     private AnimatorSet doneItemAnimation;
     private boolean donePressed;
-    private EditText editText;
+    private EditTextBoldCursor editText;
     private FrameLayout editTextContainer;
     private RecyclerView listView;
     private String nameToSet;
@@ -289,7 +289,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 }
             }
         });
-        this.editText = new EditText(context);
+        this.editText = new EditTextBoldCursor(context);
         this.editText.setHint(this.chatType == 0 ? LocaleController.getString("EnterGroupNamePlaceholder", R.string.EnterGroupNamePlaceholder) : LocaleController.getString("EnterListName", R.string.EnterListName));
         if (this.nameToSet != null) {
             this.editText.setText(this.nameToSet);
@@ -305,7 +305,9 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.editText.setInputType(16384);
         this.editText.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
         this.editText.setFilters(new InputFilter[]{new LengthFilter(100)});
-        AndroidUtilities.clearCursorDrawable(this.editText);
+        this.editText.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.editText.setCursorSize(AndroidUtilities.dp(20.0f));
+        this.editText.setCursorWidth(1.5f);
         frameLayout = this.editTextContainer;
         view = this.editText;
         f = LocaleController.isRTL ? 16.0f : 96.0f;

@@ -478,10 +478,10 @@ public class FastDatePrinter implements DatePrinter, Serializable {
                     }
                     rule = new TextField(7, strArr);
                     break;
-                case TLRPC.LAYER /*70*/:
+                case 'F':
                     rule = selectNumberRule(8, tokenLen);
                     break;
-                case 'G':
+                case TLRPC.LAYER /*71*/:
                     rule = new TextField(0, ERAs);
                     break;
                 case XtraBox.MP4_XTRA_BT_GUID /*72*/:

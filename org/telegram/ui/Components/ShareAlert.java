@@ -24,7 +24,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -82,7 +81,7 @@ import org.telegram.ui.DialogsActivity;
 
 public class ShareAlert extends BottomSheet implements NotificationCenterDelegate {
     private AnimatorSet animatorSet;
-    private EditText commentTextView;
+    private EditTextBoldCursor commentTextView;
     private boolean copyLinkOnEnd;
     private LinearLayout doneButton;
     private TextView doneButtonBadgeTextView;
@@ -96,7 +95,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     private String linkToCopy;
     private ShareDialogsAdapter listAdapter;
     private boolean loadingLink;
-    private EditText nameTextView;
+    private EditTextBoldCursor nameTextView;
     private int scrollOffsetY;
     private ShareSearchAdapter searchAdapter;
     private EmptyTextProgressView searchEmptyView;
@@ -657,7 +656,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         imageView.setScaleType(ScaleType.CENTER);
         imageView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
         this.frameLayout.addView(imageView, LayoutHelper.createFrame(48, 48, 19));
-        this.nameTextView = new EditText(context);
+        this.nameTextView = new EditTextBoldCursor(context);
         this.nameTextView.setHint(LocaleController.getString("ShareSendTo", R.string.ShareSendTo));
         this.nameTextView.setMaxLines(1);
         this.nameTextView.setSingleLine(true);
@@ -667,7 +666,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.nameTextView.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
         this.nameTextView.setImeOptions(268435456);
         this.nameTextView.setInputType(16385);
-        AndroidUtilities.clearCursorDrawable(this.nameTextView);
+        this.nameTextView.setCursorColor(Theme.getColor(Theme.key_dialogTextBlack));
+        this.nameTextView.setCursorSize(AndroidUtilities.dp(20.0f));
+        this.nameTextView.setCursorWidth(1.5f);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         this.frameLayout.addView(this.nameTextView, LayoutHelper.createFrame(-1, -1.0f, 51, 48.0f, 2.0f, 96.0f, 0.0f));
         this.nameTextView.addTextChangedListener(new TextWatcher() {
@@ -782,7 +783,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 return true;
             }
         });
-        this.commentTextView = new EditText(context);
+        this.commentTextView = new EditTextBoldCursor(context);
         this.commentTextView.setHint(LocaleController.getString("ShareComment", R.string.ShareComment));
         this.commentTextView.setMaxLines(1);
         this.commentTextView.setSingleLine(true);
@@ -792,7 +793,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.commentTextView.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
         this.commentTextView.setImeOptions(268435456);
         this.commentTextView.setInputType(16385);
-        AndroidUtilities.clearCursorDrawable(this.commentTextView);
+        this.commentTextView.setCursorColor(Theme.getColor(Theme.key_dialogTextBlack));
+        this.commentTextView.setCursorSize(AndroidUtilities.dp(20.0f));
+        this.commentTextView.setCursorWidth(1.5f);
         this.commentTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         this.frameLayout2.addView(this.commentTextView, LayoutHelper.createFrame(-1, -1.0f, 51, 8.0f, 1.0f, 8.0f, 0.0f));
         this.shadow2 = new View(context);

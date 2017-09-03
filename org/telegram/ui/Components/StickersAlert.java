@@ -96,6 +96,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     private Activity parentActivity;
     private BaseFragment parentFragment;
     private PickerBottomLayout pickerBottomLayout;
+    private ImageView previewFavButton;
     private TextView previewSendButton;
     private View previewSendButtonShadow;
     private int reqId;
@@ -515,6 +516,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                         new StickersAlert(StickersAlert.this.parentActivity, StickersAlert.this.parentFragment, inputStickerSetID, null, null).show();
                     }
                 } else if (StickersAlert.this.stickerSet != null && position >= 0 && position < StickersAlert.this.stickerSet.documents.size()) {
+                    boolean fav;
+                    ImageView access$3100;
+                    int i;
                     LayoutParams layoutParams;
                     AnimatorSet animatorSet;
                     StickersAlert.this.selectedSticker = (Document) StickersAlert.this.stickerSet.documents.get(position);
@@ -529,6 +533,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                             if (!set) {
                                 StickersAlert.this.stickerEmojiTextView.setText(Emoji.replaceEmoji(StickersQuery.getEmojiForSticker(StickersAlert.this.selectedSticker.id), StickersAlert.this.stickerEmojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE), false));
                             }
+                            fav = StickersQuery.isStickerInFavorites(StickersAlert.this.selectedSticker);
+                            StickersAlert.this.previewFavButton.setImageResource(fav ? R.drawable.stickers_unfavorite : R.drawable.stickers_favorite);
+                            StickersAlert.this.previewFavButton.setTag(fav ? Integer.valueOf(1) : null);
+                            if (StickersAlert.this.previewFavButton.getVisibility() != 8) {
+                                access$3100 = StickersAlert.this.previewFavButton;
+                                i = (fav || StickersQuery.canAddStickerToFavorites()) ? 0 : 4;
+                                access$3100.setVisibility(i);
+                            }
                             StickersAlert.this.stickerImageView.getImageReceiver().setImage(StickersAlert.this.selectedSticker, null, StickersAlert.this.selectedSticker.thumb.location, null, "webp", 1);
                             layoutParams = (FrameLayout.LayoutParams) StickersAlert.this.stickerPreviewLayout.getLayoutParams();
                             layoutParams.topMargin = StickersAlert.this.scrollOffsetY;
@@ -542,6 +554,19 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                     }
                     if (set) {
                         StickersAlert.this.stickerEmojiTextView.setText(Emoji.replaceEmoji(StickersQuery.getEmojiForSticker(StickersAlert.this.selectedSticker.id), StickersAlert.this.stickerEmojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE), false));
+                    }
+                    fav = StickersQuery.isStickerInFavorites(StickersAlert.this.selectedSticker);
+                    if (fav) {
+                    }
+                    StickersAlert.this.previewFavButton.setImageResource(fav ? R.drawable.stickers_unfavorite : R.drawable.stickers_favorite);
+                    if (fav) {
+                    }
+                    StickersAlert.this.previewFavButton.setTag(fav ? Integer.valueOf(1) : null);
+                    if (StickersAlert.this.previewFavButton.getVisibility() != 8) {
+                        access$3100 = StickersAlert.this.previewFavButton;
+                        if (!fav) {
+                        }
+                        access$3100.setVisibility(i);
                     }
                     StickersAlert.this.stickerImageView.getImageReceiver().setImage(StickersAlert.this.selectedSticker, null, StickersAlert.this.selectedSticker.thumb.location, null, "webp", 1);
                     layoutParams = (FrameLayout.LayoutParams) StickersAlert.this.stickerPreviewLayout.getLayoutParams();
@@ -642,6 +667,22 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 StickersAlert.this.dismiss();
             }
         });
+        this.previewFavButton = new ImageView(context);
+        this.previewFavButton.setScaleType(ScaleType.CENTER);
+        this.stickerPreviewLayout.addView(this.previewFavButton, LayoutHelper.createFrame(48, 48.0f, 85, 0.0f, 0.0f, 4.0f, 0.0f));
+        this.previewFavButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), Mode.MULTIPLY));
+        this.previewFavButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                StickersQuery.addRecentSticker(2, StickersAlert.this.selectedSticker, (int) (System.currentTimeMillis() / 1000), StickersAlert.this.previewFavButton.getTag() != null);
+                if (StickersAlert.this.previewFavButton.getTag() == null) {
+                    StickersAlert.this.previewFavButton.setTag(Integer.valueOf(1));
+                    StickersAlert.this.previewFavButton.setImageResource(R.drawable.stickers_unfavorite);
+                    return;
+                }
+                StickersAlert.this.previewFavButton.setTag(null);
+                StickersAlert.this.previewFavButton.setImageResource(R.drawable.stickers_favorite);
+            }
+        });
         this.previewSendButtonShadow = new View(context);
         this.previewSendButtonShadow.setBackgroundResource(R.drawable.header_shadow_reverse);
         this.stickerPreviewLayout.addView(this.previewSendButtonShadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
@@ -658,6 +699,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             this.stickerImageView.setLayoutParams(LayoutHelper.createFrame(size, size, 17));
             this.stickerEmojiTextView.setLayoutParams(LayoutHelper.createFrame(size, size, 17));
             this.previewSendButton.setVisibility(8);
+            this.previewFavButton.setVisibility(8);
             this.previewSendButtonShadow.setVisibility(8);
             return;
         }
@@ -665,6 +707,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.stickerImageView.setLayoutParams(LayoutHelper.createFrame(size, (float) size, 17, 0.0f, 0.0f, 0.0f, BitmapDescriptorFactory.HUE_ORANGE));
         this.stickerEmojiTextView.setLayoutParams(LayoutHelper.createFrame(size, (float) size, 17, 0.0f, 0.0f, 0.0f, BitmapDescriptorFactory.HUE_ORANGE));
         this.previewSendButton.setVisibility(0);
+        this.previewFavButton.setVisibility(0);
         this.previewSendButtonShadow.setVisibility(0);
     }
 
@@ -673,8 +716,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     private void updateFields() {
-        Throwable e;
         SpannableStringBuilder spannableStringBuilder;
+        Throwable e;
         if (this.titleTextView != null) {
             if (this.stickerSet != null) {
                 spannableStringBuilder = null;
@@ -721,7 +764,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 }
                 textView.setText(spannableStringBuilder);
                 if (this.stickerSet.set != null || !StickersQuery.isStickerPackInstalled(this.stickerSet.set.id)) {
-                    OnClickListener anonymousClass17 = new OnClickListener() {
+                    OnClickListener anonymousClass18 = new OnClickListener() {
                         public void onClick(View v) {
                             StickersAlert.this.dismiss();
                             if (StickersAlert.this.installDelegate != null) {
@@ -771,7 +814,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                         }
                     };
                     String string = (this.stickerSet == null && this.stickerSet.set.masks) ? LocaleController.getString("AddMasks", R.string.AddMasks) : LocaleController.getString("AddStickers", R.string.AddStickers);
-                    setRightButton(anonymousClass17, string, Theme.getColor(Theme.key_dialogTextBlue2), true);
+                    setRightButton(anonymousClass18, string, Theme.getColor(Theme.key_dialogTextBlue2), true);
                 } else if (this.stickerSet.set.official) {
                     setRightButton(new OnClickListener() {
                         public void onClick(View v) {
@@ -807,10 +850,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         textView2.setText(spannableStringBuilder);
         if (this.stickerSet.set != null) {
         }
-        OnClickListener anonymousClass172 = /* anonymous class already generated */;
+        OnClickListener anonymousClass182 = /* anonymous class already generated */;
         if (this.stickerSet == null) {
         }
-        setRightButton(anonymousClass172, string, Theme.getColor(Theme.key_dialogTextBlue2), true);
+        setRightButton(anonymousClass182, string, Theme.getColor(Theme.key_dialogTextBlue2), true);
         this.adapter.notifyDataSetChanged();
     }
 

@@ -83,6 +83,7 @@ import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Chat;
+import org.telegram.tgnet.TLRPC.ChatFull;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.InputStickerSet;
@@ -128,6 +129,7 @@ import org.telegram.ui.Components.StickersAlert.StickersAlertDelegate;
 import org.telegram.ui.Components.VideoTimelineView.VideoTimelineViewDelegate;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.DialogsActivity.DialogsActivityDelegate;
+import org.telegram.ui.GroupStickersActivity;
 import org.telegram.ui.StickersActivity;
 
 public class ChatActivityEnterView extends FrameLayout implements NotificationCenterDelegate, SizeNotifierFrameLayoutDelegate, StickersAlertDelegate {
@@ -175,6 +177,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private boolean hasBotCommands;
     private boolean hasRecordVideo;
     private boolean ignoreTextChange;
+    private ChatFull info;
     private int innerTextChange;
     private boolean isPaused = true;
     private int keyboardHeight;
@@ -359,8 +362,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         z = false;
                     }
                     chatActivityEnterView.stickersTabOpen = z;
-                    if (!(prevOpen == ChatActivityEnterView.this.stickersTabOpen || curPage == 2)) {
-                        ChatActivityEnterView.this.checkSendButton(false);
+                    if (prevOpen != ChatActivityEnterView.this.stickersTabOpen) {
+                        ChatActivityEnterView.this.checkSendButton(true);
                     }
                     if (!ChatActivityEnterView.this.stickersTabOpen && ChatActivityEnterView.this.stickersExpanded) {
                         ChatActivityEnterView.this.setStickersExpanded(false, true);
@@ -1625,7 +1628,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     public void setOpenGifsTabFirst() {
         createEmojiView();
-        StickersQuery.loadRecents(0, true, true);
+        StickersQuery.loadRecents(0, true, true, false);
         this.emojiView.switchToGifRecent();
     }
 
@@ -1956,6 +1959,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
         checkRoundVideo();
         updateFieldHint();
+    }
+
+    public void setChatInfo(ChatFull chatInfo) {
+        this.info = chatInfo;
+        if (this.emojiView != null) {
+            this.emojiView.setChatInfo(this.info);
+        }
     }
 
     public void checkRoundVideo() {
@@ -3012,7 +3022,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r1 = messageObject;
                 r2 = button;
                 dialogsActivity.setDelegate(new DialogsActivityDelegate() {
-                    public void didSelectDialog(DialogsActivity fragment, long did, boolean param) {
+                    public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
                         int uid = r1.messageOwner.from_id;
                         if (r1.messageOwner.via_bot_id != 0) {
                             uid = r1.messageOwner.via_bot_id;
@@ -3022,6 +3032,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             fragment.finishFragment();
                             return;
                         }
+                        long did = ((Long) dids.get(0)).longValue();
                         DraftQuery.saveDraft(did, "@" + user.username + " " + r2.query, null, null, true);
                         if (did != ChatActivityEnterView.this.dialog_id) {
                             int lower_part = (int) did;
@@ -3066,7 +3077,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     private void createEmojiView() {
         if (this.emojiView == null) {
-            this.emojiView = new EmojiView(this.allowStickers, this.allowGifs, this.parentActivity);
+            this.emojiView = new EmojiView(this.allowStickers, this.allowGifs, this.parentActivity, this.info);
             this.emojiView.setVisibility(8);
             this.emojiView.setListener(new Listener() {
                 public boolean onBackspace() {
@@ -3100,7 +3111,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         ChatActivityEnterView.this.setStickersExpanded(false, true);
                     }
                     ChatActivityEnterView.this.onStickerSelected(sticker);
-                    StickersQuery.addRecentSticker(0, sticker, (int) (System.currentTimeMillis() / 1000));
+                    StickersQuery.addRecentSticker(0, sticker, (int) (System.currentTimeMillis() / 1000), false);
                     if (((int) ChatActivityEnterView.this.dialog_id) == 0) {
                         MessagesController.getInstance().saveGif(sticker);
                     }
@@ -3177,6 +3188,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
                 public void onStickerSetRemove(StickerSetCovered stickerSet) {
                     StickersQuery.removeStickersSet(ChatActivityEnterView.this.parentActivity, stickerSet.set, 0, ChatActivityEnterView.this.parentFragment, false);
+                }
+
+                public void onStickersGroupClick(int chatId) {
+                    if (ChatActivityEnterView.this.parentFragment != null) {
+                        if (AndroidUtilities.isTablet()) {
+                            ChatActivityEnterView.this.hidePopup(false);
+                        }
+                        GroupStickersActivity fragment = new GroupStickersActivity(chatId);
+                        fragment.setInfo(ChatActivityEnterView.this.info);
+                        ChatActivityEnterView.this.parentFragment.presentFragment(fragment);
+                    }
                 }
             });
             this.emojiView.setDragListener(new DragListener() {
@@ -3340,7 +3362,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     private void setEmojiButtonImage() {
         int currentPage;
-        boolean z = false;
         if (this.emojiView == null) {
             currentPage = getContext().getSharedPreferences("emoji", 0).getInt("selected_page", 0);
         } else {
@@ -3353,10 +3374,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         } else if (currentPage == 2) {
             this.emojiButton.setImageResource(R.drawable.ic_msg_panel_gif);
         }
-        if (currentPage == 1 || currentPage == 2) {
-            z = true;
-        }
-        this.stickersTabOpen = z;
     }
 
     public void hidePopup(boolean byBackButton) {

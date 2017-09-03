@@ -63,7 +63,7 @@ public class ActionBarMenu extends LinearLayout {
         menuItem.setTag(Integer.valueOf(id));
         if (drawable != null) {
             menuItem.iconView.setImageDrawable(drawable);
-        } else {
+        } else if (icon != 0) {
             menuItem.iconView.setImageResource(icon);
         }
         addView(menuItem, new LayoutParams(width, -1));

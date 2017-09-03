@@ -65,10 +65,8 @@ import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.EdgeEffect;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ScrollView;
-import android.widget.TextView;
 import com.android.internal.telephony.ITelephony;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.firebase.analytics.FirebaseAnalytics.Param;
@@ -736,18 +734,6 @@ Error: java.util.NoSuchElementException
             photoSize = Integer.valueOf(1280);
         }
         return photoSize.intValue();
-    }
-
-    public static void clearCursorDrawable(EditText editText) {
-        if (editText != null) {
-            try {
-                Field mCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
-                mCursorDrawableRes.setAccessible(true);
-                mCursorDrawableRes.setInt(editText, 0);
-            } catch (Throwable e) {
-                FileLog.e(e);
-            }
-        }
     }
 
     public static void endIncomingCall() {

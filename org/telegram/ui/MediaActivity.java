@@ -49,6 +49,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
@@ -273,9 +274,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     return;
                 }
                 TL_messages_search req = new TL_messages_search();
-                req.offset = 0;
                 req.limit = 50;
-                req.max_id = max_id;
+                req.offset_id = max_id;
                 if (this.currentType == 1) {
                     req.filter = new TL_inputMessagesFilterDocument();
                 } else if (this.currentType == 3) {
@@ -962,7 +962,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             }
         }
         this.sharedMediaData[0].loading = true;
-        SharedMediaQuery.loadMedia(this.dialog_id, 0, 50, 0, 0, true, this.classGuid);
+        SharedMediaQuery.loadMedia(this.dialog_id, 50, 0, 0, true, this.classGuid);
         return true;
     }
 
@@ -1147,48 +1147,59 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 } else if (id == 3) {
                     Bundle args = new Bundle();
                     args.putBoolean("onlySelect", true);
-                    args.putInt("dialogsType", 1);
+                    args.putBoolean("isForward", true);
                     BaseFragment dialogsActivity = new DialogsActivity(args);
                     dialogsActivity.setDelegate(new DialogsActivityDelegate() {
-                        public void didSelectDialog(DialogsActivity fragment, long did, boolean param) {
-                            int lower_part = (int) did;
-                            if (lower_part != 0) {
-                                Bundle args = new Bundle();
-                                args.putBoolean("scrollToTopOnResume", true);
-                                if (lower_part > 0) {
-                                    args.putInt("user_id", lower_part);
-                                } else if (lower_part < 0) {
-                                    args.putInt("chat_id", -lower_part);
-                                }
-                                if (MessagesController.checkCanOpenChat(args, fragment)) {
-                                    ArrayList<MessageObject> fmessages = new ArrayList();
-                                    for (int a = 1; a >= 0; a--) {
-                                        ArrayList<Integer> ids = new ArrayList(MediaActivity.this.selectedFiles[a].keySet());
-                                        Collections.sort(ids);
-                                        Iterator it = ids.iterator();
-                                        while (it.hasNext()) {
-                                            Integer id = (Integer) it.next();
-                                            if (id.intValue() > 0) {
-                                                fmessages.add(MediaActivity.this.selectedFiles[a].get(id));
-                                            }
-                                        }
-                                        MediaActivity.this.selectedFiles[a].clear();
+                        public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
+                            int a;
+                            ArrayList<MessageObject> fmessages = new ArrayList();
+                            for (a = 1; a >= 0; a--) {
+                                ArrayList<Integer> arrayList = new ArrayList(MediaActivity.this.selectedFiles[a].keySet());
+                                Collections.sort(arrayList);
+                                Iterator it = arrayList.iterator();
+                                while (it.hasNext()) {
+                                    Integer id = (Integer) it.next();
+                                    if (id.intValue() > 0) {
+                                        fmessages.add(MediaActivity.this.selectedFiles[a].get(id));
                                     }
-                                    MediaActivity.this.cantDeleteMessagesCount = 0;
-                                    MediaActivity.this.actionBar.hideActionMode();
-                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
-                                    ChatActivity chatActivity = new ChatActivity(args);
-                                    MediaActivity.this.presentFragment(chatActivity, true);
-                                    chatActivity.showReplyPanel(true, null, fmessages, null, false);
-                                    if (!AndroidUtilities.isTablet()) {
-                                        MediaActivity.this.removeSelfFromStack();
-                                        return;
-                                    }
-                                    return;
                                 }
+                                MediaActivity.this.selectedFiles[a].clear();
+                            }
+                            MediaActivity.this.cantDeleteMessagesCount = 0;
+                            MediaActivity.this.actionBar.hideActionMode();
+                            long did;
+                            if (dids.size() > 1 || message != null) {
+                                for (a = 0; a < dids.size(); a++) {
+                                    did = ((Long) dids.get(a)).longValue();
+                                    if (message != null) {
+                                        SendMessagesHelper.getInstance().sendMessage(message.toString(), did, null, null, true, null, null, null);
+                                    }
+                                    SendMessagesHelper.getInstance().sendMessage(fmessages, did);
+                                }
+                                fragment.finishFragment();
                                 return;
                             }
-                            fragment.finishFragment();
+                            did = ((Long) dids.get(0)).longValue();
+                            int lower_part = (int) did;
+                            int high_part = (int) (did >> 32);
+                            Bundle args = new Bundle();
+                            args.putBoolean("scrollToTopOnResume", true);
+                            if (lower_part == 0) {
+                                args.putInt("enc_id", high_part);
+                            } else if (lower_part > 0) {
+                                args.putInt("user_id", lower_part);
+                            } else if (lower_part < 0) {
+                                args.putInt("chat_id", -lower_part);
+                            }
+                            if (lower_part == 0 || MessagesController.checkCanOpenChat(args, fragment)) {
+                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                                ChatActivity chatActivity = new ChatActivity(args);
+                                MediaActivity.this.presentFragment(chatActivity, true);
+                                chatActivity.showReplyPanel(true, null, fmessages, null, false);
+                                if (!AndroidUtilities.isTablet()) {
+                                    MediaActivity.this.removeSelfFromStack();
+                                }
+                            }
                         }
                     });
                     MediaActivity.this.presentFragment(dialogsActivity);
@@ -1364,10 +1375,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         }
                         if (!MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].endReached[0]) {
                             MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].loading = true;
-                            SharedMediaQuery.loadMedia(MediaActivity.this.dialog_id, 0, 50, MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].max_id[0], type, true, MediaActivity.this.classGuid);
+                            SharedMediaQuery.loadMedia(MediaActivity.this.dialog_id, 50, MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].max_id[0], type, true, MediaActivity.this.classGuid);
                         } else if (MediaActivity.this.mergeDialogId != 0 && !MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].endReached[1]) {
                             MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].loading = true;
-                            SharedMediaQuery.loadMedia(MediaActivity.this.mergeDialogId, 0, 50, MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].max_id[1], type, true, MediaActivity.this.classGuid);
+                            SharedMediaQuery.loadMedia(MediaActivity.this.mergeDialogId, 50, MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].max_id[1], type, true, MediaActivity.this.classGuid);
                         }
                     }
                 }
@@ -1449,7 +1460,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 this.sharedMediaData[type].endReached[loadIndex] = ((Boolean) args[5]).booleanValue();
                 if (loadIndex == 0 && this.sharedMediaData[type].endReached[loadIndex] && this.mergeDialogId != 0) {
                     this.sharedMediaData[type].loading = true;
-                    SharedMediaQuery.loadMedia(this.mergeDialogId, 0, 50, this.sharedMediaData[type].max_id[1], type, true, this.classGuid);
+                    SharedMediaQuery.loadMedia(this.mergeDialogId, 50, this.sharedMediaData[type].max_id[1], type, true, this.classGuid);
                 }
                 if (!this.sharedMediaData[type].loading) {
                     if (this.progressView != null) {
@@ -1781,7 +1792,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 } else {
                     i = 4;
                 }
-                SharedMediaQuery.loadMedia(j, 0, 50, 0, i, true, this.classGuid);
+                SharedMediaQuery.loadMedia(j, 50, 0, i, true, this.classGuid);
             }
             this.listView.setVisibility(0);
             if (this.sharedMediaData[this.selectedMode].loading && this.sharedMediaData[this.selectedMode].messages.isEmpty()) {
@@ -1811,7 +1822,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             r1.setVisibility(r0);
             if (!(this.sharedMediaData[this.selectedMode].loading || this.sharedMediaData[this.selectedMode].endReached[0] || !this.sharedMediaData[this.selectedMode].messages.isEmpty())) {
                 this.sharedMediaData[this.selectedMode].loading = true;
-                SharedMediaQuery.loadMedia(this.dialog_id, 0, 50, 0, 3, true, this.classGuid);
+                SharedMediaQuery.loadMedia(this.dialog_id, 50, 0, 3, true, this.classGuid);
             }
             this.listView.setVisibility(0);
             if (this.sharedMediaData[this.selectedMode].loading && this.sharedMediaData[this.selectedMode].messages.isEmpty()) {

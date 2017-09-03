@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnPreDrawListener;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
@@ -56,6 +55,7 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.NumberPicker;
 import org.telegram.ui.Components.NumberPicker.Formatter;
@@ -84,7 +84,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     private int passcodeDetailRow;
     private int passcodeRow;
     private int passcodeSetStep = 0;
-    private EditText passwordEditText;
+    private EditTextBoldCursor passwordEditText;
     private int rowCount;
     private TextView titleTextView;
     private int type;
@@ -276,7 +276,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             this.titleTextView.setTextSize(1, 18.0f);
             this.titleTextView.setGravity(1);
             frameLayout.addView(this.titleTextView, LayoutHelper.createFrame(-2, -2.0f, 1, 0.0f, 38.0f, 0.0f, 0.0f));
-            this.passwordEditText = new EditText(context);
+            this.passwordEditText = new EditTextBoldCursor(context);
             this.passwordEditText.setTextSize(1, 20.0f);
             this.passwordEditText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.passwordEditText.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
@@ -293,7 +293,9 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             }
             this.passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
             this.passwordEditText.setTypeface(Typeface.DEFAULT);
-            AndroidUtilities.clearCursorDrawable(this.passwordEditText);
+            this.passwordEditText.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            this.passwordEditText.setCursorSize(AndroidUtilities.dp(20.0f));
+            this.passwordEditText.setCursorWidth(1.5f);
             frameLayout.addView(this.passwordEditText, LayoutHelper.createFrame(-1, 36.0f, 51, 40.0f, 90.0f, 40.0f, 0.0f));
             this.passwordEditText.setOnEditorActionListener(new OnEditorActionListener() {
                 public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {

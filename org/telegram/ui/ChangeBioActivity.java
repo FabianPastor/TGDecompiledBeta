@@ -14,7 +14,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,13 +39,14 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ChangeBioActivity extends BaseFragment {
     private static final int done_button = 1;
     private TextView checkTextView;
     private View doneButton;
-    private EditText firstNameField;
+    private EditTextBoldCursor firstNameField;
     private TextView helpTextView;
 
     public View createView(Context context) {
@@ -73,7 +73,7 @@ public class ChangeBioActivity extends BaseFragment {
         });
         FrameLayout fieldContainer = new FrameLayout(context);
         linearLayout.addView(fieldContainer, LayoutHelper.createLinear(-1, -2, 24.0f, 24.0f, 20.0f, 0.0f));
-        this.firstNameField = new EditText(context);
+        this.firstNameField = new EditTextBoldCursor(context);
         this.firstNameField.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -104,7 +104,9 @@ public class ChangeBioActivity extends BaseFragment {
         }});
         this.firstNameField.setMinHeight(AndroidUtilities.dp(36.0f));
         this.firstNameField.setHint(LocaleController.getString("UserBio", R.string.UserBio));
-        AndroidUtilities.clearCursorDrawable(this.firstNameField);
+        this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
+        this.firstNameField.setCursorWidth(1.5f);
         this.firstNameField.setOnEditorActionListener(new OnEditorActionListener() {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i != 6 || ChangeBioActivity.this.doneButton == null) {

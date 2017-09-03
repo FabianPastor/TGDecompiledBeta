@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="10595" android:versionName="4.2.2" android:installLocation="auto" package="org.telegram.messenger.beta" platformBuildVersionCode="25" platformBuildVersionName="7.1.1">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="10795" android:versionName="4.3.0" android:installLocation="auto" package="org.telegram.messenger.beta" platformBuildVersionCode="25" platformBuildVersionName="7.1.1">
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="25" />
     <uses-feature android:name="android.hardware.location.gps" android:required="false" />
     <uses-feature android:name="android.hardware.location.network" android:required="false" />
@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.WRITE_CALL_LOG" />
     <permission android:name="org.telegram.messenger.permission.MAPS_RECEIVE" android:protectionLevel="signature|signatureOrSystem" />
@@ -198,6 +199,7 @@
         <receiver android:name="org.telegram.messenger.SmsListener">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+                <action android:name="android.provider.Telephony.NEW_OUTGOING_SMS" />
             </intent-filter>
         </receiver>
         <service android:name="org.telegram.messenger.AuthenticatorService" android:exported="true">
@@ -265,7 +267,9 @@
         <receiver android:name="org.telegram.messenger.WearReplyReceiver" android:enabled="true" />
         <receiver android:name="org.telegram.messenger.PopupReplyReceiver" android:enabled="true" />
         <receiver android:name="org.telegram.messenger.ShareBroadcastReceiver" android:enabled="true" />
+        <receiver android:name="org.telegram.messenger.CustomTabsCopyReceiver" android:enabled="true" />
         <receiver android:name="org.telegram.messenger.NotificationDismissReceiver" android:exported="false" />
+        <receiver android:name="org.telegram.messenger.voip.VoIPActionsReceiver" android:exported="false" />
         <provider android:name="android.support.v4.content.FileProvider" android:exported="false" android:authorities="org.telegram.messenger.beta.provider" android:grantUriPermissions="true">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider_paths" />
         </provider>

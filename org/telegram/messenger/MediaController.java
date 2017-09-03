@@ -16,7 +16,6 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
-import android.graphics.Point;
 import android.graphics.SurfaceTexture;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -98,7 +97,9 @@ import org.telegram.tgnet.TLRPC.messages_Messages;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.EmbedBottomSheet;
+import org.telegram.ui.Components.PhotoFilterView.CurvesToolValue;
 import org.telegram.ui.Components.PipRoundVideoView;
+import org.telegram.ui.Components.Point;
 import org.telegram.ui.Components.VideoPlayer;
 import org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate;
 import org.telegram.ui.PhotoViewer;
@@ -130,6 +131,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     private static final String[] projectionPhotos = new String[]{"_id", "bucket_id", "bucket_display_name", "_data", "datetaken", "orientation"};
     private static final String[] projectionVideo = new String[]{"_id", "bucket_id", "bucket_display_name", "_data", "datetaken", "duration"};
     public static int[] readArgs = new int[3];
+    private static Runnable refreshGalleryRunnable;
     private Sensor accelerometerSensor;
     private boolean accelerometerVertical;
     private HashMap<String, FileDownloadProgressListener> addLaterArray = new HashMap();
@@ -327,7 +329,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     private long recordTimeCount;
     private TL_document recordingAudio;
     private File recordingAudioFile;
-    private Runnable refreshGalleryRunnable;
     private int repeatMode;
     private boolean resumeAudioOnFocusGain;
     public int roamingDownloadMask = 0;
@@ -338,6 +339,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     private boolean sensorsStarted;
     private boolean shuffleMusic;
     private ArrayList<MessageObject> shuffledPlaylist = new ArrayList();
+    private SmsObserver smsObserver;
     private int startObserverToken;
     private StopMediaObserverRunnable stopMediaObserverRunnable;
     private final Object sync = new Object();
@@ -429,12 +431,12 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
 
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
-            if (MediaController.this.refreshGalleryRunnable != null) {
-                AndroidUtilities.cancelRunOnUIThread(MediaController.this.refreshGalleryRunnable);
+            if (MediaController.refreshGalleryRunnable != null) {
+                AndroidUtilities.cancelRunOnUIThread(MediaController.refreshGalleryRunnable);
             }
-            AndroidUtilities.runOnUIThread(MediaController.this.refreshGalleryRunnable = new Runnable() {
+            AndroidUtilities.runOnUIThread(MediaController.refreshGalleryRunnable = new Runnable() {
                 public void run() {
-                    MediaController.this.refreshGalleryRunnable = null;
+                    MediaController.refreshGalleryRunnable = null;
                     MediaController.loadGalleryPhotosAlbums(0);
                 }
             }, 2000);
@@ -447,13 +449,13 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         }
 
         private void scheduleReloadRunnable() {
-            AndroidUtilities.runOnUIThread(MediaController.this.refreshGalleryRunnable = new Runnable() {
+            AndroidUtilities.runOnUIThread(MediaController.refreshGalleryRunnable = new Runnable() {
                 public void run() {
                     if (PhotoViewer.getInstance().isVisible()) {
                         GalleryObserverInternal.this.scheduleReloadRunnable();
                         return;
                     }
-                    MediaController.this.refreshGalleryRunnable = null;
+                    MediaController.refreshGalleryRunnable = null;
                     MediaController.loadGalleryPhotosAlbums(0);
                 }
             }, 2000);
@@ -461,8 +463,8 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
 
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
-            if (MediaController.this.refreshGalleryRunnable != null) {
-                AndroidUtilities.cancelRunOnUIThread(MediaController.this.refreshGalleryRunnable);
+            if (MediaController.refreshGalleryRunnable != null) {
+                AndroidUtilities.cancelRunOnUIThread(MediaController.refreshGalleryRunnable);
             }
             scheduleReloadRunnable();
         }
@@ -493,6 +495,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         public boolean isVideo;
         public int orientation;
         public String path;
+        public SavedFilterState savedFilterState;
         public ArrayList<InputDocument> stickers = new ArrayList();
         public String thumbPath;
         public int ttl;
@@ -518,8 +521,31 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             this.imagePath = null;
             this.thumbPath = null;
             this.caption = null;
+            this.savedFilterState = null;
             this.stickers.clear();
         }
+    }
+
+    public static class SavedFilterState {
+        public float blurAngle;
+        public float blurExcludeBlurSize;
+        public Point blurExcludePoint;
+        public float blurExcludeSize;
+        public int blurType;
+        public float contrastValue;
+        public CurvesToolValue curvesToolValue = new CurvesToolValue();
+        public float enhanceValue;
+        public float exposureValue;
+        public float fadeValue;
+        public float grainValue;
+        public float highlightsValue;
+        public float saturationValue;
+        public float shadowsValue;
+        public float sharpenValue;
+        public int tintHighlightsColor;
+        public int tintShadowsColor;
+        public float vignetteValue;
+        public float warmthValue;
     }
 
     public static class SearchImage {
@@ -534,6 +560,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         public boolean isFiltered;
         public boolean isPainted;
         public String localUrl;
+        public SavedFilterState savedFilterState;
         public int size;
         public ArrayList<InputDocument> stickers = new ArrayList();
         public String thumbPath;
@@ -541,6 +568,16 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         public int ttl;
         public int type;
         public int width;
+    }
+
+    private class SmsObserver extends ContentObserver {
+        public SmsObserver() {
+            super(null);
+        }
+
+        public void onChange(boolean selfChange) {
+            MediaController.this.readSms();
+        }
     }
 
     private final class StopMediaObserverRunnable implements Runnable {
@@ -619,6 +656,58 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     public native byte[] getWaveform(String str);
 
     public native byte[] getWaveform2(short[] sArr, int i);
+
+    private void readSms() {
+    }
+
+    public static void checkGallery() {
+        if (VERSION.SDK_INT >= 24 && allPhotosAlbumEntry != null) {
+            Utilities.globalQueue.postRunnable(new Runnable() {
+                @SuppressLint({"NewApi"})
+                public void run() {
+                    int count = 0;
+                    Cursor cursor = null;
+                    try {
+                        if (ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
+                            cursor = Media.query(ApplicationLoader.applicationContext.getContentResolver(), Media.EXTERNAL_CONTENT_URI, new String[]{"COUNT(_id)"}, null, null, null);
+                            if (cursor != null && cursor.moveToNext()) {
+                                count = 0 + cursor.getInt(0);
+                            }
+                        }
+                        if (cursor != null) {
+                            cursor.close();
+                        }
+                    } catch (Throwable th) {
+                        if (cursor != null) {
+                            cursor.close();
+                        }
+                    }
+                    try {
+                        if (ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
+                            cursor = Media.query(ApplicationLoader.applicationContext.getContentResolver(), Video.Media.EXTERNAL_CONTENT_URI, new String[]{"COUNT(_id)"}, null, null, null);
+                            if (cursor != null && cursor.moveToNext()) {
+                                count += cursor.getInt(0);
+                            }
+                        }
+                        if (cursor != null) {
+                            cursor.close();
+                        }
+                    } catch (Throwable th2) {
+                        if (cursor != null) {
+                            cursor.close();
+                        }
+                    }
+                    if (MediaController.allPhotosAlbumEntry.photos.size() != count) {
+                        if (MediaController.refreshGalleryRunnable != null) {
+                            AndroidUtilities.cancelRunOnUIThread(MediaController.refreshGalleryRunnable);
+                            MediaController.refreshGalleryRunnable = null;
+                        }
+                        MediaController.loadGalleryPhotosAlbums(0);
+                    }
+                }
+            }, 2000);
+        }
+    }
 
     public static MediaController getInstance() {
         MediaController localInstance = Instance;
@@ -725,14 +814,24 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         }
         this.mediaProjections = new String[]{"_data", "_display_name", "bucket_display_name", "datetaken", "title", "width", "height"};
         try {
-            ApplicationLoader.applicationContext.getContentResolver().registerContentObserver(Media.EXTERNAL_CONTENT_URI, false, new GalleryObserverExternal());
+            ApplicationLoader.applicationContext.getContentResolver().registerContentObserver(Media.EXTERNAL_CONTENT_URI, true, new GalleryObserverExternal());
         } catch (Throwable e22) {
             FileLog.e(e22);
         }
         try {
-            ApplicationLoader.applicationContext.getContentResolver().registerContentObserver(Media.INTERNAL_CONTENT_URI, false, new GalleryObserverInternal());
+            ApplicationLoader.applicationContext.getContentResolver().registerContentObserver(Media.INTERNAL_CONTENT_URI, true, new GalleryObserverInternal());
         } catch (Throwable e222) {
             FileLog.e(e222);
+        }
+        try {
+            ApplicationLoader.applicationContext.getContentResolver().registerContentObserver(Video.Media.EXTERNAL_CONTENT_URI, true, new GalleryObserverExternal());
+        } catch (Throwable e2222) {
+            FileLog.e(e2222);
+        }
+        try {
+            ApplicationLoader.applicationContext.getContentResolver().registerContentObserver(Video.Media.INTERNAL_CONTENT_URI, true, new GalleryObserverInternal());
+        } catch (Throwable e22222) {
+            FileLog.e(e22222);
         }
         try {
             PhoneStateListener phoneStateListener = new PhoneStateListener() {
@@ -768,8 +867,8 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             if (mgr != null) {
                 mgr.listen(phoneStateListener, 32);
             }
-        } catch (Throwable e2222) {
-            FileLog.e(e2222);
+        } catch (Throwable e222222) {
+            FileLog.e(e222222);
         }
     }
 
@@ -1189,6 +1288,32 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         }
     }
 
+    public void startSmsObserver() {
+        try {
+            if (this.smsObserver == null) {
+                ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
+                Uri parse = Uri.parse("content://sms");
+                ContentObserver smsObserver = new SmsObserver();
+                this.smsObserver = smsObserver;
+                contentResolver.registerContentObserver(parse, false, smsObserver);
+            }
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public void run() {
+                    try {
+                        if (MediaController.this.smsObserver != null) {
+                            ApplicationLoader.applicationContext.getContentResolver().unregisterContentObserver(MediaController.this.smsObserver);
+                            MediaController.this.smsObserver = null;
+                        }
+                    } catch (Throwable e) {
+                        FileLog.e(e);
+                    }
+                }
+            }, 300000);
+        } catch (Throwable e) {
+            FileLog.e(e);
+        }
+    }
+
     public void stopMediaObserver() {
         if (this.stopMediaObserverRunnable == null) {
             this.stopMediaObserverRunnable = new StopMediaObserverRunnable();
@@ -1199,7 +1324,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
 
     private void processMediaObserver(Uri uri) {
         try {
-            Point size = AndroidUtilities.getRealScreenSize();
+            android.graphics.Point size = AndroidUtilities.getRealScreenSize();
             Cursor cursor = ApplicationLoader.applicationContext.getContentResolver().query(uri, this.mediaProjections, null, null, "date_added DESC LIMIT 1");
             ArrayList<Long> screenshotDates = new ArrayList();
             if (cursor != null) {
@@ -2430,7 +2555,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         }
         if ((this.audioTrackPlayer == null && this.audioPlayer == null && this.videoPlayer == null) || this.playingMessageObject == null || messageObject.getId() != this.playingMessageObject.getId()) {
             File cacheFile;
-            if (!messageObject.isOut() && messageObject.isContentUnread() && messageObject.messageOwner.to_id.channel_id == 0) {
+            if (!messageObject.isOut() && messageObject.isContentUnread()) {
                 MessagesController.getInstance().markMessageContentAsRead(messageObject);
             }
             boolean notify = !this.playMusicAgain;
@@ -2981,7 +3106,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             FileLog.e(e);
         }
         DispatchQueue dispatchQueue = this.recordQueue;
-        Runnable anonymousClass20 = new Runnable() {
+        Runnable anonymousClass22 = new Runnable() {
             public void run() {
                 if (MediaController.this.audioRecorder != null) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -3048,11 +3173,11 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 }
             }
         };
-        this.recordStartRunnable = anonymousClass20;
+        this.recordStartRunnable = anonymousClass22;
         if (paused) {
             j = 500;
         }
-        dispatchQueue.postRunnable(anonymousClass20, j);
+        dispatchQueue.postRunnable(anonymousClass22, j);
     }
 
     public void generateWaveform(MessageObject messageObject) {
@@ -4134,7 +4259,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         final Integer num = cameraAlbumIdFinal;
         final AlbumEntry albumEntry = allMediaAlbumFinal;
         final AlbumEntry albumEntry2 = allPhotosAlbumFinal;
-        Runnable anonymousClass27 = new Runnable() {
+        Runnable anonymousClass29 = new Runnable() {
             public void run() {
                 if (PhotoViewer.getInstance().isVisible()) {
                     MediaController.broadcastNewPhotos(i, arrayList, arrayList2, num, albumEntry, albumEntry2, 1000);
@@ -4146,8 +4271,8 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.albumsDidLoaded, Integer.valueOf(i), arrayList, arrayList2, num);
             }
         };
-        broadcastPhotosRunnable = anonymousClass27;
-        AndroidUtilities.runOnUIThread(anonymousClass27, (long) delay);
+        broadcastPhotosRunnable = anonymousClass29;
+        AndroidUtilities.runOnUIThread(anonymousClass29, (long) delay);
     }
 
     public void scheduleVideoConvert(MessageObject messageObject) {
@@ -4413,6 +4538,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean convertVideo(MessageObject messageObject) {
+        long videoStartTime;
         Throwable e;
         Throwable th;
         String videoPath = messageObject.videoEditedInfo.originalPath;
@@ -4464,7 +4590,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         }
         this.videoConvertFirstWrite = true;
         boolean error = false;
-        long videoStartTime = startTime;
+        long videoStartTime2 = startTime;
         long time = System.currentTimeMillis();
         if (resultWidth == 0 || resultHeight == 0) {
             preferences.edit().putBoolean("isPreviousOk", true).commit();
@@ -4473,7 +4599,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         }
         MP4Builder mP4Builder = null;
         MediaExtractor extractor = null;
-        long videoStartTime2;
         try {
             BufferInfo info = new BufferInfo();
             Mp4Movie movie = new Mp4Movie();
@@ -4489,9 +4614,9 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 if (resultWidth == originalWidth && resultHeight == originalHeight && rotateRender == 0 && !messageObject.videoEditedInfo.roundVideo) {
                     videoTime = readAndWriteTrack(messageObject, extractor2, mP4Builder, info, startTime, endTime, file, false);
                     if (videoTime != -1) {
-                        videoStartTime2 = videoTime;
+                        videoStartTime = videoTime;
                     }
-                    videoStartTime2 = videoStartTime;
+                    videoStartTime = videoStartTime2;
                 } else {
                     int videoIndex = selectTrack(extractor2, false);
                     if (videoIndex >= 0) {
@@ -4592,7 +4717,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                 inputSurface = inputSurface2;
                                 FileLog.e(e);
                                 error = true;
-                                videoStartTime2 = videoStartTime;
+                                videoStartTime = videoStartTime2;
                                 extractor2.unselectTrack(videoIndex);
                                 if (outputSurface != null) {
                                     outputSurface.release();
@@ -4609,7 +4734,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                     encoder.release();
                                 }
                                 checkConversionCanceled();
-                                readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime2, endTime, file, true);
+                                readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime, endTime, file, true);
                                 if (extractor2 != null) {
                                     extractor2.release();
                                 }
@@ -4628,7 +4753,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             } catch (Throwable th2) {
                                 th = th2;
                                 extractor = extractor2;
-                                videoStartTime2 = videoStartTime;
+                                videoStartTime = videoStartTime2;
                             }
                         }
                         try {
@@ -4818,16 +4943,16 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                 }
                             }
                             if (videoTime != -1) {
-                                videoStartTime2 = videoTime;
+                                videoStartTime = videoTime;
                             } else {
-                                videoStartTime2 = videoStartTime;
+                                videoStartTime = videoStartTime2;
                             }
                         } catch (Exception e4) {
                             e3 = e4;
                         } catch (Throwable th22) {
                             th = th22;
                             extractor = extractor2;
-                            videoStartTime2 = videoStartTime;
+                            videoStartTime = videoStartTime2;
                         }
                         try {
                             extractor2.unselectTrack(videoIndex);
@@ -4894,10 +5019,10 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             throw th;
                         }
                     }
-                    videoStartTime2 = videoStartTime;
+                    videoStartTime = videoStartTime2;
                 }
                 if (!(error || bitrate == -1)) {
-                    readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime2, endTime, file, true);
+                    readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime, endTime, file, true);
                 }
                 if (extractor2 != null) {
                     extractor2.release();
@@ -4910,7 +5035,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             } catch (Exception e6) {
                 e322 = e6;
                 extractor = extractor2;
-                videoStartTime2 = videoStartTime;
+                videoStartTime = videoStartTime2;
                 error = true;
                 FileLog.e(e322);
                 if (extractor != null) {
@@ -4926,11 +5051,11 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             } catch (Throwable th222) {
                 th = th222;
                 extractor = extractor2;
-                videoStartTime2 = videoStartTime;
+                videoStartTime = videoStartTime2;
             }
         } catch (Exception e7) {
             e322 = e7;
-            videoStartTime2 = videoStartTime;
+            videoStartTime = videoStartTime2;
             error = true;
             FileLog.e(e322);
             if (extractor != null) {
@@ -4945,7 +5070,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             return true;
         } catch (Throwable th5) {
             th = th5;
-            videoStartTime2 = videoStartTime;
+            videoStartTime = videoStartTime2;
             if (extractor != null) {
                 extractor.release();
             }

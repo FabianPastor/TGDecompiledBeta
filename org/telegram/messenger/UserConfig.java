@@ -17,7 +17,9 @@ public class UserConfig {
     public static boolean appLocked;
     public static int autoLockIn = 3600;
     public static boolean blockedUsersLoaded;
-    public static String contactsHash = "";
+    public static int botRatingLoadTime;
+    public static boolean contactsReimported;
+    public static int contactsSavedCount;
     private static User currentUser;
     public static long dialogsLoadOffsetAccess = 0;
     public static int dialogsLoadOffsetChannelId = 0;
@@ -47,6 +49,7 @@ public class UserConfig {
     public static int passcodeType;
     public static boolean pinnedDialogsLoaded = true;
     public static String pushString = "";
+    public static int ratingLoadTime;
     public static boolean registeredForPush;
     public static boolean saveIncomingPhotos;
     private static final Object sync = new Object();
@@ -76,7 +79,7 @@ public class UserConfig {
                 editor.putString("pushString2", pushString);
                 editor.putInt("lastSendMessageId", lastSendMessageId);
                 editor.putInt("lastLocalId", lastLocalId);
-                editor.putString("contactsHash", contactsHash);
+                editor.putInt("contactsSavedCount", contactsSavedCount);
                 editor.putBoolean("saveIncomingPhotos", saveIncomingPhotos);
                 editor.putInt("lastBroadcastId", lastBroadcastId);
                 editor.putBoolean("blockedUsersLoaded", blockedUsersLoaded);
@@ -95,6 +98,9 @@ public class UserConfig {
                 editor.putBoolean("notificationsConverted", notificationsConverted);
                 editor.putBoolean("allowScreenCapture", allowScreenCapture);
                 editor.putBoolean("pinnedDialogsLoaded", pinnedDialogsLoaded);
+                editor.putInt("ratingLoadTime", ratingLoadTime);
+                editor.putInt("botRatingLoadTime", botRatingLoadTime);
+                editor.putBoolean("contactsReimported", contactsReimported);
                 editor.putInt("3migrateOffsetId", migrateOffsetId);
                 if (migrateOffsetId != -1) {
                     editor.putInt("3migrateOffsetDate", migrateOffsetDate);
@@ -184,7 +190,7 @@ public class UserConfig {
                         pushString = data.readString(false);
                         lastSendMessageId = data.readInt32(false);
                         lastLocalId = data.readInt32(false);
-                        contactsHash = data.readString(false);
+                        data.readString(false);
                         data.readString(false);
                         saveIncomingPhotos = data.readBool(false);
                         MessagesStorage.lastQtsValue = data.readInt32(false);
@@ -205,7 +211,7 @@ public class UserConfig {
                         pushString = preferences.getString("pushString2", "");
                         lastSendMessageId = preferences.getInt("lastSendMessageId", -210000);
                         lastLocalId = preferences.getInt("lastLocalId", -210000);
-                        contactsHash = preferences.getString("contactsHash", "");
+                        contactsSavedCount = preferences.getInt("contactsHash", 0);
                         saveIncomingPhotos = preferences.getBoolean("saveIncomingPhotos", false);
                     }
                     if (lastLocalId > -210000) {
@@ -230,7 +236,7 @@ public class UserConfig {
                 pushString = preferences.getString("pushString2", "");
                 lastSendMessageId = preferences.getInt("lastSendMessageId", -210000);
                 lastLocalId = preferences.getInt("lastLocalId", -210000);
-                contactsHash = preferences.getString("contactsHash", "");
+                contactsSavedCount = preferences.getInt("contactsSavedCount", 0);
                 saveIncomingPhotos = preferences.getBoolean("saveIncomingPhotos", false);
                 lastBroadcastId = preferences.getInt("lastBroadcastId", -1);
                 blockedUsersLoaded = preferences.getBoolean("blockedUsersLoaded", false);
@@ -248,6 +254,9 @@ public class UserConfig {
                 notificationsConverted = preferences.getBoolean("notificationsConverted", false);
                 allowScreenCapture = preferences.getBoolean("allowScreenCapture", false);
                 pinnedDialogsLoaded = preferences.getBoolean("pinnedDialogsLoaded", false);
+                contactsReimported = preferences.getBoolean("contactsReimported", false);
+                ratingLoadTime = preferences.getInt("ratingLoadTime", 0);
+                botRatingLoadTime = preferences.getInt("botRatingLoadTime", 0);
                 if (passcodeHash.length() > 0 && lastPauseTime == 0) {
                     lastPauseTime = (int) ((System.currentTimeMillis() / 1000) - 600);
                 }
@@ -397,7 +406,7 @@ public class UserConfig {
     public static void clearConfig() {
         currentUser = null;
         registeredForPush = false;
-        contactsHash = "";
+        contactsSavedCount = 0;
         lastSendMessageId = -210000;
         lastBroadcastId = -1;
         saveIncomingPhotos = false;
@@ -415,6 +424,8 @@ public class UserConfig {
         dialogsLoadOffsetChatId = 0;
         dialogsLoadOffsetChannelId = 0;
         dialogsLoadOffsetAccess = 0;
+        ratingLoadTime = 0;
+        botRatingLoadTime = 0;
         appLocked = false;
         passcodeType = 0;
         passcodeHash = "";
@@ -424,6 +435,7 @@ public class UserConfig {
         useFingerprint = true;
         draftsLoaded = true;
         notificationsConverted = true;
+        contactsReimported = true;
         isWaitingForPasscodeEnter = false;
         allowScreenCapture = false;
         pinnedDialogsLoaded = false;

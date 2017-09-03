@@ -10,6 +10,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.wallet.WalletConstants;
 import org.telegram.messenger.AndroidUtilities;
@@ -65,9 +66,12 @@ import org.telegram.tgnet.TLRPC.TL_updateUserName;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.CacheControlActivity;
 import org.telegram.ui.Cells.RadioColorCell;
 import org.telegram.ui.Cells.TextColorCell;
 import org.telegram.ui.Components.NumberPicker.Formatter;
+import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.ReportOtherActivity;
 
 public class AlertsCreator {
@@ -757,7 +761,7 @@ public class AlertsCreator {
             RadioColorCell cell = new RadioColorCell(parentActivity);
             cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
             cell.setTag(Integer.valueOf(a));
-            cell.setCheckColor(-5000269, -13129232);
+            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
             cell.setTextAndValue(descriptions[a], selected[0] == a);
             linearLayout.addView(cell);
             final long j = dialog_id;
@@ -807,6 +811,84 @@ public class AlertsCreator {
         return builder.create();
     }
 
+    public static Dialog createFreeSpaceDialog(LaunchActivity parentActivity) {
+        final int[] selected = new int[1];
+        int keepMedia = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("keep_media", 2);
+        if (keepMedia == 2) {
+            selected[0] = 3;
+        } else if (keepMedia == 0) {
+            selected[0] = 1;
+        } else if (keepMedia == 1) {
+            selected[0] = 2;
+        } else if (keepMedia == 3) {
+            selected[0] = 0;
+        }
+        String[] descriptions = new String[]{LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("LowDiskSpaceNeverRemove", R.string.LowDiskSpaceNeverRemove)};
+        final LinearLayout linearLayout = new LinearLayout(parentActivity);
+        linearLayout.setOrientation(1);
+        View titleTextView = new TextView(parentActivity);
+        titleTextView.setText(LocaleController.getString("LowDiskSpaceTitle2", R.string.LowDiskSpaceTitle2));
+        titleTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        titleTextView.setTextSize(1, 16.0f);
+        titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        titleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        linearLayout.addView(titleTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, 0, 24, 8));
+        int a = 0;
+        while (a < descriptions.length) {
+            RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
+            cell.setTag(Integer.valueOf(a));
+            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
+            cell.setTextAndValue(descriptions[a], selected[0] == a);
+            linearLayout.addView(cell);
+            cell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    int num = ((Integer) v.getTag()).intValue();
+                    if (num == 0) {
+                        selected[0] = 3;
+                    } else if (num == 1) {
+                        selected[0] = 0;
+                    } else if (num == 2) {
+                        selected[0] = 1;
+                    } else if (num == 3) {
+                        selected[0] = 2;
+                    }
+                    int count = linearLayout.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        View child = linearLayout.getChildAt(a);
+                        if (child instanceof RadioColorCell) {
+                            boolean z;
+                            RadioColorCell radioColorCell = (RadioColorCell) child;
+                            if (child == v) {
+                                z = true;
+                            } else {
+                                z = false;
+                            }
+                            radioColorCell.setChecked(z, true);
+                        }
+                    }
+                }
+            });
+            a++;
+        }
+        Builder builder = new Builder(parentActivity);
+        builder.setTitle(LocaleController.getString("LowDiskSpaceTitle", R.string.LowDiskSpaceTitle));
+        builder.setMessage(LocaleController.getString("LowDiskSpaceMessage", R.string.LowDiskSpaceMessage));
+        builder.setView(linearLayout);
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putInt("keep_media", selected[0]).commit();
+            }
+        });
+        final LaunchActivity launchActivity = parentActivity;
+        builder.setNeutralButton(LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache), new OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                launchActivity.presentFragment(new CacheControlActivity());
+            }
+        });
+        return builder.create();
+    }
+
     public static Dialog createPrioritySelectDialog(Activity parentActivity, BaseFragment parentFragment, long dialog_id, boolean globalGroup, boolean globalAll, Runnable onSelect) {
         String[] descriptions;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
@@ -834,7 +916,7 @@ public class AlertsCreator {
             RadioColorCell cell = new RadioColorCell(parentActivity);
             cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
             cell.setTag(Integer.valueOf(a));
-            cell.setCheckColor(-5000269, -13129232);
+            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
             cell.setTextAndValue(descriptions[a], selected[0] == a);
             linearLayout.addView(cell);
             final long j = dialog_id;
@@ -890,7 +972,7 @@ public class AlertsCreator {
             RadioColorCell cell = new RadioColorCell(parentActivity);
             cell.setTag(Integer.valueOf(a));
             cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
-            cell.setCheckColor(-5000269, -13129232);
+            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
             cell.setTextAndValue(descriptions[a], selected[0] == a);
             linearLayout.addView(cell);
             cell.setOnClickListener(new View.OnClickListener() {
@@ -924,7 +1006,7 @@ public class AlertsCreator {
             RadioColorCell cell = new RadioColorCell(parentActivity);
             cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
             cell.setTag(Integer.valueOf(a));
-            cell.setCheckColor(-5000269, -13129232);
+            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
             String str = options[a];
             if (selected == a) {
                 z = true;

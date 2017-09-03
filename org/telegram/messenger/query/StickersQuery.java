@@ -36,9 +36,12 @@ import org.telegram.tgnet.TLRPC.TL_inputDocument;
 import org.telegram.tgnet.TLRPC.TL_inputStickerSetID;
 import org.telegram.tgnet.TLRPC.TL_messages_allStickers;
 import org.telegram.tgnet.TLRPC.TL_messages_archivedStickers;
+import org.telegram.tgnet.TLRPC.TL_messages_faveSticker;
+import org.telegram.tgnet.TLRPC.TL_messages_favedStickers;
 import org.telegram.tgnet.TLRPC.TL_messages_featuredStickers;
 import org.telegram.tgnet.TLRPC.TL_messages_getAllStickers;
 import org.telegram.tgnet.TLRPC.TL_messages_getArchivedStickers;
+import org.telegram.tgnet.TLRPC.TL_messages_getFavedStickers;
 import org.telegram.tgnet.TLRPC.TL_messages_getFeaturedStickers;
 import org.telegram.tgnet.TLRPC.TL_messages_getMaskStickers;
 import org.telegram.tgnet.TLRPC.TL_messages_getRecentStickers;
@@ -57,6 +60,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.StickersArchiveAlert;
 
 public class StickersQuery {
+    public static final int TYPE_FAVE = 2;
     public static final int TYPE_IMAGE = 0;
     public static final int TYPE_MASK = 1;
     private static HashMap<String, ArrayList<Document>> allStickers = new HashMap();
@@ -64,19 +68,20 @@ public class StickersQuery {
     private static ArrayList<StickerSetCovered> featuredStickerSets = new ArrayList();
     private static HashMap<Long, StickerSetCovered> featuredStickerSetsById = new HashMap();
     private static boolean featuredStickersLoaded;
+    private static HashMap<Long, TL_messages_stickerSet> groupStickerSets = new HashMap();
     private static int[] loadDate = new int[2];
     private static int loadFeaturedDate;
     private static int loadFeaturedHash;
     private static int[] loadHash = new int[2];
     private static boolean loadingFeaturedStickers;
     private static boolean loadingRecentGifs;
-    private static boolean[] loadingRecentStickers = new boolean[2];
+    private static boolean[] loadingRecentStickers = new boolean[3];
     private static boolean[] loadingStickers = new boolean[2];
     private static ArrayList<Long> readingStickerSets = new ArrayList();
     private static ArrayList<Document> recentGifs = new ArrayList();
     private static boolean recentGifsLoaded;
-    private static ArrayList<Document>[] recentStickers = new ArrayList[]{new ArrayList(), new ArrayList()};
-    private static boolean[] recentStickersLoaded = new boolean[2];
+    private static ArrayList<Document>[] recentStickers = new ArrayList[]{new ArrayList(), new ArrayList(), new ArrayList()};
+    private static boolean[] recentStickersLoaded = new boolean[3];
     private static ArrayList<TL_messages_stickerSet>[] stickerSets = new ArrayList[]{new ArrayList(), new ArrayList()};
     private static HashMap<Long, TL_messages_stickerSet> stickerSetsById = new HashMap();
     private static HashMap<String, TL_messages_stickerSet> stickerSetsByName = new HashMap();
@@ -85,15 +90,18 @@ public class StickersQuery {
     private static ArrayList<Long> unreadStickerSets = new ArrayList();
 
     public static void cleanup() {
-        for (int a = 0; a < 2; a++) {
+        int a;
+        for (a = 0; a < 3; a++) {
+            recentStickers[a].clear();
+            loadingRecentStickers[a] = false;
+            recentStickersLoaded[a] = false;
+        }
+        for (a = 0; a < 2; a++) {
             loadHash[a] = 0;
             loadDate[a] = 0;
             stickerSets[a].clear();
-            recentStickers[a].clear();
             loadingStickers[a] = false;
             stickersLoaded[a] = false;
-            loadingRecentStickers[a] = false;
-            recentStickersLoaded[a] = false;
         }
         loadFeaturedDate = 0;
         loadFeaturedHash = 0;
@@ -135,34 +143,79 @@ public class StickersQuery {
         return recentStickers[type];
     }
 
-    public static void addRecentSticker(int type, Document document, int date) {
+    public static boolean isStickerInFavorites(Document document) {
+        for (int a = 0; a < recentStickers[2].size(); a++) {
+            Document d = (Document) recentStickers[2].get(a);
+            if (d.id == document.id && d.dc_id == document.dc_id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void addRecentSticker(final int type, Document document, int date, boolean remove) {
+        int maxCount;
         boolean found = false;
         for (int a = 0; a < recentStickers[type].size(); a++) {
             Document image = (Document) recentStickers[type].get(a);
             if (image.id == document.id) {
                 recentStickers[type].remove(a);
-                recentStickers[type].add(0, image);
+                if (!remove) {
+                    recentStickers[type].add(0, image);
+                }
                 found = true;
             }
         }
-        if (!found) {
+        if (!(found || remove)) {
             recentStickers[type].add(0, document);
         }
-        if (recentStickers[type].size() > MessagesController.getInstance().maxRecentStickersCount) {
-            final Document old = (Document) recentStickers[type].remove(recentStickers[type].size() - 1);
+        if (type == 2) {
+            if (remove) {
+                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("RemovedFromFavorites", R.string.RemovedFromFavorites), 0).show();
+            } else {
+                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("AddedToFavorites", R.string.AddedToFavorites), 0).show();
+            }
+            TL_messages_faveSticker req = new TL_messages_faveSticker();
+            req.id = new TL_inputDocument();
+            req.id.id = document.id;
+            req.id.access_hash = document.access_hash;
+            req.unfave = remove;
+            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                public void run(TLObject response, TL_error error) {
+                }
+            });
+            maxCount = MessagesController.getInstance().maxFaveStickersCount;
+        } else {
+            maxCount = MessagesController.getInstance().maxRecentStickersCount;
+        }
+        if (recentStickers[type].size() > maxCount || remove) {
+            final Document old = remove ? document : (Document) recentStickers[type].remove(recentStickers[type].size() - 1);
             MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
+                    int cacheType;
+                    if (type == 0) {
+                        cacheType = 3;
+                    } else if (type == 1) {
+                        cacheType = 4;
+                    } else {
+                        cacheType = 5;
+                    }
                     try {
-                        MessagesStorage.getInstance().getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.id + "'").stepThis().dispose();
+                        MessagesStorage.getInstance().getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.id + "' AND type = " + cacheType).stepThis().dispose();
                     } catch (Throwable e) {
                         FileLog.e(e);
                     }
                 }
             });
         }
-        ArrayList<Document> arrayList = new ArrayList();
-        arrayList.add(document);
-        processLoadedRecentDocuments(type, arrayList, false, date);
+        if (!remove) {
+            ArrayList<Document> arrayList = new ArrayList();
+            arrayList.add(document);
+            processLoadedRecentDocuments(type, arrayList, false, date);
+        }
+        if (type == 2) {
+            NotificationCenter.getInstance().postNotificationName(NotificationCenter.recentDocumentsDidLoaded, Boolean.valueOf(false), Integer.valueOf(type));
+        }
     }
 
     public static ArrayList<Document> getRecentGifs() {
@@ -183,7 +236,7 @@ public class StickersQuery {
         MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
             public void run() {
                 try {
-                    MessagesStorage.getInstance().getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + document.id + "'").stepThis().dispose();
+                    MessagesStorage.getInstance().getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + document.id + "' AND type = 2").stepThis().dispose();
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -209,7 +262,7 @@ public class StickersQuery {
             MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
                     try {
-                        MessagesStorage.getInstance().getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.id + "'").stepThis().dispose();
+                        MessagesStorage.getInstance().getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.id + "' AND type = 2").stepThis().dispose();
                     } catch (Throwable e) {
                         FileLog.e(e);
                     }
@@ -233,8 +286,110 @@ public class StickersQuery {
         return (TL_messages_stickerSet) stickerSetsById.get(id);
     }
 
+    public static TL_messages_stickerSet getGroupStickerSetById(StickerSet stickerSet) {
+        TL_messages_stickerSet set = (TL_messages_stickerSet) stickerSetsById.get(Long.valueOf(stickerSet.id));
+        if (set == null) {
+            set = (TL_messages_stickerSet) groupStickerSets.get(Long.valueOf(stickerSet.id));
+            if (set == null) {
+                loadGroupStickerSet(stickerSet, true);
+            } else if (set.set.hash != stickerSet.hash) {
+                loadGroupStickerSet(stickerSet, false);
+            }
+        }
+        return set;
+    }
+
+    public static void putGroupStickerSet(TL_messages_stickerSet stickerSet) {
+        groupStickerSets.put(Long.valueOf(stickerSet.set.id), stickerSet);
+    }
+
+    private static void loadGroupStickerSet(final StickerSet stickerSet, boolean cache) {
+        if (cache) {
+            MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+                public void run() {
+                    try {
+                        TL_messages_stickerSet set;
+                        SQLiteCursor cursor = MessagesStorage.getInstance().getDatabase().queryFinalized("SELECT document FROM web_recent_v3 WHERE id = 's_" + stickerSet.id + "'", new Object[0]);
+                        if (!cursor.next() || cursor.isNull(0)) {
+                            set = null;
+                        } else {
+                            NativeByteBuffer data = cursor.byteBufferValue(0);
+                            if (data != null) {
+                                set = TL_messages_stickerSet.TLdeserialize(data, data.readInt32(false), false);
+                                data.reuse();
+                            } else {
+                                set = null;
+                            }
+                        }
+                        cursor.dispose();
+                        if (set == null || set.set.hash != stickerSet.hash) {
+                            StickersQuery.loadGroupStickerSet(stickerSet, false);
+                        }
+                        if (set != null) {
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    StickersQuery.groupStickerSets.put(Long.valueOf(set.set.id), set);
+                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.groupStickersDidLoaded, Long.valueOf(set.set.id));
+                                }
+                            });
+                        }
+                    } catch (Throwable e) {
+                        FileLog.e(e);
+                    }
+                }
+            });
+            return;
+        }
+        TL_messages_getStickerSet req = new TL_messages_getStickerSet();
+        req.stickerset = new TL_inputStickerSetID();
+        req.stickerset.id = stickerSet.id;
+        req.stickerset.access_hash = stickerSet.access_hash;
+        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            public void run(TLObject response, TL_error error) {
+                if (response != null) {
+                    final TL_messages_stickerSet set = (TL_messages_stickerSet) response;
+                    MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+                        public void run() {
+                            try {
+                                SQLitePreparedStatement state = MessagesStorage.getInstance().getDatabase().executeFast("REPLACE INTO web_recent_v3 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                                state.requery();
+                                state.bindString(1, "s_" + set.set.id);
+                                state.bindInteger(2, 6);
+                                state.bindString(3, "");
+                                state.bindString(4, "");
+                                state.bindString(5, "");
+                                state.bindInteger(6, 0);
+                                state.bindInteger(7, 0);
+                                state.bindInteger(8, 0);
+                                state.bindInteger(9, 0);
+                                NativeByteBuffer data = new NativeByteBuffer(set.getObjectSize());
+                                set.serializeToStream(data);
+                                state.bindByteBuffer(10, data);
+                                state.step();
+                                data.reuse();
+                                state.dispose();
+                            } catch (Throwable e) {
+                                FileLog.e(e);
+                            }
+                        }
+                    });
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            StickersQuery.groupStickerSets.put(Long.valueOf(set.set.id), set);
+                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.groupStickersDidLoaded, Long.valueOf(set.set.id));
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     public static HashMap<String, ArrayList<Document>> getAllStickers() {
         return allStickers;
+    }
+
+    public static boolean canAddStickerToFavorites() {
+        return (stickersLoaded[0] && stickerSets[0].size() < 5 && recentStickers[2].isEmpty()) ? false : true;
     }
 
     public static ArrayList<TL_messages_stickerSet> getStickerSets(int type) {
@@ -280,7 +435,7 @@ public class StickersQuery {
         return (int) acc;
     }
 
-    public static void loadRecents(final int type, final boolean gif, boolean cache) {
+    public static void loadRecents(final int type, final boolean gif, boolean cache, boolean force) {
         boolean z = true;
         if (gif) {
             if (!loadingRecentGifs) {
@@ -303,10 +458,17 @@ public class StickersQuery {
             MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
                     try {
-                        SQLiteDatabase database = MessagesStorage.getInstance().getDatabase();
-                        StringBuilder append = new StringBuilder().append("SELECT document FROM web_recent_v3 WHERE type = ");
-                        int i = gif ? 2 : type == 0 ? 3 : 4;
-                        SQLiteCursor cursor = database.queryFinalized(append.append(i).append(" ORDER BY date DESC").toString(), new Object[0]);
+                        int cacheType;
+                        if (gif) {
+                            cacheType = 2;
+                        } else if (type == 0) {
+                            cacheType = 3;
+                        } else if (type == 1) {
+                            cacheType = 4;
+                        } else {
+                            cacheType = 5;
+                        }
+                        SQLiteCursor cursor = MessagesStorage.getInstance().getDatabase().queryFinalized("SELECT document FROM web_recent_v3 WHERE type = " + cacheType + " ORDER BY date DESC", new Object[0]);
                         final ArrayList<Document> arrayList = new ArrayList();
                         while (cursor.next()) {
                             if (!cursor.isNull(0)) {
@@ -333,7 +495,7 @@ public class StickersQuery {
                                     StickersQuery.recentStickersLoaded[type] = true;
                                 }
                                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.recentDocumentsDidLoaded, Boolean.valueOf(gif), Integer.valueOf(type));
-                                StickersQuery.loadRecents(type, gif, false);
+                                StickersQuery.loadRecents(type, gif, false, false);
                             }
                         });
                     } catch (Throwable e) {
@@ -343,15 +505,27 @@ public class StickersQuery {
             });
             return;
         }
-        long lastLoadTime;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0);
-        if (gif) {
-            lastLoadTime = preferences.getLong("lastGifLoadTime", 0);
-        } else {
-            lastLoadTime = preferences.getLong("lastStickersLoadTime", 0);
-        }
-        if (Math.abs(System.currentTimeMillis() - lastLoadTime) < 3600000) {
-            return;
+        if (!force) {
+            long lastLoadTime;
+            if (gif) {
+                lastLoadTime = preferences.getLong("lastGifLoadTime", 0);
+            } else if (type == 0) {
+                lastLoadTime = preferences.getLong("lastStickersLoadTime", 0);
+            } else if (type == 1) {
+                lastLoadTime = preferences.getLong("lastStickersLoadTimeMask", 0);
+            } else {
+                lastLoadTime = preferences.getLong("lastStickersLoadTimeFavs", 0);
+            }
+            if (Math.abs(System.currentTimeMillis() - lastLoadTime) < 3600000) {
+                if (gif) {
+                    loadingRecentGifs = false;
+                    return;
+                } else {
+                    loadingRecentStickers[type] = false;
+                    return;
+                }
+            }
         }
         if (gif) {
             TL_messages_getSavedGifs req = new TL_messages_getSavedGifs();
@@ -367,16 +541,29 @@ public class StickersQuery {
             });
             return;
         }
-        TL_messages_getRecentStickers req2 = new TL_messages_getRecentStickers();
-        req2.hash = calcDocumentsHash(recentStickers[type]);
-        if (type != 1) {
-            z = false;
+        TLObject request;
+        TLObject req2;
+        if (type == 2) {
+            req2 = new TL_messages_getFavedStickers();
+            req2.hash = calcDocumentsHash(recentStickers[type]);
+            request = req2;
+        } else {
+            req2 = new TL_messages_getRecentStickers();
+            req2.hash = calcDocumentsHash(recentStickers[type]);
+            if (type != 1) {
+                z = false;
+            }
+            req2.attached = z;
+            request = req2;
         }
-        req2.attached = z;
-        ConnectionsManager.getInstance().sendRequest(req2, new RequestDelegate() {
+        ConnectionsManager.getInstance().sendRequest(request, new RequestDelegate() {
             public void run(TLObject response, TL_error error) {
                 ArrayList<Document> arrayList = null;
-                if (response instanceof TL_messages_recentStickers) {
+                if (type == 2) {
+                    if (response instanceof TL_messages_favedStickers) {
+                        arrayList = ((TL_messages_favedStickers) response).stickers;
+                    }
+                } else if (response instanceof TL_messages_recentStickers) {
                     arrayList = ((TL_messages_recentStickers) response).stickers;
                 }
                 StickersQuery.processLoadedRecentDocuments(type, arrayList, gif, 0);
@@ -389,18 +576,34 @@ public class StickersQuery {
             MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
                     try {
+                        int maxCount;
+                        int cacheType;
                         SQLiteDatabase database = MessagesStorage.getInstance().getDatabase();
-                        int maxCount = gif ? MessagesController.getInstance().maxRecentGifsCount : MessagesController.getInstance().maxRecentStickersCount;
+                        if (gif) {
+                            maxCount = MessagesController.getInstance().maxRecentGifsCount;
+                        } else if (type == 2) {
+                            maxCount = MessagesController.getInstance().maxFaveStickersCount;
+                        } else {
+                            maxCount = MessagesController.getInstance().maxRecentStickersCount;
+                        }
                         database.beginTransaction();
                         SQLitePreparedStatement state = database.executeFast("REPLACE INTO web_recent_v3 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                         int count = documents.size();
+                        if (gif) {
+                            cacheType = 2;
+                        } else if (type == 0) {
+                            cacheType = 3;
+                        } else if (type == 1) {
+                            cacheType = 4;
+                        } else {
+                            cacheType = 5;
+                        }
                         int a = 0;
                         while (a < count && a != maxCount) {
                             Document document = (Document) documents.get(a);
                             state.requery();
                             state.bindString(1, "" + document.id);
-                            int i = gif ? 2 : type == 0 ? 3 : 4;
-                            state.bindInteger(2, i);
+                            state.bindInteger(2, cacheType);
                             state.bindString(3, "");
                             state.bindString(4, "");
                             state.bindString(5, "");
@@ -422,7 +625,7 @@ public class StickersQuery {
                         if (documents.size() >= maxCount) {
                             database.beginTransaction();
                             for (a = maxCount; a < documents.size(); a++) {
-                                database.executeFast("DELETE FROM web_recent_v3 WHERE id = '" + ((Document) documents.get(a)).id + "'").stepThis().dispose();
+                                database.executeFast("DELETE FROM web_recent_v3 WHERE id = '" + ((Document) documents.get(a)).id + "' AND type = " + cacheType).stepThis().dispose();
                             }
                             database.commitTransaction();
                         }
@@ -443,7 +646,13 @@ public class StickersQuery {
                     } else {
                         StickersQuery.loadingRecentStickers[type] = false;
                         StickersQuery.recentStickersLoaded[type] = true;
-                        editor.putLong("lastStickersLoadTime", System.currentTimeMillis()).commit();
+                        if (type == 0) {
+                            editor.putLong("lastStickersLoadTime", System.currentTimeMillis()).commit();
+                        } else if (type == 1) {
+                            editor.putLong("lastStickersLoadTimeMask", System.currentTimeMillis()).commit();
+                        } else {
+                            editor.putLong("lastStickersLoadTimeFavs", System.currentTimeMillis()).commit();
+                        }
                     }
                     if (documents != null) {
                         if (gif) {

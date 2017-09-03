@@ -3,6 +3,8 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -80,6 +82,15 @@ public class BackupImageView extends View {
 
     public void setImageResource(int resId) {
         this.imageReceiver.setImageBitmap(getResources().getDrawable(resId));
+        invalidate();
+    }
+
+    public void setImageResource(int resId, int color) {
+        Drawable drawable = getResources().getDrawable(resId);
+        if (drawable != null) {
+            drawable.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
+        }
+        this.imageReceiver.setImageBitmap(drawable);
         invalidate();
     }
 

@@ -209,11 +209,11 @@ public class Theme {
     public static Paint dialogs_countPaint = null;
     public static TextPaint dialogs_countTextPaint = null;
     public static Drawable dialogs_errorDrawable = null;
-    public static Drawable dialogs_errorIconDrawable = null;
     public static Paint dialogs_errorPaint = null;
     public static Drawable dialogs_groupDrawable = null;
     public static Drawable dialogs_halfCheckDrawable = null;
     public static Drawable dialogs_lockDrawable = null;
+    public static Drawable dialogs_mentionDrawable = null;
     public static TextPaint dialogs_messagePaint = null;
     public static TextPaint dialogs_messagePrintingPaint = null;
     public static Drawable dialogs_muteDrawable = null;
@@ -318,6 +318,8 @@ public class Theme {
     public static final String key_chat_emojiPanelNewTrending = "chat_emojiPanelNewTrending";
     public static final String key_chat_emojiPanelShadowLine = "chat_emojiPanelShadowLine";
     public static final String key_chat_emojiPanelStickerPackSelector = "chat_emojiPanelStickerPackSelector";
+    public static final String key_chat_emojiPanelStickerSetName = "chat_emojiPanelStickerSetName";
+    public static final String key_chat_emojiPanelStickerSetNameIcon = "chat_emojiPanelStickerSetNameIcon";
     public static final String key_chat_emojiPanelTrendingDescription = "chat_emojiPanelTrendingDescription";
     public static final String key_chat_emojiPanelTrendingTitle = "chat_emojiPanelTrendingTitle";
     public static final String key_chat_fieldOverlayText = "chat_fieldOverlayText";
@@ -574,6 +576,8 @@ public class Theme {
     public static final String key_checkboxSquareCheck = "checkboxSquareCheck";
     public static final String key_checkboxSquareDisabled = "checkboxSquareDisabled";
     public static final String key_checkboxSquareUnchecked = "checkboxSquareUnchecked";
+    public static final String key_contacts_inviteBackground = "contacts_inviteBackground";
+    public static final String key_contacts_inviteText = "contacts_inviteText";
     public static final String key_contextProgressInner1 = "contextProgressInner1";
     public static final String key_contextProgressInner2 = "contextProgressInner2";
     public static final String key_contextProgressInner3 = "contextProgressInner3";
@@ -1156,6 +1160,8 @@ public class Theme {
         defaultColors.put(key_chat_emojiPanelMasksIcon, Integer.valueOf(-1));
         defaultColors.put(key_chat_emojiPanelMasksIconSelected, Integer.valueOf(-10305560));
         defaultColors.put(key_chat_emojiPanelTrendingTitle, Integer.valueOf(-14606047));
+        defaultColors.put(key_chat_emojiPanelStickerSetName, Integer.valueOf(-8156010));
+        defaultColors.put(key_chat_emojiPanelStickerSetNameIcon, Integer.valueOf(-5130564));
         defaultColors.put(key_chat_emojiPanelTrendingDescription, Integer.valueOf(-7697782));
         defaultColors.put(key_chat_botKeyboardButtonText, Integer.valueOf(-13220017));
         defaultColors.put(key_chat_botKeyboardButtonBackground, Integer.valueOf(-1775639));
@@ -1309,6 +1315,8 @@ public class Theme {
         defaultColors.put(key_groupcreate_checkboxCheck, Integer.valueOf(-1));
         defaultColors.put(key_groupcreate_spanText, Integer.valueOf(-14606047));
         defaultColors.put(key_groupcreate_spanBackground, Integer.valueOf(-855310));
+        defaultColors.put(key_contacts_inviteBackground, Integer.valueOf(-11157919));
+        defaultColors.put(key_contacts_inviteText, Integer.valueOf(-1));
         defaultColors.put(key_login_progressInner, Integer.valueOf(-1971470));
         defaultColors.put(key_login_progressOuter, Integer.valueOf(-10313520));
         defaultColors.put(key_musicPicker_checkbox, Integer.valueOf(-14043401));
@@ -2090,6 +2098,7 @@ public class Theme {
             dialogs_muteDrawable = resources.getDrawable(R.drawable.list_mute).mutate();
             dialogs_verifiedDrawable = resources.getDrawable(R.drawable.verified_area);
             dialogs_verifiedCheckDrawable = resources.getDrawable(R.drawable.verified_check);
+            dialogs_mentionDrawable = resources.getDrawable(R.drawable.mentionchatslist);
             dialogs_botDrawable = resources.getDrawable(R.drawable.list_bot);
             dialogs_pinnedDrawable = resources.getDrawable(R.drawable.list_pin);
             applyDialogsTheme();
@@ -2750,11 +2759,11 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
+                    int i;
+                    int selectedBackground;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        int i;
                         SharedPreferences preferences;
-                        int selectedBackground;
                         File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);

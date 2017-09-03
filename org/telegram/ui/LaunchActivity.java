@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.StatFs;
 import android.text.TextUtils;
 import android.view.ActionMode;
 import android.view.KeyEvent;
@@ -34,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -47,6 +49,8 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.ContactsController.Contact;
+import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
@@ -86,6 +90,7 @@ import org.telegram.tgnet.TLRPC.TL_langpack_getStrings;
 import org.telegram.tgnet.TLRPC.TL_messages_checkChatInvite;
 import org.telegram.tgnet.TLRPC.TL_messages_importChatInvite;
 import org.telegram.tgnet.TLRPC.TL_userContact_old2;
+import org.telegram.tgnet.TLRPC.TL_webPage;
 import org.telegram.tgnet.TLRPC.Updates;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.Vector;
@@ -98,6 +103,7 @@ import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.Cells.LanguageCell;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.JoinGroupAlert;
 import org.telegram.ui.Components.LayoutHelper;
@@ -383,18 +389,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     LaunchActivity.this.presentFragment(new ContactsActivity(null));
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 7) {
-                    if (BuildVars.DEBUG_PRIVATE_VERSION) {
-                        LaunchActivity.this.showLanguageAlert(true);
-                        return;
-                    }
-                    try {
-                        Intent intent = new Intent("android.intent.action.SEND");
-                        intent.setType("text/plain");
-                        intent.putExtra("android.intent.extra.TEXT", ContactsController.getInstance().getInviteText());
-                        LaunchActivity.this.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteFriends", R.string.InviteFriends)), 500);
-                    } catch (Throwable e) {
-                        FileLog.e(e);
-                    }
+                    LaunchActivity.this.presentFragment(new InviteContactsActivity());
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 8) {
                     LaunchActivity.this.presentFragment(new SettingsActivity());
@@ -427,6 +422,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didSetPasscode);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.reloadInterface);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.suggestedLangpack);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.openArticle);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.hasNewContactsToImport);
         if (this.actionBarLayout.fragmentsStack.isEmpty()) {
             if (UserConfig.isClientActivated()) {
                 DialogsActivity dialogsActivity = new DialogsActivity(null);
@@ -1543,7 +1540,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                         this.drawerLayoutContainer.setAllowOpenDrawer(true, false);
                     }
                 } else {
-                    didSelectDialog(null, dialogId, false);
+                    ArrayList<Long> dids = new ArrayList();
+                    dids.add(Long.valueOf(dialogId));
+                    didSelectDialogs(null, dids, null, false);
                 }
             } else if (open_settings.intValue() != 0) {
                 this.actionBarLayout.presentFragment(new SettingsActivity(), false, true, true);
@@ -1660,16 +1659,17 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                     args.putString("selectAlertStringGroup", LocaleController.getString("SendGameToGroup", R.string.SendGameToGroup));
                                     fragment = new DialogsActivity(args);
                                     fragment.setDelegate(new DialogsActivityDelegate() {
-                                        public void didSelectDialog(DialogsActivity fragment, long dialog_id, boolean param) {
+                                        public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
+                                            long did = ((Long) dids.get(0)).longValue();
                                             TL_inputMediaGame inputMediaGame = new TL_inputMediaGame();
                                             inputMediaGame.id = new TL_inputGameShortName();
                                             inputMediaGame.id.short_name = str;
                                             inputMediaGame.id.bot_id = MessagesController.getInputUser((User) res.users.get(0));
-                                            SendMessagesHelper.getInstance().sendGame(MessagesController.getInputPeer((int) dialog_id), inputMediaGame, 0, 0);
+                                            SendMessagesHelper.getInstance().sendGame(MessagesController.getInputPeer((int) did), inputMediaGame, 0, 0);
                                             Bundle args = new Bundle();
                                             args.putBoolean("scrollToTopOnResume", true);
-                                            int lower_part = (int) dialog_id;
-                                            int high_id = (int) (dialog_id >> 32);
+                                            int lower_part = (int) did;
+                                            int high_id = (int) (did >> 32);
                                             if (lower_part == 0) {
                                                 args.putInt("enc_id", high_id);
                                             } else if (high_id == 1) {
@@ -1718,7 +1718,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                     args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupTitle", R.string.AddToTheGroupTitle, UserObject.getUserName(user), "%1$s"));
                                     fragment = new DialogsActivity(args);
                                     fragment.setDelegate(new DialogsActivityDelegate() {
-                                        public void didSelectDialog(DialogsActivity fragment, long did, boolean param) {
+                                        public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
+                                            long did = ((Long) dids.get(0)).longValue();
                                             Bundle args = new Bundle();
                                             args.putBoolean("scrollToTopOnResume", true);
                                             args.putInt("chat_id", -((int) did));
@@ -1912,9 +1913,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             args.putBoolean("onlySelect", true);
             DialogsActivity fragment2 = new DialogsActivity(args);
             final boolean z2 = hasUrl;
-            final String str8 = message;
             fragment2.setDelegate(new DialogsActivityDelegate() {
-                public void didSelectDialog(DialogsActivity fragment, long did, boolean param) {
+                public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
+                    long did = ((Long) dids.get(0)).longValue();
                     Bundle args = new Bundle();
                     args.putBoolean("scrollToTopOnResume", true);
                     args.putBoolean("hasUrl", z2);
@@ -1931,7 +1932,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     }
                     if (MessagesController.checkCanOpenChat(args, fragment)) {
                         NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
-                        DraftQuery.saveDraft(did, str8, null, null, true);
+                        DraftQuery.saveDraft(did, message, null, null, true);
                         LaunchActivity.this.actionBarLayout.presentFragment(new ChatActivity(args), true, false, true);
                     }
                 }
@@ -1993,72 +1994,71 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         handleIntent(intent, true, false, false);
     }
 
-    public void didSelectDialog(DialogsActivity dialogsFragment, long dialog_id, boolean param) {
-        if (dialog_id != 0) {
-            int lower_part = (int) dialog_id;
-            int high_id = (int) (dialog_id >> 32);
-            Bundle args = new Bundle();
-            args.putBoolean("scrollToTopOnResume", true);
-            if (!AndroidUtilities.isTablet()) {
-                NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+    public void didSelectDialogs(DialogsActivity dialogsFragment, ArrayList<Long> dids, CharSequence message, boolean param) {
+        long did = ((Long) dids.get(0)).longValue();
+        int lower_part = (int) did;
+        int high_id = (int) (did >> 32);
+        Bundle args = new Bundle();
+        args.putBoolean("scrollToTopOnResume", true);
+        if (!AndroidUtilities.isTablet()) {
+            NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+        }
+        if (lower_part == 0) {
+            args.putInt("enc_id", high_id);
+        } else if (high_id == 1) {
+            args.putInt("chat_id", lower_part);
+        } else if (lower_part > 0) {
+            args.putInt("user_id", lower_part);
+        } else if (lower_part < 0) {
+            Bundle bundle = args;
+            bundle.putInt("chat_id", -lower_part);
+        }
+        if (MessagesController.checkCanOpenChat(args, dialogsFragment)) {
+            boolean z;
+            boolean z2;
+            BaseFragment chatActivity = new ChatActivity(args);
+            ActionBarLayout actionBarLayout = this.actionBarLayout;
+            if (dialogsFragment != null) {
+                z = true;
+            } else {
+                z = false;
             }
-            if (lower_part == 0) {
-                args.putInt("enc_id", high_id);
-            } else if (high_id == 1) {
-                args.putInt("chat_id", lower_part);
-            } else if (lower_part > 0) {
-                args.putInt("user_id", lower_part);
-            } else if (lower_part < 0) {
-                Bundle bundle = args;
-                bundle.putInt("chat_id", -lower_part);
+            if (dialogsFragment == null) {
+                z2 = true;
+            } else {
+                z2 = false;
             }
-            if (MessagesController.checkCanOpenChat(args, dialogsFragment)) {
-                boolean z;
-                boolean z2;
-                BaseFragment chatActivity = new ChatActivity(args);
-                ActionBarLayout actionBarLayout = this.actionBarLayout;
-                if (dialogsFragment != null) {
-                    z = true;
-                } else {
-                    z = false;
-                }
-                if (dialogsFragment == null) {
-                    z2 = true;
-                } else {
-                    z2 = false;
-                }
-                actionBarLayout.presentFragment(chatActivity, z, z2, true);
-                if (this.videoPath != null) {
-                    chatActivity.openVideoEditor(this.videoPath);
-                }
-                if (this.photoPathsArray != null) {
-                    ArrayList<String> captions = null;
-                    if (this.sendingText != null && this.sendingText.length() <= Callback.DEFAULT_DRAG_ANIMATION_DURATION && this.photoPathsArray.size() == 1) {
-                        captions = new ArrayList();
-                        captions.add(this.sendingText);
-                        this.sendingText = null;
-                    }
-                    SendMessagesHelper.prepareSendingPhotos(null, this.photoPathsArray, dialog_id, null, captions, null, null, false, null);
-                }
-                if (this.sendingText != null) {
-                    SendMessagesHelper.prepareSendingText(this.sendingText, dialog_id);
-                }
-                if (!(this.documentsPathsArray == null && this.documentsUrisArray == null)) {
-                    SendMessagesHelper.prepareSendingDocuments(this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, this.documentsMimeType, dialog_id, null, null);
-                }
-                if (!(this.contactsToSend == null || this.contactsToSend.isEmpty())) {
-                    Iterator it = this.contactsToSend.iterator();
-                    while (it.hasNext()) {
-                        SendMessagesHelper.getInstance().sendMessage((User) it.next(), dialog_id, null, null, null);
-                    }
-                }
-                this.photoPathsArray = null;
-                this.videoPath = null;
-                this.sendingText = null;
-                this.documentsPathsArray = null;
-                this.documentsOriginalPathsArray = null;
-                this.contactsToSend = null;
+            actionBarLayout.presentFragment(chatActivity, z, z2, true);
+            if (this.videoPath != null) {
+                chatActivity.openVideoEditor(this.videoPath);
             }
+            if (this.photoPathsArray != null) {
+                ArrayList<String> captions = null;
+                if (this.sendingText != null && this.sendingText.length() <= Callback.DEFAULT_DRAG_ANIMATION_DURATION && this.photoPathsArray.size() == 1) {
+                    captions = new ArrayList();
+                    captions.add(this.sendingText);
+                    this.sendingText = null;
+                }
+                SendMessagesHelper.prepareSendingPhotos(null, this.photoPathsArray, did, null, captions, null, null, false, null);
+            }
+            if (this.sendingText != null) {
+                SendMessagesHelper.prepareSendingText(this.sendingText, did);
+            }
+            if (!(this.documentsPathsArray == null && this.documentsUrisArray == null)) {
+                SendMessagesHelper.prepareSendingDocuments(this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, this.documentsMimeType, did, null, null);
+            }
+            if (!(this.contactsToSend == null || this.contactsToSend.isEmpty())) {
+                Iterator it = this.contactsToSend.iterator();
+                while (it.hasNext()) {
+                    SendMessagesHelper.getInstance().sendMessage((User) it.next(), did, null, null, null);
+                }
+            }
+            this.photoPathsArray = null;
+            this.videoPath = null;
+            this.sendingText = null;
+            this.documentsPathsArray = null;
+            this.documentsOriginalPathsArray = null;
+            this.contactsToSend = null;
         }
     }
 
@@ -2079,6 +2079,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didSetPasscode);
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.reloadInterface);
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.suggestedLangpack);
+            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.openArticle);
+            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.hasNewContactsToImport);
         }
     }
 
@@ -2271,6 +2273,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 ApplicationLoader.mainInterfacePausedStageQueueTime = System.currentTimeMillis();
             }
         });
+        checkFreeDiscSpace();
+        MediaController.checkGallery();
         onPasscodeResume();
         if (this.passcodeView.getVisibility() != 0) {
             this.actionBarLayout.onResume();
@@ -2438,6 +2442,31 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             rebuildAllFragments(true);
         } else if (id == NotificationCenter.suggestedLangpack) {
             showLanguageAlert(false);
+        } else if (id == NotificationCenter.openArticle) {
+            if (!mainFragmentsStack.isEmpty()) {
+                ArticleViewer.getInstance().setParentActivity(this, (BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1));
+                ArticleViewer.getInstance().open((TL_webPage) args[0], (String) args[1]);
+            }
+        } else if (id == NotificationCenter.hasNewContactsToImport && this.actionBarLayout != null && !this.actionBarLayout.fragmentsStack.isEmpty()) {
+            int type = ((Integer) args[0]).intValue();
+            final HashMap<Integer, Contact> contactHashMap = args[1];
+            final boolean first = ((Boolean) args[2]).booleanValue();
+            final boolean schedule = ((Boolean) args[3]).booleanValue();
+            BaseFragment fragment = (BaseFragment) this.actionBarLayout.fragmentsStack.get(this.actionBarLayout.fragmentsStack.size() - 1);
+            builder = new Builder(this);
+            builder.setTitle(LocaleController.getString("UpdateContactsTitle", R.string.UpdateContactsTitle));
+            builder.setMessage(LocaleController.getString("UpdateContactsMessage", R.string.UpdateContactsMessage));
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    ContactsController.getInstance().syncPhoneBookByAlert(contactHashMap, first, schedule, false);
+                }
+            });
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    ContactsController.getInstance().syncPhoneBookByAlert(contactHashMap, first, schedule, true);
+                }
+            });
+            fragment.showDialog(builder.create());
         }
     }
 
@@ -2447,6 +2476,44 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             return LocaleController.getString(key, intKey);
         }
         return value;
+    }
+
+    private void checkFreeDiscSpace() {
+        if (VERSION.SDK_INT < 26) {
+            Utilities.globalQueue.postRunnable(new Runnable() {
+                public void run() {
+                    if (UserConfig.isClientActivated()) {
+                        try {
+                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                            if (Math.abs(preferences.getLong("last_space_check", 0) - System.currentTimeMillis()) >= 259200000) {
+                                File path = FileLoader.getInstance().getDirectory(4);
+                                if (path != null) {
+                                    long freeSpace;
+                                    StatFs statFs = new StatFs(path.getAbsolutePath());
+                                    if (VERSION.SDK_INT < 18) {
+                                        freeSpace = (long) Math.abs(statFs.getAvailableBlocks() * statFs.getBlockSize());
+                                    } else {
+                                        freeSpace = statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong();
+                                    }
+                                    preferences.edit().putLong("last_space_check", System.currentTimeMillis()).commit();
+                                    if (freeSpace < 104857600) {
+                                        AndroidUtilities.runOnUIThread(new Runnable() {
+                                            public void run() {
+                                                try {
+                                                    AlertsCreator.createFreeSpaceDialog(LaunchActivity.this).show();
+                                                } catch (Throwable th) {
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                        } catch (Throwable th) {
+                        }
+                    }
+                }
+            }, 2000);
+        }
     }
 
     private void showLanguageAlertInternal(LocaleInfo systemInfo, LocaleInfo englishInfo, String systemLang) {

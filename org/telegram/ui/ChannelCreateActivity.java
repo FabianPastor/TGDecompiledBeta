@@ -66,6 +66,7 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.AvatarUpdater;
 import org.telegram.ui.Components.AvatarUpdater.AvatarUpdaterDelegate;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ChannelCreateActivity extends BaseFragment implements NotificationCenterDelegate, AvatarUpdaterDelegate {
@@ -84,7 +85,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     private TextView checkTextView;
     private boolean createAfterUpload;
     private int currentStep;
-    private EditText descriptionTextView;
+    private EditTextBoldCursor descriptionTextView;
     private View doneButton;
     private boolean donePressed;
     private EditText editText;
@@ -100,7 +101,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     private LoadingCell loadingAdminedCell;
     private boolean loadingAdminedChannels;
     private boolean loadingInvite;
-    private EditText nameTextView;
+    private EditTextBoldCursor nameTextView;
     private String nameToSet;
     private TextBlockCell privateContainer;
     private AlertDialog progressDialog;
@@ -318,7 +319,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     }
                 }
             });
-            this.nameTextView = new EditText(context);
+            this.nameTextView = new EditTextBoldCursor(context);
             this.nameTextView.setHint(LocaleController.getString("EnterChannelName", R.string.EnterChannelName));
             if (this.nameToSet != null) {
                 this.nameTextView.setText(this.nameToSet);
@@ -334,7 +335,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.nameTextView.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
             this.nameTextView.setFilters(new InputFilter[]{new LengthFilter(100)});
             this.nameTextView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
-            AndroidUtilities.clearCursorDrawable(this.nameTextView);
+            this.nameTextView.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            this.nameTextView.setCursorSize(AndroidUtilities.dp(20.0f));
+            this.nameTextView.setCursorWidth(1.5f);
             view = this.nameTextView;
             f = LocaleController.isRTL ? 16.0f : 96.0f;
             if (LocaleController.isRTL) {
@@ -362,7 +365,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     ChannelCreateActivity.this.avatarImage.invalidate();
                 }
             });
-            this.descriptionTextView = new EditText(context);
+            this.descriptionTextView = new EditTextBoldCursor(context);
             this.descriptionTextView.setTextSize(1, 18.0f);
             this.descriptionTextView.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.descriptionTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -373,7 +376,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.descriptionTextView.setImeOptions(6);
             this.descriptionTextView.setFilters(new InputFilter[]{new LengthFilter(120)});
             this.descriptionTextView.setHint(LocaleController.getString("DescriptionPlaceholder", R.string.DescriptionPlaceholder));
-            AndroidUtilities.clearCursorDrawable(this.descriptionTextView);
+            this.descriptionTextView.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            this.descriptionTextView.setCursorSize(AndroidUtilities.dp(20.0f));
+            this.descriptionTextView.setCursorWidth(1.5f);
             this.linearLayout.addView(this.descriptionTextView, LayoutHelper.createLinear(-1, -2, 24.0f, 18.0f, 24.0f, 0.0f));
             this.descriptionTextView.setOnEditorActionListener(new OnEditorActionListener() {
                 public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -464,7 +469,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.editText.setInputType(163840);
             this.editText.setImeOptions(6);
             this.publicContainer.addView(this.editText, LayoutHelper.createLinear(-2, 36));
-            this.nameTextView = new EditText(context);
+            this.nameTextView = new EditTextBoldCursor(context);
             this.nameTextView.setTextSize(1, 18.0f);
             this.nameTextView.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -476,7 +481,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.nameTextView.setInputType(163872);
             this.nameTextView.setImeOptions(6);
             this.nameTextView.setHint(LocaleController.getString("ChannelUsernamePlaceholder", R.string.ChannelUsernamePlaceholder));
-            AndroidUtilities.clearCursorDrawable(this.nameTextView);
+            this.nameTextView.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            this.nameTextView.setCursorSize(AndroidUtilities.dp(20.0f));
+            this.nameTextView.setCursorWidth(1.5f);
             this.publicContainer.addView(this.nameTextView, LayoutHelper.createLinear(-1, 36));
             this.nameTextView.addTextChangedListener(new TextWatcher() {
                 public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {

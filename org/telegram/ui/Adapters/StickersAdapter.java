@@ -104,10 +104,17 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
                     this.stickers = arrayList;
                     if (this.stickers != null) {
                         final ArrayList<Document> recentStickers = StickersQuery.getRecentStickersNoCopy(0);
+                        final ArrayList<Document> favsStickers = StickersQuery.getRecentStickersNoCopy(2);
                         if (!recentStickers.isEmpty()) {
                             Collections.sort(this.stickers, new Comparator<Document>() {
                                 private int getIndex(long id) {
-                                    for (int a = 0; a < recentStickers.size(); a++) {
+                                    int a;
+                                    for (a = 0; a < favsStickers.size(); a++) {
+                                        if (((Document) favsStickers.get(a)).id == id) {
+                                            return a + 1000;
+                                        }
+                                    }
+                                    for (a = 0; a < recentStickers.size(); a++) {
                                         if (((Document) recentStickers.get(a)).id == id) {
                                             return a;
                                         }

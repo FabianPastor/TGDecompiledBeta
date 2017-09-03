@@ -69,21 +69,19 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
     }
 
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        if (this.currentMessageObject == null) {
-            super.onLayout(changed, left, top, right, bottom);
-            return;
-        }
-        this.seekBarX = AndroidUtilities.dp(54.0f);
-        this.buttonX = AndroidUtilities.dp(10.0f);
-        this.timeX = (getMeasuredWidth() - this.timeWidth) - AndroidUtilities.dp(16.0f);
-        this.seekBar.setSize((getMeasuredWidth() - AndroidUtilities.dp(70.0f)) - this.timeWidth, AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE));
-        this.progressView.width = (getMeasuredWidth() - AndroidUtilities.dp(94.0f)) - this.timeWidth;
-        this.progressView.height = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
-        this.seekBarY = AndroidUtilities.dp(13.0f);
-        this.buttonY = AndroidUtilities.dp(10.0f);
-        updateProgress();
-        if (changed || !this.wasLayout) {
-            this.wasLayout = true;
+        if (this.currentMessageObject != null) {
+            this.seekBarX = AndroidUtilities.dp(54.0f);
+            this.buttonX = AndroidUtilities.dp(10.0f);
+            this.timeX = (getMeasuredWidth() - this.timeWidth) - AndroidUtilities.dp(16.0f);
+            this.seekBar.setSize((getMeasuredWidth() - AndroidUtilities.dp(70.0f)) - this.timeWidth, AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE));
+            this.progressView.width = (getMeasuredWidth() - AndroidUtilities.dp(94.0f)) - this.timeWidth;
+            this.progressView.height = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
+            this.seekBarY = AndroidUtilities.dp(13.0f);
+            this.buttonY = AndroidUtilities.dp(10.0f);
+            updateProgress();
+            if (changed || !this.wasLayout) {
+                this.wasLayout = true;
+            }
         }
     }
 

@@ -195,8 +195,20 @@ public class MentionsAdapter extends SelectionAdapter {
         this.parentFragment = fragment;
     }
 
-    public void setChatInfo(ChatFull chatParticipants) {
-        this.info = chatParticipants;
+    public void setChatInfo(ChatFull chatInfo) {
+        this.info = chatInfo;
+        if (!(this.inlineMediaEnabled || this.foundContextBot == null || this.parentFragment == null)) {
+            Chat chat = this.parentFragment.getCurrentChat();
+            if (chat != null) {
+                this.inlineMediaEnabled = ChatObject.canSendStickers(chat);
+                if (this.inlineMediaEnabled) {
+                    this.searchResultUsernames = null;
+                    notifyDataSetChanged();
+                    this.delegate.needChangePanelVisibility(false);
+                    processFoundUser(this.foundContextBot);
+                }
+            }
+        }
         if (this.lastText != null) {
             searchUsernameOrHashtag(this.lastText, this.lastPosition, this.messages, this.lastUsernameOnly);
         }
@@ -884,7 +896,12 @@ public class MentionsAdapter extends SelectionAdapter {
                 this.searchResultCommandsUsers = newResultUsers;
                 notifyDataSetChanged();
                 this.delegate.needChangePanelVisibility(!newResult.isEmpty());
-            } else if (foundType == 3 && !hasIllegalUsernameCharacters) {
+            } else if (foundType != 3) {
+            } else {
+                if (hasIllegalUsernameCharacters) {
+                    this.delegate.needChangePanelVisibility(false);
+                    return;
+                }
                 Object[] suggestions = Emoji.getSuggestion(result.toString());
                 if (suggestions != null) {
                     this.searchResultSuggestions = new ArrayList();

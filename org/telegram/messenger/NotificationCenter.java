@@ -34,6 +34,7 @@ public class NotificationCenter {
     public static final int closeInCallActivity;
     public static final int closeOtherAppActivities;
     public static final int contactsDidLoaded;
+    public static final int contactsImported;
     public static final int dialogPhotosLoaded;
     public static final int dialogsNeedReload;
     public static final int didCreatedNewDeleteTask;
@@ -57,6 +58,8 @@ public class NotificationCenter {
     public static final int encryptedChatCreated;
     public static final int encryptedChatUpdated;
     public static final int featuredStickersDidLoaded;
+    public static final int groupStickersDidLoaded;
+    public static final int hasNewContactsToImport;
     public static final int httpFileDidFailedLoad;
     public static final int httpFileDidLoaded;
     public static final int locationPermissionGranted;
@@ -83,6 +86,7 @@ public class NotificationCenter {
     public static final int newDraftReceived;
     public static final int newSessionReceived;
     public static final int notificationsSettingsUpdated;
+    public static final int openArticle;
     public static final int openedChatChanged;
     public static final int paymentFinished;
     public static final int peerSettingsDidLoaded;
@@ -107,6 +111,7 @@ public class NotificationCenter {
     public static final int suggestedLangpack;
     private static int totalEvents;
     public static final int updateInterfaces;
+    public static final int updateMentionsCount;
     public static final int updateMessageMedia;
     public static final int userInfoDidLoaded;
     public static final int wallpapersDidLoaded;
@@ -168,6 +173,12 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         contactsDidLoaded = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        contactsImported = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        hasNewContactsToImport = i;
         i = totalEvents;
         totalEvents = i + 1;
         chatDidCreated = i;
@@ -269,6 +280,9 @@ public class NotificationCenter {
         featuredStickersDidLoaded = i;
         i = totalEvents;
         totalEvents = i + 1;
+        groupStickersDidLoaded = i;
+        i = totalEvents;
+        totalEvents = i + 1;
         didReplacedPhotoInMemCache = i;
         i = totalEvents;
         totalEvents = i + 1;
@@ -348,6 +362,12 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         proxySettingsChanged = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        openArticle = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        updateMentionsCount = i;
         i = totalEvents;
         totalEvents = i + 1;
         httpFileDidLoaded = i;

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.BitmapFactory;
@@ -12,11 +14,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import java.lang.ref.WeakReference;
 import java.util.List;
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.CustomTabsCopyReceiver;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.ShareBroadcastReceiver;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.customtabs.CustomTabsCallback;
@@ -27,6 +32,14 @@ import org.telegram.messenger.support.customtabs.CustomTabsSession;
 import org.telegram.messenger.support.customtabsclient.shared.CustomTabsHelper;
 import org.telegram.messenger.support.customtabsclient.shared.ServiceConnection;
 import org.telegram.messenger.support.customtabsclient.shared.ServiceConnectionCallback;
+import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
+import org.telegram.tgnet.TLRPC.TL_messages_getWebPagePreview;
+import org.telegram.tgnet.TLRPC.TL_webPage;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.LaunchActivity;
 
@@ -113,8 +126,7 @@ public class Browser {
             }
             try {
                 activity.unbindService(customTabsServiceConnection);
-            } catch (Throwable e) {
-                FileLog.e(e);
+            } catch (Exception e) {
             }
             customTabsClient = null;
             customTabsSession = null;
@@ -138,9 +150,77 @@ public class Browser {
     }
 
     public static void openUrl(Context context, Uri uri, boolean allowCustom) {
+        openUrl(context, uri, allowCustom, true);
+    }
+
+    public static void openUrl(Context context, Uri uri, boolean allowCustom, boolean tryTelegraph) {
         if (context != null && uri != null) {
+            Intent intent;
             boolean[] forceBrowser = new boolean[]{false};
             boolean internalUri = isInternalUri(uri, forceBrowser);
+            if (tryTelegraph) {
+                try {
+                    if (uri.getHost().toLowerCase().equals("telegra.ph") || uri.toString().contains("telegram.org/faq")) {
+                        AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(context, 1)};
+                        TLObject req = new TL_messages_getWebPagePreview();
+                        req.message = uri.toString();
+                        final AlertDialog[] alertDialogArr = progressDialog;
+                        final Uri uri2 = uri;
+                        final Context context2 = context;
+                        final boolean z = allowCustom;
+                        alertDialogArr = progressDialog;
+                        final int sendRequest = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                            public void run(final TLObject response, TL_error error) {
+                                AndroidUtilities.runOnUIThread(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            alertDialogArr[0].dismiss();
+                                        } catch (Throwable th) {
+                                        }
+                                        alertDialogArr[0] = null;
+                                        boolean ok = false;
+                                        if (response instanceof TL_messageMediaWebPage) {
+                                            TL_messageMediaWebPage webPage = response;
+                                            if ((webPage.webpage instanceof TL_webPage) && webPage.webpage.cached_page != null) {
+                                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.openArticle, webPage.webpage, uri2.toString());
+                                                ok = true;
+                                            }
+                                        }
+                                        if (!ok) {
+                                            Browser.openUrl(context2, uri2, z, false);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                if (alertDialogArr[0] != null) {
+                                    try {
+                                        alertDialogArr[0].setMessage(LocaleController.getString("Loading", R.string.Loading));
+                                        alertDialogArr[0].setCanceledOnTouchOutside(false);
+                                        alertDialogArr[0].setCancelable(false);
+                                        alertDialogArr[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                ConnectionsManager.getInstance().cancelRequest(sendRequest, true);
+                                                try {
+                                                    dialog.dismiss();
+                                                } catch (Throwable e) {
+                                                    FileLog.e(e);
+                                                }
+                                            }
+                                        });
+                                        alertDialogArr[0].show();
+                                    } catch (Exception e) {
+                                    }
+                                }
+                            }
+                        }, 1000);
+                        return;
+                    }
+                } catch (Exception e) {
+                }
+            }
             try {
                 String scheme = uri.getScheme() != null ? uri.getScheme().toLowerCase() : "";
                 if (allowCustom && MediaController.getInstance().canCustomTabs() && !internalUri && !scheme.equals("tel")) {
@@ -155,7 +235,7 @@ public class Browser {
                                 FileLog.d("default browser name = " + browserPackageNames[a]);
                             }
                         }
-                    } catch (Exception e) {
+                    } catch (Exception e2) {
                     }
                     List<ResolveInfo> allActivities = null;
                     try {
@@ -187,12 +267,14 @@ public class Browser {
                                 FileLog.d("device has " + ((ResolveInfo) allActivities.get(a)).activityInfo.packageName + " to open " + uri.toString());
                             }
                         }
-                    } catch (Exception e2) {
+                    } catch (Exception e3) {
                     }
                     if (forceBrowser[0] || allActivities == null || allActivities.isEmpty()) {
-                        Intent intent = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
+                        intent = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
                         intent.setAction("android.intent.action.SEND");
+                        PendingIntent copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), 134217728);
                         Builder builder = new Builder(getSession());
+                        builder.addMenuItem(LocaleController.getString("CopyLink", R.string.CopyLink), copy);
                         builder.setToolbarColor(Theme.getColor(Theme.key_actionBarDefault));
                         builder.setShowTitle(true);
                         builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, intent, 0), false);
@@ -200,18 +282,18 @@ public class Browser {
                         return;
                     }
                 }
-            } catch (Throwable e3) {
-                FileLog.e(e3);
+            } catch (Throwable e4) {
+                FileLog.e(e4);
             }
             try {
-                Intent intent2 = new Intent("android.intent.action.VIEW", uri);
+                intent = new Intent("android.intent.action.VIEW", uri);
                 if (internalUri) {
-                    intent2.setComponent(new ComponentName(context.getPackageName(), LaunchActivity.class.getName()));
+                    intent.setComponent(new ComponentName(context.getPackageName(), LaunchActivity.class.getName()));
                 }
-                intent2.putExtra("com.android.browser.application_id", context.getPackageName());
-                context.startActivity(intent2);
-            } catch (Throwable e32) {
-                FileLog.e(e32);
+                intent.putExtra("com.android.browser.application_id", context.getPackageName());
+                context.startActivity(intent);
+            } catch (Throwable e42) {
+                FileLog.e(e42);
             }
         }
     }

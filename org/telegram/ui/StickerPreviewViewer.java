@@ -24,12 +24,15 @@ import android.widget.AbsListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.query.StickersQuery;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
@@ -62,26 +65,56 @@ public class StickerPreviewViewer {
     private Runnable showSheetRunnable = new Runnable() {
         public void run() {
             if (StickerPreviewViewer.this.parentActivity != null && StickerPreviewViewer.this.currentSet != null) {
+                final boolean inFavs = StickersQuery.isStickerInFavorites(StickerPreviewViewer.this.currentSticker);
                 Builder builder = new Builder(StickerPreviewViewer.this.parentActivity);
-                builder.setItems(new CharSequence[]{LocaleController.getString("SendStickerPreview", R.string.SendStickerPreview), LocaleController.formatString("ViewPackPreview", R.string.ViewPackPreview, new Object[0])}, new OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (StickerPreviewViewer.this.parentActivity != null && StickerPreviewViewer.this.delegate != null) {
-                            if (which == 0) {
-                                StickerPreviewViewer.this.delegate.sentSticker(StickerPreviewViewer.this.currentSticker);
-                            } else if (which == 1) {
-                                StickerPreviewViewer.this.delegate.openSet(StickerPreviewViewer.this.currentSet);
+                ArrayList<CharSequence> items = new ArrayList();
+                final ArrayList<Integer> actions = new ArrayList();
+                ArrayList<Integer> icons = new ArrayList();
+                if (StickerPreviewViewer.this.delegate != null) {
+                    items.add(LocaleController.getString("SendStickerPreview", R.string.SendStickerPreview));
+                    icons.add(Integer.valueOf(R.drawable.stickers_send));
+                    actions.add(Integer.valueOf(0));
+                    items.add(LocaleController.formatString("ViewPackPreview", R.string.ViewPackPreview, new Object[0]));
+                    icons.add(Integer.valueOf(R.drawable.stickers_pack));
+                    actions.add(Integer.valueOf(1));
+                }
+                if (!MessageObject.isMaskDocument(StickerPreviewViewer.this.currentSticker) && (inFavs || StickersQuery.canAddStickerToFavorites())) {
+                    items.add(inFavs ? LocaleController.getString("DeleteFromFavorites", R.string.DeleteFromFavorites) : LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
+                    icons.add(Integer.valueOf(inFavs ? R.drawable.stickers_unfavorite : R.drawable.stickers_favorite));
+                    actions.add(Integer.valueOf(2));
+                }
+                if (!items.isEmpty()) {
+                    int[] ic = new int[icons.size()];
+                    for (int a = 0; a < icons.size(); a++) {
+                        ic[a] = ((Integer) icons.get(a)).intValue();
+                    }
+                    builder.setItems((CharSequence[]) items.toArray(new CharSequence[items.size()]), ic, new OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (StickerPreviewViewer.this.parentActivity != null) {
+                                if (((Integer) actions.get(which)).intValue() == 0) {
+                                    if (StickerPreviewViewer.this.delegate != null) {
+                                        StickerPreviewViewer.this.delegate.sentSticker(StickerPreviewViewer.this.currentSticker);
+                                    }
+                                } else if (((Integer) actions.get(which)).intValue() == 1) {
+                                    if (StickerPreviewViewer.this.delegate != null) {
+                                        StickerPreviewViewer.this.delegate.openSet(StickerPreviewViewer.this.currentSet);
+                                    }
+                                } else if (((Integer) actions.get(which)).intValue() == 2) {
+                                    StickersQuery.addRecentSticker(2, StickerPreviewViewer.this.currentSticker, (int) (System.currentTimeMillis() / 1000), inFavs);
+                                }
                             }
                         }
-                    }
-                });
-                StickerPreviewViewer.this.visibleDialog = builder.create();
-                StickerPreviewViewer.this.visibleDialog.setOnDismissListener(new OnDismissListener() {
-                    public void onDismiss(DialogInterface dialog) {
-                        StickerPreviewViewer.this.visibleDialog = null;
-                        StickerPreviewViewer.this.close();
-                    }
-                });
-                StickerPreviewViewer.this.visibleDialog.show();
+                    });
+                    StickerPreviewViewer.this.visibleDialog = builder.create();
+                    StickerPreviewViewer.this.visibleDialog.setOnDismissListener(new OnDismissListener() {
+                        public void onDismiss(DialogInterface dialog) {
+                            StickerPreviewViewer.this.visibleDialog = null;
+                            StickerPreviewViewer.this.close();
+                        }
+                    });
+                    StickerPreviewViewer.this.visibleDialog.show();
+                    StickerPreviewViewer.this.containerView.performHapticFeedback(0);
+                }
             }
         }
     };
@@ -394,26 +427,25 @@ public class StickerPreviewViewer {
                 textPaint.setTextSize((float) AndroidUtilities.dp(24.0f));
             }
             InputStickerSet newSet = null;
-            if (isRecent) {
-                for (a = 0; a < sticker.attributes.size(); a++) {
-                    attribute = (DocumentAttribute) sticker.attributes.get(a);
-                    if ((attribute instanceof TL_documentAttributeSticker) && attribute.stickerset != null) {
-                        newSet = attribute.stickerset;
-                        break;
-                    }
+            for (a = 0; a < sticker.attributes.size(); a++) {
+                attribute = (DocumentAttribute) sticker.attributes.get(a);
+                if ((attribute instanceof TL_documentAttributeSticker) && attribute.stickerset != null) {
+                    newSet = attribute.stickerset;
+                    break;
                 }
-                if (!(newSet == null || this.currentSet == newSet)) {
-                    try {
-                        if (this.visibleDialog != null) {
-                            this.visibleDialog.setOnDismissListener(null);
-                            this.visibleDialog.dismiss();
-                        }
-                    } catch (Throwable e) {
-                        FileLog.e(e);
+            }
+            if (newSet != null) {
+                try {
+                    if (this.visibleDialog != null) {
+                        this.visibleDialog.setOnDismissListener(null);
+                        this.visibleDialog.dismiss();
+                        this.visibleDialog = null;
                     }
-                    AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
-                    AndroidUtilities.runOnUIThread(this.showSheetRunnable, 2000);
+                } catch (Throwable e) {
+                    FileLog.e(e);
                 }
+                AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
+                AndroidUtilities.runOnUIThread(this.showSheetRunnable, 1300);
             }
             this.currentSet = newSet;
             this.centerImage.setImage((TLObject) sticker, null, sticker.thumb.location, null, "webp", 1);

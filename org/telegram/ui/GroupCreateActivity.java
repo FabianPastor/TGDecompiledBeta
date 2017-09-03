@@ -355,6 +355,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
+            User user;
             switch (holder.getItemViewType()) {
                 case 0:
                     GroupCreateSectionCell cell = (GroupCreateSectionCell) holder.itemView;
@@ -364,7 +365,6 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     }
                     return;
                 default:
-                    User user;
                     GroupCreateUserCell cell2 = holder.itemView;
                     CharSequence username = null;
                     CharSequence name = null;
@@ -680,6 +680,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         this.editText.setHintColor(Theme.getColor(Theme.key_groupcreate_hintText));
         this.editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.editText.setCursorColor(Theme.getColor(Theme.key_groupcreate_cursor));
+        this.editText.setCursorWidth(1.5f);
         this.editText.setInputType(655536);
         this.editText.setSingleLine(true);
         this.editText.setBackgroundDrawable(null);

@@ -2050,7 +2050,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     }
 
     private void setUseRevealAnimation(boolean value) {
-        if (!value || (value && VERSION.SDK_INT >= 18 && !AndroidUtilities.isTablet())) {
+        if (!value || (value && VERSION.SDK_INT >= 18 && !AndroidUtilities.isTablet() && VERSION.SDK_INT != 26)) {
             this.useRevealAnimation = value;
         }
     }

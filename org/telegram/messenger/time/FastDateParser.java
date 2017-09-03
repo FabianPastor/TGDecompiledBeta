@@ -472,9 +472,9 @@ public class FastDateParser implements DateParser, Serializable {
                 return DAY_OF_YEAR_STRATEGY;
             case 'E':
                 return getLocaleSpecificStrategy(7, definingCalendar);
-            case TLRPC.LAYER /*70*/:
+            case 'F':
                 return DAY_OF_WEEK_IN_MONTH_STRATEGY;
-            case 'G':
+            case TLRPC.LAYER /*71*/:
                 return getLocaleSpecificStrategy(0, definingCalendar);
             case XtraBox.MP4_XTRA_BT_GUID /*72*/:
                 return MODULO_HOUR_OF_DAY_STRATEGY;

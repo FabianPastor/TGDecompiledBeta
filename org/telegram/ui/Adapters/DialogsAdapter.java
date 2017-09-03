@@ -17,16 +17,45 @@ import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 public class DialogsAdapter extends SelectionAdapter {
     private int currentCount;
     private int dialogsType;
+    private boolean isOnlySelect;
     private Context mContext;
     private long openedDialogId;
+    private ArrayList<Long> selectedDialogs;
 
-    public DialogsAdapter(Context context, int type) {
+    public DialogsAdapter(Context context, int type, boolean onlySelect) {
         this.mContext = context;
         this.dialogsType = type;
+        this.isOnlySelect = onlySelect;
+        if (onlySelect) {
+            this.selectedDialogs = new ArrayList();
+        }
     }
 
     public void setOpenedDialogId(long id) {
         this.openedDialogId = id;
+    }
+
+    public boolean hasSelectedDialogs() {
+        return (this.selectedDialogs == null || this.selectedDialogs.isEmpty()) ? false : true;
+    }
+
+    public void addOrRemoveSelectedDialog(long did, View cell) {
+        if (this.selectedDialogs.contains(Long.valueOf(did))) {
+            this.selectedDialogs.remove(Long.valueOf(did));
+            if (cell instanceof DialogCell) {
+                ((DialogCell) cell).setChecked(false, true);
+                return;
+            }
+            return;
+        }
+        this.selectedDialogs.add(Long.valueOf(did));
+        if (cell instanceof DialogCell) {
+            ((DialogCell) cell).setChecked(true, true);
+        }
+    }
+
+    public ArrayList<Long> getSelectedDialogs() {
+        return this.selectedDialogs;
     }
 
     public boolean isDataSetChanged() {
@@ -83,7 +112,7 @@ public class DialogsAdapter extends SelectionAdapter {
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = null;
         if (viewType == 0) {
-            view = new DialogCell(this.mContext);
+            view = new DialogCell(this.mContext, this.isOnlySelect);
         } else if (viewType == 1) {
             view = new LoadingCell(this.mContext);
         }
@@ -108,6 +137,9 @@ public class DialogsAdapter extends SelectionAdapter {
                     z = false;
                 }
                 cell.setDialogSelected(z);
+            }
+            if (this.selectedDialogs != null) {
+                cell.setChecked(this.selectedDialogs.contains(Long.valueOf(dialog.id)), false);
             }
             cell.setDialog(dialog, i, this.dialogsType);
         }

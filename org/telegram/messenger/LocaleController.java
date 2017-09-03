@@ -1010,6 +1010,14 @@ public class LocaleController {
         return getInstance().getStringInternal(key, res);
     }
 
+    public static String getPluralString(String key, int plural) {
+        if (key == null || key.length() == 0 || getInstance().currentPluralRules == null) {
+            return "LOC_ERR:" + key;
+        }
+        String param = key + "_" + getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(plural));
+        return getString(param, ApplicationLoader.applicationContext.getResources().getIdentifier(param, "string", ApplicationLoader.applicationContext.getPackageName()));
+    }
+
     public static String formatPluralString(String key, int plural) {
         if (key == null || key.length() == 0 || getInstance().currentPluralRules == null) {
             return "LOC_ERR:" + key;

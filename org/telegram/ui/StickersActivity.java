@@ -237,7 +237,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             View view = null;
             switch (viewType) {
                 case 0:
-                    view = new StickerSetCell(this.mContext);
+                    view = new StickerSetCell(this.mContext, 1);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     ((StickerSetCell) view).setOnOptionsClick(new OnClickListener() {
                         public void onClick(View v) {

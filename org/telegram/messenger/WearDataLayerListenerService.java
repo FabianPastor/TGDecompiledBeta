@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.User;
 
 public class WearDataLayerListenerService extends WearableListenerService {
@@ -105,6 +106,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                     FileLog.d("WearableDataLayer channel thread exiting");
                 }
                 if ("/waitForAuthCode".equals(path)) {
+                    ConnectionsManager.getInstance().setAppPaused(false, false);
                     final String[] code = new String[]{null};
                     barrier = new CyclicBarrier(2);
                     listener = new NotificationCenterDelegate() {
@@ -149,6 +151,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                     }
                     out.flush();
                     out.close();
+                    ConnectionsManager.getInstance().setAppPaused(true, false);
                 }
                 ch.close(apiClient).await();
                 apiClient.disconnect();

@@ -103,9 +103,7 @@ public class ProfileSearchCell extends BaseCell {
     }
 
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        if (this.user == null && this.chat == null && this.encryptedChat == null) {
-            super.onLayout(changed, left, top, right, bottom);
-        } else if (changed) {
+        if (!(this.user == null && this.chat == null && this.encryptedChat == null) && changed) {
             buildLayout();
         }
     }

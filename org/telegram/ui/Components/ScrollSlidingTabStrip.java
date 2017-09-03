@@ -16,6 +16,8 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Document;
 
 public class ScrollSlidingTabStrip extends HorizontalScrollView {
@@ -117,7 +119,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         tab.setSelected(z);
     }
 
-    public void addStickerTab(Document sticker) {
+    public void addStickerTab(Chat chat) {
         final int position = this.tabCount;
         this.tabCount = position + 1;
         FrameLayout tab = new FrameLayout(getContext());
@@ -130,9 +132,33 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         this.tabsContainer.addView(tab);
         tab.setSelected(position == this.currentPosition);
         BackupImageView imageView = new BackupImageView(getContext());
-        if (!(sticker == null || sticker.thumb == null)) {
-            imageView.setImage(sticker.thumb.location, null, "webp", null);
+        imageView.setRoundRadius(AndroidUtilities.dp(15.0f));
+        TLObject photo = null;
+        Drawable avatarDrawable = new AvatarDrawable();
+        if (chat.photo != null) {
+            photo = chat.photo.photo_small;
         }
+        avatarDrawable.setTextSize(AndroidUtilities.dp(14.0f));
+        avatarDrawable.setInfo(chat);
+        imageView.setImage(photo, "50_50", avatarDrawable);
+        imageView.setAspectFit(true);
+        tab.addView(imageView, LayoutHelper.createFrame(30, 30, 17));
+    }
+
+    public void addStickerTab(Document sticker) {
+        final int position = this.tabCount;
+        this.tabCount = position + 1;
+        FrameLayout tab = new FrameLayout(getContext());
+        tab.setTag(sticker);
+        tab.setFocusable(true);
+        tab.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                ScrollSlidingTabStrip.this.delegate.onPageSelected(position);
+            }
+        });
+        this.tabsContainer.addView(tab);
+        tab.setSelected(position == this.currentPosition);
+        BackupImageView imageView = new BackupImageView(getContext());
         imageView.setAspectFit(true);
         tab.addView(imageView, LayoutHelper.createFrame(30, 30, 17));
     }
@@ -163,8 +189,46 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         }
     }
 
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+        setImages();
+    }
+
+    public void setImages() {
+        int tabSize = AndroidUtilities.dp(52.0f);
+        int start = getScrollX() / tabSize;
+        int end = Math.min(this.tabsContainer.getChildCount(), (((int) Math.ceil((double) (((float) getMeasuredWidth()) / ((float) tabSize)))) + start) + 1);
+        for (int a = start; a < end; a++) {
+            View child = this.tabsContainer.getChildAt(a);
+            Document object = child.getTag();
+            if (object instanceof Document) {
+                ((BackupImageView) ((FrameLayout) child).getChildAt(0)).setImage(object.thumb.location, null, "webp", null);
+            }
+        }
+    }
+
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
+        int tabSize = AndroidUtilities.dp(52.0f);
+        int oldStart = oldl / tabSize;
+        int newStart = l / tabSize;
+        int count = ((int) Math.ceil((double) (((float) getMeasuredWidth()) / ((float) tabSize)))) + 1;
+        int start = Math.min(oldStart, newStart);
+        int end = Math.min(this.tabsContainer.getChildCount(), Math.max(oldStart, newStart) + count);
+        int a = start;
+        while (a < end) {
+            View child = this.tabsContainer.getChildAt(a);
+            Document object = child.getTag();
+            if (object instanceof Document) {
+                BackupImageView imageView = (BackupImageView) ((FrameLayout) child).getChildAt(0);
+                if (a < newStart || a >= newStart + count) {
+                    imageView.setImageDrawable(null);
+                } else {
+                    imageView.setImage(object.thumb.location, null, "webp", null);
+                }
+            }
+            a++;
+        }
     }
 
     protected void onDraw(Canvas canvas) {

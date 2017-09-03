@@ -42,6 +42,7 @@ import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEvent;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEventActionChangeAbout;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEventActionChangePhoto;
+import org.telegram.tgnet.TLRPC.TL_channelAdminLogEventActionChangeStickerSet;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEventActionChangeTitle;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEventActionChangeUsername;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEventActionDeleteMessage;
@@ -156,6 +157,7 @@ public class MessageObject {
     public StringBuilder botButtonsLayout;
     public CharSequence caption;
     public int contentType;
+    public TL_channelAdminLogEvent currentEvent;
     public String customReplyName;
     public String dateKey;
     public boolean deleted;
@@ -568,6 +570,7 @@ public class MessageObject {
         if (event.user_id > 0 && null == null) {
             fromUser = MessagesController.getInstance().getUser(Integer.valueOf(event.user_id));
         }
+        this.currentEvent = event;
         Calendar rightNow = new GregorianCalendar();
         rightNow.setTimeInMillis(((long) event.date) * 1000);
         int dateDay = rightNow.get(6);
@@ -580,7 +583,7 @@ public class MessageObject {
         to_id.channel_id = chat.id;
         if (dayArray == null) {
             messagesByDays.put(this.dateKey, new ArrayList());
-            Message dateMsg = new Message();
+            Message dateMsg = new TL_message();
             dateMsg.message = LocaleController.formatDateChat((long) event.date);
             dateMsg.id = 0;
             dateMsg.date = event.date;
@@ -922,6 +925,14 @@ public class MessageObject {
             message.media.webpage.flags = 10;
             message.media.webpage.display_url = "";
             message.media.webpage.url = "";
+        } else if (event.action instanceof TL_channelAdminLogEventActionChangeStickerSet) {
+            InputStickerSet newStickerset = ((TL_channelAdminLogEventActionChangeStickerSet) event.action).new_stickerset;
+            InputStickerSet oldStickerset = ((TL_channelAdminLogEventActionChangeStickerSet) event.action).new_stickerset;
+            if (newStickerset == null || (newStickerset instanceof TL_inputStickerSetEmpty)) {
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogRemovedStickersSet", R.string.EventLogRemovedStickersSet), "un1", fromUser);
+            } else {
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogChangedStickersSet", R.string.EventLogChangedStickersSet), "un1", fromUser);
+            }
         } else {
             this.messageText = "unsupported " + event.action;
         }
@@ -2701,7 +2712,7 @@ public class MessageObject {
         if (message == null || message.to_id == null) {
             return false;
         }
-        if (message.media != null && isRoundVideoDocument(message.media.document)) {
+        if (message.media != null && (isRoundVideoDocument(message.media.document) || isStickerDocument(message.media.document))) {
             return false;
         }
         if ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.id < 0) {

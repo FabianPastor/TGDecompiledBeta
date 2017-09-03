@@ -90,7 +90,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public interface DialogsSearchAdapterDelegate {
-        void didPressedOnSubDialog(int i);
+        void didPressedOnSubDialog(long j);
 
         void needRemoveHint(int i);
 
@@ -983,7 +983,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 view = new GraySectionCell(this.mContext);
                 break;
             case 2:
-                view = new DialogCell(this.mContext);
+                view = new DialogCell(this.mContext, false);
                 break;
             case 3:
                 view = new LoadingCell(this.mContext);
@@ -1014,7 +1014,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 horizontalListView.setOnItemClickListener(new OnItemClickListener() {
                     public void onItemClick(View view, int position) {
                         if (DialogsSearchAdapter.this.delegate != null) {
-                            DialogsSearchAdapter.this.delegate.didPressedOnSubDialog(((Integer) view.getTag()).intValue());
+                            DialogsSearchAdapter.this.delegate.didPressedOnSubDialog((long) ((Integer) view.getTag()).intValue());
                         }
                     }
                 });

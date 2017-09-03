@@ -232,7 +232,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
                     if (!cell.isDisabled()) {
                         Document document = cell.getSticker();
                         StickerMasksView.this.listener.onStickerSelected(document);
-                        StickersQuery.addRecentSticker(1, document, (int) (System.currentTimeMillis() / 1000));
+                        StickersQuery.addRecentSticker(1, document, (int) (System.currentTimeMillis() / 1000), false);
                         MessagesController.getInstance().saveRecentSticker(document, true);
                     }
                 }
@@ -361,7 +361,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
 
     public void addRecentSticker(Document document) {
         if (document != null) {
-            StickersQuery.addRecentSticker(this.currentType, document, (int) (System.currentTimeMillis() / 1000));
+            StickersQuery.addRecentSticker(this.currentType, document, (int) (System.currentTimeMillis() / 1000), false);
             boolean wasEmpty = this.recentStickers[this.currentType].isEmpty();
             this.recentStickers[this.currentType] = StickersQuery.getRecentStickers(this.currentType);
             if (this.stickersGridAdapter != null) {
@@ -415,8 +415,9 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
             updateStickerTabs();
             reloadStickersAdapter();
             checkDocuments();
-            StickersQuery.loadRecents(0, false, true);
-            StickersQuery.loadRecents(1, false, true);
+            StickersQuery.loadRecents(0, false, true, false);
+            StickersQuery.loadRecents(1, false, true, false);
+            StickersQuery.loadRecents(2, false, true, false);
         }
     }
 

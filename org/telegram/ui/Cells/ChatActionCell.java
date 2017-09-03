@@ -145,6 +145,9 @@ public class ChatActionCell extends BaseCell {
         }
     }
 
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    }
+
     public boolean onTouchEvent(MotionEvent event) {
         if (this.currentMessageObject == null) {
             return super.onTouchEvent(event);

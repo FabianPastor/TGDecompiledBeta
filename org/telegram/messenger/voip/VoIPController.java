@@ -42,12 +42,14 @@ public class VoIPController {
     public static final int STATE_RECONNECTING = 5;
     public static final int STATE_WAIT_INIT = 1;
     public static final int STATE_WAIT_INIT_ACK = 2;
-    private long callStartTime;
-    private ConnectionStateListener listener;
-    private long nativeInst;
+    protected long callStartTime;
+    protected ConnectionStateListener listener;
+    protected long nativeInst;
 
     public interface ConnectionStateListener {
         void onConnectionStateChanged(int i);
+
+        void onSignalBarCountChanged(int i);
     }
 
     public static class Stats {
@@ -77,7 +79,7 @@ public class VoIPController {
 
     private static native String nativeGetVersion();
 
-    private native long nativeInit(int i);
+    private native long nativeInit();
 
     private native void nativeRelease(long j);
 
@@ -99,7 +101,7 @@ public class VoIPController {
 
     public VoIPController() {
         this.nativeInst = 0;
-        this.nativeInst = nativeInit(VERSION.SDK_INT);
+        this.nativeInst = nativeInit();
     }
 
     public void start() {
@@ -154,7 +156,7 @@ public class VoIPController {
         return nativeGetDebugString(this.nativeInst);
     }
 
-    private void ensureNativeInstance() {
+    protected void ensureNativeInstance() {
         if (this.nativeInst == 0) {
             throw new IllegalStateException("Native instance is not valid");
         }
@@ -170,6 +172,12 @@ public class VoIPController {
         }
         if (this.listener != null) {
             this.listener.onConnectionStateChanged(state);
+        }
+    }
+
+    private void handleSignalBarsChange(int count) {
+        if (this.listener != null) {
+            this.listener.onSignalBarCountChanged(count);
         }
     }
 

@@ -11,7 +11,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,6 +38,7 @@ import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Cells.ThemeCell;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
@@ -82,12 +82,12 @@ public class ThemeActivity extends BaseFragment {
                                 Builder builder = new Builder(ThemeActivity.this.getParentActivity());
                                 builder.setItems(themeInfo.pathToFile == null ? new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile)} : new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile), LocaleController.getString("Edit", R.string.Edit), LocaleController.getString("Delete", R.string.Delete)}, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        File currentFile;
                                         Throwable e;
                                         File finalFile;
-                                        Intent intent;
                                         Throwable th;
                                         if (which == 0) {
+                                            File currentFile;
+                                            Intent intent;
                                             if (themeInfo.pathToFile == null && themeInfo.assetName == null) {
                                                 StringBuilder result = new StringBuilder();
                                                 for (Entry<String, Integer> entry : Theme.getDefaultColors().entrySet()) {
@@ -274,7 +274,7 @@ public class ThemeActivity extends BaseFragment {
                         ThemeActivity.this.finishFragment();
                     }
                 } else if (ThemeActivity.this.getParentActivity() != null) {
-                    final EditText editText = new EditText(ThemeActivity.this.getParentActivity());
+                    final EditTextBoldCursor editText = new EditTextBoldCursor(ThemeActivity.this.getParentActivity());
                     editText.setBackgroundDrawable(Theme.createEditTextDrawable(ThemeActivity.this.getParentActivity(), true));
                     AlertDialog.Builder builder = new AlertDialog.Builder(ThemeActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("NewTheme", R.string.NewTheme));
@@ -300,7 +300,9 @@ public class ThemeActivity extends BaseFragment {
                     editText.setGravity(51);
                     editText.setSingleLine(true);
                     editText.setImeOptions(6);
-                    AndroidUtilities.clearCursorDrawable(editText);
+                    editText.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                    editText.setCursorSize(AndroidUtilities.dp(20.0f));
+                    editText.setCursorWidth(1.5f);
                     editText.setPadding(0, AndroidUtilities.dp(4.0f), 0, 0);
                     linearLayout.addView(editText, LayoutHelper.createLinear(-1, 36, 51, 24, 6, 24, 0));
                     editText.setOnEditorActionListener(new OnEditorActionListener() {

@@ -12,31 +12,29 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class GroupCreateDividerItemDecoration extends ItemDecoration {
     private boolean searching;
+    private boolean single;
 
     public void setSearching(boolean value) {
         this.searching = value;
     }
 
+    public void setSingle(boolean value) {
+        this.single = value;
+    }
+
     public void onDraw(Canvas canvas, RecyclerView parent, State state) {
         int width = parent.getWidth();
-        int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount - 1; i++) {
+        int childCount = parent.getChildCount() - (this.single ? 0 : 1);
+        for (int i = 0; i < childCount; i++) {
             View child = parent.getChildAt(i);
-            if (parent.getChildAdapterPosition(child) != 0) {
-                int top = child.getBottom();
-                canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(72.0f), (float) top, (float) (width - (LocaleController.isRTL ? AndroidUtilities.dp(72.0f) : 0)), (float) top, Theme.dividerPaint);
-            }
+            int position = parent.getChildAdapterPosition(child);
+            int top = child.getBottom();
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(72.0f), (float) top, (float) (width - (LocaleController.isRTL ? AndroidUtilities.dp(72.0f) : 0)), (float) top, Theme.dividerPaint);
         }
     }
 
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
         super.getItemOffsets(outRect, view, parent, state);
-        int position = parent.getChildAdapterPosition(view);
-        if (position == 0) {
-            return;
-        }
-        if (this.searching || position != 1) {
-            outRect.top = 1;
-        }
+        outRect.top = 1;
     }
 }

@@ -218,7 +218,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
             View view = null;
             if (viewType == 0) {
-                view = new DialogCell(this.mContext);
+                view = new DialogCell(this.mContext, false);
             } else if (viewType == 1) {
                 view = new LoadingCell(this.mContext);
             }
@@ -367,7 +367,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             messageObject = new MessageObject(message, null, true);
             messageObject.useCustomPhoto = true;
             this.messages.add(messageObject);
-            message = new Message();
+            message = new TL_message();
             message.message = LocaleController.formatDateChat((long) date);
             message.id = 0;
             message.date = date;

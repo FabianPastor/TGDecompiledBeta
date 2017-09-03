@@ -23,7 +23,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -65,6 +64,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SlideView;
@@ -106,7 +106,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
     }
 
     public class LoginActivitySmsView extends SlideView implements NotificationCenterDelegate {
-        private EditText codeField;
+        private EditTextBoldCursor codeField;
         private volatile int codeTime = DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
         private Timer codeTimer;
         private TextView confirmTextView;
@@ -156,10 +156,12 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             } else {
                 addView(this.confirmTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3));
             }
-            this.codeField = new EditText(context);
+            this.codeField = new EditTextBoldCursor(context);
             this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.codeField.setHint(LocaleController.getString("Code", R.string.Code));
-            AndroidUtilities.clearCursorDrawable(this.codeField);
+            this.codeField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            this.codeField.setCursorWidth(1.5f);
+            this.codeField.setCursorSize(AndroidUtilities.dp(20.0f));
             this.codeField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.codeField.setImeOptions(268435461);
             this.codeField.setTextSize(1, 18.0f);

@@ -7,6 +7,7 @@ import android.os.Build.VERSION;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputFilter.LengthFilter;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.view.ActionMode;
@@ -18,7 +19,6 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
@@ -58,7 +58,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private boolean keyboardVisible;
     private int lastSizeChangeValue1;
     private boolean lastSizeChangeValue2;
-    private EditText messageEditText;
+    private EditTextBoldCursor messageEditText;
     private AnimatorSet runningAnimation;
     private AnimatorSet runningAnimation2;
     private ObjectAnimator runningAnimationAudio;
@@ -100,7 +100,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 }
             }
         });
-        this.messageEditText = new EditText(context) {
+        this.messageEditText = new EditTextBoldCursor(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 try {
                     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -167,7 +167,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.messageEditText.setGravity(80);
         this.messageEditText.setPadding(0, AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(12.0f));
         this.messageEditText.setBackgroundDrawable(null);
-        AndroidUtilities.clearCursorDrawable(this.messageEditText);
+        this.messageEditText.setCursorColor(-1);
+        this.messageEditText.setCursorSize(AndroidUtilities.dp(20.0f));
         this.messageEditText.setTextColor(-1);
         this.messageEditText.setHintTextColor(-NUM);
         this.messageEditText.setFilters(new InputFilter[]{new LengthFilter(Callback.DEFAULT_DRAG_ANIMATION_DURATION)});
@@ -328,10 +329,84 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         return this.messageEditText.getSelectionStart();
     }
 
-    public void replaceWithText(int start, int len, String text) {
+    private void createEmojiView() {
+        if (this.emojiView == null) {
+            this.emojiView = new EmojiView(false, false, getContext(), null);
+            this.emojiView.setListener(new Listener() {
+                public boolean onBackspace() {
+                    if (PhotoViewerCaptionEnterView.this.messageEditText.length() == 0) {
+                        return false;
+                    }
+                    PhotoViewerCaptionEnterView.this.messageEditText.dispatchKeyEvent(new KeyEvent(0, 67));
+                    return true;
+                }
+
+                public void onEmojiSelected(String symbol) {
+                    if (PhotoViewerCaptionEnterView.this.messageEditText.length() + symbol.length() <= Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
+                        int i = PhotoViewerCaptionEnterView.this.messageEditText.getSelectionEnd();
+                        if (i < 0) {
+                            i = 0;
+                        }
+                        try {
+                            PhotoViewerCaptionEnterView.this.innerTextChange = true;
+                            CharSequence localCharSequence = Emoji.replaceEmoji(symbol, PhotoViewerCaptionEnterView.this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+                            PhotoViewerCaptionEnterView.this.messageEditText.setText(PhotoViewerCaptionEnterView.this.messageEditText.getText().insert(i, localCharSequence));
+                            int j = i + localCharSequence.length();
+                            PhotoViewerCaptionEnterView.this.messageEditText.setSelection(j, j);
+                        } catch (Throwable e) {
+                            FileLog.e(e);
+                        } finally {
+                            PhotoViewerCaptionEnterView.this.innerTextChange = false;
+                        }
+                    }
+                }
+
+                public void onStickerSelected(Document sticker) {
+                }
+
+                public void onStickersSettingsClick() {
+                }
+
+                public void onGifSelected(Document gif) {
+                }
+
+                public void onGifTab(boolean opened) {
+                }
+
+                public void onStickersTab(boolean opened) {
+                }
+
+                public void onClearEmojiRecent() {
+                }
+
+                public void onShowStickerSet(StickerSet stickerSet, InputStickerSet inputStickerSet) {
+                }
+
+                public void onStickerSetAdd(StickerSetCovered stickerSet) {
+                }
+
+                public void onStickerSetRemove(StickerSetCovered stickerSet) {
+                }
+
+                public void onStickersGroupClick(int chatId) {
+                }
+            });
+            this.sizeNotifierLayout.addView(this.emojiView);
+        }
+    }
+
+    public void addEmojiToRecent(String code) {
+        createEmojiView();
+        this.emojiView.addEmojiToRecent(code);
+    }
+
+    public void replaceWithText(int start, int len, CharSequence text, boolean parseEmoji) {
         try {
-            StringBuilder builder = new StringBuilder(this.messageEditText.getText());
+            SpannableStringBuilder builder = new SpannableStringBuilder(this.messageEditText.getText());
             builder.replace(start, start + len, text);
+            if (parseEmoji) {
+                Emoji.replaceEmoji(builder, this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            }
             this.messageEditText.setText(builder);
             if (text.length() + start <= this.messageEditText.length()) {
                 this.messageEditText.setSelection(text.length() + start);
@@ -380,64 +455,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private void showPopup(int show) {
         if (show == 1) {
             if (this.emojiView == null) {
-                this.emojiView = new EmojiView(false, false, getContext());
-                this.emojiView.setListener(new Listener() {
-                    public boolean onBackspace() {
-                        if (PhotoViewerCaptionEnterView.this.messageEditText.length() == 0) {
-                            return false;
-                        }
-                        PhotoViewerCaptionEnterView.this.messageEditText.dispatchKeyEvent(new KeyEvent(0, 67));
-                        return true;
-                    }
-
-                    public void onEmojiSelected(String symbol) {
-                        if (PhotoViewerCaptionEnterView.this.messageEditText.length() + symbol.length() <= Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
-                            int i = PhotoViewerCaptionEnterView.this.messageEditText.getSelectionEnd();
-                            if (i < 0) {
-                                i = 0;
-                            }
-                            try {
-                                PhotoViewerCaptionEnterView.this.innerTextChange = true;
-                                CharSequence localCharSequence = Emoji.replaceEmoji(symbol, PhotoViewerCaptionEnterView.this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
-                                PhotoViewerCaptionEnterView.this.messageEditText.setText(PhotoViewerCaptionEnterView.this.messageEditText.getText().insert(i, localCharSequence));
-                                int j = i + localCharSequence.length();
-                                PhotoViewerCaptionEnterView.this.messageEditText.setSelection(j, j);
-                            } catch (Throwable e) {
-                                FileLog.e(e);
-                            } finally {
-                                PhotoViewerCaptionEnterView.this.innerTextChange = false;
-                            }
-                        }
-                    }
-
-                    public void onStickerSelected(Document sticker) {
-                    }
-
-                    public void onStickersSettingsClick() {
-                    }
-
-                    public void onGifSelected(Document gif) {
-                    }
-
-                    public void onGifTab(boolean opened) {
-                    }
-
-                    public void onStickersTab(boolean opened) {
-                    }
-
-                    public void onClearEmojiRecent() {
-                    }
-
-                    public void onShowStickerSet(StickerSet stickerSet, InputStickerSet inputStickerSet) {
-                    }
-
-                    public void onStickerSetAdd(StickerSetCovered stickerSet) {
-                    }
-
-                    public void onStickerSetRemove(StickerSetCovered stickerSet) {
-                    }
-                });
-                this.sizeNotifierLayout.addView(this.emojiView);
+                createEmojiView();
             }
             this.emojiView.setVisibility(0);
             if (this.keyboardHeight <= 0) {

@@ -29,6 +29,7 @@ public class EditTextBoldCursor extends EditText {
     private static Field mShowCursorField;
     private boolean allowDrawCursor = true;
     private int cursorSize;
+    private float cursorWidth = 2.0f;
     private Object editor;
     private GradientDrawable gradientDrawable;
     private float hintAlpha = 1.0f;
@@ -76,6 +77,10 @@ public class EditTextBoldCursor extends EditText {
 
     public void setAllowDrawCursor(boolean value) {
         this.allowDrawCursor = value;
+    }
+
+    public void setCursorWidth(float width) {
+        this.cursorWidth = width;
     }
 
     public void setCursorColor(int color) {
@@ -180,7 +185,8 @@ public class EditTextBoldCursor extends EditText {
         }
         try {
             if (this.allowDrawCursor && mShowCursorField != null && this.mCursorDrawable != null && this.mCursorDrawable[0] != null) {
-                if ((SystemClock.uptimeMillis() - mShowCursorField.getLong(this.editor)) % 1000 < 500) {
+                boolean showCursor = (SystemClock.uptimeMillis() - mShowCursorField.getLong(this.editor)) % 1000 < 500 && isFocused();
+                if (showCursor) {
                     canvas.save();
                     int voffsetCursor = 0;
                     if ((getGravity() & 112) != 48) {
@@ -192,7 +198,7 @@ public class EditTextBoldCursor extends EditText {
                     int lineCount = layout.getLineCount();
                     Rect bounds = this.mCursorDrawable[0].getBounds();
                     this.rect.left = bounds.left;
-                    this.rect.right = bounds.left + AndroidUtilities.dp(2.0f);
+                    this.rect.right = bounds.left + AndroidUtilities.dp(this.cursorWidth);
                     this.rect.bottom = bounds.bottom;
                     this.rect.top = bounds.top;
                     if (this.lineSpacingExtra != 0.0f && line < lineCount - 1) {

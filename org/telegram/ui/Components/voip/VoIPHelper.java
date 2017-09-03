@@ -48,7 +48,7 @@ import org.telegram.ui.VoIPActivity;
 
 public class VoIPHelper {
     private static final int VOIP_SUPPORT_ID = 4244000;
-    private static long lastCallRequestTime = 0;
+    public static long lastCallTime = 0;
 
     public static void startCall(User user, final Activity activity, TL_userFull userFull) {
         boolean isAirplaneMode = true;
@@ -111,8 +111,8 @@ public class VoIPHelper {
     }
 
     private static void doInitiateCall(User user, Activity activity) {
-        if (activity != null && user != null && System.currentTimeMillis() - lastCallRequestTime >= 1000) {
-            lastCallRequestTime = System.currentTimeMillis();
+        if (activity != null && user != null && System.currentTimeMillis() - lastCallTime >= 2000) {
+            lastCallTime = System.currentTimeMillis();
             Intent intent = new Intent(activity, VoIPService.class);
             intent.putExtra("user_id", user.id);
             intent.putExtra("is_outgoing", true);

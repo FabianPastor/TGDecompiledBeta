@@ -489,7 +489,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         if (spans.length > 0) {
                             int idx = TextUtils.indexOf(text, author);
                             if (idx != -1) {
-                                Spannable spannable = Factory.getInstance().newSpannable(author);
+                                Spannable spannable = Factory.getInstance().newSpannable(text);
                                 text = spannable;
                                 for (int a = 0; a < spans.length; a++) {
                                     spannable.setSpan(spans[a], spannableAuthor.getSpanStart(spans[a]) + idx, spannableAuthor.getSpanEnd(spans[a]) + idx, 33);
@@ -1240,7 +1240,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 }
                 try {
                     if (this.currentBlock.html != null) {
-                        this.webView.loadData(this.currentBlock.html, "text/html", "UTF-8");
+                        this.webView.loadDataWithBaseURL("https://telegram.org/embed", this.currentBlock.html, "text/html", "UTF-8", null);
+                        this.videoView.setVisibility(4);
+                        this.videoView.loadVideo(null, null, null, false);
+                        this.webView.setVisibility(0);
                     } else {
                         if (this.currentBlock.poster_photo_id != 0) {
                             thumb = ArticleViewer.this.getPhotoWithId(this.currentBlock.poster_photo_id);
@@ -1248,6 +1251,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         if (this.videoView.loadVideo(block.url, thumb, null, this.currentBlock.autoplay)) {
                             this.webView.setVisibility(4);
                             this.videoView.setVisibility(0);
+                            this.webView.stopLoading();
+                            this.webView.loadUrl("about:blank");
                         } else {
                             this.webView.setVisibility(0);
                             this.videoView.setVisibility(4);
@@ -1623,12 +1628,14 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     RichText item = (RichText) this.currentBlock.items.get(a);
                     if (a == 0) {
                         textLayout = ArticleViewer.this.createLayoutForText(null, item, (width - AndroidUtilities.dp(24.0f)) - this.maxLetterWidth, this.currentBlock);
-                        int lCount = textLayout.getLineCount();
-                        for (int b = 0; b < lCount; b++) {
-                            if (textLayout.getLineLeft(b) > 0.0f) {
-                                this.hasRtl = true;
-                                ArticleViewer.this.isRtl = 1;
-                                break;
+                        if (textLayout != null) {
+                            int lCount = textLayout.getLineCount();
+                            for (int b = 0; b < lCount; b++) {
+                                if (textLayout.getLineLeft(b) > 0.0f) {
+                                    this.hasRtl = true;
+                                    ArticleViewer.this.isRtl = 1;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -5812,25 +5819,29 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     }
 
     public boolean open(MessageObject messageObject) {
-        return open(messageObject, true);
+        return open(messageObject, null, null, true);
     }
 
-    private boolean open(MessageObject messageObject, boolean first) {
-        if (this.parentActivity == null || ((this.isVisible && !this.collapsed) || messageObject == null)) {
+    public boolean open(TL_webPage webpage, String url) {
+        return open(null, webpage, url, true);
+    }
+
+    private boolean open(MessageObject messageObject, WebPage webpage, String url, boolean first) {
+        if (this.parentActivity == null || ((this.isVisible && !this.collapsed) || (messageObject == null && webpage == null))) {
             return false;
         }
-        WindowManager wm;
-        final AnimatorSet animatorSet;
-        Animator[] animatorArr;
-        float[] fArr;
+        if (messageObject != null) {
+            webpage = messageObject.messageOwner.media.webpage;
+        }
         if (first) {
             TL_messages_getWebPage req = new TL_messages_getWebPage();
-            req.url = messageObject.messageOwner.media.webpage.url;
-            if (messageObject.messageOwner.media.webpage.cached_page instanceof TL_pagePart) {
+            req.url = webpage.url;
+            if (webpage.cached_page instanceof TL_pagePart) {
                 req.hash = 0;
             } else {
-                req.hash = messageObject.messageOwner.media.webpage.hash;
+                req.hash = webpage.hash;
             }
+            final WebPage webPageFinal = webpage;
             final MessageObject messageObject2 = messageObject;
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
@@ -5839,8 +5850,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         if (webPage.cached_page != null) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
-                                    if (!ArticleViewer.this.pagesStack.isEmpty() && ArticleViewer.this.pagesStack.get(0) == messageObject2.messageOwner.media.webpage && webPage.cached_page != null) {
-                                        messageObject2.messageOwner.media.webpage = webPage;
+                                    if (!ArticleViewer.this.pagesStack.isEmpty() && ArticleViewer.this.pagesStack.get(0) == webPageFinal && webPage.cached_page != null) {
+                                        if (messageObject2 != null) {
+                                            messageObject2.messageOwner.media.webpage = webPage;
+                                        }
                                         ArticleViewer.this.pagesStack.set(0, webPage);
                                         if (ArticleViewer.this.pagesStack.size() == 1) {
                                             ArticleViewer.this.currentPage = webPage;
@@ -5875,142 +5888,108 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         this.settingsButton.setAlpha(0.0f);
         this.layoutManager.scrollToPositionWithOffset(0, 0);
         checkScroll(-AndroidUtilities.dp(56.0f));
-        WebPage webPage = messageObject.messageOwner.media.webpage;
-        String webPageUrl = webPage.url.toLowerCase();
         String anchor = null;
-        for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
-            LayoutParams layoutParams;
-            MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
-            if (entity instanceof TL_messageEntityUrl) {
-                try {
-                    String url = messageObject.messageOwner.message.substring(entity.offset, entity.offset + entity.length).toLowerCase();
-                    if (url.contains(webPageUrl) || webPageUrl.contains(url)) {
-                        int index = url.lastIndexOf(35);
-                        if (index != -1) {
-                            anchor = url.substring(index + 1);
-                        }
-                        addPageToStack(webPage, anchor);
-                        this.lastInsets = null;
-                        if (this.isVisible) {
-                            wm = (WindowManager) this.parentActivity.getSystemService("window");
-                            if (this.attachedToWindow) {
-                                try {
-                                    wm.removeView(this.windowView);
-                                } catch (Exception e) {
-                                }
-                            }
-                            try {
-                                if (VERSION.SDK_INT >= 21) {
-                                    this.windowLayoutParams.flags = -NUM;
-                                }
-                                layoutParams = this.windowLayoutParams;
-                                layoutParams.flags |= 1032;
-                                this.windowView.setFocusable(false);
-                                this.containerView.setFocusable(false);
-                                wm.addView(this.windowView, this.windowLayoutParams);
-                            } catch (Throwable e2) {
-                                FileLog.e(e2);
-                                return false;
+        int index;
+        if (messageObject != null) {
+            webpage = messageObject.messageOwner.media.webpage;
+            String webPageUrl = webpage.url.toLowerCase();
+            for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
+                MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
+                if (entity instanceof TL_messageEntityUrl) {
+                    try {
+                        url = messageObject.messageOwner.message.substring(entity.offset, entity.offset + entity.length).toLowerCase();
+                        if (url.contains(webPageUrl) || webPageUrl.contains(url)) {
+                            index = url.lastIndexOf(35);
+                            if (index != -1) {
+                                anchor = url.substring(index + 1);
                             }
                         }
-                        layoutParams = this.windowLayoutParams;
-                        layoutParams.flags &= -17;
-                        ((WindowManager) this.parentActivity.getSystemService("window")).updateViewLayout(this.windowView, this.windowLayoutParams);
-                        this.isVisible = true;
-                        this.animationInProgress = 1;
-                        this.windowView.setAlpha(0.0f);
-                        this.containerView.setAlpha(0.0f);
-                        animatorSet = new AnimatorSet();
-                        animatorArr = new Animator[3];
-                        fArr = new float[2];
-                        animatorArr[0] = ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f, 1.0f});
-                        fArr = new float[2];
-                        animatorArr[1] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f, 1.0f});
-                        animatorArr[2] = ObjectAnimator.ofFloat(this.windowView, "translationX", new float[]{(float) AndroidUtilities.dp(56.0f), 0.0f});
-                        animatorSet.playTogether(animatorArr);
-                        this.animationEndRunnable = new Runnable() {
-                            public void run() {
-                                if (ArticleViewer.this.containerView != null && ArticleViewer.this.windowView != null) {
-                                    if (VERSION.SDK_INT >= 18) {
-                                        ArticleViewer.this.containerView.setLayerType(0, null);
-                                    }
-                                    ArticleViewer.this.animationInProgress = 0;
-                                    AndroidUtilities.hideKeyboard(ArticleViewer.this.parentActivity.getCurrentFocus());
-                                }
-                            }
-                        };
-                        animatorSet.setDuration(150);
-                        animatorSet.setInterpolator(this.interpolator);
-                        animatorSet.addListener(new AnimatorListenerAdapter() {
-                            public void onAnimationEnd(Animator animation) {
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public void run() {
-                                        NotificationCenter.getInstance().setAnimationInProgress(false);
-                                        if (ArticleViewer.this.animationEndRunnable != null) {
-                                            ArticleViewer.this.animationEndRunnable.run();
-                                            ArticleViewer.this.animationEndRunnable = null;
-                                        }
-                                    }
-                                });
-                            }
-                        });
-                        this.transitionAnimationStartTime = System.currentTimeMillis();
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                NotificationCenter.getInstance().setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.mediaCountDidLoaded, NotificationCenter.mediaDidLoaded, NotificationCenter.dialogPhotosLoaded});
-                                NotificationCenter.getInstance().setAnimationInProgress(true);
-                                animatorSet.start();
-                            }
-                        });
-                        if (VERSION.SDK_INT >= 18) {
-                            this.containerView.setLayerType(2, null);
-                        }
-                        showActionBar(Callback.DEFAULT_DRAG_ANIMATION_DURATION);
-                        return true;
+                    } catch (Throwable e) {
+                        FileLog.e(e);
                     }
-                } catch (Throwable e22) {
-                    FileLog.e(e22);
                 }
             }
+        } else if (url != null) {
+            index = url.lastIndexOf(35);
+            if (index != -1) {
+                anchor = url.substring(index + 1);
+            }
         }
-        addPageToStack(webPage, anchor);
+        addPageToStack(webpage, anchor);
         this.lastInsets = null;
+        LayoutParams layoutParams;
         if (this.isVisible) {
             layoutParams = this.windowLayoutParams;
             layoutParams.flags &= -17;
             ((WindowManager) this.parentActivity.getSystemService("window")).updateViewLayout(this.windowView, this.windowLayoutParams);
         } else {
-            wm = (WindowManager) this.parentActivity.getSystemService("window");
+            WindowManager wm = (WindowManager) this.parentActivity.getSystemService("window");
             if (this.attachedToWindow) {
-                wm.removeView(this.windowView);
+                try {
+                    wm.removeView(this.windowView);
+                } catch (Exception e2) {
+                }
             }
-            if (VERSION.SDK_INT >= 21) {
-                this.windowLayoutParams.flags = -NUM;
+            try {
+                if (VERSION.SDK_INT >= 21) {
+                    this.windowLayoutParams.flags = -NUM;
+                }
+                layoutParams = this.windowLayoutParams;
+                layoutParams.flags |= 1032;
+                this.windowView.setFocusable(false);
+                this.containerView.setFocusable(false);
+                wm.addView(this.windowView, this.windowLayoutParams);
+            } catch (Throwable e3) {
+                FileLog.e(e3);
+                return false;
             }
-            layoutParams = this.windowLayoutParams;
-            layoutParams.flags |= 1032;
-            this.windowView.setFocusable(false);
-            this.containerView.setFocusable(false);
-            wm.addView(this.windowView, this.windowLayoutParams);
         }
         this.isVisible = true;
         this.animationInProgress = 1;
         this.windowView.setAlpha(0.0f);
         this.containerView.setAlpha(0.0f);
-        animatorSet = new AnimatorSet();
-        animatorArr = new Animator[3];
-        fArr = new float[2];
+        final AnimatorSet animatorSet = new AnimatorSet();
+        Animator[] animatorArr = new Animator[3];
+        float[] fArr = new float[2];
         animatorArr[0] = ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f, 1.0f});
         fArr = new float[2];
         animatorArr[1] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f, 1.0f});
         animatorArr[2] = ObjectAnimator.ofFloat(this.windowView, "translationX", new float[]{(float) AndroidUtilities.dp(56.0f), 0.0f});
         animatorSet.playTogether(animatorArr);
-        this.animationEndRunnable = /* anonymous class already generated */;
+        this.animationEndRunnable = new Runnable() {
+            public void run() {
+                if (ArticleViewer.this.containerView != null && ArticleViewer.this.windowView != null) {
+                    if (VERSION.SDK_INT >= 18) {
+                        ArticleViewer.this.containerView.setLayerType(0, null);
+                    }
+                    ArticleViewer.this.animationInProgress = 0;
+                    AndroidUtilities.hideKeyboard(ArticleViewer.this.parentActivity.getCurrentFocus());
+                }
+            }
+        };
         animatorSet.setDuration(150);
         animatorSet.setInterpolator(this.interpolator);
-        animatorSet.addListener(/* anonymous class already generated */);
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animation) {
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public void run() {
+                        NotificationCenter.getInstance().setAnimationInProgress(false);
+                        if (ArticleViewer.this.animationEndRunnable != null) {
+                            ArticleViewer.this.animationEndRunnable.run();
+                            ArticleViewer.this.animationEndRunnable = null;
+                        }
+                    }
+                });
+            }
+        });
         this.transitionAnimationStartTime = System.currentTimeMillis();
-        AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public void run() {
+                NotificationCenter.getInstance().setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
+                NotificationCenter.getInstance().setAnimationInProgress(true);
+                animatorSet.start();
+            }
+        });
         if (VERSION.SDK_INT >= 18) {
             this.containerView.setLayerType(2, null);
         }
@@ -7356,7 +7335,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         this.photoTransitionAnimationStartTime = System.currentTimeMillis();
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
-                NotificationCenter.getInstance().setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.mediaCountDidLoaded, NotificationCenter.mediaDidLoaded, NotificationCenter.dialogPhotosLoaded});
+                NotificationCenter.getInstance().setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
                 NotificationCenter.getInstance().setAnimationInProgress(true);
                 animatorSet.start();
             }

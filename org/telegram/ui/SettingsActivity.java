@@ -981,12 +981,13 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 if (this.pressCount >= 2) {
                     Builder builder = new Builder(SettingsActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("DebugMenu", R.string.DebugMenu));
-                    builder.setItems(new CharSequence[]{LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts), LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts)}, new OnClickListener() {
+                    builder.setItems(new CharSequence[]{LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts), LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts), LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts)}, new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             if (which == 0) {
                                 ContactsController.getInstance().forceImportContacts();
                             } else if (which == 1) {
-                                ContactsController.getInstance().loadContacts(false, true);
+                                ContactsController.getInstance().loadContacts(false, true, 0);
+                            } else if (which != 2) {
                             }
                         }
                     });

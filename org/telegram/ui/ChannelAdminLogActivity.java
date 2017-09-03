@@ -93,6 +93,7 @@ import org.telegram.tgnet.TLRPC.InputStickerSet;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEvent;
+import org.telegram.tgnet.TLRPC.TL_channelAdminLogEventActionChangeStickerSet;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEventsFilter;
 import org.telegram.tgnet.TLRPC.TL_channelParticipantsAdmins;
 import org.telegram.tgnet.TLRPC.TL_channels_adminLogResults;
@@ -100,6 +101,7 @@ import org.telegram.tgnet.TLRPC.TL_channels_channelParticipants;
 import org.telegram.tgnet.TLRPC.TL_channels_getAdminLog;
 import org.telegram.tgnet.TLRPC.TL_channels_getParticipants;
 import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_inputStickerSetEmpty;
 import org.telegram.tgnet.TLRPC.TL_inputStickerSetID;
 import org.telegram.tgnet.TLRPC.TL_inputStickerSetShortName;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
@@ -929,6 +931,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
         this.hasOwnBackground = true;
         Theme.createChatResources(context, false);
         this.actionBar.setAddToContainer(false);
+        this.actionBar.setOccupyStatusBar(!AndroidUtilities.isTablet());
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
@@ -1375,7 +1378,18 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
                     items.add(LocaleController.getString("Copy", R.string.Copy));
                     options.add(Integer.valueOf(3));
                 }
-                if (type == 3) {
+                if (type == 1) {
+                    if (this.selectedObject.currentEvent.action instanceof TL_channelAdminLogEventActionChangeStickerSet) {
+                        InputStickerSet stickerSet = this.selectedObject.currentEvent.action.new_stickerset;
+                        if (stickerSet == null || (stickerSet instanceof TL_inputStickerSetEmpty)) {
+                            stickerSet = this.selectedObject.currentEvent.action.prev_stickerset;
+                        }
+                        if (stickerSet != null) {
+                            showDialog(new StickersAlert(getParentActivity(), this, stickerSet, null, null));
+                            return;
+                        }
+                    }
+                } else if (type == 3) {
                     if ((this.selectedObject.messageOwner.media instanceof TL_messageMediaWebPage) && MessageObject.isNewGifDocument(this.selectedObject.messageOwner.media.webpage.document)) {
                         items.add(LocaleController.getString("SaveToGIFs", R.string.SaveToGIFs));
                         options.add(Integer.valueOf(11));

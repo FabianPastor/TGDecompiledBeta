@@ -27,7 +27,6 @@ import android.view.View.OnClickListener;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -81,6 +80,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.HintEditText;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SlideView;
@@ -120,7 +120,7 @@ public class ChangePhoneActivity extends BaseFragment {
     }
 
     public class LoginActivitySmsView extends SlideView implements NotificationCenterDelegate {
-        private EditText codeField;
+        private EditTextBoldCursor codeField;
         private volatile int codeTime = DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
         private Timer codeTimer;
         private TextView confirmTextView;
@@ -173,10 +173,12 @@ public class ChangePhoneActivity extends BaseFragment {
             } else {
                 addView(this.confirmTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3));
             }
-            this.codeField = new EditText(context);
+            this.codeField = new EditTextBoldCursor(context);
             this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.codeField.setHint(LocaleController.getString("Code", R.string.Code));
-            AndroidUtilities.clearCursorDrawable(this.codeField);
+            this.codeField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            this.codeField.setCursorSize(AndroidUtilities.dp(20.0f));
+            this.codeField.setCursorWidth(1.5f);
             this.codeField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.codeField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
             this.codeField.setImeOptions(268435461);
@@ -638,7 +640,7 @@ public class ChangePhoneActivity extends BaseFragment {
     }
 
     public class PhoneView extends SlideView implements OnItemSelectedListener {
-        private EditText codeField;
+        private EditTextBoldCursor codeField;
         private HashMap<String, String> codesMap = new HashMap();
         private ArrayList<String> countriesArray = new ArrayList();
         private HashMap<String, String> countriesMap = new HashMap();
@@ -698,10 +700,12 @@ public class ChangePhoneActivity extends BaseFragment {
             this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.textView.setTextSize(1, 18.0f);
             linearLayout.addView(this.textView, LayoutHelper.createLinear(-2, -2));
-            this.codeField = new EditText(context);
+            this.codeField = new EditTextBoldCursor(context);
             this.codeField.setInputType(3);
             this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-            AndroidUtilities.clearCursorDrawable(this.codeField);
+            this.codeField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            this.codeField.setCursorSize(AndroidUtilities.dp(20.0f));
+            this.codeField.setCursorWidth(1.5f);
             this.codeField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
             this.codeField.setPadding(AndroidUtilities.dp(10.0f), 0, 0, 0);
             this.codeField.setTextSize(1, 18.0f);
@@ -745,7 +749,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                 if (!ok) {
                                     PhoneView.this.ignoreOnTextChange = true;
                                     textToSet = text.substring(1, text.length()) + PhoneView.this.phoneField.getText().toString();
-                                    EditText access$400 = PhoneView.this.codeField;
+                                    EditTextBoldCursor access$400 = PhoneView.this.codeField;
                                     text = text.substring(0, 1);
                                     access$400.setText(text);
                                 }
@@ -799,7 +803,9 @@ public class ChangePhoneActivity extends BaseFragment {
             this.phoneField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.phoneField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
             this.phoneField.setPadding(0, 0, 0, 0);
-            AndroidUtilities.clearCursorDrawable(this.phoneField);
+            this.phoneField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            this.phoneField.setCursorSize(AndroidUtilities.dp(20.0f));
+            this.phoneField.setCursorWidth(1.5f);
             this.phoneField.setTextSize(1, 18.0f);
             this.phoneField.setMaxLines(1);
             this.phoneField.setGravity(19);
@@ -994,6 +1000,9 @@ public class ChangePhoneActivity extends BaseFragment {
                         }
                         if (!allowSms) {
                             ChangePhoneActivity.this.permissionsItems.add("android.permission.RECEIVE_SMS");
+                            if (VERSION.SDK_INT >= 23) {
+                                ChangePhoneActivity.this.permissionsItems.add("android.permission.READ_SMS");
+                            }
                         }
                         if (!ChangePhoneActivity.this.permissionsItems.isEmpty()) {
                             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);

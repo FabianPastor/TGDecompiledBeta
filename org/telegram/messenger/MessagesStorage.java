@@ -82,6 +82,8 @@ import org.telegram.tgnet.TLRPC.TL_peerChannel;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettingsEmpty;
 import org.telegram.tgnet.TLRPC.TL_photoEmpty;
+import org.telegram.tgnet.TLRPC.TL_photos_photos;
+import org.telegram.tgnet.TLRPC.TL_popularContact;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
 import org.telegram.tgnet.TLRPC.TL_updates_channelDifferenceTooLong;
 import org.telegram.tgnet.TLRPC.TL_userStatusLastMonth;
@@ -127,6 +129,10 @@ public class MessagesStorage {
             this.start = s;
             this.end = e;
         }
+    }
+
+    public interface IntCallback {
+        void run(int i);
     }
 
     public static MessagesStorage getInstance() {
@@ -184,12 +190,13 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_messages_holes ON messages_holes(uid, end);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE media_holes_v2(uid INTEGER, type INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, type, start));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_media_holes_v2 ON media_holes_v2(uid, type, end);").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE messages(mid INTEGER PRIMARY KEY, uid INTEGER, read_state INTEGER, send_state INTEGER, date INTEGER, data BLOB, out INTEGER, ttl INTEGER, media INTEGER, replydata BLOB, imp INTEGER)").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE messages(mid INTEGER PRIMARY KEY, uid INTEGER, read_state INTEGER, send_state INTEGER, date INTEGER, data BLOB, out INTEGER, ttl INTEGER, media INTEGER, replydata BLOB, imp INTEGER, mention INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_idx_messages ON messages(uid, mid);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages ON messages(uid, date, mid);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages ON messages(mid, out);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS task_idx_messages ON messages(uid, out, read_state, ttl, date, send_state);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages ON messages(mid, send_state, date) WHERE mid < 0 AND send_state = 1;").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages ON messages(uid, mention, read_state);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE download_queue(uid INTEGER, type INTEGER, date INTEGER, data BLOB, PRIMARY KEY (uid, type));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS type_date_idx_download_queue ON download_queue(type, date);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE user_phones_v6(uid INTEGER, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (uid, phone))").stepThis().dispose();
@@ -235,7 +242,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE stickers_featured(id INTEGER PRIMARY KEY, data BLOB, unread BLOB, date INTEGER, hash TEXT);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE hashtag_recent_v2(id TEXT PRIMARY KEY, date INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE webpage_pending(id INTEGER, mid INTEGER, PRIMARY KEY (id, mid));").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE user_contacts_v6(uid INTEGER PRIMARY KEY, fname TEXT, sname TEXT)").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE user_contacts_v6(uid INTEGER PRIMARY KEY, fname TEXT, sname TEXT, imported INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE sent_files_v2(uid TEXT, type INTEGER, data BLOB, PRIMARY KEY (uid, type))").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE search_recent(did INTEGER PRIMARY KEY, date INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE media_counts_v2(uid INTEGER, type INTEGER, count INTEGER, PRIMARY KEY(uid, type))").stepThis().dispose();
@@ -243,7 +250,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE bot_info(uid INTEGER PRIMARY KEY, info BLOB)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE pending_tasks(id INTEGER PRIMARY KEY, data BLOB);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE requested_holes(uid INTEGER, seq_out_start INTEGER, seq_out_end INTEGER, PRIMARY KEY (uid, seq_out_start, seq_out_end));").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 41").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 42").stepThis().dispose();
             } else {
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
                 FileLog.e("current db version = " + version);
@@ -278,7 +285,7 @@ public class MessagesStorage {
                         FileLog.e(e2);
                     }
                 }
-                if (version < 41) {
+                if (version < 42) {
                     updateDbToLastVersion(version);
                 }
             }
@@ -564,6 +571,13 @@ public class MessagesStorage {
                     if (version == 40) {
                         MessagesStorage.this.fixNotificationSettings();
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 41").stepThis().dispose();
+                        version = 41;
+                    }
+                    if (version == 41) {
+                        MessagesStorage.this.database.executeFast("ALTER TABLE messages ADD COLUMN mention INTEGER default 0").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("ALTER TABLE user_contacts_v6 ADD COLUMN imported INTEGER default 0").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages ON messages(uid, mention, read_state);").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("PRAGMA user_version = 42").stepThis().dispose();
                     }
                 } catch (Throwable e) {
                     FileLog.e(e);
@@ -853,6 +867,26 @@ public class MessagesStorage {
         });
     }
 
+    private void saveDiffParamsInternal(int seq, int pts, int date, int qts) {
+        try {
+            if (this.lastSavedSeq != seq || this.lastSavedPts != pts || this.lastSavedDate != date || lastQtsValue != qts) {
+                SQLitePreparedStatement state = this.database.executeFast("UPDATE params SET seq = ?, pts = ?, date = ?, qts = ? WHERE id = 1");
+                state.bindInteger(1, seq);
+                state.bindInteger(2, pts);
+                state.bindInteger(3, date);
+                state.bindInteger(4, qts);
+                state.step();
+                state.dispose();
+                this.lastSavedSeq = seq;
+                this.lastSavedPts = pts;
+                this.lastSavedDate = date;
+                this.lastSavedQts = qts;
+            }
+        } catch (Throwable e) {
+            FileLog.e(e);
+        }
+    }
+
     public void saveDiffParams(int seq, int pts, int date, int qts) {
         final int i = seq;
         final int i2 = pts;
@@ -860,23 +894,7 @@ public class MessagesStorage {
         final int i4 = qts;
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
-                try {
-                    if (MessagesStorage.this.lastSavedSeq != i || MessagesStorage.this.lastSavedPts != i2 || MessagesStorage.this.lastSavedDate != i3 || MessagesStorage.lastQtsValue != i4) {
-                        SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("UPDATE params SET seq = ?, pts = ?, date = ?, qts = ? WHERE id = 1");
-                        state.bindInteger(1, i);
-                        state.bindInteger(2, i2);
-                        state.bindInteger(3, i3);
-                        state.bindInteger(4, i4);
-                        state.step();
-                        state.dispose();
-                        MessagesStorage.this.lastSavedSeq = i;
-                        MessagesStorage.this.lastSavedPts = i2;
-                        MessagesStorage.this.lastSavedDate = i3;
-                        MessagesStorage.this.lastSavedQts = i4;
-                    }
-                } catch (Throwable e) {
-                    FileLog.e(e);
-                }
+                MessagesStorage.this.saveDiffParamsInternal(i, i2, i3, i4);
             }
         });
     }
@@ -1033,7 +1051,7 @@ public class MessagesStorage {
                             while (a < chats.size()) {
                                 Chat chat = (Chat) chats.get(a);
                                 if (chat != null && (chat.left || chat.migrated_to != null)) {
-                                    MessagesStorage.this.database.executeFast("UPDATE dialogs SET unread_count = 0, unread_count_i = 0 WHERE did = " + ((long) (-chat.id))).stepThis().dispose();
+                                    MessagesStorage.this.database.executeFast("UPDATE dialogs SET unread_count = 0 WHERE did = " + ((long) (-chat.id))).stepThis().dispose();
                                     MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = 3 WHERE uid = %d AND mid > 0 AND read_state IN(0,2) AND out = 0", new Object[]{Long.valueOf(did)})).stepThis().dispose();
                                     chats.remove(a);
                                     a--;
@@ -1497,7 +1515,7 @@ public class MessagesStorage {
                         cursor.dispose();
                         return;
                     }
-                    MessagesStorage.this.database.executeFast("UPDATE dialogs SET unread_count = 0, unread_count_i = 0 WHERE did = " + did).stepThis().dispose();
+                    MessagesStorage.this.database.executeFast("UPDATE dialogs SET unread_count = 0 WHERE did = " + did).stepThis().dispose();
                     MessagesStorage.this.database.executeFast("DELETE FROM messages WHERE uid = " + did).stepThis().dispose();
                     MessagesStorage.this.database.executeFast("DELETE FROM bot_keyboard WHERE uid = " + did).stepThis().dispose();
                     MessagesStorage.this.database.executeFast("DELETE FROM media_counts_v2 WHERE uid = " + did).stepThis().dispose();
@@ -1517,12 +1535,11 @@ public class MessagesStorage {
         });
     }
 
-    public void getDialogPhotos(int did, int offset, int count, long max_id, int classGuid) {
+    public void getDialogPhotos(int did, int count, long max_id, int classGuid) {
         final long j = max_id;
         final int i = did;
         final int i2 = count;
-        final int i3 = offset;
-        final int i4 = classGuid;
+        final int i3 = classGuid;
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 try {
@@ -1530,9 +1547,9 @@ public class MessagesStorage {
                     if (j != 0) {
                         cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM user_photos WHERE uid = %d AND id < %d ORDER BY id DESC LIMIT %d", new Object[]{Integer.valueOf(i), Long.valueOf(j), Integer.valueOf(i2)}), new Object[0]);
                     } else {
-                        cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM user_photos WHERE uid = %d ORDER BY id DESC LIMIT %d,%d", new Object[]{Integer.valueOf(i), Integer.valueOf(i3), Integer.valueOf(i2)}), new Object[0]);
+                        cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM user_photos WHERE uid = %d ORDER BY id DESC LIMIT %d", new Object[]{Integer.valueOf(i), Integer.valueOf(i2)}), new Object[0]);
                     }
-                    final photos_Photos res = new photos_Photos();
+                    final photos_Photos res = new TL_photos_photos();
                     while (cursor.next()) {
                         NativeByteBuffer data = cursor.byteBufferValue(0);
                         if (data != null) {
@@ -1544,7 +1561,7 @@ public class MessagesStorage {
                     cursor.dispose();
                     Utilities.stageQueue.postRunnable(new Runnable() {
                         public void run() {
-                            MessagesController.getInstance().processLoadedUserPhotos(res, i, i3, i2, j, true, i4);
+                            MessagesController.getInstance().processLoadedUserPhotos(res, i, i2, j, true, i3);
                         }
                     });
                 } catch (Throwable e) {
@@ -1573,6 +1590,147 @@ public class MessagesStorage {
                     MessagesStorage.this.database.executeFast("DELETE FROM user_photos WHERE uid = " + uid + " AND id = " + pid).stepThis().dispose();
                 } catch (Throwable e) {
                     FileLog.e(e);
+                }
+            }
+        });
+    }
+
+    public void resetDialogs(messages_Dialogs dialogsRes, int messagesCount, int seq, int newPts, int date, int qts, HashMap<Long, TL_dialog> new_dialogs_dict, HashMap<Long, MessageObject> new_dialogMessage, Message lastMessage, int dialogsCount) {
+        final messages_Dialogs org_telegram_tgnet_TLRPC_messages_Dialogs = dialogsRes;
+        final int i = dialogsCount;
+        final int i2 = seq;
+        final int i3 = newPts;
+        final int i4 = date;
+        final int i5 = qts;
+        final Message message = lastMessage;
+        final int i6 = messagesCount;
+        final HashMap<Long, TL_dialog> hashMap = new_dialogs_dict;
+        final HashMap<Long, MessageObject> hashMap2 = new_dialogMessage;
+        this.storageQueue.postRunnable(new Runnable() {
+            public void run() {
+                int maxPinnedNum = 0;
+                try {
+                    int a;
+                    ArrayList<Integer> dids = new ArrayList();
+                    int totalPinnedCount = org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size() - i;
+                    HashMap<Long, Integer> oldPinnedDialogNums = new HashMap();
+                    ArrayList<Long> oldPinnedOrder = new ArrayList();
+                    ArrayList<Long> orderArrayList = new ArrayList();
+                    for (a = i; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
+                        orderArrayList.add(Long.valueOf(((TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(a)).id));
+                    }
+                    SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT did, pinned FROM dialogs WHERE 1", new Object[0]);
+                    while (cursor.next()) {
+                        long did = cursor.longValue(0);
+                        int pinnedNum = cursor.intValue(1);
+                        int lower_id = (int) did;
+                        if (lower_id != 0) {
+                            dids.add(Integer.valueOf(lower_id));
+                            if (pinnedNum > 0) {
+                                maxPinnedNum = Math.max(pinnedNum, maxPinnedNum);
+                                oldPinnedDialogNums.put(Long.valueOf(did), Integer.valueOf(pinnedNum));
+                                oldPinnedOrder.add(Long.valueOf(did));
+                            }
+                        }
+                    }
+                    final HashMap<Long, Integer> hashMap = oldPinnedDialogNums;
+                    Collections.sort(oldPinnedOrder, new Comparator<Long>() {
+                        public int compare(Long o1, Long o2) {
+                            Integer val1 = (Integer) hashMap.get(o1);
+                            Integer val2 = (Integer) hashMap.get(o2);
+                            if (val1.intValue() < val2.intValue()) {
+                                return 1;
+                            }
+                            if (val1.intValue() > val2.intValue()) {
+                                return -1;
+                            }
+                            return 0;
+                        }
+                    });
+                    while (oldPinnedOrder.size() < totalPinnedCount) {
+                        oldPinnedOrder.add(0, Long.valueOf(0));
+                    }
+                    cursor.dispose();
+                    String ids = "(" + TextUtils.join(",", dids) + ")";
+                    MessagesStorage.this.database.beginTransaction();
+                    MessagesStorage.this.database.executeFast("DELETE FROM dialogs WHERE did IN " + ids).stepThis().dispose();
+                    MessagesStorage.this.database.executeFast("DELETE FROM messages WHERE uid IN " + ids).stepThis().dispose();
+                    MessagesStorage.this.database.executeFast("DELETE FROM bot_keyboard WHERE uid IN " + ids).stepThis().dispose();
+                    MessagesStorage.this.database.executeFast("DELETE FROM media_counts_v2 WHERE uid IN " + ids).stepThis().dispose();
+                    MessagesStorage.this.database.executeFast("DELETE FROM media_v2 WHERE uid IN " + ids).stepThis().dispose();
+                    MessagesStorage.this.database.executeFast("DELETE FROM messages_holes WHERE uid IN " + ids).stepThis().dispose();
+                    MessagesStorage.this.database.executeFast("DELETE FROM media_holes_v2 WHERE uid IN " + ids).stepThis().dispose();
+                    MessagesStorage.this.database.commitTransaction();
+                    for (a = 0; a < totalPinnedCount; a++) {
+                        TL_dialog dialog = (TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(i + a);
+                        int oldIdx = oldPinnedOrder.indexOf(Long.valueOf(dialog.id));
+                        int newIdx = orderArrayList.indexOf(Long.valueOf(dialog.id));
+                        if (!(oldIdx == -1 || newIdx == -1)) {
+                            Integer oldNum;
+                            if (oldIdx == newIdx) {
+                                oldNum = (Integer) oldPinnedDialogNums.get(Long.valueOf(dialog.id));
+                                if (oldNum != null) {
+                                    dialog.pinnedNum = oldNum.intValue();
+                                }
+                            } else {
+                                oldNum = (Integer) oldPinnedDialogNums.get(Long.valueOf(((Long) oldPinnedOrder.get(newIdx)).longValue()));
+                                if (oldNum != null) {
+                                    dialog.pinnedNum = oldNum.intValue();
+                                }
+                            }
+                        }
+                        if (dialog.pinnedNum == 0) {
+                            dialog.pinnedNum = (totalPinnedCount - a) + maxPinnedNum;
+                        }
+                    }
+                    MessagesStorage.this.putDialogsInternal(org_telegram_tgnet_TLRPC_messages_Dialogs, false);
+                    MessagesStorage.this.saveDiffParamsInternal(i2, i3, i4, i5);
+                    if (message == null || message.id == UserConfig.dialogsLoadOffsetId) {
+                        UserConfig.dialogsLoadOffsetId = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                    } else {
+                        UserConfig.totalDialogsLoadCount = org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size();
+                        UserConfig.dialogsLoadOffsetId = message.id;
+                        UserConfig.dialogsLoadOffsetDate = message.date;
+                        Chat chat;
+                        if (message.to_id.channel_id != 0) {
+                            UserConfig.dialogsLoadOffsetChannelId = message.to_id.channel_id;
+                            UserConfig.dialogsLoadOffsetChatId = 0;
+                            UserConfig.dialogsLoadOffsetUserId = 0;
+                            for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.chats.size(); a++) {
+                                chat = (Chat) org_telegram_tgnet_TLRPC_messages_Dialogs.chats.get(a);
+                                if (chat.id == UserConfig.dialogsLoadOffsetChannelId) {
+                                    UserConfig.dialogsLoadOffsetAccess = chat.access_hash;
+                                    break;
+                                }
+                            }
+                        } else if (message.to_id.chat_id != 0) {
+                            UserConfig.dialogsLoadOffsetChatId = message.to_id.chat_id;
+                            UserConfig.dialogsLoadOffsetChannelId = 0;
+                            UserConfig.dialogsLoadOffsetUserId = 0;
+                            for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.chats.size(); a++) {
+                                chat = (Chat) org_telegram_tgnet_TLRPC_messages_Dialogs.chats.get(a);
+                                if (chat.id == UserConfig.dialogsLoadOffsetChatId) {
+                                    UserConfig.dialogsLoadOffsetAccess = chat.access_hash;
+                                    break;
+                                }
+                            }
+                        } else if (message.to_id.user_id != 0) {
+                            UserConfig.dialogsLoadOffsetUserId = message.to_id.user_id;
+                            UserConfig.dialogsLoadOffsetChatId = 0;
+                            UserConfig.dialogsLoadOffsetChannelId = 0;
+                            for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.users.size(); a++) {
+                                User user = (User) org_telegram_tgnet_TLRPC_messages_Dialogs.users.get(a);
+                                if (user.id == UserConfig.dialogsLoadOffsetUserId) {
+                                    UserConfig.dialogsLoadOffsetAccess = user.access_hash;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    UserConfig.saveConfig(false);
+                    MessagesController.getInstance().completeDialogsReset(org_telegram_tgnet_TLRPC_messages_Dialogs, i6, i2, i3, i4, i5, hashMap, hashMap2, message);
+                } catch (Throwable e) {
+                    FileLog.e("tmessages", e);
                 }
             }
         });
@@ -1655,7 +1813,7 @@ public class MessagesStorage {
                     }
                     cursor.dispose();
                     if (!messages.isEmpty()) {
-                        SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?)");
+                        SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
                         for (int a = 0; a < messages.size(); a++) {
                             message = (Message) messages.get(a);
                             data = new NativeByteBuffer(message.getObjectSize());
@@ -1675,6 +1833,7 @@ public class MessagesStorage {
                                 state.bindInteger(9, MessagesStorage.this.getMessageMediaType(message));
                             }
                             state.bindInteger(10, 0);
+                            state.bindInteger(11, message.mentioned ? 1 : 0);
                             state.step();
                             data.reuse();
                         }
@@ -1723,6 +1882,62 @@ public class MessagesStorage {
                     }
                     cursor.dispose();
                     MessagesController.getInstance().processLoadedDeleteTask(date, arr, channelId);
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+            }
+        });
+    }
+
+    public void markMentionMessageAsRead(int messageId, int channelId, long did) {
+        final int i = messageId;
+        final int i2 = channelId;
+        final long j = did;
+        this.storageQueue.postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    long mid = (long) i;
+                    if (i2 != 0) {
+                        mid |= ((long) i2) << 32;
+                    }
+                    MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 2 WHERE mid = %d", new Object[]{Long.valueOf(mid)})).stepThis().dispose();
+                    SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT unread_count_i FROM dialogs WHERE did = " + j, new Object[0]);
+                    int old_mentions_count = 0;
+                    if (cursor.next()) {
+                        old_mentions_count = Math.max(0, cursor.intValue(0) - 1);
+                    }
+                    cursor.dispose();
+                    MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE dialogs SET unread_count_i = %d WHERE did = %d", new Object[]{Integer.valueOf(old_mentions_count), Long.valueOf(j)})).stepThis().dispose();
+                    HashMap<Long, Integer> hashMap = new HashMap();
+                    hashMap.put(Long.valueOf(j), Integer.valueOf(old_mentions_count));
+                    MessagesController.getInstance().processDialogsUpdateRead(null, hashMap);
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+            }
+        });
+    }
+
+    public void markMessageAsMention(final long mid) {
+        this.storageQueue.postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE message SET mention = 1, read_state = read_state & ~2 WHERE mid = %d", new Object[]{Long.valueOf(mid)})).stepThis().dispose();
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+            }
+        });
+    }
+
+    public void resetMentionsCount(final long did, final int count) {
+        this.storageQueue.postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE dialogs SET unread_count_i = %d WHERE did = %d", new Object[]{Integer.valueOf(count), Long.valueOf(did)})).stepThis().dispose();
+                    HashMap<Long, Integer> hashMap = new HashMap();
+                    hashMap.put(Long.valueOf(did), Integer.valueOf(count));
+                    MessagesController.getInstance().processDialogsUpdateRead(null, hashMap);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -1867,11 +2082,13 @@ public class MessagesStorage {
         });
     }
 
-    private void updateDialogsWithReadMessagesInternal(ArrayList<Integer> messages, SparseArray<Long> inbox, SparseArray<Long> outbox) {
+    private void updateDialogsWithReadMessagesInternal(ArrayList<Integer> messages, SparseArray<Long> inbox, SparseArray<Long> outbox, ArrayList<Long> mentions) {
         try {
             SQLitePreparedStatement state;
             HashMap<Long, Integer> dialogsToUpdate = new HashMap();
+            HashMap<Long, Integer> dialogsToUpdateMentions = new HashMap();
             SQLiteCursor cursor;
+            String ids;
             if (messages == null || messages.isEmpty()) {
                 int b;
                 int key;
@@ -1882,8 +2099,7 @@ public class MessagesStorage {
                         messageId = ((Long) inbox.get(key)).longValue();
                         cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT COUNT(mid) FROM messages WHERE uid = %d AND mid > %d AND read_state IN(0,2) AND out = 0", new Object[]{Integer.valueOf(key), Long.valueOf(messageId)}), new Object[0]);
                         if (cursor.next()) {
-                            int count = cursor.intValue(0);
-                            dialogsToUpdate.put(Long.valueOf((long) key), Integer.valueOf(count));
+                            dialogsToUpdate.put(Long.valueOf((long) key), Integer.valueOf(cursor.intValue(0)));
                         }
                         cursor.dispose();
                         state = this.database.executeFast("UPDATE dialogs SET inbox_max = max((SELECT inbox_max FROM dialogs WHERE did = ?), ?) WHERE did = ?");
@@ -1894,6 +2110,28 @@ public class MessagesStorage {
                         state.step();
                         state.dispose();
                     }
+                }
+                if (!(mentions == null || mentions.size() == 0)) {
+                    ids = TextUtils.join(",", mentions);
+                    cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, read_state, out, mention FROM messages WHERE mid IN(%s)", new Object[]{ids}), new Object[0]);
+                    while (cursor.next()) {
+                        long did = cursor.longValue(0);
+                        if (cursor.intValue(1) < 2 && cursor.intValue(2) == 0 && cursor.intValue(3) == 1) {
+                            Integer unread_count = (Integer) dialogsToUpdateMentions.get(Long.valueOf(did));
+                            if (unread_count == null) {
+                                SQLiteCursor cursor2 = this.database.queryFinalized("SELECT unread_count_i FROM dialogs WHERE did = " + did, new Object[0]);
+                                int old_mentions_count = 0;
+                                if (cursor2.next()) {
+                                    old_mentions_count = cursor2.intValue(0);
+                                }
+                                cursor2.dispose();
+                                dialogsToUpdateMentions.put(Long.valueOf(did), Integer.valueOf(Math.max(0, old_mentions_count - 1)));
+                            } else {
+                                dialogsToUpdateMentions.put(Long.valueOf(did), Integer.valueOf(Math.max(0, unread_count.intValue() - 1)));
+                            }
+                        }
+                    }
+                    cursor.dispose();
                 }
                 if (!(outbox == null || outbox.size() == 0)) {
                     for (b = 0; b < outbox.size(); b++) {
@@ -1909,7 +2147,7 @@ public class MessagesStorage {
                     }
                 }
             } else {
-                String ids = TextUtils.join(",", messages);
+                ids = TextUtils.join(",", messages);
                 cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, read_state, out FROM messages WHERE mid IN(%s)", new Object[]{ids}), new Object[0]);
                 while (cursor.next()) {
                     if (cursor.intValue(2) == 0 && cursor.intValue(1) == 0) {
@@ -1924,36 +2162,46 @@ public class MessagesStorage {
                 }
                 cursor.dispose();
             }
-            if (!dialogsToUpdate.isEmpty()) {
+            if (!(dialogsToUpdate.isEmpty() && dialogsToUpdateMentions.isEmpty())) {
                 this.database.beginTransaction();
-                state = this.database.executeFast("UPDATE dialogs SET unread_count = ? WHERE did = ?");
-                for (Entry<Long, Integer> entry : dialogsToUpdate.entrySet()) {
-                    state.requery();
-                    state.bindInteger(1, ((Integer) entry.getValue()).intValue());
-                    state.bindLong(2, ((Long) entry.getKey()).longValue());
-                    state.step();
+                if (!dialogsToUpdate.isEmpty()) {
+                    state = this.database.executeFast("UPDATE dialogs SET unread_count = ? WHERE did = ?");
+                    for (Entry<Long, Integer> entry : dialogsToUpdate.entrySet()) {
+                        state.requery();
+                        state.bindInteger(1, ((Integer) entry.getValue()).intValue());
+                        state.bindLong(2, ((Long) entry.getKey()).longValue());
+                        state.step();
+                    }
+                    state.dispose();
                 }
-                state.dispose();
-                this.database.commitTransaction();
+                if (!dialogsToUpdateMentions.isEmpty()) {
+                    state = this.database.executeFast("UPDATE dialogs SET unread_count_i = ? WHERE did = ?");
+                    for (Entry<Long, Integer> entry2 : dialogsToUpdateMentions.entrySet()) {
+                        state.requery();
+                        state.bindInteger(1, ((Integer) entry2.getValue()).intValue());
+                        state.bindLong(2, ((Long) entry2.getKey()).longValue());
+                        state.step();
+                    }
+                    state.dispose();
+                }
             }
-            if (!dialogsToUpdate.isEmpty()) {
-                MessagesController.getInstance().processDialogsUpdateRead(dialogsToUpdate);
-            }
+            this.database.commitTransaction();
+            MessagesController.getInstance().processDialogsUpdateRead(dialogsToUpdate, dialogsToUpdateMentions);
         } catch (Throwable e) {
             FileLog.e(e);
         }
     }
 
-    public void updateDialogsWithReadMessages(final SparseArray<Long> inbox, final SparseArray<Long> outbox, boolean useQueue) {
-        if (inbox.size() != 0) {
+    public void updateDialogsWithReadMessages(final SparseArray<Long> inbox, final SparseArray<Long> outbox, final ArrayList<Long> mentions, boolean useQueue) {
+        if (inbox.size() != 0 || !mentions.isEmpty()) {
             if (useQueue) {
                 this.storageQueue.postRunnable(new Runnable() {
                     public void run() {
-                        MessagesStorage.this.updateDialogsWithReadMessagesInternal(null, inbox, outbox);
+                        MessagesStorage.this.updateDialogsWithReadMessagesInternal(null, inbox, outbox, mentions);
                     }
                 });
             } else {
-                updateDialogsWithReadMessagesInternal(null, inbox, outbox);
+                updateDialogsWithReadMessagesInternal(null, inbox, outbox, mentions);
             }
         }
     }
@@ -2121,7 +2369,7 @@ public class MessagesStorage {
                     state.dispose();
                     data.reuse();
                     if (info instanceof TL_channelFull) {
-                        cursor = MessagesStorage.this.database.queryFinalized("SELECT date, pts, last_mid, inbox_max, outbox_max, pinned FROM dialogs WHERE did = " + (-info.id), new Object[0]);
+                        cursor = MessagesStorage.this.database.queryFinalized("SELECT date, pts, last_mid, inbox_max, outbox_max, pinned, unread_count_i FROM dialogs WHERE did = " + (-info.id), new Object[0]);
                         if (cursor.next()) {
                             int inbox_max = cursor.intValue(3);
                             if (inbox_max <= info.read_inbox_max_id) {
@@ -2134,6 +2382,7 @@ public class MessagesStorage {
                                 long last_mid = cursor.longValue(2);
                                 int outbox_max = cursor.intValue(4);
                                 int pinned = cursor.intValue(5);
+                                int mentions = cursor.intValue(6);
                                 state = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                                 state.bindLong(1, (long) (-info.id));
                                 state.bindInteger(2, dialog_date);
@@ -2142,7 +2391,7 @@ public class MessagesStorage {
                                 state.bindInteger(5, info.read_inbox_max_id);
                                 state.bindInteger(6, Math.max(outbox_max, info.read_outbox_max_id));
                                 state.bindLong(7, 0);
-                                state.bindInteger(8, 0);
+                                state.bindInteger(8, mentions);
                                 state.bindInteger(9, pts);
                                 state.bindInteger(10, 0);
                                 state.bindInteger(11, pinned);
@@ -2391,7 +2640,7 @@ Error: java.util.NoSuchElementException
             L_0x0080:
                 throw r5;
                 */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.39.run():void");
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.43.run():void");
             }
         });
         try {
@@ -2543,7 +2792,7 @@ Error: java.util.NoSuchElementException
                     }
                     cursor.dispose();
                     currentMaxId = Math.max(currentMaxId, (int) j2);
-                    state = MessagesStorage.this.database.executeFast("UPDATE dialogs SET unread_count = 0, unread_count_i = 0, inbox_max = ? WHERE did = ?");
+                    state = MessagesStorage.this.database.executeFast("UPDATE dialogs SET unread_count = 0, inbox_max = ? WHERE did = ?");
                     state.requery();
                     state.bindInteger(1, currentMaxId);
                     state.bindLong(2, j);
@@ -2618,12 +2867,34 @@ Error: java.util.NoSuchElementException
         }
     }
 
+    public void updatePhoneBookImported(final ArrayList<TL_popularContact> popularContacts) {
+        this.storageQueue.postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    MessagesStorage.this.database.beginTransaction();
+                    SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("UPDATE user_contacts_v6 SET imported = ? WHERE imported = ?");
+                    for (int a = 0; a < popularContacts.size(); a++) {
+                        TL_popularContact imported = (TL_popularContact) popularContacts.get(a);
+                        state.requery();
+                        state.bindInteger(1, imported.importers);
+                        state.bindInteger(2, (int) imported.client_id);
+                        state.step();
+                    }
+                    state.dispose();
+                    MessagesStorage.this.database.commitTransaction();
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+            }
+        });
+    }
+
     public void putCachedPhoneBook(final HashMap<Integer, Contact> contactHashMap) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 try {
                     MessagesStorage.this.database.beginTransaction();
-                    SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO user_contacts_v6 VALUES(?, ?, ?)");
+                    SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO user_contacts_v6 VALUES(?, ?, ?, ?)");
                     SQLitePreparedStatement state2 = MessagesStorage.this.database.executeFast("REPLACE INTO user_phones_v6 VALUES(?, ?, ?, ?)");
                     for (Entry<Integer, Contact> entry : contactHashMap.entrySet()) {
                         Contact contact = (Contact) entry.getValue();
@@ -2632,6 +2903,7 @@ Error: java.util.NoSuchElementException
                             state.bindInteger(1, contact.id);
                             state.bindString(2, contact.first_name);
                             state.bindString(3, contact.last_name);
+                            state.bindInteger(4, contact.imported);
                             state.step();
                             for (int a = 0; a < contact.phones.size(); a++) {
                                 state2.requery();
@@ -2658,7 +2930,7 @@ Error: java.util.NoSuchElementException
             public void run() {
                 HashMap<Integer, Contact> contactHashMap = new HashMap();
                 try {
-                    SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted FROM user_contacts_v6 as us LEFT JOIN user_phones_v6 as up ON us.uid = up.uid WHERE 1", new Object[0]);
+                    SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v6 as us LEFT JOIN user_phones_v6 as up ON us.uid = up.uid WHERE 1", new Object[0]);
                     while (cursor.next()) {
                         int uid = cursor.intValue(0);
                         Contact contact = (Contact) contactHashMap.get(Integer.valueOf(uid));
@@ -2666,6 +2938,7 @@ Error: java.util.NoSuchElementException
                             contact = new Contact();
                             contact.first_name = cursor.stringValue(1);
                             contact.last_name = cursor.stringValue(2);
+                            contact.imported = cursor.intValue(6);
                             if (contact.first_name == null) {
                                 contact.first_name = "";
                             }
@@ -2694,7 +2967,7 @@ Error: java.util.NoSuchElementException
                     contactHashMap.clear();
                     FileLog.e(e);
                 }
-                ContactsController.getInstance().performSyncPhoneBook(contactHashMap, true, true, false, false);
+                ContactsController.getInstance().performSyncPhoneBook(contactHashMap, true, true, false, false, true, false);
             }
         });
     }
@@ -2872,6 +3145,30 @@ Error: java.util.NoSuchElementException
         return result[0];
     }
 
+    public void getUnreadMention(final long dialog_id, final IntCallback callback) {
+        this.storageQueue.postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    int result;
+                    SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT MIN(mid) FROM messages WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)", new Object[]{Long.valueOf(dialog_id)}), new Object[0]);
+                    if (cursor.next()) {
+                        result = cursor.intValue(0);
+                    } else {
+                        result = 0;
+                    }
+                    cursor.dispose();
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            callback.run(result);
+                        }
+                    });
+                } catch (Exception e) {
+                    FileLog.e("tmessages", e);
+                }
+            }
+        });
+    }
+
     public void getMessages(long dialog_id, int count, int max_id, int offset_date, int minDate, int classGuid, int load_type, boolean isChannel, int loadIndex) {
         final int i = count;
         final int i2 = max_id;
@@ -2886,6 +3183,7 @@ Error: java.util.NoSuchElementException
             public void run() {
                 TL_messages_messages res = new TL_messages_messages();
                 int count_unread = 0;
+                int mentions_unread = 0;
                 int count_query = i;
                 int offset_query = 0;
                 int min_unread_id = 0;
@@ -2917,22 +3215,24 @@ Error: java.util.NoSuchElementException
                     if (lower_id != 0) {
                         boolean containMessage;
                         if (i3 == 3 && i4 == 0) {
-                            cursor = MessagesStorage.this.database.queryFinalized("SELECT inbox_max, unread_count, date FROM dialogs WHERE did = " + j, new Object[0]);
+                            cursor = MessagesStorage.this.database.queryFinalized("SELECT inbox_max, unread_count, date, unread_count_i FROM dialogs WHERE did = " + j, new Object[0]);
                             if (cursor.next()) {
                                 min_unread_id = cursor.intValue(0) + 1;
                                 count_unread = cursor.intValue(1);
                                 max_unread_date = cursor.intValue(2);
+                                mentions_unread = cursor.intValue(3);
                             }
                             cursor.dispose();
                         } else if (!(i3 == 1 || i3 == 3 || i3 == 4 || i4 != 0)) {
                             if (i3 == 2) {
-                                cursor = MessagesStorage.this.database.queryFinalized("SELECT inbox_max, unread_count, date FROM dialogs WHERE did = " + j, new Object[0]);
+                                cursor = MessagesStorage.this.database.queryFinalized("SELECT inbox_max, unread_count, date, unread_count_i FROM dialogs WHERE did = " + j, new Object[0]);
                                 if (cursor.next()) {
                                     min_unread_id = cursor.intValue(0);
                                     max_id_query = min_unread_id;
                                     messageMaxId = (long) min_unread_id;
                                     count_unread = cursor.intValue(1);
                                     max_unread_date = cursor.intValue(2);
+                                    mentions_unread = cursor.intValue(3);
                                     queryFromServer = true;
                                     if (!(messageMaxId == 0 || channelId == 0)) {
                                         messageMaxId |= ((long) channelId) << 32;
@@ -3102,7 +3402,7 @@ Error: java.util.NoSuchElementException
                                 }
                                 cursor.dispose();
                                 if (holeMessageMaxId == 0 && holeMessageMinId == 1) {
-                                    cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(j), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2), Long.valueOf(j), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
+                                    cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(j), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2), Long.valueOf(j), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
                                 } else {
                                     if (holeMessageMaxId == 0) {
                                         holeMessageMaxId = C.NANOS_PER_SECOND;
@@ -3110,7 +3410,7 @@ Error: java.util.NoSuchElementException
                                             holeMessageMaxId = C.NANOS_PER_SECOND | (((long) channelId) << 32);
                                         }
                                     }
-                                    cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(j), Long.valueOf(messageMaxId), Long.valueOf(holeMessageMinId), Integer.valueOf(count_query / 2), Long.valueOf(j), Long.valueOf(messageMaxId), Long.valueOf(holeMessageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
+                                    cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(j), Long.valueOf(messageMaxId), Long.valueOf(holeMessageMinId), Integer.valueOf(count_query / 2), Long.valueOf(j), Long.valueOf(messageMaxId), Long.valueOf(holeMessageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
                                 }
                             } else {
                                 cursor = null;
@@ -3126,9 +3426,9 @@ Error: java.util.NoSuchElementException
                             }
                             cursor.dispose();
                             if (holeMessageId != 0) {
-                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date >= %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i4), Long.valueOf(messageMaxId), Long.valueOf(holeMessageId), Integer.valueOf(count_query)}), new Object[0]);
+                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date >= %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i4), Long.valueOf(messageMaxId), Long.valueOf(holeMessageId), Integer.valueOf(count_query)}), new Object[0]);
                             } else {
-                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date >= %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i4), Long.valueOf(messageMaxId), Integer.valueOf(count_query)}), new Object[0]);
+                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date >= %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i4), Long.valueOf(messageMaxId), Integer.valueOf(count_query)}), new Object[0]);
                             }
                         } else if (i4 == 0) {
                             cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT max(mid) FROM messages WHERE uid = %d AND mid > 0", new Object[]{Long.valueOf(j)}), new Object[0]);
@@ -3146,9 +3446,9 @@ Error: java.util.NoSuchElementException
                             }
                             cursor.dispose();
                             if (holeMessageId != 0) {
-                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d,%d", new Object[]{Long.valueOf(j), Long.valueOf(holeMessageId), Integer.valueOf(offset_query), Integer.valueOf(count_query)}), new Object[0]);
+                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d,%d", new Object[]{Long.valueOf(j), Long.valueOf(holeMessageId), Integer.valueOf(offset_query), Integer.valueOf(count_query)}), new Object[0]);
                             } else {
-                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d ORDER BY m.date DESC, m.mid DESC LIMIT %d,%d", new Object[]{Long.valueOf(j), Integer.valueOf(offset_query), Integer.valueOf(count_query)}), new Object[0]);
+                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d ORDER BY m.date DESC, m.mid DESC LIMIT %d,%d", new Object[]{Long.valueOf(j), Integer.valueOf(offset_query), Integer.valueOf(count_query)}), new Object[0]);
                             }
                         } else if (messageMaxId != 0) {
                             holeMessageId = 0;
@@ -3161,12 +3461,12 @@ Error: java.util.NoSuchElementException
                             }
                             cursor.dispose();
                             if (holeMessageId != 0) {
-                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d AND m.mid < %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i4), Long.valueOf(messageMaxId), Long.valueOf(holeMessageId), Integer.valueOf(count_query)}), new Object[0]);
+                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d AND m.mid < %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i4), Long.valueOf(messageMaxId), Long.valueOf(holeMessageId), Integer.valueOf(count_query)}), new Object[0]);
                             } else {
-                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d AND m.mid < %d ORDER BY m.date DESC, m.mid DESC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i4), Long.valueOf(messageMaxId), Integer.valueOf(count_query)}), new Object[0]);
+                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d AND m.mid < %d ORDER BY m.date DESC, m.mid DESC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i4), Long.valueOf(messageMaxId), Integer.valueOf(count_query)}), new Object[0]);
                             }
                         } else {
-                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d,%d", new Object[]{Long.valueOf(j), Integer.valueOf(i4), Integer.valueOf(offset_query), Integer.valueOf(count_query)}), new Object[0]);
+                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d,%d", new Object[]{Long.valueOf(j), Integer.valueOf(i4), Integer.valueOf(offset_query), Integer.valueOf(count_query)}), new Object[0]);
                         }
                     } else {
                         isEnd = true;
@@ -3198,9 +3498,9 @@ Error: java.util.NoSuchElementException
                                 last_message_id = cursor.intValue(0);
                             }
                             cursor.dispose();
-                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(j), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2), Long.valueOf(j), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
+                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(j), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2), Long.valueOf(j), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
                         } else if (i3 == 1) {
-                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid < %d ORDER BY m.mid DESC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i2), Integer.valueOf(count_query)}), new Object[0]);
+                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid < %d ORDER BY m.mid DESC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i2), Integer.valueOf(count_query)}), new Object[0]);
                         } else if (i4 == 0) {
                             if (i3 == 2) {
                                 cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT min(mid) FROM messages WHERE uid = %d AND mid < 0", new Object[]{Long.valueOf(j)}), new Object[0]);
@@ -3233,11 +3533,11 @@ Error: java.util.NoSuchElementException
                                 offset_query = count_unread - count_query;
                                 count_query += 10;
                             }
-                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d ORDER BY m.mid ASC LIMIT %d,%d", new Object[]{Long.valueOf(j), Integer.valueOf(offset_query), Integer.valueOf(count_query)}), new Object[0]);
+                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d ORDER BY m.mid ASC LIMIT %d,%d", new Object[]{Long.valueOf(j), Integer.valueOf(offset_query), Integer.valueOf(count_query)}), new Object[0]);
                         } else if (i2 != 0) {
-                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.mid ASC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i2), Integer.valueOf(count_query)}), new Object[0]);
+                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.mid ASC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i2), Integer.valueOf(count_query)}), new Object[0]);
                         } else {
-                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d ORDER BY m.mid ASC LIMIT %d,%d", new Object[]{Long.valueOf(j), Integer.valueOf(i4), Integer.valueOf(0), Integer.valueOf(count_query)}), new Object[0]);
+                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d ORDER BY m.mid ASC LIMIT %d,%d", new Object[]{Long.valueOf(j), Integer.valueOf(i4), Integer.valueOf(0), Integer.valueOf(count_query)}), new Object[0]);
                         }
                     }
                     if (cursor != null) {
@@ -3255,6 +3555,9 @@ Error: java.util.NoSuchElementException
                                 }
                                 if (lower_id != 0 && message.ttl == 0) {
                                     message.ttl = cursor.intValue(8);
+                                }
+                                if (cursor.intValue(9) != 0) {
+                                    message.mentioned = true;
                                 }
                                 res.messages.add(message);
                                 MessagesStorage.addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
@@ -3410,22 +3713,31 @@ Error: java.util.NoSuchElementException
                             }
                         }
                     }
+                    if (mentions_unread != 0) {
+                        cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT COUNT(mid) FROM messages WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)", new Object[]{Long.valueOf(j)}), new Object[0]);
+                        if (!cursor.next()) {
+                            mentions_unread *= -1;
+                        } else if (mentions_unread != cursor.intValue(0)) {
+                            mentions_unread *= -1;
+                        }
+                        cursor.dispose();
+                    }
                     if (!usersToLoad.isEmpty()) {
                         MessagesStorage.this.getUsersInternal(TextUtils.join(",", usersToLoad), res.users);
                     }
                     if (!chatsToLoad.isEmpty()) {
                         MessagesStorage.this.getChatsInternal(TextUtils.join(",", chatsToLoad), res.chats);
                     }
-                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer);
+                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer, mentions_unread);
                 } catch (Throwable e2) {
                     res.messages.clear();
                     res.chats.clear();
                     res.users.clear();
                     FileLog.e(e2);
-                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer);
+                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer, mentions_unread);
                 } catch (Throwable th) {
                     Throwable th2 = th;
-                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer);
+                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer, mentions_unread);
                 }
             }
         });
@@ -3623,7 +3935,7 @@ Error: java.util.NoSuchElementException
                 L_0x0087:
                     throw r5;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.54.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.60.run():void");
                 }
             });
         }
@@ -3704,7 +4016,7 @@ Error: java.util.NoSuchElementException
                 L_0x0056:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.55.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.61.run():void");
                 }
             });
         }
@@ -3769,7 +4081,7 @@ Error: java.util.NoSuchElementException
                 L_0x0037:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.56.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.62.run():void");
                 }
             });
         }
@@ -3834,7 +4146,7 @@ Error: java.util.NoSuchElementException
                 L_0x0037:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.57.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.63.run():void");
                 }
             });
         }
@@ -4062,7 +4374,7 @@ Error: java.util.NoSuchElementException
                 L_0x0161:
                     throw r7;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.58.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.64.run():void");
                 }
             });
         }
@@ -4227,7 +4539,7 @@ Error: java.util.NoSuchElementException
                             state.bindInteger(5, dialog.read_inbox_max_id);
                             state.bindInteger(6, dialog.read_outbox_max_id);
                             state.bindInteger(7, 0);
-                            state.bindInteger(8, 0);
+                            state.bindInteger(8, dialog.unread_mentions_count);
                             state.bindInteger(9, dialog.pts);
                             state.bindInteger(10, 0);
                             state.bindInteger(11, dialog.pinnedNum);
@@ -4703,6 +5015,7 @@ Error: java.util.NoSuchElementException
                     dialog.read_inbox_max_id = difference.read_inbox_max_id;
                     dialog.read_outbox_max_id = difference.read_outbox_max_id;
                     dialog.unread_count = difference.unread_count;
+                    dialog.unread_mentions_count = difference.unread_mentions_count;
                     dialog.notify_settings = null;
                     if (pinned != 0) {
                         z = true;
@@ -4805,6 +5118,7 @@ Error: java.util.NoSuchElementException
         }
         HashMap<Long, Message> messagesMap = new HashMap();
         HashMap<Long, Integer> messagesCounts = new HashMap();
+        HashMap<Long, Integer> mentionCounts = new HashMap();
         HashMap<Integer, HashMap<Long, Integer>> mediaCounts = null;
         HashMap<Long, Message> botKeyboards = new HashMap();
         HashMap<Long, Long> messagesMediaIdsMap = null;
@@ -4813,7 +5127,8 @@ Error: java.util.NoSuchElementException
         StringBuilder messageIds = new StringBuilder();
         HashMap<Long, Integer> dialogsReadMax = new HashMap();
         HashMap<Long, Long> messagesIdsMap = new HashMap();
-        SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?)");
+        HashMap<Long, Long> mentionsIdsMap = new HashMap();
+        SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
         SQLitePreparedStatement state2 = null;
         SQLitePreparedStatement state3 = this.database.executeFast("REPLACE INTO randoms VALUES(?, ?)");
         SQLitePreparedStatement state4 = this.database.executeFast("REPLACE INTO download_queue VALUES(?, ?, ?, ?)");
@@ -4833,7 +5148,10 @@ Error: java.util.NoSuchElementException
             if (message.to_id.channel_id != 0) {
                 messageId |= ((long) message.to_id.channel_id) << 32;
             }
-            if (MessageObject.isUnread(message) && !MessageObject.isOut(message)) {
+            if (message.mentioned && message.media_unread) {
+                mentionsIdsMap.put(Long.valueOf(messageId), Long.valueOf(message.dialog_id));
+            }
+            if (!MessageObject.isOut(message)) {
                 Integer currentMaxId = (Integer) dialogsReadMax.get(Long.valueOf(message.dialog_id));
                 if (currentMaxId == null) {
                     cursor = this.database.queryFinalized("SELECT inbox_max FROM dialogs WHERE did = " + message.dialog_id, new Object[0]);
@@ -4902,7 +5220,9 @@ Error: java.util.NoSuchElementException
         if (messageIds.length() > 0) {
             cursor = this.database.queryFinalized("SELECT mid FROM messages WHERE mid IN(" + messageIds.toString() + ")", new Object[0]);
             while (cursor.next()) {
-                messagesIdsMap.remove(Long.valueOf(cursor.longValue(0)));
+                long mid = cursor.longValue(0);
+                messagesIdsMap.remove(Long.valueOf(mid));
+                mentionsIdsMap.remove(Long.valueOf(mid));
             }
             cursor.dispose();
             for (Long dialog_id : messagesIdsMap.values()) {
@@ -4911,6 +5231,13 @@ Error: java.util.NoSuchElementException
                     count = Integer.valueOf(0);
                 }
                 messagesCounts.put(dialog_id, Integer.valueOf(count.intValue() + 1));
+            }
+            for (Long dialog_id2 : mentionsIdsMap.values()) {
+                count = (Integer) mentionCounts.get(dialog_id2);
+                if (count == null) {
+                    count = Integer.valueOf(0);
+                }
+                mentionCounts.put(dialog_id2, Integer.valueOf(count.intValue() + 1));
             }
         }
         int downloadMediaMask = 0;
@@ -4951,6 +5278,7 @@ Error: java.util.NoSuchElementException
                 state.bindInteger(9, getMessageMediaType(message));
             }
             state.bindInteger(10, 0);
+            state.bindInteger(11, message.mentioned ? 1 : 0);
             state.step();
             if (message.random_id != 0) {
                 state3.requery();
@@ -5056,7 +5384,7 @@ Error: java.util.NoSuchElementException
                 if (message != null) {
                     channelId = message.to_id.channel_id;
                 }
-                cursor = this.database.queryFinalized("SELECT date, unread_count, pts, last_mid, inbox_max, outbox_max, pinned FROM dialogs WHERE did = " + key, new Object[0]);
+                cursor = this.database.queryFinalized("SELECT date, unread_count, pts, last_mid, inbox_max, outbox_max, pinned, unread_count_i FROM dialogs WHERE did = " + key, new Object[0]);
                 int dialog_date = 0;
                 int last_mid = 0;
                 int old_unread_count = 0;
@@ -5064,6 +5392,7 @@ Error: java.util.NoSuchElementException
                 int inbox_max = 0;
                 int outbox_max = 0;
                 int pinned = 0;
+                int old_mentions_count = 0;
                 if (cursor.next()) {
                     dialog_date = cursor.intValue(0);
                     old_unread_count = cursor.intValue(1);
@@ -5072,15 +5401,22 @@ Error: java.util.NoSuchElementException
                     inbox_max = cursor.intValue(4);
                     outbox_max = cursor.intValue(5);
                     pinned = cursor.intValue(6);
+                    old_mentions_count = cursor.intValue(7);
                 } else if (channelId != 0) {
                     MessagesController.getInstance().checkChannelInviter(channelId);
                 }
                 cursor.dispose();
+                Integer mentions_count = (Integer) mentionCounts.get(key);
                 Integer unread_count = (Integer) messagesCounts.get(key);
                 if (unread_count == null) {
                     unread_count = Integer.valueOf(0);
                 } else {
                     messagesCounts.put(key, Integer.valueOf(unread_count.intValue() + old_unread_count));
+                }
+                if (mentions_count == null) {
+                    mentions_count = Integer.valueOf(0);
+                } else {
+                    mentionCounts.put(key, Integer.valueOf(mentions_count.intValue() + old_mentions_count));
                 }
                 if (message != null) {
                     messageId = (long) message.id;
@@ -5105,7 +5441,7 @@ Error: java.util.NoSuchElementException
                 state.bindInteger(5, inbox_max);
                 state.bindInteger(6, outbox_max);
                 state.bindLong(7, 0);
-                state.bindInteger(8, 0);
+                state.bindInteger(8, mentions_count.intValue() + old_mentions_count);
                 state.bindInteger(9, pts);
                 state.bindInteger(10, 0);
                 state.bindInteger(11, pinned);
@@ -5141,7 +5477,7 @@ Error: java.util.NoSuchElementException
         if (withTransaction) {
             this.database.commitTransaction();
         }
-        MessagesController.getInstance().processDialogsUpdateRead(messagesCounts);
+        MessagesController.getInstance().processDialogsUpdateRead(messagesCounts, mentionCounts);
         if (downloadMediaMask != 0) {
             final int i = downloadMediaMask;
             AndroidUtilities.runOnUIThread(new Runnable() {
@@ -5554,7 +5890,7 @@ Error: java.util.NoSuchElementException
                                     NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, mids, Integer.valueOf(0));
                                 }
                             });
-                            MessagesStorage.getInstance().updateDialogsWithReadMessagesInternal(mids, null, null);
+                            MessagesStorage.getInstance().updateDialogsWithReadMessagesInternal(mids, null, null, null);
                             MessagesStorage.getInstance().markMessagesAsDeletedInternal(mids, 0);
                             MessagesStorage.getInstance().updateDialogsWithDeletedMessagesInternal(mids, null, 0);
                         }
@@ -5569,8 +5905,9 @@ Error: java.util.NoSuchElementException
     private ArrayList<Long> markMessagesAsDeletedInternal(ArrayList<Integer> messages, int channelId) {
         try {
             String ids;
+            Iterator it;
             ArrayList<Long> arrayList = new ArrayList();
-            HashMap<Long, Integer> dialogsToUpdate = new HashMap();
+            HashMap<Long, Integer[]> dialogsToUpdate = new HashMap();
             if (channelId != 0) {
                 StringBuilder builder = new StringBuilder(messages.size());
                 for (int a = 0; a < messages.size(); a++) {
@@ -5584,7 +5921,7 @@ Error: java.util.NoSuchElementException
             } else {
                 ids = TextUtils.join(",", messages);
             }
-            SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state, out FROM messages WHERE mid IN(%s)", new Object[]{ids}), new Object[0]);
+            SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state, out, mention FROM messages WHERE mid IN(%s)", new Object[]{ids}), new Object[0]);
             ArrayList<File> filesToDelete = new ArrayList();
             int currentUser = UserConfig.getClientUserId();
             while (cursor.next()) {
@@ -5592,12 +5929,21 @@ Error: java.util.NoSuchElementException
                     long did = cursor.longValue(0);
                     if (did != ((long) currentUser)) {
                         int read_state = cursor.intValue(2);
-                        if ((read_state == 0 || read_state == 2) && cursor.intValue(3) == 0) {
-                            Integer unread_count = (Integer) dialogsToUpdate.get(Long.valueOf(did));
+                        if (cursor.intValue(3) == 0) {
+                            Integer num;
+                            Integer[] unread_count = (Integer[]) dialogsToUpdate.get(Long.valueOf(did));
                             if (unread_count == null) {
-                                unread_count = Integer.valueOf(0);
+                                unread_count = new Integer[]{Integer.valueOf(0), Integer.valueOf(0)};
+                                dialogsToUpdate.put(Long.valueOf(did), unread_count);
                             }
-                            dialogsToUpdate.put(Long.valueOf(did), Integer.valueOf(unread_count.intValue() + 1));
+                            if (read_state < 2) {
+                                num = unread_count[1];
+                                unread_count[1] = Integer.valueOf(unread_count[1].intValue() + 1);
+                            }
+                            if (read_state == 0 || read_state == 2) {
+                                num = unread_count[0];
+                                unread_count[0] = Integer.valueOf(unread_count[0].intValue() + 1);
+                            }
                         }
                         if (((int) did) == 0) {
                             NativeByteBuffer data = cursor.byteBufferValue(1);
@@ -5607,7 +5953,7 @@ Error: java.util.NoSuchElementException
                                 if (message == null) {
                                     continue;
                                 } else if (message.media instanceof TL_messageMediaPhoto) {
-                                    Iterator it = message.media.photo.sizes.iterator();
+                                    it = message.media.photo.sizes.iterator();
                                     while (it.hasNext()) {
                                         file = FileLoader.getPathToAttach((PhotoSize) it.next());
                                         if (file != null && file.toString().length() > 0) {
@@ -5637,13 +5983,22 @@ Error: java.util.NoSuchElementException
             }
             cursor.dispose();
             FileLoader.getInstance().deleteFiles(filesToDelete, 0);
-            for (Entry<Long, Integer> entry : dialogsToUpdate.entrySet()) {
+            for (Entry<Long, Integer[]> entry : dialogsToUpdate.entrySet()) {
                 Long did2 = (Long) entry.getKey();
+                Integer[] counts = (Integer[]) entry.getValue();
+                cursor = this.database.queryFinalized("SELECT unread_count, unread_count_i FROM dialogs WHERE did = " + did2, new Object[0]);
+                int old_unread_count = 0;
+                int old_mentions_count = 0;
+                if (cursor.next()) {
+                    old_unread_count = cursor.intValue(0);
+                    old_mentions_count = cursor.intValue(1);
+                }
+                cursor.dispose();
                 arrayList.add(did2);
-                SQLitePreparedStatement state = this.database.executeFast("UPDATE dialogs SET unread_count = max(0, ((SELECT unread_count FROM dialogs WHERE did = ?) - ?)) WHERE did = ?");
+                SQLitePreparedStatement state = this.database.executeFast("UPDATE dialogs SET unread_count = ?, unread_count_i = ? WHERE did = ?");
                 state.requery();
-                state.bindLong(1, did2.longValue());
-                state.bindInteger(2, ((Integer) entry.getValue()).intValue());
+                state.bindInteger(1, Math.max(0, old_unread_count - counts[0].intValue()));
+                state.bindInteger(2, Math.max(0, old_mentions_count - counts[1].intValue()));
                 state.bindLong(3, did2.longValue());
                 state.step();
                 state.dispose();
@@ -5707,12 +6062,12 @@ Error: java.util.NoSuchElementException
                 }
             }
             ids = TextUtils.join(",", dialogsToUpdate);
-            messages_Dialogs dialogs = new messages_Dialogs();
+            messages_Dialogs dialogs = new TL_messages_dialogs();
             ArrayList<EncryptedChat> encryptedChats = new ArrayList();
             ArrayList<Integer> usersToLoad = new ArrayList();
             ArrayList<Integer> chatsToLoad = new ArrayList();
             ArrayList<Integer> encryptedToLoad = new ArrayList();
-            cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, m.date, d.pts, d.inbox_max, d.outbox_max, d.pinned FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid WHERE d.did IN(%s)", new Object[]{ids}), new Object[0]);
+            cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, m.date, d.pts, d.inbox_max, d.outbox_max, d.pinned, d.unread_count_i FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid WHERE d.did IN(%s)", new Object[]{ids}), new Object[0]);
             while (cursor.next()) {
                 TL_dialog dialog = new TL_dialog();
                 dialog.id = cursor.longValue(0);
@@ -5720,6 +6075,7 @@ Error: java.util.NoSuchElementException
                 dialog.read_inbox_max_id = cursor.intValue(10);
                 dialog.read_outbox_max_id = cursor.intValue(11);
                 dialog.unread_count = cursor.intValue(2);
+                dialog.unread_mentions_count = cursor.intValue(13);
                 dialog.last_message_date = cursor.intValue(3);
                 dialog.pts = cursor.intValue(9);
                 dialog.flags = channelId == 0 ? 0 : 1;
@@ -5811,12 +6167,12 @@ Error: java.util.NoSuchElementException
             if (message.media instanceof TL_messageMediaUnsupported_old) {
                 if (message.media.bytes.length == 0) {
                     message.media.bytes = new byte[1];
-                    message.media.bytes[0] = (byte) 70;
+                    message.media.bytes[0] = (byte) 71;
                 }
             } else if (message.media instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 message.media.bytes = new byte[1];
-                message.media.bytes[0] = (byte) 70;
+                message.media.bytes[0] = (byte) 71;
                 message.flags |= 512;
             }
         }
@@ -6008,6 +6364,7 @@ Error: java.util.NoSuchElementException
         final boolean z = createDialog;
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
+                int mentionCountUpdate = ConnectionsManager.DEFAULT_DATACENTER_ID;
                 try {
                     if (!org_telegram_tgnet_TLRPC_messages_Messages.messages.isEmpty()) {
                         MessagesStorage.this.database.beginTransaction();
@@ -6031,7 +6388,7 @@ Error: java.util.NoSuchElementException
                             MessagesStorage.this.closeHolesInMedia(j, minId, maxId, -1);
                         }
                         int count = org_telegram_tgnet_TLRPC_messages_Messages.messages.size();
-                        SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?)");
+                        SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
                         SQLitePreparedStatement state2 = MessagesStorage.this.database.executeFast("REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)");
                         SQLitePreparedStatement state5 = null;
                         Message botKeyboard = null;
@@ -6047,7 +6404,7 @@ Error: java.util.NoSuchElementException
                                 messageId |= ((long) channelId) << 32;
                             }
                             if (i == -2) {
-                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT mid, data, ttl FROM messages WHERE mid = %d", new Object[]{Long.valueOf(messageId)}), new Object[0]);
+                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT mid, data, ttl, mention, read_state FROM messages WHERE mid = %d", new Object[]{Long.valueOf(messageId)}), new Object[0]);
                                 boolean exist = cursor.next();
                                 if (exist) {
                                     AbstractSerializedData data = cursor.byteBufferValue(1);
@@ -6059,6 +6416,24 @@ Error: java.util.NoSuchElementException
                                             message.ttl = cursor.intValue(2);
                                         }
                                     }
+                                    boolean oldMention = cursor.intValue(3) != 0;
+                                    int readState = cursor.intValue(4);
+                                    if (oldMention != message.mentioned) {
+                                        if (mentionCountUpdate == Integer.MAX_VALUE) {
+                                            SQLiteCursor cursor2 = MessagesStorage.this.database.queryFinalized("SELECT unread_count_i FROM dialogs WHERE did = " + j, new Object[0]);
+                                            if (cursor2.next()) {
+                                                mentionCountUpdate = cursor2.intValue(0);
+                                            }
+                                            cursor2.dispose();
+                                        }
+                                        if (oldMention) {
+                                            if (readState <= 1) {
+                                                mentionCountUpdate--;
+                                            }
+                                        } else if (message.media_unread) {
+                                            mentionCountUpdate++;
+                                        }
+                                    }
                                 }
                                 cursor.dispose();
                                 if (!exist) {
@@ -6066,9 +6441,11 @@ Error: java.util.NoSuchElementException
                             }
                             if (a == 0 && z) {
                                 int pinned = 0;
-                                cursor = MessagesStorage.this.database.queryFinalized("SELECT pinned FROM dialogs WHERE did = " + j, new Object[0]);
+                                int mentions = 0;
+                                cursor = MessagesStorage.this.database.queryFinalized("SELECT pinned, unread_count_i FROM dialogs WHERE did = " + j, new Object[0]);
                                 if (cursor.next()) {
                                     pinned = cursor.intValue(0);
+                                    mentions = cursor.intValue(1);
                                 }
                                 cursor.dispose();
                                 SQLitePreparedStatement state3 = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -6079,7 +6456,7 @@ Error: java.util.NoSuchElementException
                                 state3.bindInteger(5, message.id);
                                 state3.bindInteger(6, 0);
                                 state3.bindLong(7, messageId);
-                                state3.bindInteger(8, message.ttl);
+                                state3.bindInteger(8, mentions);
                                 state3.bindInteger(9, org_telegram_tgnet_TLRPC_messages_Messages.pts);
                                 state3.bindInteger(10, message.date);
                                 state3.bindInteger(11, pinned);
@@ -6104,6 +6481,7 @@ Error: java.util.NoSuchElementException
                                 state.bindInteger(9, MessagesStorage.this.getMessageMediaType(message));
                             }
                             state.bindInteger(10, 0);
+                            state.bindInteger(11, message.mentioned ? 1 : 0);
                             state.step();
                             if (SharedMediaQuery.canAddMessageToMedia(message)) {
                                 state2.requery();
@@ -6138,6 +6516,12 @@ Error: java.util.NoSuchElementException
                         }
                         MessagesStorage.this.putUsersInternal(org_telegram_tgnet_TLRPC_messages_Messages.users);
                         MessagesStorage.this.putChatsInternal(org_telegram_tgnet_TLRPC_messages_Messages.chats);
+                        if (mentionCountUpdate != Integer.MAX_VALUE) {
+                            MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE dialogs SET unread_count_i = %d WHERE did = %d", new Object[]{Integer.valueOf(mentionCountUpdate), Long.valueOf(j)})).stepThis().dispose();
+                            HashMap<Long, Integer> hashMap = new HashMap();
+                            hashMap.put(Long.valueOf(j), Integer.valueOf(mentionCountUpdate));
+                            MessagesController.getInstance().processDialogsUpdateRead(null, hashMap);
+                        }
                         MessagesStorage.this.database.commitTransaction();
                         if (z) {
                             MessagesStorage.getInstance().updateDialogsWithDeletedMessages(new ArrayList(), null, false, channelId);
@@ -6215,7 +6599,7 @@ Error: java.util.NoSuchElementException
     public void getDialogs(final int offset, final int count) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
-                messages_Dialogs dialogs = new messages_Dialogs();
+                messages_Dialogs dialogs = new TL_messages_dialogs();
                 ArrayList<EncryptedChat> encryptedChats = new ArrayList();
                 ArrayList<Integer> usersToLoad = new ArrayList();
                 usersToLoad.add(Integer.valueOf(UserConfig.getClientUserId()));
@@ -6223,7 +6607,7 @@ Error: java.util.NoSuchElementException
                 ArrayList<Integer> encryptedToLoad = new ArrayList();
                 ArrayList<Long> replyMessages = new ArrayList();
                 HashMap<Long, Message> replyMessageOwners = new HashMap();
-                SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
+                SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned, d.unread_count_i FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
                 while (cursor.next()) {
                     Message message;
                     TL_dialog dialog = new TL_dialog();
@@ -6238,6 +6622,7 @@ Error: java.util.NoSuchElementException
                     dialog.read_outbox_max_id = cursor.intValue(12);
                     dialog.pinnedNum = cursor.intValue(14);
                     dialog.pinned = dialog.pinnedNum != 0;
+                    dialog.unread_mentions_count = cursor.intValue(15);
                     long flags = cursor.longValue(8);
                     int low_flags = (int) flags;
                     dialog.notify_settings = new TL_peerNotifySettings();
@@ -6287,36 +6672,36 @@ Error: java.util.NoSuchElementException
                                     }
                                 }
                             } catch (Throwable e) {
-                                try {
-                                    FileLog.e(e);
-                                } catch (Throwable e2) {
-                                    dialogs.dialogs.clear();
-                                    dialogs.users.clear();
-                                    dialogs.chats.clear();
-                                    encryptedChats.clear();
-                                    FileLog.e(e2);
-                                    MessagesController.getInstance().processLoadedDialogs(dialogs, encryptedChats, 0, 100, 1, true, false, true);
-                                    return;
-                                }
+                                FileLog.e(e);
                             }
                         }
                     }
-                    int lower_id = (int) dialog.id;
-                    int high_id = (int) (dialog.id >> 32);
-                    if (lower_id == 0) {
-                        if (!encryptedToLoad.contains(Integer.valueOf(high_id))) {
-                            encryptedToLoad.add(Integer.valueOf(high_id));
+                    try {
+                        int lower_id = (int) dialog.id;
+                        int high_id = (int) (dialog.id >> 32);
+                        if (lower_id == 0) {
+                            if (!encryptedToLoad.contains(Integer.valueOf(high_id))) {
+                                encryptedToLoad.add(Integer.valueOf(high_id));
+                            }
+                        } else if (high_id == 1) {
+                            if (!chatsToLoad.contains(Integer.valueOf(lower_id))) {
+                                chatsToLoad.add(Integer.valueOf(lower_id));
+                            }
+                        } else if (lower_id > 0) {
+                            if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
+                                usersToLoad.add(Integer.valueOf(lower_id));
+                            }
+                        } else if (!chatsToLoad.contains(Integer.valueOf(-lower_id))) {
+                            chatsToLoad.add(Integer.valueOf(-lower_id));
                         }
-                    } else if (high_id == 1) {
-                        if (!chatsToLoad.contains(Integer.valueOf(lower_id))) {
-                            chatsToLoad.add(Integer.valueOf(lower_id));
-                        }
-                    } else if (lower_id > 0) {
-                        if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
-                            usersToLoad.add(Integer.valueOf(lower_id));
-                        }
-                    } else if (!chatsToLoad.contains(Integer.valueOf(-lower_id))) {
-                        chatsToLoad.add(Integer.valueOf(-lower_id));
+                    } catch (Throwable e2) {
+                        dialogs.dialogs.clear();
+                        dialogs.users.clear();
+                        dialogs.chats.clear();
+                        encryptedChats.clear();
+                        FileLog.e(e2);
+                        MessagesController.getInstance().processLoadedDialogs(dialogs, encryptedChats, 0, 100, 1, true, false, true);
+                        return;
                     }
                 }
                 cursor.dispose();
@@ -6392,7 +6777,7 @@ Error: java.util.NoSuchElementException
                 new_dialogMessage.put(Long.valueOf(message.dialog_id), message);
             }
             if (!dialogs.dialogs.isEmpty()) {
-                SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?)");
+                SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
                 SQLitePreparedStatement state2 = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 SQLitePreparedStatement state3 = this.database.executeFast("REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)");
                 SQLitePreparedStatement state4 = this.database.executeFast("REPLACE INTO dialog_settings VALUES(?, ?)");
@@ -6441,6 +6826,7 @@ Error: java.util.NoSuchElementException
                         state.bindInteger(8, 0);
                         state.bindInteger(9, (message.flags & 1024) != 0 ? message.views : 0);
                         state.bindInteger(10, 0);
+                        state.bindInteger(11, message.mentioned ? 1 : 0);
                         state.step();
                         if (SharedMediaQuery.canAddMessageToMedia(message)) {
                             state3.requery();
@@ -6466,7 +6852,7 @@ Error: java.util.NoSuchElementException
                     state2.bindInteger(5, dialog.read_inbox_max_id);
                     state2.bindInteger(6, dialog.read_outbox_max_id);
                     state2.bindLong(7, 0);
-                    state2.bindInteger(8, 0);
+                    state2.bindInteger(8, dialog.unread_mentions_count);
                     state2.bindInteger(9, dialog.pts);
                     state2.bindInteger(10, 0);
                     state2.bindInteger(11, dialog.pinnedNum);

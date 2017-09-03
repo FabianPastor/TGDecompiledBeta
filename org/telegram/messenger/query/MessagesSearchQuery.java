@@ -172,7 +172,7 @@ public class MessagesSearchQuery {
         if (req.peer != null) {
             req.limit = 21;
             req.q = query != null ? query : "";
-            req.max_id = max_id;
+            req.offset_id = max_id;
             if (user != null) {
                 req.from_id = MessagesController.getInputUser(user);
                 req.flags |= 1;
@@ -199,7 +199,7 @@ public class MessagesSearchQuery {
                                     MessagesStorage.getInstance().putUsersAndChats(res.users, res.chats, true, true);
                                     MessagesController.getInstance().putUsers(res.users, false);
                                     MessagesController.getInstance().putChats(res.chats, false);
-                                    if (req.max_id == 0 && j2 == j3) {
+                                    if (req.offset_id == 0 && j2 == j3) {
                                         MessagesSearchQuery.lastReturnedNum = 0;
                                         MessagesSearchQuery.searchResultMessages.clear();
                                         MessagesSearchQuery.searchResultMessagesMap[0].clear();

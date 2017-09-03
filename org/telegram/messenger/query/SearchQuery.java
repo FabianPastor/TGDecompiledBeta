@@ -20,7 +20,6 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import org.telegram.SQLite.SQLiteCursor;
@@ -59,7 +58,6 @@ public class SearchQuery {
     private static RectF bitmapRect;
     public static ArrayList<TL_topPeer> hints = new ArrayList();
     public static ArrayList<TL_topPeer> inlineBots = new ArrayList();
-    private static HashMap<Integer, Integer> inlineDates = new HashMap();
     private static boolean loaded;
     private static boolean loading;
     private static Paint roundPaint;
@@ -69,7 +67,6 @@ public class SearchQuery {
         loaded = false;
         hints.clear();
         inlineBots.clear();
-        inlineDates.clear();
         NotificationCenter.getInstance().postNotificationName(NotificationCenter.reloadHints, new Object[0]);
         NotificationCenter.getInstance().postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
     }
@@ -244,14 +241,16 @@ public class SearchQuery {
                                         TL_topPeerCategoryPeers category = (TL_topPeerCategoryPeers) topPeers.categories.get(a);
                                         if (category.category instanceof TL_topPeerCategoryBotsInline) {
                                             SearchQuery.inlineBots = category.peers;
+                                            UserConfig.botRatingLoadTime = (int) (System.currentTimeMillis() / 1000);
                                         } else {
                                             SearchQuery.hints = category.peers;
+                                            UserConfig.ratingLoadTime = (int) (System.currentTimeMillis() / 1000);
                                         }
                                     }
+                                    UserConfig.saveConfig(false);
                                     SearchQuery.buildShortcuts();
                                     NotificationCenter.getInstance().postNotificationName(NotificationCenter.reloadHints, new Object[0]);
                                     NotificationCenter.getInstance().postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
-                                    final HashMap<Integer, Integer> inlineDatesCopy = new HashMap(SearchQuery.inlineDates);
                                     MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
                                         public void run() {
                                             try {
@@ -269,7 +268,6 @@ public class SearchQuery {
                                                     }
                                                     for (int b = 0; b < category.peers.size(); b++) {
                                                         int did;
-                                                        int intValue;
                                                         TL_topPeer peer = (TL_topPeer) category.peers.get(b);
                                                         if (peer.peer instanceof TL_peerUser) {
                                                             did = peer.peer.user_id;
@@ -278,17 +276,11 @@ public class SearchQuery {
                                                         } else {
                                                             did = -peer.peer.channel_id;
                                                         }
-                                                        Integer date = (Integer) inlineDatesCopy.get(Integer.valueOf(did));
                                                         state.requery();
                                                         state.bindInteger(1, did);
                                                         state.bindInteger(2, type);
                                                         state.bindDouble(3, peer.rating);
-                                                        if (date != null) {
-                                                            intValue = date.intValue();
-                                                        } else {
-                                                            intValue = 0;
-                                                        }
-                                                        state.bindInteger(4, intValue);
+                                                        state.bindInteger(4, 0);
                                                         state.step();
                                                     }
                                                 }
@@ -316,13 +308,12 @@ public class SearchQuery {
                     public void run() {
                         final ArrayList<TL_topPeer> hintsNew = new ArrayList();
                         final ArrayList<TL_topPeer> inlineBotsNew = new ArrayList();
-                        final HashMap<Integer, Integer> inlineDatesNew = new HashMap();
                         final ArrayList<User> users = new ArrayList();
                         final ArrayList<Chat> chats = new ArrayList();
                         try {
                             ArrayList<Integer> usersToLoad = new ArrayList();
                             ArrayList<Integer> chatsToLoad = new ArrayList();
-                            SQLiteCursor cursor = MessagesStorage.getInstance().getDatabase().queryFinalized("SELECT did, type, rating, date FROM chat_hints WHERE 1 ORDER BY rating DESC", new Object[0]);
+                            SQLiteCursor cursor = MessagesStorage.getInstance().getDatabase().queryFinalized("SELECT did, type, rating FROM chat_hints WHERE 1 ORDER BY rating DESC", new Object[0]);
                             while (cursor.next()) {
                                 int did = cursor.intValue(0);
                                 int type = cursor.intValue(1);
@@ -341,7 +332,6 @@ public class SearchQuery {
                                     hintsNew.add(peer);
                                 } else if (type == 1) {
                                     inlineBotsNew.add(peer);
-                                    inlineDatesNew.put(Integer.valueOf(did), Integer.valueOf(cursor.intValue(3)));
                                 }
                             }
                             cursor.dispose();
@@ -359,7 +349,6 @@ public class SearchQuery {
                                     SearchQuery.loaded = true;
                                     SearchQuery.hints = hintsNew;
                                     SearchQuery.inlineBots = inlineBotsNew;
-                                    SearchQuery.inlineDates = inlineDatesNew;
                                     SearchQuery.buildShortcuts();
                                     NotificationCenter.getInstance().postNotificationName(NotificationCenter.reloadHints, new Object[0]);
                                     NotificationCenter.getInstance().postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
@@ -380,9 +369,8 @@ public class SearchQuery {
 
     public static void increaseInlineRaiting(int uid) {
         int dt;
-        Integer time = (Integer) inlineDates.get(Integer.valueOf(uid));
-        if (time != null) {
-            dt = Math.max(1, ((int) (System.currentTimeMillis() / 1000)) - time.intValue());
+        if (UserConfig.botRatingLoadTime != 0) {
+            dt = Math.max(1, ((int) (System.currentTimeMillis() / 1000)) - UserConfig.botRatingLoadTime);
         } else {
             dt = 60;
         }
@@ -472,12 +460,8 @@ public class SearchQuery {
                                 lastTime = cursor.intValue(1);
                             }
                             cursor.dispose();
-                            if (lastMid > 0) {
-                                cursor = MessagesStorage.getInstance().getDatabase().queryFinalized(String.format(Locale.US, "SELECT date FROM messages WHERE uid = %d AND mid < %d AND out = 1 ORDER BY date DESC", new Object[]{Long.valueOf(did), Integer.valueOf(lastMid)}), new Object[0]);
-                                if (cursor.next()) {
-                                    dt = (double) (lastTime - cursor.intValue(0));
-                                }
-                                cursor.dispose();
+                            if (lastMid > 0 && UserConfig.ratingLoadTime != 0) {
+                                dt = (double) (lastTime - UserConfig.ratingLoadTime);
                             }
                         } catch (Throwable e) {
                             FileLog.e(e);

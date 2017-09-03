@@ -237,6 +237,10 @@ public class ActionBar extends FrameLayout {
         this.actionBarMenuOnItemClick = listener;
     }
 
+    public ActionBarMenuOnItemClick getActionBarMenuOnItemClick() {
+        return this.actionBarMenuOnItemClick;
+    }
+
     public View getBackButton() {
         return this.backButtonImageView;
     }

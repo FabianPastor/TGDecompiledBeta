@@ -40,6 +40,7 @@ import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ProxySettingsActivity extends BaseFragment implements NotificationCenterDelegate {
@@ -53,13 +54,12 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
     private ArrayList<View> dividers = new ArrayList();
     private HeaderCell headerCell;
     private boolean ignoreOnTextChange;
-    private EditText[] inputFields;
+    private EditTextBoldCursor[] inputFields;
     private LinearLayout linearLayout2;
     private ScrollView scrollView;
     private ShadowSectionCell sectionCell;
     private ActionBarMenuItem shareItem;
     private TextCheckCell useForCallsCell;
-    private TextInfoPrivacyCell useForCallsInfoCell;
     private boolean useProxyForCalls;
     private boolean useProxySettings;
 
@@ -175,7 +175,7 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
         });
         this.sectionCell = new ShadowSectionCell(context);
         this.linearLayout2.addView(this.sectionCell, LayoutHelper.createLinear(-1, -2));
-        this.inputFields = new EditText[4];
+        this.inputFields = new EditTextBoldCursor[4];
         int a = 0;
         while (a < 4) {
             FrameLayout container = new FrameLayout(context);
@@ -187,13 +187,15 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
                 divider.setBackgroundColor(Theme.getColor(Theme.key_divider));
                 container.addView(divider, new LayoutParams(-1, 1, 83));
             }
-            this.inputFields[a] = new EditText(context);
+            this.inputFields[a] = new EditTextBoldCursor(context);
             this.inputFields[a].setTag(Integer.valueOf(a));
             this.inputFields[a].setTextSize(1, 16.0f);
             this.inputFields[a].setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.inputFields[a].setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.inputFields[a].setBackgroundDrawable(null);
-            AndroidUtilities.clearCursorDrawable(this.inputFields[a]);
+            this.inputFields[a].setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            this.inputFields[a].setCursorSize(AndroidUtilities.dp(20.0f));
+            this.inputFields[a].setCursorWidth(1.5f);
             if (a == 0) {
                 this.inputFields[a].addTextChangedListener(new TextWatcher() {
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -312,10 +314,10 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
                 ProxySettingsActivity.this.useForCallsCell.setChecked(ProxySettingsActivity.this.useProxyForCalls);
             }
         });
-        this.useForCallsInfoCell = new TextInfoPrivacyCell(context);
-        this.useForCallsInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-        this.useForCallsInfoCell.setText(LocaleController.getString("UseProxyForCallsInfo", R.string.UseProxyForCallsInfo));
-        this.linearLayout2.addView(this.useForCallsInfoCell, LayoutHelper.createLinear(-1, -2));
+        TextInfoPrivacyCell useForCallsInfoCell = new TextInfoPrivacyCell(context);
+        useForCallsInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+        useForCallsInfoCell.setText(LocaleController.getString("UseProxyForCallsInfo", R.string.UseProxyForCallsInfo));
+        this.linearLayout2.addView(useForCallsInfoCell, LayoutHelper.createLinear(-1, -2));
         checkShareButton();
         return this.fragmentView;
     }

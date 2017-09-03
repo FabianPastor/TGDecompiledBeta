@@ -31,7 +31,6 @@ import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
@@ -76,7 +75,7 @@ public class PasscodeView extends FrameLayout {
     private ArrayList<TextView> numberTextViews;
     private FrameLayout numbersFrameLayout;
     private TextView passcodeTextView;
-    private EditText passwordEditText;
+    private EditTextBoldCursor passwordEditText;
     private AnimatingTextView passwordEditText2;
     private FrameLayout passwordFrameLayout;
     private Rect rect = new Rect();
@@ -433,7 +432,7 @@ public class PasscodeView extends FrameLayout {
         layoutParams.bottomMargin = AndroidUtilities.dp(6.0f);
         layoutParams.gravity = 81;
         this.passwordEditText2.setLayoutParams(layoutParams);
-        this.passwordEditText = new EditText(context);
+        this.passwordEditText = new EditTextBoldCursor(context);
         this.passwordEditText.setTextSize(1, 36.0f);
         this.passwordEditText.setTextColor(-1);
         this.passwordEditText.setMaxLines(1);
@@ -443,14 +442,14 @@ public class PasscodeView extends FrameLayout {
         this.passwordEditText.setImeOptions(6);
         this.passwordEditText.setTypeface(Typeface.DEFAULT);
         this.passwordEditText.setBackgroundDrawable(null);
-        AndroidUtilities.clearCursorDrawable(this.passwordEditText);
+        this.passwordEditText.setCursorColor(-1);
+        this.passwordEditText.setCursorSize(AndroidUtilities.dp(32.0f));
         this.passwordFrameLayout.addView(this.passwordEditText);
         layoutParams = (LayoutParams) this.passwordEditText.getLayoutParams();
         layoutParams.height = -2;
         layoutParams.width = -1;
         layoutParams.leftMargin = AndroidUtilities.dp(70.0f);
         layoutParams.rightMargin = AndroidUtilities.dp(70.0f);
-        layoutParams.bottomMargin = AndroidUtilities.dp(6.0f);
         layoutParams.gravity = 81;
         this.passwordEditText.setLayoutParams(layoutParams);
         this.passwordEditText.setOnEditorActionListener(new OnEditorActionListener() {

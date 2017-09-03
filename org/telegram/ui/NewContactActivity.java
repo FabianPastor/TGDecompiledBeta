@@ -24,7 +24,6 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -64,6 +63,7 @@ import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.ContextProgressView;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.HintEditText;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.CountrySelectActivity.CountrySelectActivityDelegate;
@@ -72,7 +72,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     private static final int done_button = 1;
     private AvatarDrawable avatarDrawable;
     private BackupImageView avatarImage;
-    private EditText codeField;
+    private EditTextBoldCursor codeField;
     private HashMap<String, String> codesMap = new HashMap();
     private ArrayList<String> countriesArray = new ArrayList();
     private HashMap<String, String> countriesMap = new HashMap();
@@ -82,11 +82,11 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     private ActionBarMenuItem editDoneItem;
     private AnimatorSet editDoneItemAnimation;
     private ContextProgressView editDoneItemProgress;
-    private EditText firstNameField;
+    private EditTextBoldCursor firstNameField;
     private boolean ignoreOnPhoneChange;
     private boolean ignoreOnTextChange;
     private boolean ignoreSelection;
-    private EditText lastNameField;
+    private EditTextBoldCursor lastNameField;
     private View lineView;
     private HintEditText phoneField;
     private HashMap<String, String> phoneFormatMap = new HashMap();
@@ -189,7 +189,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.avatarImage = new BackupImageView(context);
         this.avatarImage.setImageDrawable(this.avatarDrawable);
         frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(60, BitmapDescriptorFactory.HUE_YELLOW, 51, 0.0f, 9.0f, 0.0f, 0.0f));
-        this.firstNameField = new EditText(context);
+        this.firstNameField = new EditTextBoldCursor(context);
         this.firstNameField.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -201,7 +201,9 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.firstNameField.setInputType(49152);
         this.firstNameField.setImeOptions(5);
         this.firstNameField.setHint(LocaleController.getString("FirstName", R.string.FirstName));
-        AndroidUtilities.clearCursorDrawable(this.firstNameField);
+        this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
+        this.firstNameField.setCursorWidth(1.5f);
         frameLayout.addView(this.firstNameField, LayoutHelper.createFrame(-1, 34.0f, 51, 84.0f, 0.0f, 0.0f, 0.0f));
         this.firstNameField.setOnEditorActionListener(new OnEditorActionListener() {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -225,7 +227,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                 NewContactActivity.this.avatarImage.invalidate();
             }
         });
-        this.lastNameField = new EditText(context);
+        this.lastNameField = new EditTextBoldCursor(context);
         this.lastNameField.setTextSize(1, 18.0f);
         this.lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.lastNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -237,7 +239,9 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.lastNameField.setInputType(49152);
         this.lastNameField.setImeOptions(5);
         this.lastNameField.setHint(LocaleController.getString("LastName", R.string.LastName));
-        AndroidUtilities.clearCursorDrawable(this.lastNameField);
+        this.lastNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
+        this.lastNameField.setCursorWidth(1.5f);
         frameLayout.addView(this.lastNameField, LayoutHelper.createFrame(-1, 34.0f, 51, 84.0f, 44.0f, 0.0f, 0.0f));
         this.lastNameField.setOnEditorActionListener(new OnEditorActionListener() {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -301,11 +305,13 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 18.0f);
         linearLayout.addView(this.textView, LayoutHelper.createLinear(-2, -2));
-        this.codeField = new EditText(context);
+        this.codeField = new EditTextBoldCursor(context);
         this.codeField.setInputType(3);
         this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.codeField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
-        AndroidUtilities.clearCursorDrawable(this.codeField);
+        this.codeField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.codeField.setCursorSize(AndroidUtilities.dp(20.0f));
+        this.codeField.setCursorWidth(1.5f);
         this.codeField.setPadding(AndroidUtilities.dp(10.0f), 0, 0, 0);
         this.codeField.setTextSize(1, 18.0f);
         this.codeField.setMaxLines(1);
@@ -347,7 +353,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                             if (!ok) {
                                 NewContactActivity.this.ignoreOnTextChange = true;
                                 textToSet = text.substring(1, text.length()) + NewContactActivity.this.phoneField.getText().toString();
-                                EditText access$200 = NewContactActivity.this.codeField;
+                                EditTextBoldCursor access$200 = NewContactActivity.this.codeField;
                                 text = text.substring(0, 1);
                                 access$200.setText(text);
                             }
@@ -400,7 +406,9 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.phoneField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.phoneField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
         this.phoneField.setPadding(0, 0, 0, 0);
-        AndroidUtilities.clearCursorDrawable(this.phoneField);
+        this.phoneField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.phoneField.setCursorSize(AndroidUtilities.dp(20.0f));
+        this.phoneField.setCursorWidth(1.5f);
         this.phoneField.setTextSize(1, 18.0f);
         this.phoneField.setMaxLines(1);
         this.phoneField.setGravity(19);

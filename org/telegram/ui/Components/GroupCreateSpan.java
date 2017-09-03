@@ -16,6 +16,7 @@ import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
@@ -27,42 +28,68 @@ public class GroupCreateSpan extends View {
     private static Paint backPaint = new Paint(1);
     private static TextPaint textPaint = new TextPaint(1);
     private AvatarDrawable avatarDrawable;
-    private int[] colors = new int[6];
-    private Drawable deleteDrawable = getResources().getDrawable(R.drawable.delete);
+    private int[] colors;
+    private Contact currentContact;
+    private Drawable deleteDrawable;
     private boolean deleting;
     private ImageReceiver imageReceiver;
     private long lastUpdateTime;
     private StaticLayout nameLayout;
     private float progress;
-    private RectF rect = new RectF();
+    private RectF rect;
     private int textWidth;
     private float textX;
     private int uid;
 
     public GroupCreateSpan(Context context, User user) {
+        this(context, user, null);
+    }
+
+    public GroupCreateSpan(Context context, Contact contact) {
+        this(context, null, contact);
+    }
+
+    public GroupCreateSpan(Context context, User user, Contact contact) {
         int maxNameWidth;
+        String firstName;
         super(context);
+        this.rect = new RectF();
+        this.colors = new int[6];
+        this.currentContact = contact;
+        this.deleteDrawable = getResources().getDrawable(R.drawable.delete);
         textPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
         this.avatarDrawable = new AvatarDrawable();
         this.avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
-        this.avatarDrawable.setInfo(user);
+        if (user != null) {
+            this.avatarDrawable.setInfo(user);
+            this.uid = user.id;
+        } else {
+            this.avatarDrawable.setInfo(0, contact.first_name, contact.last_name, false);
+            this.uid = contact.id;
+        }
         this.imageReceiver = new ImageReceiver();
         this.imageReceiver.setRoundRadius(AndroidUtilities.dp(16.0f));
         this.imageReceiver.setParentView(this);
         this.imageReceiver.setImageCoords(0, 0, AndroidUtilities.dp(32.0f), AndroidUtilities.dp(32.0f));
-        this.uid = user.id;
         if (AndroidUtilities.isTablet()) {
             maxNameWidth = AndroidUtilities.dp(366.0f) / 2;
         } else {
             maxNameWidth = (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(164.0f)) / 2;
         }
-        this.nameLayout = new StaticLayout(TextUtils.ellipsize(UserObject.getFirstName(user).replace('\n', ' '), textPaint, (float) maxNameWidth, TruncateAt.END), textPaint, 1000, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        if (user != null) {
+            firstName = UserObject.getFirstName(user);
+        } else if (TextUtils.isEmpty(contact.first_name)) {
+            firstName = contact.last_name;
+        } else {
+            firstName = contact.first_name;
+        }
+        this.nameLayout = new StaticLayout(TextUtils.ellipsize(firstName.replace('\n', ' '), textPaint, (float) maxNameWidth, TruncateAt.END), textPaint, 1000, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         if (this.nameLayout.getLineCount() > 0) {
             this.textWidth = (int) Math.ceil((double) this.nameLayout.getLineWidth(0));
             this.textX = -this.nameLayout.getLineLeft(0);
         }
         FileLocation photo = null;
-        if (user.photo != null) {
+        if (!(user == null || user.photo == null)) {
             photo = user.photo.photo_small;
         }
         this.imageReceiver.setImage(photo, null, "50_50", this.avatarDrawable, null, null, 0, null, 1);
@@ -107,6 +134,10 @@ public class GroupCreateSpan extends View {
 
     public int getUid() {
         return this.uid;
+    }
+
+    public Contact getContact() {
+        return this.currentContact;
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

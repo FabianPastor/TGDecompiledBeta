@@ -14,9 +14,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -25,6 +27,9 @@ import android.graphics.drawable.GradientDrawable.Orientation;
 import android.media.AudioManager;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.graphics.Palette;
 import android.text.SpannableString;
@@ -63,11 +68,12 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.voip.EncryptionKeyEmojifier;
+import org.telegram.messenger.voip.VoIPBaseService.StateListener;
 import org.telegram.messenger.voip.VoIPController;
 import org.telegram.messenger.voip.VoIPService;
-import org.telegram.messenger.voip.VoIPService.StateListener;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
+import org.telegram.tgnet.TLRPC.TL_encryptedChat;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BottomSheet.Builder;
@@ -91,6 +97,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
     private ImageView blurOverlayView2;
     private Bitmap blurredPhoto1;
     private Bitmap blurredPhoto2;
+    private TextView brandingText;
     private int callState;
     private View cancelBtn;
     private ImageView chatBtn;
@@ -122,6 +129,8 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
     private BackupImageView photoView;
     private AnimatorSet retryAnim;
     private boolean retrying;
+    private int signalBarsCount;
+    private SignalBarsDrawable signalBarsDrawable;
     private CheckableImageView spkToggle;
     private TextView stateText;
     private TextView stateText2;
@@ -130,6 +139,51 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
     private Animator tooltipAnim;
     private Runnable tooltipHider;
     private User user;
+
+    private class SignalBarsDrawable extends Drawable {
+        private int[] barHeights;
+        private int offsetStart;
+        private Paint paint;
+        private RectF rect;
+
+        private SignalBarsDrawable() {
+            this.barHeights = new int[]{AndroidUtilities.dp(3.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(9.0f), AndroidUtilities.dp(12.0f)};
+            this.paint = new Paint(1);
+            this.rect = new RectF();
+            this.offsetStart = 6;
+        }
+
+        public void draw(@NonNull Canvas canvas) {
+            if (VoIPActivity.this.callState == 3 || VoIPActivity.this.callState == 5) {
+                this.paint.setColor(-1);
+                int x = getBounds().left + AndroidUtilities.dp(LocaleController.isRTL ? 0.0f : (float) this.offsetStart);
+                int y = getBounds().top;
+                for (int i = 0; i < 4; i++) {
+                    this.paint.setAlpha(i + 1 <= VoIPActivity.this.signalBarsCount ? 242 : 102);
+                    this.rect.set((float) (AndroidUtilities.dp((float) (i * 4)) + x), (float) ((getIntrinsicHeight() + y) - this.barHeights[i]), (float) (((AndroidUtilities.dp(4.0f) * i) + x) + AndroidUtilities.dp(3.0f)), (float) (getIntrinsicHeight() + y));
+                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(0.3f), (float) AndroidUtilities.dp(0.3f), this.paint);
+                }
+            }
+        }
+
+        public void setAlpha(@IntRange(from = 0, to = 255) int alpha) {
+        }
+
+        public void setColorFilter(@Nullable ColorFilter colorFilter) {
+        }
+
+        public int getIntrinsicWidth() {
+            return AndroidUtilities.dp((float) (this.offsetStart + 15));
+        }
+
+        public int getIntrinsicHeight() {
+            return AndroidUtilities.dp(12.0f);
+        }
+
+        public int getOpacity() {
+            return -3;
+        }
+    }
 
     private class TextAlphaSpan extends CharacterStyle {
         private int alpha = 0;
@@ -448,20 +502,24 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         Drawable logo = getResources().getDrawable(R.drawable.notification).mutate();
         logo.setAlpha(204);
         logo.setBounds(0, 0, AndroidUtilities.dp(15.0f), AndroidUtilities.dp(15.0f));
+        VoIPActivity voIPActivity = this;
+        this.signalBarsDrawable = new SignalBarsDrawable();
+        this.signalBarsDrawable.setBounds(0, 0, this.signalBarsDrawable.getIntrinsicWidth(), this.signalBarsDrawable.getIntrinsicHeight());
         if (LocaleController.isRTL) {
-            drawable = null;
+            drawable = this.signalBarsDrawable;
         } else {
             drawable = logo;
         }
         if (!LocaleController.isRTL) {
-            logo = null;
+            logo = this.signalBarsDrawable;
         }
         branding.setCompoundDrawables(drawable, null, logo, null);
         branding.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         branding.setGravity(LocaleController.isRTL ? 5 : 3);
         branding.setCompoundDrawablePadding(AndroidUtilities.dp(5.0f));
         branding.setTextSize(1, 14.0f);
-        frameLayout.addView(branding, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 18.0f, 18.0f, 0.0f));
+        frameLayout.addView(branding, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 18.0f, 18.0f, 18.0f, 0.0f));
+        this.brandingText = branding;
         anonymousClass10 = new TextView(this);
         anonymousClass10.setSingleLine();
         anonymousClass10.setTextColor(-1);
@@ -606,7 +664,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                 voIPActivity.setEmojiExpanded(z);
             }
         });
-        frameLayout.addView(this.emojiWrap, LayoutHelper.createFrame(-2, -2, 53));
+        frameLayout.addView(this.emojiWrap, LayoutHelper.createFrame(-2, -2, (LocaleController.isRTL ? 3 : 5) | 48));
         this.emojiWrap.setOnLongClickListener(new OnLongClickListener() {
             public boolean onLongClick(View v) {
                 boolean z = false;
@@ -747,7 +805,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
     private void updateKeyView() {
         if (VoIPService.getSharedInstance() != null) {
             new IdenticonDrawable().setColors(new int[]{ViewCompat.MEASURED_SIZE_MASK, -1, -NUM, 872415231});
-            EncryptedChat encryptedChat = new EncryptedChat();
+            EncryptedChat encryptedChat = new TL_encryptedChat();
             try {
                 ByteArrayOutputStream buf = new ByteArrayOutputStream();
                 buf.write(VoIPService.getSharedInstance().getEncryptionKey());
@@ -786,6 +844,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
 
     private void showDebugAlert() {
         if (VoIPService.getSharedInstance() != null) {
+            VoIPService.getSharedInstance().forceRating();
             final LinearLayout debugOverlay = new LinearLayout(this);
             debugOverlay.setOrientation(1);
             debugOverlay.setBackgroundColor(-872415232);
@@ -839,13 +898,13 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                     if (VoIPActivity.this.callState == 3 || VoIPActivity.this.callState == 5) {
                         CharSequence format;
                         long duration = VoIPService.getSharedInstance().getCallDuration() / 1000;
-                        TextView access$2400 = VoIPActivity.this.durationText;
+                        TextView access$2500 = VoIPActivity.this.durationText;
                         if (duration > 3600) {
                             format = String.format("%d:%02d:%02d", new Object[]{Long.valueOf(duration / 3600), Long.valueOf((duration % 3600) / 60), Long.valueOf(duration % 60)});
                         } else {
                             format = String.format("%d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60)});
                         }
-                        access$2400.setText(format);
+                        access$2500.setText(format);
                         VoIPActivity.this.durationText.postDelayed(this, 500);
                     }
                 }
@@ -1081,7 +1140,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                             VoIPActivity.this.getSharedPreferences("mainconfig", 0).edit().putInt("call_emoji_tooltip_count", count + 1).apply();
                         }
                     }
-                    if (prevState != 3 && prevState != 5) {
+                    if (!(prevState == 3 || prevState == 5)) {
                         VoIPActivity.this.setStateTextAnimated("0:00", false);
                         VoIPActivity.this.startUpdatingCallDuration();
                         VoIPActivity.this.updateKeyView();
@@ -1117,6 +1176,16 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                         }, 1000);
                     }
                 }
+                VoIPActivity.this.brandingText.invalidate();
+            }
+        });
+    }
+
+    public void onSignalBarsCountChanged(final int count) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                VoIPActivity.this.signalBarsCount = count;
+                VoIPActivity.this.brandingText.invalidate();
             }
         });
     }

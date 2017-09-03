@@ -497,7 +497,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
             req.peer = new TL_inputPeerEmpty();
             req.filter = new TL_inputMessagesFilterPhoneCalls();
             req.q = "";
-            req.max_id = max_id;
+            req.offset_id = max_id;
             ConnectionsManager.getInstance().bindRequestToGuid(ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, final TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {

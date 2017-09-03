@@ -14,7 +14,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import org.telegram.messenger.AndroidUtilities;
@@ -42,6 +41,7 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.AvatarUpdater;
 import org.telegram.ui.Components.AvatarUpdater.AvatarUpdaterDelegate;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdaterDelegate {
@@ -56,7 +56,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
     private View doneButton;
     private boolean donePressed;
     private View headerLabelView;
-    private EditText nameTextView;
+    private EditTextBoldCursor nameTextView;
     private AlertDialog progressDialog;
     private InputFile uploadedAvatar;
 
@@ -184,7 +184,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
                 }
             }
         });
-        this.nameTextView = new EditText(context);
+        this.nameTextView = new EditTextBoldCursor(context);
         if (this.currentChat.megagroup) {
             this.nameTextView.setHint(LocaleController.getString("GroupName", R.string.GroupName));
         } else {
@@ -202,7 +202,9 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
         this.nameTextView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
         this.nameTextView.setFocusable(this.nameTextView.isEnabled());
         this.nameTextView.setFilters(new InputFilter[]{new LengthFilter(100)});
-        AndroidUtilities.clearCursorDrawable(this.nameTextView);
+        this.nameTextView.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.nameTextView.setCursorSize(AndroidUtilities.dp(20.0f));
+        this.nameTextView.setCursorWidth(1.5f);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         view = this.nameTextView;
         f = LocaleController.isRTL ? 16.0f : 96.0f;

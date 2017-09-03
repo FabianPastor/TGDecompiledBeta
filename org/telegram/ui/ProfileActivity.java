@@ -834,7 +834,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     } else if (id == 3) {
                         args = new Bundle();
                         args.putBoolean("onlySelect", true);
-                        args.putInt("dialogsType", 1);
                         args.putString("selectAlertString", LocaleController.getString("SendContactTo", R.string.SendContactTo));
                         args.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroup", R.string.SendContactToGroup));
                         r0 = new DialogsActivity(args);
@@ -883,7 +882,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             r0 = new DialogsActivity(args);
                             r1 = user;
                             r0.setDelegate(new DialogsActivityDelegate() {
-                                public void didSelectDialog(DialogsActivity fragment, long did, boolean param) {
+                                public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
+                                    long did = ((Long) dids.get(0)).longValue();
                                     Bundle args = new Bundle();
                                     args.putBoolean("scrollToTopOnResume", true);
                                     args.putInt("chat_id", -((int) did));
@@ -950,9 +950,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     } else if (id == 16) {
                         args = new Bundle();
                         args.putInt("chat_id", ProfileActivity.this.chat_id);
-                        args.putInt("type", 2);
-                        args.putBoolean("open_search", true);
-                        ProfileActivity.this.presentFragment(new ChannelUsersActivity(args));
+                        if (ChatObject.isChannel(ProfileActivity.this.currentChat)) {
+                            args.putInt("type", 2);
+                            args.putBoolean("open_search", true);
+                            ProfileActivity.this.presentFragment(new ChannelUsersActivity(args));
+                            return;
+                        }
+                        ChatUsersActivity chatUsersActivity = new ChatUsersActivity(args);
+                        chatUsersActivity.setInfo(ProfileActivity.this.info);
+                        ProfileActivity.this.presentFragment(chatUsersActivity);
                     }
                 }
             }
@@ -2930,6 +2936,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     if (!chat.admins_enabled || chat.creator || chat.admin) {
                         item.addSubItem(8, LocaleController.getString("ChannelEdit", R.string.ChannelEdit));
                     }
+                    item.addSubItem(16, LocaleController.getString("SearchMembers", R.string.SearchMembers));
                     if (chat.creator && (this.info == null || this.info.participants.participants.size() > 0)) {
                         item.addSubItem(13, LocaleController.getString("ConvertGroupMenu", R.string.ConvertGroupMenu));
                     }
@@ -2952,13 +2959,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
-    public void didSelectDialog(DialogsActivity fragment, long dialog_id, boolean param) {
-        if (dialog_id != 0) {
+    public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
+        if (this.dialog_id != 0) {
+            long did = ((Long) dids.get(0)).longValue();
             Bundle args = new Bundle();
             args.putBoolean("scrollToTopOnResume", true);
-            int lower_part = (int) dialog_id;
+            int lower_part = (int) this.dialog_id;
             if (lower_part == 0) {
-                args.putInt("enc_id", (int) (dialog_id >> 32));
+                args.putInt("enc_id", (int) (this.dialog_id >> 32));
             } else if (lower_part > 0) {
                 args.putInt("user_id", lower_part);
             } else if (lower_part < 0) {
@@ -2969,7 +2977,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
                 presentFragment(new ChatActivity(args), true);
                 removeSelfFromStack();
-                SendMessagesHelper.getInstance().sendMessage(MessagesController.getInstance().getUser(Integer.valueOf(this.user_id)), dialog_id, null, null, null);
+                SendMessagesHelper.getInstance().sendMessage(MessagesController.getInstance().getUser(Integer.valueOf(this.user_id)), this.dialog_id, null, null, null);
             }
         }
     }

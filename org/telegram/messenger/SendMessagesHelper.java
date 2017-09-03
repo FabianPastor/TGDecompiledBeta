@@ -1031,7 +1031,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             }
                             newMsg.dialog_id = peer;
                             newMsg.to_id = to_id;
-                            if ((MessageObject.isVoiceMessage(newMsg) || MessageObject.isRoundVideoMessage(newMsg)) && newMsg.to_id.channel_id == 0) {
+                            if (MessageObject.isVoiceMessage(newMsg) || MessageObject.isRoundVideoMessage(newMsg)) {
                                 newMsg.media_unread = true;
                             }
                             if (msgObj.messageOwner.to_id instanceof TL_peerChannel) {
@@ -2026,7 +2026,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 }
             }
             if (high_id != 1) {
-                if ((MessageObject.isVoiceMessage(newMsg) || MessageObject.isRoundVideoMessage(newMsg)) && newMsg.to_id.channel_id == 0) {
+                if (MessageObject.isVoiceMessage(newMsg) || MessageObject.isRoundVideoMessage(newMsg)) {
                     newMsg.media_unread = true;
                 }
             }
@@ -3074,7 +3074,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     if (MessageObject.isNewGifDocument(sentMessage.media.document)) {
                         StickersQuery.addRecentGif(sentMessage.media.document, sentMessage.date);
                     } else if (MessageObject.isStickerDocument(sentMessage.media.document)) {
-                        StickersQuery.addRecentSticker(0, sentMessage.media.document, sentMessage.date);
+                        StickersQuery.addRecentSticker(0, sentMessage.media.document, sentMessage.date, false);
                     }
                 }
                 if (newMsg.attachPath == null || !newMsg.attachPath.startsWith(FileLoader.getInstance().getDirectory(4).getAbsolutePath())) {
@@ -4354,7 +4354,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         originalPath = originalPath + file.length() + "_" + file.lastModified();
                         if (videoEditedInfo2 != null) {
                             if (!isRound) {
-                                originalPath = originalPath + j2 + "_" + videoEditedInfo2.startTime + "_" + videoEditedInfo2.endTime;
+                                originalPath = originalPath + j2 + "_" + videoEditedInfo2.startTime + "_" + videoEditedInfo2.endTime + (videoEditedInfo2.muted ? "_m" : "");
                                 if (videoEditedInfo2.resultWidth == videoEditedInfo2.originalWidth) {
                                     originalPath = originalPath + "_" + videoEditedInfo2.resultWidth;
                                 }

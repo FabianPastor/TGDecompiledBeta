@@ -42,7 +42,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -120,7 +119,7 @@ public class ThemeEditorView {
             private Drawable circleDrawable;
             private Paint circlePaint;
             private boolean circlePressed;
-            private EditText[] colorEditText = new EditText[4];
+            private EditTextBoldCursor[] colorEditText = new EditTextBoldCursor[4];
             private LinearGradient colorGradient;
             private float[] colorHSV = new float[]{0.0f, 0.0f, 1.0f};
             private boolean colorPressed;
@@ -149,10 +148,12 @@ public class ThemeEditorView {
                 addView(this.linearLayout, LayoutHelper.createFrame(-2, -2, 49));
                 int a = 0;
                 while (a < 4) {
-                    this.colorEditText[a] = new EditText(context);
+                    this.colorEditText[a] = new EditTextBoldCursor(context);
                     this.colorEditText[a].setInputType(2);
                     this.colorEditText[a].setTextColor(-14606047);
-                    AndroidUtilities.clearCursorDrawable(this.colorEditText[a]);
+                    this.colorEditText[a].setCursorColor(-14606047);
+                    this.colorEditText[a].setCursorSize(AndroidUtilities.dp(20.0f));
+                    this.colorEditText[a].setCursorWidth(1.5f);
                     this.colorEditText[a].setTextSize(1, 18.0f);
                     this.colorEditText[a].setBackgroundDrawable(Theme.createEditTextDrawable(context, true));
                     this.colorEditText[a].setMaxLines(1);

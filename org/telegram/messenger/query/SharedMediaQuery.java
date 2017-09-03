@@ -50,17 +50,16 @@ public class SharedMediaQuery {
     public static final int MEDIA_TYPES_COUNT = 5;
     public static final int MEDIA_URL = 3;
 
-    public static void loadMedia(long uid, int offset, int count, int max_id, int type, boolean fromCache, int classGuid) {
+    public static void loadMedia(long uid, int count, int max_id, int type, boolean fromCache, int classGuid) {
         boolean isChannel = ((int) uid) < 0 && ChatObject.isChannel(-((int) uid));
         int lower_part = (int) uid;
         if (fromCache || lower_part == 0) {
-            loadMediaDatabase(uid, offset, count, max_id, type, classGuid, isChannel);
+            loadMediaDatabase(uid, count, max_id, type, classGuid, isChannel);
             return;
         }
         TLObject req = new TL_messages_search();
-        req.offset = offset;
         req.limit = count + 1;
-        req.max_id = max_id;
+        req.offset_id = max_id;
         if (type == 0) {
             req.filter = new TL_inputMessagesFilterPhotoVideo();
         } else if (type == 1) {
@@ -77,10 +76,9 @@ public class SharedMediaQuery {
         if (req.peer != null) {
             final int i = count;
             final long j = uid;
-            final int i2 = offset;
-            final int i3 = max_id;
-            final int i4 = type;
-            final int i5 = classGuid;
+            final int i2 = max_id;
+            final int i3 = type;
+            final int i4 = classGuid;
             final boolean z = isChannel;
             ConnectionsManager.getInstance().bindRequestToGuid(ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
@@ -93,7 +91,7 @@ public class SharedMediaQuery {
                         } else {
                             topReached = true;
                         }
-                        SharedMediaQuery.processLoadedMedia(res, j, i2, i, i3, i4, false, i5, z, topReached);
+                        SharedMediaQuery.processLoadedMedia(res, j, i, i2, i3, false, i4, z, topReached);
                     }
                 }
             }), classGuid);
@@ -107,9 +105,8 @@ public class SharedMediaQuery {
             return;
         }
         TL_messages_search req = new TL_messages_search();
-        req.offset = 0;
         req.limit = 1;
-        req.max_id = 0;
+        req.offset_id = 0;
         if (type == 0) {
             req.filter = new TL_inputMessagesFilterPhotoVideo();
         } else if (type == 1) {
@@ -204,10 +201,10 @@ public class SharedMediaQuery {
         return false;
     }
 
-    private static void processLoadedMedia(messages_Messages res, long uid, int offset, int count, int max_id, int type, boolean fromCache, int classGuid, boolean isChannel, boolean topReached) {
+    private static void processLoadedMedia(messages_Messages res, long uid, int count, int max_id, int type, boolean fromCache, int classGuid, boolean isChannel, boolean topReached) {
         int lower_part = (int) uid;
         if (fromCache && res.messages.isEmpty() && lower_part != 0) {
-            loadMedia(uid, offset, count, max_id, type, false, classGuid);
+            loadMedia(uid, count, max_id, type, false, classGuid);
             return;
         }
         int a;
@@ -320,14 +317,13 @@ public class SharedMediaQuery {
         });
     }
 
-    private static void loadMediaDatabase(long uid, int offset, int count, int max_id, int type, int classGuid, boolean isChannel) {
+    private static void loadMediaDatabase(long uid, int count, int max_id, int type, int classGuid, boolean isChannel) {
         final int i = count;
         final long j = uid;
         final int i2 = max_id;
         final boolean z = isChannel;
         final int i3 = type;
-        final int i4 = offset;
-        final int i5 = classGuid;
+        final int i4 = classGuid;
         MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
             public void run() {
                 TL_messages_messages res = new TL_messages_messages();
@@ -397,9 +393,9 @@ public class SharedMediaQuery {
                             }
                             cursor.dispose();
                             if (holeMessageId > 1) {
-                                cursor = database.queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid >= %d AND type = %d ORDER BY date DESC, mid DESC LIMIT %d,%d", new Object[]{Long.valueOf(j), Long.valueOf(holeMessageId), Integer.valueOf(i3), Integer.valueOf(i4), Integer.valueOf(countToLoad)}), new Object[0]);
+                                cursor = database.queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid >= %d AND type = %d ORDER BY date DESC, mid DESC LIMIT %d", new Object[]{Long.valueOf(j), Long.valueOf(holeMessageId), Integer.valueOf(i3), Integer.valueOf(countToLoad)}), new Object[0]);
                             } else {
-                                cursor = database.queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid > 0 AND type = %d ORDER BY date DESC, mid DESC LIMIT %d,%d", new Object[]{Long.valueOf(j), Integer.valueOf(i3), Integer.valueOf(i4), Integer.valueOf(countToLoad)}), new Object[0]);
+                                cursor = database.queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid > 0 AND type = %d ORDER BY date DESC, mid DESC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i3), Integer.valueOf(countToLoad)}), new Object[0]);
                             }
                         }
                     } else {
@@ -407,7 +403,7 @@ public class SharedMediaQuery {
                         if (i2 != 0) {
                             cursor = database.queryFinalized(String.format(Locale.US, "SELECT m.data, m.mid, r.random_id FROM media_v2 as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND type = %d ORDER BY m.mid ASC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i2), Integer.valueOf(i3), Integer.valueOf(countToLoad)}), new Object[0]);
                         } else {
-                            cursor = database.queryFinalized(String.format(Locale.US, "SELECT m.data, m.mid, r.random_id FROM media_v2 as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND type = %d ORDER BY m.mid ASC LIMIT %d,%d", new Object[]{Long.valueOf(j), Integer.valueOf(i3), Integer.valueOf(i4), Integer.valueOf(countToLoad)}), new Object[0]);
+                            cursor = database.queryFinalized(String.format(Locale.US, "SELECT m.data, m.mid, r.random_id FROM media_v2 as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND type = %d ORDER BY m.mid ASC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i3), Integer.valueOf(countToLoad)}), new Object[0]);
                         }
                     }
                     while (cursor.next()) {
@@ -443,16 +439,16 @@ public class SharedMediaQuery {
                     } else {
                         topReached = isEnd;
                     }
-                    SharedMediaQuery.processLoadedMedia(res, j, i4, i, i2, i3, true, i5, z, topReached);
+                    SharedMediaQuery.processLoadedMedia(res, j, i, i2, i3, true, i4, z, topReached);
                 } catch (Throwable e) {
                     res.messages.clear();
                     res.chats.clear();
                     res.users.clear();
                     FileLog.e(e);
-                    SharedMediaQuery.processLoadedMedia(res, j, i4, i, i2, i3, true, i5, z, false);
+                    SharedMediaQuery.processLoadedMedia(res, j, i, i2, i3, true, i4, z, false);
                 } catch (Throwable th) {
                     Throwable th2 = th;
-                    SharedMediaQuery.processLoadedMedia(res, j, i4, i, i2, i3, true, i5, z, false);
+                    SharedMediaQuery.processLoadedMedia(res, j, i, i2, i3, true, i4, z, false);
                 }
             }
         });

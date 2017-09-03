@@ -18,7 +18,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -47,6 +46,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ChangeUsernameActivity extends BaseFragment {
@@ -55,7 +55,7 @@ public class ChangeUsernameActivity extends BaseFragment {
     private Runnable checkRunnable;
     private TextView checkTextView;
     private View doneButton;
-    private EditText firstNameField;
+    private EditTextBoldCursor firstNameField;
     private TextView helpTextView;
     private boolean ignoreCheck;
     private CharSequence infoText;
@@ -129,7 +129,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 return true;
             }
         });
-        this.firstNameField = new EditText(context);
+        this.firstNameField = new EditTextBoldCursor(context);
         this.firstNameField.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -142,7 +142,9 @@ public class ChangeUsernameActivity extends BaseFragment {
         this.firstNameField.setInputType(180224);
         this.firstNameField.setImeOptions(6);
         this.firstNameField.setHint(LocaleController.getString("UsernamePlaceholder", R.string.UsernamePlaceholder));
-        AndroidUtilities.clearCursorDrawable(this.firstNameField);
+        this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
+        this.firstNameField.setCursorWidth(1.5f);
         this.firstNameField.setOnEditorActionListener(new OnEditorActionListener() {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i != 6 || ChangeUsernameActivity.this.doneButton == null) {

@@ -238,20 +238,19 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                 return;
                             }
                             return;
-                        } else if (ContactsActivity.this.createSecretChat) {
-                            if (user.id != UserConfig.getClientUserId()) {
-                                ContactsActivity.this.creatingChat = true;
-                                SecretChatHelper.getInstance().startSecretChat(ContactsActivity.this.getParentActivity(), user);
-                                return;
-                            }
-                            return;
-                        } else {
+                        } else if (!ContactsActivity.this.createSecretChat) {
                             args = new Bundle();
                             args.putInt("user_id", user.id);
                             if (MessagesController.checkCanOpenChat(args, ContactsActivity.this)) {
                                 ContactsActivity.this.presentFragment(new ChatActivity(args), true);
                                 return;
                             }
+                            return;
+                        } else if (user.id != UserConfig.getClientUserId()) {
+                            ContactsActivity.this.creatingChat = true;
+                            SecretChatHelper.getInstance().startSecretChat(ContactsActivity.this.getParentActivity(), user);
+                            return;
+                        } else {
                             return;
                         }
                     }
@@ -306,14 +305,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                         }
                     } else if (ContactsActivity.this.needPhonebook) {
                         if (row == 0) {
-                            try {
-                                Intent intent = new Intent("android.intent.action.SEND");
-                                intent.setType("text/plain");
-                                intent.putExtra("android.intent.extra.TEXT", ContactsController.getInstance().getInviteText());
-                                ContactsActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteFriends", R.string.InviteFriends)), 500);
-                            } catch (Throwable e) {
-                                FileLog.e(e);
-                            }
+                            ContactsActivity.this.presentFragment(new InviteContactsActivity());
                         }
                     } else if (ContactsActivity.this.chat_id != 0) {
                         if (row == 0) {
