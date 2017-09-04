@@ -32,7 +32,7 @@ public class StickerSetGroupInfoCell extends LinearLayout {
         this.addButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.addButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
         this.addButton.setText(LocaleController.getString("ChooseStickerSet", R.string.ChooseStickerSet).toUpperCase());
-        addView(this.addButton, LayoutHelper.createLinear(-2, 28, 51, 17, 10, 14, 4));
+        addView(this.addButton, LayoutHelper.createLinear(-2, 28, 51, 17, 10, 14, 8));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

@@ -2087,7 +2087,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 }
 
                 public void onPlayProgressChanged(float progress) {
-                    PhotoViewer.this.videoPlayer.seekTo((long) ((int) (PhotoViewer.this.videoDuration * progress)));
+                    if (PhotoViewer.this.videoPlayer != null) {
+                        PhotoViewer.this.videoPlayer.seekTo((long) ((int) (PhotoViewer.this.videoDuration * progress)));
+                    }
                 }
 
                 public void didStartDragging() {

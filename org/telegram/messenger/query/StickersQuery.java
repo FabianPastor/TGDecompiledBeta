@@ -290,7 +290,7 @@ public class StickersQuery {
         TL_messages_stickerSet set = (TL_messages_stickerSet) stickerSetsById.get(Long.valueOf(stickerSet.id));
         if (set == null) {
             set = (TL_messages_stickerSet) groupStickerSets.get(Long.valueOf(stickerSet.id));
-            if (set == null) {
+            if (set == null || set.set == null) {
                 loadGroupStickerSet(stickerSet, true);
             } else if (set.set.hash != stickerSet.hash) {
                 loadGroupStickerSet(stickerSet, false);
@@ -322,10 +322,10 @@ public class StickersQuery {
                             }
                         }
                         cursor.dispose();
-                        if (set == null || set.set.hash != stickerSet.hash) {
+                        if (set == null || set.set == null || set.set.hash != stickerSet.hash) {
                             StickersQuery.loadGroupStickerSet(stickerSet, false);
                         }
-                        if (set != null) {
+                        if (set != null && set.set != null) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
                                     StickersQuery.groupStickerSets.put(Long.valueOf(set.set.id), set);

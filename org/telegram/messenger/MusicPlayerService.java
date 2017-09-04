@@ -56,7 +56,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
             z = false;
         }
         supportBigNotifications = z;
-        if (VERSION.SDK_INT < 14 || VERSION.SDK_INT >= 21) {
+        if (VERSION.SDK_INT >= 21) {
             z2 = false;
         }
         supportLockScreenControls = z2;
@@ -104,41 +104,43 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
 
     @SuppressLint({"NewApi"})
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if ((getPackageName() + ".STOP_PLAYER").equals(intent.getAction())) {
-            MediaController.getInstance().cleanupPlayer(true, true);
-            return 2;
-        }
-        try {
-            MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
-            if (messageObject == null) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        MusicPlayerService.this.stopSelf();
-                    }
-                });
+        if (intent != null) {
+            try {
+                if ((getPackageName() + ".STOP_PLAYER").equals(intent.getAction())) {
+                    MediaController.getInstance().cleanupPlayer(true, true);
+                    return 2;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
                 return 1;
             }
-            if (supportLockScreenControls) {
-                ComponentName remoteComponentName = new ComponentName(getApplicationContext(), MusicPlayerReceiver.class.getName());
-                try {
-                    if (this.remoteControlClient == null) {
-                        this.audioManager.registerMediaButtonEventReceiver(remoteComponentName);
-                        Intent mediaButtonIntent = new Intent("android.intent.action.MEDIA_BUTTON");
-                        mediaButtonIntent.setComponent(remoteComponentName);
-                        this.remoteControlClient = new RemoteControlClient(PendingIntent.getBroadcast(this, 0, mediaButtonIntent, 0));
-                        this.audioManager.registerRemoteControlClient(this.remoteControlClient);
-                    }
-                    this.remoteControlClient.setTransportControlFlags(PsExtractor.PRIVATE_STREAM_1);
-                } catch (Throwable e) {
-                    FileLog.e(e);
+        }
+        MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
+        if (messageObject == null) {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public void run() {
+                    MusicPlayerService.this.stopSelf();
                 }
-            }
-            createNotification(messageObject);
-            return 1;
-        } catch (Exception e2) {
-            e2.printStackTrace();
+            });
             return 1;
         }
+        if (supportLockScreenControls) {
+            ComponentName remoteComponentName = new ComponentName(getApplicationContext(), MusicPlayerReceiver.class.getName());
+            try {
+                if (this.remoteControlClient == null) {
+                    this.audioManager.registerMediaButtonEventReceiver(remoteComponentName);
+                    Intent mediaButtonIntent = new Intent("android.intent.action.MEDIA_BUTTON");
+                    mediaButtonIntent.setComponent(remoteComponentName);
+                    this.remoteControlClient = new RemoteControlClient(PendingIntent.getBroadcast(this, 0, mediaButtonIntent, 0));
+                    this.audioManager.registerRemoteControlClient(this.remoteControlClient);
+                }
+                this.remoteControlClient.setTransportControlFlags(PsExtractor.PRIVATE_STREAM_1);
+            } catch (Throwable e2) {
+                FileLog.e(e2);
+            }
+        }
+        createNotification(messageObject);
+        return 1;
     }
 
     @SuppressLint({"NewApi"})

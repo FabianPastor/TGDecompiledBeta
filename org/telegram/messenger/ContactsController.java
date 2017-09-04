@@ -339,9 +339,6 @@ public class ContactsController {
     private boolean checkContactsInternal() {
         boolean reload = false;
         try {
-            if (!hasContactsPermission()) {
-                return false;
-            }
             ContentResolver cr = ApplicationLoader.applicationContext.getContentResolver();
             Cursor pCur = null;
             try {
@@ -370,10 +367,10 @@ public class ContactsController {
                     pCur.close();
                 }
             }
-            return reload;
         } catch (Throwable e2) {
             FileLog.e(e2);
         }
+        return reload;
     }
 
     public void readContacts() {
@@ -397,108 +394,137 @@ public class ContactsController {
     }
 
     private HashMap<Integer, Contact> readContactsFromPhoneBook() {
+        Contact contact;
         HashMap<Integer, Contact> contactsMap = new HashMap();
-        try {
-            if (hasContactsPermission()) {
-                Contact contact;
-                ContentResolver cr = ApplicationLoader.applicationContext.getContentResolver();
-                HashMap<String, Contact> shortContacts = new HashMap();
-                ArrayList<Integer> idsArr = new ArrayList();
-                Cursor pCur = cr.query(Phone.CONTENT_URI, this.projectionPhones, null, null, null);
-                if (pCur != null) {
-                    if (pCur.getCount() > 0) {
-                        while (pCur.moveToNext()) {
-                            String number = pCur.getString(1);
-                            if (!TextUtils.isEmpty(number)) {
-                                number = PhoneFormat.stripExceptNumbers(number, true);
-                                if (number.length() != 0) {
-                                    String shortNumber = number;
-                                    if (number.startsWith("+")) {
-                                        shortNumber = number.substring(1);
+        Cursor pCur = null;
+        ContentResolver cr = ApplicationLoader.applicationContext.getContentResolver();
+        HashMap<String, Contact> shortContacts = new HashMap();
+        ArrayList<Integer> idsArr = new ArrayList();
+        pCur = cr.query(Phone.CONTENT_URI, this.projectionPhones, null, null, null);
+        if (pCur != null) {
+            if (pCur.getCount() > 0) {
+                while (pCur.moveToNext()) {
+                    String number = pCur.getString(1);
+                    if (!TextUtils.isEmpty(number)) {
+                        number = PhoneFormat.stripExceptNumbers(number, true);
+                        if (TextUtils.isEmpty(number)) {
+                            continue;
+                        } else {
+                            String shortNumber = number;
+                            if (number.startsWith("+")) {
+                                shortNumber = number.substring(1);
+                            }
+                            if (shortContacts.containsKey(shortNumber)) {
+                                continue;
+                            } else {
+                                Integer id = Integer.valueOf(pCur.getInt(0));
+                                if (!idsArr.contains(id)) {
+                                    idsArr.add(id);
+                                }
+                                int type = pCur.getInt(2);
+                                contact = (Contact) contactsMap.get(id);
+                                if (contact == null) {
+                                    contact = new Contact();
+                                    contact.first_name = "";
+                                    contact.last_name = "";
+                                    contact.id = id.intValue();
+                                    contactsMap.put(id, contact);
+                                }
+                                contact.shortPhones.add(shortNumber);
+                                contact.phones.add(number);
+                                contact.phoneDeleted.add(Integer.valueOf(0));
+                                if (type == 0) {
+                                    String custom = pCur.getString(3);
+                                    ArrayList arrayList = contact.phoneTypes;
+                                    if (custom == null) {
+                                        custom = LocaleController.getString("PhoneMobile", R.string.PhoneMobile);
                                     }
-                                    if (shortContacts.containsKey(shortNumber)) {
-                                        continue;
-                                    } else {
-                                        Integer id = Integer.valueOf(pCur.getInt(0));
-                                        if (!idsArr.contains(id)) {
-                                            idsArr.add(id);
-                                        }
-                                        int type = pCur.getInt(2);
-                                        contact = (Contact) contactsMap.get(id);
-                                        if (contact == null) {
-                                            contact = new Contact();
-                                            contact.first_name = "";
-                                            contact.last_name = "";
-                                            contact.id = id.intValue();
-                                            contactsMap.put(id, contact);
-                                        }
-                                        contact.shortPhones.add(shortNumber);
-                                        contact.phones.add(number);
-                                        contact.phoneDeleted.add(Integer.valueOf(0));
-                                        if (type == 0) {
-                                            String custom = pCur.getString(3);
-                                            ArrayList arrayList = contact.phoneTypes;
-                                            if (custom == null) {
-                                                custom = LocaleController.getString("PhoneMobile", R.string.PhoneMobile);
+                                    arrayList.add(custom);
+                                } else if (type == 1) {
+                                    contact.phoneTypes.add(LocaleController.getString("PhoneHome", R.string.PhoneHome));
+                                } else if (type == 2) {
+                                    try {
+                                        contact.phoneTypes.add(LocaleController.getString("PhoneMobile", R.string.PhoneMobile));
+                                    } catch (Throwable e) {
+                                        FileLog.e(e);
+                                        contactsMap.clear();
+                                        if (pCur != null) {
+                                            try {
+                                                pCur.close();
+                                            } catch (Throwable e2) {
+                                                FileLog.e(e2);
                                             }
-                                            arrayList.add(custom);
-                                        } else if (type == 1) {
-                                            contact.phoneTypes.add(LocaleController.getString("PhoneHome", R.string.PhoneHome));
-                                        } else if (type == 2) {
-                                            contact.phoneTypes.add(LocaleController.getString("PhoneMobile", R.string.PhoneMobile));
-                                        } else if (type == 3) {
-                                            contact.phoneTypes.add(LocaleController.getString("PhoneWork", R.string.PhoneWork));
-                                        } else if (type == 12) {
-                                            contact.phoneTypes.add(LocaleController.getString("PhoneMain", R.string.PhoneMain));
-                                        } else {
-                                            contact.phoneTypes.add(LocaleController.getString("PhoneOther", R.string.PhoneOther));
                                         }
-                                        shortContacts.put(shortNumber, contact);
+                                    } catch (Throwable th) {
+                                        if (pCur != null) {
+                                            try {
+                                                pCur.close();
+                                            } catch (Throwable e22) {
+                                                FileLog.e(e22);
+                                            }
+                                        }
                                     }
+                                } else if (type == 3) {
+                                    contact.phoneTypes.add(LocaleController.getString("PhoneWork", R.string.PhoneWork));
+                                } else if (type == 12) {
+                                    contact.phoneTypes.add(LocaleController.getString("PhoneMain", R.string.PhoneMain));
                                 } else {
-                                    continue;
+                                    contact.phoneTypes.add(LocaleController.getString("PhoneOther", R.string.PhoneOther));
                                 }
+                                shortContacts.put(shortNumber, contact);
                             }
                         }
                     }
-                    pCur.close();
-                }
-                pCur = cr.query(Data.CONTENT_URI, this.projectionNames, "contact_id IN (" + TextUtils.join(",", idsArr) + ") AND " + "mimetype" + " = '" + "vnd.android.cursor.item/name" + "'", null, null);
-                if (pCur != null) {
-                    while (pCur.moveToNext()) {
-                        int id2 = pCur.getInt(0);
-                        String fname = pCur.getString(1);
-                        String sname = pCur.getString(2);
-                        String sname2 = pCur.getString(3);
-                        String mname = pCur.getString(4);
-                        contact = (Contact) contactsMap.get(Integer.valueOf(id2));
-                        if (contact != null && TextUtils.isEmpty(contact.first_name) && TextUtils.isEmpty(contact.last_name)) {
-                            contact.first_name = fname;
-                            contact.last_name = sname;
-                            if (contact.first_name == null) {
-                                contact.first_name = "";
-                            }
-                            if (!TextUtils.isEmpty(mname)) {
-                                if (contact.first_name.length() != 0) {
-                                    contact.first_name += " " + mname;
-                                } else {
-                                    contact.first_name = mname;
-                                }
-                            }
-                            if (contact.last_name == null) {
-                                contact.last_name = "";
-                            }
-                            if (TextUtils.isEmpty(contact.last_name) && TextUtils.isEmpty(contact.first_name) && !TextUtils.isEmpty(sname2)) {
-                                contact.first_name = sname2;
-                            }
-                        }
-                    }
-                    pCur.close();
                 }
             }
-        } catch (Throwable e) {
-            FileLog.e(e);
-            contactsMap.clear();
+            try {
+                pCur.close();
+            } catch (Exception e3) {
+            }
+            pCur = null;
+        }
+        pCur = cr.query(Data.CONTENT_URI, this.projectionNames, "contact_id IN (" + TextUtils.join(",", idsArr) + ") AND " + "mimetype" + " = '" + "vnd.android.cursor.item/name" + "'", null, null);
+        if (pCur != null) {
+            while (pCur.moveToNext()) {
+                int id2 = pCur.getInt(0);
+                String fname = pCur.getString(1);
+                String sname = pCur.getString(2);
+                String sname2 = pCur.getString(3);
+                String mname = pCur.getString(4);
+                contact = (Contact) contactsMap.get(Integer.valueOf(id2));
+                if (contact != null && TextUtils.isEmpty(contact.first_name) && TextUtils.isEmpty(contact.last_name)) {
+                    contact.first_name = fname;
+                    contact.last_name = sname;
+                    if (contact.first_name == null) {
+                        contact.first_name = "";
+                    }
+                    if (!TextUtils.isEmpty(mname)) {
+                        if (contact.first_name.length() != 0) {
+                            contact.first_name += " " + mname;
+                        } else {
+                            contact.first_name = mname;
+                        }
+                    }
+                    if (contact.last_name == null) {
+                        contact.last_name = "";
+                    }
+                    if (TextUtils.isEmpty(contact.last_name) && TextUtils.isEmpty(contact.first_name) && !TextUtils.isEmpty(sname2)) {
+                        contact.first_name = sname2;
+                    }
+                }
+            }
+            try {
+                pCur.close();
+            } catch (Exception e4) {
+            }
+            pCur = null;
+        }
+        if (pCur != null) {
+            try {
+                pCur.close();
+            } catch (Throwable e222) {
+                FileLog.e(e222);
+            }
         }
         return contactsMap;
     }
@@ -531,11 +557,11 @@ public class ContactsController {
             final boolean z6 = canceled;
             Utilities.globalQueue.postRunnable(new Runnable() {
                 public void run() {
+                    int a;
                     int newPhonebookContacts = 0;
                     int serverContactsInPhonebook = 0;
                     HashMap<String, Contact> contactShortHashMap = new HashMap();
                     for (Entry<Integer, Contact> entry : hashMap.entrySet()) {
-                        int a;
                         Contact c = (Contact) entry.getValue();
                         for (a = 0; a < c.shortPhones.size(); a++) {
                             contactShortHashMap.put(c.shortPhones.get(a), c);
@@ -1382,17 +1408,15 @@ public class ContactsController {
     private void applyContactsUpdates(ArrayList<Integer> ids, ConcurrentHashMap<Integer, User> userDict, ArrayList<TL_contact> newC, ArrayList<Integer> contactsTD) {
         int a;
         Integer uid;
-        Contact contact;
-        int index;
         if (newC == null || contactsTD == null) {
             newC = new ArrayList();
             contactsTD = new ArrayList();
             for (a = 0; a < ids.size(); a++) {
                 uid = (Integer) ids.get(a);
                 if (uid.intValue() > 0) {
-                    TL_contact contact2 = new TL_contact();
-                    contact2.user_id = uid.intValue();
-                    newC.add(contact2);
+                    TL_contact contact = new TL_contact();
+                    contact.user_id = uid.intValue();
+                    newC.add(contact);
                 } else if (uid.intValue() < 0) {
                     contactsTD.add(Integer.valueOf(-uid.intValue()));
                 }
@@ -1403,6 +1427,8 @@ public class ContactsController {
         StringBuilder toDelete = new StringBuilder();
         boolean reloadContacts = false;
         for (a = 0; a < newC.size(); a++) {
+            Contact contact2;
+            int index;
             TL_contact newContact = (TL_contact) newC.get(a);
             User user = null;
             if (userDict != null) {
@@ -1416,11 +1442,11 @@ public class ContactsController {
             if (user == null || TextUtils.isEmpty(user.phone)) {
                 reloadContacts = true;
             } else {
-                contact = (Contact) this.contactsBookSPhones.get(user.phone);
-                if (contact != null) {
-                    index = contact.shortPhones.indexOf(user.phone);
+                contact2 = (Contact) this.contactsBookSPhones.get(user.phone);
+                if (contact2 != null) {
+                    index = contact2.shortPhones.indexOf(user.phone);
                     if (index != -1) {
-                        contact.phoneDeleted.set(index, Integer.valueOf(0));
+                        contact2.phoneDeleted.set(index, Integer.valueOf(0));
                     }
                 }
                 if (toAdd.length() != 0) {
@@ -1448,11 +1474,11 @@ public class ContactsController {
             if (user == null) {
                 reloadContacts = true;
             } else if (!TextUtils.isEmpty(user.phone)) {
-                contact = (Contact) this.contactsBookSPhones.get(user.phone);
-                if (contact != null) {
-                    index = contact.shortPhones.indexOf(user.phone);
+                contact2 = (Contact) this.contactsBookSPhones.get(user.phone);
+                if (contact2 != null) {
+                    index = contact2.shortPhones.indexOf(user.phone);
                     if (index != -1) {
-                        contact.phoneDeleted.set(index, Integer.valueOf(1));
+                        contact2.phoneDeleted.set(index, Integer.valueOf(1));
                     }
                 }
                 if (toDelete.length() != 0) {

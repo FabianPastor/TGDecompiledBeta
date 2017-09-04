@@ -213,18 +213,20 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         int oldStart = oldl / tabSize;
         int newStart = l / tabSize;
         int count = ((int) Math.ceil((double) (((float) getMeasuredWidth()) / ((float) tabSize)))) + 1;
-        int start = Math.min(oldStart, newStart);
+        int start = Math.max(0, Math.min(oldStart, newStart));
         int end = Math.min(this.tabsContainer.getChildCount(), Math.max(oldStart, newStart) + count);
         int a = start;
         while (a < end) {
             View child = this.tabsContainer.getChildAt(a);
-            Document object = child.getTag();
-            if (object instanceof Document) {
-                BackupImageView imageView = (BackupImageView) ((FrameLayout) child).getChildAt(0);
-                if (a < newStart || a >= newStart + count) {
-                    imageView.setImageDrawable(null);
-                } else {
-                    imageView.setImage(object.thumb.location, null, "webp", null);
+            if (child != null) {
+                Document object = child.getTag();
+                if (object instanceof Document) {
+                    BackupImageView imageView = (BackupImageView) ((FrameLayout) child).getChildAt(0);
+                    if (a < newStart || a >= newStart + count) {
+                        imageView.setImageDrawable(null);
+                    } else {
+                        imageView.setImage(object.thumb.location, null, "webp", null);
+                    }
                 }
             }
             a++;

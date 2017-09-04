@@ -1169,7 +1169,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                 this.cameraPanel.setTag(null);
                             }
                         }
-                    } else {
+                    } else if (this.cameraView != null) {
                         this.cameraView.getLocationOnScreen(this.viewPosition);
                         this.cameraView.focusToPoint((int) (event.getRawX() - ((float) this.viewPosition[0])), (int) (event.getRawY() - ((float) this.viewPosition[1])));
                     }

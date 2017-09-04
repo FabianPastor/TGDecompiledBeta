@@ -475,13 +475,11 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     @TargetApi(23)
     private void askForPermissons() {
         Activity activity = getParentActivity();
-        if (activity != null) {
+        if (activity != null && activity.checkSelfPermission("android.permission.READ_CONTACTS") != 0) {
             ArrayList<String> permissons = new ArrayList();
-            if (activity.checkSelfPermission("android.permission.READ_CONTACTS") != 0) {
-                permissons.add("android.permission.READ_CONTACTS");
-                permissons.add("android.permission.WRITE_CONTACTS");
-                permissons.add("android.permission.GET_ACCOUNTS");
-            }
+            permissons.add("android.permission.READ_CONTACTS");
+            permissons.add("android.permission.WRITE_CONTACTS");
+            permissons.add("android.permission.GET_ACCOUNTS");
             activity.requestPermissions((String[]) permissons.toArray(new String[permissons.size()]), 1);
         }
     }

@@ -1379,7 +1379,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
                     options.add(Integer.valueOf(3));
                 }
                 if (type == 1) {
-                    if (this.selectedObject.currentEvent.action instanceof TL_channelAdminLogEventActionChangeStickerSet) {
+                    if (this.selectedObject.currentEvent != null && (this.selectedObject.currentEvent.action instanceof TL_channelAdminLogEventActionChangeStickerSet)) {
                         InputStickerSet stickerSet = this.selectedObject.currentEvent.action.new_stickerset;
                         if (stickerSet == null || (stickerSet instanceof TL_inputStickerSetEmpty)) {
                             stickerSet = this.selectedObject.currentEvent.action.prev_stickerset;

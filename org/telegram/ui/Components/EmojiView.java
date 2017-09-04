@@ -935,7 +935,11 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     }
                     TL_messages_stickerSet object = this.cache.get(Integer.valueOf(position));
                     if (object instanceof TL_messages_stickerSet) {
-                        cell3.setText(object.set.title, 0);
+                        TL_messages_stickerSet set = object;
+                        if (set.set != null) {
+                            cell3.setText(set.set.title, 0);
+                            return;
+                        }
                         return;
                     } else if (object == EmojiView.this.recentStickers) {
                         cell3.setText(LocaleController.getString("RecentStickers", R.string.RecentStickers), 0);
@@ -1159,6 +1163,9 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     width = smallSide - leftSide;
                 } else {
                     width = AndroidUtilities.displaySize.x;
+                }
+                if (width == 0) {
+                    width = 1080;
                 }
             }
             this.stickersPerRow = width / AndroidUtilities.dp(72.0f);
@@ -1477,6 +1484,9 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                                 }
                                 if (EmojiView.this.recentGifs.isEmpty()) {
                                     EmojiView.this.updateStickerTabs();
+                                    if (EmojiView.this.stickersGridAdapter != null) {
+                                        EmojiView.this.stickersGridAdapter.notifyDataSetChanged();
+                                    }
                                 }
                             }
                         });
@@ -2009,7 +2019,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 }
                 if (this.info.stickerset != null) {
                     pack = StickersQuery.getGroupStickerSetById(this.info.stickerset);
-                    if (!(pack == null || pack.documents == null || pack.documents.isEmpty())) {
+                    if (!(pack == null || pack.documents == null || pack.documents.isEmpty() || pack.set == null)) {
                         TL_messages_stickerSet set = new TL_messages_stickerSet();
                         set.documents = pack.documents;
                         set.packs = pack.packs;

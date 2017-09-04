@@ -2199,9 +2199,9 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll, long taskId, TLObject taskRequest) {
-        TL_channels_deleteMessages req;
         long newTaskId;
         NativeByteBuffer data;
+        NativeByteBuffer data2;
         Throwable e;
         final int i;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
@@ -2229,8 +2229,8 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
-            NativeByteBuffer data2;
             if (channelId != 0) {
+                TL_channels_deleteMessages req;
                 if (taskRequest != null) {
                     req = (TL_channels_deleteMessages) taskRequest;
                     newTaskId = taskId;
@@ -3792,7 +3792,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
-                Chat chat;
                 User user;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
@@ -3811,6 +3810,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 Message lastMessage = null;
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                     if (lastMessage == null || message.date < lastMessage.date) {
                         lastMessage = message;
@@ -4207,8 +4207,6 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void checkLastDialogMessage(TL_dialog dialog, InputPeer peer, long taskId) {
         Throwable e;
-        long newTaskId;
-        final TL_dialog tL_dialog;
         final int lower_id = (int) dialog.id;
         if (lower_id != 0 && !this.checkingLastMessagesDialogs.containsKey(Integer.valueOf(lower_id))) {
             InputPeer inputPeer;
@@ -4220,6 +4218,8 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             req.peer = inputPeer;
             if (req.peer != null) {
+                long newTaskId;
+                final TL_dialog tL_dialog;
                 req.limit = 1;
                 this.checkingLastMessagesDialogs.put(Integer.valueOf(lower_id), Boolean.valueOf(true));
                 if (taskId == 0) {
@@ -4227,7 +4227,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     try {
                         NativeByteBuffer data2 = new NativeByteBuffer(req.peer.getObjectSize() + 48);
                         try {
-                            data2.writeInt32(5);
+                            data2.writeInt32(8);
                             data2.writeInt64(dialog.id);
                             data2.writeInt32(dialog.top_message);
                             data2.writeInt32(dialog.read_inbox_max_id);
@@ -4238,6 +4238,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             data2.writeInt32(dialog.flags);
                             data2.writeBool(dialog.pinned);
                             data2.writeInt32(dialog.pinnedNum);
+                            data2.writeInt32(dialog.unread_mentions_count);
                             peer.serializeToStream(data2);
                             data = data2;
                         } catch (Exception e2) {
@@ -4269,6 +4270,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                             newDialog.notify_settings = tL_dialog.notify_settings;
                                             newDialog.pts = tL_dialog.pts;
                                             newDialog.unread_count = tL_dialog.unread_count;
+                                            newDialog.unread_mentions_count = tL_dialog.unread_mentions_count;
                                             newDialog.read_inbox_max_id = tL_dialog.read_inbox_max_id;
                                             newDialog.read_outbox_max_id = tL_dialog.read_outbox_max_id;
                                             newDialog.pinned = tL_dialog.pinned;
@@ -5711,6 +5713,10 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId, InputChannel inputChannel) {
         Throwable e;
+        long newTaskId;
+        TL_updates_getChannelDifference req;
+        final int i;
+        final int i2;
         Boolean gettingDifferenceChannel = (Boolean) this.gettingDifferenceChannels.get(Integer.valueOf(channelId));
         if (gettingDifferenceChannel == null) {
             gettingDifferenceChannel = Boolean.valueOf(false);
@@ -5742,10 +5748,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 inputChannel = getInputChannel(channelId);
             }
             if (inputChannel != null && inputChannel.access_hash != 0) {
-                long newTaskId;
-                TL_updates_getChannelDifference req;
-                final int i;
-                final int i2;
                 if (taskId == 0) {
                     NativeByteBuffer data = null;
                     try {
