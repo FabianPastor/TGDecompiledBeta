@@ -357,7 +357,6 @@ public class MessagesController implements NotificationCenterDelegate {
     public int callReceiveTimeout = 20000;
     public int callRingTimeout = 90000;
     public boolean callsEnabled;
-    private SparseArray<ArrayList<Integer>> channelViewsToReload = new SparseArray();
     private SparseArray<ArrayList<Integer>> channelViewsToSend = new SparseArray();
     private HashMap<Integer, Integer> channelsPts = new HashMap();
     private ConcurrentHashMap<Integer, Chat> chats = new ConcurrentHashMap(100, 1.0f, 2);
@@ -885,7 +884,6 @@ public class MessagesController implements NotificationCenterDelegate {
         this.dialogs.clear();
         this.joiningToChannels.clear();
         this.channelViewsToSend.clear();
-        this.channelViewsToReload.clear();
         this.dialogsServerOnly.clear();
         this.dialogsGroupsOnly.clear();
         this.dialogMessagesByIds.clear();
@@ -2576,7 +2574,6 @@ public class MessagesController implements NotificationCenterDelegate {
     public void updateTimerProc() {
         int a;
         int key;
-        int b;
         long currentTime = System.currentTimeMillis();
         checkDeletingTask(false);
         if (UserConfig.isClientActivated()) {
@@ -2640,49 +2637,42 @@ public class MessagesController implements NotificationCenterDelegate {
                 a++;
             }
         }
-        if (!(this.channelViewsToSend.size() == 0 && this.channelViewsToReload.size() == 0) && Math.abs(System.currentTimeMillis() - this.lastViewsCheckTime) >= DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS) {
+        if (this.channelViewsToSend.size() != 0 && Math.abs(System.currentTimeMillis() - this.lastViewsCheckTime) >= DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS) {
             this.lastViewsCheckTime = System.currentTimeMillis();
-            b = 0;
-            while (b < 2) {
-                SparseArray<ArrayList<Integer>> array = b == 0 ? this.channelViewsToSend : this.channelViewsToReload;
-                if (array.size() != 0) {
-                    a = 0;
-                    while (a < array.size()) {
-                        key = array.keyAt(a);
-                        final TL_messages_getMessagesViews req2 = new TL_messages_getMessagesViews();
-                        req2.peer = getInputPeer(key);
-                        req2.id = (ArrayList) array.get(key);
-                        req2.increment = a == 0;
-                        ConnectionsManager.getInstance().sendRequest(req2, new RequestDelegate() {
-                            public void run(TLObject response, TL_error error) {
-                                if (error == null) {
-                                    Vector vector = (Vector) response;
-                                    final SparseArray<SparseIntArray> channelViews = new SparseArray();
-                                    SparseIntArray array = (SparseIntArray) channelViews.get(key);
-                                    if (array == null) {
-                                        array = new SparseIntArray();
-                                        channelViews.put(key, array);
-                                    }
-                                    int a = 0;
-                                    while (a < req2.id.size() && a < vector.objects.size()) {
-                                        array.put(((Integer) req2.id.get(a)).intValue(), ((Integer) vector.objects.get(a)).intValue());
-                                        a++;
-                                    }
-                                    MessagesStorage.getInstance().putChannelViews(channelViews, req2.peer instanceof TL_inputPeerChannel);
-                                    AndroidUtilities.runOnUIThread(new Runnable() {
-                                        public void run() {
-                                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.didUpdatedMessagesViews, channelViews);
-                                        }
-                                    });
-                                }
+            a = 0;
+            while (a < this.channelViewsToSend.size()) {
+                key = this.channelViewsToSend.keyAt(a);
+                final TL_messages_getMessagesViews req2 = new TL_messages_getMessagesViews();
+                req2.peer = getInputPeer(key);
+                req2.id = (ArrayList) this.channelViewsToSend.get(key);
+                req2.increment = a == 0;
+                ConnectionsManager.getInstance().sendRequest(req2, new RequestDelegate() {
+                    public void run(TLObject response, TL_error error) {
+                        if (error == null) {
+                            Vector vector = (Vector) response;
+                            final SparseArray<SparseIntArray> channelViews = new SparseArray();
+                            SparseIntArray array = (SparseIntArray) channelViews.get(key);
+                            if (array == null) {
+                                array = new SparseIntArray();
+                                channelViews.put(key, array);
                             }
-                        });
-                        a++;
+                            int a = 0;
+                            while (a < req2.id.size() && a < vector.objects.size()) {
+                                array.put(((Integer) req2.id.get(a)).intValue(), ((Integer) vector.objects.get(a)).intValue());
+                                a++;
+                            }
+                            MessagesStorage.getInstance().putChannelViews(channelViews, req2.peer instanceof TL_inputPeerChannel);
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.didUpdatedMessagesViews, channelViews);
+                                }
+                            });
+                        }
                     }
-                    array.clear();
-                }
-                b++;
+                });
+                a++;
             }
+            this.channelViewsToSend.clear();
         }
         if (!this.onlinePrivacy.isEmpty()) {
             ArrayList<Integer> toRemove = null;
@@ -2721,7 +2711,7 @@ public class MessagesController implements NotificationCenterDelegate {
         if (!this.printingUsers.isEmpty() || this.lastPrintingStringCount != this.printingUsers.size()) {
             boolean updated = false;
             ArrayList<Long> keys2 = new ArrayList(this.printingUsers.keySet());
-            b = 0;
+            int b = 0;
             while (b < keys2.size()) {
                 Long key2 = (Long) keys2.get(b);
                 ArrayList<PrintingUser> arr = (ArrayList) this.printingUsers.get(key2);
@@ -4207,6 +4197,8 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void checkLastDialogMessage(TL_dialog dialog, InputPeer peer, long taskId) {
         Throwable e;
+        long newTaskId;
+        final TL_dialog tL_dialog;
         final int lower_id = (int) dialog.id;
         if (lower_id != 0 && !this.checkingLastMessagesDialogs.containsKey(Integer.valueOf(lower_id))) {
             InputPeer inputPeer;
@@ -4218,8 +4210,6 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             req.peer = inputPeer;
             if (req.peer != null) {
-                long newTaskId;
-                final TL_dialog tL_dialog;
                 req.limit = 1;
                 this.checkingLastMessagesDialogs.put(Integer.valueOf(lower_id), Boolean.valueOf(true));
                 if (taskId == 0) {
@@ -6324,7 +6314,6 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public boolean pinDialog(long did, boolean pin, InputPeer peer, long taskId) {
         Throwable e;
-        long newTaskId;
         int lower_id = (int) did;
         TL_dialog dialog = (TL_dialog) this.dialogs_dict.get(Long.valueOf(did));
         if (dialog != null && dialog.pinned != pin) {
@@ -6356,6 +6345,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (peer instanceof TL_inputPeerEmpty) {
                     return false;
                 }
+                long newTaskId;
                 req.peer = peer;
                 if (taskId == 0) {
                     NativeByteBuffer data = null;
@@ -7242,6 +7232,7 @@ public class MessagesController implements NotificationCenterDelegate {
         AbstractMap usersDict;
         int a;
         AbstractMap chatsDict;
+        Iterator it;
         long currentTime = System.currentTimeMillis();
         final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
         HashMap<Long, WebPage> webPages = new HashMap();
@@ -7295,7 +7286,6 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         int interfaceUpdateMask = 0;
         for (int c = 0; c < updates.size(); c++) {
-            Iterator it;
             Update update = (Update) updates.get(c);
             FileLog.d("process update " + update);
             Message message;

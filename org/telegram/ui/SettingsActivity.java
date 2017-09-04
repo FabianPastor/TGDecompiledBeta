@@ -986,8 +986,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             if (which == 0) {
                                 ContactsController.getInstance().forceImportContacts();
                             } else if (which == 1) {
-                                ContactsController.getInstance().loadContacts(false, true, 0);
-                            } else if (which != 2) {
+                                ContactsController.getInstance().loadContacts(false, 0);
+                            } else if (which == 2) {
+                                ContactsController.getInstance().resetImportedContacts();
                             }
                         }
                     });

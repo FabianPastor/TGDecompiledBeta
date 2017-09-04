@@ -5549,42 +5549,45 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     private void updateTextureViewPosition() {
-        boolean foundTextureViewMessage = false;
-        int count = this.chatListView.getChildCount();
-        int additionalTop = this.chatActivityEnterView.isTopViewVisible() ? AndroidUtilities.dp(48.0f) : 0;
-        for (int a = 0; a < count; a++) {
-            View view = this.chatListView.getChildAt(a);
-            if (view instanceof ChatMessageCell) {
-                ChatMessageCell messageCell = (ChatMessageCell) view;
-                MessageObject messageObject = messageCell.getMessageObject();
-                if (this.roundVideoContainer != null && messageObject.isRoundVideo() && MediaController.getInstance().isPlayingMessage(messageObject)) {
-                    ImageReceiver imageReceiver = messageCell.getPhotoImage();
-                    this.roundVideoContainer.setTranslationX((float) imageReceiver.getImageX());
-                    this.roundVideoContainer.setTranslationY((float) (((this.fragmentView.getPaddingTop() + messageCell.getTop()) + imageReceiver.getImageY()) - additionalTop));
-                    this.fragmentView.invalidate();
-                    this.roundVideoContainer.invalidate();
-                    foundTextureViewMessage = true;
-                    break;
+        if (this.fragmentView != null) {
+            MessageObject messageObject;
+            boolean foundTextureViewMessage = false;
+            int count = this.chatListView.getChildCount();
+            int additionalTop = this.chatActivityEnterView.isTopViewVisible() ? AndroidUtilities.dp(48.0f) : 0;
+            for (int a = 0; a < count; a++) {
+                View view = this.chatListView.getChildAt(a);
+                if (view instanceof ChatMessageCell) {
+                    ChatMessageCell messageCell = (ChatMessageCell) view;
+                    messageObject = messageCell.getMessageObject();
+                    if (this.roundVideoContainer != null && messageObject.isRoundVideo() && MediaController.getInstance().isPlayingMessage(messageObject)) {
+                        ImageReceiver imageReceiver = messageCell.getPhotoImage();
+                        this.roundVideoContainer.setTranslationX((float) imageReceiver.getImageX());
+                        this.roundVideoContainer.setTranslationY((float) (((this.fragmentView.getPaddingTop() + messageCell.getTop()) + imageReceiver.getImageY()) - additionalTop));
+                        this.fragmentView.invalidate();
+                        this.roundVideoContainer.invalidate();
+                        foundTextureViewMessage = true;
+                        break;
+                    }
                 }
             }
-        }
-        if (this.roundVideoContainer != null) {
-            messageObject = MediaController.getInstance().getPlayingMessageObject();
-            if (messageObject.eventId != 0) {
-                return;
-            }
-            if (foundTextureViewMessage) {
-                MediaController.getInstance().setCurrentRoundVisible(true);
-                scrollToMessageId(messageObject.getId(), 0, false, 0, true);
-                return;
-            }
-            this.roundVideoContainer.setTranslationY((float) ((-AndroidUtilities.roundMessageSize) - 100));
-            this.fragmentView.invalidate();
-            if (messageObject != null && messageObject.isRoundVideo()) {
-                if (this.checkTextureViewPosition || PipRoundVideoView.getInstance() != null) {
-                    MediaController.getInstance().setCurrentRoundVisible(false);
-                } else {
+            if (this.roundVideoContainer != null) {
+                messageObject = MediaController.getInstance().getPlayingMessageObject();
+                if (messageObject.eventId != 0) {
+                    return;
+                }
+                if (foundTextureViewMessage) {
+                    MediaController.getInstance().setCurrentRoundVisible(true);
                     scrollToMessageId(messageObject.getId(), 0, false, 0, true);
+                    return;
+                }
+                this.roundVideoContainer.setTranslationY((float) ((-AndroidUtilities.roundMessageSize) - 100));
+                this.fragmentView.invalidate();
+                if (messageObject != null && messageObject.isRoundVideo()) {
+                    if (this.checkTextureViewPosition || PipRoundVideoView.getInstance() != null) {
+                        MediaController.getInstance().setCurrentRoundVisible(false);
+                    } else {
+                        scrollToMessageId(messageObject.getId(), 0, false, 0, true);
+                    }
                 }
             }
         }

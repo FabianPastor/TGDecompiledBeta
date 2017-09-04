@@ -2929,9 +2929,10 @@ Error: java.util.NoSuchElementException
         });
     }
 
-    public void getCachedPhoneBook() {
+    public void getCachedPhoneBook(final boolean byError) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
+                boolean z;
                 HashMap<Integer, Contact> contactHashMap = new HashMap();
                 try {
                     SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v6 as us LEFT JOIN user_phones_v6 as up ON us.uid = up.uid WHERE 1", new Object[0]);
@@ -2971,7 +2972,13 @@ Error: java.util.NoSuchElementException
                     contactHashMap.clear();
                     FileLog.e(e);
                 }
-                ContactsController.getInstance().performSyncPhoneBook(contactHashMap, true, true, false, false, true, false);
+                ContactsController instance = ContactsController.getInstance();
+                if (byError) {
+                    z = false;
+                } else {
+                    z = true;
+                }
+                instance.performSyncPhoneBook(contactHashMap, true, true, false, false, z, false);
             }
         });
     }

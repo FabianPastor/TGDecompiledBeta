@@ -684,6 +684,7 @@ final class zzcen extends zzchj {
     }
 
     final Map<Integer, List<zzcjn>> zzJ(String str, String str2) {
+        Cursor query;
         Object e;
         Throwable th;
         zzkD();
@@ -691,7 +692,6 @@ final class zzcen extends zzchj {
         zzbo.zzcF(str);
         zzbo.zzcF(str2);
         Map<Integer, List<zzcjn>> arrayMap = new ArrayMap();
-        Cursor query;
         try {
             query = getWritableDatabase().query("event_filters", new String[]{"audience_id", "data"}, "app_id=? AND event_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -825,6 +825,7 @@ final class zzcen extends zzchj {
 
     @WorkerThread
     protected final long zzL(String str, String str2) {
+        long zza;
         Object e;
         zzbo.zzcF(str);
         zzbo.zzcF(str2);
@@ -832,7 +833,6 @@ final class zzcen extends zzchj {
         zzkD();
         SQLiteDatabase writableDatabase = getWritableDatabase();
         writableDatabase.beginTransaction();
-        long zza;
         try {
             zza = zza(new StringBuilder(String.valueOf(str2).length() + 32).append("select ").append(str2).append(" from app2 where app_id=?").toString(), new String[]{str}, -1);
             if (zza == -1) {
@@ -1305,12 +1305,12 @@ final class zzcen extends zzchj {
     }
 
     public final String zzaa(long j) {
+        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
         zzjC();
         zzkD();
-        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from apps where app_id in (select distinct app_id from raw_events) and config_fetched_time < ? order by failed_config_fetch_time limit 1;", new String[]{String.valueOf(j)});
             try {
@@ -1607,12 +1607,12 @@ final class zzcen extends zzchj {
 
     @WorkerThread
     public final byte[] zzdS(String str) {
-        Cursor query;
         Object e;
         Throwable th;
         zzbo.zzcF(str);
         zzjC();
         zzkD();
+        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"remote_config"}, "app_id=?", new String[]{str}, null, null, null);
             try {

@@ -6428,6 +6428,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         FileLog.d("video hasn't avc1 atom");
                         isAvc = false;
                     }
+                    PhotoViewer.this.audioFramesSize = 0;
+                    PhotoViewer.this.videoFramesSize = 0;
                     int b = 0;
                     while (b < boxes.size()) {
                         if (PhotoViewer.this.currentLoadingVideoRunnable == this) {
@@ -6452,30 +6454,31 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             } catch (Throwable e) {
                                 FileLog.e(e);
                             }
-                            if (PhotoViewer.this.currentLoadingVideoRunnable == this) {
-                                TrackHeaderBox headerBox = trackBox.getTrackHeaderBox();
-                                if (headerBox.getWidth() == 0.0d || headerBox.getHeight() == 0.0d) {
-                                    try {
+                            try {
+                                if (PhotoViewer.this.currentLoadingVideoRunnable == this) {
+                                    TrackHeaderBox headerBox = trackBox.getTrackHeaderBox();
+                                    if (headerBox.getWidth() == 0.0d || headerBox.getHeight() == 0.0d) {
                                         PhotoViewer.this.audioFramesSize = PhotoViewer.this.audioFramesSize + sampleSizes;
-                                    } catch (Throwable e2) {
-                                        FileLog.e(e2);
-                                        hasAudio = false;
-                                        isAvc = false;
+                                    } else {
+                                        trackHeaderBox = headerBox;
+                                        PhotoViewer.this.originalBitrate = PhotoViewer.this.bitrate = (int) ((trackBitrate / 100000) * 100000);
+                                        if (PhotoViewer.this.bitrate > 900000) {
+                                            PhotoViewer.this.bitrate = 900000;
+                                        }
+                                        PhotoViewer.this.videoFramesSize = PhotoViewer.this.videoFramesSize + sampleSizes;
                                     }
+                                    b++;
                                 } else {
-                                    trackHeaderBox = headerBox;
-                                    PhotoViewer.this.originalBitrate = PhotoViewer.this.bitrate = (int) ((trackBitrate / 100000) * 100000);
-                                    if (PhotoViewer.this.bitrate > 900000) {
-                                        PhotoViewer.this.bitrate = 900000;
-                                    }
-                                    PhotoViewer.this.videoFramesSize = PhotoViewer.this.videoFramesSize + sampleSizes;
+                                    return;
                                 }
-                                b++;
-                            } else {
-                                return;
+                            } catch (Throwable e2) {
+                                FileLog.e(e2);
+                                hasAudio = false;
+                                isAvc = false;
                             }
+                        } else {
+                            return;
                         }
-                        return;
                     }
                     if (trackHeaderBox == null) {
                         FileLog.d("video hasn't trackHeaderBox atom");
