@@ -30,6 +30,7 @@ import android.media.MediaCodecInfo;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.support.v4.content.FileProvider;
 import android.text.Layout.Alignment;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
@@ -1317,58 +1318,63 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         }
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void onSharePressed() {
-        Throwable e;
+        boolean z = true;
         if (this.parentActivity != null && this.allowShare) {
             File f = null;
             boolean isVideo = false;
-            try {
-                if (this.currentMessageObject != null) {
-                    isVideo = this.currentMessageObject.isVideo();
-                    if (!TextUtils.isEmpty(this.currentMessageObject.messageOwner.attachPath)) {
-                        File f2 = new File(this.currentMessageObject.messageOwner.attachPath);
-                        try {
-                            if (f2.exists()) {
-                                f = f2;
-                            } else {
-                                f = null;
-                            }
-                        } catch (Exception e2) {
-                            e = e2;
+            if (this.currentMessageObject != null) {
+                isVideo = this.currentMessageObject.isVideo();
+                if (!TextUtils.isEmpty(this.currentMessageObject.messageOwner.attachPath)) {
+                    File f2 = new File(this.currentMessageObject.messageOwner.attachPath);
+                    try {
+                        if (f2.exists()) {
                             f = f2;
-                            FileLog.e(e);
+                        } else {
+                            f = null;
                         }
+                    } catch (Exception e) {
+                        Throwable e2 = e;
+                        f = f2;
+                        FileLog.e(e2);
+                        return;
                     }
-                    if (f == null) {
-                        f = FileLoader.getPathToMessage(this.currentMessageObject.messageOwner);
-                    }
-                } else if (this.currentFileLocation != null) {
-                    TLObject tLObject = this.currentFileLocation;
-                    boolean z = this.avatarsDialogId != 0 || this.isEvent;
-                    f = FileLoader.getPathToAttach(tLObject, z);
                 }
-                if (f.exists()) {
-                    Intent intent = new Intent("android.intent.action.SEND");
-                    if (isVideo) {
-                        intent.setType(MimeTypes.VIDEO_MP4);
-                    } else if (this.currentMessageObject != null) {
-                        intent.setType(this.currentMessageObject.getMimeType());
-                    } else {
-                        intent.setType("image/jpeg");
-                    }
-                    intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(f));
-                    this.parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
-                    return;
+                if (f == null) {
+                    f = FileLoader.getPathToMessage(this.currentMessageObject.messageOwner);
                 }
-                Builder builder = new Builder(this.parentActivity);
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
-                showAlertDialog(builder);
-            } catch (Exception e3) {
-                e = e3;
-                FileLog.e(e);
+            } else if (this.currentFileLocation != null) {
+                TLObject tLObject = this.currentFileLocation;
+                if (this.avatarsDialogId == 0 && !this.isEvent) {
+                    z = false;
+                }
+                f = FileLoader.getPathToAttach(tLObject, z);
             }
+            if (f.exists()) {
+                Intent intent = new Intent("android.intent.action.SEND");
+                if (isVideo) {
+                    intent.setType(MimeTypes.VIDEO_MP4);
+                } else if (this.currentMessageObject != null) {
+                    intent.setType(this.currentMessageObject.getMimeType());
+                } else {
+                    intent.setType("image/jpeg");
+                }
+                try {
+                    intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(this.parentActivity, "org.telegram.messenger.beta.provider", f));
+                    intent.setFlags(1);
+                } catch (Exception e3) {
+                    intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(f));
+                }
+                this.parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
+                return;
+            }
+            Builder builder = new Builder(this.parentActivity);
+            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+            builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
+            showAlertDialog(builder);
         }
     }
 
@@ -4227,7 +4233,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     this.captionTextView.setTranslationY((float) AndroidUtilities.dp(48.0f));
                 } else {
                     ActionBarMenuItem actionBarMenuItem = this.masksItem;
-                    int i = (!this.currentMessageObject.hasPhotoStickers() || ((int) this.currentMessageObject.getDialogId()) == 0) ? 4 : 0;
+                    int i = (!this.currentMessageObject.hasPhotoStickers() || ((int) this.currentMessageObject.getDialogId()) == 0) ? 8 : 0;
                     actionBarMenuItem.setVisibility(i);
                     if (this.currentMessageObject.canDeleteMessage(null)) {
                         this.menuItem.showSubItem(6);

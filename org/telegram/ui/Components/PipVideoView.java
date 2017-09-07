@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Build.VERSION;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
@@ -131,7 +132,11 @@ public class PipVideoView {
             this.windowLayoutParams.y = getSideCoord(false, sidey, py, this.videoHeight);
             this.windowLayoutParams.format = -3;
             this.windowLayoutParams.gravity = 51;
-            this.windowLayoutParams.type = 2003;
+            if (VERSION.SDK_INT >= 26) {
+                this.windowLayoutParams.type = 2038;
+            } else {
+                this.windowLayoutParams.type = 2003;
+            }
             this.windowLayoutParams.flags = 16777736;
             this.windowManager.addView(this.windowView, this.windowLayoutParams);
             this.parentSheet = sheet;

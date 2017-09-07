@@ -6680,6 +6680,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
     public void didReceivedNotification(int id, Object... args) {
         int index;
+        int currentUserId;
         ArrayList<MessageObject> messArr;
         int a;
         MessageObject obj;
@@ -6696,6 +6697,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     NotificationCenter.getInstance().setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.chatInfoDidLoaded, NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.botKeyboardDidLoaded});
                 }
                 index = this.waitingForLoad.indexOf(Integer.valueOf(((Integer) args[11]).intValue()));
+                currentUserId = UserConfig.getClientUserId();
                 if (index != -1) {
                     this.waitingForLoad.remove(index);
                     messArr = args[2];
@@ -6828,7 +6830,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             if (this.currentUser.self) {
                                 obj.messageOwner.out = true;
                             }
-                            if (this.currentUser.bot && obj.isOut()) {
+                            if ((this.currentUser.bot && obj.isOut()) || this.currentUser.id == currentUserId) {
                                 obj.setIsRead();
                             }
                         }
@@ -7206,6 +7208,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         } else if (id == NotificationCenter.didReceivedNewMessages) {
             if (((Long) args[0]).longValue() == this.dialog_id) {
+                currentUserId = UserConfig.getClientUserId();
                 boolean updateChat = false;
                 boolean hasFromMe = false;
                 ArrayList<MessageObject> arr = args[1];
@@ -7223,7 +7226,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     for (a = 0; a < arr.size(); a++) {
                         messageObject = (MessageObject) arr.get(a);
                         if (this.currentChat != null) {
-                            if (((messageObject.messageOwner.action instanceof TL_messageActionChatDeleteUser) && messageObject.messageOwner.action.user_id == UserConfig.getClientUserId()) || ((messageObject.messageOwner.action instanceof TL_messageActionChatAddUser) && messageObject.messageOwner.action.users.contains(Integer.valueOf(UserConfig.getClientUserId())))) {
+                            if (((messageObject.messageOwner.action instanceof TL_messageActionChatDeleteUser) && messageObject.messageOwner.action.user_id == currentUserId) || ((messageObject.messageOwner.action instanceof TL_messageActionChatAddUser) && messageObject.messageOwner.action.users.contains(Integer.valueOf(currentUserId)))) {
                                 Chat newChat = MessagesController.getInstance().getChat(Integer.valueOf(this.currentChat.id));
                                 if (newChat != null) {
                                     this.currentChat = newChat;
@@ -7300,7 +7303,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 }
                             }
                         }
-                        if (this.currentUser != null && this.currentUser.bot && obj.isOut()) {
+                        if (this.currentUser != null && ((this.currentUser.bot && obj.isOut()) || this.currentUser.id == currentUserId)) {
                             obj.setIsRead();
                         }
                         if (!(this.avatarContainer == null || this.currentEncryptedChat == null || obj.messageOwner.action == null || !(obj.messageOwner.action instanceof TL_messageEncryptedAction) || !(obj.messageOwner.action.encryptedAction instanceof TL_decryptedMessageActionSetMessageTTL))) {
@@ -7500,7 +7503,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     boolean currentMarkAsRead = false;
                     for (a = 0; a < arr.size(); a++) {
                         obj = (MessageObject) arr.get(a);
-                        if (this.currentUser != null && this.currentUser.bot && obj.isOut()) {
+                        if (this.currentUser != null && ((this.currentUser.bot && obj.isOut()) || this.currentUser.id == currentUserId)) {
                             obj.setIsRead();
                         }
                         if (!(this.avatarContainer == null || this.currentEncryptedChat == null || obj.messageOwner.action == null || !(obj.messageOwner.action instanceof TL_messageEncryptedAction) || !(obj.messageOwner.action.encryptedAction instanceof TL_decryptedMessageActionSetMessageTTL))) {
@@ -10121,12 +10124,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     private void processSelectedOption(int option) {
-        File file;
-        Intent intent;
         if (this.selectedObject != null) {
             Bundle args;
             String path;
+            File file;
             AlertDialog.Builder builder;
+            Intent intent;
             TLObject req;
             switch (option) {
                 case 0:

@@ -2106,7 +2106,7 @@ public class MessageObject {
     }
 
     public boolean isSecretMedia() {
-        return ((this.messageOwner instanceof TL_message) && (((this.messageOwner.media instanceof TL_messageMediaPhoto) || (this.messageOwner.media instanceof TL_messageMediaDocument)) && this.messageOwner.media.ttl_seconds != 0)) || ((this.messageOwner instanceof TL_message_secret) && ((((this.messageOwner.media instanceof TL_messageMediaPhoto) || isRoundVideo() || isVideo()) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60) || isVoice()));
+        return ((this.messageOwner instanceof TL_message) && (((this.messageOwner.media instanceof TL_messageMediaPhoto) || (this.messageOwner.media instanceof TL_messageMediaDocument)) && this.messageOwner.media.ttl_seconds != 0)) || ((this.messageOwner instanceof TL_message_secret) && (((this.messageOwner.media instanceof TL_messageMediaPhoto) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60) || isVoice() || isRoundVideo() || isVideo()));
     }
 
     public static void setUnreadFlags(Message message, int flag) {

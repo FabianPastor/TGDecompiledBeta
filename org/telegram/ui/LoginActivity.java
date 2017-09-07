@@ -727,11 +727,20 @@ public class LoginActivity extends BaseFragment {
             this.lastNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
             this.lastNameField.setCursorWidth(1.5f);
-            this.lastNameField.setImeOptions(268435461);
+            this.lastNameField.setImeOptions(268435462);
             this.lastNameField.setTextSize(1, 18.0f);
             this.lastNameField.setMaxLines(1);
             this.lastNameField.setInputType(8192);
             addView(this.lastNameField, LayoutHelper.createLinear(-1, 36, 0.0f, 10.0f, 0.0f, 0.0f));
+            this.lastNameField.setOnEditorActionListener(new OnEditorActionListener(LoginActivity.this) {
+                public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                    if (i != 6 && i != 5) {
+                        return false;
+                    }
+                    LoginActivityRegisterView.this.onNextPressed();
+                    return true;
+                }
+            });
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setGravity(80);
             addView(linearLayout, LayoutHelper.createLinear(-1, -1));

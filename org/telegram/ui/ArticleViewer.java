@@ -30,6 +30,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.support.v4.content.FileProvider;
 import android.support.v4.internal.view.SupportMenu;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -6493,25 +6494,28 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         }
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void onSharePressed() {
         if (this.parentActivity != null && this.currentMedia != null) {
+            File f = getMediaFile(this.currentIndex);
+            if (f == null || !f.exists()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this.parentActivity);
+                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
+                showDialog(builder.create());
+                return;
+            }
+            Intent intent = new Intent("android.intent.action.SEND");
+            if (isMediaVideo(this.currentIndex)) {
+                intent.setType(MimeTypes.VIDEO_MP4);
+            } else {
+                intent.setType("image/jpeg");
+            }
             try {
-                File f = getMediaFile(this.currentIndex);
-                if (f == null || !f.exists()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this.parentActivity);
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                    builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
-                    showDialog(builder.create());
-                    return;
-                }
-                Intent intent = new Intent("android.intent.action.SEND");
-                if (isMediaVideo(this.currentIndex)) {
-                    intent.setType(MimeTypes.VIDEO_MP4);
-                } else {
-                    intent.setType("image/jpeg");
-                }
-                intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(f));
+                intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(this.parentActivity, "org.telegram.messenger.beta.provider", f));
+                intent.setFlags(1);
                 this.parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
             } catch (Throwable e) {
                 FileLog.e(e);
