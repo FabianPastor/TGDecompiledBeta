@@ -1681,10 +1681,14 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
                     }
                     intent = new Intent("android.intent.action.SEND");
                     intent.setType(this.selectedObject.getDocument().mime_type);
-                    try {
-                        intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(getParentActivity(), "org.telegram.messenger.beta.provider", new File(path)));
-                        intent.setFlags(1);
-                    } catch (Exception e) {
+                    if (VERSION.SDK_INT >= 24) {
+                        try {
+                            intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(getParentActivity(), "org.telegram.messenger.beta.provider", new File(path)));
+                            intent.setFlags(1);
+                        } catch (Exception e) {
+                            intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(new File(path)));
+                        }
+                    } else {
                         intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(new File(path)));
                     }
                     getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
@@ -1704,6 +1708,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
                     getParentActivity().requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 4);
                     this.selectedObject = null;
                     return;
+                    break;
                 case 9:
                     showDialog(new StickersAlert(getParentActivity(), this, this.selectedObject.getInputStickerSet(), null, null));
                     break;

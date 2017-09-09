@@ -1729,7 +1729,7 @@ public class MessageObject {
     }
 
     public void generateCaption() {
-        if (this.caption == null && this.messageOwner.media != null && this.messageOwner.media.caption != null && this.messageOwner.media.caption.length() > 0) {
+        if (this.caption == null && !isRoundVideo() && this.messageOwner.media != null && !TextUtils.isEmpty(this.messageOwner.media.caption)) {
             this.caption = Emoji.replaceEmoji(this.messageOwner.media.caption, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             if (containsUrls(this.caption)) {
                 try {

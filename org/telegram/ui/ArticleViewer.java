@@ -6494,31 +6494,37 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         }
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void onSharePressed() {
         if (this.parentActivity != null && this.currentMedia != null) {
-            File f = getMediaFile(this.currentIndex);
-            if (f == null || !f.exists()) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this.parentActivity);
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
-                showDialog(builder.create());
-                return;
-            }
-            Intent intent = new Intent("android.intent.action.SEND");
-            if (isMediaVideo(this.currentIndex)) {
-                intent.setType(MimeTypes.VIDEO_MP4);
-            } else {
-                intent.setType("image/jpeg");
-            }
             try {
-                intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(this.parentActivity, "org.telegram.messenger.beta.provider", f));
-                intent.setFlags(1);
+                File f = getMediaFile(this.currentIndex);
+                if (f == null || !f.exists()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this.parentActivity);
+                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                    builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
+                    showDialog(builder.create());
+                    return;
+                }
+                Intent intent = new Intent("android.intent.action.SEND");
+                if (isMediaVideo(this.currentIndex)) {
+                    intent.setType(MimeTypes.VIDEO_MP4);
+                } else {
+                    intent.setType("image/jpeg");
+                }
+                if (VERSION.SDK_INT >= 24) {
+                    try {
+                        intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(this.parentActivity, "org.telegram.messenger.beta.provider", f));
+                        intent.setFlags(1);
+                    } catch (Exception e) {
+                        intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(f));
+                    }
+                } else {
+                    intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(f));
+                }
                 this.parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
-            } catch (Throwable e) {
-                FileLog.e(e);
+            } catch (Throwable e2) {
+                FileLog.e(e2);
             }
         }
     }

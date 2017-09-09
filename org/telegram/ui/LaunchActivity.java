@@ -1952,7 +1952,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     }
                 }
             });
-            progressDialog.show();
+            try {
+                progressDialog.show();
+            } catch (Exception e) {
+            }
         }
     }
 

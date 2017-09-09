@@ -1318,63 +1318,70 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         }
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void onSharePressed() {
+        Throwable e;
         boolean z = true;
         if (this.parentActivity != null && this.allowShare) {
             File f = null;
             boolean isVideo = false;
-            if (this.currentMessageObject != null) {
-                isVideo = this.currentMessageObject.isVideo();
-                if (!TextUtils.isEmpty(this.currentMessageObject.messageOwner.attachPath)) {
-                    File f2 = new File(this.currentMessageObject.messageOwner.attachPath);
-                    try {
-                        if (f2.exists()) {
+            try {
+                if (this.currentMessageObject != null) {
+                    isVideo = this.currentMessageObject.isVideo();
+                    if (!TextUtils.isEmpty(this.currentMessageObject.messageOwner.attachPath)) {
+                        File f2 = new File(this.currentMessageObject.messageOwner.attachPath);
+                        try {
+                            if (f2.exists()) {
+                                f = f2;
+                            } else {
+                                f = null;
+                            }
+                        } catch (Exception e2) {
+                            e = e2;
                             f = f2;
-                        } else {
-                            f = null;
+                            FileLog.e(e);
                         }
-                    } catch (Exception e) {
-                        Throwable e2 = e;
-                        f = f2;
-                        FileLog.e(e2);
-                        return;
                     }
+                    if (f == null) {
+                        f = FileLoader.getPathToMessage(this.currentMessageObject.messageOwner);
+                    }
+                } else if (this.currentFileLocation != null) {
+                    TLObject tLObject = this.currentFileLocation;
+                    if (this.avatarsDialogId == 0 && !this.isEvent) {
+                        z = false;
+                    }
+                    f = FileLoader.getPathToAttach(tLObject, z);
                 }
-                if (f == null) {
-                    f = FileLoader.getPathToMessage(this.currentMessageObject.messageOwner);
+                if (f.exists()) {
+                    Intent intent = new Intent("android.intent.action.SEND");
+                    if (isVideo) {
+                        intent.setType(MimeTypes.VIDEO_MP4);
+                    } else if (this.currentMessageObject != null) {
+                        intent.setType(this.currentMessageObject.getMimeType());
+                    } else {
+                        intent.setType("image/jpeg");
+                    }
+                    if (VERSION.SDK_INT >= 24) {
+                        try {
+                            intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(this.parentActivity, "org.telegram.messenger.beta.provider", f));
+                            intent.setFlags(1);
+                        } catch (Exception e3) {
+                            intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(f));
+                        }
+                    } else {
+                        intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(f));
+                    }
+                    this.parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
+                    return;
                 }
-            } else if (this.currentFileLocation != null) {
-                TLObject tLObject = this.currentFileLocation;
-                if (this.avatarsDialogId == 0 && !this.isEvent) {
-                    z = false;
-                }
-                f = FileLoader.getPathToAttach(tLObject, z);
+                Builder builder = new Builder(this.parentActivity);
+                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
+                showAlertDialog(builder);
+            } catch (Exception e4) {
+                e = e4;
+                FileLog.e(e);
             }
-            if (f.exists()) {
-                Intent intent = new Intent("android.intent.action.SEND");
-                if (isVideo) {
-                    intent.setType(MimeTypes.VIDEO_MP4);
-                } else if (this.currentMessageObject != null) {
-                    intent.setType(this.currentMessageObject.getMimeType());
-                } else {
-                    intent.setType("image/jpeg");
-                }
-                try {
-                    intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(this.parentActivity, "org.telegram.messenger.beta.provider", f));
-                    intent.setFlags(1);
-                } catch (Exception e3) {
-                    intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(f));
-                }
-                this.parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
-                return;
-            }
-            Builder builder = new Builder(this.parentActivity);
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-            builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
-            showAlertDialog(builder);
         }
     }
 

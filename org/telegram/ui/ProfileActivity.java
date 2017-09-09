@@ -2960,25 +2960,23 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
-        if (this.dialog_id != 0) {
-            long did = ((Long) dids.get(0)).longValue();
-            Bundle args = new Bundle();
-            args.putBoolean("scrollToTopOnResume", true);
-            int lower_part = (int) this.dialog_id;
-            if (lower_part == 0) {
-                args.putInt("enc_id", (int) (this.dialog_id >> 32));
-            } else if (lower_part > 0) {
-                args.putInt("user_id", lower_part);
-            } else if (lower_part < 0) {
-                args.putInt("chat_id", -lower_part);
-            }
-            if (MessagesController.checkCanOpenChat(args, fragment)) {
-                NotificationCenter.getInstance().removeObserver(this, NotificationCenter.closeChats);
-                NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
-                presentFragment(new ChatActivity(args), true);
-                removeSelfFromStack();
-                SendMessagesHelper.getInstance().sendMessage(MessagesController.getInstance().getUser(Integer.valueOf(this.user_id)), this.dialog_id, null, null, null);
-            }
+        long did = ((Long) dids.get(0)).longValue();
+        Bundle args = new Bundle();
+        args.putBoolean("scrollToTopOnResume", true);
+        int lower_part = (int) did;
+        if (lower_part == 0) {
+            args.putInt("enc_id", (int) (did >> 32));
+        } else if (lower_part > 0) {
+            args.putInt("user_id", lower_part);
+        } else if (lower_part < 0) {
+            args.putInt("chat_id", -lower_part);
+        }
+        if (MessagesController.checkCanOpenChat(args, fragment)) {
+            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.closeChats);
+            NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+            presentFragment(new ChatActivity(args), true);
+            removeSelfFromStack();
+            SendMessagesHelper.getInstance().sendMessage(MessagesController.getInstance().getUser(Integer.valueOf(this.user_id)), did, null, null, null);
         }
     }
 

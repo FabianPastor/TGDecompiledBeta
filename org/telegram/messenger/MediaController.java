@@ -3659,8 +3659,10 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 name = String.format(Locale.US, "%d.%s", new Object[]{Integer.valueOf(id), ext});
             }
             inputStream = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri);
-            File f = new File(FileLoader.getInstance().getDirectory(4), name);
-            FileOutputStream output = new FileOutputStream(f);
+            File f = new File(FileLoader.getInstance().getDirectory(4), "sharing/");
+            f.mkdirs();
+            File f2 = new File(f, name);
+            FileOutputStream output = new FileOutputStream(f2);
             try {
                 byte[] buffer = new byte[CacheDataSink.DEFAULT_BUFFER_SIZE];
                 while (true) {
@@ -3670,7 +3672,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                     }
                     output.write(buffer, 0, len);
                 }
-                String absolutePath = f.getAbsolutePath();
+                String absolutePath = f2.getAbsolutePath();
                 if (inputStream != null) {
                     try {
                         inputStream.close();
