@@ -151,7 +151,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     try {
                                                         Intent intent = new Intent("android.intent.action.VIEW", Uri.fromParts("sms", inputPhoneContact.phone, null));
-                                                        intent.putExtra("sms_body", LocaleController.getString("InviteText", R.string.InviteText));
+                                                        intent.putExtra("sms_body", ContactsController.getInstance().getInviteText(1));
                                                         NewContactActivity.this.getParentActivity().startActivityForResult(intent, 500);
                                                     } catch (Throwable e) {
                                                         FileLog.e(e);

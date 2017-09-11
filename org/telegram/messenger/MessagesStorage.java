@@ -966,6 +966,7 @@ public class MessagesStorage {
                     if (ids.length() > 0) {
                         AbstractSerializedData data;
                         Message message;
+                        Message message2;
                         ArrayList<Message> arrayList;
                         int a;
                         cursor = MessagesStorage.this.database.queryFinalized("SELECT read_state, data, send_state, mid, date, uid, replydata FROM messages WHERE uid IN (" + ids.toString() + ") AND out = 0 AND read_state IN(0,2) ORDER BY date DESC LIMIT 50", new Object[0]);
@@ -996,6 +997,10 @@ public class MessagesStorage {
                                                 message.replyMessage = Message.TLdeserialize(data, data.readInt32(false), false);
                                                 data.reuse();
                                                 if (message.replyMessage != null) {
+                                                    if (MessageObject.isMegagroup(message)) {
+                                                        message2 = message.replyMessage;
+                                                        message2.flags |= Integer.MIN_VALUE;
+                                                    }
                                                     MessagesStorage.addUsersAndChatsFromMessage(message.replyMessage, usersToLoad, chatsToLoad);
                                                 }
                                             }
@@ -1036,7 +1041,12 @@ public class MessagesStorage {
                                     arrayList = (ArrayList) replyMessageOwners.get(Integer.valueOf(message.id));
                                     if (arrayList != null) {
                                         for (a = 0; a < arrayList.size(); a++) {
-                                            ((Message) arrayList.get(a)).replyMessage = message;
+                                            Message m = (Message) arrayList.get(a);
+                                            m.replyMessage = message;
+                                            if (MessageObject.isMegagroup(m)) {
+                                                message2 = m.replyMessage;
+                                                message2.flags |= Integer.MIN_VALUE;
+                                            }
                                         }
                                     }
                                 }
@@ -1926,7 +1936,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 try {
-                    MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE message SET mention = 1, read_state = read_state & ~2 WHERE mid = %d", new Object[]{Long.valueOf(mid)})).stepThis().dispose();
+                    MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE messages SET mention = 1, read_state = read_state & ~2 WHERE mid = %d", new Object[]{Long.valueOf(mid)})).stepThis().dispose();
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -3217,6 +3227,7 @@ Error: java.util.NoSuchElementException
                     SQLiteCursor cursor;
                     AbstractSerializedData data;
                     Message message;
+                    Message message2;
                     ArrayList<Integer> usersToLoad = new ArrayList();
                     ArrayList<Integer> chatsToLoad = new ArrayList();
                     ArrayList<Long> replyMessages = new ArrayList();
@@ -3579,6 +3590,10 @@ Error: java.util.NoSuchElementException
                                             message.replyMessage = Message.TLdeserialize(data, data.readInt32(false), false);
                                             data.reuse();
                                             if (message.replyMessage != null) {
+                                                if (MessageObject.isMegagroup(message)) {
+                                                    message2 = message.replyMessage;
+                                                    message2.flags |= Integer.MIN_VALUE;
+                                                }
                                                 MessagesStorage.addUsersAndChatsFromMessage(message.replyMessage, usersToLoad, chatsToLoad);
                                             }
                                         }
@@ -3695,20 +3710,30 @@ Error: java.util.NoSuchElementException
                                 message.date = cursor.intValue(2);
                                 message.dialog_id = j;
                                 MessagesStorage.addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
+                                Message object;
                                 if (replyMessageOwners.isEmpty()) {
                                     arrayList = (ArrayList) replyMessageRandomOwners.remove(Long.valueOf(cursor.longValue(3)));
                                     if (arrayList != null) {
                                         for (a = 0; a < arrayList.size(); a++) {
-                                            Message object = (Message) arrayList.get(a);
+                                            object = (Message) arrayList.get(a);
                                             object.replyMessage = message;
                                             object.reply_to_msg_id = message.id;
+                                            if (MessageObject.isMegagroup(object)) {
+                                                message2 = object.replyMessage;
+                                                message2.flags |= Integer.MIN_VALUE;
+                                            }
                                         }
                                     }
                                 } else {
                                     arrayList = (ArrayList) replyMessageOwners.get(Integer.valueOf(message.id));
                                     if (arrayList != null) {
                                         for (a = 0; a < arrayList.size(); a++) {
-                                            ((Message) arrayList.get(a)).replyMessage = message;
+                                            object = (Message) arrayList.get(a);
+                                            object.replyMessage = message;
+                                            if (MessageObject.isMegagroup(object)) {
+                                                message2 = object.replyMessage;
+                                                message2.flags |= Integer.MIN_VALUE;
+                                            }
                                         }
                                     }
                                 }
@@ -5094,12 +5119,12 @@ Error: java.util.NoSuchElementException
 
     private void putMessagesInternal(ArrayList<Message> messages, boolean withTransaction, boolean doNotUpdateDialogDate, int downloadMask, boolean ifNoLastMessage) {
         Message lastMessage;
-        SQLiteCursor cursor;
         int a;
         Integer type;
         Integer count;
         if (ifNoLastMessage) {
             try {
+                SQLiteCursor cursor;
                 lastMessage = (Message) messages.get(0);
                 if (lastMessage.dialog_id == 0) {
                     if (lastMessage.to_id.user_id != 0) {
@@ -5162,7 +5187,7 @@ Error: java.util.NoSuchElementException
             if (message.mentioned && message.media_unread) {
                 mentionsIdsMap.put(Long.valueOf(messageId), Long.valueOf(message.dialog_id));
             }
-            if (!MessageObject.isOut(message)) {
+            if (!MessageObject.isOut(message) && (message.id > 0 || MessageObject.isUnread(message))) {
                 Integer currentMaxId = (Integer) dialogsReadMax.get(Long.valueOf(message.dialog_id));
                 if (currentMaxId == null) {
                     cursor = this.database.queryFinalized("SELECT inbox_max FROM dialogs WHERE did = " + message.dialog_id, new Object[0]);
@@ -6667,6 +6692,10 @@ Error: java.util.NoSuchElementException
                                             message.replyMessage = Message.TLdeserialize(data, data.readInt32(false), false);
                                             data.reuse();
                                             if (message.replyMessage != null) {
+                                                if (MessageObject.isMegagroup(message)) {
+                                                    Message message2 = message.replyMessage;
+                                                    message2.flags |= Integer.MIN_VALUE;
+                                                }
                                                 MessagesStorage.addUsersAndChatsFromMessage(message.replyMessage, usersToLoad, chatsToLoad);
                                             }
                                         }
@@ -6731,6 +6760,10 @@ Error: java.util.NoSuchElementException
                             if (owner != null) {
                                 owner.replyMessage = message;
                                 message.dialog_id = owner.dialog_id;
+                                if (MessageObject.isMegagroup(owner)) {
+                                    message2 = owner.replyMessage;
+                                    message2.flags |= Integer.MIN_VALUE;
+                                }
                             }
                         }
                     }

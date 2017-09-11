@@ -53,6 +53,7 @@ import org.telegram.messenger.LocaleController.LocaleInfo;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -299,7 +300,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         public void setSurfaceTextureSize(int width, int height) {
             this.surfaceWidth = width;
             this.surfaceHeight = height;
-            Intro.onSurfaceChanged(width, height, Math.min(((float) this.surfaceWidth) / 148.0f, ((float) this.surfaceHeight) / 148.0f), 0);
+            Intro.onSurfaceChanged(width, height, Math.min(((float) this.surfaceWidth) / 150.0f, ((float) this.surfaceHeight) / 150.0f), 0);
         }
 
         public void run() {
@@ -377,7 +378,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         FrameLayout frameLayout2 = new FrameLayout(this);
         frameLayout.addView(frameLayout2, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 78.0f, 0.0f, 0.0f));
         scrollView = new TextureView(this);
-        frameLayout2.addView(scrollView, LayoutHelper.createFrame(180, 140, 17));
+        frameLayout2.addView(scrollView, LayoutHelper.createFrame(Callback.DEFAULT_DRAG_ANIMATION_DURATION, 150, 17));
         scrollView.setSurfaceTextureListener(new SurfaceTextureListener() {
             public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
                 if (IntroActivity.this.eglThread == null && surface != null) {

@@ -1913,8 +1913,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             args.putBoolean("onlySelect", true);
             DialogsActivity fragment2 = new DialogsActivity(args);
             final boolean z2 = hasUrl;
+            final String str8 = message;
             fragment2.setDelegate(new DialogsActivityDelegate() {
-                public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
+                public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence m, boolean param) {
                     long did = ((Long) dids.get(0)).longValue();
                     Bundle args = new Bundle();
                     args.putBoolean("scrollToTopOnResume", true);
@@ -1932,7 +1933,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     }
                     if (MessagesController.checkCanOpenChat(args, fragment)) {
                         NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
-                        DraftQuery.saveDraft(did, message, null, null, true);
+                        DraftQuery.saveDraft(did, str8, null, null, true);
                         LaunchActivity.this.actionBarLayout.presentFragment(new ChatActivity(args), true, false, true);
                     }
                 }

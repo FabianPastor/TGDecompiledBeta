@@ -2740,7 +2740,15 @@ public class MessageObject {
             if (chat.megagroup) {
                 return false;
             }
-            if ((!chat.creator && (chat.admin_rights == null || !chat.admin_rights.edit_messages)) || !message.post) {
+            if (!chat.creator) {
+                if (chat.admin_rights == null) {
+                    return false;
+                }
+                if (!(chat.admin_rights.edit_messages || message.out)) {
+                    return false;
+                }
+            }
+            if (!message.post) {
                 return false;
             }
         }
@@ -2767,10 +2775,10 @@ public class MessageObject {
                 if (chat.creator) {
                     return true;
                 }
-                if (chat.admin_rights != null && chat.admin_rights.delete_messages) {
+                if (chat.admin_rights != null && (chat.admin_rights.delete_messages || message.out)) {
                     return true;
                 }
-                if (chat.megagroup && isOut(message) && message.from_id > 0) {
+                if (chat.megagroup && message.out && message.from_id > 0) {
                     return true;
                 }
             }

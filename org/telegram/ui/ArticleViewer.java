@@ -5450,7 +5450,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         divider.setBackgroundColor(-2039584);
         settingsContainer.addView(divider, LayoutHelper.createLinear(-1, 1, 15.0f, 4.0f, 15.0f, 4.0f));
         divider.getLayoutParams().height = 1;
-        View textView = new TextView(this.parentActivity);
+        TextView textView = new TextView(this.parentActivity);
         textView.setTextColor(-14606047);
         textView.setTextSize(1, 16.0f);
         textView.setLines(1);
@@ -5688,23 +5688,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidStarted);
-        int color = getSelectedColor();
-        if (color == 0) {
-            this.backgroundPaint.setColor(-1);
-            this.listView.setGlowColor(-657673);
-        } else if (color == 1) {
-            this.backgroundPaint.setColor(-659492);
-            this.listView.setGlowColor(-659492);
-        } else if (color == 2) {
-            this.backgroundPaint.setColor(-15461356);
-            this.listView.setGlowColor(-15461356);
-        }
-        for (a = 0; a < Theme.chat_ivStatesDrawable.length; a++) {
-            Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][0], getTextColor(), false);
-            Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][0], getTextColor(), true);
-            Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][1], getTextColor(), false);
-            Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][1], getTextColor(), true);
-        }
+        updatePaintColors();
     }
 
     private void showNightModeHint() {

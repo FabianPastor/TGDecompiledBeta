@@ -292,7 +292,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         try {
                                             Intent intent = new Intent("android.intent.action.VIEW", Uri.fromParts("sms", arg1, null));
-                                            intent.putExtra("sms_body", LocaleController.getString("InviteText", R.string.InviteText));
+                                            intent.putExtra("sms_body", ContactsController.getInstance().getInviteText(1));
                                             ContactsActivity.this.getParentActivity().startActivityForResult(intent, 500);
                                         } catch (Throwable e) {
                                             FileLog.e(e);

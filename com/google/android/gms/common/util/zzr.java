@@ -14,10 +14,10 @@ public final class zzr {
 
     private static String zzaD(int i) {
         ThreadPolicy allowThreadDiskReads;
-        Closeable bufferedReader;
         Throwable th;
         String str = null;
         if (i > 0) {
+            Closeable bufferedReader;
             try {
                 allowThreadDiskReads = StrictMode.allowThreadDiskReads();
                 bufferedReader = new BufferedReader(new FileReader("/proc/" + i + "/cmdline"));

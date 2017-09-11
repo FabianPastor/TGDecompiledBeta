@@ -151,7 +151,6 @@ public final class R {
         public static final int blur_linear = NUM;
         public static final int blur_off = NUM;
         public static final int blur_radial = NUM;
-        public static final int boog_group = NUM;
         public static final int book_bot = NUM;
         public static final int book_channel = NUM;
         public static final int book_group = NUM;
@@ -168,8 +167,6 @@ public final class R {
         public static final int boxshadow = NUM;
         public static final int broadcast3 = NUM;
         public static final int broadcast_w = NUM;
-        public static final int btn_send_location_down = NUM;
-        public static final int btn_send_location_up = NUM;
         public static final int btnshadow = NUM;
         public static final int burn = NUM;
         public static final int camera_btn = NUM;
@@ -222,7 +219,6 @@ public final class R {
         public static final int edit_cancel = NUM;
         public static final int edit_done = NUM;
         public static final int fab_highlight_dark = NUM;
-        public static final int field_carret = NUM;
         public static final int field_carret_empty = NUM;
         public static final int flame_small = NUM;
         public static final int flash_auto = NUM;
@@ -277,7 +273,6 @@ public final class R {
         public static final int ic_call_end_white_36dp = NUM;
         public static final int ic_call_made_green_18dp = NUM;
         public static final int ic_call_received_green_18dp = NUM;
-        public static final int ic_call_white_18dp = NUM;
         public static final int ic_call_white_24dp = NUM;
         public static final int ic_chat_bubble_white_24dp = NUM;
         public static final int ic_close_white = NUM;
@@ -294,13 +289,9 @@ public final class R {
         public static final int ic_lock_header = NUM;
         public static final int ic_lock_white = NUM;
         public static final int ic_masks_msk1 = NUM;
-        public static final int ic_masks_recent = NUM;
         public static final int ic_masks_recent1 = NUM;
-        public static final int ic_masks_recent2 = NUM;
         public static final int ic_masks_sticker1 = NUM;
-        public static final int ic_masks_sticker2 = NUM;
         public static final int ic_mic_off_white_24dp = NUM;
-        public static final int ic_more = NUM;
         public static final int ic_msg_panel_gif = NUM;
         public static final int ic_msg_panel_kb = NUM;
         public static final int ic_msg_panel_smiles = NUM;
@@ -337,7 +328,6 @@ public final class R {
         public static final int ic_storage_gallery = NUM;
         public static final int ic_video = NUM;
         public static final int ic_volume_up_white_24dp = NUM;
-        public static final int ic_vpn_key_white_24dp = NUM;
         public static final int inline_video_pause = NUM;
         public static final int inline_video_play = NUM;
         public static final int instant_camera = NUM;
@@ -370,7 +360,6 @@ public final class R {
         public static final int list_broadcast = NUM;
         public static final int list_check = NUM;
         public static final int list_circle = NUM;
-        public static final int list_focused_holo = NUM;
         public static final int list_group = NUM;
         public static final int list_halfcheck = NUM;
         public static final int list_mute = NUM;
@@ -382,7 +371,6 @@ public final class R {
         public static final int loading_animation = NUM;
         public static final int loading_animation2 = NUM;
         public static final int location_panel = NUM;
-        public static final int location_send_button_states = NUM;
         public static final int lock_arrow = NUM;
         public static final int lock_close = NUM;
         public static final int lock_middle = NUM;
@@ -392,7 +380,6 @@ public final class R {
         public static final int lock_top = NUM;
         public static final int log_info = NUM;
         public static final int logo_avatar = NUM;
-        public static final int managers = NUM;
         public static final int map_pin = NUM;
         public static final int media_doc_blue = NUM;
         public static final int media_doc_green = NUM;
@@ -434,19 +421,12 @@ public final class R {
         public static final int msg_panel_reply = NUM;
         public static final int msg_photo = NUM;
         public static final int msg_photo_shadow = NUM;
-        public static final int msg_round_cancel_l = NUM;
         public static final int msg_round_cancel_m = NUM;
-        public static final int msg_round_cancel_s = NUM;
         public static final int msg_round_file_s = NUM;
         public static final int msg_round_gif_m = NUM;
-        public static final int msg_round_load_l = NUM;
         public static final int msg_round_load_m = NUM;
-        public static final int msg_round_load_s = NUM;
         public static final int msg_round_pause_m = NUM;
-        public static final int msg_round_pause_s = NUM;
-        public static final int msg_round_play_l = NUM;
         public static final int msg_round_play_m = NUM;
-        public static final int msg_round_play_s = NUM;
         public static final int msg_views = NUM;
         public static final int msg_warning = NUM;
         public static final int myloc_on = NUM;
@@ -486,20 +466,15 @@ public final class R {
         public static final int photo_paint_text = NUM;
         public static final int photo_placeholder_in = NUM;
         public static final int photo_sticker = NUM;
-        public static final int photo_text = NUM;
         public static final int photo_timer = NUM;
         public static final int photo_tools = NUM;
         public static final int photo_undo = NUM;
         public static final int photo_w = NUM;
         public static final int photobadge = NUM;
-        public static final int photoborder = NUM;
         public static final int photocheck = NUM;
         public static final int phototime = NUM;
-        public static final int phototime2 = NUM;
-        public static final int phototime2_b = NUM;
         public static final int photoview_placeholder = NUM;
         public static final int pin = NUM;
-        public static final int pl_back = NUM;
         public static final int pl_next = NUM;
         public static final int pl_pause = NUM;
         public static final int pl_play = NUM;
@@ -517,7 +492,6 @@ public final class R {
         public static final int profile_info = NUM;
         public static final int profile_list = NUM;
         public static final int profile_phone = NUM;
-        public static final int rec = NUM;
         public static final int redcircle = NUM;
         public static final int regbtn2 = NUM;
         public static final int regbtn2_pressed = NUM;
@@ -533,8 +507,6 @@ public final class R {
         public static final int search_dark_activated = NUM;
         public static final int search_down = NUM;
         public static final int search_gif = NUM;
-        public static final int search_light = NUM;
-        public static final int search_light_activated = NUM;
         public static final int search_up = NUM;
         public static final int search_web = NUM;
         public static final int selectphoto_large = NUM;
@@ -542,7 +514,6 @@ public final class R {
         public static final int share = NUM;
         public static final int share_arrow = NUM;
         public static final int share_round = NUM;
-        public static final int sharedmedia = NUM;
         public static final int sheet_shadow = NUM;
         public static final int shortcut_compose = NUM;
         public static final int shortcut_user = NUM;
@@ -565,7 +536,6 @@ public final class R {
         public static final int stickers_unfavorite = NUM;
         public static final int stickersclose = NUM;
         public static final int stickerset_close = NUM;
-        public static final int stickerssettings = NUM;
         public static final int switch_thumb = NUM;
         public static final int switch_to_on1 = NUM;
         public static final int switch_to_on2 = NUM;
@@ -594,11 +564,7 @@ public final class R {
         public static final int video_actions = NUM;
         public static final int video_cropleft = NUM;
         public static final int video_cropright = NUM;
-        public static final int video_edit_play = NUM;
         public static final int video_mute = NUM;
-        public static final int video_play = NUM;
-        public static final int video_time_l = NUM;
-        public static final int video_time_r = NUM;
         public static final int volume_off = NUM;
         public static final int volume_on = NUM;
         public static final int wall_selection = NUM;

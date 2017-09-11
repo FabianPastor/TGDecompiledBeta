@@ -7245,6 +7245,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 } else if (messageObject.messageOwner.action instanceof TL_messageActionPaymentSent) {
                                     messageObject.generatePaymentSentMessageText(null);
                                 }
+                                if (messageObject.isMegagroup()) {
+                                    Message message = messageObject.replyMessageObject.messageOwner;
+                                    message.flags |= Integer.MIN_VALUE;
+                                }
                             }
                         } else if (!(this.inlineReturn == 0 || messageObject.messageOwner.reply_markup == null)) {
                             for (b = 0; b < messageObject.messageOwner.reply_markup.rows.size(); b++) {
@@ -8318,9 +8322,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 updateVisibleRows();
             }
         } else if (id == NotificationCenter.didLoadedPinnedMessage) {
-            MessageObject message = args[0];
-            if (message.getDialogId() == this.dialog_id && this.info != null && this.info.pinned_msg_id == message.getId()) {
-                this.pinnedMessageObject = message;
+            MessageObject message2 = args[0];
+            if (message2.getDialogId() == this.dialog_id && this.info != null && this.info.pinned_msg_id == message2.getId()) {
+                this.pinnedMessageObject = message2;
                 this.loadingPinnedMessage = 0;
                 updatePinnedMessageView(true);
             }

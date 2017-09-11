@@ -249,6 +249,10 @@ public class MessagesQuery {
                                             MessageObject object = (MessageObject) arrayList.get(b);
                                             object.replyMessageObject = messageObject;
                                             object.messageOwner.reply_to_msg_id = messageObject.getId();
+                                            if (object.isMegagroup()) {
+                                                Message message2 = object.replyMessageObject.messageOwner;
+                                                message2.flags |= Integer.MIN_VALUE;
+                                            }
                                         }
                                     }
                                 }
@@ -449,6 +453,10 @@ public class MessagesQuery {
                                 m.generateGameMessageText(null);
                             } else if (m.messageOwner.action instanceof TL_messageActionPaymentSent) {
                                 m.generatePaymentSentMessageText(null);
+                            }
+                            if (m.isMegagroup()) {
+                                Message message2 = m.replyMessageObject.messageOwner;
+                                message2.flags |= Integer.MIN_VALUE;
                             }
                         }
                         changed = true;
