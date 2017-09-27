@@ -7245,7 +7245,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 } else if (messageObject.messageOwner.action instanceof TL_messageActionPaymentSent) {
                                     messageObject.generatePaymentSentMessageText(null);
                                 }
-                                if (messageObject.isMegagroup()) {
+                                if (!(!messageObject.isMegagroup() || messageObject.replyMessageObject == null || messageObject.replyMessageObject.messageOwner == null)) {
                                     Message message = messageObject.replyMessageObject.messageOwner;
                                     message.flags |= Integer.MIN_VALUE;
                                 }
