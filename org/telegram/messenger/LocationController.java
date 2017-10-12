@@ -372,6 +372,17 @@ public class LocationController implements NotificationCenterDelegate {
                             data.reuse();
                         }
                         result.add(info);
+                        int lower_id = (int) info.did;
+                        int high_id = (int) (info.did >> 32);
+                        if (lower_id != 0) {
+                            if (lower_id < 0) {
+                                if (!chatsToLoad.contains(Integer.valueOf(-lower_id))) {
+                                    chatsToLoad.add(Integer.valueOf(-lower_id));
+                                }
+                            } else if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
+                                usersToLoad.add(Integer.valueOf(lower_id));
+                            }
+                        }
                     }
                     cursor.dispose();
                     if (!chatsToLoad.isEmpty()) {
@@ -599,6 +610,7 @@ public class LocationController implements NotificationCenterDelegate {
                                     }
                                     a++;
                                 }
+                                MessagesStorage.getInstance().putUsersAndChats(res.users, res.chats, true, true);
                                 MessagesController.getInstance().putUsers(res.users, false);
                                 MessagesController.getInstance().putChats(res.chats, false);
                                 LocationController.this.locationsCache.put(Long.valueOf(did), res.messages);

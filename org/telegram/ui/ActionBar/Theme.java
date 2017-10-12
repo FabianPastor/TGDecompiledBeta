@@ -1781,6 +1781,7 @@ public class Theme {
                 applyDialogsTheme();
                 applyProfileTheme();
                 applyChatTheme(false);
+                NotificationCenter.getInstance().postNotificationName(NotificationCenter.didSetNewTheme, new Object[0]);
             } catch (Throwable e) {
                 FileLog.e(e);
             }
@@ -1924,8 +1925,8 @@ public class Theme {
     }
 
     public static File getAssetFile(String assetName) {
-        File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
         long size;
+        File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
         try {
             InputStream stream = ApplicationLoader.applicationContext.getAssets().open(assetName);
             size = (long) stream.available();
@@ -2789,12 +2790,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
-                    int i;
                     SharedPreferences preferences;
                     int selectedBackground;
-                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
+                        int i;
+                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

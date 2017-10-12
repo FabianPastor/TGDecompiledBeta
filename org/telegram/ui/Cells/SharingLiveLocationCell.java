@@ -201,16 +201,20 @@ public class SharingLiveLocationCell extends FrameLayout {
         if (lower_id > 0) {
             User user = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
             this.avatarDrawable.setInfo(user);
-            this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
-            if (!(user.photo == null || user.photo.photo_small == null)) {
-                photo = user.photo.photo_small;
+            if (user != null) {
+                this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
+                if (!(user.photo == null || user.photo.photo_small == null)) {
+                    photo = user.photo.photo_small;
+                }
             }
         } else {
             Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
-            this.avatarDrawable.setInfo(chat);
-            this.nameTextView.setText(chat.title);
-            if (!(chat.photo == null || chat.photo.photo_small == null)) {
-                photo = chat.photo.photo_small;
+            if (chat != null) {
+                this.avatarDrawable.setInfo(chat);
+                this.nameTextView.setText(chat.title);
+                if (!(chat.photo == null || chat.photo.photo_small == null)) {
+                    photo = chat.photo.photo_small;
+                }
             }
         }
         LatLng position = info.marker.getPosition();
@@ -235,17 +239,21 @@ public class SharingLiveLocationCell extends FrameLayout {
         TLObject photo = null;
         if (lower_id > 0) {
             User user = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
-            this.avatarDrawable.setInfo(user);
-            this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
-            if (!(user.photo == null || user.photo.photo_small == null)) {
-                photo = user.photo.photo_small;
+            if (user != null) {
+                this.avatarDrawable.setInfo(user);
+                this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
+                if (!(user.photo == null || user.photo.photo_small == null)) {
+                    photo = user.photo.photo_small;
+                }
             }
         } else {
             Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
-            this.avatarDrawable.setInfo(chat);
-            this.nameTextView.setText(chat.title);
-            if (!(chat.photo == null || chat.photo.photo_small == null)) {
-                photo = chat.photo.photo_small;
+            if (chat != null) {
+                this.avatarDrawable.setInfo(chat);
+                this.nameTextView.setText(chat.title);
+                if (!(chat.photo == null || chat.photo.photo_small == null)) {
+                    photo = chat.photo.photo_small;
+                }
             }
         }
         this.avatarImageView.setImage(photo, null, this.avatarDrawable);

@@ -845,9 +845,9 @@ public class MessageObject {
             this.messageText = replaceWithLink(LocaleController.getString("EventLogDeletedMessages", R.string.EventLogDeletedMessages), "un1", fromUser);
         } else if (event.action instanceof TL_channelAdminLogEventActionTogglePreHistoryHidden) {
             if (((TL_channelAdminLogEventActionTogglePreHistoryHidden) event.action).new_value) {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesHistoryOn", R.string.EventLogToggledInvitesHistoryOn), "un1", fromUser);
-            } else {
                 this.messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesHistoryOff", R.string.EventLogToggledInvitesHistoryOff), "un1", fromUser);
+            } else {
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesHistoryOn", R.string.EventLogToggledInvitesHistoryOn), "un1", fromUser);
             }
         } else if (event.action instanceof TL_channelAdminLogEventActionChangeAbout) {
             CharSequence string;

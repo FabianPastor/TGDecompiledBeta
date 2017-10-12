@@ -48,6 +48,7 @@ public class NotificationCenter {
     public static final int didReceivedWebpagesInUpdates;
     public static final int didRemovedTwoStepPassword;
     public static final int didReplacedPhotoInMemCache;
+    public static final int didSetNewTheme;
     public static final int didSetNewWallpapper;
     public static final int didSetPasscode;
     public static final int didSetTwoStepPassword;
@@ -389,6 +390,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         messageThumbGenerated = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        didSetNewTheme = i;
         i = totalEvents;
         totalEvents = i + 1;
         wallpapersDidLoaded = i;

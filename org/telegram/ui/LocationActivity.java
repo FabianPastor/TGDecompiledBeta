@@ -64,6 +64,7 @@ import org.telegram.messenger.LocationController;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.MessagesStorage.IntCallback;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
@@ -1058,10 +1059,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         int date = ConnectionsManager.getInstance().getCurrentTime();
         for (int a = 0; a < messages.size(); a++) {
             Message message = (Message) messages.get(a);
-            if (builder != null) {
-                builder.include(new LatLng(message.media.geo.lat, message.media.geo._long));
+            if (message.date + message.media.period > date) {
+                if (builder != null) {
+                    builder.include(new LatLng(message.media.geo.lat, message.media.geo._long));
+                }
+                addUserMarker(message);
             }
-            addUserMarker(message);
         }
         if (builder != null) {
             this.firstFocus = false;
@@ -1090,7 +1093,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             fetchRecentLocations(messages);
         }
         TL_messages_getRecentLocations req = new TL_messages_getRecentLocations();
-        req.peer = MessagesController.getInputPeer((int) this.messageObject.getDialogId());
+        final long dialog_id = this.messageObject.getDialogId();
+        req.peer = MessagesController.getInputPeer((int) dialog_id);
         req.limit = 100;
         ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
             public void run(final TLObject response, TL_error error) {
@@ -1107,9 +1111,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                                     }
                                     a++;
                                 }
+                                MessagesStorage.getInstance().putUsersAndChats(res.users, res.chats, true, true);
                                 MessagesController.getInstance().putUsers(res.users, false);
                                 MessagesController.getInstance().putChats(res.chats, false);
-                                LocationController.getInstance().locationsCache.put(Long.valueOf(LocationActivity.this.messageObject.getDialogId()), res.messages);
+                                LocationController.getInstance().locationsCache.put(Long.valueOf(dialog_id), res.messages);
+                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.liveLocationsCacheChanged, Long.valueOf(dialog_id));
                                 LocationActivity.this.fetchRecentLocations(res.messages);
                             }
                         }
@@ -1156,13 +1162,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 ArrayList<MessageObject> messageObjects = args[1];
                 for (a = 0; a < messageObjects.size(); a++) {
                     messageObject = (MessageObject) messageObjects.get(a);
-                    LiveLocation liveLocation = (LiveLocation) this.markersMap.get(Integer.valueOf(getMessageId(messageObject.messageOwner)));
-                    if (liveLocation != null) {
-                        SharingLocationInfo myInfo = LocationController.getInstance().getSharingLocationInfo(did);
-                        if (myInfo == null || myInfo.mid != messageObject.getId()) {
-                            liveLocation.marker.setPosition(new LatLng(messageObject.messageOwner.media.geo.lat, messageObject.messageOwner.media.geo._long));
+                    if (messageObject.isLiveLocation()) {
+                        LiveLocation liveLocation = (LiveLocation) this.markersMap.get(Integer.valueOf(getMessageId(messageObject.messageOwner)));
+                        if (liveLocation != null) {
+                            SharingLocationInfo myInfo = LocationController.getInstance().getSharingLocationInfo(did);
+                            if (myInfo == null || myInfo.mid != messageObject.getId()) {
+                                liveLocation.marker.setPosition(new LatLng(messageObject.messageOwner.media.geo.lat, messageObject.messageOwner.media.geo._long));
+                            }
+                            updated = true;
                         }
-                        updated = true;
                     }
                 }
                 if (updated && this.adapter != null) {

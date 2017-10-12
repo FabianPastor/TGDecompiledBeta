@@ -432,6 +432,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.suggestedLangpack);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.openArticle);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.hasNewContactsToImport);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.didSetNewTheme);
         if (this.actionBarLayout.fragmentsStack.isEmpty()) {
             if (UserConfig.isClientActivated()) {
                 DialogsActivity dialogsActivity = new DialogsActivity(null);
@@ -2085,6 +2086,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.suggestedLangpack);
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.openArticle);
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.hasNewContactsToImport);
+            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didSetNewTheme);
         }
     }
 
@@ -2451,33 +2453,39 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 ArticleViewer.getInstance().setParentActivity(this, (BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1));
                 ArticleViewer.getInstance().open((TL_webPage) args[0], (String) args[1]);
             }
-        } else if (id == NotificationCenter.hasNewContactsToImport && this.actionBarLayout != null && !this.actionBarLayout.fragmentsStack.isEmpty()) {
-            int type = ((Integer) args[0]).intValue();
-            final HashMap<Integer, Contact> contactHashMap = args[1];
-            final boolean first = ((Boolean) args[2]).booleanValue();
-            final boolean schedule = ((Boolean) args[3]).booleanValue();
-            BaseFragment fragment = (BaseFragment) this.actionBarLayout.fragmentsStack.get(this.actionBarLayout.fragmentsStack.size() - 1);
-            builder = new Builder(this);
-            builder.setTitle(LocaleController.getString("UpdateContactsTitle", R.string.UpdateContactsTitle));
-            builder.setMessage(LocaleController.getString("UpdateContactsMessage", R.string.UpdateContactsMessage));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    ContactsController.getInstance().syncPhoneBookByAlert(contactHashMap, first, schedule, false);
-                }
-            });
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    ContactsController.getInstance().syncPhoneBookByAlert(contactHashMap, first, schedule, true);
-                }
-            });
-            builder.setOnBackButtonListener(new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    ContactsController.getInstance().syncPhoneBookByAlert(contactHashMap, first, schedule, true);
-                }
-            });
-            AlertDialog dialog = builder.create();
-            fragment.showDialog(dialog);
-            dialog.setCanceledOnTouchOutside(false);
+        } else if (id == NotificationCenter.hasNewContactsToImport) {
+            if (this.actionBarLayout != null && !this.actionBarLayout.fragmentsStack.isEmpty()) {
+                int type = ((Integer) args[0]).intValue();
+                final HashMap<Integer, Contact> contactHashMap = args[1];
+                final boolean first = ((Boolean) args[2]).booleanValue();
+                final boolean schedule = ((Boolean) args[3]).booleanValue();
+                BaseFragment fragment = (BaseFragment) this.actionBarLayout.fragmentsStack.get(this.actionBarLayout.fragmentsStack.size() - 1);
+                builder = new Builder(this);
+                builder.setTitle(LocaleController.getString("UpdateContactsTitle", R.string.UpdateContactsTitle));
+                builder.setMessage(LocaleController.getString("UpdateContactsMessage", R.string.UpdateContactsMessage));
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ContactsController.getInstance().syncPhoneBookByAlert(contactHashMap, first, schedule, false);
+                    }
+                });
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ContactsController.getInstance().syncPhoneBookByAlert(contactHashMap, first, schedule, true);
+                    }
+                });
+                builder.setOnBackButtonListener(new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ContactsController.getInstance().syncPhoneBookByAlert(contactHashMap, first, schedule, true);
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                fragment.showDialog(dialog);
+                dialog.setCanceledOnTouchOutside(false);
+            }
+        } else if (id == NotificationCenter.didSetNewTheme && this.sideMenu != null) {
+            this.sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
+            this.sideMenu.setGlowColor(Theme.getColor(Theme.key_chats_menuBackground));
+            this.sideMenu.getAdapter().notifyDataSetChanged();
         }
     }
 

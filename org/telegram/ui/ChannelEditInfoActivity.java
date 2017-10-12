@@ -753,9 +753,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
             if (chatFull.id == this.chatId) {
                 if (this.info == null) {
                     this.descriptionTextView.setText(chatFull.about);
-                }
-                if (this.info == null) {
-                    this.historyHidden = this.info.hidden_prehistory;
+                    this.historyHidden = chatFull.hidden_prehistory;
                     if (this.radioButtonCell3 != null) {
                         boolean z;
                         RadioButtonCell radioButtonCell = this.radioButtonCell3;

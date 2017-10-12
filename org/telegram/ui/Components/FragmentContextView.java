@@ -414,7 +414,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     if (lower_id > 0) {
                         param = UserObject.getFirstName(MessagesController.getInstance().getUser(Integer.valueOf(lower_id)));
                     } else {
-                        param = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id)).title;
+                        Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
+                        if (chat != null) {
+                            param = chat.title;
+                        } else {
+                            param = "";
+                        }
                     }
                 } else {
                     param = LocaleController.formatPluralString("Chats", LocationController.getInstance().sharingLocationsUI.size());
