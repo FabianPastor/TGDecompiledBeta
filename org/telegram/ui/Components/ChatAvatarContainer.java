@@ -121,6 +121,11 @@ public class ChatAvatarContainer extends FrameLayout {
         }
     }
 
+    public void setTitleColors(int title, int subtitle) {
+        this.titleTextView.setTextColor(title);
+        this.subtitleTextView.setTextColor(title);
+    }
+
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int availableWidth = width - AndroidUtilities.dp(70.0f);
@@ -302,6 +307,17 @@ public class ChatAvatarContainer extends FrameLayout {
             newPhoto = chat.photo.photo_small;
         }
         this.avatarDrawable.setInfo(chat);
+        if (this.avatarImageView != null) {
+            this.avatarImageView.setImage(newPhoto, "50_50", this.avatarDrawable);
+        }
+    }
+
+    public void setUserAvatar(User user) {
+        TLObject newPhoto = null;
+        if (user.photo != null) {
+            newPhoto = user.photo.photo_small;
+        }
+        this.avatarDrawable.setInfo(user);
         if (this.avatarImageView != null) {
             this.avatarImageView.setImage(newPhoto, "50_50", this.avatarDrawable);
         }

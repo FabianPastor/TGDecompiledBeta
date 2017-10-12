@@ -57,6 +57,7 @@ public class AlertDialog extends Dialog implements Callback {
     private CharSequence negativeButtonText;
     private OnClickListener neutralButtonListener;
     private CharSequence neutralButtonText;
+    private OnClickListener onBackButtonListener;
     private OnClickListener onClickListener;
     private OnDismissListener onDismissListener;
     private OnScrollChangedListener onScrollChangedListener;
@@ -75,6 +76,7 @@ public class AlertDialog extends Dialog implements Callback {
     private CharSequence title;
     private TextView titleTextView;
     private int topBackgroundColor;
+    private Drawable topDrawable;
     private ImageView topImageView;
     private int topResId;
 
@@ -179,6 +181,12 @@ public class AlertDialog extends Dialog implements Callback {
             return this;
         }
 
+        public Builder setTopImage(Drawable drawable, int backgroundColor) {
+            this.alertDialog.topDrawable = drawable;
+            this.alertDialog.topBackgroundColor = backgroundColor;
+            return this;
+        }
+
         public Builder setMessage(CharSequence message) {
             this.alertDialog.message = message;
             return this;
@@ -199,6 +207,11 @@ public class AlertDialog extends Dialog implements Callback {
         public Builder setNeutralButton(CharSequence text, OnClickListener listener) {
             this.alertDialog.neutralButtonText = text;
             this.alertDialog.neutralButtonListener = listener;
+            return this;
+        }
+
+        public Builder setOnBackButtonListener(OnClickListener listener) {
+            this.alertDialog.onBackButtonListener = listener;
             return this;
         }
 
@@ -372,9 +385,13 @@ public class AlertDialog extends Dialog implements Callback {
         containerView.setFitsSystemWindows(VERSION.SDK_INT >= 21);
         setContentView(containerView);
         boolean hasButtons = (this.positiveButtonText == null && this.negativeButtonText == null && this.neutralButtonText == null) ? false : true;
-        if (this.topResId != 0) {
+        if (!(this.topResId == 0 && this.topDrawable == null)) {
             this.topImageView = new ImageView(getContext());
-            this.topImageView.setImageResource(this.topResId);
+            if (this.topDrawable != null) {
+                this.topImageView.setImageDrawable(this.topDrawable);
+            } else {
+                this.topImageView.setImageResource(this.topResId);
+            }
             this.topImageView.setScaleType(ScaleType.CENTER);
             this.topImageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.popup_fixed_top));
             this.topImageView.getBackground().setColorFilter(new PorterDuffColorFilter(this.topBackgroundColor, Mode.MULTIPLY));
@@ -648,6 +665,13 @@ public class AlertDialog extends Dialog implements Callback {
         }
         params.flags |= 131072;
         window.setAttributes(params);
+    }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (this.onBackButtonListener != null) {
+            this.onBackButtonListener.onClick(this, -2);
+        }
     }
 
     private void runShadowAnimation(final int num, boolean show) {

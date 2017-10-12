@@ -28,6 +28,9 @@ public class SlideView extends LinearLayout {
     public void onNextPressed() {
     }
 
+    public void onCancelPressed() {
+    }
+
     public void saveStateParams(Bundle bundle) {
     }
 

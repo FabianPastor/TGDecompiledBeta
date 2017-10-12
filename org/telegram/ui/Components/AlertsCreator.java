@@ -18,9 +18,11 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
+import org.telegram.messenger.MessagesStorage.IntCallback;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SecretChatHelper;
+import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
@@ -63,6 +65,7 @@ import org.telegram.tgnet.TLRPC.TL_payments_sendPaymentForm;
 import org.telegram.tgnet.TLRPC.TL_payments_validateRequestedInfo;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
 import org.telegram.tgnet.TLRPC.TL_updateUserName;
+import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
@@ -164,11 +167,6 @@ public class AlertsCreator {
                                                         } else {
                                                             str = error.text;
                                                             switch (str.hashCode()) {
-                                                                case -141887186:
-                                                                    if (str.equals("USERNAMES_UNAVAILABLE")) {
-                                                                        z = true;
-                                                                        break;
-                                                                    }
                                                                 case 288843630:
                                                                     if (str.equals("USERNAME_INVALID")) {
                                                                         break;
@@ -188,9 +186,6 @@ public class AlertsCreator {
                                                                     break;
                                                                 case true:
                                                                     showSimpleAlert(fragment, LocaleController.getString("UsernameInUse", R.string.UsernameInUse));
-                                                                    break;
-                                                                case true:
-                                                                    showSimpleAlert(fragment, LocaleController.getString("FeatureUnavailable", R.string.FeatureUnavailable));
                                                                     break;
                                                                 default:
                                                                     showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred));
@@ -808,6 +803,71 @@ public class AlertsCreator {
         builder.setTitle(LocaleController.getString("Vibrate", R.string.Vibrate));
         builder.setView(linearLayout);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        return builder.create();
+    }
+
+    public static Dialog createLocationUpdateDialog(Activity parentActivity, User user, IntCallback callback) {
+        final int[] selected = new int[1];
+        String[] descriptions = new String[]{LocaleController.getString("SendLiveLocationFor15m", R.string.SendLiveLocationFor15m), LocaleController.getString("SendLiveLocationFor1h", R.string.SendLiveLocationFor1h), LocaleController.getString("SendLiveLocationFor8h", R.string.SendLiveLocationFor8h)};
+        final LinearLayout linearLayout = new LinearLayout(parentActivity);
+        linearLayout.setOrientation(1);
+        TextView titleTextView = new TextView(parentActivity);
+        if (user != null) {
+            titleTextView.setText(LocaleController.formatString("LiveLocationAlertPrivate", R.string.LiveLocationAlertPrivate, UserObject.getFirstName(user)));
+        } else {
+            titleTextView.setText(LocaleController.getString("LiveLocationAlertGroup", R.string.LiveLocationAlertGroup));
+        }
+        titleTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        titleTextView.setTextSize(1, 16.0f);
+        titleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        linearLayout.addView(titleTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, 0, 24, 8));
+        int a = 0;
+        while (a < descriptions.length) {
+            RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
+            cell.setTag(Integer.valueOf(a));
+            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
+            cell.setTextAndValue(descriptions[a], selected[0] == a);
+            linearLayout.addView(cell);
+            cell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    selected[0] = ((Integer) v.getTag()).intValue();
+                    int count = linearLayout.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        View child = linearLayout.getChildAt(a);
+                        if (child instanceof RadioColorCell) {
+                            boolean z;
+                            RadioColorCell radioColorCell = (RadioColorCell) child;
+                            if (child == v) {
+                                z = true;
+                            } else {
+                                z = false;
+                            }
+                            radioColorCell.setChecked(z, true);
+                        }
+                    }
+                }
+            });
+            a++;
+        }
+        Builder builder = new Builder(parentActivity);
+        builder.setTopImage(new ShareLocationDrawable(parentActivity, false), Theme.getColor(Theme.key_dialogTopBackground));
+        builder.setView(linearLayout);
+        final IntCallback intCallback = callback;
+        builder.setPositiveButton(LocaleController.getString("ShareFile", R.string.ShareFile), new OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                int time;
+                if (selected[0] == 0) {
+                    time = 900;
+                } else if (selected[0] == 1) {
+                    time = 3600;
+                } else {
+                    time = 28800;
+                }
+                intCallback.run(time);
+            }
+        });
+        builder.setNeutralButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         return builder.create();
     }
 

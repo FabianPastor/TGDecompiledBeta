@@ -203,6 +203,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.showProgress();
+        frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView = new RecyclerListView(context);
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setEmptyView(this.emptyView);

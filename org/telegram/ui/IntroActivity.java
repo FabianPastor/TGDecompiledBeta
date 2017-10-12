@@ -68,6 +68,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     private BottomPagesView bottomPages;
     private long currentDate;
     private int currentViewPagerPage;
+    private boolean destroyed;
     private boolean dragging;
     private EGLThread eglThread;
     private boolean justCreated = false;
@@ -466,6 +467,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                     Intent intent2 = new Intent(IntroActivity.this, LaunchActivity.class);
                     intent2.putExtra("fromIntro", true);
                     IntroActivity.this.startActivity(intent2);
+                    IntroActivity.this.destroyed = true;
                     IntroActivity.this.finish();
                 }
             }
@@ -493,6 +495,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                     Intent intent2 = new Intent(IntroActivity.this, LaunchActivity.class);
                     intent2.putExtra("fromIntro", true);
                     IntroActivity.this.startActivity(intent2);
+                    IntroActivity.this.destroyed = true;
                     IntroActivity.this.finish();
                 }
             }
@@ -513,6 +516,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
             setRequestedOrientation(1);
             setContentView(scrollView);
         }
+        LocaleController.getInstance().loadRemoteLanguages();
         checkContinueText();
         this.justCreated = true;
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.suggestedLangpack);
@@ -544,6 +548,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
 
     protected void onDestroy() {
         super.onDestroy();
+        this.destroyed = true;
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.suggestedLangpack);
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putLong("intro_crashed_time", 0).commit();
     }
@@ -559,7 +564,6 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         } else {
             arg = systemLang;
         }
-        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putString("language_showed2", LocaleController.getSystemLocaleStringIso639().toLowerCase()).commit();
         for (int a = 0; a < LocaleController.getInstance().languages.size(); a++) {
             LocaleInfo info = (LocaleInfo) LocaleController.getInstance().languages.get(a);
             if (info.shortName.equals("en")) {
@@ -591,7 +595,10 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                             if (string instanceof TL_langPackString) {
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
-                                        IntroActivity.this.textView.setText(string.value);
+                                        if (!IntroActivity.this.destroyed) {
+                                            IntroActivity.this.textView.setText(string.value);
+                                            ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putString("language_showed2", LocaleController.getSystemLocaleStringIso639().toLowerCase()).commit();
+                                        }
                                     }
                                 });
                             }

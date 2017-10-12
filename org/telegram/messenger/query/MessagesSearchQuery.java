@@ -14,6 +14,8 @@ import org.telegram.tgnet.TLRPC.InputPeer;
 import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterEmpty;
+import org.telegram.tgnet.TLRPC.TL_messageActionHistoryClear;
+import org.telegram.tgnet.TLRPC.TL_messageEmpty;
 import org.telegram.tgnet.TLRPC.TL_messages_channelMessages;
 import org.telegram.tgnet.TLRPC.TL_messages_messagesSlice;
 import org.telegram.tgnet.TLRPC.TL_messages_search;
@@ -196,6 +198,15 @@ public class MessagesSearchQuery {
                                     MessageObject messageObject;
                                     int i;
                                     messages_Messages res = response;
+                                    int a = 0;
+                                    while (a < res.messages.size()) {
+                                        Message message = (Message) res.messages.get(a);
+                                        if ((message instanceof TL_messageEmpty) || (message.action instanceof TL_messageActionHistoryClear)) {
+                                            res.messages.remove(a);
+                                            a--;
+                                        }
+                                        a++;
+                                    }
                                     MessagesStorage.getInstance().putUsersAndChats(res.users, res.chats, true, true);
                                     MessagesController.getInstance().putUsers(res.users, false);
                                     MessagesController.getInstance().putChats(res.chats, false);
@@ -207,7 +218,7 @@ public class MessagesSearchQuery {
                                         MessagesSearchQuery.messagesSearchCount[0] = 0;
                                     }
                                     boolean added = false;
-                                    for (int a = 0; a < Math.min(res.messages.size(), 20); a++) {
+                                    for (a = 0; a < Math.min(res.messages.size(), 20); a++) {
                                         added = true;
                                         messageObject = new MessageObject((Message) res.messages.get(a), null, false);
                                         MessagesSearchQuery.searchResultMessages.add(messageObject);

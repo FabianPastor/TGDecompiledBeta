@@ -267,7 +267,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private static HashMap<Integer, TextPaint> videoTextPaints = new HashMap();
     private ActionBar actionBar;
     private WebpageAdapter adapter;
-    public HashMap<String, Integer> anchors = new HashMap();
+    private HashMap<String, Integer> anchors = new HashMap();
     private float animateToScale;
     private float animateToX;
     private float animateToY;
@@ -279,12 +279,14 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private float[][] animationValues = ((float[][]) Array.newInstance(Float.TYPE, new int[]{2, 8}));
     private AspectRatioFrameLayout aspectRatioFrameLayout;
     private boolean attachedToWindow;
+    private HashMap<TL_pageBlockAudio, MessageObject> audioBlocks = new HashMap();
+    private ArrayList<MessageObject> audioMessages = new ArrayList();
     private ImageView backButton;
     private BackDrawable backDrawable;
     private Paint backgroundPaint;
     private View barBackground;
     private Paint blackPaint = new Paint();
-    public ArrayList<PageBlock> blocks = new ArrayList();
+    private ArrayList<PageBlock> blocks = new ArrayList();
     private FrameLayout bottomLayout;
     private boolean canDragDown = true;
     private boolean canZoom = true;
@@ -367,7 +369,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private Runnable photoAnimationEndRunnable;
     private int photoAnimationInProgress;
     private PhotoBackgroundDrawable photoBackgroundDrawable = new PhotoBackgroundDrawable(-16777216);
-    public ArrayList<PageBlock> photoBlocks = new ArrayList();
+    private ArrayList<PageBlock> photoBlocks = new ArrayList();
     private View photoContainerBackground;
     private FrameLayoutDrawer photoContainerView;
     private long photoTransitionAnimationStartTime;
@@ -555,7 +557,11 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             if (this.currentBlock == null) {
                 height = 1;
             } else if (this.lastCreatedWidth != width) {
-                this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.text, width - AndroidUtilities.dp(50.0f), this.currentBlock);
+                int textWidth = width - AndroidUtilities.dp(50.0f);
+                if (this.currentBlock.level > 0) {
+                    textWidth -= AndroidUtilities.dp((float) (this.currentBlock.level * 14));
+                }
+                this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.text, textWidth, this.currentBlock);
                 this.hasRtl = false;
                 if (this.textLayout != null) {
                     height = 0 + (AndroidUtilities.dp(8.0f) + this.textLayout.getHeight());
@@ -568,12 +574,18 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         }
                     }
                 }
-                if (this.hasRtl) {
+                if (this.currentBlock.level > 0) {
+                    if (this.hasRtl) {
+                        this.textX = AndroidUtilities.dp((float) ((this.currentBlock.level * 14) + 14));
+                    } else {
+                        this.textX = AndroidUtilities.dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.dp(32.0f);
+                    }
+                } else if (this.hasRtl) {
                     this.textX = AndroidUtilities.dp(14.0f);
                 } else {
                     this.textX = AndroidUtilities.dp(32.0f);
                 }
-                this.textLayout2 = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, width - AndroidUtilities.dp(50.0f), this.currentBlock);
+                this.textLayout2 = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, textWidth, this.currentBlock);
                 if (this.textLayout2 != null) {
                     this.textY2 = AndroidUtilities.dp(2.0f) + height;
                     height += AndroidUtilities.dp(8.0f) + this.textLayout2.getHeight();
@@ -604,9 +616,12 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 if (this.hasRtl) {
                     int x = getMeasuredWidth() - AndroidUtilities.dp(20.0f);
                     canvas.drawRect((float) x, (float) AndroidUtilities.dp(6.0f), (float) (AndroidUtilities.dp(2.0f) + x), (float) (getMeasuredHeight() - AndroidUtilities.dp(6.0f)), ArticleViewer.quoteLinePaint);
-                    return;
+                } else {
+                    canvas.drawRect((float) AndroidUtilities.dp((float) ((this.currentBlock.level * 14) + 18)), (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp((float) ((this.currentBlock.level * 14) + 20)), (float) (getMeasuredHeight() - AndroidUtilities.dp(6.0f)), ArticleViewer.quoteLinePaint);
                 }
-                canvas.drawRect((float) AndroidUtilities.dp(18.0f), (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - AndroidUtilities.dp(6.0f)), ArticleViewer.quoteLinePaint);
+                if (this.currentBlock.level > 0) {
+                    canvas.drawRect((float) AndroidUtilities.dp(18.0f), 0.0f, (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
+                }
             }
         }
     }
@@ -1185,9 +1200,15 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         return;
                     }
                     ArticleViewer.this.customView = view;
-                    ArticleViewer.this.fullscreenVideoContainer.setVisibility(0);
-                    ArticleViewer.this.fullscreenVideoContainer.addView(view, LayoutHelper.createFrame(-1, -1.0f));
                     ArticleViewer.this.customViewCallback = callback;
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            if (ArticleViewer.this.customView != null) {
+                                ArticleViewer.this.fullscreenVideoContainer.addView(ArticleViewer.this.customView, LayoutHelper.createFrame(-1, -1.0f));
+                                ArticleViewer.this.fullscreenVideoContainer.setVisibility(0);
+                            }
+                        }
+                    }, 100);
                 }
 
                 public void onHideCustomView() {
@@ -3172,23 +3193,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
 
         public void setBlock(TL_pageBlockAudio block, boolean first, boolean last) {
             this.currentBlock = block;
-            this.currentDocument = ArticleViewer.this.getDocumentWithId(this.currentBlock.audio_id);
-            TL_message message = new TL_message();
-            message.out = true;
-            message.id = this.currentBlock.mid;
-            message.to_id = new TL_peerUser();
-            Peer peer = message.to_id;
-            int clientUserId = UserConfig.getClientUserId();
-            message.from_id = clientUserId;
-            peer.user_id = clientUserId;
-            message.date = (int) (System.currentTimeMillis() / 1000);
-            message.message = "-1";
-            message.media = new TL_messageMediaDocument();
-            MessageMedia messageMedia = message.media;
-            messageMedia.flags |= 3;
-            message.media.document = this.currentDocument;
-            message.flags |= 768;
-            this.currentMessageObject = new MessageObject(message, null, false);
+            this.currentMessageObject = (MessageObject) ArticleViewer.this.audioBlocks.get(this.currentBlock);
+            this.currentDocument = this.currentMessageObject.getDocument();
             this.lastCreatedWidth = 0;
             this.isFirst = first;
             this.isLast = last;
@@ -3394,7 +3400,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
 
         private void didPressedButton(boolean animated) {
             if (this.buttonState == 0) {
-                if (MediaController.getInstance().playMessage(this.currentMessageObject)) {
+                if (MediaController.getInstance().setPlaylist(ArticleViewer.this.audioMessages, this.currentMessageObject, false)) {
                     this.buttonState = 1;
                     this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                     invalidate();
@@ -4177,6 +4183,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.channelBlock = null;
             this.blocks.clear();
             this.photoBlocks.clear();
+            this.audioBlocks.clear();
+            this.audioMessages.clear();
             int count = this.currentPage.cached_page.blocks.size();
             for (int a = 0; a < count; a++) {
                 PageBlock block = (PageBlock) this.currentPage.cached_page.blocks.get(a);
@@ -4184,6 +4192,28 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     if (block instanceof TL_pageBlockAnchor) {
                         this.anchors.put(block.name.toLowerCase(), Integer.valueOf(this.blocks.size()));
                     } else {
+                        if (block instanceof TL_pageBlockAudio) {
+                            TL_message message = new TL_message();
+                            message.out = true;
+                            int i = ((int) this.currentPage.id) + a;
+                            block.mid = i;
+                            message.id = i;
+                            message.to_id = new TL_peerUser();
+                            Peer peer = message.to_id;
+                            int clientUserId = UserConfig.getClientUserId();
+                            message.from_id = clientUserId;
+                            peer.user_id = clientUserId;
+                            message.date = (int) (System.currentTimeMillis() / 1000);
+                            message.message = "-1";
+                            message.media = new TL_messageMediaDocument();
+                            MessageMedia messageMedia = message.media;
+                            messageMedia.flags |= 3;
+                            message.media.document = getDocumentWithId(block.audio_id);
+                            message.flags |= 768;
+                            MessageObject messageObject = new MessageObject(message, null, false);
+                            this.audioMessages.add(messageObject);
+                            this.audioBlocks.put((TL_pageBlockAudio) block, messageObject);
+                        }
                         setRichTextParents(null, block.text);
                         setRichTextParents(null, block.caption);
                         if (block instanceof TL_pageBlockAuthorDate) {
@@ -4205,8 +4235,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                                 setRichTextParents(null, ((PageBlock) innerBlock3.items.get(i)).text);
                                 setRichTextParents(null, ((PageBlock) innerBlock3.items.get(i)).caption);
                             }
-                        } else if (block instanceof TL_pageBlockAudio) {
-                            block.mid = ((int) this.currentPage.id) + a;
                         }
                         if (a == 0) {
                             block.first = true;
@@ -4680,7 +4708,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             listTextPointerPaint.setTextSize((float) (AndroidUtilities.dp(15.0f) + additionalSize));
             paint = listTextPointerPaint;
         }
-        if ((parentBlock instanceof TL_pageBlockPullquote) || !(richText == null || parentBlock == null || richText != parentBlock.caption)) {
+        if ((parentBlock instanceof TL_pageBlockPullquote) || !(richText == null || parentBlock == null || (parentBlock instanceof TL_pageBlockBlockquote) || richText != parentBlock.caption)) {
             return new StaticLayout(text, paint, width, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
         }
         return new StaticLayout(text, paint, width, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.dp(4.0f), false);
@@ -5050,6 +5078,9 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         if (quoteLinePaint != null) {
             quoteLinePaint.setColor(getTextColor());
         }
+        if (listTextPointerPaint != null) {
+            listTextPointerPaint.setColor(getTextColor());
+        }
         if (preformattedBackgroundPaint != null) {
             if (currentColor == 0) {
                 preformattedBackgroundPaint.setColor(-657156);
@@ -5151,6 +5182,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
 
     public void setParentActivity(Activity activity, BaseFragment fragment) {
         this.parentFragment = fragment;
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidReset);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidStarted);
         if (this.parentActivity == activity) {
             updatePaintColors();
             return;
@@ -5684,10 +5719,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         this.rightImage.setParentView(this.photoContainerView);
         this.rightImage.setCrossfadeAlpha((byte) 2);
         this.rightImage.setInvalidateAll(true);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidReset);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidStarted);
         updatePaintColors();
     }
 
@@ -7056,11 +7087,11 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 int i = 4;
                 ArticleViewer.this.captionTextViewOld.setTag(null);
                 ArticleViewer.this.captionTextViewOld.setVisibility(4);
-                TextView access$14000 = ArticleViewer.this.captionTextViewNew;
+                TextView access$14300 = ArticleViewer.this.captionTextViewNew;
                 if (ArticleViewer.this.actionBar.getVisibility() == 0) {
                     i = 0;
                 }
-                access$14000.setVisibility(i);
+                access$14300.setVisibility(i);
             }
         });
     }

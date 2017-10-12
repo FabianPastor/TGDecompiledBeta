@@ -190,7 +190,7 @@ public class AvatarDrawable extends Drawable {
             Theme.avatar_backgroundPaint.setColor(this.color);
             canvas.save();
             canvas.translate((float) bounds.left, (float) bounds.top);
-            canvas.drawCircle((float) (size / 2), (float) (size / 2), (float) (size / 2), Theme.avatar_backgroundPaint);
+            canvas.drawCircle(((float) size) / 2.0f, ((float) size) / 2.0f, ((float) size) / 2.0f, Theme.avatar_backgroundPaint);
             int x;
             int y;
             if (this.drawBrodcast && Theme.avatar_broadcastDrawable != null) {

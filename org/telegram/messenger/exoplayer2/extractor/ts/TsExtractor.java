@@ -316,7 +316,7 @@ public final class TsExtractor implements Extractor {
         }
         limit = this.tsPacketBuffer.limit();
         int position = this.tsPacketBuffer.getPosition();
-        while (position < limit && data[position] != (byte) 71) {
+        while (position < limit && data[position] != TS_SYNC_BYTE) {
             position++;
         }
         this.tsPacketBuffer.setPosition(position);

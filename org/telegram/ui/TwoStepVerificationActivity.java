@@ -753,7 +753,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             if (this.email.length() > 0) {
                 tL_account_passwordInputSettings = req.new_settings;
                 tL_account_passwordInputSettings.flags |= 2;
-                req.new_settings.email = this.email;
+                req.new_settings.email = this.email.trim();
             }
         } else if (this.waitingForEmail && (this.currentPassword instanceof TL_account_noPassword)) {
             req.new_settings.flags = 2;

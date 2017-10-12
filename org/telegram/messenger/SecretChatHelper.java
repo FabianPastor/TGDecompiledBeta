@@ -1040,6 +1040,7 @@ public class SecretChatHelper {
                     newMessage.media.address = decryptedMessage.media.address;
                     newMessage.media.provider = decryptedMessage.media.provider;
                     newMessage.media.venue_id = decryptedMessage.media.venue_id;
+                    newMessage.media.venue_type = "";
                     return newMessage;
                 }
             } else if (object instanceof TL_decryptedMessageService) {

@@ -881,12 +881,6 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
             Object obj = -1;
             switch (error.hashCode()) {
-                case -141887186:
-                    if (error.equals("USERNAMES_UNAVAILABLE")) {
-                        obj = 2;
-                        break;
-                    }
-                    break;
                 case 288843630:
                     if (error.equals("USERNAME_INVALID")) {
                         obj = null;
@@ -906,9 +900,6 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     break;
                 case 1:
                     builder.setMessage(LocaleController.getString("LinkInUse", R.string.LinkInUse));
-                    break;
-                case 2:
-                    builder.setMessage(LocaleController.getString("FeatureUnavailable", R.string.FeatureUnavailable));
                     break;
                 default:
                     builder.setMessage(LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred));

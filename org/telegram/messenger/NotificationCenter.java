@@ -60,8 +60,11 @@ public class NotificationCenter {
     public static final int featuredStickersDidLoaded;
     public static final int groupStickersDidLoaded;
     public static final int hasNewContactsToImport;
+    public static final int historyCleared;
     public static final int httpFileDidFailedLoad;
     public static final int httpFileDidLoaded;
+    public static final int liveLocationsCacheChanged;
+    public static final int liveLocationsChanged;
     public static final int locationPermissionGranted;
     public static final int mainUserInfoChanged;
     public static final int mediaCountDidLoaded;
@@ -155,6 +158,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         messagesDeleted = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        historyCleared = i;
         i = totalEvents;
         totalEvents = i + 1;
         messagesRead = i;
@@ -368,6 +374,12 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         updateMentionsCount = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        liveLocationsChanged = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        liveLocationsCacheChanged = i;
         i = totalEvents;
         totalEvents = i + 1;
         httpFileDidLoaded = i;

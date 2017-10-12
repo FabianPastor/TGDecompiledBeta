@@ -316,6 +316,10 @@ public class ChangePhoneActivity extends BaseFragment {
             return LocaleController.getString("YourCode", R.string.YourCode);
         }
 
+        public void onCancelPressed() {
+            this.nextPressed = false;
+        }
+
         public void setParams(Bundle params, boolean restore) {
             int i = 0;
             if (params != null) {
@@ -980,6 +984,10 @@ public class ChangePhoneActivity extends BaseFragment {
             this.ignoreOnTextChange = true;
             this.codeField.setText((CharSequence) this.countriesMap.get((String) this.countriesArray.get(i)));
             this.ignoreOnTextChange = false;
+        }
+
+        public void onCancelPressed() {
+            this.nextPressed = false;
         }
 
         public void onNothingSelected(AdapterView<?> adapterView) {

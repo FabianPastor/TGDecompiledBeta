@@ -38,6 +38,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private boolean centerRotation;
     private ColorFilter colorFilter;
     private byte crossfadeAlpha;
+    private Drawable crossfadeImage;
+    private String crossfadeKey;
+    private BitmapShader crossfadeShader;
+    private boolean crossfadeWithOldImage;
     private boolean crossfadeWithThumb;
     private float currentAlpha;
     private int currentCacheType;
@@ -200,8 +204,33 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     thumbKey = thumbKey + "@" + thumbFilter;
                 }
             }
-            recycleBitmap(key, false);
-            recycleBitmap(thumbKey, true);
+            if (!this.crossfadeWithOldImage) {
+                recycleBitmap(key, 0);
+                recycleBitmap(thumbKey, 1);
+                recycleBitmap(null, 2);
+                this.crossfadeShader = null;
+            } else if (this.currentImage != null) {
+                recycleBitmap(thumbKey, 1);
+                recycleBitmap(null, 2);
+                this.crossfadeShader = this.bitmapShader;
+                this.crossfadeImage = this.currentImage;
+                this.crossfadeKey = this.currentKey;
+                this.currentImage = null;
+                this.currentKey = null;
+            } else if (this.currentThumb != null) {
+                recycleBitmap(key, 0);
+                recycleBitmap(null, 2);
+                this.crossfadeShader = this.bitmapShaderThumb;
+                this.crossfadeImage = this.currentThumb;
+                this.crossfadeKey = this.currentThumbKey;
+                this.currentThumb = null;
+                this.currentThumbKey = null;
+            } else {
+                recycleBitmap(key, 0);
+                recycleBitmap(thumbKey, 1);
+                recycleBitmap(null, 2);
+                this.crossfadeShader = null;
+            }
             this.currentThumbKey = thumbKey;
             this.currentKey = key;
             this.currentExt = ext;
@@ -233,8 +262,9 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 return;
             }
         }
-        recycleBitmap(null, false);
-        recycleBitmap(null, true);
+        for (int a = 0; a < 3; a++) {
+            recycleBitmap(null, a);
+        }
         this.currentKey = null;
         this.currentExt = ext;
         this.currentThumbKey = null;
@@ -250,6 +280,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.currentImage = null;
         this.bitmapShader = null;
         this.bitmapShaderThumb = null;
+        this.crossfadeShader = null;
         ImageLoader.getInstance().cancelLoadingForImageReceiver(this, 0);
         if (this.parentView != null) {
             if (this.invalidateAll) {
@@ -336,9 +367,15 @@ public class ImageReceiver implements NotificationCenterDelegate {
     public void setImageBitmap(Drawable bitmap) {
         boolean z = false;
         ImageLoader.getInstance().cancelLoadingForImageReceiver(this, 0);
-        recycleBitmap(null, false);
-        recycleBitmap(null, true);
+        for (int a = 0; a < 3; a++) {
+            recycleBitmap(null, a);
+        }
         this.staticThumb = bitmap;
+        if (this.roundRadius == 0 || !(bitmap instanceof BitmapDrawable)) {
+            this.bitmapShaderThumb = null;
+        } else {
+            this.bitmapShaderThumb = new BitmapShader(((BitmapDrawable) bitmap).getBitmap(), TileMode.CLAMP, TileMode.CLAMP);
+        }
         this.currentThumbLocation = null;
         this.currentKey = null;
         this.currentExt = null;
@@ -351,7 +388,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.currentSize = 0;
         this.currentCacheType = 0;
         this.bitmapShader = null;
-        this.bitmapShaderThumb = null;
+        this.crossfadeShader = null;
         if (this.setImageBackup != null) {
             this.setImageBackup.fileLocation = null;
             this.setImageBackup.httpUrl = null;
@@ -377,8 +414,9 @@ public class ImageReceiver implements NotificationCenterDelegate {
     }
 
     public void clearImage() {
-        recycleBitmap(null, false);
-        recycleBitmap(null, true);
+        for (int a = 0; a < 3; a++) {
+            recycleBitmap(null, a);
+        }
         if (this.needsQualityThumb) {
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messageThumbGenerated);
             ImageLoader.getInstance().cancelLoadingForImageReceiver(this, 0);
@@ -628,6 +666,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 this.currentAlpha += ((float) dt) / 150.0f;
                 if (this.currentAlpha > 1.0f) {
                     this.currentAlpha = 1.0f;
+                    if (this.crossfadeImage != null) {
+                        recycleBitmap(null, 2);
+                        this.crossfadeShader = null;
+                    }
                 }
             }
             this.lastUpdateAlphaTime = System.currentTimeMillis();
@@ -647,8 +689,12 @@ public class ImageReceiver implements NotificationCenterDelegate {
         try {
             boolean animationNotReady = (this.currentImage instanceof AnimatedFileDrawable) && !((AnimatedFileDrawable) this.currentImage).hasBitmap();
             boolean isThumb = false;
+            BitmapShader customShader = null;
             if (!this.forcePreview && this.currentImage != null && !animationNotReady) {
                 drawable = this.currentImage;
+            } else if (this.crossfadeImage != null) {
+                drawable = this.crossfadeImage;
+                customShader = this.crossfadeShader;
             } else if (this.staticThumb instanceof BitmapDrawable) {
                 drawable = this.staticThumb;
                 isThumb = true;
@@ -658,16 +704,24 @@ public class ImageReceiver implements NotificationCenterDelegate {
             }
             if (drawable != null) {
                 boolean z;
+                int i;
                 if (this.crossfadeAlpha == (byte) 0) {
-                    drawDrawable(canvas, drawable, (int) (this.overrideAlpha * 255.0f), isThumb ? this.bitmapShaderThumb : this.bitmapShader);
+                    i = (int) (this.overrideAlpha * 255.0f);
+                    if (customShader == null) {
+                        customShader = isThumb ? this.bitmapShaderThumb : this.bitmapShader;
+                    }
+                    drawDrawable(canvas, drawable, i, customShader);
                 } else if (this.crossfadeWithThumb && animationNotReady) {
                     drawDrawable(canvas, drawable, (int) (this.overrideAlpha * 255.0f), this.bitmapShaderThumb);
                 } else {
-                    BitmapShader bitmapShader;
                     if (this.crossfadeWithThumb && this.currentAlpha != 1.0f) {
                         Drawable thumbDrawable = null;
+                        BitmapShader customThumbShader = null;
                         if (drawable == this.currentImage) {
-                            if (this.staticThumb != null) {
+                            if (this.crossfadeImage != null) {
+                                thumbDrawable = this.crossfadeImage;
+                                customThumbShader = this.crossfadeShader;
+                            } else if (this.staticThumb != null) {
                                 thumbDrawable = this.staticThumb;
                             } else if (this.currentThumb != null) {
                                 thumbDrawable = this.currentThumb;
@@ -676,16 +730,18 @@ public class ImageReceiver implements NotificationCenterDelegate {
                             thumbDrawable = this.staticThumb;
                         }
                         if (thumbDrawable != null) {
-                            drawDrawable(canvas, thumbDrawable, (int) (this.overrideAlpha * 255.0f), this.bitmapShaderThumb);
+                            i = (int) (this.overrideAlpha * 255.0f);
+                            if (customThumbShader == null) {
+                                customThumbShader = this.bitmapShaderThumb;
+                            }
+                            drawDrawable(canvas, thumbDrawable, i, customThumbShader);
                         }
                     }
-                    int i = (int) ((this.overrideAlpha * this.currentAlpha) * 255.0f);
-                    if (isThumb) {
-                        bitmapShader = this.bitmapShaderThumb;
-                    } else {
-                        bitmapShader = this.bitmapShader;
+                    i = (int) ((this.overrideAlpha * this.currentAlpha) * 255.0f);
+                    if (customShader == null) {
+                        customShader = isThumb ? this.bitmapShaderThumb : this.bitmapShader;
                     }
-                    drawDrawable(canvas, drawable, i, bitmapShader);
+                    drawDrawable(canvas, drawable, i, customShader);
                 }
                 if (animationNotReady && this.crossfadeWithThumb) {
                     z = true;
@@ -962,6 +1018,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
         }
     }
 
+    public void setCrossfadeWithOldImage(boolean value) {
+        this.crossfadeWithOldImage = value;
+    }
+
     public boolean isNeedsQualityThumb() {
         return this.needsQualityThumb;
     }
@@ -1117,10 +1177,13 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return true;
     }
 
-    private void recycleBitmap(String newKey, boolean thumb) {
+    private void recycleBitmap(String newKey, int type) {
         String key;
         Drawable image;
-        if (thumb) {
+        if (type == 2) {
+            key = this.crossfadeKey;
+            image = this.crossfadeImage;
+        } else if (type == 1) {
             key = this.currentThumbKey;
             image = this.currentThumb;
         } else {
@@ -1138,13 +1201,16 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 }
             }
         }
-        if (thumb) {
+        if (type == 2) {
+            this.crossfadeKey = null;
+            this.crossfadeImage = null;
+        } else if (type == 1) {
             this.currentThumb = null;
             this.currentThumbKey = null;
-            return;
+        } else {
+            this.currentImage = null;
+            this.currentKey = null;
         }
-        this.currentImage = null;
-        this.currentKey = null;
     }
 
     public void didReceivedNotification(int id, Object... args) {

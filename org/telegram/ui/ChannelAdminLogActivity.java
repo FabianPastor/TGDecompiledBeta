@@ -415,7 +415,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
                             }
                         } else if (message.type == 4) {
                             if (AndroidUtilities.isGoogleMapsInstalled(ChannelAdminLogActivity.this)) {
-                                LocationActivity fragment = new LocationActivity();
+                                LocationActivity fragment = new LocationActivity(0);
                                 fragment.setMessageObject(message);
                                 ChannelAdminLogActivity.this.presentFragment(fragment);
                             }
@@ -470,6 +470,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
                             ArticleViewer.getInstance().setParentActivity(ChannelAdminLogActivity.this.getParentActivity(), ChannelAdminLogActivity.this);
                             ArticleViewer.getInstance().open(messageObject);
                         }
+                    }
+
+                    public boolean isChatAdminCell(int uid) {
+                        return false;
                     }
                 });
                 chatMessageCell.setAllowAssistant(true);
@@ -801,7 +805,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
                                     if (!ChannelAdminLogActivity.this.messagesDict.containsKey(Long.valueOf(event.id))) {
                                         ChannelAdminLogActivity.this.minEventId = Math.min(ChannelAdminLogActivity.this.minEventId, event.id);
                                         added = true;
-                                        ChannelAdminLogActivity.this.messagesDict.put(Long.valueOf(event.id), new MessageObject(event, ChannelAdminLogActivity.this.messages, ChannelAdminLogActivity.this.messagesByDays, ChannelAdminLogActivity.this.currentChat, ChannelAdminLogActivity.this.mid));
+                                        MessageObject messageObject = new MessageObject(event, ChannelAdminLogActivity.this.messages, ChannelAdminLogActivity.this.messagesByDays, ChannelAdminLogActivity.this.currentChat, ChannelAdminLogActivity.this.mid);
+                                        if (messageObject.contentType >= 0) {
+                                            ChannelAdminLogActivity.this.messagesDict.put(Long.valueOf(event.id), messageObject);
+                                        }
                                     }
                                 }
                                 int newRowsCount = ChannelAdminLogActivity.this.messages.size() - oldRowsCount;

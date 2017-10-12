@@ -109,15 +109,11 @@ public class SizeNotifierFrameLayout extends FrameLayout {
             int height = (int) Math.ceil((double) (((float) this.backgroundDrawable.getIntrinsicHeight()) * scale));
             int x = (getMeasuredWidth() - width) / 2;
             int y = (((viewHeight - height) + this.keyboardHeight) / 2) + actionBarHeight;
-            if (this.bottomClip != 0) {
-                canvas.save();
-                canvas.clipRect(0, actionBarHeight, width, getMeasuredHeight() - this.bottomClip);
-            }
+            canvas.save();
+            canvas.clipRect(0, actionBarHeight, width, getMeasuredHeight() - this.bottomClip);
             this.backgroundDrawable.setBounds(x, y, x + width, y + height);
             this.backgroundDrawable.draw(canvas);
-            if (this.bottomClip != 0) {
-                canvas.restore();
-            }
+            canvas.restore();
         }
     }
 

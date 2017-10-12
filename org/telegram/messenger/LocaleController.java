@@ -713,7 +713,7 @@ public class LocaleController {
                 localeInfo.shortName = languageCode.toLowerCase();
                 localeInfo.pathToFile = finalFile.getAbsolutePath();
                 this.languages.add(localeInfo);
-                this.languagesDict.put(localeInfo.shortName, localeInfo);
+                this.languagesDict.put(localeInfo.getKey(), localeInfo);
                 this.otherLanguages.add(localeInfo);
                 saveOtherLanguages();
             }
@@ -813,12 +813,12 @@ public class LocaleController {
     }
 
     private HashMap<String, String> getLocaleFileStrings(File file, boolean preserveEscapes) {
-        HashMap<String, String> stringMap;
         Throwable e;
         Throwable th;
         FileInputStream fileInputStream = null;
         this.reloadLastFile = false;
         try {
+            HashMap<String, String> stringMap;
             if (file.exists()) {
                 stringMap = new HashMap();
                 XmlPullParser parser = Xml.newPullParser();
@@ -1682,6 +1682,68 @@ public class LocaleController {
         }
     }
 
+    public static String formatLocationUpdateDate(long date) {
+        date *= 1000;
+        try {
+            Calendar rightNow = Calendar.getInstance();
+            int day = rightNow.get(6);
+            int year = rightNow.get(1);
+            rightNow.setTimeInMillis(date);
+            int dateDay = rightNow.get(6);
+            int dateYear = rightNow.get(1);
+            if (dateDay == day && year == dateYear) {
+                int diff = ((int) (((long) ConnectionsManager.getInstance().getCurrentTime()) - (date / 1000))) / 60;
+                if (diff < 1) {
+                    return getString("LocationUpdatedJustNow", R.string.LocationUpdatedJustNow);
+                }
+                if (diff < 60) {
+                    return formatPluralString("UpdatedMinutes", diff);
+                }
+                return String.format("%s %s %s", new Object[]{getString("LocationUpdated", R.string.LocationUpdated), getString("TodayAt", R.string.TodayAt), getInstance().formatterDay.format(new Date(date))});
+            } else if (dateDay + 1 == day && year == dateYear) {
+                return String.format("%s %s %s", new Object[]{getString("LocationUpdated", R.string.LocationUpdated), getString("YesterdayAt", R.string.YesterdayAt), getInstance().formatterDay.format(new Date(date))});
+            } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
+                format = formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
+                return String.format("%s %s", new Object[]{getString("LocationUpdated", R.string.LocationUpdated), format});
+            } else {
+                format = formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
+                return String.format("%s %s", new Object[]{getString("LocationUpdated", R.string.LocationUpdated), format});
+            }
+        } catch (Throwable e) {
+            FileLog.e(e);
+            return "LOC_ERR";
+        }
+    }
+
+    public static String formatLocationLeftTime(int time) {
+        int i = 1;
+        int hours = (time / 60) / 60;
+        time -= (hours * 60) * 60;
+        int minutes = time / 60;
+        time -= minutes * 60;
+        String str;
+        Object[] objArr;
+        if (hours != 0) {
+            str = "%dh";
+            objArr = new Object[1];
+            if (minutes <= 30) {
+                i = 0;
+            }
+            objArr[0] = Integer.valueOf(i + hours);
+            return String.format(str, objArr);
+        } else if (minutes != 0) {
+            str = "%d";
+            objArr = new Object[1];
+            if (time <= 30) {
+                i = 0;
+            }
+            objArr[0] = Integer.valueOf(i + minutes);
+            return String.format(str, objArr);
+        } else {
+            return String.format("%d", new Object[]{Integer.valueOf(time)});
+        }
+    }
+
     public static String formatDateOnline(long date) {
         date *= 1000;
         try {
@@ -1849,6 +1911,10 @@ public class LocaleController {
         return formatDateOnline((long) user.status.expires);
     }
 
+    private String escapeString(String str) {
+        return str.contains("[CDATA") ? str : str.replace("<", "&lt;").replace(">", "&gt;").replace("&", "&amp;");
+    }
+
     public void saveRemoteLocaleStrings(final TL_langPackDifference difference) {
         if (difference != null && !difference.strings.isEmpty()) {
             final String langCode = difference.lang_code.replace('-', '_').toLowerCase();
@@ -1863,21 +1929,21 @@ public class LocaleController {
                 for (int a = 0; a < difference.strings.size(); a++) {
                     LangPackString string = (LangPackString) difference.strings.get(a);
                     if (string instanceof TL_langPackString) {
-                        values.put(string.key, string.value);
+                        values.put(string.key, escapeString(string.value));
                     } else if (string instanceof TL_langPackStringPluralized) {
-                        Object obj;
-                        values.put(string.key + "_zero", string.zero_value != null ? string.zero_value : "");
-                        values.put(string.key + "_one", string.one_value != null ? string.one_value : "");
-                        values.put(string.key + "_two", string.two_value != null ? string.two_value : "");
-                        values.put(string.key + "_few", string.few_value != null ? string.few_value : "");
-                        values.put(string.key + "_many", string.many_value != null ? string.many_value : "");
+                        Object escapeString;
+                        values.put(string.key + "_zero", string.zero_value != null ? escapeString(string.zero_value) : "");
+                        values.put(string.key + "_one", string.one_value != null ? escapeString(string.one_value) : "");
+                        values.put(string.key + "_two", string.two_value != null ? escapeString(string.two_value) : "");
+                        values.put(string.key + "_few", string.few_value != null ? escapeString(string.few_value) : "");
+                        values.put(string.key + "_many", string.many_value != null ? escapeString(string.many_value) : "");
                         String str = string.key + "_other";
                         if (string.other_value != null) {
-                            obj = string.other_value;
+                            escapeString = escapeString(string.other_value);
                         } else {
-                            obj = "";
+                            escapeString = "";
                         }
-                        values.put(str, obj);
+                        values.put(str, escapeString);
                     } else if (string instanceof TL_langPackStringDeleted) {
                         values.remove(string.key);
                     }
@@ -1958,6 +2024,7 @@ public class LocaleController {
                                 LocaleController.this.remoteLanguages.clear();
                                 for (a = 0; a < res.objects.size(); a++) {
                                     TL_langPackLanguage language = (TL_langPackLanguage) res.objects.get(a);
+                                    FileLog.d("loaded lang " + language.name);
                                     LocaleInfo localeInfo = new LocaleInfo();
                                     localeInfo.nameEnglish = language.name;
                                     localeInfo.name = language.native_name;
@@ -1967,6 +2034,7 @@ public class LocaleController {
                                     if (existing == null) {
                                         LocaleController.this.languages.add(localeInfo);
                                         LocaleController.this.languagesDict.put(localeInfo.getKey(), localeInfo);
+                                        existing = localeInfo;
                                     } else {
                                         existing.nameEnglish = localeInfo.nameEnglish;
                                         existing.name = localeInfo.name;
@@ -1979,6 +2047,7 @@ public class LocaleController {
                                 while (a < LocaleController.this.languages.size()) {
                                     LocaleInfo info = (LocaleInfo) LocaleController.this.languages.get(a);
                                     if (!info.isBuiltIn() && info.isRemote() && ((LocaleInfo) remoteLoaded.get(info.getKey())) == null) {
+                                        FileLog.d("remove lang " + info.getKey());
                                         LocaleController.this.languages.remove(a);
                                         LocaleController.this.languagesDict.remove(info.getKey());
                                         a--;

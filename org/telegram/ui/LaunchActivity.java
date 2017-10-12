@@ -55,6 +55,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocaleController.LocaleInfo;
+import org.telegram.messenger.LocationController.SharingLocationInfo;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -104,6 +105,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.Cells.LanguageCell;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.AudioPlayerAlert;
 import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.JoinGroupAlert;
 import org.telegram.ui.Components.LayoutHelper;
@@ -112,6 +114,8 @@ import org.telegram.ui.Components.PasscodeView.PasscodeViewDelegate;
 import org.telegram.ui.Components.PipRoundVideoView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.SharingLocationsAlert;
+import org.telegram.ui.Components.SharingLocationsAlert.SharingLocationsAlertDelegate;
 import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.ThemeEditorView;
 import org.telegram.ui.DialogsActivity.DialogsActivityDelegate;
@@ -389,7 +393,11 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     LaunchActivity.this.presentFragment(new ContactsActivity(null));
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 7) {
-                    LaunchActivity.this.presentFragment(new InviteContactsActivity());
+                    if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                        LaunchActivity.this.showLanguageAlert(true);
+                    } else {
+                        LaunchActivity.this.presentFragment(new InviteContactsActivity());
+                    }
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 8) {
                     LaunchActivity.this.presentFragment(new SettingsActivity());
@@ -952,6 +960,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             long dialogId = (intent == null || intent.getExtras() == null) ? 0 : intent.getExtras().getLong("dialogId", 0);
             boolean showDialogsList = false;
             boolean showPlayer = false;
+            boolean showLocations = false;
             this.photoPathsArray = null;
             this.videoPath = null;
             this.sendingText = null;
@@ -1438,6 +1447,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     }
                 } else if (intent.getAction().equals("com.tmessages.openplayer")) {
                     showPlayer = true;
+                } else if (intent.getAction().equals("org.tmessages.openlocations")) {
+                    showLocations = true;
                 }
             }
             if (push_user_id.intValue() != 0) {
@@ -1482,30 +1493,27 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 pushOpened = false;
                 isNew = false;
             } else if (showPlayer) {
-                BaseFragment fragment;
-                if (AndroidUtilities.isTablet()) {
-                    for (a = 0; a < this.layersActionBarLayout.fragmentsStack.size(); a++) {
-                        fragment = (BaseFragment) this.layersActionBarLayout.fragmentsStack.get(a);
-                        if (fragment instanceof AudioPlayerActivity) {
-                            this.layersActionBarLayout.removeFragmentFromStack(fragment);
-                            break;
-                        }
-                    }
-                    this.actionBarLayout.showLastFragment();
-                    this.rightActionBarLayout.showLastFragment();
-                    this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
-                } else {
-                    for (a = 0; a < this.actionBarLayout.fragmentsStack.size(); a++) {
-                        fragment = (BaseFragment) this.actionBarLayout.fragmentsStack.get(a);
-                        if (fragment instanceof AudioPlayerActivity) {
-                            this.actionBarLayout.removeFragmentFromStack(fragment);
-                            break;
-                        }
-                    }
-                    this.drawerLayoutContainer.setAllowOpenDrawer(true, false);
+                if (!this.actionBarLayout.fragmentsStack.isEmpty()) {
+                    ((BaseFragment) this.actionBarLayout.fragmentsStack.get(0)).showDialog(new AudioPlayerAlert(this));
                 }
-                this.actionBarLayout.presentFragment(new AudioPlayerActivity(), false, true, true);
-                pushOpened = true;
+                pushOpened = false;
+            } else if (showLocations) {
+                if (!this.actionBarLayout.fragmentsStack.isEmpty()) {
+                    ((BaseFragment) this.actionBarLayout.fragmentsStack.get(0)).showDialog(new SharingLocationsAlert(this, new SharingLocationsAlertDelegate() {
+                        public void didSelectLocation(SharingLocationInfo info) {
+                            LocationActivity locationActivity = new LocationActivity(2);
+                            locationActivity.setMessageObject(info.messageObject);
+                            final long dialog_id = info.messageObject.getDialogId();
+                            locationActivity.setDelegate(new LocationActivityDelegate() {
+                                public void didSelectLocation(MessageMedia location, int live) {
+                                    SendMessagesHelper.getInstance().sendMessage(location, dialog_id, null, null, null);
+                                }
+                            });
+                            LaunchActivity.this.presentFragment(locationActivity);
+                        }
+                    }));
+                }
+                pushOpened = false;
             } else if (this.videoPath != null || this.photoPathsArray != null || this.sendingText != null || this.documentsPathsArray != null || this.contactsToSend != null || this.documentsUrisArray != null) {
                 if (!AndroidUtilities.isTablet()) {
                     NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
@@ -1819,19 +1827,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                     } else if (((invite.chat != null || (invite.channel && !invite.megagroup)) && (invite.chat == null || (ChatObject.isChannel(invite.chat) && !invite.chat.megagroup))) || LaunchActivity.mainFragmentsStack.isEmpty()) {
                                         builder = new Builder(LaunchActivity.this);
                                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                        String str;
-                                        Object[] objArr;
-                                        if ((invite.megagroup || !invite.channel) && (!ChatObject.isChannel(invite.chat) || invite.chat.megagroup)) {
-                                            str = "JoinToGroup";
-                                            objArr = new Object[1];
-                                            objArr[0] = invite.chat != null ? invite.chat.title : invite.title;
-                                            builder.setMessage(LocaleController.formatString(str, R.string.JoinToGroup, objArr));
-                                        } else {
-                                            str = "ChannelJoinTo";
-                                            objArr = new Object[1];
-                                            objArr[0] = invite.chat != null ? invite.chat.title : invite.title;
-                                            builder.setMessage(LocaleController.formatString(str, R.string.ChannelJoinTo, objArr));
-                                        }
+                                        String str = "ChannelJoinTo";
+                                        Object[] objArr = new Object[1];
+                                        objArr[0] = invite.chat != null ? invite.chat.title : invite.title;
+                                        builder.setMessage(LocaleController.formatString(str, R.string.ChannelJoinTo, objArr));
                                         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 LaunchActivity.this.runLinkRequest(str2, str, str3, str4, str5, str6, z, num2, str7, strArr, 1);
@@ -2034,7 +2033,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             }
             actionBarLayout.presentFragment(chatActivity, z, z2, true);
             if (this.videoPath != null) {
-                chatActivity.openVideoEditor(this.videoPath);
+                chatActivity.openVideoEditor(this.videoPath, this.sendingText);
+                this.sendingText = null;
             }
             if (this.photoPathsArray != null) {
                 ArrayList<String> captions = null;
@@ -2403,9 +2403,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             builder.setNegativeButton(LocaleController.getString("ShareYouLocationUnableManually", R.string.ShareYouLocationUnableManually), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (!LaunchActivity.mainFragmentsStack.isEmpty() && AndroidUtilities.isGoogleMapsInstalled((BaseFragment) LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1))) {
-                        LocationActivity fragment = new LocationActivity();
+                        LocationActivity fragment = new LocationActivity(0);
                         fragment.setDelegate(new LocationActivityDelegate() {
-                            public void didSelectLocation(MessageMedia location) {
+                            public void didSelectLocation(MessageMedia location, int live) {
                                 for (Entry<String, MessageObject> entry : waitingForLocation.entrySet()) {
                                     MessageObject messageObject = (MessageObject) entry.getValue();
                                     SendMessagesHelper.getInstance().sendMessage(location, messageObject.getDialogId(), messageObject, null, null);
@@ -2470,7 +2470,14 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     ContactsController.getInstance().syncPhoneBookByAlert(contactHashMap, first, schedule, true);
                 }
             });
-            fragment.showDialog(builder.create());
+            builder.setOnBackButtonListener(new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    ContactsController.getInstance().syncPhoneBookByAlert(contactHashMap, first, schedule, true);
+                }
+            });
+            AlertDialog dialog = builder.create();
+            fragment.showDialog(dialog);
+            dialog.setCanceledOnTouchOutside(false);
         }
     }
 
@@ -2630,6 +2637,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                         }
                     }
                     if (infos[0] != null && infos[1] != null && infos[0] != infos[1]) {
+                        FileLog.d("show lang alert for " + infos[0].getKey() + " and " + infos[1].getKey());
                         this.systemLocaleStrings = null;
                         this.englishLocaleStrings = null;
                         this.loadingLocaleDialog = true;
@@ -2685,8 +2693,11 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                 });
                             }
                         }, 8);
+                        return;
                     }
+                    return;
                 }
+                FileLog.d("alert already showed for " + showedLang);
             }
         } catch (Throwable e) {
             FileLog.e(e);

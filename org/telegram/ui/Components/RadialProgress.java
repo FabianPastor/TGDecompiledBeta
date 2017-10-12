@@ -52,6 +52,10 @@ public class RadialProgress {
         this.progressRect.set((float) left, (float) top, (float) right, (float) bottom);
     }
 
+    public RectF getProgressRect() {
+        return this.progressRect;
+    }
+
     public void setAlphaForPrevious(boolean value) {
         this.alphaForPrevious = value;
     }

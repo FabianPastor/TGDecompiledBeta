@@ -6472,7 +6472,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                                     TrackHeaderBox headerBox = trackBox.getTrackHeaderBox();
                                     if (headerBox.getWidth() == 0.0d || headerBox.getHeight() == 0.0d) {
                                         PhotoViewer.this.audioFramesSize = PhotoViewer.this.audioFramesSize + sampleSizes;
-                                    } else {
+                                    } else if (trackHeaderBox == null || trackHeaderBox.getWidth() < headerBox.getWidth() || trackHeaderBox.getHeight() < headerBox.getHeight()) {
                                         trackHeaderBox = headerBox;
                                         PhotoViewer.this.originalBitrate = PhotoViewer.this.bitrate = (int) ((trackBitrate / 100000) * 100000);
                                         if (PhotoViewer.this.bitrate > 900000) {

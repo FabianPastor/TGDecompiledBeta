@@ -27,6 +27,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.SendMessagesHelper.LocationProvider;
 import org.telegram.messenger.SendMessagesHelper.LocationProvider.LocationProviderDelegate;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.query.SearchQuery;
@@ -86,6 +87,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private ChatFull info;
     private boolean inlineMediaEnabled = true;
     private boolean isDarkTheme;
+    private boolean isSearchingMentions;
     private Location lastKnownLocation;
     private int lastPosition;
     private String lastText;
@@ -438,6 +440,10 @@ public class MentionsAdapter extends SelectionAdapter {
                 this.locationProvider.start();
             }
         }
+    }
+
+    public void setSearchingMentions(boolean value) {
+        this.isSearchingMentions = value;
     }
 
     public String getBotCaption() {
@@ -795,9 +801,10 @@ public class MentionsAdapter extends SelectionAdapter {
                                                     TL_channels_channelParticipants res = response;
                                                     MessagesController.getInstance().putUsers(res.users, false);
                                                     if (!res.participants.isEmpty()) {
+                                                        int currentUserId = UserConfig.getClientUserId();
                                                         for (int a = 0; a < res.participants.size(); a++) {
                                                             ChannelParticipant participant = (ChannelParticipant) res.participants.get(a);
-                                                            if (!MentionsAdapter.this.searchResultUsernamesMap.containsKey(Integer.valueOf(participant.user_id))) {
+                                                            if (!MentionsAdapter.this.searchResultUsernamesMap.containsKey(Integer.valueOf(participant.user_id)) && (MentionsAdapter.this.isSearchingMentions || participant.user_id != currentUserId)) {
                                                                 User user = MessagesController.getInstance().getUser(Integer.valueOf(participant.user_id));
                                                                 if (user != null) {
                                                                     MentionsAdapter.this.searchResultUsernames.add(user);

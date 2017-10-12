@@ -113,6 +113,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                     VoIPBaseService.this.proximityWakelock.release();
                 }
                 VoIPBaseService.this.isProximityNear = false;
+                VoIPBaseService.this.updateOutputGainControlState();
             } else if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction())) {
                 VoIPBaseService.this.updateNetworkType();
             } else if ("android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED".equals(intent.getAction())) {
@@ -450,6 +451,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         am.setMode(3);
         am.setSpeakerphoneOn(false);
         am.requestAudioFocus(this, 0, 1);
+        updateOutputGainControlState();
         SensorManager sm = (SensorManager) getSystemService("sensor");
         Sensor proximity = sm.getDefaultSensor(8);
         if (proximity != null) {
@@ -690,5 +692,12 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 FileLog.e("Error starting permission activity", x2);
             }
         }
+    }
+
+    public void updateOutputGainControlState() {
+        AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+        VoIPController voIPController = this.controller;
+        boolean z = (!hasEarpiece() || am.isSpeakerphoneOn() || am.isBluetoothScoOn() || this.isHeadsetPlugged) ? false : true;
+        voIPController.setAudioOutputGainControlEnabled(z);
     }
 }

@@ -52,6 +52,7 @@ public class BottomSheet extends Dialog {
     private AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
     private boolean allowCustomAnimation = true;
     private boolean allowDrawContent = true;
+    private boolean allowNestedScroll = true;
     private boolean applyBottomPadding = true;
     private boolean applyTopPadding = true;
     protected ColorDrawable backDrawable = new ColorDrawable(-16777216);
@@ -248,26 +249,26 @@ public class BottomSheet extends Dialog {
         }
 
         public boolean onStartNestedScroll(View child, View target, int nestedScrollAxes) {
-            return (BottomSheet.this.dismissed || nestedScrollAxes != 2 || BottomSheet.this.canDismissWithSwipe()) ? false : true;
+            return !BottomSheet.this.dismissed && BottomSheet.this.allowNestedScroll && nestedScrollAxes == 2 && !BottomSheet.this.canDismissWithSwipe();
         }
 
         public void onNestedScrollAccepted(View child, View target, int nestedScrollAxes) {
             this.nestedScrollingParentHelper.onNestedScrollAccepted(child, target, nestedScrollAxes);
-            if (!BottomSheet.this.dismissed) {
+            if (!BottomSheet.this.dismissed && BottomSheet.this.allowNestedScroll) {
                 cancelCurrentAnimation();
             }
         }
 
         public void onStopNestedScroll(View target) {
             this.nestedScrollingParentHelper.onStopNestedScroll(target);
-            if (!BottomSheet.this.dismissed) {
+            if (!BottomSheet.this.dismissed && BottomSheet.this.allowNestedScroll) {
                 float currentTranslation = BottomSheet.this.containerView.getTranslationY();
                 checkDismiss(0.0f, 0.0f);
             }
         }
 
         public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
-            if (!BottomSheet.this.dismissed) {
+            if (!BottomSheet.this.dismissed && BottomSheet.this.allowNestedScroll) {
                 cancelCurrentAnimation();
                 if (dyUnconsumed != 0) {
                     float currentTranslation = BottomSheet.this.containerView.getTranslationY() - ((float) dyUnconsumed);
@@ -280,7 +281,7 @@ public class BottomSheet extends Dialog {
         }
 
         public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
-            if (!BottomSheet.this.dismissed) {
+            if (!BottomSheet.this.dismissed && BottomSheet.this.allowNestedScroll) {
                 cancelCurrentAnimation();
                 float currentTranslation = BottomSheet.this.containerView.getTranslationY();
                 if (currentTranslation > 0.0f && dy > 0) {
@@ -542,6 +543,13 @@ public class BottomSheet extends Dialog {
 
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
+    }
+
+    public void setAllowNestedScroll(boolean value) {
+        this.allowNestedScroll = value;
+        if (!this.allowNestedScroll) {
+            this.containerView.setTranslationY(0.0f);
+        }
     }
 
     public BottomSheet(Context context, boolean needFocus) {

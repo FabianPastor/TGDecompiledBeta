@@ -3692,11 +3692,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     private void setStickersExpanded(boolean expanded, boolean animated) {
+        if (this.emojiView == null) {
+            return;
+        }
         if (!expanded || this.emojiView.areThereAnyStickers()) {
             this.stickersExpanded = expanded;
             final int origHeight = AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y ? this.keyboardHeightLand : this.keyboardHeight;
             if (this.stickersExpansionAnim != null) {
                 this.stickersExpansionAnim.cancel();
+                this.stickersExpansionAnim = null;
             }
             AnimatorSet anims;
             Animator[] animatorArr;

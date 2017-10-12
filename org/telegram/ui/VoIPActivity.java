@@ -297,6 +297,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                                             break;
                                     }
                                     VoIPActivity.this.onAudioSettingsChanged();
+                                    VoIPService.getSharedInstance().updateOutputGainControlState();
                                 }
                             }
                         }).show();
@@ -312,6 +313,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                     } else {
                         am.setBluetoothScoOn(checked);
                     }
+                    svc.updateOutputGainControlState();
                 }
             }
         });
@@ -1069,6 +1071,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
             public void run() {
                 boolean wasFirstStateChange = VoIPActivity.this.firstStateChange;
                 if (VoIPActivity.this.firstStateChange) {
+                    VoIPActivity.this.spkToggle.setChecked(((AudioManager) VoIPActivity.this.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).isSpeakerphoneOn());
                     if (VoIPActivity.this.isIncomingWaiting = state == 15) {
                         VoIPActivity.this.swipeViewsWrap.setVisibility(0);
                         VoIPActivity.this.endBtn.setVisibility(8);

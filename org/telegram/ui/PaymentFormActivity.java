@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -48,6 +49,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.BooleanResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -99,6 +101,7 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -107,7 +110,10 @@ import org.telegram.tgnet.TLRPC.TL_account_getPassword;
 import org.telegram.tgnet.TLRPC.TL_account_getTmpPassword;
 import org.telegram.tgnet.TLRPC.TL_account_noPassword;
 import org.telegram.tgnet.TLRPC.TL_account_password;
+import org.telegram.tgnet.TLRPC.TL_account_passwordInputSettings;
 import org.telegram.tgnet.TLRPC.TL_account_tmpPassword;
+import org.telegram.tgnet.TLRPC.TL_account_updatePasswordSettings;
+import org.telegram.tgnet.TLRPC.TL_boolTrue;
 import org.telegram.tgnet.TLRPC.TL_dataJSON;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputPaymentCredentials;
@@ -127,6 +133,7 @@ import org.telegram.tgnet.TLRPC.TL_payments_validatedRequestedInfo;
 import org.telegram.tgnet.TLRPC.TL_postAddress;
 import org.telegram.tgnet.TLRPC.TL_shippingOption;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.TLRPC.account_Password;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -153,6 +160,7 @@ import org.telegram.ui.CountrySelectActivity.CountrySelectActivityDelegate;
 public class PaymentFormActivity extends BaseFragment implements NotificationCenterDelegate {
     private static final int FIELDS_COUNT_ADDRESS = 10;
     private static final int FIELDS_COUNT_CARD = 6;
+    private static final int FIELDS_COUNT_PASSWORD = 3;
     private static final int FIELDS_COUNT_SAVEDCARD = 2;
     private static final int FIELD_CARD = 0;
     private static final int FIELD_CARDNAME = 2;
@@ -162,11 +170,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private static final int FIELD_COUNTRY = 4;
     private static final int FIELD_CVV = 3;
     private static final int FIELD_EMAIL = 7;
+    private static final int FIELD_ENTERPASSWORD = 0;
+    private static final int FIELD_ENTERPASSWORDEMAIL = 2;
     private static final int FIELD_EXPIRE_DATE = 1;
     private static final int FIELD_NAME = 6;
     private static final int FIELD_PHONE = 9;
     private static final int FIELD_PHONECODE = 8;
     private static final int FIELD_POSTCODE = 5;
+    private static final int FIELD_REENTERPASSWORD = 1;
     private static final int FIELD_SAVEDCARD = 0;
     private static final int FIELD_SAVEDPASSWORD = 1;
     private static final int FIELD_STATE = 3;
@@ -193,6 +204,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private String countryName;
     private String currentBotName;
     private String currentItemName;
+    private account_Password currentPassword;
     private int currentStep;
     private PaymentFormActivityDelegate delegate;
     private TextDetailSettingsCell[] detailSettingsCell;
@@ -208,10 +220,12 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private EditTextBoldCursor[] inputFields;
     private boolean isWebView;
     private LinearLayout linearLayout2;
+    private boolean loadingPasswordInfo;
     private MessageObject messageObject;
     private boolean need_card_country;
     private boolean need_card_name;
     private boolean need_card_postcode;
+    private PaymentFormActivity passwordFragment;
     private boolean passwordOk;
     private TextView payTextView;
     private TL_payments_paymentForm paymentForm;
@@ -228,10 +242,12 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private ShadowSectionCell[] sectionCell;
     private TextSettingsCell settingsCell1;
     private TL_shippingOption shippingOption;
+    private Runnable shortPollRunnable;
     private String stripeApiKey;
     private TextView textView;
     private String totalPriceDecimal;
     private TL_payments_validateRequestedInfo validateRequest;
+    private boolean waitingForEmail;
     private WebView webView;
     private boolean webviewLoading;
 
@@ -266,7 +282,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     private interface PaymentFormActivityDelegate {
-        void didSelectNewCard(String str, String str2, boolean z, TL_inputPaymentCredentialsAndroidPay tL_inputPaymentCredentialsAndroidPay);
+        void currentPasswordUpdated(account_Password org_telegram_tgnet_TLRPC_account_Password);
+
+        boolean didSelectNewCard(String str, String str2, boolean z, TL_inputPaymentCredentialsAndroidPay tL_inputPaymentCredentialsAndroidPay);
+
+        void onFragmentDestroyed();
     }
 
     private class TelegramWebviewProxy {
@@ -301,7 +321,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         this.headerCell = new HeaderCell[3];
         this.dividers = new ArrayList();
         this.sectionCell = new ShadowSectionCell[3];
-        this.bottomCell = new TextInfoPrivacyCell[2];
+        this.bottomCell = new TextInfoPrivacyCell[3];
         this.detailSettingsCell = new TextDetailSettingsCell[7];
         this.currentStep = 5;
         this.paymentForm = new TL_payments_paymentForm();
@@ -334,7 +354,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         this.headerCell = new HeaderCell[3];
         this.dividers = new ArrayList();
         this.sectionCell = new ShadowSectionCell[3];
-        this.bottomCell = new TextInfoPrivacyCell[2];
+        this.bottomCell = new TextInfoPrivacyCell[3];
         this.detailSettingsCell = new TextDetailSettingsCell[7];
         if (form.invoice.shipping_address_requested || form.invoice.email_requested || form.invoice.name_requested || form.invoice.phone_requested) {
             step = 0;
@@ -362,9 +382,21 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         this.headerCell = new HeaderCell[3];
         this.dividers = new ArrayList();
         this.sectionCell = new ShadowSectionCell[3];
-        this.bottomCell = new TextInfoPrivacyCell[2];
+        this.bottomCell = new TextInfoPrivacyCell[3];
         this.detailSettingsCell = new TextDetailSettingsCell[7];
         init(form, message, step, validatedRequestedInfo, shipping, tokenJson, card, request, saveCard, androidPay);
+    }
+
+    private void setCurrentPassword(account_Password password) {
+        if (!(password instanceof TL_account_password)) {
+            this.currentPassword = password;
+            if (this.currentPassword != null) {
+                this.waitingForEmail = this.currentPassword.email_unconfirmed_pattern.length() > 0;
+            }
+            updatePasswordFields();
+        } else if (getParentActivity() != null) {
+            goToNextStep();
+        }
     }
 
     private void setDelegate(PaymentFormActivityDelegate paymentFormActivityDelegate) {
@@ -411,7 +443,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
         if (VERSION.SDK_INT >= 23) {
             try {
-                if (this.currentStep == 2 && !this.paymentForm.invoice.test) {
+                if ((this.currentStep == 2 || this.currentStep == 6) && !this.paymentForm.invoice.test) {
                     getParentActivity().getWindow().setFlags(8192, 8192);
                 } else if (UserConfig.passcodeHash.length() == 0 || UserConfig.allowScreenCapture) {
                     getParentActivity().getWindow().clearFlags(8192);
@@ -455,6 +487,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             } else {
                 this.actionBar.setTitle(LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt));
             }
+        } else if (this.currentStep == 6) {
+            this.actionBar.setTitle(LocaleController.getString("PaymentPassword", R.string.PaymentPassword));
         }
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
@@ -483,12 +517,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         PaymentFormActivity.this.sendCardData();
                     } else if (PaymentFormActivity.this.currentStep == 3) {
                         PaymentFormActivity.this.checkPassword();
+                    } else if (PaymentFormActivity.this.currentStep == 6) {
+                        PaymentFormActivity.this.sendSavePassword(false);
                     }
                 }
             }
         });
         ActionBarMenu menu = this.actionBar.createMenu();
-        if (this.currentStep == 0 || this.currentStep == 1 || this.currentStep == 2 || this.currentStep == 3 || this.currentStep == 4) {
+        if (this.currentStep == 0 || this.currentStep == 1 || this.currentStep == 2 || this.currentStep == 3 || this.currentStep == 4 || this.currentStep == 6) {
             this.doneItem = menu.addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
             this.progressView = new ContextProgressView(context, 1);
             this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
@@ -1615,13 +1651,20 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     public void onClick(View v) {
                         PaymentFormActivity activity = new PaymentFormActivity(PaymentFormActivity.this.paymentForm, PaymentFormActivity.this.messageObject, 2, PaymentFormActivity.this.requestedInfo, PaymentFormActivity.this.shippingOption, null, PaymentFormActivity.this.cardName, PaymentFormActivity.this.validateRequest, PaymentFormActivity.this.saveCardInfo, null);
                         activity.setDelegate(new PaymentFormActivityDelegate() {
-                            public void didSelectNewCard(String tokenJson, String card, boolean saveCard, TL_inputPaymentCredentialsAndroidPay androidPay) {
+                            public boolean didSelectNewCard(String tokenJson, String card, boolean saveCard, TL_inputPaymentCredentialsAndroidPay androidPay) {
                                 PaymentFormActivity.this.paymentForm.saved_credentials = null;
                                 PaymentFormActivity.this.paymentJson = tokenJson;
                                 PaymentFormActivity.this.saveCardInfo = saveCard;
                                 PaymentFormActivity.this.cardName = card;
                                 PaymentFormActivity.this.androidPayCredentials = androidPay;
                                 PaymentFormActivity.this.detailSettingsCell[0].setTextAndValue(PaymentFormActivity.this.cardName, LocaleController.getString("PaymentCheckoutMethod", R.string.PaymentCheckoutMethod), true);
+                                return false;
+                            }
+
+                            public void onFragmentDestroyed() {
+                            }
+
+                            public void currentPasswordUpdated(account_Password password) {
                             }
                         });
                         PaymentFormActivity.this.presentFragment(activity);
@@ -1772,8 +1815,222 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             this.sectionCell[1] = new ShadowSectionCell(context);
             this.sectionCell[1].setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             this.linearLayout2.addView(this.sectionCell[1], LayoutHelper.createLinear(-1, -2));
+        } else if (this.currentStep == 6) {
+            this.bottomCell[2] = new TextInfoPrivacyCell(context);
+            this.bottomCell[2].setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+            this.linearLayout2.addView(this.bottomCell[2], LayoutHelper.createLinear(-1, -2));
+            this.settingsCell1 = new TextSettingsCell(context);
+            this.settingsCell1.setBackgroundDrawable(Theme.getSelectorDrawable(true));
+            this.settingsCell1.setTag(Theme.key_windowBackgroundWhiteRedText3);
+            this.settingsCell1.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText3));
+            this.settingsCell1.setText(LocaleController.getString("AbortPassword", R.string.AbortPassword), false);
+            this.linearLayout2.addView(this.settingsCell1, LayoutHelper.createLinear(-1, -2));
+            this.settingsCell1.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
+                    Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
+                    builder.setMessage(LocaleController.getString("TurnPasswordOffQuestion", R.string.TurnPasswordOffQuestion));
+                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            PaymentFormActivity.this.sendSavePassword(true);
+                        }
+                    });
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    PaymentFormActivity.this.showDialog(builder.create());
+                }
+            });
+            this.inputFields = new EditTextBoldCursor[3];
+            a = 0;
+            while (a < 3) {
+                if (a == 0) {
+                    this.headerCell[0] = new HeaderCell(context);
+                    this.headerCell[0].setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    this.headerCell[0].setText(LocaleController.getString("PaymentPasswordTitle", R.string.PaymentPasswordTitle));
+                    this.linearLayout2.addView(this.headerCell[0], LayoutHelper.createLinear(-1, -2));
+                } else if (a == 2) {
+                    this.headerCell[1] = new HeaderCell(context);
+                    this.headerCell[1].setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    this.headerCell[1].setText(LocaleController.getString("PaymentPasswordEmailTitle", R.string.PaymentPasswordEmailTitle));
+                    this.linearLayout2.addView(this.headerCell[1], LayoutHelper.createLinear(-1, -2));
+                }
+                view = new FrameLayout(context);
+                this.linearLayout2.addView(view, LayoutHelper.createLinear(-1, 48));
+                view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                if (a == 0) {
+                    view = new View(context);
+                    this.dividers.add(view);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_divider));
+                    view.addView(view, new LayoutParams(-1, 1, 83));
+                }
+                this.inputFields[a] = new EditTextBoldCursor(context);
+                this.inputFields[a].setTag(Integer.valueOf(a));
+                this.inputFields[a].setTextSize(1, 16.0f);
+                this.inputFields[a].setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+                this.inputFields[a].setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                this.inputFields[a].setBackgroundDrawable(null);
+                this.inputFields[a].setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                this.inputFields[a].setCursorSize(AndroidUtilities.dp(20.0f));
+                this.inputFields[a].setCursorWidth(1.5f);
+                if (a == 0 || a == 1) {
+                    this.inputFields[a].setInputType(TsExtractor.TS_STREAM_TYPE_AC3);
+                    this.inputFields[a].setTypeface(Typeface.DEFAULT);
+                    this.inputFields[a].setImeOptions(268435461);
+                } else {
+                    this.inputFields[a].setImeOptions(268435462);
+                }
+                switch (a) {
+                    case 0:
+                        this.inputFields[a].setHint(LocaleController.getString("PaymentPasswordEnter", R.string.PaymentPasswordEnter));
+                        this.inputFields[a].requestFocus();
+                        break;
+                    case 1:
+                        this.inputFields[a].setHint(LocaleController.getString("PaymentPasswordReEnter", R.string.PaymentPasswordReEnter));
+                        break;
+                    case 2:
+                        this.inputFields[a].setHint(LocaleController.getString("PaymentPasswordEmail", R.string.PaymentPasswordEmail));
+                        break;
+                }
+                this.inputFields[a].setPadding(0, 0, 0, AndroidUtilities.dp(6.0f));
+                this.inputFields[a].setGravity(LocaleController.isRTL ? 5 : 3);
+                view.addView(this.inputFields[a], LayoutHelper.createFrame(-1, -2.0f, 51, 17.0f, 12.0f, 17.0f, 6.0f));
+                this.inputFields[a].setOnEditorActionListener(new OnEditorActionListener() {
+                    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                        if (i == 6) {
+                            PaymentFormActivity.this.doneItem.performClick();
+                            return true;
+                        }
+                        if (i == 5) {
+                            int num = ((Integer) textView.getTag()).intValue();
+                            if (num == 0) {
+                                PaymentFormActivity.this.inputFields[1].requestFocus();
+                            } else if (num == 1) {
+                                PaymentFormActivity.this.inputFields[2].requestFocus();
+                            }
+                        }
+                        return false;
+                    }
+                });
+                if (a == 1) {
+                    this.bottomCell[0] = new TextInfoPrivacyCell(context);
+                    this.bottomCell[0].setText(LocaleController.getString("PaymentPasswordInfo", R.string.PaymentPasswordInfo));
+                    this.bottomCell[0].setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    this.linearLayout2.addView(this.bottomCell[0], LayoutHelper.createLinear(-1, -2));
+                } else if (a == 2) {
+                    this.bottomCell[1] = new TextInfoPrivacyCell(context);
+                    this.bottomCell[1].setText(LocaleController.getString("PaymentPasswordEmailInfo", R.string.PaymentPasswordEmailInfo));
+                    this.bottomCell[1].setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    this.linearLayout2.addView(this.bottomCell[1], LayoutHelper.createLinear(-1, -2));
+                }
+                a++;
+            }
+            updatePasswordFields();
         }
         return this.fragmentView;
+    }
+
+    private void updatePasswordFields() {
+        if (this.currentStep == 6 && this.bottomCell[2] != null) {
+            int a;
+            if (this.currentPassword == null) {
+                this.doneItem.setVisibility(0);
+                showEditDoneProgress(true, true);
+                this.bottomCell[2].setVisibility(8);
+                this.settingsCell1.setVisibility(8);
+                this.headerCell[0].setVisibility(8);
+                this.headerCell[1].setVisibility(8);
+                this.bottomCell[0].setVisibility(8);
+                for (a = 0; a < 3; a++) {
+                    ((View) this.inputFields[a].getParent()).setVisibility(8);
+                }
+                for (a = 0; a < this.dividers.size(); a++) {
+                    ((View) this.dividers.get(a)).setVisibility(8);
+                }
+                return;
+            }
+            showEditDoneProgress(true, false);
+            if (this.waitingForEmail) {
+                if (getParentActivity() != null) {
+                    AndroidUtilities.hideKeyboard(getParentActivity().getCurrentFocus());
+                }
+                this.doneItem.setVisibility(8);
+                this.bottomCell[2].setText(LocaleController.formatString("EmailPasswordConfirmText", R.string.EmailPasswordConfirmText, this.currentPassword.email_unconfirmed_pattern));
+                this.bottomCell[2].setVisibility(0);
+                this.settingsCell1.setVisibility(0);
+                this.bottomCell[1].setText("");
+                this.headerCell[0].setVisibility(8);
+                this.headerCell[1].setVisibility(8);
+                this.bottomCell[0].setVisibility(8);
+                for (a = 0; a < 3; a++) {
+                    ((View) this.inputFields[a].getParent()).setVisibility(8);
+                }
+                for (a = 0; a < this.dividers.size(); a++) {
+                    ((View) this.dividers.get(a)).setVisibility(8);
+                }
+                return;
+            }
+            this.doneItem.setVisibility(0);
+            this.bottomCell[2].setVisibility(8);
+            this.settingsCell1.setVisibility(8);
+            this.bottomCell[1].setText(LocaleController.getString("PaymentPasswordEmailInfo", R.string.PaymentPasswordEmailInfo));
+            this.headerCell[0].setVisibility(0);
+            this.headerCell[1].setVisibility(0);
+            this.bottomCell[0].setVisibility(0);
+            for (a = 0; a < 3; a++) {
+                ((View) this.inputFields[a].getParent()).setVisibility(0);
+            }
+            for (a = 0; a < this.dividers.size(); a++) {
+                ((View) this.dividers.get(a)).setVisibility(0);
+            }
+        }
+    }
+
+    private void loadPasswordInfo() {
+        if (!this.loadingPasswordInfo) {
+            this.loadingPasswordInfo = true;
+            ConnectionsManager.getInstance().sendRequest(new TL_account_getPassword(), new RequestDelegate() {
+                public void run(final TLObject response, final TL_error error) {
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            PaymentFormActivity.this.loadingPasswordInfo = false;
+                            if (error == null) {
+                                PaymentFormActivity.this.currentPassword = (account_Password) response;
+                                if (PaymentFormActivity.this.paymentForm != null && (PaymentFormActivity.this.currentPassword instanceof TL_account_password)) {
+                                    PaymentFormActivity.this.paymentForm.password_missing = false;
+                                    PaymentFormActivity.this.paymentForm.can_save_credentials = true;
+                                    PaymentFormActivity.this.updateSavePaymentField();
+                                }
+                                byte[] salt = new byte[(PaymentFormActivity.this.currentPassword.new_salt.length + 8)];
+                                Utilities.random.nextBytes(salt);
+                                System.arraycopy(PaymentFormActivity.this.currentPassword.new_salt, 0, salt, 0, PaymentFormActivity.this.currentPassword.new_salt.length);
+                                PaymentFormActivity.this.currentPassword.new_salt = salt;
+                                if (PaymentFormActivity.this.passwordFragment != null) {
+                                    PaymentFormActivity.this.passwordFragment.setCurrentPassword(PaymentFormActivity.this.currentPassword);
+                                }
+                            }
+                            if ((response instanceof TL_account_noPassword) && PaymentFormActivity.this.shortPollRunnable == null) {
+                                PaymentFormActivity.this.shortPollRunnable = new Runnable() {
+                                    public void run() {
+                                        if (PaymentFormActivity.this.shortPollRunnable != null) {
+                                            PaymentFormActivity.this.loadPasswordInfo();
+                                            PaymentFormActivity.this.shortPollRunnable = null;
+                                        }
+                                    }
+                                };
+                                AndroidUtilities.runOnUIThread(PaymentFormActivity.this.shortPollRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                            }
+                        }
+                    });
+                }
+            }, 10);
+        }
+    }
+
+    private void showAlertWithText(String title, String text) {
+        Builder builder = new Builder(getParentActivity());
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setTitle(title);
+        builder.setMessage(text);
+        showDialog(builder.create());
     }
 
     private void showPayAlert(String totalPrice) {
@@ -1814,19 +2071,19 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     private String getTotalPriceString(ArrayList<TL_labeledPrice> prices) {
-        int amount = 0;
+        long amount = 0;
         for (int a = 0; a < prices.size(); a++) {
-            amount = (int) (((TL_labeledPrice) prices.get(a)).amount + ((long) amount));
+            amount += ((TL_labeledPrice) prices.get(a)).amount;
         }
-        return LocaleController.getInstance().formatCurrencyString((long) amount, this.paymentForm.invoice.currency);
+        return LocaleController.getInstance().formatCurrencyString(amount, this.paymentForm.invoice.currency);
     }
 
     private String getTotalPriceDecimalString(ArrayList<TL_labeledPrice> prices) {
-        int amount = 0;
+        long amount = 0;
         for (int a = 0; a < prices.size(); a++) {
-            amount = (int) (((TL_labeledPrice) prices.get(a)).amount + ((long) amount));
+            amount += ((TL_labeledPrice) prices.get(a)).amount;
         }
-        return LocaleController.getInstance().formatCurrencyDecimalString((long) amount, this.paymentForm.invoice.currency, false);
+        return LocaleController.getInstance().formatCurrencyDecimalString(amount, this.paymentForm.invoice.currency, false);
     }
 
     public boolean onFragmentCreate() {
@@ -1839,6 +2096,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     public void onFragmentDestroy() {
+        if (this.delegate != null) {
+            this.delegate.onFragmentDestroyed();
+        }
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didSetTwoStepPassword);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didRemovedTwoStepPassword);
         if (this.currentStep != 4) {
@@ -1859,7 +2119,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
         }
         try {
-            if (this.currentStep == 2 && VERSION.SDK_INT >= 23 && (UserConfig.passcodeHash.length() == 0 || UserConfig.allowScreenCapture)) {
+            if ((this.currentStep == 2 || this.currentStep == 6) && VERSION.SDK_INT >= 23 && (UserConfig.passcodeHash.length() == 0 || UserConfig.allowScreenCapture)) {
                 getParentActivity().getWindow().clearFlags(8192);
             }
         } catch (Throwable e2) {
@@ -1881,6 +2141,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             } else if (this.currentStep == 3) {
                 this.inputFields[1].requestFocus();
                 AndroidUtilities.showKeyboard(this.inputFields[1]);
+            } else if (this.currentStep == 6 && !this.waitingForEmail) {
+                this.inputFields[0].requestFocus();
+                AndroidUtilities.showKeyboard(this.inputFields[0]);
             }
         }
     }
@@ -2031,12 +2294,35 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
             presentFragment(new PaymentFormActivity(this.paymentForm, this.messageObject, nextStep, this.requestedInfo, this.shippingOption, null, this.cardName, this.validateRequest, this.saveCardInfo, this.androidPayCredentials), this.isWebView);
         } else if (this.currentStep == 2) {
-            if (this.delegate != null) {
+            if (this.paymentForm.password_missing && this.saveCardInfo) {
+                this.passwordFragment = new PaymentFormActivity(this.paymentForm, this.messageObject, 6, this.requestedInfo, this.shippingOption, this.paymentJson, this.cardName, this.validateRequest, this.saveCardInfo, this.androidPayCredentials);
+                this.passwordFragment.setCurrentPassword(this.currentPassword);
+                this.passwordFragment.setDelegate(new PaymentFormActivityDelegate() {
+                    public boolean didSelectNewCard(String tokenJson, String card, boolean saveCard, TL_inputPaymentCredentialsAndroidPay androidPay) {
+                        if (PaymentFormActivity.this.delegate != null) {
+                            PaymentFormActivity.this.delegate.didSelectNewCard(tokenJson, card, saveCard, androidPay);
+                        }
+                        if (PaymentFormActivity.this.isWebView) {
+                            PaymentFormActivity.this.removeSelfFromStack();
+                        }
+                        return PaymentFormActivity.this.delegate != null;
+                    }
+
+                    public void onFragmentDestroyed() {
+                        PaymentFormActivity.this.passwordFragment = null;
+                    }
+
+                    public void currentPasswordUpdated(account_Password password) {
+                        PaymentFormActivity.this.currentPassword = password;
+                    }
+                });
+                presentFragment(this.passwordFragment, this.isWebView);
+            } else if (this.delegate != null) {
                 this.delegate.didSelectNewCard(this.paymentJson, this.cardName, this.saveCardInfo, this.androidPayCredentials);
                 finishFragment();
-                return;
+            } else {
+                presentFragment(new PaymentFormActivity(this.paymentForm, this.messageObject, 4, this.requestedInfo, this.shippingOption, this.paymentJson, this.cardName, this.validateRequest, this.saveCardInfo, this.androidPayCredentials), this.isWebView);
             }
-            presentFragment(new PaymentFormActivity(this.paymentForm, this.messageObject, 4, this.requestedInfo, this.shippingOption, this.paymentJson, this.cardName, this.validateRequest, this.saveCardInfo, this.androidPayCredentials), this.isWebView);
         } else if (this.currentStep == 3) {
             if (this.passwordOk) {
                 nextStep = 4;
@@ -2047,6 +2333,13 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         } else if (this.currentStep == 4) {
             NotificationCenter.getInstance().postNotificationName(NotificationCenter.paymentFinished, new Object[0]);
             finishFragment();
+        } else if (this.currentStep != 6) {
+        } else {
+            if (this.delegate.didSelectNewCard(this.paymentJson, this.cardName, this.saveCardInfo, this.androidPayCredentials)) {
+                finishFragment();
+            } else {
+                presentFragment(new PaymentFormActivity(this.paymentForm, this.messageObject, 4, this.requestedInfo, this.shippingOption, this.paymentJson, this.cardName, this.validateRequest, this.saveCardInfo, this.androidPayCredentials), true);
+            }
         }
     }
 
@@ -2055,6 +2348,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             if ((this.paymentForm.password_missing || this.paymentForm.can_save_credentials) && (this.webView == null || !(this.webView == null || this.webviewLoading))) {
                 SpannableStringBuilder text = new SpannableStringBuilder(LocaleController.getString("PaymentCardSavePaymentInformationInfoLine1", R.string.PaymentCardSavePaymentInformationInfoLine1));
                 if (this.paymentForm.password_missing) {
+                    loadPasswordInfo();
                     text.append("\n");
                     int len = text.length();
                     String str2 = LocaleController.getString("PaymentCardSavePaymentInformationInfoLine2", R.string.PaymentCardSavePaymentInformationInfoLine2);
@@ -2069,10 +2363,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         text.replace(index1, index1 + 1, "");
                         text.setSpan(new LinkSpan(), index1, index2 - 1, 33);
                     }
-                    this.checkCell1.setEnabled(false);
-                } else {
-                    this.checkCell1.setEnabled(true);
                 }
+                this.checkCell1.setEnabled(true);
                 this.bottomCell[0].setText(text);
                 this.checkCell1.setVisibility(0);
                 this.bottomCell[0].setVisibility(0);
@@ -2138,15 +2430,123 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    private void sendSavePassword(final boolean clear) {
+        String email;
+        TL_account_updatePasswordSettings req = new TL_account_updatePasswordSettings();
+        if (clear) {
+            this.doneItem.setVisibility(0);
+            email = null;
+            req.new_settings = new TL_account_passwordInputSettings();
+            req.new_settings.flags = 2;
+            req.new_settings.email = "";
+            req.current_password_hash = new byte[0];
+        } else {
+            String firstPassword = this.inputFields[0].getText().toString();
+            if (TextUtils.isEmpty(firstPassword)) {
+                shakeField(0);
+                return;
+            } else if (firstPassword.equals(this.inputFields[1].getText().toString())) {
+                email = this.inputFields[2].getText().toString();
+                if (email.length() < 3) {
+                    shakeField(2);
+                    return;
+                }
+                int dot = email.lastIndexOf(46);
+                int dog = email.lastIndexOf(64);
+                if (dot < 0 || dog < 0 || dot < dog) {
+                    shakeField(2);
+                    return;
+                }
+                req.current_password_hash = new byte[0];
+                req.new_settings = new TL_account_passwordInputSettings();
+                byte[] newPasswordBytes = null;
+                try {
+                    newPasswordBytes = firstPassword.getBytes("UTF-8");
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+                byte[] new_salt = this.currentPassword.new_salt;
+                byte[] hash = new byte[((new_salt.length * 2) + newPasswordBytes.length)];
+                System.arraycopy(new_salt, 0, hash, 0, new_salt.length);
+                System.arraycopy(newPasswordBytes, 0, hash, new_salt.length, newPasswordBytes.length);
+                System.arraycopy(new_salt, 0, hash, hash.length - new_salt.length, new_salt.length);
+                TL_account_passwordInputSettings tL_account_passwordInputSettings = req.new_settings;
+                tL_account_passwordInputSettings.flags |= 1;
+                req.new_settings.hint = "";
+                req.new_settings.new_password_hash = Utilities.computeSHA256(hash, 0, hash.length);
+                req.new_settings.new_salt = new_salt;
+                if (email.length() > 0) {
+                    tL_account_passwordInputSettings = req.new_settings;
+                    tL_account_passwordInputSettings.flags |= 2;
+                    req.new_settings.email = email.trim();
+                }
+            } else {
+                try {
+                    Toast.makeText(getParentActivity(), LocaleController.getString("PasswordDoNotMatch", R.string.PasswordDoNotMatch), 0).show();
+                } catch (Throwable e2) {
+                    FileLog.e(e2);
+                }
+                shakeField(1);
+                return;
+            }
+        }
+        showEditDoneProgress(true, true);
+        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            public void run(final TLObject response, final TL_error error) {
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public void run() {
+                        PaymentFormActivity.this.showEditDoneProgress(true, false);
+                        if (clear) {
+                            PaymentFormActivity.this.currentPassword = new TL_account_noPassword();
+                            PaymentFormActivity.this.delegate.currentPasswordUpdated(PaymentFormActivity.this.currentPassword);
+                            PaymentFormActivity.this.finishFragment();
+                        } else if (error == null && (response instanceof TL_boolTrue)) {
+                            if (PaymentFormActivity.this.getParentActivity() != null) {
+                                PaymentFormActivity.this.goToNextStep();
+                            }
+                        } else if (error == null) {
+                        } else {
+                            if (error.text.equals("EMAIL_UNCONFIRMED")) {
+                                Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
+                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        PaymentFormActivity.this.waitingForEmail = true;
+                                        PaymentFormActivity.this.currentPassword.email_unconfirmed_pattern = email;
+                                        PaymentFormActivity.this.updatePasswordFields();
+                                    }
+                                });
+                                builder.setMessage(LocaleController.getString("YourEmailAlmostThereText", R.string.YourEmailAlmostThereText));
+                                builder.setTitle(LocaleController.getString("YourEmailAlmostThere", R.string.YourEmailAlmostThere));
+                                Dialog dialog = PaymentFormActivity.this.showDialog(builder.create());
+                                if (dialog != null) {
+                                    dialog.setCanceledOnTouchOutside(false);
+                                    dialog.setCancelable(false);
+                                }
+                            } else if (error.text.equals("EMAIL_INVALID")) {
+                                PaymentFormActivity.this.showAlertWithText(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("PasswordEmailInvalid", R.string.PasswordEmailInvalid));
+                            } else if (error.text.startsWith("FLOOD_WAIT")) {
+                                String timeString;
+                                int time = Utilities.parseInt(error.text).intValue();
+                                if (time < 60) {
+                                    timeString = LocaleController.formatPluralString("Seconds", time);
+                                } else {
+                                    timeString = LocaleController.formatPluralString("Minutes", time / 60);
+                                }
+                                PaymentFormActivity.this.showAlertWithText(LocaleController.getString("AppName", R.string.AppName), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                            } else {
+                                PaymentFormActivity.this.showAlertWithText(LocaleController.getString("AppName", R.string.AppName), error.text);
+                            }
+                        }
+                    }
+                });
+            }
+        }, 10);
+    }
+
     private boolean sendCardData() {
-        String[] args;
         Integer month;
         Integer year;
-        if (this.paymentForm.saved_credentials == null || this.saveCardInfo || this.paymentForm.can_save_credentials) {
-            args = this.inputFields[1].getText().toString().split("/");
-        } else {
-            args = this.inputFields[1].getText().toString().split("/");
-        }
+        String[] args = this.inputFields[1].getText().toString().split("/");
         if (args.length == 2) {
             month = Utilities.parseInt(args[0]);
             year = Utilities.parseInt(args[1]);

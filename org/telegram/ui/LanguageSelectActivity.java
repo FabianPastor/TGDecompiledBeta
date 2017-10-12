@@ -16,6 +16,8 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocaleController.LocaleInfo;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
@@ -37,7 +39,7 @@ import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
-public class LanguageSelectActivity extends BaseFragment {
+public class LanguageSelectActivity extends BaseFragment implements NotificationCenterDelegate {
     private EmptyTextProgressView emptyView;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
@@ -116,7 +118,14 @@ public class LanguageSelectActivity extends BaseFragment {
 
     public boolean onFragmentCreate() {
         fillLanguages();
+        LocaleController.getInstance().loadRemoteLanguages();
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.suggestedLangpack);
         return super.onFragmentCreate();
+    }
+
+    public void onFragmentDestroy() {
+        super.onFragmentDestroy();
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.suggestedLangpack);
     }
 
     public View createView(Context context) {
@@ -236,6 +245,13 @@ public class LanguageSelectActivity extends BaseFragment {
             }
         });
         return this.fragmentView;
+    }
+
+    public void didReceivedNotification(int id, Object... args) {
+        if (id == NotificationCenter.suggestedLangpack && this.listAdapter != null) {
+            fillLanguages();
+            this.listAdapter.notifyDataSetChanged();
+        }
     }
 
     private void fillLanguages() {

@@ -296,6 +296,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                                         if (object.has("name")) {
                                             venue.title = object.getString("name");
                                         }
+                                        venue.venue_type = "";
                                         venue.venue_id = object.getString(TtmlNode.ATTR_ID);
                                         venue.provider = "foursquare";
                                         BaseLocationAdapter.this.places.add(venue);

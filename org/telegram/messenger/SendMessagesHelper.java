@@ -113,6 +113,7 @@ import org.telegram.tgnet.TLRPC.TL_inputMediaContact;
 import org.telegram.tgnet.TLRPC.TL_inputMediaDocument;
 import org.telegram.tgnet.TLRPC.TL_inputMediaEmpty;
 import org.telegram.tgnet.TLRPC.TL_inputMediaGame;
+import org.telegram.tgnet.TLRPC.TL_inputMediaGeoLive;
 import org.telegram.tgnet.TLRPC.TL_inputMediaGeoPoint;
 import org.telegram.tgnet.TLRPC.TL_inputMediaGifExternal;
 import org.telegram.tgnet.TLRPC.TL_inputMediaPhoto;
@@ -142,6 +143,7 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaDocument;
 import org.telegram.tgnet.TLRPC.TL_messageMediaEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGame;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGeo;
+import org.telegram.tgnet.TLRPC.TL_messageMediaGeoLive;
 import org.telegram.tgnet.TLRPC.TL_messageMediaInvoice;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
@@ -1419,8 +1421,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public void sendGame(InputPeer peer, TL_inputMediaGame game, long random_id, long taskId) {
         Throwable e;
-        long newTaskId;
         if (peer != null && game != null) {
+            long newTaskId;
             TL_messages_sendMedia request = new TL_messages_sendMedia();
             request.peer = peer;
             if (request.peer instanceof TL_inputPeerChannel) {
@@ -2172,6 +2174,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             inputMedia.title = location.title;
                             inputMedia.provider = location.provider;
                             inputMedia.venue_id = location.venue_id;
+                            inputMedia.venue_type = "";
+                        } else if (location instanceof TL_messageMediaGeoLive) {
+                            inputMedia = new TL_inputMediaGeoLive();
+                            inputMedia.period = location.period;
                         } else {
                             inputMedia = new TL_inputMediaGeoPoint();
                         }
@@ -2790,13 +2796,13 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         boolean isSentError = false;
                         if (error == null) {
                             int i;
-                            final int oldId = newMsgObj.id;
-                            final boolean isBroadcast = tLObject instanceof TL_messages_sendBroadcast;
-                            final ArrayList<Message> sentMessages = new ArrayList();
-                            final String attachPath = newMsgObj.attachPath;
+                            int oldId = newMsgObj.id;
+                            boolean isBroadcast = tLObject instanceof TL_messages_sendBroadcast;
+                            ArrayList<Message> sentMessages = new ArrayList();
+                            String attachPath = newMsgObj.attachPath;
                             Message message;
                             if (response instanceof TL_updateShortSentMessage) {
-                                final TL_updateShortSentMessage res = response;
+                                TL_updateShortSentMessage res = (TL_updateShortSentMessage) response;
                                 message = newMsgObj;
                                 Message message2 = newMsgObj;
                                 i = res.id;
@@ -2817,14 +2823,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     message = newMsgObj;
                                     message.flags |= 128;
                                 }
+                                final TL_updateShortSentMessage tL_updateShortSentMessage = res;
                                 Utilities.stageQueue.postRunnable(new Runnable() {
                                     public void run() {
-                                        MessagesController.getInstance().processNewDifferenceParams(-1, res.pts, res.date, res.pts_count);
+                                        MessagesController.getInstance().processNewDifferenceParams(-1, tL_updateShortSentMessage.pts, tL_updateShortSentMessage.date, tL_updateShortSentMessage.pts_count);
                                     }
                                 });
                                 sentMessages.add(newMsgObj);
                             } else if (response instanceof Updates) {
-                                final Updates updates = response;
+                                Updates updates = (Updates) response;
                                 ArrayList<Update> updatesArr = ((Updates) response).updates;
                                 Message message3 = null;
                                 int a = 0;
@@ -2872,11 +2879,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 } else {
                                     isSentError = true;
                                 }
+                                final Updates updates2 = updates;
                                 Utilities.stageQueue.postRunnable(new Runnable() {
                                     public void run() {
-                                        MessagesController.getInstance().processUpdates(updates, false);
+                                        MessagesController.getInstance().processUpdates(updates2, false);
                                     }
                                 });
+                            }
+                            if (MessageObject.isLiveLocationMessage(newMsgObj)) {
+                                LocationController.getInstance().addSharingLocation(newMsgObj.dialog_id, newMsgObj.id, newMsgObj.media.period, newMsgObj);
                             }
                             if (!isSentError) {
                                 int i2;
@@ -2884,31 +2895,35 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 newMsgObj.send_state = 0;
                                 NotificationCenter instance = NotificationCenter.getInstance();
                                 i = NotificationCenter.messageReceivedByServer;
-                                Integer[] numArr = new Object[4];
-                                numArr[0] = Integer.valueOf(oldId);
+                                Object[] objArr = new Object[4];
+                                objArr[0] = Integer.valueOf(oldId);
                                 if (isBroadcast) {
                                     i2 = oldId;
                                 } else {
                                     i2 = newMsgObj.id;
                                 }
-                                numArr[1] = Integer.valueOf(i2);
-                                numArr[2] = newMsgObj;
-                                numArr[3] = Long.valueOf(newMsgObj.dialog_id);
-                                instance.postNotificationName(i, numArr);
+                                objArr[1] = Integer.valueOf(i2);
+                                objArr[2] = newMsgObj;
+                                objArr[3] = Long.valueOf(newMsgObj.dialog_id);
+                                instance.postNotificationName(i, objArr);
+                                i = oldId;
+                                final boolean z = isBroadcast;
+                                final ArrayList<Message> arrayList = sentMessages;
+                                final String str = attachPath;
                                 MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
                                     public void run() {
-                                        MessagesStorage.getInstance().updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), isBroadcast ? oldId : newMsgObj.id, 0, false, newMsgObj.to_id.channel_id);
-                                        MessagesStorage.getInstance().putMessages(sentMessages, true, false, isBroadcast, 0);
-                                        if (isBroadcast) {
+                                        MessagesStorage.getInstance().updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(i), z ? i : newMsgObj.id, 0, false, newMsgObj.to_id.channel_id);
+                                        MessagesStorage.getInstance().putMessages(arrayList, true, false, z, 0);
+                                        if (z) {
                                             ArrayList currentMessage = new ArrayList();
                                             currentMessage.add(newMsgObj);
                                             MessagesStorage.getInstance().putMessages(currentMessage, true, false, false, 0);
                                         }
                                         AndroidUtilities.runOnUIThread(new Runnable() {
                                             public void run() {
-                                                if (isBroadcast) {
-                                                    for (int a = 0; a < sentMessages.size(); a++) {
-                                                        Message message = (Message) sentMessages.get(a);
+                                                if (z) {
+                                                    for (int a = 0; a < arrayList.size(); a++) {
+                                                        Message message = (Message) arrayList.get(a);
                                                         ArrayList<MessageObject> arr = new ArrayList();
                                                         MessageObject messageObject = new MessageObject(message, null, false);
                                                         arr.add(messageObject);
@@ -2920,17 +2935,17 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                 NotificationCenter instance = NotificationCenter.getInstance();
                                                 int i = NotificationCenter.messageReceivedByServer;
                                                 Object[] objArr = new Object[4];
-                                                objArr[0] = Integer.valueOf(oldId);
-                                                objArr[1] = Integer.valueOf(isBroadcast ? oldId : newMsgObj.id);
+                                                objArr[0] = Integer.valueOf(i);
+                                                objArr[1] = Integer.valueOf(z ? i : newMsgObj.id);
                                                 objArr[2] = newMsgObj;
                                                 objArr[3] = Long.valueOf(newMsgObj.dialog_id);
                                                 instance.postNotificationName(i, objArr);
-                                                SendMessagesHelper.this.processSentMessage(oldId);
-                                                SendMessagesHelper.this.removeFromSendingMessages(oldId);
+                                                SendMessagesHelper.this.processSentMessage(i);
+                                                SendMessagesHelper.this.removeFromSendingMessages(i);
                                             }
                                         });
                                         if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
-                                            SendMessagesHelper.this.stopVideoService(attachPath);
+                                            SendMessagesHelper.this.stopVideoService(str);
                                         }
                                     }
                                 });
@@ -3196,15 +3211,21 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         TL_documentAttributeAudio attributeAudio = null;
         String extension = null;
         if (uri != null) {
+            boolean hasExt = false;
             if (mime != null) {
                 extension = myMime.getExtensionFromMimeType(mime);
             }
             if (extension == null) {
                 extension = "txt";
+            } else {
+                hasExt = true;
             }
             path = MediaController.copyFileToCache(uri, extension);
             if (path == null) {
                 return false;
+            }
+            if (!hasExt) {
+                extension = null;
             }
         }
         File file = new File(path);
@@ -3805,9 +3826,18 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 venue.title = result.send_message.title;
                 venue.provider = result.send_message.provider;
                 venue.venue_id = result.send_message.venue_id;
+                venue.venue_type = "";
                 getInstance().sendMessage(venue, dialog_id, reply_to_msg, result.send_message.reply_markup, (HashMap) params);
             } else if (result.send_message instanceof TL_botInlineMessageMediaGeo) {
-                MessageMedia location = new TL_messageMediaGeo();
+                MessageMedia location;
+                if (result.send_message.period != 0) {
+                    location = new TL_messageMediaGeoLive();
+                    location.period = result.send_message.period;
+                    location.geo = result.send_message.geo;
+                    getInstance().sendMessage(location, dialog_id, reply_to_msg, result.send_message.reply_markup, (HashMap) params);
+                    return;
+                }
+                location = new TL_messageMediaGeo();
                 location.geo = result.send_message.geo;
                 getInstance().sendMessage(location, dialog_id, reply_to_msg, result.send_message.reply_markup, (HashMap) params);
             } else if (result.send_message instanceof TL_botInlineMessageMediaContact) {

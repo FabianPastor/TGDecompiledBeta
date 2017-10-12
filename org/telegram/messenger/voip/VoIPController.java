@@ -83,6 +83,8 @@ public class VoIPController {
 
     private native void nativeRelease(long j);
 
+    private native void nativeSetAudioOutputGainControlEnabled(long j, boolean z);
+
     private native void nativeSetConfig(long j, double d, double d2, int i, boolean z, boolean z2, boolean z3, String str, String str2);
 
     private native void nativeSetEncryptionKey(long j, byte[] bArr, boolean z);
@@ -290,5 +292,10 @@ public class VoIPController {
             throw new NullPointerException("address can't be null");
         }
         nativeSetProxy(this.nativeInst, address, port, username, password);
+    }
+
+    public void setAudioOutputGainControlEnabled(boolean enabled) {
+        ensureNativeInstance();
+        nativeSetAudioOutputGainControlEnabled(this.nativeInst, enabled);
     }
 }

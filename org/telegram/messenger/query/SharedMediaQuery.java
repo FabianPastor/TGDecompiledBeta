@@ -511,12 +511,17 @@ public class SharedMediaQuery {
         });
     }
 
-    public static void loadMusic(final long uid, final int max_id) {
+    public static void loadMusic(final long uid, final long max_id) {
         MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
             public void run() {
                 final ArrayList<MessageObject> arrayList = new ArrayList();
                 try {
-                    SQLiteCursor cursor = MessagesStorage.getInstance().getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid < %d AND type = %d ORDER BY date DESC, mid DESC LIMIT 1000", new Object[]{Long.valueOf(uid), Integer.valueOf(max_id), Integer.valueOf(4)}), new Object[0]);
+                    SQLiteCursor cursor;
+                    if (((int) uid) != 0) {
+                        cursor = MessagesStorage.getInstance().getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid < %d AND type = %d ORDER BY date DESC, mid DESC LIMIT 1000", new Object[]{Long.valueOf(uid), Long.valueOf(max_id), Integer.valueOf(4)}), new Object[0]);
+                    } else {
+                        cursor = MessagesStorage.getInstance().getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid > %d AND type = %d ORDER BY date DESC, mid DESC LIMIT 1000", new Object[]{Long.valueOf(uid), Long.valueOf(max_id), Integer.valueOf(4)}), new Object[0]);
+                    }
                     while (cursor.next()) {
                         NativeByteBuffer data = cursor.byteBufferValue(0);
                         if (data != null) {

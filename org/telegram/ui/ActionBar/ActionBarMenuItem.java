@@ -29,7 +29,6 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
@@ -38,10 +37,12 @@ import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow.OnDispatchKeyEventListener;
 import org.telegram.ui.Components.CloseProgressDrawable2;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarMenuItem extends FrameLayout {
     private static Method layoutInScreenMethod;
+    private int additionalOffset;
     private boolean allowCloseAnimation = true;
     private boolean animationEnabled = true;
     private ImageView clearButton;
@@ -61,7 +62,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private CloseProgressDrawable2 progressDrawable;
     private Rect rect;
     private FrameLayout searchContainer;
-    private EditText searchField;
+    private EditTextBoldCursor searchField;
     private TextView searchFieldCaption;
     private View selectedMenuView;
     private Runnable showMenuRunnable;
@@ -407,7 +408,7 @@ public class ActionBarMenuItem extends FrameLayout {
         return this.iconView;
     }
 
-    public EditText getSearchField() {
+    public EditTextBoldCursor getSearchField() {
         return this.searchField;
     }
 
@@ -457,7 +458,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 this.searchFieldCaption.setEllipsize(TruncateAt.END);
                 this.searchFieldCaption.setVisibility(8);
                 this.searchFieldCaption.setGravity(LocaleController.isRTL ? 5 : 3);
-                this.searchField = new EditText(getContext()) {
+                this.searchField = new EditTextBoldCursor(getContext()) {
                     public boolean onKeyDown(int keyCode, KeyEvent event) {
                         if (keyCode != 67 || ActionBarMenuItem.this.searchField.length() != 0 || ActionBarMenuItem.this.searchFieldCaption.getVisibility() != 0 || ActionBarMenuItem.this.searchFieldCaption.length() <= 0) {
                             return super.onKeyDown(keyCode, event);
@@ -470,6 +471,8 @@ public class ActionBarMenuItem extends FrameLayout {
                         return super.dispatchKeyEvent(event);
                     }
                 };
+                this.searchField.setCursorWidth(1.5f);
+                this.searchField.setCursorColor(-1);
                 this.searchField.setTextSize(1, 18.0f);
                 this.searchField.setHintTextColor(Theme.getColor(Theme.key_actionBarDefaultSearchPlaceholder));
                 this.searchField.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSearch));
@@ -525,12 +528,6 @@ public class ActionBarMenuItem extends FrameLayout {
                     public void afterTextChanged(Editable s) {
                     }
                 });
-                try {
-                    Field mCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
-                    mCursorDrawableRes.setAccessible(true);
-                    mCursorDrawableRes.set(this.searchField, Integer.valueOf(R.drawable.search_carret));
-                } catch (Exception e) {
-                }
                 this.searchField.setImeOptions(33554435);
                 this.searchField.setTextIsSelectable(false);
                 if (LocaleController.isRTL) {
@@ -627,13 +624,17 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
+    public void setAdditionalOffset(int value) {
+        this.additionalOffset = value;
+    }
+
     private void updateOrShowPopup(boolean show, boolean update) {
         int offsetY;
         if (this.parentMenu != null) {
             offsetY = (-this.parentMenu.parentActionBar.getMeasuredHeight()) + this.parentMenu.getTop();
         } else {
             float scaleY = getScaleY();
-            offsetY = -((int) ((((float) getMeasuredHeight()) * scaleY) - (getTranslationY() / scaleY)));
+            offsetY = (-((int) ((((float) getMeasuredHeight()) * scaleY) - (getTranslationY() / scaleY)))) + this.additionalOffset;
         }
         if (show) {
             this.popupLayout.scrollToTop();
@@ -643,19 +644,19 @@ public class ActionBarMenuItem extends FrameLayout {
             parent = this.parentMenu.parentActionBar;
             if (this.subMenuOpenSide == 0) {
                 if (show) {
-                    this.popupWindow.showAsDropDown(parent, ((getLeft() + this.parentMenu.getLeft()) + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth(), offsetY);
+                    this.popupWindow.showAsDropDown(parent, (((getLeft() + this.parentMenu.getLeft()) + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth()) + ((int) getTranslationX()), offsetY);
                 }
                 if (update) {
-                    this.popupWindow.update(parent, ((getLeft() + this.parentMenu.getLeft()) + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth(), offsetY, -1, -1);
+                    this.popupWindow.update(parent, (((getLeft() + this.parentMenu.getLeft()) + getMeasuredWidth()) - this.popupLayout.getMeasuredWidth()) + ((int) getTranslationX()), offsetY, -1, -1);
                     return;
                 }
                 return;
             }
             if (show) {
-                this.popupWindow.showAsDropDown(parent, getLeft() - AndroidUtilities.dp(8.0f), offsetY);
+                this.popupWindow.showAsDropDown(parent, (getLeft() - AndroidUtilities.dp(8.0f)) + ((int) getTranslationX()), offsetY);
             }
             if (update) {
-                this.popupWindow.update(parent, getLeft() - AndroidUtilities.dp(8.0f), offsetY, -1, -1);
+                this.popupWindow.update(parent, (getLeft() - AndroidUtilities.dp(8.0f)) + ((int) getTranslationX()), offsetY, -1, -1);
             }
         } else if (this.subMenuOpenSide != 0) {
             if (show) {

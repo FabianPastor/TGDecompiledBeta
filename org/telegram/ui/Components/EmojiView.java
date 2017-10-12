@@ -1652,21 +1652,22 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                             EmojiView.this.listener.onGifTab(false);
                             EmojiView.this.gifsGridView.setVisibility(8);
                             EmojiView.this.stickersGridView.setVisibility(0);
-                            r3 = EmojiView.this.stickersEmptyView;
+                            int vis = EmojiView.this.stickersGridView.getVisibility();
+                            r4 = EmojiView.this.stickersEmptyView;
                             if (EmojiView.this.stickersGridAdapter.getItemCount() == 0) {
                                 i = 0;
                             }
-                            r3.setVisibility(i);
+                            r4.setVisibility(i);
                             EmojiView.this.checkScroll();
                             EmojiView.this.saveNewPage();
                         } else if (EmojiView.this.trendingGridView.getVisibility() == 0) {
                             EmojiView.this.trendingGridView.setVisibility(8);
                             EmojiView.this.stickersGridView.setVisibility(0);
-                            r3 = EmojiView.this.stickersEmptyView;
+                            r4 = EmojiView.this.stickersEmptyView;
                             if (EmojiView.this.stickersGridAdapter.getItemCount() == 0) {
                                 i = 0;
                             }
-                            r3.setVisibility(i);
+                            r4.setVisibility(i);
                             EmojiView.this.saveNewPage();
                         }
                     }

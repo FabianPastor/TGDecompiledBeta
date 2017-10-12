@@ -29,8 +29,10 @@ import org.telegram.tgnet.TLRPC.TL_channels_getMessages;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputMessageEntityMentionName;
 import org.telegram.tgnet.TLRPC.TL_messageActionGameScore;
+import org.telegram.tgnet.TLRPC.TL_messageActionHistoryClear;
 import org.telegram.tgnet.TLRPC.TL_messageActionPaymentSent;
 import org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
+import org.telegram.tgnet.TLRPC.TL_messageEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageEntityBold;
 import org.telegram.tgnet.TLRPC.TL_messageEntityCode;
 import org.telegram.tgnet.TLRPC.TL_messageEntityItalic;
@@ -81,10 +83,14 @@ public class MessagesQuery {
                 if (data != null) {
                     result = Message.TLdeserialize(data, data.readInt32(false), false);
                     data.reuse();
-                    result.id = cursor.intValue(1);
-                    result.date = cursor.intValue(2);
-                    result.dialog_id = (long) (-channelId);
-                    MessagesStorage.addUsersAndChatsFromMessage(result, usersToLoad, chatsToLoad);
+                    if (result.action instanceof TL_messageActionHistoryClear) {
+                        result = null;
+                    } else {
+                        result.id = cursor.intValue(1);
+                        result.date = cursor.intValue(2);
+                        result.dialog_id = (long) (-channelId);
+                        MessagesStorage.addUsersAndChatsFromMessage(result, usersToLoad, chatsToLoad);
+                    }
                 }
             }
             cursor.dispose();
@@ -95,7 +101,7 @@ public class MessagesQuery {
                     if (data != null) {
                         result = Message.TLdeserialize(data, data.readInt32(false), false);
                         data.reuse();
-                        if (result.id != mid) {
+                        if (result.id != mid || (result.action instanceof TL_messageActionHistoryClear)) {
                             result = null;
                         } else {
                             result.dialog_id = (long) (-channelId);
@@ -115,6 +121,7 @@ public class MessagesQuery {
                         boolean ok = false;
                         if (error == null) {
                             messages_Messages messagesRes = (messages_Messages) response;
+                            MessagesQuery.removeEmptyMessages(messagesRes.messages);
                             if (!messagesRes.messages.isEmpty()) {
                                 ImageLoader.saveMessagesThumbs(messagesRes.messages);
                                 MessagesQuery.broadcastPinnedMessage((Message) messagesRes.messages.get(0), messagesRes.users, messagesRes.chats, false, false);
@@ -195,6 +202,18 @@ public class MessagesQuery {
             }
         });
         return null;
+    }
+
+    private static void removeEmptyMessages(ArrayList<Message> messages) {
+        int a = 0;
+        while (a < messages.size()) {
+            Message message = (Message) messages.get(a);
+            if (message == null || (message instanceof TL_messageEmpty) || (message.action instanceof TL_messageActionHistoryClear)) {
+                messages.remove(a);
+                a--;
+            }
+            a++;
+        }
     }
 
     public static void loadReplyMessagesForMessages(ArrayList<MessageObject> messages, long dialogId) {
@@ -350,6 +369,7 @@ public class MessagesQuery {
                                     public void run(TLObject response, TL_error error) {
                                         if (error == null) {
                                             messages_Messages messagesRes = (messages_Messages) response;
+                                            MessagesQuery.removeEmptyMessages(messagesRes.messages);
                                             ImageLoader.saveMessagesThumbs(messagesRes.messages);
                                             MessagesQuery.broadcastReplyMessages(messagesRes.messages, replyMessageOwners, messagesRes.users, messagesRes.chats, j2, false);
                                             MessagesStorage.getInstance().putUsersAndChats(messagesRes.users, messagesRes.chats, true, true);
@@ -365,6 +385,7 @@ public class MessagesQuery {
                                 public void run(TLObject response, TL_error error) {
                                     if (error == null) {
                                         messages_Messages messagesRes = (messages_Messages) response;
+                                        MessagesQuery.removeEmptyMessages(messagesRes.messages);
                                         ImageLoader.saveMessagesThumbs(messagesRes.messages);
                                         MessagesQuery.broadcastReplyMessages(messagesRes.messages, replyMessageOwners, messagesRes.users, messagesRes.chats, j2, false);
                                         MessagesStorage.getInstance().putUsersAndChats(messagesRes.users, messagesRes.chats, true, true);

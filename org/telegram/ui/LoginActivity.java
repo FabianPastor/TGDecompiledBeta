@@ -322,6 +322,10 @@ public class LoginActivity extends BaseFragment {
             return LocaleController.getString("LoginPassword", R.string.LoginPassword);
         }
 
+        public void onCancelPressed() {
+            this.nextPressed = false;
+        }
+
         public void setParams(Bundle params, boolean restore) {
             boolean z = true;
             if (params != null) {
@@ -557,6 +561,10 @@ public class LoginActivity extends BaseFragment {
             return true;
         }
 
+        public void onCancelPressed() {
+            this.nextPressed = false;
+        }
+
         public String getHeaderName() {
             return LocaleController.getString("LoginPassword", R.string.LoginPassword);
         }
@@ -775,6 +783,10 @@ public class LoginActivity extends BaseFragment {
 
         public String getHeaderName() {
             return LocaleController.getString("YourName", R.string.YourName);
+        }
+
+        public void onCancelPressed() {
+            this.nextPressed = false;
         }
 
         public void onShow() {
@@ -1237,6 +1249,10 @@ public class LoginActivity extends BaseFragment {
                     LoginActivity.this.setPage(0, true, null, true);
                 }
             });
+        }
+
+        public void onCancelPressed() {
+            this.nextPressed = false;
         }
 
         private void resendCode() {
@@ -2056,6 +2072,10 @@ public class LoginActivity extends BaseFragment {
             }
         }
 
+        public void onCancelPressed() {
+            this.nextPressed = false;
+        }
+
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             if (this.ignoreSelection) {
                 this.ignoreSelection = false;
@@ -2585,6 +2605,7 @@ public class LoginActivity extends BaseFragment {
             if (reqiestId != 0) {
                 builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        LoginActivity.this.views[LoginActivity.this.currentViewNum].onCancelPressed();
                         ConnectionsManager.getInstance().cancelRequest(reqiestId, true);
                         LoginActivity.this.progressDialog = null;
                     }

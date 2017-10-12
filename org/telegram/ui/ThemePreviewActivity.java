@@ -437,6 +437,10 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
 
                     public void didPressedInstantButton(ChatMessageCell cell, int type) {
                     }
+
+                    public boolean isChatAdminCell(int uid) {
+                        return false;
+                    }
                 });
             } else if (viewType == 1) {
                 view = new ChatActionCell(this.mContext);

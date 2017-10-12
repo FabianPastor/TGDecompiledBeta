@@ -100,6 +100,11 @@ public class BackupImageView extends View {
 
     public void setRoundRadius(int value) {
         this.imageReceiver.setRoundRadius(value);
+        invalidate();
+    }
+
+    public int getRoundRadius() {
+        return this.imageReceiver.getRoundRadius();
     }
 
     public void setAspectFit(boolean value) {

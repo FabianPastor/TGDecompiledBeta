@@ -435,7 +435,7 @@ public class ImageLoader {
         private CacheImage cacheImage = null;
         private boolean canRetry = true;
         private RandomAccessFile fileOutputStream = null;
-        private URLConnection httpConnection = null;
+        private HttpURLConnection httpConnection = null;
         private int imageSize;
         private long lastProgressTime;
 
@@ -466,13 +466,11 @@ public class ImageLoader {
             boolean done = false;
             if (!isCancelled()) {
                 try {
-                    this.httpConnection = new URL(this.cacheImage.httpUrl).openConnection();
+                    this.httpConnection = (HttpURLConnection) new URL(this.cacheImage.httpUrl).openConnection();
                     this.httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1");
                     this.httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
                     this.httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
-                    if (this.httpConnection instanceof HttpURLConnection) {
-                        ((HttpURLConnection) this.httpConnection).setInstanceFollowRedirects(true);
-                    }
+                    this.httpConnection.setInstanceFollowRedirects(true);
                     if (!isCancelled()) {
                         this.httpConnection.connect();
                         httpConnectionStream = this.httpConnection.getInputStream();
@@ -498,7 +496,7 @@ public class ImageLoader {
             if (!isCancelled()) {
                 try {
                     if (this.httpConnection != null && (this.httpConnection instanceof HttpURLConnection)) {
-                        int code = ((HttpURLConnection) this.httpConnection).getResponseCode();
+                        int code = this.httpConnection.getResponseCode();
                         if (!(code == Callback.DEFAULT_DRAG_ANIMATION_DURATION || code == 202 || code == 304)) {
                             this.canRetry = false;
                         }
@@ -555,6 +553,12 @@ public class ImageLoader {
                 }
             } catch (Throwable e22222) {
                 FileLog.e(e22222);
+            }
+            try {
+                if (this.httpConnection != null) {
+                    this.httpConnection.disconnect();
+                }
+            } catch (Throwable th) {
             }
             if (httpConnectionStream != null) {
                 try {
@@ -978,21 +982,21 @@ public class ImageLoader {
     }
 
     private boolean canMoveFiles(File from, File to, int type) {
+        File srcFile;
         Throwable e;
         Throwable th;
         RandomAccessFile file = null;
-        File srcFile = null;
+        File srcFile2 = null;
         File dstFile = null;
-        File srcFile2;
         if (type == 0) {
             try {
-                srcFile2 = new File(from, "000000000_999999_temp.jpg");
+                srcFile = new File(from, "000000000_999999_temp.jpg");
                 try {
                     dstFile = new File(to, "000000000_999999.jpg");
-                    srcFile = srcFile2;
+                    srcFile2 = srcFile;
                 } catch (Exception e2) {
                     e = e2;
-                    srcFile = srcFile2;
+                    srcFile2 = srcFile;
                     try {
                         FileLog.e(e);
                         if (file != null) {
@@ -1024,27 +1028,27 @@ public class ImageLoader {
                 return false;
             }
         } else if (type == 3) {
-            srcFile2 = new File(from, "000000000_999999_temp.doc");
+            srcFile = new File(from, "000000000_999999_temp.doc");
             dstFile = new File(to, "000000000_999999.doc");
-            srcFile = srcFile2;
+            srcFile2 = srcFile;
         } else if (type == 1) {
-            srcFile2 = new File(from, "000000000_999999_temp.ogg");
+            srcFile = new File(from, "000000000_999999_temp.ogg");
             dstFile = new File(to, "000000000_999999.ogg");
-            srcFile = srcFile2;
+            srcFile2 = srcFile;
         } else if (type == 2) {
-            srcFile2 = new File(from, "000000000_999999_temp.mp4");
+            srcFile = new File(from, "000000000_999999_temp.mp4");
             dstFile = new File(to, "000000000_999999.mp4");
-            srcFile = srcFile2;
+            srcFile2 = srcFile;
         }
         byte[] buffer = new byte[1024];
-        srcFile.createNewFile();
-        RandomAccessFile file2 = new RandomAccessFile(srcFile, "rws");
+        srcFile2.createNewFile();
+        RandomAccessFile file2 = new RandomAccessFile(srcFile2, "rws");
         try {
             file2.write(buffer);
             file2.close();
             file = null;
-            boolean canRename = srcFile.renameTo(dstFile);
-            srcFile.delete();
+            boolean canRename = srcFile2.renameTo(dstFile);
+            srcFile2.delete();
             dstFile.delete();
             if (!canRename) {
                 if (file != null) {

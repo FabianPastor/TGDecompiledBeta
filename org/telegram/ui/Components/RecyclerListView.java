@@ -55,6 +55,7 @@ public class RecyclerListView extends RecyclerView {
     private GestureDetector gestureDetector;
     private ArrayList<View> headers;
     private ArrayList<View> headersCache;
+    private boolean hiddenByEmptyView;
     private boolean ignoreOnScroll;
     private boolean instantClick;
     private boolean interceptedByChild;
@@ -79,6 +80,7 @@ public class RecyclerListView extends RecyclerView {
     private OnItemLongClickListener onItemLongClickListener;
     private OnScrollListener onScrollListener;
     private View pinnedHeader;
+    private boolean scrollEnabled = true;
     private SectionsAdapter sectionsAdapter;
     private int sectionsCount;
     private int sectionsType;
@@ -391,7 +393,11 @@ public class RecyclerListView extends RecyclerView {
             int action = event.getActionMasked();
             boolean isScrollIdle = RecyclerListView.this.getScrollState() == 0;
             if ((action == 0 || action == 5) && RecyclerListView.this.currentChildView == null && isScrollIdle) {
-                RecyclerListView.this.currentChildView = view.findChildViewUnder(event.getX(), event.getY());
+                float ex = event.getX();
+                float ey = event.getY();
+                if (RecyclerListView.this.allowSelectChildAtPosition(ex, ey)) {
+                    RecyclerListView.this.currentChildView = view.findChildViewUnder(ex, ey);
+                }
                 if (RecyclerListView.this.currentChildView instanceof ViewGroup) {
                     float x = event.getX() - ((float) RecyclerListView.this.currentChildView.getLeft());
                     float y = event.getY() - ((float) RecyclerListView.this.currentChildView.getTop());
@@ -608,6 +614,10 @@ public class RecyclerListView extends RecyclerView {
             }
             return -1;
         }
+    }
+
+    protected boolean allowSelectChildAtPosition(float x, float y) {
+        return true;
     }
 
     private void removeSelection(View pressedChild, MotionEvent event) {
@@ -897,6 +907,14 @@ public class RecyclerListView extends RecyclerView {
         }
     }
 
+    public boolean canScrollVertically(int direction) {
+        return this.scrollEnabled && super.canScrollVertically(direction);
+    }
+
+    public void setScrollEnabled(boolean value) {
+        this.scrollEnabled = value;
+    }
+
     public boolean onInterceptTouchEvent(MotionEvent e) {
         if (!isEnabled()) {
             return false;
@@ -912,7 +930,7 @@ public class RecyclerListView extends RecyclerView {
 
     private void checkIfEmpty() {
         int i = 0;
-        if (this.emptyView != null && getAdapter() != null) {
+        if (getAdapter() != null && this.emptyView != null) {
             boolean emptyViewVisible;
             if (getAdapter().getItemCount() == 0) {
                 emptyViewVisible = true;
@@ -924,6 +942,17 @@ public class RecyclerListView extends RecyclerView {
                 i = 4;
             }
             setVisibility(i);
+            this.hiddenByEmptyView = true;
+        } else if (this.hiddenByEmptyView && getVisibility() != 0) {
+            setVisibility(0);
+            this.hiddenByEmptyView = false;
+        }
+    }
+
+    public void setVisibility(int visibility) {
+        super.setVisibility(visibility);
+        if (visibility != 0) {
+            this.hiddenByEmptyView = false;
         }
     }
 

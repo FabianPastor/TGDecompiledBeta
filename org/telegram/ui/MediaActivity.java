@@ -1430,7 +1430,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.progressView.addView(this.progressBar, LayoutHelper.createLinear(-2, -2));
         switchToCurrentSelectedMode();
         if (!AndroidUtilities.isTablet()) {
-            View fragmentContextView = new FragmentContextView(context, this);
+            View fragmentContextView = new FragmentContextView(context, this, false);
             this.fragmentContextView = fragmentContextView;
             frameLayout.addView(fragmentContextView, LayoutHelper.createFrame(-1, 39.0f, 51, 0.0f, -36.0f, 0.0f, 0.0f));
         }

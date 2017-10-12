@@ -52,7 +52,6 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     private String emojiText;
     private TextView emojiTextView;
     private AnimatorSet hintAnimatorSet;
-    private TextView hintTextView;
     private LinearLayout linearLayout;
     private LinearLayout linearLayout1;
     private TextView textView;
@@ -98,14 +97,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
                 }
             }
         });
-        this.fragmentView = new FrameLayout(context) {
-            protected void onLayout(boolean changed, int l, int t, int r, int b) {
-                super.onLayout(changed, l, t, r, b);
-                int x = ((IdenticonActivity.this.container.getLeft() + IdenticonActivity.this.codeTextView.getLeft()) + (IdenticonActivity.this.codeTextView.getMeasuredWidth() / 2)) - (IdenticonActivity.this.hintTextView.getMeasuredWidth() / 2);
-                int y = Math.max(AndroidUtilities.dp(5.0f), (IdenticonActivity.this.container.getTop() + IdenticonActivity.this.codeTextView.getTop()) - AndroidUtilities.dp(10.0f));
-                IdenticonActivity.this.hintTextView.layout(x, y, IdenticonActivity.this.hintTextView.getMeasuredWidth() + x, IdenticonActivity.this.hintTextView.getMeasuredHeight() + y);
-            }
-        };
+        this.fragmentView = new FrameLayout(context);
         FrameLayout parentFrameLayout = this.fragmentView;
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.fragmentView.setOnTouchListener(new OnTouchListener() {
@@ -145,15 +137,6 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         this.codeTextView.setTypeface(Typeface.MONOSPACE);
         this.codeTextView.setTextSize(1, 16.0f);
         this.linearLayout1.addView(this.codeTextView, LayoutHelper.createLinear(-2, -2, 1));
-        this.hintTextView = new TextView(getParentActivity());
-        this.hintTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(3.0f), Theme.getColor(Theme.key_chat_gifSaveHintBackground)));
-        this.hintTextView.setTextColor(Theme.getColor(Theme.key_chat_gifSaveHintText));
-        this.hintTextView.setTextSize(1, 14.0f);
-        this.hintTextView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
-        this.hintTextView.setText(LocaleController.getString("TapToEmojify", R.string.TapToEmojify));
-        this.hintTextView.setGravity(16);
-        this.hintTextView.setAlpha(0.0f);
-        parentFrameLayout.addView(this.hintTextView, LayoutHelper.createFrame(-2, 32.0f));
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
         this.textView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
@@ -357,18 +340,14 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         });
     }
 
-    private void showHint(boolean show) {
-    }
-
     protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen && !backward && this.emojiText != null) {
             this.emojiTextView.setText(Emoji.replaceEmoji(this.emojiText, this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(32.0f), false));
-            showHint(true);
         }
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[11];
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[9];
         themeDescriptionArr[0] = new ThemeDescription(this.container, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
         themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
         themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
@@ -378,8 +357,6 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         themeDescriptionArr[6] = new ThemeDescription(this.textView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
         themeDescriptionArr[7] = new ThemeDescription(this.codeTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
         themeDescriptionArr[8] = new ThemeDescription(this.textView, ThemeDescription.FLAG_LINKCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteLinkText);
-        themeDescriptionArr[9] = new ThemeDescription(this.hintTextView, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_chat_gifSaveHintBackground);
-        themeDescriptionArr[10] = new ThemeDescription(this.hintTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_chat_gifSaveHintText);
         return themeDescriptionArr;
     }
 }

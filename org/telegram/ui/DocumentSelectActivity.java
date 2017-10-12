@@ -509,7 +509,6 @@ public class DocumentSelectActivity extends BaseFragment {
 
     private boolean listFiles(File dir) {
         if (dir.canRead()) {
-            this.emptyView.setText(LocaleController.getString("NoFiles", R.string.NoFiles));
             try {
                 File[] files = dir.listFiles();
                 if (files == null) {

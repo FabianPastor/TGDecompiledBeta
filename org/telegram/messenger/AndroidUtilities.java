@@ -398,8 +398,8 @@ Error: java.util.NoSuchElementException
         if (pathString == null) {
             return false;
         }
-        String path;
         while (true) {
+            String path;
             String newPath = Utilities.readlink(pathString);
             if (newPath != null && !newPath.equals(pathString)) {
                 pathString = newPath;
@@ -1190,19 +1190,33 @@ Error: java.util.NoSuchElementException
             }
             ArrayList<Integer> bolds = new ArrayList();
             if ((flag & 2) != 0) {
+                int end;
                 while (true) {
                     start = stringBuilder.indexOf("<b>");
                     if (start == -1) {
                         break;
                     }
                     stringBuilder.replace(start, start + 3, "");
-                    int end = stringBuilder.indexOf("</b>");
+                    end = stringBuilder.indexOf("</b>");
                     if (end == -1) {
                         end = stringBuilder.indexOf("<b>");
                     }
                     stringBuilder.replace(end, end + 4, "");
                     bolds.add(Integer.valueOf(start));
                     bolds.add(Integer.valueOf(end));
+                }
+                while (true) {
+                    start = stringBuilder.indexOf("**");
+                    if (start == -1) {
+                        break;
+                    }
+                    stringBuilder.replace(start, start + 2, "");
+                    end = stringBuilder.indexOf("**");
+                    if (end >= 0) {
+                        stringBuilder.replace(end, end + 2, "");
+                        bolds.add(Integer.valueOf(start));
+                        bolds.add(Integer.valueOf(end));
+                    }
                 }
             }
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(stringBuilder);

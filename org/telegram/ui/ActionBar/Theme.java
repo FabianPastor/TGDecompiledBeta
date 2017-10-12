@@ -108,10 +108,12 @@ public class Theme {
     public static TextPaint chat_instantViewPaint = null;
     public static Paint chat_instantViewRectPaint = null;
     public static Drawable[][] chat_ivStatesDrawable = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{4, 2}));
+    public static TextPaint chat_livePaint = null;
     public static TextPaint chat_locationAddressPaint = null;
     public static Drawable[] chat_locationDrawable = new Drawable[2];
     public static TextPaint chat_locationTitlePaint = null;
     public static Drawable chat_lockIconDrawable = null;
+    public static Drawable chat_msgAvatarLiveLocationDrawable = null;
     public static TextPaint chat_msgBotButtonPaint = null;
     public static Drawable chat_msgBroadcastDrawable = null;
     public static Drawable chat_msgBroadcastMediaDrawable = null;
@@ -175,6 +177,7 @@ public class Theme {
     public static Drawable chat_muteIconDrawable = null;
     public static TextPaint chat_namePaint = null;
     public static Drawable[][] chat_photoStatesDrawables = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{13, 2}));
+    public static Paint chat_radialProgress2Paint = null;
     public static Paint chat_radialProgressPaint = null;
     public static Paint chat_replyLinePaint = null;
     public static TextPaint chat_replyNamePaint = null;
@@ -619,6 +622,8 @@ public class Theme {
     public static final String key_dialogTextHint = "dialogTextHint";
     public static final String key_dialogTextLink = "dialogTextLink";
     public static final String key_dialogTextRed = "dialogTextRed";
+    public static final String key_dialogTopBackground = "dialogTopBackground";
+    public static final String key_dialog_liveLocationProgress = "location_liveLocationProgress";
     public static final String key_divider = "divider";
     public static final String key_emptyListPlaceholder = "emptyListPlaceholder";
     public static final String key_fastScrollActive = "fastScrollActive";
@@ -652,7 +657,10 @@ public class Theme {
     public static final String key_inappPlayerPlayPause = "inappPlayerPlayPause";
     public static final String key_inappPlayerTitle = "inappPlayerTitle";
     public static final String key_listSelector = "listSelectorSDK21";
+    public static final String key_location_liveLocationProgress = "location_liveLocationProgress";
     public static final String key_location_markerX = "location_markerX";
+    public static final String key_location_placeLocationBackground = "location_placeLocationBackground";
+    public static final String key_location_sendLiveLocationBackground = "location_sendLiveLocationBackground";
     public static final String key_location_sendLocationBackground = "location_sendLocationBackground";
     public static final String key_location_sendLocationIcon = "location_sendLocationIcon";
     public static final String key_login_progressInner = "login_progressInner";
@@ -671,13 +679,13 @@ public class Theme {
     public static final String key_player_actionBarSubtitle = "player_actionBarSubtitle";
     public static final String key_player_actionBarTitle = "player_actionBarTitle";
     public static final String key_player_actionBarTop = "player_actionBarTop";
+    public static final String key_player_background = "player_background";
     public static final String key_player_button = "player_button";
     public static final String key_player_buttonActive = "player_buttonActive";
-    public static final String key_player_duration = "player_duration";
     public static final String key_player_placeholder = "player_placeholder";
+    public static final String key_player_placeholderBackground = "player_placeholderBackground";
     public static final String key_player_progress = "player_progress";
     public static final String key_player_progressBackground = "player_progressBackground";
-    public static final String key_player_seekBarBackground = "player_seekBarBackground";
     public static final String key_player_time = "player_time";
     public static final String key_profile_actionBackground = "profile_actionBackground";
     public static final String key_profile_actionIcon = "profile_actionIcon";
@@ -842,6 +850,7 @@ public class Theme {
         defaultColors.put(key_dialogTextHint, Integer.valueOf(-6842473));
         defaultColors.put(key_dialogIcon, Integer.valueOf(-7697782));
         defaultColors.put(key_dialogGrayLine, Integer.valueOf(-2960686));
+        defaultColors.put(key_dialogTopBackground, Integer.valueOf(-9456923));
         defaultColors.put(key_dialogInputField, Integer.valueOf(-2368549));
         defaultColors.put(key_dialogInputFieldActivated, Integer.valueOf(-13129232));
         defaultColors.put(key_dialogCheckboxSquareBackground, Integer.valueOf(-12345121));
@@ -1261,25 +1270,29 @@ public class Theme {
         defaultColors.put(key_profile_title, Integer.valueOf(-1));
         defaultColors.put(key_player_actionBar, Integer.valueOf(-1));
         defaultColors.put(key_player_actionBarSelector, Integer.valueOf(ACTION_BAR_AUDIO_SELECTOR_COLOR));
-        defaultColors.put(key_player_actionBarTitle, Integer.valueOf(-14606047));
+        defaultColors.put(key_player_actionBarTitle, Integer.valueOf(-13683656));
         defaultColors.put(key_player_actionBarTop, Integer.valueOf(-NUM));
         defaultColors.put(key_player_actionBarSubtitle, Integer.valueOf(-7697782));
         defaultColors.put(key_player_actionBarItems, Integer.valueOf(-7697782));
-        defaultColors.put(key_player_seekBarBackground, Integer.valueOf(-436207617));
-        defaultColors.put(key_player_time, Integer.valueOf(-15095832));
-        defaultColors.put(key_player_duration, Integer.valueOf(-7697782));
+        defaultColors.put(key_player_background, Integer.valueOf(-1));
+        defaultColors.put(key_player_time, Integer.valueOf(-7564650));
         defaultColors.put(key_player_progressBackground, Integer.valueOf(419430400));
         defaultColors.put(key_player_progress, Integer.valueOf(-14438417));
-        defaultColors.put(key_player_placeholder, Integer.valueOf(-2500135));
-        defaultColors.put(key_player_button, Integer.valueOf(-7697782));
-        defaultColors.put(key_player_buttonActive, Integer.valueOf(-14438417));
+        defaultColors.put(key_player_placeholder, Integer.valueOf(-5723992));
+        defaultColors.put(key_player_placeholderBackground, Integer.valueOf(-986896));
+        defaultColors.put(key_player_button, Integer.valueOf(ACTION_BAR_MEDIA_PICKER_COLOR));
+        defaultColors.put(key_player_buttonActive, Integer.valueOf(-11753238));
         defaultColors.put(key_files_folderIcon, Integer.valueOf(-6710887));
         defaultColors.put(key_files_folderIconBackground, Integer.valueOf(-986896));
         defaultColors.put(key_files_iconText, Integer.valueOf(-1));
         defaultColors.put(key_sessions_devicesImage, Integer.valueOf(-6908266));
         defaultColors.put(key_location_markerX, Integer.valueOf(-8355712));
         defaultColors.put(key_location_sendLocationBackground, Integer.valueOf(-9592620));
+        defaultColors.put(key_location_sendLiveLocationBackground, Integer.valueOf(-39836));
         defaultColors.put(key_location_sendLocationIcon, Integer.valueOf(-1));
+        defaultColors.put("location_liveLocationProgress", Integer.valueOf(-13262875));
+        defaultColors.put(key_location_placeLocationBackground, Integer.valueOf(-11753238));
+        defaultColors.put("location_liveLocationProgress", Integer.valueOf(-13262875));
         defaultColors.put(key_calls_callReceivedGreenIcon, Integer.valueOf(-16725933));
         defaultColors.put(key_calls_callReceivedRedIcon, Integer.valueOf(-47032));
         defaultColors.put(key_featuredStickers_addedIcon, Integer.valueOf(-11491093));
@@ -1912,7 +1925,16 @@ public class Theme {
 
     public static File getAssetFile(String assetName) {
         File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
-        if (!file.exists()) {
+        long size;
+        try {
+            InputStream stream = ApplicationLoader.applicationContext.getAssets().open(assetName);
+            size = (long) stream.available();
+            stream.close();
+        } catch (Throwable e) {
+            size = 0;
+            FileLog.e(e);
+        }
+        if (!(file.exists() && (size == 0 || file.length() == size))) {
             InputStream in = null;
             try {
                 in = ApplicationLoader.applicationContext.getAssets().open(assetName);
@@ -1920,22 +1942,22 @@ public class Theme {
                 if (in != null) {
                     try {
                         in.close();
-                    } catch (Exception e) {
+                    } catch (Exception e2) {
                     }
                 }
-            } catch (Throwable e2) {
-                FileLog.e(e2);
+            } catch (Throwable e3) {
+                FileLog.e(e3);
                 if (in != null) {
                     try {
                         in.close();
-                    } catch (Exception e3) {
+                    } catch (Exception e4) {
                     }
                 }
             } catch (Throwable th) {
                 if (in != null) {
                     try {
                         in.close();
-                    } catch (Exception e4) {
+                    } catch (Exception e5) {
                     }
                 }
             }
@@ -2185,7 +2207,12 @@ public class Theme {
             chat_radialProgressPaint.setStrokeCap(Cap.ROUND);
             chat_radialProgressPaint.setStyle(Style.STROKE);
             chat_radialProgressPaint.setColor(-NUM);
+            chat_radialProgress2Paint = new Paint(1);
+            chat_radialProgress2Paint.setStrokeCap(Cap.ROUND);
+            chat_radialProgress2Paint.setStyle(Style.STROKE);
             chat_audioTimePaint = new TextPaint(1);
+            chat_livePaint = new TextPaint(1);
+            chat_livePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_audioTitlePaint = new TextPaint(1);
             chat_audioTitlePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_audioPerformerPaint = new TextPaint(1);
@@ -2272,6 +2299,7 @@ public class Theme {
             chat_msgCallUpGreenDrawable = resources.getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
             chat_msgCallDownRedDrawable = resources.getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
             chat_msgCallDownGreenDrawable = resources.getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
+            chat_msgAvatarLiveLocationDrawable = resources.getDrawable(R.drawable.livepin).mutate();
             chat_inlineResultFile = resources.getDrawable(R.drawable.bot_file);
             chat_inlineResultAudio = resources.getDrawable(R.drawable.bot_music);
             chat_inlineResultLocation = resources.getDrawable(R.drawable.bot_location);
@@ -2398,6 +2426,7 @@ public class Theme {
             chat_locationTitlePaint.setTextSize((float) AndroidUtilities.dp(15.0f));
             chat_locationAddressPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             chat_audioTimePaint.setTextSize((float) AndroidUtilities.dp(12.0f));
+            chat_livePaint.setTextSize((float) AndroidUtilities.dp(12.0f));
             chat_audioTitlePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
             chat_audioPerformerPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
             chat_botButtonPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
@@ -2418,6 +2447,7 @@ public class Theme {
             chat_contextResult_titleTextPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
             chat_contextResult_descriptionTextPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             chat_radialProgressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
+            chat_radialProgress2Paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         }
     }
 

@@ -36,6 +36,7 @@ import org.telegram.tgnet.TLRPC.TL_encryptedChat;
 import org.telegram.tgnet.TLRPC.TL_encryptedChatDiscarded;
 import org.telegram.tgnet.TLRPC.TL_encryptedChatRequested;
 import org.telegram.tgnet.TLRPC.TL_encryptedChatWaiting;
+import org.telegram.tgnet.TLRPC.TL_messageActionHistoryClear;
 import org.telegram.tgnet.TLRPC.TL_messageMediaDocument;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGame;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
@@ -225,6 +226,7 @@ public class DialogCell extends BaseCell {
         this.drawNameLock = false;
         this.drawNameBot = false;
         this.drawVerified = false;
+        boolean showChecks = true;
         String name;
         SpannableStringBuilder stringBuilder;
         Object messageString2;
@@ -402,7 +404,12 @@ public class DialogCell extends BaseCell {
                         fromChat = MessagesController.getInstance().getChat(Integer.valueOf(this.message.messageOwner.to_id.channel_id));
                     }
                     if (this.message.messageOwner instanceof TL_messageService) {
-                        messageString = this.message.messageText;
+                        if (ChatObject.isChannel(this.chat) && (this.message.messageOwner.action instanceof TL_messageActionHistoryClear)) {
+                            messageString = "";
+                            showChecks = false;
+                        } else {
+                            messageString = this.message.messageText;
+                        }
                         currentMessagePaint = Theme.dialogs_messagePrintingPaint;
                     } else if (this.chat != null && this.chat.id > 0 && fromChat == null) {
                         if (this.message.isOutOwner()) {
@@ -502,7 +509,7 @@ public class DialogCell extends BaseCell {
                 } else {
                     this.drawMention = false;
                 }
-                if (!this.message.isOut() || this.draftMessage != null) {
+                if (!this.message.isOut() || this.draftMessage != null || !showChecks) {
                     this.drawCheck1 = false;
                     this.drawCheck2 = false;
                     this.drawClock = false;

@@ -355,7 +355,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         TL_userFull userFull = MessagesController.getInstance().getUserFull(UserConfig.getClientUserId());
                         if (userFull == null) {
                             value = LocaleController.getString("Loading", R.string.Loading);
-                        } else if (userFull == null || TextUtils.isEmpty(userFull.about)) {
+                        } else if (TextUtils.isEmpty(userFull.about)) {
                             value = LocaleController.getString("UserBioEmpty", R.string.UserBioEmpty);
                         } else {
                             value = userFull.about;
@@ -978,10 +978,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     return false;
                 }
                 this.pressCount++;
-                if (this.pressCount >= 2) {
+                if (this.pressCount >= 2 || BuildVars.DEBUG_PRIVATE_VERSION) {
                     Builder builder = new Builder(SettingsActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("DebugMenu", R.string.DebugMenu));
-                    builder.setItems(new CharSequence[]{LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts), LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts), LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts)}, new OnClickListener() {
+                    builder.setItems(new CharSequence[]{LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts), LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts), LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts), "Reset Dialogs"}, new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             if (which == 0) {
                                 ContactsController.getInstance().forceImportContacts();
@@ -989,6 +989,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 ContactsController.getInstance().loadContacts(false, 0);
                             } else if (which == 2) {
                                 ContactsController.getInstance().resetImportedContacts();
+                            } else if (which == 3) {
+                                MessagesController.getInstance().forceResetDialogs();
                             }
                         }
                     });

@@ -169,7 +169,7 @@ public class StatsController {
                         StatsController.this.editor.putLong("resetStatsDate" + networkType, StatsController.this.resetStatsDate[networkType]);
                     }
                     try {
-                        StatsController.this.editor.commit();
+                        StatsController.this.editor.apply();
                     } catch (Throwable e) {
                         FileLog.e(e);
                     }
