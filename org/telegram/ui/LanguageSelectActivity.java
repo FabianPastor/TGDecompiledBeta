@@ -184,19 +184,21 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
-                LocaleInfo localeInfo = null;
-                if (LanguageSelectActivity.this.searching && LanguageSelectActivity.this.searchWas) {
-                    if (position >= 0 && position < LanguageSelectActivity.this.searchResult.size()) {
-                        localeInfo = (LocaleInfo) LanguageSelectActivity.this.searchResult.get(position);
+                if (LanguageSelectActivity.this.getParentActivity() != null && LanguageSelectActivity.this.parentLayout != null) {
+                    LocaleInfo localeInfo = null;
+                    if (LanguageSelectActivity.this.searching && LanguageSelectActivity.this.searchWas) {
+                        if (position >= 0 && position < LanguageSelectActivity.this.searchResult.size()) {
+                            localeInfo = (LocaleInfo) LanguageSelectActivity.this.searchResult.get(position);
+                        }
+                    } else if (position >= 0 && position < LanguageSelectActivity.this.sortedLanguages.size()) {
+                        localeInfo = (LocaleInfo) LanguageSelectActivity.this.sortedLanguages.get(position);
                     }
-                } else if (position >= 0 && position < LanguageSelectActivity.this.sortedLanguages.size()) {
-                    localeInfo = (LocaleInfo) LanguageSelectActivity.this.sortedLanguages.get(position);
+                    if (localeInfo != null) {
+                        LocaleController.getInstance().applyLanguage(localeInfo, true, false, true);
+                        LanguageSelectActivity.this.parentLayout.rebuildAllFragmentViews(false, false);
+                    }
+                    LanguageSelectActivity.this.finishFragment();
                 }
-                if (localeInfo != null) {
-                    LocaleController.getInstance().applyLanguage(localeInfo, true);
-                    LanguageSelectActivity.this.parentLayout.rebuildAllFragmentViews(false, false);
-                }
-                LanguageSelectActivity.this.finishFragment();
             }
         });
         this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {

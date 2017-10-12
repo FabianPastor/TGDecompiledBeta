@@ -542,6 +542,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             if (chatFull.id == this.chatId && !byChannelUsers) {
                 this.info = chatFull;
                 fetchUsers();
+                updateRows();
             }
         }
     }

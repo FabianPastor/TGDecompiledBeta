@@ -463,7 +463,7 @@ public class LocaleController {
         addRules(new String[]{"mt"}, new PluralRules_Maltese());
         addRules(new String[]{"ga", "se", "sma", "smi", "smj", "smn", "sms"}, new PluralRules_Two());
         addRules(new String[]{"ak", "am", "bh", "fil", "tl", "guw", "hi", "ln", "mg", "nso", "ti", "wa"}, new PluralRules_Zero());
-        addRules(new String[]{"az", "bm", "fa", "ig", "hu", "ja", "kde", "kea", "ko", "my", "ses", "sg", "to", "tr", "vi", "wo", "yo", "zh", "bo", "dz", TtmlNode.ATTR_ID, "jv", "ka", "km", "kn", "ms", "th"}, new PluralRules_None());
+        addRules(new String[]{"az", "bm", "fa", "ig", "hu", "ja", "kde", "kea", "ko", "my", "ses", "sg", "to", "tr", "vi", "wo", "yo", "zh", "bo", "dz", TtmlNode.ATTR_ID, "jv", "jw", "ka", "km", "kn", "ms", "th", "in"}, new PluralRules_None());
         LocaleInfo localeInfo = new LocaleInfo();
         localeInfo.name = "English";
         localeInfo.nameEnglish = "English";
@@ -692,6 +692,115 @@ public class LocaleController {
         return result.toString();
     }
 
+    public static String getLocaleAlias(String code) {
+        if (code == null) {
+            return null;
+        }
+        Object obj = -1;
+        switch (code.hashCode()) {
+            case 3325:
+                if (code.equals("he")) {
+                    obj = 7;
+                    break;
+                }
+                break;
+            case 3355:
+                if (code.equals(TtmlNode.ATTR_ID)) {
+                    obj = 6;
+                    break;
+                }
+                break;
+            case 3365:
+                if (code.equals("in")) {
+                    obj = null;
+                    break;
+                }
+                break;
+            case 3374:
+                if (code.equals("iw")) {
+                    obj = 1;
+                    break;
+                }
+                break;
+            case 3391:
+                if (code.equals("ji")) {
+                    obj = 5;
+                    break;
+                }
+                break;
+            case 3404:
+                if (code.equals("jv")) {
+                    obj = 8;
+                    break;
+                }
+                break;
+            case 3405:
+                if (code.equals("jw")) {
+                    obj = 2;
+                    break;
+                }
+                break;
+            case 3508:
+                if (code.equals("nb")) {
+                    obj = 9;
+                    break;
+                }
+                break;
+            case 3521:
+                if (code.equals("no")) {
+                    obj = 3;
+                    break;
+                }
+                break;
+            case 3704:
+                if (code.equals("tl")) {
+                    obj = 4;
+                    break;
+                }
+                break;
+            case 3856:
+                if (code.equals("yi")) {
+                    obj = 11;
+                    break;
+                }
+                break;
+            case 101385:
+                if (code.equals("fil")) {
+                    obj = 10;
+                    break;
+                }
+                break;
+        }
+        switch (obj) {
+            case null:
+                return TtmlNode.ATTR_ID;
+            case 1:
+                return "he";
+            case 2:
+                return "jv";
+            case 3:
+                return "nb";
+            case 4:
+                return "fil";
+            case 5:
+                return "yi";
+            case 6:
+                return "in";
+            case 7:
+                return "iw";
+            case 8:
+                return "jw";
+            case 9:
+                return "no";
+            case 10:
+                return "tl";
+            case 11:
+                return "ji";
+            default:
+                return null;
+        }
+    }
+
     public boolean applyLanguageFile(File file) {
         try {
             HashMap<String, String> stringMap = getLocaleFileStrings(file);
@@ -718,7 +827,7 @@ public class LocaleController {
                 saveOtherLanguages();
             }
             this.localeValues = stringMap;
-            applyLanguage(localeInfo, true, true);
+            applyLanguage(localeInfo, true, true, false);
             return true;
         } catch (Throwable e) {
             FileLog.e(e);
@@ -929,14 +1038,14 @@ public class LocaleController {
     }
 
     public void applyLanguage(LocaleInfo localeInfo, boolean override) {
-        applyLanguage(localeInfo, override, false);
+        applyLanguage(localeInfo, override, false, false);
     }
 
-    public void applyLanguage(LocaleInfo localeInfo, boolean override, boolean fromFile) {
+    public void applyLanguage(LocaleInfo localeInfo, boolean override, boolean fromFile, boolean force) {
         if (localeInfo != null) {
             File pathToFile = localeInfo.getPathToFile();
             ConnectionsManager.getInstance().setLangCode(localeInfo.shortName.replace("_", "-"));
-            if (localeInfo.isRemote() && !pathToFile.exists()) {
+            if (localeInfo.isRemote() && (force || !pathToFile.exists())) {
                 FileLog.d("reload locale because file doesn't exist " + pathToFile);
                 applyRemoteLanguage(localeInfo, null, true);
             }
@@ -961,9 +1070,12 @@ public class LocaleController {
                 }
                 this.currentLocale = newLocale;
                 this.currentLocaleInfo = localeInfo;
-                this.currentPluralRules = (PluralRules) this.allRules.get(this.currentLocale.getLanguage());
+                this.currentPluralRules = (PluralRules) this.allRules.get(args[0]);
                 if (this.currentPluralRules == null) {
-                    this.currentPluralRules = (PluralRules) this.allRules.get("en");
+                    this.currentPluralRules = (PluralRules) this.allRules.get(this.currentLocale.getLanguage());
+                }
+                if (this.currentPluralRules == null) {
+                    this.currentPluralRules = new PluralRules_None();
                 }
                 this.changingConfiguration = true;
                 Locale.setDefault(this.currentLocale);
@@ -1303,7 +1415,7 @@ public class LocaleController {
             format.setCurrency(сurrency);
             return (discount ? "-" : "") + format.format(doubleAmount);
         }
-        return (discount ? "-" : "") + String.format(type + customFormat, new Object[]{Double.valueOf(doubleAmount)});
+        return (discount ? "-" : "") + String.format(Locale.US, type + customFormat, new Object[]{Double.valueOf(doubleAmount)});
     }
 
     public String formatCurrencyDecimalString(long amount, String type, boolean inludeType) {
@@ -1535,10 +1647,11 @@ public class LocaleController {
                 doubleAmount = ((double) amount) / 100.0d;
                 break;
         }
+        Locale locale = Locale.US;
         if (!inludeType) {
             type = "" + customFormat;
         }
-        return String.format(type, new Object[]{Double.valueOf(doubleAmount)}).trim();
+        return String.format(locale, type, new Object[]{Double.valueOf(doubleAmount)}).trim();
     }
 
     public static String formatStringSimple(String string, Object... args) {

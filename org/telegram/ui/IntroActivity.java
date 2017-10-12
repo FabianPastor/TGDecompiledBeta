@@ -554,22 +554,23 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     }
 
     private void checkContinueText() {
+        String arg;
         LocaleInfo englishInfo = null;
         LocaleInfo systemInfo = null;
         LocaleInfo currentLocaleInfo = LocaleController.getInstance().getCurrentLocaleInfo();
         String systemLang = LocaleController.getSystemLocaleStringIso639().toLowerCase();
-        String arg;
         if (systemLang.contains("-")) {
             arg = systemLang.split("-")[0];
         } else {
             arg = systemLang;
         }
+        String alias = LocaleController.getLocaleAlias(arg);
         for (int a = 0; a < LocaleController.getInstance().languages.size(); a++) {
             LocaleInfo info = (LocaleInfo) LocaleController.getInstance().languages.get(a);
             if (info.shortName.equals("en")) {
                 englishInfo = info;
             }
-            if (info.shortName.replace("_", "-").equals(systemLang) || info.shortName.equals(arg)) {
+            if (info.shortName.replace("_", "-").equals(systemLang) || info.shortName.equals(arg) || (alias != null && info.shortName.equals(alias))) {
                 systemInfo = info;
             }
             if (englishInfo != null && systemInfo != null) {

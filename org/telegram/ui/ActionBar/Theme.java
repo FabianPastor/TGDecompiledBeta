@@ -76,6 +76,7 @@ public class Theme {
     public static Drawable avatar_photoDrawable = null;
     public static Paint chat_actionBackgroundPaint = null;
     public static TextPaint chat_actionTextPaint = null;
+    public static TextPaint chat_adminPaint = null;
     public static Drawable[] chat_attachButtonDrawables = new Drawable[8];
     public static TextPaint chat_audioPerformerPaint = null;
     public static TextPaint chat_audioTimePaint = null;
@@ -231,6 +232,7 @@ public class Theme {
     public static Drawable dialogs_verifiedCheckDrawable = null;
     public static Drawable dialogs_verifiedDrawable = null;
     public static Paint dividerPaint = null;
+    private static HashMap<String, String> fallbackKeys = new HashMap();
     private static boolean isCustomTheme = false;
     public static final String key_actionBarActionModeDefault = "actionBarActionModeDefault";
     public static final String key_actionBarActionModeDefaultIcon = "actionBarActionModeDefaultIcon";
@@ -303,6 +305,8 @@ public class Theme {
     public static final String key_calls_ratingStarSelected = "calls_ratingStarSelected";
     public static final String key_changephoneinfo_image = "changephoneinfo_image";
     public static final String key_chat_addContact = "chat_addContact";
+    public static final String key_chat_adminSelectedText = "chat_adminSelectedText";
+    public static final String key_chat_adminText = "chat_adminText";
     public static final String key_chat_botButtonText = "chat_botButtonText";
     public static final String key_chat_botKeyboardButtonBackground = "chat_botKeyboardButtonBackground";
     public static final String key_chat_botKeyboardButtonBackgroundPressed = "chat_botKeyboardButtonBackgroundPressed";
@@ -1113,6 +1117,8 @@ public class Theme {
         defaultColors.put(key_chat_mediaTimeText, Integer.valueOf(-1));
         defaultColors.put(key_chat_inTimeText, Integer.valueOf(-6182221));
         defaultColors.put(key_chat_outTimeText, Integer.valueOf(-9391780));
+        defaultColors.put(key_chat_adminText, Integer.valueOf(-4143413));
+        defaultColors.put(key_chat_adminSelectedText, Integer.valueOf(-7752511));
         defaultColors.put(key_chat_inTimeSelectedText, Integer.valueOf(-7752511));
         defaultColors.put(key_chat_outTimeSelectedText, Integer.valueOf(-9391780));
         defaultColors.put(key_chat_inAudioPerfomerText, Integer.valueOf(-13683656));
@@ -1343,6 +1349,8 @@ public class Theme {
         defaultColors.put(key_chat_botSwitchToInlineText, Integer.valueOf(-12348980));
         defaultColors.put(key_calls_ratingStar, Integer.valueOf(Integer.MIN_VALUE));
         defaultColors.put(key_calls_ratingStarSelected, Integer.valueOf(-11888682));
+        fallbackKeys.put(key_chat_adminText, key_chat_inTimeText);
+        fallbackKeys.put(key_chat_adminSelectedText, key_chat_inTimeSelectedText);
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Default";
         ArrayList arrayList = themes;
@@ -1925,8 +1933,8 @@ public class Theme {
     }
 
     public static File getAssetFile(String assetName) {
-        long size;
         File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
+        long size;
         try {
             InputStream stream = ApplicationLoader.applicationContext.getAssets().open(assetName);
             size = (long) stream.available();
@@ -2227,6 +2235,7 @@ public class Theme {
             chat_gamePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_shipmentPaint = new TextPaint(1);
             chat_timePaint = new TextPaint(1);
+            chat_adminPaint = new TextPaint(1);
             chat_namePaint = new TextPaint(1);
             chat_namePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_forwardNamePaint = new TextPaint(1);
@@ -2435,6 +2444,7 @@ public class Theme {
             chat_contactPhonePaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             chat_durationPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
             chat_timePaint.setTextSize((float) AndroidUtilities.dp(12.0f));
+            chat_adminPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             chat_namePaint.setTextSize((float) AndroidUtilities.dp(14.0f));
             chat_forwardNamePaint.setTextSize((float) AndroidUtilities.dp(14.0f));
             chat_replyNamePaint.setTextSize((float) AndroidUtilities.dp(14.0f));
@@ -2642,6 +2652,12 @@ public class Theme {
 
     public static Integer getColorOrNull(String key) {
         Integer color = (Integer) currentColors.get(key);
+        if (color != null) {
+            return color;
+        }
+        if (((String) fallbackKeys.get(key)) != null) {
+            color = (Integer) currentColors.get(key);
+        }
         if (color == null) {
             return (Integer) defaultColors.get(key);
         }
@@ -2654,19 +2670,24 @@ public class Theme {
 
     public static int getColor(String key, boolean[] isDefault) {
         Integer color = (Integer) currentColors.get(key);
-        if (color != null) {
-            return color.intValue();
+        if (color == null) {
+            if (((String) fallbackKeys.get(key)) != null) {
+                color = (Integer) currentColors.get(key);
+            }
+            if (color == null) {
+                if (isDefault != null) {
+                    isDefault[0] = true;
+                }
+                if (key.equals(key_chat_serviceBackground)) {
+                    return serviceMessageColor;
+                }
+                if (key.equals(key_chat_serviceBackgroundSelected)) {
+                    return serviceSelectedMessageColor;
+                }
+                return getDefaultColor(key);
+            }
         }
-        if (isDefault != null) {
-            isDefault[0] = true;
-        }
-        if (key.equals(key_chat_serviceBackground)) {
-            return serviceMessageColor;
-        }
-        if (key.equals(key_chat_serviceBackgroundSelected)) {
-            return serviceSelectedMessageColor;
-        }
-        return getDefaultColor(key);
+        return color.intValue();
     }
 
     public static void setColor(String key, int color, boolean useDefault) {
@@ -2790,12 +2811,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
+                    int i;
                     SharedPreferences preferences;
                     int selectedBackground;
+                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        int i;
-                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

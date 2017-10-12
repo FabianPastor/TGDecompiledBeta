@@ -53,13 +53,16 @@ public class LocationSharingService extends Service implements NotificationCente
     }
 
     public void didReceivedNotification(int id, Object... args) {
-        if (id != NotificationCenter.liveLocationsChanged) {
-            return;
-        }
-        if (LocationController.getInstance().sharingLocationsUI.isEmpty()) {
-            stopSelf();
-        } else {
-            updateNotification();
+        if (id == NotificationCenter.liveLocationsChanged && this.handler != null) {
+            this.handler.post(new Runnable() {
+                public void run() {
+                    if (LocationController.getInstance().sharingLocationsUI.isEmpty()) {
+                        LocationSharingService.this.stopSelf();
+                    } else {
+                        LocationSharingService.this.updateNotification();
+                    }
+                }
+            });
         }
     }
 

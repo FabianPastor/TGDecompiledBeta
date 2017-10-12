@@ -1945,32 +1945,28 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
-        int maxWidth;
-        boolean z;
         int i;
         int dp;
-        String description;
+        String author;
         Photo photo;
         TLObject document;
         String type;
+        int duration;
+        boolean smallImage;
         TL_webDocument webDocument;
-        int additinalWidth;
-        int height;
+        TL_webDocument webDocument2;
         int width;
         Throwable e;
-        int restLinesCount;
         int a;
+        int lineLeft;
         boolean authorIsRTL;
         boolean hasRTL;
-        int maxPhotoWidth;
+        int textWidth;
         DocumentAttribute attribute;
-        PhotoSize photoSize;
-        PhotoSize photoSize2;
-        int dp2;
-        int durationWidth;
         ArrayList arrayList;
         String fileName;
         boolean autoDownload;
+        int seconds;
         String str;
         CharSequence str2;
         String price;
@@ -1983,7 +1979,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         int maxButtonWidth;
         int maxButtonsWidth;
         HashMap<String, BotButton> hashMap;
-        HashMap<String, BotButton> oldByPosition;
         TL_keyboardButtonRow row;
         int buttonWidth;
         int b;
@@ -2001,7 +1996,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
             int linkPreviewMaxWidth;
-            int lineLeft;
+            int height;
+            HashMap<String, BotButton> oldByPosition;
             int buttonsCount;
             int timeWidthTotal;
             this.pinnedBottom = bottomNear;
@@ -2089,6 +2085,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
+            int maxWidth;
+            boolean z;
+            int maxPhotoWidth;
             float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
@@ -2193,13 +2192,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
                     String site_name;
                     String title;
-                    String author;
-                    int duration;
-                    boolean smallImage;
-                    TL_webDocument webDocument2;
+                    String description;
+                    int additinalWidth;
                     int restLines;
-                    int textWidth;
-                    int seconds;
+                    int restLinesCount;
+                    PhotoSize photoSize;
+                    PhotoSize photoSize2;
+                    int dp2;
+                    int durationWidth;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.needDrawAvatar() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);
@@ -7051,7 +7051,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         int i;
         int x;
         int y;
-        float progress;
         int x1;
         int y1;
         RadialProgress radialProgress;
@@ -7348,6 +7347,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             Theme.chat_photoStatesDrawables[drawable][this.buttonPressed].draw(canvas);
             if (this.currentMessageObject.messageOwner.destroyTime != 0) {
                 if (!this.currentMessageObject.isOutOwner()) {
+                    float progress;
                     progress = ((float) Math.max(0, (((long) this.currentMessageObject.messageOwner.destroyTime) * 1000) - (System.currentTimeMillis() + ((long) (ConnectionsManager.getInstance().getTimeDifference() * 1000))))) / (((float) this.currentMessageObject.messageOwner.ttl) * 1000.0f);
                     Theme.chat_deleteProgressPaint.setAlpha((int) (255.0f * this.controlsAlpha));
                     canvas.drawArc(this.deleteProgressRect, -90.0f, -360.0f * progress, true, Theme.chat_deleteProgressPaint);
@@ -8524,7 +8524,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 adminWidth = 0;
             } else {
                 adminString = LocaleController.getString("ChatAdmin", R.string.ChatAdmin);
-                adminWidth = (int) Math.ceil((double) Theme.chat_timePaint.measureText(adminString));
+                adminWidth = (int) Math.ceil((double) Theme.chat_adminPaint.measureText(adminString));
                 this.nameWidth -= adminWidth;
             }
             if (!authorName) {
@@ -8573,7 +8573,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     this.nameOffsetX = this.nameLayout.getLineLeft(0);
                 }
                 if (adminString != null) {
-                    this.adminLayout = new StaticLayout(adminString, Theme.chat_timePaint, adminWidth + AndroidUtilities.dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    this.adminLayout = new StaticLayout(adminString, Theme.chat_adminPaint, adminWidth + AndroidUtilities.dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     this.nameWidth = (int) (((float) this.nameWidth) + (this.adminLayout.getLineWidth(0) + ((float) AndroidUtilities.dp(8.0f))));
                 } else {
                     this.adminLayout = null;
@@ -8954,11 +8954,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     }
                     canvas.translate(this.nameX, this.nameY);
                     this.nameLayout.draw(canvas);
-                    if (this.adminLayout != null) {
-                        canvas.translate(((float) (this.backgroundWidth - AndroidUtilities.dp(32.0f))) - this.adminLayout.getLineWidth(0), (float) AndroidUtilities.dp(1.5f));
-                        this.adminLayout.draw(canvas);
-                    }
                     canvas.restore();
+                    if (this.adminLayout != null) {
+                        Theme.chat_adminPaint.setColor(Theme.getColor(isDrawSelectedBackground() ? Theme.key_chat_adminSelectedText : Theme.key_chat_adminText));
+                        canvas.save();
+                        canvas.translate(((float) (this.currentBackgroundDrawable.getBounds().right - AndroidUtilities.dp(11.0f))) - this.adminLayout.getLineWidth(0), this.nameY + ((float) AndroidUtilities.dp(0.5f)));
+                        this.adminLayout.draw(canvas);
+                        canvas.restore();
+                    }
                 }
                 if (!(!this.drawForwardedName || this.forwardedNameLayout[0] == null || this.forwardedNameLayout[1] == null)) {
                     if (this.currentMessageObject.type == 5) {

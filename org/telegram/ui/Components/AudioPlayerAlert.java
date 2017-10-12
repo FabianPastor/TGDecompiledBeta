@@ -801,6 +801,20 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
             protected boolean allowSelectChildAtPosition(float x, float y) {
                 return AudioPlayerAlert.this.playerLayout == null || y > AudioPlayerAlert.this.playerLayout.getTranslationY() + ((float) AudioPlayerAlert.this.playerLayout.getMeasuredHeight());
             }
+
+            public boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                int measuredHeight;
+                canvas.save();
+                if (AudioPlayerAlert.this.actionBar != null) {
+                    measuredHeight = AudioPlayerAlert.this.actionBar.getMeasuredHeight();
+                } else {
+                    measuredHeight = 0;
+                }
+                canvas.clipRect(0, measuredHeight + AndroidUtilities.dp(50.0f), getMeasuredWidth(), getMeasuredHeight());
+                boolean result = super.drawChild(canvas, child, drawingTime);
+                canvas.restore();
+                return result;
+            }
         };
         this.listView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
         this.listView.setClipToPadding(false);

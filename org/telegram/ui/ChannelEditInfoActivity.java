@@ -818,7 +818,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
     }
 
     public void setInfo(ChatFull chatFull) {
-        if (this.info == null) {
+        if (this.info == null && chatFull != null) {
             this.historyHidden = chatFull.hidden_prehistory;
         }
         this.info = chatFull;

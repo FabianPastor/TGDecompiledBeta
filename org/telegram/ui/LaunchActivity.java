@@ -2625,19 +2625,29 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 String showedLang = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getString("language_showed2", "");
                 final String systemLang = LocaleController.getSystemLocaleStringIso639().toLowerCase();
                 if (force || !showedLang.equals(systemLang)) {
-                    final LocaleInfo[] infos = new LocaleInfo[2];
                     String arg;
+                    final LocaleInfo[] infos = new LocaleInfo[2];
                     if (systemLang.contains("-")) {
                         arg = systemLang.split("-")[0];
                     } else {
                         arg = systemLang;
+                    }
+                    String alias;
+                    if ("in".equals(arg)) {
+                        alias = TtmlNode.ATTR_ID;
+                    } else if ("iw".equals(arg)) {
+                        alias = "he";
+                    } else if ("jw".equals(arg)) {
+                        alias = "jv";
+                    } else {
+                        alias = null;
                     }
                     for (int a = 0; a < LocaleController.getInstance().languages.size(); a++) {
                         LocaleInfo info = (LocaleInfo) LocaleController.getInstance().languages.get(a);
                         if (info.shortName.equals("en")) {
                             infos[0] = info;
                         }
-                        if (info.shortName.replace("_", "-").equals(systemLang) || info.shortName.equals(arg)) {
+                        if (info.shortName.replace("_", "-").equals(systemLang) || info.shortName.equals(arg) || (alias != null && info.shortName.equals(alias))) {
                             infos[1] = info;
                         }
                         if (infos[0] != null && infos[1] != null) {

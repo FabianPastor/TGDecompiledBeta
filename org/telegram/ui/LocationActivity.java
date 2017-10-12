@@ -414,7 +414,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     } else if (LocationController.getInstance().isSharingLocation(LocationActivity.this.dialogId)) {
                         LocationController.getInstance().removeSharingLocation(LocationActivity.this.dialogId);
                         LocationActivity.this.finishFragment();
-                    } else if (LocationActivity.this.delegate != null && LocationActivity.this.userLocation != null) {
+                    } else if (LocationActivity.this.delegate != null && LocationActivity.this.getParentActivity() != null && LocationActivity.this.userLocation != null) {
                         User user = null;
                         if (((int) LocationActivity.this.dialogId) > 0) {
                             user = MessagesController.getInstance().getUser(Integer.valueOf((int) LocationActivity.this.dialogId));
@@ -828,7 +828,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         builder.setMessage(LocaleController.getString("GpsDisabledAlert", R.string.GpsDisabledAlert));
                         builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", R.string.ConnectingToProxyEnable), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                LocationActivity.this.getParentActivity().startActivity(new Intent("android.settings.LOCATION_SOURCE_SETTINGS"));
+                                if (LocationActivity.this.getParentActivity() != null) {
+                                    try {
+                                        LocationActivity.this.getParentActivity().startActivity(new Intent("android.settings.LOCATION_SOURCE_SETTINGS"));
+                                    } catch (Exception e) {
+                                    }
+                                }
                             }
                         });
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
