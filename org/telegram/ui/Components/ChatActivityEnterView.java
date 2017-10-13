@@ -1993,6 +1993,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.hasRecordVideo = false;
                 }
             }
+            if (!MediaController.getInstance().canInAppCamera()) {
+                this.hasRecordVideo = false;
+            }
             if (this.hasRecordVideo) {
                 CameraController.getInstance().initCamera();
                 setRecordVideoButtonVisible(ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean(isChannel ? "currentModeVideoChannel" : "currentModeVideo", isChannel), false);

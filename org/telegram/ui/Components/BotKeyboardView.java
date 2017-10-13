@@ -24,6 +24,7 @@ public class BotKeyboardView extends LinearLayout {
     private BotKeyboardViewDelegate delegate;
     private boolean isFullSize;
     private int panelHeight;
+    private ScrollView scrollView;
 
     public interface BotKeyboardViewDelegate {
         void didPressedButton(KeyboardButton keyboardButton);
@@ -32,12 +33,12 @@ public class BotKeyboardView extends LinearLayout {
     public BotKeyboardView(Context context) {
         super(context);
         setOrientation(1);
-        ScrollView scrollView = new ScrollView(context);
-        addView(scrollView);
+        this.scrollView = new ScrollView(context);
+        addView(this.scrollView);
         this.container = new LinearLayout(context);
         this.container.setOrientation(1);
-        scrollView.addView(this.container);
-        AndroidUtilities.setScrollViewEdgeEffectColor(scrollView, Theme.getColor(Theme.key_chat_emojiPanelBackground));
+        this.scrollView.addView(this.container);
+        AndroidUtilities.setScrollViewEdgeEffectColor(this.scrollView, Theme.getColor(Theme.key_chat_emojiPanelBackground));
         setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
     }
 
@@ -82,6 +83,7 @@ public class BotKeyboardView extends LinearLayout {
         this.botButtons = buttons;
         this.container.removeAllViews();
         this.buttonViews.clear();
+        this.scrollView.scrollTo(0, 0);
         if (buttons != null && this.botButtons.rows.size() != 0) {
             this.isFullSize = !buttons.resize;
             this.buttonHeight = !this.isFullSize ? 42 : (int) Math.max(42.0f, ((float) (((this.panelHeight - AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) - ((this.botButtons.rows.size() - 1) * AndroidUtilities.dp(10.0f))) / this.botButtons.rows.size())) / AndroidUtilities.density);

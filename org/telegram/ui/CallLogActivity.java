@@ -48,6 +48,7 @@ import org.telegram.tgnet.TLRPC.PhoneCallDiscardReason;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterPhoneCalls;
 import org.telegram.tgnet.TLRPC.TL_inputPeerEmpty;
+import org.telegram.tgnet.TLRPC.TL_messageActionHistoryClear;
 import org.telegram.tgnet.TLRPC.TL_messageActionPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_messages_search;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
@@ -519,7 +520,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                                 }
                                 for (a = 0; a < msgs.messages.size(); a++) {
                                     Message msg = (Message) msgs.messages.get(a);
-                                    if (msg.action != null) {
+                                    if (!(msg.action == null || (msg.action instanceof TL_messageActionHistoryClear))) {
                                         int callType;
                                         if (msg.from_id == UserConfig.getClientUserId()) {
                                             callType = 0;

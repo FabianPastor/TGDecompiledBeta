@@ -6,9 +6,12 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.text.TextUtils;
@@ -165,8 +168,34 @@ public class WebviewActivity extends BaseFragment {
             this.webView.addJavascriptInterface(new TelegramWebviewProxy(), "TelegramWebviewProxy");
         }
         this.webView.setWebViewClient(new WebViewClient() {
+            private boolean isInternalUrl(String url) {
+                if (TextUtils.isEmpty(url)) {
+                    return false;
+                }
+                Uri uri = Uri.parse(url);
+                if (!"tg".equals(uri.getScheme())) {
+                    return false;
+                }
+                WebviewActivity.this.finishFragment();
+                try {
+                    Intent intent = new Intent("android.intent.action.VIEW", uri);
+                    intent.setComponent(new ComponentName(ApplicationLoader.applicationContext.getPackageName(), LaunchActivity.class.getName()));
+                    intent.putExtra("com.android.browser.application_id", ApplicationLoader.applicationContext.getPackageName());
+                    ApplicationLoader.applicationContext.startActivity(intent);
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+                return true;
+            }
+
             public void onLoadResource(WebView view, String url) {
-                super.onLoadResource(view, url);
+                if (!isInternalUrl(url)) {
+                    super.onLoadResource(view, url);
+                }
+            }
+
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return isInternalUrl(url) || super.shouldOverrideUrlLoading(view, url);
             }
 
             public void onPageFinished(WebView view, String url) {

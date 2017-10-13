@@ -179,6 +179,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     private int ignoreFirstProgress = 0;
     private boolean ignoreOnPause;
     private boolean ignoreProximity;
+    private boolean inappCamera = true;
     private boolean inputFieldHasText;
     private InternalObserver internalObserver;
     private boolean isDrawingWasReady;
@@ -791,6 +792,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         this.customTabs = preferences.getBoolean("custom_tabs", true);
         this.directShare = preferences.getBoolean("direct_share", true);
         this.shuffleMusic = preferences.getBoolean("shuffleMusic", false);
+        this.inappCamera = preferences.getBoolean("inappCamera", true);
         this.repeatMode = preferences.getInt("repeatMode", 0);
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
@@ -3349,6 +3351,10 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
 
     public static void saveFile(String fullPath, Context context, int type, String name, String mime) {
         Throwable e;
+        final AlertDialog finalProgress;
+        final int i;
+        final String str;
+        final String str2;
         if (fullPath != null) {
             File file = null;
             if (!(fullPath == null || fullPath.length() == 0)) {
@@ -3361,10 +3367,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 final File sourceFile = file;
                 final boolean[] cancelled = new boolean[1];
                 if (sourceFile.exists()) {
-                    final AlertDialog finalProgress;
-                    final int i;
-                    final String str;
-                    final String str2;
                     AlertDialog progressDialog = null;
                     if (!(context == null || type == 0)) {
                         try {
@@ -3843,6 +3845,19 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         editor.commit();
     }
 
+    public void toggleInappCamera() {
+        boolean z;
+        if (this.inappCamera) {
+            z = false;
+        } else {
+            z = true;
+        }
+        this.inappCamera = z;
+        Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+        editor.putBoolean("direct_share", this.inappCamera);
+        editor.commit();
+    }
+
     public void checkSaveToGalleryFiles() {
         try {
             File telegramPath = new File(Environment.getExternalStorageDirectory(), "Telegram");
@@ -3889,6 +3904,10 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
 
     public boolean canDirectShare() {
         return this.directShare;
+    }
+
+    public boolean canInAppCamera() {
+        return this.inappCamera;
     }
 
     public static void loadGalleryPhotosAlbums(final int guid) {

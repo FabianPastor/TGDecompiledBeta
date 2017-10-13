@@ -414,7 +414,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     } else if (LocationController.getInstance().isSharingLocation(LocationActivity.this.dialogId)) {
                         LocationController.getInstance().removeSharingLocation(LocationActivity.this.dialogId);
                         LocationActivity.this.finishFragment();
-                    } else if (LocationActivity.this.delegate != null && LocationActivity.this.getParentActivity() != null && LocationActivity.this.userLocation != null) {
+                    } else if (LocationActivity.this.delegate != null && LocationActivity.this.getParentActivity() != null && LocationActivity.this.myLocation != null) {
                         User user = null;
                         if (((int) LocationActivity.this.dialogId) > 0) {
                             user = MessagesController.getInstance().getUser(Integer.valueOf((int) LocationActivity.this.dialogId));
@@ -423,8 +423,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                             public void run(int param) {
                                 TL_messageMediaGeoLive location = new TL_messageMediaGeoLive();
                                 location.geo = new TL_geoPoint();
-                                location.geo.lat = LocationActivity.this.userLocation.getLatitude();
-                                location.geo._long = LocationActivity.this.userLocation.getLongitude();
+                                location.geo.lat = LocationActivity.this.myLocation.getLatitude();
+                                location.geo._long = LocationActivity.this.myLocation.getLongitude();
                                 location.period = param;
                                 LocationActivity.this.delegate.didSelectLocation(location, LocationActivity.this.liveLocationType);
                                 LocationActivity.this.finishFragment();

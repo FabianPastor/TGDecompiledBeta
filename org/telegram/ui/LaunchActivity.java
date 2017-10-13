@@ -2145,7 +2145,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     ContactsController.getInstance().readContacts();
                     return;
                 } else if (requestCode == 3) {
-                    CameraController.getInstance().initCamera();
+                    if (MediaController.getInstance().canInAppCamera()) {
+                        CameraController.getInstance().initCamera();
+                        return;
+                    }
                     return;
                 } else if (requestCode == 19 || requestCode == 20) {
                     showAlert = false;

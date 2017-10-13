@@ -2012,7 +2012,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     public void checkCamera(boolean request) {
         if (this.baseFragment != null) {
             boolean old = this.deviceHasGoodCamera;
-            if (VERSION.SDK_INT < 23) {
+            if (!MediaController.getInstance().canInAppCamera()) {
+                this.deviceHasGoodCamera = false;
+            } else if (VERSION.SDK_INT < 23) {
                 CameraController.getInstance().initCamera();
                 this.deviceHasGoodCamera = CameraController.getInstance().isCameraInitied();
             } else if (this.baseFragment.getParentActivity().checkSelfPermission("android.permission.CAMERA") != 0) {

@@ -1017,11 +1017,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
                     public void didPressedInstantButton(ChatMessageCell cell, int type) {
                         MessageObject messageObject = cell.getMessageObject();
-                        if (type != 0) {
+                        if (type == 0) {
+                            if (messageObject.messageOwner.media != null && messageObject.messageOwner.media.webpage != null && messageObject.messageOwner.media.webpage.cached_page != null) {
+                                ArticleViewer.getInstance().setParentActivity(ChatActivity.this.getParentActivity(), ChatActivity.this);
+                                ArticleViewer.getInstance().open(messageObject);
+                            }
+                        } else if (messageObject.messageOwner.media != null && messageObject.messageOwner.media.webpage != null) {
                             Browser.openUrl(ChatActivity.this.getParentActivity(), messageObject.messageOwner.media.webpage.url);
-                        } else if (messageObject.messageOwner.media != null && messageObject.messageOwner.media.webpage != null && messageObject.messageOwner.media.webpage.cached_page != null) {
-                            ArticleViewer.getInstance().setParentActivity(ChatActivity.this.getParentActivity(), ChatActivity.this);
-                            ArticleViewer.getInstance().open(messageObject);
                         }
                     }
 
@@ -7957,7 +7959,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             this.unread_to_load = 0;
             removeMessageObject(this.unreadMessageObject);
             this.unreadMessageObject = null;
-            this.pagedownButtonCounter.setVisibility(4);
+            if (this.pagedownButtonCounter != null) {
+                this.pagedownButtonCounter.setVisibility(4);
+            }
         } else if (id == NotificationCenter.messageReceivedByServer) {
             Integer msgId = args[0];
             obj = (MessageObject) this.messagesDict[0].get(msgId);
@@ -10303,12 +10307,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     private void processSelectedOption(int option) {
+        File file;
+        Intent intent;
         if (this.selectedObject != null) {
             Bundle args;
             String path;
-            File file;
             AlertDialog.Builder builder;
-            Intent intent;
             TLObject req;
             switch (option) {
                 case 0:

@@ -979,9 +979,21 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 }
                 this.pressCount++;
                 if (this.pressCount >= 2 || BuildVars.DEBUG_PRIVATE_VERSION) {
+                    String string;
                     Builder builder = new Builder(SettingsActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("DebugMenu", R.string.DebugMenu));
-                    builder.setItems(new CharSequence[]{LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts), LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts), LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts), "Reset Dialogs"}, new OnClickListener() {
+                    CharSequence[] items = new CharSequence[5];
+                    items[0] = LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts);
+                    items[1] = LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts);
+                    items[2] = LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts);
+                    items[3] = LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs);
+                    if (MediaController.getInstance().canInAppCamera()) {
+                        string = LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera);
+                    } else {
+                        string = LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
+                    }
+                    items[4] = string;
+                    builder.setItems(items, new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             if (which == 0) {
                                 ContactsController.getInstance().forceImportContacts();
@@ -991,20 +1003,21 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 ContactsController.getInstance().resetImportedContacts();
                             } else if (which == 3) {
                                 MessagesController.getInstance().forceResetDialogs();
+                            } else if (which == 4) {
+                                MediaController.getInstance().toggleInappCamera();
                             }
                         }
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     SettingsActivity.this.showDialog(builder.create());
-                    return true;
+                } else {
+                    try {
+                        Toast.makeText(SettingsActivity.this.getParentActivity(), "¯\\_(ツ)_/¯", 0).show();
+                    } catch (Throwable e) {
+                        FileLog.e(e);
+                    }
                 }
-                try {
-                    Toast.makeText(SettingsActivity.this.getParentActivity(), "¯\\_(ツ)_/¯", 0).show();
-                    return true;
-                } catch (Throwable e) {
-                    FileLog.e(e);
-                    return true;
-                }
+                return true;
             }
         });
         frameLayout.addView(this.actionBar);
