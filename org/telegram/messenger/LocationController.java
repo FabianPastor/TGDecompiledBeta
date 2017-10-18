@@ -173,8 +173,10 @@ public class LocationController implements NotificationCenterDelegate {
                         toRemove.add(Long.valueOf(info.did));
                     }
                 }
-                for (a = 0; a < toRemove.size(); a++) {
-                    removeSharingLocation(((Long) toRemove.get(a)).longValue());
+                if (toRemove != null) {
+                    for (a = 0; a < toRemove.size(); a++) {
+                        removeSharingLocation(((Long) toRemove.get(a)).longValue());
+                    }
                 }
             }
         } else if (id == NotificationCenter.replaceMessagesObjects) {

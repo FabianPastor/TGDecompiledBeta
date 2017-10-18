@@ -199,13 +199,13 @@ final class zzcen extends zzchj {
 
     @WorkerThread
     private static boolean zza(zzcfl com_google_android_gms_internal_zzcfl, SQLiteDatabase sQLiteDatabase, String str) {
+        Cursor query;
         Object e;
         Throwable th;
         Cursor cursor = null;
         if (com_google_android_gms_internal_zzcfl == null) {
             throw new IllegalArgumentException("Monitor must not be null");
         }
-        Cursor query;
         try {
             SQLiteDatabase sQLiteDatabase2 = sQLiteDatabase;
             query = sQLiteDatabase2.query("SQLITE_MASTER", new String[]{"name"}, "name=?", new String[]{str}, null, null, null);
@@ -684,6 +684,7 @@ final class zzcen extends zzchj {
     }
 
     final Map<Integer, List<zzcjn>> zzJ(String str, String str2) {
+        Cursor query;
         Object e;
         Throwable th;
         zzkD();
@@ -691,7 +692,6 @@ final class zzcen extends zzchj {
         zzbo.zzcF(str);
         zzbo.zzcF(str2);
         Map<Integer, List<zzcjn>> arrayMap = new ArrayMap();
-        Cursor query;
         try {
             query = getWritableDatabase().query("event_filters", new String[]{"audience_id", "data"}, "app_id=? AND event_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -916,7 +916,6 @@ final class zzcen extends zzchj {
 
     @WorkerThread
     public final zzceo zza(long j, String str, boolean z, boolean z2, boolean z3, boolean z4, boolean z5) {
-        Cursor query;
         Object e;
         Throwable th;
         zzbo.zzcF(str);
@@ -924,6 +923,7 @@ final class zzcen extends zzchj {
         zzkD();
         String[] strArr = new String[]{str};
         zzceo com_google_android_gms_internal_zzceo = new zzceo();
+        Cursor query;
         try {
             SQLiteDatabase writableDatabase = getWritableDatabase();
             query = writableDatabase.query("apps", new String[]{"day", "daily_events_count", "daily_public_events_count", "daily_conversions_count", "daily_error_events_count", "daily_realtime_events_count"}, "app_id=?", new String[]{str}, null, null, null);
@@ -1361,13 +1361,13 @@ final class zzcen extends zzchj {
     }
 
     public final List<zzcek> zzc(String str, String[] strArr) {
+        Cursor query;
         Object e;
         Cursor cursor;
         Throwable th;
         zzjC();
         zzkD();
         List<zzcek> arrayList = new ArrayList();
-        Cursor query;
         try {
             String[] strArr2 = new String[]{"app_id", "origin", "name", Param.VALUE, "active", "trigger_event_name", "trigger_timeout", "timed_out_event", "creation_timestamp", "triggered_event", "triggered_timestamp", "time_to_live", "expired_event"};
             zzcem.zzxv();
@@ -1666,12 +1666,12 @@ final class zzcen extends zzchj {
     }
 
     final Map<Integer, zzcka> zzdT(String str) {
+        Cursor query;
         Object e;
         Throwable th;
         zzkD();
         zzjC();
         zzbo.zzcF(str);
-        Cursor query;
         try {
             query = getWritableDatabase().query("audience_filter_values", new String[]{"audience_id", "current_results"}, "app_id=?", new String[]{str}, null, null, null);
             if (query.moveToFirst()) {
@@ -1854,6 +1854,7 @@ final class zzcen extends zzchj {
 
     @WorkerThread
     public final List<Pair<zzcjz, Long>> zzl(String str, int i, int i2) {
+        Cursor query;
         List<Pair<zzcjz, Long>> arrayList;
         Object e;
         Cursor cursor;
@@ -1867,7 +1868,6 @@ final class zzcen extends zzchj {
         }
         zzbo.zzaf(z);
         zzbo.zzcF(str);
-        Cursor query;
         try {
             query = getWritableDatabase().query("queue", new String[]{"rowid", "data"}, "app_id=?", new String[]{str}, null, null, "rowid", String.valueOf(i));
             try {
@@ -1947,10 +1947,10 @@ final class zzcen extends zzchj {
 
     @WorkerThread
     public final String zzyc() {
-        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
+        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from queue order by has_realtime desc, rowid asc limit 1;", null);
             try {
