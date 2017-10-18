@@ -99,7 +99,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
     private AnimatorSet animatorSet;
     private TextView authorTextView;
     private ChatAvatarContainer avatarContainer;
-    private ImageView[] buttons = new ImageView[5];
+    private View[] buttons = new View[5];
     private TextView durationTextView;
     private float endTranslation;
     private float fullAnimationProgress;
@@ -120,6 +120,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
     private LaunchActivity parentActivity;
     private BackupImageView placeholderImageView;
     private ImageView playButton;
+    private Drawable[] playOrderButtons = new Drawable[2];
     private FrameLayout playerLayout;
     private ArrayList<MessageObject> playlist = new ArrayList();
     private LineProgressView progressView;
@@ -135,7 +136,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
     private View shadow;
     private View shadow2;
     private Drawable shadowDrawable;
-    private ImageView shuffleButton;
+    private ActionBarMenuItem shuffleButton;
     private float startTranslation;
     private float thumbMaxScale;
     private int thumbMaxX;
@@ -628,7 +629,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         frameLayout = this.playerLayout;
         frameLayout.addView(this.authorTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 72.0f, 40.0f, BitmapDescriptorFactory.HUE_YELLOW, 0.0f));
         this.optionsButton = new ActionBarMenuItem(context, null, 0, Theme.getColor(Theme.key_player_actionBarItems));
-        this.optionsButton.setIcon(R.drawable.ic_ab_other);
+        this.optionsButton.setIcon((int) R.drawable.ic_ab_other);
         this.optionsButton.setAdditionalOffset(-AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN));
         frameLayout = this.playerLayout;
         frameLayout.addView(this.optionsButton, LayoutHelper.createFrame(40, 40.0f, 53, 0.0f, 19.0f, 10.0f, 0.0f));
@@ -678,34 +679,43 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
             }
         };
         this.playerLayout.addView(bottomView, LayoutHelper.createFrame(-1, 66.0f, 51, 0.0f, 106.0f, 0.0f, 0.0f));
-        ImageView[] imageViewArr = this.buttons;
-        ImageView imageView = new ImageView(context);
-        this.shuffleButton = imageView;
-        imageViewArr[0] = imageView;
-        this.shuffleButton.setImageResource(R.drawable.pl_shuffle);
-        this.shuffleButton.setScaleType(ScaleType.CENTER);
+        View[] viewArr = this.buttons;
+        ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(context, null, 0, 0);
+        this.shuffleButton = actionBarMenuItem;
+        viewArr[0] = actionBarMenuItem;
+        this.shuffleButton.setAdditionalOffset(-AndroidUtilities.dp(10.0f));
         bottomView.addView(this.shuffleButton, LayoutHelper.createFrame(48, 48, 51));
-        this.shuffleButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                MediaController.getInstance().toggleShuffleMusic();
+        TextView textView = this.shuffleButton.addSubItem(1, LocaleController.getString("ReverseOrder", R.string.ReverseOrder));
+        textView.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(16.0f), 0);
+        this.playOrderButtons[0] = context.getResources().getDrawable(R.drawable.music_reverse).mutate();
+        textView.setCompoundDrawablePadding(AndroidUtilities.dp(8.0f));
+        textView.setCompoundDrawablesWithIntrinsicBounds(this.playOrderButtons[0], null, null, null);
+        textView = this.shuffleButton.addSubItem(2, LocaleController.getString("Shuffle", R.string.Shuffle));
+        textView.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(16.0f), 0);
+        this.playOrderButtons[1] = context.getResources().getDrawable(R.drawable.pl_shuffle).mutate();
+        textView.setCompoundDrawablePadding(AndroidUtilities.dp(8.0f));
+        textView.setCompoundDrawablesWithIntrinsicBounds(this.playOrderButtons[1], null, null, null);
+        this.shuffleButton.setDelegate(new ActionBarMenuItemDelegate() {
+            public void onItemClick(int id) {
+                MediaController.getInstance().toggleShuffleMusic(id);
                 AudioPlayerAlert.this.updateShuffleButton();
             }
         });
-        imageViewArr = this.buttons;
-        View imageView2 = new ImageView(context);
-        imageViewArr[1] = imageView2;
-        imageView2.setScaleType(ScaleType.CENTER);
-        imageView2.setImageDrawable(Theme.createSimpleSelectorDrawable(context, R.drawable.pl_previous, Theme.getColor(Theme.key_player_button), Theme.getColor(Theme.key_player_buttonActive)));
-        bottomView.addView(imageView2, LayoutHelper.createFrame(48, 48, 51));
-        imageView2.setOnClickListener(new OnClickListener() {
+        viewArr = this.buttons;
+        View imageView = new ImageView(context);
+        viewArr[1] = imageView;
+        imageView.setScaleType(ScaleType.CENTER);
+        imageView.setImageDrawable(Theme.createSimpleSelectorDrawable(context, R.drawable.pl_previous, Theme.getColor(Theme.key_player_button), Theme.getColor(Theme.key_player_buttonActive)));
+        bottomView.addView(imageView, LayoutHelper.createFrame(48, 48, 51));
+        imageView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 MediaController.getInstance().playPreviousMessage();
             }
         });
-        imageViewArr = this.buttons;
-        imageView = new ImageView(context);
-        this.playButton = imageView;
-        imageViewArr[2] = imageView;
+        viewArr = this.buttons;
+        ImageView imageView2 = new ImageView(context);
+        this.playButton = imageView2;
+        viewArr[2] = imageView2;
         this.playButton.setScaleType(ScaleType.CENTER);
         this.playButton.setImageDrawable(Theme.createSimpleSelectorDrawable(context, R.drawable.pl_play, Theme.getColor(Theme.key_player_button), Theme.getColor(Theme.key_player_buttonActive)));
         bottomView.addView(this.playButton, LayoutHelper.createFrame(48, 48, 51));
@@ -720,21 +730,21 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
                 }
             }
         });
-        imageViewArr = this.buttons;
-        imageView2 = new ImageView(context);
-        imageViewArr[3] = imageView2;
-        imageView2.setScaleType(ScaleType.CENTER);
-        imageView2.setImageDrawable(Theme.createSimpleSelectorDrawable(context, R.drawable.pl_next, Theme.getColor(Theme.key_player_button), Theme.getColor(Theme.key_player_buttonActive)));
-        bottomView.addView(imageView2, LayoutHelper.createFrame(48, 48, 51));
-        imageView2.setOnClickListener(new OnClickListener() {
+        viewArr = this.buttons;
+        imageView = new ImageView(context);
+        viewArr[3] = imageView;
+        imageView.setScaleType(ScaleType.CENTER);
+        imageView.setImageDrawable(Theme.createSimpleSelectorDrawable(context, R.drawable.pl_next, Theme.getColor(Theme.key_player_button), Theme.getColor(Theme.key_player_buttonActive)));
+        bottomView.addView(imageView, LayoutHelper.createFrame(48, 48, 51));
+        imageView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 MediaController.getInstance().playNextMessage();
             }
         });
-        imageViewArr = this.buttons;
-        imageView = new ImageView(context);
-        this.repeatButton = imageView;
-        imageViewArr[4] = imageView;
+        viewArr = this.buttons;
+        imageView2 = new ImageView(context);
+        this.repeatButton = imageView2;
+        viewArr[4] = imageView2;
         this.repeatButton.setScaleType(ScaleType.CENTER);
         this.repeatButton.setPadding(0, 0, AndroidUtilities.dp(8.0f), 0);
         bottomView.addView(this.repeatButton, LayoutHelper.createFrame(50, 48, 51));
@@ -799,7 +809,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
             }
 
             protected boolean allowSelectChildAtPosition(float x, float y) {
-                return AudioPlayerAlert.this.playerLayout == null || y > AudioPlayerAlert.this.playerLayout.getTranslationY() + ((float) AudioPlayerAlert.this.playerLayout.getMeasuredHeight());
+                float p = AudioPlayerAlert.this.playerLayout.getY() + ((float) AudioPlayerAlert.this.playerLayout.getMeasuredHeight());
+                return AudioPlayerAlert.this.playerLayout == null || y > AudioPlayerAlert.this.playerLayout.getY() + ((float) AudioPlayerAlert.this.playerLayout.getMeasuredHeight());
             }
 
             public boolean drawChild(Canvas canvas, View child, long drawingTime) {
@@ -1255,13 +1266,22 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
     }
 
     private void updateShuffleButton() {
+        Drawable drawable;
         if (MediaController.getInstance().isShuffleMusic()) {
-            this.shuffleButton.setTag(Theme.key_player_buttonActive);
-            this.shuffleButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), Mode.MULTIPLY));
-            return;
+            drawable = getContext().getResources().getDrawable(R.drawable.pl_shuffle).mutate();
+            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), Mode.MULTIPLY));
+            this.shuffleButton.setIcon(drawable);
+        } else {
+            drawable = getContext().getResources().getDrawable(R.drawable.music_reverse).mutate();
+            if (MediaController.getInstance().isPlayOrderReversed()) {
+                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), Mode.MULTIPLY));
+            } else {
+                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_button), Mode.MULTIPLY));
+            }
+            this.shuffleButton.setIcon(drawable);
         }
-        this.shuffleButton.setTag(Theme.key_player_button);
-        this.shuffleButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_button), Mode.MULTIPLY));
+        this.playOrderButtons[0].setColorFilter(new PorterDuffColorFilter(Theme.getColor(MediaController.getInstance().isPlayOrderReversed() ? Theme.key_player_buttonActive : Theme.key_player_button), Mode.MULTIPLY));
+        this.playOrderButtons[1].setColorFilter(new PorterDuffColorFilter(Theme.getColor(MediaController.getInstance().isShuffleMusic() ? Theme.key_player_buttonActive : Theme.key_player_button), Mode.MULTIPLY));
     }
 
     private void updateRepeatButton() {

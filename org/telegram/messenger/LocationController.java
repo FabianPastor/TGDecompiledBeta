@@ -159,7 +159,25 @@ public class LocationController implements NotificationCenterDelegate {
                     }
                 }
             }
-        } else if (id != NotificationCenter.messagesDeleted && id == NotificationCenter.replaceMessagesObjects) {
+        } else if (id == NotificationCenter.messagesDeleted) {
+            if (!this.sharingLocationsUI.isEmpty()) {
+                ArrayList<Integer> markAsDeletedMessages = args[0];
+                int channelId = ((Integer) args[1]).intValue();
+                ArrayList<Long> toRemove = null;
+                for (a = 0; a < this.sharingLocationsUI.size(); a++) {
+                    SharingLocationInfo info = (SharingLocationInfo) this.sharingLocationsUI.get(a);
+                    if (channelId == (info.messageObject != null ? info.messageObject.getChannelId() : 0) && markAsDeletedMessages.contains(Integer.valueOf(info.mid))) {
+                        if (toRemove == null) {
+                            toRemove = new ArrayList();
+                        }
+                        toRemove.add(Long.valueOf(info.did));
+                    }
+                }
+                for (a = 0; a < toRemove.size(); a++) {
+                    removeSharingLocation(((Long) toRemove.get(a)).longValue());
+                }
+            }
+        } else if (id == NotificationCenter.replaceMessagesObjects) {
             did = ((Long) args[0]).longValue();
             if (isSharingLocation(did)) {
                 messages = (ArrayList) this.locationsCache.get(Long.valueOf(did));

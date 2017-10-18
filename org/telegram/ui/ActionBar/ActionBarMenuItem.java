@@ -404,6 +404,10 @@ public class ActionBarMenuItem extends FrameLayout {
         this.iconView.setImageResource(resId);
     }
 
+    public void setIcon(Drawable drawable) {
+        this.iconView.setImageDrawable(drawable);
+    }
+
     public ImageView getImageView() {
         return this.iconView;
     }

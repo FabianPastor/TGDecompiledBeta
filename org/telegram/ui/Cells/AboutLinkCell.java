@@ -5,10 +5,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
+import android.os.Build.VERSION;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
+import android.text.StaticLayout.Builder;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
@@ -162,7 +164,12 @@ public class AboutLinkCell extends FrameLayout {
     @SuppressLint({"DrawAllocation"})
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (this.stringBuilder != null) {
-            this.textLayout = new StaticLayout(this.stringBuilder, Theme.profile_aboutTextPaint, MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(87.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            int maxWidth = MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(87.0f);
+            if (VERSION.SDK_INT >= 24) {
+                this.textLayout = Builder.obtain(this.stringBuilder, 0, this.stringBuilder.length(), Theme.profile_aboutTextPaint, maxWidth).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Alignment.ALIGN_NORMAL).build();
+            } else {
+                this.textLayout = new StaticLayout(this.stringBuilder, Theme.profile_aboutTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            }
         }
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.textLayout != null ? this.textLayout.getHeight() : AndroidUtilities.dp(20.0f)) + AndroidUtilities.dp(16.0f), NUM));
     }

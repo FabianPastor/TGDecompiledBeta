@@ -197,6 +197,7 @@ public class MessageObject {
         public int charactersOffset;
         public byte directionFlags;
         public int height;
+        public int heightByOffset;
         public StaticLayout textLayout;
         public float textYOffset;
 
@@ -2130,6 +2131,13 @@ public class MessageObject {
             return id;
         }
         return id | (((long) this.messageOwner.to_id.channel_id) << 32);
+    }
+
+    public int getChannelId() {
+        if (this.messageOwner.to_id != null) {
+            return this.messageOwner.to_id.channel_id;
+        }
+        return 0;
     }
 
     public static boolean shouldEncryptPhotoOrVideo(Message message) {

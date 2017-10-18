@@ -434,6 +434,7 @@ public final class R {
         public static final int msg_round_play_m = NUM;
         public static final int msg_views = NUM;
         public static final int msg_warning = NUM;
+        public static final int music_reverse = NUM;
         public static final int myloc_on = NUM;
         public static final int navigate = NUM;
         public static final int newmsg_divider = NUM;
@@ -781,6 +782,12 @@ public final class R {
         public static final int AlwaysShareWithPlaceholder = NUM;
         public static final int AlwaysShareWithTitle = NUM;
         public static final int AlwaysShowPopup = NUM;
+        public static final int AndMoreTypingGroup_few = NUM;
+        public static final int AndMoreTypingGroup_many = NUM;
+        public static final int AndMoreTypingGroup_one = NUM;
+        public static final int AndMoreTypingGroup_other = NUM;
+        public static final int AndMoreTypingGroup_two = NUM;
+        public static final int AndMoreTypingGroup_zero = NUM;
         public static final int AndMoreTyping_few = NUM;
         public static final int AndMoreTyping_many = NUM;
         public static final int AndMoreTyping_one = NUM;
@@ -809,6 +816,7 @@ public final class R {
         public static final int ArchivedStickersEmpty = NUM;
         public static final int ArchivedStickersInfo = NUM;
         public static final int AreTyping = NUM;
+        public static final int AreTypingGroup = NUM;
         public static final int AreYouSure = NUM;
         public static final int AreYouSureBlockContact = NUM;
         public static final int AreYouSureClearHistory = NUM;
@@ -1481,6 +1489,7 @@ public final class R {
         public static final int IsSendingPhoto = NUM;
         public static final int IsSendingVideo = NUM;
         public static final int IsTyping = NUM;
+        public static final int IsTypingGroup = NUM;
         public static final int Italic = NUM;
         public static final int JoinGroup = NUM;
         public static final int JoinToGroupErrorFull = NUM;
@@ -1987,6 +1996,7 @@ public final class R {
         public static final int RestorePasswordNoEmailTitle = NUM;
         public static final int Retry = NUM;
         public static final int ReturnToCall = NUM;
+        public static final int ReverseOrder = NUM;
         public static final int RevokeAlert = NUM;
         public static final int RevokeAlertNewLink = NUM;
         public static final int RevokeButton = NUM;
@@ -2113,6 +2123,7 @@ public final class R {
         public static final int ShowAllMedia = NUM;
         public static final int ShowInChat = NUM;
         public static final int ShowNearbyPlaces = NUM;
+        public static final int Shuffle = NUM;
         public static final int SlideToCancel = NUM;
         public static final int SmartNotifications = NUM;
         public static final int SmartNotificationsAlert = NUM;

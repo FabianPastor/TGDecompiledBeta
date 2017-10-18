@@ -587,7 +587,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 }
                 this.textLayout2 = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, textWidth, this.currentBlock);
                 if (this.textLayout2 != null) {
-                    this.textY2 = AndroidUtilities.dp(2.0f) + height;
+                    this.textY2 = AndroidUtilities.dp(8.0f) + height;
                     height += AndroidUtilities.dp(8.0f) + this.textLayout2.getHeight();
                 }
                 if (height != 0) {

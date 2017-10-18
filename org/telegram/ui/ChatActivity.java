@@ -557,6 +557,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private ImageView pagedownButtonImage;
     private boolean pagedownButtonShowedByScroll;
     private boolean paused = true;
+    private boolean pausedOnLastMessage;
     private String pendingLinkSearchString;
     private Runnable pendingWebPageTimeoutRunnable;
     private FileLocation pinnedImageLocation;
@@ -4800,7 +4801,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (this.chatLayoutManager != null && !this.paused) {
             int firstVisibleItem = this.chatLayoutManager.findFirstVisibleItemPosition();
             int visibleItemCount = firstVisibleItem == -1 ? 0 : Math.abs(this.chatLayoutManager.findLastVisibleItemPosition() - firstVisibleItem) + 1;
-            if (visibleItemCount > 0) {
+            if (visibleItemCount > 0 || this.currentEncryptedChat != null) {
                 int checkLoadCount;
                 MessagesController instance;
                 long j;
@@ -4857,7 +4858,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         instance.loadMessages(j, 50, i, 0, z, i2, i3, 0, 0, isChannel, i4);
                     }
                 }
-                if (!this.loadingForward && firstVisibleItem + visibleItemCount >= totalItemCount - 10) {
+                if (visibleItemCount > 0 && !this.loadingForward && firstVisibleItem + visibleItemCount >= totalItemCount - 10) {
                     if (this.mergeDialogId != 0 && !this.forwardEndReached[1]) {
                         this.waitingForLoad.add(Integer.valueOf(this.lastLoadIndex));
                         instance = MessagesController.getInstance();
@@ -9371,6 +9372,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             this.scrollToMessage = null;
         }
         this.paused = false;
+        this.pausedOnLastMessage = false;
         AndroidUtilities.runOnUIThread(this.readRunnable, 500);
         checkScrollForLoad(false);
         if (this.wasPaused) {
@@ -9447,34 +9449,37 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
         DraftQuery.saveDraft(j, charSequence, entities, message2, z);
         MessagesController.getInstance().cancelTyping(0, this.dialog_id);
-        Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
-        int messageId = 0;
-        int offset = 0;
-        if (this.chatLayoutManager != null) {
-            int position = this.chatLayoutManager.findLastVisibleItemPosition();
-            if (position < this.chatLayoutManager.getItemCount() - 1) {
-                Holder holder = (Holder) this.chatListView.findViewHolderForAdapterPosition(position);
-                if (holder != null) {
-                    if (holder.itemView instanceof ChatMessageCell) {
-                        messageId = ((ChatMessageCell) holder.itemView).getMessageObject().getId();
-                    } else if (holder.itemView instanceof ChatActionCell) {
-                        messageId = ((ChatActionCell) holder.itemView).getMessageObject().getId();
-                    }
-                    if (messageId != 0) {
-                        offset = (holder.itemView.getMeasuredHeight() - (holder.itemView.getBottom() - this.chatListView.getMeasuredHeight())) + AndroidUtilities.dp2(1.0f);
-                        FileLog.d("save offset = " + offset + " for mid " + messageId);
+        if (!this.pausedOnLastMessage) {
+            Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+            int messageId = 0;
+            int offset = 0;
+            if (this.chatLayoutManager != null) {
+                int position = this.chatLayoutManager.findLastVisibleItemPosition();
+                if (position < this.chatLayoutManager.getItemCount() - 1) {
+                    Holder holder = (Holder) this.chatListView.findViewHolderForAdapterPosition(position);
+                    if (holder != null) {
+                        if (holder.itemView instanceof ChatMessageCell) {
+                            messageId = ((ChatMessageCell) holder.itemView).getMessageObject().getId();
+                        } else if (holder.itemView instanceof ChatActionCell) {
+                            messageId = ((ChatActionCell) holder.itemView).getMessageObject().getId();
+                        }
+                        if (messageId != 0) {
+                            offset = (holder.itemView.getMeasuredHeight() - (holder.itemView.getBottom() - this.chatListView.getMeasuredHeight())) + AndroidUtilities.dp2(1.0f);
+                            FileLog.d("save offset = " + offset + " for mid " + messageId);
+                        }
                     }
                 }
             }
+            if (messageId != 0) {
+                editor.putInt("diditem" + this.dialog_id, messageId);
+                editor.putInt("diditemo" + this.dialog_id, offset);
+            } else {
+                this.pausedOnLastMessage = true;
+                editor.remove("diditem" + this.dialog_id);
+                editor.remove("diditemo" + this.dialog_id);
+            }
+            editor.commit();
         }
-        if (messageId != 0) {
-            editor.putInt("diditem" + this.dialog_id, messageId);
-            editor.putInt("diditemo" + this.dialog_id, offset);
-        } else {
-            editor.remove("diditem" + this.dialog_id);
-            editor.remove("diditemo" + this.dialog_id);
-        }
-        editor.commit();
         if (this.currentUser != null) {
             this.chatLeaveTime = System.currentTimeMillis();
             updateInformationForScreenshotDetector();
@@ -10307,12 +10312,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     private void processSelectedOption(int option) {
-        File file;
-        Intent intent;
         if (this.selectedObject != null) {
             Bundle args;
             String path;
+            File file;
             AlertDialog.Builder builder;
+            Intent intent;
             TLObject req;
             switch (option) {
                 case 0:

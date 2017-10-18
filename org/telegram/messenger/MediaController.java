@@ -210,6 +210,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     private PipRoundVideoView pipRoundVideoView;
     private int pipSwitchingState;
     private boolean playMusicAgain;
+    private boolean playOrderReversed;
     private int playerBufferSize = 0;
     private final Object playerObjectSync = new Object();
     private DispatchQueue playerQueue;
@@ -792,6 +793,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         this.customTabs = preferences.getBoolean("custom_tabs", true);
         this.directShare = preferences.getBoolean("direct_share", true);
         this.shuffleMusic = preferences.getBoolean("shuffleMusic", false);
+        this.playOrderReversed = preferences.getBoolean("playOrderReversed", false);
         this.inappCamera = preferences.getBoolean("inappCamera", true);
         this.repeatMode = preferences.getInt("repeatMode", 0);
         AndroidUtilities.runOnUIThread(new Runnable() {
@@ -2290,7 +2292,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     }
 
     public void playNextMessage() {
-        playNextMessage(false);
+        playNextMessageWithoutOrder(false);
     }
 
     public boolean findMessageInPlaylistAndPlay(MessageObject messageObject) {
@@ -2310,77 +2312,84 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         }
     }
 
-    private void playNextMessage(boolean byStop) {
+    private void playNextMessageWithoutOrder(boolean byStop) {
         ArrayList<MessageObject> currentPlayList = this.shuffleMusic ? this.shuffledPlaylist : this.playlist;
         if (byStop && this.repeatMode == 2 && !this.forceLoopCurrentPlaylist) {
             cleanupPlayer(false, false);
             playMessage((MessageObject) currentPlayList.get(this.currentPlaylistNum));
             return;
         }
-        this.currentPlaylistNum--;
-        if (this.currentPlaylistNum < 0) {
-            this.currentPlaylistNum = currentPlayList.size() - 1;
-            if (byStop && this.repeatMode == 0 && !this.forceLoopCurrentPlaylist) {
-                if (this.audioPlayer != null || this.audioTrackPlayer != null || this.videoPlayer != null) {
-                    if (this.audioPlayer != null) {
-                        try {
-                            this.audioPlayer.reset();
-                        } catch (Throwable e) {
-                            FileLog.e(e);
-                        }
-                        try {
-                            this.audioPlayer.stop();
-                        } catch (Throwable e2) {
-                            FileLog.e(e2);
-                        }
-                        try {
-                            this.audioPlayer.release();
-                        } catch (Throwable e22) {
-                            FileLog.e(e22);
-                        }
-                        this.audioPlayer = null;
-                    } else if (this.audioTrackPlayer != null) {
-                        synchronized (this.playerObjectSync) {
-                            try {
-                                this.audioTrackPlayer.pause();
-                                this.audioTrackPlayer.flush();
-                            } catch (Throwable e222) {
-                                FileLog.e(e222);
-                            }
-                            try {
-                                this.audioTrackPlayer.release();
-                            } catch (Throwable e2222) {
-                                FileLog.e(e2222);
-                            }
-                            this.audioTrackPlayer = null;
-                        }
-                    } else if (this.videoPlayer != null) {
-                        this.currentAspectRatioFrameLayout = null;
-                        this.currentTextureViewContainer = null;
-                        this.currentAspectRatioFrameLayoutReady = false;
-                        this.currentTextureView = null;
-                        this.videoPlayer.releasePlayer();
-                        this.videoPlayer = null;
-                        try {
-                            this.baseActivity.getWindow().clearFlags(128);
-                        } catch (Throwable e22222) {
-                            FileLog.e(e22222);
-                        }
-                    }
-                    stopProgressTimer();
-                    this.lastProgress = 0;
-                    this.buffersWrited = 0;
-                    this.isPaused = true;
-                    this.playingMessageObject.audioProgress = 0.0f;
-                    this.playingMessageObject.audioProgressSec = 0;
-                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagePlayingProgressDidChanged, Integer.valueOf(this.playingMessageObject.getId()), Integer.valueOf(0));
-                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagePlayingPlayStateChanged, Integer.valueOf(this.playingMessageObject.getId()));
-                    return;
-                }
-                return;
+        boolean last = false;
+        if (this.playOrderReversed) {
+            this.currentPlaylistNum++;
+            if (this.currentPlaylistNum >= currentPlayList.size()) {
+                this.currentPlaylistNum = 0;
+                last = true;
+            }
+        } else {
+            this.currentPlaylistNum--;
+            if (this.currentPlaylistNum < 0) {
+                this.currentPlaylistNum = currentPlayList.size() - 1;
+                last = true;
             }
         }
-        if (this.currentPlaylistNum >= 0 && this.currentPlaylistNum < currentPlayList.size()) {
+        if (last && byStop && this.repeatMode == 0 && !this.forceLoopCurrentPlaylist) {
+            if (this.audioPlayer != null || this.audioTrackPlayer != null || this.videoPlayer != null) {
+                if (this.audioPlayer != null) {
+                    try {
+                        this.audioPlayer.reset();
+                    } catch (Throwable e) {
+                        FileLog.e(e);
+                    }
+                    try {
+                        this.audioPlayer.stop();
+                    } catch (Throwable e2) {
+                        FileLog.e(e2);
+                    }
+                    try {
+                        this.audioPlayer.release();
+                    } catch (Throwable e22) {
+                        FileLog.e(e22);
+                    }
+                    this.audioPlayer = null;
+                } else if (this.audioTrackPlayer != null) {
+                    synchronized (this.playerObjectSync) {
+                        try {
+                            this.audioTrackPlayer.pause();
+                            this.audioTrackPlayer.flush();
+                        } catch (Throwable e222) {
+                            FileLog.e(e222);
+                        }
+                        try {
+                            this.audioTrackPlayer.release();
+                        } catch (Throwable e2222) {
+                            FileLog.e(e2222);
+                        }
+                        this.audioTrackPlayer = null;
+                    }
+                } else if (this.videoPlayer != null) {
+                    this.currentAspectRatioFrameLayout = null;
+                    this.currentTextureViewContainer = null;
+                    this.currentAspectRatioFrameLayoutReady = false;
+                    this.currentTextureView = null;
+                    this.videoPlayer.releasePlayer();
+                    this.videoPlayer = null;
+                    try {
+                        this.baseActivity.getWindow().clearFlags(128);
+                    } catch (Throwable e22222) {
+                        FileLog.e(e22222);
+                    }
+                }
+                stopProgressTimer();
+                this.lastProgress = 0;
+                this.buffersWrited = 0;
+                this.isPaused = true;
+                this.playingMessageObject.audioProgress = 0.0f;
+                this.playingMessageObject.audioProgressSec = 0;
+                NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagePlayingProgressDidChanged, Integer.valueOf(this.playingMessageObject.getId()), Integer.valueOf(0));
+                NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagePlayingPlayStateChanged, Integer.valueOf(this.playingMessageObject.getId()));
+            }
+        } else if (this.currentPlaylistNum >= 0 && this.currentPlaylistNum < currentPlayList.size()) {
             this.playMusicAgain = true;
             playMessage((MessageObject) currentPlayList.get(this.currentPlaylistNum));
         }
@@ -2394,9 +2403,16 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 getInstance().seekToProgress(currentSong, 0.0f);
                 return;
             }
-            this.currentPlaylistNum++;
-            if (this.currentPlaylistNum >= currentPlayList.size()) {
-                this.currentPlaylistNum = 0;
+            if (this.playOrderReversed) {
+                this.currentPlaylistNum--;
+                if (this.currentPlaylistNum < 0) {
+                    this.currentPlaylistNum = currentPlayList.size() - 1;
+                }
+            } else {
+                this.currentPlaylistNum++;
+                if (this.currentPlaylistNum >= currentPlayList.size()) {
+                    this.currentPlaylistNum = 0;
+                }
             }
             if (this.currentPlaylistNum >= 0 && this.currentPlaylistNum < currentPlayList.size()) {
                 this.playMusicAgain = true;
@@ -2796,7 +2812,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                     mediaController.cleanupPlayer(true, true, z);
                                     return;
                                 }
-                                MediaController.this.playNextMessage(true);
+                                MediaController.this.playNextMessageWithoutOrder(true);
                             }
                         });
                         this.audioPlayer.prepare();
@@ -2999,21 +3015,34 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         return this.shuffleMusic;
     }
 
+    public boolean isPlayOrderReversed() {
+        return this.playOrderReversed;
+    }
+
     public int getRepeatMode() {
         return this.repeatMode;
     }
 
-    public void toggleShuffleMusic() {
-        boolean z;
-        if (this.shuffleMusic) {
-            z = false;
+    public void toggleShuffleMusic(int type) {
+        boolean oldShuffle = this.shuffleMusic;
+        if (type == 2) {
+            boolean z;
+            if (this.shuffleMusic) {
+                z = false;
+            } else {
+                z = true;
+            }
+            this.shuffleMusic = z;
         } else {
-            z = true;
+            this.playOrderReversed = !this.playOrderReversed;
         }
-        this.shuffleMusic = z;
         Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
         editor.putBoolean("shuffleMusic", this.shuffleMusic);
+        editor.putBoolean("playOrderReversed", this.playOrderReversed);
         editor.commit();
+        if (oldShuffle == this.shuffleMusic) {
+            return;
+        }
         if (this.shuffleMusic) {
             buildShuffledPlayList();
             this.currentPlaylistNum = 0;

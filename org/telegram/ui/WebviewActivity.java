@@ -176,7 +176,7 @@ public class WebviewActivity extends BaseFragment {
                 if (!"tg".equals(uri.getScheme())) {
                     return false;
                 }
-                WebviewActivity.this.finishFragment();
+                WebviewActivity.this.finishFragment(false);
                 try {
                     Intent intent = new Intent("android.intent.action.VIEW", uri);
                     intent.setComponent(new ComponentName(ApplicationLoader.applicationContext.getPackageName(), LaunchActivity.class.getName()));

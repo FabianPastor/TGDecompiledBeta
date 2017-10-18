@@ -1366,9 +1366,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             }
             this.passcodeItem.setVisibility(0);
             if (UserConfig.appLocked) {
-                this.passcodeItem.setIcon(R.drawable.lock_close);
+                this.passcodeItem.setIcon((int) R.drawable.lock_close);
             } else {
-                this.passcodeItem.setIcon(R.drawable.lock_open);
+                this.passcodeItem.setIcon((int) R.drawable.lock_open);
             }
         }
     }

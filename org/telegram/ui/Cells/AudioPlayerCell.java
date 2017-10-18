@@ -8,7 +8,6 @@ import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import java.io.File;
@@ -73,40 +72,6 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
 
     public MessageObject getMessageObject() {
         return this.currentMessageObject;
-    }
-
-    public boolean onTouchEvent(MotionEvent event) {
-        int x = (int) event.getX();
-        int y = (int) event.getY();
-        boolean result = false;
-        int side = AndroidUtilities.dp(48.0f);
-        boolean area = this.radialProgress.getProgressRect().contains((float) x, (float) y);
-        if (event.getAction() == 0) {
-            if (area) {
-                this.buttonPressed = true;
-                invalidate();
-                result = true;
-                this.radialProgress.swapBackground(getDrawableForCurrentState());
-            }
-        } else if (this.buttonPressed) {
-            if (event.getAction() == 1) {
-                this.buttonPressed = false;
-                playSoundEffect(0);
-                didPressedButton();
-                invalidate();
-            } else if (event.getAction() == 3) {
-                this.buttonPressed = false;
-                invalidate();
-            } else if (event.getAction() == 2 && !area) {
-                this.buttonPressed = false;
-                invalidate();
-            }
-            this.radialProgress.swapBackground(getDrawableForCurrentState());
-        }
-        if (result) {
-            return result;
-        }
-        return super.onTouchEvent(event);
     }
 
     public void didPressedButton() {

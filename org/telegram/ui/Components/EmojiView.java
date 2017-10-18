@@ -20,6 +20,7 @@ import android.os.Build.VERSION;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.SpannableStringBuilder;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -549,6 +550,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             } else {
                 code = (String) getTag();
             }
+            new SpannableStringBuilder().append(code);
             if (override == null) {
                 if (EmojiView.this.pager.getCurrentItem() != 0) {
                     String color = (String) Emoji.emojiColor.get(code);
@@ -603,12 +605,10 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                             setImageDrawable(Emoji.getEmojiBigDrawable(code));
                             sendEmoji(null);
                             Emoji.saveEmojiColors();
+                        } else if (color != null) {
+                            sendEmoji(EmojiView.addColorToCode(code, color));
                         } else {
-                            StringBuilder append = new StringBuilder().append(code);
-                            if (color == null) {
-                                color = "";
-                            }
-                            sendEmoji(append.append(color).toString());
+                            sendEmoji(code);
                         }
                     }
                     this.touched = false;

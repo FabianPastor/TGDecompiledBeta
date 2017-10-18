@@ -1209,6 +1209,10 @@
     <drawable name="msg_warning">res/drawable-hdpi-v4/msg_warning.png</drawable>
     <drawable name="msg_warning">res/drawable-xhdpi-v4/msg_warning.png</drawable>
     <drawable name="msg_warning">res/drawable-xxhdpi-v4/msg_warning.png</drawable>
+    <drawable name="music_reverse">res/drawable-mdpi-v4/music_reverse.png</drawable>
+    <drawable name="music_reverse">res/drawable-hdpi-v4/music_reverse.png</drawable>
+    <drawable name="music_reverse">res/drawable-xhdpi-v4/music_reverse.png</drawable>
+    <drawable name="music_reverse">res/drawable-xxhdpi-v4/music_reverse.png</drawable>
     <drawable name="myloc_on">res/drawable-mdpi-v4/myloc_on.png</drawable>
     <drawable name="myloc_on">res/drawable-hdpi-v4/myloc_on.png</drawable>
     <drawable name="myloc_on">res/drawable-xhdpi-v4/myloc_on.png</drawable>

@@ -2217,6 +2217,7 @@ public class MessagesController implements NotificationCenterDelegate {
         TL_channels_deleteMessages req;
         long newTaskId;
         NativeByteBuffer data;
+        NativeByteBuffer data2;
         Throwable e;
         final int i;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
@@ -2244,7 +2245,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
-            NativeByteBuffer data2;
             if (channelId != 0) {
                 if (taskRequest != null) {
                     req = (TL_channels_deleteMessages) taskRequest;
@@ -2857,41 +2857,41 @@ public class MessagesController implements NotificationCenterDelegate {
                         newPrintingStringsTypes.put(Long.valueOf(key), Integer.valueOf(3));
                     } else {
                         if (lower_id < 0) {
-                            newPrintingStrings.put(Long.valueOf(key), String.format("%s %s", new Object[]{getUserNameForTyping(user), LocaleController.getString("IsTyping", R.string.IsTyping)}));
+                            newPrintingStrings.put(Long.valueOf(key), LocaleController.formatString("IsTypingGroup", R.string.IsTypingGroup, getUserNameForTyping(user)));
                         } else {
                             newPrintingStrings.put(Long.valueOf(key), LocaleController.getString("Typing", R.string.Typing));
                         }
                         newPrintingStringsTypes.put(Long.valueOf(key), Integer.valueOf(0));
                     }
-                } else {
-                    return;
                 }
-            }
-            int count = 0;
-            String label = "";
-            Iterator it = arr.iterator();
-            while (it.hasNext()) {
-                user = getUser(Integer.valueOf(((PrintingUser) it.next()).userId));
-                if (user != null) {
-                    if (label.length() != 0) {
-                        label = label + ", ";
+            } else {
+                int count = 0;
+                String label = "";
+                Iterator it = arr.iterator();
+                while (it.hasNext()) {
+                    user = getUser(Integer.valueOf(((PrintingUser) it.next()).userId));
+                    if (user != null) {
+                        if (label.length() != 0) {
+                            label = label + ", ";
+                        }
+                        label = label + getUserNameForTyping(user);
+                        count++;
                     }
-                    label = label + getUserNameForTyping(user);
-                    count++;
+                    if (count == 2) {
+                        break;
+                    }
                 }
-                if (count == 2) {
-                    break;
+                if (label.length() != 0) {
+                    if (count == 1) {
+                        newPrintingStrings.put(Long.valueOf(key), LocaleController.formatString("IsTypingGroup", R.string.IsTypingGroup, label));
+                    } else if (arr.size() > 2) {
+                        String plural = LocaleController.getPluralString("AndMoreTypingGroup", arr.size() - 2);
+                        newPrintingStrings.put(Long.valueOf(key), String.format(plural, new Object[]{label, Integer.valueOf(arr.size() - 2)}));
+                    } else {
+                        newPrintingStrings.put(Long.valueOf(key), LocaleController.formatString("AreTypingGroup", R.string.AreTypingGroup, label));
+                    }
+                    newPrintingStringsTypes.put(Long.valueOf(key), Integer.valueOf(0));
                 }
-            }
-            if (label.length() != 0) {
-                if (count == 1) {
-                    newPrintingStrings.put(Long.valueOf(key), String.format("%s %s", new Object[]{label, LocaleController.getString("IsTyping", R.string.IsTyping)}));
-                } else if (arr.size() > 2) {
-                    newPrintingStrings.put(Long.valueOf(key), String.format("%s %s", new Object[]{label, LocaleController.formatPluralString("AndMoreTyping", arr.size() - 2)}));
-                } else {
-                    newPrintingStrings.put(Long.valueOf(key), String.format("%s %s", new Object[]{label, LocaleController.getString("AreTyping", R.string.AreTyping)}));
-                }
-                newPrintingStringsTypes.put(Long.valueOf(key), Integer.valueOf(0));
             }
         }
         this.lastPrintingStringCount = newPrintingStrings.size();
@@ -5814,6 +5814,10 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId, InputChannel inputChannel) {
         Throwable e;
+        long newTaskId;
+        TL_updates_getChannelDifference req;
+        final int i;
+        final int i2;
         Boolean gettingDifferenceChannel = (Boolean) this.gettingDifferenceChannels.get(Integer.valueOf(channelId));
         if (gettingDifferenceChannel == null) {
             gettingDifferenceChannel = Boolean.valueOf(false);
@@ -5845,10 +5849,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 inputChannel = getInputChannel(channelId);
             }
             if (inputChannel != null && inputChannel.access_hash != 0) {
-                long newTaskId;
-                TL_updates_getChannelDifference req;
-                final int i;
-                final int i2;
                 if (taskId == 0) {
                     NativeByteBuffer data = null;
                     try {
