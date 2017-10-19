@@ -138,7 +138,6 @@ import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInfo;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
-import org.telegram.tgnet.TLRPC.ChannelParticipant;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.ChatFull;
 import org.telegram.tgnet.TLRPC.ChatParticipant;
@@ -163,7 +162,6 @@ import org.telegram.tgnet.TLRPC.TL_channels_channelParticipant;
 import org.telegram.tgnet.TLRPC.TL_channels_exportMessageLink;
 import org.telegram.tgnet.TLRPC.TL_channels_getParticipant;
 import org.telegram.tgnet.TLRPC.TL_channels_reportSpam;
-import org.telegram.tgnet.TLRPC.TL_chatChannelParticipant;
 import org.telegram.tgnet.TLRPC.TL_chatForbidden;
 import org.telegram.tgnet.TLRPC.TL_chatFull;
 import org.telegram.tgnet.TLRPC.TL_chatParticipantsForbidden;
@@ -1029,18 +1027,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
 
                     public boolean isChatAdminCell(int uid) {
-                        if (ChatActivity.this.info == null || ChatActivity.this.info.participants == null || !ChatObject.isChannel(ChatActivity.this.currentChat) || !ChatActivity.this.currentChat.megagroup) {
-                            return false;
-                        }
-                        for (int a = 0; a < ChatActivity.this.info.participants.participants.size(); a++) {
-                            ChatParticipant participant = (ChatParticipant) ChatActivity.this.info.participants.participants.get(a);
-                            if (participant.user_id == uid && (participant instanceof TL_chatChannelParticipant)) {
-                                ChannelParticipant channelParticipant = ((TL_chatChannelParticipant) participant).channelParticipant;
-                                if ((channelParticipant instanceof TL_channelParticipantCreator) || (channelParticipant instanceof TL_channelParticipantAdmin)) {
-                                    return true;
-                                }
-                                return false;
-                            }
+                        if (ChatObject.isChannel(ChatActivity.this.currentChat) && ChatActivity.this.currentChat.megagroup) {
+                            return MessagesController.getInstance().isChannelAdmin(ChatActivity.this.currentChat.id, uid);
                         }
                         return false;
                     }

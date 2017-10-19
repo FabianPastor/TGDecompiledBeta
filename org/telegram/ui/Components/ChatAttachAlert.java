@@ -855,7 +855,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         this.recordTime = new TextView(context);
         this.recordTime.setBackgroundResource(R.drawable.system);
         this.recordTime.getBackground().setColorFilter(new PorterDuffColorFilter(NUM, Mode.MULTIPLY));
-        this.recordTime.setText("00:00");
         this.recordTime.setTextSize(1, 15.0f);
         this.recordTime.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.recordTime.setAlpha(0.0f);
@@ -903,7 +902,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     ChatAttachAlert.this.switchCameraButton.setAlpha(0.0f);
                     ChatAttachAlert.this.cameraFile = AndroidUtilities.generateVideoPath();
                     ChatAttachAlert.this.recordTime.setAlpha(1.0f);
-                    ChatAttachAlert.this.recordTime.setText("00:00");
+                    ChatAttachAlert.this.recordTime.setText(String.format("%02d:%02d", new Object[]{Integer.valueOf(0), Integer.valueOf(0)}));
                     ChatAttachAlert.this.videoRecordTime = 0;
                     ChatAttachAlert.this.videoRecordRunnable = new Runnable() {
                         public void run() {

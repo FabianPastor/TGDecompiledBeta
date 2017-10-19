@@ -501,7 +501,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     }
                     switch (obj) {
                         case null:
-                            ContactsController.getInstance().readContacts();
+                            ContactsController.getInstance().forceImportContacts();
                             break;
                         default:
                             break;

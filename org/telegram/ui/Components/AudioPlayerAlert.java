@@ -658,14 +658,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         this.timeTextView = new SimpleTextView(context);
         this.timeTextView.setTextSize(12);
         this.timeTextView.setTextColor(Theme.getColor(Theme.key_player_time));
-        this.timeTextView.setText("0:00");
         frameLayout = this.playerLayout;
         frameLayout.addView(this.timeTextView, LayoutHelper.createFrame(100, -2.0f, 51, 20.0f, 92.0f, 0.0f, 0.0f));
         this.durationTextView = new TextView(context);
         this.durationTextView.setTextSize(1, 12.0f);
         this.durationTextView.setTextColor(Theme.getColor(Theme.key_player_time));
         this.durationTextView.setGravity(17);
-        this.durationTextView.setText("3:00");
         frameLayout = this.playerLayout;
         frameLayout.addView(this.durationTextView, LayoutHelper.createFrame(-2, -2.0f, 53, 0.0f, 90.0f, 20.0f, 0.0f));
         FrameLayout bottomView = new FrameLayout(context) {

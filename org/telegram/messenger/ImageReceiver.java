@@ -59,6 +59,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private ImageReceiverDelegate delegate;
     private Rect drawRegion;
     private boolean forceCrossfade;
+    private boolean forceLoding;
     private boolean forcePreview;
     private int imageH;
     private int imageW;
@@ -123,8 +124,17 @@ public class ImageReceiver implements NotificationCenterDelegate {
     }
 
     public void cancelLoadImage() {
+        this.forceLoding = false;
         ImageLoader.getInstance().cancelLoadingForImageReceiver(this, 0);
         this.canceledLoading = true;
+    }
+
+    public void setForceLoading(boolean value) {
+        this.forceLoding = value;
+    }
+
+    public boolean isForceLoding() {
+        return this.forceLoding;
     }
 
     public void setImage(TLObject path, String filter, Drawable thumb, String ext, int cacheType) {
@@ -419,8 +429,8 @@ public class ImageReceiver implements NotificationCenterDelegate {
         }
         if (this.needsQualityThumb) {
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messageThumbGenerated);
-            ImageLoader.getInstance().cancelLoadingForImageReceiver(this, 0);
         }
+        ImageLoader.getInstance().cancelLoadingForImageReceiver(this, 0);
     }
 
     public void onDetachedFromWindow() {

@@ -6557,11 +6557,11 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private void updateVideoPlayerTime() {
         String newText;
         if (this.videoPlayer == null) {
-            newText = "00:00 / 00:00";
+            newText = String.format("%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0)});
         } else {
             long current = this.videoPlayer.getCurrentPosition() / 1000;
             if (this.videoPlayer.getDuration() / 1000 == C.TIME_UNSET || current == C.TIME_UNSET) {
-                newText = "00:00 / 00:00";
+                newText = String.format("%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0)});
             } else {
                 newText = String.format("%02d:%02d / %02d:%02d", new Object[]{Long.valueOf(current / 60), Long.valueOf(current % 60), Long.valueOf(total / 60), Long.valueOf(total % 60)});
             }

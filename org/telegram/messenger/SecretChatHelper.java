@@ -599,7 +599,7 @@ public class SecretChatHelper {
                                     SecretChatHelper.this.requestNewSecretChatKey(encryptedChat);
                                 }
                             }
-                            MessagesStorage.getInstance().updateEncryptedChatSeq(encryptedChat);
+                            MessagesStorage.getInstance().updateEncryptedChatSeq(encryptedChat, false);
                             if (message != null) {
                                 message.seq_in = layer.in_seq_no;
                                 message.seq_out = layer.out_seq_no;
@@ -1396,7 +1396,7 @@ public class SecretChatHelper {
                 this.secretHolesQueue.remove(Integer.valueOf(chat.id));
             }
             if (update) {
-                MessagesStorage.getInstance().updateEncryptedChatSeq(chat);
+                MessagesStorage.getInstance().updateEncryptedChatSeq(chat, true);
             }
         }
     }
@@ -1459,7 +1459,7 @@ public class SecretChatHelper {
                         applyPeerLayer(chat, layer.layer);
                         chat.seq_in = layer.out_seq_no;
                         chat.in_seq_no = layer.in_seq_no;
-                        MessagesStorage.getInstance().updateEncryptedChatSeq(chat);
+                        MessagesStorage.getInstance().updateEncryptedChatSeq(chat, true);
                         object = layer.message;
                     } else {
                         FileLog.e("got hole");

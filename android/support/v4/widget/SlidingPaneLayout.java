@@ -551,7 +551,6 @@ public class SlidingPaneLayout extends ViewGroup {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int i;
-        int childHeightSpec;
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
@@ -594,6 +593,7 @@ public class SlidingPaneLayout extends ViewGroup {
         this.mSlideableView = null;
         for (i = 0; i < childCount; i++) {
             int childWidthSpec;
+            int childHeightSpec;
             View child = getChildAt(i);
             LayoutParams lp = (LayoutParams) child.getLayoutParams();
             if (child.getVisibility() == 8) {

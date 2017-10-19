@@ -393,11 +393,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     LaunchActivity.this.presentFragment(new ContactsActivity(null));
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 7) {
-                    if (BuildVars.DEBUG_PRIVATE_VERSION) {
-                        LaunchActivity.this.showLanguageAlert(true);
-                    } else {
-                        LaunchActivity.this.presentFragment(new InviteContactsActivity());
-                    }
+                    LaunchActivity.this.presentFragment(new InviteContactsActivity());
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 8) {
                     LaunchActivity.this.presentFragment(new SettingsActivity());
@@ -2142,7 +2138,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     ImageLoader.getInstance().checkMediaPaths();
                     return;
                 } else if (requestCode == 5) {
-                    ContactsController.getInstance().readContacts();
+                    ContactsController.getInstance().forceImportContacts();
                     return;
                 } else if (requestCode == 3) {
                     if (MediaController.getInstance().canInAppCamera()) {

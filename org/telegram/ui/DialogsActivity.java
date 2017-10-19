@@ -1253,7 +1253,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     }
                     switch (obj) {
                         case null:
-                            ContactsController.getInstance().readContacts();
+                            ContactsController.getInstance().forceImportContacts();
                             break;
                         case 1:
                             ImageLoader.getInstance().checkMediaPaths();

@@ -233,6 +233,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE chats(uid INTEGER PRIMARY KEY, name TEXT, data BLOB)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE enc_chats(uid INTEGER PRIMARY KEY, user INTEGER, name TEXT, data BLOB, g BLOB, authkey BLOB, ttl INTEGER, layer INTEGER, seq_in INTEGER, seq_out INTEGER, use_count INTEGER, exchange_id INTEGER, key_date INTEGER, fprint INTEGER, fauthkey BLOB, khash BLOB, in_seq_no INTEGER, admin_id INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE channel_users_v2(did INTEGER, uid INTEGER, date INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE channel_admins(did INTEGER, uid INTEGER, PRIMARY KEY(did, uid))").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE contacts(uid INTEGER PRIMARY KEY, mutual INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE wallpapers(uid INTEGER PRIMARY KEY, data BLOB)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
@@ -252,7 +253,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE pending_tasks(id INTEGER PRIMARY KEY, data BLOB);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE requested_holes(uid INTEGER, seq_out_start INTEGER, seq_out_end INTEGER, PRIMARY KEY (uid, seq_out_start, seq_out_end));").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE sharing_locations(uid INTEGER PRIMARY KEY, mid INTEGER, date INTEGER, period INTEGER, message BLOB);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 43").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 44").stepThis().dispose();
             } else {
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
                 FileLog.e("current db version = " + version);
@@ -287,7 +288,7 @@ public class MessagesStorage {
                         FileLog.e(e2);
                     }
                 }
-                if (version < 43) {
+                if (version < 44) {
                     updateDbToLastVersion(version);
                 }
             }
@@ -585,6 +586,11 @@ public class MessagesStorage {
                     if (version == 42) {
                         MessagesStorage.this.database.executeFast("CREATE TABLE IF NOT EXISTS sharing_locations(uid INTEGER PRIMARY KEY, mid INTEGER, date INTEGER, period INTEGER, message BLOB);").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 43").stepThis().dispose();
+                        version = 43;
+                    }
+                    if (version == 43) {
+                        MessagesStorage.this.database.executeFast("CREATE TABLE IF NOT EXISTS channel_admins(did INTEGER, uid INTEGER, PRIMARY KEY(did, uid))").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("PRAGMA user_version = 44").stepThis().dispose();
                     }
                 } catch (Throwable e) {
                     FileLog.e(e);
@@ -2286,6 +2292,47 @@ public class MessagesStorage {
         }
     }
 
+    public void loadChannelAdmins(final int chatId) {
+        this.storageQueue.postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT uid FROM channel_admins WHERE did = " + chatId, new Object[0]);
+                    ArrayList<Integer> ids = new ArrayList();
+                    while (cursor.next()) {
+                        ids.add(Integer.valueOf(cursor.intValue(0)));
+                    }
+                    cursor.dispose();
+                    MessagesController.getInstance().processLoadedChannelAdmins(ids, chatId, true);
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+            }
+        });
+    }
+
+    public void putChannelAdmins(final int chatId, final ArrayList<Integer> ids) {
+        this.storageQueue.postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    MessagesStorage.this.database.executeFast("DELETE FROM channel_admins WHERE did = " + chatId).stepThis().dispose();
+                    MessagesStorage.this.database.beginTransaction();
+                    SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO channel_admins VALUES(?, ?)");
+                    int date = (int) (System.currentTimeMillis() / 1000);
+                    for (int a = 0; a < ids.size(); a++) {
+                        state.requery();
+                        state.bindInteger(1, chatId);
+                        state.bindInteger(2, ((Integer) ids.get(a)).intValue());
+                        state.step();
+                    }
+                    state.dispose();
+                    MessagesStorage.this.database.commitTransaction();
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+            }
+        });
+    }
+
     public void updateChannelUsers(final int channel_id, final ArrayList<ChannelParticipant> participants) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
@@ -2676,7 +2723,7 @@ Error: java.util.NoSuchElementException
             L_0x0080:
                 throw r5;
                 */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.43.run():void");
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.45.run():void");
             }
         });
         try {
@@ -4008,13 +4055,13 @@ Error: java.util.NoSuchElementException
                 L_0x0087:
                     throw r5;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.60.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.62.run():void");
                 }
             });
         }
     }
 
-    public void updateEncryptedChatSeq(final EncryptedChat chat) {
+    public void updateEncryptedChatSeq(final EncryptedChat chat, final boolean cleanup) {
         if (chat != null) {
             this.storageQueue.postRunnable(new Runnable() {
                 public void run() {
@@ -4038,58 +4085,85 @@ Error: java.util.NoSuchElementException
 	at jadx.api.JadxDecompiler$1.run(JadxDecompiler.java:199)
 */
                     /*
-                    r5 = this;
-                    r1 = 0;
-                    r2 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r2 = r2.database;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r3 = "UPDATE enc_chats SET seq_in = ?, seq_out = ?, use_count = ?, in_seq_no = ? WHERE uid = ?";	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r1 = r2.executeFast(r3);	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r2 = 1;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r3 = r3;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r3 = r3.seq_in;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r2 = 2;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r3 = r3;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r3 = r3.seq_out;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r2 = 3;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r3 = r3;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r3 = r3.key_use_count_in;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r3 = r3 << 16;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r4 = r3;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r4 = r4.key_use_count_out;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r3 = r3 | r4;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r2 = 4;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r3 = r3;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r3 = r3.in_seq_no;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r2 = 5;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r3 = r3;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r3 = r3.id;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    r1.step();	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    if (r1 == 0) goto L_0x0045;
-                L_0x0042:
-                    r1.dispose();
-                L_0x0045:
+                    r10 = this;
+                    r3 = 0;
+                    r4 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r4 = r4.database;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r5 = "UPDATE enc_chats SET seq_in = ?, seq_out = ?, use_count = ?, in_seq_no = ? WHERE uid = ?";	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r3 = r4.executeFast(r5);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r4 = 1;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r5 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r5 = r5.seq_in;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r4 = 2;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r5 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r5 = r5.seq_out;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r4 = 3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r5 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r5 = r5.key_use_count_in;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r5 = r5 << 16;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r6 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r6 = r6.key_use_count_out;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r5 = r5 | r6;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r4 = 4;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r5 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r5 = r5.in_seq_no;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r4 = 5;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r5 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r5 = r5.id;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r3.step();	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r4 = r4;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    if (r4 == 0) goto L_0x007c;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                L_0x0044:
+                    r4 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r4 = r4.id;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r4 = (long) r4;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r6 = 32;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r0 = r4 << r6;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r4 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r4 = r4.database;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r6 = "DELETE FROM messages WHERE mid IN (SELECT m.mid FROM messages as m LEFT JOIN messages_seq as s ON m.mid = s.mid WHERE m.uid = %d AND m.date = 0 AND m.mid < 0 AND s.seq_out <= %d)";	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r7 = 2;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r7 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r8 = 0;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r9 = java.lang.Long.valueOf(r0);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r7[r8] = r9;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r8 = 1;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r9 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r9 = r9.in_seq_no;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r9 = java.lang.Integer.valueOf(r9);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r7[r8] = r9;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r5 = java.lang.String.format(r5, r6, r7);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r4 = r4.executeFast(r5);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r4 = r4.stepThis();	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    r4.dispose();	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                L_0x007c:
+                    if (r3 == 0) goto L_0x0081;
+                L_0x007e:
+                    r3.dispose();
+                L_0x0081:
                     return;
-                L_0x0046:
-                    r0 = move-exception;
-                    org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
-                    if (r1 == 0) goto L_0x0045;
-                L_0x004c:
-                    r1.dispose();
-                    goto L_0x0045;
-                L_0x0050:
+                L_0x0082:
                     r2 = move-exception;
-                    if (r1 == 0) goto L_0x0056;
-                L_0x0053:
-                    r1.dispose();
-                L_0x0056:
-                    throw r2;
+                    org.telegram.messenger.FileLog.e(r2);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
+                    if (r3 == 0) goto L_0x0081;
+                L_0x0088:
+                    r3.dispose();
+                    goto L_0x0081;
+                L_0x008c:
+                    r4 = move-exception;
+                    if (r3 == 0) goto L_0x0092;
+                L_0x008f:
+                    r3.dispose();
+                L_0x0092:
+                    throw r4;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.61.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.63.run():void");
                 }
             });
         }
@@ -4154,7 +4228,7 @@ Error: java.util.NoSuchElementException
                 L_0x0037:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.62.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.64.run():void");
                 }
             });
         }
@@ -4219,7 +4293,7 @@ Error: java.util.NoSuchElementException
                 L_0x0037:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.63.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.65.run():void");
                 }
             });
         }
@@ -4447,7 +4521,7 @@ Error: java.util.NoSuchElementException
                 L_0x0161:
                     throw r7;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.64.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.66.run():void");
                 }
             });
         }
@@ -5619,7 +5693,6 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
-        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -5672,6 +5745,7 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
+        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {

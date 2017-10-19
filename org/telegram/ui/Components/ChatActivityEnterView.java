@@ -1229,7 +1229,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.recordDot = new RecordDot(context);
         this.recordTimeContainer.addView(this.recordDot, LayoutHelper.createLinear(11, 11, 16, 0, 1, 0, 0));
         this.recordTimeText = new TextView(context);
-        this.recordTimeText.setText("00:00");
         this.recordTimeText.setTextColor(Theme.getColor(Theme.key_chat_recordTime));
         this.recordTimeText.setTextSize(1, 16.0f);
         this.recordTimeContainer.addView(this.recordTimeText, LayoutHelper.createLinear(-2, -2, 16, 6, 0, 0, 0));
@@ -2564,7 +2563,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.recordPanel.setVisibility(0);
             this.recordCircle.setVisibility(0);
             this.recordCircle.setAmplitude(0.0d);
-            this.recordTimeText.setText("00:00");
+            this.recordTimeText.setText(String.format("%02d:%02d.%02d", new Object[]{Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0)}));
             this.recordDot.resetAlpha();
             this.lastTimeString = null;
             this.lastTypingSendTime = -1;

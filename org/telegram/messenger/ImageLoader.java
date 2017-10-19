@@ -73,6 +73,7 @@ public class ImageLoader {
     private int currentHttpFileLoadTasksCount = 0;
     private int currentHttpTasksCount = 0;
     private ConcurrentHashMap<String, Float> fileProgresses = new ConcurrentHashMap();
+    private HashMap<String, Integer> forceLoadingImages = new HashMap();
     private LinkedList<HttpFileTask> httpFileLoadTasks = new LinkedList();
     private HashMap<String, HttpFileTask> httpFileLoadTasksByKeys = new HashMap();
     private LinkedList<HttpImageTask> httpTasks = new LinkedList();
@@ -145,7 +146,7 @@ public class ImageLoader {
                     ImageLoader.this.imageLoadingByTag.remove(((ImageReceiver) this.imageReceiverArray.get(a)).getTag(this.thumb));
                 }
                 this.imageReceiverArray.clear();
-                if (this.location != null) {
+                if (!(this.location == null || ImageLoader.this.forceLoadingImages.containsKey(this.key))) {
                     if (this.location instanceof FileLocation) {
                         FileLoader.getInstance().cancelLoadFile((FileLocation) this.location, this.ext);
                     } else if (this.location instanceof Document) {
@@ -982,21 +983,21 @@ public class ImageLoader {
     }
 
     private boolean canMoveFiles(File from, File to, int type) {
+        File srcFile;
         Throwable e;
         Throwable th;
         RandomAccessFile file = null;
-        File srcFile = null;
+        File srcFile2 = null;
         File dstFile = null;
-        File srcFile2;
         if (type == 0) {
             try {
-                srcFile2 = new File(from, "000000000_999999_temp.jpg");
+                srcFile = new File(from, "000000000_999999_temp.jpg");
                 try {
                     dstFile = new File(to, "000000000_999999.jpg");
-                    srcFile = srcFile2;
+                    srcFile2 = srcFile;
                 } catch (Exception e2) {
                     e = e2;
-                    srcFile = srcFile2;
+                    srcFile2 = srcFile;
                     try {
                         FileLog.e(e);
                         if (file != null) {
@@ -1028,27 +1029,27 @@ public class ImageLoader {
                 return false;
             }
         } else if (type == 3) {
-            srcFile2 = new File(from, "000000000_999999_temp.doc");
+            srcFile = new File(from, "000000000_999999_temp.doc");
             dstFile = new File(to, "000000000_999999.doc");
-            srcFile = srcFile2;
+            srcFile2 = srcFile;
         } else if (type == 1) {
-            srcFile2 = new File(from, "000000000_999999_temp.ogg");
+            srcFile = new File(from, "000000000_999999_temp.ogg");
             dstFile = new File(to, "000000000_999999.ogg");
-            srcFile = srcFile2;
+            srcFile2 = srcFile;
         } else if (type == 2) {
-            srcFile2 = new File(from, "000000000_999999_temp.mp4");
+            srcFile = new File(from, "000000000_999999_temp.mp4");
             dstFile = new File(to, "000000000_999999.mp4");
-            srcFile = srcFile2;
+            srcFile2 = srcFile;
         }
         byte[] buffer = new byte[1024];
-        srcFile.createNewFile();
-        RandomAccessFile file2 = new RandomAccessFile(srcFile, "rws");
+        srcFile2.createNewFile();
+        RandomAccessFile file2 = new RandomAccessFile(srcFile2, "rws");
         try {
             file2.write(buffer);
             file2.close();
             file = null;
-            boolean canRename = srcFile.renameTo(dstFile);
-            srcFile.delete();
+            boolean canRename = srcFile2.renameTo(dstFile);
+            srcFile2.delete();
             dstFile.delete();
             if (!canRename) {
                 if (file != null) {
@@ -1270,6 +1271,19 @@ public class ImageLoader {
         }
     }
 
+    public void cancelForceLoadingForImageReceiver(ImageReceiver imageReceiver) {
+        if (imageReceiver != null) {
+            final String key = imageReceiver.getKey();
+            if (key != null) {
+                this.imageLoadQueue.postRunnable(new Runnable() {
+                    public void run() {
+                        ImageLoader.this.forceLoadingImages.remove(key);
+                    }
+                });
+            }
+        }
+    }
+
     private void createLoadOperationForImageReceiver(ImageReceiver imageReceiver, String key, String url, String ext, TLObject imageLocation, String httpLocation, String filter, int size, int cacheType, int thumb) {
         if (imageReceiver != null && url != null && key != null) {
             Integer TAG = imageReceiver.getTag(thumb != 0);
@@ -1419,24 +1433,30 @@ public class ImageLoader {
                             img.url = str;
                             img.location = tLObject;
                             ImageLoader.this.imageLoadingByUrl.put(str, img);
-                            if (str4 != null) {
-                                img.tempFilePath = new File(FileLoader.getInstance().getDirectory(4), Utilities.MD5(str4) + "_temp.jpg");
-                                img.finalFilePath = cacheFile;
-                                img.httpTask = new HttpImageTask(img, i3);
-                                ImageLoader.this.httpTasks.add(img.httpTask);
-                                ImageLoader.this.runHttpTasks(false);
-                            } else if (tLObject instanceof FileLocation) {
-                                FileLocation location2 = (FileLocation) tLObject;
-                                int localCacheType = i2;
-                                if (localCacheType == 0 && (i3 == 0 || location2.key != null)) {
-                                    localCacheType = 1;
+                            if (str4 == null) {
+                                if (tLObject instanceof FileLocation) {
+                                    FileLocation location2 = (FileLocation) tLObject;
+                                    int localCacheType = i2;
+                                    if (localCacheType == 0 && (i3 == 0 || location2.key != null)) {
+                                        localCacheType = 1;
+                                    }
+                                    FileLoader.getInstance().loadFile(location2, str5, i3, localCacheType);
+                                } else if (tLObject instanceof Document) {
+                                    FileLoader.getInstance().loadFile((Document) tLObject, true, i2);
+                                } else if (tLObject instanceof TL_webDocument) {
+                                    FileLoader.getInstance().loadFile((TL_webDocument) tLObject, true, i2);
                                 }
-                                FileLoader.getInstance().loadFile(location2, str5, i3, localCacheType);
-                            } else if (tLObject instanceof Document) {
-                                FileLoader.getInstance().loadFile((Document) tLObject, true, i2);
-                            } else if (tLObject instanceof TL_webDocument) {
-                                FileLoader.getInstance().loadFile((TL_webDocument) tLObject, true, i2);
+                                if (imageReceiver2.isForceLoding()) {
+                                    ImageLoader.this.forceLoadingImages.put(img.key, Integer.valueOf(0));
+                                    return;
+                                }
+                                return;
                             }
+                            img.tempFilePath = new File(FileLoader.getInstance().getDirectory(4), Utilities.MD5(str4) + "_temp.jpg");
+                            img.finalFilePath = cacheFile;
+                            img.httpTask = new HttpImageTask(img, i3);
+                            ImageLoader.this.httpTasks.add(img.httpTask);
+                            ImageLoader.this.runHttpTasks(false);
                         }
                     }
                 }

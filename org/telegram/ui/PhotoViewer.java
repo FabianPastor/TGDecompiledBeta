@@ -2758,12 +2758,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     private void updateVideoPlayerTime() {
         String newText;
         if (this.videoPlayer == null) {
-            newText = "00:00 / 00:00";
+            newText = String.format("%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0)});
         } else {
             long current = this.videoPlayer.getCurrentPosition();
             long total = this.videoPlayer.getDuration();
             if (total == C.TIME_UNSET || current == C.TIME_UNSET) {
-                newText = "00:00 / 00:00";
+                newText = String.format("%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0)});
             } else {
                 if (!this.inPreview && this.videoTimelineView.getVisibility() == 0) {
                     total = (long) (((float) total) * (this.videoTimelineView.getRightProgress() - this.videoTimelineView.getLeftProgress()));
@@ -3363,8 +3363,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     PhotoEntry object = this.imagesArrLocals.get(this.currentIndex);
                     if (object instanceof PhotoEntry) {
                         PhotoEntry entry = object;
-                        state = entry.savedFilterState;
-                        originalPath = entry.path;
+                        if (entry.imagePath == null) {
+                            originalPath = entry.path;
+                            state = entry.savedFilterState;
+                        }
                         orientation = entry.orientation;
                     } else if (object instanceof SearchImage) {
                         SearchImage entry2 = (SearchImage) object;
@@ -6321,7 +6323,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         targetBitrate = 1100000;
                         break;
                     default:
-                        targetBitrate = 1600000;
+                        targetBitrate = 2500000;
                         maxSize = 1280.0f;
                         break;
                 }

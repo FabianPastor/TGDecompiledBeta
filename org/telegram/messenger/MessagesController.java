@@ -42,6 +42,7 @@ import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInfo;
+import org.telegram.tgnet.TLRPC.ChannelParticipant;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.ChatFull;
 import org.telegram.tgnet.TLRPC.ChatParticipant;
@@ -76,6 +77,7 @@ import org.telegram.tgnet.TLRPC.TL_channelBannedRights;
 import org.telegram.tgnet.TLRPC.TL_channelForbidden;
 import org.telegram.tgnet.TLRPC.TL_channelMessagesFilterEmpty;
 import org.telegram.tgnet.TLRPC.TL_channelParticipantSelf;
+import org.telegram.tgnet.TLRPC.TL_channelParticipantsAdmins;
 import org.telegram.tgnet.TLRPC.TL_channelParticipantsRecent;
 import org.telegram.tgnet.TLRPC.TL_channels_channelParticipant;
 import org.telegram.tgnet.TLRPC.TL_channels_channelParticipants;
@@ -362,6 +364,7 @@ public class MessagesController implements NotificationCenterDelegate {
     public int callReceiveTimeout = 20000;
     public int callRingTimeout = 90000;
     public boolean callsEnabled;
+    private HashMap<Integer, ArrayList<Integer>> channelAdmins = new HashMap();
     private SparseArray<ArrayList<Integer>> channelViewsToSend = new SparseArray();
     private HashMap<Integer, Integer> channelsPts = new HashMap();
     private ConcurrentHashMap<Integer, Chat> chats = new ConcurrentHashMap(100, 1.0f, 2);
@@ -436,6 +439,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private ArrayList<Integer> loadedFullParticipants = new ArrayList();
     private ArrayList<Integer> loadedFullUsers = new ArrayList();
     public boolean loadingBlockedUsers = false;
+    private SparseIntArray loadingChannelAdmins = new SparseIntArray();
     public boolean loadingDialogs;
     private ArrayList<Integer> loadingFullChats = new ArrayList();
     private ArrayList<Integer> loadingFullParticipants = new ArrayList();
@@ -898,6 +902,8 @@ public class MessagesController implements NotificationCenterDelegate {
         this.dialogsGroupsOnly.clear();
         this.dialogMessagesByIds.clear();
         this.dialogMessagesByRandomIds.clear();
+        this.channelAdmins.clear();
+        this.loadingChannelAdmins.clear();
         this.users.clear();
         this.objectsByUsernames.clear();
         this.chats.clear();
@@ -1352,18 +1358,77 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
+    public boolean isChannelAdmin(int chatId, int uid) {
+        ArrayList<Integer> array = (ArrayList) this.channelAdmins.get(Integer.valueOf(chatId));
+        return array != null && array.indexOf(Integer.valueOf(uid)) >= 0;
+    }
+
+    public void loadChannelAdmins(final int chatId, boolean cache) {
+        if (this.loadingChannelAdmins.indexOfKey(chatId) < 0) {
+            this.loadingChannelAdmins.put(chatId, 0);
+            if (cache) {
+                MessagesStorage.getInstance().loadChannelAdmins(chatId);
+                return;
+            }
+            TL_channels_getParticipants req = new TL_channels_getParticipants();
+            ArrayList<Integer> array = (ArrayList) this.channelAdmins.get(Integer.valueOf(chatId));
+            if (array != null) {
+                long acc = 0;
+                for (int a = 0; a < array.size(); a++) {
+                    acc = (((20261 * acc) + 2147483648L) + ((long) ((Integer) array.get(a)).intValue())) % 2147483648L;
+                }
+                req.hash = (int) acc;
+            }
+            req.channel = getInputChannel(chatId);
+            req.limit = 100;
+            req.filter = new TL_channelParticipantsAdmins();
+            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                public void run(TLObject response, TL_error error) {
+                    if (response instanceof TL_channels_channelParticipants) {
+                        TL_channels_channelParticipants participants = (TL_channels_channelParticipants) response;
+                        ArrayList<Integer> array = new ArrayList(participants.participants.size());
+                        for (int a = 0; a < participants.participants.size(); a++) {
+                            array.add(Integer.valueOf(((ChannelParticipant) participants.participants.get(a)).user_id));
+                        }
+                        MessagesController.this.processLoadedChannelAdmins(array, chatId, false);
+                    }
+                }
+            });
+        }
+    }
+
+    public void processLoadedChannelAdmins(final ArrayList<Integer> array, final int chatId, final boolean cache) {
+        Collections.sort(array);
+        if (!cache) {
+            MessagesStorage.getInstance().putChannelAdmins(chatId, array);
+        }
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public void run() {
+                MessagesController.this.loadingChannelAdmins.delete(chatId);
+                MessagesController.this.channelAdmins.put(Integer.valueOf(chatId), array);
+                if (cache) {
+                    MessagesController.this.loadChannelAdmins(chatId, false);
+                }
+            }
+        });
+    }
+
     public void loadFullChat(int chat_id, int classGuid, boolean force) {
+        boolean loaded = this.loadedFullChats.contains(Integer.valueOf(chat_id));
         if (!this.loadingFullChats.contains(Integer.valueOf(chat_id))) {
-            if (force || !this.loadedFullChats.contains(Integer.valueOf(chat_id))) {
+            if (force || !loaded) {
                 TLObject request;
                 this.loadingFullChats.add(Integer.valueOf(chat_id));
                 final long dialog_id = (long) (-chat_id);
                 final Chat chat = getChat(Integer.valueOf(chat_id));
                 TLObject req;
-                if (ChatObject.isChannel(chat_id)) {
+                if (ChatObject.isChannel(chat)) {
                     req = new TL_channels_getFullChannel();
-                    req.channel = getInputChannel(chat_id);
+                    req.channel = getInputChannel(chat);
                     request = req;
+                    if (chat.megagroup) {
+                        loadChannelAdmins(chat_id, !loaded);
+                    }
                 } else {
                     req = new TL_messages_getFullChat();
                     req.chat_id = chat_id;
@@ -2215,9 +2280,7 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll, long taskId, TLObject taskRequest) {
         long newTaskId;
-        NativeByteBuffer data;
         Throwable e;
-        final int i;
         TL_messages_deleteMessages req;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
             ArrayList<Integer> toSend = null;
@@ -2244,9 +2307,11 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
+            NativeByteBuffer data;
             NativeByteBuffer data2;
             if (channelId != 0) {
                 TL_channels_deleteMessages req2;
+                final int i;
                 if (taskRequest != null) {
                     req2 = (TL_channels_deleteMessages) taskRequest;
                     newTaskId = taskId;
@@ -3842,6 +3907,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 int a;
                 User user;
+                Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 AbstractMap usersDict = new HashMap();
@@ -3930,7 +3996,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 final ArrayList<TL_dialog> dialogsToReload = new ArrayList();
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
-                    Integer value;
                     TL_dialog d = (TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(a);
                     if (d.id == 0 && d.peer != null) {
                         if (d.peer.user_id != 0) {
@@ -5813,7 +5878,6 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId, InputChannel inputChannel) {
-        Integer channelPts;
         Throwable e;
         long newTaskId;
         TL_updates_getChannelDifference req;
@@ -5824,6 +5888,7 @@ public class MessagesController implements NotificationCenterDelegate {
             gettingDifferenceChannel = Boolean.valueOf(false);
         }
         if (!gettingDifferenceChannel.booleanValue()) {
+            Integer channelPts;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = (Integer) this.channelsPts.get(Integer.valueOf(channelId));
@@ -7343,7 +7408,6 @@ public class MessagesController implements NotificationCenterDelegate {
         AbstractMap usersDict;
         int a;
         AbstractMap chatsDict;
-        Iterator it;
         long currentTime = System.currentTimeMillis();
         final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
         HashMap<Long, WebPage> webPages = new HashMap();
@@ -7398,6 +7462,7 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         int interfaceUpdateMask = 0;
         for (int c = 0; c < updates.size(); c++) {
+            Iterator it;
             Update update = (Update) updates.get(c);
             FileLog.d("process update " + update);
             Message message;

@@ -676,9 +676,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         public void onBindViewHolder(ViewHolder holder, int position) {
             Throwable e;
             Object username;
-            String u;
             int idx;
-            ManageChatUserCell userCell;
             switch (holder.getItemViewType()) {
                 case 0:
                     User user;
@@ -686,6 +684,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     CharSequence username3;
                     String foundUserName;
                     CharSequence spannableStringBuilder;
+                    String u;
+                    ManageChatUserCell userCell;
                     TLObject object = getItem(position);
                     if (object instanceof User) {
                         user = (User) object;
