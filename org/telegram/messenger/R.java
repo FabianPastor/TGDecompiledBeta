@@ -1788,6 +1788,7 @@ public final class R {
         public static final int OpenGroup = NUM;
         public static final int OpenInBrowser = NUM;
         public static final int OpenInExternalApp = NUM;
+        public static final int OpenInPip = NUM;
         public static final int OpenUrlAlert = NUM;
         public static final int OtherSessions = NUM;
         public static final int OutgoingCalls = NUM;

@@ -194,7 +194,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                         localeInfo = (LocaleInfo) LanguageSelectActivity.this.sortedLanguages.get(position);
                     }
                     if (localeInfo != null) {
-                        LocaleController.getInstance().applyLanguage(localeInfo, true, false, true);
+                        LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true);
                         LanguageSelectActivity.this.parentLayout.rebuildAllFragmentViews(false, false);
                     }
                     LanguageSelectActivity.this.finishFragment();

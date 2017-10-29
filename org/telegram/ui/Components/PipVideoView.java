@@ -5,21 +5,28 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Build.VERSION;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.ui.ActionBar.ActionBar;
 
@@ -35,7 +42,109 @@ public class PipVideoView {
     private WindowManager windowManager;
     private FrameLayout windowView;
 
-    public TextureView show(Activity activity, EmbedBottomSheet sheet, View controls, float aspectRatio, int rotation) {
+    private class MiniControlsView extends FrameLayout {
+        private AnimatorSet currentAnimation;
+        private Runnable hideRunnable = new Runnable() {
+            public void run() {
+                MiniControlsView.this.show(false, true);
+            }
+        };
+        private ImageView inlineButton;
+        private boolean isVisible = true;
+
+        public MiniControlsView(Context context) {
+            super(context);
+            setWillNotDraw(false);
+            this.inlineButton = new ImageView(context);
+            this.inlineButton.setScaleType(ScaleType.CENTER);
+            this.inlineButton.setImageResource(R.drawable.ic_outinline);
+            addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 53));
+            this.inlineButton.setOnClickListener(new OnClickListener(PipVideoView.this) {
+                public void onClick(View v) {
+                    if (PipVideoView.this.parentSheet != null) {
+                        PipVideoView.this.parentSheet.exitFromPip();
+                    }
+                }
+            });
+        }
+
+        public void show(boolean value, boolean animated) {
+            if (this.isVisible != value) {
+                this.isVisible = value;
+                if (this.currentAnimation != null) {
+                    this.currentAnimation.cancel();
+                }
+                AnimatorSet animatorSet;
+                Animator[] animatorArr;
+                if (this.isVisible) {
+                    if (animated) {
+                        this.currentAnimation = new AnimatorSet();
+                        animatorSet = this.currentAnimation;
+                        animatorArr = new Animator[1];
+                        animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{1.0f});
+                        animatorSet.playTogether(animatorArr);
+                        this.currentAnimation.setDuration(150);
+                        this.currentAnimation.addListener(new AnimatorListenerAdapter() {
+                            public void onAnimationEnd(Animator animator) {
+                                MiniControlsView.this.currentAnimation = null;
+                            }
+                        });
+                        this.currentAnimation.start();
+                    } else {
+                        setAlpha(1.0f);
+                    }
+                } else if (animated) {
+                    this.currentAnimation = new AnimatorSet();
+                    animatorSet = this.currentAnimation;
+                    animatorArr = new Animator[1];
+                    animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f});
+                    animatorSet.playTogether(animatorArr);
+                    this.currentAnimation.setDuration(150);
+                    this.currentAnimation.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            MiniControlsView.this.currentAnimation = null;
+                        }
+                    });
+                    this.currentAnimation.start();
+                } else {
+                    setAlpha(0.0f);
+                }
+                checkNeedHide();
+            }
+        }
+
+        private void checkNeedHide() {
+            AndroidUtilities.cancelRunOnUIThread(this.hideRunnable);
+            if (this.isVisible) {
+                AndroidUtilities.runOnUIThread(this.hideRunnable, 3000);
+            }
+        }
+
+        public boolean onInterceptTouchEvent(MotionEvent ev) {
+            if (ev.getAction() == 0) {
+                if (this.isVisible) {
+                    checkNeedHide();
+                } else {
+                    show(true, true);
+                    return true;
+                }
+            }
+            return super.onInterceptTouchEvent(ev);
+        }
+
+        public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+            super.requestDisallowInterceptTouchEvent(disallowIntercept);
+            checkNeedHide();
+        }
+
+        protected void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            checkNeedHide();
+        }
+    }
+
+    public TextureView show(Activity activity, EmbedBottomSheet sheet, View controls, float aspectRatio, int rotation, WebView webview) {
+        TextureView textureView;
         this.windowView = new FrameLayout(activity) {
             private boolean dragging;
             private float startX;
@@ -51,7 +160,9 @@ public class PipVideoView {
                     this.dragging = true;
                     this.startX = x;
                     this.startY = y;
-                    ((ViewParent) PipVideoView.this.controlsView).requestDisallowInterceptTouchEvent(true);
+                    if (PipVideoView.this.controlsView != null) {
+                        ((ViewParent) PipVideoView.this.controlsView).requestDisallowInterceptTouchEvent(true);
+                    }
                     return true;
                 }
                 return super.onInterceptTouchEvent(event);
@@ -70,10 +181,10 @@ public class PipVideoView {
                 if (event.getAction() == 2) {
                     float dx = x - this.startX;
                     float dy = y - this.startY;
-                    LayoutParams access$100 = PipVideoView.this.windowLayoutParams;
-                    access$100.x = (int) (((float) access$100.x) + dx);
-                    access$100 = PipVideoView.this.windowLayoutParams;
-                    access$100.y = (int) (((float) access$100.y) + dy);
+                    LayoutParams access$300 = PipVideoView.this.windowLayoutParams;
+                    access$300.x = (int) (((float) access$300.x) + dx);
+                    access$300 = PipVideoView.this.windowLayoutParams;
+                    access$300.y = (int) (((float) access$300.y) + dy);
                     int maxDiff = PipVideoView.this.videoWidth / 2;
                     if (PipVideoView.this.windowLayoutParams.x < (-maxDiff)) {
                         PipVideoView.this.windowLayoutParams.x = -maxDiff;
@@ -114,9 +225,19 @@ public class PipVideoView {
         AspectRatioFrameLayout aspectRatioFrameLayout = new AspectRatioFrameLayout(activity);
         aspectRatioFrameLayout.setAspectRatio(aspectRatio, rotation);
         this.windowView.addView(aspectRatioFrameLayout, LayoutHelper.createFrame(-1, -1, 17));
-        TextureView textureView = new TextureView(activity);
-        aspectRatioFrameLayout.addView(textureView, LayoutHelper.createFrame(-1, -1.0f));
-        this.controlsView = controls;
+        if (webview != null) {
+            ((ViewGroup) webview.getParent()).removeView(webview);
+            aspectRatioFrameLayout.addView(webview, LayoutHelper.createFrame(-1, -1.0f));
+            textureView = null;
+        } else {
+            textureView = new TextureView(activity);
+            aspectRatioFrameLayout.addView(textureView, LayoutHelper.createFrame(-1, -1.0f));
+        }
+        if (controls == null) {
+            this.controlsView = new MiniControlsView(activity);
+        } else {
+            this.controlsView = controls;
+        }
         this.windowView.addView(this.controlsView, LayoutHelper.createFrame(-1, -1.0f));
         this.windowManager = (WindowManager) ApplicationLoader.applicationContext.getSystemService("window");
         this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig", 0);

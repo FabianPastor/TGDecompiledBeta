@@ -1829,10 +1829,30 @@ public class MessageObject {
     }
 
     public void generateLayout(User fromUser) {
-        int a;
         if (this.type == 0 && this.messageOwner.to_id != null && this.messageText != null && this.messageText.length() != 0) {
             boolean hasEntities;
+            int a;
             TextPaint paint;
+            StaticLayout textLayout;
+            int linesCount;
+            int blocksCount;
+            int linesOffset;
+            float prevOffset;
+            int currentBlockLinesCount;
+            TextLayoutBlock block;
+            int startCharacter;
+            int endCharacter;
+            float lastLeft;
+            float lastLine;
+            int linesMaxWidth;
+            int lastLineWidthWithLeft;
+            int linesMaxWidthWithLeft;
+            boolean hasNonRTL;
+            float textRealMaxWidth;
+            float textRealMaxWidthWithLeft;
+            int n;
+            float lineWidth;
+            float lineLeft;
             generateLinkDescription();
             this.textLayoutBlocks = new ArrayList();
             this.textWidth = 0;
@@ -1857,10 +1877,14 @@ public class MessageObject {
                     FileLog.e(e);
                 }
             }
+            boolean hasUrls = false;
             if (this.messageText instanceof Spannable) {
                 Spannable spannable = (Spannable) this.messageText;
                 int count = this.messageOwner.entities.size();
                 URLSpan[] spans = (URLSpan[]) spannable.getSpans(0, this.messageText.length(), URLSpan.class);
+                if (spans != null && spans.length > 0) {
+                    hasUrls = true;
+                }
                 for (a = 0; a < count; a++) {
                     MessageEntity entity = (MessageEntity) this.messageOwner.entities.get(a);
                     if (entity.length > 0 && entity.offset >= 0 && entity.offset < this.messageOwner.message.length()) {
@@ -1898,6 +1922,7 @@ public class MessageObject {
                             } else if (entity instanceof TL_messageEntityEmail) {
                                 spannable.setSpan(new URLSpanReplacement("mailto:" + url), entity.offset, entity.offset + entity.length, 33);
                             } else if (entity instanceof TL_messageEntityUrl) {
+                                hasUrls = true;
                                 if (url.toLowerCase().startsWith("http") || url.toLowerCase().startsWith("tg://")) {
                                     spannable.setSpan(new URLSpan(url), entity.offset, entity.offset + entity.length, 33);
                                 } else {
@@ -1926,40 +1951,176 @@ public class MessageObject {
             } else {
                 paint = Theme.chat_msgTextPaint;
             }
-            try {
-                StaticLayout textLayout;
-                if (VERSION.SDK_INT >= 24) {
-                    textLayout = Builder.obtain(this.messageText, 0, this.messageText.length(), paint, maxWidth).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Alignment.ALIGN_NORMAL).build();
-                } else {
-                    textLayout = new StaticLayout(this.messageText, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                }
-                this.textHeight = textLayout.getHeight();
-                int linesCount = textLayout.getLineCount();
-                int blocksCount = (int) Math.ceil((double) (((float) linesCount) / 10.0f));
-                int linesOffset = 0;
-                float prevOffset = 0.0f;
-                for (a = 0; a < blocksCount; a++) {
-                    float lastLeft;
-                    float lastLine;
-                    int currentBlockLinesCount = Math.min(10, linesCount - linesOffset);
-                    TextLayoutBlock block = new TextLayoutBlock();
-                    if (blocksCount == 1) {
-                        block.textLayout = textLayout;
-                        block.textYOffset = 0.0f;
-                        block.charactersOffset = 0;
-                        block.height = this.textHeight;
-                    } else {
-                        int startCharacter = textLayout.getLineStart(linesOffset);
-                        int endCharacter = textLayout.getLineEnd((linesOffset + currentBlockLinesCount) - 1);
-                        if (endCharacter >= startCharacter) {
-                            block.charactersOffset = startCharacter;
-                            block.charactersEnd = endCharacter;
-                            try {
-                                if (VERSION.SDK_INT >= 24) {
-                                    block.textLayout = Builder.obtain(this.messageText, startCharacter, endCharacter, paint, maxWidth).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Alignment.ALIGN_NORMAL).build();
-                                } else {
+            if (hasUrls) {
+                try {
+                    if (VERSION.SDK_INT >= 24) {
+                        textLayout = Builder.obtain(this.messageText, 0, this.messageText.length(), paint, maxWidth).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Alignment.ALIGN_NORMAL).build();
+                        this.textHeight = textLayout.getHeight();
+                        linesCount = textLayout.getLineCount();
+                        blocksCount = (int) Math.ceil((double) (((float) linesCount) / 10.0f));
+                        linesOffset = 0;
+                        prevOffset = 0.0f;
+                        for (a = 0; a < blocksCount; a++) {
+                            currentBlockLinesCount = Math.min(10, linesCount - linesOffset);
+                            block = new TextLayoutBlock();
+                            if (blocksCount != 1) {
+                                block.textLayout = textLayout;
+                                block.textYOffset = 0.0f;
+                                block.charactersOffset = 0;
+                                block.height = this.textHeight;
+                            } else {
+                                startCharacter = textLayout.getLineStart(linesOffset);
+                                endCharacter = textLayout.getLineEnd((linesOffset + currentBlockLinesCount) - 1);
+                                if (endCharacter < startCharacter) {
+                                    block.charactersOffset = startCharacter;
+                                    block.charactersEnd = endCharacter;
+                                    if (hasUrls) {
+                                        try {
+                                            if (VERSION.SDK_INT >= 24) {
+                                                block.textLayout = Builder.obtain(this.messageText, startCharacter, endCharacter, paint, AndroidUtilities.dp(2.0f) + maxWidth).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Alignment.ALIGN_NORMAL).build();
+                                                block.textYOffset = (float) textLayout.getLineTop(linesOffset);
+                                                if (a != 0) {
+                                                    block.height = (int) (block.textYOffset - prevOffset);
+                                                }
+                                                block.height = Math.max(block.height, block.textLayout.getLineBottom(block.textLayout.getLineCount() - 1));
+                                                prevOffset = block.textYOffset;
+                                                if (a == blocksCount - 1) {
+                                                    currentBlockLinesCount = Math.max(currentBlockLinesCount, block.textLayout.getLineCount());
+                                                    try {
+                                                        this.textHeight = Math.max(this.textHeight, (int) (block.textYOffset + ((float) block.textLayout.getHeight())));
+                                                    } catch (Throwable e2) {
+                                                        FileLog.e(e2);
+                                                    }
+                                                }
+                                            }
+                                        } catch (Throwable e22) {
+                                            FileLog.e(e22);
+                                        }
+                                    }
                                     block.textLayout = new StaticLayout(this.messageText, startCharacter, endCharacter, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    block.textYOffset = (float) textLayout.getLineTop(linesOffset);
+                                    if (a != 0) {
+                                        block.height = (int) (block.textYOffset - prevOffset);
+                                    }
+                                    block.height = Math.max(block.height, block.textLayout.getLineBottom(block.textLayout.getLineCount() - 1));
+                                    prevOffset = block.textYOffset;
+                                    if (a == blocksCount - 1) {
+                                        currentBlockLinesCount = Math.max(currentBlockLinesCount, block.textLayout.getLineCount());
+                                        this.textHeight = Math.max(this.textHeight, (int) (block.textYOffset + ((float) block.textLayout.getHeight())));
+                                    }
                                 }
+                            }
+                            this.textLayoutBlocks.add(block);
+                            try {
+                                lastLeft = block.textLayout.getLineLeft(currentBlockLinesCount - 1);
+                                if (a == 0) {
+                                    this.textXOffset = lastLeft;
+                                }
+                            } catch (Throwable e222) {
+                                lastLeft = 0.0f;
+                                if (a == 0) {
+                                    this.textXOffset = 0.0f;
+                                }
+                                FileLog.e(e222);
+                            }
+                            try {
+                                lastLine = block.textLayout.getLineWidth(currentBlockLinesCount - 1);
+                            } catch (Throwable e2222) {
+                                lastLine = 0.0f;
+                                FileLog.e(e2222);
+                            }
+                            linesMaxWidth = (int) Math.ceil((double) lastLine);
+                            if (a == blocksCount - 1) {
+                                this.lastLineWidth = linesMaxWidth;
+                            }
+                            lastLineWidthWithLeft = (int) Math.ceil((double) (lastLine + lastLeft));
+                            linesMaxWidthWithLeft = lastLineWidthWithLeft;
+                            if (currentBlockLinesCount <= 1) {
+                                hasNonRTL = false;
+                                textRealMaxWidth = 0.0f;
+                                textRealMaxWidthWithLeft = 0.0f;
+                                for (n = 0; n < currentBlockLinesCount; n++) {
+                                    try {
+                                        lineWidth = block.textLayout.getLineWidth(n);
+                                    } catch (Throwable e22222) {
+                                        FileLog.e(e22222);
+                                        lineWidth = 0.0f;
+                                    }
+                                    if (lineWidth > ((float) (maxWidth + 20))) {
+                                        lineWidth = (float) maxWidth;
+                                    }
+                                    try {
+                                        lineLeft = block.textLayout.getLineLeft(n);
+                                    } catch (Throwable e222222) {
+                                        FileLog.e(e222222);
+                                        lineLeft = 0.0f;
+                                    }
+                                    if (lineLeft <= 0.0f) {
+                                        this.textXOffset = Math.min(this.textXOffset, lineLeft);
+                                        block.directionFlags = (byte) (block.directionFlags | 1);
+                                        this.hasRtl = true;
+                                    } else {
+                                        block.directionFlags = (byte) (block.directionFlags | 2);
+                                    }
+                                    if (!hasNonRTL && lineLeft == 0.0f) {
+                                        try {
+                                            if (block.textLayout.getParagraphDirection(n) == 1) {
+                                                hasNonRTL = true;
+                                            }
+                                        } catch (Exception e3) {
+                                            hasNonRTL = true;
+                                        }
+                                    }
+                                    textRealMaxWidth = Math.max(textRealMaxWidth, lineWidth);
+                                    textRealMaxWidthWithLeft = Math.max(textRealMaxWidthWithLeft, lineWidth + lineLeft);
+                                    linesMaxWidth = Math.max(linesMaxWidth, (int) Math.ceil((double) lineWidth));
+                                    linesMaxWidthWithLeft = Math.max(linesMaxWidthWithLeft, (int) Math.ceil((double) (lineWidth + lineLeft)));
+                                }
+                                if (hasNonRTL) {
+                                    textRealMaxWidth = textRealMaxWidthWithLeft;
+                                    if (a == blocksCount - 1) {
+                                        this.lastLineWidth = lastLineWidthWithLeft;
+                                    }
+                                } else if (a == blocksCount - 1) {
+                                    this.lastLineWidth = linesMaxWidth;
+                                }
+                                this.textWidth = Math.max(this.textWidth, (int) Math.ceil((double) textRealMaxWidth));
+                            } else {
+                                if (lastLeft <= 0.0f) {
+                                    this.textXOffset = Math.min(this.textXOffset, lastLeft);
+                                    this.hasRtl = blocksCount == 1;
+                                    block.directionFlags = (byte) (block.directionFlags | 1);
+                                } else {
+                                    block.directionFlags = (byte) (block.directionFlags | 2);
+                                }
+                                this.textWidth = Math.max(this.textWidth, Math.min(maxWidth, linesMaxWidth));
+                            }
+                            linesOffset += currentBlockLinesCount;
+                        }
+                    }
+                } catch (Throwable e2222222) {
+                    FileLog.e(e2222222);
+                    return;
+                }
+            }
+            textLayout = new StaticLayout(this.messageText, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            this.textHeight = textLayout.getHeight();
+            linesCount = textLayout.getLineCount();
+            blocksCount = (int) Math.ceil((double) (((float) linesCount) / 10.0f));
+            linesOffset = 0;
+            prevOffset = 0.0f;
+            while (a < blocksCount) {
+                currentBlockLinesCount = Math.min(10, linesCount - linesOffset);
+                block = new TextLayoutBlock();
+                if (blocksCount != 1) {
+                    startCharacter = textLayout.getLineStart(linesOffset);
+                    endCharacter = textLayout.getLineEnd((linesOffset + currentBlockLinesCount) - 1);
+                    if (endCharacter < startCharacter) {
+                        block.charactersOffset = startCharacter;
+                        block.charactersEnd = endCharacter;
+                        if (hasUrls) {
+                            if (VERSION.SDK_INT >= 24) {
+                                block.textLayout = Builder.obtain(this.messageText, startCharacter, endCharacter, paint, AndroidUtilities.dp(2.0f) + maxWidth).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Alignment.ALIGN_NORMAL).build();
                                 block.textYOffset = (float) textLayout.getLineTop(linesOffset);
                                 if (a != 0) {
                                     block.height = (int) (block.textYOffset - prevOffset);
@@ -1968,108 +2129,87 @@ public class MessageObject {
                                 prevOffset = block.textYOffset;
                                 if (a == blocksCount - 1) {
                                     currentBlockLinesCount = Math.max(currentBlockLinesCount, block.textLayout.getLineCount());
-                                    try {
-                                        this.textHeight = Math.max(this.textHeight, (int) (block.textYOffset + ((float) block.textLayout.getHeight())));
-                                    } catch (Throwable e2) {
-                                        FileLog.e(e2);
-                                    }
+                                    this.textHeight = Math.max(this.textHeight, (int) (block.textYOffset + ((float) block.textLayout.getHeight())));
                                 }
-                            } catch (Throwable e22) {
-                                FileLog.e(e22);
                             }
                         }
-                    }
-                    this.textLayoutBlocks.add(block);
-                    try {
-                        lastLeft = block.textLayout.getLineLeft(currentBlockLinesCount - 1);
-                        if (a == 0) {
-                            this.textXOffset = lastLeft;
+                        block.textLayout = new StaticLayout(this.messageText, startCharacter, endCharacter, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        block.textYOffset = (float) textLayout.getLineTop(linesOffset);
+                        if (a != 0) {
+                            block.height = (int) (block.textYOffset - prevOffset);
                         }
-                    } catch (Throwable e222) {
-                        lastLeft = 0.0f;
-                        if (a == 0) {
-                            this.textXOffset = 0.0f;
+                        block.height = Math.max(block.height, block.textLayout.getLineBottom(block.textLayout.getLineCount() - 1));
+                        prevOffset = block.textYOffset;
+                        if (a == blocksCount - 1) {
+                            currentBlockLinesCount = Math.max(currentBlockLinesCount, block.textLayout.getLineCount());
+                            this.textHeight = Math.max(this.textHeight, (int) (block.textYOffset + ((float) block.textLayout.getHeight())));
                         }
-                        FileLog.e(e222);
                     }
-                    try {
-                        lastLine = block.textLayout.getLineWidth(currentBlockLinesCount - 1);
-                    } catch (Throwable e2222) {
-                        lastLine = 0.0f;
-                        FileLog.e(e2222);
+                } else {
+                    block.textLayout = textLayout;
+                    block.textYOffset = 0.0f;
+                    block.charactersOffset = 0;
+                    block.height = this.textHeight;
+                }
+                this.textLayoutBlocks.add(block);
+                lastLeft = block.textLayout.getLineLeft(currentBlockLinesCount - 1);
+                if (a == 0) {
+                    this.textXOffset = lastLeft;
+                }
+                lastLine = block.textLayout.getLineWidth(currentBlockLinesCount - 1);
+                linesMaxWidth = (int) Math.ceil((double) lastLine);
+                if (a == blocksCount - 1) {
+                    this.lastLineWidth = linesMaxWidth;
+                }
+                lastLineWidthWithLeft = (int) Math.ceil((double) (lastLine + lastLeft));
+                linesMaxWidthWithLeft = lastLineWidthWithLeft;
+                if (currentBlockLinesCount <= 1) {
+                    if (lastLeft <= 0.0f) {
+                        block.directionFlags = (byte) (block.directionFlags | 2);
+                    } else {
+                        this.textXOffset = Math.min(this.textXOffset, lastLeft);
+                        if (blocksCount == 1) {
+                        }
+                        this.hasRtl = blocksCount == 1;
+                        block.directionFlags = (byte) (block.directionFlags | 1);
                     }
-                    int linesMaxWidth = (int) Math.ceil((double) lastLine);
-                    if (a == blocksCount - 1) {
+                    this.textWidth = Math.max(this.textWidth, Math.min(maxWidth, linesMaxWidth));
+                } else {
+                    hasNonRTL = false;
+                    textRealMaxWidth = 0.0f;
+                    textRealMaxWidthWithLeft = 0.0f;
+                    for (n = 0; n < currentBlockLinesCount; n++) {
+                        lineWidth = block.textLayout.getLineWidth(n);
+                        if (lineWidth > ((float) (maxWidth + 20))) {
+                            lineWidth = (float) maxWidth;
+                        }
+                        lineLeft = block.textLayout.getLineLeft(n);
+                        if (lineLeft <= 0.0f) {
+                            block.directionFlags = (byte) (block.directionFlags | 2);
+                        } else {
+                            this.textXOffset = Math.min(this.textXOffset, lineLeft);
+                            block.directionFlags = (byte) (block.directionFlags | 1);
+                            this.hasRtl = true;
+                        }
+                        if (block.textLayout.getParagraphDirection(n) == 1) {
+                            hasNonRTL = true;
+                        }
+                        textRealMaxWidth = Math.max(textRealMaxWidth, lineWidth);
+                        textRealMaxWidthWithLeft = Math.max(textRealMaxWidthWithLeft, lineWidth + lineLeft);
+                        linesMaxWidth = Math.max(linesMaxWidth, (int) Math.ceil((double) lineWidth));
+                        linesMaxWidthWithLeft = Math.max(linesMaxWidthWithLeft, (int) Math.ceil((double) (lineWidth + lineLeft)));
+                    }
+                    if (hasNonRTL) {
+                        textRealMaxWidth = textRealMaxWidthWithLeft;
+                        if (a == blocksCount - 1) {
+                            this.lastLineWidth = lastLineWidthWithLeft;
+                        }
+                    } else if (a == blocksCount - 1) {
                         this.lastLineWidth = linesMaxWidth;
                     }
-                    int lastLineWidthWithLeft = (int) Math.ceil((double) (lastLine + lastLeft));
-                    int linesMaxWidthWithLeft = lastLineWidthWithLeft;
-                    if (currentBlockLinesCount > 1) {
-                        boolean hasNonRTL = false;
-                        float textRealMaxWidth = 0.0f;
-                        float textRealMaxWidthWithLeft = 0.0f;
-                        for (int n = 0; n < currentBlockLinesCount; n++) {
-                            float lineWidth;
-                            float lineLeft;
-                            try {
-                                lineWidth = block.textLayout.getLineWidth(n);
-                            } catch (Throwable e22222) {
-                                FileLog.e(e22222);
-                                lineWidth = 0.0f;
-                            }
-                            if (lineWidth > ((float) (maxWidth + 20))) {
-                                lineWidth = (float) maxWidth;
-                            }
-                            try {
-                                lineLeft = block.textLayout.getLineLeft(n);
-                            } catch (Throwable e222222) {
-                                FileLog.e(e222222);
-                                lineLeft = 0.0f;
-                            }
-                            if (lineLeft > 0.0f) {
-                                this.textXOffset = Math.min(this.textXOffset, lineLeft);
-                                block.directionFlags = (byte) (block.directionFlags | 1);
-                                this.hasRtl = true;
-                            } else {
-                                block.directionFlags = (byte) (block.directionFlags | 2);
-                            }
-                            if (!hasNonRTL && lineLeft == 0.0f) {
-                                try {
-                                    if (block.textLayout.getParagraphDirection(n) == 1) {
-                                        hasNonRTL = true;
-                                    }
-                                } catch (Exception e3) {
-                                    hasNonRTL = true;
-                                }
-                            }
-                            textRealMaxWidth = Math.max(textRealMaxWidth, lineWidth);
-                            textRealMaxWidthWithLeft = Math.max(textRealMaxWidthWithLeft, lineWidth + lineLeft);
-                            linesMaxWidth = Math.max(linesMaxWidth, (int) Math.ceil((double) lineWidth));
-                            linesMaxWidthWithLeft = Math.max(linesMaxWidthWithLeft, (int) Math.ceil((double) (lineWidth + lineLeft)));
-                        }
-                        if (hasNonRTL) {
-                            textRealMaxWidth = textRealMaxWidthWithLeft;
-                            if (a == blocksCount - 1) {
-                                this.lastLineWidth = lastLineWidthWithLeft;
-                            }
-                        } else if (a == blocksCount - 1) {
-                            this.lastLineWidth = linesMaxWidth;
-                        }
-                        this.textWidth = Math.max(this.textWidth, (int) Math.ceil((double) textRealMaxWidth));
-                    } else {
-                        if (lastLeft > 0.0f) {
-                            this.textXOffset = Math.min(this.textXOffset, lastLeft);
-                            this.hasRtl = blocksCount != 1;
-                            block.directionFlags = (byte) (block.directionFlags | 1);
-                        } else {
-                            block.directionFlags = (byte) (block.directionFlags | 2);
-                        }
-                        this.textWidth = Math.max(this.textWidth, Math.min(maxWidth, linesMaxWidth));
-                    }
-                    linesOffset += currentBlockLinesCount;
+                    this.textWidth = Math.max(this.textWidth, (int) Math.ceil((double) textRealMaxWidth));
                 }
-            } catch (Throwable e2222222) {
-                FileLog.e(e2222222);
+                linesOffset += currentBlockLinesCount;
             }
         }
     }

@@ -110,6 +110,12 @@
     <string name="AlwaysShareWithPlaceholder">Sempre compartilhar para os usuários...</string>
     <string name="AlwaysShareWithTitle">Sempre Mostrar</string>
     <string name="AlwaysShowPopup">Sempre mostrar pop-up</string>
+    <string name="AndMoreTypingGroup_few">%1$s and %2$d more are typing</string>
+    <string name="AndMoreTypingGroup_many">%1$s and %2$d more are typing</string>
+    <string name="AndMoreTypingGroup_one">%1$s e %2$d mais estão escrevendo</string>
+    <string name="AndMoreTypingGroup_other">%1$s and %2$d more are typing</string>
+    <string name="AndMoreTypingGroup_two">%1$s and %2$d more are typing</string>
+    <string name="AndMoreTypingGroup_zero">%1$s and %2$d more are typing</string>
     <string name="AndMoreTyping_few">e mais %1$d estão escrevendo</string>
     <string name="AndMoreTyping_many">e mais %1$d estão escrevendo</string>
     <string name="AndMoreTyping_one">e mais %1$d estão escrevendo</string>
@@ -138,6 +144,7 @@
     <string name="ArchivedStickersEmpty">Nenhum sticker arquivado</string>
     <string name="ArchivedStickersInfo">Você pode ter até 200 pacotes de sticker instalados. Stickers não usados são arquivados quando você adicionar mais.</string>
     <string name="AreTyping">estão escrevendo...</string>
+    <string name="AreTypingGroup">%1$s estão escrevendo...</string>
     <string name="AreYouSure">Você tem certeza?</string>
     <string name="AreYouSureBlockContact">Você tem certeza que deseja bloquear este contato?</string>
     <string name="AreYouSureClearHistory">Você tem certeza que deseja limpar o histórico?</string>
@@ -455,9 +462,12 @@
     <string name="Days_two">%1$d dias</string>
     <string name="Days_zero">%1$d dias</string>
     <string name="DebugMenu">Debug Menu</string>
+    <string name="DebugMenuDisableCamera">Desativar câmera no app</string>
+    <string name="DebugMenuEnableCamera">Ativar câmera no app</string>
     <string name="DebugMenuImportContacts">Importar Contatos</string>
     <string name="DebugMenuReloadContacts">Recarregar Contatos</string>
     <string name="DebugMenuResetContacts">Restaurar Contatos Importados</string>
+    <string name="DebugMenuResetDialogs">Limpar Dialogs</string>
     <string name="Default">Padrão</string>
     <string name="DefaultRingtone">Padrão</string>
     <string name="Delete">Apagar</string>
@@ -807,6 +817,7 @@
     <string name="IsSendingPhoto">%1$s está enviando uma foto...</string>
     <string name="IsSendingVideo">%1$s está enviando um vídeo...</string>
     <string name="IsTyping">está escrevendo...</string>
+    <string name="IsTypingGroup">%1$s está escrevendo...</string>
     <string name="Italic">Itálico</string>
     <string name="JoinGroup">ENTRAR NO GRUPO</string>
     <string name="JoinToGroupErrorFull">Desculpe, este grupo já está lotado.</string>
@@ -1313,6 +1324,7 @@
     <string name="RestorePasswordNoEmailTitle">Desculpe</string>
     <string name="Retry">Tentar novamente</string>
     <string name="ReturnToCall">RETORNAR À LIGAÇÃO</string>
+    <string name="ReverseOrder">Ordem reversa</string>
     <string name="RevokeAlert">Você tem certeza que deseja desativar o link? Uma vez feito, ninguém conseguirá entrar usando-o.</string>
     <string name="RevokeAlertNewLink">Este link de convite está inativo. Um novo link foi gerado.</string>
     <string name="RevokeButton">Desativar</string>
@@ -1439,6 +1451,7 @@
     <string name="ShowAllMedia">Mostrar todas as mídias</string>
     <string name="ShowInChat">Mostrar na conversa</string>
     <string name="ShowNearbyPlaces">DESLIZE PARA VER LUGARES PRÓXIMOS</string>
+    <string name="Shuffle">Aleatório</string>
     <string name="SlideToCancel">DESLIZE PARA CANCELAR</string>
     <string name="SmartNotifications">Notificações Inteligentes</string>
     <string name="SmartNotificationsAlert">Frequência do Alerta de Som</string>

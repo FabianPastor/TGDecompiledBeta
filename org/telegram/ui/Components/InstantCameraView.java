@@ -104,7 +104,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private static final int MSG_VIDEOFRAME_AVAILABLE = 2;
     private static final String VERTEX_SHADER = "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n   gl_Position = uMVPMatrix * aPosition;\n   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n";
     private AnimatorSet animatorSet;
-    private Size aspectRatio = new Size(16, 9);
+    private Size aspectRatio;
     private ChatActivity baseFragment;
     private FrameLayout cameraContainer;
     private File cameraFile;
@@ -121,9 +121,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private boolean isFrontface = true;
     private byte[] iv;
     private byte[] key;
-    private float[] mMVPMatrix = new float[16];
-    private float[] mSTMatrix = new float[16];
-    private float[] moldSTMatrix = new float[16];
+    private float[] mMVPMatrix;
+    private float[] mSTMatrix;
+    private float[] moldSTMatrix;
     private AnimatorSet muteAnimation;
     private ImageView muteImageView;
     private int[] oldCameraTexture = new int[1];
@@ -1248,7 +1248,17 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     public InstantCameraView(Context context, ChatActivity parentFragment) {
+        Size size;
         super(context);
+        if (MediaController.getInstance().canRoundCamera16to9()) {
+            size = new Size(16, 9);
+        } else {
+            size = new Size(4, 3);
+        }
+        this.aspectRatio = size;
+        this.mMVPMatrix = new float[16];
+        this.mSTMatrix = new float[16];
+        this.moldSTMatrix = new float[16];
         setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 float f = 1.0f;

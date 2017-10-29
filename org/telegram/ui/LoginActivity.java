@@ -2155,7 +2155,6 @@ public class LoginActivity extends BaseFragment {
                     ConnectionsManager.getInstance().cleanup();
                     final TL_auth_sendCode req = new TL_auth_sendCode();
                     String phone = PhoneFormat.stripExceptNumbers("" + this.codeField.getText() + this.phoneField.getText());
-                    ConnectionsManager.getInstance().applyCountryPortNumber(phone);
                     req.api_hash = BuildVars.APP_HASH;
                     req.api_id = BuildVars.APP_ID;
                     req.phone_number = phone;

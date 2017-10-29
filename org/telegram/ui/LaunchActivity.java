@@ -2607,7 +2607,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             builder.setView(linearLayout);
             builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    LocaleController.getInstance().applyLanguage(selectedLanguage[0], true);
+                    LocaleController.getInstance().applyLanguage(selectedLanguage[0], true, false);
                     LaunchActivity.this.rebuildAllFragments(true);
                 }
             });

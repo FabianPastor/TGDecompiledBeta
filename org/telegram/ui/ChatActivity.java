@@ -752,7 +752,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             if (postId != 0) {
                                 args.putInt("message_id", postId);
                             }
-                            if (MessagesController.checkCanOpenChat(args, ChatActivity.this)) {
+                            if (MessagesController.checkCanOpenChat(args, ChatActivity.this, cell.getMessageObject())) {
                                 ChatActivity.this.presentFragment(new ChatActivity(args), true);
                             }
                         }
@@ -2076,7 +2076,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             this.searchItem.setVisibility(8);
         }
         this.headerItem = menu.addItem(0, (int) R.drawable.ic_ab_other);
-        if (this.currentUser != null && MessagesController.getInstance().callsEnabled) {
+        if (this.currentUser != null) {
             this.headerItem.addSubItem(32, LocaleController.getString("Call", R.string.Call));
             TL_userFull userFull = MessagesController.getInstance().getUserFull(this.currentUser.id);
             if (userFull == null || !userFull.phone_calls_available) {
@@ -2097,7 +2097,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (this.currentEncryptedChat != null) {
             this.timeItem2 = this.headerItem.addSubItem(13, LocaleController.getString("SetTimer", R.string.SetTimer));
         }
-        if (!ChatObject.isChannel(this.currentChat) || (this.currentChat != null && this.currentChat.megagroup)) {
+        if (!ChatObject.isChannel(this.currentChat) || (this.currentChat != null && this.currentChat.megagroup && TextUtils.isEmpty(this.currentChat.username))) {
             this.headerItem.addSubItem(15, LocaleController.getString("ClearHistory", R.string.ClearHistory));
         }
         if (!ChatObject.isChannel(this.currentChat)) {

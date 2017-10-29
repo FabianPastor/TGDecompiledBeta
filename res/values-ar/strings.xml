@@ -110,6 +110,12 @@
     <string name="AlwaysShareWithPlaceholder">دائمًا شارك مع جهات الاتصال...</string>
     <string name="AlwaysShareWithTitle">دائمُا شارك</string>
     <string name="AlwaysShowPopup">دائمًا أظهر الإشعارات المنبثقة</string>
+    <string name="AndMoreTypingGroup_few">%1$s و %2$d أشخاص يقوموا بالكتابة</string>
+    <string name="AndMoreTypingGroup_many">%1$s و %2$d شخص يقوموا بالكتابة</string>
+    <string name="AndMoreTypingGroup_one">%1$s و شخص اخر يقوموا بالكتابة</string>
+    <string name="AndMoreTypingGroup_other">%1$s و %2$d شخص يقوموا بالكتابة</string>
+    <string name="AndMoreTypingGroup_two">%1$s و شخصان يقوموا بالكتابة</string>
+    <string name="AndMoreTypingGroup_zero"></string>
     <string name="AndMoreTyping_few">كذلك %1$d أعضاء آخرون يقومون بالكتابة</string>
     <string name="AndMoreTyping_many">كذلك %1$d عضو آخرون يقومون بالكتابة</string>
     <string name="AndMoreTyping_one">كذلك %1$d عضو آخر يقوم بالكتابة</string>
@@ -138,6 +144,7 @@
     <string name="ArchivedStickersEmpty">لا توجد ملصقات مؤرشفة</string>
     <string name="ArchivedStickersInfo">يمكنك تنصيب ٢٠٠ حزمة ملصقات هنا. سنقوم بأرشفة الحزم الغير مستخدمة عند تنزيل حزم جديدة.</string>
     <string name="AreTyping">يكتبون…</string>
+    <string name="AreTypingGroup">%1$s يقوموا بالكتابة...</string>
     <string name="AreYouSure">هل أنت متأكد؟</string>
     <string name="AreYouSureBlockContact">هل أنت متأكد من رغبتك في حظر جهة الاتصال هذه؟</string>
     <string name="AreYouSureClearHistory">هل أنت متأكد من رغبتك في حذف سجل المحادثات؟</string>
@@ -455,9 +462,12 @@
     <string name="Days_two">%1$d يومان</string>
     <string name="Days_zero">%1$d يوم</string>
     <string name="DebugMenu">قائمة المعالجة</string>
+    <string name="DebugMenuDisableCamera">عطل الكاميرا داخل التطبيق</string>
+    <string name="DebugMenuEnableCamera">فعل الكاميرا داخل التطبيق</string>
     <string name="DebugMenuImportContacts">استيراد جهات الاتصال</string>
     <string name="DebugMenuReloadContacts">إعادة تنزيل جهات الاتصال</string>
     <string name="DebugMenuResetContacts">إعادة ضبط جهات الاتصال المستوردة</string>
+    <string name="DebugMenuResetDialogs">إعادة تعيين الحوارات</string>
     <string name="Default">افتراضي</string>
     <string name="DefaultRingtone">افتراضي</string>
     <string name="Delete">حذف</string>
@@ -807,6 +817,7 @@
     <string name="IsSendingPhoto">%1$s يقوم بإرسال صورة...</string>
     <string name="IsSendingVideo">%1$s يقوم بإرسال مقطع مرئي...</string>
     <string name="IsTyping">يكتب…</string>
+    <string name="IsTypingGroup">%1$s يقوم بالكتابة...</string>
     <string name="Italic">مائل</string>
     <string name="JoinGroup">انضم للمجموعة</string>
     <string name="JoinToGroupErrorFull">المعذرة، هذه المجموعة ممتلئة.</string>
@@ -1313,6 +1324,7 @@
     <string name="RestorePasswordNoEmailTitle">عذرًا</string>
     <string name="Retry">إعادة المحاولة</string>
     <string name="ReturnToCall">الرجوع للمكالمة</string>
+    <string name="ReverseOrder">اعكس الترتيب</string>
     <string name="RevokeAlert">هل أنت متأكد من رغبتك في إلغاء الرابط؟ اذا قمت بذلك، لن يستطيع أحد الدخول باستخدامه.</string>
     <string name="RevokeAlertNewLink">رابط الدعوة السابق لا يعمل الآن. سيتم إنشاء رابط جديد.</string>
     <string name="RevokeButton">إلغاء الرابط</string>
@@ -1439,6 +1451,7 @@
     <string name="ShowAllMedia">عرض كافة الوسائط</string>
     <string name="ShowInChat">أظهر في المحادثة</string>
     <string name="ShowNearbyPlaces">اسحب للأعلى لمشاهدة الأماكن القريبة</string>
+    <string name="Shuffle">عشوائي</string>
     <string name="SlideToCancel">قم بالسحب للإلغاء</string>
     <string name="SmartNotifications">إشعارات ذكية</string>
     <string name="SmartNotificationsAlert">تردد صوت التنبيه</string>

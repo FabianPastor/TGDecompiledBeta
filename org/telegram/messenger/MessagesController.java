@@ -363,7 +363,6 @@ public class MessagesController implements NotificationCenterDelegate {
     public int callPacketTimeout = 10000;
     public int callReceiveTimeout = 20000;
     public int callRingTimeout = 90000;
-    public boolean callsEnabled;
     private HashMap<Integer, ArrayList<Integer>> channelAdmins = new HashMap();
     private SparseArray<ArrayList<Integer>> channelViewsToSend = new SparseArray();
     private HashMap<Integer, Integer> channelsPts = new HashMap();
@@ -581,7 +580,6 @@ public class MessagesController implements NotificationCenterDelegate {
         this.fontSize = preferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
         this.allowBigEmoji = preferences.getBoolean("allowBigEmoji", false);
         this.useSystemEmoji = preferences.getBoolean("useSystemEmoji", false);
-        this.callsEnabled = preferences.getBoolean("callsEnabled", false);
         this.linkPrefix = preferences.getString("linkPrefix", "t.me");
         this.callReceiveTimeout = preferences.getInt("callReceiveTimeout", 20000);
         this.callRingTimeout = preferences.getInt("callRingTimeout", 90000);
@@ -622,8 +620,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesController.this.maxRecentGifsCount = config.saved_gifs_limit;
                 MessagesController.this.maxRecentStickersCount = config.stickers_recent_limit;
                 MessagesController.this.maxFaveStickersCount = config.stickers_faved_limit;
-                boolean callsOld = MessagesController.this.callsEnabled;
-                MessagesController.this.callsEnabled = config.phonecalls_enabled;
                 MessagesController.this.linkPrefix = config.me_url_prefix;
                 if (MessagesController.this.linkPrefix.endsWith("/")) {
                     MessagesController.this.linkPrefix = MessagesController.this.linkPrefix.substring(0, MessagesController.this.linkPrefix.length() - 1);
@@ -651,7 +647,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 editor.putInt("callRingTimeout", MessagesController.this.callRingTimeout);
                 editor.putInt("callConnectTimeout", MessagesController.this.callConnectTimeout);
                 editor.putInt("callPacketTimeout", MessagesController.this.callPacketTimeout);
-                editor.putBoolean("callsEnabled", MessagesController.this.callsEnabled);
                 editor.putString("linkPrefix", MessagesController.this.linkPrefix);
                 editor.putInt("maxPinnedDialogsCount", MessagesController.this.maxPinnedDialogsCount);
                 try {
@@ -670,9 +665,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     FileLog.e(e);
                 }
                 editor.commit();
-                if (MessagesController.this.callsEnabled != callsOld) {
-                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
-                }
             }
         });
     }
@@ -2280,7 +2272,9 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll, long taskId, TLObject taskRequest) {
         long newTaskId;
+        NativeByteBuffer data;
         Throwable e;
+        final int i;
         TL_messages_deleteMessages req;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
             ArrayList<Integer> toSend = null;
@@ -2307,11 +2301,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
-            NativeByteBuffer data;
             NativeByteBuffer data2;
             if (channelId != 0) {
                 TL_channels_deleteMessages req2;
-                final int i;
                 if (taskRequest != null) {
                     req2 = (TL_channels_deleteMessages) taskRequest;
                     newTaskId = taskId;
@@ -3624,7 +3616,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesController.this.getDifference();
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
-                        MessageObject messageObject;
                         MessagesController.this.resetingDialogs = false;
                         MessagesController.this.applyDialogsNotificationsSettings(org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs);
                         if (!UserConfig.draftsLoaded) {
@@ -3633,6 +3624,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         MessagesController.this.putUsers(org_telegram_tgnet_TLRPC_messages_Dialogs.users, false);
                         MessagesController.this.putChats(org_telegram_tgnet_TLRPC_messages_Dialogs.chats, false);
                         for (int a = 0; a < MessagesController.this.dialogs.size(); a++) {
+                            MessageObject messageObject;
                             TL_dialog oldDialog = (TL_dialog) MessagesController.this.dialogs.get(a);
                             if (((int) oldDialog.id) != 0) {
                                 MessagesController.this.dialogs_dict.remove(Long.valueOf(oldDialog.id));
@@ -4352,6 +4344,8 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void checkLastDialogMessage(TL_dialog dialog, InputPeer peer, long taskId) {
         Throwable e;
+        long newTaskId;
+        final TL_dialog tL_dialog;
         final int lower_id = (int) dialog.id;
         if (lower_id != 0 && !this.checkingLastMessagesDialogs.containsKey(Integer.valueOf(lower_id))) {
             InputPeer inputPeer;
@@ -4363,8 +4357,6 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             req.peer = inputPeer;
             if (req.peer != null && !(req.peer instanceof TL_inputPeerChannel)) {
-                long newTaskId;
-                final TL_dialog tL_dialog;
                 req.limit = 1;
                 this.checkingLastMessagesDialogs.put(Integer.valueOf(lower_id), Boolean.valueOf(true));
                 if (taskId == 0) {
@@ -5878,6 +5870,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId, InputChannel inputChannel) {
+        Integer channelPts;
         Throwable e;
         long newTaskId;
         TL_updates_getChannelDifference req;
@@ -5888,7 +5881,6 @@ public class MessagesController implements NotificationCenterDelegate {
             gettingDifferenceChannel = Boolean.valueOf(false);
         }
         if (!gettingDifferenceChannel.booleanValue()) {
-            Integer channelPts;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = (Integer) this.channelsPts.get(Integer.valueOf(channelId));
@@ -5911,7 +5903,14 @@ public class MessagesController implements NotificationCenterDelegate {
                 return;
             }
             if (inputChannel == null) {
-                inputChannel = getInputChannel(channelId);
+                Chat chat = getChat(Integer.valueOf(channelId));
+                if (chat == null) {
+                    chat = MessagesStorage.getInstance().getChatSync(channelId);
+                    if (chat != null) {
+                        putChat(chat, true);
+                    }
+                }
+                inputChannel = getInputChannel(chat);
             }
             if (inputChannel != null && inputChannel.access_hash != 0) {
                 if (taskId == 0) {
@@ -8863,6 +8862,10 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public static boolean checkCanOpenChat(Bundle bundle, BaseFragment fragment) {
+        return checkCanOpenChat(bundle, fragment, null);
+    }
+
+    public static boolean checkCanOpenChat(Bundle bundle, BaseFragment fragment, MessageObject originalMessage) {
         if (bundle == null || fragment == null) {
             return true;
         }
@@ -8870,6 +8873,7 @@ public class MessagesController implements NotificationCenterDelegate {
         Chat chat = null;
         int user_id = bundle.getInt("user_id", 0);
         int chat_id = bundle.getInt("chat_id", 0);
+        int messageId = bundle.getInt("message_id", 0);
         if (user_id != 0) {
             user = getInstance().getUser(Integer.valueOf(user_id));
         } else if (chat_id != 0) {
@@ -8884,11 +8888,75 @@ public class MessagesController implements NotificationCenterDelegate {
         } else if (user != null) {
             reason = getRestrictionReason(user.restriction_reason);
         }
-        if (reason == null) {
-            return true;
+        if (reason != null) {
+            showCantOpenAlert(fragment, reason);
+            return false;
         }
-        showCantOpenAlert(fragment, reason);
-        return false;
+        if (!(messageId == 0 || originalMessage == null || chat == null || chat.access_hash != 0)) {
+            int did = (int) originalMessage.getDialogId();
+            if (did != 0) {
+                TLObject req;
+                final AlertDialog progressDialog = new AlertDialog(fragment.getParentActivity(), 1);
+                progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.setCancelable(false);
+                if (did < 0) {
+                    chat = getInstance().getChat(Integer.valueOf(-did));
+                }
+                TLObject request;
+                if (did > 0 || !ChatObject.isChannel(chat)) {
+                    request = new TL_messages_getMessages();
+                    request.id.add(Integer.valueOf(originalMessage.getId()));
+                    req = request;
+                } else {
+                    chat = getInstance().getChat(Integer.valueOf(-did));
+                    request = new TL_channels_getMessages();
+                    request.channel = getInputChannel(chat);
+                    request.id.add(Integer.valueOf(originalMessage.getId()));
+                    req = request;
+                }
+                final BaseFragment baseFragment = fragment;
+                final Bundle bundle2 = bundle;
+                final int reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    public void run(final TLObject response, TL_error error) {
+                        if (response != null) {
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    try {
+                                        progressDialog.dismiss();
+                                    } catch (Throwable e) {
+                                        FileLog.e(e);
+                                    }
+                                    messages_Messages res = response;
+                                    MessagesController.getInstance().putUsers(res.users, false);
+                                    MessagesController.getInstance().putChats(res.chats, false);
+                                    MessagesStorage.getInstance().putUsersAndChats(res.users, res.chats, true, true);
+                                    baseFragment.presentFragment(new ChatActivity(bundle2), true);
+                                }
+                            });
+                        }
+                    }
+                });
+                baseFragment = fragment;
+                progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ConnectionsManager.getInstance().cancelRequest(reqId, true);
+                        try {
+                            dialog.dismiss();
+                        } catch (Throwable e) {
+                            FileLog.e(e);
+                        }
+                        if (baseFragment != null) {
+                            baseFragment.setVisibleDialog(null);
+                        }
+                    }
+                });
+                fragment.setVisibleDialog(progressDialog);
+                progressDialog.show();
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void openChatOrProfileWith(User user, Chat chat, BaseFragment fragment, int type, boolean closeLast) {
@@ -8944,10 +9012,7 @@ public class MessagesController implements NotificationCenterDelegate {
             } else if (chat != null) {
                 openChatOrProfileWith(null, chat, fragment, 1, false);
             } else if (fragment.getParentActivity() != null) {
-                final AlertDialog progressDialog = new AlertDialog(fragment.getParentActivity(), 1);
-                progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.setCancelable(false);
+                final AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(fragment.getParentActivity(), 1)};
                 TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
                 req.username = username;
                 final int reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -8955,10 +9020,10 @@ public class MessagesController implements NotificationCenterDelegate {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
                                 try {
-                                    progressDialog.dismiss();
-                                } catch (Throwable e) {
-                                    FileLog.e(e);
+                                    progressDialog[0].dismiss();
+                                } catch (Exception e) {
                                 }
+                                progressDialog[0] = null;
                                 fragment.setVisibleDialog(null);
                                 if (error == null) {
                                     TL_contacts_resolvedPeer res = response;
@@ -8981,21 +9046,26 @@ public class MessagesController implements NotificationCenterDelegate {
                         });
                     }
                 });
-                progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        ConnectionsManager.getInstance().cancelRequest(reqId, true);
-                        try {
-                            dialog.dismiss();
-                        } catch (Throwable e) {
-                            FileLog.e(e);
-                        }
-                        if (fragment != null) {
-                            fragment.setVisibleDialog(null);
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public void run() {
+                        if (progressDialog[0] != null) {
+                            progressDialog[0].setMessage(LocaleController.getString("Loading", R.string.Loading));
+                            progressDialog[0].setCanceledOnTouchOutside(false);
+                            progressDialog[0].setCancelable(false);
+                            progressDialog[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ConnectionsManager.getInstance().cancelRequest(reqId, true);
+                                    try {
+                                        dialog.dismiss();
+                                    } catch (Throwable e) {
+                                        FileLog.e(e);
+                                    }
+                                }
+                            });
+                            fragment.showDialog(progressDialog[0]);
                         }
                     }
-                });
-                fragment.setVisibleDialog(progressDialog);
-                progressDialog.show();
+                }, 500);
             }
         }
     }

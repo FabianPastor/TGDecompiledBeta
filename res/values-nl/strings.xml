@@ -110,6 +110,12 @@
     <string name="AlwaysShareWithPlaceholder">Altijd delen met gebruikers</string>
     <string name="AlwaysShareWithTitle">Altijd delen</string>
     <string name="AlwaysShowPopup">Altijd pop-up tonen</string>
+    <string name="AndMoreTypingGroup_few">%1$s en %2$d anderen zijn aan het typen</string>
+    <string name="AndMoreTypingGroup_many">%1$s en %2$d anderen zijn aan het typen</string>
+    <string name="AndMoreTypingGroup_one">%1$s en %2$d andere zijn aan het typen</string>
+    <string name="AndMoreTypingGroup_other">%1$s en %2$d anderen zijn aan het typen</string>
+    <string name="AndMoreTypingGroup_two">%1$s en %2$d anderen zijn aan het typen</string>
+    <string name="AndMoreTypingGroup_zero">%1$s en %2$d anderen zijn aan het typen</string>
     <string name="AndMoreTyping_few">en %1$d meer zijn aan het typen</string>
     <string name="AndMoreTyping_many">en %1$d meer zijn aan het typen</string>
     <string name="AndMoreTyping_one">en %1$d meer is aan het typen</string>
@@ -138,6 +144,7 @@
     <string name="ArchivedStickersEmpty">Geen gearchiveerde stickers</string>
     <string name="ArchivedStickersInfo">Je kunt 200 stickerbundels tegelijk installeren, daarboven archiveren we ongebruikte stickers.</string>
     <string name="AreTyping">zijn aan het typen</string>
+    <string name="AreTypingGroup">%1$s zijn aan het typen...</string>
     <string name="AreYouSure">Weet je het zeker?</string>
     <string name="AreYouSureBlockContact">Weet je zeker dat je deze persoon wilt blokkeren?</string>
     <string name="AreYouSureClearHistory">Geschiedenis echt wissen?</string>
@@ -346,7 +353,7 @@
     <string name="ChatHistoryVisibleInfo">Nieuwe leden krijgen chatgeschiedenis ouder dan de eigen deelname te zien.</string>
     <string name="ChatLocation">Locatie</string>
     <string name="ChatVideo">Video</string>
-    <string name="ChatYourSelf">Je Cloudopslag</string>
+    <string name="ChatYourSelf">je cloudopslag</string>
     <string name="ChatYourSelfDescription1">• Berichten naartoe door te sturen</string>
     <string name="ChatYourSelfDescription2">• Media en bestanden te bewaren</string>
     <string name="ChatYourSelfDescription3">• Te gebruiken op al je apparaten</string>
@@ -455,9 +462,12 @@
     <string name="Days_two">%1$d dagen</string>
     <string name="Days_zero">%1$d dagen</string>
     <string name="DebugMenu">Debug-menu</string>
+    <string name="DebugMenuDisableCamera">In-app camera uitschakelen</string>
+    <string name="DebugMenuEnableCamera">In-app camera inschakelen</string>
     <string name="DebugMenuImportContacts">Contacten importeren</string>
     <string name="DebugMenuReloadContacts">Contacten verversen</string>
     <string name="DebugMenuResetContacts">Reset geimporteerde contacten</string>
+    <string name="DebugMenuResetDialogs">Chats herstellen</string>
     <string name="Default">Standaard</string>
     <string name="DefaultRingtone">Standaard</string>
     <string name="Delete">Verwijder</string>
@@ -637,7 +647,7 @@
     <string name="Fade">Vervagen</string>
     <string name="FavoriteStickers">Favorieten</string>
     <string name="FeaturedStickers">Populaire stickers</string>
-    <string name="FeaturedStickersInfo">Deze stickers zijn momenteel populair op Telegram. Just kunt persoonlijke stickers toevoegen via de @stickers bot.</string>
+    <string name="FeaturedStickersInfo">Deze stickers zijn momenteel populair op Telegram. Je kunt persoonlijke stickers toevoegen via de @stickers bot.</string>
     <string name="FileUploadLimit">Bestanden mogen maximaal %1$s zijn</string>
     <string name="FilesDataUsage">Bestanden</string>
     <string name="FingerprintHelp">Vingerafdruksensor</string>
@@ -807,6 +817,7 @@
     <string name="IsSendingPhoto">%1$s verstuurt een foto</string>
     <string name="IsSendingVideo">%1$s verstuurt een video</string>
     <string name="IsTyping">is aan het typen</string>
+    <string name="IsTypingGroup">%1$s is aan het typen...</string>
     <string name="Italic">Cursief</string>
     <string name="JoinGroup">LID WORDEN</string>
     <string name="JoinToGroupErrorFull">Sorry, deze groep is al vol.</string>
@@ -1313,6 +1324,7 @@
     <string name="RestorePasswordNoEmailTitle">Sorry</string>
     <string name="Retry">Opnieuw proberen</string>
     <string name="ReturnToCall">TERUG NAAR GESPREK</string>
+    <string name="ReverseOrder">Volgorde omdraaien</string>
     <string name="RevokeAlert">Deze link echt intrekken? Na intrekken kan niemand meer lid worden met de oude link.</string>
     <string name="RevokeAlertNewLink">De oude link is nu inactief. Een nieuwe link is aangemaakt.</string>
     <string name="RevokeButton">Intrekken</string>
@@ -1439,6 +1451,7 @@
     <string name="ShowAllMedia">Alle media weergeven</string>
     <string name="ShowInChat">In chat weergeven</string>
     <string name="ShowNearbyPlaces">VEEG OMHOOG VOOR PLEKKEN DICHTBIJ</string>
+    <string name="Shuffle">Shuffle</string>
     <string name="SlideToCancel">SLEEP OM TE ANNULEREN</string>
     <string name="SmartNotifications">Slimme meldingen</string>
     <string name="SmartNotificationsAlert">Aantal geluidsmeldingen</string>

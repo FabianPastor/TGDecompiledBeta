@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -267,7 +268,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         textCell.setText("Switch Backend", true);
                         return;
                     } else if (position == SettingsActivity.this.telegramFaqRow) {
-                        textCell.setText(LocaleController.getString("TelegramFAQ", R.string.TelegramFaq), true);
+                        textCell.setText(LocaleController.getString("TelegramFaq", R.string.TelegramFaq), true);
                         return;
                     } else if (position == SettingsActivity.this.contactsReimportRow) {
                         textCell.setText(LocaleController.getString("ImportContacts", R.string.ImportContacts), true);
@@ -979,20 +980,36 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 }
                 this.pressCount++;
                 if (this.pressCount >= 2 || BuildVars.DEBUG_PRIVATE_VERSION) {
-                    String string;
+                    CharSequence[] items;
                     Builder builder = new Builder(SettingsActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("DebugMenu", R.string.DebugMenu));
-                    CharSequence[] items = new CharSequence[5];
-                    items[0] = LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts);
-                    items[1] = LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts);
-                    items[2] = LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts);
-                    items[3] = LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs);
-                    if (MediaController.getInstance().canInAppCamera()) {
-                        string = LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera);
+                    String str;
+                    if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                        items = new CharSequence[6];
+                        items[0] = LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts);
+                        items[1] = LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts);
+                        items[2] = LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts);
+                        items[3] = LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs);
+                        items[4] = MediaController.getInstance().canInAppCamera() ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
+                        if (MediaController.getInstance().canRoundCamera16to9()) {
+                            str = "switch camera to 4:3";
+                        } else {
+                            str = "switch camera to 16:9";
+                        }
+                        items[5] = str;
                     } else {
-                        string = LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
+                        items = new CharSequence[5];
+                        items[0] = LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts);
+                        items[1] = LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts);
+                        items[2] = LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts);
+                        items[3] = LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs);
+                        if (MediaController.getInstance().canInAppCamera()) {
+                            str = LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera);
+                        } else {
+                            str = LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
+                        }
+                        items[4] = str;
                     }
-                    items[4] = string;
                     builder.setItems(items, new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             if (which == 0) {
@@ -1005,6 +1022,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 MessagesController.getInstance().forceResetDialogs();
                             } else if (which == 4) {
                                 MediaController.getInstance().toggleInappCamera();
+                            } else if (which == 5) {
+                                MediaController.getInstance().toggleRoundCamera16to9();
                             }
                         }
                     });
@@ -1459,10 +1478,17 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         try {
             ArrayList<Uri> uris = new ArrayList();
             for (File file : new File(ApplicationLoader.applicationContext.getExternalFilesDir(null).getAbsolutePath() + "/logs").listFiles()) {
-                uris.add(Uri.fromFile(file));
+                if (VERSION.SDK_INT >= 24) {
+                    uris.add(FileProvider.getUriForFile(getParentActivity(), "org.telegram.messenger.beta.provider", file));
+                } else {
+                    uris.add(Uri.fromFile(file));
+                }
             }
             if (!uris.isEmpty()) {
                 Intent i = new Intent("android.intent.action.SEND_MULTIPLE");
+                if (VERSION.SDK_INT >= 24) {
+                    i.addFlags(1);
+                }
                 i.setType("message/rfc822");
                 i.putExtra("android.intent.extra.EMAIL", "");
                 i.putExtra("android.intent.extra.SUBJECT", "last logs");

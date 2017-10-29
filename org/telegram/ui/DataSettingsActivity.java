@@ -15,7 +15,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
-import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
@@ -282,21 +281,15 @@ public class DataSettingsActivity extends BaseFragment {
         i = this.rowCount;
         this.rowCount = i + 1;
         this.usageSection2Row = i;
-        if (MessagesController.getInstance().callsEnabled) {
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.callsSectionRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.useLessDataForCallsRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.callsSection2Row = i;
-        } else {
-            this.callsSection2Row = -1;
-            this.callsSectionRow = -1;
-            this.useLessDataForCallsRow = -1;
-        }
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.callsSectionRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.useLessDataForCallsRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.callsSection2Row = i;
         i = this.rowCount;
         this.rowCount = i + 1;
         this.proxySectionRow = i;

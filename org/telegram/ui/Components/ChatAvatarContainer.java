@@ -16,6 +16,8 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
@@ -33,9 +35,11 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.ProfileActivity;
 
-public class ChatAvatarContainer extends FrameLayout {
+public class ChatAvatarContainer extends FrameLayout implements NotificationCenterDelegate {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private BackupImageView avatarImageView;
+    private int currentConnectionState;
+    private CharSequence lastSubtitle;
     private int onlineCount = -1;
     private ChatActivity parentFragment;
     private StatusDrawable[] statusDrawables = new StatusDrawable[5];
@@ -181,7 +185,11 @@ public class ChatAvatarContainer extends FrameLayout {
     }
 
     public void setSubtitle(CharSequence value) {
-        this.subtitleTextView.setText(value);
+        if (this.lastSubtitle == null) {
+            this.subtitleTextView.setText(value);
+        } else {
+            this.lastSubtitle = value;
+        }
     }
 
     public ImageView getTimeItem() {
@@ -223,6 +231,7 @@ public class ChatAvatarContainer extends FrameLayout {
 
     public void updateSubtitle() {
         if (this.parentFragment != null) {
+            CharSequence newSubtitle;
             User user = this.parentFragment.getCurrentUser();
             Chat chat = this.parentFragment.getCurrentChat();
             CharSequence printString = (CharSequence) MessagesController.getInstance().printingStrings.get(Long.valueOf(this.parentFragment.getDialogId()));
@@ -236,44 +245,35 @@ public class ChatAvatarContainer extends FrameLayout {
                     if (ChatObject.isChannel(chat)) {
                         if (info == null || info.participants_count == 0) {
                             if (chat.megagroup) {
-                                this.subtitleTextView.setText(LocaleController.getString("Loading", R.string.Loading).toLowerCase());
-                                return;
+                                newSubtitle = LocaleController.getString("Loading", R.string.Loading).toLowerCase();
                             } else if ((chat.flags & 64) != 0) {
-                                this.subtitleTextView.setText(LocaleController.getString("ChannelPublic", R.string.ChannelPublic).toLowerCase());
-                                return;
+                                newSubtitle = LocaleController.getString("ChannelPublic", R.string.ChannelPublic).toLowerCase();
                             } else {
-                                this.subtitleTextView.setText(LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase());
-                                return;
+                                newSubtitle = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase();
                             }
                         } else if (!chat.megagroup || info.participants_count > Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
                             int[] result = new int[1];
                             String shortNumber = LocaleController.formatShortNumber(info.participants_count, result);
-                            this.subtitleTextView.setText(LocaleController.formatPluralString("Members", result[0]).replace(String.format("%d", new Object[]{Integer.valueOf(result[0])}), shortNumber));
-                            return;
+                            newSubtitle = LocaleController.formatPluralString("Members", result[0]).replace(String.format("%d", new Object[]{Integer.valueOf(result[0])}), shortNumber);
                         } else if (this.onlineCount <= 1 || info.participants_count == 0) {
-                            this.subtitleTextView.setText(LocaleController.formatPluralString("Members", info.participants_count));
-                            return;
+                            newSubtitle = LocaleController.formatPluralString("Members", info.participants_count);
                         } else {
-                            this.subtitleTextView.setText(String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Members", info.participants_count), LocaleController.formatPluralString("OnlineCount", this.onlineCount)}));
-                            return;
+                            newSubtitle = String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Members", info.participants_count), LocaleController.formatPluralString("OnlineCount", this.onlineCount)});
                         }
                     } else if (ChatObject.isKickedFromChat(chat)) {
-                        this.subtitleTextView.setText(LocaleController.getString("YouWereKicked", R.string.YouWereKicked));
-                        return;
+                        newSubtitle = LocaleController.getString("YouWereKicked", R.string.YouWereKicked);
                     } else if (ChatObject.isLeftFromChat(chat)) {
-                        this.subtitleTextView.setText(LocaleController.getString("YouLeft", R.string.YouLeft));
-                        return;
+                        newSubtitle = LocaleController.getString("YouLeft", R.string.YouLeft);
                     } else {
                         int count = chat.participants_count;
                         if (!(info == null || info.participants == null)) {
                             count = info.participants.participants.size();
                         }
                         if (this.onlineCount <= 1 || count == 0) {
-                            this.subtitleTextView.setText(LocaleController.formatPluralString("Members", count));
-                            return;
+                            newSubtitle = LocaleController.formatPluralString("Members", count);
+                        } else {
+                            newSubtitle = String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Members", count), LocaleController.formatPluralString("OnlineCount", this.onlineCount)});
                         }
-                        this.subtitleTextView.setText(String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Members", count), LocaleController.formatPluralString("OnlineCount", this.onlineCount)}));
-                        return;
                     }
                 } else if (user != null) {
                     String newStatus;
@@ -290,14 +290,19 @@ public class ChatAvatarContainer extends FrameLayout {
                     } else {
                         newStatus = LocaleController.formatUserStatus(user);
                     }
-                    this.subtitleTextView.setText(newStatus);
-                    return;
+                    Object newSubtitle2 = newStatus;
                 } else {
-                    return;
+                    newSubtitle = "";
                 }
+            } else {
+                newSubtitle = printString;
+                setTypingAnimation(true);
             }
-            this.subtitleTextView.setText(printString);
-            setTypingAnimation(true);
+            if (this.lastSubtitle == null) {
+                this.subtitleTextView.setText(newSubtitle);
+            } else {
+                this.lastSubtitle = newSubtitle;
+            }
         }
     }
 
@@ -360,6 +365,52 @@ public class ChatAvatarContainer extends FrameLayout {
                     }
                 }
             }
+        }
+    }
+
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (this.parentFragment != null) {
+            NotificationCenter.getInstance().addObserver(this, NotificationCenter.didUpdatedConnectionState);
+            this.currentConnectionState = ConnectionsManager.getInstance().getConnectionState();
+            updateCurrentConnectionState();
+        }
+    }
+
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (this.parentFragment != null) {
+            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didUpdatedConnectionState);
+        }
+    }
+
+    public void didReceivedNotification(int id, Object... args) {
+        if (id == NotificationCenter.didUpdatedConnectionState) {
+            int state = ConnectionsManager.getInstance().getConnectionState();
+            if (this.currentConnectionState != state) {
+                this.currentConnectionState = state;
+                updateCurrentConnectionState();
+            }
+        }
+    }
+
+    private void updateCurrentConnectionState() {
+        String title = null;
+        if (this.currentConnectionState == 2) {
+            title = LocaleController.getString("WaitingForNetwork", R.string.WaitingForNetwork);
+        } else if (this.currentConnectionState == 1) {
+            title = LocaleController.getString("Connecting", R.string.Connecting);
+        } else if (this.currentConnectionState == 5) {
+            title = LocaleController.getString("Updating", R.string.Updating);
+        } else if (this.currentConnectionState == 4) {
+            title = LocaleController.getString("ConnectingToProxy", R.string.ConnectingToProxy);
+        }
+        if (title != null) {
+            this.lastSubtitle = this.subtitleTextView.getText();
+            this.subtitleTextView.setText(title);
+        } else if (this.lastSubtitle != null) {
+            this.subtitleTextView.setText(this.lastSubtitle);
+            this.lastSubtitle = null;
         }
     }
 }

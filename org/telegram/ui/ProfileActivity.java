@@ -1587,7 +1587,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             ArrayList<CharSequence> items = new ArrayList();
             final ArrayList<Integer> actions = new ArrayList();
             TL_userFull userFull = MessagesController.getInstance().getUserFull(user.id);
-            if (MessagesController.getInstance().callsEnabled && userFull != null && userFull.phone_calls_available) {
+            if (userFull != null && userFull.phone_calls_available) {
                 items.add(LocaleController.getString("CallViaTelegram", R.string.CallViaTelegram));
                 actions.add(Integer.valueOf(2));
             }
@@ -2717,6 +2717,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
 
     private void updateProfileData() {
         if (this.avatarImage != null && this.nameTextView != null) {
+            String onlineTextOverride;
+            int currentConnectionState = ConnectionsManager.getInstance().getConnectionState();
+            if (currentConnectionState == 2) {
+                onlineTextOverride = LocaleController.getString("WaitingForNetwork", R.string.WaitingForNetwork);
+            } else if (currentConnectionState == 1) {
+                onlineTextOverride = LocaleController.getString("Connecting", R.string.Connecting);
+            } else if (currentConnectionState == 5) {
+                onlineTextOverride = LocaleController.getString("Updating", R.string.Updating);
+            } else if (currentConnectionState == 4) {
+                onlineTextOverride = LocaleController.getString("ConnectingToProxy", R.string.ConnectingToProxy);
+            } else {
+                onlineTextOverride = null;
+            }
             TLObject photo;
             FileLocation photoBig;
             String newString;
@@ -2753,7 +2766,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         } else if (!this.nameTextView[a].getText().equals(newString)) {
                             this.nameTextView[a].setText(newString);
                         }
-                        if (!this.onlineTextView[a].getText().equals(newString2)) {
+                        if (a == 0 && onlineTextOverride != null) {
+                            this.onlineTextView[a].setText(onlineTextOverride);
+                        } else if (!this.onlineTextView[a].getText().equals(newString2)) {
                             this.onlineTextView[a].setText(newString2);
                         }
                         Drawable leftIcon = this.currentEncryptedChat != null ? Theme.chat_lockIconDrawable : null;
@@ -2761,7 +2776,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         if (a == 0) {
                             rightIcon = MessagesController.getInstance().isDialogMuted((this.dialog_id > 0 ? 1 : (this.dialog_id == 0 ? 0 : -1)) != 0 ? this.dialog_id : (long) this.user_id) ? Theme.chat_muteIconDrawable : null;
                         } else if (user.verified) {
-                            rightIcon = new CombinedDrawable(Theme.profile_verifiedDrawable, Theme.profile_verifiedCheckDrawable);
+                            Drawable combinedDrawable = new CombinedDrawable(Theme.profile_verifiedDrawable, Theme.profile_verifiedCheckDrawable);
                         }
                         this.nameTextView[a].setLeftDrawable(leftIcon);
                         this.nameTextView[a].setRightDrawable(rightIcon);
@@ -2816,7 +2831,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         } else {
                             this.nameTextView[a].setRightDrawable(null);
                         }
-                        if (!this.currentChat.megagroup || this.info == null || this.info.participants_count > 200 || this.onlineCount <= 0) {
+                        if (a == 0 && onlineTextOverride != null) {
+                            this.onlineTextView[a].setText(onlineTextOverride);
+                        } else if (!this.currentChat.megagroup || this.info == null || this.info.participants_count > 200 || this.onlineCount <= 0) {
                             if (a == 0 && ChatObject.isChannel(this.currentChat) && this.info != null && this.info.participants_count != 0 && (this.currentChat.megagroup || this.currentChat.broadcast)) {
                                 result = new int[1];
                                 this.onlineTextView[a].setText(LocaleController.formatPluralString("Members", result[0]).replace(String.format("%d", new Object[]{Integer.valueOf(result[0])}), LocaleController.formatShortNumber(this.info.participants_count, result)));
@@ -2850,7 +2867,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         if (this.user_id != 0) {
             if (UserConfig.getClientUserId() != this.user_id) {
                 TL_userFull userFull = MessagesController.getInstance().getUserFull(this.user_id);
-                if (MessagesController.getInstance().callsEnabled && userFull != null && userFull.phone_calls_available) {
+                if (userFull != null && userFull.phone_calls_available) {
                     this.callItem = menu.addItem(15, (int) R.drawable.ic_call_white_24dp);
                 }
                 if (ContactsController.getInstance().contactsDict.get(this.user_id) == null) {

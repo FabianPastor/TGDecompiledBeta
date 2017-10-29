@@ -7,19 +7,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.PowerManager;
-import android.util.Base64;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import java.io.File;
-import java.io.RandomAccessFile;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.SerializedData;
 import org.telegram.ui.Components.ForegroundDetector;
 
 public class ApplicationLoader extends Application {
@@ -31,53 +25,6 @@ public class ApplicationLoader extends Application {
     public static volatile boolean mainInterfacePaused = true;
     public static volatile boolean mainInterfacePausedStageQueue = true;
     public static volatile long mainInterfacePausedStageQueueTime;
-
-    private static void convertConfig() {
-        SharedPreferences preferences = applicationContext.getSharedPreferences("dataconfig", 0);
-        if (preferences.contains("currentDatacenterId")) {
-            boolean z;
-            SerializedData buffer = new SerializedData(32768);
-            buffer.writeInt32(2);
-            if (preferences.getInt("datacenterSetId", 0) != 0) {
-                z = true;
-            } else {
-                z = false;
-            }
-            buffer.writeBool(z);
-            buffer.writeBool(true);
-            buffer.writeInt32(preferences.getInt("currentDatacenterId", 0));
-            buffer.writeInt32(preferences.getInt("timeDifference", 0));
-            buffer.writeInt32(preferences.getInt("lastDcUpdateTime", 0));
-            buffer.writeInt64(preferences.getLong("pushSessionId", 0));
-            buffer.writeBool(false);
-            buffer.writeInt32(0);
-            try {
-                String datacentersString = preferences.getString("datacenters", null);
-                if (datacentersString != null) {
-                    byte[] datacentersBytes = Base64.decode(datacentersString, 0);
-                    if (datacentersBytes != null) {
-                        SerializedData data = new SerializedData(datacentersBytes);
-                        buffer.writeInt32(data.readInt32(false));
-                        buffer.writeBytes(datacentersBytes, 4, datacentersBytes.length - 4);
-                        data.cleanup();
-                    }
-                }
-            } catch (Throwable e) {
-                FileLog.e(e);
-            }
-            try {
-                RandomAccessFile fileOutputStream = new RandomAccessFile(new File(getFilesDirFixed(), "tgnet.dat"), "rws");
-                byte[] bytes = buffer.toByteArray();
-                fileOutputStream.writeInt(Integer.reverseBytes(bytes.length));
-                fileOutputStream.write(bytes);
-                fileOutputStream.close();
-            } catch (Throwable e2) {
-                FileLog.e(e2);
-            }
-            buffer.cleanup();
-            preferences.edit().clear().commit();
-        }
-    }
 
     public static File getFilesDirFixed() {
         for (int a = 0; a < 10; a++) {
@@ -98,22 +45,16 @@ public class ApplicationLoader extends Application {
 
     public static void postInitApplication() {
         if (!applicationInited) {
-            String systemLangCode;
-            String langCode;
-            String deviceModel;
-            String appVersion;
-            String systemVersion;
             applicationInited = true;
-            convertConfig();
             try {
                 LocaleController.getInstance();
             } catch (Exception e) {
                 e.printStackTrace();
             }
             try {
-                IntentFilter intentFilter = new IntentFilter("android.intent.action.SCREEN_ON");
-                intentFilter.addAction("android.intent.action.SCREEN_OFF");
-                applicationContext.registerReceiver(new ScreenReceiver(), intentFilter);
+                IntentFilter filter = new IntentFilter("android.intent.action.SCREEN_ON");
+                filter.addAction("android.intent.action.SCREEN_OFF");
+                applicationContext.registerReceiver(new ScreenReceiver(), filter);
             } catch (Exception e2) {
                 e2.printStackTrace();
             }
@@ -124,39 +65,10 @@ public class ApplicationLoader extends Application {
                 FileLog.e(e3);
             }
             UserConfig.loadConfig();
-            String configPath = getFilesDirFixed().toString();
-            try {
-                systemLangCode = LocaleController.getSystemLocaleStringIso639();
-                langCode = LocaleController.getLocaleStringIso639();
-                deviceModel = Build.MANUFACTURER + Build.MODEL;
-                PackageInfo pInfo = applicationContext.getPackageManager().getPackageInfo(applicationContext.getPackageName(), 0);
-                appVersion = pInfo.versionName + " (" + pInfo.versionCode + ")";
-                systemVersion = "SDK " + VERSION.SDK_INT;
-            } catch (Exception e4) {
-                systemLangCode = "en";
-                langCode = "";
-                deviceModel = "Android unknown";
-                appVersion = "App version unknown";
-                systemVersion = "SDK " + VERSION.SDK_INT;
-            }
-            if (systemLangCode.trim().length() == 0) {
-                langCode = "en";
-            }
-            if (deviceModel.trim().length() == 0) {
-                deviceModel = "Android unknown";
-            }
-            if (appVersion.trim().length() == 0) {
-                appVersion = "App version unknown";
-            }
-            if (systemVersion.trim().length() == 0) {
-                systemVersion = "SDK Unknown";
-            }
-            boolean enablePushConnection = applicationContext.getSharedPreferences("Notifications", 0).getBoolean("pushConnection", true);
             MessagesController.getInstance();
-            ConnectionsManager.getInstance().init(BuildVars.BUILD_VERSION, 72, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), UserConfig.getClientUserId(), enablePushConnection);
+            ConnectionsManager.getInstance();
             if (UserConfig.getCurrentUser() != null) {
                 MessagesController.getInstance().putUser(UserConfig.getCurrentUser(), true);
-                ConnectionsManager.getInstance().applyCountryPortNumber(UserConfig.getCurrentUser().phone);
                 MessagesController.getInstance().getBlockedUsers(true);
                 SendMessagesHelper.getInstance().checkUnsentMessages();
             }

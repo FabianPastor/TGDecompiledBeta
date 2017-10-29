@@ -568,7 +568,7 @@ public class LocaleController {
                     currentInfo = getLanguageFromDict("en");
                 }
             }
-            applyLanguage(currentInfo, override);
+            applyLanguage(currentInfo, override, true);
         } catch (Throwable e) {
             FileLog.e(e);
         }
@@ -807,32 +807,40 @@ public class LocaleController {
             String languageName = (String) stringMap.get("LanguageName");
             String languageNameInEnglish = (String) stringMap.get("LanguageNameInEnglish");
             String languageCode = (String) stringMap.get("LanguageCode");
-            if (languageName == null || languageName.length() <= 0 || languageNameInEnglish == null || languageNameInEnglish.length() <= 0 || languageCode == null || languageCode.length() <= 0 || languageName.contains("&") || languageName.contains("|") || languageNameInEnglish.contains("&") || languageNameInEnglish.contains("|") || languageCode.contains("&") || languageCode.contains("|") || languageCode.contains("/") || languageCode.contains("\\")) {
-                return false;
+            if (languageName != null && languageName.length() > 0 && languageNameInEnglish != null && languageNameInEnglish.length() > 0 && languageCode != null && languageCode.length() > 0) {
+                if (languageName.contains("&") || languageName.contains("|")) {
+                    return false;
+                }
+                if (languageNameInEnglish.contains("&") || languageNameInEnglish.contains("|")) {
+                    return false;
+                }
+                if (languageCode.contains("&") || languageCode.contains("|") || languageCode.contains("/") || languageCode.contains("\\")) {
+                    return false;
+                }
+                File finalFile = new File(ApplicationLoader.getFilesDirFixed(), languageCode + ".xml");
+                if (!AndroidUtilities.copyFile(file, finalFile)) {
+                    return false;
+                }
+                LocaleInfo localeInfo = getLanguageFromDict(languageCode);
+                if (localeInfo == null) {
+                    localeInfo = new LocaleInfo();
+                    localeInfo.name = languageName;
+                    localeInfo.nameEnglish = languageNameInEnglish;
+                    localeInfo.shortName = languageCode.toLowerCase();
+                    localeInfo.pathToFile = finalFile.getAbsolutePath();
+                    this.languages.add(localeInfo);
+                    this.languagesDict.put(localeInfo.getKey(), localeInfo);
+                    this.otherLanguages.add(localeInfo);
+                    saveOtherLanguages();
+                }
+                this.localeValues = stringMap;
+                applyLanguage(localeInfo, true, false, true, false);
+                return true;
             }
-            File finalFile = new File(ApplicationLoader.getFilesDirFixed(), languageCode + ".xml");
-            if (!AndroidUtilities.copyFile(file, finalFile)) {
-                return false;
-            }
-            LocaleInfo localeInfo = getLanguageFromDict(languageCode);
-            if (localeInfo == null) {
-                localeInfo = new LocaleInfo();
-                localeInfo.name = languageName;
-                localeInfo.nameEnglish = languageNameInEnglish;
-                localeInfo.shortName = languageCode.toLowerCase();
-                localeInfo.pathToFile = finalFile.getAbsolutePath();
-                this.languages.add(localeInfo);
-                this.languagesDict.put(localeInfo.getKey(), localeInfo);
-                this.otherLanguages.add(localeInfo);
-                saveOtherLanguages();
-            }
-            this.localeValues = stringMap;
-            applyLanguage(localeInfo, true, true, false);
-            return true;
         } catch (Throwable e) {
             FileLog.e(e);
-            return false;
         }
+        return false;
     }
 
     private void saveOtherLanguages() {
@@ -878,7 +886,7 @@ public class LocaleController {
             if (info == null) {
                 info = getLanguageFromDict("en");
             }
-            applyLanguage(info, true);
+            applyLanguage(info, true, false);
         }
         this.otherLanguages.remove(localeInfo);
         this.languages.remove(localeInfo);
@@ -1037,14 +1045,17 @@ public class LocaleController {
         }
     }
 
-    public void applyLanguage(LocaleInfo localeInfo, boolean override) {
-        applyLanguage(localeInfo, override, false, false);
+    public void applyLanguage(LocaleInfo localeInfo, boolean override, boolean init) {
+        applyLanguage(localeInfo, override, init, false, false);
     }
 
-    public void applyLanguage(LocaleInfo localeInfo, boolean override, boolean fromFile, boolean force) {
+    public void applyLanguage(LocaleInfo localeInfo, boolean override, boolean init, boolean fromFile, boolean force) {
         if (localeInfo != null) {
             File pathToFile = localeInfo.getPathToFile();
-            ConnectionsManager.getInstance().setLangCode(localeInfo.shortName.replace("_", "-"));
+            String shortName = localeInfo.shortName;
+            if (!init) {
+                ConnectionsManager.getInstance().setLangCode(shortName.replace("_", "-"));
+            }
             if (localeInfo.isRemote() && (force || !pathToFile.exists())) {
                 FileLog.d("reload locale because file doesn't exist " + pathToFile);
                 applyRemoteLanguage(localeInfo, null, true);
@@ -1084,7 +1095,15 @@ public class LocaleController {
                 ApplicationLoader.applicationContext.getResources().updateConfiguration(config, ApplicationLoader.applicationContext.getResources().getDisplayMetrics());
                 this.changingConfiguration = false;
                 if (this.reloadLastFile) {
-                    reloadCurrentRemoteLocale();
+                    if (init) {
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                LocaleController.this.reloadCurrentRemoteLocale();
+                            }
+                        });
+                    } else {
+                        reloadCurrentRemoteLocale();
+                    }
                     this.reloadLastFile = false;
                 }
             } catch (Throwable e) {
@@ -1688,7 +1707,7 @@ public class LocaleController {
             if (this.languageOverride != null) {
                 LocaleInfo toSet = this.currentLocaleInfo;
                 this.currentLocaleInfo = null;
-                applyLanguage(toSet, false);
+                applyLanguage(toSet, false, false);
                 return;
             }
             Locale newLocale = newConfig.locale;
@@ -2174,7 +2193,7 @@ public class LocaleController {
                                             if (info == null) {
                                                 info = LocaleController.this.getLanguageFromDict("en");
                                             }
-                                            LocaleController.this.applyLanguage(info, true);
+                                            LocaleController.this.applyLanguage(info, true, false);
                                             NotificationCenter.getInstance().postNotificationName(NotificationCenter.reloadInterface, new Object[0]);
                                         }
                                     }
@@ -2182,7 +2201,7 @@ public class LocaleController {
                                 }
                                 LocaleController.this.saveOtherLanguages();
                                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.suggestedLangpack, new Object[0]);
-                                LocaleController.this.applyLanguage(LocaleController.this.currentLocaleInfo, true);
+                                LocaleController.this.applyLanguage(LocaleController.this.currentLocaleInfo, true, false);
                             }
                         });
                     }

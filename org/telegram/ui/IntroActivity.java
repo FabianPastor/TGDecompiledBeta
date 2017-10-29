@@ -490,7 +490,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         this.textView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (!IntroActivity.this.startPressed && IntroActivity.this.localeInfo != null) {
-                    LocaleController.getInstance().applyLanguage(IntroActivity.this.localeInfo, true);
+                    LocaleController.getInstance().applyLanguage(IntroActivity.this.localeInfo, true, false);
                     IntroActivity.this.startPressed = true;
                     Intent intent2 = new Intent(IntroActivity.this, LaunchActivity.class);
                     intent2.putExtra("fromIntro", true);

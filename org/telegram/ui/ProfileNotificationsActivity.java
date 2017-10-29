@@ -455,12 +455,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             this.rowCount = i + 1;
             this.popupInfoRow = i;
         }
-        if (lower_id <= 0 || !MessagesController.getInstance().callsEnabled) {
-            this.callsRow = -1;
-            this.callsVibrateRow = -1;
-            this.ringtoneRow = -1;
-            this.ringtoneInfoRow = -1;
-        } else {
+        if (lower_id > 0) {
             i = this.rowCount;
             this.rowCount = i + 1;
             this.callsRow = i;
@@ -473,6 +468,11 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             i = this.rowCount;
             this.rowCount = i + 1;
             this.ringtoneInfoRow = i;
+        } else {
+            this.callsRow = -1;
+            this.callsVibrateRow = -1;
+            this.ringtoneRow = -1;
+            this.ringtoneInfoRow = -1;
         }
         i = this.rowCount;
         this.rowCount = i + 1;

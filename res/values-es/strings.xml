@@ -110,6 +110,12 @@
     <string name="AlwaysShareWithPlaceholder">Siempre compartir con...</string>
     <string name="AlwaysShareWithTitle">Siempre compartir</string>
     <string name="AlwaysShowPopup">Mostrar siempre</string>
+    <string name="AndMoreTypingGroup_few">%1$s y %2$d más están escribiendo</string>
+    <string name="AndMoreTypingGroup_many">%1$s y %2$d más están escribiendo</string>
+    <string name="AndMoreTypingGroup_one">%1$s y %2$d más está escribiendo</string>
+    <string name="AndMoreTypingGroup_other">%1$s y %2$d más están escribiendo</string>
+    <string name="AndMoreTypingGroup_two">%1$s y %2$d más están escribiendo</string>
+    <string name="AndMoreTypingGroup_zero">%1$s y %2$d más están escribiendo</string>
     <string name="AndMoreTyping_few">y %1$d más están escribiendo</string>
     <string name="AndMoreTyping_many">y %1$d más están escribiendo</string>
     <string name="AndMoreTyping_one">y %1$d más están escribiendo</string>
@@ -138,6 +144,7 @@
     <string name="ArchivedStickersEmpty">Stickers no archivados</string>
     <string name="ArchivedStickersInfo">Puedes instalar hasta 200 packs de stickers. Cuando instales más, se archivarán los que no usas.</string>
     <string name="AreTyping">están escribiendo...</string>
+    <string name="AreTypingGroup">%1$s están escribiendo...</string>
     <string name="AreYouSure">¿Quieres hacerlo?</string>
     <string name="AreYouSureBlockContact">¿Quieres bloquear este contacto?</string>
     <string name="AreYouSureClearHistory">¿Quieres eliminar el historial?</string>
@@ -170,7 +177,7 @@
     <string name="AttachInlineRestricted">Los administradores del grupo han restringido que envíes contenido integrado hasta el %1$s</string>
     <string name="AttachInlineRestrictedForever">Los administradores del grupo han restringido que envíes contenido integrado</string>
     <string name="AttachLiveLocation">Ubicación en directo</string>
-    <string name="AttachLiveLocationIsSharing">%1$s se está compartiendo con %2$s</string>
+    <string name="AttachLiveLocationIsSharing">%1$s compartida con %2$s</string>
     <string name="AttachLocation">Ubicación</string>
     <string name="AttachMediaRestricted">Los administradores del grupo han restringido que envíes multimedia hasta el %1$s</string>
     <string name="AttachMediaRestrictedForever">Los administradores del grupo han restringido que envíes multimedia</string>
@@ -455,9 +462,12 @@
     <string name="Days_two">%1$d días</string>
     <string name="Days_zero">%1$d días</string>
     <string name="DebugMenu">Menú de depuración</string>
+    <string name="DebugMenuDisableCamera">Desactivar cámara interna</string>
+    <string name="DebugMenuEnableCamera">Activar cámara interna</string>
     <string name="DebugMenuImportContacts">Importar contactos</string>
     <string name="DebugMenuReloadContacts">Recargar contactos</string>
     <string name="DebugMenuResetContacts">Restablecer contactos importados</string>
+    <string name="DebugMenuResetDialogs">Restablecer diálogos</string>
     <string name="Default">Por defecto</string>
     <string name="DefaultRingtone">Por defecto</string>
     <string name="Delete">Eliminar</string>
@@ -807,6 +817,7 @@
     <string name="IsSendingPhoto">%1$s está enviando una foto...</string>
     <string name="IsSendingVideo">%1$s está enviando un vídeo...</string>
     <string name="IsTyping">está escribiendo...</string>
+    <string name="IsTypingGroup">%1$s está escribiendo...</string>
     <string name="Italic">Cursiva</string>
     <string name="JoinGroup">UNIRME AL GRUPO</string>
     <string name="JoinToGroupErrorFull">Lo sentimos. Este grupo está lleno.</string>
@@ -1313,6 +1324,7 @@
     <string name="RestorePasswordNoEmailTitle">Lo sentimos</string>
     <string name="Retry">Reintentar</string>
     <string name="ReturnToCall">VOLVER A LA LLAMADA</string>
+    <string name="ReverseOrder">Invertir orden</string>
     <string name="RevokeAlert">¿Quieres anular este enlace? Una vez anulado, nadie podrá unirse a través de él.</string>
     <string name="RevokeAlertNewLink">El enlace de invitación anterior está inactivo. Ha sido creado uno nuevo.</string>
     <string name="RevokeButton">Anular</string>
@@ -1373,7 +1385,7 @@
     <string name="SendGameTo">¿Compartir el juego con %1$s?</string>
     <string name="SendGameToGroup">¿Compartir el juego en %1$s?</string>
     <string name="SendItems">Enviar %1$s</string>
-    <string name="SendLiveLocation">Compartir mi ubicación por...</string>
+    <string name="SendLiveLocation">Enviar mi ubicación durante...</string>
     <string name="SendLiveLocationFor15m">por 15 minutos</string>
     <string name="SendLiveLocationFor1h">por 1 hora</string>
     <string name="SendLiveLocationFor8h">por 8 horas</string>
@@ -1431,7 +1443,7 @@
     <string name="SharedMedia">Multimedia</string>
     <string name="SharedMediaTitle">Multimedia</string>
     <string name="SharedPlace">Lugar</string>
-    <string name="SharingLiveLocationTitle">Estás compartiendo tu ubicación en directo con %1$s</string>
+    <string name="SharingLiveLocationTitle">Estás enviando tu ubicación en directo a %1$s</string>
     <string name="SharingYouAndOtherName">Tú y %1$s</string>
     <string name="Sharpen">Nitidez</string>
     <string name="Short">Cortas</string>
@@ -1439,6 +1451,7 @@
     <string name="ShowAllMedia">Ir a Multimedia</string>
     <string name="ShowInChat">Mostrar en el chat</string>
     <string name="ShowNearbyPlaces">LEVANTA PARA VER LUGARES CERCANOS</string>
+    <string name="Shuffle">Aleatorio</string>
     <string name="SlideToCancel">DESLIZA PARA CANCELAR</string>
     <string name="SmartNotifications">Notificaciones inteligentes</string>
     <string name="SmartNotificationsAlert">Frecuencia de alertas</string>
@@ -1468,10 +1481,10 @@
     <string name="Stickers_two">%1$d stickers</string>
     <string name="Stickers_zero">%1$d stickers</string>
     <string name="StopAllLocationSharings">DETENER TODO</string>
-    <string name="StopLiveLocation">Dejar de compartir mi ubicación</string>
-    <string name="StopLiveLocationAlertAll">¿Quieres dejar de compartir tu ubicación en directo?</string>
-    <string name="StopLiveLocationAlertToGroup">¿Quieres dejar de compartir la ubicación en directo con %1$s?</string>
-    <string name="StopLiveLocationAlertToUser">¿Quieres dejar de compartir la ubicación en directo con %1$s?</string>
+    <string name="StopLiveLocation">Dejar de enviar mi ubicación</string>
+    <string name="StopLiveLocationAlertAll">¿Quieres dejar de enviar tu ubicación en directo?</string>
+    <string name="StopLiveLocationAlertToGroup">¿Quieres dejar de enviar la ubicación en directo a %1$s?</string>
+    <string name="StopLiveLocationAlertToUser">¿Quieres dejar de enviar la ubicación en directo a %1$s?</string>
     <string name="StorageUsage">Uso de almacenamiento</string>
     <string name="Support">Soporte</string>
     <string name="SystemRoot">Raíz del Sistema</string>
@@ -1506,7 +1519,7 @@
     <string name="TintShadows">SOMBRAS</string>
     <string name="TodayAt">a las</string>
     <string name="TotalDataUsage">Total</string>
-    <string name="TurnPasswordOff">Desactivar la contraseña</string>
+    <string name="TurnPasswordOff">Desactivar contraseña</string>
     <string name="TurnPasswordOffQuestion">¿Quieres desactivar tu contraseña?</string>
     <string name="TwoStepVerification">Verificación en dos pasos</string>
     <string name="TypeMessage">Mensaje</string>

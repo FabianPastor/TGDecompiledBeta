@@ -1500,9 +1500,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     private void sendMessage(String message, MessageMedia location, TL_photo photo, VideoEditedInfo videoEditedInfo, User user, TL_document document, TL_game game, long peer, String path, MessageObject reply_to_msg, WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<MessageEntity> entities, ReplyMarkup replyMarkup, HashMap<String, String> params, int ttl) {
         Throwable e;
-        MessageObject newMsgObj;
         if (peer != 0) {
             Chat chat;
+            MessageObject newMsgObj;
             int a;
             DocumentAttribute attribute;
             String originalPath = null;
@@ -2138,10 +2138,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         reqSend4.random_id.add(Long.valueOf(newMsg.random_id));
                         if (retryMessageObject.getId() >= 0) {
                             reqSend4.id.add(Integer.valueOf(retryMessageObject.getId()));
+                        } else if (retryMessageObject.messageOwner.fwd_msg_id != 0) {
+                            reqSend4.id.add(Integer.valueOf(retryMessageObject.messageOwner.fwd_msg_id));
                         } else if (retryMessageObject.messageOwner.fwd_from != null) {
                             reqSend4.id.add(Integer.valueOf(retryMessageObject.messageOwner.fwd_from.channel_post));
-                        } else {
-                            reqSend4.id.add(Integer.valueOf(retryMessageObject.messageOwner.fwd_msg_id));
                         }
                         performSendMessageRequest(reqSend4, newMsgObj, null);
                     } else if (type == 9) {

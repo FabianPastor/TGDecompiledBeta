@@ -110,6 +110,12 @@
     <string name="AlwaysShareWithPlaceholder">항상 공유할 대화상대...</string>
     <string name="AlwaysShareWithTitle">항상 공유</string>
     <string name="AlwaysShowPopup">항상 표시</string>
+    <string name="AndMoreTypingGroup_few">%1$s님과 %2$d명이 입력중</string>
+    <string name="AndMoreTypingGroup_many">%1$s님과 %2$d명이 입력중</string>
+    <string name="AndMoreTypingGroup_one">%1$s님과 %2$d명이 입력중</string>
+    <string name="AndMoreTypingGroup_other">%1$s님과 %2$d명이 입력중</string>
+    <string name="AndMoreTypingGroup_two">%1$s님과 %2$d명이 입력중</string>
+    <string name="AndMoreTypingGroup_zero">%1$s님과 %2$d명이 입력중</string>
     <string name="AndMoreTyping_few">외 %1$d명이 입력 중</string>
     <string name="AndMoreTyping_many">외 %1$d명이 입력 중</string>
     <string name="AndMoreTyping_one">외 %1$d명이 입력 중</string>
@@ -138,6 +144,7 @@
     <string name="ArchivedStickersEmpty">보관된 스티커 없음</string>
     <string name="ArchivedStickersInfo">최대 200개의 스티커를 설치 할 수 있습니다. 사용하지 않는 스티커는 새로추가시 보관됩니다.</string>
     <string name="AreTyping">님이 입력 중...</string>
+    <string name="AreTypingGroup">%1$s님이 입력중...</string>
     <string name="AreYouSure">확실합니까?</string>
     <string name="AreYouSureBlockContact">대화상대를 차단할까요?</string>
     <string name="AreYouSureClearHistory">정말로 대화내용을 지우시겠습니까?</string>
@@ -455,9 +462,12 @@
     <string name="Days_two">%1$d일</string>
     <string name="Days_zero">%1$d일</string>
     <string name="DebugMenu">디버그 메뉴</string>
+    <string name="DebugMenuDisableCamera">앱내 카메라 비활성화</string>
+    <string name="DebugMenuEnableCamera">앱내 카메라 활성화</string>
     <string name="DebugMenuImportContacts">연락처 가져오기</string>
     <string name="DebugMenuReloadContacts">연락처 재동기화</string>
     <string name="DebugMenuResetContacts">동기화된 주소록 초기화</string>
+    <string name="DebugMenuResetDialogs">대화 초기화</string>
     <string name="Default">기본값</string>
     <string name="DefaultRingtone">기본값</string>
     <string name="Delete">삭제</string>
@@ -678,7 +688,7 @@
     <string name="ForwardedMessage">전달된 메시지</string>
     <string name="ForwardedMessageCount_few">%1$d 개의 전달된 메시지</string>
     <string name="ForwardedMessageCount_many">%1$d 개의 전달된 메시지</string>
-    <string name="ForwardedMessageCount_one">전달된 메시지</string>
+    <string name="ForwardedMessageCount_one">%1$d 개의 전달된 메시지</string>
     <string name="ForwardedMessageCount_other">%1$d 개의 전달된 메시지</string>
     <string name="ForwardedMessageCount_two">%1$d 개의 전달된 메시지</string>
     <string name="ForwardedMessageCount_zero">%1$d 개의 전달된 메시지</string>
@@ -807,6 +817,7 @@
     <string name="IsSendingPhoto">%1$s님이 사진 보내는 중...</string>
     <string name="IsSendingVideo">%1$s님이 동영상 보내는 중...</string>
     <string name="IsTyping">님이 입력 중...</string>
+    <string name="IsTypingGroup">%1$s 님이 입력중...</string>
     <string name="Italic">기울림</string>
     <string name="JoinGroup">그룹방 입장</string>
     <string name="JoinToGroupErrorFull">죄송합니다, 그룹방의 인원이 최대치입니다.</string>
@@ -1313,6 +1324,7 @@
     <string name="RestorePasswordNoEmailTitle">죄송합니다.</string>
     <string name="Retry">재전송</string>
     <string name="ReturnToCall">전화로 이동</string>
+    <string name="ReverseOrder">역순</string>
     <string name="RevokeAlert">초대링크를 폐지하시겠습니까? 진행하실 경우 해당 링크로 방에 참여할 수 없게 됩니다.</string>
     <string name="RevokeAlertNewLink">기존 초대링크는 비활성화 되었습니다. 새로운 링크가 생성되었습니다.</string>
     <string name="RevokeButton">폐지하기</string>
@@ -1439,6 +1451,7 @@
     <string name="ShowAllMedia">모든 미디어 보기</string>
     <string name="ShowInChat">대화내에서 보기</string>
     <string name="ShowNearbyPlaces">위로 올려 근처 장소 확인</string>
+    <string name="Shuffle">섞기</string>
     <string name="SlideToCancel">밀어서 취소</string>
     <string name="SmartNotifications">스마트 알림</string>
     <string name="SmartNotificationsAlert">소리 알림 간격</string>

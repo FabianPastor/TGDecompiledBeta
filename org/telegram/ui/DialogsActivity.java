@@ -19,6 +19,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewOutlineProvider;
@@ -623,24 +624,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             icons[0] = dialog.pinned ? R.drawable.chats_unpin : R.drawable.chats_pin;
                             icons[1] = R.drawable.chats_clear;
                             icons[2] = R.drawable.chats_leave;
-                            if (chat == null || !chat.megagroup) {
-                                items = new CharSequence[3];
-                                string = (dialog.pinned || MessagesController.getInstance().canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
-                                items[0] = string;
-                                items[1] = LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
-                                if (chat == null || !chat.creator) {
-                                    string = LocaleController.getString("LeaveChannelMenu", R.string.LeaveChannelMenu);
-                                } else {
-                                    string = LocaleController.getString("ChannelDeleteMenu", R.string.ChannelDeleteMenu);
-                                }
-                                items[2] = string;
-                            } else {
+                            if (chat != null && chat.megagroup && TextUtils.isEmpty(chat.username)) {
                                 items = new CharSequence[3];
                                 string = (dialog.pinned || MessagesController.getInstance().canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
                                 items[0] = string;
                                 items[1] = LocaleController.getString("ClearHistory", R.string.ClearHistory);
-                                string = (chat == null || !chat.creator) ? LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu) : LocaleController.getString("DeleteMegaMenu", R.string.DeleteMegaMenu);
-                                items[2] = string;
+                                items[2] = LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu);
+                            } else {
+                                items = new CharSequence[3];
+                                string = (dialog.pinned || MessagesController.getInstance().canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
+                                items[0] = string;
+                                items[1] = LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
+                                items[2] = LocaleController.getString("LeaveChannelMenu", R.string.LeaveChannelMenu);
                             }
                             z = pinned;
                             builder.setItems(items, icons, new OnClickListener() {
@@ -677,13 +672,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                                         });
                                     } else {
                                         if (chat == null || !chat.megagroup) {
-                                            if (chat == null || !chat.creator) {
-                                                builder.setMessage(LocaleController.getString("ChannelLeaveAlert", R.string.ChannelLeaveAlert));
-                                            } else {
-                                                builder.setMessage(LocaleController.getString("ChannelDeleteAlert", R.string.ChannelDeleteAlert));
-                                            }
-                                        } else if (chat.creator) {
-                                            builder.setMessage(LocaleController.getString("MegaDeleteAlert", R.string.MegaDeleteAlert));
+                                            builder.setMessage(LocaleController.getString("ChannelLeaveAlert", R.string.ChannelLeaveAlert));
                                         } else {
                                             builder.setMessage(LocaleController.getString("MegaLeaveAlert", R.string.MegaLeaveAlert));
                                         }

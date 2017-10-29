@@ -39,6 +39,7 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import com.google.android.gms.wearable.WearableStatusCodes;
 import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -64,6 +65,7 @@ import org.json.JSONTokener;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Bitmaps;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
@@ -88,6 +90,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     private static final String exprName = "[a-zA-Z_$][a-zA-Z_$0-9]*";
     private static final Pattern exprParensPattern = Pattern.compile("[()]");
     private static final Pattern jsPattern = Pattern.compile("\"assets\":.+?\"js\":\\s*(\"[^\"]+\")");
+    private static int lastContainerId = WearableStatusCodes.DUPLICATE_LISTENER;
     private static final Pattern playerIdPattern = Pattern.compile(".*?-([a-zA-Z0-9_-]+)(?:/watch_as3|/html5player(?:-new)?|(?:/[a-z]{2}_[A-Z]{2})?/base)?\\.([a-z]+)$");
     private static final Pattern sigPattern = Pattern.compile("\\.sig\\|\\|([a-zA-Z0-9$]+)\\(");
     private static final Pattern sigPattern2 = Pattern.compile("[\"']signature[\"']\\s*,\\s*([a-zA-Z0-9$]+)\\(");
@@ -109,9 +112,11 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     private float currentAlpha;
     private Bitmap currentBitmap;
     private AsyncTask currentTask;
+    private String currentYoutubeId;
     private WebPlayerViewDelegate delegate;
     private boolean drawImage;
     private boolean firstFrameRendered;
+    private int fragment_container_id;
     private ImageView fullscreenButton;
     private boolean hasAudioFocus;
     private boolean inFullscreen;
@@ -882,10 +887,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 }
                 if (files.has("progressive")) {
                     this.results[1] = "other";
-                    JSONArray progressive = files.getJSONArray("progressive");
-                    if (0 < progressive.length()) {
-                        this.results[0] = progressive.getJSONObject(0).getString("url");
-                    }
+                    this.results[0] = files.getJSONArray("progressive").getJSONObject(0).getString("url");
                 }
                 if (isCancelled()) {
                     return this.results[0];
@@ -1325,6 +1327,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     public WebPlayerView(Context context, boolean allowInline, boolean allowShare, WebPlayerViewDelegate webPlayerViewDelegate) {
         boolean z;
         super(context);
+        int i = lastContainerId;
+        lastContainerId = i + 1;
+        this.fragment_container_id = i;
         if (VERSION.SDK_INT >= 21) {
             z = true;
         } else {
@@ -1620,6 +1625,10 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             }
             this.textureImageView.setImageDrawable(null);
         }
+    }
+
+    public String getYoutubeId() {
+        return this.currentYoutubeId;
     }
 
     public void onStateChanged(boolean playWhenReady, int playbackState) {
@@ -2073,6 +2082,10 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
         this.isLoading = true;
         this.controlsView.setProgress(0);
+        if (!(youtubeId == null || BuildVars.DEBUG_PRIVATE_VERSION)) {
+            this.currentYoutubeId = youtubeId;
+            youtubeId = null;
+        }
         if (mp4File != null) {
             this.initied = true;
             this.playVideoUrl = mp4File;

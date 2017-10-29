@@ -291,13 +291,9 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         i = this.rowCount;
         this.rowCount = i + 1;
         this.lastSeenRow = i;
-        if (MessagesController.getInstance().callsEnabled) {
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.callsRow = i;
-        } else {
-            this.callsRow = -1;
-        }
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.callsRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
         this.groupsRow = i;
@@ -337,6 +333,15 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         i = this.rowCount;
         this.rowCount = i + 1;
         this.paymentsDetailRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.callsSectionRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.callsP2PRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.callsDetailRow = i;
         if (MessagesController.getInstance().secretWebpagePreview != 1) {
             i = this.rowCount;
             this.rowCount = i + 1;
@@ -351,21 +356,6 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
             this.secretSectionRow = -1;
             this.secretWebpageRow = -1;
             this.secretDetailRow = -1;
-        }
-        if (MessagesController.getInstance().callsEnabled) {
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.callsSectionRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.callsP2PRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.callsDetailRow = i;
-        } else {
-            this.callsSectionRow = -1;
-            this.callsP2PRow = -1;
-            this.callsDetailRow = -1;
         }
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.privacyRulesUpdated);
         return true;

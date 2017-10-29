@@ -462,25 +462,18 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         } else {
             this.inappPriorityRow = -1;
         }
-        if (MessagesController.getInstance().callsEnabled) {
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.callsSectionRow2 = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.callsSectionRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.callsVibrateRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.callsRingtoneRow = i;
-        } else {
-            this.callsRingtoneRow = -1;
-            this.callsVibrateRow = -1;
-            this.callsSectionRow = -1;
-            this.callsSectionRow2 = -1;
-        }
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.callsSectionRow2 = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.callsSectionRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.callsVibrateRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.callsRingtoneRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
         this.eventsSectionRow2 = i;
