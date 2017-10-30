@@ -258,7 +258,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
                             } else {
                                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
                             }
-                            MessagesController.getInstance().deleteUserFromChat(ChangeChatNameActivity.this.chatId, MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId())), null);
+                            MessagesController.getInstance().deleteUserFromChat(ChangeChatNameActivity.this.chatId, MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId())), null, true);
                             ChangeChatNameActivity.this.finishFragment();
                         }
                     });

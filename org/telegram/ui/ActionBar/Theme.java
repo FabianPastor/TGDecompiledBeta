@@ -1937,8 +1937,8 @@ public class Theme {
     }
 
     public static File getAssetFile(String assetName) {
-        long size;
         File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
+        long size;
         try {
             InputStream stream = ApplicationLoader.applicationContext.getAssets().open(assetName);
             size = (long) stream.available();

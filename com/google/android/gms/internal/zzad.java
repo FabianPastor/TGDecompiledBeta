@@ -87,13 +87,13 @@ public final class zzad implements zzk {
     public final zzn zza(zzp<?> com_google_android_gms_internal_zzp_) throws zzaa {
         int statusCode;
         byte[] zza;
-        String valueOf;
         Throwable e;
         long elapsedRealtime = SystemClock.elapsedRealtime();
         while (true) {
             HttpResponse httpResponse = null;
             Map emptyMap = Collections.emptyMap();
             HttpResponse zza2;
+            String valueOf;
             try {
                 Map hashMap = new HashMap();
                 zzc zze = com_google_android_gms_internal_zzp_.zze();

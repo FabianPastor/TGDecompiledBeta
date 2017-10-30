@@ -701,7 +701,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
                             } else {
                                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
                             }
-                            MessagesController.getInstance().deleteUserFromChat(ChannelEditInfoActivity.this.chatId, MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId())), ChannelEditInfoActivity.this.info);
+                            MessagesController.getInstance().deleteUserFromChat(ChannelEditInfoActivity.this.chatId, MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId())), ChannelEditInfoActivity.this.info, true);
                             ChannelEditInfoActivity.this.finishFragment();
                         }
                     });
