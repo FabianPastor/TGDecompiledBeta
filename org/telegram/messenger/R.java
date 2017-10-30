@@ -570,9 +570,12 @@ public final class R {
         public static final int video_480 = NUM;
         public static final int video_720 = NUM;
         public static final int video_actions = NUM;
+        public static final int video_copy = NUM;
         public static final int video_cropleft = NUM;
         public static final int video_cropright = NUM;
         public static final int video_mute = NUM;
+        public static final int video_pip = NUM;
+        public static final int video_png = NUM;
         public static final int volume_off = NUM;
         public static final int volume_on = NUM;
         public static final int wall_selection = NUM;
@@ -1788,7 +1791,6 @@ public final class R {
         public static final int OpenGroup = NUM;
         public static final int OpenInBrowser = NUM;
         public static final int OpenInExternalApp = NUM;
-        public static final int OpenInPip = NUM;
         public static final int OpenUrlAlert = NUM;
         public static final int OtherSessions = NUM;
         public static final int OutgoingCalls = NUM;

@@ -1937,8 +1937,8 @@ public class Theme {
     }
 
     public static File getAssetFile(String assetName) {
-        File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
         long size;
+        File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
         try {
             InputStream stream = ApplicationLoader.applicationContext.getAssets().open(assetName);
             size = (long) stream.available();
@@ -2817,9 +2817,9 @@ public class Theme {
                     Throwable e;
                     int i;
                     SharedPreferences preferences;
-                    int selectedBackground;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
+                        int selectedBackground;
                         File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
