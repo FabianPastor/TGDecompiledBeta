@@ -268,7 +268,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         textCell.setText("Switch Backend", true);
                         return;
                     } else if (position == SettingsActivity.this.telegramFaqRow) {
-                        textCell.setText(LocaleController.getString("TelegramFaq", R.string.TelegramFaq), true);
+                        textCell.setText(LocaleController.getString("TelegramFAQ", R.string.TelegramFAQ), true);
                         return;
                     } else if (position == SettingsActivity.this.contactsReimportRow) {
                         textCell.setText(LocaleController.getString("ImportContacts", R.string.ImportContacts), true);

@@ -265,7 +265,7 @@ public class MessagesStorage {
                     if (cursor.next()) {
                         lastSeqValue = cursor.intValue(0);
                         lastPtsValue = cursor.intValue(1);
-                        lastDateValue = cursor.intValue(2) - 3600;
+                        lastDateValue = cursor.intValue(2);
                         lastQtsValue = cursor.intValue(3);
                         lastSecretVersion = cursor.intValue(4);
                         secretG = cursor.intValue(5);
@@ -939,7 +939,6 @@ public class MessagesStorage {
     }
 
     public void loadUnreadMessages() throws Exception {
-        int lower_id;
         ArrayList<Integer> usersToLoad = new ArrayList();
         ArrayList<Integer> chatsToLoad = new ArrayList();
         ArrayList<Integer> encryptedChatIds = new ArrayList();
@@ -948,6 +947,7 @@ public class MessagesStorage {
         StringBuilder ids = new StringBuilder();
         int currentTime = ConnectionsManager.getInstance().getCurrentTime();
         while (cursor.next()) {
+            int lower_id;
             long flags = cursor.longValue(2);
             boolean muted = (1 & flags) != 0;
             int mutedUntil = (int) (flags >> 32);
@@ -6855,6 +6855,7 @@ Error: java.util.NoSuchElementException
     public void getDialogs(final int offset, final int count) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
+                Message message;
                 messages_Dialogs dialogs = new TL_messages_dialogs();
                 ArrayList<EncryptedChat> encryptedChats = new ArrayList();
                 ArrayList<Integer> usersToLoad = new ArrayList();
@@ -6865,7 +6866,6 @@ Error: java.util.NoSuchElementException
                 HashMap<Long, Message> replyMessageOwners = new HashMap();
                 SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned, d.unread_count_i FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
                 while (cursor.next()) {
-                    Message message;
                     TL_dialog dialog = new TL_dialog();
                     dialog.id = cursor.longValue(0);
                     dialog.top_message = cursor.intValue(1);

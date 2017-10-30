@@ -264,14 +264,14 @@ public class DialogCell extends BaseCell {
                 checkMessage = false;
                 if (this.customDialog.isMedia) {
                     currentMessagePaint = Theme.dialogs_messagePrintingPaint;
-                    stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: %s", new Object[]{name, this.message.messageText}));
+                    stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: ⁨%s⁩", new Object[]{name, this.message.messageText}));
                     stringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_chats_attachMessage)), name.length() + 2, stringBuilder.length(), 33);
                 } else {
                     mess = this.customDialog.message;
                     if (mess.length() > 150) {
                         mess = mess.substring(0, 150);
                     }
-                    stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: %s", new Object[]{name, mess.replace('\n', ' ')}));
+                    stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: ⁨%s⁩", new Object[]{name, mess.replace('\n', ' ')}));
                 }
                 if (stringBuilder.length() > 0) {
                     stringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_chats_nameMessage)), 0, name.length() + 1, 33);
@@ -391,7 +391,7 @@ public class DialogCell extends BaseCell {
                         if (mess.length() > 150) {
                             mess = mess.substring(0, 150);
                         }
-                        stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: %s", new Object[]{LocaleController.getString("Draft", R.string.Draft), mess.replace('\n', ' ')}));
+                        stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: ⁨%s⁩", new Object[]{LocaleController.getString("Draft", R.string.Draft), mess.replace('\n', ' ')}));
                         stringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_chats_draft)), 0, draftString.length() + 1, 33);
                         messageString = Emoji.replaceEmoji(stringBuilder, Theme.dialogs_messagePaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
                     }
@@ -427,15 +427,15 @@ public class DialogCell extends BaseCell {
                             if (mess.length() > 150) {
                                 mess = mess.substring(0, 150);
                             }
-                            stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: %s", new Object[]{name, mess.replace('\n', ' ')}));
+                            stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: ⁨%s⁩", new Object[]{name, mess.replace('\n', ' ')}));
                         } else if (this.message.messageOwner.media != null && !this.message.isMediaEmpty()) {
                             currentMessagePaint = Theme.dialogs_messagePrintingPaint;
                             if (this.message.messageOwner.media instanceof TL_messageMediaGame) {
-                                stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: 🎮 %s", new Object[]{name, this.message.messageOwner.media.game.title}));
+                                stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: 🎮 ⁨%s⁩", new Object[]{name, this.message.messageOwner.media.game.title}));
                             } else if (this.message.type == 14) {
-                                stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: 🎧 %s - %s", new Object[]{name, this.message.getMusicAuthor(), this.message.getMusicTitle()}));
+                                stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: 🎧 ⁨%s - %s⁩", new Object[]{name, this.message.getMusicAuthor(), this.message.getMusicTitle()}));
                             } else {
-                                stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: %s", new Object[]{name, this.message.messageText}));
+                                stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: ⁨%s⁩", new Object[]{name, this.message.messageText}));
                             }
                             stringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_chats_attachMessage)), name.length() + 2, stringBuilder.length(), 33);
                         } else if (this.message.messageOwner.message != null) {
@@ -443,7 +443,7 @@ public class DialogCell extends BaseCell {
                             if (mess.length() > 150) {
                                 mess = mess.substring(0, 150);
                             }
-                            stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: %s", new Object[]{name, mess.replace('\n', ' ')}));
+                            stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: ⁨%s⁩", new Object[]{name, mess.replace('\n', ' ')}));
                         } else {
                             stringBuilder = SpannableStringBuilder.valueOf("");
                         }

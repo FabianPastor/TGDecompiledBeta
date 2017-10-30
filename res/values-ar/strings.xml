@@ -1495,7 +1495,7 @@
     <string name="TelegramContacts_other">%1$d جهة اتصال على تيليجرام</string>
     <string name="TelegramContacts_two">جهتي اتصال على تيليجرام</string>
     <string name="TelegramContacts_zero">لا يوجد جهات اتصال على تيليجرام</string>
-    <string name="TelegramFaq">الأسئلة الشائعة عن تيليجرام</string>
+    <string name="TelegramFAQ">الأسئلة الشائعة عن تيليجرام</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq/ar</string>
     <string name="TelegramVersion">تيليجرام للأندرويد %1$s</string>
     <string name="TerminateAllSessions">سجل الخروج من كافة الأجهزة الأخرى</string>

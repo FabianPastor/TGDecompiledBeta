@@ -1495,7 +1495,7 @@
     <string name="TelegramContacts_other">텔레그램에 %1$d개의 연락처가 있음</string>
     <string name="TelegramContacts_two">텔레그램에 %1$d개의 연락처가 있음</string>
     <string name="TelegramContacts_zero">텔레그램에 %1$d개의 연락처가 있음</string>
-    <string name="TelegramFaq">자주 묻는 질문</string>
+    <string name="TelegramFAQ">자주 묻는 질문</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq/ko</string>
     <string name="TelegramVersion">텔레그램 안드로이드 %1$s</string>
     <string name="TerminateAllSessions">다른 모든 세션 종료</string>

@@ -226,7 +226,10 @@ public class PipVideoView {
         aspectRatioFrameLayout.setAspectRatio(aspectRatio, rotation);
         this.windowView.addView(aspectRatioFrameLayout, LayoutHelper.createFrame(-1, -1, 17));
         if (webview != null) {
-            ((ViewGroup) webview.getParent()).removeView(webview);
+            ViewGroup parent = (ViewGroup) webview.getParent();
+            if (parent != null) {
+                parent.removeView(webview);
+            }
             aspectRatioFrameLayout.addView(webview, LayoutHelper.createFrame(-1, -1.0f));
             textureView = null;
         } else {

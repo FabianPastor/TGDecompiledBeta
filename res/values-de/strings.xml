@@ -1495,7 +1495,7 @@
     <string name="TelegramContacts_other">%1$d Kontakte bei Telegram</string>
     <string name="TelegramContacts_two">%1$d Kontakte bei Telegram</string>
     <string name="TelegramContacts_zero">%1$d Kontakte bei Telegram</string>
-    <string name="TelegramFaq">Fragen und Antworten</string>
+    <string name="TelegramFAQ">Fragen und Antworten</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq/de</string>
     <string name="TelegramVersion">Telegram für Android %1$s</string>
     <string name="TerminateAllSessions">Alle anderen Sitzungen abmelden</string>

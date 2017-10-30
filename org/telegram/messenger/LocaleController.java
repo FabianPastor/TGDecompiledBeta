@@ -1914,6 +1914,7 @@ public class LocaleController {
     }
 
     public void recreateFormatters() {
+        int i = 1;
         Locale locale = this.currentLocale;
         if (locale == null) {
             locale = Locale.getDefault();
@@ -1922,8 +1923,13 @@ public class LocaleController {
         if (lang == null) {
             lang = "en";
         }
-        isRTL = lang.toLowerCase().equals("ar");
-        nameDisplayOrder = lang.toLowerCase().equals("ko") ? 2 : 1;
+        lang = lang.toLowerCase();
+        boolean z = lang.startsWith("ar") || lang.startsWith("he") || lang.startsWith("iw") || lang.startsWith("fa");
+        isRTL = z;
+        if (lang.equals("ko")) {
+            i = 2;
+        }
+        nameDisplayOrder = i;
         this.formatterMonth = createFormatter(locale, getStringInternal("formatterMonth", R.string.formatterMonth), "dd MMM");
         this.formatterYear = createFormatter(locale, getStringInternal("formatterYear", R.string.formatterYear), "dd.MM.yy");
         this.formatterYearMax = createFormatter(locale, getStringInternal("formatterYearMax", R.string.formatterYearMax), "dd.MM.yyyy");

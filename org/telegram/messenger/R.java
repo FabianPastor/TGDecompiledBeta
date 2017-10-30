@@ -2168,7 +2168,7 @@ public final class R {
         public static final int TelegramContacts_other = NUM;
         public static final int TelegramContacts_two = NUM;
         public static final int TelegramContacts_zero = NUM;
-        public static final int TelegramFaq = NUM;
+        public static final int TelegramFAQ = NUM;
         public static final int TelegramFaqUrl = NUM;
         public static final int TelegramVersion = NUM;
         public static final int TerminateAllSessions = NUM;
