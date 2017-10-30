@@ -1716,6 +1716,9 @@
     <drawable name="video_actions">res/drawable-hdpi-v4/video_actions.png</drawable>
     <drawable name="video_actions">res/drawable-xhdpi-v4/video_actions.png</drawable>
     <drawable name="video_actions">res/drawable-xxhdpi-v4/video_actions.png</drawable>
+    <drawable name="video_copy">res/drawable-mdpi-v4/video_copy.png</drawable>
+    <drawable name="video_copy">res/drawable-hdpi-v4/video_copy.png</drawable>
+    <drawable name="video_copy">res/drawable-xxhdpi-v4/video_copy.png</drawable>
     <drawable name="video_cropleft">res/drawable-mdpi-v4/video_cropleft.png</drawable>
     <drawable name="video_cropleft">res/drawable-hdpi-v4/video_cropleft.png</drawable>
     <drawable name="video_cropleft">res/drawable-xhdpi-v4/video_cropleft.png</drawable>
@@ -1728,6 +1731,11 @@
     <drawable name="video_mute">res/drawable-hdpi-v4/video_mute.png</drawable>
     <drawable name="video_mute">res/drawable-xhdpi-v4/video_mute.png</drawable>
     <drawable name="video_mute">res/drawable-xxhdpi-v4/video_mute.png</drawable>
+    <drawable name="video_pip">res/drawable-mdpi-v4/video_pip.png</drawable>
+    <drawable name="video_pip">res/drawable-hdpi-v4/video_pip.png</drawable>
+    <drawable name="video_pip">res/drawable-xhdpi-v4/video_pip.png</drawable>
+    <drawable name="video_pip">res/drawable-xxhdpi-v4/video_pip.png</drawable>
+    <drawable name="video_png">res/drawable-xhdpi-v4/video_png.png</drawable>
     <drawable name="volume_off">res/drawable-mdpi-v4/volume_off.png</drawable>
     <drawable name="volume_off">res/drawable-hdpi-v4/volume_off.png</drawable>
     <drawable name="volume_off">res/drawable-xhdpi-v4/volume_off.png</drawable>
