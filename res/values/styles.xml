@@ -1,50 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="HockeyApp.ButtonStyle">
-        <item>15sp</item>
-        <item>@color/hockeyapp_text_white</item>
-        <item>11</item>
-        <item>@drawable/hockeyapp_btn_background</item>
-    </style>
-    <style name="HockeyApp.ButtonStyle">
-        <item>15sp</item>
-        <item>@color/hockeyapp_text_white</item>
-        <item>11</item>
-        <item>@drawable/hockeyapp_btn_background</item>
-        <item>true</item>
-    </style>
-    <style name="HockeyApp.EditTextStyle">
-        <item>15sp</item>
-        <item>0</item>
-        <item>@color/hockeyapp_text_normal</item>
-        <item>@color/hockeyapp_text_light</item>
-        <item>20dp</item>
-        <item>10dp</item>
-        <item>20dp</item>
-        <item>10dp</item>
-        <item>5</item>
-    </style>
-    <style name="HockeyApp.EditTextStyle">
-        <item>15sp</item>
-        <item>0</item>
-        <item>@color/hockeyapp_text_normal</item>
-        <item>@color/hockeyapp_text_light</item>
-        <item>20dp</item>
-        <item>10dp</item>
-        <item>20dp</item>
-        <item>10dp</item>
-        <item>5</item>
-    </style>
-    <style name="HockeyApp.SingleLineInputStyle">
-        <item>true</item>
-    </style>
-    <style name="HockeyApp.SingleLineInputStyle">
-        <item>true</item>
-    </style>
-    <style name="ActionBar.Transparent.TMessages.Item">
-        <item>18sp</item>
-        <item>#000000</item>
-    </style>
     <style name="ActionBar.Transparent.TMessages.Item">
         <item>18sp</item>
         <item>#000000</item>
@@ -66,6 +21,31 @@
     <style name="DialogNoAnimation">
         <item>?unknown_ref: 0</item>
         <item>?unknown_ref: 0</item>
+    </style>
+    <style name="HockeyApp.ButtonStyle">
+        <item>15sp</item>
+        <item>@color/hockeyapp_text_white</item>
+        <item>11</item>
+        <item>@drawable/hockeyapp_btn_background</item>
+        <item>true</item>
+    </style>
+    <style name="HockeyApp.EditTextStyle">
+        <item>15sp</item>
+        <item>0</item>
+        <item>@color/hockeyapp_text_normal</item>
+        <item>@color/hockeyapp_text_light</item>
+        <item>20dp</item>
+        <item>10dp</item>
+        <item>20dp</item>
+        <item>10dp</item>
+        <item>5</item>
+    </style>
+    <style name="HockeyApp.SingleLineInputStyle">
+        <item>true</item>
+    </style>
+    <style name="PopupAnimation">
+        <item>@anim/popup_in</item>
+        <item>@anim/popup_out</item>
     </style>
     <style name="Theme.TMessages">
         <item>?unknown_ref: 106000b</item>
@@ -174,26 +154,6 @@
         <item>false</item>
         <item>false</item>
     </style>
-    <style name="Theme.TMessages.Transparent">
-        <item>?unknown_ref: 106000d</item>
-        <item>true</item>
-        <item>true</item>
-        <item>true</item>
-        <item>?unknown_ref: 0</item>
-        <item>?unknown_ref: 0</item>
-        <item>false</item>
-        <item>?unknown_ref: 0</item>
-        <item>false</item>
-        <item>false</item>
-    </style>
-    <style name="Theme.TMessages.TransparentWithAlerts">
-        <item>?unknown_ref: 106000d</item>
-        <item>true</item>
-        <item>true</item>
-        <item>?unknown_ref: 0</item>
-        <item>?unknown_ref: 0</item>
-        <item>false</item>
-    </style>
     <style name="Theme.TMessages.TransparentWithAlerts">
         <item>?unknown_ref: 106000d</item>
         <item>true</item>
@@ -222,10 +182,6 @@
         <item>false</item>
         <item>false</item>
         <item>?unknown_ref: 0</item>
-    </style>
-    <style name="PopupAnimation">
-        <item>@anim/popup_in</item>
-        <item>@anim/popup_out</item>
     </style>
     <style name="WalletFragmentDefaultButtonTextAppearance">
         <item>18sp</item>
@@ -247,16 +203,16 @@
         <item>@color/wallet_holo_blue_light</item>
     </style>
     <style name="WalletFragmentDefaultStyle">
-        <item>48dp</item>
-        <item>-1</item>
-        <item>5</item>
         <item>4</item>
-        <item>@style/WalletFragmentDefaultDetailsTextAppearance</item>
-        <item>@style/WalletFragmentDefaultDetailsHeaderTextAppearance</item>
+        <item>48dp</item>
+        <item>5</item>
+        <item>-1</item>
         <item>@color/wallet_bright_foreground_holo_light</item>
-        <item>@style/WalletFragmentDefaultButtonTextAppearance</item>
         <item>?unknown_ref: 1080004</item>
-        <item>@color/wallet_bright_foreground_holo_dark</item>
+        <item>@style/WalletFragmentDefaultButtonTextAppearance</item>
+        <item>@style/WalletFragmentDefaultDetailsHeaderTextAppearance</item>
         <item>3</item>
+        <item>@color/wallet_bright_foreground_holo_dark</item>
+        <item>@style/WalletFragmentDefaultDetailsTextAppearance</item>
     </style>
 </resources>

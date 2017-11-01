@@ -1,23 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="common_google_play_services_enable_button">تمكين</string>
-    <string name="common_google_play_services_enable_text">‏لن يعمل %1$s ما لم يتم تمكين خدمات Google Play.</string>
-    <string name="common_google_play_services_enable_title">‏تمكين خدمات Google Play</string>
-    <string name="common_google_play_services_install_button">تثبيت</string>
-    <string name="common_google_play_services_install_text">‏لن يتم تشغيل %1$s بدون خدمات Google Play، والتي لا تتوفر على جهازك.</string>
-    <string name="common_google_play_services_install_title">‏الحصول على خدمات Google Play</string>
-    <string name="common_google_play_services_notification_ticker">‏خطأ في خدمات Google Play</string>
-    <string name="common_google_play_services_unknown_issue">‏لدى %1$s مشكلة في خدمات Google Play. الرجاء إعادة المحاولة.</string>
-    <string name="common_google_play_services_unsupported_text">‏لن يتم تشغيل %1$s بدون خدمات Google Play التي لا يوفرها جهازك.</string>
-    <string name="common_google_play_services_update_button">تحديث</string>
-    <string name="common_google_play_services_update_text">‏لن يتم تشغيل %1$s ما لم يتم تحديث خدمات Google Play.</string>
-    <string name="common_google_play_services_update_title">‏تحديث خدمات Google Play</string>
-    <string name="common_google_play_services_updating_text">‏لن يتم تشغيل %1$s بدون خدمات Google Play، والتي يتم تحديثها حاليًا.</string>
-    <string name="common_google_play_services_wear_update_text">‏يجب توفر إصدار جديد من خدمات Google Play. سيتم تحديثها تلقائيًا قريبًا.</string>
-    <string name="common_open_on_phone">فتح على الهاتف</string>
-    <string name="common_signin_button_text">تسجل الدخول</string>
-    <string name="common_signin_button_text_long">‏تسجيل الدخول عبر Google</string>
-    <string name="wallet_buy_button_place_holder">الشراء عبر Google</string>
     <string name="ALongTimeAgo">آخر ظهور خلال فترة طويلة</string>
     <string name="AbortPassword">إنهاء عملية إعداد التحقق بخطوتين</string>
     <string name="AccessError">خطأ في الوصول</string>
@@ -1330,7 +1312,7 @@
     <string name="RevokeButton">إلغاء الرابط</string>
     <string name="RevokeLink">إلغاء الرابط</string>
     <string name="RevokeLinkAlert">هل أنت متأكد من رغبتك في تعطيل الرابط **%1$s**? المجموعة \"**%2$s**\" ستصبح خاصة.</string>
-    <string name="RevokeLinkAlertChannel">هل أنت متأكد من رغبتك في تعطيل الرابط **%1$s**? لقناة \"**%2$s**\" ستصبح خاصة.</string>
+    <string name="RevokeLinkAlertChannel">هل أنت متأكد من رغبتك في تعطيل الرابط **%1$s**? القناة \"**%2$s**\" ستصبح خاصة.</string>
     <string name="RoamingUsage">استخدام تجوال البيانات</string>
     <string name="SETTINGS">الإعدادات</string>
     <string name="Satellite">قمر صناعي</string>
@@ -1686,6 +1668,23 @@
     <string name="YourPhone">رقم هاتفك المحمول</string>
     <string name="chatDate">MMMM d</string>
     <string name="chatFullDate">MMMM d, yyyy</string>
+    <string name="common_google_play_services_enable_button">تمكين</string>
+    <string name="common_google_play_services_enable_text">‏لن يعمل %1$s ما لم يتم تمكين خدمات Google Play.</string>
+    <string name="common_google_play_services_enable_title">‏تمكين خدمات Google Play</string>
+    <string name="common_google_play_services_install_button">تثبيت</string>
+    <string name="common_google_play_services_install_text">‏لن يتم تشغيل %1$s بدون خدمات Google Play، والتي لا تتوفر على جهازك.</string>
+    <string name="common_google_play_services_install_title">‏الحصول على خدمات Google Play</string>
+    <string name="common_google_play_services_notification_ticker">‏خطأ في خدمات Google Play</string>
+    <string name="common_google_play_services_unknown_issue">‏لدى %1$s مشكلة في خدمات Google Play. الرجاء إعادة المحاولة.</string>
+    <string name="common_google_play_services_unsupported_text">‏لن يتم تشغيل %1$s بدون خدمات Google Play التي لا يوفرها جهازك.</string>
+    <string name="common_google_play_services_update_button">تحديث</string>
+    <string name="common_google_play_services_update_text">‏لن يتم تشغيل %1$s ما لم يتم تحديث خدمات Google Play.</string>
+    <string name="common_google_play_services_update_title">‏تحديث خدمات Google Play</string>
+    <string name="common_google_play_services_updating_text">‏لن يتم تشغيل %1$s بدون خدمات Google Play، والتي يتم تحديثها حاليًا.</string>
+    <string name="common_google_play_services_wear_update_text">‏يجب توفر إصدار جديد من خدمات Google Play. سيتم تحديثها تلقائيًا قريبًا.</string>
+    <string name="common_open_on_phone">فتح على الهاتف</string>
+    <string name="common_signin_button_text">تسجل الدخول</string>
+    <string name="common_signin_button_text_long">‏تسجيل الدخول عبر Google</string>
     <string name="formatDateAtTime">%1$s الساعة %2$s</string>
     <string name="formatterBannedUntil12H">MMM dd yyyy, h:mm a</string>
     <string name="formatterBannedUntil24H">MMM dd yyyy, HH:mm</string>
@@ -1712,4 +1711,5 @@
     <string name="messages_other">%1$d رسالة</string>
     <string name="messages_two">%1$d رسالتان</string>
     <string name="messages_zero">لا يوجد رسائل</string>
+    <string name="wallet_buy_button_place_holder">الشراء عبر Google</string>
 </resources>

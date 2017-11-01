@@ -83,7 +83,6 @@ import org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettingsEmpty;
 import org.telegram.tgnet.TLRPC.TL_photoEmpty;
 import org.telegram.tgnet.TLRPC.TL_photos_photos;
-import org.telegram.tgnet.TLRPC.TL_popularContact;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
 import org.telegram.tgnet.TLRPC.TL_updates_channelDifferenceTooLong;
 import org.telegram.tgnet.TLRPC.TL_userStatusLastMonth;
@@ -200,8 +199,9 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages ON messages(uid, mention, read_state);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE download_queue(uid INTEGER, type INTEGER, date INTEGER, data BLOB, PRIMARY KEY (uid, type));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS type_date_idx_download_queue ON download_queue(type, date);").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE user_phones_v6(uid INTEGER, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (uid, phone))").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v6(sphone, deleted);").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE user_contacts_v7(key TEXT PRIMARY KEY, uid INTEGER, fname TEXT, sname TEXT, imported INTEGER)").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE user_phones_v7(key TEXT, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (key, phone))").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v7(sphone, deleted);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE dialogs(did INTEGER PRIMARY KEY, date INTEGER, unread_count INTEGER, last_mid INTEGER, inbox_max INTEGER, outbox_max INTEGER, last_mid_i INTEGER, unread_count_i INTEGER, pts INTEGER, date_i INTEGER, pinned INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_dialogs ON dialogs(date);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS last_mid_idx_dialogs ON dialogs(last_mid);").stepThis().dispose();
@@ -244,7 +244,6 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE stickers_featured(id INTEGER PRIMARY KEY, data BLOB, unread BLOB, date INTEGER, hash TEXT);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE hashtag_recent_v2(id TEXT PRIMARY KEY, date INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE webpage_pending(id INTEGER, mid INTEGER, PRIMARY KEY (id, mid));").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE user_contacts_v6(uid INTEGER PRIMARY KEY, fname TEXT, sname TEXT, imported INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE sent_files_v2(uid TEXT, type INTEGER, data BLOB, PRIMARY KEY (uid, type))").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE search_recent(did INTEGER PRIMARY KEY, date INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE media_counts_v2(uid INTEGER, type INTEGER, count INTEGER, PRIMARY KEY(uid, type))").stepThis().dispose();
@@ -253,7 +252,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE pending_tasks(id INTEGER PRIMARY KEY, data BLOB);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE requested_holes(uid INTEGER, seq_out_start INTEGER, seq_out_end INTEGER, PRIMARY KEY (uid, seq_out_start, seq_out_end));").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE sharing_locations(uid INTEGER PRIMARY KEY, mid INTEGER, date INTEGER, period INTEGER, message BLOB);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 44").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 45").stepThis().dispose();
             } else {
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
                 FileLog.e("current db version = " + version);
@@ -288,7 +287,7 @@ public class MessagesStorage {
                         FileLog.e(e2);
                     }
                 }
-                if (version < 44) {
+                if (version < 45) {
                     updateDbToLastVersion(version);
                 }
             }
@@ -599,6 +598,13 @@ public class MessagesStorage {
                     if (version == 43) {
                         MessagesStorage.this.database.executeFast("CREATE TABLE IF NOT EXISTS channel_admins(did INTEGER, uid INTEGER, PRIMARY KEY(did, uid))").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 44").stepThis().dispose();
+                        version = 44;
+                    }
+                    if (version == 44) {
+                        MessagesStorage.this.database.executeFast("CREATE TABLE IF NOT EXISTS user_contacts_v7(key TEXT PRIMARY KEY, uid INTEGER, fname TEXT, sname TEXT, imported INTEGER)").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("CREATE TABLE IF NOT EXISTS user_phones_v7(key TEXT, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (key, phone))").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v7(sphone, deleted);").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("PRAGMA user_version = 45").stepThis().dispose();
                     }
                 } catch (Throwable e) {
                     FileLog.e(e);
@@ -2936,10 +2942,10 @@ Error: java.util.NoSuchElementException
                 public void run() {
                     try {
                         if (adds.length() != 0) {
-                            MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE user_phones_v6 SET deleted = 0 WHERE sphone IN(%s)", new Object[]{adds})).stepThis().dispose();
+                            MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE user_phones_v7 SET deleted = 0 WHERE sphone IN(%s)", new Object[]{adds})).stepThis().dispose();
                         }
                         if (deletes.length() != 0) {
-                            MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE user_phones_v6 SET deleted = 1 WHERE sphone IN(%s)", new Object[]{deletes})).stepThis().dispose();
+                            MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE user_phones_v7 SET deleted = 1 WHERE sphone IN(%s)", new Object[]{deletes})).stepThis().dispose();
                         }
                     } catch (Throwable e) {
                         FileLog.e(e);
@@ -2949,47 +2955,26 @@ Error: java.util.NoSuchElementException
         }
     }
 
-    public void updatePhoneBookImported(final ArrayList<TL_popularContact> popularContacts) {
+    public void putCachedPhoneBook(final HashMap<String, Contact> contactHashMap, final boolean migrate) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 try {
                     MessagesStorage.this.database.beginTransaction();
-                    SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("UPDATE user_contacts_v6 SET imported = ? WHERE imported = ?");
-                    for (int a = 0; a < popularContacts.size(); a++) {
-                        TL_popularContact imported = (TL_popularContact) popularContacts.get(a);
-                        state.requery();
-                        state.bindInteger(1, imported.importers);
-                        state.bindInteger(2, (int) imported.client_id);
-                        state.step();
-                    }
-                    state.dispose();
-                    MessagesStorage.this.database.commitTransaction();
-                } catch (Throwable e) {
-                    FileLog.e(e);
-                }
-            }
-        });
-    }
-
-    public void putCachedPhoneBook(final HashMap<Integer, Contact> contactHashMap) {
-        this.storageQueue.postRunnable(new Runnable() {
-            public void run() {
-                try {
-                    MessagesStorage.this.database.beginTransaction();
-                    SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO user_contacts_v6 VALUES(?, ?, ?, ?)");
-                    SQLitePreparedStatement state2 = MessagesStorage.this.database.executeFast("REPLACE INTO user_phones_v6 VALUES(?, ?, ?, ?)");
-                    for (Entry<Integer, Contact> entry : contactHashMap.entrySet()) {
+                    SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO user_contacts_v7 VALUES(?, ?, ?, ?, ?)");
+                    SQLitePreparedStatement state2 = MessagesStorage.this.database.executeFast("REPLACE INTO user_phones_v7 VALUES(?, ?, ?, ?)");
+                    for (Entry<String, Contact> entry : contactHashMap.entrySet()) {
                         Contact contact = (Contact) entry.getValue();
                         if (!(contact.phones.isEmpty() || contact.shortPhones.isEmpty())) {
                             state.requery();
-                            state.bindInteger(1, contact.id);
-                            state.bindString(2, contact.first_name);
-                            state.bindString(3, contact.last_name);
-                            state.bindInteger(4, contact.imported);
+                            state.bindString(1, contact.key);
+                            state.bindInteger(2, contact.contact_id);
+                            state.bindString(3, contact.first_name);
+                            state.bindString(4, contact.last_name);
+                            state.bindInteger(5, contact.imported);
                             state.step();
                             for (int a = 0; a < contact.phones.size(); a++) {
                                 state2.requery();
-                                state2.bindInteger(1, contact.id);
+                                state2.bindString(1, contact.key);
                                 state2.bindString(2, (String) contact.phones.get(a));
                                 state2.bindString(3, (String) contact.shortPhones.get(a));
                                 state2.bindInteger(4, ((Integer) contact.phoneDeleted.get(a)).intValue());
@@ -3000,6 +2985,11 @@ Error: java.util.NoSuchElementException
                     state.dispose();
                     state2.dispose();
                     MessagesStorage.this.database.commitTransaction();
+                    if (migrate) {
+                        MessagesStorage.this.database.executeFast("DROP TABLE IF EXISTS user_contacts_v6;").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("DROP TABLE IF EXISTS user_phones_v6;").stepThis().dispose();
+                        MessagesStorage.this.getCachedPhoneBook(false);
+                    }
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -3010,53 +3000,95 @@ Error: java.util.NoSuchElementException
     public void getCachedPhoneBook(final boolean byError) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
-                boolean z;
-                HashMap<Integer, Contact> contactHashMap = new HashMap();
+                SQLiteCursor cursor;
+                Contact contact;
+                String phone;
+                String sphone;
                 try {
-                    SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v6 as us LEFT JOIN user_phones_v6 as up ON us.uid = up.uid WHERE 1", new Object[0]);
+                    cursor = MessagesStorage.this.database.queryFinalized("SELECT name FROM sqlite_master WHERE type='table' AND name='user_contacts_v6'", new Object[0]);
+                    boolean migrate = cursor.next();
+                    cursor.dispose();
+                    if (migrate) {
+                        HashMap<Integer, Contact> contactHashMap = new HashMap();
+                        cursor = MessagesStorage.this.database.queryFinalized("SELECT us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v6 as us LEFT JOIN user_phones_v6 as up ON us.uid = up.uid WHERE 1", new Object[0]);
+                        while (cursor.next()) {
+                            int uid = cursor.intValue(0);
+                            contact = (Contact) contactHashMap.get(Integer.valueOf(uid));
+                            if (contact == null) {
+                                contact = new Contact();
+                                contact.first_name = cursor.stringValue(1);
+                                contact.last_name = cursor.stringValue(2);
+                                contact.imported = cursor.intValue(6);
+                                if (contact.first_name == null) {
+                                    contact.first_name = "";
+                                }
+                                if (contact.last_name == null) {
+                                    contact.last_name = "";
+                                }
+                                contact.contact_id = uid;
+                                contactHashMap.put(Integer.valueOf(uid), contact);
+                            }
+                            phone = cursor.stringValue(3);
+                            if (phone != null) {
+                                contact.phones.add(phone);
+                                sphone = cursor.stringValue(4);
+                                if (sphone != null) {
+                                    if (sphone.length() == 8 && phone.length() != 8) {
+                                        sphone = PhoneFormat.stripExceptNumbers(phone);
+                                    }
+                                    contact.shortPhones.add(sphone);
+                                    contact.phoneDeleted.add(Integer.valueOf(cursor.intValue(5)));
+                                    contact.phoneTypes.add("");
+                                }
+                            }
+                        }
+                        cursor.dispose();
+                        ContactsController.getInstance().migratePhoneBookToV7(contactHashMap);
+                        return;
+                    }
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+                HashMap<String, Contact> contactHashMap2 = new HashMap();
+                try {
+                    cursor = MessagesStorage.this.database.queryFinalized("SELECT us.key, us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v7 as us LEFT JOIN user_phones_v7 as up ON us.key = up.key WHERE 1", new Object[0]);
                     while (cursor.next()) {
-                        int uid = cursor.intValue(0);
-                        Contact contact = (Contact) contactHashMap.get(Integer.valueOf(uid));
+                        String key = cursor.stringValue(0);
+                        contact = (Contact) contactHashMap2.get(key);
                         if (contact == null) {
                             contact = new Contact();
-                            contact.first_name = cursor.stringValue(1);
-                            contact.last_name = cursor.stringValue(2);
-                            contact.imported = cursor.intValue(6);
+                            contact.contact_id = cursor.intValue(1);
+                            contact.first_name = cursor.stringValue(2);
+                            contact.last_name = cursor.stringValue(3);
+                            contact.imported = cursor.intValue(7);
                             if (contact.first_name == null) {
                                 contact.first_name = "";
                             }
                             if (contact.last_name == null) {
                                 contact.last_name = "";
                             }
-                            contact.id = uid;
-                            contactHashMap.put(Integer.valueOf(uid), contact);
+                            contactHashMap2.put(key, contact);
                         }
-                        String phone = cursor.stringValue(3);
+                        phone = cursor.stringValue(4);
                         if (phone != null) {
                             contact.phones.add(phone);
-                            String sphone = cursor.stringValue(4);
+                            sphone = cursor.stringValue(5);
                             if (sphone != null) {
                                 if (sphone.length() == 8 && phone.length() != 8) {
                                     sphone = PhoneFormat.stripExceptNumbers(phone);
                                 }
                                 contact.shortPhones.add(sphone);
-                                contact.phoneDeleted.add(Integer.valueOf(cursor.intValue(5)));
+                                contact.phoneDeleted.add(Integer.valueOf(cursor.intValue(6)));
                                 contact.phoneTypes.add("");
                             }
                         }
                     }
                     cursor.dispose();
-                } catch (Throwable e) {
-                    contactHashMap.clear();
-                    FileLog.e(e);
+                } catch (Throwable e2) {
+                    contactHashMap2.clear();
+                    FileLog.e(e2);
                 }
-                ContactsController instance = ContactsController.getInstance();
-                if (byError) {
-                    z = false;
-                } else {
-                    z = true;
-                }
-                instance.performSyncPhoneBook(contactHashMap, true, true, false, false, z, false);
+                ContactsController.getInstance().performSyncPhoneBook(contactHashMap2, true, true, false, false, !byError, false);
             }
         });
     }
@@ -4054,7 +4086,7 @@ Error: java.util.NoSuchElementException
                 L_0x0087:
                     throw r5;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.62.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.61.run():void");
                 }
             });
         }
@@ -4162,7 +4194,7 @@ Error: java.util.NoSuchElementException
                 L_0x0092:
                     throw r4;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.63.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.62.run():void");
                 }
             });
         }
@@ -4227,7 +4259,7 @@ Error: java.util.NoSuchElementException
                 L_0x0037:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.64.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.63.run():void");
                 }
             });
         }
@@ -4292,7 +4324,7 @@ Error: java.util.NoSuchElementException
                 L_0x0037:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.65.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.64.run():void");
                 }
             });
         }
@@ -4520,7 +4552,7 @@ Error: java.util.NoSuchElementException
                 L_0x0161:
                     throw r7;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.66.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.65.run():void");
                 }
             });
         }
@@ -6855,6 +6887,7 @@ Error: java.util.NoSuchElementException
     public void getDialogs(final int offset, final int count) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
+                Message message;
                 messages_Dialogs dialogs = new TL_messages_dialogs();
                 ArrayList<EncryptedChat> encryptedChats = new ArrayList();
                 ArrayList<Integer> usersToLoad = new ArrayList();
@@ -6865,7 +6898,6 @@ Error: java.util.NoSuchElementException
                 HashMap<Long, Message> replyMessageOwners = new HashMap();
                 SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned, d.unread_count_i FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
                 while (cursor.next()) {
-                    Message message;
                     TL_dialog dialog = new TL_dialog();
                     dialog.id = cursor.longValue(0);
                     dialog.top_message = cursor.intValue(1);

@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="common_google_signin_btn_text_dark">res/color/common_google_signin_btn_text_dark.xml</color>
     <color name="common_google_signin_btn_text_dark_default">?unknown_ref: 106000b</color>
     <color name="common_google_signin_btn_text_dark_disabled">#1f000000</color>
     <color name="common_google_signin_btn_text_dark_focused">?unknown_ref: 106000c</color>
     <color name="common_google_signin_btn_text_dark_pressed">?unknown_ref: 106000b</color>
+    <color name="common_google_signin_btn_text_light">res/color/common_google_signin_btn_text_light.xml</color>
     <color name="common_google_signin_btn_text_light_default">#90000000</color>
     <color name="common_google_signin_btn_text_light_disabled">#1f000000</color>
     <color name="common_google_signin_btn_text_light_focused">#90000000</color>
     <color name="common_google_signin_btn_text_light_pressed">#de000000</color>
+    <color name="common_google_signin_btn_tint">res/color/common_google_signin_btn_tint.xml</color>
     <color name="divider">#dcdcdc</color>
     <color name="hockeyapp_background_header">#e6ecef</color>
     <color name="hockeyapp_background_light">#cccccc</color>
@@ -30,9 +33,6 @@
     <color name="wallet_hint_foreground_holo_light">#808080</color>
     <color name="wallet_holo_blue_light">#ff33b5e5</color>
     <color name="wallet_link_text_light">#0000ee</color>
-    <color name="common_google_signin_btn_text_dark">res/color/common_google_signin_btn_text_dark.xml</color>
-    <color name="common_google_signin_btn_text_light">res/color/common_google_signin_btn_text_light.xml</color>
-    <color name="common_google_signin_btn_tint">res/color/common_google_signin_btn_tint.xml</color>
     <color name="wallet_primary_text_holo_light">res/color/wallet_primary_text_holo_light.xml</color>
     <color name="wallet_secondary_text_holo_dark">res/color/wallet_secondary_text_holo_dark.xml</color>
 </resources>

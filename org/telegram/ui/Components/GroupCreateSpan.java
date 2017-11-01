@@ -33,6 +33,7 @@ public class GroupCreateSpan extends View {
     private Drawable deleteDrawable;
     private boolean deleting;
     private ImageReceiver imageReceiver;
+    private String key;
     private long lastUpdateTime;
     private StaticLayout nameLayout;
     private float progress;
@@ -65,7 +66,8 @@ public class GroupCreateSpan extends View {
             this.uid = user.id;
         } else {
             this.avatarDrawable.setInfo(0, contact.first_name, contact.last_name, false);
-            this.uid = contact.id;
+            this.uid = contact.contact_id;
+            this.key = contact.key;
         }
         this.imageReceiver = new ImageReceiver();
         this.imageReceiver.setRoundRadius(AndroidUtilities.dp(16.0f));
@@ -134,6 +136,10 @@ public class GroupCreateSpan extends View {
 
     public int getUid() {
         return this.uid;
+    }
+
+    public String getKey() {
+        return this.key;
     }
 
     public Contact getContact() {

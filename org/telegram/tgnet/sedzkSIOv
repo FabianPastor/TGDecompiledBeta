@@ -1,0 +1,470 @@
+package org.telegram.tgnet;
+
+import android.support.v4.view.accessibility.AccessibilityEventCompat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
+
+public class TLRPC {
+    public static final int CHAT_FLAG_IS_PUBLIC = 64;
+    public static final int LAYER = 72;
+    public static final int MESSAGE_FLAG_EDITED = 32768;
+    public static final int MESSAGE_FLAG_FWD = 4;
+    public static final int MESSAGE_FLAG_HAS_BOT_ID = 2048;
+    public static final int MESSAGE_FLAG_HAS_ENTITIES = 128;
+    public static final int MESSAGE_FLAG_HAS_FROM_ID = 256;
+    public static final int MESSAGE_FLAG_HAS_MARKUP = 64;
+    public static final int MESSAGE_FLAG_HAS_MEDIA = 512;
+    public static final int MESSAGE_FLAG_HAS_VIEWS = 1024;
+    public static final int MESSAGE_FLAG_MEGAGROUP = Integer.MIN_VALUE;
+    public static final int MESSAGE_FLAG_REPLY = 8;
+    public static final int USER_FLAG_ACCESS_HASH = 1;
+    public static final int USER_FLAG_FIRST_NAME = 2;
+    public static final int USER_FLAG_LAST_NAME = 4;
+    public static final int USER_FLAG_PHONE = 16;
+    public static final int USER_FLAG_PHOTO = 32;
+    public static final int USER_FLAG_STATUS = 64;
+    public static final int USER_FLAG_UNUSED = 128;
+    public static final int USER_FLAG_UNUSED2 = 256;
+    public static final int USER_FLAG_UNUSED3 = 512;
+    public static final int USER_FLAG_USERNAME = 8;
+
+    public static abstract class Audio extends TLObject {
+        public long access_hash;
+        public int date;
+        public int dc_id;
+        public int duration;
+        public long id;
+        public byte[] iv;
+        public byte[] key;
+        public String mime_type;
+        public int size;
+        public int user_id;
+
+        public static Audio TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            Audio result = null;
+            switch (constructor) {
+                case -945003370:
+                    result = new TL_audio_old2();
+                    break;
+                case -102543275:
+                    result = new TL_audio_layer45();
+                    break;
+                case 1114908135:
+                    result = new TL_audio_old();
+                    break;
+                case 1431655926:
+                    result = new TL_audioEncrypted();
+                    break;
+                case 1483311320:
+                    result = new TL_audioEmpty_layer45();
+                    break;
+            }
+            if (result == null && exception) {
+                throw new RuntimeException(String.format("can't parse magic %x in Audio", new Object[]{Integer.valueOf(constructor)}));
+            }
+            if (result != null) {
+                result.readParams(stream, exception);
+            }
+            return result;
+        }
+    }
+
+    public static abstract class Bool extends TLObject {
+        public static Bool TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            Bool result = null;
+            switch (constructor) {
+                case -1720552011:
+                    result = new TL_boolTrue();
+                    break;
+                case -1132882121:
+                    result = new TL_boolFalse();
+                    break;
+            }
+            if (result == null && exception) {
+                throw new RuntimeException(String.format("can't parse magic %x in Bool", new Object[]{Integer.valueOf(constructor)}));
+            }
+            if (result != null) {
+                result.readParams(stream, exception);
+            }
+            return result;
+        }
+    }
+
+    public static abstract class BotInfo extends TLObject {
+        public ArrayList<TL_botCommand> commands = new ArrayList();
+        public String description;
+        public int user_id;
+        public int version;
+
+        public static BotInfo TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            BotInfo result = null;
+            switch (constructor) {
+                case -1729618630:
+                    result = new TL_botInfo();
+                    break;
+                case -1154598962:
+                    result = new TL_botInfoEmpty_layer48();
+                    break;
+                case 164583517:
+                    result = new TL_botInfo_layer48();
+                    break;
+            }
+            if (result == null && exception) {
+                throw new RuntimeException(String.format("can't parse magic %x in BotInfo", new Object[]{Integer.valueOf(constructor)}));
+            }
+            if (result != null) {
+                result.readParams(stream, exception);
+            }
+            return result;
+        }
+    }
+
+    public static abstract class BotInlineMessage extends TLObject {
+        public String address;
+        public String caption;
+        public ArrayList<MessageEntity> entities = new ArrayList();
+        public String first_name;
+        public int flags;
+        public GeoPoint geo;
+        public String last_name;
+        public String message;
+        public boolean no_webpage;
+        public int period;
+        public String phone_number;
+        public String provider;
+        public ReplyMarkup reply_markup;
+        public String title;
+        public String venue_id;
+
+        public static BotInlineMessage TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            BotInlineMessage result = null;
+            switch (constructor) {
+                case -1937807902:
+                    result = new TL_botInlineMessageText();
+                    break;
+                case -1222451611:
+                    result = new TL_botInlineMessageMediaGeo();
+                    break;
+                case 175419739:
+                    result = new TL_botInlineMessageMediaAuto();
+                    break;
+                case 904770772:
+                    result = new TL_botInlineMessageMediaContact();
+                    break;
+                case 982505656:
+                    result = new TL_botInlineMessageMediaGeo_layer71();
+                    break;
+                case 1130767150:
+                    result = new TL_botInlineMessageMediaVenue();
+                    break;
+            }
+            if (result == null && exception) {
+                throw new RuntimeException(String.format("can't parse magic %x in BotInlineMessage", new Object[]{Integer.valueOf(constructor)}));
+            }
+            if (result != null) {
+                result.readParams(stream, exception);
+            }
+            return result;
+        }
+    }
+
+    public static abstract class BotInlineResult extends TLObject {
+        public String content_type;
+        public String content_url;
+        public String description;
+        public Document document;
+        public int duration;
+        public int flags;
+        public int h;
+        public String id;
+        public Photo photo;
+        public long query_id;
+        public BotInlineMessage send_message;
+        public String thumb_url;
+        public String title;
+        public String type;
+        public String url;
+        public int w;
+
+        public static BotInlineResult TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            BotInlineResult result = null;
+            switch (constructor) {
+                case -1679053127:
+                    result = new TL_botInlineResult();
+                    break;
+                case 400266251:
+                    result = new TL_botInlineMediaResult();
+                    break;
+            }
+            if (result == null && exception) {
+                throw new RuntimeException(String.format("can't parse magic %x in BotInlineResult", new Object[]{Integer.valueOf(constructor)}));
+            }
+            if (result != null) {
+                result.readParams(stream, exception);
+            }
+            return result;
+        }
+    }
+
+    public static abstract class ChannelAdminLogEventAction extends TLObject {
+        public Message message;
+        public Message new_message;
+        public ChannelParticipant new_participant;
+        public ChatPhoto new_photo;
+        public InputStickerSet new_stickerset;
+        public ChannelParticipant participant;
+        public Message prev_message;
+        public ChannelParticipant prev_participant;
+        public ChatPhoto prev_photo;
+        public InputStickerSet prev_stickerset;
+        public String prev_value;
+
+        public static ChannelAdminLogEventAction TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            ChannelAdminLogEventAction result = null;
+            switch (constructor) {
+                case -1312568665:
+                    result = new TL_channelAdminLogEventActionChangeStickerSet();
+                    break;
+                case -1204857405:
+                    result = new TL_channelAdminLogEventActionChangePhoto();
+                    break;
+                case -714643696:
+                    result = new TL_channelAdminLogEventActionParticipantToggleAdmin();
+                    break;
+                case -484690728:
+                    result = new TL_channelAdminLogEventActionParticipantInvite();
+                    break;
+                case -422036098:
+                    result = new TL_channelAdminLogEventActionParticipantToggleBan();
+                    break;
+                case -421545947:
+                    result = new TL_channelAdminLogEventActionChangeTitle();
+                    break;
+                case -370660328:
+                    result = new TL_channelAdminLogEventActionUpdatePinned();
+                    break;
+                case -124291086:
+                    result = new TL_channelAdminLogEventActionParticipantLeave();
+                    break;
+                case 405815507:
+                    result = new TL_channelAdminLogEventActionParticipantJoin();
+                    break;
+                case 460916654:
+                    result = new TL_channelAdminLogEventActionToggleInvites();
+                    break;
+                case 648939889:
+                    result = new TL_channelAdminLogEventActionToggleSignatures();
+                    break;
+                case 1121994683:
+                    result = new TL_channelAdminLogEventActionDeleteMessage();
+                    break;
+                case 1427671598:
+                    result = new TL_channelAdminLogEventActionChangeAbout();
+                    break;
+                case 1599903217:
+                    result = new TL_channelAdminLogEventActionTogglePreHistoryHidden();
+                    break;
+                case 1783299128:
+                    result = new TL_channelAdminLogEventActionChangeUsername();
+                    break;
+                case 1889215493:
+                    result = new TL_channelAdminLogEventActionEditMessage();
+                    break;
+            }
+            if (result == null && exception) {
+                throw new RuntimeException(String.format("can't parse magic %x in ChannelAdminLogEventAction", new Object[]{Integer.valueOf(constructor)}));
+            }
+            if (result != null) {
+                result.readParams(stream, exception);
+            }
+            return result;
+        }
+    }
+
+    public static abstract class ChannelMessagesFilter extends TLObject {
+        public boolean exclude_new_messages;
+        public int flags;
+        public ArrayList<TL_messageRange> ranges = new ArrayList();
+
+        public static ChannelMessagesFilter TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            ChannelMessagesFilter result = null;
+            switch (constructor) {
+                case -1798033689:
+                    result = new TL_channelMessagesFilterEmpty();
+                    break;
+                case -847783593:
+                    result = new TL_channelMessagesFilter();
+                    break;
+            }
+            if (result == null && exception) {
+                throw new RuntimeException(String.format("can't parse magic %x in ChannelMessagesFilter", new Object[]{Integer.valueOf(constructor)}));
+            }
+            if (result != null) {
+                result.readParams(stream, exception);
+            }
+            return result;
+        }
+    }
+
+    public static abstract class ChannelParticipant extends TLObject {
+        public TL_channelAdminRights admin_rights;
+        public TL_channelBannedRights banned_rights;
+        public boolean can_edit;
+        public int date;
+        public int flags;
+        public int inviter_id;
+        public int kicked_by;
+        public boolean left;
+        public int promoted_by;
+        public int user_id;
+
+        public static ChannelParticipant TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            ChannelParticipant result = null;
+            switch (constructor) {
+                case -1933187430:
+                    result = new TL_channelParticipantKicked_layer67();
+                    break;
+                case -1861910545:
+                    result = new TL_channelParticipantModerator_layer67();
+                    break;
+                case -1743180447:
+                    result = new TL_channelParticipantEditor_layer67();
+                    break;
+                case -1557620115:
+                    result = new TL_channelParticipantSelf();
+                    break;
+                case -1473271656:
+                    result = new TL_channelParticipantAdmin();
+                    break;
+                case -471670279:
+                    result = new TL_channelParticipantCreator();
+                    break;
+                case 367766557:
+                    result = new TL_channelParticipant();
+                    break;
+                case 573315206:
+                    result = new TL_channelParticipantBanned();
+                    break;
+            }
+            if (result == null && exception) {
+                throw new RuntimeException(String.format("can't parse magic %x in ChannelParticipant", new Object[]{Integer.valueOf(constructor)}));
+            }
+            if (result != null) {
+                result.readParams(stream, exception);
+            }
+            return result;
+        }
+    }
+
+    public static abstract class ChannelParticipantsFilter extends TLObject {
+        public String q;
+
+        public static ChannelParticipantsFilter TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            ChannelParticipantsFilter result = null;
+            switch (constructor) {
+                case -1548400251:
+                    result = new TL_channelParticipantsKicked();
+                    break;
+                case -1328445861:
+                    result = new TL_channelParticipantsBots();
+                    break;
+                case -1268741783:
+                    result = new TL_channelParticipantsAdmins();
+                    break;
+                case -566281095:
+                    result = new TL_channelParticipantsRecent();
+                    break;
+                case 106343499:
+                    result = new TL_channelParticipantsSearch();
+                    break;
+                case 338142689:
+                    result = new TL_channelParticipantsBanned();
+                    break;
+            }
+            if (result == null && exception) {
+                throw new RuntimeException(String.format("can't parse magic %x in ChannelParticipantsFilter", new Object[]{Integer.valueOf(constructor)}));
+            }
+            if (result != null) {
+                result.readParams(stream, exception);
+            }
+            return result;
+        }
+    }
+
+    public static abstract class Chat extends TLObject {
+        public long access_hash;
+        public String address;
+        public boolean admin;
+        public TL_channelAdminRights admin_rights;
+        public boolean admins_enabled;
+        public TL_channelBannedRights banned_rights;
+        public boolean broadcast;
+        public boolean checked_in;
+        public boolean creator;
+        public int date;
+        public boolean deactivated;
+        public boolean democracy;
+        public boolean explicit_content;
+        public int flags;
+        public GeoPoint geo;
+        public int id;
+        public boolean kicked;
+        public boolean left;
+        public boolean megagroup;
+        public InputChannel migrated_to;
+        public boolean min;
+        public boolean moderator;
+        public int participants_count;
+        public ChatPhoto photo;
+        public boolean restricted;
+        public String restriction_reason;
+        public boolean signatures;
+        public String title;
+        public int until_date;
+        public String username;
+        public String venue;
+        public boolean verified;
+        public int version;
+
+        public static Chat TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            Chat result = null;
+            switch (constructor) {
+                case -2059962289:
+                    result = new TL_channelForbidden_layer67();
+                    break;
+                case -1683826688:
+                    result = new TL_chatEmpty();
+                    break;
+                case -1588737454:
+                    result = new TL_channel_layer67();
+                    break;
+                case -652419756:
+                    result = new TL_chat();
+                    break;
+                case -83047359:
+                    result = new TL_chatForbidden_old();
+                    break;
+                case 120753115:
+                    result = new TL_chatForbidden();
+                    break;
+                case 213142300:
+                    result = new TL_channel();
+                    break;
+                case 681420594:
+                    result = new TL_channelForbidden();
+                    break;
+                case 763724588:
+                    result = new TL_channelForbidden_layer52();
+                    break;
+                case 1260090630:
+                    result = new TL_channel_layer48();
+                    break;
+                case 1737397639:
+                    result = new TL_channel_old();
+                    break;
+                case 1855757255:
+                    result = new TL_chat_old();
+                    break;
+                case 1930607688:

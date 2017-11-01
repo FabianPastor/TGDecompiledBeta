@@ -86,7 +86,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
     private ScrollView scrollView;
     private boolean searchWas;
     private boolean searching;
-    private HashMap<Integer, GroupCreateSpan> selectedContacts = new HashMap();
+    private HashMap<String, GroupCreateSpan> selectedContacts = new HashMap();
     private SpansContainer spansContainer;
     private TextView textView;
 
@@ -197,7 +197,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
 
         public void addSpan(GroupCreateSpan span) {
             InviteContactsActivity.this.allSpans.add(span);
-            InviteContactsActivity.this.selectedContacts.put(Integer.valueOf(span.getUid()), span);
+            InviteContactsActivity.this.selectedContacts.put(span.getKey(), span);
             InviteContactsActivity.this.editText.setHintVisible(false);
             if (this.currentAnimation != null) {
                 this.currentAnimation.setupEndValues();
@@ -224,7 +224,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
 
         public void removeSpan(final GroupCreateSpan span) {
             InviteContactsActivity.this.ignoreScrollEvent = true;
-            InviteContactsActivity.this.selectedContacts.remove(Integer.valueOf(span.getUid()));
+            InviteContactsActivity.this.selectedContacts.remove(span.getKey());
             InviteContactsActivity.this.allSpans.remove(span);
             span.setOnClickListener(null);
             if (this.currentAnimation != null) {
@@ -308,7 +308,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                         name = null;
                     }
                     cell.setUser(contact, name);
-                    cell.setChecked(InviteContactsActivity.this.selectedContacts.containsKey(Integer.valueOf(contact.id)), false);
+                    cell.setChecked(InviteContactsActivity.this.selectedContacts.containsKey(contact.key), false);
                     return;
                 default:
                     return;
@@ -647,9 +647,9 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                     InviteUserCell cell = (InviteUserCell) view;
                     Contact contact = cell.getContact();
                     if (contact != null) {
-                        boolean exists = InviteContactsActivity.this.selectedContacts.containsKey(Integer.valueOf(contact.id));
+                        boolean exists = InviteContactsActivity.this.selectedContacts.containsKey(contact.key);
                         if (exists) {
-                            InviteContactsActivity.this.spansContainer.removeSpan((GroupCreateSpan) InviteContactsActivity.this.selectedContacts.get(Integer.valueOf(contact.id)));
+                            InviteContactsActivity.this.spansContainer.removeSpan((GroupCreateSpan) InviteContactsActivity.this.selectedContacts.get(contact.key));
                         } else {
                             GroupCreateSpan span = new GroupCreateSpan(InviteContactsActivity.this.editText.getContext(), contact);
                             InviteContactsActivity.this.spansContainer.addSpan(span);
@@ -773,7 +773,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                 InviteUserCell cell = (InviteUserCell) child;
                 Contact contact = cell.getContact();
                 if (contact != null) {
-                    cell.setChecked(this.selectedContacts.containsKey(Integer.valueOf(contact.id)), true);
+                    cell.setChecked(this.selectedContacts.containsKey(contact.key), true);
                 }
             }
         }

@@ -624,18 +624,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             icons[0] = dialog.pinned ? R.drawable.chats_unpin : R.drawable.chats_pin;
                             icons[1] = R.drawable.chats_clear;
                             icons[2] = R.drawable.chats_leave;
-                            if (chat != null && chat.megagroup && TextUtils.isEmpty(chat.username)) {
-                                items = new CharSequence[3];
-                                string = (dialog.pinned || MessagesController.getInstance().canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
-                                items[0] = string;
-                                items[1] = LocaleController.getString("ClearHistory", R.string.ClearHistory);
-                                items[2] = LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu);
-                            } else {
+                            if (chat == null || !chat.megagroup) {
                                 items = new CharSequence[3];
                                 string = (dialog.pinned || MessagesController.getInstance().canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
                                 items[0] = string;
                                 items[1] = LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
                                 items[2] = LocaleController.getString("LeaveChannelMenu", R.string.LeaveChannelMenu);
+                            } else {
+                                items = new CharSequence[3];
+                                string = (dialog.pinned || MessagesController.getInstance().canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
+                                items[0] = string;
+                                items[1] = TextUtils.isEmpty(chat.username) ? LocaleController.getString("ClearHistory", R.string.ClearHistory) : LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
+                                items[2] = LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu);
                             }
                             z = pinned;
                             builder.setItems(items, icons, new OnClickListener() {
@@ -663,10 +663,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                                         }
                                         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                if (chat == null || !chat.megagroup) {
-                                                    MessagesController.getInstance().deleteDialog(DialogsActivity.this.selectedDialog, 2);
-                                                } else {
+                                                if (chat != null && chat.megagroup && TextUtils.isEmpty(chat.username)) {
                                                     MessagesController.getInstance().deleteDialog(DialogsActivity.this.selectedDialog, 1);
+                                                } else {
+                                                    MessagesController.getInstance().deleteDialog(DialogsActivity.this.selectedDialog, 2);
                                                 }
                                             }
                                         });

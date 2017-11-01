@@ -2455,7 +2455,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         } else if (id == NotificationCenter.hasNewContactsToImport) {
             if (this.actionBarLayout != null && !this.actionBarLayout.fragmentsStack.isEmpty()) {
                 int type = ((Integer) args[0]).intValue();
-                final HashMap<Integer, Contact> contactHashMap = args[1];
+                final HashMap<String, Contact> contactHashMap = args[1];
                 final boolean first = ((Boolean) args[2]).booleanValue();
                 final boolean schedule = ((Boolean) args[3]).booleanValue();
                 BaseFragment fragment = (BaseFragment) this.actionBarLayout.fragmentsStack.get(this.actionBarLayout.fragmentsStack.size() - 1);

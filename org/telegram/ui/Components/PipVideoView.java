@@ -383,7 +383,9 @@ public class PipVideoView {
                 animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
                 animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
-                        PipVideoView.this.parentSheet.destroy();
+                        if (PipVideoView.this.parentSheet != null) {
+                            PipVideoView.this.parentSheet.destroy();
+                        }
                     }
                 });
             }

@@ -1,23 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="common_google_play_services_enable_button">Ativar</string>
-    <string name="common_google_play_services_enable_text">%1$s só funciona com o Google Play Services ativado.</string>
-    <string name="common_google_play_services_enable_title">Ativar o Google Play Services</string>
-    <string name="common_google_play_services_install_button">Instalar</string>
-    <string name="common_google_play_services_install_text">O app %1$s não funciona sem o Google Play Services, o qual não está instalado no seu dispositivo.</string>
-    <string name="common_google_play_services_install_title">Instalar o Google Play Services</string>
-    <string name="common_google_play_services_notification_ticker">Erro do Google Play Services</string>
-    <string name="common_google_play_services_unknown_issue">O app %1$s está com problemas com o Google Play Services. Tente novamente.</string>
-    <string name="common_google_play_services_unsupported_text">O app %1$s não funciona sem o Google Play Services, o qual não é compatível com seu dispositivo.</string>
-    <string name="common_google_play_services_update_button">Atualizar</string>
-    <string name="common_google_play_services_update_text">%1$s só funciona com uma versão atualizada do Google Play Services.</string>
-    <string name="common_google_play_services_update_title">Atualizar o Google Play Services</string>
-    <string name="common_google_play_services_updating_text">%1$s não funciona sem o Google Play Services, o qual está sendo atualizado no momento.</string>
-    <string name="common_google_play_services_wear_update_text">É necessária uma nova versão do Google Play Services. Ele será atualizado em breve.</string>
-    <string name="common_open_on_phone">Abrir no smartphone</string>
-    <string name="common_signin_button_text">Fazer login</string>
-    <string name="common_signin_button_text_long">Fazer login com o Google</string>
-    <string name="wallet_buy_button_place_holder">Comprar com o Google</string>
     <string name="ALongTimeAgo">visto há muito tempo</string>
     <string name="AbortPassword">Cancelar a configuração da verificação em duas etapas</string>
     <string name="AccessError">Erro de acesso</string>
@@ -1686,6 +1668,23 @@
     <string name="YourPhone">Seu número</string>
     <string name="chatDate">d MMMM</string>
     <string name="chatFullDate">d MMMM, yyyy</string>
+    <string name="common_google_play_services_enable_button">Ativar</string>
+    <string name="common_google_play_services_enable_text">%1$s só funciona com o Google Play Services ativado.</string>
+    <string name="common_google_play_services_enable_title">Ativar o Google Play Services</string>
+    <string name="common_google_play_services_install_button">Instalar</string>
+    <string name="common_google_play_services_install_text">O app %1$s não funciona sem o Google Play Services, o qual não está instalado no seu dispositivo.</string>
+    <string name="common_google_play_services_install_title">Instalar o Google Play Services</string>
+    <string name="common_google_play_services_notification_ticker">Erro do Google Play Services</string>
+    <string name="common_google_play_services_unknown_issue">O app %1$s está com problemas com o Google Play Services. Tente novamente.</string>
+    <string name="common_google_play_services_unsupported_text">O app %1$s não funciona sem o Google Play Services, o qual não é compatível com seu dispositivo.</string>
+    <string name="common_google_play_services_update_button">Atualizar</string>
+    <string name="common_google_play_services_update_text">%1$s só funciona com uma versão atualizada do Google Play Services.</string>
+    <string name="common_google_play_services_update_title">Atualizar o Google Play Services</string>
+    <string name="common_google_play_services_updating_text">%1$s não funciona sem o Google Play Services, o qual está sendo atualizado no momento.</string>
+    <string name="common_google_play_services_wear_update_text">É necessária uma nova versão do Google Play Services. Ele será atualizado em breve.</string>
+    <string name="common_open_on_phone">Abrir no smartphone</string>
+    <string name="common_signin_button_text">Fazer login</string>
+    <string name="common_signin_button_text_long">Fazer login com o Google</string>
     <string name="formatDateAtTime">%1$s às %2$s</string>
     <string name="formatterBannedUntil12H">dd MMM yyyy, h:mm a</string>
     <string name="formatterBannedUntil24H">dd MMM yyyy, h:mm a</string>
@@ -1712,4 +1711,5 @@
     <string name="messages_other">%1$d mensagens</string>
     <string name="messages_two">%1$d mensagens</string>
     <string name="messages_zero">%1$d mensagens</string>
+    <string name="wallet_buy_button_place_holder">Comprar com o Google</string>
 </resources>

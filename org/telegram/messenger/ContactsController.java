@@ -67,7 +67,7 @@ public class ContactsController {
     private ArrayList<PrivacyRule> callPrivacyRules;
     private int completedRequestsCount;
     public ArrayList<TL_contact> contacts = new ArrayList();
-    public HashMap<Integer, Contact> contactsBook = new HashMap();
+    public HashMap<String, Contact> contactsBook = new HashMap();
     private boolean contactsBookLoaded;
     public HashMap<String, Contact> contactsBookSPhones = new HashMap();
     public HashMap<String, TL_contact> contactsByPhone = new HashMap();
@@ -87,11 +87,12 @@ public class ContactsController {
     private int loadingDeleteInfo;
     private int loadingGroupInfo;
     private int loadingLastSeenInfo;
+    private boolean migratingContacts;
     private final Object observerLock = new Object();
     public ArrayList<Contact> phoneBookContacts = new ArrayList();
     private ArrayList<PrivacyRule> privacyRules;
-    private String[] projectionNames = new String[]{"contact_id", "data2", "data3", "display_name", "data5"};
-    private String[] projectionPhones = new String[]{"contact_id", "data1", "data2", "data3"};
+    private String[] projectionNames = new String[]{"lookup", "data2", "data3", "display_name", "data5"};
+    private String[] projectionPhones = new String[]{"lookup", "data1", "data2", "data3"};
     private HashMap<String, String> sectionsToReplace = new HashMap();
     public ArrayList<String> sortedUsersMutualSectionsArray = new ArrayList();
     public ArrayList<String> sortedUsersSectionsArray = new ArrayList();
@@ -100,9 +101,10 @@ public class ContactsController {
     public HashMap<String, ArrayList<TL_contact>> usersSectionsDict = new HashMap();
 
     public static class Contact {
+        public int contact_id;
         public String first_name;
-        public int id;
         public int imported;
+        public String key;
         public String last_name;
         public ArrayList<Integer> phoneDeleted = new ArrayList();
         public ArrayList<String> phoneTypes = new ArrayList();
@@ -188,6 +190,7 @@ public class ContactsController {
         this.loadingCallsInfo = 0;
         Utilities.globalQueue.postRunnable(new Runnable() {
             public void run() {
+                ContactsController.this.migratingContacts = false;
                 ContactsController.this.completedRequestsCount = 0;
             }
         });
@@ -318,8 +321,8 @@ public class ContactsController {
         });
     }
 
-    public void syncPhoneBookByAlert(HashMap<Integer, Contact> contacts, boolean first, boolean schedule, boolean cancel) {
-        final HashMap<Integer, Contact> hashMap = contacts;
+    public void syncPhoneBookByAlert(HashMap<String, Contact> contacts, boolean first, boolean schedule, boolean cancel) {
+        final HashMap<String, Contact> hashMap = contacts;
         final boolean z = first;
         final boolean z2 = schedule;
         final boolean z3 = cancel;
@@ -397,18 +400,19 @@ public class ContactsController {
         }
     }
 
-    private HashMap<Integer, Contact> readContactsFromPhoneBook() {
-        HashMap<Integer, Contact> contactsMap = new HashMap();
+    private HashMap<String, Contact> readContactsFromPhoneBook() {
+        HashMap<String, Contact> contactsMap = new HashMap();
         Cursor pCur = null;
         if (hasContactsPermission()) {
-            int id;
+            String lookup_key;
             Contact contact;
             ContentResolver cr = ApplicationLoader.applicationContext.getContentResolver();
             HashMap<String, Contact> shortContacts = new HashMap();
-            ArrayList<Integer> idsArr = new ArrayList();
+            ArrayList<String> idsArr = new ArrayList();
             pCur = cr.query(Phone.CONTENT_URI, this.projectionPhones, null, null, null);
             if (pCur != null) {
                 if (pCur.getCount() > 0) {
+                    int lastContactId = 1;
                     while (pCur.moveToNext()) {
                         String number = pCur.getString(1);
                         if (!TextUtils.isEmpty(number)) {
@@ -423,18 +427,24 @@ public class ContactsController {
                                 if (shortContacts.containsKey(shortNumber)) {
                                     continue;
                                 } else {
-                                    id = pCur.getInt(0);
-                                    if (!idsArr.contains(Integer.valueOf(id))) {
-                                        idsArr.add(Integer.valueOf(id));
+                                    int lastContactId2;
+                                    lookup_key = pCur.getString(0);
+                                    String key = "'" + lookup_key + "'";
+                                    if (!idsArr.contains(key)) {
+                                        idsArr.add(key);
                                     }
                                     int type = pCur.getInt(2);
-                                    contact = (Contact) contactsMap.get(Integer.valueOf(id));
+                                    contact = (Contact) contactsMap.get(lookup_key);
                                     if (contact == null) {
                                         contact = new Contact();
                                         contact.first_name = "";
                                         contact.last_name = "";
-                                        contact.id = id;
-                                        contactsMap.put(Integer.valueOf(id), contact);
+                                        contact.key = lookup_key;
+                                        lastContactId2 = lastContactId + 1;
+                                        contact.contact_id = lastContactId;
+                                        contactsMap.put(lookup_key, contact);
+                                    } else {
+                                        lastContactId2 = lastContactId;
                                     }
                                     contact.shortPhones.add(shortNumber);
                                     contact.phones.add(number);
@@ -478,6 +488,7 @@ public class ContactsController {
                                         contact.phoneTypes.add(LocaleController.getString("PhoneOther", R.string.PhoneOther));
                                     }
                                     shortContacts.put(shortNumber, contact);
+                                    lastContactId = lastContactId2;
                                 }
                             }
                         }
@@ -489,15 +500,15 @@ public class ContactsController {
                 }
                 pCur = null;
             }
-            pCur = cr.query(Data.CONTENT_URI, this.projectionNames, "contact_id IN (" + TextUtils.join(",", idsArr) + ") AND " + "mimetype" + " = '" + "vnd.android.cursor.item/name" + "'", null, null);
+            pCur = cr.query(Data.CONTENT_URI, this.projectionNames, "lookup IN (" + TextUtils.join(",", idsArr) + ") AND " + "mimetype" + " = '" + "vnd.android.cursor.item/name" + "'", null, null);
             if (pCur != null) {
                 while (pCur.moveToNext()) {
-                    id = pCur.getInt(0);
+                    lookup_key = pCur.getString(0);
                     String fname = pCur.getString(1);
                     String sname = pCur.getString(2);
                     String sname2 = pCur.getString(3);
                     String mname = pCur.getString(4);
-                    contact = (Contact) contactsMap.get(Integer.valueOf(id));
+                    contact = (Contact) contactsMap.get(lookup_key);
                     if (contact != null && TextUtils.isEmpty(contact.first_name) && TextUtils.isEmpty(contact.last_name)) {
                         contact.first_name = fname;
                         contact.last_name = sname;
@@ -542,9 +553,9 @@ public class ContactsController {
         return contactsMap;
     }
 
-    public HashMap<Integer, Contact> getContactsCopy(HashMap<Integer, Contact> original) {
-        HashMap<Integer, Contact> ret = new HashMap();
-        for (Entry<Integer, Contact> entry : original.entrySet()) {
+    public HashMap<String, Contact> getContactsCopy(HashMap<String, Contact> original) {
+        HashMap<String, Contact> ret = new HashMap();
+        for (Entry<String, Contact> entry : original.entrySet()) {
             Contact copyContact = new Contact();
             Contact originalContact = (Contact) entry.getValue();
             copyContact.phoneDeleted.addAll(originalContact.phoneDeleted);
@@ -553,15 +564,50 @@ public class ContactsController {
             copyContact.shortPhones.addAll(originalContact.shortPhones);
             copyContact.first_name = originalContact.first_name;
             copyContact.last_name = originalContact.last_name;
-            copyContact.id = originalContact.id;
-            ret.put(Integer.valueOf(copyContact.id), copyContact);
+            copyContact.contact_id = originalContact.contact_id;
+            copyContact.key = originalContact.key;
+            ret.put(copyContact.key, copyContact);
         }
         return ret;
     }
 
-    protected void performSyncPhoneBook(HashMap<Integer, Contact> contactHashMap, boolean request, boolean first, boolean schedule, boolean force, boolean checkCount, boolean canceled) {
+    protected void migratePhoneBookToV7(final HashMap<Integer, Contact> contactHashMap) {
+        Utilities.globalQueue.postRunnable(new Runnable() {
+            public void run() {
+                if (!ContactsController.this.migratingContacts) {
+                    Contact value;
+                    int a;
+                    ContactsController.this.migratingContacts = true;
+                    HashMap<String, Contact> migratedMap = new HashMap();
+                    HashMap<String, Contact> contactsMap = ContactsController.this.readContactsFromPhoneBook();
+                    HashMap<String, String> contactsBookShort = new HashMap();
+                    for (Entry<String, Contact> entry : contactsMap.entrySet()) {
+                        value = (Contact) entry.getValue();
+                        for (a = 0; a < value.shortPhones.size(); a++) {
+                            contactsBookShort.put(value.shortPhones.get(a), value.key);
+                        }
+                    }
+                    for (Entry<Integer, Contact> entry2 : contactHashMap.entrySet()) {
+                        value = (Contact) entry2.getValue();
+                        for (a = 0; a < value.shortPhones.size(); a++) {
+                            String key = (String) contactsBookShort.get((String) value.shortPhones.get(a));
+                            if (key != null) {
+                                value.key = key;
+                                migratedMap.put(key, value);
+                                break;
+                            }
+                        }
+                    }
+                    FileLog.d("migrated contacts " + migratedMap.size() + " of " + contactHashMap.size());
+                    MessagesStorage.getInstance().putCachedPhoneBook(migratedMap, true);
+                }
+            }
+        });
+    }
+
+    protected void performSyncPhoneBook(HashMap<String, Contact> contactHashMap, boolean request, boolean first, boolean schedule, boolean force, boolean checkCount, boolean canceled) {
         if (first || this.contactsBookLoaded) {
-            final HashMap<Integer, Contact> hashMap = contactHashMap;
+            final HashMap<String, Contact> hashMap = contactHashMap;
             final boolean z = schedule;
             final boolean z2 = request;
             final boolean z3 = first;
@@ -571,10 +617,11 @@ public class ContactsController {
             Utilities.globalQueue.postRunnable(new Runnable() {
                 public void run() {
                     int a;
+                    Contact value;
                     int newPhonebookContacts = 0;
                     int serverContactsInPhonebook = 0;
                     HashMap<String, Contact> contactShortHashMap = new HashMap();
-                    for (Entry<Integer, Contact> entry : hashMap.entrySet()) {
+                    for (Entry<String, Contact> entry : hashMap.entrySet()) {
                         Contact c = (Contact) entry.getValue();
                         for (a = 0; a < c.shortPhones.size(); a++) {
                             contactShortHashMap.put(c.shortPhones.get(a), c);
@@ -584,11 +631,10 @@ public class ContactsController {
                     if (!z) {
                         ContactsController.this.checkContactsInternal();
                     }
-                    final HashMap<Integer, Contact> contactsMap = ContactsController.this.readContactsFromPhoneBook();
+                    final HashMap<String, Contact> contactsMap = ContactsController.this.readContactsFromPhoneBook();
                     final HashMap<String, Contact> contactsBookShort = new HashMap();
                     int oldCount = hashMap.size();
                     ArrayList<TL_inputPhoneContact> toImport = new ArrayList();
-                    Contact value;
                     String sphone;
                     String sphone9;
                     TL_inputPhoneContact imp;
@@ -597,8 +643,8 @@ public class ContactsController {
                     String firstName;
                     String lastName;
                     if (!hashMap.isEmpty()) {
-                        for (Entry<Integer, Contact> pair : contactsMap.entrySet()) {
-                            Integer id = (Integer) pair.getKey();
+                        for (Entry<String, Contact> pair : contactsMap.entrySet()) {
+                            String id = (String) pair.getKey();
                             value = (Contact) pair.getValue();
                             Contact existing = (Contact) hashMap.get(id);
                             if (existing == null) {
@@ -606,7 +652,7 @@ public class ContactsController {
                                     c = (Contact) contactShortHashMap.get(value.shortPhones.get(a));
                                     if (c != null) {
                                         existing = c;
-                                        id = Integer.valueOf(existing.id);
+                                        id = existing.key;
                                         break;
                                     }
                                 }
@@ -639,7 +685,7 @@ public class ContactsController {
                                             }
                                         }
                                         imp = new TL_inputPhoneContact();
-                                        imp.client_id = (long) value.id;
+                                        imp.client_id = (long) value.contact_id;
                                         imp.client_id |= ((long) a) << 32;
                                         imp.first_name = value.first_name;
                                         imp.last_name = value.last_name;
@@ -701,7 +747,7 @@ public class ContactsController {
                                             }
                                         }
                                         imp = new TL_inputPhoneContact();
-                                        imp.client_id = (long) value.id;
+                                        imp.client_id = (long) value.contact_id;
                                         imp.client_id |= ((long) a) << 32;
                                         imp.first_name = value.first_name;
                                         imp.last_name = value.last_name;
@@ -719,7 +765,7 @@ public class ContactsController {
                             return;
                         } else if (!(!z2 || hashMap.isEmpty() || contactsMap.isEmpty())) {
                             if (toImport.isEmpty()) {
-                                MessagesStorage.getInstance().putCachedPhoneBook(contactsMap);
+                                MessagesStorage.getInstance().putCachedPhoneBook(contactsMap, false);
                             }
                             if (!(true || hashMap.isEmpty())) {
                                 AndroidUtilities.runOnUIThread(new Runnable() {
@@ -737,7 +783,7 @@ public class ContactsController {
                                                     }
                                                 }
                                                 int removed = 0;
-                                                for (Entry<Integer, Contact> entry : hashMap.entrySet()) {
+                                                for (Entry<String, Contact> entry : hashMap.entrySet()) {
                                                     Contact contact = (Contact) entry.getValue();
                                                     boolean was = false;
                                                     a = 0;
@@ -767,9 +813,9 @@ public class ContactsController {
                             }
                         }
                     } else if (z2) {
-                        for (Entry<Integer, Contact> pair2 : contactsMap.entrySet()) {
+                        for (Entry<String, Contact> pair2 : contactsMap.entrySet()) {
                             value = (Contact) pair2.getValue();
-                            int id2 = ((Integer) pair2.getKey()).intValue();
+                            String key = (String) pair2.getKey();
                             for (a = 0; a < value.phones.size(); a++) {
                                 if (!z4) {
                                     sphone = (String) value.shortPhones.get(a);
@@ -793,7 +839,7 @@ public class ContactsController {
                                     }
                                 }
                                 imp = new TL_inputPhoneContact();
-                                imp.client_id = (long) id2;
+                                imp.client_id = (long) value.contact_id;
                                 imp.client_id |= ((long) a) << 32;
                                 imp.first_name = value.first_name;
                                 imp.last_name = value.last_name;
@@ -820,7 +866,7 @@ public class ContactsController {
                             }
                         });
                         if (!contactsMap.isEmpty()) {
-                            MessagesStorage.getInstance().putCachedPhoneBook(contactsMap);
+                            MessagesStorage.getInstance().putCachedPhoneBook(contactsMap, false);
                         }
                     } else if (toImport.isEmpty()) {
                         Utilities.stageQueue.postRunnable(new Runnable() {
@@ -877,7 +923,7 @@ public class ContactsController {
                                         ContactsController.this.applyContactsUpdates(ContactsController.this.delayedContactsUpdate, null, null, null);
                                         ContactsController.this.delayedContactsUpdate.clear();
                                     }
-                                    MessagesStorage.getInstance().putCachedPhoneBook(contactsMap);
+                                    MessagesStorage.getInstance().putCachedPhoneBook(contactsMap, false);
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
                                             ContactsController.this.updateUnregisteredContacts(ContactsController.this.contacts);
@@ -889,7 +935,12 @@ public class ContactsController {
                             });
                         } else {
                             final boolean[] hasErrors = new boolean[]{false};
-                            final HashMap<Integer, Contact> contactsMapToSave = new HashMap(contactsMap);
+                            final HashMap<String, Contact> contactsMapToSave = new HashMap(contactsMap);
+                            final HashMap<Integer, String> contactIdToKey = new HashMap();
+                            for (Entry<String, Contact> entry2 : contactsMapToSave.entrySet()) {
+                                value = (Contact) entry2.getValue();
+                                contactIdToKey.put(Integer.valueOf(value.contact_id), value.key);
+                            }
                             ContactsController.this.completedRequestsCount = 0;
                             final int count = (int) Math.ceil(((double) toImport.size()) / 500.0d);
                             for (a = 0; a < count; a++) {
@@ -905,13 +956,13 @@ public class ContactsController {
                                             TL_contacts_importedContacts res = (TL_contacts_importedContacts) response;
                                             if (!res.retry_contacts.isEmpty()) {
                                                 for (a = 0; a < res.retry_contacts.size(); a++) {
-                                                    contactsMapToSave.remove(Integer.valueOf((int) ((Long) res.retry_contacts.get(a)).longValue()));
+                                                    contactsMapToSave.remove(contactIdToKey.get(Integer.valueOf((int) ((Long) res.retry_contacts.get(a)).longValue())));
                                                 }
                                                 hasErrors[0] = true;
                                             }
                                             for (a = 0; a < res.popular_invites.size(); a++) {
                                                 TL_popularContact popularContact = (TL_popularContact) res.popular_invites.get(a);
-                                                Contact contact = (Contact) contactsMap.get(Integer.valueOf((int) popularContact.client_id));
+                                                Contact contact = (Contact) contactsMap.get(contactIdToKey.get(Integer.valueOf((int) popularContact.client_id)));
                                                 if (contact != null) {
                                                     contact.imported = popularContact.importers;
                                                 }
@@ -926,14 +977,14 @@ public class ContactsController {
                                             ContactsController.this.processLoadedContacts(cArr, res.users, 2);
                                         } else {
                                             for (a = 0; a < req.contacts.size(); a++) {
-                                                contactsMapToSave.remove(Integer.valueOf((int) ((TL_inputPhoneContact) req.contacts.get(a)).client_id));
+                                                contactsMapToSave.remove(contactIdToKey.get(Integer.valueOf((int) ((TL_inputPhoneContact) req.contacts.get(a)).client_id)));
                                             }
                                             hasErrors[0] = true;
                                             FileLog.e("import contacts error " + error.text);
                                         }
                                         if (ContactsController.this.completedRequestsCount == count) {
                                             if (!contactsMapToSave.isEmpty()) {
-                                                MessagesStorage.getInstance().putCachedPhoneBook(contactsMapToSave);
+                                                MessagesStorage.getInstance().putCachedPhoneBook(contactsMapToSave, false);
                                             }
                                             Utilities.stageQueue.postRunnable(new Runnable() {
                                                 public void run() {
@@ -1272,9 +1323,8 @@ public class ContactsController {
             }
         }
         ArrayList<Contact> sortedPhoneBookContacts = new ArrayList();
-        for (Entry<Integer, Contact> pair : this.contactsBook.entrySet()) {
+        for (Entry<String, Contact> pair : this.contactsBook.entrySet()) {
             Contact value2 = (Contact) pair.getValue();
-            int id = ((Integer) pair.getKey()).intValue();
             boolean skip = false;
             a = 0;
             while (a < value2.phones.size()) {
