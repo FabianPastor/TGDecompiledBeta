@@ -10300,12 +10300,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     private void processSelectedOption(int option) {
-        File file;
-        Intent intent;
         if (this.selectedObject != null) {
             Bundle args;
             String path;
+            File file;
             AlertDialog.Builder builder;
+            Intent intent;
             TLObject req;
             switch (option) {
                 case 0:

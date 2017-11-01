@@ -32,98 +32,87 @@ final class zzcft implements Runnable {
     }
 
     public final void run() {
-        HttpURLConnection httpURLConnection;
-        OutputStream outputStream;
         Throwable e;
         Map map;
         int i;
-        HttpURLConnection httpURLConnection2;
-        OutputStream outputStream2;
+        HttpURLConnection httpURLConnection;
+        OutputStream outputStream;
         Throwable th;
         Map map2;
         int i2 = 0;
         this.zzbrf.zzwq();
+        HttpURLConnection httpURLConnection2;
+        OutputStream outputStream2;
         try {
             URLConnection openConnection = this.zzJu.openConnection();
             if (openConnection instanceof HttpURLConnection) {
-                httpURLConnection = (HttpURLConnection) openConnection;
-                httpURLConnection.setDefaultUseCaches(false);
+                httpURLConnection2 = (HttpURLConnection) openConnection;
+                httpURLConnection2.setDefaultUseCaches(false);
                 zzcem.zzxz();
-                httpURLConnection.setConnectTimeout(60000);
+                httpURLConnection2.setConnectTimeout(60000);
                 zzcem.zzxA();
-                httpURLConnection.setReadTimeout(61000);
-                httpURLConnection.setInstanceFollowRedirects(false);
-                httpURLConnection.setDoInput(true);
+                httpURLConnection2.setReadTimeout(61000);
+                httpURLConnection2.setInstanceFollowRedirects(false);
+                httpURLConnection2.setDoInput(true);
                 try {
                     if (this.zzbre != null) {
                         for (Entry entry : this.zzbre.entrySet()) {
-                            httpURLConnection.addRequestProperty((String) entry.getKey(), (String) entry.getValue());
+                            httpURLConnection2.addRequestProperty((String) entry.getKey(), (String) entry.getValue());
                         }
                     }
                     if (this.zzaKA != null) {
                         byte[] zzl = this.zzbrf.zzwB().zzl(this.zzaKA);
                         this.zzbrf.zzwF().zzyD().zzj("Uploading data. size", Integer.valueOf(zzl.length));
-                        httpURLConnection.setDoOutput(true);
-                        httpURLConnection.addRequestProperty("Content-Encoding", "gzip");
-                        httpURLConnection.setFixedLengthStreamingMode(zzl.length);
-                        httpURLConnection.connect();
-                        outputStream = httpURLConnection.getOutputStream();
+                        httpURLConnection2.setDoOutput(true);
+                        httpURLConnection2.addRequestProperty("Content-Encoding", "gzip");
+                        httpURLConnection2.setFixedLengthStreamingMode(zzl.length);
+                        httpURLConnection2.connect();
+                        outputStream2 = httpURLConnection2.getOutputStream();
                         try {
-                            outputStream.write(zzl);
-                            outputStream.close();
+                            outputStream2.write(zzl);
+                            outputStream2.close();
                         } catch (IOException e2) {
                             e = e2;
                             map = null;
                             i = 0;
-                            OutputStream outputStream3 = outputStream;
-                            httpURLConnection2 = httpURLConnection;
-                            outputStream2 = outputStream3;
-                            if (outputStream2 != null) {
-                                try {
-                                    outputStream2.close();
-                                } catch (IOException e3) {
-                                    this.zzbrf.zzwF().zzyx().zze("Error closing HTTP compressed POST connection output stream. appId", zzcfl.zzdZ(this.mPackageName), e3);
-                                }
-                            }
-                            if (httpURLConnection2 != null) {
-                                httpURLConnection2.disconnect();
-                            }
-                            this.zzbrf.zzwE().zzj(new zzcfs(this.mPackageName, this.zzbrd, i, e, null, map));
-                        } catch (Throwable th2) {
-                            th = th2;
-                            map2 = null;
+                            OutputStream outputStream3 = outputStream2;
+                            httpURLConnection = httpURLConnection2;
+                            outputStream = outputStream3;
                             if (outputStream != null) {
                                 try {
                                     outputStream.close();
-                                } catch (IOException e4) {
-                                    this.zzbrf.zzwF().zzyx().zze("Error closing HTTP compressed POST connection output stream. appId", zzcfl.zzdZ(this.mPackageName), e4);
+                                } catch (IOException e3) {
+                                    this.zzbrf.zzwF().zzyx().zze("Error closing HTTP compressed POST connection output stream. appId", zzcfl.zzdZ(this.mPackageName), e3);
                                 }
                             }
                             if (httpURLConnection != null) {
                                 httpURLConnection.disconnect();
                             }
+                            this.zzbrf.zzwE().zzj(new zzcfs(this.mPackageName, this.zzbrd, i, e, null, map));
+                        } catch (Throwable th2) {
+                            th = th2;
+                            map2 = null;
+                            if (outputStream2 != null) {
+                                try {
+                                    outputStream2.close();
+                                } catch (IOException e4) {
+                                    this.zzbrf.zzwF().zzyx().zze("Error closing HTTP compressed POST connection output stream. appId", zzcfl.zzdZ(this.mPackageName), e4);
+                                }
+                            }
+                            if (httpURLConnection2 != null) {
+                                httpURLConnection2.disconnect();
+                            }
                             this.zzbrf.zzwE().zzj(new zzcfs(this.mPackageName, this.zzbrd, i2, null, null, map2));
                             throw th;
                         }
                     }
-                    i2 = httpURLConnection.getResponseCode();
-                    map2 = httpURLConnection.getHeaderFields();
+                    i2 = httpURLConnection2.getResponseCode();
+                    map2 = httpURLConnection2.getHeaderFields();
                 } catch (IOException e5) {
                     e = e5;
                     map = null;
                     i = i2;
-                    httpURLConnection2 = httpURLConnection;
-                    outputStream2 = null;
-                    if (outputStream2 != null) {
-                        outputStream2.close();
-                    }
-                    if (httpURLConnection2 != null) {
-                        httpURLConnection2.disconnect();
-                    }
-                    this.zzbrf.zzwE().zzj(new zzcfs(this.mPackageName, this.zzbrd, i, e, null, map));
-                } catch (Throwable th3) {
-                    th = th3;
-                    map2 = null;
+                    httpURLConnection = httpURLConnection2;
                     outputStream = null;
                     if (outputStream != null) {
                         outputStream.close();
@@ -131,13 +120,24 @@ final class zzcft implements Runnable {
                     if (httpURLConnection != null) {
                         httpURLConnection.disconnect();
                     }
+                    this.zzbrf.zzwE().zzj(new zzcfs(this.mPackageName, this.zzbrd, i, e, null, map));
+                } catch (Throwable th3) {
+                    th = th3;
+                    map2 = null;
+                    outputStream2 = null;
+                    if (outputStream2 != null) {
+                        outputStream2.close();
+                    }
+                    if (httpURLConnection2 != null) {
+                        httpURLConnection2.disconnect();
+                    }
                     this.zzbrf.zzwE().zzj(new zzcfs(this.mPackageName, this.zzbrd, i2, null, null, map2));
                     throw th;
                 }
                 try {
-                    byte[] zza = zzcfp.zzc(httpURLConnection);
-                    if (httpURLConnection != null) {
-                        httpURLConnection.disconnect();
+                    byte[] zza = zzcfp.zzc(httpURLConnection2);
+                    if (httpURLConnection2 != null) {
+                        httpURLConnection2.disconnect();
                     }
                     this.zzbrf.zzwE().zzj(new zzcfs(this.mPackageName, this.zzbrd, i2, null, zza, map2));
                     return;
@@ -145,23 +145,23 @@ final class zzcft implements Runnable {
                     e = e6;
                     map = map2;
                     i = i2;
-                    httpURLConnection2 = httpURLConnection;
-                    outputStream2 = null;
-                    if (outputStream2 != null) {
-                        outputStream2.close();
-                    }
-                    if (httpURLConnection2 != null) {
-                        httpURLConnection2.disconnect();
-                    }
-                    this.zzbrf.zzwE().zzj(new zzcfs(this.mPackageName, this.zzbrd, i, e, null, map));
-                } catch (Throwable th32) {
-                    th = th32;
+                    httpURLConnection = httpURLConnection2;
                     outputStream = null;
                     if (outputStream != null) {
                         outputStream.close();
                     }
                     if (httpURLConnection != null) {
                         httpURLConnection.disconnect();
+                    }
+                    this.zzbrf.zzwE().zzj(new zzcfs(this.mPackageName, this.zzbrd, i, e, null, map));
+                } catch (Throwable th32) {
+                    th = th32;
+                    outputStream2 = null;
+                    if (outputStream2 != null) {
+                        outputStream2.close();
+                    }
+                    if (httpURLConnection2 != null) {
+                        httpURLConnection2.disconnect();
                     }
                     this.zzbrf.zzwE().zzj(new zzcfs(this.mPackageName, this.zzbrd, i2, null, null, map2));
                     throw th;
@@ -172,18 +172,6 @@ final class zzcft implements Runnable {
             e = e7;
             map = null;
             i = 0;
-            outputStream2 = null;
-            httpURLConnection2 = null;
-            if (outputStream2 != null) {
-                outputStream2.close();
-            }
-            if (httpURLConnection2 != null) {
-                httpURLConnection2.disconnect();
-            }
-            this.zzbrf.zzwE().zzj(new zzcfs(this.mPackageName, this.zzbrd, i, e, null, map));
-        } catch (Throwable th4) {
-            th = th4;
-            map2 = null;
             outputStream = null;
             httpURLConnection = null;
             if (outputStream != null) {
@@ -191,6 +179,18 @@ final class zzcft implements Runnable {
             }
             if (httpURLConnection != null) {
                 httpURLConnection.disconnect();
+            }
+            this.zzbrf.zzwE().zzj(new zzcfs(this.mPackageName, this.zzbrd, i, e, null, map));
+        } catch (Throwable th4) {
+            th = th4;
+            map2 = null;
+            outputStream2 = null;
+            httpURLConnection2 = null;
+            if (outputStream2 != null) {
+                outputStream2.close();
+            }
+            if (httpURLConnection2 != null) {
+                httpURLConnection2.disconnect();
             }
             this.zzbrf.zzwE().zzj(new zzcfs(this.mPackageName, this.zzbrd, i2, null, null, map2));
             throw th;

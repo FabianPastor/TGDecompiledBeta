@@ -591,6 +591,7 @@ final class zzcen extends zzchj {
 
     @WorkerThread
     public final zzcek zzH(String str, String str2) {
+        Cursor query;
         Object e;
         Cursor cursor;
         Throwable th;
@@ -598,7 +599,6 @@ final class zzcen extends zzchj {
         zzbo.zzcF(str2);
         zzjC();
         zzkD();
-        Cursor query;
         try {
             query = getWritableDatabase().query("conditional_properties", new String[]{"origin", Param.VALUE, "active", "trigger_event_name", "trigger_timeout", "timed_out_event", "creation_timestamp", "triggered_event", "triggered_timestamp", "time_to_live", "expired_event"}, "app_id=? and name=?", new String[]{str, str2}, null, null, null);
             try {
@@ -916,6 +916,7 @@ final class zzcen extends zzchj {
 
     @WorkerThread
     public final zzceo zza(long j, String str, boolean z, boolean z2, boolean z3, boolean z4, boolean z5) {
+        Cursor query;
         Object e;
         Throwable th;
         zzbo.zzcF(str);
@@ -923,7 +924,6 @@ final class zzcen extends zzchj {
         zzkD();
         String[] strArr = new String[]{str};
         zzceo com_google_android_gms_internal_zzceo = new zzceo();
-        Cursor query;
         try {
             SQLiteDatabase writableDatabase = getWritableDatabase();
             query = writableDatabase.query("apps", new String[]{"day", "daily_events_count", "daily_public_events_count", "daily_conversions_count", "daily_error_events_count", "daily_realtime_events_count"}, "app_id=?", new String[]{str}, null, null, null);

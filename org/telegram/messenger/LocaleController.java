@@ -934,12 +934,12 @@ public class LocaleController {
     }
 
     private HashMap<String, String> getLocaleFileStrings(File file, boolean preserveEscapes) {
+        HashMap<String, String> stringMap;
         Throwable e;
         Throwable th;
         FileInputStream fileInputStream = null;
         this.reloadLastFile = false;
         try {
-            HashMap<String, String> stringMap;
             if (file.exists()) {
                 stringMap = new HashMap();
                 XmlPullParser parser = Xml.newPullParser();
@@ -1053,7 +1053,7 @@ public class LocaleController {
         applyLanguage(localeInfo, override, init, false, false);
     }
 
-    public void applyLanguage(LocaleInfo localeInfo, boolean override, boolean init, boolean fromFile, boolean force) {
+    public void applyLanguage(final LocaleInfo localeInfo, boolean override, boolean init, boolean fromFile, boolean force) {
         if (localeInfo != null) {
             File pathToFile = localeInfo.getPathToFile();
             String shortName = localeInfo.shortName;
@@ -1062,7 +1062,15 @@ public class LocaleController {
             }
             if (localeInfo.isRemote() && (force || !pathToFile.exists())) {
                 FileLog.d("reload locale because file doesn't exist " + pathToFile);
-                applyRemoteLanguage(localeInfo, null, true);
+                if (init) {
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            LocaleController.this.applyRemoteLanguage(localeInfo, null, true);
+                        }
+                    });
+                } else {
+                    applyRemoteLanguage(localeInfo, null, true);
+                }
             }
             try {
                 Locale newLocale;
@@ -1993,10 +2001,10 @@ public class LocaleController {
     }
 
     public static String formatShortNumber(int number, int[] rounded) {
-        String K = "";
+        StringBuilder K = new StringBuilder();
         int lastDec = 0;
         while (number / 1000 > 0) {
-            K = K + "K";
+            K.append("K");
             lastDec = (number % 1000) / 100;
             number /= 1000;
         }
@@ -2011,11 +2019,11 @@ public class LocaleController {
             if (K.length() == 2) {
                 return String.format(Locale.US, "%dM", new Object[]{Integer.valueOf(number)});
             }
-            return String.format(Locale.US, "%d%s", new Object[]{Integer.valueOf(number), K});
+            return String.format(Locale.US, "%d%s", new Object[]{Integer.valueOf(number), K.toString()});
         } else if (K.length() == 2) {
             return String.format(Locale.US, "%d.%dM", new Object[]{Integer.valueOf(number), Integer.valueOf(lastDec)});
         } else {
-            return String.format(Locale.US, "%d.%d%s", new Object[]{Integer.valueOf(number), Integer.valueOf(lastDec), K});
+            return String.format(Locale.US, "%d.%d%s", new Object[]{Integer.valueOf(number), Integer.valueOf(lastDec), K.toString()});
         }
     }
 
