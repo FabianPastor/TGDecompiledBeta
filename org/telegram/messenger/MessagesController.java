@@ -2294,8 +2294,10 @@ public class MessagesController implements NotificationCenterDelegate {
         TL_channels_deleteMessages req;
         long newTaskId;
         NativeByteBuffer data;
+        NativeByteBuffer data2;
         Throwable e;
         final int i;
+        TL_messages_deleteMessages req2;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
             ArrayList<Integer> toSend = null;
             if (taskId == 0) {
@@ -2321,7 +2323,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
-            NativeByteBuffer data2;
             if (channelId != 0) {
                 if (taskRequest != null) {
                     req = (TL_channels_deleteMessages) taskRequest;
@@ -2371,7 +2372,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
                 return;
             }
-            TL_messages_deleteMessages req2;
             if (!(randoms == null || encryptedChat == null || randoms.isEmpty())) {
                 SecretChatHelper.getInstance().sendMessagesDeleteMessage(encryptedChat, randoms, null);
             }
@@ -3918,7 +3918,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
-                Chat chat;
                 User user;
                 Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
@@ -3938,6 +3937,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 Message lastMessage = null;
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                     if (lastMessage == null || message.date < lastMessage.date) {
                         lastMessage = message;
@@ -5894,7 +5894,6 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId, InputChannel inputChannel) {
-        Integer channelPts;
         Throwable e;
         long newTaskId;
         TL_updates_getChannelDifference req;
@@ -5905,6 +5904,7 @@ public class MessagesController implements NotificationCenterDelegate {
             gettingDifferenceChannel = Boolean.valueOf(false);
         }
         if (!gettingDifferenceChannel.booleanValue()) {
+            Integer channelPts;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = (Integer) this.channelsPts.get(Integer.valueOf(channelId));
@@ -7446,6 +7446,7 @@ public class MessagesController implements NotificationCenterDelegate {
         AbstractMap usersDict;
         int a;
         AbstractMap chatsDict;
+        Iterator it;
         long currentTime = System.currentTimeMillis();
         final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
         HashMap<Long, WebPage> webPages = new HashMap();
@@ -7500,7 +7501,6 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         int interfaceUpdateMask = 0;
         for (int c = 0; c < updates.size(); c++) {
-            Iterator it;
             Update update = (Update) updates.get(c);
             FileLog.d("process update " + update);
             Message message;

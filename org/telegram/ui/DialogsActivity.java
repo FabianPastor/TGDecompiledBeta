@@ -641,11 +641,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                                     boolean z = true;
                                     if (which == 0) {
                                         MessagesController instance = MessagesController.getInstance();
-                                        long access$2700 = DialogsActivity.this.selectedDialog;
+                                        long access$2800 = DialogsActivity.this.selectedDialog;
                                         if (z) {
                                             z = false;
                                         }
-                                        if (instance.pinDialog(access$2700, z, null, 0) && !z) {
+                                        if (instance.pinDialog(access$2800, z, null, 0) && !z) {
                                             DialogsActivity.this.listView.smoothScrollToPosition(0);
                                             return;
                                         }
@@ -716,11 +716,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                                             boolean z = true;
                                             if (which == 0) {
                                                 MessagesController instance = MessagesController.getInstance();
-                                                long access$2700 = DialogsActivity.this.selectedDialog;
+                                                long access$2800 = DialogsActivity.this.selectedDialog;
                                                 if (z) {
                                                     z = false;
                                                 }
-                                                if (instance.pinDialog(access$2700, z, null, 0) && !z) {
+                                                if (instance.pinDialog(access$2800, z, null, 0) && !z) {
                                                     DialogsActivity.this.listView.smoothScrollToPosition(0);
                                                     return;
                                                 }
@@ -785,7 +785,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             builder.setItems(charSequenceArr, iArr, /* anonymous class already generated */);
                             DialogsActivity.this.showDialog(builder.create());
                         }
-                    } else if (DialogsActivity.this.dialogsType != 3) {
+                    } else if (DialogsActivity.this.dialogsType != 3 || DialogsActivity.this.selectAlertString != null) {
                         return false;
                     } else {
                         DialogsActivity.this.dialogsAdapter.addOrRemoveSelectedDialog(dialog.id, view);
@@ -1130,49 +1130,53 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     private void updateSelectedCount() {
-        if (this.dialogsAdapter.hasSelectedDialogs()) {
-            if (this.commentView.getTag() == null) {
-                this.commentView.setFieldText("");
-                this.commentView.setVisibility(0);
-                AnimatorSet animatorSet = new AnimatorSet();
-                Animator[] animatorArr = new Animator[1];
-                animatorArr[0] = ObjectAnimator.ofFloat(this.commentView, "translationY", new float[]{(float) this.commentView.getMeasuredHeight(), 0.0f});
+        if (this.commentView != null) {
+            AnimatorSet animatorSet;
+            Animator[] animatorArr;
+            if (this.dialogsAdapter.hasSelectedDialogs()) {
+                if (this.commentView.getTag() == null) {
+                    this.commentView.setFieldText("");
+                    this.commentView.setVisibility(0);
+                    animatorSet = new AnimatorSet();
+                    animatorArr = new Animator[1];
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.commentView, "translationY", new float[]{(float) this.commentView.getMeasuredHeight(), 0.0f});
+                    animatorSet.playTogether(animatorArr);
+                    animatorSet.setDuration(180);
+                    animatorSet.setInterpolator(new DecelerateInterpolator());
+                    animatorSet.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animation) {
+                            DialogsActivity.this.commentView.setTag(Integer.valueOf(2));
+                        }
+                    });
+                    animatorSet.start();
+                    this.commentView.setTag(Integer.valueOf(1));
+                }
+                this.actionBar.setTitle(LocaleController.formatPluralString("Recipient", this.dialogsAdapter.getSelectedDialogs().size()));
+                return;
+            }
+            if (this.dialogsType == 3 && this.selectAlertString == null) {
+                this.actionBar.setTitle(LocaleController.getString("ForwardTo", R.string.ForwardTo));
+            } else {
+                this.actionBar.setTitle(LocaleController.getString("SelectChat", R.string.SelectChat));
+            }
+            if (this.commentView.getTag() != null) {
+                this.commentView.hidePopup(false);
+                this.commentView.closeKeyboard();
+                animatorSet = new AnimatorSet();
+                animatorArr = new Animator[1];
+                animatorArr[0] = ObjectAnimator.ofFloat(this.commentView, "translationY", new float[]{0.0f, (float) this.commentView.getMeasuredHeight()});
                 animatorSet.playTogether(animatorArr);
                 animatorSet.setDuration(180);
                 animatorSet.setInterpolator(new DecelerateInterpolator());
                 animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
-                        DialogsActivity.this.commentView.setTag(Integer.valueOf(2));
+                        DialogsActivity.this.commentView.setVisibility(8);
                     }
                 });
                 animatorSet.start();
-                this.commentView.setTag(Integer.valueOf(1));
+                this.commentView.setTag(null);
+                this.listView.requestLayout();
             }
-            this.actionBar.setTitle(LocaleController.formatPluralString("Recipient", this.dialogsAdapter.getSelectedDialogs().size()));
-            return;
-        }
-        if (this.dialogsType == 3 && this.selectAlertString == null) {
-            this.actionBar.setTitle(LocaleController.getString("ForwardTo", R.string.ForwardTo));
-        } else {
-            this.actionBar.setTitle(LocaleController.getString("SelectChat", R.string.SelectChat));
-        }
-        if (this.commentView.getTag() != null) {
-            this.commentView.hidePopup(false);
-            this.commentView.closeKeyboard();
-            animatorSet = new AnimatorSet();
-            animatorArr = new Animator[1];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.commentView, "translationY", new float[]{0.0f, (float) this.commentView.getMeasuredHeight()});
-            animatorSet.playTogether(animatorArr);
-            animatorSet.setDuration(180);
-            animatorSet.setInterpolator(new DecelerateInterpolator());
-            animatorSet.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
-                    DialogsActivity.this.commentView.setVisibility(8);
-                }
-            });
-            animatorSet.start();
-            this.commentView.setTag(null);
-            this.listView.requestLayout();
         }
     }
 

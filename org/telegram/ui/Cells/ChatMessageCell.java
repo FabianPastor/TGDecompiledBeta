@@ -1972,27 +1972,31 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
-        int maxWidth;
-        int linkPreviewMaxWidth;
+        int dp;
         String description;
-        Photo photo;
         String type;
         int duration;
-        boolean smallImage;
         TL_webDocument webDocument;
+        TL_webDocument webDocument2;
+        int additinalWidth;
         int height;
         int width;
         Throwable e;
-        int restLinesCount;
         int a;
         int lineLeft;
         boolean authorIsRTL;
         boolean hasRTL;
-        int maxPhotoWidth;
+        ArrayList arrayList;
+        DocumentAttribute attribute;
+        PhotoSize photoSize;
+        PhotoSize photoSize2;
+        int dp2;
         String fileName;
-        boolean autoDownload;
         int seconds;
         String str;
+        CharSequence str2;
+        String price;
+        SpannableStringBuilder spannableStringBuilder;
         int mWidth;
         WebPage webPage;
         if (messageObject.checkLayout() || !(this.currentPosition == null || this.lastHeight == AndroidUtilities.displaySize.y)) {
@@ -2013,7 +2017,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         }
         if (messageChanged || dataChanged || groupChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
             int i;
-            int dp;
+            int linkPreviewMaxWidth;
             float f;
             int timeWidthTotal;
             this.pinnedBottom = bottomNear;
@@ -2023,7 +2027,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             this.widthBeforeNewTimeLine = -1;
             this.currentMessageObject = messageObject;
             this.currentMessagesGroup = groupedMessages;
-            if (this.currentMessagesGroup == null || this.currentMessagesGroup.messages.size() <= 1) {
+            if (this.currentMessagesGroup == null || this.currentMessagesGroup.posArray.size() <= 1) {
                 this.currentMessagesGroup = null;
                 this.currentPosition = null;
             } else {
@@ -2120,7 +2124,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
-            DocumentAttribute attribute;
+            int maxWidth;
+            int maxPhotoWidth;
+            boolean autoDownload;
             float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
@@ -2226,19 +2232,13 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     String site_name;
                     String title;
                     String author;
+                    Photo photo;
                     TLObject document;
-                    TL_webDocument webDocument2;
-                    int additinalWidth;
+                    boolean smallImage;
                     int restLines;
+                    int restLinesCount;
                     int textWidth;
-                    ArrayList arrayList;
-                    PhotoSize photoSize;
-                    PhotoSize photoSize2;
-                    int dp2;
                     int durationWidth;
-                    CharSequence str2;
-                    String price;
-                    SpannableStringBuilder spannableStringBuilder;
                     if (AndroidUtilities.isTablet()) {
                         if (this.isChat && messageObject.needDrawAvatar() && !this.currentMessageObject.isOut()) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(132.0f);
@@ -5768,7 +5768,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     }
                     if (this.currentMessagesGroup != null) {
                         firstLineWidth = 0;
-                        for (a = 0; a < this.currentMessagesGroup.messages.size(); a++) {
+                        for (a = 0; a < this.currentMessagesGroup.posArray.size(); a++) {
                             position = (GroupedMessagePosition) this.currentMessagesGroup.posArray.get(a);
                             if (position.minY != (byte) 0) {
                                 break;
@@ -5807,7 +5807,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         if (this.currentPosition.minY != (byte) 0 && ((messageObject.isOutOwner() && (this.currentPosition.flags & 1) != 0) || !(messageObject.isOutOwner() || (this.currentPosition.flags & 2) == 0))) {
                             firstLineWidth = 0;
                             int currentLineWidth = 0;
-                            for (a = 0; a < this.currentMessagesGroup.messages.size(); a++) {
+                            for (a = 0; a < this.currentMessagesGroup.posArray.size(); a++) {
                                 position = (GroupedMessagePosition) this.currentMessagesGroup.posArray.get(a);
                                 if (position.minY == (byte) 0) {
                                     firstLineWidth = (int) (((position.leftSpanOffset != 0 ? Math.ceil((double) ((((float) position.leftSpanOffset) / 1000.0f) * ((float) AndroidUtilities.displaySize.x))) : 0.0d) + Math.ceil((double) ((((float) position.pw) / 1000.0f) * ((float) AndroidUtilities.displaySize.x)))) + ((double) firstLineWidth));
@@ -7307,7 +7307,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             return (maxWidth - this.backgroundWidth) - AndroidUtilities.dp(57.0f);
         } else if (this.currentMessagesGroup != null) {
             int firstLineWidth = 0;
-            for (int a = 0; a < this.currentMessagesGroup.messages.size(); a++) {
+            for (int a = 0; a < this.currentMessagesGroup.posArray.size(); a++) {
                 GroupedMessagePosition position = (GroupedMessagePosition) this.currentMessagesGroup.posArray.get(a);
                 if (position.minY != (byte) 0) {
                     break;

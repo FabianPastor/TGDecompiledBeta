@@ -569,7 +569,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 uploadMultiMedia(message, media, location, false);
                             } else if (media.file == null) {
                                 media.file = file;
-                                index = ((Integer) message.extraHashMap.get(location + "_i")).intValue();
+                                index = message.messageObjects.indexOf((MessageObject) message.extraHashMap.get(location + "_i"));
                                 message.location = (FileLocation) message.extraHashMap.get(location + "_t");
                                 stopVideoService(((MessageObject) message.messageObjects.get(index)).messageOwner.attachPath);
                                 if (media.thumb != null || message.location == null) {
@@ -621,7 +621,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 }
             }
         } else if (id == NotificationCenter.FilePreparingStarted) {
-            messageObject = args[0];
+            messageObject = (MessageObject) args[0];
             if (messageObject.getId() != 0) {
                 finalPath = args[1];
                 arr = (ArrayList) this.delayedMessages.get(messageObject.messageOwner.attachPath);
@@ -630,7 +630,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     while (a < arr.size()) {
                         message = (DelayedMessage) arr.get(a);
                         if (message.type == 4) {
-                            index = ((Integer) message.extraHashMap.get(messageObject.messageOwner.attachPath + "_i")).intValue();
+                            index = message.messageObjects.indexOf(messageObject);
                             message.location = (FileLocation) message.extraHashMap.get(messageObject.messageOwner.attachPath + "_t");
                             performSendDelayedMessage(message, index);
                             arr.remove(a);
@@ -3128,7 +3128,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         }
                         putToDelayedMessages(location, message);
                         message.extraHashMap.put(messageObject, location);
-                        message.extraHashMap.put(location + "_i", Integer.valueOf(index));
+                        message.extraHashMap.put(location + "_i", messageObject);
                         if (message.location != null) {
                             message.extraHashMap.put(location + "_t", message.location);
                         }
@@ -3144,7 +3144,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             putToDelayedMessages(documentLocation, message);
                             message.extraHashMap.put(messageObject, documentLocation);
                             message.extraHashMap.put(documentLocation, media);
-                            message.extraHashMap.put(documentLocation + "_i", Integer.valueOf(index));
+                            message.extraHashMap.put(documentLocation + "_i", messageObject);
                             if (message.location != null) {
                                 message.extraHashMap.put(documentLocation + "_t", message.location);
                             }

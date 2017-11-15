@@ -459,9 +459,9 @@ public final class AudioTrack {
     }
 
     private void resetAudioProcessors() {
-        AudioProcessor audioProcessor;
         ArrayList<AudioProcessor> newAudioProcessors = new ArrayList();
-        for (AudioProcessor audioProcessor2 : this.availableAudioProcessors) {
+        for (AudioProcessor audioProcessor : this.availableAudioProcessors) {
+            AudioProcessor audioProcessor2;
             if (audioProcessor2.isActive()) {
                 newAudioProcessors.add(audioProcessor2);
             } else {

@@ -2890,13 +2890,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         this.chatLayoutManager.setSpanSizeLookup(new SpanSizeLookup() {
             public int getSpanSize(int position) {
                 if (position >= ChatActivity.this.chatAdapter.messagesStartRow && position < ChatActivity.this.chatAdapter.messagesEndRow) {
-                    MessageObject message = (MessageObject) ChatActivity.this.messages.get(position - ChatActivity.this.chatAdapter.messagesStartRow);
-                    if (message.messageOwner.grouped_id != 0) {
-                        GroupedMessages groupedMessages = (GroupedMessages) ChatActivity.this.groupedMessagesMap.get(Long.valueOf(message.messageOwner.grouped_id));
-                        if (groupedMessages != null && groupedMessages.messages.size() > 1) {
-                            GroupedMessagePosition p = (GroupedMessagePosition) groupedMessages.positions.get(message);
-                            if (p != null) {
-                                return p.spanSize;
+                    int idx = position - ChatActivity.this.chatAdapter.messagesStartRow;
+                    if (idx >= 0 && idx < ChatActivity.this.messages.size()) {
+                        MessageObject message = (MessageObject) ChatActivity.this.messages.get(idx);
+                        if (message.messageOwner.grouped_id != 0) {
+                            GroupedMessages groupedMessages = (GroupedMessages) ChatActivity.this.groupedMessagesMap.get(Long.valueOf(message.messageOwner.grouped_id));
+                            if (groupedMessages != null && groupedMessages.messages.size() > 1) {
+                                GroupedMessagePosition p = (GroupedMessagePosition) groupedMessages.positions.get(message);
+                                if (p != null) {
+                                    return p.spanSize;
+                                }
                             }
                         }
                     }
@@ -7434,7 +7437,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 } else {
                                     this.messages.add(this.messages.size() - 1, obj);
                                 }
-                                if (!(obj.messageOwner.grouped_id == 0 || obj.photoThumbs.isEmpty())) {
+                                if (!(obj.messageOwner.grouped_id == 0 || obj.photoThumbs == null || obj.photoThumbs.isEmpty())) {
                                     groupedMessages = (GroupedMessages) this.groupedMessagesMap.get(Long.valueOf(obj.messageOwner.grouped_id));
                                     if (groupedMessages == null) {
                                         groupedMessages = new GroupedMessages();
@@ -7947,6 +7950,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         }, 1000);
                                     }
                                 });
+                                if (newGroups != null) {
+                                    for (Entry<Long, GroupedMessages> entry2 : newGroups.entrySet()) {
+                                        ((GroupedMessages) entry2.getValue()).calculate();
+                                    }
+                                    return;
+                                }
                                 return;
                             }
                             if (this.currentChat != null && this.currentChat.megagroup && ((obj.messageOwner.action instanceof TL_messageActionChatAddUser) || (obj.messageOwner.action instanceof TL_messageActionChatDeleteUser))) {
@@ -8052,8 +8061,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         MessagesController.getInstance().reloadWebPages(this.dialog_id, webpagesToReload);
                     }
                     if (newGroups != null) {
-                        for (Entry<Long, GroupedMessages> entry2 : newGroups.entrySet()) {
-                            ((GroupedMessages) entry2.getValue()).calculate();
+                        for (Entry<Long, GroupedMessages> entry22 : newGroups.entrySet()) {
+                            ((GroupedMessages) entry22.getValue()).calculate();
                         }
                     }
                     if (this.progressView != null) {
@@ -8453,8 +8462,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
             }
             if (newGroups != null) {
-                for (Entry<Long, GroupedMessages> entry22 : newGroups.entrySet()) {
-                    groupedMessages = (GroupedMessages) entry22.getValue();
+                for (Entry<Long, GroupedMessages> entry222 : newGroups.entrySet()) {
+                    groupedMessages = (GroupedMessages) entry222.getValue();
                     if (groupedMessages.messages.isEmpty()) {
                         this.groupedMessagesMap.remove(Long.valueOf(groupedMessages.groupId));
                     } else {
@@ -8811,10 +8820,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         this.chatActivityEnterView.setButtons(null, false);
                     }
                 }
-                if (this.currentEncryptedChat == null && this.currentUser != null && this.currentUser.bot && this.botUser == null) {
-                    this.botUser = "";
-                    updateBottomOverlay();
-                }
                 if (((Boolean) args[1]).booleanValue()) {
                     if (this.chatAdapter != null) {
                         this.progressView.setVisibility(this.chatAdapter.botInfoRow == -1 ? 0 : 4);
@@ -8845,6 +8850,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
                 if (this.chatAdapter != null) {
                     this.chatAdapter.notifyDataSetChanged();
+                }
+                if (this.currentEncryptedChat == null && this.currentUser != null && this.currentUser.bot && this.botUser == null) {
+                    this.botUser = "";
+                    updateBottomOverlay();
                 }
             }
         } else if (id == NotificationCenter.screenshotTook) {
@@ -8993,7 +9002,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 existMessageObject.messageOwner.media = message.media;
                 existMessageObject.messageOwner.attachPath = message.attachPath;
                 existMessageObject.generateThumbs(false);
-                if (existMessageObject.messageOwner.grouped_id != 0 && existMessageObject.photoThumbs.isEmpty()) {
+                if (existMessageObject.messageOwner.grouped_id != 0 && (existMessageObject.photoThumbs == null || existMessageObject.photoThumbs.isEmpty())) {
                     groupedMessages = (GroupedMessages) this.groupedMessagesMap.get(Long.valueOf(existMessageObject.messageOwner.grouped_id));
                     if (groupedMessages != null) {
                         idx = groupedMessages.messages.indexOf(existMessageObject);
@@ -9068,7 +9077,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         if (old.messageOwner.grouped_id != messageObject.messageOwner.grouped_id) {
                                             this.groupedMessagesMap.put(Long.valueOf(messageObject.messageOwner.grouped_id), groupedMessages);
                                         }
-                                        if (messageObject.photoThumbs.isEmpty()) {
+                                        if (messageObject.photoThumbs == null || messageObject.photoThumbs.isEmpty()) {
                                             if (newGroups == null) {
                                                 newGroups = new HashMap();
                                             }
@@ -9111,8 +9120,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                 }
                 if (newGroups != null) {
-                    for (Entry<Long, GroupedMessages> entry222 : newGroups.entrySet()) {
-                        groupedMessages = (GroupedMessages) entry222.getValue();
+                    for (Entry<Long, GroupedMessages> entry2222 : newGroups.entrySet()) {
+                        groupedMessages = (GroupedMessages) entry2222.getValue();
                         if (groupedMessages.messages.isEmpty()) {
                             this.groupedMessagesMap.remove(Long.valueOf(groupedMessages.groupId));
                         } else {

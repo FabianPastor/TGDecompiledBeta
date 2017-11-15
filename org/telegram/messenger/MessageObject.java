@@ -285,7 +285,7 @@ public class MessageObject {
                     PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
                     GroupedMessagePosition position = new GroupedMessagePosition();
                     position.last = a == count + -1;
-                    position.aspectRatio = ((float) photoSize.w) / ((float) photoSize.h);
+                    position.aspectRatio = photoSize == null ? 1.0f : ((float) photoSize.w) / ((float) photoSize.h);
                     if (position.aspectRatio > 1.2f) {
                         proportions.append("w");
                     } else if (position.aspectRatio < 0.8f) {

@@ -76,12 +76,12 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
         boolean working = true;
         result.mConsumed = 0;
         while (working) {
-            View view;
             int count = 0;
             int consumedSpanCount = 0;
             int remainingSpan = this.mSpanCount;
             working = false;
             while (count < this.mSpanCount && layoutState.hasMore(state) && remainingSpan > 0) {
+                View view;
                 int pos = layoutState.mCurrentPosition;
                 int spanSize = getSpanSize(recycler, state, pos);
                 remainingSpan -= spanSize;

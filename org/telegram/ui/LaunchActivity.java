@@ -200,14 +200,17 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         requestWindowFeature(1);
         setTheme(R.style.Theme.TMessages);
         if (VERSION.SDK_INT >= 21) {
-            setTaskDescription(new TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault)));
+            try {
+                setTaskDescription(new TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault) | -16777216));
+            } catch (Exception e) {
+            }
         }
         getWindow().setBackgroundDrawableResource(R.drawable.transparent);
         if (UserConfig.passcodeHash.length() > 0 && !UserConfig.allowScreenCapture) {
             try {
                 getWindow().setFlags(8192, 8192);
-            } catch (Throwable e) {
-                FileLog.e(e);
+            } catch (Throwable e2) {
+                FileLog.e(e2);
             }
         }
         super.onCreate(savedInstanceState);
@@ -780,8 +783,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                 break;
                         }
                     }
-                } catch (Throwable e2) {
-                    FileLog.e(e2);
+                } catch (Throwable e22) {
+                    FileLog.e(e22);
                 }
             }
         } else {
@@ -836,8 +839,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 this.onGlobalLayoutListener = anonymousClass5;
                 viewTreeObserver.addOnGlobalLayoutListener(anonymousClass5);
             }
-        } catch (Throwable e22) {
-            FileLog.e(e22);
+        } catch (Throwable e222) {
+            FileLog.e(e222);
         }
         MediaController.getInstance().setBaseActivity(this, true);
     }
@@ -2497,7 +2500,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 this.sideMenu.getAdapter().notifyDataSetChanged();
             }
             if (VERSION.SDK_INT >= 21) {
-                setTaskDescription(new TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault)));
+                try {
+                    setTaskDescription(new TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault) | -16777216));
+                } catch (Exception e3) {
+                }
             }
         }
     }

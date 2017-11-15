@@ -616,12 +616,12 @@ public class ContactsController {
             final boolean z6 = canceled;
             Utilities.globalQueue.postRunnable(new Runnable() {
                 public void run() {
-                    int a;
                     Contact value;
                     int newPhonebookContacts = 0;
                     int serverContactsInPhonebook = 0;
                     HashMap<String, Contact> contactShortHashMap = new HashMap();
                     for (Entry<String, Contact> entry : hashMap.entrySet()) {
+                        int a;
                         Contact c = (Contact) entry.getValue();
                         for (a = 0; a < c.shortPhones.size(); a++) {
                             contactShortHashMap.put(c.shortPhones.get(a), c);
