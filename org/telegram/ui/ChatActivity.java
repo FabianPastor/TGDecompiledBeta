@@ -2864,20 +2864,23 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
             protected boolean hasSiblingChild(int position) {
                 if (position >= ChatActivity.this.chatAdapter.messagesStartRow && position < ChatActivity.this.chatAdapter.messagesEndRow) {
-                    MessageObject message = (MessageObject) ChatActivity.this.messages.get(position - ChatActivity.this.chatAdapter.messagesStartRow);
-                    if (message.messageOwner.grouped_id != 0) {
-                        GroupedMessages group = (GroupedMessages) ChatActivity.this.groupedMessagesMap.get(Long.valueOf(message.messageOwner.grouped_id));
-                        if (group != null && group.messages.size() > 1) {
-                            GroupedMessagePosition pos = (GroupedMessagePosition) group.positions.get(message);
-                            if (pos != null) {
-                                if (pos.minX == pos.maxX || pos.minY != pos.maxY) {
-                                    return false;
-                                }
-                                int count = group.posArray.size();
-                                for (int a = 0; a < count; a++) {
-                                    GroupedMessagePosition p = (GroupedMessagePosition) group.posArray.get(a);
-                                    if (p != pos && p.minY <= pos.minY && p.maxY >= pos.minY) {
-                                        return true;
+                    int index = position - ChatActivity.this.chatAdapter.messagesStartRow;
+                    if (index >= 0 && index < ChatActivity.this.messages.size()) {
+                        MessageObject message = (MessageObject) ChatActivity.this.messages.get(index);
+                        if (message.messageOwner.grouped_id != 0) {
+                            GroupedMessages group = (GroupedMessages) ChatActivity.this.groupedMessagesMap.get(Long.valueOf(message.messageOwner.grouped_id));
+                            if (group != null && group.messages.size() > 1) {
+                                GroupedMessagePosition pos = (GroupedMessagePosition) group.positions.get(message);
+                                if (pos != null) {
+                                    if (pos.minX == pos.maxX || pos.minY != pos.maxY || pos.minY == (byte) 0) {
+                                        return false;
+                                    }
+                                    int count = group.posArray.size();
+                                    for (int a = 0; a < count; a++) {
+                                        GroupedMessagePosition p = (GroupedMessagePosition) group.posArray.get(a);
+                                        if (p != pos && p.minY <= pos.minY && p.maxY >= pos.minY) {
+                                            return true;
+                                        }
                                     }
                                 }
                             }
@@ -7092,7 +7095,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     FileLog.d("video record uri " + uri.toString());
                     videoPath = AndroidUtilities.getPath(uri);
                     FileLog.d("resolved path = " + videoPath);
-                    if (!new File(videoPath).exists()) {
+                    if (videoPath == null || !new File(videoPath).exists()) {
                         videoPath = this.currentPicturePath;
                     }
                 } else {
@@ -10215,33 +10218,48 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     private boolean fixLayoutInternal() {
-        boolean z = true;
         if (AndroidUtilities.isTablet() || ApplicationLoader.applicationContext.getResources().getConfiguration().orientation != 2) {
             this.selectedMessagesCountTextView.setTextSize(20);
         } else {
             this.selectedMessagesCountTextView.setTextSize(18);
+        }
+        HashMap<Long, GroupedMessages> newGroups = null;
+        int count = this.chatListView.getChildCount();
+        for (int a = 0; a < count; a++) {
+            View child = this.chatListView.getChildAt(a);
+            if (child instanceof ChatMessageCell) {
+                GroupedMessages groupedMessages = ((ChatMessageCell) child).getCurrentMessagesGroup();
+                if (groupedMessages != null && groupedMessages.hasSibling) {
+                    if (newGroups == null) {
+                        newGroups = new HashMap();
+                    }
+                    if (!newGroups.containsKey(Long.valueOf(groupedMessages.groupId))) {
+                        newGroups.put(Long.valueOf(groupedMessages.groupId), groupedMessages);
+                        int idx = this.messages.indexOf((MessageObject) groupedMessages.messages.get(groupedMessages.messages.size() - 1));
+                        if (idx >= 0) {
+                            this.chatAdapter.notifyItemRangeChanged(this.chatAdapter.messagesStartRow + idx, groupedMessages.messages.size());
+                        }
+                    }
+                }
+            }
         }
         if (!AndroidUtilities.isTablet()) {
             return true;
         }
         if (AndroidUtilities.isSmallTablet() && ApplicationLoader.applicationContext.getResources().getConfiguration().orientation == 1) {
             this.actionBar.setBackButtonDrawable(new BackDrawable(false));
-            if (this.fragmentContextView == null || this.fragmentContextView.getParent() != null) {
-                return false;
+            if (this.fragmentContextView != null && this.fragmentContextView.getParent() == null) {
+                ((ViewGroup) this.fragmentView).addView(this.fragmentContextView, LayoutHelper.createFrame(-1, 39.0f, 51, 0.0f, -36.0f, 0.0f, 0.0f));
             }
-            ((ViewGroup) this.fragmentView).addView(this.fragmentContextView, LayoutHelper.createFrame(-1, 39.0f, 51, 0.0f, -36.0f, 0.0f, 0.0f));
-            return false;
+        } else {
+            ActionBar actionBar = this.actionBar;
+            boolean z = this.parentLayout == null || this.parentLayout.fragmentsStack.isEmpty() || this.parentLayout.fragmentsStack.get(0) == this || this.parentLayout.fragmentsStack.size() == 1;
+            actionBar.setBackButtonDrawable(new BackDrawable(z));
+            if (!(this.fragmentContextView == null || this.fragmentContextView.getParent() == null)) {
+                this.fragmentView.setPadding(0, 0, 0, 0);
+                ((ViewGroup) this.fragmentView).removeView(this.fragmentContextView);
+            }
         }
-        ActionBar actionBar = this.actionBar;
-        if (!(this.parentLayout == null || this.parentLayout.fragmentsStack.isEmpty() || this.parentLayout.fragmentsStack.get(0) == this || this.parentLayout.fragmentsStack.size() == 1)) {
-            z = false;
-        }
-        actionBar.setBackButtonDrawable(new BackDrawable(z));
-        if (this.fragmentContextView == null || this.fragmentContextView.getParent() == null) {
-            return false;
-        }
-        this.fragmentView.setPadding(0, 0, 0, 0);
-        ((ViewGroup) this.fragmentView).removeView(this.fragmentContextView);
         return false;
     }
 

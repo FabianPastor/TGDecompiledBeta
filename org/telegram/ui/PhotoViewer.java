@@ -688,6 +688,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         this.currentObjects.addAll(PhotoViewer.this.imagesArrLocations);
                         this.currentPhotos.addAll(PhotoViewer.this.imagesArrLocations);
                         this.currentImage = PhotoViewer.this.currentIndex;
+                        this.animateToItem = -1;
                     } else if (!PhotoViewer.this.imagesArr.isEmpty() && this.currentGroupId != 0) {
                         MessageObject object;
                         max = Math.min(PhotoViewer.this.currentIndex + 10, PhotoViewer.this.imagesArr.size());
@@ -700,6 +701,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             this.currentPhotos.add(FileLoader.getClosestPhotoSizeWithSize(object.photoThumbs, 56, true));
                         }
                         this.currentImage = 0;
+                        this.animateToItem = -1;
                         min = Math.max(PhotoViewer.this.currentIndex - 10, 0);
                         for (a = PhotoViewer.this.currentIndex - 1; a >= min; a--) {
                             object = (MessageObject) PhotoViewer.this.imagesArr.get(a);

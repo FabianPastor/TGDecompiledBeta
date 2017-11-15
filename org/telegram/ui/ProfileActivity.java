@@ -2749,6 +2749,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 this.avatarImage.getImageReceiver().setVisible(!PhotoViewer.getInstance().isShowingImage(photoBig), false);
             } else if (this.chat_id != 0) {
                 int[] result;
+                String shortNumber;
                 Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(this.chat_id));
                 if (chat != null) {
                     this.currentChat = chat;
@@ -2775,7 +2776,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     }
                 } else if (!this.currentChat.megagroup || this.info.participants_count > 200) {
                     result = new int[1];
-                    newString = LocaleController.formatPluralString("Members", result[0]).replace(String.format("%d", new Object[]{Integer.valueOf(result[0])}), LocaleController.formatShortNumber(this.info.participants_count, result));
+                    shortNumber = LocaleController.formatShortNumber(this.info.participants_count, result);
+                    if (this.currentChat.megagroup) {
+                        newString = LocaleController.formatPluralString("Members", result[0]).replace(String.format("%d", new Object[]{Integer.valueOf(result[0])}), shortNumber);
+                    } else {
+                        newString = LocaleController.formatPluralString("Subscribers", result[0]).replace(String.format("%d", new Object[]{Integer.valueOf(result[0])}), shortNumber);
+                    }
                 } else if (this.onlineCount <= 1 || this.info.participants_count == 0) {
                     newString = LocaleController.formatPluralString("Members", this.info.participants_count);
                 } else {
@@ -2800,7 +2806,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         } else if (!this.currentChat.megagroup || this.info == null || this.info.participants_count > 200 || this.onlineCount <= 0) {
                             if (a == 0 && ChatObject.isChannel(this.currentChat) && this.info != null && this.info.participants_count != 0 && (this.currentChat.megagroup || this.currentChat.broadcast)) {
                                 result = new int[1];
-                                this.onlineTextView[a].setText(LocaleController.formatPluralString("Members", result[0]).replace(String.format("%d", new Object[]{Integer.valueOf(result[0])}), LocaleController.formatShortNumber(this.info.participants_count, result)));
+                                shortNumber = LocaleController.formatShortNumber(this.info.participants_count, result);
+                                if (this.currentChat.megagroup) {
+                                    this.onlineTextView[a].setText(LocaleController.formatPluralString("Members", result[0]).replace(String.format("%d", new Object[]{Integer.valueOf(result[0])}), shortNumber));
+                                } else {
+                                    this.onlineTextView[a].setText(LocaleController.formatPluralString("Subscribers", result[0]).replace(String.format("%d", new Object[]{Integer.valueOf(result[0])}), shortNumber));
+                                }
                             } else if (!this.onlineTextView[a].getText().equals(newString)) {
                                 this.onlineTextView[a].setText(newString);
                             }

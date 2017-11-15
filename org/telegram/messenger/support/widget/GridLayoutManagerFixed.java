@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.View.MeasureSpec;
+import java.util.ArrayList;
 import java.util.Arrays;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
@@ -11,6 +12,8 @@ import org.telegram.messenger.support.widget.RecyclerView.Recycler;
 import org.telegram.messenger.support.widget.RecyclerView.State;
 
 public class GridLayoutManagerFixed extends GridLayoutManager {
+    ArrayList<View> additionalViews = new ArrayList(4);
+
     public GridLayoutManagerFixed(Context context, int spanCount) {
         super(context, spanCount);
     }
@@ -71,33 +74,62 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
     }
 
     void layoutChunk(Recycler recycler, State state, LayoutState layoutState, LayoutChunkResult result) {
+        View view;
         int otherDirSpecMode = this.mOrientationHelper.getModeInOther();
         boolean layingOutInPrimaryDirection = layoutState.mItemDirection == 1;
         boolean working = true;
         result.mConsumed = 0;
+        int startPosition = layoutState.mCurrentPosition;
+        if (layoutState.mLayoutDirection != -1) {
+            if (hasSiblingChild(layoutState.mCurrentPosition) && findViewByPosition(layoutState.mCurrentPosition + 1) == null) {
+                if (hasSiblingChild(layoutState.mCurrentPosition + 1)) {
+                    layoutState.mCurrentPosition += 3;
+                } else {
+                    layoutState.mCurrentPosition += 2;
+                }
+                int backupPosition = layoutState.mCurrentPosition;
+                for (int a = layoutState.mCurrentPosition; a > startPosition; a--) {
+                    view = layoutState.next(recycler);
+                    this.additionalViews.add(view);
+                    if (a != backupPosition) {
+                        calculateItemDecorationsForChild(view, this.mDecorInsets);
+                        measureChild(view, otherDirSpecMode, false);
+                        int size = this.mOrientationHelper.getDecoratedMeasurement(view);
+                        layoutState.mOffset -= size;
+                        layoutState.mAvailable += size;
+                    }
+                }
+                layoutState.mCurrentPosition = backupPosition;
+            }
+        }
         while (working) {
             int count = 0;
             int consumedSpanCount = 0;
             int remainingSpan = this.mSpanCount;
-            working = false;
+            working = !this.additionalViews.isEmpty();
+            int firstPositionStart = layoutState.mCurrentPosition;
             while (count < this.mSpanCount && layoutState.hasMore(state) && remainingSpan > 0) {
-                View view;
                 int pos = layoutState.mCurrentPosition;
                 int spanSize = getSpanSize(recycler, state, pos);
                 remainingSpan -= spanSize;
-                if (remainingSpan >= 0) {
-                    view = layoutState.next(recycler);
-                    if (view == null) {
-                        break;
-                    }
-                    consumedSpanCount += spanSize;
-                    this.mSet[count] = view;
-                    count++;
-                    if (layoutState.mLayoutDirection == -1 && remainingSpan <= 0 && hasSiblingChild(pos)) {
-                        working = true;
-                    }
-                } else {
+                if (remainingSpan < 0) {
                     break;
+                }
+                if (this.additionalViews.isEmpty()) {
+                    view = layoutState.next(recycler);
+                } else {
+                    view = (View) this.additionalViews.get(0);
+                    this.additionalViews.remove(0);
+                    layoutState.mCurrentPosition--;
+                }
+                if (view == null) {
+                    break;
+                }
+                consumedSpanCount += spanSize;
+                this.mSet[count] = view;
+                count++;
+                if (layoutState.mLayoutDirection == -1 && remainingSpan <= 0 && hasSiblingChild(pos)) {
+                    working = true;
                 }
             }
             if (count == 0) {
@@ -123,7 +155,7 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
                 }
                 calculateItemDecorationsForChild(view, this.mDecorInsets);
                 measureChild(view, otherDirSpecMode, false);
-                int size = this.mOrientationHelper.getDecoratedMeasurement(view);
+                size = this.mOrientationHelper.getDecoratedMeasurement(view);
                 if (size > maxSize) {
                     maxSize = size;
                 }
@@ -137,8 +169,7 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
                 if (this.mOrientationHelper.getDecoratedMeasurement(view) != maxSize) {
                     GridLayoutManager.LayoutParams lp = (GridLayoutManager.LayoutParams) view.getLayoutParams();
                     Rect decorInsets = lp.mDecorInsets;
-                    int horizontalInsets = ((decorInsets.left + decorInsets.right) + lp.leftMargin) + lp.rightMargin;
-                    measureChildWithDecorationsAndMargin(view, LayoutManager.getChildMeasureSpec(this.mCachedBorders[lp.mSpanSize], NUM, horizontalInsets, lp.width, false), MeasureSpec.makeMeasureSpec(maxSize - (((decorInsets.top + decorInsets.bottom) + lp.topMargin) + lp.bottomMargin), NUM), true);
+                    measureChildWithDecorationsAndMargin(view, LayoutManager.getChildMeasureSpec(this.mCachedBorders[lp.mSpanSize], NUM, ((decorInsets.left + decorInsets.right) + lp.leftMargin) + lp.rightMargin, lp.width, false), MeasureSpec.makeMeasureSpec(maxSize - (((decorInsets.top + decorInsets.bottom) + lp.topMargin) + lp.bottomMargin), NUM), true);
                 }
             }
             boolean fromOpositeSide = shouldLayoutChildFromOpositeSide(this.mSet[0]);

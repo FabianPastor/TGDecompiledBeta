@@ -2202,7 +2202,7 @@ public class MessageObject {
     }
 
     public void generateLayout(User fromUser) {
-        if (this.type == 0 && this.messageOwner.to_id != null && this.messageText != null && this.messageText.length() != 0) {
+        if (this.type == 0 && this.messageOwner.to_id != null && !TextUtils.isEmpty(this.messageText)) {
             boolean hasEntities;
             int a;
             TextPaint paint;
@@ -2308,7 +2308,7 @@ public class MessageObject {
                     }
                 }
             }
-            boolean needShare = this.eventId == 0 && !isOutOwner() && (!(this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer == null) || (this.messageOwner.from_id > 0 && (this.messageOwner.to_id.channel_id != 0 || this.messageOwner.to_id.chat_id != 0 || (this.messageOwner.media instanceof TL_messageMediaGame) || (this.messageOwner.media instanceof TL_messageMediaInvoice))));
+            boolean needShare = this.eventId == 0 && !isOutOwner() && (!(this.messageOwner.fwd_from == null || (this.messageOwner.fwd_from.saved_from_peer == null && this.messageOwner.fwd_from.from_id == 0 && this.messageOwner.fwd_from.channel_id == 0)) || (this.messageOwner.from_id > 0 && (this.messageOwner.to_id.channel_id != 0 || this.messageOwner.to_id.chat_id != 0 || (this.messageOwner.media instanceof TL_messageMediaGame) || (this.messageOwner.media instanceof TL_messageMediaInvoice))));
             this.generatedWithMinSize = AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() : AndroidUtilities.displaySize.x;
             int i = this.generatedWithMinSize;
             float f = (needShare || this.eventId != 0) ? 132.0f : 80.0f;
@@ -2592,7 +2592,23 @@ public class MessageObject {
     }
 
     public boolean isOutOwner() {
-        return (this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer == null || this.messageOwner.fwd_from.saved_from_peer.user_id == UserConfig.getClientUserId()) && this.messageOwner.out && this.messageOwner.from_id > 0 && !this.messageOwner.post;
+        if (!this.messageOwner.out || this.messageOwner.from_id <= 0 || this.messageOwner.post) {
+            return false;
+        }
+        if (this.messageOwner.fwd_from == null) {
+            return true;
+        }
+        int selfUserId = UserConfig.getClientUserId();
+        if (getDialogId() == ((long) selfUserId)) {
+            if (this.messageOwner.fwd_from.from_id == selfUserId || (this.messageOwner.fwd_from.saved_from_peer != null && this.messageOwner.fwd_from.saved_from_peer.user_id == selfUserId)) {
+                return true;
+            }
+            return false;
+        } else if (this.messageOwner.fwd_from.saved_from_peer == null || this.messageOwner.fwd_from.saved_from_peer.user_id == selfUserId) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean needDrawAvatar() {

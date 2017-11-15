@@ -1084,10 +1084,12 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             }
 
             public boolean onTouchEvent(MotionEvent event) {
-                if (BlockEmbedCell.this.currentBlock.allow_scrolling) {
-                    requestDisallowInterceptTouchEvent(true);
-                } else {
-                    ArticleViewer.this.windowView.requestDisallowInterceptTouchEvent(true);
+                if (BlockEmbedCell.this.currentBlock != null) {
+                    if (BlockEmbedCell.this.currentBlock.allow_scrolling) {
+                        requestDisallowInterceptTouchEvent(true);
+                    } else {
+                        ArticleViewer.this.windowView.requestDisallowInterceptTouchEvent(true);
+                    }
                 }
                 return super.onTouchEvent(event);
             }

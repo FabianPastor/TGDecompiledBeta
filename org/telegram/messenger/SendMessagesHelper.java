@@ -1670,8 +1670,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public void sendGame(InputPeer peer, TL_inputMediaGame game, long random_id, long taskId) {
         Throwable e;
-        long newTaskId;
         if (peer != null && game != null) {
+            long newTaskId;
             TL_messages_sendMedia request = new TL_messages_sendMedia();
             request.peer = peer;
             if (request.peer instanceof TL_inputPeerChannel) {
@@ -2539,7 +2539,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             inputMedia.caption = document.caption != null ? document.caption : "";
                             inputMedia.mime_type = document.mime_type;
                             inputMedia.attributes = document.attributes;
-                            if (videoEditedInfo == null || !videoEditedInfo.muted) {
+                            if (videoEditedInfo == null || !(videoEditedInfo.muted || videoEditedInfo.roundVideo)) {
                                 inputMedia.nosound_video = true;
                             }
                             if (ttl != 0) {
@@ -3243,6 +3243,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     private void sendReadyToSendGroup(DelayedMessage message, boolean add, boolean check) {
+        if (message.messageObjects.isEmpty()) {
+            message.markAsError();
+            return;
+        }
         String key = "group_" + message.groupId;
         if (message.finalGroupMessage == ((MessageObject) message.messageObjects.get(message.messageObjects.size() - 1)).getId()) {
             if (add) {
