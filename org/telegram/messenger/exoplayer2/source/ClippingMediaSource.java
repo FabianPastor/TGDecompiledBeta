@@ -8,11 +8,13 @@ import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
 import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
+import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
 public final class ClippingMediaSource implements MediaSource, Listener {
     private ClippingTimeline clippingTimeline;
+    private final boolean enableInitialDiscontinuity;
     private final long endUs;
     private final ArrayList<ClippingMediaPeriod> mediaPeriods;
     private final MediaSource mediaSource;
@@ -36,9 +38,11 @@ public final class ClippingMediaSource implements MediaSource, Listener {
                 resolvedEndUs = endUs;
             }
             if (window.durationUs != C.TIME_UNSET) {
+                if (resolvedEndUs > window.durationUs) {
+                    resolvedEndUs = window.durationUs;
+                }
                 boolean z = startUs == 0 || window.isSeekable;
                 Assertions.checkArgument(z);
-                Assertions.checkArgument(resolvedEndUs <= window.durationUs);
                 Assertions.checkArgument(startUs <= resolvedEndUs);
             }
             Assertions.checkArgument(timeline.getPeriod(0, new Period()).getPositionInWindowUs() == 0);
@@ -49,6 +53,14 @@ public final class ClippingMediaSource implements MediaSource, Listener {
 
         public int getWindowCount() {
             return 1;
+        }
+
+        public int getNextWindowIndex(int windowIndex, int repeatMode) {
+            return this.timeline.getNextWindowIndex(windowIndex, repeatMode);
+        }
+
+        public int getPreviousWindowIndex(int windowIndex, int repeatMode) {
+            return this.timeline.getPreviousWindowIndex(windowIndex, repeatMode);
         }
 
         public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
@@ -95,10 +107,15 @@ public final class ClippingMediaSource implements MediaSource, Listener {
     }
 
     public ClippingMediaSource(MediaSource mediaSource, long startPositionUs, long endPositionUs) {
+        this(mediaSource, startPositionUs, endPositionUs, true);
+    }
+
+    public ClippingMediaSource(MediaSource mediaSource, long startPositionUs, long endPositionUs, boolean enableInitialDiscontinuity) {
         Assertions.checkArgument(startPositionUs >= 0);
         this.mediaSource = (MediaSource) Assertions.checkNotNull(mediaSource);
         this.startUs = startPositionUs;
         this.endUs = endPositionUs;
+        this.enableInitialDiscontinuity = enableInitialDiscontinuity;
         this.mediaPeriods = new ArrayList();
     }
 
@@ -111,8 +128,8 @@ public final class ClippingMediaSource implements MediaSource, Listener {
         this.mediaSource.maybeThrowSourceInfoRefreshError();
     }
 
-    public MediaPeriod createPeriod(int index, Allocator allocator, long positionUs) {
-        ClippingMediaPeriod mediaPeriod = new ClippingMediaPeriod(this.mediaSource.createPeriod(index, allocator, this.startUs + positionUs));
+    public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
+        ClippingMediaPeriod mediaPeriod = new ClippingMediaPeriod(this.mediaSource.createPeriod(id, allocator), this.enableInitialDiscontinuity);
         this.mediaPeriods.add(mediaPeriod);
         mediaPeriod.setClipping(this.clippingTimeline.startUs, this.clippingTimeline.endUs);
         return mediaPeriod;

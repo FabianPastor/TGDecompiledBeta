@@ -100,7 +100,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     private ShareSearchAdapter searchAdapter;
     private EmptyTextProgressView searchEmptyView;
     private HashMap<Long, TL_dialog> selectedDialogs = new HashMap();
-    private MessageObject sendingMessageObject;
+    private ArrayList<MessageObject> sendingMessageObjects;
     private String sendingText;
     private View shadow;
     private View shadow2;
@@ -119,8 +119,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
 
         public void fetchDialogs() {
             this.dialogs.clear();
-            for (int a = 0; a < MessagesController.getInstance().dialogsServerOnly.size(); a++) {
-                TL_dialog dialog = (TL_dialog) MessagesController.getInstance().dialogsServerOnly.get(a);
+            for (int a = 0; a < MessagesController.getInstance().dialogsForward.size(); a++) {
+                TL_dialog dialog = (TL_dialog) MessagesController.getInstance().dialogsForward.get(a);
                 int lower_id = (int) dialog.id;
                 int high_id = (int) (dialog.id >> 32);
                 if (!(lower_id == 0 || high_id == 1)) {
@@ -508,20 +508,31 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         }
     }
 
-    public ShareAlert(final Context context, MessageObject messageObject, String text, boolean publicChannel, String copyLink, boolean fullScreen) {
+    public static ShareAlert createShareAlert(Context context, MessageObject messageObject, String text, boolean publicChannel, String copyLink, boolean fullScreen) {
+        ArrayList<MessageObject> arrayList;
+        if (messageObject != null) {
+            arrayList = new ArrayList();
+            arrayList.add(messageObject);
+        } else {
+            arrayList = null;
+        }
+        return new ShareAlert(context, arrayList, text, publicChannel, copyLink, fullScreen);
+    }
+
+    public ShareAlert(final Context context, ArrayList<MessageObject> messages, String text, boolean publicChannel, String copyLink, boolean fullScreen) {
         super(context, true);
         this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), Mode.MULTIPLY));
         this.linkToCopy = copyLink;
-        this.sendingMessageObject = messageObject;
+        this.sendingMessageObjects = messages;
         this.searchAdapter = new ShareSearchAdapter(context);
         this.isPublicChannel = publicChannel;
         this.sendingText = text;
         if (publicChannel) {
             this.loadingLink = true;
             TL_channels_exportMessageLink req = new TL_channels_exportMessageLink();
-            req.id = messageObject.getId();
-            req.channel = MessagesController.getInputChannel(messageObject.messageOwner.to_id.channel_id);
+            req.id = ((MessageObject) messages.get(0)).getId();
+            req.channel = MessagesController.getInputChannel(((MessageObject) messages.get(0)).messageOwner.to_id.channel_id);
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -606,14 +617,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.doneButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (!ShareAlert.this.selectedDialogs.isEmpty() || (!ShareAlert.this.isPublicChannel && ShareAlert.this.linkToCopy == null)) {
-                    if (ShareAlert.this.sendingMessageObject != null) {
-                        ArrayList<MessageObject> arrayList = new ArrayList();
-                        arrayList.add(ShareAlert.this.sendingMessageObject);
+                    if (ShareAlert.this.sendingMessageObjects != null) {
                         for (Entry<Long, TL_dialog> entry : ShareAlert.this.selectedDialogs.entrySet()) {
                             if (ShareAlert.this.frameLayout2.getTag() != null && ShareAlert.this.commentTextView.length() > 0) {
                                 SendMessagesHelper.getInstance().sendMessage(ShareAlert.this.commentTextView.getText().toString(), ((Long) entry.getKey()).longValue(), null, null, true, null, null, null);
                             }
-                            SendMessagesHelper.getInstance().sendMessage(arrayList, ((Long) entry.getKey()).longValue());
+                            SendMessagesHelper.getInstance().sendMessage(ShareAlert.this.sendingMessageObjects, ((Long) entry.getKey()).longValue());
                         }
                     } else if (ShareAlert.this.sendingText != null) {
                         for (Entry<Long, TL_dialog> entry2 : ShareAlert.this.selectedDialogs.entrySet()) {

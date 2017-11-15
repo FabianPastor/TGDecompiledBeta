@@ -149,7 +149,7 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
         this.loader.release();
     }
 
-    public void prepare(MediaPeriod.Callback callback) {
+    public void prepare(MediaPeriod.Callback callback, long positionUs) {
         callback.onPrepared(this);
     }
 

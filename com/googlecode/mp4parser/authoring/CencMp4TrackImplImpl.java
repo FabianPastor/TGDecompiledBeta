@@ -25,6 +25,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.telegram.messenger.exoplayer2.C;
 
 public class CencMp4TrackImplImpl extends Mp4TrackImpl implements CencEncryptedTrack {
     static final /* synthetic */ boolean $assertionsDisabled = (!CencMp4TrackImplImpl.class.desiredAssertionStatus());
@@ -57,16 +58,16 @@ public class CencMp4TrackImplImpl extends Mp4TrackImpl implements CencEncryptedT
                 this.saio = null;
                 int i = 0;
                 while (i < saizs.size()) {
-                    if ((this.saiz == null && ((SampleAuxiliaryInformationSizesBox) saizs.get(i)).getAuxInfoType() == null) || "cenc".equals(((SampleAuxiliaryInformationSizesBox) saizs.get(i)).getAuxInfoType())) {
+                    if ((this.saiz == null && ((SampleAuxiliaryInformationSizesBox) saizs.get(i)).getAuxInfoType() == null) || C.CENC_TYPE_cenc.equals(((SampleAuxiliaryInformationSizesBox) saizs.get(i)).getAuxInfoType())) {
                         this.saiz = (SampleAuxiliaryInformationSizesBox) saizs.get(i);
-                    } else if (this.saiz != null && this.saiz.getAuxInfoType() == null && "cenc".equals(((SampleAuxiliaryInformationSizesBox) saizs.get(i)).getAuxInfoType())) {
+                    } else if (this.saiz != null && this.saiz.getAuxInfoType() == null && C.CENC_TYPE_cenc.equals(((SampleAuxiliaryInformationSizesBox) saizs.get(i)).getAuxInfoType())) {
                         this.saiz = (SampleAuxiliaryInformationSizesBox) saizs.get(i);
                     } else {
                         throw new RuntimeException("Are there two cenc labeled saiz?");
                     }
-                    if ((this.saio == null && ((SampleAuxiliaryInformationOffsetsBox) saios.get(i)).getAuxInfoType() == null) || "cenc".equals(((SampleAuxiliaryInformationOffsetsBox) saios.get(i)).getAuxInfoType())) {
+                    if ((this.saio == null && ((SampleAuxiliaryInformationOffsetsBox) saios.get(i)).getAuxInfoType() == null) || C.CENC_TYPE_cenc.equals(((SampleAuxiliaryInformationOffsetsBox) saios.get(i)).getAuxInfoType())) {
                         this.saio = (SampleAuxiliaryInformationOffsetsBox) saios.get(i);
-                    } else if (this.saio != null && this.saio.getAuxInfoType() == null && "cenc".equals(((SampleAuxiliaryInformationOffsetsBox) saios.get(i)).getAuxInfoType())) {
+                    } else if (this.saio != null && this.saio.getAuxInfoType() == null && C.CENC_TYPE_cenc.equals(((SampleAuxiliaryInformationOffsetsBox) saios.get(i)).getAuxInfoType())) {
                         this.saio = (SampleAuxiliaryInformationOffsetsBox) saios.get(i);
                     } else {
                         throw new RuntimeException("Are there two cenc labeled saio?");
@@ -82,7 +83,7 @@ public class CencMp4TrackImplImpl extends Mp4TrackImpl implements CencEncryptedT
     public CencMp4TrackImplImpl(String name, TrackBox trackBox, IsoFile... fragments) throws IOException {
         super(name, trackBox, fragments);
         SchemeTypeBox schm = (SchemeTypeBox) Path.getPath((AbstractContainerBox) trackBox, "mdia[0]/minf[0]/stbl[0]/stsd[0]/enc.[0]/sinf[0]/schm[0]");
-        if ($assertionsDisabled || (schm != null && (schm.getSchemeType().equals("cenc") || schm.getSchemeType().equals("cbc1")))) {
+        if ($assertionsDisabled || (schm != null && (schm.getSchemeType().equals(C.CENC_TYPE_cenc) || schm.getSchemeType().equals(C.CENC_TYPE_cbc1)))) {
             this.sampleEncryptionEntries = new ArrayList();
             long trackId = trackBox.getTrackHeaderBox().getTrackId();
             TrackEncryptionBox tenc;

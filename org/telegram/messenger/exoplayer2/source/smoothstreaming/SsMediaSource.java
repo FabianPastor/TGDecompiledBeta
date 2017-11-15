@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
+import org.telegram.messenger.exoplayer2.ExoPlayerLibraryInfo;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.source.AdaptiveMediaSourceEventListener;
@@ -15,6 +16,7 @@ import org.telegram.messenger.exoplayer2.source.AdaptiveMediaSourceEventListener
 import org.telegram.messenger.exoplayer2.source.MediaPeriod;
 import org.telegram.messenger.exoplayer2.source.MediaSource;
 import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
+import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
 import org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline;
 import org.telegram.messenger.exoplayer2.source.smoothstreaming.SsChunkSource.Factory;
 import org.telegram.messenger.exoplayer2.source.smoothstreaming.manifest.SsManifest;
@@ -51,6 +53,10 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
     private final ArrayList<SsMediaPeriod> mediaPeriods;
     private final int minLoadableRetryCount;
     private Listener sourceListener;
+
+    static {
+        ExoPlayerLibraryInfo.registerModule("goog.exo.smoothstreaming");
+    }
 
     public SsMediaSource(SsManifest manifest, Factory chunkSourceFactory, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
         this(manifest, chunkSourceFactory, 3, eventHandler, eventListener);
@@ -109,8 +115,8 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
         this.manifestLoaderErrorThrower.maybeThrowError();
     }
 
-    public MediaPeriod createPeriod(int index, Allocator allocator, long positionUs) {
-        Assertions.checkArgument(index == 0);
+    public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
+        Assertions.checkArgument(id.periodIndex == 0);
         SsMediaPeriod period = new SsMediaPeriod(this.manifest, this.chunkSourceFactory, this.minLoadableRetryCount, this.eventDispatcher, this.manifestLoaderErrorThrower, allocator);
         this.mediaPeriods.add(period);
         return period;
@@ -155,34 +161,46 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
     }
 
     private void processManifest() {
+        long startTimeUs;
         Timeline timeline;
         for (int i = 0; i < this.mediaPeriods.size(); i++) {
             ((SsMediaPeriod) this.mediaPeriods.get(i)).updateManifest(this.manifest);
         }
-        if (this.manifest.isLive) {
-            long startTimeUs = Long.MAX_VALUE;
-            long endTimeUs = Long.MIN_VALUE;
-            for (StreamElement element : this.manifest.streamElements) {
-                if (element.chunkCount > 0) {
-                    startTimeUs = Math.min(startTimeUs, element.getStartTimeUs(0));
-                    endTimeUs = Math.max(endTimeUs, element.getStartTimeUs(element.chunkCount - 1) + element.getChunkDurationUs(element.chunkCount - 1));
-                }
-            }
-            if (startTimeUs == Long.MAX_VALUE) {
-                timeline = new SinglePeriodTimeline(C.TIME_UNSET, false);
+        long endTimeUs = Long.MIN_VALUE;
+        StreamElement[] streamElementArr = this.manifest.streamElements;
+        int length = streamElementArr.length;
+        int i2 = 0;
+        long startTimeUs2 = Long.MAX_VALUE;
+        while (i2 < length) {
+            StreamElement element = streamElementArr[i2];
+            if (element.chunkCount > 0) {
+                startTimeUs = Math.min(startTimeUs2, element.getStartTimeUs(0));
+                endTimeUs = Math.max(endTimeUs, element.getStartTimeUs(element.chunkCount - 1) + element.getChunkDurationUs(element.chunkCount - 1));
             } else {
-                if (this.manifest.dvrWindowLengthUs != C.TIME_UNSET && this.manifest.dvrWindowLengthUs > 0) {
-                    startTimeUs = Math.max(startTimeUs, endTimeUs - this.manifest.dvrWindowLengthUs);
-                }
-                long durationUs = endTimeUs - startTimeUs;
-                long defaultStartPositionUs = durationUs - C.msToUs(this.livePresentationDelayMs);
-                if (defaultStartPositionUs < MIN_LIVE_DEFAULT_START_POSITION_US) {
-                    defaultStartPositionUs = Math.min(MIN_LIVE_DEFAULT_START_POSITION_US, durationUs / 2);
-                }
-                timeline = new SinglePeriodTimeline(C.TIME_UNSET, durationUs, startTimeUs, defaultStartPositionUs, true, true);
+                startTimeUs = startTimeUs2;
             }
+            i2++;
+            startTimeUs2 = startTimeUs;
+        }
+        if (startTimeUs2 == Long.MAX_VALUE) {
+            timeline = new SinglePeriodTimeline(this.manifest.isLive ? C.TIME_UNSET : 0, 0, 0, 0, true, this.manifest.isLive);
+            startTimeUs = startTimeUs2;
+        } else if (this.manifest.isLive) {
+            if (this.manifest.dvrWindowLengthUs == C.TIME_UNSET || this.manifest.dvrWindowLengthUs <= 0) {
+                startTimeUs = startTimeUs2;
+            } else {
+                startTimeUs = Math.max(startTimeUs2, endTimeUs - this.manifest.dvrWindowLengthUs);
+            }
+            durationUs = endTimeUs - startTimeUs;
+            long defaultStartPositionUs = durationUs - C.msToUs(this.livePresentationDelayMs);
+            if (defaultStartPositionUs < MIN_LIVE_DEFAULT_START_POSITION_US) {
+                defaultStartPositionUs = Math.min(MIN_LIVE_DEFAULT_START_POSITION_US, durationUs / 2);
+            }
+            Timeline singlePeriodTimeline = new SinglePeriodTimeline(C.TIME_UNSET, durationUs, startTimeUs, defaultStartPositionUs, true, true);
         } else {
-            timeline = new SinglePeriodTimeline(this.manifest.durationUs, this.manifest.durationUs != C.TIME_UNSET);
+            durationUs = this.manifest.durationUs != C.TIME_UNSET ? this.manifest.durationUs : endTimeUs - startTimeUs2;
+            Timeline singlePeriodTimeline2 = new SinglePeriodTimeline(startTimeUs2 + durationUs, durationUs, startTimeUs2, 0, true, false);
+            startTimeUs = startTimeUs2;
         }
         this.sourceListener.onSourceInfoRefreshed(timeline, this.manifest);
     }

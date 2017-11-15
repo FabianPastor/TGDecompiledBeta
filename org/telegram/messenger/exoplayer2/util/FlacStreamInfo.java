@@ -22,7 +22,7 @@ public final class FlacStreamInfo {
         this.sampleRate = scratch.readBits(20);
         this.channels = scratch.readBits(3) + 1;
         this.bitsPerSample = scratch.readBits(5) + 1;
-        this.totalSamples = (long) scratch.readBits(36);
+        this.totalSamples = ((((long) scratch.readBits(4)) & 15) << 32) | (((long) scratch.readBits(32)) & 4294967295L);
     }
 
     public FlacStreamInfo(int minBlockSize, int maxBlockSize, int minFrameSize, int maxFrameSize, int sampleRate, int channels, int bitsPerSample, long totalSamples) {

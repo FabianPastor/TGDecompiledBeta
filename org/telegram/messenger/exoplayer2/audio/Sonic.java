@@ -159,9 +159,7 @@ final class Sonic {
         for (int period = minPeriod; period <= maxPeriod; period++) {
             int diff = 0;
             for (int i = 0; i < period; i++) {
-                short sVal = samples[position + i];
-                short pVal = samples[(position + period) + i];
-                diff += sVal >= pVal ? sVal - pVal : pVal - sVal;
+                diff += Math.abs(samples[position + i] - samples[(position + period) + i]);
             }
             if (diff * bestPeriod < minDiff * period) {
                 minDiff = diff;
@@ -276,7 +274,7 @@ final class Sonic {
         int rightPosition = (this.oldRatePosition + 1) * newSampleRate;
         int ratio = rightPosition - (this.newRatePosition * oldSampleRate);
         int width = rightPosition - (this.oldRatePosition * newSampleRate);
-        return (short) (((ratio * in[this.numChannels * inPos]) + ((width - ratio) * in[(this.numChannels * inPos) + this.numChannels])) / width);
+        return (short) (((ratio * in[inPos]) + ((width - ratio) * in[this.numChannels + inPos])) / width);
     }
 
     private void adjustRate(float rate, int originalNumOutputSamples) {
@@ -295,7 +293,7 @@ final class Sonic {
                 while ((this.oldRatePosition + 1) * newSampleRate > this.newRatePosition * oldSampleRate) {
                     enlargeOutputBufferIfNeeded(1);
                     for (int i = 0; i < this.numChannels; i++) {
-                        this.outputBuffer[(this.numOutputSamples * this.numChannels) + i] = interpolate(this.pitchBuffer, position + i, oldSampleRate, newSampleRate);
+                        this.outputBuffer[(this.numOutputSamples * this.numChannels) + i] = interpolate(this.pitchBuffer, (this.numChannels * position) + i, oldSampleRate, newSampleRate);
                     }
                     this.newRatePosition++;
                     this.numOutputSamples++;

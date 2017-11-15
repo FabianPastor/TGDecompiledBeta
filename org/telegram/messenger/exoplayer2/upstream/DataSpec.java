@@ -62,4 +62,19 @@ public final class DataSpec {
     public String toString() {
         return "DataSpec[" + this.uri + ", " + Arrays.toString(this.postBody) + ", " + this.absoluteStreamPosition + ", " + this.position + ", " + this.length + ", " + this.key + ", " + this.flags + "]";
     }
+
+    public DataSpec subrange(long offset) {
+        long j = -1;
+        if (this.length != -1) {
+            j = this.length - offset;
+        }
+        return subrange(offset, j);
+    }
+
+    public DataSpec subrange(long offset, long length) {
+        if (offset == 0 && this.length == length) {
+            return this;
+        }
+        return new DataSpec(this.uri, this.postBody, this.absoluteStreamPosition + offset, this.position + offset, length, this.key, this.flags);
+    }
 }

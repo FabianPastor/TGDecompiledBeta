@@ -24,7 +24,7 @@ public final class Ac3Extractor implements Extractor {
     private static final int MAX_SNIFF_BYTES = 8192;
     private static final int MAX_SYNC_FRAME_SIZE = 2786;
     private final long firstSampleTimestampUs;
-    private Ac3Reader reader;
+    private final Ac3Reader reader;
     private final ParsableByteArray sampleData;
     private boolean startedPacket;
 
@@ -34,6 +34,7 @@ public final class Ac3Extractor implements Extractor {
 
     public Ac3Extractor(long firstSampleTimestampUs) {
         this.firstSampleTimestampUs = firstSampleTimestampUs;
+        this.reader = new Ac3Reader();
         this.sampleData = new ParsableByteArray((int) MAX_SYNC_FRAME_SIZE);
     }
 
@@ -81,7 +82,6 @@ public final class Ac3Extractor implements Extractor {
     }
 
     public void init(ExtractorOutput output) {
-        this.reader = new Ac3Reader();
         this.reader.createTracks(output, new TrackIdGenerator(0, 1));
         output.endTracks();
         output.seekMap(new Unseekable(C.TIME_UNSET));

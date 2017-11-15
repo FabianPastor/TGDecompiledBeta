@@ -18,7 +18,9 @@ public final class DefaultExtractorsFactory implements ExtractorsFactory {
     private int fragmentedMp4Flags;
     private int matroskaFlags;
     private int mp3Flags;
+    private int mp4Flags;
     private int tsFlags;
+    private int tsMode = 1;
 
     static {
         Constructor<? extends Extractor> flacExtractorConstructor = null;
@@ -35,6 +37,11 @@ public final class DefaultExtractorsFactory implements ExtractorsFactory {
         return this;
     }
 
+    public synchronized DefaultExtractorsFactory setMp4ExtractorFlags(int flags) {
+        this.mp4Flags = flags;
+        return this;
+    }
+
     public synchronized DefaultExtractorsFactory setFragmentedMp4ExtractorFlags(int flags) {
         this.fragmentedMp4Flags = flags;
         return this;
@@ -42,6 +49,11 @@ public final class DefaultExtractorsFactory implements ExtractorsFactory {
 
     public synchronized DefaultExtractorsFactory setMp3ExtractorFlags(int flags) {
         this.mp3Flags = flags;
+        return this;
+    }
+
+    public synchronized DefaultExtractorsFactory setTsExtractorMode(int mode) {
+        this.tsMode = mode;
         return this;
     }
 
@@ -60,11 +72,11 @@ public final class DefaultExtractorsFactory implements ExtractorsFactory {
             extractors = new Extractor[i];
             extractors[0] = new MatroskaExtractor(this.matroskaFlags);
             extractors[1] = new FragmentedMp4Extractor(this.fragmentedMp4Flags);
-            extractors[2] = new Mp4Extractor();
+            extractors[2] = new Mp4Extractor(this.mp4Flags);
             extractors[3] = new Mp3Extractor(this.mp3Flags);
             extractors[4] = new AdtsExtractor();
             extractors[5] = new Ac3Extractor();
-            extractors[6] = new TsExtractor(this.tsFlags);
+            extractors[6] = new TsExtractor(this.tsMode, this.tsFlags);
             extractors[7] = new FlvExtractor();
             extractors[8] = new OggExtractor();
             extractors[9] = new PsExtractor();

@@ -13,7 +13,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Outline;
 import android.graphics.Paint;
@@ -66,7 +65,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
@@ -145,10 +143,11 @@ import org.telegram.ui.Components.URLSpanMono;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.URLSpanReplacement;
 import org.telegram.ui.Components.URLSpanUserMention;
+import org.telegram.ui.PhotoViewer.EmptyPhotoViewerProvider;
 import org.telegram.ui.PhotoViewer.PhotoViewerProvider;
 import org.telegram.ui.PhotoViewer.PlaceProviderObject;
 
-public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewerProvider, NotificationCenterDelegate {
+public class ChannelAdminLogActivity extends BaseFragment implements NotificationCenterDelegate {
     private ArrayList<ChannelParticipant> admins;
     private Paint aspectPaint;
     private Path aspectPath;
@@ -186,6 +185,57 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
     private RadialProgressView progressBar;
     private FrameLayout progressView;
     private View progressView2;
+    private PhotoViewerProvider provider = new EmptyPhotoViewerProvider() {
+        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+            int count = ChannelAdminLogActivity.this.chatListView.getChildCount();
+            for (int a = 0; a < count; a++) {
+                ImageReceiver imageReceiver = null;
+                View view = ChannelAdminLogActivity.this.chatListView.getChildAt(a);
+                MessageObject message;
+                if (view instanceof ChatMessageCell) {
+                    if (messageObject != null) {
+                        ChatMessageCell cell = (ChatMessageCell) view;
+                        message = cell.getMessageObject();
+                        if (message != null && message.getId() == messageObject.getId()) {
+                            imageReceiver = cell.getPhotoImage();
+                        }
+                    }
+                } else if (view instanceof ChatActionCell) {
+                    ChatActionCell cell2 = (ChatActionCell) view;
+                    message = cell2.getMessageObject();
+                    if (message != null) {
+                        if (messageObject != null) {
+                            if (message.getId() == messageObject.getId()) {
+                                imageReceiver = cell2.getPhotoImage();
+                            }
+                        } else if (fileLocation != null && message.photoThumbs != null) {
+                            for (int b = 0; b < message.photoThumbs.size(); b++) {
+                                PhotoSize photoSize = (PhotoSize) message.photoThumbs.get(b);
+                                if (photoSize.location.volume_id == fileLocation.volume_id && photoSize.location.local_id == fileLocation.local_id) {
+                                    imageReceiver = cell2.getPhotoImage();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (imageReceiver != null) {
+                    int[] coords = new int[2];
+                    view.getLocationInWindow(coords);
+                    PlaceProviderObject object = new PlaceProviderObject();
+                    object.viewX = coords[0];
+                    object.viewY = coords[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
+                    object.parentView = ChannelAdminLogActivity.this.chatListView;
+                    object.imageReceiver = imageReceiver;
+                    object.thumb = imageReceiver.getBitmap();
+                    object.radius = imageReceiver.getRoundRadius();
+                    object.isEvent = true;
+                    return object;
+                }
+            }
+            return null;
+        }
+    };
     private FrameLayout roundVideoContainer;
     private MessageObject scrollToMessage;
     private int scrollToOffsetOnRecreate = 0;
@@ -260,7 +310,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
                             Context access$5800 = ChatActivityAdapter.this.mContext;
                             MessageObject messageObject = cell.getMessageObject();
                             boolean z = ChatObject.isChannel(ChannelAdminLogActivity.this.currentChat) && !ChannelAdminLogActivity.this.currentChat.megagroup && ChannelAdminLogActivity.this.currentChat.username != null && ChannelAdminLogActivity.this.currentChat.username.length() > 0;
-                            channelAdminLogActivity.showDialog(new ShareAlert(access$5800, messageObject, null, z, null, false));
+                            channelAdminLogActivity.showDialog(ShareAlert.createShareAlert(access$5800, messageObject, null, z, null, false));
                         }
                     }
 
@@ -392,7 +442,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
                             ChannelAdminLogActivity.this.showDialog(new StickersAlert(ChannelAdminLogActivity.this.getParentActivity(), ChannelAdminLogActivity.this, message.getInputStickerSet(), null, null));
                         } else if (message.isVideo() || message.type == 1 || ((message.type == 0 && !message.isWebpageDocument()) || message.isGif())) {
                             PhotoViewer.getInstance().setParentActivity(ChannelAdminLogActivity.this.getParentActivity());
-                            PhotoViewer.getInstance().openPhoto(message, message.type != 0 ? ChannelAdminLogActivity.this.dialog_id : 0, 0, ChannelAdminLogActivity.this);
+                            PhotoViewer.getInstance().openPhoto(message, message.type != 0 ? ChannelAdminLogActivity.this.dialog_id : 0, 0, ChannelAdminLogActivity.this.provider);
                         } else if (message.type == 3) {
                             f = null;
                             try {
@@ -485,10 +535,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
                         PhotoViewer.getInstance().setParentActivity(ChannelAdminLogActivity.this.getParentActivity());
                         PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(message.photoThumbs, 640);
                         if (photoSize != null) {
-                            PhotoViewer.getInstance().openPhoto(photoSize.location, ChannelAdminLogActivity.this);
+                            PhotoViewer.getInstance().openPhoto(photoSize.location, ChannelAdminLogActivity.this.provider);
                             return;
                         }
-                        PhotoViewer.getInstance().openPhoto(message, 0, 0, ChannelAdminLogActivity.this);
+                        PhotoViewer.getInstance().openPhoto(message, 0, 0, ChannelAdminLogActivity.this.provider);
                     }
 
                     public void didLongPressed(ChatActionCell cell) {
@@ -573,7 +623,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
                     } else {
                         pinnedTop = false;
                     }
-                    messageCell.setMessageObject(message, pinnedBotton, pinnedTop);
+                    messageCell.setMessageObject(message, null, pinnedBotton, pinnedTop);
                     if ((view instanceof ChatMessageCell) && MediaController.getInstance().canDownloadMedia(2)) {
                         ((ChatMessageCell) view).downloadAudioIfNeed();
                     }
@@ -1589,9 +1639,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
     }
 
     private void processSelectedOption(int option) {
-        Intent intent;
         if (this.selectedObject != null) {
             String path;
+            Intent intent;
             switch (option) {
                 case 3:
                     AndroidUtilities.addToClipboard(getMessageContent(this.selectedObject, 0, true));
@@ -2127,69 +2177,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
         }
     }
 
-    public void updatePhotoAtIndex(int index) {
-    }
-
     public Chat getCurrentChat() {
         return this.currentChat;
-    }
-
-    public boolean allowCaption() {
-        return true;
-    }
-
-    public boolean scaleToFill() {
-        return false;
-    }
-
-    public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-        int count = this.chatListView.getChildCount();
-        for (int a = 0; a < count; a++) {
-            ImageReceiver imageReceiver = null;
-            View view = this.chatListView.getChildAt(a);
-            MessageObject message;
-            if (view instanceof ChatMessageCell) {
-                if (messageObject != null) {
-                    ChatMessageCell cell = (ChatMessageCell) view;
-                    message = cell.getMessageObject();
-                    if (message != null && message.getId() == messageObject.getId()) {
-                        imageReceiver = cell.getPhotoImage();
-                    }
-                }
-            } else if (view instanceof ChatActionCell) {
-                ChatActionCell cell2 = (ChatActionCell) view;
-                message = cell2.getMessageObject();
-                if (message != null) {
-                    if (messageObject != null) {
-                        if (message.getId() == messageObject.getId()) {
-                            imageReceiver = cell2.getPhotoImage();
-                        }
-                    } else if (fileLocation != null && message.photoThumbs != null) {
-                        for (int b = 0; b < message.photoThumbs.size(); b++) {
-                            PhotoSize photoSize = (PhotoSize) message.photoThumbs.get(b);
-                            if (photoSize.location.volume_id == fileLocation.volume_id && photoSize.location.local_id == fileLocation.local_id) {
-                                imageReceiver = cell2.getPhotoImage();
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            if (imageReceiver != null) {
-                int[] coords = new int[2];
-                view.getLocationInWindow(coords);
-                PlaceProviderObject object = new PlaceProviderObject();
-                object.viewX = coords[0];
-                object.viewY = coords[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
-                object.parentView = this.chatListView;
-                object.imageReceiver = imageReceiver;
-                object.thumb = imageReceiver.getBitmap();
-                object.radius = imageReceiver.getRoundRadius();
-                object.isEvent = true;
-                return object;
-            }
-        }
-        return null;
     }
 
     private void addCanBanUser(Bundle bundle, int uid) {
@@ -2224,34 +2213,6 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
         showDialog(builder.create());
     }
 
-    public Bitmap getThumbForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-        return null;
-    }
-
-    public void willSwitchFromPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-    }
-
-    public void willHidePhotoViewer() {
-    }
-
-    public boolean isPhotoChecked(int index) {
-        return false;
-    }
-
-    public void setPhotoChecked(int index, VideoEditedInfo videoEditedInfo) {
-    }
-
-    public boolean cancelButtonPressed() {
-        return true;
-    }
-
-    public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
-    }
-
-    public int getSelectedCount() {
-        return 0;
-    }
-
     private void removeMessageObject(MessageObject messageObject) {
         int index = this.messages.indexOf(messageObject);
         if (index != -1) {
@@ -2277,7 +2238,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
         themeDescriptionArr[10] = new ThemeDescription(this.avatarContainer.getTitleTextView(), ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
         themeDescriptionArr[11] = new ThemeDescription(this.avatarContainer.getSubtitleTextView(), ThemeDescription.FLAG_TEXTCOLOR, null, new Paint[]{Theme.chat_statusPaint, Theme.chat_statusRecordPaint}, null, null, Theme.key_actionBarDefaultSubtitle, null);
         themeDescriptionArr[12] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        themeDescriptionArr[13] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable}, null, Theme.key_avatar_text);
+        themeDescriptionArr[13] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
         themeDescriptionArr[14] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_avatar_backgroundRed);
         themeDescriptionArr[15] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_avatar_backgroundOrange);
         themeDescriptionArr[16] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_avatar_backgroundViolet);
@@ -2300,7 +2261,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements PhotoViewer
         themeDescriptionArr[33] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutShadowDrawable, Theme.chat_msgOutMediaShadowDrawable}, null, Theme.key_chat_outBubbleShadow);
         themeDescriptionArr[34] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{ChatActionCell.class}, Theme.chat_actionTextPaint, null, null, Theme.key_chat_serviceText);
         themeDescriptionArr[35] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_LINKCOLOR, new Class[]{ChatActionCell.class}, Theme.chat_actionTextPaint, null, null, Theme.key_chat_serviceLink);
-        themeDescriptionArr[36] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_shareIconDrawable, Theme.chat_botInlineDrawable, Theme.chat_botLinkDrawalbe}, null, Theme.key_chat_serviceIcon);
+        themeDescriptionArr[36] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_shareIconDrawable, Theme.chat_botInlineDrawable, Theme.chat_botLinkDrawalbe, Theme.chat_goIconDrawable}, null, Theme.key_chat_serviceIcon);
         themeDescriptionArr[37] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class, ChatActionCell.class}, null, null, null, Theme.key_chat_serviceBackground);
         themeDescriptionArr[38] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class, ChatActionCell.class}, null, null, null, Theme.key_chat_serviceBackgroundSelected);
         themeDescriptionArr[39] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_messageTextIn);

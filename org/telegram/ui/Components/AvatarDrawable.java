@@ -19,6 +19,7 @@ public class AvatarDrawable extends Drawable {
     private boolean drawPhoto;
     private boolean isProfile;
     private TextPaint namePaint;
+    private int savedMessages;
     private StringBuilder stringBuilder;
     private float textHeight;
     private StaticLayout textLayout;
@@ -98,6 +99,11 @@ public class AvatarDrawable extends Drawable {
         }
     }
 
+    public void setSavedMessages(int value) {
+        this.savedMessages = value;
+        this.color = Theme.getColor(Theme.key_avatar_backgroundSaved);
+    }
+
     public void setInfo(Chat chat) {
         if (chat != null) {
             setInfo(chat.id, chat.title, null, chat.id < 0, null);
@@ -127,6 +133,7 @@ public class AvatarDrawable extends Drawable {
             this.color = getColorForId(id);
         }
         this.drawBrodcast = isBroadcast;
+        this.savedMessages = 0;
         if (firstName == null || firstName.length() == 0) {
             firstName = lastName;
             lastName = null;
@@ -193,7 +200,18 @@ public class AvatarDrawable extends Drawable {
             canvas.drawCircle(((float) size) / 2.0f, ((float) size) / 2.0f, ((float) size) / 2.0f, Theme.avatar_backgroundPaint);
             int x;
             int y;
-            if (this.drawBrodcast && Theme.avatar_broadcastDrawable != null) {
+            if (this.savedMessages != 0 && Theme.avatar_savedDrawable != null) {
+                int w = Theme.avatar_savedDrawable.getIntrinsicWidth();
+                int h = Theme.avatar_savedDrawable.getIntrinsicHeight();
+                if (this.savedMessages == 2) {
+                    w = (int) (((float) w) * 0.8f);
+                    h = (int) (((float) h) * 0.8f);
+                }
+                x = (size - w) / 2;
+                y = (size - h) / 2;
+                Theme.avatar_savedDrawable.setBounds(x, y, x + w, y + h);
+                Theme.avatar_savedDrawable.draw(canvas);
+            } else if (this.drawBrodcast && Theme.avatar_broadcastDrawable != null) {
                 x = (size - Theme.avatar_broadcastDrawable.getIntrinsicWidth()) / 2;
                 y = (size - Theme.avatar_broadcastDrawable.getIntrinsicHeight()) / 2;
                 Theme.avatar_broadcastDrawable.setBounds(x, y, Theme.avatar_broadcastDrawable.getIntrinsicWidth() + x, Theme.avatar_broadcastDrawable.getIntrinsicHeight() + y);

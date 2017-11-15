@@ -243,6 +243,9 @@ public class VideoPlayer implements EventListener, VideoListener {
         }
     }
 
+    public void onRepeatModeChanged(int repeatMode) {
+    }
+
     public void setVolume(float volume) {
         if (this.player != null) {
             this.player.setVolume(volume);

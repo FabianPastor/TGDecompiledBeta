@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.provider.Settings.System;
@@ -307,5 +309,16 @@ public class VoIPHelper {
                 }
             }
         });
+    }
+
+    public static void upgradeP2pSetting() {
+        SharedPreferences prefs = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+        if (prefs.contains("calls_p2p")) {
+            Editor e = prefs.edit();
+            if (!prefs.getBoolean("calls_p2p", true)) {
+                e.putInt("calls_p2p_new", 2);
+            }
+            e.remove("calls_p2p").apply();
+        }
     }
 }

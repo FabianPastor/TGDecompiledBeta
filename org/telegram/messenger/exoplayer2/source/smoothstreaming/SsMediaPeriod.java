@@ -15,7 +15,6 @@ import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkSampleStream;
 import org.telegram.messenger.exoplayer2.source.smoothstreaming.SsChunkSource.Factory;
 import org.telegram.messenger.exoplayer2.source.smoothstreaming.manifest.SsManifest;
-import org.telegram.messenger.exoplayer2.source.smoothstreaming.manifest.SsManifest.ProtectionElement;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.upstream.LoaderErrorThrower;
@@ -41,10 +40,8 @@ final class SsMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<SsC
         this.eventDispatcher = eventDispatcher;
         this.allocator = allocator;
         this.trackGroups = buildTrackGroups(manifest);
-        ProtectionElement protectionElement = manifest.protectionElement;
-        if (protectionElement != null) {
-            byte[] keyId = getProtectionElementKeyId(protectionElement.data);
-            this.trackEncryptionBoxes = new TrackEncryptionBox[]{new TrackEncryptionBox(true, 8, keyId)};
+        if (manifest.protectionElement != null) {
+            this.trackEncryptionBoxes = new TrackEncryptionBox[]{new TrackEncryptionBox(true, null, 8, getProtectionElementKeyId(manifest.protectionElement.data), 0, 0, null)};
         } else {
             this.trackEncryptionBoxes = null;
         }
@@ -67,7 +64,7 @@ final class SsMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<SsC
         }
     }
 
-    public void prepare(MediaPeriod.Callback callback) {
+    public void prepare(MediaPeriod.Callback callback, long positionUs) {
         this.callback = callback;
         callback.onPrepared(this);
     }
@@ -124,14 +121,7 @@ final class SsMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<SsC
     }
 
     public long getBufferedPositionUs() {
-        long bufferedPositionUs = Long.MAX_VALUE;
-        for (ChunkSampleStream<SsChunkSource> sampleStream : this.sampleStreams) {
-            long rendererBufferedPositionUs = sampleStream.getBufferedPositionUs();
-            if (rendererBufferedPositionUs != Long.MIN_VALUE) {
-                bufferedPositionUs = Math.min(bufferedPositionUs, rendererBufferedPositionUs);
-            }
-        }
-        return bufferedPositionUs == Long.MAX_VALUE ? Long.MIN_VALUE : bufferedPositionUs;
+        return this.sequenceableLoader.getBufferedPositionUs();
     }
 
     public long seekToUs(long positionUs) {

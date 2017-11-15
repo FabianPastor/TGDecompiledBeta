@@ -144,8 +144,8 @@ public class AndroidUtilities {
         /* JADX: method processing error */
 /*
 Error: java.util.NoSuchElementException
-	at java.util.HashMap$HashIterator.nextNode(HashMap.java:1439)
-	at java.util.HashMap$KeyIterator.next(HashMap.java:1461)
+	at java.util.HashMap$HashIterator.nextNode(HashMap.java:1444)
+	at java.util.HashMap$KeyIterator.next(HashMap.java:1466)
 	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.applyRemove(BlockFinallyExtract.java:535)
 	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.extractFinally(BlockFinallyExtract.java:175)
 	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.processExceptionHandler(BlockFinallyExtract.java:80)
@@ -1409,8 +1409,7 @@ Error: java.util.NoSuchElementException
                 cursor.close();
                 return value;
             }
-        } catch (Throwable e) {
-            FileLog.e(e);
+        } catch (Exception e) {
             if (cursor != null) {
                 cursor.close();
             }
@@ -1435,7 +1434,10 @@ Error: java.util.NoSuchElementException
 
     public static File generatePicturePath() {
         try {
-            return new File(getAlbumDir(), "IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".jpg");
+            File storageDir = getAlbumDir();
+            Date date = new Date();
+            date.setTime((System.currentTimeMillis() + ((long) Utilities.random.nextInt(1000))) + 1);
+            return new File(storageDir, "IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date) + ".jpg");
         } catch (Throwable e) {
             FileLog.e(e);
             return null;
@@ -1487,7 +1489,10 @@ Error: java.util.NoSuchElementException
 
     public static File generateVideoPath() {
         try {
-            return new File(getAlbumDir(), "VID_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4");
+            File storageDir = getAlbumDir();
+            Date date = new Date();
+            date.setTime((System.currentTimeMillis() + ((long) Utilities.random.nextInt(1000))) + 1);
+            return new File(storageDir, "VID_" + new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date) + ".mp4");
         } catch (Throwable e) {
             FileLog.e(e);
             return null;

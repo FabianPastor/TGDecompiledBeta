@@ -13,6 +13,9 @@ public final class WidevineUtil {
 
     public static Pair<Long, Long> getLicenseDurationRemainingSec(DrmSession<?> drmSession) {
         Map<String, String> keyStatus = drmSession.queryKeyStatus();
+        if (keyStatus == null) {
+            return null;
+        }
         return new Pair(Long.valueOf(getDurationRemainingSec(keyStatus, PROPERTY_LICENSE_DURATION_REMAINING)), Long.valueOf(getDurationRemainingSec(keyStatus, PROPERTY_PLAYBACK_DURATION_REMAINING)));
     }
 

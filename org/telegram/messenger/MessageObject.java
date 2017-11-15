@@ -2,6 +2,7 @@ package org.telegram.messenger;
 
 import android.graphics.Typeface;
 import android.os.Build.VERSION;
+import android.support.v4.widget.AutoScrollHelper;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.Spannable.Factory;
@@ -153,6 +154,10 @@ public class MessageObject {
     public static final int MESSAGE_SEND_STATE_SENDING = 1;
     public static final int MESSAGE_SEND_STATE_SEND_ERROR = 2;
     public static final int MESSAGE_SEND_STATE_SENT = 0;
+    public static final int POSITION_FLAG_BOTTOM = 8;
+    public static final int POSITION_FLAG_LEFT = 1;
+    public static final int POSITION_FLAG_RIGHT = 2;
+    public static final int POSITION_FLAG_TOP = 4;
     public static Pattern urlPattern;
     public boolean attachPathExists;
     public float audioProgress;
@@ -191,6 +196,374 @@ public class MessageObject {
     public VideoEditedInfo videoEditedInfo;
     public boolean viewsReloaded;
     public int wantedBotKeyboardWidth;
+
+    public static class GroupedMessagePosition {
+        public float aspectRatio;
+        public boolean edge;
+        public int flags;
+        public boolean last;
+        public int leftSpanOffset;
+        public byte maxX;
+        public byte maxY;
+        public byte minX;
+        public byte minY;
+        public float ph;
+        public int pw;
+        public float[] siblingHeights;
+        public int spanSize;
+
+        public void set(int minX, int maxX, int minY, int maxY, int w, float h, int flags) {
+            this.minX = (byte) minX;
+            this.maxX = (byte) maxX;
+            this.minY = (byte) minY;
+            this.maxY = (byte) maxY;
+            this.pw = w;
+            this.spanSize = w;
+            this.ph = h;
+            this.flags = (byte) flags;
+        }
+    }
+
+    public static class GroupedMessages {
+        private int firstSpanAdditionalSize = Callback.DEFAULT_DRAG_ANIMATION_DURATION;
+        public long groupId;
+        public boolean hasSibling;
+        private int maxSizeWidth = 800;
+        public ArrayList<MessageObject> messages = new ArrayList();
+        public ArrayList<GroupedMessagePosition> posArray = new ArrayList();
+        public HashMap<MessageObject, GroupedMessagePosition> positions = new HashMap();
+
+        private class MessageGroupedLayoutAttempt {
+            public float[] heights;
+            public int[] lineCounts;
+
+            public MessageGroupedLayoutAttempt(int i1, int i2, float f1, float f2) {
+                this.lineCounts = new int[]{i1, i2};
+                this.heights = new float[]{f1, f2};
+            }
+
+            public MessageGroupedLayoutAttempt(int i1, int i2, int i3, float f1, float f2, float f3) {
+                this.lineCounts = new int[]{i1, i2, i3};
+                this.heights = new float[]{f1, f2, f3};
+            }
+
+            public MessageGroupedLayoutAttempt(int i1, int i2, int i3, int i4, float f1, float f2, float f3, float f4) {
+                this.lineCounts = new int[]{i1, i2, i3, i4};
+                this.heights = new float[]{f1, f2, f3, f4};
+            }
+        }
+
+        private float multiHeight(float[] array, int start, int end) {
+            float sum = 0.0f;
+            for (int a = start; a < end; a++) {
+                sum += array[a];
+            }
+            return ((float) this.maxSizeWidth) / sum;
+        }
+
+        public void calculate() {
+            this.posArray.clear();
+            this.positions.clear();
+            int count = this.messages.size();
+            if (count > 1) {
+                MessageObject messageObject;
+                GroupedMessagePosition pos;
+                StringBuilder proportions = new StringBuilder();
+                float averageAspectRatio = 1.0f;
+                boolean isOut = false;
+                byte maxX = (byte) 0;
+                boolean forceCalc = false;
+                boolean needShare = false;
+                this.hasSibling = false;
+                int a = 0;
+                while (a < count) {
+                    messageObject = (MessageObject) this.messages.get(a);
+                    if (a == 0) {
+                        isOut = messageObject.isOutOwner();
+                        needShare = !isOut && (!(messageObject.messageOwner.fwd_from == null || messageObject.messageOwner.fwd_from.saved_from_peer == null) || (messageObject.messageOwner.from_id > 0 && (messageObject.messageOwner.to_id.channel_id != 0 || messageObject.messageOwner.to_id.chat_id != 0 || (messageObject.messageOwner.media instanceof TL_messageMediaGame) || (messageObject.messageOwner.media instanceof TL_messageMediaInvoice))));
+                    }
+                    PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
+                    GroupedMessagePosition position = new GroupedMessagePosition();
+                    position.last = a == count + -1;
+                    position.aspectRatio = ((float) photoSize.w) / ((float) photoSize.h);
+                    if (position.aspectRatio > 1.2f) {
+                        proportions.append("w");
+                    } else if (position.aspectRatio < 0.8f) {
+                        proportions.append("n");
+                    } else {
+                        proportions.append("q");
+                    }
+                    averageAspectRatio += position.aspectRatio;
+                    if (position.aspectRatio > 2.0f) {
+                        forceCalc = true;
+                    }
+                    this.positions.put(messageObject, position);
+                    this.posArray.add(position);
+                    a++;
+                }
+                if (needShare) {
+                    this.maxSizeWidth -= 50;
+                    this.firstSpanAdditionalSize += 50;
+                }
+                int minHeight = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN);
+                int minWidth = (int) (((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN)) / (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) this.maxSizeWidth)));
+                int paddingsWidth = (int) (((float) AndroidUtilities.dp(40.0f)) / (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) this.maxSizeWidth)));
+                float maxAspectRatio = ((float) this.maxSizeWidth) / 814.0f;
+                averageAspectRatio /= (float) count;
+                float height;
+                int width;
+                if (forceCalc || !(count == 2 || count == 3 || count == 4)) {
+                    int firstLine;
+                    int secondLine;
+                    int thirdLine;
+                    float[] croppedRatios = new float[this.posArray.size()];
+                    for (a = 0; a < count; a++) {
+                        if (averageAspectRatio > 1.1f) {
+                            croppedRatios[a] = Math.max(1.0f, ((GroupedMessagePosition) this.posArray.get(a)).aspectRatio);
+                        } else {
+                            croppedRatios[a] = Math.min(1.0f, ((GroupedMessagePosition) this.posArray.get(a)).aspectRatio);
+                        }
+                        croppedRatios[a] = Math.max(0.66667f, Math.min(1.7f, croppedRatios[a]));
+                    }
+                    ArrayList<MessageGroupedLayoutAttempt> attempts = new ArrayList();
+                    for (firstLine = 1; firstLine < croppedRatios.length; firstLine++) {
+                        secondLine = croppedRatios.length - firstLine;
+                        if (firstLine <= 3 && secondLine <= 3) {
+                            attempts.add(new MessageGroupedLayoutAttempt(firstLine, secondLine, multiHeight(croppedRatios, 0, firstLine), multiHeight(croppedRatios, firstLine, croppedRatios.length)));
+                        }
+                    }
+                    for (firstLine = 1; firstLine < croppedRatios.length - 1; firstLine++) {
+                        for (secondLine = 1; secondLine < croppedRatios.length - firstLine; secondLine++) {
+                            thirdLine = (croppedRatios.length - firstLine) - secondLine;
+                            if (firstLine <= 3) {
+                                if (secondLine <= (averageAspectRatio < 0.85f ? 4 : 3) && thirdLine <= 3) {
+                                    attempts.add(new MessageGroupedLayoutAttempt(firstLine, secondLine, thirdLine, multiHeight(croppedRatios, 0, firstLine), multiHeight(croppedRatios, firstLine, firstLine + secondLine), multiHeight(croppedRatios, firstLine + secondLine, croppedRatios.length)));
+                                }
+                            }
+                        }
+                    }
+                    for (firstLine = 1; firstLine < croppedRatios.length - 2; firstLine++) {
+                        secondLine = 1;
+                        while (secondLine < croppedRatios.length - firstLine) {
+                            thirdLine = 1;
+                            while (thirdLine < (croppedRatios.length - firstLine) - secondLine) {
+                                int fourthLine = ((croppedRatios.length - firstLine) - secondLine) - thirdLine;
+                                if (firstLine <= 3 && secondLine <= 3 && thirdLine <= 3 && fourthLine <= 3) {
+                                    attempts.add(new MessageGroupedLayoutAttempt(firstLine, secondLine, thirdLine, fourthLine, multiHeight(croppedRatios, 0, firstLine), multiHeight(croppedRatios, firstLine, firstLine + secondLine), multiHeight(croppedRatios, firstLine + secondLine, (firstLine + secondLine) + thirdLine), multiHeight(croppedRatios, (firstLine + secondLine) + thirdLine, croppedRatios.length)));
+                                }
+                                thirdLine++;
+                            }
+                            secondLine++;
+                        }
+                    }
+                    MessageGroupedLayoutAttempt optimal = null;
+                    float optimalDiff = 0.0f;
+                    float maxHeight = (float) ((this.maxSizeWidth / 3) * 4);
+                    for (a = 0; a < attempts.size(); a++) {
+                        MessageGroupedLayoutAttempt attempt = (MessageGroupedLayoutAttempt) attempts.get(a);
+                        height = 0.0f;
+                        float minLineHeight = AutoScrollHelper.NO_MAX;
+                        for (int b = 0; b < attempt.heights.length; b++) {
+                            height += attempt.heights[b];
+                            if (attempt.heights[b] < minLineHeight) {
+                                minLineHeight = attempt.heights[b];
+                            }
+                        }
+                        float diff = Math.abs(height - maxHeight);
+                        if (attempt.lineCounts.length > 1 && (attempt.lineCounts[0] > attempt.lineCounts[1] || ((attempt.lineCounts.length > 2 && attempt.lineCounts[1] > attempt.lineCounts[2]) || (attempt.lineCounts.length > 3 && attempt.lineCounts[2] > attempt.lineCounts[3])))) {
+                            diff *= 1.2f;
+                        }
+                        if (minLineHeight < ((float) minWidth)) {
+                            diff *= 1.5f;
+                        }
+                        if (optimal == null || diff < optimalDiff) {
+                            optimal = attempt;
+                            optimalDiff = diff;
+                        }
+                    }
+                    if (optimal != null) {
+                        int index = 0;
+                        float y = 0.0f;
+                        for (int i = 0; i < optimal.lineCounts.length; i++) {
+                            int c = optimal.lineCounts[i];
+                            float lineHeight = optimal.heights[i];
+                            int spanLeft = this.maxSizeWidth;
+                            GroupedMessagePosition posToFix = null;
+                            maxX = Math.max(maxX, c - 1);
+                            for (int k = 0; k < c; k++) {
+                                width = (int) (croppedRatios[index] * lineHeight);
+                                spanLeft -= width;
+                                pos = (GroupedMessagePosition) this.posArray.get(index);
+                                int flags = 0;
+                                if (i == 0) {
+                                    flags = 0 | 4;
+                                }
+                                if (i == optimal.lineCounts.length - 1) {
+                                    flags |= 8;
+                                }
+                                if (k == 0) {
+                                    flags |= 1;
+                                    if (isOut) {
+                                        posToFix = pos;
+                                    }
+                                }
+                                if (k == c - 1) {
+                                    flags |= 2;
+                                    if (!isOut) {
+                                        posToFix = pos;
+                                    }
+                                }
+                                pos.set(k, k, i, i, width, lineHeight / 814.0f, flags);
+                                index++;
+                            }
+                            posToFix.pw += spanLeft;
+                            posToFix.spanSize += spanLeft;
+                            y += lineHeight;
+                        }
+                    } else {
+                        return;
+                    }
+                } else if (count == 2) {
+                    position1 = (GroupedMessagePosition) this.posArray.get(0);
+                    position2 = (GroupedMessagePosition) this.posArray.get(1);
+                    String pString = proportions.toString();
+                    if (!pString.equals("ww") || ((double) averageAspectRatio) <= 1.4d * ((double) maxAspectRatio) || ((double) (position1.aspectRatio - position2.aspectRatio)) >= 0.2d) {
+                        if (!pString.equals("ww")) {
+                            if (!pString.equals("qq")) {
+                                int secondWidth = (int) Math.max(0.4f * ((float) this.maxSizeWidth), (float) Math.round((((float) this.maxSizeWidth) / position1.aspectRatio) / ((1.0f / position1.aspectRatio) + (1.0f / position2.aspectRatio))));
+                                int firstWidth = this.maxSizeWidth - secondWidth;
+                                if (firstWidth < minWidth) {
+                                    int diff2 = minWidth - firstWidth;
+                                    firstWidth = minWidth;
+                                    secondWidth -= diff2;
+                                }
+                                height = Math.min(814.0f, (float) Math.round(Math.min(((float) firstWidth) / position1.aspectRatio, ((float) secondWidth) / position2.aspectRatio))) / 814.0f;
+                                position1.set(0, 0, 0, 0, firstWidth, height, 13);
+                                position2.set(1, 1, 0, 0, secondWidth, height, 14);
+                                maxX = (byte) 1;
+                            }
+                        }
+                        width = this.maxSizeWidth / 2;
+                        height = ((float) Math.round(Math.min(((float) width) / position1.aspectRatio, Math.min(((float) width) / position2.aspectRatio, 814.0f)))) / 814.0f;
+                        position1.set(0, 0, 0, 0, width, height, 13);
+                        position2.set(1, 1, 0, 0, width, height, 14);
+                        maxX = (byte) 1;
+                    } else {
+                        height = ((float) Math.round(Math.min(((float) this.maxSizeWidth) / position1.aspectRatio, Math.min(((float) this.maxSizeWidth) / position2.aspectRatio, 814.0f / 2.0f)))) / 814.0f;
+                        position1.set(0, 0, 0, 0, this.maxSizeWidth, height, 7);
+                        position2.set(0, 0, 1, 1, this.maxSizeWidth, height, 11);
+                    }
+                } else if (count == 3) {
+                    position1 = (GroupedMessagePosition) this.posArray.get(0);
+                    position2 = (GroupedMessagePosition) this.posArray.get(1);
+                    position3 = (GroupedMessagePosition) this.posArray.get(2);
+                    float secondHeight;
+                    if (proportions.charAt(0) == 'n') {
+                        float thirdHeight = Math.min(0.5f * 814.0f, (float) Math.round((position2.aspectRatio * ((float) this.maxSizeWidth)) / (position3.aspectRatio + position2.aspectRatio)));
+                        secondHeight = 814.0f - thirdHeight;
+                        int rightWidth = (int) Math.max((float) minWidth, Math.min(((float) this.maxSizeWidth) * 0.5f, (float) Math.round(Math.min(position3.aspectRatio * thirdHeight, position2.aspectRatio * secondHeight))));
+                        int leftWidth = Math.round(Math.min((position1.aspectRatio * 814.0f) + ((float) paddingsWidth), (float) (this.maxSizeWidth - rightWidth)));
+                        position1.set(0, 0, 0, 1, leftWidth, 1.0f, 13);
+                        position2.set(1, 1, 0, 0, rightWidth, secondHeight / 814.0f, 6);
+                        position3.set(0, 1, 1, 1, rightWidth, thirdHeight / 814.0f, 10);
+                        position3.spanSize = this.maxSizeWidth;
+                        position1.siblingHeights = new float[]{thirdHeight / 814.0f, secondHeight / 814.0f};
+                        if (isOut) {
+                            position1.spanSize = this.maxSizeWidth - rightWidth;
+                        } else {
+                            position2.spanSize = this.maxSizeWidth - leftWidth;
+                            position3.leftSpanOffset = leftWidth;
+                        }
+                        this.hasSibling = true;
+                        maxX = (byte) 1;
+                    } else {
+                        float firstHeight = ((float) Math.round(Math.min(((float) this.maxSizeWidth) / position1.aspectRatio, 0.66f * 814.0f))) / 814.0f;
+                        position1.set(0, 1, 0, 0, this.maxSizeWidth, firstHeight, 7);
+                        width = this.maxSizeWidth / 2;
+                        secondHeight = Math.min(814.0f - firstHeight, (float) Math.round(Math.min(((float) width) / position2.aspectRatio, ((float) width) / position3.aspectRatio))) / 814.0f;
+                        position2.set(0, 0, 1, 1, width, secondHeight, 9);
+                        position3.set(1, 1, 1, 1, width, secondHeight, 10);
+                        maxX = (byte) 1;
+                    }
+                } else if (count == 4) {
+                    position1 = (GroupedMessagePosition) this.posArray.get(0);
+                    position2 = (GroupedMessagePosition) this.posArray.get(1);
+                    position3 = (GroupedMessagePosition) this.posArray.get(2);
+                    GroupedMessagePosition position4 = (GroupedMessagePosition) this.posArray.get(3);
+                    float h0;
+                    int w0;
+                    if (proportions.charAt(0) == 'w') {
+                        h0 = ((float) Math.round(Math.min(((float) this.maxSizeWidth) / position1.aspectRatio, 0.66f * 814.0f))) / 814.0f;
+                        position1.set(0, 2, 0, 0, this.maxSizeWidth, h0, 7);
+                        float h = (float) Math.round(((float) this.maxSizeWidth) / ((position2.aspectRatio + position3.aspectRatio) + position4.aspectRatio));
+                        w0 = (int) Math.max((float) minWidth, Math.min(((float) this.maxSizeWidth) * 0.4f, position2.aspectRatio * h));
+                        int w2 = (int) Math.max(Math.max((float) minWidth, ((float) this.maxSizeWidth) * 0.33f), position4.aspectRatio * h);
+                        int w1 = (this.maxSizeWidth - w0) - w2;
+                        h = Math.min(814.0f - h0, h) / 814.0f;
+                        position2.set(0, 0, 1, 1, w0, h, 9);
+                        position3.set(1, 1, 1, 1, w1, h, 8);
+                        position4.set(2, 2, 1, 1, w2, h, 10);
+                        maxX = (byte) 2;
+                    } else {
+                        int w = Math.max(minWidth, Math.round(814.0f / ((1.0f / ((GroupedMessagePosition) this.posArray.get(3)).aspectRatio) + ((1.0f / position3.aspectRatio) + (1.0f / position2.aspectRatio)))));
+                        h0 = Math.min(0.33f, Math.max((float) minHeight, ((float) w) / position2.aspectRatio) / 814.0f);
+                        float h1 = Math.min(0.33f, Math.max((float) minHeight, ((float) w) / position3.aspectRatio) / 814.0f);
+                        float h2 = (1.0f - h0) - h1;
+                        w0 = Math.round(Math.min((position1.aspectRatio * 814.0f) + ((float) paddingsWidth), (float) (this.maxSizeWidth - w)));
+                        position1.set(0, 0, 0, 2, w0, (h0 + h1) + h2, 13);
+                        position2.set(1, 1, 0, 0, w, h0, 6);
+                        position3.set(0, 1, 1, 1, w, h1, 2);
+                        position3.spanSize = this.maxSizeWidth;
+                        position4.set(0, 1, 2, 2, w, h2, 10);
+                        position4.spanSize = this.maxSizeWidth;
+                        if (isOut) {
+                            position1.spanSize = this.maxSizeWidth - w;
+                        } else {
+                            position2.spanSize = this.maxSizeWidth - w0;
+                            position3.leftSpanOffset = w0;
+                            position4.leftSpanOffset = w0;
+                        }
+                        position1.siblingHeights = new float[]{h0, h1, h2};
+                        this.hasSibling = true;
+                        maxX = (byte) 1;
+                    }
+                }
+                for (a = 0; a < count; a++) {
+                    pos = (GroupedMessagePosition) this.posArray.get(a);
+                    if (isOut) {
+                        if (pos.minX == (byte) 0) {
+                            pos.spanSize += this.firstSpanAdditionalSize;
+                        }
+                        if ((pos.flags & 2) != 0) {
+                            pos.edge = true;
+                        }
+                    } else {
+                        if (pos.maxX == maxX || (pos.flags & 2) != 0) {
+                            pos.spanSize += this.firstSpanAdditionalSize;
+                        }
+                        if ((pos.flags & 1) != 0) {
+                            pos.edge = true;
+                        }
+                    }
+                    messageObject = (MessageObject) this.messages.get(a);
+                    if (!isOut && messageObject.needDrawAvatar()) {
+                        if (pos.edge) {
+                            if (pos.spanSize != 1000) {
+                                pos.spanSize += 108;
+                            }
+                            pos.pw += 108;
+                        } else if ((pos.flags & 2) != 0) {
+                            if (pos.spanSize != 1000) {
+                                pos.spanSize -= 108;
+                            } else if (pos.leftSpanOffset != 0) {
+                                pos.leftSpanOffset += 108;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     public static class TextLayoutBlock {
         public int charactersEnd;
@@ -733,11 +1106,11 @@ public class MessageObject {
                 r7[0] = getUserName(whoUser, this.messageOwner.entities, str.indexOf("%1$s"));
                 this.messageText = String.format(str, r7);
             } else {
-                String bannedDuration;
+                StringBuilder bannedDuration;
                 if (n2 == null || AndroidUtilities.isBannedForever(n2.until_date)) {
-                    bannedDuration = LocaleController.getString("UserRestrictionsUntilForever", R.string.UserRestrictionsUntilForever);
+                    bannedDuration = new StringBuilder(LocaleController.getString("UserRestrictionsUntilForever", R.string.UserRestrictionsUntilForever));
                 } else {
-                    bannedDuration = "";
+                    bannedDuration = new StringBuilder();
                     int duration = n2.until_date - event.date;
                     int days = ((duration / 60) / 60) / 24;
                     duration -= ((days * 60) * 60) * 24;
@@ -762,9 +1135,9 @@ public class MessageObject {
                         }
                         if (addStr != null) {
                             if (bannedDuration.length() > 0) {
-                                bannedDuration = bannedDuration + ", ";
+                                bannedDuration.append(", ");
                             }
-                            bannedDuration = bannedDuration + addStr;
+                            bannedDuration.append(addStr);
                         }
                         if (count == 2) {
                             break;
@@ -774,7 +1147,7 @@ public class MessageObject {
                 str = LocaleController.getString("EventLogRestrictedUntil", R.string.EventLogRestrictedUntil);
                 r7 = new Object[2];
                 r7[0] = getUserName(whoUser, this.messageOwner.entities, str.indexOf("%1$s"));
-                r7[1] = bannedDuration;
+                r7[1] = bannedDuration.toString();
                 r0 = new StringBuilder(String.format(str, r7));
                 boolean added = false;
                 if (o2 == null) {
@@ -1935,10 +2308,10 @@ public class MessageObject {
                     }
                 }
             }
-            boolean needShare = this.eventId == 0 && this.messageOwner.from_id > 0 && ((this.messageOwner.to_id.channel_id != 0 || this.messageOwner.to_id.chat_id != 0 || (this.messageOwner.media instanceof TL_messageMediaGame) || (this.messageOwner.media instanceof TL_messageMediaInvoice)) && !isOut());
+            boolean needShare = this.eventId == 0 && !isOutOwner() && (!(this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer == null) || (this.messageOwner.from_id > 0 && (this.messageOwner.to_id.channel_id != 0 || this.messageOwner.to_id.chat_id != 0 || (this.messageOwner.media instanceof TL_messageMediaGame) || (this.messageOwner.media instanceof TL_messageMediaInvoice))));
             this.generatedWithMinSize = AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() : AndroidUtilities.displaySize.x;
             int i = this.generatedWithMinSize;
-            float f = (needShare || this.eventId != 0) ? 122.0f : 80.0f;
+            float f = (needShare || this.eventId != 0) ? 132.0f : 80.0f;
             int maxWidth = i - AndroidUtilities.dp(f);
             if ((fromUser != null && fromUser.bot) || ((isMegagroup() || !(this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.channel_id == 0)) && !isOut())) {
                 maxWidth -= AndroidUtilities.dp(20.0f);
@@ -2219,11 +2592,11 @@ public class MessageObject {
     }
 
     public boolean isOutOwner() {
-        return this.messageOwner.out && this.messageOwner.from_id > 0 && !this.messageOwner.post;
+        return (this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer == null || this.messageOwner.fwd_from.saved_from_peer.user_id == UserConfig.getClientUserId()) && this.messageOwner.out && this.messageOwner.from_id > 0 && !this.messageOwner.post;
     }
 
     public boolean needDrawAvatar() {
-        return isFromUser() || this.eventId != 0;
+        return (!isFromUser() && this.eventId == 0 && (this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer == null)) ? false : true;
     }
 
     public boolean isFromUser() {
@@ -2325,6 +2698,13 @@ public class MessageObject {
 
     public boolean isMegagroup() {
         return isMegagroup(this.messageOwner);
+    }
+
+    public boolean isSavedFromMegagroup() {
+        if (this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer == null || this.messageOwner.fwd_from.saved_from_peer.channel_id == 0) {
+            return false;
+        }
+        return ChatObject.isMegagroup(MessagesController.getInstance().getChat(Integer.valueOf(this.messageOwner.fwd_from.saved_from_peer.channel_id)));
     }
 
     public static boolean isMegagroup(Message message) {
@@ -2886,6 +3266,10 @@ public class MessageObject {
         return isForwardedMessage(this.messageOwner);
     }
 
+    public boolean needDrawForwarded() {
+        return ((this.messageOwner.flags & 4) == 0 || this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer != null || ((long) UserConfig.getClientUserId()) == getDialogId()) ? false : true;
+    }
+
     public static boolean isForwardedMessage(Message message) {
         return ((message.flags & 4) == 0 || message.fwd_from == null) ? false : true;
     }
@@ -2906,6 +3290,34 @@ public class MessageObject {
         return canEditMessage(this.messageOwner, chat);
     }
 
+    public boolean canEditMessageAnytime(Chat chat) {
+        return canEditMessageAnytime(this.messageOwner, chat);
+    }
+
+    public static boolean canEditMessageAnytime(Message message, Chat chat) {
+        if (message == null || message.to_id == null || ((message.media != null && (isRoundVideoDocument(message.media.document) || isStickerDocument(message.media.document))) || ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.id < 0))) {
+            return false;
+        }
+        if (message.from_id == message.to_id.user_id && message.from_id == UserConfig.getClientUserId() && !isLiveLocationMessage(message)) {
+            return true;
+        }
+        if (chat == null && message.to_id.channel_id != 0) {
+            chat = MessagesController.getInstance().getChat(Integer.valueOf(message.to_id.channel_id));
+            if (chat == null) {
+                return false;
+            }
+        }
+        if (message.out && chat != null && chat.megagroup) {
+            if (chat.creator) {
+                return true;
+            }
+            if (chat.admin_rights != null && chat.admin_rights.pin_messages) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean canEditMessage(Message message, Chat chat) {
         if (message == null || message.to_id == null || ((message.media != null && (isRoundVideoDocument(message.media.document) || isStickerDocument(message.media.document))) || ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.id < 0))) {
             return false;
@@ -2919,8 +3331,13 @@ public class MessageObject {
                 return false;
             }
         }
-        if (message.out && chat != null && chat.megagroup && chat.admin_rights != null && chat.admin_rights.pin_messages) {
-            return true;
+        if (message.out && chat != null && chat.megagroup) {
+            if (chat.creator) {
+                return true;
+            }
+            if (chat.admin_rights != null && chat.admin_rights.pin_messages) {
+                return true;
+            }
         }
         if (Math.abs(message.date - ConnectionsManager.getInstance().getCurrentTime()) > MessagesController.getInstance().maxEditTime) {
             return false;
@@ -2994,6 +3411,33 @@ public class MessageObject {
             }
         }
         return null;
+    }
+
+    public int getFromId() {
+        if (this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer == null) {
+            if (this.messageOwner.from_id != 0) {
+                return this.messageOwner.from_id;
+            }
+            if (this.messageOwner.post) {
+                return this.messageOwner.to_id.channel_id;
+            }
+        } else if (this.messageOwner.fwd_from.saved_from_peer.user_id != 0) {
+            if (this.messageOwner.fwd_from.from_id != 0) {
+                return this.messageOwner.fwd_from.from_id;
+            }
+            return this.messageOwner.fwd_from.saved_from_peer.user_id;
+        } else if (this.messageOwner.fwd_from.saved_from_peer.channel_id != 0) {
+            if (!isSavedFromMegagroup() || this.messageOwner.fwd_from.from_id == 0) {
+                return -this.messageOwner.fwd_from.saved_from_peer.channel_id;
+            }
+            return this.messageOwner.fwd_from.from_id;
+        } else if (this.messageOwner.fwd_from.saved_from_peer.chat_id != 0) {
+            if (this.messageOwner.fwd_from.from_id != 0) {
+                return this.messageOwner.fwd_from.from_id;
+            }
+            return -this.messageOwner.fwd_from.saved_from_peer.chat_id;
+        }
+        return 0;
     }
 
     public void checkMediaExistance() {

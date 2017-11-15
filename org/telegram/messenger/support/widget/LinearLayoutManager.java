@@ -41,6 +41,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
     OrientationHelper mOrientationHelper;
     SavedState mPendingSavedState;
     int mPendingScrollPosition;
+    boolean mPendingScrollPositionBottom;
     int mPendingScrollPositionOffset;
     private boolean mRecycleChildrenOnDetach;
     private boolean mReverseLayout;
@@ -294,6 +295,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         this.mStackFromEnd = false;
         this.mSmoothScrollbarEnabled = true;
         this.mPendingScrollPosition = -1;
+        this.mPendingScrollPositionBottom = true;
         this.mPendingScrollPositionOffset = Integer.MIN_VALUE;
         this.mPendingSavedState = null;
         this.mAnchorInfo = new AnchorInfo();
@@ -510,7 +512,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
             View existing = findViewByPosition(this.mPendingScrollPosition);
             if (existing != null) {
                 int upcomingOffset;
-                if (this.mShouldReverseLayout) {
+                if (this.mPendingScrollPositionBottom) {
                     upcomingOffset = (this.mOrientationHelper.getEndAfterPadding() - this.mOrientationHelper.getDecoratedEnd(existing)) - this.mPendingScrollPositionOffset;
                 } else {
                     upcomingOffset = this.mPendingScrollPositionOffset - (this.mOrientationHelper.getDecoratedStart(existing) - this.mOrientationHelper.getStartAfterPadding());
@@ -725,7 +727,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
                     } else {
                         z2 = false;
                     }
-                    if (z2 == this.mShouldReverseLayout) {
+                    if (z2 == this.mPendingScrollPositionBottom) {
                         z = true;
                     }
                     anchorInfo.mLayoutFromEnd = z;
@@ -754,8 +756,8 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
                 return true;
             }
         } else {
-            anchorInfo.mLayoutFromEnd = this.mShouldReverseLayout;
-            if (this.mShouldReverseLayout) {
+            anchorInfo.mLayoutFromEnd = this.mPendingScrollPositionBottom;
+            if (this.mPendingScrollPositionBottom) {
                 anchorInfo.mCoordinate = this.mOrientationHelper.getEndAfterPadding() - this.mPendingScrollPositionOffset;
                 return true;
             }
@@ -851,8 +853,13 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
     }
 
     public void scrollToPositionWithOffset(int position, int offset) {
+        scrollToPositionWithOffset(position, offset, this.mShouldReverseLayout);
+    }
+
+    public void scrollToPositionWithOffset(int position, int offset, boolean bottom) {
         this.mPendingScrollPosition = position;
         this.mPendingScrollPositionOffset = offset;
+        this.mPendingScrollPositionBottom = bottom;
         if (this.mPendingSavedState != null) {
             this.mPendingSavedState.invalidateAnchor();
         }
@@ -1080,7 +1087,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         }
     }
 
-    private void recycleChildren(Recycler recycler, int startIndex, int endIndex) {
+    protected void recycleChildren(Recycler recycler, int startIndex, int endIndex) {
         if (startIndex != endIndex) {
             int i;
             if (endIndex > startIndex) {
@@ -1095,7 +1102,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         }
     }
 
-    private void recycleViewsFromStart(Recycler recycler, int dt) {
+    protected void recycleViewsFromStart(Recycler recycler, int dt) {
         if (dt >= 0) {
             int limit = dt;
             int childCount = getChildCount();
@@ -1121,7 +1128,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         }
     }
 
-    private void recycleViewsFromEnd(Recycler recycler, int dt) {
+    protected void recycleViewsFromEnd(Recycler recycler, int dt) {
         int childCount = getChildCount();
         if (dt >= 0) {
             int limit = this.mOrientationHelper.getEnd() - dt;

@@ -96,8 +96,12 @@ public final class Format implements Parcelable {
         return new Format(id, containerMimeType, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, null, -1, -1, -1, -1, -1, selectionFlags, language, accessibilityChannel, Long.MAX_VALUE, null, null, null);
     }
 
-    public static Format createTextSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, int selectionFlags, String language, DrmInitData drmInitData) {
-        return createTextSampleFormat(id, sampleMimeType, codecs, bitrate, selectionFlags, language, -1, drmInitData, Long.MAX_VALUE, Collections.emptyList());
+    public static Format createTextSampleFormat(String id, String sampleMimeType, int selectionFlags, String language) {
+        return createTextSampleFormat(id, sampleMimeType, selectionFlags, language, null);
+    }
+
+    public static Format createTextSampleFormat(String id, String sampleMimeType, int selectionFlags, String language, DrmInitData drmInitData) {
+        return createTextSampleFormat(id, sampleMimeType, null, -1, selectionFlags, language, -1, drmInitData, Long.MAX_VALUE, Collections.emptyList());
     }
 
     public static Format createTextSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, int selectionFlags, String language, int accessibilityChannel, DrmInitData drmInitData) {

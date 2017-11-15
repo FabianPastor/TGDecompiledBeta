@@ -5,6 +5,8 @@ import android.media.MediaCodec.CryptoInfo.Pattern;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class CryptoInfo {
+    public int clearBlocks;
+    public int encryptedBlocks;
     private final android.media.MediaCodec.CryptoInfo frameworkCryptoInfo;
     public byte[] iv;
     public byte[] key;
@@ -12,8 +14,6 @@ public final class CryptoInfo {
     public int[] numBytesOfClearData;
     public int[] numBytesOfEncryptedData;
     public int numSubSamples;
-    public int patternBlocksToEncrypt;
-    public int patternBlocksToSkip;
     private final PatternHolderV24 patternHolder;
 
     @TargetApi(24)
@@ -26,8 +26,8 @@ public final class CryptoInfo {
             this.pattern = new Pattern(0, 0);
         }
 
-        private void set(int blocksToEncrypt, int blocksToSkip) {
-            this.pattern.set(blocksToEncrypt, blocksToSkip);
+        private void set(int encryptedBlocks, int clearBlocks) {
+            this.pattern.set(encryptedBlocks, clearBlocks);
             this.frameworkCryptoInfo.setPattern(this.pattern);
         }
     }
@@ -47,25 +47,17 @@ public final class CryptoInfo {
         this.patternHolder = patternHolderV24;
     }
 
-    public void set(int numSubSamples, int[] numBytesOfClearData, int[] numBytesOfEncryptedData, byte[] key, byte[] iv, int mode) {
+    public void set(int numSubSamples, int[] numBytesOfClearData, int[] numBytesOfEncryptedData, byte[] key, byte[] iv, int mode, int encryptedBlocks, int clearBlocks) {
         this.numSubSamples = numSubSamples;
         this.numBytesOfClearData = numBytesOfClearData;
         this.numBytesOfEncryptedData = numBytesOfEncryptedData;
         this.key = key;
         this.iv = iv;
         this.mode = mode;
-        this.patternBlocksToEncrypt = 0;
-        this.patternBlocksToSkip = 0;
+        this.encryptedBlocks = encryptedBlocks;
+        this.clearBlocks = clearBlocks;
         if (Util.SDK_INT >= 16) {
             updateFrameworkCryptoInfoV16();
-        }
-    }
-
-    public void setPattern(int patternBlocksToEncrypt, int patternBlocksToSkip) {
-        this.patternBlocksToEncrypt = patternBlocksToEncrypt;
-        this.patternBlocksToSkip = patternBlocksToSkip;
-        if (Util.SDK_INT >= 24) {
-            this.patternHolder.set(patternBlocksToEncrypt, patternBlocksToSkip);
         }
     }
 
@@ -88,7 +80,7 @@ public final class CryptoInfo {
         this.frameworkCryptoInfo.iv = this.iv;
         this.frameworkCryptoInfo.mode = this.mode;
         if (Util.SDK_INT >= 24) {
-            this.patternHolder.set(this.patternBlocksToEncrypt, this.patternBlocksToSkip);
+            this.patternHolder.set(this.encryptedBlocks, this.clearBlocks);
         }
     }
 }

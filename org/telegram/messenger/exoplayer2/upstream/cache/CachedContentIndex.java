@@ -31,7 +31,7 @@ import org.telegram.messenger.exoplayer2.util.AtomicFile;
 import org.telegram.messenger.exoplayer2.util.ReusableBufferedOutputStream;
 import org.telegram.messenger.exoplayer2.util.Util;
 
-final class CachedContentIndex {
+class CachedContentIndex {
     public static final String FILE_NAME = "cached_content_index.exi";
     private static final int FLAG_ENCRYPTED_INDEX = 1;
     private static final String TAG = "CachedContentIndex";
@@ -40,6 +40,7 @@ final class CachedContentIndex {
     private ReusableBufferedOutputStream bufferedOutputStream;
     private boolean changed;
     private final Cipher cipher;
+    private final boolean encrypt;
     private final SparseArray<String> idToKey;
     private final HashMap<String, CachedContent> keyToContent;
     private final SecretKeySpec secretKeySpec;
@@ -49,11 +50,16 @@ final class CachedContentIndex {
     }
 
     public CachedContentIndex(File cacheDir, byte[] secretKey) {
+        this(cacheDir, secretKey, secretKey != null);
+    }
+
+    public CachedContentIndex(File cacheDir, byte[] secretKey, boolean encrypt) {
         GeneralSecurityException e;
+        this.encrypt = encrypt;
         if (secretKey != null) {
             Assertions.checkArgument(secretKey.length == 16);
             try {
-                this.cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+                this.cipher = getCipher();
                 this.secretKeySpec = new SecretKeySpec(secretKey, "AES");
             } catch (NoSuchAlgorithmException e2) {
                 e = e2;
@@ -275,12 +281,18 @@ final class CachedContentIndex {
             DataOutputStream output = new DataOutputStream(this.bufferedOutputStream);
             Object output2;
             try {
+                boolean writeEncrypted;
                 output.writeInt(1);
-                if (this.cipher == null) {
+                if (!this.encrypt || this.cipher == null) {
+                    writeEncrypted = false;
+                } else {
+                    writeEncrypted = true;
+                }
+                if (!writeEncrypted) {
                     flags = 0;
                 }
                 output.writeInt(flags);
-                if (this.cipher != null) {
+                if (writeEncrypted) {
                     byte[] initializationVector = new byte[16];
                     new Random().nextBytes(initializationVector);
                     output.write(initializationVector);
@@ -342,6 +354,16 @@ final class CachedContentIndex {
         CachedContent cachedContent = new CachedContent(getNewId(this.idToKey), key, length);
         addNew(cachedContent);
         return cachedContent;
+    }
+
+    private static Cipher getCipher() throws NoSuchPaddingException, NoSuchAlgorithmException {
+        if (Util.SDK_INT == 18) {
+            try {
+                return Cipher.getInstance("AES/CBC/PKCS5PADDING", "BC");
+            } catch (Throwable th) {
+            }
+        }
+        return Cipher.getInstance("AES/CBC/PKCS5PADDING");
     }
 
     public static int getNewId(SparseArray<String> idToKey) {

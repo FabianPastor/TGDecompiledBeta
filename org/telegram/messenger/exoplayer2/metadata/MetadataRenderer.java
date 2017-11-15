@@ -46,10 +46,10 @@ public final class MetadataRenderer extends BaseRenderer implements Callback {
     }
 
     public int supportsFormat(Format format) {
-        return this.decoderFactory.supportsFormat(format) ? 3 : 0;
+        return this.decoderFactory.supportsFormat(format) ? 4 : 0;
     }
 
-    protected void onStreamChanged(Format[] formats) throws ExoPlaybackException {
+    protected void onStreamChanged(Format[] formats, long offsetUs) throws ExoPlaybackException {
         this.decoder = this.decoderFactory.createDecoder(formats[0]);
     }
 
@@ -89,7 +89,6 @@ public final class MetadataRenderer extends BaseRenderer implements Callback {
     protected void onDisabled() {
         flushPendingMetadata();
         this.decoder = null;
-        super.onDisabled();
     }
 
     public boolean isEnded() {

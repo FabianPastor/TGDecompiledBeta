@@ -2,6 +2,7 @@ package org.telegram.messenger.exoplayer2.audio;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.media.AudioAttributes;
 import android.media.AudioAttributes.Builder;
 import android.media.AudioFormat;
 import android.media.AudioTimestamp;
@@ -48,6 +49,7 @@ public final class AudioTrack {
     private static final int WRITE_NON_BLOCKING = 1;
     public static boolean enablePreV21AudioSessionWorkaround = false;
     public static boolean failOnSpuriousAudioTimestamp = false;
+    private AudioAttributes audioAttributes;
     private final AudioCapabilities audioCapabilities;
     private AudioProcessor[] audioProcessors;
     private int audioSessionId;
@@ -98,7 +100,6 @@ public final class AudioTrack {
     private final SonicAudioProcessor sonicAudioProcessor;
     private int startMediaTimeState;
     private long startMediaTimeUs;
-    private int streamType;
     private long submittedEncodedFrames;
     private long submittedPcmBytes;
     private boolean tunneling;
@@ -302,7 +303,7 @@ public final class AudioTrack {
         this.playheadOffsets = new long[10];
         this.volume = 1.0f;
         this.startMediaTimeState = 0;
-        this.streamType = 3;
+        this.audioAttributes = AudioAttributes.DEFAULT;
         this.audioSessionId = 0;
         this.playbackParameters = PlaybackParameters.DEFAULT;
         this.drainingAudioProcessorIndex = -1;
@@ -479,21 +480,14 @@ public final class AudioTrack {
 
     private void initialize() throws InitializationException {
         this.releasingConditionVariable.block();
-        if (this.tunneling) {
-            this.audioTrack = createHwAvSyncAudioTrackV21(this.sampleRate, this.channelConfig, this.outputEncoding, this.bufferSize, this.audioSessionId);
-        } else if (this.audioSessionId == 0) {
-            this.audioTrack = new android.media.AudioTrack(this.streamType, this.sampleRate, this.channelConfig, this.outputEncoding, this.bufferSize, 1);
-        } else {
-            this.audioTrack = new android.media.AudioTrack(this.streamType, this.sampleRate, this.channelConfig, this.outputEncoding, this.bufferSize, 1, this.audioSessionId);
-        }
-        checkAudioTrackInitialized();
+        this.audioTrack = initializeAudioTrack();
         int audioSessionId = this.audioTrack.getAudioSessionId();
         if (enablePreV21AudioSessionWorkaround && Util.SDK_INT < 21) {
             if (!(this.keepSessionIdAudioTrack == null || audioSessionId == this.keepSessionIdAudioTrack.getAudioSessionId())) {
                 releaseKeepSessionIdAudioTrack();
             }
             if (this.keepSessionIdAudioTrack == null) {
-                this.keepSessionIdAudioTrack = new android.media.AudioTrack(this.streamType, WearableStatusCodes.TARGET_NODE_NOT_CONNECTED, 4, 2, 2, 0, audioSessionId);
+                this.keepSessionIdAudioTrack = initializeKeepSessionIdAudioTrack(audioSessionId);
             }
         }
         if (this.audioSessionId != audioSessionId) {
@@ -740,9 +734,9 @@ public final class AudioTrack {
         return this.playbackParameters;
     }
 
-    public void setStreamType(int streamType) {
-        if (this.streamType != streamType) {
-            this.streamType = streamType;
+    public void setAudioAttributes(AudioAttributes audioAttributes) {
+        if (!this.audioAttributes.equals(audioAttributes)) {
+            this.audioAttributes = audioAttributes;
             if (!this.tunneling) {
                 reset();
                 this.audioSessionId = 0;
@@ -916,14 +910,14 @@ public final class AudioTrack {
                     if (audioTimestampUs < this.resumeSystemTimeUs) {
                         this.audioTimestampSet = false;
                     } else if (Math.abs(audioTimestampUs - systemClockUs) > 5000000) {
-                        message = "Spurious audio timestamp (system clock mismatch): " + audioTimestampFramePosition + ", " + audioTimestampUs + ", " + systemClockUs + ", " + playbackPositionUs;
+                        message = "Spurious audio timestamp (system clock mismatch): " + audioTimestampFramePosition + ", " + audioTimestampUs + ", " + systemClockUs + ", " + playbackPositionUs + ", " + getSubmittedFrames() + ", " + getWrittenFrames();
                         if (failOnSpuriousAudioTimestamp) {
                             throw new InvalidAudioTrackTimestampException(message);
                         }
                         Log.w(TAG, message);
                         this.audioTimestampSet = false;
                     } else if (Math.abs(framesToDurationUs(audioTimestampFramePosition) - playbackPositionUs) > 5000000) {
-                        message = "Spurious audio timestamp (frame position mismatch): " + audioTimestampFramePosition + ", " + audioTimestampUs + ", " + systemClockUs + ", " + playbackPositionUs;
+                        message = "Spurious audio timestamp (frame position mismatch): " + audioTimestampFramePosition + ", " + audioTimestampUs + ", " + systemClockUs + ", " + playbackPositionUs + ", " + getSubmittedFrames() + ", " + getWrittenFrames();
                         if (failOnSpuriousAudioTimestamp) {
                             throw new InvalidAudioTrackTimestampException(message);
                         }
@@ -945,19 +939,6 @@ public final class AudioTrack {
                 }
                 this.lastTimestampSampleTimeUs = systemClockUs;
             }
-        }
-    }
-
-    private void checkAudioTrackInitialized() throws InitializationException {
-        int state = this.audioTrack.getState();
-        if (state != 1) {
-            try {
-                this.audioTrack.release();
-            } catch (Exception e) {
-            } finally {
-                this.audioTrack = null;
-            }
-            throw new InitializationException(state, this.sampleRate, this.channelConfig, this.bufferSize);
         }
     }
 
@@ -998,9 +979,42 @@ public final class AudioTrack {
         return needsPassthroughWorkarounds() && this.audioTrack.getPlayState() == 2 && this.audioTrack.getPlaybackHeadPosition() == 0;
     }
 
+    private android.media.AudioTrack initializeAudioTrack() throws InitializationException {
+        android.media.AudioTrack audioTrack;
+        if (Util.SDK_INT >= 21) {
+            audioTrack = createAudioTrackV21();
+        } else {
+            int streamType = Util.getStreamTypeForAudioUsage(this.audioAttributes.usage);
+            if (this.audioSessionId == 0) {
+                audioTrack = new android.media.AudioTrack(streamType, this.sampleRate, this.channelConfig, this.outputEncoding, this.bufferSize, 1);
+            } else {
+                audioTrack = new android.media.AudioTrack(streamType, this.sampleRate, this.channelConfig, this.outputEncoding, this.bufferSize, 1, this.audioSessionId);
+            }
+        }
+        int state = audioTrack.getState();
+        if (state == 1) {
+            return audioTrack;
+        }
+        try {
+            audioTrack.release();
+        } catch (Exception e) {
+        }
+        throw new InitializationException(state, this.sampleRate, this.channelConfig, this.bufferSize);
+    }
+
     @TargetApi(21)
-    private static android.media.AudioTrack createHwAvSyncAudioTrackV21(int sampleRate, int channelConfig, int encoding, int bufferSize, int sessionId) {
-        return new android.media.AudioTrack(new Builder().setUsage(1).setContentType(3).setFlags(16).build(), new AudioFormat.Builder().setChannelMask(channelConfig).setEncoding(encoding).setSampleRate(sampleRate).build(), bufferSize, 1, sessionId);
+    private android.media.AudioTrack createAudioTrackV21() {
+        AudioAttributes attributes;
+        if (this.tunneling) {
+            attributes = new Builder().setContentType(3).setFlags(16).setUsage(1).build();
+        } else {
+            attributes = this.audioAttributes.getAudioAttributesV21();
+        }
+        return new android.media.AudioTrack(attributes, new AudioFormat.Builder().setChannelMask(this.channelConfig).setEncoding(this.outputEncoding).setSampleRate(this.sampleRate).build(), this.bufferSize, 1, this.audioSessionId != 0 ? this.audioSessionId : 0);
+    }
+
+    private android.media.AudioTrack initializeKeepSessionIdAudioTrack(int audioSessionId) {
+        return new android.media.AudioTrack(3, WearableStatusCodes.TARGET_NODE_NOT_CONNECTED, 4, 2, 2, 0, audioSessionId);
     }
 
     private static int getEncodingForMimeType(String mimeType) {

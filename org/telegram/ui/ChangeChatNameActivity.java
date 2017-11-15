@@ -248,7 +248,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
             shadowSectionCell.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Builder builder = new Builder(ChangeChatNameActivity.this.getParentActivity());
-                    builder.setMessage(LocaleController.getString("MegaDeleteAlert", R.string.MegaDeleteAlert));
+                    builder.setMessage(LocaleController.getString("AreYouSureDeleteAndExit", R.string.AreYouSureDeleteAndExit));
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {

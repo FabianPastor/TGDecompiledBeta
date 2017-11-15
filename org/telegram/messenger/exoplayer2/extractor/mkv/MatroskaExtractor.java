@@ -1,5 +1,6 @@
 package org.telegram.messenger.exoplayer2.extractor.mkv;
 
+import android.util.Log;
 import android.util.SparseArray;
 import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.IOException;
@@ -27,6 +28,7 @@ import org.telegram.messenger.exoplayer2.extractor.PositionHolder;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap.Unseekable;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
+import org.telegram.messenger.exoplayer2.extractor.TrackOutput.CryptoData;
 import org.telegram.messenger.exoplayer2.util.LongArray;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.NalUnitUtil;
@@ -43,6 +45,7 @@ public final class MatroskaExtractor implements Extractor {
     private static final String CODEC_ID_AAC = "A_AAC";
     private static final String CODEC_ID_AC3 = "A_AC3";
     private static final String CODEC_ID_ACM = "A_MS/ACM";
+    private static final String CODEC_ID_ASS = "S_TEXT/ASS";
     private static final String CODEC_ID_DTS = "A_DTS";
     private static final String CODEC_ID_DTS_EXPRESS = "A_DTS/EXPRESS";
     private static final String CODEC_ID_DTS_LOSSLESS = "A_DTS/LOSSLESS";
@@ -162,10 +165,18 @@ public final class MatroskaExtractor implements Extractor {
     private static final int LACING_NONE = 0;
     private static final int LACING_XIPH = 1;
     private static final int OPUS_MAX_INPUT_SIZE = 5760;
+    private static final byte[] SSA_DIALOGUE_FORMAT = Util.getUtf8Bytes("Format: Start, End, ReadOrder, Layer, Style, Name, MarginL, MarginR, MarginV, Effect, Text");
+    private static final byte[] SSA_PREFIX = new byte[]{(byte) 68, (byte) 105, (byte) 97, (byte) 108, (byte) 111, (byte) 103, (byte) 117, (byte) 101, (byte) 58, (byte) 32, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 44, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 44};
+    private static final int SSA_PREFIX_END_TIMECODE_OFFSET = 21;
+    private static final byte[] SSA_TIMECODE_EMPTY = new byte[]{(byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32};
+    private static final String SSA_TIMECODE_FORMAT = "%01d:%02d:%02d:%02d";
+    private static long SSA_TIMECODE_LAST_VALUE_SCALING_FACTOR = 10000;
     private static final byte[] SUBRIP_PREFIX = new byte[]{(byte) 49, (byte) 10, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 44, (byte) 48, (byte) 48, (byte) 48, (byte) 32, (byte) 45, (byte) 45, (byte) 62, (byte) 32, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 44, (byte) 48, (byte) 48, (byte) 48, (byte) 10};
     private static final int SUBRIP_PREFIX_END_TIMECODE_OFFSET = 19;
     private static final byte[] SUBRIP_TIMECODE_EMPTY = new byte[]{(byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32};
-    private static final int SUBRIP_TIMECODE_LENGTH = 12;
+    private static final String SUBRIP_TIMECODE_FORMAT = "%02d:%02d:%02d,%03d";
+    private static long SUBRIP_TIMECODE_LAST_VALUE_SCALING_FACTOR = 1000;
+    private static final String TAG = "MatroskaExtractor";
     private static final int TRACK_TYPE_AUDIO = 2;
     private static final int UNSET_ENTRY_ID = -1;
     private static final int VORBIS_MAX_INPUT_SIZE = 8192;
@@ -219,7 +230,7 @@ public final class MatroskaExtractor implements Extractor {
     private long segmentContentPosition;
     private long segmentContentSize;
     private boolean sentSeekMap;
-    private final ParsableByteArray subripSample;
+    private final ParsableByteArray subtitleSample;
     private long timecodeScale;
     private final SparseArray<Track> tracks;
     private final VarintReader varintReader;
@@ -242,12 +253,12 @@ public final class MatroskaExtractor implements Extractor {
         public int colorRange;
         public int colorSpace;
         public int colorTransfer;
+        public CryptoData cryptoData;
         public int defaultSampleDurationNs;
         public int displayHeight;
         public int displayUnit;
         public int displayWidth;
         public DrmInitData drmInitData;
-        public byte[] encryptionKeyId;
         public boolean flagDefault;
         public boolean flagForced;
         public boolean hasColorInfo;
@@ -370,7 +381,7 @@ public final class MatroskaExtractor implements Extractor {
                     break;
                 case -933872740:
                     if (str.equals(MatroskaExtractor.CODEC_ID_DVBSUB)) {
-                        obj = 27;
+                        obj = 28;
                         break;
                     }
                     break;
@@ -388,7 +399,7 @@ public final class MatroskaExtractor implements Extractor {
                     break;
                 case -425012669:
                     if (str.equals(MatroskaExtractor.CODEC_ID_VOBSUB)) {
-                        obj = 25;
+                        obj = 26;
                         break;
                     }
                     break;
@@ -430,7 +441,7 @@ public final class MatroskaExtractor implements Extractor {
                     break;
                 case 99146302:
                     if (str.equals(MatroskaExtractor.CODEC_ID_PGS)) {
-                        obj = 26;
+                        obj = 27;
                         break;
                     }
                     break;
@@ -449,6 +460,12 @@ public final class MatroskaExtractor implements Extractor {
                 case 725957860:
                     if (str.equals(MatroskaExtractor.CODEC_ID_PCM_INT_LIT)) {
                         obj = 23;
+                        break;
+                    }
+                    break;
+                case 738597099:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_ASS)) {
+                        obj = 25;
                         break;
                     }
                     break;
@@ -523,7 +540,12 @@ public final class MatroskaExtractor implements Extractor {
                     break;
                 case 8:
                     initializationData = parseFourCcVc1Private(new ParsableByteArray(this.codecPrivate));
-                    mimeType = initializationData == null ? MimeTypes.VIDEO_UNKNOWN : MimeTypes.VIDEO_VC1;
+                    if (initializationData == null) {
+                        Log.w(MatroskaExtractor.TAG, "Unsupported FourCC. Setting mimeType to video/x-unknown");
+                        mimeType = MimeTypes.VIDEO_UNKNOWN;
+                        break;
+                    }
+                    mimeType = MimeTypes.VIDEO_VC1;
                     break;
                 case 9:
                     mimeType = MimeTypes.VIDEO_UNKNOWN;
@@ -575,32 +597,43 @@ public final class MatroskaExtractor implements Extractor {
                     break;
                 case 22:
                     mimeType = MimeTypes.AUDIO_RAW;
-                    if (parseMsAcmCodecPrivate(new ParsableByteArray(this.codecPrivate))) {
-                        pcmEncoding = Util.getPcmEncoding(this.audioBitDepth);
-                        if (pcmEncoding == 0) {
-                            throw new ParserException("Unsupported PCM bit depth: " + this.audioBitDepth);
-                        }
+                    if (!parseMsAcmCodecPrivate(new ParsableByteArray(this.codecPrivate))) {
+                        mimeType = MimeTypes.AUDIO_UNKNOWN;
+                        Log.w(MatroskaExtractor.TAG, "Non-PCM MS/ACM is unsupported. Setting mimeType to " + mimeType);
+                        break;
                     }
-                    throw new ParserException("Non-PCM MS/ACM is unsupported");
+                    pcmEncoding = Util.getPcmEncoding(this.audioBitDepth);
+                    if (pcmEncoding == 0) {
+                        pcmEncoding = -1;
+                        mimeType = MimeTypes.AUDIO_UNKNOWN;
+                        Log.w(MatroskaExtractor.TAG, "Unsupported PCM bit depth: " + this.audioBitDepth + ". Setting mimeType to " + mimeType);
+                        break;
+                    }
                     break;
                 case 23:
                     mimeType = MimeTypes.AUDIO_RAW;
                     pcmEncoding = Util.getPcmEncoding(this.audioBitDepth);
                     if (pcmEncoding == 0) {
-                        throw new ParserException("Unsupported PCM bit depth: " + this.audioBitDepth);
+                        pcmEncoding = -1;
+                        mimeType = MimeTypes.AUDIO_UNKNOWN;
+                        Log.w(MatroskaExtractor.TAG, "Unsupported PCM bit depth: " + this.audioBitDepth + ". Setting mimeType to " + mimeType);
+                        break;
                     }
                     break;
                 case 24:
                     mimeType = MimeTypes.APPLICATION_SUBRIP;
                     break;
                 case 25:
+                    mimeType = MimeTypes.TEXT_SSA;
+                    break;
+                case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
                     mimeType = MimeTypes.APPLICATION_VOBSUB;
                     initializationData = Collections.singletonList(this.codecPrivate);
                     break;
-                case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
+                case 27:
                     mimeType = MimeTypes.APPLICATION_PGS;
                     break;
-                case 27:
+                case 28:
                     mimeType = MimeTypes.APPLICATION_DVBSUBS;
                     initializationData = Collections.singletonList(new byte[]{this.codecPrivate[0], this.codecPrivate[1], this.codecPrivate[2], this.codecPrivate[3]});
                     break;
@@ -634,7 +667,13 @@ public final class MatroskaExtractor implements Extractor {
                 format = Format.createVideoSampleFormat(Integer.toString(trackId), mimeType, null, -1, maxInputSize, this.width, this.height, -1.0f, initializationData, -1, pixelWidthHeightRatio, this.projectionData, this.stereoMode, colorInfo, this.drmInitData);
             } else if (MimeTypes.APPLICATION_SUBRIP.equals(mimeType)) {
                 type = 3;
-                format = Format.createTextSampleFormat(Integer.toString(trackId), mimeType, null, -1, selectionFlags, this.language, this.drmInitData);
+                format = Format.createTextSampleFormat(Integer.toString(trackId), mimeType, selectionFlags, this.language, this.drmInitData);
+            } else if (MimeTypes.TEXT_SSA.equals(mimeType)) {
+                type = 3;
+                initializationData = new ArrayList(2);
+                initializationData.add(MatroskaExtractor.SSA_DIALOGUE_FORMAT);
+                initializationData.add(this.codecPrivate);
+                format = Format.createTextSampleFormat(Integer.toString(trackId), mimeType, null, -1, selectionFlags, this.language, -1, this.drmInitData, Long.MAX_VALUE, initializationData);
             } else if (MimeTypes.APPLICATION_VOBSUB.equals(mimeType) || MimeTypes.APPLICATION_PGS.equals(mimeType) || MimeTypes.APPLICATION_DVBSUBS.equals(mimeType)) {
                 type = 3;
                 format = Format.createImageSampleFormat(Integer.toString(trackId), mimeType, null, -1, initializationData, this.language, this.drmInitData);
@@ -816,7 +855,7 @@ public final class MatroskaExtractor implements Extractor {
         this.nalStartCode = new ParsableByteArray(NalUnitUtil.NAL_START_CODE);
         this.nalLength = new ParsableByteArray(4);
         this.sampleStrippedBytes = new ParsableByteArray();
-        this.subripSample = new ParsableByteArray();
+        this.subtitleSample = new ParsableByteArray();
         this.encryptionInitializationVector = new ParsableByteArray(8);
         this.encryptionSubsampleData = new ParsableByteArray();
     }
@@ -1029,10 +1068,10 @@ public final class MatroskaExtractor implements Extractor {
                 if (!this.currentTrack.hasContentEncryption) {
                     return;
                 }
-                if (this.currentTrack.encryptionKeyId == null) {
+                if (this.currentTrack.cryptoData == null) {
                     throw new ParserException("Encrypted Track found but ContentEncKeyID was not found");
                 }
-                this.currentTrack.drmInitData = new DrmInitData(new SchemeData(C.UUID_NIL, MimeTypes.VIDEO_WEBM, this.currentTrack.encryptionKeyId));
+                this.currentTrack.drmInitData = new DrmInitData(new SchemeData(C.UUID_NIL, null, MimeTypes.VIDEO_WEBM, this.currentTrack.cryptoData.encryptionKey));
                 return;
             case ID_CONTENT_ENCODINGS /*28032*/:
                 if (this.currentTrack.hasContentEncryption && this.currentTrack.sampleStrippedBytes != null) {
@@ -1358,8 +1397,8 @@ public final class MatroskaExtractor implements Extractor {
                                     headerSize++;
                                     readScratch(input, headerSize);
                                     byteValue = this.scratch.data[headerSize - 1] & 255;
-                                    r25 = this.blockLacingSampleSizes;
-                                    r25[sampleIndex] = r25[sampleIndex] + byteValue;
+                                    r26 = this.blockLacingSampleSizes;
+                                    r26[sampleIndex] = r26[sampleIndex] + byteValue;
                                 } while (byteValue == 255);
                                 totalSamplesSize += this.blockLacingSampleSizes[sampleIndex];
                             }
@@ -1394,11 +1433,11 @@ public final class MatroskaExtractor implements Extractor {
                                             throw new ParserException("EBML lacing sample size out of range.");
                                         }
                                         int intReadValue = (int) readValue;
-                                        r25 = this.blockLacingSampleSizes;
+                                        r26 = this.blockLacingSampleSizes;
                                         if (sampleIndex != 0) {
                                             intReadValue += this.blockLacingSampleSizes[sampleIndex - 1];
                                         }
-                                        r25[sampleIndex] = intReadValue;
+                                        r26[sampleIndex] = intReadValue;
                                         totalSamplesSize += this.blockLacingSampleSizes[sampleIndex];
                                         sampleIndex++;
                                     } else {
@@ -1448,8 +1487,9 @@ public final class MatroskaExtractor implements Extractor {
                 input.readFully(this.currentTrack.sampleStrippedBytes, 0, contentSize);
                 return;
             case ID_CONTENT_ENCRYPTION_KEY_ID /*18402*/:
-                this.currentTrack.encryptionKeyId = new byte[contentSize];
-                input.readFully(this.currentTrack.encryptionKeyId, 0, contentSize);
+                byte[] encryptionKey = new byte[contentSize];
+                input.readFully(encryptionKey, 0, contentSize);
+                this.currentTrack.cryptoData = new CryptoData(1, encryptionKey, 0, 0);
                 return;
             case ID_SEEK_ID /*21419*/:
                 Arrays.fill(this.seekEntryIdBytes.data, (byte) 0);
@@ -1472,9 +1512,11 @@ public final class MatroskaExtractor implements Extractor {
 
     private void commitSampleToOutput(Track track, long timeUs) {
         if (CODEC_ID_SUBRIP.equals(track.codecId)) {
-            writeSubripSample(track);
+            commitSubtitleSample(track, SUBRIP_TIMECODE_FORMAT, 19, SUBRIP_TIMECODE_LAST_VALUE_SCALING_FACTOR, SUBRIP_TIMECODE_EMPTY);
+        } else if (CODEC_ID_ASS.equals(track.codecId)) {
+            commitSubtitleSample(track, SSA_TIMECODE_FORMAT, 21, SSA_TIMECODE_LAST_VALUE_SCALING_FACTOR, SSA_TIMECODE_EMPTY);
         }
-        track.output.sampleMetadata(timeUs, this.blockFlags, this.sampleBytesWritten, 0, track.encryptionKeyId);
+        track.output.sampleMetadata(timeUs, this.blockFlags, this.sampleBytesWritten, 0, track.cryptoData);
         this.sampleRead = true;
         resetSample();
     }
@@ -1504,138 +1546,145 @@ public final class MatroskaExtractor implements Extractor {
 
     private void writeSampleData(ExtractorInput input, Track track, int size) throws IOException, InterruptedException {
         if (CODEC_ID_SUBRIP.equals(track.codecId)) {
-            int sizeWithPrefix = SUBRIP_PREFIX.length + size;
-            if (this.subripSample.capacity() < sizeWithPrefix) {
-                this.subripSample.data = Arrays.copyOf(SUBRIP_PREFIX, sizeWithPrefix + size);
-            }
-            input.readFully(this.subripSample.data, SUBRIP_PREFIX.length, size);
-            this.subripSample.setPosition(0);
-            this.subripSample.setLimit(sizeWithPrefix);
-            return;
-        }
-        TrackOutput output = track.output;
-        if (!this.sampleEncodingHandled) {
-            if (track.hasContentEncryption) {
-                this.blockFlags &= -NUM;
-                if (!this.sampleSignalByteRead) {
-                    input.readFully(this.scratch.data, 0, 1);
-                    this.sampleBytesRead++;
-                    if ((this.scratch.data[0] & 128) == 128) {
-                        throw new ParserException("Extension bit is set in signal byte");
+            writeSubtitleSampleData(input, SUBRIP_PREFIX, size);
+        } else if (CODEC_ID_ASS.equals(track.codecId)) {
+            writeSubtitleSampleData(input, SSA_PREFIX, size);
+        } else {
+            TrackOutput output = track.output;
+            if (!this.sampleEncodingHandled) {
+                if (track.hasContentEncryption) {
+                    this.blockFlags &= -NUM;
+                    if (!this.sampleSignalByteRead) {
+                        input.readFully(this.scratch.data, 0, 1);
+                        this.sampleBytesRead++;
+                        if ((this.scratch.data[0] & 128) == 128) {
+                            throw new ParserException("Extension bit is set in signal byte");
+                        }
+                        this.sampleSignalByte = this.scratch.data[0];
+                        this.sampleSignalByteRead = true;
                     }
-                    this.sampleSignalByte = this.scratch.data[0];
-                    this.sampleSignalByteRead = true;
-                }
-                if ((this.sampleSignalByte & 1) == 1) {
-                    boolean hasSubsampleEncryption = (this.sampleSignalByte & 2) == 2;
-                    this.blockFlags |= NUM;
-                    if (!this.sampleInitializationVectorRead) {
-                        input.readFully(this.encryptionInitializationVector.data, 0, 8);
-                        this.sampleBytesRead += 8;
-                        this.sampleInitializationVectorRead = true;
-                        this.scratch.data[0] = (byte) ((hasSubsampleEncryption ? 128 : 0) | 8);
-                        this.scratch.setPosition(0);
-                        output.sampleData(this.scratch, 1);
-                        this.sampleBytesWritten++;
-                        this.encryptionInitializationVector.setPosition(0);
-                        output.sampleData(this.encryptionInitializationVector, 8);
-                        this.sampleBytesWritten += 8;
-                    }
-                    if (hasSubsampleEncryption) {
-                        if (!this.samplePartitionCountRead) {
-                            input.readFully(this.scratch.data, 0, 1);
-                            this.sampleBytesRead++;
+                    if ((this.sampleSignalByte & 1) == 1) {
+                        boolean hasSubsampleEncryption = (this.sampleSignalByte & 2) == 2;
+                        this.blockFlags |= NUM;
+                        if (!this.sampleInitializationVectorRead) {
+                            input.readFully(this.encryptionInitializationVector.data, 0, 8);
+                            this.sampleBytesRead += 8;
+                            this.sampleInitializationVectorRead = true;
+                            this.scratch.data[0] = (byte) ((hasSubsampleEncryption ? 128 : 0) | 8);
                             this.scratch.setPosition(0);
-                            this.samplePartitionCount = this.scratch.readUnsignedByte();
-                            this.samplePartitionCountRead = true;
+                            output.sampleData(this.scratch, 1);
+                            this.sampleBytesWritten++;
+                            this.encryptionInitializationVector.setPosition(0);
+                            output.sampleData(this.encryptionInitializationVector, 8);
+                            this.sampleBytesWritten += 8;
                         }
-                        int samplePartitionDataSize = this.samplePartitionCount * 4;
-                        this.scratch.reset(samplePartitionDataSize);
-                        input.readFully(this.scratch.data, 0, samplePartitionDataSize);
-                        this.sampleBytesRead += samplePartitionDataSize;
-                        short subsampleCount = (short) ((this.samplePartitionCount / 2) + 1);
-                        int subsampleDataSize = (subsampleCount * 6) + 2;
-                        if (this.encryptionSubsampleDataBuffer == null || this.encryptionSubsampleDataBuffer.capacity() < subsampleDataSize) {
-                            this.encryptionSubsampleDataBuffer = ByteBuffer.allocate(subsampleDataSize);
-                        }
-                        this.encryptionSubsampleDataBuffer.position(0);
-                        this.encryptionSubsampleDataBuffer.putShort(subsampleCount);
-                        int partitionOffset = 0;
-                        for (int i = 0; i < this.samplePartitionCount; i++) {
-                            int previousPartitionOffset = partitionOffset;
-                            partitionOffset = this.scratch.readUnsignedIntToInt();
-                            if (i % 2 == 0) {
-                                this.encryptionSubsampleDataBuffer.putShort((short) (partitionOffset - previousPartitionOffset));
-                            } else {
-                                this.encryptionSubsampleDataBuffer.putInt(partitionOffset - previousPartitionOffset);
+                        if (hasSubsampleEncryption) {
+                            if (!this.samplePartitionCountRead) {
+                                input.readFully(this.scratch.data, 0, 1);
+                                this.sampleBytesRead++;
+                                this.scratch.setPosition(0);
+                                this.samplePartitionCount = this.scratch.readUnsignedByte();
+                                this.samplePartitionCountRead = true;
                             }
+                            int samplePartitionDataSize = this.samplePartitionCount * 4;
+                            this.scratch.reset(samplePartitionDataSize);
+                            input.readFully(this.scratch.data, 0, samplePartitionDataSize);
+                            this.sampleBytesRead += samplePartitionDataSize;
+                            short subsampleCount = (short) ((this.samplePartitionCount / 2) + 1);
+                            int subsampleDataSize = (subsampleCount * 6) + 2;
+                            if (this.encryptionSubsampleDataBuffer == null || this.encryptionSubsampleDataBuffer.capacity() < subsampleDataSize) {
+                                this.encryptionSubsampleDataBuffer = ByteBuffer.allocate(subsampleDataSize);
+                            }
+                            this.encryptionSubsampleDataBuffer.position(0);
+                            this.encryptionSubsampleDataBuffer.putShort(subsampleCount);
+                            int partitionOffset = 0;
+                            for (int i = 0; i < this.samplePartitionCount; i++) {
+                                int previousPartitionOffset = partitionOffset;
+                                partitionOffset = this.scratch.readUnsignedIntToInt();
+                                if (i % 2 == 0) {
+                                    this.encryptionSubsampleDataBuffer.putShort((short) (partitionOffset - previousPartitionOffset));
+                                } else {
+                                    this.encryptionSubsampleDataBuffer.putInt(partitionOffset - previousPartitionOffset);
+                                }
+                            }
+                            int finalPartitionSize = (size - this.sampleBytesRead) - partitionOffset;
+                            if (this.samplePartitionCount % 2 == 1) {
+                                this.encryptionSubsampleDataBuffer.putInt(finalPartitionSize);
+                            } else {
+                                this.encryptionSubsampleDataBuffer.putShort((short) finalPartitionSize);
+                                this.encryptionSubsampleDataBuffer.putInt(0);
+                            }
+                            this.encryptionSubsampleData.reset(this.encryptionSubsampleDataBuffer.array(), subsampleDataSize);
+                            output.sampleData(this.encryptionSubsampleData, subsampleDataSize);
+                            this.sampleBytesWritten += subsampleDataSize;
                         }
-                        int finalPartitionSize = (size - this.sampleBytesRead) - partitionOffset;
-                        if (this.samplePartitionCount % 2 == 1) {
-                            this.encryptionSubsampleDataBuffer.putInt(finalPartitionSize);
-                        } else {
-                            this.encryptionSubsampleDataBuffer.putShort((short) finalPartitionSize);
-                            this.encryptionSubsampleDataBuffer.putInt(0);
-                        }
-                        this.encryptionSubsampleData.reset(this.encryptionSubsampleDataBuffer.array(), subsampleDataSize);
-                        output.sampleData(this.encryptionSubsampleData, subsampleDataSize);
-                        this.sampleBytesWritten += subsampleDataSize;
+                    }
+                } else if (track.sampleStrippedBytes != null) {
+                    this.sampleStrippedBytes.reset(track.sampleStrippedBytes, track.sampleStrippedBytes.length);
+                }
+                this.sampleEncodingHandled = true;
+            }
+            size += this.sampleStrippedBytes.limit();
+            if (CODEC_ID_H264.equals(track.codecId) || CODEC_ID_H265.equals(track.codecId)) {
+                byte[] nalLengthData = this.nalLength.data;
+                nalLengthData[0] = (byte) 0;
+                nalLengthData[1] = (byte) 0;
+                nalLengthData[2] = (byte) 0;
+                int nalUnitLengthFieldLength = track.nalUnitLengthFieldLength;
+                int nalUnitLengthFieldLengthDiff = 4 - track.nalUnitLengthFieldLength;
+                while (this.sampleBytesRead < size) {
+                    if (this.sampleCurrentNalBytesRemaining == 0) {
+                        readToTarget(input, nalLengthData, nalUnitLengthFieldLengthDiff, nalUnitLengthFieldLength);
+                        this.nalLength.setPosition(0);
+                        this.sampleCurrentNalBytesRemaining = this.nalLength.readUnsignedIntToInt();
+                        this.nalStartCode.setPosition(0);
+                        output.sampleData(this.nalStartCode, 4);
+                        this.sampleBytesWritten += 4;
+                    } else {
+                        this.sampleCurrentNalBytesRemaining -= readToOutput(input, output, this.sampleCurrentNalBytesRemaining);
                     }
                 }
-            } else if (track.sampleStrippedBytes != null) {
-                this.sampleStrippedBytes.reset(track.sampleStrippedBytes, track.sampleStrippedBytes.length);
-            }
-            this.sampleEncodingHandled = true;
-        }
-        size += this.sampleStrippedBytes.limit();
-        if (CODEC_ID_H264.equals(track.codecId) || CODEC_ID_H265.equals(track.codecId)) {
-            byte[] nalLengthData = this.nalLength.data;
-            nalLengthData[0] = (byte) 0;
-            nalLengthData[1] = (byte) 0;
-            nalLengthData[2] = (byte) 0;
-            int nalUnitLengthFieldLength = track.nalUnitLengthFieldLength;
-            int nalUnitLengthFieldLengthDiff = 4 - track.nalUnitLengthFieldLength;
-            while (this.sampleBytesRead < size) {
-                if (this.sampleCurrentNalBytesRemaining == 0) {
-                    readToTarget(input, nalLengthData, nalUnitLengthFieldLengthDiff, nalUnitLengthFieldLength);
-                    this.nalLength.setPosition(0);
-                    this.sampleCurrentNalBytesRemaining = this.nalLength.readUnsignedIntToInt();
-                    this.nalStartCode.setPosition(0);
-                    output.sampleData(this.nalStartCode, 4);
-                    this.sampleBytesWritten += 4;
-                } else {
-                    this.sampleCurrentNalBytesRemaining -= readToOutput(input, output, this.sampleCurrentNalBytesRemaining);
+            } else {
+                while (this.sampleBytesRead < size) {
+                    readToOutput(input, output, size - this.sampleBytesRead);
                 }
             }
-        } else {
-            while (this.sampleBytesRead < size) {
-                readToOutput(input, output, size - this.sampleBytesRead);
+            if (CODEC_ID_VORBIS.equals(track.codecId)) {
+                this.vorbisNumPageSamples.setPosition(0);
+                output.sampleData(this.vorbisNumPageSamples, 4);
+                this.sampleBytesWritten += 4;
             }
         }
-        if (CODEC_ID_VORBIS.equals(track.codecId)) {
-            this.vorbisNumPageSamples.setPosition(0);
-            output.sampleData(this.vorbisNumPageSamples, 4);
-            this.sampleBytesWritten += 4;
-        }
     }
 
-    private void writeSubripSample(Track track) {
-        setSubripSampleEndTimecode(this.subripSample.data, this.blockDurationUs);
-        track.output.sampleData(this.subripSample, this.subripSample.limit());
-        this.sampleBytesWritten += this.subripSample.limit();
-    }
-
-    private static void setSubripSampleEndTimecode(byte[] subripSampleData, long timeUs) {
-        byte[] timeCodeData;
-        if (timeUs == C.TIME_UNSET) {
-            timeCodeData = SUBRIP_TIMECODE_EMPTY;
+    private void writeSubtitleSampleData(ExtractorInput input, byte[] samplePrefix, int size) throws IOException, InterruptedException {
+        int sizeWithPrefix = samplePrefix.length + size;
+        if (this.subtitleSample.capacity() < sizeWithPrefix) {
+            this.subtitleSample.data = Arrays.copyOf(samplePrefix, sizeWithPrefix + size);
         } else {
-            timeUs -= ((long) ((int) (timeUs / 3600000000L))) * 3600000000L;
-            timeUs -= (long) (60000000 * ((int) (timeUs / 60000000)));
-            int milliseconds = (int) ((timeUs - ((long) (1000000 * ((int) (timeUs / C.MICROS_PER_SECOND))))) / 1000);
-            timeCodeData = Util.getUtf8Bytes(String.format(Locale.US, "%02d:%02d:%02d,%03d", new Object[]{Integer.valueOf(hours), Integer.valueOf(minutes), Integer.valueOf((int) (timeUs / C.MICROS_PER_SECOND)), Integer.valueOf(milliseconds)}));
+            System.arraycopy(samplePrefix, 0, this.subtitleSample.data, 0, samplePrefix.length);
         }
-        System.arraycopy(timeCodeData, 0, subripSampleData, 19, 12);
+        input.readFully(this.subtitleSample.data, samplePrefix.length, size);
+        this.subtitleSample.reset(sizeWithPrefix);
+    }
+
+    private void commitSubtitleSample(Track track, String timecodeFormat, int endTimecodeOffset, long lastTimecodeValueScalingFactor, byte[] emptyTimecode) {
+        setSampleDuration(this.subtitleSample.data, this.blockDurationUs, timecodeFormat, endTimecodeOffset, lastTimecodeValueScalingFactor, emptyTimecode);
+        track.output.sampleData(this.subtitleSample, this.subtitleSample.limit());
+        this.sampleBytesWritten += this.subtitleSample.limit();
+    }
+
+    private static void setSampleDuration(byte[] subripSampleData, long durationUs, String timecodeFormat, int endTimecodeOffset, long lastTimecodeValueScalingFactor, byte[] emptyTimecode) {
+        byte[] timeCodeData;
+        if (durationUs == C.TIME_UNSET) {
+            timeCodeData = emptyTimecode;
+        } else {
+            durationUs -= ((long) (((int) (durationUs / 3600000000L)) * 3600)) * C.MICROS_PER_SECOND;
+            durationUs -= ((long) (((int) (durationUs / 60000000)) * 60)) * C.MICROS_PER_SECOND;
+            int lastValue = (int) ((durationUs - (((long) ((int) (durationUs / C.MICROS_PER_SECOND))) * C.MICROS_PER_SECOND)) / lastTimecodeValueScalingFactor);
+            timeCodeData = Util.getUtf8Bytes(String.format(Locale.US, timecodeFormat, new Object[]{Integer.valueOf(hours), Integer.valueOf(minutes), Integer.valueOf(seconds), Integer.valueOf(lastValue)}));
+        }
+        System.arraycopy(timeCodeData, 0, subripSampleData, endTimecodeOffset, emptyTimecode.length);
     }
 
     private void readToTarget(ExtractorInput input, byte[] target, int offset, int length) throws IOException, InterruptedException {
@@ -1711,7 +1760,7 @@ public final class MatroskaExtractor implements Extractor {
     }
 
     private static boolean isCodecSupported(String codecId) {
-        if (CODEC_ID_VP8.equals(codecId) || CODEC_ID_VP9.equals(codecId) || CODEC_ID_MPEG2.equals(codecId) || CODEC_ID_MPEG4_SP.equals(codecId) || CODEC_ID_MPEG4_ASP.equals(codecId) || CODEC_ID_MPEG4_AP.equals(codecId) || CODEC_ID_H264.equals(codecId) || CODEC_ID_H265.equals(codecId) || CODEC_ID_FOURCC.equals(codecId) || CODEC_ID_THEORA.equals(codecId) || CODEC_ID_OPUS.equals(codecId) || CODEC_ID_VORBIS.equals(codecId) || CODEC_ID_AAC.equals(codecId) || CODEC_ID_MP2.equals(codecId) || CODEC_ID_MP3.equals(codecId) || CODEC_ID_AC3.equals(codecId) || CODEC_ID_E_AC3.equals(codecId) || CODEC_ID_TRUEHD.equals(codecId) || CODEC_ID_DTS.equals(codecId) || CODEC_ID_DTS_EXPRESS.equals(codecId) || CODEC_ID_DTS_LOSSLESS.equals(codecId) || CODEC_ID_FLAC.equals(codecId) || CODEC_ID_ACM.equals(codecId) || CODEC_ID_PCM_INT_LIT.equals(codecId) || CODEC_ID_SUBRIP.equals(codecId) || CODEC_ID_VOBSUB.equals(codecId) || CODEC_ID_PGS.equals(codecId) || CODEC_ID_DVBSUB.equals(codecId)) {
+        if (CODEC_ID_VP8.equals(codecId) || CODEC_ID_VP9.equals(codecId) || CODEC_ID_MPEG2.equals(codecId) || CODEC_ID_MPEG4_SP.equals(codecId) || CODEC_ID_MPEG4_ASP.equals(codecId) || CODEC_ID_MPEG4_AP.equals(codecId) || CODEC_ID_H264.equals(codecId) || CODEC_ID_H265.equals(codecId) || CODEC_ID_FOURCC.equals(codecId) || CODEC_ID_THEORA.equals(codecId) || CODEC_ID_OPUS.equals(codecId) || CODEC_ID_VORBIS.equals(codecId) || CODEC_ID_AAC.equals(codecId) || CODEC_ID_MP2.equals(codecId) || CODEC_ID_MP3.equals(codecId) || CODEC_ID_AC3.equals(codecId) || CODEC_ID_E_AC3.equals(codecId) || CODEC_ID_TRUEHD.equals(codecId) || CODEC_ID_DTS.equals(codecId) || CODEC_ID_DTS_EXPRESS.equals(codecId) || CODEC_ID_DTS_LOSSLESS.equals(codecId) || CODEC_ID_FLAC.equals(codecId) || CODEC_ID_ACM.equals(codecId) || CODEC_ID_PCM_INT_LIT.equals(codecId) || CODEC_ID_SUBRIP.equals(codecId) || CODEC_ID_ASS.equals(codecId) || CODEC_ID_VOBSUB.equals(codecId) || CODEC_ID_PGS.equals(codecId) || CODEC_ID_DVBSUB.equals(codecId)) {
             return true;
         }
         return false;

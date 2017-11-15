@@ -1,31 +1,23 @@
 package org.telegram.messenger.exoplayer2;
 
-import android.support.annotation.Nullable;
+import android.os.Looper;
 import org.telegram.messenger.exoplayer2.source.MediaSource;
-import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
-import org.telegram.messenger.exoplayer2.trackselection.TrackSelectionArray;
 
-public interface ExoPlayer {
+public interface ExoPlayer extends Player {
+    @Deprecated
+    public static final int REPEAT_MODE_ALL = 2;
+    @Deprecated
+    public static final int REPEAT_MODE_OFF = 0;
+    @Deprecated
+    public static final int REPEAT_MODE_ONE = 1;
+    @Deprecated
     public static final int STATE_BUFFERING = 2;
+    @Deprecated
     public static final int STATE_ENDED = 4;
+    @Deprecated
     public static final int STATE_IDLE = 1;
+    @Deprecated
     public static final int STATE_READY = 3;
-
-    public interface EventListener {
-        void onLoadingChanged(boolean z);
-
-        void onPlaybackParametersChanged(PlaybackParameters playbackParameters);
-
-        void onPlayerError(ExoPlaybackException exoPlaybackException);
-
-        void onPlayerStateChanged(boolean z, int i);
-
-        void onPositionDiscontinuity();
-
-        void onTimelineChanged(Timeline timeline, Object obj);
-
-        void onTracksChanged(TrackGroupArray trackGroupArray, TrackSelectionArray trackSelectionArray);
-    }
 
     public interface ExoPlayerComponent {
         void handleMessage(int i, Object obj) throws ExoPlaybackException;
@@ -43,67 +35,17 @@ public interface ExoPlayer {
         }
     }
 
-    void addListener(EventListener eventListener);
+    @Deprecated
+    public interface EventListener extends org.telegram.messenger.exoplayer2.Player.EventListener {
+    }
 
     void blockingSendMessages(ExoPlayerMessage... exoPlayerMessageArr);
 
-    int getBufferedPercentage();
-
-    long getBufferedPosition();
-
-    Object getCurrentManifest();
-
-    int getCurrentPeriodIndex();
-
-    long getCurrentPosition();
-
-    Timeline getCurrentTimeline();
-
-    TrackGroupArray getCurrentTrackGroups();
-
-    TrackSelectionArray getCurrentTrackSelections();
-
-    int getCurrentWindowIndex();
-
-    long getDuration();
-
-    boolean getPlayWhenReady();
-
-    PlaybackParameters getPlaybackParameters();
-
-    int getPlaybackState();
-
-    int getRendererCount();
-
-    int getRendererType(int i);
-
-    boolean isCurrentWindowDynamic();
-
-    boolean isCurrentWindowSeekable();
-
-    boolean isLoading();
+    Looper getPlaybackLooper();
 
     void prepare(MediaSource mediaSource);
 
     void prepare(MediaSource mediaSource, boolean z, boolean z2);
 
-    void release();
-
-    void removeListener(EventListener eventListener);
-
-    void seekTo(int i, long j);
-
-    void seekTo(long j);
-
-    void seekToDefaultPosition();
-
-    void seekToDefaultPosition(int i);
-
     void sendMessages(ExoPlayerMessage... exoPlayerMessageArr);
-
-    void setPlayWhenReady(boolean z);
-
-    void setPlaybackParameters(@Nullable PlaybackParameters playbackParameters);
-
-    void stop();
 }

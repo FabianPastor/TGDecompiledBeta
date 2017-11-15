@@ -20,6 +20,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.ShortBufferException;
 import javax.crypto.spec.IvParameterSpec;
+import org.telegram.messenger.exoplayer2.C;
 
 public class CencEncryptingSampleList extends AbstractList<Sample> {
     List<CencSampleAuxiliaryDataFormat> auxiliaryDataFormats;
@@ -49,11 +50,11 @@ public class CencEncryptingSampleList extends AbstractList<Sample> {
                 if (this.cencSampleAuxiliaryDataFormat.pairs == null || this.cencSampleAuxiliaryDataFormat.pairs.length <= 0) {
                     byte[] fullyEncryptedSample = new byte[sample.limit()];
                     sample.get(fullyEncryptedSample);
-                    if ("cbc1".equals(CencEncryptingSampleList.this.encryptionAlgo)) {
+                    if (C.CENC_TYPE_cbc1.equals(CencEncryptingSampleList.this.encryptionAlgo)) {
                         int encryptedLength = (fullyEncryptedSample.length / 16) * 16;
                         channel.write(ByteBuffer.wrap(this.cipher.doFinal(fullyEncryptedSample, 0, encryptedLength)));
                         channel.write(ByteBuffer.wrap(fullyEncryptedSample, encryptedLength, fullyEncryptedSample.length - encryptedLength));
-                    } else if ("cenc".equals(CencEncryptingSampleList.this.encryptionAlgo)) {
+                    } else if (C.CENC_TYPE_cenc.equals(CencEncryptingSampleList.this.encryptionAlgo)) {
                         channel.write(ByteBuffer.wrap(this.cipher.doFinal(fullyEncryptedSample)));
                     }
                 } else {
@@ -111,11 +112,11 @@ public class CencEncryptingSampleList extends AbstractList<Sample> {
                 } else {
                     byte[] fullyEncryptedSample = new byte[sample.limit()];
                     sample.get(fullyEncryptedSample);
-                    if ("cbc1".equals(CencEncryptingSampleList.this.encryptionAlgo)) {
+                    if (C.CENC_TYPE_cbc1.equals(CencEncryptingSampleList.this.encryptionAlgo)) {
                         int encryptedLength = (fullyEncryptedSample.length / 16) * 16;
                         encSample.put(this.cipher.doFinal(fullyEncryptedSample, 0, encryptedLength));
                         encSample.put(fullyEncryptedSample, encryptedLength, fullyEncryptedSample.length - encryptedLength);
-                    } else if ("cenc".equals(CencEncryptingSampleList.this.encryptionAlgo)) {
+                    } else if (C.CENC_TYPE_cenc.equals(CencEncryptingSampleList.this.encryptionAlgo)) {
                         encSample.put(this.cipher.doFinal(fullyEncryptedSample));
                     }
                 }
@@ -131,7 +132,7 @@ public class CencEncryptingSampleList extends AbstractList<Sample> {
     }
 
     public CencEncryptingSampleList(SecretKey defaultCek, List<Sample> parent, List<CencSampleAuxiliaryDataFormat> auxiliaryDataFormats) {
-        this(new RangeStartMap(Integer.valueOf(0), defaultCek), parent, auxiliaryDataFormats, "cenc");
+        this(new RangeStartMap(Integer.valueOf(0), defaultCek), parent, auxiliaryDataFormats, C.CENC_TYPE_cenc);
     }
 
     public CencEncryptingSampleList(RangeStartMap<Integer, SecretKey> ceks, List<Sample> parent, List<CencSampleAuxiliaryDataFormat> auxiliaryDataFormats, String encryptionAlgo) {
@@ -141,9 +142,9 @@ public class CencEncryptingSampleList extends AbstractList<Sample> {
         this.encryptionAlgo = encryptionAlgo;
         this.parent = parent;
         try {
-            if ("cenc".equals(encryptionAlgo)) {
+            if (C.CENC_TYPE_cenc.equals(encryptionAlgo)) {
                 this.cipher = Cipher.getInstance("AES/CTR/NoPadding");
-            } else if ("cbc1".equals(encryptionAlgo)) {
+            } else if (C.CENC_TYPE_cbc1.equals(encryptionAlgo)) {
                 this.cipher = Cipher.getInstance("AES/CBC/NoPadding");
             } else {
                 throw new RuntimeException("Only cenc & cbc1 is supported as encryptionAlgo");

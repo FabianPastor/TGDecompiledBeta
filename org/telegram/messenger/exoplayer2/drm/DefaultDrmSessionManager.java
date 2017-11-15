@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
@@ -58,7 +59,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSe
     private byte[] schemeInitData;
     private String schemeMimeType;
     private byte[] sessionId;
-    private int state = 1;
+    private int state;
     final UUID uuid;
 
     public interface EventListener {
@@ -221,6 +222,21 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSe
         this.offlineLicenseKeySetId = offlineLicenseKeySetId;
     }
 
+    public boolean canAcquireSession(@NonNull DrmInitData drmInitData) {
+        SchemeData schemeData = drmInitData.get(this.uuid);
+        if (schemeData == null) {
+            return false;
+        }
+        String schemeType = schemeData.type;
+        if (schemeType == null || "cenc".equals(schemeType)) {
+            return true;
+        }
+        if ((C.CENC_TYPE_cbc1.equals(schemeType) || C.CENC_TYPE_cbcs.equals(schemeType) || C.CENC_TYPE_cens.equals(schemeType)) && Util.SDK_INT < 24) {
+            return false;
+        }
+        return true;
+    }
+
     public DrmSession<T> acquireSession(Looper playbackLooper, DrmInitData drmInitData) {
         boolean z = this.playbackLooper == null || this.playbackLooper == playbackLooper;
         Assertions.checkState(z);
@@ -249,7 +265,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSe
                         }
                     }
                     if (Util.SDK_INT < 26 && C.CLEARKEY_UUID.equals(this.uuid) && (MimeTypes.VIDEO_MP4.equals(this.schemeMimeType) || MimeTypes.AUDIO_MP4.equals(this.schemeMimeType))) {
-                        this.schemeMimeType = CENC_SCHEME_MIME_TYPE;
+                        this.schemeMimeType = "cenc";
                     }
                 }
             }
@@ -263,7 +279,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSe
         int i = this.openCount - 1;
         this.openCount = i;
         if (i == 0) {
-            this.state = 1;
+            this.state = 0;
             this.provisioningInProgress = false;
             this.mediaDrmHandler.removeCallbacksAndMessages(null);
             this.postResponseHandler.removeCallbacksAndMessages(null);
@@ -286,29 +302,16 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSe
         return this.state;
     }
 
-    public final T getMediaCrypto() {
-        if (this.state == 3 || this.state == 4) {
-            return this.mediaCrypto;
-        }
-        throw new IllegalStateException();
-    }
-
-    public boolean requiresSecureDecoderComponent(String mimeType) {
-        if (this.state == 3 || this.state == 4) {
-            return this.mediaCrypto.requiresSecureDecoderComponent(mimeType);
-        }
-        throw new IllegalStateException();
-    }
-
     public final DrmSessionException getError() {
-        return this.state == 0 ? this.lastException : null;
+        return this.state == 1 ? this.lastException : null;
+    }
+
+    public final T getMediaCrypto() {
+        return this.mediaCrypto;
     }
 
     public Map<String, String> queryKeyStatus() {
-        if (this.sessionId != null) {
-            return this.mediaDrm.queryKeyStatus(this.sessionId);
-        }
-        throw new IllegalStateException();
+        return this.sessionId == null ? null : this.mediaDrm.queryKeyStatus(this.sessionId);
     }
 
     public byte[] getOfflineLicenseKeySetId() {
@@ -495,7 +498,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSe
             });
         }
         if (this.state != 4) {
-            this.state = 0;
+            this.state = 1;
         }
     }
 }

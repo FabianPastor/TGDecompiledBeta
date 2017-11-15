@@ -7,6 +7,7 @@ import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
 import org.telegram.messenger.exoplayer2.source.MediaPeriod.Callback;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
 import org.telegram.messenger.exoplayer2.util.Assertions;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public final class ClippingMediaPeriod implements MediaPeriod, Callback {
     private Callback callback;
@@ -75,8 +76,9 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
         }
     }
 
-    public ClippingMediaPeriod(MediaPeriod mediaPeriod) {
+    public ClippingMediaPeriod(MediaPeriod mediaPeriod, boolean enableInitialDiscontinuity) {
         this.mediaPeriod = mediaPeriod;
+        this.pendingInitialDiscontinuity = enableInitialDiscontinuity;
     }
 
     public void setClipping(long startUs, long endUs) {
@@ -84,9 +86,9 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
         this.endUs = endUs;
     }
 
-    public void prepare(Callback callback) {
+    public void prepare(Callback callback, long positionUs) {
         this.callback = callback;
-        this.mediaPeriod.prepare(this);
+        this.mediaPeriod.prepare(this, this.startUs + positionUs);
     }
 
     public void maybeThrowPrepareError() throws IOException {
@@ -99,6 +101,7 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
 
     public long selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs) {
         int i;
+        boolean z;
         this.sampleStreams = new ClippingSampleStream[streams.length];
         SampleStream[] internalStreams = new SampleStream[streams.length];
         for (i = 0; i < streams.length; i++) {
@@ -106,7 +109,11 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
             internalStreams[i] = this.sampleStreams[i] != null ? this.sampleStreams[i].stream : null;
         }
         long enablePositionUs = this.mediaPeriod.selectTracks(selections, mayRetainStreamFlags, internalStreams, streamResetFlags, positionUs + this.startUs);
-        boolean z = enablePositionUs == this.startUs + positionUs || (enablePositionUs >= this.startUs && (this.endUs == Long.MIN_VALUE || enablePositionUs <= this.endUs));
+        if (this.pendingInitialDiscontinuity) {
+            z = this.startUs != 0 && shouldKeepInitialDiscontinuity(selections);
+            this.pendingInitialDiscontinuity = z;
+        }
+        z = enablePositionUs == this.startUs + positionUs || (enablePositionUs >= this.startUs && (this.endUs == Long.MIN_VALUE || enablePositionUs <= this.endUs));
         Assertions.checkState(z);
         i = 0;
         while (i < streams.length) {
@@ -199,17 +206,21 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
     }
 
     public void onPrepared(MediaPeriod mediaPeriod) {
-        boolean z = true;
-        boolean z2 = (this.startUs == C.TIME_UNSET || this.endUs == C.TIME_UNSET) ? false : true;
-        Assertions.checkState(z2);
-        if (this.startUs == 0) {
-            z = false;
-        }
-        this.pendingInitialDiscontinuity = z;
+        boolean z = (this.startUs == C.TIME_UNSET || this.endUs == C.TIME_UNSET) ? false : true;
+        Assertions.checkState(z);
         this.callback.onPrepared(this);
     }
 
     public void onContinueLoadingRequested(MediaPeriod source) {
         this.callback.onContinueLoadingRequested(this);
+    }
+
+    private static boolean shouldKeepInitialDiscontinuity(TrackSelection[] selections) {
+        for (TrackSelection trackSelection : selections) {
+            if (trackSelection != null && !MimeTypes.isAudio(trackSelection.getSelectedFormat().sampleMimeType)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

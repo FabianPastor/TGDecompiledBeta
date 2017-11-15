@@ -7,6 +7,7 @@ import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
+import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.upstream.DataSource.Factory;
 import org.telegram.messenger.exoplayer2.util.Assertions;
@@ -52,8 +53,8 @@ public final class SingleSampleMediaSource implements MediaSource {
     public void maybeThrowSourceInfoRefreshError() throws IOException {
     }
 
-    public MediaPeriod createPeriod(int index, Allocator allocator, long positionUs) {
-        Assertions.checkArgument(index == 0);
+    public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
+        Assertions.checkArgument(id.periodIndex == 0);
         return new SingleSampleMediaPeriod(this.uri, this.dataSourceFactory, this.format, this.minLoadableRetryCount, this.eventHandler, this.eventListener, this.eventSourceId);
     }
 

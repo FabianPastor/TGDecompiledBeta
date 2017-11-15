@@ -93,7 +93,7 @@ public class DashManifest {
                     break;
                 }
             } while (key.adaptationSetIndex == adaptationSetIndex);
-            copyAdaptationSets.add(new AdaptationSet(adaptationSet.id, adaptationSet.type, copyRepresentations, adaptationSet.accessibilityDescriptors));
+            copyAdaptationSets.add(new AdaptationSet(adaptationSet.id, adaptationSet.type, copyRepresentations, adaptationSet.accessibilityDescriptors, adaptationSet.supplementalProperties));
         } while (key.periodIndex == periodIndex);
         keys.addFirst(key);
         return copyAdaptationSets;

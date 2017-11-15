@@ -18,6 +18,7 @@ public class UserConfig {
     public static int autoLockIn = 3600;
     public static boolean blockedUsersLoaded;
     public static int botRatingLoadTime;
+    private static boolean configLoaded;
     public static boolean contactsReimported;
     public static int contactsSavedCount;
     private static User currentUser;
@@ -174,6 +175,9 @@ public class UserConfig {
 
     public static void loadConfig() {
         synchronized (sync) {
+            if (configLoaded) {
+                return;
+            }
             final File configFile = new File(ApplicationLoader.getFilesDirFixed(), "user.dat");
             SerializedData data;
             SharedPreferences preferences;
@@ -364,6 +368,7 @@ public class UserConfig {
                     saveConfig(false);
                 }
             }
+            configLoaded = true;
         }
     }
 

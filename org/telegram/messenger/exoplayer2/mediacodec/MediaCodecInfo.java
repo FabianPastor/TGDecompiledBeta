@@ -19,32 +19,43 @@ public final class MediaCodecInfo {
     private final CodecCapabilities capabilities;
     private final String mimeType;
     public final String name;
+    public final boolean secure;
     public final boolean tunneling;
 
     public static MediaCodecInfo newPassthroughInstance(String name) {
-        return new MediaCodecInfo(name, null, null);
+        return new MediaCodecInfo(name, null, null, false, false);
     }
 
     public static MediaCodecInfo newInstance(String name, String mimeType, CodecCapabilities capabilities) {
-        return new MediaCodecInfo(name, mimeType, capabilities);
+        return new MediaCodecInfo(name, mimeType, capabilities, false, false);
     }
 
-    private MediaCodecInfo(String name, String mimeType, CodecCapabilities capabilities) {
+    public static MediaCodecInfo newInstance(String name, String mimeType, CodecCapabilities capabilities, boolean forceDisableAdaptive, boolean forceSecure) {
+        return new MediaCodecInfo(name, mimeType, capabilities, forceDisableAdaptive, forceSecure);
+    }
+
+    private MediaCodecInfo(String name, String mimeType, CodecCapabilities capabilities, boolean forceDisableAdaptive, boolean forceSecure) {
         boolean z;
-        boolean z2 = true;
+        boolean z2 = false;
         this.name = (String) Assertions.checkNotNull(name);
         this.mimeType = mimeType;
         this.capabilities = capabilities;
-        if (capabilities == null || !isAdaptive(capabilities)) {
+        if (forceDisableAdaptive || capabilities == null || !isAdaptive(capabilities)) {
             z = false;
         } else {
             z = true;
         }
         this.adaptive = z;
         if (capabilities == null || !isTunneling(capabilities)) {
-            z2 = false;
+            z = false;
+        } else {
+            z = true;
         }
-        this.tunneling = z2;
+        this.tunneling = z;
+        if (forceSecure || (capabilities != null && isSecure(capabilities))) {
+            z2 = true;
+        }
+        this.secure = z2;
     }
 
     public CodecProfileLevel[] getProfileLevels() {
@@ -87,8 +98,8 @@ public final class MediaCodecInfo {
             logNoSupport("sizeAndRate.vCaps");
             return false;
         }
-        if (!areSizeAndRateSupported(videoCapabilities, width, height, frameRate)) {
-            if (width >= height || !areSizeAndRateSupported(videoCapabilities, height, width, frameRate)) {
+        if (!areSizeAndRateSupportedV21(videoCapabilities, width, height, frameRate)) {
+            if (width >= height || !areSizeAndRateSupportedV21(videoCapabilities, height, width, frameRate)) {
                 logNoSupport("sizeAndRate.support, " + width + "x" + height + "x" + frameRate);
                 return false;
             }
@@ -141,7 +152,7 @@ public final class MediaCodecInfo {
         if (audioCapabilities == null) {
             logNoSupport("channelCount.aCaps");
             return false;
-        } else if (audioCapabilities.getMaxInputChannelCount() >= channelCount) {
+        } else if (adjustMaxInputChannelCount(this.name, this.mimeType, audioCapabilities.getMaxInputChannelCount()) >= channelCount) {
             return true;
         } else {
             logNoSupport("channelCount.support, " + channelCount);
@@ -157,6 +168,25 @@ public final class MediaCodecInfo {
         Log.d(TAG, "AssumedSupport [" + message + "] [" + this.name + ", " + this.mimeType + "] [" + Util.DEVICE_DEBUG_INFO + "]");
     }
 
+    private static int adjustMaxInputChannelCount(String name, String mimeType, int maxChannelCount) {
+        if (maxChannelCount > 1) {
+            return maxChannelCount;
+        }
+        if ((Util.SDK_INT >= 26 && maxChannelCount > 0) || MimeTypes.AUDIO_MPEG.equals(mimeType) || MimeTypes.AUDIO_AMR_NB.equals(mimeType) || MimeTypes.AUDIO_AMR_WB.equals(mimeType) || MimeTypes.AUDIO_AAC.equals(mimeType) || MimeTypes.AUDIO_VORBIS.equals(mimeType) || MimeTypes.AUDIO_OPUS.equals(mimeType) || MimeTypes.AUDIO_RAW.equals(mimeType) || MimeTypes.AUDIO_FLAC.equals(mimeType) || MimeTypes.AUDIO_ALAW.equals(mimeType) || MimeTypes.AUDIO_MLAW.equals(mimeType) || MimeTypes.AUDIO_MSGSM.equals(mimeType)) {
+            return maxChannelCount;
+        }
+        int assumedMaxChannelCount;
+        if (MimeTypes.AUDIO_AC3.equals(mimeType)) {
+            assumedMaxChannelCount = 6;
+        } else if (MimeTypes.AUDIO_E_AC3.equals(mimeType)) {
+            assumedMaxChannelCount = 16;
+        } else {
+            assumedMaxChannelCount = 30;
+        }
+        Log.w(TAG, "AssumedMaxChannelAdjustment: " + name + ", [" + maxChannelCount + " to " + assumedMaxChannelCount + "]");
+        return assumedMaxChannelCount;
+    }
+
     private static boolean isAdaptive(CodecCapabilities capabilities) {
         return Util.SDK_INT >= 19 && isAdaptiveV19(capabilities);
     }
@@ -166,14 +196,6 @@ public final class MediaCodecInfo {
         return capabilities.isFeatureSupported("adaptive-playback");
     }
 
-    @TargetApi(21)
-    private static boolean areSizeAndRateSupported(VideoCapabilities capabilities, int width, int height, double frameRate) {
-        if (frameRate == -1.0d || frameRate <= 0.0d) {
-            return capabilities.isSizeSupported(width, height);
-        }
-        return capabilities.areSizeAndRateSupported(width, height, frameRate);
-    }
-
     private static boolean isTunneling(CodecCapabilities capabilities) {
         return Util.SDK_INT >= 21 && isTunnelingV21(capabilities);
     }
@@ -181,5 +203,22 @@ public final class MediaCodecInfo {
     @TargetApi(21)
     private static boolean isTunnelingV21(CodecCapabilities capabilities) {
         return capabilities.isFeatureSupported("tunneled-playback");
+    }
+
+    private static boolean isSecure(CodecCapabilities capabilities) {
+        return Util.SDK_INT >= 21 && isSecureV21(capabilities);
+    }
+
+    @TargetApi(21)
+    private static boolean isSecureV21(CodecCapabilities capabilities) {
+        return capabilities.isFeatureSupported("secure-playback");
+    }
+
+    @TargetApi(21)
+    private static boolean areSizeAndRateSupportedV21(VideoCapabilities capabilities, int width, int height, double frameRate) {
+        if (frameRate == -1.0d || frameRate <= 0.0d) {
+            return capabilities.isSizeSupported(width, height);
+        }
+        return capabilities.areSizeAndRateSupported(width, height, frameRate);
     }
 }

@@ -1479,6 +1479,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return false;
     }
 
+    public boolean isSendButtonVisible() {
+        return this.sendButton.getVisibility() == 0;
+    }
+
     private void setRecordVideoButtonVisible(boolean visible, boolean animated) {
         if (this.videoSendButton != null) {
             this.videoSendButton.setTag(visible ? Integer.valueOf(1) : null);
@@ -2909,7 +2913,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     public void setButtons(MessageObject messageObject, boolean openKeyboard) {
-        TL_replyKeyboardMarkup tL_replyKeyboardMarkup = null;
         if (this.replyingMessageObject != null && this.replyingMessageObject == this.botButtonsMessageObject && this.replyingMessageObject != messageObject) {
             this.botMessageObject = messageObject;
         } else if (this.botButton == null) {
@@ -2940,14 +2943,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.sizeNotifierLayout.addView(this.botKeyboardView);
                 }
                 this.botButtonsMessageObject = messageObject;
-                TL_replyKeyboardMarkup tL_replyKeyboardMarkup2 = (messageObject == null || !(messageObject.messageOwner.reply_markup instanceof TL_replyKeyboardMarkup)) ? null : (TL_replyKeyboardMarkup) messageObject.messageOwner.reply_markup;
-                this.botReplyMarkup = tL_replyKeyboardMarkup2;
+                TL_replyKeyboardMarkup tL_replyKeyboardMarkup = (messageObject == null || !(messageObject.messageOwner.reply_markup instanceof TL_replyKeyboardMarkup)) ? null : (TL_replyKeyboardMarkup) messageObject.messageOwner.reply_markup;
+                this.botReplyMarkup = tL_replyKeyboardMarkup;
                 this.botKeyboardView.setPanelHeight(AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y ? this.keyboardHeightLand : this.keyboardHeight);
-                BotKeyboardView botKeyboardView = this.botKeyboardView;
-                if (this.botReplyMarkup != null) {
-                    tL_replyKeyboardMarkup = this.botReplyMarkup;
-                }
-                botKeyboardView.setButtons(tL_replyKeyboardMarkup);
+                this.botKeyboardView.setButtons(this.botReplyMarkup);
                 if (this.botReplyMarkup != null) {
                     boolean keyboardHidden;
                     SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);

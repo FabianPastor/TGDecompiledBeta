@@ -13,6 +13,7 @@ import org.telegram.messenger.exoplayer2.RendererCapabilities;
 import org.telegram.messenger.exoplayer2.source.TrackGroup;
 import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection.Factory;
+import org.telegram.messenger.exoplayer2.upstream.BandwidthMeter;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 import org.telegram.tgnet.ConnectionsManager;
@@ -62,17 +63,17 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         public final int maxVideoBitrate;
         public final int maxVideoHeight;
         public final int maxVideoWidth;
-        public final boolean orientationMayChange;
         public final String preferredAudioLanguage;
         public final String preferredTextLanguage;
         public final int viewportHeight;
+        public final boolean viewportOrientationMayChange;
         public final int viewportWidth;
 
         public Parameters() {
             this(null, null, false, true, ConnectionsManager.DEFAULT_DATACENTER_ID, ConnectionsManager.DEFAULT_DATACENTER_ID, ConnectionsManager.DEFAULT_DATACENTER_ID, true, true, ConnectionsManager.DEFAULT_DATACENTER_ID, ConnectionsManager.DEFAULT_DATACENTER_ID, true);
         }
 
-        public Parameters(String preferredAudioLanguage, String preferredTextLanguage, boolean allowMixedMimeAdaptiveness, boolean allowNonSeamlessAdaptiveness, int maxVideoWidth, int maxVideoHeight, int maxVideoBitrate, boolean exceedVideoConstraintsIfNecessary, boolean exceedRendererCapabilitiesIfNecessary, int viewportWidth, int viewportHeight, boolean orientationMayChange) {
+        public Parameters(String preferredAudioLanguage, String preferredTextLanguage, boolean allowMixedMimeAdaptiveness, boolean allowNonSeamlessAdaptiveness, int maxVideoWidth, int maxVideoHeight, int maxVideoBitrate, boolean exceedVideoConstraintsIfNecessary, boolean exceedRendererCapabilitiesIfNecessary, int viewportWidth, int viewportHeight, boolean viewportOrientationMayChange) {
             this.preferredAudioLanguage = preferredAudioLanguage;
             this.preferredTextLanguage = preferredTextLanguage;
             this.allowMixedMimeAdaptiveness = allowMixedMimeAdaptiveness;
@@ -84,7 +85,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
             this.exceedRendererCapabilitiesIfNecessary = exceedRendererCapabilitiesIfNecessary;
             this.viewportWidth = viewportWidth;
             this.viewportHeight = viewportHeight;
-            this.orientationMayChange = orientationMayChange;
+            this.viewportOrientationMayChange = viewportOrientationMayChange;
         }
 
         public Parameters withPreferredAudioLanguage(String preferredAudioLanguage) {
@@ -92,7 +93,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
             if (TextUtils.equals(preferredAudioLanguage, this.preferredAudioLanguage)) {
                 return this;
             }
-            return new Parameters(preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.orientationMayChange);
+            return new Parameters(preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
         }
 
         public Parameters withPreferredTextLanguage(String preferredTextLanguage) {
@@ -100,35 +101,35 @@ public class DefaultTrackSelector extends MappingTrackSelector {
             if (TextUtils.equals(preferredTextLanguage, this.preferredTextLanguage)) {
                 return this;
             }
-            return new Parameters(this.preferredAudioLanguage, preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.orientationMayChange);
+            return new Parameters(this.preferredAudioLanguage, preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
         }
 
         public Parameters withAllowMixedMimeAdaptiveness(boolean allowMixedMimeAdaptiveness) {
             if (allowMixedMimeAdaptiveness == this.allowMixedMimeAdaptiveness) {
                 return this;
             }
-            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.orientationMayChange);
+            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
         }
 
         public Parameters withAllowNonSeamlessAdaptiveness(boolean allowNonSeamlessAdaptiveness) {
             if (allowNonSeamlessAdaptiveness == this.allowNonSeamlessAdaptiveness) {
                 return this;
             }
-            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.orientationMayChange);
+            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
         }
 
         public Parameters withMaxVideoSize(int maxVideoWidth, int maxVideoHeight) {
             if (maxVideoWidth == this.maxVideoWidth && maxVideoHeight == this.maxVideoHeight) {
                 return this;
             }
-            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, maxVideoWidth, maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.orientationMayChange);
+            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, maxVideoWidth, maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
         }
 
         public Parameters withMaxVideoBitrate(int maxVideoBitrate) {
             if (maxVideoBitrate == this.maxVideoBitrate) {
                 return this;
             }
-            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.orientationMayChange);
+            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
         }
 
         public Parameters withMaxVideoSizeSd() {
@@ -143,23 +144,23 @@ public class DefaultTrackSelector extends MappingTrackSelector {
             if (exceedVideoConstraintsIfNecessary == this.exceedVideoConstraintsIfNecessary) {
                 return this;
             }
-            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.orientationMayChange);
+            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
         }
 
         public Parameters withExceedRendererCapabilitiesIfNecessary(boolean exceedRendererCapabilitiesIfNecessary) {
             if (exceedRendererCapabilitiesIfNecessary == this.exceedRendererCapabilitiesIfNecessary) {
                 return this;
             }
-            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.orientationMayChange);
+            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
         }
 
-        public Parameters withViewportSize(int viewportWidth, int viewportHeight, boolean orientationMayChange) {
-            return (viewportWidth == this.viewportWidth && viewportHeight == this.viewportHeight && orientationMayChange == this.orientationMayChange) ? this : new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, viewportWidth, viewportHeight, orientationMayChange);
+        public Parameters withViewportSize(int viewportWidth, int viewportHeight, boolean viewportOrientationMayChange) {
+            return (viewportWidth == this.viewportWidth && viewportHeight == this.viewportHeight && viewportOrientationMayChange == this.viewportOrientationMayChange) ? this : new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, viewportWidth, viewportHeight, viewportOrientationMayChange);
         }
 
-        public Parameters withViewportSizeFromContext(Context context, boolean orientationMayChange) {
+        public Parameters withViewportSizeFromContext(Context context, boolean viewportOrientationMayChange) {
             Point viewportSize = Util.getPhysicalDisplaySize(context);
-            return withViewportSize(viewportSize.x, viewportSize.y, orientationMayChange);
+            return withViewportSize(viewportSize.x, viewportSize.y, viewportOrientationMayChange);
         }
 
         public Parameters withoutViewportSizeConstraints() {
@@ -174,7 +175,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
                 return false;
             }
             Parameters other = (Parameters) obj;
-            if (this.allowMixedMimeAdaptiveness == other.allowMixedMimeAdaptiveness && this.allowNonSeamlessAdaptiveness == other.allowNonSeamlessAdaptiveness && this.maxVideoWidth == other.maxVideoWidth && this.maxVideoHeight == other.maxVideoHeight && this.exceedVideoConstraintsIfNecessary == other.exceedVideoConstraintsIfNecessary && this.exceedRendererCapabilitiesIfNecessary == other.exceedRendererCapabilitiesIfNecessary && this.orientationMayChange == other.orientationMayChange && this.viewportWidth == other.viewportWidth && this.viewportHeight == other.viewportHeight && this.maxVideoBitrate == other.maxVideoBitrate && TextUtils.equals(this.preferredAudioLanguage, other.preferredAudioLanguage) && TextUtils.equals(this.preferredTextLanguage, other.preferredTextLanguage)) {
+            if (this.allowMixedMimeAdaptiveness == other.allowMixedMimeAdaptiveness && this.allowNonSeamlessAdaptiveness == other.allowNonSeamlessAdaptiveness && this.maxVideoWidth == other.maxVideoWidth && this.maxVideoHeight == other.maxVideoHeight && this.exceedVideoConstraintsIfNecessary == other.exceedVideoConstraintsIfNecessary && this.exceedRendererCapabilitiesIfNecessary == other.exceedRendererCapabilitiesIfNecessary && this.viewportOrientationMayChange == other.viewportOrientationMayChange && this.viewportWidth == other.viewportWidth && this.viewportHeight == other.viewportHeight && this.maxVideoBitrate == other.maxVideoBitrate && TextUtils.equals(this.preferredAudioLanguage, other.preferredAudioLanguage) && TextUtils.equals(this.preferredTextLanguage, other.preferredTextLanguage)) {
                 return true;
             }
             return false;
@@ -202,7 +203,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
                 i = 0;
             }
             i = (hashCode + i) * 31;
-            if (!this.orientationMayChange) {
+            if (!this.viewportOrientationMayChange) {
                 i2 = 0;
             }
             return ((((i + i2) * 31) + this.viewportWidth) * 31) + this.viewportHeight;
@@ -210,7 +211,11 @@ public class DefaultTrackSelector extends MappingTrackSelector {
     }
 
     public DefaultTrackSelector() {
-        this(null);
+        this((Factory) null);
+    }
+
+    public DefaultTrackSelector(BandwidthMeter bandwidthMeter) {
+        this(new AdaptiveTrackSelection.Factory(bandwidthMeter));
     }
 
     public DefaultTrackSelector(Factory adaptiveTrackSelectionFactory) {
@@ -234,54 +239,68 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         int rendererCount = rendererCapabilities.length;
         TrackSelection[] rendererTrackSelections = new TrackSelection[rendererCount];
         Parameters params = (Parameters) this.paramsReference.get();
-        boolean videoTrackAndRendererPresent = false;
+        boolean seenVideoRendererWithMappedTracks = false;
+        boolean selectedVideoTracks = false;
         for (i = 0; i < rendererCount; i++) {
             if (2 == rendererCapabilities[i].getTrackType()) {
                 int i2;
-                rendererTrackSelections[i] = selectVideoTrack(rendererCapabilities[i], rendererTrackGroupArrays[i], rendererFormatSupports[i], params.maxVideoWidth, params.maxVideoHeight, params.maxVideoBitrate, params.allowNonSeamlessAdaptiveness, params.allowMixedMimeAdaptiveness, params.viewportWidth, params.viewportHeight, params.orientationMayChange, this.adaptiveTrackSelectionFactory, params.exceedVideoConstraintsIfNecessary, params.exceedRendererCapabilitiesIfNecessary);
+                if (!selectedVideoTracks) {
+                    rendererTrackSelections[i] = selectVideoTrack(rendererCapabilities[i], rendererTrackGroupArrays[i], rendererFormatSupports[i], params, this.adaptiveTrackSelectionFactory);
+                    selectedVideoTracks = rendererTrackSelections[i] != null;
+                }
                 if (rendererTrackGroupArrays[i].length > 0) {
                     i2 = 1;
                 } else {
                     i2 = 0;
                 }
-                videoTrackAndRendererPresent |= i2;
+                seenVideoRendererWithMappedTracks |= i2;
             }
         }
+        boolean selectedAudioTracks = false;
+        boolean selectedTextTracks = false;
         for (i = 0; i < rendererCount; i++) {
             switch (rendererCapabilities[i].getTrackType()) {
                 case 1:
-                    rendererTrackSelections[i] = selectAudioTrack(rendererTrackGroupArrays[i], rendererFormatSupports[i], params.preferredAudioLanguage, params.exceedRendererCapabilitiesIfNecessary, params.allowMixedMimeAdaptiveness, videoTrackAndRendererPresent ? null : this.adaptiveTrackSelectionFactory);
+                    if (!selectedAudioTracks) {
+                        rendererTrackSelections[i] = selectAudioTrack(rendererTrackGroupArrays[i], rendererFormatSupports[i], params, seenVideoRendererWithMappedTracks ? null : this.adaptiveTrackSelectionFactory);
+                        selectedAudioTracks = rendererTrackSelections[i] != null;
+                        break;
+                    }
                     break;
                 case 2:
                     break;
                 case 3:
-                    rendererTrackSelections[i] = selectTextTrack(rendererTrackGroupArrays[i], rendererFormatSupports[i], params.preferredTextLanguage, params.preferredAudioLanguage, params.exceedRendererCapabilitiesIfNecessary);
+                    if (!selectedTextTracks) {
+                        rendererTrackSelections[i] = selectTextTrack(rendererTrackGroupArrays[i], rendererFormatSupports[i], params);
+                        selectedTextTracks = rendererTrackSelections[i] != null;
+                        break;
+                    }
                     break;
                 default:
-                    rendererTrackSelections[i] = selectOtherTrack(rendererCapabilities[i].getTrackType(), rendererTrackGroupArrays[i], rendererFormatSupports[i], params.exceedRendererCapabilitiesIfNecessary);
+                    rendererTrackSelections[i] = selectOtherTrack(rendererCapabilities[i].getTrackType(), rendererTrackGroupArrays[i], rendererFormatSupports[i], params);
                     break;
             }
         }
         return rendererTrackSelections;
     }
 
-    protected TrackSelection selectVideoTrack(RendererCapabilities rendererCapabilities, TrackGroupArray groups, int[][] formatSupport, int maxVideoWidth, int maxVideoHeight, int maxVideoBitrate, boolean allowNonSeamlessAdaptiveness, boolean allowMixedMimeAdaptiveness, int viewportWidth, int viewportHeight, boolean orientationMayChange, Factory adaptiveTrackSelectionFactory, boolean exceedConstraintsIfNecessary, boolean exceedRendererCapabilitiesIfNecessary) throws ExoPlaybackException {
+    protected TrackSelection selectVideoTrack(RendererCapabilities rendererCapabilities, TrackGroupArray groups, int[][] formatSupport, Parameters params, Factory adaptiveTrackSelectionFactory) throws ExoPlaybackException {
         TrackSelection selection = null;
         if (adaptiveTrackSelectionFactory != null) {
-            selection = selectAdaptiveVideoTrack(rendererCapabilities, groups, formatSupport, maxVideoWidth, maxVideoHeight, maxVideoBitrate, allowNonSeamlessAdaptiveness, allowMixedMimeAdaptiveness, viewportWidth, viewportHeight, orientationMayChange, adaptiveTrackSelectionFactory);
+            selection = selectAdaptiveVideoTrack(rendererCapabilities, groups, formatSupport, params, adaptiveTrackSelectionFactory);
         }
         if (selection == null) {
-            return selectFixedVideoTrack(groups, formatSupport, maxVideoWidth, maxVideoHeight, maxVideoBitrate, viewportWidth, viewportHeight, orientationMayChange, exceedConstraintsIfNecessary, exceedRendererCapabilitiesIfNecessary);
+            return selectFixedVideoTrack(groups, formatSupport, params);
         }
         return selection;
     }
 
-    private static TrackSelection selectAdaptiveVideoTrack(RendererCapabilities rendererCapabilities, TrackGroupArray groups, int[][] formatSupport, int maxVideoWidth, int maxVideoHeight, int maxVideoBitrate, boolean allowNonSeamlessAdaptiveness, boolean allowMixedMimeAdaptiveness, int viewportWidth, int viewportHeight, boolean orientationMayChange, Factory adaptiveTrackSelectionFactory) throws ExoPlaybackException {
-        int requiredAdaptiveSupport = allowNonSeamlessAdaptiveness ? 12 : 8;
-        boolean allowMixedMimeTypes = allowMixedMimeAdaptiveness && (rendererCapabilities.supportsMixedMimeTypeAdaptation() & requiredAdaptiveSupport) != 0;
+    private static TrackSelection selectAdaptiveVideoTrack(RendererCapabilities rendererCapabilities, TrackGroupArray groups, int[][] formatSupport, Parameters params, Factory adaptiveTrackSelectionFactory) throws ExoPlaybackException {
+        int requiredAdaptiveSupport = params.allowNonSeamlessAdaptiveness ? 24 : 16;
+        boolean allowMixedMimeTypes = params.allowMixedMimeAdaptiveness && (rendererCapabilities.supportsMixedMimeTypeAdaptation() & requiredAdaptiveSupport) != 0;
         for (int i = 0; i < groups.length; i++) {
             TrackGroup group = groups.get(i);
-            int[] adaptiveTracks = getAdaptiveVideoTracksForGroup(group, formatSupport[i], allowMixedMimeTypes, requiredAdaptiveSupport, maxVideoWidth, maxVideoHeight, maxVideoBitrate, viewportWidth, viewportHeight, orientationMayChange);
+            int[] adaptiveTracks = getAdaptiveVideoTracksForGroup(group, formatSupport[i], allowMixedMimeTypes, requiredAdaptiveSupport, params.maxVideoWidth, params.maxVideoHeight, params.maxVideoBitrate, params.viewportWidth, params.viewportHeight, params.viewportOrientationMayChange);
             if (adaptiveTracks.length > 0) {
                 return adaptiveTrackSelectionFactory.createTrackSelection(group, adaptiveTracks);
             }
@@ -289,11 +308,11 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         return null;
     }
 
-    private static int[] getAdaptiveVideoTracksForGroup(TrackGroup group, int[] formatSupport, boolean allowMixedMimeTypes, int requiredAdaptiveSupport, int maxVideoWidth, int maxVideoHeight, int maxVideoBitrate, int viewportWidth, int viewportHeight, boolean orientationMayChange) {
+    private static int[] getAdaptiveVideoTracksForGroup(TrackGroup group, int[] formatSupport, boolean allowMixedMimeTypes, int requiredAdaptiveSupport, int maxVideoWidth, int maxVideoHeight, int maxVideoBitrate, int viewportWidth, int viewportHeight, boolean viewportOrientationMayChange) {
         if (group.length < 2) {
             return NO_TRACKS;
         }
-        List<Integer> selectedTrackIndices = getViewportFilteredTrackIndices(group, viewportWidth, viewportHeight, orientationMayChange);
+        List<Integer> selectedTrackIndices = getViewportFilteredTrackIndices(group, viewportWidth, viewportHeight, viewportOrientationMayChange);
         if (selectedTrackIndices.size() < 2) {
             return NO_TRACKS;
         }
@@ -355,7 +374,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         return false;
     }
 
-    private static TrackSelection selectFixedVideoTrack(TrackGroupArray groups, int[][] formatSupport, int maxVideoWidth, int maxVideoHeight, int maxVideoBitrate, int viewportWidth, int viewportHeight, boolean orientationMayChange, boolean exceedConstraintsIfNecessary, boolean exceedRendererCapabilitiesIfNecessary) {
+    private static TrackSelection selectFixedVideoTrack(TrackGroupArray groups, int[][] formatSupport, Parameters params) {
         TrackGroup selectedGroup = null;
         int selectedTrackIndex = 0;
         int selectedTrackScore = 0;
@@ -363,15 +382,16 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         int selectedPixelCount = -1;
         for (int groupIndex = 0; groupIndex < groups.length; groupIndex++) {
             TrackGroup trackGroup = groups.get(groupIndex);
-            List<Integer> selectedTrackIndices = getViewportFilteredTrackIndices(trackGroup, viewportWidth, viewportHeight, orientationMayChange);
+            List<Integer> selectedTrackIndices = getViewportFilteredTrackIndices(trackGroup, params.viewportWidth, params.viewportHeight, params.viewportOrientationMayChange);
             int[] trackFormatSupport = formatSupport[groupIndex];
             for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
-                if (isSupported(trackFormatSupport[trackIndex], exceedRendererCapabilitiesIfNecessary)) {
+                if (isSupported(trackFormatSupport[trackIndex], params.exceedRendererCapabilitiesIfNecessary)) {
                     Format format = trackGroup.getFormat(trackIndex);
-                    boolean isWithinConstraints = selectedTrackIndices.contains(Integer.valueOf(trackIndex)) && ((format.width == -1 || format.width <= maxVideoWidth) && ((format.height == -1 || format.height <= maxVideoHeight) && (format.bitrate == -1 || format.bitrate <= maxVideoBitrate)));
-                    if (isWithinConstraints || exceedConstraintsIfNecessary) {
+                    boolean isWithinConstraints = selectedTrackIndices.contains(Integer.valueOf(trackIndex)) && ((format.width == -1 || format.width <= params.maxVideoWidth) && ((format.height == -1 || format.height <= params.maxVideoHeight) && (format.bitrate == -1 || format.bitrate <= params.maxVideoBitrate)));
+                    if (isWithinConstraints || params.exceedVideoConstraintsIfNecessary) {
                         int trackScore = isWithinConstraints ? 2 : 1;
-                        if (isSupported(trackFormatSupport[trackIndex], false)) {
+                        boolean isWithinCapabilities = isSupported(trackFormatSupport[trackIndex], false);
+                        if (isWithinCapabilities) {
                             trackScore += 1000;
                         }
                         boolean selectTrack = trackScore > selectedTrackScore;
@@ -382,7 +402,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
                             } else {
                                 comparisonResult = compareFormatValues(format.bitrate, selectedBitrate);
                             }
-                            selectTrack = isWithinConstraints ? comparisonResult > 0 : comparisonResult < 0;
+                            selectTrack = (isWithinCapabilities && isWithinConstraints) ? comparisonResult > 0 : comparisonResult < 0;
                         }
                         if (selectTrack) {
                             selectedGroup = trackGroup;
@@ -402,7 +422,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         return first == -1 ? second == -1 ? 0 : -1 : second == -1 ? 1 : first - second;
     }
 
-    protected TrackSelection selectAudioTrack(TrackGroupArray groups, int[][] formatSupport, String preferredAudioLanguage, boolean exceedRendererCapabilitiesIfNecessary, boolean allowMixedMimeAdaptiveness, Factory adaptiveTrackSelectionFactory) {
+    protected TrackSelection selectAudioTrack(TrackGroupArray groups, int[][] formatSupport, Parameters params, Factory adaptiveTrackSelectionFactory) throws ExoPlaybackException {
         int selectedGroupIndex = -1;
         int selectedTrackIndex = -1;
         int selectedTrackScore = 0;
@@ -410,8 +430,8 @@ public class DefaultTrackSelector extends MappingTrackSelector {
             TrackGroup trackGroup = groups.get(groupIndex);
             int[] trackFormatSupport = formatSupport[groupIndex];
             for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
-                if (isSupported(trackFormatSupport[trackIndex], exceedRendererCapabilitiesIfNecessary)) {
-                    int trackScore = getAudioTrackScore(trackFormatSupport[trackIndex], preferredAudioLanguage, trackGroup.getFormat(trackIndex));
+                if (isSupported(trackFormatSupport[trackIndex], params.exceedRendererCapabilitiesIfNecessary)) {
+                    int trackScore = getAudioTrackScore(trackFormatSupport[trackIndex], params.preferredAudioLanguage, trackGroup.getFormat(trackIndex));
                     if (trackScore > selectedTrackScore) {
                         selectedGroupIndex = groupIndex;
                         selectedTrackIndex = trackIndex;
@@ -425,7 +445,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         }
         TrackGroup selectedGroup = groups.get(selectedGroupIndex);
         if (adaptiveTrackSelectionFactory != null) {
-            int[] adaptiveTracks = getAdaptiveAudioTracks(selectedGroup, formatSupport[selectedGroupIndex], allowMixedMimeAdaptiveness);
+            int[] adaptiveTracks = getAdaptiveAudioTracks(selectedGroup, formatSupport[selectedGroupIndex], params.allowMixedMimeAdaptiveness);
             if (adaptiveTracks.length > 0) {
                 return adaptiveTrackSelectionFactory.createTrackSelection(selectedGroup, adaptiveTracks);
             }
@@ -509,7 +529,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         return false;
     }
 
-    protected TrackSelection selectTextTrack(TrackGroupArray groups, int[][] formatSupport, String preferredTextLanguage, String preferredAudioLanguage, boolean exceedRendererCapabilitiesIfNecessary) {
+    protected TrackSelection selectTextTrack(TrackGroupArray groups, int[][] formatSupport, Parameters params) throws ExoPlaybackException {
         TrackGroup selectedGroup = null;
         int selectedTrackIndex = 0;
         int selectedTrackScore = 0;
@@ -517,12 +537,12 @@ public class DefaultTrackSelector extends MappingTrackSelector {
             TrackGroup trackGroup = groups.get(groupIndex);
             int[] trackFormatSupport = formatSupport[groupIndex];
             for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
-                if (isSupported(trackFormatSupport[trackIndex], exceedRendererCapabilitiesIfNecessary)) {
+                if (isSupported(trackFormatSupport[trackIndex], params.exceedRendererCapabilitiesIfNecessary)) {
                     int trackScore;
                     Format format = trackGroup.getFormat(trackIndex);
                     boolean isDefault = (format.selectionFlags & 1) != 0;
                     boolean isForced = (format.selectionFlags & 2) != 0;
-                    if (formatHasLanguage(format, preferredTextLanguage)) {
+                    if (formatHasLanguage(format, params.preferredTextLanguage)) {
                         if (isDefault) {
                             trackScore = 6;
                         } else if (isForced) {
@@ -533,7 +553,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
                     } else if (isDefault) {
                         trackScore = 3;
                     } else if (isForced) {
-                        if (formatHasLanguage(format, preferredAudioLanguage)) {
+                        if (formatHasLanguage(format, params.preferredAudioLanguage)) {
                             trackScore = 2;
                         } else {
                             trackScore = 1;
@@ -553,7 +573,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         return selectedGroup == null ? null : new FixedTrackSelection(selectedGroup, selectedTrackIndex);
     }
 
-    protected TrackSelection selectOtherTrack(int trackType, TrackGroupArray groups, int[][] formatSupport, boolean exceedRendererCapabilitiesIfNecessary) {
+    protected TrackSelection selectOtherTrack(int trackType, TrackGroupArray groups, int[][] formatSupport, Parameters params) throws ExoPlaybackException {
         TrackGroup selectedGroup = null;
         int selectedTrackIndex = 0;
         int selectedTrackScore = 0;
@@ -561,7 +581,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
             TrackGroup trackGroup = groups.get(groupIndex);
             int[] trackFormatSupport = formatSupport[groupIndex];
             for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
-                if (isSupported(trackFormatSupport[trackIndex], exceedRendererCapabilitiesIfNecessary)) {
+                if (isSupported(trackFormatSupport[trackIndex], params.exceedRendererCapabilitiesIfNecessary)) {
                     int trackScore = (trackGroup.getFormat(trackIndex).selectionFlags & 1) != 0 ? 2 : 1;
                     if (isSupported(trackFormatSupport[trackIndex], false)) {
                         trackScore += 1000;
@@ -578,12 +598,12 @@ public class DefaultTrackSelector extends MappingTrackSelector {
     }
 
     protected static boolean isSupported(int formatSupport, boolean allowExceedsCapabilities) {
-        int maskedSupport = formatSupport & 3;
-        return maskedSupport == 3 || (allowExceedsCapabilities && maskedSupport == 2);
+        int maskedSupport = formatSupport & 7;
+        return maskedSupport == 4 || (allowExceedsCapabilities && maskedSupport == 3);
     }
 
     protected static boolean formatHasLanguage(Format format, String language) {
-        return TextUtils.equals(language, Util.normalizeLanguageCode(format.language));
+        return language != null && TextUtils.equals(language, Util.normalizeLanguageCode(format.language));
     }
 
     private static List<Integer> getViewportFilteredTrackIndices(TrackGroup group, int viewportWidth, int viewportHeight, boolean orientationMayChange) {

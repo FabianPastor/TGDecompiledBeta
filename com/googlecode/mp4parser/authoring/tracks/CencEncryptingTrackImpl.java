@@ -43,6 +43,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 import javax.crypto.SecretKey;
+import org.telegram.messenger.exoplayer2.C;
 
 public class CencEncryptingTrackImpl implements CencEncryptedTrack {
     List<CencSampleAuxiliaryDataFormat> cencSampleAuxiliaryData;
@@ -58,7 +59,7 @@ public class CencEncryptingTrackImpl implements CencEncryptedTrack {
     boolean subSampleEncryption;
 
     public CencEncryptingTrackImpl(Track source, UUID defaultKeyId, SecretKey key, boolean dummyIvs) {
-        this(source, defaultKeyId, Collections.singletonMap(defaultKeyId, key), null, "cenc", dummyIvs);
+        this(source, defaultKeyId, Collections.singletonMap(defaultKeyId, key), null, C.CENC_TYPE_cenc, dummyIvs);
     }
 
     public CencEncryptingTrackImpl(Track source, UUID defaultKeyId, Map<UUID, SecretKey> keys, Map<CencSampleEncryptionInformationGroupEntry, long[]> keyRotation, String encryptionAlgo, boolean dummyIvs) {

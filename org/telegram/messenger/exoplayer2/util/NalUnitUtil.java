@@ -151,7 +151,7 @@ public final class NalUnitUtil {
             }
             parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
             parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-            parsableNalUnitBitArray.skipBits(1);
+            parsableNalUnitBitArray.skipBit();
             if (parsableNalUnitBitArray.readBit()) {
                 int limit = chromaFormatIdc != 3 ? 8 : 12;
                 i = 0;
@@ -179,15 +179,15 @@ public final class NalUnitUtil {
             }
         }
         parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
-        parsableNalUnitBitArray.skipBits(1);
+        parsableNalUnitBitArray.skipBit();
         int picWidthInMbs = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 1;
         int picHeightInMapUnits = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 1;
         boolean frameMbsOnlyFlag = parsableNalUnitBitArray.readBit();
         int frameHeightInMbs = (2 - (frameMbsOnlyFlag ? 1 : 0)) * picHeightInMapUnits;
         if (!frameMbsOnlyFlag) {
-            parsableNalUnitBitArray.skipBits(1);
+            parsableNalUnitBitArray.skipBit();
         }
-        parsableNalUnitBitArray.skipBits(1);
+        parsableNalUnitBitArray.skipBit();
         int frameWidth = picWidthInMbs * 16;
         int frameHeight = frameHeightInMbs * 16;
         if (parsableNalUnitBitArray.readBit()) {
@@ -230,7 +230,7 @@ public final class NalUnitUtil {
         data.skipBits(8);
         int picParameterSetId = data.readUnsignedExpGolombCodedInt();
         int seqParameterSetId = data.readUnsignedExpGolombCodedInt();
-        data.skipBits(1);
+        data.skipBit();
         return new PpsData(picParameterSetId, seqParameterSetId, data.readBit());
     }
 

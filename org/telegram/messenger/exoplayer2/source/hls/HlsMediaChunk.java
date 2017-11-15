@@ -2,6 +2,7 @@ package org.telegram.messenger.exoplayer2.source.hls;
 
 import android.text.TextUtils;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.telegram.messenger.exoplayer2.C;
@@ -124,9 +125,9 @@ final class HlsMediaChunk extends MediaChunk {
     }
 
     private void maybeLoadInitData() throws IOException, InterruptedException {
+        ExtractorInput input;
         if (this.previousExtractor != this.extractor && !this.initLoadCompleted && this.initDataSpec != null) {
-            DataSpec initSegmentDataSpec = Util.getRemainderDataSpec(this.initDataSpec, this.initSegmentBytesLoaded);
-            ExtractorInput input;
+            DataSpec initSegmentDataSpec = this.initDataSpec.subrange((long) this.initSegmentBytesLoaded);
             try {
                 input = new DefaultExtractorInput(this.initDataSource, initSegmentDataSpec.absoluteStreamPosition, this.initDataSource.open(initSegmentDataSpec));
                 int result = 0;
@@ -147,11 +148,12 @@ final class HlsMediaChunk extends MediaChunk {
     private void loadMedia() throws IOException, InterruptedException {
         DataSpec loadDataSpec;
         boolean skipLoadedBytes;
+        ExtractorInput input;
         if (this.isEncrypted) {
             loadDataSpec = this.dataSpec;
             skipLoadedBytes = this.bytesLoaded != 0;
         } else {
-            loadDataSpec = Util.getRemainderDataSpec(this.dataSpec, this.bytesLoaded);
+            loadDataSpec = this.dataSpec.subrange((long) this.bytesLoaded);
             skipLoadedBytes = false;
         }
         if (!this.isMasterTimestampSource) {
@@ -159,7 +161,6 @@ final class HlsMediaChunk extends MediaChunk {
         } else if (this.timestampAdjuster.getFirstSampleTimestampUs() == Long.MAX_VALUE) {
             this.timestampAdjuster.setFirstSampleTimestampUs(this.startTimeUs);
         }
-        ExtractorInput input;
         try {
             input = new DefaultExtractorInput(this.dataSource, loadDataSpec.absoluteStreamPosition, this.dataSource.open(loadDataSpec));
             if (this.extractor == null) {
@@ -239,8 +240,11 @@ final class HlsMediaChunk extends MediaChunk {
             extractor = new FragmentedMp4Extractor(0, this.timestampAdjuster);
         } else {
             int esReaderFactoryFlags = 16;
-            if (!this.muxedCaptionFormats.isEmpty()) {
+            List<Format> closedCaptionFormats = this.muxedCaptionFormats;
+            if (closedCaptionFormats != null) {
                 esReaderFactoryFlags = 16 | 32;
+            } else {
+                closedCaptionFormats = Collections.emptyList();
             }
             String codecs = this.trackFormat.codecs;
             if (!TextUtils.isEmpty(codecs)) {
@@ -251,7 +255,7 @@ final class HlsMediaChunk extends MediaChunk {
                     esReaderFactoryFlags |= 4;
                 }
             }
-            extractor = new TsExtractor(2, this.timestampAdjuster, new DefaultTsPayloadReaderFactory(esReaderFactoryFlags, this.muxedCaptionFormats));
+            extractor = new TsExtractor(2, this.timestampAdjuster, new DefaultTsPayloadReaderFactory(esReaderFactoryFlags, closedCaptionFormats));
         }
         if (usingNewExtractor) {
             extractor.init(this.extractorOutput);
@@ -268,7 +272,7 @@ final class HlsMediaChunk extends MediaChunk {
         } else if (this.lastPathSegment.endsWith(MP3_FILE_EXTENSION)) {
             extractor = new Mp3Extractor(0, startTimeUs);
         } else {
-            throw new IllegalArgumentException("Unkown extension for audio file: " + this.lastPathSegment);
+            throw new IllegalArgumentException("Unknown extension for audio file: " + this.lastPathSegment);
         }
         extractor.init(this.extractorOutput);
         return extractor;

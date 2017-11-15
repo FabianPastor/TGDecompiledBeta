@@ -11,15 +11,23 @@ public final class SinglePeriodTimeline extends Timeline {
     private final boolean isDynamic;
     private final boolean isSeekable;
     private final long periodDurationUs;
+    private final long presentationStartTimeMs;
     private final long windowDefaultStartPositionUs;
     private final long windowDurationUs;
     private final long windowPositionInPeriodUs;
+    private final long windowStartTimeMs;
 
     public SinglePeriodTimeline(long durationUs, boolean isSeekable) {
         this(durationUs, durationUs, 0, 0, isSeekable, false);
     }
 
     public SinglePeriodTimeline(long periodDurationUs, long windowDurationUs, long windowPositionInPeriodUs, long windowDefaultStartPositionUs, boolean isSeekable, boolean isDynamic) {
+        this(C.TIME_UNSET, C.TIME_UNSET, periodDurationUs, windowDurationUs, windowPositionInPeriodUs, windowDefaultStartPositionUs, isSeekable, isDynamic);
+    }
+
+    public SinglePeriodTimeline(long presentationStartTimeMs, long windowStartTimeMs, long periodDurationUs, long windowDurationUs, long windowPositionInPeriodUs, long windowDefaultStartPositionUs, boolean isSeekable, boolean isDynamic) {
+        this.presentationStartTimeMs = presentationStartTimeMs;
+        this.windowStartTimeMs = windowStartTimeMs;
         this.periodDurationUs = periodDurationUs;
         this.windowDurationUs = windowDurationUs;
         this.windowPositionInPeriodUs = windowPositionInPeriodUs;
@@ -42,7 +50,7 @@ public final class SinglePeriodTimeline extends Timeline {
                 windowDefaultStartPositionUs = C.TIME_UNSET;
             }
         }
-        return window.set(id, C.TIME_UNSET, C.TIME_UNSET, this.isSeekable, this.isDynamic, windowDefaultStartPositionUs, this.windowDurationUs, 0, 0, this.windowPositionInPeriodUs);
+        return window.set(id, this.presentationStartTimeMs, this.windowStartTimeMs, this.isSeekable, this.isDynamic, windowDefaultStartPositionUs, this.windowDurationUs, 0, 0, this.windowPositionInPeriodUs);
     }
 
     public int getPeriodCount() {
@@ -52,7 +60,7 @@ public final class SinglePeriodTimeline extends Timeline {
     public Period getPeriod(int periodIndex, Period period, boolean setIds) {
         Assertions.checkIndex(periodIndex, 0, 1);
         Object id = setIds ? ID : null;
-        return period.set(id, id, 0, this.periodDurationUs, -this.windowPositionInPeriodUs, false);
+        return period.set(id, id, 0, this.periodDurationUs, -this.windowPositionInPeriodUs);
     }
 
     public int getIndexOfPeriod(Object uid) {

@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.ui.SubtitleView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Paint.Swatch;
 
@@ -156,7 +155,7 @@ public class ColorPicker extends FrameLayout {
         if (((double) hsv[0]) >= 0.001d || ((double) hsv[1]) >= 0.001d || hsv[2] <= 0.92f) {
             this.swatchStrokePaint.setColor(color);
         } else {
-            int c = (int) ((1.0f - (((hsv[2] - 0.92f) / SubtitleView.DEFAULT_BOTTOM_PADDING_FRACTION) * 0.22f)) * 255.0f);
+            int c = (int) ((1.0f - (((hsv[2] - 0.92f) / 0.08f) * 0.22f)) * 255.0f);
             this.swatchStrokePaint.setColor(Color.rgb(c, c, c));
         }
         invalidate();

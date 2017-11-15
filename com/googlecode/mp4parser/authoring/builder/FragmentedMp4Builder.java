@@ -80,6 +80,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
+import org.telegram.messenger.exoplayer2.C;
 
 public class FragmentedMp4Builder implements Mp4Builder {
     static final /* synthetic */ boolean $assertionsDisabled = (!FragmentedMp4Builder.class.desiredAssertionStatus());
@@ -303,7 +304,7 @@ public class FragmentedMp4Builder implements Mp4Builder {
         SampleAuxiliaryInformationOffsetsBox saio = new SampleAuxiliaryInformationOffsetsBox();
         parent.addBox(saio);
         if ($assertionsDisabled || parent.getBoxes(TrackRunBox.class).size() == 1) {
-            saio.setAuxInfoType("cenc");
+            saio.setAuxInfoType(C.CENC_TYPE_cenc);
             saio.setFlags(1);
             long offset = 0 + 8;
             for (Box box : parent.getBoxes()) {
@@ -331,7 +332,7 @@ public class FragmentedMp4Builder implements Mp4Builder {
         SchemeTypeBox schemeTypeBox = (SchemeTypeBox) Path.getPath(sampleDescriptionBox, "enc.[0]/sinf[0]/schm[0]");
         TrackEncryptionBox tenc = (TrackEncryptionBox) Path.getPath(sampleDescriptionBox, "enc.[0]/sinf[0]/schi[0]/tenc[0]");
         SampleAuxiliaryInformationSizesBox saiz = new SampleAuxiliaryInformationSizesBox();
-        saiz.setAuxInfoType("cenc");
+        saiz.setAuxInfoType(C.CENC_TYPE_cenc);
         saiz.setFlags(1);
         if (track.hasSubSampleEncryption()) {
             short[] sizes = new short[CastUtils.l2i(endSample - startSample)];

@@ -18,6 +18,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
+import org.telegram.messenger.exoplayer2.C;
 
 public class CencDecryptingSampleList extends AbstractList<Sample> {
     String encryptionAlgo;
@@ -26,7 +27,7 @@ public class CencDecryptingSampleList extends AbstractList<Sample> {
     List<CencSampleAuxiliaryDataFormat> sencInfo;
 
     public CencDecryptingSampleList(SecretKey secretKey, List<Sample> parent, List<CencSampleAuxiliaryDataFormat> sencInfo) {
-        this(new RangeStartMap(Integer.valueOf(0), secretKey), parent, sencInfo, "cenc");
+        this(new RangeStartMap(Integer.valueOf(0), secretKey), parent, sencInfo, C.CENC_TYPE_cenc);
     }
 
     public CencDecryptingSampleList(RangeStartMap<Integer, SecretKey> keys, List<Sample> parent, List<CencSampleAuxiliaryDataFormat> sencInfo, String encryptionAlgo) {
@@ -42,11 +43,11 @@ public class CencDecryptingSampleList extends AbstractList<Sample> {
         System.arraycopy(iv, 0, fullIv, 0, iv.length);
         try {
             Cipher c;
-            if ("cenc".equals(this.encryptionAlgo)) {
+            if (C.CENC_TYPE_cenc.equals(this.encryptionAlgo)) {
                 c = Cipher.getInstance("AES/CTR/NoPadding");
                 c.init(2, sk, new IvParameterSpec(fullIv));
                 return c;
-            } else if ("cbc1".equals(this.encryptionAlgo)) {
+            } else if (C.CENC_TYPE_cbc1.equals(this.encryptionAlgo)) {
                 c = Cipher.getInstance("AES/CBC/NoPadding");
                 c.init(2, sk, new IvParameterSpec(fullIv));
                 return c;
@@ -78,11 +79,11 @@ public class CencDecryptingSampleList extends AbstractList<Sample> {
             if (sencEntry.pairs == null || sencEntry.pairs.length <= 0) {
                 byte[] fullyEncryptedSample = new byte[encSampleBuffer.limit()];
                 encSampleBuffer.get(fullyEncryptedSample);
-                if ("cbc1".equals(this.encryptionAlgo)) {
+                if (C.CENC_TYPE_cbc1.equals(this.encryptionAlgo)) {
                     int encryptedLength = (fullyEncryptedSample.length / 16) * 16;
                     decSampleBuffer.put(cipher.doFinal(fullyEncryptedSample, 0, encryptedLength));
                     decSampleBuffer.put(fullyEncryptedSample, encryptedLength, fullyEncryptedSample.length - encryptedLength);
-                } else if ("cenc".equals(this.encryptionAlgo)) {
+                } else if (C.CENC_TYPE_cenc.equals(this.encryptionAlgo)) {
                     decSampleBuffer.put(cipher.doFinal(fullyEncryptedSample));
                 }
             } else {

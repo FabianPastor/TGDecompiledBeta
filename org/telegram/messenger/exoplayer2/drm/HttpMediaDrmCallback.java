@@ -21,28 +21,20 @@ import org.telegram.messenger.exoplayer2.util.Util;
 
 @TargetApi(18)
 public final class HttpMediaDrmCallback implements MediaDrmCallback {
-    private static final Map<String, String> PLAYREADY_KEY_REQUEST_PROPERTIES = new HashMap();
     private final Factory dataSourceFactory;
-    private final String defaultUrl;
+    private final String defaultLicenseUrl;
+    private final boolean forceDefaultLicenseUrl;
     private final Map<String, String> keyRequestProperties;
 
-    static {
-        PLAYREADY_KEY_REQUEST_PROPERTIES.put("Content-Type", "text/xml");
-        PLAYREADY_KEY_REQUEST_PROPERTIES.put("SOAPAction", "http://schemas.microsoft.com/DRM/2007/03/protocols/AcquireLicense");
+    public HttpMediaDrmCallback(String defaultLicenseUrl, Factory dataSourceFactory) {
+        this(defaultLicenseUrl, false, dataSourceFactory);
     }
 
-    public HttpMediaDrmCallback(String defaultUrl, Factory dataSourceFactory) {
-        this(defaultUrl, dataSourceFactory, null);
-    }
-
-    @Deprecated
-    public HttpMediaDrmCallback(String defaultUrl, Factory dataSourceFactory, Map<String, String> keyRequestProperties) {
+    public HttpMediaDrmCallback(String defaultLicenseUrl, boolean forceDefaultLicenseUrl, Factory dataSourceFactory) {
         this.dataSourceFactory = dataSourceFactory;
-        this.defaultUrl = defaultUrl;
+        this.defaultLicenseUrl = defaultLicenseUrl;
+        this.forceDefaultLicenseUrl = forceDefaultLicenseUrl;
         this.keyRequestProperties = new HashMap();
-        if (keyRequestProperties != null) {
-            this.keyRequestProperties.putAll(keyRequestProperties);
-        }
     }
 
     public void setKeyRequestProperty(String name, String value) {
@@ -72,13 +64,14 @@ public final class HttpMediaDrmCallback implements MediaDrmCallback {
 
     public byte[] executeKeyRequest(UUID uuid, KeyRequest request) throws Exception {
         String url = request.getDefaultUrl();
-        if (TextUtils.isEmpty(url)) {
-            url = this.defaultUrl;
+        if (this.forceDefaultLicenseUrl || TextUtils.isEmpty(url)) {
+            url = this.defaultLicenseUrl;
         }
         Map<String, String> requestProperties = new HashMap();
-        requestProperties.put("Content-Type", "application/octet-stream");
+        String contentType = C.PLAYREADY_UUID.equals(uuid) ? "text/xml" : C.CLEARKEY_UUID.equals(uuid) ? "application/json" : "application/octet-stream";
+        requestProperties.put("Content-Type", contentType);
         if (C.PLAYREADY_UUID.equals(uuid)) {
-            requestProperties.putAll(PLAYREADY_KEY_REQUEST_PROPERTIES);
+            requestProperties.put("SOAPAction", "http://schemas.microsoft.com/DRM/2007/03/protocols/AcquireLicense");
         }
         synchronized (this.keyRequestProperties) {
             requestProperties.putAll(this.keyRequestProperties);

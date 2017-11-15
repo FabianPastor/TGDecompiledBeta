@@ -14,12 +14,11 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.MediaController.PhotoEntry;
-import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.SendMessagesHelper.SendingMediaInfo;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.VideoEditedInfo;
-import org.telegram.tgnet.TLRPC.InputDocument;
 import org.telegram.tgnet.TLRPC.InputFile;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -85,9 +84,9 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
         if (VERSION.SDK_INT < 23 || this.parentFragment == null || this.parentFragment.getParentActivity() == null || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
             PhotoAlbumPickerActivity fragment = new PhotoAlbumPickerActivity(true, false, false, null);
             fragment.setDelegate(new PhotoAlbumPickerActivityDelegate() {
-                public void didSelectPhotos(ArrayList<String> photos, ArrayList<String> arrayList, ArrayList<Integer> arrayList2, ArrayList<PhotoEntry> arrayList3, ArrayList<ArrayList<InputDocument>> arrayList4, ArrayList<SearchImage> arrayList5) {
+                public void didSelectPhotos(ArrayList<SendingMediaInfo> photos) {
                     if (!photos.isEmpty()) {
-                        AvatarUpdater.this.processBitmap(ImageLoader.loadBitmap((String) photos.get(0), null, 800.0f, 800.0f, true));
+                        AvatarUpdater.this.processBitmap(ImageLoader.loadBitmap(((SendingMediaInfo) photos.get(0)).path, null, 800.0f, 800.0f, true));
                     }
                 }
 
@@ -164,6 +163,10 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
                 }
 
                 public boolean allowCaption() {
+                    return false;
+                }
+
+                public boolean canScrollAway() {
                     return false;
                 }
             }, null);

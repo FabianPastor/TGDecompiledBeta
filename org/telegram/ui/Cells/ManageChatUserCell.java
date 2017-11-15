@@ -32,6 +32,7 @@ public class ManageChatUserCell extends FrameLayout {
     private User currentUser;
     private CharSequence currrntStatus;
     private ManageChatUserCellDelegate delegate;
+    private boolean isAdmin;
     private FileLocation lastAvatar;
     private String lastName;
     private int lastStatus;
@@ -135,6 +136,10 @@ public class ManageChatUserCell extends FrameLayout {
         this.statusOnlineColor = onlineColor;
     }
 
+    public void setIsAdmin(boolean value) {
+        this.isAdmin = value;
+    }
+
     public void update(int mask) {
         if (this.currentUser != null) {
             TLObject photo = null;
@@ -188,7 +193,7 @@ public class ManageChatUserCell extends FrameLayout {
             } else if (this.currentUser != null) {
                 if (this.currentUser.bot) {
                     this.statusTextView.setTextColor(this.statusColor);
-                    if (this.currentUser.bot_chat_history) {
+                    if (this.currentUser.bot_chat_history || this.isAdmin) {
                         this.statusTextView.setText(LocaleController.getString("BotStatusRead", R.string.BotStatusRead));
                     } else {
                         this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));

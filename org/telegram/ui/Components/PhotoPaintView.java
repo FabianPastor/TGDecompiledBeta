@@ -1112,8 +1112,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 /* JADX: method processing error */
 /*
 Error: java.util.NoSuchElementException
-	at java.util.HashMap$HashIterator.nextNode(HashMap.java:1439)
-	at java.util.HashMap$KeyIterator.next(HashMap.java:1461)
+	at java.util.HashMap$HashIterator.nextNode(HashMap.java:1444)
+	at java.util.HashMap$KeyIterator.next(HashMap.java:1466)
 	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.applyRemove(BlockFinallyExtract.java:535)
 	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.extractFinally(BlockFinallyExtract.java:175)
 	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.processExceptionHandler(BlockFinallyExtract.java:80)

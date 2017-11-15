@@ -513,6 +513,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
             if (connected) {
                 am.startBluetoothSco();
+                am.setSpeakerphoneOn(false);
+                am.setBluetoothScoOn(true);
             } else {
                 am.stopBluetoothSco();
             }

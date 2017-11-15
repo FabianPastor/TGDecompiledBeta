@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2.extractor.mp3;
 
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.util.Util;
 
 final class ConstantBitrateSeeker implements Seeker {
     private static final int BITS_PER_BYTE = 8;
@@ -19,7 +20,11 @@ final class ConstantBitrateSeeker implements Seeker {
     }
 
     public long getPosition(long timeUs) {
-        return this.durationUs == C.TIME_UNSET ? 0 : this.firstFramePosition + ((((long) this.bitrate) * timeUs) / 8000000);
+        if (this.durationUs == C.TIME_UNSET) {
+            return 0;
+        }
+        timeUs = Util.constrainValue(timeUs, 0, this.durationUs);
+        return ((((long) this.bitrate) * timeUs) / 8000000) + this.firstFramePosition;
     }
 
     public long getTimeUs(long position) {

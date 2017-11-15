@@ -16,6 +16,10 @@ public final class C {
     public static final int BUFFER_FLAG_ENCRYPTED = NUM;
     public static final int BUFFER_FLAG_END_OF_STREAM = 4;
     public static final int BUFFER_FLAG_KEY_FRAME = 1;
+    public static final String CENC_TYPE_cbc1 = "cbc1";
+    public static final String CENC_TYPE_cbcs = "cbcs";
+    public static final String CENC_TYPE_cenc = "cenc";
+    public static final String CENC_TYPE_cens = "cens";
     public static final int CHANNEL_OUT_7POINT1_SURROUND;
     public static final UUID CLEARKEY_UUID = new UUID(1186680826959645954L, -5988876978535335093L);
     public static final int COLOR_RANGE_FULL = 1;
@@ -26,6 +30,11 @@ public final class C {
     public static final int COLOR_TRANSFER_HLG = 7;
     public static final int COLOR_TRANSFER_SDR = 3;
     public static final int COLOR_TRANSFER_ST2084 = 6;
+    public static final int CONTENT_TYPE_MOVIE = 3;
+    public static final int CONTENT_TYPE_MUSIC = 2;
+    public static final int CONTENT_TYPE_SONIFICATION = 4;
+    public static final int CONTENT_TYPE_SPEECH = 1;
+    public static final int CONTENT_TYPE_UNKNOWN = 0;
     public static final int CRYPTO_MODE_AES_CBC = 2;
     public static final int CRYPTO_MODE_AES_CTR = 1;
     public static final int CRYPTO_MODE_UNENCRYPTED = 0;
@@ -51,12 +60,13 @@ public final class C {
     public static final int ENCODING_PCM_24BIT = Integer.MIN_VALUE;
     public static final int ENCODING_PCM_32BIT = NUM;
     public static final int ENCODING_PCM_8BIT = 3;
+    public static final int FLAG_AUDIBILITY_ENFORCED = 1;
     public static final int INDEX_UNSET = -1;
     public static final int LENGTH_UNSET = -1;
     public static final long MICROS_PER_SECOND = 1000000;
     public static final int MSG_CUSTOM_BASE = 10000;
+    public static final int MSG_SET_AUDIO_ATTRIBUTES = 3;
     public static final int MSG_SET_SCALING_MODE = 4;
-    public static final int MSG_SET_STREAM_TYPE = 3;
     public static final int MSG_SET_SURFACE = 1;
     public static final int MSG_SET_VOLUME = 2;
     public static final long NANOS_PER_SECOND = NUM;
@@ -86,10 +96,12 @@ public final class C {
     public static final int STEREO_MODE_TOP_BOTTOM = 1;
     public static final int STREAM_TYPE_ALARM = 4;
     public static final int STREAM_TYPE_DEFAULT = 3;
+    public static final int STREAM_TYPE_DTMF = 8;
     public static final int STREAM_TYPE_MUSIC = 3;
     public static final int STREAM_TYPE_NOTIFICATION = 5;
     public static final int STREAM_TYPE_RING = 2;
     public static final int STREAM_TYPE_SYSTEM = 1;
+    public static final int STREAM_TYPE_USE_DEFAULT = Integer.MIN_VALUE;
     public static final int STREAM_TYPE_VOICE_CALL = 0;
     public static final long TIME_END_OF_SOURCE = Long.MIN_VALUE;
     public static final long TIME_UNSET = -9223372036854775807L;
@@ -104,6 +116,21 @@ public final class C {
     public static final int TYPE_HLS = 2;
     public static final int TYPE_OTHER = 3;
     public static final int TYPE_SS = 1;
+    public static final int USAGE_ALARM = 4;
+    public static final int USAGE_ASSISTANCE_ACCESSIBILITY = 11;
+    public static final int USAGE_ASSISTANCE_NAVIGATION_GUIDANCE = 12;
+    public static final int USAGE_ASSISTANCE_SONIFICATION = 13;
+    public static final int USAGE_GAME = 14;
+    public static final int USAGE_MEDIA = 1;
+    public static final int USAGE_NOTIFICATION = 5;
+    public static final int USAGE_NOTIFICATION_COMMUNICATION_DELAYED = 9;
+    public static final int USAGE_NOTIFICATION_COMMUNICATION_INSTANT = 8;
+    public static final int USAGE_NOTIFICATION_COMMUNICATION_REQUEST = 7;
+    public static final int USAGE_NOTIFICATION_EVENT = 10;
+    public static final int USAGE_NOTIFICATION_RINGTONE = 6;
+    public static final int USAGE_UNKNOWN = 0;
+    public static final int USAGE_VOICE_COMMUNICATION = 2;
+    public static final int USAGE_VOICE_COMMUNICATION_SIGNALLING = 3;
     public static final String UTF16_NAME = "UTF-16";
     public static final String UTF8_NAME = "UTF-8";
     public static final UUID UUID_NIL = new UUID(0, 0);
@@ -111,6 +138,18 @@ public final class C {
     public static final int VIDEO_SCALING_MODE_SCALE_TO_FIT = 1;
     public static final int VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING = 2;
     public static final UUID WIDEVINE_UUID = new UUID(-1301668207276963122L, -6645017420763422227L);
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface AudioContentType {
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface AudioFlags {
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface AudioUsage {
+    }
 
     @Retention(RetentionPolicy.SOURCE)
     public @interface BufferFlags {
@@ -174,11 +213,11 @@ public final class C {
     }
 
     public static long usToMs(long timeUs) {
-        return timeUs == TIME_UNSET ? TIME_UNSET : timeUs / 1000;
+        return (timeUs == TIME_UNSET || timeUs == Long.MIN_VALUE) ? timeUs : timeUs / 1000;
     }
 
     public static long msToUs(long timeMs) {
-        return timeMs == TIME_UNSET ? TIME_UNSET : 1000 * timeMs;
+        return (timeMs == TIME_UNSET || timeMs == Long.MIN_VALUE) ? timeMs : timeMs * 1000;
     }
 
     @TargetApi(21)

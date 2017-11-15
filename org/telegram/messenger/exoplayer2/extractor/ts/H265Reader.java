@@ -246,7 +246,7 @@ public final class H265Reader implements ElementaryStreamReader {
         ParsableNalUnitBitArray bitArray = new ParsableNalUnitBitArray(sps.nalData, 0, sps.nalLength);
         bitArray.skipBits(44);
         int maxSubLayersMinus1 = bitArray.readBits(3);
-        bitArray.skipBits(1);
+        bitArray.skipBit();
         bitArray.skipBits(88);
         bitArray.skipBits(8);
         int toSkip = 0;
@@ -265,7 +265,7 @@ public final class H265Reader implements ElementaryStreamReader {
         bitArray.readUnsignedExpGolombCodedInt();
         int chromaFormatIdc = bitArray.readUnsignedExpGolombCodedInt();
         if (chromaFormatIdc == 3) {
-            bitArray.skipBits(1);
+            bitArray.skipBit();
         }
         int picWidthInLumaSamples = bitArray.readUnsignedExpGolombCodedInt();
         int picHeightInLumaSamples = bitArray.readUnsignedExpGolombCodedInt();
@@ -302,7 +302,7 @@ public final class H265Reader implements ElementaryStreamReader {
             bitArray.skipBits(8);
             bitArray.readUnsignedExpGolombCodedInt();
             bitArray.readUnsignedExpGolombCodedInt();
-            bitArray.skipBits(1);
+            bitArray.skipBit();
         }
         skipShortTermRefPicSets(bitArray);
         if (bitArray.readBit()) {
@@ -364,11 +364,11 @@ public final class H265Reader implements ElementaryStreamReader {
                 interRefPicSetPredictionFlag = bitArray.readBit();
             }
             if (interRefPicSetPredictionFlag) {
-                bitArray.skipBits(1);
+                bitArray.skipBit();
                 bitArray.readUnsignedExpGolombCodedInt();
                 for (int j = 0; j <= previousNumDeltaPocs; j++) {
                     if (bitArray.readBit()) {
-                        bitArray.skipBits(1);
+                        bitArray.skipBit();
                     }
                 }
             } else {
@@ -378,11 +378,11 @@ public final class H265Reader implements ElementaryStreamReader {
                 previousNumDeltaPocs = numNegativePics + numPositivePics;
                 for (i = 0; i < numNegativePics; i++) {
                     bitArray.readUnsignedExpGolombCodedInt();
-                    bitArray.skipBits(1);
+                    bitArray.skipBit();
                 }
                 for (i = 0; i < numPositivePics; i++) {
                     bitArray.readUnsignedExpGolombCodedInt();
-                    bitArray.skipBits(1);
+                    bitArray.skipBit();
                 }
             }
         }

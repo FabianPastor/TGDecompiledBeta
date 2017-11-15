@@ -8,5 +8,7 @@ public interface SequenceableLoader {
 
     boolean continueLoading(long j);
 
+    long getBufferedPositionUs();
+
     long getNextLoadPositionUs();
 }

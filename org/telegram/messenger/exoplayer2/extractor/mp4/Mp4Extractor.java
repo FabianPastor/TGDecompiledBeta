@@ -30,25 +30,31 @@ public final class Mp4Extractor implements Extractor, SeekMap {
             return new Extractor[]{new Mp4Extractor()};
         }
     };
+    public static final int FLAG_WORKAROUND_IGNORE_EDIT_LISTS = 1;
     private static final long RELOAD_MINIMUM_SEEK_DISTANCE = 262144;
     private static final int STATE_READING_ATOM_HEADER = 0;
     private static final int STATE_READING_ATOM_PAYLOAD = 1;
     private static final int STATE_READING_SAMPLE = 2;
     private ParsableByteArray atomData;
-    private final ParsableByteArray atomHeader = new ParsableByteArray(16);
+    private final ParsableByteArray atomHeader;
     private int atomHeaderBytesRead;
     private long atomSize;
     private int atomType;
-    private final Stack<ContainerAtom> containerAtoms = new Stack();
+    private final Stack<ContainerAtom> containerAtoms;
     private long durationUs;
     private ExtractorOutput extractorOutput;
+    private final int flags;
     private boolean isQuickTime;
-    private final ParsableByteArray nalLength = new ParsableByteArray(4);
-    private final ParsableByteArray nalStartCode = new ParsableByteArray(NalUnitUtil.NAL_START_CODE);
+    private final ParsableByteArray nalLength;
+    private final ParsableByteArray nalStartCode;
     private int parserState;
     private int sampleBytesWritten;
     private int sampleCurrentNalBytesRemaining;
     private Mp4Track[] tracks;
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Flags {
+    }
 
     private static final class Mp4Track {
         public int sampleIndex;
@@ -65,6 +71,18 @@ public final class Mp4Extractor implements Extractor, SeekMap {
 
     @Retention(RetentionPolicy.SOURCE)
     private @interface State {
+    }
+
+    public Mp4Extractor() {
+        this(0);
+    }
+
+    public Mp4Extractor(int flags) {
+        this.flags = flags;
+        this.atomHeader = new ParsableByteArray(16);
+        this.containerAtoms = new Stack();
+        this.nalStartCode = new ParsableByteArray(NalUnitUtil.NAL_START_CODE);
+        this.nalLength = new ParsableByteArray(4);
     }
 
     public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
@@ -141,6 +159,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
     }
 
     private boolean readAtomHeader(ExtractorInput input) throws IOException, InterruptedException {
+        long endPosition;
         if (this.atomHeaderBytesRead == 0) {
             if (!input.readFully(this.atomHeader.data, 0, 8, true)) {
                 return false;
@@ -154,9 +173,20 @@ public final class Mp4Extractor implements Extractor, SeekMap {
             input.readFully(this.atomHeader.data, 8, 8);
             this.atomHeaderBytesRead += 8;
             this.atomSize = this.atomHeader.readUnsignedLongToLong();
+        } else if (this.atomSize == 0) {
+            endPosition = input.getLength();
+            if (endPosition == -1 && !this.containerAtoms.isEmpty()) {
+                endPosition = ((ContainerAtom) this.containerAtoms.peek()).endPosition;
+            }
+            if (endPosition != -1) {
+                this.atomSize = (endPosition - input.getPosition()) + ((long) this.atomHeaderBytesRead);
+            }
+        }
+        if (this.atomSize < ((long) this.atomHeaderBytesRead)) {
+            throw new ParserException("Atom size less than header length (unsupported).");
         }
         if (shouldParseContainerAtom(this.atomType)) {
-            long endPosition = (input.getPosition() + this.atomSize) - ((long) this.atomHeaderBytesRead);
+            endPosition = (input.getPosition() + this.atomSize) - ((long) this.atomHeaderBytesRead);
             this.containerAtoms.add(new ContainerAtom(this.atomType, endPosition));
             if (this.atomSize == ((long) this.atomHeaderBytesRead)) {
                 processAtomEnded(endPosition);
@@ -257,13 +287,11 @@ public final class Mp4Extractor implements Extractor, SeekMap {
         for (int i = 0; i < moov.containerChildren.size(); i++) {
             ContainerAtom atom = (ContainerAtom) moov.containerChildren.get(i);
             if (atom.type == Atom.TYPE_trak) {
-                Track track = AtomParsers.parseTrak(atom, moov.getLeafAtomOfType(Atom.TYPE_mvhd), C.TIME_UNSET, null, this.isQuickTime);
+                Track track = AtomParsers.parseTrak(atom, moov.getLeafAtomOfType(Atom.TYPE_mvhd), C.TIME_UNSET, null, (this.flags & 1) != 0, this.isQuickTime);
                 if (track != null) {
                     TrackSampleTable trackSampleTable = AtomParsers.parseStbl(track, atom.getContainerAtomOfType(Atom.TYPE_mdia).getContainerAtomOfType(Atom.TYPE_minf).getContainerAtomOfType(Atom.TYPE_stbl), gaplessInfoHolder);
                     if (trackSampleTable.sampleCount != 0) {
-                        Track track2 = track;
-                        TrackSampleTable trackSampleTable2 = trackSampleTable;
-                        Mp4Track mp4Track = new Mp4Track(track2, trackSampleTable2, this.extractorOutput.track(i, track.type));
+                        Mp4Track mp4Track = new Mp4Track(track, trackSampleTable, this.extractorOutput.track(i, track.type));
                         Format format = track.format.copyWithMaxInputSize(trackSampleTable.maximumSize + 30);
                         if (track.type == 1) {
                             if (gaplessInfoHolder.hasGaplessInfo()) {

@@ -1,34 +1,35 @@
 package org.telegram.messenger.exoplayer2.source;
 
-import android.util.Pair;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
-import org.telegram.messenger.exoplayer2.Timeline.Period;
-import org.telegram.messenger.exoplayer2.Timeline.Window;
 import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
+import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class ConcatenatingMediaSource implements MediaSource {
     private final boolean[] duplicateFlags;
+    private final boolean isRepeatOneAtomic;
     private Listener listener;
     private final Object[] manifests;
     private final MediaSource[] mediaSources;
-    private final Map<MediaPeriod, Integer> sourceIndexByMediaPeriod = new HashMap();
+    private final Map<MediaPeriod, Integer> sourceIndexByMediaPeriod;
     private ConcatenatedTimeline timeline;
     private final Timeline[] timelines;
 
-    private static final class ConcatenatedTimeline extends Timeline {
+    private static final class ConcatenatedTimeline extends AbstractConcatenatedTimeline {
+        private final boolean isRepeatOneAtomic;
         private final int[] sourcePeriodOffsets;
         private final int[] sourceWindowOffsets;
         private final Timeline[] timelines;
 
-        public ConcatenatedTimeline(Timeline[] timelines) {
+        public ConcatenatedTimeline(Timeline[] timelines, boolean isRepeatOneAtomic) {
+            super(timelines.length);
             int[] sourcePeriodOffsets = new int[timelines.length];
             int[] sourceWindowOffsets = new int[timelines.length];
             long periodCount = 0;
@@ -44,81 +45,76 @@ public final class ConcatenatingMediaSource implements MediaSource {
             this.timelines = timelines;
             this.sourcePeriodOffsets = sourcePeriodOffsets;
             this.sourceWindowOffsets = sourceWindowOffsets;
+            this.isRepeatOneAtomic = isRepeatOneAtomic;
         }
 
         public int getWindowCount() {
             return this.sourceWindowOffsets[this.sourceWindowOffsets.length - 1];
         }
 
-        public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
-            int sourceIndex = getSourceIndexForWindow(windowIndex);
-            int firstWindowIndexInSource = getFirstWindowIndexInSource(sourceIndex);
-            int firstPeriodIndexInSource = getFirstPeriodIndexInSource(sourceIndex);
-            this.timelines[sourceIndex].getWindow(windowIndex - firstWindowIndexInSource, window, setIds, defaultPositionProjectionUs);
-            window.firstPeriodIndex += firstPeriodIndexInSource;
-            window.lastPeriodIndex += firstPeriodIndexInSource;
-            return window;
-        }
-
         public int getPeriodCount() {
             return this.sourcePeriodOffsets[this.sourcePeriodOffsets.length - 1];
         }
 
-        public Period getPeriod(int periodIndex, Period period, boolean setIds) {
-            int sourceIndex = getSourceIndexForPeriod(periodIndex);
-            int firstWindowIndexInSource = getFirstWindowIndexInSource(sourceIndex);
-            this.timelines[sourceIndex].getPeriod(periodIndex - getFirstPeriodIndexInSource(sourceIndex), period, setIds);
-            period.windowIndex += firstWindowIndexInSource;
-            if (setIds) {
-                period.uid = Pair.create(Integer.valueOf(sourceIndex), period.uid);
+        public int getNextWindowIndex(int windowIndex, int repeatMode) {
+            if (this.isRepeatOneAtomic && repeatMode == 1) {
+                repeatMode = 2;
             }
-            return period;
+            return super.getNextWindowIndex(windowIndex, repeatMode);
         }
 
-        public int getIndexOfPeriod(Object uid) {
-            if (!(uid instanceof Pair)) {
-                return -1;
+        public int getPreviousWindowIndex(int windowIndex, int repeatMode) {
+            if (this.isRepeatOneAtomic && repeatMode == 1) {
+                repeatMode = 2;
             }
-            Pair<?, ?> sourceIndexAndPeriodId = (Pair) uid;
-            if (!(sourceIndexAndPeriodId.first instanceof Integer)) {
-                return -1;
-            }
-            int sourceIndex = ((Integer) sourceIndexAndPeriodId.first).intValue();
-            Object periodId = sourceIndexAndPeriodId.second;
-            if (sourceIndex < 0 || sourceIndex >= this.timelines.length) {
-                return -1;
-            }
-            int i;
-            int periodIndexInSource = this.timelines[sourceIndex].getIndexOfPeriod(periodId);
-            if (periodIndexInSource == -1) {
-                i = -1;
-            } else {
-                i = getFirstPeriodIndexInSource(sourceIndex) + periodIndexInSource;
-            }
-            return i;
+            return super.getPreviousWindowIndex(windowIndex, repeatMode);
         }
 
-        private int getSourceIndexForPeriod(int periodIndex) {
+        protected int getChildIndexByPeriodIndex(int periodIndex) {
             return Util.binarySearchFloor(this.sourcePeriodOffsets, periodIndex, true, false) + 1;
         }
 
-        private int getFirstPeriodIndexInSource(int sourceIndex) {
-            return sourceIndex == 0 ? 0 : this.sourcePeriodOffsets[sourceIndex - 1];
-        }
-
-        private int getSourceIndexForWindow(int windowIndex) {
+        protected int getChildIndexByWindowIndex(int windowIndex) {
             return Util.binarySearchFloor(this.sourceWindowOffsets, windowIndex, true, false) + 1;
         }
 
-        private int getFirstWindowIndexInSource(int sourceIndex) {
-            return sourceIndex == 0 ? 0 : this.sourceWindowOffsets[sourceIndex - 1];
+        protected int getChildIndexByChildUid(Object childUid) {
+            if (childUid instanceof Integer) {
+                return ((Integer) childUid).intValue();
+            }
+            return -1;
+        }
+
+        protected Timeline getTimelineByChildIndex(int childIndex) {
+            return this.timelines[childIndex];
+        }
+
+        protected int getFirstPeriodIndexByChildIndex(int childIndex) {
+            return childIndex == 0 ? 0 : this.sourcePeriodOffsets[childIndex - 1];
+        }
+
+        protected int getFirstWindowIndexByChildIndex(int childIndex) {
+            return childIndex == 0 ? 0 : this.sourceWindowOffsets[childIndex - 1];
+        }
+
+        protected Object getChildUidByChildIndex(int childIndex) {
+            return Integer.valueOf(childIndex);
         }
     }
 
     public ConcatenatingMediaSource(MediaSource... mediaSources) {
+        this(false, mediaSources);
+    }
+
+    public ConcatenatingMediaSource(boolean isRepeatOneAtomic, MediaSource... mediaSources) {
+        for (MediaSource mediaSource : mediaSources) {
+            Assertions.checkNotNull(mediaSource);
+        }
         this.mediaSources = mediaSources;
+        this.isRepeatOneAtomic = isRepeatOneAtomic;
         this.timelines = new Timeline[mediaSources.length];
         this.manifests = new Object[mediaSources.length];
+        this.sourceIndexByMediaPeriod = new HashMap();
         this.duplicateFlags = buildDuplicateFlags(mediaSources);
     }
 
@@ -144,9 +140,9 @@ public final class ConcatenatingMediaSource implements MediaSource {
         }
     }
 
-    public MediaPeriod createPeriod(int index, Allocator allocator, long positionUs) {
-        int sourceIndex = this.timeline.getSourceIndexForPeriod(index);
-        MediaPeriod mediaPeriod = this.mediaSources[sourceIndex].createPeriod(index - this.timeline.getFirstPeriodIndexInSource(sourceIndex), allocator, positionUs);
+    public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
+        int sourceIndex = this.timeline.getChildIndexByPeriodIndex(id.periodIndex);
+        MediaPeriod mediaPeriod = this.mediaSources[sourceIndex].createPeriod(new MediaPeriodId(id.periodIndex - this.timeline.getFirstPeriodIndexByChildIndex(sourceIndex)), allocator);
         this.sourceIndexByMediaPeriod.put(mediaPeriod, Integer.valueOf(sourceIndex));
         return mediaPeriod;
     }
@@ -184,7 +180,7 @@ public final class ConcatenatingMediaSource implements MediaSource {
                 return;
             }
         }
-        this.timeline = new ConcatenatedTimeline((Timeline[]) this.timelines.clone());
+        this.timeline = new ConcatenatedTimeline((Timeline[]) this.timelines.clone(), this.isRepeatOneAtomic);
         this.listener.onSourceInfoRefreshed(this.timeline, this.manifests.clone());
     }
 

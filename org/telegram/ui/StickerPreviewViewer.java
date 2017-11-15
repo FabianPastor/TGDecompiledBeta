@@ -346,7 +346,7 @@ public class StickerPreviewViewer {
                                     ((AbsListView) view2).setOnItemClickListener(null);
                                     ((AbsListView) view2).requestDisallowInterceptTouchEvent(true);
                                 } else if (view2 instanceof RecyclerListView) {
-                                    ((RecyclerListView) view2).setOnItemClickListener(null);
+                                    ((RecyclerListView) view2).setOnItemClickListener((RecyclerListView.OnItemClickListener) null);
                                     ((RecyclerListView) view2).requestDisallowInterceptTouchEvent(true);
                                 }
                                 StickerPreviewViewer.this.openStickerPreviewRunnable = null;

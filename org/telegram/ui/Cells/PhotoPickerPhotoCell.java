@@ -26,9 +26,11 @@ public class PhotoPickerPhotoCell extends FrameLayout {
     public BackupImageView photoImage;
     public FrameLayout videoInfoContainer;
     public TextView videoTextView;
+    private boolean zoomOnSelect;
 
-    public PhotoPickerPhotoCell(Context context) {
+    public PhotoPickerPhotoCell(Context context, boolean zoom) {
         super(context);
+        this.zoomOnSelect = zoom;
         this.photoImage = new BackupImageView(context);
         addView(this.photoImage, LayoutHelper.createFrame(-1, -1.0f));
         this.checkFrame = new FrameLayout(context);
@@ -45,11 +47,11 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         this.videoTextView.setTextSize(1, 12.0f);
         this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createFrame(-2, -2.0f, 19, 18.0f, -0.7f, 0.0f, 0.0f));
         this.checkBox = new CheckBox(context, R.drawable.checkbig);
-        this.checkBox.setSize(30);
+        this.checkBox.setSize(zoom ? 30 : 26);
         this.checkBox.setCheckOffset(AndroidUtilities.dp(1.0f));
         this.checkBox.setDrawBackground(true);
-        this.checkBox.setColor(-12793105, -1);
-        addView(this.checkBox, LayoutHelper.createFrame(30, BitmapDescriptorFactory.HUE_ORANGE, 53, 0.0f, 4.0f, 4.0f, 0.0f));
+        this.checkBox.setColor(-10043398, -1);
+        addView(this.checkBox, LayoutHelper.createFrame(zoom ? 30 : 26, zoom ? BitmapDescriptorFactory.HUE_ORANGE : 26.0f, 53, 0.0f, 4.0f, 4.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -91,13 +93,20 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         this.animatorSet.start();
     }
 
-    public void setChecked(final boolean checked, boolean animated) {
+    public void setNum(int num) {
+        this.checkBox.setNum(num);
+    }
+
+    public void setChecked(int num, final boolean checked, boolean animated) {
         int i = -16119286;
         float f = 0.85f;
-        this.checkBox.setChecked(checked, animated);
+        this.checkBox.setChecked(num, checked, animated);
         if (this.animator != null) {
             this.animator.cancel();
             this.animator = null;
+        }
+        if (!this.zoomOnSelect) {
+            return;
         }
         if (animated) {
             if (checked) {

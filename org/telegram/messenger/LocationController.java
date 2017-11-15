@@ -118,9 +118,14 @@ public class LocationController implements NotificationCenterDelegate {
     }
 
     public LocationController() {
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.didReceivedNewMessages);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagesDeleted);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.replaceMessagesObjects);
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public void run() {
+                LocationController locationController = LocationController.getInstance();
+                NotificationCenter.getInstance().addObserver(locationController, NotificationCenter.didReceivedNewMessages);
+                NotificationCenter.getInstance().addObserver(locationController, NotificationCenter.messagesDeleted);
+                NotificationCenter.getInstance().addObserver(locationController, NotificationCenter.replaceMessagesObjects);
+            }
+        });
         loadSharingLocations();
     }
 

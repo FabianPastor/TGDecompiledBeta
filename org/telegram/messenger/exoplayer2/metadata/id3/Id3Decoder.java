@@ -739,18 +739,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
     }
 
     private static PrivFrame decodePrivFrame(ParsableByteArray id3Data, int frameSize) throws UnsupportedEncodingException {
-        byte[] privateData;
         byte[] data = new byte[frameSize];
         id3Data.readBytes(data, 0, frameSize);
         int ownerEndIndex = indexOfZeroByte(data, 0);
-        String owner = new String(data, 0, ownerEndIndex, "ISO-8859-1");
-        int privateDataStartIndex = ownerEndIndex + 1;
-        if (privateDataStartIndex < data.length) {
-            privateData = Arrays.copyOfRange(data, privateDataStartIndex, data.length);
-        } else {
-            privateData = new byte[0];
-        }
-        return new PrivFrame(owner, privateData);
+        return new PrivFrame(new String(data, 0, ownerEndIndex, "ISO-8859-1"), copyOfRangeIfValid(data, ownerEndIndex + 1, data.length));
     }
 
     private static GeobFrame decodeGeobFrame(ParsableByteArray id3Data, int frameSize) throws UnsupportedEncodingException {
@@ -765,7 +757,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
         String filename = new String(data, filenameStartIndex, filenameEndIndex - filenameStartIndex, charset);
         int descriptionStartIndex = filenameEndIndex + delimiterLength(encoding);
         int descriptionEndIndex = indexOfEos(data, descriptionStartIndex, encoding);
-        return new GeobFrame(mimeType, filename, new String(data, descriptionStartIndex, descriptionEndIndex - descriptionStartIndex, charset), Arrays.copyOfRange(data, descriptionEndIndex + delimiterLength(encoding), data.length));
+        return new GeobFrame(mimeType, filename, new String(data, descriptionStartIndex, descriptionEndIndex - descriptionStartIndex, charset), copyOfRangeIfValid(data, descriptionEndIndex + delimiterLength(encoding), data.length));
     }
 
     private static ApicFrame decodeApicFrame(ParsableByteArray id3Data, int frameSize, int majorVersion) throws UnsupportedEncodingException {
@@ -791,7 +783,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
         int pictureType = data[mimeTypeEndIndex + 1] & 255;
         int descriptionStartIndex = mimeTypeEndIndex + 2;
         int descriptionEndIndex = indexOfEos(data, descriptionStartIndex, encoding);
-        return new ApicFrame(mimeType, new String(data, descriptionStartIndex, descriptionEndIndex - descriptionStartIndex, charset), pictureType, Arrays.copyOfRange(data, descriptionEndIndex + delimiterLength(encoding), data.length));
+        return new ApicFrame(mimeType, new String(data, descriptionStartIndex, descriptionEndIndex - descriptionStartIndex, charset), pictureType, copyOfRangeIfValid(data, descriptionEndIndex + delimiterLength(encoding), data.length));
     }
 
     private static CommentFrame decodeCommentFrame(ParsableByteArray id3Data, int frameSize) throws UnsupportedEncodingException {
@@ -940,5 +932,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
 
     private static int delimiterLength(int encodingByte) {
         return (encodingByte == 0 || encodingByte == 3) ? 1 : 2;
+    }
+
+    private static byte[] copyOfRangeIfValid(byte[] data, int from, int to) {
+        if (to <= from) {
+            return new byte[0];
+        }
+        return Arrays.copyOfRange(data, from, to);
     }
 }

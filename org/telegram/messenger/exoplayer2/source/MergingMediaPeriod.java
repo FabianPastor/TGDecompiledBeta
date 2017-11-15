@@ -21,11 +21,11 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
         this.periods = periods;
     }
 
-    public void prepare(Callback callback) {
+    public void prepare(Callback callback, long positionUs) {
         this.callback = callback;
         this.pendingChildPrepareCount = this.periods.length;
         for (MediaPeriod period : this.periods) {
-            period.prepare(this);
+            period.prepare(this, positionUs);
         }
     }
 
@@ -143,14 +143,7 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
     }
 
     public long getBufferedPositionUs() {
-        long bufferedPositionUs = Long.MAX_VALUE;
-        for (MediaPeriod period : this.enabledPeriods) {
-            long rendererBufferedPositionUs = period.getBufferedPositionUs();
-            if (rendererBufferedPositionUs != Long.MIN_VALUE) {
-                bufferedPositionUs = Math.min(bufferedPositionUs, rendererBufferedPositionUs);
-            }
-        }
-        return bufferedPositionUs == Long.MAX_VALUE ? Long.MIN_VALUE : bufferedPositionUs;
+        return this.sequenceableLoader.getBufferedPositionUs();
     }
 
     public long seekToUs(long positionUs) {

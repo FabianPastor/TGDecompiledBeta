@@ -357,7 +357,8 @@ public class ConnectionsManager {
         if (systemVersion.trim().length() == 0) {
             systemVersion = "SDK Unknown";
         }
-        init(BuildVars.BUILD_VERSION, 72, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), UserConfig.getClientUserId(), enablePushConnection);
+        UserConfig.loadConfig();
+        init(BuildVars.BUILD_VERSION, 73, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), UserConfig.getClientUserId(), enablePushConnection);
         try {
             this.wakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(1, JoinPoint.SYNCHRONIZATION_LOCK);
             this.wakeLock.setReferenceCounted(false);
@@ -413,6 +414,7 @@ public class ConnectionsManager {
                     tLObject.freeResources();
                     ConnectionsManager.native_sendRequest(buffer.address, new RequestDelegateInternal() {
                         public void run(int response, int errorCode, String errorText, int networkType) {
+                            Throwable e;
                             TLObject resp = null;
                             TL_error error = null;
                             if (response != 0) {
@@ -420,8 +422,8 @@ public class ConnectionsManager {
                                     NativeByteBuffer buff = NativeByteBuffer.wrap(response);
                                     buff.reused = true;
                                     resp = tLObject.deserializeResponse(buff, buff.readInt32(true), true);
-                                } catch (Exception e) {
-                                    e = e;
+                                } catch (Exception e2) {
+                                    e = e2;
                                     FileLog.e(e);
                                     return;
                                 }
@@ -432,11 +434,10 @@ public class ConnectionsManager {
                                     error2.text = errorText;
                                     FileLog.e(tLObject + " got error " + error2.code + " " + error2.text);
                                     error = error2;
-                                } catch (Exception e2) {
-                                    Throwable e3;
-                                    e3 = e2;
+                                } catch (Exception e3) {
+                                    e = e3;
                                     error = error2;
-                                    FileLog.e(e3);
+                                    FileLog.e(e);
                                     return;
                                 }
                             }

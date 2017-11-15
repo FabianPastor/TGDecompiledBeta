@@ -1,9 +1,9 @@
 package org.telegram.messenger.exoplayer2.upstream;
 
 import android.os.Handler;
-import android.os.SystemClock;
 import org.telegram.messenger.exoplayer2.upstream.BandwidthMeter.EventListener;
 import org.telegram.messenger.exoplayer2.util.Assertions;
+import org.telegram.messenger.exoplayer2.util.Clock;
 import org.telegram.messenger.exoplayer2.util.SlidingPercentile;
 
 public final class DefaultBandwidthMeter implements BandwidthMeter, TransferListener<Object> {
@@ -11,6 +11,7 @@ public final class DefaultBandwidthMeter implements BandwidthMeter, TransferList
     public static final int DEFAULT_MAX_WEIGHT = 2000;
     private static final int ELAPSED_MILLIS_FOR_ESTIMATE = 2000;
     private long bitrateEstimate;
+    private final Clock clock;
     private final Handler eventHandler;
     private final EventListener eventListener;
     private long sampleBytesTransferred;
@@ -29,9 +30,14 @@ public final class DefaultBandwidthMeter implements BandwidthMeter, TransferList
     }
 
     public DefaultBandwidthMeter(Handler eventHandler, EventListener eventListener, int maxWeight) {
+        this(eventHandler, eventListener, maxWeight, Clock.DEFAULT);
+    }
+
+    public DefaultBandwidthMeter(Handler eventHandler, EventListener eventListener, int maxWeight, Clock clock) {
         this.eventHandler = eventHandler;
         this.eventListener = eventListener;
         this.slidingPercentile = new SlidingPercentile(maxWeight);
+        this.clock = clock;
         this.bitrateEstimate = -1;
     }
 
@@ -41,7 +47,7 @@ public final class DefaultBandwidthMeter implements BandwidthMeter, TransferList
 
     public synchronized void onTransferStart(Object source, DataSpec dataSpec) {
         if (this.streamCount == 0) {
-            this.sampleStartTimeMs = SystemClock.elapsedRealtime();
+            this.sampleStartTimeMs = this.clock.elapsedRealtime();
         }
         this.streamCount++;
     }
@@ -52,7 +58,7 @@ public final class DefaultBandwidthMeter implements BandwidthMeter, TransferList
 
     public synchronized void onTransferEnd(Object source) {
         Assertions.checkState(this.streamCount > 0);
-        long nowMs = SystemClock.elapsedRealtime();
+        long nowMs = this.clock.elapsedRealtime();
         int sampleElapsedTimeMs = (int) (nowMs - this.sampleStartTimeMs);
         this.totalElapsedTimeMs += (long) sampleElapsedTimeMs;
         this.totalBytesTransferred += this.sampleBytesTransferred;

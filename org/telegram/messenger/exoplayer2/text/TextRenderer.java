@@ -56,12 +56,12 @@ public final class TextRenderer extends BaseRenderer implements Callback {
 
     public int supportsFormat(Format format) {
         if (this.decoderFactory.supportsFormat(format)) {
-            return 3;
+            return 4;
         }
         return MimeTypes.isText(format.sampleMimeType) ? 1 : 0;
     }
 
-    protected void onStreamChanged(Format[] formats) throws ExoPlaybackException {
+    protected void onStreamChanged(Format[] formats, long offsetUs) throws ExoPlaybackException {
         this.streamFormat = formats[0];
         if (this.decoder != null) {
             this.decoderReplacementState = 1;
@@ -167,7 +167,6 @@ public final class TextRenderer extends BaseRenderer implements Callback {
         this.streamFormat = null;
         clearOutput();
         releaseDecoder();
-        super.onDisabled();
     }
 
     public boolean isEnded() {

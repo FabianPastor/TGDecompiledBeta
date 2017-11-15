@@ -39,6 +39,11 @@ final class Sniffer {
                 input.peekFully(buffer.data, 8, 8);
                 buffer.setLimit(16);
                 atomSize = buffer.readUnsignedLongToLong();
+            } else if (atomSize == 0) {
+                long endPosition = input.getLength();
+                if (endPosition != -1) {
+                    atomSize = (endPosition - input.getPosition()) + ((long) 8);
+                }
             }
             if (atomSize >= ((long) headerSize)) {
                 bytesSearched += headerSize;

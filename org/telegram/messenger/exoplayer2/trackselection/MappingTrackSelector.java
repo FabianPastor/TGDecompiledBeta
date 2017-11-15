@@ -50,11 +50,11 @@ public abstract class MappingTrackSelector extends TrackSelector {
             for (int i = 0; i < rendererFormatSupport.length; i++) {
                 for (int i2 : rendererFormatSupport[i]) {
                     int trackRendererSupport;
-                    switch (i2 & 3) {
-                        case 2:
+                    switch (i2 & 7) {
+                        case 3:
                             trackRendererSupport = 2;
                             break;
-                        case 3:
+                        case 4:
                             return 3;
                         default:
                             trackRendererSupport = 1;
@@ -77,7 +77,7 @@ public abstract class MappingTrackSelector extends TrackSelector {
         }
 
         public int getTrackFormatSupport(int rendererIndex, int groupIndex, int trackIndex) {
-            return this.formatSupport[rendererIndex][groupIndex][trackIndex] & 3;
+            return this.formatSupport[rendererIndex][groupIndex][trackIndex] & 7;
         }
 
         public int getAdaptiveSupport(int rendererIndex, int groupIndex, boolean includeCapabilitiesExceededTracks) {
@@ -88,7 +88,7 @@ public abstract class MappingTrackSelector extends TrackSelector {
             while (i < trackCount) {
                 int trackIndexCount2;
                 int fixedSupport = getTrackFormatSupport(rendererIndex, groupIndex, i);
-                if (fixedSupport == 3 || (includeCapabilitiesExceededTracks && fixedSupport == 2)) {
+                if (fixedSupport == 4 || (includeCapabilitiesExceededTracks && fixedSupport == 3)) {
                     trackIndexCount2 = trackIndexCount + 1;
                     trackIndices[trackIndexCount] = i;
                 } else {
@@ -102,7 +102,7 @@ public abstract class MappingTrackSelector extends TrackSelector {
 
         public int getAdaptiveSupport(int rendererIndex, int groupIndex, int[] trackIndices) {
             int handledTrackCount = 0;
-            int adaptiveSupport = 8;
+            int adaptiveSupport = 16;
             boolean multipleMimeTypes = false;
             String firstSampleMimeType = null;
             int i = 0;
@@ -114,7 +114,7 @@ public abstract class MappingTrackSelector extends TrackSelector {
                 } else {
                     multipleMimeTypes |= !Util.areEqual(firstSampleMimeType, sampleMimeType) ? 1 : 0;
                 }
-                adaptiveSupport = Math.min(adaptiveSupport, this.formatSupport[rendererIndex][groupIndex][i] & 12);
+                adaptiveSupport = Math.min(adaptiveSupport, this.formatSupport[rendererIndex][groupIndex][i] & 24);
                 i++;
                 handledTrackCount = handledTrackCount2;
             }
@@ -267,10 +267,15 @@ public abstract class MappingTrackSelector extends TrackSelector {
                 trackSelections[i] = null;
             } else {
                 TrackGroupArray rendererTrackGroup = rendererTrackGroupArrays[i];
-                Map<TrackGroupArray, SelectionOverride> overrides = (Map) this.selectionOverrides.get(i);
-                SelectionOverride override = overrides == null ? null : (SelectionOverride) overrides.get(rendererTrackGroup);
-                if (override != null) {
-                    trackSelections[i] = override.createTrackSelection(rendererTrackGroup);
+                if (hasSelectionOverride(i, rendererTrackGroup)) {
+                    TrackSelection trackSelection;
+                    SelectionOverride override = (SelectionOverride) ((Map) this.selectionOverrides.get(i)).get(rendererTrackGroup);
+                    if (override == null) {
+                        trackSelection = null;
+                    } else {
+                        trackSelection = override.createTrackSelection(rendererTrackGroup);
+                    }
+                    trackSelections[i] = trackSelection;
                 }
             }
         }
@@ -293,11 +298,11 @@ public abstract class MappingTrackSelector extends TrackSelector {
         for (int rendererIndex = 0; rendererIndex < rendererCapabilities.length; rendererIndex++) {
             RendererCapabilities rendererCapability = rendererCapabilities[rendererIndex];
             for (int trackIndex = 0; trackIndex < group.length; trackIndex++) {
-                int formatSupportLevel = rendererCapability.supportsFormat(group.getFormat(trackIndex)) & 3;
+                int formatSupportLevel = rendererCapability.supportsFormat(group.getFormat(trackIndex)) & 7;
                 if (formatSupportLevel > bestFormatSupportLevel) {
                     bestRendererIndex = rendererIndex;
                     bestFormatSupportLevel = formatSupportLevel;
-                    if (bestFormatSupportLevel == 3) {
+                    if (bestFormatSupportLevel == 4) {
                         return bestRendererIndex;
                     }
                 }
@@ -362,7 +367,7 @@ public abstract class MappingTrackSelector extends TrackSelector {
         }
         int trackGroupIndex = trackGroups.indexOf(selection.getTrackGroup());
         for (int i = 0; i < selection.length(); i++) {
-            if ((formatSupport[trackGroupIndex][selection.getIndexInTrackGroup(i)] & 16) != 16) {
+            if ((formatSupport[trackGroupIndex][selection.getIndexInTrackGroup(i)] & 32) != 32) {
                 return false;
             }
         }

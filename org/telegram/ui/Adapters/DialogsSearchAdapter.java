@@ -25,6 +25,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.query.SearchQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
@@ -79,6 +80,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     private ArrayList<MessageObject> searchResultMessages = new ArrayList();
     private ArrayList<CharSequence> searchResultNames = new ArrayList();
     private Timer searchTimer;
+    private int selfUserId;
 
     private class DialogSearchResult {
         public int date;
@@ -175,6 +177,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         this.mContext = context;
         this.needMessagesSearch = messagesSearch;
         this.dialogsType = type;
+        this.selfUserId = UserConfig.getClientUserId();
         loadRecentSearch();
         SearchQuery.loadHints(true);
     }
@@ -481,6 +484,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
                     try {
+                        String savedMessages = LocaleController.getString("SavedMessages", R.string.SavedMessages).toLowerCase();
                         String search1 = query.trim().toLowerCase();
                         if (search1.length() == 0) {
                             DialogsSearchAdapter.this.lastSearchId = -1;
@@ -488,6 +492,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             return;
                         }
                         DialogSearchResult dialogSearchResult;
+                        TLObject user;
                         String name;
                         String tName;
                         String username;
@@ -498,7 +503,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         String q;
                         NativeByteBuffer data;
                         int a;
-                        User user;
+                        User user2;
                         String search2 = LocaleController.getInstance().getTranslitString(search1);
                         if (search1.equals(search2) || search2.length() == 0) {
                             search2 = null;
@@ -539,6 +544,15 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             }
                         }
                         cursor.dispose();
+                        if (savedMessages.startsWith(search1)) {
+                            user = UserConfig.getCurrentUser();
+                            dialogSearchResult = new DialogSearchResult();
+                            dialogSearchResult.date = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                            dialogSearchResult.name = savedMessages;
+                            dialogSearchResult.object = user;
+                            dialogsResult.put(Long.valueOf((long) user.id), dialogSearchResult);
+                            resultCount = 0 + 1;
+                        }
                         if (!usersToLoad.isEmpty()) {
                             cursor = MessagesStorage.getInstance().getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, status, name FROM users WHERE uid IN(%s)", new Object[]{TextUtils.join(",", usersToLoad)}), new Object[0]);
                             while (cursor.next()) {
@@ -565,18 +579,18 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                     if (found != 0) {
                                         data = cursor.byteBufferValue(0);
                                         if (data != null) {
-                                            TLObject user2 = User.TLdeserialize(data, data.readInt32(false), false);
+                                            user = User.TLdeserialize(data, data.readInt32(false), false);
                                             data.reuse();
-                                            dialogSearchResult = (DialogSearchResult) dialogsResult.get(Long.valueOf((long) user2.id));
-                                            if (user2.status != null) {
-                                                user2.status.expires = cursor.intValue(1);
+                                            dialogSearchResult = (DialogSearchResult) dialogsResult.get(Long.valueOf((long) user.id));
+                                            if (user.status != null) {
+                                                user.status.expires = cursor.intValue(1);
                                             }
                                             if (found == 1) {
-                                                dialogSearchResult.name = AndroidUtilities.generateSearchName(user2.first_name, user2.last_name, q);
+                                                dialogSearchResult.name = AndroidUtilities.generateSearchName(user.first_name, user.last_name, q);
                                             } else {
-                                                dialogSearchResult.name = AndroidUtilities.generateSearchName("@" + user2.username, null, "@" + q);
+                                                dialogSearchResult.name = AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q);
                                             }
-                                            dialogSearchResult.object = user2;
+                                            dialogSearchResult.object = user;
                                             resultCount++;
                                         }
                                     } else {
@@ -649,7 +663,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                     }
                                     if (found != 0) {
                                         EncryptedChat chat2 = null;
-                                        user = null;
+                                        user2 = null;
                                         data = cursor.byteBufferValue(0);
                                         if (data != null) {
                                             chat2 = EncryptedChat.TLdeserialize(data, data.readInt32(false), false);
@@ -657,10 +671,10 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                         }
                                         data = cursor.byteBufferValue(6);
                                         if (data != null) {
-                                            user = User.TLdeserialize(data, data.readInt32(false), false);
+                                            user2 = User.TLdeserialize(data, data.readInt32(false), false);
                                             data.reuse();
                                         }
-                                        if (!(chat2 == null || user == null)) {
+                                        if (!(chat2 == null || user2 == null)) {
                                             dialogSearchResult = (DialogSearchResult) dialogsResult.get(Long.valueOf(((long) chat2.id) << 32));
                                             chat2.user_id = cursor.intValue(2);
                                             chat2.a_or_b = cursor.byteArrayValue(3);
@@ -678,17 +692,17 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                             chat2.future_auth_key = cursor.byteArrayValue(15);
                                             chat2.key_hash = cursor.byteArrayValue(16);
                                             chat2.in_seq_no = cursor.intValue(17);
-                                            if (user.status != null) {
-                                                user.status.expires = cursor.intValue(7);
+                                            if (user2.status != null) {
+                                                user2.status.expires = cursor.intValue(7);
                                             }
                                             if (found == 1) {
-                                                dialogSearchResult.name = new SpannableStringBuilder(ContactsController.formatName(user.first_name, user.last_name));
+                                                dialogSearchResult.name = new SpannableStringBuilder(ContactsController.formatName(user2.first_name, user2.last_name));
                                                 ((SpannableStringBuilder) dialogSearchResult.name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_chats_secretName)), 0, dialogSearchResult.name.length(), 33);
                                             } else {
-                                                dialogSearchResult.name = AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q);
+                                                dialogSearchResult.name = AndroidUtilities.generateSearchName("@" + user2.username, null, "@" + q);
                                             }
                                             dialogSearchResult.object = chat2;
-                                            encUsers.add(user);
+                                            encUsers.add(user2);
                                             resultCount++;
                                         }
                                     } else {
@@ -749,17 +763,17 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                         if (found != 0) {
                                             data = cursor.byteBufferValue(0);
                                             if (data != null) {
-                                                user = User.TLdeserialize(data, data.readInt32(false), false);
+                                                user2 = User.TLdeserialize(data, data.readInt32(false), false);
                                                 data.reuse();
-                                                if (user.status != null) {
-                                                    user.status.expires = cursor.intValue(1);
+                                                if (user2.status != null) {
+                                                    user2.status.expires = cursor.intValue(1);
                                                 }
                                                 if (found == 1) {
-                                                    resultArrayNames.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, q));
+                                                    resultArrayNames.add(AndroidUtilities.generateSearchName(user2.first_name, user2.last_name, q));
                                                 } else {
-                                                    resultArrayNames.add(AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q));
+                                                    resultArrayNames.add(AndroidUtilities.generateSearchName("@" + user2.username, null, "@" + q));
                                                 }
-                                                resultArray.add(user);
+                                                resultArray.add(user2);
                                             }
                                         } else {
                                             i++;
@@ -799,6 +813,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                     MessagesController.getInstance().putUsers(arrayList2, true);
                     DialogsSearchAdapter.this.searchResult = arrayList;
                     DialogsSearchAdapter.this.searchResultNames = arrayList3;
+                    DialogsSearchAdapter.this.searchAdapterHelper.mergeResults(DialogsSearchAdapter.this.searchResult);
                     DialogsSearchAdapter.this.notifyDataSetChanged();
                 }
             }
@@ -831,6 +846,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 this.searchResult.clear();
                 this.searchResultNames.clear();
                 this.searchResultHashtags.clear();
+                this.searchAdapterHelper.mergeResults(null);
                 if (this.needMessagesSearch != 2) {
                     this.searchAdapterHelper.queryServerSearch(null, true, true, true, true, 0, false);
                 }
@@ -1039,11 +1055,10 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Throwable e;
-        Object username;
-        TLObject tLObject;
         switch (holder.getItemViewType()) {
             case 0:
+                Object username;
+                TLObject tLObject;
                 ProfileSearchCell cell = holder.itemView;
                 TLObject user = null;
                 TLObject chat = null;
@@ -1092,35 +1107,38 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             foundUserName = foundUserName.substring(1);
                         }
                         try {
-                            CharSequence spannableStringBuilder = new SpannableStringBuilder(un);
-                            try {
-                                ((SpannableStringBuilder) spannableStringBuilder).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
-                                username2 = spannableStringBuilder;
-                            } catch (Exception e2) {
-                                e = e2;
-                                username2 = spannableStringBuilder;
-                                username = un;
-                                FileLog.e(e);
-                                if (user != null) {
-                                    tLObject = chat;
-                                } else {
-                                    tLObject = user;
-                                }
-                                cell.setData(tLObject, encryptedChat, name, username2, isRecent);
-                                return;
+                            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+                            spannableStringBuilder.append("@");
+                            spannableStringBuilder.append(un);
+                            if (un.startsWith(foundUserName)) {
+                                spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, Math.min(spannableStringBuilder.length(), foundUserName.length() + 1), 33);
                             }
-                        } catch (Exception e3) {
-                            e = e3;
+                            username = spannableStringBuilder;
+                        } catch (Throwable e) {
                             username = un;
                             FileLog.e(e);
-                            if (user != null) {
-                                tLObject = user;
-                            } else {
-                                tLObject = chat;
-                            }
-                            cell.setData(tLObject, encryptedChat, name, username2, isRecent);
-                            return;
                         }
+                    }
+                }
+                boolean savedMessages = false;
+                if (user != null && user.id == this.selfUserId) {
+                    name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
+                    username2 = null;
+                    savedMessages = true;
+                }
+                if (!(chat == null || chat.participants_count == 0)) {
+                    String membersString;
+                    if (!ChatObject.isChannel((Chat) chat) || chat.megagroup) {
+                        membersString = LocaleController.formatPluralString("Members", chat.participants_count);
+                    } else {
+                        membersString = LocaleController.formatPluralString("Subscribers", chat.participants_count);
+                    }
+                    if (username2 instanceof SpannableStringBuilder) {
+                        ((SpannableStringBuilder) username2).append(", ").append(membersString);
+                    } else if (TextUtils.isEmpty(username2)) {
+                        username = membersString;
+                    } else {
+                        username2 = TextUtils.concat(new CharSequence[]{username2, ", ", membersString});
                     }
                 }
                 if (user != null) {
@@ -1128,7 +1146,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 } else {
                     tLObject = chat;
                 }
-                cell.setData(tLObject, encryptedChat, name, username2, isRecent);
+                cell.setData(tLObject, encryptedChat, name, username2, isRecent, savedMessages);
                 return;
             case 1:
                 GraySectionCell cell2 = holder.itemView;
@@ -1157,7 +1175,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 cell3.setDialog(messageObject.getDialogId(), messageObject, messageObject.messageOwner.date);
                 return;
             case 4:
-                HashtagSearchCell cell4 = (HashtagSearchCell) holder.itemView;
+                HashtagSearchCell cell4 = holder.itemView;
                 cell4.setText((CharSequence) this.searchResultHashtags.get(position - 1));
                 cell4.setNeedDivider(position != this.searchResultHashtags.size());
                 return;

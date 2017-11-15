@@ -78,6 +78,7 @@ public class EmbedBottomSheet extends BottomSheet {
     private boolean isYouTube;
     private int lastOrientation;
     private OnShowListener onShowListener;
+    private TextView openInButton;
     private String openUrl;
     private OrientationEventListener orientationEventListener;
     private Activity parentActivity;
@@ -93,6 +94,7 @@ public class EmbedBottomSheet extends BottomSheet {
     private WebView webView;
     private int width;
     private final String youtubeFrame;
+    private ImageView youtubeLogoImage;
 
     private class YoutubeProxy {
         private YoutubeProxy() {
@@ -103,21 +105,22 @@ public class EmbedBottomSheet extends BottomSheet {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     String str = eventName;
-                    Object obj = -1;
+                    boolean z = true;
                     switch (str.hashCode()) {
                         case -1097519099:
                             if (str.equals("loaded")) {
-                                obj = null;
+                                z = false;
                                 break;
                             }
                             break;
                     }
-                    switch (obj) {
-                        case null:
+                    switch (z) {
+                        case false:
                             EmbedBottomSheet.this.progressBar.setVisibility(4);
                             EmbedBottomSheet.this.progressBarBlackBackground.setVisibility(4);
                             EmbedBottomSheet.this.pipButton.setEnabled(true);
                             EmbedBottomSheet.this.pipButton.setAlpha(1.0f);
+                            EmbedBottomSheet.this.showOrHideYoutubeLogo(false);
                             return;
                         default:
                             return;
@@ -213,7 +216,14 @@ public class EmbedBottomSheet extends BottomSheet {
             }
         });
         setCustomView(this.containerLayout);
-        this.webView = new WebView(context);
+        this.webView = new WebView(context) {
+            public boolean onTouchEvent(MotionEvent event) {
+                if (EmbedBottomSheet.this.isYouTube && event.getAction() == 0) {
+                    EmbedBottomSheet.this.showOrHideYoutubeLogo(true);
+                }
+                return super.onTouchEvent(event);
+            }
+        };
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setDomStorageEnabled(true);
         if (VERSION.SDK_INT >= 17) {
@@ -270,6 +280,16 @@ public class EmbedBottomSheet extends BottomSheet {
             }
         });
         this.containerLayout.addView(this.webView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, (float) ((this.hasDescription ? 22 : 0) + 84)));
+        this.youtubeLogoImage = new ImageView(context);
+        this.youtubeLogoImage.setVisibility(8);
+        this.containerLayout.addView(this.youtubeLogoImage, LayoutHelper.createFrame(66, 28.0f, 53, 0.0f, 8.0f, 8.0f, 0.0f));
+        this.youtubeLogoImage.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                if (EmbedBottomSheet.this.youtubeLogoImage.getAlpha() != 0.0f) {
+                    EmbedBottomSheet.this.openInButton.callOnClick();
+                }
+            }
+        });
         this.videoView = new WebPlayerView(context, true, false, new WebPlayerViewDelegate() {
             public void onInitFailed() {
                 EmbedBottomSheet.this.webView.setVisibility(0);
@@ -444,10 +464,10 @@ public class EmbedBottomSheet extends BottomSheet {
                 if (animated) {
                     EmbedBottomSheet.this.animationInProgress = true;
                     EmbedBottomSheet.this.videoView.getAspectRatioView().getLocationInWindow(EmbedBottomSheet.this.position);
-                    int[] access$3600 = EmbedBottomSheet.this.position;
-                    access$3600[0] = access$3600[0] - EmbedBottomSheet.this.getLeftInset();
-                    access$3600 = EmbedBottomSheet.this.position;
-                    access$3600[1] = (int) (((float) access$3600[1]) - EmbedBottomSheet.this.containerView.getTranslationY());
+                    int[] access$3900 = EmbedBottomSheet.this.position;
+                    access$3900[0] = access$3900[0] - EmbedBottomSheet.this.getLeftInset();
+                    access$3900 = EmbedBottomSheet.this.position;
+                    access$3900[1] = (int) (((float) access$3900[1]) - EmbedBottomSheet.this.containerView.getTranslationY());
                     TextureView textureView = EmbedBottomSheet.this.videoView.getTextureView();
                     ImageView textureImageView = EmbedBottomSheet.this.videoView.getTextureImageView();
                     AnimatorSet animatorSet = new AnimatorSet();
@@ -575,21 +595,21 @@ public class EmbedBottomSheet extends BottomSheet {
             public void onClick(View v) {
                 if (EmbedBottomSheet.this.checkInlinePermissions() && EmbedBottomSheet.this.progressBar.getVisibility() != 0) {
                     EmbedBottomSheet.this.pipVideoView = new PipVideoView();
-                    PipVideoView access$300 = EmbedBottomSheet.this.pipVideoView;
-                    Activity access$1900 = EmbedBottomSheet.this.parentActivity;
+                    PipVideoView access$400 = EmbedBottomSheet.this.pipVideoView;
+                    Activity access$2200 = EmbedBottomSheet.this.parentActivity;
                     EmbedBottomSheet embedBottomSheet = EmbedBottomSheet.this;
-                    float access$700 = (EmbedBottomSheet.this.width == 0 || EmbedBottomSheet.this.height == 0) ? 1.0f : ((float) EmbedBottomSheet.this.width) / ((float) EmbedBottomSheet.this.height);
-                    access$300.show(access$1900, embedBottomSheet, null, access$700, 0, EmbedBottomSheet.this.webView);
+                    float access$800 = (EmbedBottomSheet.this.width == 0 || EmbedBottomSheet.this.height == 0) ? 1.0f : ((float) EmbedBottomSheet.this.width) / ((float) EmbedBottomSheet.this.height);
+                    access$400.show(access$2200, embedBottomSheet, null, access$800, 0, EmbedBottomSheet.this.webView);
                     if (EmbedBottomSheet.this.isYouTube) {
                         EmbedBottomSheet.this.runJsCode("hideControls();");
                     }
                     if (false) {
                         EmbedBottomSheet.this.animationInProgress = true;
                         EmbedBottomSheet.this.videoView.getAspectRatioView().getLocationInWindow(EmbedBottomSheet.this.position);
-                        int[] access$3600 = EmbedBottomSheet.this.position;
-                        access$3600[0] = access$3600[0] - EmbedBottomSheet.this.getLeftInset();
-                        access$3600 = EmbedBottomSheet.this.position;
-                        access$3600[1] = (int) (((float) access$3600[1]) - EmbedBottomSheet.this.containerView.getTranslationY());
+                        int[] access$3900 = EmbedBottomSheet.this.position;
+                        access$3900[0] = access$3900[0] - EmbedBottomSheet.this.getLeftInset();
+                        access$3900 = EmbedBottomSheet.this.position;
+                        access$3900[1] = (int) (((float) access$3900[1]) - EmbedBottomSheet.this.containerView.getTranslationY());
                         TextureView textureView = EmbedBottomSheet.this.videoView.getTextureView();
                         ImageView textureImageView = EmbedBottomSheet.this.videoView.getTextureImageView();
                         AnimatorSet animatorSet = new AnimatorSet();
@@ -650,18 +670,18 @@ public class EmbedBottomSheet extends BottomSheet {
         this.copyTextButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         linearLayout.addView(this.copyTextButton, LayoutHelper.createFrame(-2, -1, 51));
         this.copyTextButton.setOnClickListener(copyClickListener);
-        textView = new TextView(context);
-        textView.setTextSize(1, 14.0f);
-        textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue4));
-        textView.setGravity(17);
-        textView.setSingleLine(true);
-        textView.setEllipsize(TruncateAt.END);
-        textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 0));
-        textView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        textView.setText(LocaleController.getString("OpenInBrowser", R.string.OpenInBrowser).toUpperCase());
-        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        linearLayout.addView(textView, LayoutHelper.createFrame(-2, -1, 51));
-        textView.setOnClickListener(new OnClickListener() {
+        this.openInButton = new TextView(context);
+        this.openInButton.setTextSize(1, 14.0f);
+        this.openInButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue4));
+        this.openInButton.setGravity(17);
+        this.openInButton.setSingleLine(true);
+        this.openInButton.setEllipsize(TruncateAt.END);
+        this.openInButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 0));
+        this.openInButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
+        this.openInButton.setText(LocaleController.getString("OpenInBrowser", R.string.OpenInBrowser).toUpperCase());
+        this.openInButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        linearLayout.addView(this.openInButton, LayoutHelper.createFrame(-2, -1, 51));
+        this.openInButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Browser.openUrl(EmbedBottomSheet.this.parentActivity, EmbedBottomSheet.this.openUrl);
                 EmbedBottomSheet.this.dismiss();
@@ -692,6 +712,8 @@ public class EmbedBottomSheet extends BottomSheet {
                 try {
                     if (EmbedBottomSheet.this.videoView.getYoutubeId() != null) {
                         EmbedBottomSheet.this.progressBarBlackBackground.setVisibility(0);
+                        EmbedBottomSheet.this.youtubeLogoImage.setVisibility(0);
+                        EmbedBottomSheet.this.youtubeLogoImage.setImageResource(R.drawable.ytlogo);
                         EmbedBottomSheet.this.isYouTube = true;
                         if (VERSION.SDK_INT >= 17) {
                             EmbedBottomSheet.this.webView.addJavascriptInterface(new YoutubeProxy(), "YoutubeProxy");
@@ -770,6 +792,16 @@ public class EmbedBottomSheet extends BottomSheet {
         } catch (Throwable e) {
             FileLog.e(e);
         }
+    }
+
+    private void showOrHideYoutubeLogo(final boolean show) {
+        this.youtubeLogoImage.animate().alpha(show ? 1.0f : 0.0f).setDuration(200).setStartDelay(show ? 0 : 2900).setInterpolator(new DecelerateInterpolator()).setListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animation) {
+                if (show) {
+                    EmbedBottomSheet.this.showOrHideYoutubeLogo(false);
+                }
+            }
+        }).start();
     }
 
     public boolean checkInlinePermissions() {

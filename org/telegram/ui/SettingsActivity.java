@@ -14,7 +14,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Outline;
 import android.graphics.PorterDuff.Mode;
@@ -67,7 +66,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.query.StickersQuery;
@@ -124,10 +122,11 @@ import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.Components.URLSpanNoUnderline;
+import org.telegram.ui.PhotoViewer.EmptyPhotoViewerProvider;
 import org.telegram.ui.PhotoViewer.PhotoViewerProvider;
 import org.telegram.ui.PhotoViewer.PlaceProviderObject;
 
-public class SettingsActivity extends BaseFragment implements NotificationCenterDelegate, PhotoViewerProvider {
+public class SettingsActivity extends BaseFragment implements NotificationCenterDelegate {
     private static final int edit_name = 1;
     private static final int logout = 2;
     private int askQuestionRow;
@@ -164,6 +163,41 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private int overscrollRow;
     private int privacyPolicyRow;
     private int privacyRow;
+    private PhotoViewerProvider provider = new EmptyPhotoViewerProvider() {
+        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+            PlaceProviderObject placeProviderObject = null;
+            int i = 0;
+            if (fileLocation != null) {
+                User user = MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId()));
+                if (!(user == null || user.photo == null || user.photo.photo_big == null)) {
+                    FileLocation photoBig = user.photo.photo_big;
+                    if (photoBig.local_id == fileLocation.local_id && photoBig.volume_id == fileLocation.volume_id && photoBig.dc_id == fileLocation.dc_id) {
+                        int[] coords = new int[2];
+                        SettingsActivity.this.avatarImage.getLocationInWindow(coords);
+                        placeProviderObject = new PlaceProviderObject();
+                        placeProviderObject.viewX = coords[0];
+                        int i2 = coords[1];
+                        if (VERSION.SDK_INT < 21) {
+                            i = AndroidUtilities.statusBarHeight;
+                        }
+                        placeProviderObject.viewY = i2 - i;
+                        placeProviderObject.parentView = SettingsActivity.this.avatarImage;
+                        placeProviderObject.imageReceiver = SettingsActivity.this.avatarImage.getImageReceiver();
+                        placeProviderObject.dialogId = UserConfig.getClientUserId();
+                        placeProviderObject.thumb = placeProviderObject.imageReceiver.getBitmap();
+                        placeProviderObject.size = -1;
+                        placeProviderObject.radius = SettingsActivity.this.avatarImage.getImageReceiver().getRoundRadius();
+                        placeProviderObject.scale = SettingsActivity.this.avatarImage.getScaleX();
+                    }
+                }
+            }
+            return placeProviderObject;
+        }
+
+        public void willHidePhotoViewer() {
+            SettingsActivity.this.avatarImage.getImageReceiver().setVisible(true, true);
+        }
+    };
     private int raiseToSpeakRow;
     private int rowCount;
     private int saveToGalleryRow;
@@ -712,13 +746,13 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(false);
         RecyclerListView recyclerListView = this.listView;
-        LayoutManager anonymousClass4 = new LinearLayoutManager(context, 1, false) {
+        LayoutManager anonymousClass5 = new LinearLayoutManager(context, 1, false) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
         };
-        this.layoutManager = anonymousClass4;
-        recyclerListView.setLayoutManager(anonymousClass4);
+        this.layoutManager = anonymousClass5;
+        recyclerListView.setLayoutManager(anonymousClass5);
         this.listView.setGlowColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
@@ -1057,7 +1091,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 User user = MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId()));
                 if (user != null && user.photo != null && user.photo.photo_big != null) {
                     PhotoViewer.getInstance().setParentActivity(SettingsActivity.this.getParentActivity());
-                    PhotoViewer.getInstance().openPhoto(user.photo.photo_big, SettingsActivity.this);
+                    PhotoViewer.getInstance().openPhoto(user.photo.photo_big, SettingsActivity.this.provider);
                 }
             }
         });
@@ -1166,76 +1200,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             }
         });
         return this.fragmentView;
-    }
-
-    public void updatePhotoAtIndex(int index) {
-    }
-
-    public boolean allowCaption() {
-        return true;
-    }
-
-    public boolean scaleToFill() {
-        return false;
-    }
-
-    public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-        PlaceProviderObject placeProviderObject = null;
-        int i = 0;
-        if (fileLocation != null) {
-            User user = MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId()));
-            if (!(user == null || user.photo == null || user.photo.photo_big == null)) {
-                FileLocation photoBig = user.photo.photo_big;
-                if (photoBig.local_id == fileLocation.local_id && photoBig.volume_id == fileLocation.volume_id && photoBig.dc_id == fileLocation.dc_id) {
-                    int[] coords = new int[2];
-                    this.avatarImage.getLocationInWindow(coords);
-                    placeProviderObject = new PlaceProviderObject();
-                    placeProviderObject.viewX = coords[0];
-                    int i2 = coords[1];
-                    if (VERSION.SDK_INT < 21) {
-                        i = AndroidUtilities.statusBarHeight;
-                    }
-                    placeProviderObject.viewY = i2 - i;
-                    placeProviderObject.parentView = this.avatarImage;
-                    placeProviderObject.imageReceiver = this.avatarImage.getImageReceiver();
-                    placeProviderObject.dialogId = UserConfig.getClientUserId();
-                    placeProviderObject.thumb = placeProviderObject.imageReceiver.getBitmap();
-                    placeProviderObject.size = -1;
-                    placeProviderObject.radius = this.avatarImage.getImageReceiver().getRoundRadius();
-                    placeProviderObject.scale = this.avatarImage.getScaleX();
-                }
-            }
-        }
-        return placeProviderObject;
-    }
-
-    public Bitmap getThumbForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-        return null;
-    }
-
-    public void willSwitchFromPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-    }
-
-    public void willHidePhotoViewer() {
-        this.avatarImage.getImageReceiver().setVisible(true, true);
-    }
-
-    public boolean isPhotoChecked(int index) {
-        return false;
-    }
-
-    public void setPhotoChecked(int index, VideoEditedInfo videoEditedInfo) {
-    }
-
-    public boolean cancelButtonPressed() {
-        return true;
-    }
-
-    public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
-    }
-
-    public int getSelectedCount() {
-        return 0;
     }
 
     private void performAskAQuestion() {
@@ -1529,7 +1493,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         themeDescriptionArr[24] = new ThemeDescription(this.listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
         themeDescriptionArr[25] = new ThemeDescription(this.listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
         themeDescriptionArr[26] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText5);
-        themeDescriptionArr[27] = new ThemeDescription(this.avatarImage, 0, null, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable}, null, Theme.key_avatar_text);
+        themeDescriptionArr[27] = new ThemeDescription(this.avatarImage, 0, null, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
         themeDescriptionArr[28] = new ThemeDescription(this.avatarImage, 0, null, null, new Drawable[]{this.avatarDrawable}, null, Theme.key_avatar_backgroundInProfileBlue);
         themeDescriptionArr[29] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_profile_actionIcon);
         themeDescriptionArr[30] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_profile_actionBackground);

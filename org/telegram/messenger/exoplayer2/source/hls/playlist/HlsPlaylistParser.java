@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -23,6 +25,7 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
+    private static final String ATTR_CLOSED_CAPTIONS_NONE = "CLOSED-CAPTIONS=NONE";
     private static final String BOOLEAN_FALSE = "NO";
     private static final String BOOLEAN_TRUE = "YES";
     private static final String METHOD_AES128 = "AES-128";
@@ -30,7 +33,8 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
     private static final String PLAYLIST_HEADER = "#EXTM3U";
     private static final Pattern REGEX_ATTR_BYTERANGE = Pattern.compile("BYTERANGE=\"(\\d+(?:@\\d+)?)\\b\"");
     private static final Pattern REGEX_AUTOSELECT = compileBooleanAttrPattern("AUTOSELECT");
-    private static final Pattern REGEX_BANDWIDTH = Pattern.compile("BANDWIDTH=(\\d+)\\b");
+    private static final Pattern REGEX_AVERAGE_BANDWIDTH = Pattern.compile("AVERAGE-BANDWIDTH=(\\d+)\\b");
+    private static final Pattern REGEX_BANDWIDTH = Pattern.compile("[^-]BANDWIDTH=(\\d+)\\b");
     private static final Pattern REGEX_BYTERANGE = Pattern.compile("#EXT-X-BYTERANGE:(\\d+(?:@\\d+)?)\\b");
     private static final Pattern REGEX_CODECS = Pattern.compile("CODECS=\"(.+?)\"");
     private static final Pattern REGEX_DEFAULT = compileBooleanAttrPattern("DEFAULT");
@@ -53,12 +57,14 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
     private static final String TAG_DISCONTINUITY = "#EXT-X-DISCONTINUITY";
     private static final String TAG_DISCONTINUITY_SEQUENCE = "#EXT-X-DISCONTINUITY-SEQUENCE";
     private static final String TAG_ENDLIST = "#EXT-X-ENDLIST";
+    private static final String TAG_INDEPENDENT_SEGMENTS = "#EXT-X-INDEPENDENT-SEGMENTS";
     private static final String TAG_INIT_SEGMENT = "#EXT-X-MAP";
     private static final String TAG_KEY = "#EXT-X-KEY";
     private static final String TAG_MEDIA = "#EXT-X-MEDIA";
     private static final String TAG_MEDIA_DURATION = "#EXTINF";
     private static final String TAG_MEDIA_SEQUENCE = "#EXT-X-MEDIA-SEQUENCE";
     private static final String TAG_PLAYLIST_TYPE = "#EXT-X-PLAYLIST-TYPE";
+    private static final String TAG_PREFIX = "#EXT";
     private static final String TAG_PROGRAM_DATE_TIME = "#EXT-X-PROGRAM-DATE-TIME";
     private static final String TAG_START = "#EXT-X-START";
     private static final String TAG_STREAM_INF = "#EXT-X-STREAM-INF";
@@ -175,13 +181,19 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
     }
 
     private static HlsMasterPlaylist parseMasterPlaylist(LineIterator iterator, String baseUri) throws IOException {
+        HashSet<String> variantUrls = new HashSet();
         ArrayList<HlsUrl> variants = new ArrayList();
         ArrayList<HlsUrl> audios = new ArrayList();
         ArrayList<HlsUrl> subtitles = new ArrayList();
+        ArrayList<String> tags = new ArrayList();
         Format muxedAudioFormat = null;
-        ArrayList<Format> muxedCaptionFormats = new ArrayList();
+        List<Format> muxedCaptionFormats = null;
+        boolean noClosedCaptions = false;
         while (iterator.hasNext()) {
             String line = iterator.next();
+            if (line.startsWith(TAG_PREFIX)) {
+                tags.add(line);
+            }
             if (line.startsWith(TAG_MEDIA)) {
                 int selectionFlags = parseSelectionFlags(line);
                 String uri = parseOptionalStringAttr(line, REGEX_URI);
@@ -232,6 +244,9 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
                             mimeType = MimeTypes.APPLICATION_CEA708;
                             accessibilityChannel = Integer.parseInt(instreamId.substring(7));
                         }
+                        if (muxedCaptionFormats == null) {
+                            muxedCaptionFormats = new ArrayList();
+                        }
                         muxedCaptionFormats.add(Format.createTextContainerFormat(id, null, mimeType, null, -1, selectionFlags, language, accessibilityChannel));
                         break;
                     default:
@@ -242,8 +257,13 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
                 int width;
                 int height;
                 int bitrate = parseIntAttr(line, REGEX_BANDWIDTH);
+                String averageBandwidthString = parseOptionalStringAttr(line, REGEX_AVERAGE_BANDWIDTH);
+                if (averageBandwidthString != null) {
+                    bitrate = Integer.parseInt(averageBandwidthString);
+                }
                 String codecs = parseOptionalStringAttr(line, REGEX_CODECS);
                 String resolutionString = parseOptionalStringAttr(line, REGEX_RESOLUTION);
+                noClosedCaptions |= line.contains(ATTR_CLOSED_CAPTIONS_NONE);
                 if (resolutionString != null) {
                     String[] widthAndHeight = resolutionString.split("x");
                     width = Integer.parseInt(widthAndHeight[0]);
@@ -256,10 +276,16 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
                     width = -1;
                     height = -1;
                 }
-                variants.add(new HlsUrl(iterator.next(), Format.createVideoContainerFormat(Integer.toString(variants.size()), MimeTypes.APPLICATION_M3U8, null, codecs, bitrate, width, height, -1.0f, null, 0)));
+                line = iterator.next();
+                if (variantUrls.add(line)) {
+                    variants.add(new HlsUrl(line, Format.createVideoContainerFormat(Integer.toString(variants.size()), MimeTypes.APPLICATION_M3U8, null, codecs, bitrate, width, height, -1.0f, null, 0)));
+                }
             }
         }
-        return new HlsMasterPlaylist(baseUri, variants, audios, subtitles, muxedAudioFormat, muxedCaptionFormats);
+        if (noClosedCaptions) {
+            muxedCaptionFormats = Collections.emptyList();
+        }
+        return new HlsMasterPlaylist(baseUri, tags, variants, audios, subtitles, muxedAudioFormat, muxedCaptionFormats);
     }
 
     private static int parseSelectionFlags(String line) {
@@ -284,9 +310,11 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
         int mediaSequence = 0;
         int version = 1;
         long targetDurationUs = C.TIME_UNSET;
+        boolean hasIndependentSegmentsTag = false;
         boolean hasEndTag = false;
         Segment initializationSegment = null;
         List<Segment> segments = new ArrayList();
+        List<String> tags = new ArrayList();
         long segmentDurationUs = 0;
         boolean hasDiscontinuitySequence = false;
         int playlistDiscontinuitySequence = 0;
@@ -301,14 +329,15 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
         String encryptionIV = null;
         while (iterator.hasNext()) {
             String line = iterator.next();
+            if (line.startsWith(TAG_PREFIX)) {
+                tags.add(line);
+            }
             if (line.startsWith(TAG_PLAYLIST_TYPE)) {
                 String playlistTypeString = parseStringAttr(line, REGEX_PLAYLIST_TYPE);
                 if ("VOD".equals(playlistTypeString)) {
                     playlistType = 1;
                 } else if ("EVENT".equals(playlistTypeString)) {
                     playlistType = 2;
-                } else {
-                    throw new ParserException("Illegal playlist type: " + playlistTypeString);
                 }
             } else if (line.startsWith(TAG_START)) {
                 startOffsetUs = (long) (parseDoubleAttr(line, REGEX_TIME_OFFSET) * 1000000.0d);
@@ -378,19 +407,13 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
                     segmentByteRangeOffset += segmentByteRangeLength;
                 }
                 segmentByteRangeLength = -1;
+            } else if (line.equals(TAG_INDEPENDENT_SEGMENTS)) {
+                hasIndependentSegmentsTag = true;
             } else if (line.equals(TAG_ENDLIST)) {
                 hasEndTag = true;
             }
         }
-        return new HlsMediaPlaylist(playlistType, baseUri, startOffsetUs, playlistStartTimeUs, hasDiscontinuitySequence, playlistDiscontinuitySequence, mediaSequence, version, targetDurationUs, hasEndTag, playlistStartTimeUs != 0, initializationSegment, segments);
-    }
-
-    private static String parseStringAttr(String line, Pattern pattern) throws ParserException {
-        Matcher matcher = pattern.matcher(line);
-        if (matcher.find() && matcher.groupCount() == 1) {
-            return matcher.group(1);
-        }
-        throw new ParserException("Couldn't match " + pattern.pattern() + " in " + line);
+        return new HlsMediaPlaylist(playlistType, baseUri, tags, startOffsetUs, playlistStartTimeUs, hasDiscontinuitySequence, playlistDiscontinuitySequence, mediaSequence, version, targetDurationUs, hasIndependentSegmentsTag, hasEndTag, playlistStartTimeUs != 0, initializationSegment, segments);
     }
 
     private static int parseIntAttr(String line, Pattern pattern) throws ParserException {
@@ -403,10 +426,15 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
 
     private static String parseOptionalStringAttr(String line, Pattern pattern) {
         Matcher matcher = pattern.matcher(line);
-        if (matcher.find()) {
+        return matcher.find() ? matcher.group(1) : null;
+    }
+
+    private static String parseStringAttr(String line, Pattern pattern) throws ParserException {
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find() && matcher.groupCount() == 1) {
             return matcher.group(1);
         }
-        return null;
+        throw new ParserException("Couldn't match " + pattern.pattern() + " in " + line);
     }
 
     private static boolean parseBooleanAttribute(String line, Pattern pattern, boolean defaultValue) {

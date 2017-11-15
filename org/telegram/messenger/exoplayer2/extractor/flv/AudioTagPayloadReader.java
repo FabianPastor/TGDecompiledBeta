@@ -38,7 +38,7 @@ final class AudioTagPayloadReader extends TagPayloadReader {
                 this.output.format(Format.createAudioSampleFormat(null, MimeTypes.AUDIO_MPEG, null, -1, -1, 1, AUDIO_SAMPLING_RATE_TABLE[(header >> 2) & 3], null, null, 0, null));
                 this.hasOutputFormat = true;
             } else if (this.audioFormat == 7 || this.audioFormat == 8) {
-                this.output.format(Format.createAudioSampleFormat(null, this.audioFormat == 7 ? MimeTypes.AUDIO_ALAW : MimeTypes.AUDIO_ULAW, null, -1, -1, 1, 8000, (header & 1) == 1 ? 2 : 3, null, null, 0, null));
+                this.output.format(Format.createAudioSampleFormat(null, this.audioFormat == 7 ? MimeTypes.AUDIO_ALAW : MimeTypes.AUDIO_MLAW, null, -1, -1, 1, 8000, (header & 1) == 1 ? 2 : 3, null, null, 0, null));
                 this.hasOutputFormat = true;
             } else if (this.audioFormat != 10) {
                 throw new UnsupportedFormatException("Audio format not supported: " + this.audioFormat);

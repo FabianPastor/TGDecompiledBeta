@@ -18,6 +18,7 @@ final class TtmlNode {
     public static final String ATTR_ID = "id";
     public static final String ATTR_TTS_BACKGROUND_COLOR = "backgroundColor";
     public static final String ATTR_TTS_COLOR = "color";
+    public static final String ATTR_TTS_DISPLAY_ALIGN = "displayAlign";
     public static final String ATTR_TTS_EXTENT = "extent";
     public static final String ATTR_TTS_FONT_FAMILY = "fontFamily";
     public static final String ATTR_TTS_FONT_SIZE = "fontSize";
@@ -151,7 +152,7 @@ final class TtmlNode {
         List<Cue> cues = new ArrayList();
         for (Entry<String, SpannableStringBuilder> entry : regionOutputs.entrySet()) {
             TtmlRegion region = (TtmlRegion) regionMap.get(entry.getKey());
-            cues.add(new Cue(cleanUpText((SpannableStringBuilder) entry.getValue()), null, region.line, region.lineType, Integer.MIN_VALUE, region.position, Integer.MIN_VALUE, region.width));
+            cues.add(new Cue(cleanUpText((SpannableStringBuilder) entry.getValue()), null, region.line, region.lineType, region.lineAnchor, region.position, Integer.MIN_VALUE, region.width));
         }
         return cues;
     }

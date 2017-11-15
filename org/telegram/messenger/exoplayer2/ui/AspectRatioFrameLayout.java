@@ -16,6 +16,7 @@ public class AspectRatioFrameLayout extends FrameLayout {
     public static final int RESIZE_MODE_FIT = 0;
     public static final int RESIZE_MODE_FIXED_HEIGHT = 2;
     public static final int RESIZE_MODE_FIXED_WIDTH = 1;
+    public static final int RESIZE_MODE_ZOOM = 4;
     private boolean drawingReady;
     private Matrix matrix;
     private int resizeMode;
@@ -36,12 +37,6 @@ public class AspectRatioFrameLayout extends FrameLayout {
         this.resizeMode = 0;
     }
 
-    public void setDrawingReady(boolean value) {
-        if (this.drawingReady != value) {
-            this.drawingReady = value;
-        }
-    }
-
     public boolean isDrawingReady() {
         return this.drawingReady;
     }
@@ -54,12 +49,8 @@ public class AspectRatioFrameLayout extends FrameLayout {
         }
     }
 
-    public float getAspectRatio() {
-        return this.videoAspectRatio;
-    }
-
-    public int getVideoRotation() {
-        return this.rotation;
+    public int getResizeMode() {
+        return this.resizeMode;
     }
 
     public void setResizeMode(int resizeMode) {
@@ -67,6 +58,20 @@ public class AspectRatioFrameLayout extends FrameLayout {
             this.resizeMode = resizeMode;
             requestLayout();
         }
+    }
+
+    public void setDrawingReady(boolean value) {
+        if (this.drawingReady != value) {
+            this.drawingReady = value;
+        }
+    }
+
+    public float getAspectRatio() {
+        return this.videoAspectRatio;
+    }
+
+    public int getVideoRotation() {
+        return this.rotation;
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -83,6 +88,14 @@ public class AspectRatioFrameLayout extends FrameLayout {
                     case 2:
                         width = (int) (((float) height) * this.videoAspectRatio);
                         break;
+                    case 4:
+                        if (aspectDeformation <= 0.0f) {
+                            height = (int) (((float) width) / this.videoAspectRatio);
+                            break;
+                        } else {
+                            width = (int) (((float) height) * this.videoAspectRatio);
+                            break;
+                        }
                     default:
                         if (aspectDeformation <= 0.0f) {
                             width = (int) (((float) height) * this.videoAspectRatio);

@@ -67,19 +67,20 @@ public class AdaptiveTrackSelection extends BaseTrackSelection {
     public void updateSelectedTrack(long bufferedDurationUs) {
         long nowMs = SystemClock.elapsedRealtime();
         int currentSelectedIndex = this.selectedIndex;
-        Format currentFormat = getSelectedFormat();
-        int idealSelectedIndex = determineIdealSelectedIndex(nowMs);
-        Format idealFormat = getFormat(idealSelectedIndex);
-        this.selectedIndex = idealSelectedIndex;
-        if (!(currentFormat == null || isBlacklisted(this.selectedIndex, nowMs))) {
-            if (idealFormat.bitrate > currentFormat.bitrate && bufferedDurationUs < this.minDurationForQualityIncreaseUs) {
-                this.selectedIndex = currentSelectedIndex;
-            } else if (idealFormat.bitrate < currentFormat.bitrate && bufferedDurationUs >= this.maxDurationForQualityDecreaseUs) {
-                this.selectedIndex = currentSelectedIndex;
-            }
-        }
+        this.selectedIndex = determineIdealSelectedIndex(nowMs);
         if (this.selectedIndex != currentSelectedIndex) {
-            this.reason = 3;
+            if (!isBlacklisted(currentSelectedIndex, nowMs)) {
+                Format currentFormat = getFormat(currentSelectedIndex);
+                Format selectedFormat = getFormat(this.selectedIndex);
+                if (selectedFormat.bitrate > currentFormat.bitrate && bufferedDurationUs < this.minDurationForQualityIncreaseUs) {
+                    this.selectedIndex = currentSelectedIndex;
+                } else if (selectedFormat.bitrate < currentFormat.bitrate && bufferedDurationUs >= this.maxDurationForQualityDecreaseUs) {
+                    this.selectedIndex = currentSelectedIndex;
+                }
+            }
+            if (this.selectedIndex != currentSelectedIndex) {
+                this.reason = 3;
+            }
         }
     }
 

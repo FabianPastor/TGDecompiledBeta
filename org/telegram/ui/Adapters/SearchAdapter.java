@@ -239,10 +239,10 @@ public class SearchAdapter extends SelectionAdapter {
         Object username;
         ProfileSearchCell profileSearchCell;
         boolean z;
+        UserCell userCell;
         if (holder.getItemViewType() == 0) {
             TLObject object = getItem(position);
             if (object != null) {
-                UserCell userCell;
                 int id = 0;
                 String un = null;
                 if (object instanceof User) {
@@ -277,7 +277,7 @@ public class SearchAdapter extends SelectionAdapter {
                             FileLog.e(e);
                             if (this.useUserCell) {
                                 profileSearchCell = holder.itemView;
-                                profileSearchCell.setData(object, null, name, username2, false);
+                                profileSearchCell.setData(object, null, name, username2, false, false);
                                 if (position == getItemCount() + -1) {
                                 }
                                 profileSearchCell.useSeparator = z;
@@ -304,7 +304,7 @@ public class SearchAdapter extends SelectionAdapter {
                             return;
                         }
                         profileSearchCell = holder.itemView;
-                        profileSearchCell.setData(object, null, name, username2, false);
+                        profileSearchCell.setData(object, null, name, username2, false, false);
                         if (position == getItemCount() + -1) {
                         }
                         profileSearchCell.useSeparator = z;
@@ -320,7 +320,7 @@ public class SearchAdapter extends SelectionAdapter {
                     return;
                 }
                 profileSearchCell = holder.itemView;
-                profileSearchCell.setData(object, null, name, username2, false);
+                profileSearchCell.setData(object, null, name, username2, false, false);
                 z = position == getItemCount() + -1 && position != this.searchResult.size() - 1;
                 profileSearchCell.useSeparator = z;
             }

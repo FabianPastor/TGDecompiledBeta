@@ -4,17 +4,13 @@ import org.telegram.messenger.exoplayer2.util.Assertions;
 
 final class VorbisBitArray {
     private int bitOffset;
+    private final int byteLimit;
     private int byteOffset;
-    public final byte[] data;
-    private final int limit;
+    private final byte[] data;
 
     public VorbisBitArray(byte[] data) {
-        this(data, data.length);
-    }
-
-    public VorbisBitArray(byte[] data, int limit) {
         this.data = data;
-        this.limit = limit * 8;
+        this.byteLimit = data.length;
     }
 
     public void reset() {
@@ -23,52 +19,35 @@ final class VorbisBitArray {
     }
 
     public boolean readBit() {
-        return readBits(1) == 1;
+        boolean returnValue = (((this.data[this.byteOffset] & 255) >> this.bitOffset) & 1) == 1;
+        skipBits(1);
+        return returnValue;
     }
 
     public int readBits(int numBits) {
-        Assertions.checkState(getPosition() + numBits <= this.limit);
-        if (numBits == 0) {
-            return 0;
+        int tempByteOffset = this.byteOffset;
+        int bitsRead = Math.min(numBits, 8 - this.bitOffset);
+        int tempByteOffset2 = tempByteOffset + 1;
+        int returnValue = ((this.data[tempByteOffset] & 255) >> this.bitOffset) & (255 >> (8 - bitsRead));
+        while (bitsRead < numBits) {
+            returnValue |= (this.data[tempByteOffset2] & 255) << bitsRead;
+            bitsRead += 8;
+            tempByteOffset2++;
         }
-        int result = 0;
-        int bitCount = 0;
-        if (this.bitOffset != 0) {
-            bitCount = Math.min(numBits, 8 - this.bitOffset);
-            result = (this.data[this.byteOffset] >>> this.bitOffset) & (255 >>> (8 - bitCount));
-            this.bitOffset += bitCount;
-            if (this.bitOffset == 8) {
-                this.byteOffset++;
-                this.bitOffset = 0;
-            }
-        }
-        if (numBits - bitCount > 7) {
-            int numBytes = (numBits - bitCount) / 8;
-            for (int i = 0; i < numBytes; i++) {
-                long j = (long) result;
-                byte[] bArr = this.data;
-                int i2 = this.byteOffset;
-                this.byteOffset = i2 + 1;
-                result = (int) (j | ((((long) bArr[i2]) & 255) << bitCount));
-                bitCount += 8;
-            }
-        }
-        if (numBits > bitCount) {
-            int bitsOnNextByte = numBits - bitCount;
-            result |= (this.data[this.byteOffset] & (255 >>> (8 - bitsOnNextByte))) << bitCount;
-            this.bitOffset += bitsOnNextByte;
-        }
-        return result;
+        returnValue &= -1 >>> (32 - numBits);
+        skipBits(numBits);
+        return returnValue;
     }
 
-    public void skipBits(int numberOfBits) {
-        Assertions.checkState(getPosition() + numberOfBits <= this.limit);
-        this.byteOffset += numberOfBits / 8;
-        this.bitOffset += numberOfBits % 8;
+    public void skipBits(int numBits) {
+        int numBytes = numBits / 8;
+        this.byteOffset += numBytes;
+        this.bitOffset += numBits - (numBytes * 8);
         if (this.bitOffset > 7) {
             this.byteOffset++;
             this.bitOffset -= 8;
         }
+        assertValidOffset();
     }
 
     public int getPosition() {
@@ -76,17 +55,17 @@ final class VorbisBitArray {
     }
 
     public void setPosition(int position) {
-        boolean z = position < this.limit && position >= 0;
-        Assertions.checkArgument(z);
         this.byteOffset = position / 8;
         this.bitOffset = position - (this.byteOffset * 8);
+        assertValidOffset();
     }
 
     public int bitsLeft() {
-        return this.limit - getPosition();
+        return ((this.byteLimit - this.byteOffset) * 8) - this.bitOffset;
     }
 
-    public int limit() {
-        return this.limit;
+    private void assertValidOffset() {
+        boolean z = this.byteOffset >= 0 && (this.byteOffset < this.byteLimit || (this.byteOffset == this.byteLimit && this.bitOffset == 0));
+        Assertions.checkState(z);
     }
 }

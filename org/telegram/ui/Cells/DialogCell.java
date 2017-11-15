@@ -77,6 +77,7 @@ public class DialogCell extends BaseCell {
     private boolean drawNameGroup;
     private boolean drawNameLock;
     private boolean drawPin;
+    private boolean drawPinBackground;
     private boolean drawVerified;
     private EncryptedChat encryptedChat = null;
     private int errorLeft;
@@ -207,6 +208,7 @@ public class DialogCell extends BaseCell {
     public void buildLayout() {
         String messageFormat;
         String mess;
+        int timeWidth;
         int nameWidth;
         int w;
         int avatarLeft;
@@ -228,7 +230,9 @@ public class DialogCell extends BaseCell {
         this.drawNameLock = false;
         this.drawNameBot = false;
         this.drawVerified = false;
-        boolean showChecks = true;
+        this.drawPinBackground = false;
+        boolean showChecks = !UserObject.isUserSelf(this.user);
+        boolean drawTime = true;
         if (VERSION.SDK_INT >= 18) {
             messageFormat = "%s: ⁨%s⁩";
         } else {
@@ -410,7 +414,11 @@ public class DialogCell extends BaseCell {
                     } else {
                         fromChat = MessagesController.getInstance().getChat(Integer.valueOf(this.message.messageOwner.to_id.channel_id));
                     }
-                    if (this.message.messageOwner instanceof TL_messageService) {
+                    if (this.dialogsType == 3 && UserObject.isUserSelf(this.user)) {
+                        messageString = LocaleController.getString("SavedMessagesInfo", R.string.SavedMessagesInfo);
+                        showChecks = false;
+                        drawTime = false;
+                    } else if (this.message.messageOwner instanceof TL_messageService) {
                         if (ChatObject.isChannel(this.chat) && (this.message.messageOwner.action instanceof TL_messageActionHistoryClear)) {
                             messageString = "";
                             showChecks = false;
@@ -550,8 +558,11 @@ public class DialogCell extends BaseCell {
             if (this.chat != null) {
                 nameString = this.chat.title;
             } else if (this.user != null) {
-                if (this.user.id == UserConfig.getClientUserId()) {
-                    nameString = LocaleController.getString("ChatYourSelfName", R.string.ChatYourSelfName);
+                if (UserObject.isUserSelf(this.user)) {
+                    if (this.dialogsType == 3) {
+                        this.drawPinBackground = true;
+                    }
+                    nameString = LocaleController.getString("SavedMessages", R.string.SavedMessages);
                 } else if (this.user.id / 1000 == 777 || this.user.id / 1000 == 333 || ContactsController.getInstance().contactsDict.get(this.user.id) != null) {
                     nameString = UserObject.getUserName(this.user);
                 } else if (ContactsController.getInstance().contactsDict.size() == 0 && (!ContactsController.getInstance().contactsLoaded || ContactsController.getInstance().isLoadingContacts())) {
@@ -569,12 +580,18 @@ public class DialogCell extends BaseCell {
                 nameString = LocaleController.getString("HiddenName", R.string.HiddenName);
             }
         }
-        int timeWidth = (int) Math.ceil((double) Theme.dialogs_timePaint.measureText(timeString));
-        this.timeLayout = new StaticLayout(timeString, Theme.dialogs_timePaint, timeWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        if (LocaleController.isRTL) {
-            this.timeLeft = AndroidUtilities.dp(15.0f);
+        if (drawTime) {
+            timeWidth = (int) Math.ceil((double) Theme.dialogs_timePaint.measureText(timeString));
+            this.timeLayout = new StaticLayout(timeString, Theme.dialogs_timePaint, timeWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            if (LocaleController.isRTL) {
+                this.timeLeft = AndroidUtilities.dp(15.0f);
+            } else {
+                this.timeLeft = (getMeasuredWidth() - AndroidUtilities.dp(15.0f)) - timeWidth;
+            }
         } else {
-            this.timeLeft = (getMeasuredWidth() - AndroidUtilities.dp(15.0f)) - timeWidth;
+            timeWidth = 0;
+            this.timeLayout = null;
+            this.timeLeft = 0;
         }
         if (LocaleController.isRTL) {
             nameWidth = ((getMeasuredWidth() - this.nameLeft) - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline)) - timeWidth;
@@ -780,6 +797,9 @@ public class DialogCell extends BaseCell {
         if (this.dialogsType == 2) {
             return MessagesController.getInstance().dialogsGroupsOnly;
         }
+        if (this.dialogsType == 3) {
+            return MessagesController.getInstance().dialogsForward;
+        }
         return null;
     }
 
@@ -913,10 +933,12 @@ public class DialogCell extends BaseCell {
             }
             TLObject photo = null;
             if (this.user != null) {
-                if (this.user.photo != null) {
+                this.avatarDrawable.setInfo(this.user);
+                if (UserObject.isUserSelf(this.user)) {
+                    this.avatarDrawable.setSavedMessages(1);
+                } else if (this.user.photo != null) {
                     photo = this.user.photo.photo_small;
                 }
-                this.avatarDrawable.setInfo(this.user);
             } else if (this.chat != null) {
                 if (this.chat.photo != null) {
                     photo = this.chat.photo.photo_small;
@@ -938,7 +960,7 @@ public class DialogCell extends BaseCell {
             if (this.isSelected) {
                 canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), Theme.dialogs_tabletSeletedPaint);
             }
-            if (this.drawPin) {
+            if (this.drawPin || this.drawPinBackground) {
                 canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), Theme.dialogs_pinnedPaint);
             }
             if (this.drawNameLock) {
@@ -960,10 +982,12 @@ public class DialogCell extends BaseCell {
                 this.nameLayout.draw(canvas);
                 canvas.restore();
             }
-            canvas.save();
-            canvas.translate((float) this.timeLeft, (float) this.timeTop);
-            this.timeLayout.draw(canvas);
-            canvas.restore();
+            if (this.timeLayout != null) {
+                canvas.save();
+                canvas.translate((float) this.timeLeft, (float) this.timeTop);
+                this.timeLayout.draw(canvas);
+                canvas.restore();
+            }
             if (this.messageLayout != null) {
                 canvas.save();
                 canvas.translate((float) this.messageLeft, (float) this.messageTop);

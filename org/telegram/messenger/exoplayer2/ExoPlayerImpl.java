@@ -2,18 +2,20 @@ package org.telegram.messenger.exoplayer2;
 
 import android.annotation.SuppressLint;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArraySet;
-import org.telegram.messenger.exoplayer2.ExoPlayer.EventListener;
 import org.telegram.messenger.exoplayer2.ExoPlayer.ExoPlayerMessage;
 import org.telegram.messenger.exoplayer2.ExoPlayerImplInternal.PlaybackInfo;
 import org.telegram.messenger.exoplayer2.ExoPlayerImplInternal.SourceInfo;
+import org.telegram.messenger.exoplayer2.Player.EventListener;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
 import org.telegram.messenger.exoplayer2.source.MediaSource;
+import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
 import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelectionArray;
@@ -41,6 +43,7 @@ final class ExoPlayerImpl implements ExoPlayer {
     private PlaybackParameters playbackParameters;
     private int playbackState;
     private final Renderer[] renderers;
+    private int repeatMode;
     private Timeline timeline;
     private TrackGroupArray trackGroups;
     private TrackSelectionArray trackSelections;
@@ -50,11 +53,18 @@ final class ExoPlayerImpl implements ExoPlayer {
 
     @SuppressLint({"HandlerLeak"})
     public ExoPlayerImpl(Renderer[] renderers, TrackSelector trackSelector, LoadControl loadControl) {
-        Log.i(TAG, "Init ExoPlayerLib/2.4.0 [" + Util.DEVICE_DEBUG_INFO + "]");
-        Assertions.checkState(renderers.length > 0);
+        boolean z;
+        Log.i(TAG, "Init " + Integer.toHexString(System.identityHashCode(this)) + " [" + ExoPlayerLibraryInfo.VERSION_SLASHY + "] [" + Util.DEVICE_DEBUG_INFO + "]");
+        if (renderers.length > 0) {
+            z = true;
+        } else {
+            z = false;
+        }
+        Assertions.checkState(z);
         this.renderers = (Renderer[]) Assertions.checkNotNull(renderers);
         this.trackSelector = (TrackSelector) Assertions.checkNotNull(trackSelector);
         this.playWhenReady = false;
+        this.repeatMode = 0;
         this.playbackState = 1;
         this.listeners = new CopyOnWriteArraySet();
         this.emptyTrackSelections = new TrackSelectionArray(new TrackSelection[renderers.length]);
@@ -64,13 +74,17 @@ final class ExoPlayerImpl implements ExoPlayer {
         this.trackGroups = TrackGroupArray.EMPTY;
         this.trackSelections = this.emptyTrackSelections;
         this.playbackParameters = PlaybackParameters.DEFAULT;
-        this.eventHandler = new Handler() {
+        this.eventHandler = new Handler(Looper.myLooper() != null ? Looper.myLooper() : Looper.getMainLooper()) {
             public void handleMessage(Message msg) {
                 ExoPlayerImpl.this.handleEvent(msg);
             }
         };
         this.playbackInfo = new PlaybackInfo(0, 0);
-        this.internalPlayer = new ExoPlayerImplInternal(renderers, trackSelector, loadControl, this.playWhenReady, this.eventHandler, this.playbackInfo, this);
+        this.internalPlayer = new ExoPlayerImplInternal(renderers, trackSelector, loadControl, this.playWhenReady, this.repeatMode, this.eventHandler, this.playbackInfo, this);
+    }
+
+    public Looper getPlaybackLooper() {
+        return this.internalPlayer.getPlaybackLooper();
     }
 
     public void addListener(EventListener listener) {
@@ -130,6 +144,21 @@ final class ExoPlayerImpl implements ExoPlayer {
         return this.playWhenReady;
     }
 
+    public void setRepeatMode(int repeatMode) {
+        if (this.repeatMode != repeatMode) {
+            this.repeatMode = repeatMode;
+            this.internalPlayer.setRepeatMode(repeatMode);
+            Iterator it = this.listeners.iterator();
+            while (it.hasNext()) {
+                ((EventListener) it.next()).onRepeatModeChanged(repeatMode);
+            }
+        }
+    }
+
+    public int getRepeatMode() {
+        return this.repeatMode;
+    }
+
     public boolean isLoading() {
         return this.isLoading;
     }
@@ -155,15 +184,10 @@ final class ExoPlayerImpl implements ExoPlayer {
         if (this.timeline.isEmpty()) {
             this.maskingPeriodIndex = 0;
         } else {
-            long resolvedPositionMs;
             this.timeline.getWindow(windowIndex, this.window);
-            if (positionMs == C.TIME_UNSET) {
-                resolvedPositionMs = this.window.getDefaultPositionUs();
-            } else {
-                resolvedPositionMs = positionMs;
-            }
+            long resolvedPositionUs = positionMs == C.TIME_UNSET ? this.window.getDefaultPositionUs() : C.msToUs(positionMs);
             int periodIndex = this.window.firstPeriodIndex;
-            long periodPositionUs = this.window.getPositionInFirstPeriodUs() + C.msToUs(resolvedPositionMs);
+            long periodPositionUs = this.window.getPositionInFirstPeriodUs() + resolvedPositionUs;
             long periodDurationUs = this.timeline.getPeriod(periodIndex, this.period).getDurationUs();
             while (periodDurationUs != C.TIME_UNSET && periodPositionUs >= periodDurationUs && periodIndex < this.window.lastPeriodIndex) {
                 periodPositionUs -= periodDurationUs;
@@ -201,6 +225,7 @@ final class ExoPlayerImpl implements ExoPlayer {
     }
 
     public void release() {
+        Log.i(TAG, "Release " + Integer.toHexString(System.identityHashCode(this)) + " [" + ExoPlayerLibraryInfo.VERSION_SLASHY + "] [" + Util.DEVICE_DEBUG_INFO + "] [" + ExoPlayerLibraryInfo.registeredModules() + "]");
         this.internalPlayer.release();
         this.eventHandler.removeCallbacksAndMessages(null);
     }
@@ -217,54 +242,53 @@ final class ExoPlayerImpl implements ExoPlayer {
         if (this.timeline.isEmpty() || this.pendingSeekAcks > 0) {
             return this.maskingPeriodIndex;
         }
-        return this.playbackInfo.periodIndex;
+        return this.playbackInfo.periodId.periodIndex;
     }
 
     public int getCurrentWindowIndex() {
         if (this.timeline.isEmpty() || this.pendingSeekAcks > 0) {
             return this.maskingWindowIndex;
         }
-        return this.timeline.getPeriod(this.playbackInfo.periodIndex, this.period).windowIndex;
+        return this.timeline.getPeriod(this.playbackInfo.periodId.periodIndex, this.period).windowIndex;
     }
 
     public long getDuration() {
         if (this.timeline.isEmpty()) {
             return C.TIME_UNSET;
         }
-        return this.timeline.getWindow(getCurrentWindowIndex(), this.window).getDurationMs();
+        if (!isPlayingAd()) {
+            return this.timeline.getWindow(getCurrentWindowIndex(), this.window).getDurationMs();
+        }
+        MediaPeriodId periodId = this.playbackInfo.periodId;
+        this.timeline.getPeriod(periodId.periodIndex, this.period);
+        return C.usToMs(this.period.getAdDurationUs(periodId.adGroupIndex, periodId.adIndexInAdGroup));
     }
 
     public long getCurrentPosition() {
         if (this.timeline.isEmpty() || this.pendingSeekAcks > 0) {
             return this.maskingWindowPositionMs;
         }
-        this.timeline.getPeriod(this.playbackInfo.periodIndex, this.period);
-        return this.period.getPositionInWindowMs() + C.usToMs(this.playbackInfo.positionUs);
+        return playbackInfoPositionUsToWindowPositionMs(this.playbackInfo.positionUs);
     }
 
     public long getBufferedPosition() {
         if (this.timeline.isEmpty() || this.pendingSeekAcks > 0) {
             return this.maskingWindowPositionMs;
         }
-        this.timeline.getPeriod(this.playbackInfo.periodIndex, this.period);
-        return this.period.getPositionInWindowMs() + C.usToMs(this.playbackInfo.bufferedPositionUs);
+        return playbackInfoPositionUsToWindowPositionMs(this.playbackInfo.bufferedPositionUs);
     }
 
     public int getBufferedPercentage() {
-        long j = 100;
+        int i = 100;
         if (this.timeline.isEmpty()) {
             return 0;
         }
-        int i;
-        long bufferedPosition = getBufferedPosition();
+        long position = getBufferedPosition();
         long duration = getDuration();
-        if (bufferedPosition == C.TIME_UNSET || duration == C.TIME_UNSET) {
+        if (position == C.TIME_UNSET || duration == C.TIME_UNSET) {
             i = 0;
-        } else {
-            if (duration != 0) {
-                j = (100 * bufferedPosition) / duration;
-            }
-            i = (int) j;
+        } else if (duration != 0) {
+            i = Util.constrainValue((int) ((100 * position) / duration), 0, 100);
         }
         return i;
     }
@@ -275,6 +299,26 @@ final class ExoPlayerImpl implements ExoPlayer {
 
     public boolean isCurrentWindowSeekable() {
         return !this.timeline.isEmpty() && this.timeline.getWindow(getCurrentWindowIndex(), this.window).isSeekable;
+    }
+
+    public boolean isPlayingAd() {
+        return !this.timeline.isEmpty() && this.pendingSeekAcks == 0 && this.playbackInfo.periodId.isAd();
+    }
+
+    public int getCurrentAdGroupIndex() {
+        return isPlayingAd() ? this.playbackInfo.periodId.adGroupIndex : -1;
+    }
+
+    public int getCurrentAdIndexInAdGroup() {
+        return isPlayingAd() ? this.playbackInfo.periodId.adIndexInAdGroup : -1;
+    }
+
+    public long getContentPosition() {
+        if (!isPlayingAd()) {
+            return getCurrentPosition();
+        }
+        this.timeline.getPeriod(this.playbackInfo.periodId.periodIndex, this.period);
+        return this.period.getPositionInWindowMs() + C.usToMs(this.playbackInfo.contentPositionUs);
     }
 
     public int getRendererCount() {
@@ -344,6 +388,11 @@ final class ExoPlayerImpl implements ExoPlayer {
                 this.pendingSeekAcks = i;
                 if (i == 0) {
                     this.playbackInfo = (PlaybackInfo) msg.obj;
+                    if (this.timeline.isEmpty()) {
+                        this.maskingPeriodIndex = 0;
+                        this.maskingWindowIndex = 0;
+                        this.maskingWindowPositionMs = 0;
+                    }
                     if (msg.arg1 != 0) {
                         it = this.listeners.iterator();
                         while (it.hasNext()) {
@@ -371,6 +420,11 @@ final class ExoPlayerImpl implements ExoPlayer {
                     this.timeline = sourceInfo.timeline;
                     this.manifest = sourceInfo.manifest;
                     this.playbackInfo = sourceInfo.playbackInfo;
+                    if (this.pendingSeekAcks == 0 && this.timeline.isEmpty()) {
+                        this.maskingPeriodIndex = 0;
+                        this.maskingWindowIndex = 0;
+                        this.maskingWindowPositionMs = 0;
+                    }
                     it = this.listeners.iterator();
                     while (it.hasNext()) {
                         ((EventListener) it.next()).onTimelineChanged(this.timeline, this.manifest);
@@ -399,5 +453,14 @@ final class ExoPlayerImpl implements ExoPlayer {
             default:
                 throw new IllegalStateException();
         }
+    }
+
+    private long playbackInfoPositionUsToWindowPositionMs(long positionUs) {
+        long positionMs = C.usToMs(positionUs);
+        if (this.playbackInfo.periodId.isAd()) {
+            return positionMs;
+        }
+        this.timeline.getPeriod(this.playbackInfo.periodId.periodIndex, this.period);
+        return positionMs + this.period.getPositionInWindowMs();
     }
 }

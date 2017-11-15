@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
@@ -53,7 +52,6 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.query.SharedMediaQuery;
@@ -116,10 +114,11 @@ import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
 import org.telegram.ui.Components.RecyclerListView.SectionsAdapter;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.DialogsActivity.DialogsActivityDelegate;
+import org.telegram.ui.PhotoViewer.EmptyPhotoViewerProvider;
 import org.telegram.ui.PhotoViewer.PhotoViewerProvider;
 import org.telegram.ui.PhotoViewer.PlaceProviderObject;
 
-public class MediaActivity extends BaseFragment implements NotificationCenterDelegate, PhotoViewerProvider {
+public class MediaActivity extends BaseFragment implements NotificationCenterDelegate {
     private static final int delete = 4;
     private static final int files_item = 2;
     private static final int forward = 3;
@@ -152,6 +151,43 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     private ActionBarPopupWindowLayout popupLayout;
     private RadialProgressView progressBar;
     private LinearLayout progressView;
+    private PhotoViewerProvider provider = new EmptyPhotoViewerProvider() {
+        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+            if (messageObject == null || MediaActivity.this.listView == null || MediaActivity.this.selectedMode != 0) {
+                return null;
+            }
+            int count = MediaActivity.this.listView.getChildCount();
+            for (int a = 0; a < count; a++) {
+                View view = MediaActivity.this.listView.getChildAt(a);
+                if (view instanceof SharedPhotoVideoCell) {
+                    SharedPhotoVideoCell cell = (SharedPhotoVideoCell) view;
+                    for (int i = 0; i < 6; i++) {
+                        MessageObject message = cell.getMessageObject(i);
+                        if (message == null) {
+                            continue;
+                            break;
+                        }
+                        BackupImageView imageView = cell.getImageView(i);
+                        if (message.getId() == messageObject.getId()) {
+                            int[] coords = new int[2];
+                            imageView.getLocationInWindow(coords);
+                            PlaceProviderObject object = new PlaceProviderObject();
+                            object.viewX = coords[0];
+                            object.viewY = coords[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
+                            object.parentView = MediaActivity.this.listView;
+                            object.imageReceiver = imageView.getImageReceiver();
+                            object.thumb = object.imageReceiver.getBitmap();
+                            object.parentView.getLocationInWindow(coords);
+                            object.clipTopAddition = AndroidUtilities.dp(40.0f);
+                            return object;
+                        }
+                    }
+                    continue;
+                }
+            }
+            return null;
+        }
+    };
     private boolean scrolling;
     private ActionBarMenuItem searchItem;
     private boolean searchWas;
@@ -489,7 +525,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             boolean z = true;
             MessageObject messageObject;
             boolean z2;
-            HashMap[] access$600;
+            HashMap[] access$800;
             int i;
             if (this.currentType == 1 || this.currentType == 4) {
                 SharedDocumentCell sharedDocumentCell = holder.itemView;
@@ -501,13 +537,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 }
                 sharedDocumentCell.setDocument(messageObject, z2);
                 if (MediaActivity.this.actionBar.isActionModeShowed()) {
-                    access$600 = MediaActivity.this.selectedFiles;
+                    access$800 = MediaActivity.this.selectedFiles;
                     if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
                         i = 0;
                     } else {
                         i = 1;
                     }
-                    z2 = access$600[i].containsKey(Integer.valueOf(messageObject.getId()));
+                    z2 = access$800[i].containsKey(Integer.valueOf(messageObject.getId()));
                     if (MediaActivity.this.scrolling) {
                         z = false;
                     }
@@ -528,13 +564,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 }
                 sharedLinkCell.setLink(messageObject, z2);
                 if (MediaActivity.this.actionBar.isActionModeShowed()) {
-                    access$600 = MediaActivity.this.selectedFiles;
+                    access$800 = MediaActivity.this.selectedFiles;
                     if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
                         i = 0;
                     } else {
                         i = 1;
                     }
-                    z2 = access$600[i].containsKey(Integer.valueOf(messageObject.getId()));
+                    z2 = access$800[i].containsKey(Integer.valueOf(messageObject.getId()));
                     if (MediaActivity.this.scrolling) {
                         z = false;
                     }
@@ -632,13 +668,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         sharedDocumentCell.setDocument(messageObject, z2);
                         if (MediaActivity.this.actionBar.isActionModeShowed()) {
                             int i;
-                            HashMap[] access$600 = MediaActivity.this.selectedFiles;
+                            HashMap[] access$800 = MediaActivity.this.selectedFiles;
                             if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
                                 i = 0;
                             } else {
                                 i = 1;
                             }
-                            z2 = access$600[i].containsKey(Integer.valueOf(messageObject.getId()));
+                            z2 = access$800[i].containsKey(Integer.valueOf(messageObject.getId()));
                             if (MediaActivity.this.scrolling) {
                                 z = false;
                             }
@@ -761,13 +797,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         sharedLinkCell.setLink(messageObject, z2);
                         if (MediaActivity.this.actionBar.isActionModeShowed()) {
                             int i;
-                            HashMap[] access$600 = MediaActivity.this.selectedFiles;
+                            HashMap[] access$800 = MediaActivity.this.selectedFiles;
                             if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
                                 i = 0;
                             } else {
                                 i = 1;
                             }
-                            z2 = access$600[i].containsKey(Integer.valueOf(messageObject.getId()));
+                            z2 = access$800[i].containsKey(Integer.valueOf(messageObject.getId()));
                             if (MediaActivity.this.scrolling) {
                                 z = false;
                             }
@@ -895,13 +931,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                 if (MediaActivity.this.actionBar.isActionModeShowed()) {
                                     int i;
                                     boolean z;
-                                    HashMap[] access$600 = MediaActivity.this.selectedFiles;
+                                    HashMap[] access$800 = MediaActivity.this.selectedFiles;
                                     if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
                                         i = 0;
                                     } else {
                                         i = 1;
                                     }
-                                    boolean containsKey = access$600[i].containsKey(Integer.valueOf(messageObject.getId()));
+                                    boolean containsKey = access$800[i].containsKey(Integer.valueOf(messageObject.getId()));
                                     if (MediaActivity.this.scrolling) {
                                         z = false;
                                     } else {
@@ -1147,7 +1183,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 } else if (id == 3) {
                     Bundle args = new Bundle();
                     args.putBoolean("onlySelect", true);
-                    args.putBoolean("isForward", true);
+                    args.putInt("dialogsType", 3);
                     BaseFragment dialogsActivity = new DialogsActivity(args);
                     dialogsActivity.setDelegate(new DialogsActivityDelegate() {
                         public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
@@ -1168,7 +1204,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             MediaActivity.this.cantDeleteMessagesCount = 0;
                             MediaActivity.this.actionBar.hideActionMode();
                             long did;
-                            if (dids.size() > 1 || message != null) {
+                            if (dids.size() > 1 || ((Long) dids.get(0)).longValue() == ((long) UserConfig.getClientUserId()) || message != null) {
                                 for (a = 0; a < dids.size(); a++) {
                                     did = ((Long) dids.get(a)).longValue();
                                     if (message != null) {
@@ -1626,81 +1662,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         }
     }
 
-    public void updatePhotoAtIndex(int index) {
-    }
-
-    public boolean scaleToFill() {
-        return false;
-    }
-
-    public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-        if (messageObject == null || this.listView == null || this.selectedMode != 0) {
-            return null;
-        }
-        int count = this.listView.getChildCount();
-        for (int a = 0; a < count; a++) {
-            View view = this.listView.getChildAt(a);
-            if (view instanceof SharedPhotoVideoCell) {
-                SharedPhotoVideoCell cell = (SharedPhotoVideoCell) view;
-                for (int i = 0; i < 6; i++) {
-                    MessageObject message = cell.getMessageObject(i);
-                    if (message == null) {
-                        continue;
-                        break;
-                    }
-                    BackupImageView imageView = cell.getImageView(i);
-                    if (message.getId() == messageObject.getId()) {
-                        int[] coords = new int[2];
-                        imageView.getLocationInWindow(coords);
-                        PlaceProviderObject object = new PlaceProviderObject();
-                        object.viewX = coords[0];
-                        object.viewY = coords[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
-                        object.parentView = this.listView;
-                        object.imageReceiver = imageView.getImageReceiver();
-                        object.thumb = object.imageReceiver.getBitmap();
-                        object.parentView.getLocationInWindow(coords);
-                        object.clipTopAddition = AndroidUtilities.dp(40.0f);
-                        return object;
-                    }
-                }
-                continue;
-            }
-        }
-        return null;
-    }
-
-    public Bitmap getThumbForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-        return null;
-    }
-
-    public boolean allowCaption() {
-        return true;
-    }
-
-    public void willSwitchFromPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-    }
-
-    public void willHidePhotoViewer() {
-    }
-
-    public boolean isPhotoChecked(int index) {
-        return false;
-    }
-
-    public void setPhotoChecked(int index, VideoEditedInfo videoEditedInfo) {
-    }
-
-    public boolean cancelButtonPressed() {
-        return true;
-    }
-
-    public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
-    }
-
-    public int getSelectedCount() {
-        return 0;
-    }
-
     public void setChatInfo(ChatFull chatInfo) {
         this.info = chatInfo;
         if (this.info != null && this.info.migrated_from_chat_id != 0) {
@@ -1910,7 +1871,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 }
             } else if (this.selectedMode == 0) {
                 PhotoViewer.getInstance().setParentActivity(getParentActivity());
-                PhotoViewer.getInstance().openPhoto(this.sharedMediaData[this.selectedMode].messages, index, this.dialog_id, this.mergeDialogId, this);
+                PhotoViewer.getInstance().openPhoto(this.sharedMediaData[this.selectedMode].messages, index, this.dialog_id, this.mergeDialogId, this.provider);
             } else if (this.selectedMode == 1 || this.selectedMode == 4) {
                 if (view instanceof SharedDocumentCell) {
                     SharedDocumentCell cell = (SharedDocumentCell) view;

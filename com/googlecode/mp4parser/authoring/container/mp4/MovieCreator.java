@@ -12,6 +12,7 @@ import com.googlecode.mp4parser.authoring.Mp4TrackImpl;
 import com.googlecode.mp4parser.util.Path;
 import java.io.File;
 import java.io.IOException;
+import org.telegram.messenger.exoplayer2.C;
 
 public class MovieCreator {
     public static Movie build(String file) throws IOException {
@@ -23,7 +24,7 @@ public class MovieCreator {
         Movie m = new Movie();
         for (AbstractContainerBox trackBox : isoFile.getMovieBox().getBoxes(TrackBox.class)) {
             SchemeTypeBox schm = (SchemeTypeBox) Path.getPath(trackBox, "mdia[0]/minf[0]/stbl[0]/stsd[0]/enc.[0]/sinf[0]/schm[0]");
-            if (schm == null || !(schm.getSchemeType().equals("cenc") || schm.getSchemeType().equals("cbc1"))) {
+            if (schm == null || !(schm.getSchemeType().equals(C.CENC_TYPE_cenc) || schm.getSchemeType().equals(C.CENC_TYPE_cbc1))) {
                 m.addTrack(new Mp4TrackImpl(channel.toString() + "[" + trackBox.getTrackHeaderBox().getTrackId() + "]", trackBox, new IsoFile[0]));
             } else {
                 m.addTrack(new CencMp4TrackImplImpl(channel.toString() + "[" + trackBox.getTrackHeaderBox().getTrackId() + "]", trackBox, new IsoFile[0]));

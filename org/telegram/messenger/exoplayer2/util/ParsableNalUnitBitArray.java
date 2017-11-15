@@ -18,10 +18,21 @@ public final class ParsableNalUnitBitArray {
         assertValidOffset();
     }
 
-    public void skipBits(int n) {
+    public void skipBit() {
+        int i = this.bitOffset + 1;
+        this.bitOffset = i;
+        if (i == 8) {
+            this.bitOffset = 0;
+            this.byteOffset = (shouldSkipByte(this.byteOffset + 1) ? 2 : 1) + this.byteOffset;
+        }
+        assertValidOffset();
+    }
+
+    public void skipBits(int numBits) {
         int oldByteOffset = this.byteOffset;
-        this.byteOffset += n / 8;
-        this.bitOffset += n % 8;
+        int numBytes = numBits / 8;
+        this.byteOffset += numBytes;
+        this.bitOffset += numBits - (numBytes * 8);
         if (this.bitOffset > 7) {
             this.byteOffset++;
             this.bitOffset -= 8;
@@ -37,10 +48,11 @@ public final class ParsableNalUnitBitArray {
         assertValidOffset();
     }
 
-    public boolean canReadBits(int n) {
+    public boolean canReadBits(int numBits) {
         int oldByteOffset = this.byteOffset;
-        int newByteOffset = this.byteOffset + (n / 8);
-        int newBitOffset = this.bitOffset + (n % 8);
+        int numBytes = numBits / 8;
+        int newByteOffset = this.byteOffset + numBytes;
+        int newBitOffset = (this.bitOffset + numBits) - (numBytes * 8);
         if (newBitOffset > 7) {
             newByteOffset++;
             newBitOffset -= 8;
@@ -57,41 +69,28 @@ public final class ParsableNalUnitBitArray {
     }
 
     public boolean readBit() {
-        return readBits(1) == 1;
+        boolean returnValue = (this.data[this.byteOffset] & (128 >> this.bitOffset)) != 0;
+        skipBit();
+        return returnValue;
     }
 
     public int readBits(int numBits) {
-        if (numBits == 0) {
-            return 0;
-        }
+        int i = 2;
         int returnValue = 0;
-        int wholeBytes = numBits / 8;
-        for (int i = 0; i < wholeBytes; i++) {
-            int byteValue;
-            int nextByteOffset = shouldSkipByte(this.byteOffset + 1) ? this.byteOffset + 2 : this.byteOffset + 1;
-            if (this.bitOffset != 0) {
-                byteValue = ((this.data[this.byteOffset] & 255) << this.bitOffset) | ((this.data[nextByteOffset] & 255) >>> (8 - this.bitOffset));
-            } else {
-                byteValue = this.data[this.byteOffset];
-            }
-            numBits -= 8;
-            returnValue |= (byteValue & 255) << numBits;
-            this.byteOffset = nextByteOffset;
+        this.bitOffset += numBits;
+        while (this.bitOffset > 8) {
+            this.bitOffset -= 8;
+            returnValue |= (this.data[this.byteOffset] & 255) << this.bitOffset;
+            this.byteOffset = (shouldSkipByte(this.byteOffset + 1) ? 2 : 1) + this.byteOffset;
         }
-        if (numBits > 0) {
-            int nextBit = this.bitOffset + numBits;
-            byte writeMask = (byte) (255 >> (8 - numBits));
-            nextByteOffset = shouldSkipByte(this.byteOffset + 1) ? this.byteOffset + 2 : this.byteOffset + 1;
-            if (nextBit > 8) {
-                returnValue |= (((this.data[this.byteOffset] & 255) << (nextBit - 8)) | ((this.data[nextByteOffset] & 255) >> (16 - nextBit))) & writeMask;
-                this.byteOffset = nextByteOffset;
-            } else {
-                returnValue |= ((this.data[this.byteOffset] & 255) >> (8 - nextBit)) & writeMask;
-                if (nextBit == 8) {
-                    this.byteOffset = nextByteOffset;
-                }
+        returnValue = (returnValue | ((this.data[this.byteOffset] & 255) >> (8 - this.bitOffset))) & (-1 >>> (32 - numBits));
+        if (this.bitOffset == 8) {
+            this.bitOffset = 0;
+            int i2 = this.byteOffset;
+            if (!shouldSkipByte(this.byteOffset + 1)) {
+                i = 1;
             }
-            this.bitOffset = nextBit % 8;
+            this.byteOffset = i2 + i;
         }
         assertValidOffset();
         return returnValue;
@@ -140,7 +139,7 @@ public final class ParsableNalUnitBitArray {
     }
 
     private void assertValidOffset() {
-        boolean z = this.byteOffset >= 0 && this.bitOffset >= 0 && this.bitOffset < 8 && (this.byteOffset < this.byteLimit || (this.byteOffset == this.byteLimit && this.bitOffset == 0));
+        boolean z = this.byteOffset >= 0 && (this.byteOffset < this.byteLimit || (this.byteOffset == this.byteLimit && this.bitOffset == 0));
         Assertions.checkState(z);
     }
 }

@@ -85,12 +85,12 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
         }
         int tunnelingSupport;
         if (Util.SDK_INT >= 21) {
-            tunnelingSupport = 16;
+            tunnelingSupport = 32;
         } else {
             tunnelingSupport = 0;
         }
         if (allowPassthrough(mimeType) && mediaCodecSelector.getPassthroughDecoderInfo() != null) {
-            return (tunnelingSupport | 4) | 3;
+            return (tunnelingSupport | 8) | 4;
         }
         MediaCodecInfo decoderInfo = mediaCodecSelector.getDecoderInfo(mimeType, false);
         if (decoderInfo == null) {
@@ -102,7 +102,7 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
         } else {
             decoderCapable = false;
         }
-        return (tunnelingSupport | 4) | (decoderCapable ? 3 : 2);
+        return (tunnelingSupport | 8) | (decoderCapable ? 4 : 3);
     }
 
     protected MediaCodecInfo getDecoderInfo(MediaCodecSelector mediaCodecSelector, Format format, boolean requiresSecureDecoder) throws DecoderQueryException {
@@ -305,7 +305,7 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
                 this.audioTrack.setVolume(((Float) message).floatValue());
                 return;
             case 3:
-                this.audioTrack.setStreamType(((Integer) message).intValue());
+                this.audioTrack.setAudioAttributes((AudioAttributes) message);
                 return;
             default:
                 super.handleMessage(messageType, message);

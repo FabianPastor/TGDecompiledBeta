@@ -19,6 +19,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
@@ -33,6 +34,7 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
+import org.telegram.ui.MediaActivity;
 import org.telegram.ui.ProfileActivity;
 
 public class ChatAvatarContainer extends FrameLayout implements NotificationCenterDelegate {
@@ -90,6 +92,13 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                     ProfileActivity fragment;
                     if (user != null) {
                         args = new Bundle();
+                        if (UserObject.isUserSelf(user)) {
+                            args.putLong("dialog_id", ChatAvatarContainer.this.parentFragment.getDialogId());
+                            MediaActivity fragment2 = new MediaActivity(args);
+                            fragment2.setChatInfo(ChatAvatarContainer.this.parentFragment.getCurrentChatInfo());
+                            ChatAvatarContainer.this.parentFragment.presentFragment(fragment2);
+                            return;
+                        }
                         args.putInt("user_id", user.id);
                         if (ChatAvatarContainer.this.timeItem != null) {
                             args.putLong("dialog_id", ChatAvatarContainer.this.parentFragment.getDialogId());
@@ -319,10 +328,12 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
 
     public void setUserAvatar(User user) {
         TLObject newPhoto = null;
-        if (user.photo != null) {
+        this.avatarDrawable.setInfo(user);
+        if (UserObject.isUserSelf(user)) {
+            this.avatarDrawable.setSavedMessages(2);
+        } else if (user.photo != null) {
             newPhoto = user.photo.photo_small;
         }
-        this.avatarDrawable.setInfo(user);
         if (this.avatarImageView != null) {
             this.avatarImageView.setImage(newPhoto, "50_50", this.avatarDrawable);
         }
@@ -334,10 +345,12 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             User user = this.parentFragment.getCurrentUser();
             Chat chat = this.parentFragment.getCurrentChat();
             if (user != null) {
-                if (user.photo != null) {
+                this.avatarDrawable.setInfo(user);
+                if (UserObject.isUserSelf(user)) {
+                    this.avatarDrawable.setSavedMessages(2);
+                } else if (user.photo != null) {
                     newPhoto = user.photo.photo_small;
                 }
-                this.avatarDrawable.setInfo(user);
             } else if (chat != null) {
                 if (chat.photo != null) {
                     newPhoto = chat.photo.photo_small;

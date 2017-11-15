@@ -1,5 +1,6 @@
 package org.telegram.messenger.exoplayer2.extractor.ts;
 
+import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
@@ -29,8 +30,7 @@ import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class TsExtractor implements Extractor {
     private static final long AC3_FORMAT_IDENTIFIER = ((long) Util.getIntegerCodeForString("AC-3"));
-    private static final int BUFFER_PACKET_COUNT = 5;
-    private static final int BUFFER_SIZE = 940;
+    private static final int BUFFER_SIZE = 9400;
     private static final long E_AC3_FORMAT_IDENTIFIER = ((long) Util.getIntegerCodeForString("EAC3"));
     public static final ExtractorsFactory FACTORY = new ExtractorsFactory() {
         public Extractor[] createExtractors() {
@@ -40,8 +40,9 @@ public final class TsExtractor implements Extractor {
     private static final long HEVC_FORMAT_IDENTIFIER = ((long) Util.getIntegerCodeForString("HEVC"));
     private static final int MAX_PID_PLUS_ONE = 8192;
     public static final int MODE_HLS = 2;
-    public static final int MODE_NORMAL = 0;
+    public static final int MODE_MULTI_PMT = 0;
     public static final int MODE_SINGLE_PMT = 1;
+    private static final int SNIFF_TS_PACKET_COUNT = 5;
     private static final int TS_PACKET_SIZE = 188;
     private static final int TS_PAT_PID = 0;
     public static final int TS_STREAM_TYPE_AAC = 15;
@@ -69,7 +70,6 @@ public final class TsExtractor implements Extractor {
     private boolean tracksEnded;
     private final ParsableByteArray tsPacketBuffer;
     private final SparseArray<TsPayloadReader> tsPayloadReaders;
-    private final ParsableBitArray tsScratch;
 
     @Retention(RetentionPolicy.SOURCE)
     public @interface Mode {
@@ -113,6 +113,8 @@ public final class TsExtractor implements Extractor {
         private static final int TS_PMT_DESC_REGISTRATION = 5;
         private final int pid;
         private final ParsableBitArray pmtScratch = new ParsableBitArray(new byte[5]);
+        private final SparseIntArray trackIdToPidScratch = new SparseIntArray();
+        private final SparseArray<TsPayloadReader> trackIdToReaderScratch = new SparseArray();
 
         public PmtReader(int pid) {
             this.pid = pid;
@@ -124,6 +126,8 @@ public final class TsExtractor implements Extractor {
         public void consume(ParsableByteArray sectionData) {
             if (sectionData.readUnsignedByte() == 2) {
                 TimestampAdjuster timestampAdjuster;
+                int trackId;
+                TsPayloadReader reader;
                 if (TsExtractor.this.mode == 1 || TsExtractor.this.mode == 2 || TsExtractor.this.remainingPmts == 1) {
                     timestampAdjuster = (TimestampAdjuster) TsExtractor.this.timestampAdjusters.get(0);
                 } else {
@@ -140,9 +144,10 @@ public final class TsExtractor implements Extractor {
                     TsExtractor.this.id3Reader = TsExtractor.this.payloadReaderFactory.createPayloadReader(21, new EsInfo(21, null, null, new byte[0]));
                     TsExtractor.this.id3Reader.init(timestampAdjuster, TsExtractor.this.output, new TrackIdGenerator(programNumber, 21, 8192));
                 }
+                this.trackIdToReaderScratch.clear();
+                this.trackIdToPidScratch.clear();
                 int remainingEntriesLength = sectionData.bytesLeft();
                 while (remainingEntriesLength > 0) {
-                    int trackId;
                     sectionData.readBytes(this.pmtScratch, 5);
                     int streamType = this.pmtScratch.readBits(8);
                     this.pmtScratch.skipBits(3);
@@ -160,19 +165,27 @@ public final class TsExtractor implements Extractor {
                         trackId = elementaryPid;
                     }
                     if (!TsExtractor.this.trackIds.get(trackId)) {
-                        TsPayloadReader reader;
-                        TsExtractor.this.trackIds.put(trackId, true);
                         if (TsExtractor.this.mode == 2 && streamType == 21) {
                             reader = TsExtractor.this.id3Reader;
                         } else {
                             reader = TsExtractor.this.payloadReaderFactory.createPayloadReader(streamType, esInfo);
-                            if (reader != null) {
-                                reader.init(timestampAdjuster, TsExtractor.this.output, new TrackIdGenerator(programNumber, trackId, 8192));
-                            }
                         }
-                        if (reader != null) {
-                            TsExtractor.this.tsPayloadReaders.put(elementaryPid, reader);
+                        if (TsExtractor.this.mode != 2 || elementaryPid < this.trackIdToPidScratch.get(trackId, 8192)) {
+                            this.trackIdToPidScratch.put(trackId, elementaryPid);
+                            this.trackIdToReaderScratch.put(trackId, reader);
                         }
+                    }
+                }
+                int trackIdCount = this.trackIdToPidScratch.size();
+                for (int i = 0; i < trackIdCount; i++) {
+                    trackId = this.trackIdToPidScratch.keyAt(i);
+                    TsExtractor.this.trackIds.put(trackId, true);
+                    reader = (TsPayloadReader) this.trackIdToReaderScratch.valueAt(i);
+                    if (reader != null) {
+                        if (reader != TsExtractor.this.id3Reader) {
+                            reader.init(timestampAdjuster, TsExtractor.this.output, new TrackIdGenerator(programNumber, trackId, 8192));
+                        }
+                        TsExtractor.this.tsPayloadReaders.put(this.trackIdToPidScratch.valueAt(i), reader);
                     }
                 }
                 if (TsExtractor.this.mode != 2) {
@@ -239,7 +252,11 @@ public final class TsExtractor implements Extractor {
     }
 
     public TsExtractor(int defaultTsPayloadReaderFlags) {
-        this(0, new TimestampAdjuster(0), new DefaultTsPayloadReaderFactory(defaultTsPayloadReaderFlags));
+        this(1, defaultTsPayloadReaderFlags);
+    }
+
+    public TsExtractor(int mode, int defaultTsPayloadReaderFlags) {
+        this(mode, new TimestampAdjuster(0), new DefaultTsPayloadReaderFactory(defaultTsPayloadReaderFlags));
     }
 
     public TsExtractor(int mode, TimestampAdjuster timestampAdjuster, Factory payloadReaderFactory) {
@@ -252,7 +269,6 @@ public final class TsExtractor implements Extractor {
             this.timestampAdjusters.add(timestampAdjuster);
         }
         this.tsPacketBuffer = new ParsableByteArray((int) BUFFER_SIZE);
-        this.tsScratch = new ParsableBitArray(new byte[3]);
         this.trackIds = new SparseBooleanArray();
         this.tsPayloadReaders = new SparseArray();
         this.continuityCounters = new SparseIntArray();
@@ -261,7 +277,7 @@ public final class TsExtractor implements Extractor {
 
     public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
         byte[] buffer = this.tsPacketBuffer.data;
-        input.peekFully(buffer, 0, BUFFER_SIZE);
+        input.peekFully(buffer, 0, 940);
         int j = 0;
         while (j < TS_PACKET_SIZE) {
             int i = 0;
@@ -299,7 +315,7 @@ public final class TsExtractor implements Extractor {
     public int read(ExtractorInput input, PositionHolder seekPosition) throws IOException, InterruptedException {
         int limit;
         byte[] data = this.tsPacketBuffer.data;
-        if (940 - this.tsPacketBuffer.getPosition() < TS_PACKET_SIZE) {
+        if (9400 - this.tsPacketBuffer.getPosition() < TS_PACKET_SIZE) {
             int bytesLeft = this.tsPacketBuffer.bytesLeft();
             if (bytesLeft > 0) {
                 System.arraycopy(data, this.tsPacketBuffer.getPosition(), data, 0, bytesLeft);
@@ -308,7 +324,7 @@ public final class TsExtractor implements Extractor {
         }
         while (this.tsPacketBuffer.bytesLeft() < TS_PACKET_SIZE) {
             limit = this.tsPacketBuffer.limit();
-            int read = input.read(data, limit, 940 - limit);
+            int read = input.read(data, limit, 9400 - limit);
             if (read == -1) {
                 return -1;
             }
@@ -324,21 +340,18 @@ public final class TsExtractor implements Extractor {
         if (endOfPacket > limit) {
             return 0;
         }
-        this.tsPacketBuffer.skipBytes(1);
-        this.tsPacketBuffer.readBytes(this.tsScratch, 3);
-        if (this.tsScratch.readBit()) {
+        int tsPacketHeader = this.tsPacketBuffer.readInt();
+        if ((8388608 & tsPacketHeader) != 0) {
             this.tsPacketBuffer.setPosition(endOfPacket);
             return 0;
         }
-        boolean payloadUnitStartIndicator = this.tsScratch.readBit();
-        this.tsScratch.skipBits(1);
-        int pid = this.tsScratch.readBits(13);
-        this.tsScratch.skipBits(2);
-        boolean adaptationFieldExists = this.tsScratch.readBit();
-        boolean payloadExists = this.tsScratch.readBit();
+        boolean payloadUnitStartIndicator = (AccessibilityEventCompat.TYPE_WINDOWS_CHANGED & tsPacketHeader) != 0;
+        int pid = (2096896 & tsPacketHeader) >> 8;
+        boolean adaptationFieldExists = (tsPacketHeader & 32) != 0;
+        boolean payloadExists = (tsPacketHeader & 16) != 0;
         boolean discontinuityFound = false;
-        int continuityCounter = this.tsScratch.readBits(4);
         if (this.mode != 2) {
+            int continuityCounter = tsPacketHeader & 15;
             int previousCounter = this.continuityCounters.get(pid, continuityCounter - 1);
             this.continuityCounters.put(pid, continuityCounter);
             if (previousCounter == continuityCounter) {
@@ -346,7 +359,7 @@ public final class TsExtractor implements Extractor {
                     this.tsPacketBuffer.setPosition(endOfPacket);
                     return 0;
                 }
-            } else if (continuityCounter != (previousCounter + 1) % 16) {
+            } else if (continuityCounter != ((previousCounter + 1) & 15)) {
                 discontinuityFound = true;
             }
         }
@@ -361,7 +374,6 @@ public final class TsExtractor implements Extractor {
                 }
                 this.tsPacketBuffer.setLimit(endOfPacket);
                 payloadReader.consume(this.tsPacketBuffer, payloadUnitStartIndicator);
-                Assertions.checkState(this.tsPacketBuffer.getPosition() <= endOfPacket);
                 this.tsPacketBuffer.setLimit(limit);
             }
         }

@@ -9,6 +9,7 @@ import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
 import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
+import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 
 public final class MergingMediaSource implements MediaSource {
@@ -62,10 +63,10 @@ public final class MergingMediaSource implements MediaSource {
         }
     }
 
-    public MediaPeriod createPeriod(int index, Allocator allocator, long positionUs) {
+    public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
         MediaPeriod[] periods = new MediaPeriod[this.mediaSources.length];
         for (int i = 0; i < periods.length; i++) {
-            periods[i] = this.mediaSources[i].createPeriod(index, allocator, positionUs);
+            periods[i] = this.mediaSources[i].createPeriod(id, allocator);
         }
         return new MergingMediaPeriod(periods);
     }

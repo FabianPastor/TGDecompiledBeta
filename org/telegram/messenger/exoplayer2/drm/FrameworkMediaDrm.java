@@ -12,10 +12,12 @@ import android.support.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.KeyRequest;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.OnEventListener;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.ProvisionRequest;
 import org.telegram.messenger.exoplayer2.util.Assertions;
+import org.telegram.messenger.exoplayer2.util.Util;
 
 @TargetApi(18)
 public final class FrameworkMediaDrm implements ExoMediaDrm<FrameworkMediaCrypto> {
@@ -114,6 +116,7 @@ public final class FrameworkMediaDrm implements ExoMediaDrm<FrameworkMediaCrypto
     }
 
     public FrameworkMediaCrypto createMediaCrypto(UUID uuid, byte[] initData) throws MediaCryptoException {
-        return new FrameworkMediaCrypto(new MediaCrypto(uuid, initData));
+        boolean forceAllowInsecureDecoderComponents = Util.SDK_INT < 21 && C.WIDEVINE_UUID.equals(uuid) && "L3".equals(getPropertyString("securityLevel"));
+        return new FrameworkMediaCrypto(new MediaCrypto(uuid, initData), forceAllowInsecureDecoderComponents);
     }
 }

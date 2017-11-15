@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 import javax.crypto.SecretKey;
+import org.telegram.messenger.exoplayer2.C;
 
 public class CencDecryptingTrackImpl extends AbstractTrack {
     RangeStartMap<Integer, SecretKey> indexToKey;
@@ -45,7 +46,7 @@ public class CencDecryptingTrackImpl extends AbstractTrack {
         this.indexToKey = new RangeStartMap();
         this.original = original;
         SchemeTypeBox schm = (SchemeTypeBox) Path.getPath(original.getSampleDescriptionBox(), "enc./sinf/schm");
-        if ("cenc".equals(schm.getSchemeType()) || "cbc1".equals(schm.getSchemeType())) {
+        if (C.CENC_TYPE_cenc.equals(schm.getSchemeType()) || C.CENC_TYPE_cbc1.equals(schm.getSchemeType())) {
             List<CencSampleEncryptionInformationGroupEntry> groupEntries = new ArrayList();
             for (Entry<GroupEntry, long[]> groupEntry : original.getSampleGroups().entrySet()) {
                 if (groupEntry.getKey() instanceof CencSampleEncryptionInformationGroupEntry) {

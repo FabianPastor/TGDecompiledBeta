@@ -98,7 +98,7 @@ public class WebviewActivity extends BaseFragment {
                                 WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = true;
                                 break;
                         }
-                        WebviewActivity.this.showDialog(new ShareAlert(WebviewActivity.this.getParentActivity(), WebviewActivity.this.currentMessageObject, null, false, WebviewActivity.this.linkToCopy, false));
+                        WebviewActivity.this.showDialog(ShareAlert.createShareAlert(WebviewActivity.this.getParentActivity(), WebviewActivity.this.currentMessageObject, null, false, WebviewActivity.this.linkToCopy, false));
                     }
                 }
             });
@@ -145,7 +145,7 @@ public class WebviewActivity extends BaseFragment {
                     WebviewActivity.this.finishFragment();
                 } else if (id == 1) {
                     WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = false;
-                    WebviewActivity.this.showDialog(new ShareAlert(WebviewActivity.this.getParentActivity(), WebviewActivity.this.currentMessageObject, null, false, WebviewActivity.this.linkToCopy, false));
+                    WebviewActivity.this.showDialog(ShareAlert.createShareAlert(WebviewActivity.this.getParentActivity(), WebviewActivity.this.currentMessageObject, null, false, WebviewActivity.this.linkToCopy, false));
                 } else if (id == 2) {
                     WebviewActivity.openGameInBrowser(WebviewActivity.this.currentUrl, WebviewActivity.this.currentMessageObject, WebviewActivity.this.getParentActivity(), WebviewActivity.this.short_param, WebviewActivity.this.currentBot);
                 }

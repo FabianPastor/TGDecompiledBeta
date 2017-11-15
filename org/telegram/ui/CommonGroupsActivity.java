@@ -98,7 +98,7 @@ public class CommonGroupsActivity extends BaseFragment {
             boolean z = false;
             if (holder.getItemViewType() == 0) {
                 ProfileSearchCell cell = holder.itemView;
-                cell.setData((Chat) CommonGroupsActivity.this.chats.get(position), null, null, null, false);
+                cell.setData((Chat) CommonGroupsActivity.this.chats.get(position), null, null, null, false, false);
                 if (!(position == CommonGroupsActivity.this.chats.size() - 1 && CommonGroupsActivity.this.endReached)) {
                     z = true;
                 }
@@ -278,7 +278,7 @@ public class CommonGroupsActivity extends BaseFragment {
         r10[12] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
         r10[13] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, Theme.key_progressCircle);
         r10[14] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_namePaint, null, null, Theme.key_chats_name);
-        r10[15] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable}, null, Theme.key_avatar_text);
+        r10[15] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
         r10[16] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
         r10[17] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
         r10[18] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);

@@ -28,13 +28,14 @@ public final class Mp3Extractor implements Extractor {
     };
     public static final int FLAG_DISABLE_ID3_METADATA = 2;
     public static final int FLAG_ENABLE_CONSTANT_BITRATE_SEEKING = 1;
-    private static final int HEADER_MASK = -128000;
-    private static final int INFO_HEADER = Util.getIntegerCodeForString("Info");
-    private static final int MAX_SNIFF_BYTES = 4096;
+    private static final int MAX_SNIFF_BYTES = 16384;
     private static final int MAX_SYNC_BYTES = 131072;
+    private static final int MPEG_AUDIO_HEADER_MASK = -128000;
     private static final int SCRATCH_LENGTH = 10;
-    private static final int VBRI_HEADER = Util.getIntegerCodeForString("VBRI");
-    private static final int XING_HEADER = Util.getIntegerCodeForString("Xing");
+    private static final int SEEK_HEADER_INFO = Util.getIntegerCodeForString("Info");
+    private static final int SEEK_HEADER_UNSET = 0;
+    private static final int SEEK_HEADER_VBRI = Util.getIntegerCodeForString("VBRI");
+    private static final int SEEK_HEADER_XING = Util.getIntegerCodeForString("Xing");
     private long basisTimeUs;
     private ExtractorOutput extractorOutput;
     private final int flags;
@@ -103,7 +104,10 @@ public final class Mp3Extractor implements Extractor {
             }
         }
         if (this.seeker == null) {
-            this.seeker = setupSeeker(input);
+            this.seeker = maybeReadSeekFrame(input);
+            if (this.seeker == null || !(this.seeker.isSeekable() || (this.flags & 1) == 0)) {
+                this.seeker = getConstantBitrateSeeker(input);
+            }
             this.extractorOutput.seekMap(this.seeker);
             this.trackOutput.format(Format.createAudioSampleFormat(null, this.synchronizedHeader.mimeType, null, -1, 4096, this.synchronizedHeader.channels, this.synchronizedHeader.sampleRate, -1, this.gaplessInfoHolder.encoderDelay, this.gaplessInfoHolder.encoderPadding, null, null, 0, null, (this.flags & 2) != 0 ? null : this.metadata));
         }
@@ -118,7 +122,7 @@ public final class Mp3Extractor implements Extractor {
             }
             this.scratch.setPosition(0);
             int sampleHeaderData = this.scratch.readInt();
-            if ((HEADER_MASK & sampleHeaderData) != (this.synchronizedHeaderData & HEADER_MASK) || MpegAudioHeader.getFrameSize(sampleHeaderData) == -1) {
+            if (!headersMatch(sampleHeaderData, (long) this.synchronizedHeaderData) || MpegAudioHeader.getFrameSize(sampleHeaderData) == -1) {
                 extractorInput.skipFully(1);
                 this.synchronizedHeaderData = 0;
                 return 0;
@@ -153,7 +157,7 @@ public final class Mp3Extractor implements Extractor {
         int candidateSynchronizedHeaderData = 0;
         int peekedId3Bytes = 0;
         int searchedBytes = 0;
-        int searchLimitBytes = sniffing ? 4096 : 131072;
+        int searchLimitBytes = sniffing ? 16384 : 131072;
         input.resetPeekPosition();
         if (input.getPosition() == 0) {
             peekId3Data(input);
@@ -175,7 +179,7 @@ public final class Mp3Extractor implements Extractor {
             }
             this.scratch.setPosition(0);
             int headerData = this.scratch.readInt();
-            if (candidateSynchronizedHeaderData == 0 || (HEADER_MASK & headerData) == (HEADER_MASK & candidateSynchronizedHeaderData)) {
+            if (candidateSynchronizedHeaderData == 0 || headersMatch(headerData, (long) candidateSynchronizedHeaderData)) {
                 int frameSize = MpegAudioHeader.getFrameSize(headerData);
                 if (frameSize != -1) {
                     validFrameCount++;
@@ -241,14 +245,11 @@ public final class Mp3Extractor implements Extractor {
         }
     }
 
-    private Seeker setupSeeker(ExtractorInput input) throws IOException, InterruptedException {
+    private Seeker maybeReadSeekFrame(ExtractorInput input) throws IOException, InterruptedException {
+        Seeker seeker;
         int xingBase = 21;
         ParsableByteArray frame = new ParsableByteArray(this.synchronizedHeader.frameSize);
         input.peekFully(frame.data, 0, this.synchronizedHeader.frameSize);
-        long position = input.getPosition();
-        long length = input.getLength();
-        int headerData = 0;
-        Seeker seeker = null;
         if ((this.synchronizedHeader.version & 1) != 0) {
             if (this.synchronizedHeader.channels != 1) {
                 xingBase = 36;
@@ -256,12 +257,9 @@ public final class Mp3Extractor implements Extractor {
         } else if (this.synchronizedHeader.channels == 1) {
             xingBase = 13;
         }
-        if (frame.limit() >= xingBase + 4) {
-            frame.setPosition(xingBase);
-            headerData = frame.readInt();
-        }
-        if (headerData == XING_HEADER || headerData == INFO_HEADER) {
-            seeker = XingSeeker.create(this.synchronizedHeader, frame, position, length);
+        int seekHeader = getSeekFrameHeader(frame, xingBase);
+        if (seekHeader == SEEK_HEADER_XING || seekHeader == SEEK_HEADER_INFO) {
+            seeker = XingSeeker.create(this.synchronizedHeader, frame, input.getPosition(), input.getLength());
             if (!(seeker == null || this.gaplessInfoHolder.hasGaplessInfo())) {
                 input.resetPeekPosition();
                 input.advancePeekPosition(xingBase + 141);
@@ -270,20 +268,44 @@ public final class Mp3Extractor implements Extractor {
                 this.gaplessInfoHolder.setFromXingHeaderValue(this.scratch.readUnsignedInt24());
             }
             input.skipFully(this.synchronizedHeader.frameSize);
-        } else if (frame.limit() >= 40) {
-            frame.setPosition(36);
-            if (frame.readInt() == VBRI_HEADER) {
-                seeker = VbriSeeker.create(this.synchronizedHeader, frame, position, length);
-                input.skipFully(this.synchronizedHeader.frameSize);
+            if (!(seeker == null || seeker.isSeekable() || seekHeader != SEEK_HEADER_INFO)) {
+                return getConstantBitrateSeeker(input);
             }
+        } else if (seekHeader == SEEK_HEADER_VBRI) {
+            seeker = VbriSeeker.create(this.synchronizedHeader, frame, input.getPosition(), input.getLength());
+            input.skipFully(this.synchronizedHeader.frameSize);
+        } else {
+            seeker = null;
+            input.resetPeekPosition();
         }
-        if (seeker != null && (seeker.isSeekable() || (this.flags & 1) == 0)) {
-            return seeker;
-        }
-        input.resetPeekPosition();
+        return seeker;
+    }
+
+    private Seeker getConstantBitrateSeeker(ExtractorInput input) throws IOException, InterruptedException {
         input.peekFully(this.scratch.data, 0, 4);
         this.scratch.setPosition(0);
         MpegAudioHeader.populateHeader(this.scratch.readInt(), this.synchronizedHeader);
-        return new ConstantBitrateSeeker(input.getPosition(), this.synchronizedHeader.bitrate, length);
+        return new ConstantBitrateSeeker(input.getPosition(), this.synchronizedHeader.bitrate, input.getLength());
+    }
+
+    private static boolean headersMatch(int headerA, long headerB) {
+        return ((long) (MPEG_AUDIO_HEADER_MASK & headerA)) == (-128000 & headerB);
+    }
+
+    private static int getSeekFrameHeader(ParsableByteArray frame, int xingBase) {
+        if (frame.limit() >= xingBase + 4) {
+            frame.setPosition(xingBase);
+            int headerData = frame.readInt();
+            if (headerData == SEEK_HEADER_XING || headerData == SEEK_HEADER_INFO) {
+                return headerData;
+            }
+        }
+        if (frame.limit() >= 40) {
+            frame.setPosition(36);
+            if (frame.readInt() == SEEK_HEADER_VBRI) {
+                return SEEK_HEADER_VBRI;
+            }
+        }
+        return 0;
     }
 }

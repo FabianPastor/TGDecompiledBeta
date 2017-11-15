@@ -103,7 +103,7 @@ final class WebvttExtractor implements Extractor {
                 return;
             }
             long firstCueTimeUs = WebvttParserUtil.parseTimestampUs(cueHeaderMatcher.group(1));
-            long sampleTimeUs = this.timestampAdjuster.adjustSampleTimestamp((firstCueTimeUs + tsTimestampUs) - vttTimestampUs);
+            long sampleTimeUs = this.timestampAdjuster.adjustTsTimestamp(TimestampAdjuster.usToPts((firstCueTimeUs + tsTimestampUs) - vttTimestampUs));
             TrackOutput trackOutput = buildTrackOutput(sampleTimeUs - firstCueTimeUs);
             this.sampleDataWrapper.reset(this.sampleData, this.sampleSize);
             trackOutput.sampleData(this.sampleDataWrapper, this.sampleSize);

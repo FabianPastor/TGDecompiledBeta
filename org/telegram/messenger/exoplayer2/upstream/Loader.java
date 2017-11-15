@@ -16,11 +16,6 @@ import org.telegram.messenger.exoplayer2.util.Util;
 public final class Loader implements LoaderErrorThrower {
     public static final int DONT_RETRY = 2;
     public static final int DONT_RETRY_FATAL = 3;
-    private static final int MSG_CANCEL = 1;
-    private static final int MSG_END_OF_SOURCE = 2;
-    private static final int MSG_FATAL_ERROR = 4;
-    private static final int MSG_IO_EXCEPTION = 3;
-    private static final int MSG_START = 0;
     public static final int RETRY = 0;
     public static final int RETRY_RESET_ERROR_COUNT = 1;
     private LoadTask<? extends Loadable> currentTask;
@@ -37,6 +32,11 @@ public final class Loader implements LoaderErrorThrower {
 
     @SuppressLint({"HandlerLeak"})
     private final class LoadTask<T extends Loadable> extends Handler implements Runnable {
+        private static final int MSG_CANCEL = 1;
+        private static final int MSG_END_OF_SOURCE = 2;
+        private static final int MSG_FATAL_ERROR = 4;
+        private static final int MSG_IO_EXCEPTION = 3;
+        private static final int MSG_START = 0;
         private static final String TAG = "LoadTask";
         private final Callback<T> callback;
         private IOException currentError;
@@ -117,12 +117,17 @@ public final class Loader implements LoaderErrorThrower {
                 if (!this.released) {
                     obtainMessage(3, new UnexpectedLoaderException(e3)).sendToTarget();
                 }
-            } catch (Error e4) {
-                Log.e(TAG, "Unexpected error loading stream", e4);
+            } catch (OutOfMemoryError e4) {
+                Log.e(TAG, "OutOfMemory error loading stream", e4);
                 if (!this.released) {
-                    obtainMessage(4, e4).sendToTarget();
+                    obtainMessage(3, new UnexpectedLoaderException(e4)).sendToTarget();
                 }
-                throw e4;
+            } catch (Error e5) {
+                Log.e(TAG, "Unexpected error loading stream", e5);
+                if (!this.released) {
+                    obtainMessage(4, e5).sendToTarget();
+                }
+                throw e5;
             } catch (Throwable th) {
                 TraceUtil.endSection();
             }
@@ -197,8 +202,28 @@ public final class Loader implements LoaderErrorThrower {
         void load() throws IOException, InterruptedException;
     }
 
+    public interface ReleaseCallback {
+        void onLoaderReleased();
+    }
+
+    private static final class ReleaseTask extends Handler implements Runnable {
+        private final ReleaseCallback callback;
+
+        public ReleaseTask(ReleaseCallback callback) {
+            this.callback = callback;
+        }
+
+        public void run() {
+            sendEmptyMessage(0);
+        }
+
+        public void handleMessage(Message msg) {
+            this.callback.onLoaderReleased();
+        }
+    }
+
     public static final class UnexpectedLoaderException extends IOException {
-        public UnexpectedLoaderException(Exception cause) {
+        public UnexpectedLoaderException(Throwable cause) {
             super("Unexpected " + cause.getClass().getSimpleName() + ": " + cause.getMessage(), cause);
         }
     }
@@ -227,14 +252,19 @@ public final class Loader implements LoaderErrorThrower {
         release(null);
     }
 
-    public void release(Runnable postLoadAction) {
+    public boolean release(ReleaseCallback callback) {
+        boolean callbackInvoked = false;
         if (this.currentTask != null) {
             this.currentTask.cancel(true);
-        }
-        if (postLoadAction != null) {
-            this.downloadExecutorService.execute(postLoadAction);
+            if (callback != null) {
+                this.downloadExecutorService.execute(new ReleaseTask(callback));
+            }
+        } else if (callback != null) {
+            callback.onLoaderReleased();
+            callbackInvoked = true;
         }
         this.downloadExecutorService.shutdown();
+        return callbackInvoked;
     }
 
     public void maybeThrowError() throws IOException {

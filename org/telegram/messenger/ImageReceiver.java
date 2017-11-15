@@ -27,8 +27,8 @@ import org.telegram.tgnet.TLRPC.TL_webDocument;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 
 public class ImageReceiver implements NotificationCenterDelegate {
-    private static Paint roundPaint;
     private static PorterDuffColorFilter selectedColorFilter = new PorterDuffColorFilter(-2236963, Mode.MULTIPLY);
+    private static PorterDuffColorFilter selectedGroupColorFilter = new PorterDuffColorFilter(-4473925, Mode.MULTIPLY);
     private boolean allowDecodeSingleFrame;
     private boolean allowStartAnimation;
     private RectF bitmapRect;
@@ -67,15 +67,17 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private int imageY;
     private boolean invalidateAll;
     private boolean isAspectFit;
-    private boolean isPressed;
+    private int isPressed;
     private boolean isVisible;
     private long lastUpdateAlphaTime;
     private boolean manualAlphaAnimator;
     private boolean needsQualityThumb;
     private int orientation;
     private float overrideAlpha;
+    private int param;
     private MessageObject parentMessageObject;
     private View parentView;
+    private Paint roundPaint;
     private int roundRadius;
     private RectF roundRect;
     private SetImageBackup setImageBackup;
@@ -118,9 +120,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.overrideAlpha = 1.0f;
         this.crossfadeAlpha = (byte) 1;
         this.parentView = view;
-        if (roundPaint == null) {
-            roundPaint = new Paint(1);
-        }
+        this.roundPaint = new Paint(1);
     }
 
     public void cancelLoadImage() {
@@ -323,12 +323,12 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.delegate = delegate;
     }
 
-    public void setPressed(boolean value) {
+    public void setPressed(int value) {
         this.isPressed = value;
     }
 
     public boolean getPressed() {
-        return this.isPressed;
+        return this.isPressed != 0;
     }
 
     public void setOrientation(int angle, boolean center) {
@@ -471,27 +471,33 @@ public class ImageReceiver implements NotificationCenterDelegate {
             int bitmapH;
             Drawable bitmapDrawable = (BitmapDrawable) drawable;
             if (shader != null) {
-                paint = roundPaint;
+                paint = this.roundPaint;
             } else {
                 paint = bitmapDrawable.getPaint();
             }
             boolean hasFilter = (paint == null || paint.getColorFilter() == null) ? false : true;
-            if (!hasFilter || this.isPressed) {
-                if (!hasFilter && this.isPressed) {
+            if (hasFilter && this.isPressed == 0) {
+                if (shader != null) {
+                    this.roundPaint.setColorFilter(null);
+                } else if (this.staticThumb != drawable) {
+                    bitmapDrawable.setColorFilter(null);
+                }
+            } else if (!(hasFilter || this.isPressed == 0)) {
+                if (this.isPressed == 1) {
                     if (shader != null) {
-                        roundPaint.setColorFilter(selectedColorFilter);
+                        this.roundPaint.setColorFilter(selectedColorFilter);
                     } else {
                         bitmapDrawable.setColorFilter(selectedColorFilter);
                     }
+                } else if (shader != null) {
+                    this.roundPaint.setColorFilter(selectedGroupColorFilter);
+                } else {
+                    bitmapDrawable.setColorFilter(selectedGroupColorFilter);
                 }
-            } else if (shader != null) {
-                roundPaint.setColorFilter(null);
-            } else if (this.staticThumb != drawable) {
-                bitmapDrawable.setColorFilter(null);
             }
             if (this.colorFilter != null) {
                 if (shader != null) {
-                    roundPaint.setColorFilter(this.colorFilter);
+                    this.roundPaint.setColorFilter(this.colorFilter);
                 } else {
                     bitmapDrawable.setColorFilter(this.colorFilter);
                 }
@@ -515,7 +521,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             float scaleH = ((float) bitmapH) / ((float) this.imageH);
             float scale;
             if (shader != null) {
-                roundPaint.setShader(shader);
+                this.roundPaint.setShader(shader);
                 scale = Math.min(scaleW, scaleH);
                 this.roundRect.set((float) this.imageX, (float) this.imageY, (float) (this.imageX + this.imageW), (float) (this.imageY + this.imageH));
                 this.shaderMatrix.reset();
@@ -537,8 +543,8 @@ public class ImageReceiver implements NotificationCenterDelegate {
                         this.shaderMatrix.setRectToRect(this.bitmapRect, this.roundRect, ScaleToFit.FILL);
                     }
                     shader.setLocalMatrix(this.shaderMatrix);
-                    roundPaint.setAlpha(alpha);
-                    canvas.drawRoundRect(this.roundRect, (float) this.roundRadius, (float) this.roundRadius, roundPaint);
+                    this.roundPaint.setAlpha(alpha);
+                    canvas.drawRoundRect(this.roundRect, (float) this.roundRadius, (float) this.roundRadius, this.roundPaint);
                     return;
                 }
                 return;
@@ -900,8 +906,16 @@ public class ImageReceiver implements NotificationCenterDelegate {
         }
     }
 
+    public void setImageX(int x) {
+        this.imageX = x;
+    }
+
     public void setImageY(int y) {
         this.imageY = y;
+    }
+
+    public void setImageWidth(int width) {
+        this.imageW = width;
     }
 
     public void setImageCoords(int x, int y, int width, int height) {
@@ -1089,6 +1103,14 @@ public class ImageReceiver implements NotificationCenterDelegate {
         } else {
             this.tag = value;
         }
+    }
+
+    public void setParam(int value) {
+        this.param = value;
+    }
+
+    public int getParam() {
+        return this.param;
     }
 
     protected boolean setImageBitmapByKey(BitmapDrawable bitmap, String key, boolean thumb, boolean memCache) {

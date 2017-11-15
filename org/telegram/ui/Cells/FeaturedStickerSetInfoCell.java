@@ -116,7 +116,6 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
                 }
             }
         };
-        this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
         this.addButton.setGravity(17);
         this.addButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
         this.addButton.setTextSize(1, 14.0f);
@@ -153,6 +152,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
                 this.addButton.setBackgroundDrawable(this.addDrawable);
                 this.addButton.setText(LocaleController.getString("Add", R.string.Add).toUpperCase());
             }
+            this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
         } else {
             this.addButton.setVisibility(8);
         }

@@ -9,7 +9,10 @@ import android.media.MediaCrypto;
 import android.media.MediaFormat;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +23,9 @@ import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.decoder.DecoderCounters;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
+import org.telegram.messenger.exoplayer2.drm.DrmInitData;
 import org.telegram.messenger.exoplayer2.drm.DrmSession;
+import org.telegram.messenger.exoplayer2.drm.DrmSession.DrmSessionException;
 import org.telegram.messenger.exoplayer2.drm.DrmSessionManager;
 import org.telegram.messenger.exoplayer2.drm.FrameworkMediaCrypto;
 import org.telegram.messenger.exoplayer2.mediacodec.MediaCodecUtil.DecoderQueryException;
@@ -32,6 +37,9 @@ import org.telegram.messenger.exoplayer2.util.Util;
 @TargetApi(16)
 public abstract class MediaCodecRenderer extends BaseRenderer {
     private static final byte[] ADAPTATION_WORKAROUND_BUFFER = Util.getBytesFromHexString("0000016742C00BDA259000000168CE0F13200000016588840DCE7118A0002FBF1C31C3275D78");
+    private static final int ADAPTATION_WORKAROUND_MODE_ALWAYS = 2;
+    private static final int ADAPTATION_WORKAROUND_MODE_NEVER = 0;
+    private static final int ADAPTATION_WORKAROUND_MODE_SAME_RESOLUTION = 1;
     private static final int ADAPTATION_WORKAROUND_SLICE_WIDTH_HEIGHT = 32;
     private static final long MAX_CODEC_HOTSWAP_TIME_MS = 1000;
     private static final int RECONFIGURATION_STATE_NONE = 0;
@@ -43,9 +51,9 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     private static final String TAG = "MediaCodecRenderer";
     private final DecoderInputBuffer buffer;
     private MediaCodec codec;
+    private int codecAdaptationWorkaroundMode;
     private long codecHotswapDeadlineMs;
-    private boolean codecIsAdaptive;
-    private boolean codecNeedsAdaptationWorkaround;
+    private MediaCodecInfo codecInfo;
     private boolean codecNeedsAdaptationWorkaroundBuffer;
     private boolean codecNeedsDiscardToSpsWorkaround;
     private boolean codecNeedsEosFlushWorkaround;
@@ -79,6 +87,10 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     private boolean shouldSkipOutputBuffer;
     private boolean waitingForFirstSyncFrame;
     private boolean waitingForKeys;
+
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface AdaptationWorkaroundMode {
+    }
 
     public static class DecoderInitializationException extends Exception {
         private static final int CUSTOM_ERROR_CODE_BASE = -50000;
@@ -139,13 +151,17 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
         this.codecReinitializationState = 0;
     }
 
-    public final int supportsMixedMimeTypeAdaptation() throws ExoPlaybackException {
-        return 4;
+    public final int supportsMixedMimeTypeAdaptation() {
+        return 8;
     }
 
     public final int supportsFormat(Format format) throws ExoPlaybackException {
         try {
-            return supportsFormat(this.mediaCodecSelector, format);
+            int formatSupport = supportsFormat(this.mediaCodecSelector, format);
+            if ((formatSupport & 7) <= 2 || isDrmSchemeSupported(this.drmSessionManager, format.drmInitData)) {
+                return formatSupport;
+            }
+            return (formatSupport & -8) | 2;
         } catch (DecoderQueryException e) {
             throw ExoPlaybackException.createForRenderer(e, getIndex());
         }
@@ -156,71 +172,73 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     }
 
     protected final void maybeInitCodec() throws ExoPlaybackException {
-        if (shouldInitCodec()) {
+        if (this.codec == null && this.format != null) {
             this.drmSession = this.pendingDrmSession;
             String mimeType = this.format.sampleMimeType;
-            MediaCrypto mediaCrypto = null;
+            MediaCrypto wrappedMediaCrypto = null;
             boolean drmSessionRequiresSecureDecoder = false;
             if (this.drmSession != null) {
-                int drmSessionState = this.drmSession.getState();
-                if (drmSessionState == 0) {
-                    throw ExoPlaybackException.createForRenderer(this.drmSession.getError(), getIndex());
-                } else if (drmSessionState == 3 || drmSessionState == 4) {
-                    mediaCrypto = ((FrameworkMediaCrypto) this.drmSession.getMediaCrypto()).getWrappedMediaCrypto();
-                    drmSessionRequiresSecureDecoder = this.drmSession.requiresSecureDecoderComponent(mimeType);
-                } else {
+                FrameworkMediaCrypto mediaCrypto = (FrameworkMediaCrypto) this.drmSession.getMediaCrypto();
+                if (mediaCrypto == null) {
+                    DrmSessionException drmError = this.drmSession.getError();
+                    if (drmError != null) {
+                        throw ExoPlaybackException.createForRenderer(drmError, getIndex());
+                    }
                     return;
                 }
+                wrappedMediaCrypto = mediaCrypto.getWrappedMediaCrypto();
+                drmSessionRequiresSecureDecoder = mediaCrypto.requiresSecureDecoderComponent(mimeType);
             }
-            MediaCodecInfo decoderInfo = null;
-            try {
-                decoderInfo = getDecoderInfo(this.mediaCodecSelector, this.format, drmSessionRequiresSecureDecoder);
-                if (decoderInfo == null && drmSessionRequiresSecureDecoder) {
-                    decoderInfo = getDecoderInfo(this.mediaCodecSelector, this.format, false);
-                    if (decoderInfo != null) {
-                        Log.w(TAG, "Drm session requires secure decoder for " + mimeType + ", but no secure decoder available. Trying to proceed with " + decoderInfo.name + ".");
+            if (this.codecInfo == null) {
+                try {
+                    this.codecInfo = getDecoderInfo(this.mediaCodecSelector, this.format, drmSessionRequiresSecureDecoder);
+                    if (this.codecInfo == null && drmSessionRequiresSecureDecoder) {
+                        this.codecInfo = getDecoderInfo(this.mediaCodecSelector, this.format, false);
+                        if (this.codecInfo != null) {
+                            Log.w(TAG, "Drm session requires secure decoder for " + mimeType + ", but no secure decoder available. Trying to proceed with " + this.codecInfo.name + ".");
+                        }
                     }
+                } catch (Throwable e) {
+                    throwDecoderInitError(new DecoderInitializationException(this.format, e, drmSessionRequiresSecureDecoder, -49998));
                 }
-            } catch (Throwable e) {
-                throwDecoderInitError(new DecoderInitializationException(this.format, e, drmSessionRequiresSecureDecoder, -49998));
+                if (this.codecInfo == null) {
+                    throwDecoderInitError(new DecoderInitializationException(this.format, null, drmSessionRequiresSecureDecoder, -49999));
+                }
             }
-            if (decoderInfo == null) {
-                throwDecoderInitError(new DecoderInitializationException(this.format, null, drmSessionRequiresSecureDecoder, -49999));
+            if (shouldInitCodec(this.codecInfo)) {
+                String codecName = this.codecInfo.name;
+                this.codecAdaptationWorkaroundMode = codecAdaptationWorkaroundMode(codecName);
+                this.codecNeedsDiscardToSpsWorkaround = codecNeedsDiscardToSpsWorkaround(codecName, this.format);
+                this.codecNeedsFlushWorkaround = codecNeedsFlushWorkaround(codecName);
+                this.codecNeedsEosPropagationWorkaround = codecNeedsEosPropagationWorkaround(codecName);
+                this.codecNeedsEosFlushWorkaround = codecNeedsEosFlushWorkaround(codecName);
+                this.codecNeedsEosOutputExceptionWorkaround = codecNeedsEosOutputExceptionWorkaround(codecName);
+                this.codecNeedsMonoChannelCountWorkaround = codecNeedsMonoChannelCountWorkaround(codecName, this.format);
+                try {
+                    long codecInitializingTimestamp = SystemClock.elapsedRealtime();
+                    TraceUtil.beginSection("createCodec:" + codecName);
+                    this.codec = MediaCodec.createByCodecName(codecName);
+                    TraceUtil.endSection();
+                    TraceUtil.beginSection("configureCodec");
+                    configureCodec(this.codecInfo, this.codec, this.format, wrappedMediaCrypto);
+                    TraceUtil.endSection();
+                    TraceUtil.beginSection("startCodec");
+                    this.codec.start();
+                    TraceUtil.endSection();
+                    long codecInitializedTimestamp = SystemClock.elapsedRealtime();
+                    onCodecInitialized(codecName, codecInitializedTimestamp, codecInitializedTimestamp - codecInitializingTimestamp);
+                    this.inputBuffers = this.codec.getInputBuffers();
+                    this.outputBuffers = this.codec.getOutputBuffers();
+                } catch (Throwable e2) {
+                    throwDecoderInitError(new DecoderInitializationException(this.format, e2, drmSessionRequiresSecureDecoder, codecName));
+                }
+                this.codecHotswapDeadlineMs = getState() == 2 ? SystemClock.elapsedRealtime() + MAX_CODEC_HOTSWAP_TIME_MS : C.TIME_UNSET;
+                this.inputIndex = -1;
+                this.outputIndex = -1;
+                this.waitingForFirstSyncFrame = true;
+                DecoderCounters decoderCounters = this.decoderCounters;
+                decoderCounters.decoderInitCount++;
             }
-            String codecName = decoderInfo.name;
-            boolean z = decoderInfo.adaptive && !codecNeedsDisableAdaptationWorkaround(codecName);
-            this.codecIsAdaptive = z;
-            this.codecNeedsDiscardToSpsWorkaround = codecNeedsDiscardToSpsWorkaround(codecName, this.format);
-            this.codecNeedsFlushWorkaround = codecNeedsFlushWorkaround(codecName);
-            this.codecNeedsAdaptationWorkaround = codecNeedsAdaptationWorkaround(codecName);
-            this.codecNeedsEosPropagationWorkaround = codecNeedsEosPropagationWorkaround(codecName);
-            this.codecNeedsEosFlushWorkaround = codecNeedsEosFlushWorkaround(codecName);
-            this.codecNeedsEosOutputExceptionWorkaround = codecNeedsEosOutputExceptionWorkaround(codecName);
-            this.codecNeedsMonoChannelCountWorkaround = codecNeedsMonoChannelCountWorkaround(codecName, this.format);
-            try {
-                long codecInitializingTimestamp = SystemClock.elapsedRealtime();
-                TraceUtil.beginSection("createCodec:" + codecName);
-                this.codec = MediaCodec.createByCodecName(codecName);
-                TraceUtil.endSection();
-                TraceUtil.beginSection("configureCodec");
-                configureCodec(decoderInfo, this.codec, this.format, mediaCrypto);
-                TraceUtil.endSection();
-                TraceUtil.beginSection("startCodec");
-                this.codec.start();
-                TraceUtil.endSection();
-                long codecInitializedTimestamp = SystemClock.elapsedRealtime();
-                onCodecInitialized(codecName, codecInitializedTimestamp, codecInitializedTimestamp - codecInitializingTimestamp);
-                this.inputBuffers = this.codec.getInputBuffers();
-                this.outputBuffers = this.codec.getOutputBuffers();
-            } catch (Throwable e2) {
-                throwDecoderInitError(new DecoderInitializationException(this.format, e2, drmSessionRequiresSecureDecoder, codecName));
-            }
-            this.codecHotswapDeadlineMs = getState() == 2 ? SystemClock.elapsedRealtime() + MAX_CODEC_HOTSWAP_TIME_MS : C.TIME_UNSET;
-            this.inputIndex = -1;
-            this.outputIndex = -1;
-            this.waitingForFirstSyncFrame = true;
-            DecoderCounters decoderCounters = this.decoderCounters;
-            decoderCounters.decoderInitCount++;
         }
     }
 
@@ -228,12 +246,16 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
         throw ExoPlaybackException.createForRenderer(e, getIndex());
     }
 
-    protected boolean shouldInitCodec() {
-        return this.codec == null && this.format != null;
+    protected boolean shouldInitCodec(MediaCodecInfo codecInfo) {
+        return true;
     }
 
     protected final MediaCodec getCodec() {
         return this.codec;
+    }
+
+    protected final MediaCodecInfo getCodecInfo() {
+        return this.codecInfo;
     }
 
     protected void onEnabled(boolean joining) throws ExoPlaybackException {
@@ -277,32 +299,32 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     }
 
     protected void releaseCodec() {
+        this.codecHotswapDeadlineMs = C.TIME_UNSET;
+        this.inputIndex = -1;
+        this.outputIndex = -1;
+        this.waitingForKeys = false;
+        this.shouldSkipOutputBuffer = false;
+        this.decodeOnlyPresentationTimestamps.clear();
+        this.inputBuffers = null;
+        this.outputBuffers = null;
+        this.codecInfo = null;
+        this.codecReconfigured = false;
+        this.codecReceivedBuffers = false;
+        this.codecNeedsDiscardToSpsWorkaround = false;
+        this.codecNeedsFlushWorkaround = false;
+        this.codecAdaptationWorkaroundMode = 0;
+        this.codecNeedsEosPropagationWorkaround = false;
+        this.codecNeedsEosFlushWorkaround = false;
+        this.codecNeedsMonoChannelCountWorkaround = false;
+        this.codecNeedsAdaptationWorkaroundBuffer = false;
+        this.shouldSkipAdaptationWorkaroundOutputBuffer = false;
+        this.codecReceivedEos = false;
+        this.codecReconfigurationState = 0;
+        this.codecReinitializationState = 0;
+        this.buffer.data = null;
         if (this.codec != null) {
-            this.codecHotswapDeadlineMs = C.TIME_UNSET;
-            this.inputIndex = -1;
-            this.outputIndex = -1;
-            this.waitingForKeys = false;
-            this.shouldSkipOutputBuffer = false;
-            this.decodeOnlyPresentationTimestamps.clear();
-            this.inputBuffers = null;
-            this.outputBuffers = null;
-            this.codecReconfigured = false;
-            this.codecReceivedBuffers = false;
-            this.codecIsAdaptive = false;
-            this.codecNeedsDiscardToSpsWorkaround = false;
-            this.codecNeedsFlushWorkaround = false;
-            this.codecNeedsAdaptationWorkaround = false;
-            this.codecNeedsEosPropagationWorkaround = false;
-            this.codecNeedsEosFlushWorkaround = false;
-            this.codecNeedsMonoChannelCountWorkaround = false;
-            this.codecNeedsAdaptationWorkaroundBuffer = false;
-            this.shouldSkipAdaptationWorkaroundOutputBuffer = false;
-            this.codecReceivedEos = false;
-            this.codecReconfigurationState = 0;
-            this.codecReinitializationState = 0;
             DecoderCounters decoderCounters = this.decoderCounters;
             decoderCounters.decoderReleaseCount++;
-            this.buffer.data = null;
             try {
                 this.codec.stop();
                 try {
@@ -351,7 +373,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
         }
         int result;
         if (this.format == null) {
-            this.buffer.clear();
+            this.flagsOnlyBuffer.clear();
             result = readSource(this.formatHolder, this.flagsOnlyBuffer, true);
             if (result == -5) {
                 onInputFormatChanged(this.formatHolder.format);
@@ -542,19 +564,16 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     }
 
     private boolean shouldWaitForKeys(boolean bufferEncrypted) throws ExoPlaybackException {
-        if (this.drmSession == null) {
+        if (this.drmSession == null || (!bufferEncrypted && this.playClearSamplesWithoutKeys)) {
             return false;
         }
         int drmSessionState = this.drmSession.getState();
-        if (drmSessionState == 0) {
+        if (drmSessionState == 1) {
             throw ExoPlaybackException.createForRenderer(this.drmSession.getError(), getIndex());
         } else if (drmSessionState == 4) {
             return false;
         } else {
-            if (bufferEncrypted || !this.playClearSamplesWithoutKeys) {
-                return true;
-            }
-            return false;
+            return true;
         }
     }
 
@@ -576,11 +595,11 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
                 }
             }
         }
-        if (this.pendingDrmSession == this.drmSession && this.codec != null && canReconfigureCodec(this.codec, this.codecIsAdaptive, oldFormat, this.format)) {
+        if (this.pendingDrmSession == this.drmSession && this.codec != null && canReconfigureCodec(this.codec, this.codecInfo.adaptive, oldFormat, this.format)) {
             boolean z;
             this.codecReconfigured = true;
             this.codecReconfigurationState = 1;
-            if (this.codecNeedsAdaptationWorkaround && this.format.width == oldFormat.width && this.format.height == oldFormat.height) {
+            if (this.codecAdaptationWorkaroundMode == 2 || (this.codecAdaptationWorkaroundMode == 1 && this.format.width == oldFormat.width && this.format.height == oldFormat.height)) {
                 z = true;
             } else {
                 z = false;
@@ -686,7 +705,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
 
     private void processOutputFormat() throws ExoPlaybackException {
         MediaFormat format = this.codec.getOutputFormat();
-        if (this.codecNeedsAdaptationWorkaround && format.getInteger("width") == 32 && format.getInteger("height") == 32) {
+        if (this.codecAdaptationWorkaroundMode != 0 && format.getInteger("width") == 32 && format.getInteger("height") == 32) {
             this.shouldSkipAdaptationWorkaroundOutputBuffer = true;
             return;
         }
@@ -724,12 +743,28 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
         return false;
     }
 
+    private static boolean isDrmSchemeSupported(DrmSessionManager drmSessionManager, @Nullable DrmInitData drmInitData) {
+        if (drmInitData == null) {
+            return true;
+        }
+        if (drmSessionManager == null) {
+            return false;
+        }
+        return drmSessionManager.canAcquireSession(drmInitData);
+    }
+
     private static boolean codecNeedsFlushWorkaround(String name) {
         return Util.SDK_INT < 18 || ((Util.SDK_INT == 18 && ("OMX.SEC.avc.dec".equals(name) || "OMX.SEC.avc.dec.secure".equals(name))) || (Util.SDK_INT == 19 && Util.MODEL.startsWith("SM-G800") && ("OMX.Exynos.avc.dec".equals(name) || "OMX.Exynos.avc.dec.secure".equals(name))));
     }
 
-    private static boolean codecNeedsAdaptationWorkaround(String name) {
-        return Util.SDK_INT < 24 && (("OMX.Nvidia.h264.decode".equals(name) || "OMX.Nvidia.h264.decode.secure".equals(name)) && ("flounder".equals(Util.DEVICE) || "flounder_lte".equals(Util.DEVICE) || "grouper".equals(Util.DEVICE) || "tilapia".equals(Util.DEVICE)));
+    private int codecAdaptationWorkaroundMode(String name) {
+        if (Util.SDK_INT <= 24 && "OMX.Exynos.avc.dec.secure".equals(name) && (Util.MODEL.startsWith("SM-T585") || Util.MODEL.startsWith("SM-A520"))) {
+            return 2;
+        }
+        if (Util.SDK_INT >= 24 || ((!"OMX.Nvidia.h264.decode".equals(name) && !"OMX.Nvidia.h264.decode.secure".equals(name)) || (!"flounder".equals(Util.DEVICE) && !"flounder_lte".equals(Util.DEVICE) && !"grouper".equals(Util.DEVICE) && !"tilapia".equals(Util.DEVICE)))) {
+            return 0;
+        }
+        return 1;
     }
 
     private static boolean codecNeedsDiscardToSpsWorkaround(String name, Format format) {
@@ -753,9 +788,5 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
             return true;
         }
         return false;
-    }
-
-    private static boolean codecNeedsDisableAdaptationWorkaround(String name) {
-        return Util.SDK_INT <= 19 && Util.MODEL.equals("ODROID-XU3") && ("OMX.Exynos.AVC.Decoder".equals(name) || "OMX.Exynos.AVC.Decoder.secure".equals(name));
     }
 }

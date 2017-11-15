@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.source.BehindLiveWindowException;
 import org.telegram.messenger.exoplayer2.source.TrackGroup;
@@ -30,7 +29,9 @@ class HlsChunkSource {
     private String encryptionIvString;
     private byte[] encryptionKey;
     private Uri encryptionKeyUri;
+    private HlsUrl expectedPlaylistUrl;
     private IOException fatalError;
+    private boolean independentSegments;
     private boolean isTimestampMaster;
     private final DataSource mediaDataSource;
     private final List<Format> muxedCaptionFormats;
@@ -132,6 +133,8 @@ class HlsChunkSource {
     public void maybeThrowError() throws IOException {
         if (this.fatalError != null) {
             throw this.fatalError;
+        } else if (this.expectedPlaylistUrl != null) {
+            this.playlistTracker.maybeThrowPlaylistRefreshError(this.expectedPlaylistUrl);
         }
     }
 
@@ -141,6 +144,10 @@ class HlsChunkSource {
 
     public void selectTracks(TrackSelection trackSelection) {
         this.trackSelection = trackSelection;
+    }
+
+    public TrackSelection getTrackSelection() {
+        return this.trackSelection;
     }
 
     public void reset() {
@@ -159,10 +166,11 @@ class HlsChunkSource {
         } else {
             oldVariantIndex = this.trackGroup.indexOf(previous.trackFormat);
         }
+        this.expectedPlaylistUrl = null;
         if (previous == null) {
             bufferedDurationUs = 0;
         } else {
-            bufferedDurationUs = Math.max(0, previous.startTimeUs - playbackPositionUs);
+            bufferedDurationUs = Math.max(0, (this.independentSegments ? previous.endTimeUs : previous.startTimeUs) - playbackPositionUs);
         }
         this.trackSelection.updateSelectedTrack(bufferedDurationUs);
         int selectedVariantIndex = this.trackSelection.getSelectedIndexInTrackGroup();
@@ -171,9 +179,10 @@ class HlsChunkSource {
         if (this.playlistTracker.isSnapshotValid(selectedUrl)) {
             int chunkMediaSequence;
             HlsMediaPlaylist mediaPlaylist = this.playlistTracker.getPlaylistSnapshot(selectedUrl);
+            this.independentSegments = mediaPlaylist.hasIndependentSegmentsTag;
             if (previous == null || switchingVariant) {
-                long targetPositionUs = previous == null ? playbackPositionUs : previous.startTimeUs;
-                if (mediaPlaylist.hasEndTag || targetPositionUs <= mediaPlaylist.getEndTimeUs()) {
+                long targetPositionUs = previous == null ? playbackPositionUs : this.independentSegments ? previous.endTimeUs : previous.startTimeUs;
+                if (mediaPlaylist.hasEndTag || targetPositionUs < mediaPlaylist.getEndTimeUs()) {
                     List list = mediaPlaylist.segments;
                     Object valueOf = Long.valueOf(targetPositionUs - mediaPlaylist.startTimeUs);
                     boolean z = !this.playlistTracker.isLive() || previous == null;
@@ -222,10 +231,12 @@ class HlsChunkSource {
                 return;
             } else {
                 out.playlist = selectedUrl;
+                this.expectedPlaylistUrl = selectedUrl;
                 return;
             }
         }
         out.playlist = selectedUrl;
+        this.expectedPlaylistUrl = selectedUrl;
     }
 
     public void onChunkLoadCompleted(Chunk chunk) {
@@ -256,7 +267,7 @@ class HlsChunkSource {
 
     private void setEncryptionData(Uri keyUri, String iv, byte[] secretKey) {
         String trimmedIv;
-        if (iv.toLowerCase(Locale.getDefault()).startsWith("0x")) {
+        if (Util.toLowerInvariant(iv).startsWith("0x")) {
             trimmedIv = iv.substring(2);
         } else {
             trimmedIv = iv;

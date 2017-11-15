@@ -15,6 +15,7 @@ import java.util.TimeZone;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
+import org.telegram.messenger.exoplayer2.ExoPlayerLibraryInfo;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
@@ -23,6 +24,7 @@ import org.telegram.messenger.exoplayer2.source.AdaptiveMediaSourceEventListener
 import org.telegram.messenger.exoplayer2.source.MediaPeriod;
 import org.telegram.messenger.exoplayer2.source.MediaSource;
 import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
+import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
 import org.telegram.messenger.exoplayer2.source.dash.DashChunkSource.Factory;
 import org.telegram.messenger.exoplayer2.source.dash.manifest.AdaptationSet;
 import org.telegram.messenger.exoplayer2.source.dash.manifest.DashManifest;
@@ -148,7 +150,7 @@ public final class DashMediaSource implements MediaSource {
             if (setIdentifiers) {
                 uid = Integer.valueOf(this.firstPeriodId + Assertions.checkIndex(periodIndex, 0, this.manifest.getPeriodCount()));
             }
-            return period.set(id, uid, 0, this.manifest.getPeriodDurationUs(periodIndex), C.msToUs(this.manifest.getPeriod(periodIndex).startMs - this.manifest.getPeriod(0).startMs) - this.offsetInFirstPeriodUs, false);
+            return period.set(id, uid, 0, this.manifest.getPeriodDurationUs(periodIndex), C.msToUs(this.manifest.getPeriod(periodIndex).startMs - this.manifest.getPeriod(0).startMs) - this.offsetInFirstPeriodUs);
         }
 
         public int getWindowCount() {
@@ -262,6 +264,10 @@ public final class DashMediaSource implements MediaSource {
         }
     }
 
+    static {
+        ExoPlayerLibraryInfo.registerModule("goog.exo.dash");
+    }
+
     public DashMediaSource(DashManifest manifest, Factory chunkSourceFactory, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
         this(manifest, chunkSourceFactory, 3, eventHandler, eventListener);
     }
@@ -342,9 +348,9 @@ public final class DashMediaSource implements MediaSource {
         this.loaderErrorThrower.maybeThrowError();
     }
 
-    public MediaPeriod createPeriod(int periodIndex, Allocator allocator, long positionUs) {
-        int i = periodIndex;
-        DashMediaPeriod mediaPeriod = new DashMediaPeriod(this.firstPeriodId + periodIndex, this.manifest, i, this.chunkSourceFactory, this.minLoadableRetryCount, this.eventDispatcher.copyWithMediaTimeOffsetMs(this.manifest.getPeriod(periodIndex).startMs), this.elapsedRealtimeOffsetMs, this.loaderErrorThrower, allocator);
+    public MediaPeriod createPeriod(MediaPeriodId periodId, Allocator allocator) {
+        int periodIndex = periodId.periodIndex;
+        DashMediaPeriod mediaPeriod = new DashMediaPeriod(this.firstPeriodId + periodIndex, this.manifest, periodIndex, this.chunkSourceFactory, this.minLoadableRetryCount, this.eventDispatcher.copyWithMediaTimeOffsetMs(this.manifest.getPeriod(periodIndex).startMs), this.elapsedRealtimeOffsetMs, this.loaderErrorThrower, allocator);
         this.periodsById.put(mediaPeriod.id, mediaPeriod);
         return mediaPeriod;
     }
@@ -443,11 +449,11 @@ public final class DashMediaSource implements MediaSource {
 
     private void resolveUtcTimingElement(UtcTimingElement timingElement) {
         String scheme = timingElement.schemeIdUri;
-        if (Util.areEqual(scheme, "urn:mpeg:dash:utc:direct:2012")) {
+        if (Util.areEqual(scheme, "urn:mpeg:dash:utc:direct:2014") || Util.areEqual(scheme, "urn:mpeg:dash:utc:direct:2012")) {
             resolveUtcTimingElementDirect(timingElement);
-        } else if (Util.areEqual(scheme, "urn:mpeg:dash:utc:http-iso:2014")) {
+        } else if (Util.areEqual(scheme, "urn:mpeg:dash:utc:http-iso:2014") || Util.areEqual(scheme, "urn:mpeg:dash:utc:http-iso:2012")) {
             resolveUtcTimingElementHttp(timingElement, new Iso8601Parser());
-        } else if (Util.areEqual(scheme, "urn:mpeg:dash:utc:http-xsdate:2012") || Util.areEqual(scheme, "urn:mpeg:dash:utc:http-xsdate:2014")) {
+        } else if (Util.areEqual(scheme, "urn:mpeg:dash:utc:http-xsdate:2014") || Util.areEqual(scheme, "urn:mpeg:dash:utc:http-xsdate:2012")) {
             resolveUtcTimingElementHttp(timingElement, new XsDateTimeParser());
         } else {
             onUtcTimestampResolutionError(new IOException("Unsupported UTC timing scheme"));

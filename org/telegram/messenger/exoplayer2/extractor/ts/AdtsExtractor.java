@@ -24,7 +24,7 @@ public final class AdtsExtractor implements Extractor {
     private static final int MAX_SNIFF_BYTES = 8192;
     private final long firstSampleTimestampUs;
     private final ParsableByteArray packetBuffer;
-    private AdtsReader reader;
+    private final AdtsReader reader;
     private boolean startedPacket;
 
     public AdtsExtractor() {
@@ -33,6 +33,7 @@ public final class AdtsExtractor implements Extractor {
 
     public AdtsExtractor(long firstSampleTimestampUs) {
         this.firstSampleTimestampUs = firstSampleTimestampUs;
+        this.reader = new AdtsReader(true);
         this.packetBuffer = new ParsableByteArray(200);
     }
 
@@ -86,7 +87,6 @@ public final class AdtsExtractor implements Extractor {
     }
 
     public void init(ExtractorOutput output) {
-        this.reader = new AdtsReader(true);
         this.reader.createTracks(output, new TrackIdGenerator(0, 1));
         output.endTracks();
         output.seekMap(new Unseekable(C.TIME_UNSET));

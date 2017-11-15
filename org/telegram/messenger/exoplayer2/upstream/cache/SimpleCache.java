@@ -24,15 +24,23 @@ public final class SimpleCache implements Cache {
     private long totalSpace;
 
     public SimpleCache(File cacheDir, CacheEvictor evictor) {
-        this(cacheDir, evictor, null);
+        this(cacheDir, evictor, null, false);
     }
 
     public SimpleCache(File cacheDir, CacheEvictor evictor, byte[] secretKey) {
+        this(cacheDir, evictor, secretKey, secretKey != null);
+    }
+
+    public SimpleCache(File cacheDir, CacheEvictor evictor, byte[] secretKey, boolean encrypt) {
+        this(cacheDir, evictor, new CachedContentIndex(cacheDir, secretKey, encrypt));
+    }
+
+    SimpleCache(File cacheDir, CacheEvictor evictor, CachedContentIndex index) {
         this.totalSpace = 0;
         this.cacheDir = cacheDir;
         this.evictor = evictor;
         this.lockedSpans = new HashMap();
-        this.index = new CachedContentIndex(cacheDir, secretKey);
+        this.index = index;
         this.listeners = new HashMap();
         final ConditionVariable conditionVariable = new ConditionVariable();
         new Thread("SimpleCache.initialize()") {
@@ -72,9 +80,14 @@ public final class SimpleCache implements Cache {
     }
 
     public synchronized NavigableSet<CacheSpan> getCachedSpans(String key) {
-        CachedContent cachedContent;
-        cachedContent = this.index.get(key);
-        return cachedContent == null ? null : new TreeSet(cachedContent.getSpans());
+        NavigableSet<CacheSpan> navigableSet;
+        CachedContent cachedContent = this.index.get(key);
+        if (cachedContent == null || cachedContent.isEmpty()) {
+            navigableSet = null;
+        } else {
+            navigableSet = new TreeSet(cachedContent.getSpans());
+        }
+        return navigableSet;
     }
 
     public synchronized Set<String> getKeys() {
@@ -200,13 +213,20 @@ public final class SimpleCache implements Cache {
 
     private void removeSpan(CacheSpan span, boolean removeEmptyCachedContent) throws CacheException {
         CachedContent cachedContent = this.index.get(span.key);
-        Assertions.checkState(cachedContent.removeSpan(span));
-        this.totalSpace -= span.length;
-        if (removeEmptyCachedContent && cachedContent.isEmpty()) {
-            this.index.removeEmpty(cachedContent.key);
-            this.index.store();
+        if (cachedContent != null && cachedContent.removeSpan(span)) {
+            this.totalSpace -= span.length;
+            if (removeEmptyCachedContent) {
+                try {
+                    if (cachedContent.isEmpty()) {
+                        this.index.removeEmpty(cachedContent.key);
+                        this.index.store();
+                    }
+                } catch (Throwable th) {
+                    notifySpanRemoved(span);
+                }
+            }
+            notifySpanRemoved(span);
         }
-        notifySpanRemoved(span);
     }
 
     public synchronized void removeSpan(CacheSpan span) throws CacheException {

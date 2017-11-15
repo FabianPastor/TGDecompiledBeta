@@ -21,7 +21,7 @@ public interface MediaPeriod extends SequenceableLoader {
 
     void maybeThrowPrepareError() throws IOException;
 
-    void prepare(Callback callback);
+    void prepare(Callback callback, long j);
 
     long readDiscontinuity();
 

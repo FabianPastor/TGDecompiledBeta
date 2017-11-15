@@ -3,6 +3,7 @@ package org.telegram.messenger.exoplayer2.text.webvtt;
 import android.support.annotation.NonNull;
 import android.text.Layout.Alignment;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.AlignmentSpan.Standard;
 import android.text.style.BackgroundColorSpan;
@@ -106,11 +107,18 @@ final class WebvttCueParser {
 
     boolean parseCue(ParsableByteArray webvttData, Builder builder, List<WebvttCssStyle> styles) {
         String firstLine = webvttData.readLine();
+        if (firstLine == null) {
+            return false;
+        }
         Matcher cueHeaderMatcher = CUE_HEADER_PATTERN.matcher(firstLine);
         if (cueHeaderMatcher.matches()) {
             return parseCue(null, cueHeaderMatcher, webvttData, builder, this.textBuilder, styles);
         }
-        cueHeaderMatcher = CUE_HEADER_PATTERN.matcher(webvttData.readLine());
+        String secondLine = webvttData.readLine();
+        if (secondLine == null) {
+            return false;
+        }
+        cueHeaderMatcher = CUE_HEADER_PATTERN.matcher(secondLine);
         if (!cueHeaderMatcher.matches()) {
             return false;
         }
@@ -218,17 +226,15 @@ final class WebvttCueParser {
             textBuilder.setLength(0);
             while (true) {
                 String line = webvttData.readLine();
-                if (line == null || line.isEmpty()) {
+                if (TextUtils.isEmpty(line)) {
                     parseCueText(id, textBuilder.toString(), builder, styles);
-                } else {
-                    if (textBuilder.length() > 0) {
-                        textBuilder.append("\n");
-                    }
-                    textBuilder.append(line.trim());
+                    return true;
                 }
+                if (textBuilder.length() > 0) {
+                    textBuilder.append("\n");
+                }
+                textBuilder.append(line.trim());
             }
-            parseCueText(id, textBuilder.toString(), builder, styles);
-            return true;
         } catch (NumberFormatException e) {
             Log.w(TAG, "Skipping cue with bad header: " + cueHeaderMatcher.group());
             return false;

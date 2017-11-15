@@ -77,6 +77,7 @@ public class RecyclerListView extends RecyclerView {
     };
     private OnInterceptTouchListener onInterceptTouchListener;
     private OnItemClickListener onItemClickListener;
+    private OnItemClickListenerExtended onItemClickListenerExtended;
     private OnItemLongClickListener onItemLongClickListener;
     private OnScrollListener onScrollListener;
     private View pinnedHeader;
@@ -328,6 +329,10 @@ public class RecyclerListView extends RecyclerView {
         void onItemClick(View view, int i);
     }
 
+    public interface OnItemClickListenerExtended {
+        void onItemClick(View view, int i, float f, float f2);
+    }
+
     public interface OnItemLongClickListener {
         boolean onItemClick(View view, int i);
     }
@@ -342,13 +347,19 @@ public class RecyclerListView extends RecyclerView {
         public RecyclerListViewItemClickListener(Context context) {
             RecyclerListView.this.gestureDetector = new GestureDetector(context, new SimpleOnGestureListener(RecyclerListView.this) {
                 public boolean onSingleTapUp(MotionEvent e) {
-                    if (!(RecyclerListView.this.currentChildView == null || RecyclerListView.this.onItemClickListener == null)) {
-                        RecyclerListView.this.currentChildView.setPressed(true);
+                    if (!(RecyclerListView.this.currentChildView == null || (RecyclerListView.this.onItemClickListener == null && RecyclerListView.this.onItemClickListenerExtended == null))) {
+                        RecyclerListView.this.onChildPressed(RecyclerListView.this.currentChildView, true);
                         final View view = RecyclerListView.this.currentChildView;
                         final int position = RecyclerListView.this.currentChildPosition;
+                        final float x = e.getX();
+                        final float y = e.getY();
                         if (RecyclerListView.this.instantClick && position != -1) {
                             view.playSoundEffect(0);
-                            RecyclerListView.this.onItemClickListener.onItemClick(view, position);
+                            if (RecyclerListView.this.onItemClickListener != null) {
+                                RecyclerListView.this.onItemClickListener.onItemClick(view, position);
+                            } else if (RecyclerListView.this.onItemClickListenerExtended != null) {
+                                RecyclerListView.this.onItemClickListenerExtended.onItemClick(view, position, x, y);
+                            }
                         }
                         AndroidUtilities.runOnUIThread(RecyclerListView.this.clickRunnable = new Runnable() {
                             public void run() {
@@ -356,11 +367,16 @@ public class RecyclerListView extends RecyclerView {
                                     RecyclerListView.this.clickRunnable = null;
                                 }
                                 if (view != null) {
-                                    view.setPressed(false);
+                                    RecyclerListView.this.onChildPressed(view, false);
                                     if (!RecyclerListView.this.instantClick) {
                                         view.playSoundEffect(0);
-                                        if (RecyclerListView.this.onItemClickListener != null && position != -1) {
+                                        if (position == -1) {
+                                            return;
+                                        }
+                                        if (RecyclerListView.this.onItemClickListener != null) {
                                             RecyclerListView.this.onItemClickListener.onItemClick(view, position);
+                                        } else if (RecyclerListView.this.onItemClickListenerExtended != null) {
+                                            RecyclerListView.this.onItemClickListenerExtended.onItemClick(view, position, x, y);
                                         }
                                     }
                                 }
@@ -432,7 +448,7 @@ public class RecyclerListView extends RecyclerView {
                     RecyclerListView.this.selectChildRunnable = new Runnable() {
                         public void run() {
                             if (RecyclerListView.this.selectChildRunnable != null && RecyclerListView.this.currentChildView != null) {
-                                RecyclerListView.this.currentChildView.setPressed(true);
+                                RecyclerListView.this.onChildPressed(RecyclerListView.this.currentChildView, true);
                                 RecyclerListView.this.selectChildRunnable = null;
                             }
                         }
@@ -464,7 +480,7 @@ public class RecyclerListView extends RecyclerView {
                     RecyclerListView.this.selectChildRunnable = null;
                 }
                 View pressedChild = RecyclerListView.this.currentChildView;
-                RecyclerListView.this.currentChildView.setPressed(false);
+                RecyclerListView.this.onChildPressed(RecyclerListView.this.currentChildView, false);
                 RecyclerListView.this.currentChildView = null;
                 RecyclerListView.this.interceptedByChild = false;
                 RecyclerListView.this.removeSelection(pressedChild, event);
@@ -616,6 +632,10 @@ public class RecyclerListView extends RecyclerView {
         }
     }
 
+    protected void onChildPressed(View child, boolean pressed) {
+        child.setPressed(pressed);
+    }
+
     protected boolean allowSelectChildAtPosition(float x, float y) {
         return true;
     }
@@ -648,7 +668,7 @@ public class RecyclerListView extends RecyclerView {
         if (this.currentChildView != null) {
             View child = this.currentChildView;
             if (uncheck) {
-                this.currentChildView.setPressed(false);
+                onChildPressed(this.currentChildView, false);
             }
             this.currentChildView = null;
             removeSelection(child, null);
@@ -706,7 +726,7 @@ public class RecyclerListView extends RecyclerView {
                     RecyclerListView.this.currentChildView.onTouchEvent(event);
                     event.recycle();
                     View child = RecyclerListView.this.currentChildView;
-                    RecyclerListView.this.currentChildView.setPressed(false);
+                    RecyclerListView.this.onChildPressed(RecyclerListView.this.currentChildView, false);
                     RecyclerListView.this.currentChildView = null;
                     RecyclerListView.this.removeSelection(child, null);
                     RecyclerListView.this.interceptedByChild = false;
@@ -877,6 +897,10 @@ public class RecyclerListView extends RecyclerView {
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.onItemClickListener = listener;
+    }
+
+    public void setOnItemClickListener(OnItemClickListenerExtended listener) {
+        this.onItemClickListenerExtended = listener;
     }
 
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {

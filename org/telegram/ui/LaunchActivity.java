@@ -2,6 +2,7 @@ package org.telegram.ui;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityManager.TaskDescription;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
@@ -64,6 +65,7 @@ import org.telegram.messenger.NativeCrashManager;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.SendMessagesHelper.SendingMediaInfo;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
@@ -146,7 +148,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     private boolean passcodeSaveIntentIsNew;
     private boolean passcodeSaveIntentIsRestore;
     private PasscodeView passcodeView;
-    private ArrayList<Uri> photoPathsArray;
+    private ArrayList<SendingMediaInfo> photoPathsArray;
     private ActionBarLayout rightActionBarLayout;
     private String sendingText;
     private FrameLayout shadowTablet;
@@ -197,6 +199,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         }
         requestWindowFeature(1);
         setTheme(R.style.Theme.TMessages);
+        if (VERSION.SDK_INT >= 21) {
+            setTaskDescription(new TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault)));
+        }
         getWindow().setBackgroundDrawableResource(R.drawable.transparent);
         if (UserConfig.passcodeHash.length() > 0 && !UserConfig.allowScreenCapture) {
             try {
@@ -403,6 +408,11 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 10) {
                     LaunchActivity.this.presentFragment(new CallLogActivity());
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
+                } else if (id == 11) {
+                    args = new Bundle();
+                    args.putInt("user_id", UserConfig.getClientUserId());
+                    LaunchActivity.this.presentFragment(new ChatActivity(args));
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 }
             }
@@ -1180,7 +1190,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                         if (this.photoPathsArray == null) {
                                             this.photoPathsArray = new ArrayList();
                                         }
-                                        this.photoPathsArray.add(uri);
+                                        SendingMediaInfo info = new SendingMediaInfo();
+                                        info.uri = uri;
+                                        this.photoPathsArray.add(info);
                                     }
                                 }
                             }
@@ -1518,6 +1530,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 if (dialogId == 0) {
                     args2 = new Bundle();
                     args2.putBoolean("onlySelect", true);
+                    args2.putInt("dialogsType", 3);
                     if (this.contactsToSend != null) {
                         args2.putString("selectAlertString", LocaleController.getString("SendContactTo", R.string.SendMessagesTo));
                         args2.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroup", R.string.SendContactToGroup));
@@ -2010,13 +2023,12 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         } else if (lower_part > 0) {
             args.putInt("user_id", lower_part);
         } else if (lower_part < 0) {
-            Bundle bundle = args;
-            bundle.putInt("chat_id", -lower_part);
+            args.putInt("chat_id", -lower_part);
         }
         if (MessagesController.checkCanOpenChat(args, dialogsFragment)) {
             boolean z;
             boolean z2;
-            BaseFragment chatActivity = new ChatActivity(args);
+            ChatActivity fragment = new ChatActivity(args);
             ActionBarLayout actionBarLayout = this.actionBarLayout;
             if (dialogsFragment != null) {
                 z = true;
@@ -2028,19 +2040,16 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             } else {
                 z2 = false;
             }
-            actionBarLayout.presentFragment(chatActivity, z, z2, true);
+            actionBarLayout.presentFragment(fragment, z, z2, true);
             if (this.videoPath != null) {
-                chatActivity.openVideoEditor(this.videoPath, this.sendingText);
+                fragment.openVideoEditor(this.videoPath, this.sendingText);
                 this.sendingText = null;
             }
             if (this.photoPathsArray != null) {
-                ArrayList<String> captions = null;
                 if (this.sendingText != null && this.sendingText.length() <= Callback.DEFAULT_DRAG_ANIMATION_DURATION && this.photoPathsArray.size() == 1) {
-                    captions = new ArrayList();
-                    captions.add(this.sendingText);
-                    this.sendingText = null;
+                    ((SendingMediaInfo) this.photoPathsArray.get(0)).caption = this.sendingText;
                 }
-                SendMessagesHelper.prepareSendingPhotos(null, this.photoPathsArray, did, null, captions, null, null, false, null);
+                SendMessagesHelper.prepareSendingMedia(this.photoPathsArray, did, null, null, false, false);
             }
             if (this.sendingText != null) {
                 SendMessagesHelper.prepareSendingText(this.sendingText, did);
@@ -2481,10 +2490,15 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 fragment.showDialog(dialog);
                 dialog.setCanceledOnTouchOutside(false);
             }
-        } else if (id == NotificationCenter.didSetNewTheme && this.sideMenu != null) {
-            this.sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
-            this.sideMenu.setGlowColor(Theme.getColor(Theme.key_chats_menuBackground));
-            this.sideMenu.getAdapter().notifyDataSetChanged();
+        } else if (id == NotificationCenter.didSetNewTheme) {
+            if (this.sideMenu != null) {
+                this.sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
+                this.sideMenu.setGlowColor(Theme.getColor(Theme.key_chats_menuBackground));
+                this.sideMenu.getAdapter().notifyDataSetChanged();
+            }
+            if (VERSION.SDK_INT >= 21) {
+                setTaskDescription(new TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault)));
+            }
         }
     }
 

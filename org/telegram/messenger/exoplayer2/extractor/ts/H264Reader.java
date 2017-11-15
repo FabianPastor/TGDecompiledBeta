@@ -194,7 +194,7 @@ public final class H264Reader implements ElementaryStreamReader {
                 this.bufferLength += readLength;
                 this.bitArray.reset(this.buffer, 0, this.bufferLength);
                 if (this.bitArray.canReadBits(8)) {
-                    this.bitArray.skipBits(1);
+                    this.bitArray.skipBit();
                     int nalRefIdc = this.bitArray.readBits(2);
                     this.bitArray.skipBits(5);
                     if (this.bitArray.canReadExpGolombCodedNum()) {

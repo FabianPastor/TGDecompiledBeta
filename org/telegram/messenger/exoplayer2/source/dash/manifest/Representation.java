@@ -13,7 +13,7 @@ public abstract class Representation {
     public final String baseUrl;
     public final String contentId;
     public final Format format;
-    public final List<SchemeValuePair> inbandEventStreams;
+    public final List<Descriptor> inbandEventStreams;
     private final RangedUri initializationUri;
     public final long presentationTimeOffsetUs;
     public final long revisionId;
@@ -21,7 +21,7 @@ public abstract class Representation {
     public static class MultiSegmentRepresentation extends Representation implements DashSegmentIndex {
         private final MultiSegmentBase segmentBase;
 
-        public MultiSegmentRepresentation(String contentId, long revisionId, Format format, String baseUrl, MultiSegmentBase segmentBase, List<SchemeValuePair> inbandEventStreams) {
+        public MultiSegmentRepresentation(String contentId, long revisionId, Format format, String baseUrl, MultiSegmentBase segmentBase, List<Descriptor> inbandEventStreams) {
             super(contentId, revisionId, format, baseUrl, segmentBase, inbandEventStreams);
             this.segmentBase = segmentBase;
         }
@@ -74,12 +74,12 @@ public abstract class Representation {
         private final SingleSegmentIndex segmentIndex;
         public final Uri uri;
 
-        public static SingleSegmentRepresentation newInstance(String contentId, long revisionId, Format format, String uri, long initializationStart, long initializationEnd, long indexStart, long indexEnd, List<SchemeValuePair> inbandEventStreams, String customCacheKey, long contentLength) {
+        public static SingleSegmentRepresentation newInstance(String contentId, long revisionId, Format format, String uri, long initializationStart, long initializationEnd, long indexStart, long indexEnd, List<Descriptor> inbandEventStreams, String customCacheKey, long contentLength) {
             long j = 1 + (indexEnd - indexStart);
             return new SingleSegmentRepresentation(contentId, revisionId, format, uri, new SingleSegmentBase(new RangedUri(null, initializationStart, (initializationEnd - initializationStart) + 1), 1, 0, indexStart, j), inbandEventStreams, customCacheKey, contentLength);
         }
 
-        public SingleSegmentRepresentation(String contentId, long revisionId, Format format, String baseUrl, SingleSegmentBase segmentBase, List<SchemeValuePair> inbandEventStreams, String customCacheKey, long contentLength) {
+        public SingleSegmentRepresentation(String contentId, long revisionId, Format format, String baseUrl, SingleSegmentBase segmentBase, List<Descriptor> inbandEventStreams, String customCacheKey, long contentLength) {
             super(contentId, revisionId, format, baseUrl, segmentBase, inbandEventStreams);
             this.uri = Uri.parse(baseUrl);
             this.indexUri = segmentBase.getIndex();
@@ -114,11 +114,11 @@ public abstract class Representation {
         return newInstance(contentId, revisionId, format, baseUrl, segmentBase, null);
     }
 
-    public static Representation newInstance(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase, List<SchemeValuePair> inbandEventStreams) {
+    public static Representation newInstance(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase, List<Descriptor> inbandEventStreams) {
         return newInstance(contentId, revisionId, format, baseUrl, segmentBase, inbandEventStreams, null);
     }
 
-    public static Representation newInstance(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase, List<SchemeValuePair> inbandEventStreams, String customCacheKey) {
+    public static Representation newInstance(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase, List<Descriptor> inbandEventStreams, String customCacheKey) {
         if (segmentBase instanceof SingleSegmentBase) {
             return new SingleSegmentRepresentation(contentId, revisionId, format, baseUrl, (SingleSegmentBase) segmentBase, inbandEventStreams, customCacheKey, -1);
         } else if (segmentBase instanceof MultiSegmentBase) {
@@ -128,7 +128,7 @@ public abstract class Representation {
         }
     }
 
-    private Representation(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase, List<SchemeValuePair> inbandEventStreams) {
+    private Representation(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase, List<Descriptor> inbandEventStreams) {
         List emptyList;
         this.contentId = contentId;
         this.revisionId = revisionId;

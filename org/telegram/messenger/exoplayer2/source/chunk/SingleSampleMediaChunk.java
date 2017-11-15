@@ -41,7 +41,7 @@ public final class SingleSampleMediaChunk extends BaseMediaChunk {
 
     public void load() throws IOException, InterruptedException {
         try {
-            long length = this.dataSource.open(Util.getRemainderDataSpec(this.dataSpec, this.bytesLoaded));
+            long length = this.dataSource.open(this.dataSpec.subrange((long) this.bytesLoaded));
             if (length != -1) {
                 length += (long) this.bytesLoaded;
             }

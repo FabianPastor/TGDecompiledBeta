@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2.decoder;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public class SimpleOutputBuffer extends OutputBuffer {
     public ByteBuffer data;
@@ -13,7 +14,7 @@ public class SimpleOutputBuffer extends OutputBuffer {
     public ByteBuffer init(long timeUs, int size) {
         this.timeUs = timeUs;
         if (this.data == null || this.data.capacity() < size) {
-            this.data = ByteBuffer.allocateDirect(size);
+            this.data = ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder());
         }
         this.data.position(0);
         this.data.limit(size);

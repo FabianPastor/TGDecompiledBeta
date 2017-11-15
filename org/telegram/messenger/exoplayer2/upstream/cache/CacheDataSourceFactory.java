@@ -13,6 +13,10 @@ public final class CacheDataSourceFactory implements Factory {
     private final int flags;
     private final Factory upstreamFactory;
 
+    public CacheDataSourceFactory(Cache cache, Factory upstreamFactory) {
+        this(cache, upstreamFactory, 0);
+    }
+
     public CacheDataSourceFactory(Cache cache, Factory upstreamFactory, int flags) {
         this(cache, upstreamFactory, flags, CacheDataSource.DEFAULT_MAX_CACHE_FILE_SIZE);
     }

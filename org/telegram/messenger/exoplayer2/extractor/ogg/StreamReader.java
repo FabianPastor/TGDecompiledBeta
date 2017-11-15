@@ -20,7 +20,7 @@ abstract class StreamReader {
     private ExtractorOutput extractorOutput;
     private boolean formatSet;
     private long lengthOfReadPacket;
-    private OggPacket oggPacket;
+    private final OggPacket oggPacket = new OggPacket();
     private OggSeeker oggSeeker;
     private long payloadStartPosition;
     private int sampleRate;
@@ -59,13 +59,9 @@ abstract class StreamReader {
 
     protected abstract boolean readHeaders(ParsableByteArray parsableByteArray, long j, SetupData setupData) throws IOException, InterruptedException;
 
-    StreamReader() {
-    }
-
     void init(ExtractorOutput output, TrackOutput trackOutput) {
         this.extractorOutput = output;
         this.trackOutput = trackOutput;
-        this.oggPacket = new OggPacket();
         reset(true);
     }
 
@@ -135,6 +131,7 @@ abstract class StreamReader {
         }
         this.setupData = null;
         this.state = 2;
+        this.oggPacket.trimPayload();
         return 0;
     }
 

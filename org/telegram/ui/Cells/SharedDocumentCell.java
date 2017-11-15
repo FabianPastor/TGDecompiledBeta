@@ -216,6 +216,13 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         MediaController.getInstance().removeLoadingFileObserver(this);
     }
 
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (this.progressView.getVisibility() == 0) {
+            updateFileExistIcon();
+        }
+    }
+
     public void setChecked(boolean checked, boolean animated) {
         if (this.checkBox.getVisibility() != 0) {
             this.checkBox.setVisibility(0);
@@ -300,6 +307,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         this.loaded = false;
         if (fileName == null) {
             this.statusImageView.setVisibility(4);
+            this.progressView.setVisibility(4);
             this.dateTextView.setPadding(0, 0, 0, 0);
             this.loading = false;
             this.loaded = true;

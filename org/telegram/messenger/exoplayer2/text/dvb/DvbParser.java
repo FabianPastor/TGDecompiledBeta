@@ -644,7 +644,7 @@ final class DvbParser {
             int runLength = 0;
             int clutIndex = 0;
             int peek = data.readBits(2);
-            if (data.readBit()) {
+            if (peek == 0) {
                 if (!data.readBit()) {
                     if (!data.readBit()) {
                         switch (data.readBits(2)) {
@@ -666,9 +666,11 @@ final class DvbParser {
                                 break;
                         }
                     }
+                    runLength = 1;
+                } else {
+                    runLength = data.readBits(3) + 3;
+                    clutIndex = data.readBits(2);
                 }
-                runLength = data.readBits(3) + 3;
-                clutIndex = data.readBits(2);
             } else {
                 runLength = 1;
                 clutIndex = peek;

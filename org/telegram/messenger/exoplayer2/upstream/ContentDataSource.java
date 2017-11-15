@@ -6,6 +6,7 @@ import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
 import java.io.EOFException;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -37,16 +38,26 @@ public final class ContentDataSource implements DataSource {
         try {
             this.uri = dataSpec.uri;
             this.assetFileDescriptor = this.resolver.openAssetFileDescriptor(this.uri, "r");
+            if (this.assetFileDescriptor == null) {
+                throw new FileNotFoundException("Could not open file descriptor for: " + this.uri);
+            }
             this.inputStream = new FileInputStream(this.assetFileDescriptor.getFileDescriptor());
-            if (this.inputStream.skip(dataSpec.position) < dataSpec.position) {
+            long assetStartOffset = this.assetFileDescriptor.getStartOffset();
+            long skipped = this.inputStream.skip(dataSpec.position + assetStartOffset) - assetStartOffset;
+            if (skipped != dataSpec.position) {
                 throw new EOFException();
             }
             if (dataSpec.length != -1) {
                 this.bytesRemaining = dataSpec.length;
             } else {
-                this.bytesRemaining = (long) this.inputStream.available();
-                if (this.bytesRemaining == 0) {
-                    this.bytesRemaining = -1;
+                long assetFileDescriptorLength = this.assetFileDescriptor.getLength();
+                if (assetFileDescriptorLength == -1) {
+                    this.bytesRemaining = (long) this.inputStream.available();
+                    if (this.bytesRemaining == 0) {
+                        this.bytesRemaining = -1;
+                    }
+                } else {
+                    this.bytesRemaining = assetFileDescriptorLength - skipped;
                 }
             }
             this.opened = true;

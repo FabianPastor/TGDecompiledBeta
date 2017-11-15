@@ -12,7 +12,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.text.TextUtils.TruncateAt;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -32,48 +31,16 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class DrawerProfileCell extends FrameLayout {
     private BackupImageView avatarImageView;
-    private Drawable cloudDrawable;
-    private CloudView cloudView;
     private Integer currentColor;
     private Rect destRect = new Rect();
-    private int lastCloudColor;
     private TextView nameTextView;
     private Paint paint = new Paint();
     private TextView phoneTextView;
     private ImageView shadowView;
     private Rect srcRect = new Rect();
 
-    private class CloudView extends View {
-        private Paint paint = new Paint(1);
-
-        public CloudView(Context context) {
-            super(context);
-        }
-
-        protected void onDraw(Canvas canvas) {
-            if (!Theme.isCustomTheme() || Theme.getCachedWallpaper() == null) {
-                this.paint.setColor(Theme.getColor(Theme.key_chats_menuCloudBackgroundCats));
-            } else {
-                this.paint.setColor(Theme.getServiceMessageColor());
-            }
-            if (DrawerProfileCell.this.lastCloudColor != Theme.getColor(Theme.key_chats_menuCloud)) {
-                DrawerProfileCell.this.cloudDrawable.setColorFilter(new PorterDuffColorFilter(DrawerProfileCell.this.lastCloudColor = Theme.getColor(Theme.key_chats_menuCloud), Mode.MULTIPLY));
-            }
-            canvas.drawCircle(((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f, ((float) AndroidUtilities.dp(34.0f)) / 2.0f, this.paint);
-            int l = (getMeasuredWidth() - AndroidUtilities.dp(33.0f)) / 2;
-            int t = (getMeasuredHeight() - AndroidUtilities.dp(33.0f)) / 2;
-            DrawerProfileCell.this.cloudDrawable.setBounds(l, t, AndroidUtilities.dp(33.0f) + l, AndroidUtilities.dp(33.0f) + t);
-            DrawerProfileCell.this.cloudDrawable.draw(canvas);
-        }
-    }
-
     public DrawerProfileCell(Context context) {
         super(context);
-        this.cloudDrawable = context.getResources().getDrawable(R.drawable.cloud);
-        Drawable drawable = this.cloudDrawable;
-        int color = Theme.getColor(Theme.key_chats_menuCloud);
-        this.lastCloudColor = color;
-        drawable.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
         this.shadowView = new ImageView(context);
         this.shadowView.setVisibility(4);
         this.shadowView.setScaleType(ScaleType.FIT_XY);
@@ -98,8 +65,6 @@ public class DrawerProfileCell extends FrameLayout {
         this.phoneTextView.setSingleLine(true);
         this.phoneTextView.setGravity(3);
         addView(this.phoneTextView, LayoutHelper.createFrame(-1, -2.0f, 83, 16.0f, 0.0f, 76.0f, 9.0f));
-        this.cloudView = new CloudView(context);
-        addView(this.cloudView, LayoutHelper.createFrame(61, 61, 85));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -179,6 +144,5 @@ public class DrawerProfileCell extends FrameLayout {
 
     public void invalidate() {
         super.invalidate();
-        this.cloudView.invalidate();
     }
 }

@@ -64,7 +64,7 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
         this.stream = stream;
         this.readEndOfStream = false;
         this.streamOffsetUs = offsetUs;
-        onStreamChanged(formats);
+        onStreamChanged(formats, offsetUs);
     }
 
     public final SampleStream getStream() {
@@ -106,9 +106,9 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
         }
         Assertions.checkState(z);
         this.state = 0;
-        onDisabled();
         this.stream = null;
         this.streamIsFinal = false;
+        onDisabled();
     }
 
     public int supportsMixedMimeTypeAdaptation() throws ExoPlaybackException {
@@ -121,7 +121,7 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
     protected void onEnabled(boolean joining) throws ExoPlaybackException {
     }
 
-    protected void onStreamChanged(Format[] formats) throws ExoPlaybackException {
+    protected void onStreamChanged(Format[] formats, long offsetUs) throws ExoPlaybackException {
     }
 
     protected void onPositionReset(long positionUs, boolean joining) throws ExoPlaybackException {

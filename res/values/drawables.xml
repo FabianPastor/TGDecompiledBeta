@@ -181,6 +181,10 @@
     <drawable name="book_user">res/drawable-hdpi-v4/book_user.png</drawable>
     <drawable name="book_user">res/drawable-xhdpi-v4/book_user.png</drawable>
     <drawable name="book_user">res/drawable-xxhdpi-v4/book_user.png</drawable>
+    <drawable name="bookmark_large">res/drawable-mdpi-v4/bookmark_large.png</drawable>
+    <drawable name="bookmark_large">res/drawable-hdpi-v4/bookmark_large.png</drawable>
+    <drawable name="bookmark_large">res/drawable-xhdpi-v4/bookmark_large.png</drawable>
+    <drawable name="bookmark_large">res/drawable-xxhdpi-v4/bookmark_large.png</drawable>
     <drawable name="bot_file">res/drawable-mdpi-v4/bot_file.png</drawable>
     <drawable name="bot_file">res/drawable-hdpi-v4/bot_file.png</drawable>
     <drawable name="bot_file">res/drawable-xhdpi-v4/bot_file.png</drawable>
@@ -286,10 +290,6 @@
     <drawable name="circle_big">res/drawable-hdpi-v4/circle_big.png</drawable>
     <drawable name="circle_big">res/drawable-xhdpi-v4/circle_big.png</drawable>
     <drawable name="circle_big">res/drawable-xxhdpi-v4/circle_big.png</drawable>
-    <drawable name="cloud">res/drawable-mdpi-v4/cloud.png</drawable>
-    <drawable name="cloud">res/drawable-hdpi-v4/cloud.png</drawable>
-    <drawable name="cloud">res/drawable-xhdpi-v4/cloud.png</drawable>
-    <drawable name="cloud">res/drawable-xxhdpi-v4/cloud.png</drawable>
     <drawable name="cloud_big">res/drawable-mdpi-v4/cloud_big.png</drawable>
     <drawable name="cloud_big">res/drawable-hdpi-v4/cloud_big.png</drawable>
     <drawable name="cloud_big">res/drawable-xhdpi-v4/cloud_big.png</drawable>
@@ -1077,6 +1077,10 @@
     <drawable name="menu_newgroup">res/drawable-hdpi-v4/menu_newgroup.png</drawable>
     <drawable name="menu_newgroup">res/drawable-xhdpi-v4/menu_newgroup.png</drawable>
     <drawable name="menu_newgroup">res/drawable-xxhdpi-v4/menu_newgroup.png</drawable>
+    <drawable name="menu_saved">res/drawable-mdpi-v4/menu_saved.png</drawable>
+    <drawable name="menu_saved">res/drawable-hdpi-v4/menu_saved.png</drawable>
+    <drawable name="menu_saved">res/drawable-xhdpi-v4/menu_saved.png</drawable>
+    <drawable name="menu_saved">res/drawable-xxhdpi-v4/menu_saved.png</drawable>
     <drawable name="menu_secret">res/drawable-mdpi-v4/menu_secret.png</drawable>
     <drawable name="menu_secret">res/drawable-hdpi-v4/menu_secret.png</drawable>
     <drawable name="menu_secret">res/drawable-xhdpi-v4/menu_secret.png</drawable>
@@ -1089,6 +1093,10 @@
     <drawable name="menu_shadow">res/drawable-hdpi-v4/menu_shadow.png</drawable>
     <drawable name="menu_shadow">res/drawable-xhdpi-v4/menu_shadow.png</drawable>
     <drawable name="menu_shadow">res/drawable-xxhdpi-v4/menu_shadow.png</drawable>
+    <drawable name="message_arrow">res/drawable-mdpi-v4/message_arrow.png</drawable>
+    <drawable name="message_arrow">res/drawable-hdpi-v4/message_arrow.png</drawable>
+    <drawable name="message_arrow">res/drawable-xhdpi-v4/message_arrow.png</drawable>
+    <drawable name="message_arrow">res/drawable-xxhdpi-v4/message_arrow.png</drawable>
     <drawable name="mic">res/drawable-mdpi-v4/mic.png</drawable>
     <drawable name="mic">res/drawable-hdpi-v4/mic.png</drawable>
     <drawable name="mic">res/drawable-xhdpi-v4/mic.png</drawable>
@@ -1364,6 +1372,10 @@
     <drawable name="photocheck">res/drawable-hdpi-v4/photocheck.png</drawable>
     <drawable name="photocheck">res/drawable-xhdpi-v4/photocheck.png</drawable>
     <drawable name="photocheck">res/drawable-xxhdpi-v4/photocheck.png</drawable>
+    <drawable name="photos_group">res/drawable-mdpi-v4/photos_group.png</drawable>
+    <drawable name="photos_group">res/drawable-hdpi-v4/photos_group.png</drawable>
+    <drawable name="photos_group">res/drawable-xhdpi-v4/photos_group.png</drawable>
+    <drawable name="photos_group">res/drawable-xxhdpi-v4/photos_group.png</drawable>
     <drawable name="phototime">res/drawable-mdpi-v4/phototime.9.png</drawable>
     <drawable name="phototime">res/drawable-hdpi-v4/phototime.9.png</drawable>
     <drawable name="phototime">res/drawable-xhdpi-v4/phototime.9.png</drawable>
@@ -1748,4 +1760,5 @@
     <drawable name="wall_selection">res/drawable-hdpi-v4/wall_selection.9.png</drawable>
     <drawable name="wall_selection">res/drawable-xhdpi-v4/wall_selection.9.png</drawable>
     <drawable name="wall_selection">res/drawable-xxhdpi-v4/wall_selection.9.png</drawable>
+    <drawable name="ytlogo">res/drawable/ytlogo.png</drawable>
 </resources>

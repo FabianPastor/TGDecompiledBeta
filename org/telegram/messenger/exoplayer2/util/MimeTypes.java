@@ -12,6 +12,7 @@ public final class MimeTypes {
     public static final String APPLICATION_CEA708 = "application/cea-708";
     public static final String APPLICATION_DVBSUBS = "application/dvbsubs";
     public static final String APPLICATION_EMSG = "application/x-emsg";
+    public static final String APPLICATION_EXIF = "application/x-exif";
     public static final String APPLICATION_ID3 = "application/id3";
     public static final String APPLICATION_M3U8 = "application/x-mpegURL";
     public static final String APPLICATION_MP4 = "application/mp4";
@@ -35,21 +36,24 @@ public final class MimeTypes {
     public static final String AUDIO_DTS_EXPRESS = "audio/vnd.dts.hd;profile=lbr";
     public static final String AUDIO_DTS_HD = "audio/vnd.dts.hd";
     public static final String AUDIO_E_AC3 = "audio/eac3";
-    public static final String AUDIO_FLAC = "audio/x-flac";
+    public static final String AUDIO_FLAC = "audio/flac";
+    public static final String AUDIO_MLAW = "audio/g711-mlaw";
     public static final String AUDIO_MP4 = "audio/mp4";
     public static final String AUDIO_MPEG = "audio/mpeg";
     public static final String AUDIO_MPEG_L1 = "audio/mpeg-L1";
     public static final String AUDIO_MPEG_L2 = "audio/mpeg-L2";
+    public static final String AUDIO_MSGSM = "audio/gsm";
     public static final String AUDIO_OPUS = "audio/opus";
     public static final String AUDIO_RAW = "audio/raw";
     public static final String AUDIO_TRUEHD = "audio/true-hd";
-    public static final String AUDIO_ULAW = "audio/g711-mlaw";
+    public static final String AUDIO_UNKNOWN = "audio/x-unknown";
     public static final String AUDIO_VORBIS = "audio/vorbis";
     public static final String AUDIO_WEBM = "audio/webm";
     public static final String BASE_TYPE_APPLICATION = "application";
     public static final String BASE_TYPE_AUDIO = "audio";
     public static final String BASE_TYPE_TEXT = "text";
     public static final String BASE_TYPE_VIDEO = "video";
+    public static final String TEXT_SSA = "text/x-ssa";
     public static final String TEXT_VTT = "text/vtt";
     public static final String VIDEO_H263 = "video/3gpp";
     public static final String VIDEO_H264 = "video/avc";
@@ -119,10 +123,10 @@ public final class MimeTypes {
         if (codec.startsWith(VisualSampleEntry.TYPE7) || codec.startsWith(VisualSampleEntry.TYPE6)) {
             return VIDEO_H265;
         }
-        if (codec.startsWith("vp9")) {
+        if (codec.startsWith("vp9") || codec.startsWith("vp09")) {
             return VIDEO_VP9;
         }
-        if (codec.startsWith("vp8")) {
+        if (codec.startsWith("vp8") || codec.startsWith("vp08")) {
             return VIDEO_VP8;
         }
         if (codec.startsWith(AudioSampleEntry.TYPE3)) {

@@ -7,7 +7,18 @@ public final class CompositeSequenceableLoader implements SequenceableLoader {
         this.loaders = loaders;
     }
 
-    public long getNextLoadPositionUs() {
+    public final long getBufferedPositionUs() {
+        long bufferedPositionUs = Long.MAX_VALUE;
+        for (SequenceableLoader loader : this.loaders) {
+            long loaderBufferedPositionUs = loader.getBufferedPositionUs();
+            if (loaderBufferedPositionUs != Long.MIN_VALUE) {
+                bufferedPositionUs = Math.min(bufferedPositionUs, loaderBufferedPositionUs);
+            }
+        }
+        return bufferedPositionUs == Long.MAX_VALUE ? Long.MIN_VALUE : bufferedPositionUs;
+    }
+
+    public final long getNextLoadPositionUs() {
         long nextLoadPositionUs = Long.MAX_VALUE;
         for (SequenceableLoader loader : this.loaders) {
             long loaderNextLoadPositionUs = loader.getNextLoadPositionUs();
@@ -18,7 +29,7 @@ public final class CompositeSequenceableLoader implements SequenceableLoader {
         return nextLoadPositionUs == Long.MAX_VALUE ? Long.MIN_VALUE : nextLoadPositionUs;
     }
 
-    public boolean continueLoading(long positionUs) {
+    public final boolean continueLoading(long positionUs) {
         boolean madeProgress = false;
         boolean madeProgressThisIteration;
         do {

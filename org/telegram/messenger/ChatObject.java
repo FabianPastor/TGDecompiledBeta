@@ -29,6 +29,10 @@ public class ChatObject {
         return (chat instanceof TL_channel) || (chat instanceof TL_channelForbidden);
     }
 
+    public static boolean isMegagroup(Chat chat) {
+        return ((chat instanceof TL_channel) || (chat instanceof TL_channelForbidden)) && chat.megagroup;
+    }
+
     public static boolean hasAdminRights(Chat chat) {
         return chat != null && (chat.creator || !(chat.admin_rights == null || chat.admin_rights.flags == 0));
     }

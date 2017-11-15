@@ -16,6 +16,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.ChannelParticipant;
+import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.TL_channelParticipantsBanned;
 import org.telegram.tgnet.TLRPC.TL_channelParticipantsKicked;
 import org.telegram.tgnet.TLRPC.TL_channelParticipantsSearch;
@@ -33,6 +34,7 @@ public class SearchAdapterHelper {
     private int channelReqId2 = 0;
     private SearchAdapterHelperDelegate delegate;
     private ArrayList<TLObject> globalSearch = new ArrayList();
+    private HashMap<Integer, TLObject> globalSearchMap = new HashMap();
     private ArrayList<ChannelParticipant> groupSearch = new ArrayList();
     private ArrayList<ChannelParticipant> groupSearch2 = new ArrayList();
     private ArrayList<HashtagObject> hashtags;
@@ -42,7 +44,17 @@ public class SearchAdapterHelper {
     private String lastFoundChannel2;
     private String lastFoundUsername = null;
     private int lastReqId;
+    private ArrayList<TLObject> localSearchResults;
     private int reqId = 0;
+
+    protected static final class DialogSearchResult {
+        public int date;
+        public CharSequence name;
+        public TLObject object;
+
+        protected DialogSearchResult() {
+        }
+    }
 
     public static class HashtagObject {
         int date;
@@ -72,6 +84,7 @@ public class SearchAdapterHelper {
             this.groupSearch.clear();
             this.groupSearch2.clear();
             this.globalSearch.clear();
+            this.globalSearchMap.clear();
             this.lastReqId = 0;
             this.channelLastReqId = 0;
             this.channelLastReqId2 = 0;
@@ -161,18 +174,28 @@ public class SearchAdapterHelper {
                                 int a;
                                 TL_contacts_found res = response;
                                 SearchAdapterHelper.this.globalSearch.clear();
+                                SearchAdapterHelper.this.globalSearchMap.clear();
+                                MessagesController.getInstance().putChats(res.chats, false);
+                                MessagesController.getInstance().putUsers(res.users, false);
+                                MessagesStorage.getInstance().putUsersAndChats(res.users, res.chats, true, true);
                                 if (z) {
                                     for (a = 0; a < res.chats.size(); a++) {
-                                        SearchAdapterHelper.this.globalSearch.add(res.chats.get(a));
+                                        Chat chat = (Chat) res.chats.get(a);
+                                        SearchAdapterHelper.this.globalSearch.add(chat);
+                                        SearchAdapterHelper.this.globalSearchMap.put(Integer.valueOf(-chat.id), chat);
                                     }
                                 }
                                 for (a = 0; a < res.users.size(); a++) {
                                     User user = (User) res.users.get(a);
                                     if ((z2 || !user.bot) && (z3 || !user.self)) {
-                                        SearchAdapterHelper.this.globalSearch.add(res.users.get(a));
+                                        SearchAdapterHelper.this.globalSearch.add(user);
+                                        SearchAdapterHelper.this.globalSearchMap.put(Integer.valueOf(user.id), user);
                                     }
                                 }
                                 SearchAdapterHelper.this.lastFoundUsername = str.toLowerCase();
+                                if (SearchAdapterHelper.this.localSearchResults != null) {
+                                    SearchAdapterHelper.this.mergeResults(SearchAdapterHelper.this.localSearchResults);
+                                }
                                 SearchAdapterHelper.this.delegate.onDataSetChanged();
                             }
                             SearchAdapterHelper.this.reqId = 0;
@@ -183,6 +206,7 @@ public class SearchAdapterHelper {
             return;
         }
         this.globalSearch.clear();
+        this.globalSearchMap.clear();
         this.lastReqId = 0;
         this.delegate.onDataSetChanged();
     }
@@ -231,6 +255,29 @@ public class SearchAdapterHelper {
             }
         });
         return false;
+    }
+
+    public void mergeResults(ArrayList<TLObject> localResults) {
+        this.localSearchResults = localResults;
+        if (!this.globalSearch.isEmpty() && localResults != null) {
+            int count = localResults.size();
+            for (int a = 0; a < count; a++) {
+                TLObject obj = (TLObject) localResults.get(a);
+                if (obj instanceof User) {
+                    User u = (User) this.globalSearchMap.get(Integer.valueOf(((User) obj).id));
+                    if (u != null) {
+                        this.globalSearch.remove(u);
+                        this.globalSearchMap.remove(Integer.valueOf(u.id));
+                    }
+                } else if (obj instanceof Chat) {
+                    Chat c = (Chat) this.globalSearchMap.get(Integer.valueOf(-((Chat) obj).id));
+                    if (c != null) {
+                        this.globalSearch.remove(c);
+                        this.globalSearchMap.remove(Integer.valueOf(-c.id));
+                    }
+                }
+            }
+        }
     }
 
     public void setDelegate(SearchAdapterHelperDelegate searchAdapterHelperDelegate) {

@@ -74,6 +74,7 @@ public class Theme {
     public static Paint avatar_backgroundPaint = null;
     public static Drawable avatar_broadcastDrawable = null;
     public static Drawable avatar_photoDrawable = null;
+    public static Drawable avatar_savedDrawable = null;
     public static Paint chat_actionBackgroundPaint = null;
     public static TextPaint chat_actionTextPaint = null;
     public static TextPaint chat_adminPaint = null;
@@ -102,6 +103,7 @@ public class Theme {
     public static Drawable[][] chat_fileStatesDrawable = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{10, 2}));
     public static TextPaint chat_forwardNamePaint = null;
     public static TextPaint chat_gamePaint = null;
+    public static Drawable chat_goIconDrawable = null;
     public static TextPaint chat_infoPaint = null;
     public static Drawable chat_inlineResultAudio = null;
     public static Drawable chat_inlineResultFile = null;
@@ -283,6 +285,7 @@ public class Theme {
     public static final String key_avatar_backgroundOrange = "avatar_backgroundOrange";
     public static final String key_avatar_backgroundPink = "avatar_backgroundPink";
     public static final String key_avatar_backgroundRed = "avatar_backgroundRed";
+    public static final String key_avatar_backgroundSaved = "avatar_backgroundSaved";
     public static final String key_avatar_backgroundViolet = "avatar_backgroundViolet";
     public static final String key_avatar_nameInMessageBlue = "avatar_nameInMessageBlue";
     public static final String key_avatar_nameInMessageCyan = "avatar_nameInMessageCyan";
@@ -934,6 +937,7 @@ public class Theme {
         defaultColors.put(key_fastScrollInactive, Integer.valueOf(-10263709));
         defaultColors.put(key_fastScrollText, Integer.valueOf(-1));
         defaultColors.put(key_avatar_text, Integer.valueOf(-1));
+        defaultColors.put(key_avatar_backgroundSaved, Integer.valueOf(-10043398));
         defaultColors.put(key_avatar_backgroundRed, Integer.valueOf(-1743531));
         defaultColors.put(key_avatar_backgroundOrange, Integer.valueOf(-881592));
         defaultColors.put(key_avatar_backgroundViolet, Integer.valueOf(-7436818));
@@ -1552,6 +1556,10 @@ public class Theme {
     }
 
     public static Drawable createCircleDrawableWithIcon(int size, int iconRes, int stroke) {
+        return createCircleDrawableWithIcon(size, ApplicationLoader.applicationContext.getResources().getDrawable(iconRes).mutate(), stroke);
+    }
+
+    public static Drawable createCircleDrawableWithIcon(int size, Drawable drawable, int stroke) {
         OvalShape ovalShape = new OvalShape();
         ovalShape.resize((float) size, (float) size);
         ShapeDrawable defaultDrawable = new ShapeDrawable(ovalShape);
@@ -1563,7 +1571,7 @@ public class Theme {
         } else if (stroke == 2) {
             paint.setAlpha(0);
         }
-        CombinedDrawable combinedDrawable = new CombinedDrawable(defaultDrawable, ApplicationLoader.applicationContext.getResources().getDrawable(iconRes).mutate());
+        CombinedDrawable combinedDrawable = new CombinedDrawable(defaultDrawable, drawable);
         combinedDrawable.setCustomSize(size, size);
         return combinedDrawable;
     }
@@ -1937,8 +1945,8 @@ public class Theme {
     }
 
     public static File getAssetFile(String assetName) {
-        File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
         long size;
+        File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
         try {
             InputStream stream = ApplicationLoader.applicationContext.getAssets().open(assetName);
             size = (long) stream.available();
@@ -2089,6 +2097,7 @@ public class Theme {
             linkSelectionPaint = new Paint();
             Resources resources = context.getResources();
             avatar_broadcastDrawable = resources.getDrawable(R.drawable.broadcast_w);
+            avatar_savedDrawable = resources.getDrawable(R.drawable.bookmark_large);
             avatar_photoDrawable = resources.getDrawable(R.drawable.photo_w);
             applyCommonTheme();
         }
@@ -2099,6 +2108,7 @@ public class Theme {
             dividerPaint.setColor(getColor(key_divider));
             linkSelectionPaint.setColor(getColor(key_windowBackgroundWhiteLinkSelection));
             setDrawableColorByKey(avatar_broadcastDrawable, key_avatar_text);
+            setDrawableColorByKey(avatar_savedDrawable, key_avatar_text);
             setDrawableColorByKey(avatar_photoDrawable, key_avatar_text);
         }
     }
@@ -2343,14 +2353,15 @@ public class Theme {
             chat_cornerInner[3] = resources.getDrawable(R.drawable.corner_in_bl);
             chat_shareDrawable = resources.getDrawable(R.drawable.share_round);
             chat_shareIconDrawable = resources.getDrawable(R.drawable.share_arrow);
-            chat_ivStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_play_m, 1);
-            chat_ivStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_play_m, 1);
-            chat_ivStatesDrawable[1][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_pause_m, 1);
-            chat_ivStatesDrawable[1][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_pause_m, 1);
-            chat_ivStatesDrawable[2][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_load_m, 1);
-            chat_ivStatesDrawable[2][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_load_m, 1);
-            chat_ivStatesDrawable[3][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_cancel_m, 2);
-            chat_ivStatesDrawable[3][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), R.drawable.msg_round_cancel_m, 2);
+            chat_goIconDrawable = resources.getDrawable(R.drawable.message_arrow);
+            chat_ivStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), (int) R.drawable.msg_round_play_m, 1);
+            chat_ivStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), (int) R.drawable.msg_round_play_m, 1);
+            chat_ivStatesDrawable[1][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), (int) R.drawable.msg_round_pause_m, 1);
+            chat_ivStatesDrawable[1][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), (int) R.drawable.msg_round_pause_m, 1);
+            chat_ivStatesDrawable[2][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), (int) R.drawable.msg_round_load_m, 1);
+            chat_ivStatesDrawable[2][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), (int) R.drawable.msg_round_load_m, 1);
+            chat_ivStatesDrawable[3][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), (int) R.drawable.msg_round_cancel_m, 2);
+            chat_ivStatesDrawable[3][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), (int) R.drawable.msg_round_cancel_m, 2);
             chat_fileStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44.0f), R.drawable.msg_round_play_m);
             chat_fileStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44.0f), R.drawable.msg_round_play_m);
             chat_fileStatesDrawable[1][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44.0f), R.drawable.msg_round_pause_m);
@@ -2512,6 +2523,7 @@ public class Theme {
             setDrawableColorByKey(chat_msgStickerClockDrawable, key_chat_serviceText);
             setDrawableColorByKey(chat_msgStickerViewsDrawable, key_chat_serviceText);
             setDrawableColorByKey(chat_shareIconDrawable, key_chat_serviceIcon);
+            setDrawableColorByKey(chat_goIconDrawable, key_chat_serviceIcon);
             setDrawableColorByKey(chat_botInlineDrawable, key_chat_serviceIcon);
             setDrawableColorByKey(chat_botLinkDrawalbe, key_chat_serviceIcon);
             setDrawableColorByKey(chat_msgInViewsDrawable, key_chat_inViews);
@@ -2817,10 +2829,10 @@ public class Theme {
                     Throwable e;
                     int i;
                     SharedPreferences preferences;
-                    int selectedBackground;
                     File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
+                        int selectedBackground;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

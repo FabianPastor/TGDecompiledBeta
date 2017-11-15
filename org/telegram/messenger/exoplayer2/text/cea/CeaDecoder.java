@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.text.cea;
 
 import java.util.LinkedList;
-import java.util.TreeSet;
+import java.util.PriorityQueue;
 import org.telegram.messenger.exoplayer2.text.Subtitle;
 import org.telegram.messenger.exoplayer2.text.SubtitleDecoder;
 import org.telegram.messenger.exoplayer2.text.SubtitleDecoderException;
@@ -16,7 +16,7 @@ abstract class CeaDecoder implements SubtitleDecoder {
     private final LinkedList<SubtitleOutputBuffer> availableOutputBuffers;
     private SubtitleInputBuffer dequeuedInputBuffer;
     private long playbackPositionUs;
-    private final TreeSet<SubtitleInputBuffer> queuedInputBuffers;
+    private final PriorityQueue<SubtitleInputBuffer> queuedInputBuffers;
 
     protected abstract Subtitle createSubtitle();
 
@@ -35,7 +35,7 @@ abstract class CeaDecoder implements SubtitleDecoder {
         for (i = 0; i < 2; i++) {
             this.availableOutputBuffers.add(new CeaOutputBuffer(this));
         }
-        this.queuedInputBuffers = new TreeSet();
+        this.queuedInputBuffers = new PriorityQueue();
     }
 
     public void setPositionUs(long positionUs) {
@@ -52,12 +52,7 @@ abstract class CeaDecoder implements SubtitleDecoder {
     }
 
     public void queueInputBuffer(SubtitleInputBuffer inputBuffer) throws SubtitleDecoderException {
-        boolean z = true;
-        Assertions.checkArgument(inputBuffer != null);
-        if (inputBuffer != this.dequeuedInputBuffer) {
-            z = false;
-        }
-        Assertions.checkArgument(z);
+        Assertions.checkArgument(inputBuffer == this.dequeuedInputBuffer);
         if (inputBuffer.isDecodeOnly()) {
             releaseInputBuffer(inputBuffer);
         } else {
@@ -70,8 +65,8 @@ abstract class CeaDecoder implements SubtitleDecoder {
         if (this.availableOutputBuffers.isEmpty()) {
             return null;
         }
-        while (!this.queuedInputBuffers.isEmpty() && ((SubtitleInputBuffer) this.queuedInputBuffers.first()).timeUs <= this.playbackPositionUs) {
-            SubtitleInputBuffer inputBuffer = (SubtitleInputBuffer) this.queuedInputBuffers.pollFirst();
+        while (!this.queuedInputBuffers.isEmpty() && ((SubtitleInputBuffer) this.queuedInputBuffers.peek()).timeUs <= this.playbackPositionUs) {
+            SubtitleInputBuffer inputBuffer = (SubtitleInputBuffer) this.queuedInputBuffers.poll();
             if (inputBuffer.isEndOfStream()) {
                 SubtitleOutputBuffer outputBuffer = (SubtitleOutputBuffer) this.availableOutputBuffers.pollFirst();
                 outputBuffer.addFlag(4);
@@ -106,7 +101,7 @@ abstract class CeaDecoder implements SubtitleDecoder {
     public void flush() {
         this.playbackPositionUs = 0;
         while (!this.queuedInputBuffers.isEmpty()) {
-            releaseInputBuffer((SubtitleInputBuffer) this.queuedInputBuffers.pollFirst());
+            releaseInputBuffer((SubtitleInputBuffer) this.queuedInputBuffers.poll());
         }
         if (this.dequeuedInputBuffer != null) {
             releaseInputBuffer(this.dequeuedInputBuffer);

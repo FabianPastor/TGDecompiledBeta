@@ -39,7 +39,6 @@ import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.ExoPlayerLibraryInfo;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
-import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 
 public final class Util {
     private static final int[] CRC32_BYTES_MSBF = new int[]{0, 79764919, 159529838, 222504665, 319059676, 398814059, 445009330, 507990021, 638119352, 583659535, 797628118, 726387553, 890018660, 835552979, NUM, 944750013, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -734892656, -789352409, -575645954, -646886583, -952755380, -NUM, -827056094, -898286187, -231047128, -151282273, -71779514, -8804623, -515967244, -436212925, -390279782, -327299027, 881225847, 809987520, NUM, 969234094, 662832811, 591600412, 771767749, 717299826, 311336399, 374308984, 453813921, 533576470, 25881363, 88864420, 134795389, 214552010, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -525066777, -462094256, -382327159, -302564546, -206542021, -143559028, -97365931, -17609246, -960696225, -NUM, -817968335, -872425850, -709327229, -780559564, -600130067, -654598054, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, 622672798, 568075817, 748617968, 677256519, 907627842, 853037301, NUM, 995781531, 51762726, 131386257, 177728840, 240578815, 269590778, 349224269, 429104020, 491947555, -248556018, -168932423, -122852000, -60002089, -500490030, -420856475, -341238852, -278395381, -685261898, -739858943, -559578920, -630940305, -NUM, -NUM, -845023740, -916395085, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, 295390185, 358241886, 404320391, 483945776, 43990325, 106832002, 186451547, 266083308, 932423249, 861060070, NUM, 986742920, 613929101, 542559546, 756411363, 701822548, -978770311, -NUM, -869589737, -924188512, -693284699, -764654318, -550540341, -605129092, -475935807, -413084042, -366743377, -287118056, -257573603, -194731862, -114850189, -35218492, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM};
@@ -50,7 +49,7 @@ public final class Util {
     public static final String MODEL = Build.MODEL;
     public static final int SDK_INT;
     private static final String TAG = "Util";
-    private static final Pattern XS_DATE_TIME_PATTERN = Pattern.compile("(\\d\\d\\d\\d)\\-(\\d\\d)\\-(\\d\\d)[Tt](\\d\\d):(\\d\\d):(\\d\\d)([\\.,](\\d+))?([Zz]|((\\+|\\-)(\\d\\d):?(\\d\\d)))?");
+    private static final Pattern XS_DATE_TIME_PATTERN = Pattern.compile("(\\d\\d\\d\\d)\\-(\\d\\d)\\-(\\d\\d)[Tt](\\d\\d):(\\d\\d):(\\d\\d)([\\.,](\\d+))?([Zz]|((\\+|\\-)(\\d?\\d):?(\\d\\d)))?");
     private static final Pattern XS_DURATION_PATTERN = Pattern.compile("^(-)?P(([0-9]*)Y)?(([0-9]*)M)?(([0-9]*)D)?(T(([0-9]*)H)?(([0-9]*)M)?(([0-9.]*)S)?)?$");
 
     static {
@@ -146,7 +145,7 @@ public final class Util {
     }
 
     public static byte[] getUtf8Bytes(String value) {
-        return value.getBytes(Charset.defaultCharset());
+        return value.getBytes(Charset.forName("UTF-8"));
     }
 
     public static boolean isLinebreak(int c) {
@@ -385,17 +384,6 @@ public final class Util {
         return intArray;
     }
 
-    public static DataSpec getRemainderDataSpec(DataSpec dataSpec, int bytesLoaded) {
-        long remainingLength = -1;
-        if (bytesLoaded == 0) {
-            return dataSpec;
-        }
-        if (dataSpec.length != -1) {
-            remainingLength = dataSpec.length - ((long) bytesLoaded);
-        }
-        return new DataSpec(dataSpec.uri, dataSpec.position + ((long) bytesLoaded), remainingLength, dataSpec.key, dataSpec.flags);
-    }
-
     public static int getIntegerCodeForString(String string) {
         int length = string.length();
         Assertions.checkArgument(length <= 4);
@@ -466,13 +454,70 @@ public final class Util {
         }
     }
 
+    public static int getAudioUsageForStreamType(int streamType) {
+        switch (streamType) {
+            case 0:
+                return 2;
+            case 1:
+                return 13;
+            case 2:
+                return 6;
+            case 4:
+                return 4;
+            case 5:
+                return 5;
+            case 8:
+                return 3;
+            default:
+                return 1;
+        }
+    }
+
+    public static int getAudioContentTypeForStreamType(int streamType) {
+        switch (streamType) {
+            case 0:
+                return 1;
+            case 1:
+            case 2:
+            case 4:
+            case 5:
+            case 8:
+                return 4;
+            default:
+                return 2;
+        }
+    }
+
+    public static int getStreamTypeForAudioUsage(int usage) {
+        switch (usage) {
+            case 2:
+                return 0;
+            case 3:
+                return 8;
+            case 4:
+                return 4;
+            case 5:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+                return 5;
+            case 6:
+                return 2;
+            case 13:
+                return 1;
+            default:
+                return 3;
+        }
+    }
+
     public static int inferContentType(Uri uri) {
         String path = uri.getPath();
         return path == null ? 3 : inferContentType(path);
     }
 
     public static int inferContentType(String fileName) {
-        fileName = fileName.toLowerCase();
+        fileName = toLowerInvariant(fileName);
         if (fileName.endsWith(".mpd")) {
             return 0;
         }
@@ -580,14 +625,14 @@ public final class Util {
         int expectedLength = length - (percentCharacterCount * 2);
         StringBuilder builder = new StringBuilder(expectedLength);
         Matcher matcher = ESCAPED_CHARACTER_PATTERN.matcher(fileName);
-        int endOfLastMatch = 0;
+        int startOfNotEscaped = 0;
         while (percentCharacterCount > 0 && matcher.find()) {
-            builder.append(fileName, endOfLastMatch, matcher.start()).append((char) Integer.parseInt(matcher.group(1), 16));
-            endOfLastMatch = matcher.end();
+            builder.append(fileName, startOfNotEscaped, matcher.start()).append((char) Integer.parseInt(matcher.group(1), 16));
+            startOfNotEscaped = matcher.end();
             percentCharacterCount--;
         }
-        if (endOfLastMatch < length) {
-            builder.append(fileName, endOfLastMatch, length);
+        if (startOfNotEscaped < length) {
+            builder.append(fileName, startOfNotEscaped, length);
         }
         if (builder.length() != expectedLength) {
             return null;

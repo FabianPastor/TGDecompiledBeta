@@ -15,11 +15,11 @@ public class UserObject {
     }
 
     public static boolean isContact(User user) {
-        return (user instanceof TL_userContact_old2) || user.contact || user.mutual_contact;
+        return user != null && ((user instanceof TL_userContact_old2) || user.contact || user.mutual_contact);
     }
 
     public static boolean isUserSelf(User user) {
-        return (user instanceof TL_userSelf_old3) || user.self;
+        return user != null && ((user instanceof TL_userSelf_old3) || user.self);
     }
 
     public static String getUserName(User user) {

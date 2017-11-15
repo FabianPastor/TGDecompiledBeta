@@ -488,7 +488,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                     pinnedTop = false;
                 }
                 messageCell.setFullyDraw(true);
-                messageCell.setMessageObject(message, pinnedBotton, pinnedTop);
+                messageCell.setMessageObject(message, null, pinnedBotton, pinnedTop);
             } else if (view instanceof ChatActionCell) {
                 ChatActionCell actionCell = (ChatActionCell) view;
                 actionCell.setMessageObject(message);

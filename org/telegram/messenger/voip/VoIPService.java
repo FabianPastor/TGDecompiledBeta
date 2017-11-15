@@ -79,6 +79,7 @@ import org.telegram.tgnet.TLRPC.TL_phone_saveCallDebug;
 import org.telegram.tgnet.TLRPC.TL_updates;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.messages_DhConfig;
+import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.VoIPActivity;
 import org.telegram.ui.VoIPFeedbackActivity;
 
@@ -768,6 +769,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             this.timeoutRunnable = null;
         }
         try {
+            boolean allowP2p;
             FileLog.d("InitCall: keyID=" + this.keyFingerprint);
             SharedPreferences nprefs = getSharedPreferences("notifications", 0);
             HashSet<String> hashes = new HashSet(nprefs.getStringSet("calls_access_hashes", Collections.EMPTY_SET));
@@ -805,8 +807,25 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             for (int i = 0; i < this.call.alternative_connections.size(); i++) {
                 endpoints[i + 1] = (TL_phoneConnection) this.call.alternative_connections.get(i);
             }
+            VoIPHelper.upgradeP2pSetting();
+            switch (getSharedPreferences("mainconfig", 0).getInt("calls_p2p_new", 1)) {
+                case 0:
+                    allowP2p = true;
+                    break;
+                case 2:
+                    allowP2p = false;
+                    break;
+                default:
+                    if (ContactsController.getInstance().contactsDict.get(this.user.id) == null) {
+                        allowP2p = false;
+                        break;
+                    } else {
+                        allowP2p = true;
+                        break;
+                    }
+            }
             VoIPController voIPController = this.controller;
-            boolean z = this.call.protocol.udp_p2p && getSharedPreferences("mainconfig", 0).getBoolean("calls_p2p", true);
+            boolean z = this.call.protocol.udp_p2p && allowP2p;
             voIPController.setRemoteEndpoints(endpoints, z);
             SharedPreferences prefs = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
             if (prefs.getBoolean("proxy_enabled", false)) {

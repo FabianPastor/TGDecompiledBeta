@@ -44,7 +44,7 @@ public final class LeastRecentlyUsedCacheEvictor implements CacheEvictor, Compar
     }
 
     private void evictCache(Cache cache, long requiredSpace) {
-        while (this.currentSize + requiredSpace > this.maxBytes) {
+        while (this.currentSize + requiredSpace > this.maxBytes && !this.leastRecentlyUsed.isEmpty()) {
             try {
                 cache.removeSpan((CacheSpan) this.leastRecentlyUsed.first());
             } catch (CacheException e) {

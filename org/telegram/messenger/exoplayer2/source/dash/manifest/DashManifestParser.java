@@ -49,10 +49,10 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
         public final String baseUrl;
         public final ArrayList<SchemeData> drmSchemeDatas;
         public final Format format;
-        public final ArrayList<SchemeValuePair> inbandEventStreams;
+        public final ArrayList<Descriptor> inbandEventStreams;
         public final SegmentBase segmentBase;
 
-        public RepresentationInfo(Format format, String baseUrl, SegmentBase segmentBase, ArrayList<SchemeData> drmSchemeDatas, ArrayList<SchemeValuePair> inbandEventStreams) {
+        public RepresentationInfo(Format format, String baseUrl, SegmentBase segmentBase, ArrayList<SchemeData> drmSchemeDatas, ArrayList<Descriptor> inbandEventStreams) {
             this.format = format;
             this.baseUrl = baseUrl;
             this.segmentBase = segmentBase;
@@ -282,8 +282,9 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
         int audioSamplingRate = parseInt(xpp, "audioSamplingRate", -1);
         String language = xpp.getAttributeValue(null, "lang");
         ArrayList<SchemeData> drmSchemeDatas = new ArrayList();
-        ArrayList<SchemeValuePair> inbandEventStreams = new ArrayList();
-        ArrayList<SchemeValuePair> accessibilityDescriptors = new ArrayList();
+        ArrayList<Descriptor> inbandEventStreams = new ArrayList();
+        ArrayList<Descriptor> accessibilityDescriptors = new ArrayList();
+        ArrayList<Descriptor> supplementalProperties = new ArrayList();
         List<RepresentationInfo> representationInfos = new ArrayList();
         int selectionFlags = 0;
         boolean seenFirstBaseUrl = false;
@@ -307,26 +308,30 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
                                 audioChannels = parseAudioChannelConfiguration(xpp);
                             } else {
                                 if (XmlPullParserUtil.isStartTag(xpp, "Accessibility")) {
-                                    accessibilityDescriptors.add(parseAccessibility(xpp));
+                                    accessibilityDescriptors.add(parseDescriptor(xpp, "Accessibility"));
                                 } else {
-                                    if (XmlPullParserUtil.isStartTag(xpp, "Representation")) {
-                                        RepresentationInfo representationInfo = parseRepresentation(xpp, baseUrl, mimeType, codecs, width, height, frameRate, audioChannels, audioSamplingRate, language, selectionFlags, accessibilityDescriptors, segmentBase);
-                                        contentType = checkContentTypeConsistency(contentType, getContentType(representationInfo.format));
-                                        representationInfos.add(representationInfo);
+                                    if (XmlPullParserUtil.isStartTag(xpp, "SupplementalProperty")) {
+                                        supplementalProperties.add(parseDescriptor(xpp, "SupplementalProperty"));
                                     } else {
-                                        if (XmlPullParserUtil.isStartTag(xpp, "SegmentBase")) {
-                                            segmentBase = parseSegmentBase(xpp, (SingleSegmentBase) segmentBase);
+                                        if (XmlPullParserUtil.isStartTag(xpp, "Representation")) {
+                                            RepresentationInfo representationInfo = parseRepresentation(xpp, baseUrl, mimeType, codecs, width, height, frameRate, audioChannels, audioSamplingRate, language, selectionFlags, accessibilityDescriptors, segmentBase);
+                                            contentType = checkContentTypeConsistency(contentType, getContentType(representationInfo.format));
+                                            representationInfos.add(representationInfo);
                                         } else {
-                                            if (XmlPullParserUtil.isStartTag(xpp, "SegmentList")) {
-                                                segmentBase = parseSegmentList(xpp, (SegmentList) segmentBase);
+                                            if (XmlPullParserUtil.isStartTag(xpp, "SegmentBase")) {
+                                                segmentBase = parseSegmentBase(xpp, (SingleSegmentBase) segmentBase);
                                             } else {
-                                                if (XmlPullParserUtil.isStartTag(xpp, "SegmentTemplate")) {
-                                                    segmentBase = parseSegmentTemplate(xpp, (SegmentTemplate) segmentBase);
+                                                if (XmlPullParserUtil.isStartTag(xpp, "SegmentList")) {
+                                                    segmentBase = parseSegmentList(xpp, (SegmentList) segmentBase);
                                                 } else {
-                                                    if (XmlPullParserUtil.isStartTag(xpp, "InbandEventStream")) {
-                                                        inbandEventStreams.add(parseInbandEventStream(xpp));
-                                                    } else if (XmlPullParserUtil.isStartTag(xpp)) {
-                                                        parseAdaptationSetChild(xpp);
+                                                    if (XmlPullParserUtil.isStartTag(xpp, "SegmentTemplate")) {
+                                                        segmentBase = parseSegmentTemplate(xpp, (SegmentTemplate) segmentBase);
+                                                    } else {
+                                                        if (XmlPullParserUtil.isStartTag(xpp, "InbandEventStream")) {
+                                                            inbandEventStreams.add(parseDescriptor(xpp, "InbandEventStream"));
+                                                        } else if (XmlPullParserUtil.isStartTag(xpp)) {
+                                                            parseAdaptationSetChild(xpp);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -346,11 +351,11 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
         for (int i = 0; i < representationInfos.size(); i++) {
             arrayList.add(buildRepresentation((RepresentationInfo) representationInfos.get(i), this.contentId, drmSchemeDatas, inbandEventStreams));
         }
-        return buildAdaptationSet(id, contentType, arrayList, accessibilityDescriptors);
+        return buildAdaptationSet(id, contentType, arrayList, accessibilityDescriptors, supplementalProperties);
     }
 
-    protected AdaptationSet buildAdaptationSet(int id, int contentType, List<Representation> representations, List<SchemeValuePair> accessibilityDescriptors) {
-        return new AdaptationSet(id, contentType, representations, accessibilityDescriptors);
+    protected AdaptationSet buildAdaptationSet(int id, int contentType, List<Representation> representations, List<Descriptor> accessibilityDescriptors, List<Descriptor> supplementalProperties) {
+        return new AdaptationSet(id, contentType, representations, accessibilityDescriptors, supplementalProperties);
     }
 
     protected int parseContentType(XmlPullParser xpp) {
@@ -389,6 +394,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
 
     protected SchemeData parseContentProtection(XmlPullParser xpp) throws XmlPullParserException, IOException {
         boolean isPlayReady = "urn:uuid:9a04f079-9840-4286-ab92-e65be0885f95".equals(xpp.getAttributeValue(null, "schemeIdUri"));
+        String schemeType = xpp.getAttributeValue(null, Param.VALUE);
         byte[] data = null;
         UUID uuid = null;
         boolean requiresSecureDecoder = false;
@@ -410,17 +416,9 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
             }
         } while (!XmlPullParserUtil.isEndTag(xpp, "ContentProtection"));
         if (data != null) {
-            return new SchemeData(uuid, MimeTypes.VIDEO_MP4, data, requiresSecureDecoder);
+            return new SchemeData(uuid, schemeType, MimeTypes.VIDEO_MP4, data, requiresSecureDecoder);
         }
         return null;
-    }
-
-    protected SchemeValuePair parseInbandEventStream(XmlPullParser xpp) throws XmlPullParserException, IOException {
-        return parseSchemeValuePair(xpp, "InbandEventStream");
-    }
-
-    protected SchemeValuePair parseAccessibility(XmlPullParser xpp) throws XmlPullParserException, IOException {
-        return parseSchemeValuePair(xpp, "Accessibility");
     }
 
     protected int parseRole(XmlPullParser xpp) throws XmlPullParserException, IOException {
@@ -435,7 +433,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
     protected void parseAdaptationSetChild(XmlPullParser xpp) throws XmlPullParserException, IOException {
     }
 
-    protected RepresentationInfo parseRepresentation(XmlPullParser xpp, String baseUrl, String adaptationSetMimeType, String adaptationSetCodecs, int adaptationSetWidth, int adaptationSetHeight, float adaptationSetFrameRate, int adaptationSetAudioChannels, int adaptationSetAudioSamplingRate, String adaptationSetLanguage, int adaptationSetSelectionFlags, List<SchemeValuePair> adaptationSetAccessibilityDescriptors, SegmentBase segmentBase) throws XmlPullParserException, IOException {
+    protected RepresentationInfo parseRepresentation(XmlPullParser xpp, String baseUrl, String adaptationSetMimeType, String adaptationSetCodecs, int adaptationSetWidth, int adaptationSetHeight, float adaptationSetFrameRate, int adaptationSetAudioChannels, int adaptationSetAudioSamplingRate, String adaptationSetLanguage, int adaptationSetSelectionFlags, List<Descriptor> adaptationSetAccessibilityDescriptors, SegmentBase segmentBase) throws XmlPullParserException, IOException {
         String id = xpp.getAttributeValue(null, TtmlNode.ATTR_ID);
         int bandwidth = parseInt(xpp, "bandwidth", -1);
         String mimeType = parseString(xpp, "mimeType", adaptationSetMimeType);
@@ -446,7 +444,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
         int audioChannels = adaptationSetAudioChannels;
         int audioSamplingRate = parseInt(xpp, "audioSamplingRate", adaptationSetAudioSamplingRate);
         ArrayList<SchemeData> drmSchemeDatas = new ArrayList();
-        ArrayList<SchemeValuePair> inbandEventStreams = new ArrayList();
+        ArrayList<Descriptor> inbandEventStreams = new ArrayList();
         boolean seenFirstBaseUrl = false;
         do {
             xpp.next();
@@ -470,7 +468,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
                                     }
                                 } else {
                                     if (XmlPullParserUtil.isStartTag(xpp, "InbandEventStream")) {
-                                        inbandEventStreams.add(parseInbandEventStream(xpp));
+                                        inbandEventStreams.add(parseDescriptor(xpp, "InbandEventStream"));
                                     }
                                 }
                             }
@@ -489,7 +487,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
         return new RepresentationInfo(format, baseUrl, segmentBase, drmSchemeDatas, inbandEventStreams);
     }
 
-    protected Format buildFormat(String id, String containerMimeType, int width, int height, float frameRate, int audioChannels, int audioSamplingRate, int bitrate, String language, int selectionFlags, List<SchemeValuePair> accessibilityDescriptors, String codecs) {
+    protected Format buildFormat(String id, String containerMimeType, int width, int height, float frameRate, int audioChannels, int audioSamplingRate, int bitrate, String language, int selectionFlags, List<Descriptor> accessibilityDescriptors, String codecs) {
         String sampleMimeType = getSampleMimeType(containerMimeType, codecs);
         if (sampleMimeType != null) {
             if (MimeTypes.isVideo(sampleMimeType)) {
@@ -513,14 +511,14 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
         return Format.createContainerFormat(id, containerMimeType, sampleMimeType, codecs, bitrate, selectionFlags, language);
     }
 
-    protected Representation buildRepresentation(RepresentationInfo representationInfo, String contentId, ArrayList<SchemeData> extraDrmSchemeDatas, ArrayList<SchemeValuePair> extraInbandEventStreams) {
+    protected Representation buildRepresentation(RepresentationInfo representationInfo, String contentId, ArrayList<SchemeData> extraDrmSchemeDatas, ArrayList<Descriptor> extraInbandEventStreams) {
         Format format = representationInfo.format;
         List drmSchemeDatas = representationInfo.drmSchemeDatas;
         drmSchemeDatas.addAll(extraDrmSchemeDatas);
         if (!drmSchemeDatas.isEmpty()) {
             format = format.copyWithDrmInitData(new DrmInitData(drmSchemeDatas));
         }
-        ArrayList<SchemeValuePair> inbandEventStremas = representationInfo.inbandEventStreams;
+        ArrayList<Descriptor> inbandEventStremas = representationInfo.inbandEventStreams;
         inbandEventStremas.addAll(extraInbandEventStreams);
         return Representation.newInstance(contentId, -1, format, representationInfo.baseUrl, representationInfo.segmentBase, inbandEventStremas);
     }
@@ -752,18 +750,19 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
         return firstType;
     }
 
-    protected static SchemeValuePair parseSchemeValuePair(XmlPullParser xpp, String tag) throws XmlPullParserException, IOException {
-        String schemeIdUri = parseString(xpp, "schemeIdUri", null);
+    protected static Descriptor parseDescriptor(XmlPullParser xpp, String tag) throws XmlPullParserException, IOException {
+        String schemeIdUri = parseString(xpp, "schemeIdUri", "");
         String value = parseString(xpp, Param.VALUE, null);
+        String id = parseString(xpp, TtmlNode.ATTR_ID, null);
         do {
             xpp.next();
         } while (!XmlPullParserUtil.isEndTag(xpp, tag));
-        return new SchemeValuePair(schemeIdUri, value);
+        return new Descriptor(schemeIdUri, value, id);
     }
 
-    protected static int parseCea608AccessibilityChannel(List<SchemeValuePair> accessibilityDescriptors) {
+    protected static int parseCea608AccessibilityChannel(List<Descriptor> accessibilityDescriptors) {
         for (int i = 0; i < accessibilityDescriptors.size(); i++) {
-            SchemeValuePair descriptor = (SchemeValuePair) accessibilityDescriptors.get(i);
+            Descriptor descriptor = (Descriptor) accessibilityDescriptors.get(i);
             if ("urn:scte:dash:cc:cea-608:2015".equals(descriptor.schemeIdUri) && descriptor.value != null) {
                 Matcher accessibilityValueMatcher = CEA_608_ACCESSIBILITY_PATTERN.matcher(descriptor.value);
                 if (accessibilityValueMatcher.matches()) {
@@ -775,9 +774,9 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
         return -1;
     }
 
-    protected static int parseCea708AccessibilityChannel(List<SchemeValuePair> accessibilityDescriptors) {
+    protected static int parseCea708AccessibilityChannel(List<Descriptor> accessibilityDescriptors) {
         for (int i = 0; i < accessibilityDescriptors.size(); i++) {
-            SchemeValuePair descriptor = (SchemeValuePair) accessibilityDescriptors.get(i);
+            Descriptor descriptor = (Descriptor) accessibilityDescriptors.get(i);
             if ("urn:scte:dash:cc:cea-708:2015".equals(descriptor.schemeIdUri) && descriptor.value != null) {
                 Matcher accessibilityValueMatcher = CEA_708_ACCESSIBILITY_PATTERN.matcher(descriptor.value);
                 if (accessibilityValueMatcher.matches()) {

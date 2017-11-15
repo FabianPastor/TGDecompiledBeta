@@ -45,9 +45,20 @@ public final class ParsableBitArray {
         assertValidOffset();
     }
 
-    public void skipBits(int n) {
-        this.byteOffset += n / 8;
-        this.bitOffset += n % 8;
+    public void skipBit() {
+        int i = this.bitOffset + 1;
+        this.bitOffset = i;
+        if (i == 8) {
+            this.bitOffset = 0;
+            this.byteOffset++;
+        }
+        assertValidOffset();
+    }
+
+    public void skipBits(int numBits) {
+        int numBytes = numBits / 8;
+        this.byteOffset += numBytes;
+        this.bitOffset += numBits - (numBytes * 8);
         if (this.bitOffset > 7) {
             this.byteOffset++;
             this.bitOffset -= 8;
@@ -56,7 +67,9 @@ public final class ParsableBitArray {
     }
 
     public boolean readBit() {
-        return readBits(1) == 1;
+        boolean returnValue = (this.data[this.byteOffset] & (128 >> this.bitOffset)) != 0;
+        skipBit();
+        return returnValue;
     }
 
     public int readBits(int numBits) {
@@ -64,31 +77,18 @@ public final class ParsableBitArray {
             return 0;
         }
         int returnValue = 0;
-        int wholeBytes = numBits / 8;
-        for (int i = 0; i < wholeBytes; i++) {
-            int byteValue;
-            if (this.bitOffset != 0) {
-                byteValue = ((this.data[this.byteOffset] & 255) << this.bitOffset) | ((this.data[this.byteOffset + 1] & 255) >>> (8 - this.bitOffset));
-            } else {
-                byteValue = this.data[this.byteOffset];
-            }
-            numBits -= 8;
-            returnValue |= (byteValue & 255) << numBits;
-            this.byteOffset++;
+        this.bitOffset += numBits;
+        while (this.bitOffset > 8) {
+            this.bitOffset -= 8;
+            byte[] bArr = this.data;
+            int i = this.byteOffset;
+            this.byteOffset = i + 1;
+            returnValue |= (bArr[i] & 255) << this.bitOffset;
         }
-        if (numBits > 0) {
-            int nextBit = this.bitOffset + numBits;
-            byte writeMask = (byte) (255 >> (8 - numBits));
-            if (nextBit > 8) {
-                returnValue |= (((this.data[this.byteOffset] & 255) << (nextBit - 8)) | ((this.data[this.byteOffset + 1] & 255) >> (16 - nextBit))) & writeMask;
-                this.byteOffset++;
-            } else {
-                returnValue |= ((this.data[this.byteOffset] & 255) >> (8 - nextBit)) & writeMask;
-                if (nextBit == 8) {
-                    this.byteOffset++;
-                }
-            }
-            this.bitOffset = nextBit % 8;
+        returnValue = (returnValue | ((this.data[this.byteOffset] & 255) >> (8 - this.bitOffset))) & (-1 >>> (32 - numBits));
+        if (this.bitOffset == 8) {
+            this.bitOffset = 0;
+            this.byteOffset++;
         }
         assertValidOffset();
         return returnValue;
@@ -116,7 +116,7 @@ public final class ParsableBitArray {
     }
 
     private void assertValidOffset() {
-        boolean z = this.byteOffset >= 0 && this.bitOffset >= 0 && this.bitOffset < 8 && (this.byteOffset < this.byteLimit || (this.byteOffset == this.byteLimit && this.bitOffset == 0));
+        boolean z = this.byteOffset >= 0 && (this.byteOffset < this.byteLimit || (this.byteOffset == this.byteLimit && this.bitOffset == 0));
         Assertions.checkState(z);
     }
 }

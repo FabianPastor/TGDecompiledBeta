@@ -27,7 +27,7 @@ final class SeiReader {
             String channelMimeType = channelFormat.sampleMimeType;
             boolean z = MimeTypes.APPLICATION_CEA608.equals(channelMimeType) || MimeTypes.APPLICATION_CEA708.equals(channelMimeType);
             Assertions.checkArgument(z, "Invalid closed caption mime type provided: " + channelMimeType);
-            output.format(Format.createTextSampleFormat(idGenerator.getFormatId(), channelMimeType, null, -1, channelFormat.selectionFlags, channelFormat.language, channelFormat.accessibilityChannel, null));
+            output.format(Format.createTextSampleFormat(channelFormat.id != null ? channelFormat.id : idGenerator.getFormatId(), channelMimeType, null, -1, channelFormat.selectionFlags, channelFormat.language, channelFormat.accessibilityChannel, null));
             this.outputs[i] = output;
         }
     }

@@ -20,6 +20,7 @@ import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
 import org.telegram.messenger.exoplayer2.decoder.SimpleDecoder;
 import org.telegram.messenger.exoplayer2.decoder.SimpleOutputBuffer;
 import org.telegram.messenger.exoplayer2.drm.DrmSession;
+import org.telegram.messenger.exoplayer2.drm.DrmSession.DrmSessionException;
 import org.telegram.messenger.exoplayer2.drm.DrmSessionManager;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaCrypto;
 import org.telegram.messenger.exoplayer2.util.Assertions;
@@ -115,7 +116,7 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
         if (formatSupport == 0 || formatSupport == 1) {
             return formatSupport;
         }
-        return formatSupport | ((Util.SDK_INT >= 21 ? 16 : 0) | 4);
+        return formatSupport | ((Util.SDK_INT >= 21 ? 32 : 0) | 8);
     }
 
     public void render(long positionUs, long elapsedRealtimeUs) throws ExoPlaybackException {
@@ -267,19 +268,16 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
     }
 
     private boolean shouldWaitForKeys(boolean bufferEncrypted) throws ExoPlaybackException {
-        if (this.drmSession == null) {
+        if (this.drmSession == null || (!bufferEncrypted && this.playClearSamplesWithoutKeys)) {
             return false;
         }
         int drmSessionState = this.drmSession.getState();
-        if (drmSessionState == 0) {
+        if (drmSessionState == 1) {
             throw ExoPlaybackException.createForRenderer(this.drmSession.getError(), getIndex());
         } else if (drmSessionState == 4) {
             return false;
         } else {
-            if (bufferEncrypted || !this.playClearSamplesWithoutKeys) {
-                return true;
-            }
-            return false;
+            return true;
         }
     }
 
@@ -410,12 +408,12 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
             this.drmSession = this.pendingDrmSession;
             ExoMediaCrypto mediaCrypto = null;
             if (this.drmSession != null) {
-                int drmSessionState = this.drmSession.getState();
-                if (drmSessionState == 0) {
-                    throw ExoPlaybackException.createForRenderer(this.drmSession.getError(), getIndex());
-                } else if (drmSessionState == 3 || drmSessionState == 4) {
-                    mediaCrypto = this.drmSession.getMediaCrypto();
-                } else {
+                mediaCrypto = this.drmSession.getMediaCrypto();
+                if (mediaCrypto == null) {
+                    DrmSessionException drmError = this.drmSession.getError();
+                    if (drmError != null) {
+                        throw ExoPlaybackException.createForRenderer(drmError, getIndex());
+                    }
                     return;
                 }
             }
@@ -478,7 +476,7 @@ public abstract class SimpleDecoderAudioRenderer extends BaseRenderer implements
                 this.audioTrack.setVolume(((Float) message).floatValue());
                 return;
             case 3:
-                this.audioTrack.setStreamType(((Integer) message).intValue());
+                this.audioTrack.setAudioAttributes((AudioAttributes) message);
                 return;
             default:
                 super.handleMessage(messageType, message);

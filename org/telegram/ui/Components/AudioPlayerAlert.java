@@ -611,6 +611,11 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
                 AudioPlayerAlert.this.searchItem.setVisibility(0);
                 AudioPlayerAlert.this.isInFullMode = !AudioPlayerAlert.this.isInFullMode;
                 AudioPlayerAlert.this.listView.setScrollEnabled(false);
+                if (AudioPlayerAlert.this.isInFullMode) {
+                    AudioPlayerAlert.this.shuffleButton.setAdditionalOffset(-AndroidUtilities.dp(68.0f));
+                } else {
+                    AudioPlayerAlert.this.shuffleButton.setAdditionalOffset(-AndroidUtilities.dp(10.0f));
+                }
             }
         });
         this.titleTextView = new TextView(context);
@@ -900,7 +905,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
             if (id == 1) {
                 args = new Bundle();
                 args.putBoolean("onlySelect", true);
-                args.putBoolean("isForward", true);
+                args.putInt("dialogsType", 3);
                 BaseFragment dialogsActivity = new DialogsActivity(args);
                 ArrayList<MessageObject> fmessages = new ArrayList();
                 fmessages.add(messageObject);
@@ -908,7 +913,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
                 dialogsActivity.setDelegate(new DialogsActivityDelegate() {
                     public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
                         long did;
-                        if (dids.size() > 1 || message != null) {
+                        if (dids.size() > 1 || ((Long) dids.get(0)).longValue() == ((long) UserConfig.getClientUserId()) || message != null) {
                             for (int a = 0; a < dids.size(); a++) {
                                 did = ((Long) dids.get(a)).longValue();
                                 if (message != null) {

@@ -38,7 +38,7 @@ public final class DefaultTsPayloadReaderFactory implements Factory {
     public DefaultTsPayloadReaderFactory(int flags, List<Format> closedCaptionFormats) {
         this.flags = flags;
         if (!isSet(32) && closedCaptionFormats.isEmpty()) {
-            closedCaptionFormats = Collections.singletonList(Format.createTextSampleFormat(null, MimeTypes.APPLICATION_CEA608, null, -1, 0, null, null));
+            closedCaptionFormats = Collections.singletonList(Format.createTextSampleFormat(null, MimeTypes.APPLICATION_CEA608, 0, null));
         }
         this.closedCaptionFormats = closedCaptionFormats;
     }

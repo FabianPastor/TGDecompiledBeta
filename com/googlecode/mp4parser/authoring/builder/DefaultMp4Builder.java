@@ -66,6 +66,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.telegram.messenger.exoplayer2.C;
 
 public class DefaultMp4Builder implements Mp4Builder {
     static final /* synthetic */ boolean $assertionsDisabled = (!DefaultMp4Builder.class.desiredAssertionStatus());
@@ -446,7 +447,7 @@ public class DefaultMp4Builder implements Mp4Builder {
     protected void createCencBoxes(CencEncryptedTrack track, SampleTableBox stbl, int[] chunkSizes) {
         int i;
         SampleAuxiliaryInformationSizesBox saiz = new SampleAuxiliaryInformationSizesBox();
-        saiz.setAuxInfoType("cenc");
+        saiz.setAuxInfoType(C.CENC_TYPE_cenc);
         saiz.setFlags(1);
         List<CencSampleAuxiliaryDataFormat> sampleEncryptionEntries = track.getSampleEncryptionEntries();
         if (track.hasSubSampleEncryption()) {

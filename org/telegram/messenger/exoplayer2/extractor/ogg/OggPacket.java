@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2.extractor.ogg;
 
 import java.io.IOException;
+import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
@@ -47,6 +48,9 @@ final class OggPacket {
             segmentIndex = this.currentSegmentIndex + this.segmentCount;
             if (size > 0) {
                 boolean z;
+                if (this.packetArray.capacity() < this.packetArray.limit() + size) {
+                    this.packetArray.data = Arrays.copyOf(this.packetArray.data, this.packetArray.limit() + size);
+                }
                 input.readFully(this.packetArray.data, this.packetArray.limit(), size);
                 this.packetArray.setLimit(this.packetArray.limit() + size);
                 if (this.pageHeader.laces[segmentIndex - 1] != 255) {
@@ -70,6 +74,12 @@ final class OggPacket {
 
     public ParsableByteArray getPayload() {
         return this.packetArray;
+    }
+
+    public void trimPayload() {
+        if (this.packetArray.data.length != OggPageHeader.MAX_PAGE_PAYLOAD) {
+            this.packetArray.data = Arrays.copyOf(this.packetArray.data, Math.max(OggPageHeader.MAX_PAGE_PAYLOAD, this.packetArray.limit()));
+        }
     }
 
     private int calculatePacketSize(int startSegmentIndex) {

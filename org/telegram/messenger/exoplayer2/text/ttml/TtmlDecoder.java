@@ -2,7 +2,6 @@ package org.telegram.messenger.exoplayer2.text.ttml;
 
 import android.text.Layout.Alignment;
 import android.util.Log;
-import android.util.Pair;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -12,7 +11,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.telegram.messenger.exoplayer2.C;
-import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.messenger.exoplayer2.text.SimpleSubtitleDecoder;
 import org.telegram.messenger.exoplayer2.text.SubtitleDecoderException;
 import org.telegram.messenger.exoplayer2.util.ColorParser;
@@ -65,7 +63,7 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
             XmlPullParser xmlParser = this.xmlParserFactory.newPullParser();
             Map<String, TtmlStyle> globalStyles = new HashMap();
             Map<String, TtmlRegion> regionMap = new HashMap();
-            regionMap.put("", new TtmlRegion());
+            regionMap.put("", new TtmlRegion(null));
             xmlParser.setInput(new ByteArrayInputStream(bytes, 0, length), null);
             TtmlSubtitle ttmlSubtitle = null;
             LinkedList<TtmlNode> nodeStack = new LinkedList();
@@ -164,48 +162,84 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
                     globalStyles.put(style.getId(), style);
                 }
             } else if (XmlPullParserUtil.isStartTag(xmlParser, "region")) {
-                Pair<String, TtmlRegion> ttmlRegionInfo = parseRegionAttributes(xmlParser);
-                if (ttmlRegionInfo != null) {
-                    globalRegions.put(ttmlRegionInfo.first, ttmlRegionInfo.second);
+                TtmlRegion ttmlRegion = parseRegionAttributes(xmlParser);
+                if (ttmlRegion != null) {
+                    globalRegions.put(ttmlRegion.id, ttmlRegion);
                 }
             }
         } while (!XmlPullParserUtil.isEndTag(xmlParser, TtmlNode.TAG_HEAD));
         return globalStyles;
     }
 
-    private Pair<String, TtmlRegion> parseRegionAttributes(XmlPullParser xmlParser) {
+    private TtmlRegion parseRegionAttributes(XmlPullParser xmlParser) {
         String regionId = XmlPullParserUtil.getAttributeValue(xmlParser, TtmlNode.ATTR_ID);
-        String regionOrigin = XmlPullParserUtil.getAttributeValue(xmlParser, "origin");
-        String regionExtent = XmlPullParserUtil.getAttributeValue(xmlParser, TtmlNode.ATTR_TTS_EXTENT);
-        if (regionOrigin == null || regionId == null) {
+        if (regionId == null) {
             return null;
         }
-        float position = Cue.DIMEN_UNSET;
-        float line = Cue.DIMEN_UNSET;
-        Matcher originMatcher = PERCENTAGE_COORDINATES.matcher(regionOrigin);
-        if (originMatcher.matches()) {
-            try {
-                position = Float.parseFloat(originMatcher.group(1)) / 100.0f;
-                line = Float.parseFloat(originMatcher.group(2)) / 100.0f;
-            } catch (NumberFormatException e) {
-                Log.w(TAG, "Ignoring region with malformed origin: '" + regionOrigin + "'", e);
-                position = Cue.DIMEN_UNSET;
-            }
-        }
-        float width = Cue.DIMEN_UNSET;
-        if (regionExtent != null) {
-            Matcher extentMatcher = PERCENTAGE_COORDINATES.matcher(regionExtent);
-            if (extentMatcher.matches()) {
+        String regionOrigin = XmlPullParserUtil.getAttributeValue(xmlParser, "origin");
+        if (regionOrigin != null) {
+            Matcher originMatcher = PERCENTAGE_COORDINATES.matcher(regionOrigin);
+            if (originMatcher.matches()) {
                 try {
-                    width = Float.parseFloat(extentMatcher.group(1)) / 100.0f;
+                    float position = Float.parseFloat(originMatcher.group(1)) / 100.0f;
+                    float line = Float.parseFloat(originMatcher.group(2)) / 100.0f;
+                    String regionExtent = XmlPullParserUtil.getAttributeValue(xmlParser, TtmlNode.ATTR_TTS_EXTENT);
+                    if (regionExtent != null) {
+                        Matcher extentMatcher = PERCENTAGE_COORDINATES.matcher(regionExtent);
+                        if (extentMatcher.matches()) {
+                            try {
+                                float width = Float.parseFloat(extentMatcher.group(1)) / 100.0f;
+                                float height = Float.parseFloat(extentMatcher.group(2)) / 100.0f;
+                                int lineAnchor = 0;
+                                String displayAlign = XmlPullParserUtil.getAttributeValue(xmlParser, TtmlNode.ATTR_TTS_DISPLAY_ALIGN);
+                                if (displayAlign != null) {
+                                    String toLowerInvariant = Util.toLowerInvariant(displayAlign);
+                                    Object obj = -1;
+                                    switch (toLowerInvariant.hashCode()) {
+                                        case -1364013995:
+                                            if (toLowerInvariant.equals(TtmlNode.CENTER)) {
+                                                obj = null;
+                                                break;
+                                            }
+                                            break;
+                                        case 92734940:
+                                            if (toLowerInvariant.equals("after")) {
+                                                obj = 1;
+                                                break;
+                                            }
+                                            break;
+                                    }
+                                    switch (obj) {
+                                        case null:
+                                            lineAnchor = 1;
+                                            line += height / 2.0f;
+                                            break;
+                                        case 1:
+                                            lineAnchor = 2;
+                                            line += height;
+                                            break;
+                                    }
+                                }
+                                return new TtmlRegion(regionId, position, line, 0, lineAnchor, width);
+                            } catch (NumberFormatException e) {
+                                Log.w(TAG, "Ignoring region with malformed extent: " + regionOrigin);
+                                return null;
+                            }
+                        }
+                        Log.w(TAG, "Ignoring region with unsupported extent: " + regionOrigin);
+                        return null;
+                    }
+                    Log.w(TAG, "Ignoring region without an extent");
+                    return null;
                 } catch (NumberFormatException e2) {
-                    Log.w(TAG, "Ignoring malformed region extent: '" + regionExtent + "'", e2);
+                    Log.w(TAG, "Ignoring region with malformed origin: " + regionOrigin);
+                    return null;
                 }
             }
+            Log.w(TAG, "Ignoring region with unsupported origin: " + regionOrigin);
+            return null;
         }
-        if (position != Cue.DIMEN_UNSET) {
-            return new Pair(regionId, new TtmlRegion(position, line, 0, width));
-        }
+        Log.w(TAG, "Ignoring region without an origin");
         return null;
     }
 
@@ -284,7 +318,7 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
                         style.setBackgroundColor(ColorParser.parseTtmlColor(attributeValue));
                         break;
                     } catch (IllegalArgumentException e) {
-                        Log.w(TAG, "failed parsing background value: '" + attributeValue + "'");
+                        Log.w(TAG, "Failed parsing background value: " + attributeValue);
                         break;
                     }
                 case true:
@@ -293,7 +327,7 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
                         style.setFontColor(ColorParser.parseTtmlColor(attributeValue));
                         break;
                     } catch (IllegalArgumentException e2) {
-                        Log.w(TAG, "failed parsing color value: '" + attributeValue + "'");
+                        Log.w(TAG, "Failed parsing color value: " + attributeValue);
                         break;
                     }
                 case true:
@@ -305,7 +339,7 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
                         parseFontSize(attributeValue, style);
                         break;
                     } catch (SubtitleDecoderException e3) {
-                        Log.w(TAG, "failed parsing fontSize value: '" + attributeValue + "'");
+                        Log.w(TAG, "Failed parsing fontSize value: " + attributeValue);
                         break;
                     }
                 case true:

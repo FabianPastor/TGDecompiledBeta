@@ -13,6 +13,7 @@ import android.view.WindowManager;
 @TargetApi(16)
 public final class VideoFrameReleaseTimeHelper {
     private static final long CHOREOGRAPHER_SAMPLE_DELAY_MILLIS = 500;
+    private static final double DISPLAY_REFRESH_RATE_UNKNOWN = -1.0d;
     private static final long MAX_ALLOWED_DRIFT_NS = 20000000;
     private static final int MIN_FRAMES_FOR_ADJUSTMENT = 6;
     private static final long VSYNC_OFFSET_PERCENTAGE = 80;
@@ -99,16 +100,16 @@ public final class VideoFrameReleaseTimeHelper {
     }
 
     public VideoFrameReleaseTimeHelper() {
-        this(-1.0d, false);
+        this((double) DISPLAY_REFRESH_RATE_UNKNOWN);
     }
 
     public VideoFrameReleaseTimeHelper(Context context) {
-        this((double) getDefaultDisplayRefreshRate(context), true);
+        this(getDefaultDisplayRefreshRate(context));
     }
 
-    private VideoFrameReleaseTimeHelper(double defaultDisplayRefreshRate, boolean useDefaultDisplayVsync) {
-        this.useDefaultDisplayVsync = useDefaultDisplayVsync;
-        if (useDefaultDisplayVsync) {
+    private VideoFrameReleaseTimeHelper(double defaultDisplayRefreshRate) {
+        this.useDefaultDisplayVsync = defaultDisplayRefreshRate != DISPLAY_REFRESH_RATE_UNKNOWN;
+        if (this.useDefaultDisplayVsync) {
             this.vsyncSampler = VSyncSampler.getInstance();
             this.vsyncDurationNs = (long) (1.0E9d / defaultDisplayRefreshRate);
             this.vsyncOffsetNs = (this.vsyncDurationNs * VSYNC_OFFSET_PERCENTAGE) / 100;
@@ -189,7 +190,8 @@ public final class VideoFrameReleaseTimeHelper {
         return snappedBeforeNs;
     }
 
-    private static float getDefaultDisplayRefreshRate(Context context) {
-        return ((WindowManager) context.getSystemService("window")).getDefaultDisplay().getRefreshRate();
+    private static double getDefaultDisplayRefreshRate(Context context) {
+        WindowManager manager = (WindowManager) context.getSystemService("window");
+        return manager.getDefaultDisplay() != null ? (double) manager.getDefaultDisplay().getRefreshRate() : DISPLAY_REFRESH_RATE_UNKNOWN;
     }
 }

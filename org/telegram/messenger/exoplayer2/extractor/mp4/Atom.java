@@ -68,10 +68,11 @@ import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 abstract class Atom {
+    public static final int DEFINES_LARGE_SIZE = 1;
+    public static final int EXTENDS_TO_END_SIZE = 0;
     public static final int FULL_HEADER_SIZE = 12;
     public static final int HEADER_SIZE = 8;
     public static final int LONG_HEADER_SIZE = 16;
-    public static final int LONG_SIZE_PREFIX = 1;
     public static final int TYPE_TTML = Util.getIntegerCodeForString("TTML");
     public static final int TYPE__mp3 = Util.getIntegerCodeForString(".mp3");
     public static final int TYPE_ac_3 = Util.getIntegerCodeForString(AudioSampleEntry.TYPE8);

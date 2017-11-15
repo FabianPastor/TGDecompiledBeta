@@ -9,6 +9,7 @@ import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
+import org.telegram.messenger.exoplayer2.extractor.TrackOutput.CryptoData;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
@@ -62,8 +63,8 @@ public final class ChunkExtractorWrapper implements ExtractorOutput {
             this.trackOutput.sampleData(data, length);
         }
 
-        public void sampleMetadata(long timeUs, int flags, int size, int offset, byte[] encryptionKey) {
-            this.trackOutput.sampleMetadata(timeUs, flags, size, offset, encryptionKey);
+        public void sampleMetadata(long timeUs, int flags, int size, int offset, CryptoData cryptoData) {
+            this.trackOutput.sampleMetadata(timeUs, flags, size, offset, cryptoData);
         }
     }
 

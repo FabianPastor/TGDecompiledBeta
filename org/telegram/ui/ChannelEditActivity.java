@@ -49,6 +49,7 @@ import org.telegram.tgnet.TLRPC.TL_channelParticipantsRecent;
 import org.telegram.tgnet.TLRPC.TL_channels_channelParticipants;
 import org.telegram.tgnet.TLRPC.TL_channels_getParticipants;
 import org.telegram.tgnet.TLRPC.TL_chatChannelParticipant;
+import org.telegram.tgnet.TLRPC.TL_chatParticipantAdmin;
 import org.telegram.tgnet.TLRPC.TL_chatParticipants;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.User;
@@ -95,6 +96,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     private int membersSectionRow;
     private int membersStartRow;
     private HashMap<Integer, ChatParticipant> participantsMap = new HashMap();
+    private int permissionsRow;
     private int rowCount = 0;
     private SearchAdapter searchListViewAdapter;
     private boolean searchWas;
@@ -150,6 +152,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         }
 
         public void onBindViewHolder(ViewHolder holder, int i) {
+            boolean z = false;
             String str = null;
             switch (holder.getItemViewType()) {
                 case 0:
@@ -172,6 +175,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                     } else if (i == ChannelEditActivity.this.infoRow) {
                         textCell.setText(ChannelEditActivity.this.currentChat.megagroup ? LocaleController.getString("EventLogFilterGroupInfo", R.string.EventLogFilterGroupInfo) : LocaleController.getString("EventLogFilterChannelInfo", R.string.EventLogFilterChannelInfo), null, R.drawable.group_edit, true);
                         return;
+                    } else if (i != ChannelEditActivity.this.permissionsRow) {
+                        return;
                     } else {
                         return;
                     }
@@ -185,6 +190,15 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                         part = (ChatParticipant) ChannelEditActivity.this.info.participants.participants.get(((Integer) ChannelEditActivity.this.sortedUsers.get(i - ChannelEditActivity.this.membersStartRow)).intValue());
                     }
                     if (part != null) {
+                        if (part instanceof TL_chatChannelParticipant) {
+                            ChannelParticipant channelParticipant = ((TL_chatChannelParticipant) part).channelParticipant;
+                            if ((channelParticipant instanceof TL_channelParticipantCreator) || (channelParticipant instanceof TL_channelParticipantAdmin)) {
+                                z = true;
+                            }
+                            userCell.setIsAdmin(z);
+                        } else {
+                            userCell.setIsAdmin(part instanceof TL_chatParticipantAdmin);
+                        }
                         userCell.setData(MessagesController.getInstance().getUser(Integer.valueOf(part.user_id)), null, null);
                         return;
                     }
@@ -215,7 +229,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         }
 
         public int getItemViewType(int i) {
-            if (i == ChannelEditActivity.this.managementRow || i == ChannelEditActivity.this.blockedUsersRow || i == ChannelEditActivity.this.infoRow || i == ChannelEditActivity.this.eventLogRow) {
+            if (i == ChannelEditActivity.this.managementRow || i == ChannelEditActivity.this.blockedUsersRow || i == ChannelEditActivity.this.infoRow || i == ChannelEditActivity.this.eventLogRow || i == ChannelEditActivity.this.permissionsRow) {
                 return 0;
             }
             if (i >= ChannelEditActivity.this.membersStartRow && i < ChannelEditActivity.this.membersEndRow) {
@@ -310,13 +324,21 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
             switch (holder.getItemViewType()) {
                 case 0:
                     User user;
+                    boolean isAdmin;
                     TLObject object = getItem(position);
                     if (object instanceof User) {
                         user = (User) object;
+                        ChatParticipant part = (ChatParticipant) ChannelEditActivity.this.participantsMap.get(Integer.valueOf(user.id));
+                        if (part instanceof TL_chatChannelParticipant) {
+                            ChannelParticipant channelParticipant = ((TL_chatChannelParticipant) part).channelParticipant;
+                            isAdmin = (channelParticipant instanceof TL_channelParticipantCreator) || (channelParticipant instanceof TL_channelParticipantAdmin);
+                        } else {
+                            isAdmin = part instanceof TL_chatParticipantAdmin;
+                        }
                     } else {
+                        isAdmin = (object instanceof TL_channelParticipantAdmin) || (object instanceof TL_channelParticipantCreator);
                         user = MessagesController.getInstance().getUser(Integer.valueOf(((ChannelParticipant) object).user_id));
                     }
-                    String un = user.username;
                     CharSequence name = null;
                     String nameSearch = this.searchAdapterHelper.getLastFoundChannel();
                     if (nameSearch != null) {
@@ -329,6 +351,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                     }
                     ManageChatUserCell userCell = holder.itemView;
                     userCell.setTag(Integer.valueOf(position));
+                    userCell.setIsAdmin(isAdmin);
                     userCell.setData(user, name, null);
                     return;
                 default:
@@ -474,6 +497,10 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                             args.putInt("type", 1);
                         }
                         ChannelEditActivity.this.presentFragment(new ChannelUsersActivity(args));
+                    } else if (position == ChannelEditActivity.this.permissionsRow) {
+                        ChannelPermissionsActivity permissions = new ChannelPermissionsActivity(ChannelEditActivity.this.chat_id);
+                        permissions.setInfo(ChannelEditActivity.this.info);
+                        ChannelEditActivity.this.presentFragment(permissions);
                     } else if (position == ChannelEditActivity.this.eventLogRow) {
                         ChannelEditActivity.this.presentFragment(new ChannelAdminLogActivity(ChannelEditActivity.this.currentChat));
                     } else if (position == ChannelEditActivity.this.infoRow) {
@@ -621,6 +648,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         } else {
             this.infoRow = -1;
         }
+        this.permissionsRow = -1;
         i = this.rowCount;
         this.rowCount = i + 1;
         this.eventLogRow = i;
@@ -808,7 +836,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         r10[13] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
         r10[14] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, null, null, сellDelegate, Theme.key_windowBackgroundWhiteGrayText);
         r10[15] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, null, null, сellDelegate, Theme.key_windowBackgroundWhiteBlueText);
-        r10[16] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable}, null, Theme.key_avatar_text);
+        r10[16] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
         r10[17] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
         r10[18] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
         r10[19] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);

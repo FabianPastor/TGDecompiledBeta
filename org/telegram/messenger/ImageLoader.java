@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
 import android.os.Environment;
+import android.text.TextUtils;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -107,26 +108,30 @@ public class ImageLoader {
         protected String key;
         protected ArrayList<String> keys;
         protected TLObject location;
+        protected boolean selfThumb;
         protected File tempFilePath;
-        protected boolean thumb;
+        protected ArrayList<Boolean> thumbs;
         protected String url;
 
         private CacheImage() {
             this.imageReceiverArray = new ArrayList();
             this.keys = new ArrayList();
             this.filters = new ArrayList();
+            this.thumbs = new ArrayList();
         }
 
-        public void addImageReceiver(ImageReceiver imageReceiver, String key, String filter) {
+        public void addImageReceiver(ImageReceiver imageReceiver, String key, String filter, boolean thumb) {
             if (!this.imageReceiverArray.contains(imageReceiver)) {
                 this.imageReceiverArray.add(imageReceiver);
                 this.keys.add(key);
                 this.filters.add(filter);
-                ImageLoader.this.imageLoadingByTag.put(imageReceiver.getTag(this.thumb), this);
+                this.thumbs.add(Boolean.valueOf(thumb));
+                ImageLoader.this.imageLoadingByTag.put(imageReceiver.getTag(thumb), this);
             }
         }
 
         public void removeImageReceiver(ImageReceiver imageReceiver) {
+            Boolean thumb = Boolean.valueOf(this.selfThumb);
             int a = 0;
             while (a < this.imageReceiverArray.size()) {
                 ImageReceiver obj = (ImageReceiver) this.imageReceiverArray.get(a);
@@ -134,8 +139,9 @@ public class ImageLoader {
                     this.imageReceiverArray.remove(a);
                     this.keys.remove(a);
                     this.filters.remove(a);
+                    thumb = (Boolean) this.thumbs.remove(a);
                     if (obj != null) {
-                        ImageLoader.this.imageLoadingByTag.remove(obj.getTag(this.thumb));
+                        ImageLoader.this.imageLoadingByTag.remove(obj.getTag(thumb.booleanValue()));
                     }
                     a--;
                 }
@@ -143,7 +149,7 @@ public class ImageLoader {
             }
             if (this.imageReceiverArray.size() == 0) {
                 for (a = 0; a < this.imageReceiverArray.size(); a++) {
-                    ImageLoader.this.imageLoadingByTag.remove(((ImageReceiver) this.imageReceiverArray.get(a)).getTag(this.thumb));
+                    ImageLoader.this.imageLoadingByTag.remove(((ImageReceiver) this.imageReceiverArray.get(a)).getTag(thumb.booleanValue()));
                 }
                 this.imageReceiverArray.clear();
                 if (!(this.location == null || ImageLoader.this.forceLoadingImages.containsKey(this.key))) {
@@ -156,7 +162,7 @@ public class ImageLoader {
                     }
                 }
                 if (this.cacheTask != null) {
-                    if (this.thumb) {
+                    if (this.selfThumb) {
                         ImageLoader.this.cacheThumbOutQueue.cancelRunnable(this.cacheTask);
                     } else {
                         ImageLoader.this.cacheOutQueue.cancelRunnable(this.cacheTask);
@@ -189,7 +195,7 @@ public class ImageLoader {
                             BitmapDrawable fileDrawable = image;
                             a = 0;
                             while (a < finalImageReceiverArray.size()) {
-                                if (((ImageReceiver) finalImageReceiverArray.get(a)).setImageBitmapByKey(a == 0 ? fileDrawable : fileDrawable.makeCopy(), CacheImage.this.key, CacheImage.this.thumb, false)) {
+                                if (((ImageReceiver) finalImageReceiverArray.get(a)).setImageBitmapByKey(a == 0 ? fileDrawable : fileDrawable.makeCopy(), CacheImage.this.key, CacheImage.this.selfThumb, false)) {
                                     imageSet = true;
                                 }
                                 a++;
@@ -201,13 +207,13 @@ public class ImageLoader {
                             return;
                         }
                         for (a = 0; a < finalImageReceiverArray.size(); a++) {
-                            ((ImageReceiver) finalImageReceiverArray.get(a)).setImageBitmapByKey(image, CacheImage.this.key, CacheImage.this.thumb, false);
+                            ((ImageReceiver) finalImageReceiverArray.get(a)).setImageBitmapByKey(image, CacheImage.this.key, CacheImage.this.selfThumb, false);
                         }
                     }
                 });
             }
             for (int a = 0; a < this.imageReceiverArray.size(); a++) {
-                ImageLoader.this.imageLoadingByTag.remove(((ImageReceiver) this.imageReceiverArray.get(a)).getTag(this.thumb));
+                ImageLoader.this.imageLoadingByTag.remove(((ImageReceiver) this.imageReceiverArray.get(a)).getTag(this.selfThumb));
             }
             this.imageReceiverArray.clear();
             if (this.url != null) {
@@ -1324,11 +1330,11 @@ public class ImageLoader {
                             }
                         }
                         if (!(added || alreadyLoadingCache == null)) {
-                            alreadyLoadingCache.addImageReceiver(imageReceiver2, str2, str3);
+                            alreadyLoadingCache.addImageReceiver(imageReceiver2, str2, str3, i != 0);
                             added = true;
                         }
                         if (!(added || alreadyLoadingUrl == null)) {
-                            alreadyLoadingUrl.addImageReceiver(imageReceiver2, str2, str3);
+                            alreadyLoadingUrl.addImageReceiver(imageReceiver2, str2, str3, i != 0);
                             added = true;
                         }
                     }
@@ -1394,7 +1400,12 @@ public class ImageLoader {
                         if (i != 2) {
                             boolean isEncrypted = (tLObject instanceof TL_documentEncrypted) || (tLObject instanceof TL_fileEncryptedLocation);
                             CacheImage img = new CacheImage();
-                            if (!(str4 == null || str4.startsWith("vthumb") || str4.startsWith("thumb") || (!str4.endsWith("mp4") && !str4.endsWith("gif"))) || (((tLObject instanceof TL_webDocument) && ((TL_webDocument) tLObject).mime_type.equals("image/gif")) || ((tLObject instanceof Document) && (MessageObject.isGifDocument((Document) tLObject) || MessageObject.isRoundVideoDocument((Document) tLObject))))) {
+                            if (str4 != null && !str4.startsWith("vthumb") && !str4.startsWith("thumb")) {
+                                String trueExt = ImageLoader.getHttpUrlExtension(str4, "jpg");
+                                if (trueExt.equals("mp4") || trueExt.equals("gif")) {
+                                    img.animatedFile = true;
+                                }
+                            } else if (((tLObject instanceof TL_webDocument) && ((TL_webDocument) tLObject).mime_type.equals("image/gif")) || ((tLObject instanceof Document) && (MessageObject.isGifDocument((Document) tLObject) || MessageObject.isRoundVideoDocument((Document) tLObject)))) {
                                 img.animatedFile = true;
                             }
                             if (cacheFile == null) {
@@ -1409,7 +1420,7 @@ public class ImageLoader {
                                     cacheFile = tLObject instanceof Document ? MessageObject.isVideoDocument((Document) tLObject) ? new File(FileLoader.getInstance().getDirectory(2), str) : new File(FileLoader.getInstance().getDirectory(3), str) : tLObject instanceof TL_webDocument ? new File(FileLoader.getInstance().getDirectory(3), str) : new File(FileLoader.getInstance().getDirectory(0), str);
                                 }
                             }
-                            img.thumb = i != 0;
+                            img.selfThumb = i != 0;
                             img.key = str2;
                             img.filter = str3;
                             img.httpUrl = str4;
@@ -1417,7 +1428,7 @@ public class ImageLoader {
                             if (i2 == 2) {
                                 img.encryptionKeyPath = new File(FileLoader.getInternalCacheDir(), str + ".enc.key");
                             }
-                            img.addImageReceiver(imageReceiver2, str2, str3);
+                            img.addImageReceiver(imageReceiver2, str2, str3, i != 0);
                             if (onlyCache || cacheFileExists || cacheFile.exists()) {
                                 img.finalFilePath = cacheFile;
                                 img.cacheTask = new CacheOutTask(img);
@@ -1638,6 +1649,7 @@ public class ImageLoader {
                     for (a = 0; a < img.imageReceiverArray.size(); a++) {
                         String key = (String) img.keys.get(a);
                         String filter = (String) img.filters.get(a);
+                        Boolean thumb = (Boolean) img.thumbs.get(a);
                         ImageReceiver imageReceiver = (ImageReceiver) img.imageReceiverArray.get(a);
                         CacheImage cacheImage = (CacheImage) ImageLoader.this.imageLoadingByKeys.get(key);
                         if (cacheImage == null) {
@@ -1645,7 +1657,7 @@ public class ImageLoader {
                             cacheImage.finalFilePath = finalFile;
                             cacheImage.key = key;
                             cacheImage.httpUrl = img.httpUrl;
-                            cacheImage.thumb = img.thumb;
+                            cacheImage.selfThumb = thumb.booleanValue();
                             cacheImage.ext = img.ext;
                             cacheImage.encryptionKeyPath = img.encryptionKeyPath;
                             cacheImage.cacheTask = new CacheOutTask(cacheImage);
@@ -1654,13 +1666,14 @@ public class ImageLoader {
                             ImageLoader.this.imageLoadingByKeys.put(key, cacheImage);
                             tasks.add(cacheImage.cacheTask);
                         }
-                        cacheImage.addImageReceiver(imageReceiver, key, filter);
+                        cacheImage.addImageReceiver(imageReceiver, key, filter, thumb.booleanValue());
                     }
                     for (a = 0; a < tasks.size(); a++) {
-                        if (img.thumb) {
-                            ImageLoader.this.cacheThumbOutQueue.postRunnable((Runnable) tasks.get(a));
+                        CacheOutTask task = (CacheOutTask) tasks.get(a);
+                        if (task.cacheImage.selfThumb) {
+                            ImageLoader.this.cacheThumbOutQueue.postRunnable(task);
                         } else {
-                            ImageLoader.this.cacheOutQueue.postRunnable((Runnable) tasks.get(a));
+                            ImageLoader.this.cacheOutQueue.postRunnable(task);
                         }
                     }
                 }
@@ -1988,6 +2001,10 @@ public class ImageLoader {
 
     public static String getHttpUrlExtension(String url, String defaultExt) {
         String ext = null;
+        String last = Uri.parse(url).getLastPathSegment();
+        if (!TextUtils.isEmpty(last) && last.length() > 1) {
+            url = last;
+        }
         int idx = url.lastIndexOf(46);
         if (idx != -1) {
             ext = url.substring(idx + 1);

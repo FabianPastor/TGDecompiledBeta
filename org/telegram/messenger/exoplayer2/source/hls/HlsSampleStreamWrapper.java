@@ -2,18 +2,18 @@ package org.telegram.messenger.exoplayer2.source.hls;
 
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.SparseArray;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
-import org.telegram.messenger.exoplayer2.extractor.DefaultTrackOutput;
-import org.telegram.messenger.exoplayer2.extractor.DefaultTrackOutput.UpstreamFormatChangedListener;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap;
 import org.telegram.messenger.exoplayer2.source.AdaptiveMediaSourceEventListener.EventDispatcher;
+import org.telegram.messenger.exoplayer2.source.SampleQueue;
+import org.telegram.messenger.exoplayer2.source.SampleQueue.UpstreamFormatChangedListener;
 import org.telegram.messenger.exoplayer2.source.SampleStream;
 import org.telegram.messenger.exoplayer2.source.SequenceableLoader;
 import org.telegram.messenger.exoplayer2.source.TrackGroup;
@@ -24,10 +24,12 @@ import org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist.H
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.upstream.Loader;
+import org.telegram.messenger.exoplayer2.upstream.Loader.ReleaseCallback;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
+import org.telegram.messenger.exoplayer2.util.Util;
 
-final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.upstream.Loader.Callback<Chunk>, SequenceableLoader, ExtractorOutput, UpstreamFormatChangedListener {
+final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.upstream.Loader.Callback<Chunk>, ReleaseCallback, SequenceableLoader, ExtractorOutput, UpstreamFormatChangedListener {
     private static final int PRIMARY_TYPE_AUDIO = 2;
     private static final int PRIMARY_TYPE_NONE = 0;
     private static final int PRIMARY_TYPE_TEXT = 1;
@@ -38,8 +40,8 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
     private Format downstreamTrackFormat;
     private int enabledTrackCount;
     private final EventDispatcher eventDispatcher;
-    private boolean[] groupEnabledStates;
     private final Handler handler = new Handler();
+    private boolean haveAudioVideoTrackGroups;
     private long lastSeekPositionUs;
     private final Loader loader = new Loader("Loader:HlsSampleStreamWrapper");
     private boolean loadingFinished;
@@ -53,11 +55,16 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
     private final Format muxedAudioFormat;
     private final HlsChunkHolder nextChunkHolder = new HlsChunkHolder();
     private long pendingResetPositionUs;
+    private boolean pendingResetUpstreamFormats;
     private boolean prepared;
     private int primaryTrackGroupIndex;
     private boolean released;
-    private final SparseArray<DefaultTrackOutput> sampleQueues = new SparseArray();
+    private int[] sampleQueueTrackIds = new int[0];
+    private SampleQueue[] sampleQueues = new SampleQueue[0];
     private boolean sampleQueuesBuilt;
+    private boolean seenFirstTrackSelection;
+    private boolean[] trackGroupEnabledStates;
+    private boolean[] trackGroupIsAudioVideoFlags;
     private TrackGroupArray trackGroups;
     private final int trackType;
     private int upstreamChunkUid;
@@ -100,74 +107,113 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
         return this.trackGroups;
     }
 
-    public boolean selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, boolean isFirstTrackSelection) {
+    public boolean selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs, boolean forceReset) {
+        boolean seekRequired;
+        SampleQueue sampleQueue;
         Assertions.checkState(this.prepared);
+        int oldEnabledTrackCount = this.enabledTrackCount;
         int i = 0;
         while (i < selections.length) {
             if (streams[i] != null && (selections[i] == null || !mayRetainStreamFlags[i])) {
-                int group = ((HlsSampleStream) streams[i]).group;
-                setTrackGroupEnabledState(group, false);
-                ((DefaultTrackOutput) this.sampleQueues.valueAt(group)).disable();
+                setTrackGroupEnabledState(((HlsSampleStream) streams[i]).group, false);
                 streams[i] = null;
             }
             i++;
         }
-        TrackSelection primaryTrackSelection = null;
-        boolean selectedNewTracks = false;
+        if (forceReset || (this.seenFirstTrackSelection ? oldEnabledTrackCount == 0 : positionUs != this.lastSeekPositionUs)) {
+            seekRequired = true;
+        } else {
+            seekRequired = false;
+        }
+        TrackSelection oldPrimaryTrackSelection = this.chunkSource.getTrackSelection();
+        TrackSelection primaryTrackSelection = oldPrimaryTrackSelection;
         i = 0;
         while (i < selections.length) {
             if (streams[i] == null && selections[i] != null) {
                 TrackSelection selection = selections[i];
-                group = this.trackGroups.indexOf(selection.getTrackGroup());
-                setTrackGroupEnabledState(group, true);
-                if (group == this.primaryTrackGroupIndex) {
+                int trackGroupIndex = this.trackGroups.indexOf(selection.getTrackGroup());
+                setTrackGroupEnabledState(trackGroupIndex, true);
+                if (trackGroupIndex == this.primaryTrackGroupIndex) {
                     primaryTrackSelection = selection;
                     this.chunkSource.selectTracks(selection);
                 }
-                streams[i] = new HlsSampleStream(this, group);
+                streams[i] = new HlsSampleStream(this, trackGroupIndex);
                 streamResetFlags[i] = true;
-                selectedNewTracks = true;
+                if (!seekRequired) {
+                    sampleQueue = this.sampleQueues[trackGroupIndex];
+                    sampleQueue.rewind();
+                    if (sampleQueue.advanceTo(positionUs, true, true) || sampleQueue.getReadIndex() == 0) {
+                        seekRequired = false;
+                    } else {
+                        seekRequired = true;
+                    }
+                }
             }
             i++;
-        }
-        if (isFirstTrackSelection) {
-            int sampleQueueCount = this.sampleQueues.size();
-            for (i = 0; i < sampleQueueCount; i++) {
-                if (!this.groupEnabledStates[i]) {
-                    ((DefaultTrackOutput) this.sampleQueues.valueAt(i)).disable();
-                }
-            }
-            if (!(primaryTrackSelection == null || this.mediaChunks.isEmpty())) {
-                primaryTrackSelection.updateSelectedTrack(0);
-                if (primaryTrackSelection.getSelectedIndexInTrackGroup() != this.chunkSource.getTrackGroup().indexOf(((HlsMediaChunk) this.mediaChunks.getLast()).trackFormat)) {
-                    seekTo(this.lastSeekPositionUs);
-                }
-            }
         }
         if (this.enabledTrackCount == 0) {
             this.chunkSource.reset();
             this.downstreamTrackFormat = null;
             this.mediaChunks.clear();
             if (this.loader.isLoading()) {
+                for (SampleQueue sampleQueue2 : this.sampleQueues) {
+                    sampleQueue2.discardToEnd();
+                }
                 this.loader.cancelLoading();
+            } else {
+                resetSampleQueues();
+            }
+        } else {
+            if (!(this.mediaChunks.isEmpty() || Util.areEqual(primaryTrackSelection, oldPrimaryTrackSelection))) {
+                boolean primarySampleQueueDirty = false;
+                if (this.seenFirstTrackSelection) {
+                    primarySampleQueueDirty = true;
+                } else {
+                    primaryTrackSelection.updateSelectedTrack(0);
+                    if (primaryTrackSelection.getSelectedIndexInTrackGroup() != this.chunkSource.getTrackGroup().indexOf(((HlsMediaChunk) this.mediaChunks.getLast()).trackFormat)) {
+                        primarySampleQueueDirty = true;
+                    }
+                }
+                if (primarySampleQueueDirty) {
+                    forceReset = true;
+                    seekRequired = true;
+                    this.pendingResetUpstreamFormats = true;
+                }
+            }
+            if (seekRequired) {
+                seekToUs(positionUs, forceReset);
+                for (i = 0; i < streams.length; i++) {
+                    if (streams[i] != null) {
+                        streamResetFlags[i] = true;
+                    }
+                }
             }
         }
-        return selectedNewTracks;
+        this.seenFirstTrackSelection = true;
+        return seekRequired;
     }
 
-    public void seekTo(long positionUs) {
+    public void discardBuffer(long positionUs) {
+        int sampleQueueCount = this.sampleQueues.length;
+        for (int i = 0; i < sampleQueueCount; i++) {
+            this.sampleQueues[i].discardTo(positionUs, false, this.trackGroupEnabledStates[i]);
+        }
+    }
+
+    public boolean seekToUs(long positionUs, boolean forceReset) {
         this.lastSeekPositionUs = positionUs;
+        if (!forceReset && !isPendingReset() && seekInsideBufferUs(positionUs)) {
+            return false;
+        }
         this.pendingResetPositionUs = positionUs;
         this.loadingFinished = false;
         this.mediaChunks.clear();
         if (this.loader.isLoading()) {
             this.loader.cancelLoading();
-            return;
+        } else {
+            resetSampleQueues();
         }
-        int sampleQueueCount = this.sampleQueues.size();
-        for (int i = 0; i < sampleQueueCount; i++) {
-            ((DefaultTrackOutput) this.sampleQueues.valueAt(i)).reset(this.groupEnabledStates[i]);
-        }
+        return true;
     }
 
     public long getBufferedPositionUs() {
@@ -183,21 +229,25 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
         if (lastCompletedMediaChunk != null) {
             bufferedPositionUs = Math.max(bufferedPositionUs, lastCompletedMediaChunk.endTimeUs);
         }
-        int sampleQueueCount = this.sampleQueues.size();
-        for (int i = 0; i < sampleQueueCount; i++) {
-            bufferedPositionUs = Math.max(bufferedPositionUs, ((DefaultTrackOutput) this.sampleQueues.valueAt(i)).getLargestQueuedTimestampUs());
+        for (SampleQueue sampleQueue : this.sampleQueues) {
+            bufferedPositionUs = Math.max(bufferedPositionUs, sampleQueue.getLargestQueuedTimestampUs());
         }
         return bufferedPositionUs;
     }
 
     public void release() {
-        int sampleQueueCount = this.sampleQueues.size();
-        for (int i = 0; i < sampleQueueCount; i++) {
-            ((DefaultTrackOutput) this.sampleQueues.valueAt(i)).disable();
+        boolean releasedSynchronously = this.loader.release(this);
+        if (this.prepared && !releasedSynchronously) {
+            for (SampleQueue sampleQueue : this.sampleQueues) {
+                sampleQueue.discardToEnd();
+            }
         }
-        this.loader.release();
         this.handler.removeCallbacksAndMessages(null);
         this.released = true;
+    }
+
+    public void onLoaderReleased() {
+        resetSampleQueues();
     }
 
     public void setIsTimestampMaster(boolean isTimestampMaster) {
@@ -208,8 +258,8 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
         this.chunkSource.onPlaylistBlacklisted(url, blacklistMs);
     }
 
-    boolean isReady(int group) {
-        return this.loadingFinished || !(isPendingReset() || ((DefaultTrackOutput) this.sampleQueues.valueAt(group)).isEmpty());
+    boolean isReady(int trackGroupIndex) {
+        return this.loadingFinished || (!isPendingReset() && this.sampleQueues[trackGroupIndex].hasNextSample());
     }
 
     void maybeThrowError() throws IOException {
@@ -217,41 +267,50 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
         this.chunkSource.maybeThrowError();
     }
 
-    int readData(int group, FormatHolder formatHolder, DecoderInputBuffer buffer, boolean requireFormat) {
+    int readData(int trackGroupIndex, FormatHolder formatHolder, DecoderInputBuffer buffer, boolean requireFormat) {
         if (isPendingReset()) {
             return -3;
         }
-        while (this.mediaChunks.size() > 1 && finishedReadingChunk((HlsMediaChunk) this.mediaChunks.getFirst())) {
-            this.mediaChunks.removeFirst();
+        if (!this.mediaChunks.isEmpty()) {
+            while (this.mediaChunks.size() > 1 && finishedReadingChunk((HlsMediaChunk) this.mediaChunks.getFirst())) {
+                this.mediaChunks.removeFirst();
+            }
+            HlsMediaChunk currentChunk = (HlsMediaChunk) this.mediaChunks.getFirst();
+            Format trackFormat = currentChunk.trackFormat;
+            if (!trackFormat.equals(this.downstreamTrackFormat)) {
+                this.eventDispatcher.downstreamFormatChanged(this.trackType, trackFormat, currentChunk.trackSelectionReason, currentChunk.trackSelectionData, currentChunk.startTimeUs);
+            }
+            this.downstreamTrackFormat = trackFormat;
         }
-        HlsMediaChunk currentChunk = (HlsMediaChunk) this.mediaChunks.getFirst();
-        Format trackFormat = currentChunk.trackFormat;
-        if (!trackFormat.equals(this.downstreamTrackFormat)) {
-            this.eventDispatcher.downstreamFormatChanged(this.trackType, trackFormat, currentChunk.trackSelectionReason, currentChunk.trackSelectionData, currentChunk.startTimeUs);
-        }
-        this.downstreamTrackFormat = trackFormat;
-        return ((DefaultTrackOutput) this.sampleQueues.valueAt(group)).readData(formatHolder, buffer, requireFormat, this.loadingFinished, this.lastSeekPositionUs);
+        return this.sampleQueues[trackGroupIndex].read(formatHolder, buffer, requireFormat, this.loadingFinished, this.lastSeekPositionUs);
     }
 
-    void skipData(int group, long positionUs) {
-        DefaultTrackOutput sampleQueue = (DefaultTrackOutput) this.sampleQueues.valueAt(group);
+    void skipData(int trackGroupIndex, long positionUs) {
+        SampleQueue sampleQueue = this.sampleQueues[trackGroupIndex];
         if (!this.loadingFinished || positionUs <= sampleQueue.getLargestQueuedTimestampUs()) {
-            sampleQueue.skipToKeyframeBefore(positionUs, true);
+            sampleQueue.advanceTo(positionUs, true, true);
         } else {
-            sampleQueue.skipAll();
+            sampleQueue.advanceToEnd();
         }
     }
 
     private boolean finishedReadingChunk(HlsMediaChunk chunk) {
         int chunkUid = chunk.uid;
         int i = 0;
-        while (i < this.sampleQueues.size()) {
-            if (this.groupEnabledStates[i] && ((DefaultTrackOutput) this.sampleQueues.valueAt(i)).peekSourceId() == chunkUid) {
+        while (i < this.sampleQueues.length) {
+            if (this.trackGroupEnabledStates[i] && this.sampleQueues[i].peekSourceId() == chunkUid) {
                 return false;
             }
             i++;
         }
         return true;
+    }
+
+    private void resetSampleQueues() {
+        for (SampleQueue sampleQueue : this.sampleQueues) {
+            sampleQueue.reset(this.pendingResetUpstreamFormats);
+        }
+        this.pendingResetUpstreamFormats = false;
     }
 
     public boolean continueLoading(long positionUs) {
@@ -274,6 +333,7 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
         HlsUrl playlistToLoad = this.nextChunkHolder.playlist;
         this.nextChunkHolder.clear();
         if (endOfStream) {
+            this.pendingResetPositionUs = C.TIME_UNSET;
             this.loadingFinished = true;
             return true;
         } else if (loadable == null) {
@@ -313,11 +373,10 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
     public void onLoadCanceled(Chunk loadable, long elapsedRealtimeMs, long loadDurationMs, boolean released) {
         this.eventDispatcher.loadCanceled(loadable.dataSpec, loadable.type, this.trackType, loadable.trackFormat, loadable.trackSelectionReason, loadable.trackSelectionData, loadable.startTimeUs, loadable.endTimeUs, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded());
         if (!released) {
-            int sampleQueueCount = this.sampleQueues.size();
-            for (int i = 0; i < sampleQueueCount; i++) {
-                ((DefaultTrackOutput) this.sampleQueues.valueAt(i)).reset(this.groupEnabledStates[i]);
+            resetSampleQueues();
+            if (this.enabledTrackCount > 0) {
+                this.callback.onContinueLoadingRequested(this);
             }
-            this.callback.onContinueLoadingRequested(this);
         }
     }
 
@@ -348,26 +407,34 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
     }
 
     public void init(int chunkUid, boolean shouldSpliceIn) {
-        int i;
+        int i = 0;
         this.upstreamChunkUid = chunkUid;
-        for (i = 0; i < this.sampleQueues.size(); i++) {
-            ((DefaultTrackOutput) this.sampleQueues.valueAt(i)).sourceId(chunkUid);
+        for (SampleQueue sampleQueue : this.sampleQueues) {
+            sampleQueue.sourceId(chunkUid);
         }
         if (shouldSpliceIn) {
-            for (i = 0; i < this.sampleQueues.size(); i++) {
-                ((DefaultTrackOutput) this.sampleQueues.valueAt(i)).splice();
+            SampleQueue[] sampleQueueArr = this.sampleQueues;
+            int length = sampleQueueArr.length;
+            while (i < length) {
+                sampleQueueArr[i].splice();
+                i++;
             }
         }
     }
 
-    public DefaultTrackOutput track(int id, int type) {
-        if (this.sampleQueues.indexOfKey(id) >= 0) {
-            return (DefaultTrackOutput) this.sampleQueues.get(id);
+    public SampleQueue track(int id, int type) {
+        int trackCount = this.sampleQueues.length;
+        for (int i = 0; i < trackCount; i++) {
+            if (this.sampleQueueTrackIds[i] == id) {
+                return this.sampleQueues[i];
+            }
         }
-        DefaultTrackOutput trackOutput = new DefaultTrackOutput(this.allocator);
+        SampleQueue trackOutput = new SampleQueue(this.allocator);
         trackOutput.setUpstreamFormatChangeListener(this);
-        trackOutput.sourceId(this.upstreamChunkUid);
-        this.sampleQueues.put(id, trackOutput);
+        this.sampleQueueTrackIds = Arrays.copyOf(this.sampleQueueTrackIds, trackCount + 1);
+        this.sampleQueueTrackIds[trackCount] = id;
+        this.sampleQueues = (SampleQueue[]) Arrays.copyOf(this.sampleQueues, trackCount + 1);
+        this.sampleQueues[trackCount] = trackOutput;
         return trackOutput;
     }
 
@@ -385,10 +452,11 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
 
     private void maybeFinishPrepare() {
         if (!this.released && !this.prepared && this.sampleQueuesBuilt) {
-            int sampleQueueCount = this.sampleQueues.size();
+            SampleQueue[] sampleQueueArr = this.sampleQueues;
+            int length = sampleQueueArr.length;
             int i = 0;
-            while (i < sampleQueueCount) {
-                if (((DefaultTrackOutput) this.sampleQueues.valueAt(i)).getUpstreamFormat() != null) {
+            while (i < length) {
+                if (sampleQueueArr[i].getUpstreamFormat() != null) {
                     i++;
                 } else {
                     return;
@@ -404,10 +472,10 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
         int i;
         int primaryExtractorTrackType = 0;
         int primaryExtractorTrackIndex = -1;
-        int extractorTrackCount = this.sampleQueues.size();
+        int extractorTrackCount = this.sampleQueues.length;
         for (i = 0; i < extractorTrackCount; i++) {
             int trackType;
-            String sampleMimeType = ((DefaultTrackOutput) this.sampleQueues.valueAt(i)).getUpstreamFormat().sampleMimeType;
+            String sampleMimeType = this.sampleQueues[i].getUpstreamFormat().sampleMimeType;
             if (MimeTypes.isVideo(sampleMimeType)) {
                 trackType = 3;
             } else if (MimeTypes.isAudio(sampleMimeType)) {
@@ -427,10 +495,15 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
         TrackGroup chunkSourceTrackGroup = this.chunkSource.getTrackGroup();
         int chunkSourceTrackCount = chunkSourceTrackGroup.length;
         this.primaryTrackGroupIndex = -1;
-        this.groupEnabledStates = new boolean[extractorTrackCount];
+        this.trackGroupEnabledStates = new boolean[extractorTrackCount];
+        this.trackGroupIsAudioVideoFlags = new boolean[extractorTrackCount];
         TrackGroup[] trackGroups = new TrackGroup[extractorTrackCount];
         for (i = 0; i < extractorTrackCount; i++) {
-            Format sampleFormat = ((DefaultTrackOutput) this.sampleQueues.valueAt(i)).getUpstreamFormat();
+            Format sampleFormat = this.sampleQueues[i].getUpstreamFormat();
+            String mimeType = sampleFormat.sampleMimeType;
+            boolean isAudioVideo = MimeTypes.isVideo(mimeType) || MimeTypes.isAudio(mimeType);
+            this.trackGroupIsAudioVideoFlags[i] = isAudioVideo;
+            this.haveAudioVideoTrackGroups |= isAudioVideo;
             if (i == primaryExtractorTrackIndex) {
                 Format[] formats = new Format[chunkSourceTrackCount];
                 for (int j = 0; j < chunkSourceTrackCount; j++) {
@@ -446,10 +519,10 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
         this.trackGroups = new TrackGroupArray(trackGroups);
     }
 
-    private void setTrackGroupEnabledState(int group, boolean enabledState) {
+    private void setTrackGroupEnabledState(int trackGroupIndex, boolean enabledState) {
         int i = 1;
-        Assertions.checkState(this.groupEnabledStates[group] != enabledState);
-        this.groupEnabledStates[group] = enabledState;
+        Assertions.checkState(this.trackGroupEnabledStates[trackGroupIndex] != enabledState);
+        this.trackGroupEnabledStates[trackGroupIndex] = enabledState;
         int i2 = this.enabledTrackCount;
         if (!enabledState) {
             i = -1;
@@ -477,6 +550,21 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
 
     private boolean isPendingReset() {
         return this.pendingResetPositionUs != C.TIME_UNSET;
+    }
+
+    private boolean seekInsideBufferUs(long positionUs) {
+        int trackCount = this.sampleQueues.length;
+        int i = 0;
+        while (i < trackCount) {
+            SampleQueue sampleQueue = this.sampleQueues[i];
+            sampleQueue.rewind();
+            if (!sampleQueue.advanceTo(positionUs, true, false) && (this.trackGroupIsAudioVideoFlags[i] || !this.haveAudioVideoTrackGroups)) {
+                return false;
+            }
+            sampleQueue.discardToRead();
+            i++;
+        }
+        return true;
     }
 
     private static String getAudioCodecs(String codecs) {

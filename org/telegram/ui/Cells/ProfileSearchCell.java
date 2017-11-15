@@ -32,7 +32,7 @@ import org.telegram.ui.Components.AvatarDrawable;
 public class ProfileSearchCell extends BaseCell {
     private AvatarDrawable avatarDrawable;
     private ImageReceiver avatarImage = new ImageReceiver(this);
-    private Chat chat = null;
+    private Chat chat;
     private StaticLayout countLayout;
     private int countLeft;
     private int countTop = AndroidUtilities.dp(25.0f);
@@ -45,10 +45,10 @@ public class ProfileSearchCell extends BaseCell {
     private boolean drawNameBroadcast;
     private boolean drawNameGroup;
     private boolean drawNameLock;
-    private EncryptedChat encryptedChat = null;
-    private FileLocation lastAvatar = null;
-    private String lastName = null;
-    private int lastStatus = 0;
+    private EncryptedChat encryptedChat;
+    private FileLocation lastAvatar;
+    private String lastName;
+    private int lastStatus;
     private int lastUnreadCount;
     private StaticLayout nameLayout;
     private int nameLeft;
@@ -59,9 +59,10 @@ public class ProfileSearchCell extends BaseCell {
     private int onlineLeft;
     private int paddingRight;
     private RectF rect = new RectF();
+    private boolean savedMessages;
     private CharSequence subLabel;
-    public boolean useSeparator = false;
-    private User user = null;
+    public boolean useSeparator;
+    private User user;
 
     public ProfileSearchCell(Context context) {
         super(context);
@@ -69,7 +70,7 @@ public class ProfileSearchCell extends BaseCell {
         this.avatarDrawable = new AvatarDrawable();
     }
 
-    public void setData(TLObject object, EncryptedChat ec, CharSequence n, CharSequence s, boolean needCount) {
+    public void setData(TLObject object, EncryptedChat ec, CharSequence n, CharSequence s, boolean needCount, boolean saved) {
         this.currentName = n;
         if (object instanceof User) {
             this.user = (User) object;
@@ -81,6 +82,7 @@ public class ProfileSearchCell extends BaseCell {
         this.encryptedChat = ec;
         this.subLabel = s;
         this.drawCount = needCount;
+        this.savedMessages = saved;
         update(0);
     }
 
@@ -270,10 +272,15 @@ public class ProfileSearchCell extends BaseCell {
                     }
                 }
             }
-            this.onlineLayout = new StaticLayout(TextUtils.ellipsize(onlineString, currentOnlinePaint, (float) (onlineWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentOnlinePaint, onlineWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-            this.nameTop = AndroidUtilities.dp(13.0f);
-            if (!(this.subLabel == null || this.chat == null)) {
-                this.nameLockTop -= AndroidUtilities.dp(12.0f);
+            if (this.savedMessages) {
+                this.onlineLayout = null;
+                this.nameTop = AndroidUtilities.dp(25.0f);
+            } else {
+                this.onlineLayout = new StaticLayout(TextUtils.ellipsize(onlineString, currentOnlinePaint, (float) (onlineWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentOnlinePaint, onlineWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.nameTop = AndroidUtilities.dp(13.0f);
+                if (!(this.subLabel == null || this.chat == null)) {
+                    this.nameLockTop -= AndroidUtilities.dp(12.0f);
+                }
             }
         } else {
             this.onlineLayout = null;
@@ -322,10 +329,12 @@ public class ProfileSearchCell extends BaseCell {
     public void update(int mask) {
         TLObject photo = null;
         if (this.user != null) {
-            if (this.user.photo != null) {
+            this.avatarDrawable.setInfo(this.user);
+            if (this.savedMessages) {
+                this.avatarDrawable.setSavedMessages(1);
+            } else if (this.user.photo != null) {
                 photo = this.user.photo.photo_small;
             }
-            this.avatarDrawable.setInfo(this.user);
         } else if (this.chat != null) {
             if (this.chat.photo != null) {
                 photo = this.chat.photo.photo_small;

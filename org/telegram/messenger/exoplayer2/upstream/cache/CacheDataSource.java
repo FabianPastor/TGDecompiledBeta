@@ -52,8 +52,8 @@ public final class CacheDataSource implements DataSource {
         /* JADX: method processing error */
 /*
 Error: java.util.NoSuchElementException
-	at java.util.HashMap$HashIterator.nextNode(HashMap.java:1439)
-	at java.util.HashMap$KeyIterator.next(HashMap.java:1461)
+	at java.util.HashMap$HashIterator.nextNode(HashMap.java:1444)
+	at java.util.HashMap$KeyIterator.next(HashMap.java:1466)
 	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.applyRemove(BlockFinallyExtract.java:535)
 	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.extractFinally(BlockFinallyExtract.java:175)
 	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.processExceptionHandler(BlockFinallyExtract.java:80)
@@ -102,6 +102,10 @@ Error: java.util.NoSuchElementException
         throw r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.upstream.cache.CacheDataSource.closeCurrentSource():void");
+    }
+
+    public CacheDataSource(Cache cache, DataSource upstream) {
+        this(cache, upstream, 0, DEFAULT_MAX_CACHE_FILE_SIZE);
     }
 
     public CacheDataSource(Cache cache, DataSource upstream, int flags) {

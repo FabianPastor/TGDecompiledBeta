@@ -28,14 +28,15 @@ public final class SubripDecoder extends SimpleSubtitleDecoder {
         while (true) {
             String currentLine = subripData.readLine();
             if (currentLine == null) {
-                Cue[] cuesArray = new Cue[cues.size()];
-                cues.toArray(cuesArray);
-                return new SubripSubtitle(cuesArray, cueTimesUs.toArray());
+                break;
             } else if (currentLine.length() != 0) {
                 try {
                     Integer.parseInt(currentLine);
                     boolean haveEndTimecode = false;
                     currentLine = subripData.readLine();
+                    if (currentLine == null) {
+                        break;
+                    }
                     Matcher matcher = SUBRIP_TIMING_LINE.matcher(currentLine);
                     if (matcher.matches()) {
                         cueTimesUs.add(parseTimecode(matcher, 1));
@@ -66,6 +67,10 @@ public final class SubripDecoder extends SimpleSubtitleDecoder {
                 }
             }
         }
+        Log.w(TAG, "Unexpected end");
+        Cue[] cuesArray = new Cue[cues.size()];
+        cues.toArray(cuesArray);
+        return new SubripSubtitle(cuesArray, cueTimesUs.toArray());
     }
 
     private static long parseTimecode(Matcher matcher, int groupOffset) {
