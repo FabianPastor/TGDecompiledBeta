@@ -398,8 +398,8 @@ Error: java.util.NoSuchElementException
         if (pathString == null) {
             return false;
         }
+        String path;
         while (true) {
-            String path;
             String newPath = Utilities.readlink(pathString);
             if (newPath != null && !newPath.equals(pathString)) {
                 pathString = newPath;
@@ -895,7 +895,11 @@ Error: java.util.NoSuchElementException
                 String name;
                 TLObject photo = null;
                 if (user != null) {
-                    name = ContactsController.formatName(user.first_name, user.last_name);
+                    if (UserObject.isUserSelf(user)) {
+                        name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
+                    } else {
+                        name = ContactsController.formatName(user.first_name, user.last_name);
+                    }
                     if (user.photo != null) {
                         photo = user.photo.photo_small;
                     }

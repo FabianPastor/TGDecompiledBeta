@@ -395,7 +395,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         } else {
                             value = userFull.about;
                         }
-                        textCell3.setTextAndValue(value, LocaleController.getString("UserBio", R.string.UserBio), false);
+                        textCell3.setTextWithEmojiAndValue(value, LocaleController.getString("UserBio", R.string.UserBio), false);
                         return;
                     } else {
                         return;
@@ -555,6 +555,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.updateInterfaces);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.featuredStickersDidLoaded);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.userInfoDidLoaded);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
         this.rowCount = 0;
         int i = this.rowCount;
         this.rowCount = i + 1;
@@ -679,6 +680,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.updateInterfaces);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.featuredStickersDidLoaded);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.userInfoDidLoaded);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
         this.avatarUpdater.clear();
     }
 
@@ -1308,8 +1310,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (this.listAdapter != null) {
                 this.listAdapter.notifyItemChanged(this.stickersRow);
             }
-        } else if (id == NotificationCenter.userInfoDidLoaded && args[0].intValue() == UserConfig.getClientUserId() && this.listAdapter != null) {
-            this.listAdapter.notifyItemChanged(this.bioRow);
+        } else if (id == NotificationCenter.userInfoDidLoaded) {
+            if (args[0].intValue() == UserConfig.getClientUserId() && this.listAdapter != null) {
+                this.listAdapter.notifyItemChanged(this.bioRow);
+            }
+        } else if (id == NotificationCenter.emojiDidLoaded && this.listView != null) {
+            this.listView.invalidateViews();
         }
     }
 

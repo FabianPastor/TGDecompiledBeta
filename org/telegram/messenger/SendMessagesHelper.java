@@ -1670,8 +1670,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public void sendGame(InputPeer peer, TL_inputMediaGame game, long random_id, long taskId) {
         Throwable e;
+        long newTaskId;
         if (peer != null && game != null) {
-            long newTaskId;
             TL_messages_sendMedia request = new TL_messages_sendMedia();
             request.peer = peer;
             if (request.peer instanceof TL_inputPeerChannel) {
@@ -2326,6 +2326,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         delayedMessage2.messageObjects = new ArrayList();
                         delayedMessage2.messages = new ArrayList();
                         delayedMessage2.originalPaths = new ArrayList();
+                        delayedMessage2.extraHashMap = new HashMap();
                     } else {
                         delayedMessage3 = delayedMessage;
                     }
@@ -2692,6 +2693,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         request.peer = sendToPeer;
                         if (newMsg.to_id instanceof TL_peerChannel) {
                             request.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("silent_" + peer, false);
+                        }
+                        if (reply_to_msg != null) {
+                            request.flags |= 1;
+                            request.reply_to_msg_id = reply_to_msg.getId();
                         }
                         request.random_id = newMsg.random_id;
                         request.media = inputMedia;
@@ -3112,9 +3117,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         } else if (message.type == 4) {
             boolean add = index < 0;
             if (message.location != null || message.httpLocation != null || index >= 0) {
-                if (message.extraHashMap == null) {
-                    message.extraHashMap = new HashMap();
-                }
                 if (index < 0) {
                     index = message.messageObjects.size() - 1;
                 }

@@ -1154,8 +1154,8 @@ public class NotificationsController {
                                     } else if (object.isRoundVideo()) {
                                         return LocaleController.formatString("NotificationActionPinnedRoundChannel", R.string.NotificationActionPinnedRoundChannel, chat.title);
                                     } else if (object.isSticker()) {
-                                        if (messageObject.getStickerEmoji() != null) {
-                                            return LocaleController.formatString("NotificationActionPinnedStickerEmojiChannel", R.string.NotificationActionPinnedStickerEmojiChannel, chat.title, messageObject.getStickerEmoji());
+                                        if (object.getStickerEmoji() != null) {
+                                            return LocaleController.formatString("NotificationActionPinnedStickerEmojiChannel", R.string.NotificationActionPinnedStickerEmojiChannel, chat.title, object.getStickerEmoji());
                                         }
                                         return LocaleController.formatString("NotificationActionPinnedStickerChannel", R.string.NotificationActionPinnedStickerChannel, chat.title);
                                     } else if (object.messageOwner.media instanceof TL_messageMediaDocument) {
@@ -1210,8 +1210,8 @@ public class NotificationsController {
                                     } else if (object.isRoundVideo()) {
                                         return LocaleController.formatString("NotificationActionPinnedRound", R.string.NotificationActionPinnedRound, name, chat.title);
                                     } else if (object.isSticker()) {
-                                        if (messageObject.getStickerEmoji() != null) {
-                                            return LocaleController.formatString("NotificationActionPinnedStickerEmoji", R.string.NotificationActionPinnedStickerEmoji, name, chat.title, messageObject.getStickerEmoji());
+                                        if (object.getStickerEmoji() != null) {
+                                            return LocaleController.formatString("NotificationActionPinnedStickerEmoji", R.string.NotificationActionPinnedStickerEmoji, name, chat.title, object.getStickerEmoji());
                                         }
                                         return LocaleController.formatString("NotificationActionPinnedSticker", R.string.NotificationActionPinnedSticker, name, chat.title);
                                     } else if (object.messageOwner.media instanceof TL_messageMediaDocument) {

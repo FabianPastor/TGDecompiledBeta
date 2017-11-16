@@ -1421,7 +1421,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.sendButtonContainer.addView(this.expandStickersButton, LayoutHelper.createFrame(48, 48.0f));
         this.expandStickersButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                if (!ChatActivityEnterView.this.stickersDragging) {
+                if (ChatActivityEnterView.this.expandStickersButton.getVisibility() == 0 && ChatActivityEnterView.this.expandStickersButton.getAlpha() == 1.0f && !ChatActivityEnterView.this.stickersDragging) {
                     ChatActivityEnterView.this.setStickersExpanded(!ChatActivityEnterView.this.stickersExpanded, true);
                 }
             }

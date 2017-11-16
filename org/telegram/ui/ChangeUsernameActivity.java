@@ -169,7 +169,10 @@ public class ChangeUsernameActivity extends BaseFragment {
                     String url = "https://" + MessagesController.getInstance().linkPrefix + "/" + ChangeUsernameActivity.this.firstNameField.getText();
                     String text = LocaleController.formatString("UsernameHelpLink", R.string.UsernameHelpLink, url);
                     int index = text.indexOf(url);
-                    new SpannableStringBuilder(text).setSpan(new LinkSpan(url), index, url.length() + index, 33);
+                    SpannableStringBuilder textSpan = new SpannableStringBuilder(text);
+                    if (index >= 0) {
+                        textSpan.setSpan(new LinkSpan(url), index, url.length() + index, 33);
+                    }
                     ChangeUsernameActivity.this.helpTextView.setText(TextUtils.concat(new CharSequence[]{ChangeUsernameActivity.this.infoText, "\n\n", textSpan}));
                     return;
                 }

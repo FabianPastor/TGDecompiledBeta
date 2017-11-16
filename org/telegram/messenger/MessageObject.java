@@ -179,6 +179,7 @@ public class MessageObject {
     public int lastLineWidth;
     private boolean layoutCreated;
     public CharSequence linkDescription;
+    public long localGroupId;
     public boolean mediaExists;
     public Message messageOwner;
     public CharSequence messageText;
@@ -2176,6 +2177,14 @@ public class MessageObject {
         } catch (Throwable e) {
             FileLog.e(e);
         }
+    }
+
+    public boolean hasValidGroupId() {
+        return (getGroupId() == 0 || this.photoThumbs == null || this.photoThumbs.isEmpty()) ? false : true;
+    }
+
+    public long getGroupId() {
+        return this.localGroupId != 0 ? this.localGroupId : this.messageOwner.grouped_id;
     }
 
     public static void addLinks(boolean isOut, CharSequence messageText) {

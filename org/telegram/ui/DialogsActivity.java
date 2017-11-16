@@ -1028,9 +1028,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             contentView.addView(this.commentView, LayoutHelper.createFrame(-1, -2, 83));
             this.commentView.setDelegate(new ChatActivityEnterViewDelegate() {
                 public void onMessageSend(CharSequence message) {
-                    ArrayList<Long> selectedDialogs = DialogsActivity.this.dialogsAdapter.getSelectedDialogs();
-                    if (!selectedDialogs.isEmpty()) {
-                        DialogsActivity.this.delegate.didSelectDialogs(DialogsActivity.this, selectedDialogs, message, false);
+                    if (DialogsActivity.this.delegate != null) {
+                        ArrayList<Long> selectedDialogs = DialogsActivity.this.dialogsAdapter.getSelectedDialogs();
+                        if (!selectedDialogs.isEmpty()) {
+                            DialogsActivity.this.delegate.didSelectDialogs(DialogsActivity.this, selectedDialogs, message, false);
+                        }
                     }
                 }
 

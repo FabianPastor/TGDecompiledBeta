@@ -1775,6 +1775,7 @@ public class ImageLoader {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static Bitmap loadBitmap(String path, Uri uri, float maxWidth, float maxHeight, boolean useMaxScale) {
         float scaleFactor;
+        Bitmap newBitmap;
         Options bmOptions = new Options();
         bmOptions.inJustDecodeBounds = true;
         InputStream inputStream = null;
@@ -1853,7 +1854,6 @@ public class ImageLoader {
             }
         }
         Bitmap b = null;
-        Bitmap newBitmap;
         if (path != null) {
             try {
                 b = BitmapFactory.decodeFile(path, bmOptions);

@@ -304,7 +304,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         SessionsActivity.this.showDialog(builder.create());
                     }
-                } else if (position >= SessionsActivity.this.otherSessionsStartRow && position < SessionsActivity.this.otherSessionsEndRow) {
+                } else if (position >= SessionsActivity.this.otherSessionsStartRow && position < SessionsActivity.this.otherSessionsEndRow && SessionsActivity.this.getParentActivity() != null) {
                     builder = new Builder(SessionsActivity.this.getParentActivity());
                     builder.setMessage(LocaleController.getString("TerminateSessionQuestion", R.string.TerminateSessionQuestion));
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
