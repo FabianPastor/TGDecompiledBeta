@@ -1169,7 +1169,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 }
             }
             this.stickersPerRow = width / AndroidUtilities.dp(72.0f);
-            EmojiView.this.trendingLayoutManager.setSpanCount(this.stickersPerRow);
+            EmojiView.this.trendingLayoutManager.setSpanCount(Math.max(1, this.stickersPerRow));
             if (!EmojiView.this.trendingLoaded) {
                 this.cache.clear();
                 this.positionsToSets.clear();

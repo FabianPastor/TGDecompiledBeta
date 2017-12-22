@@ -71,6 +71,7 @@
     <string name="AddStickers">Añadir stickers</string>
     <string name="AddStickersInstalled">Nuevos stickers añadidos</string>
     <string name="AddStickersNotFound">Stickers no encontrados</string>
+    <string name="AddSubscriber">Añadir suscriptor</string>
     <string name="AddToContacts">Añadir a contactos</string>
     <string name="AddToFavorites">Añadir a favoritos</string>
     <string name="AddToMasks">Añadir a máscaras</string>
@@ -177,10 +178,17 @@
     <string name="AudioTitle">Música</string>
     <string name="AudioUnknownArtist">Artista desconocido</string>
     <string name="AudioUnknownTitle">Título desconocido</string>
+    <string name="AutoDownloadMedia">Autodescarga de multimedia</string>
     <string name="AutoLock">Autobloqueo</string>
     <string name="AutoLockDisabled">Desactivado</string>
     <string name="AutoLockInTime">en %1$s</string>
     <string name="AutoLockInfo">El bloqueo se activará transcurrido este tiempo.</string>
+    <string name="AutodownloadChannels">Canales</string>
+    <string name="AutodownloadContacts">Contactos</string>
+    <string name="AutodownloadGroupChats">Chats grupales</string>
+    <string name="AutodownloadPrivateChats">Chats</string>
+    <string name="AutodownloadSizeLimit">Limitar por tamaño</string>
+    <string name="AutodownloadSizeLimitUpTo">hasta %1$s</string>
     <string name="AutomaticMediaDownload">Autodescarga de multimedia</string>
     <string name="AutoplayGifs">Autorreproducción de GIF</string>
     <string name="AwaitingEncryption">Esperando que %s se conecte...</string>
@@ -314,6 +322,7 @@
     <string name="ChannelSignMessages">Firmar los mensajes</string>
     <string name="ChannelSignMessagesInfo">Añadir los nombres de los administradores a sus publicaciones.</string>
     <string name="ChannelSilentBroadcast">Difusión en silencio</string>
+    <string name="ChannelSubscribers">Suscriptores</string>
     <string name="ChannelUnmute">NO SILENCIAR</string>
     <string name="ChannelUserAddLimit">Lo sentimos, sólo puedes añadir a los primeros 200 miembros a un canal. Sin embargo, una cantidad ilimitada de personas pueden unirse por el enlace del canal.</string>
     <string name="ChannelUserCantAdd">Lo sentimos, no puedes añadir a este usuario a canales.</string>
@@ -336,7 +345,7 @@
     <string name="ChatHistoryVisibleInfo">Los nuevos miembros verán mensajes que fueron enviados antes de unirse.</string>
     <string name="ChatLocation">Ubicación</string>
     <string name="ChatVideo">Vídeo</string>
-    <string name="ChatYourSelf">chat contigo</string>
+    <string name="ChatYourSelf">reenvía aquí para guardar</string>
     <string name="ChatYourSelfDescription1">Guarda mensajes reenviándolos aquí</string>
     <string name="ChatYourSelfDescription2">Envía archivos para almacenarlos</string>
     <string name="ChatYourSelfDescription3">Accede desde cualquier dispositivo</string>
@@ -728,7 +737,7 @@
     <string name="GroupMembers">Miembros</string>
     <string name="GroupName">Nombre del grupo</string>
     <string name="GroupNotifications">Notificaciones de grupo</string>
-    <string name="GroupPhotosHelp">Mostrar las fotos en un mensaje</string>
+    <string name="GroupPhotosHelp">Agrupar multimedia en un mensaje</string>
     <string name="GroupStickers">Stickers de grupo</string>
     <string name="GroupStickersInfo">Puedes elegir un pack para que los miembros del grupo lo utilicen en él.</string>
     <string name="GroupUserAddLimit">Lo sentimos, el grupo está lleno.</string>
@@ -970,7 +979,7 @@
     <string name="NoBlockedUsers">Sin suspendidos</string>
     <string name="NoCallLog">Aún no has realizado llamadas.</string>
     <string name="NoChats">Aún no hay chats...</string>
-    <string name="NoChatsHelp">Envía mensajes tocando el botón para redactar, en la parte inferior derecha, o pulsa el botón menú para más opciones.</string>
+    <string name="NoChatsHelp">Envía mensajes tocando el botón del lápiz, en la esquina inferior derecha, o pulsa el botón menú para más opciones.</string>
     <string name="NoContacts">Aún no hay contactos</string>
     <string name="NoGroupsInCommon">Aún no hay grupos en común</string>
     <string name="NoHandleAppInstalled">No tienes aplicaciones que puedan manejar el tipo de archivo “%1$s”. Por favor, instala una para continuar.</string>
@@ -1168,6 +1177,7 @@
     <string name="PaymentConfirmationMessage">Tu tarjeta %1$s está archivada. Para pagar con esta tarjeta, por favor, pon tu contraseña de la verificación en dos pasos.</string>
     <string name="PaymentConfirmationNewCard">Elige una tarjeta diferente</string>
     <string name="PaymentConnectionFailed">No es posible acceder al servidor de pago. Por favor, revisa tu conexión a internet y reinténtalo.</string>
+    <string name="PaymentEmailToProvider">El e-mail será entregado a %1$s como información de facturación.</string>
     <string name="PaymentFailed">Lo sentimos, el pago fue rechazado.</string>
     <string name="PaymentInvoice">FACTURA</string>
     <string name="PaymentNoShippingMethod">Lo sentimos, pero no es posible hacer envíos a tu dirección.</string>
@@ -1179,6 +1189,8 @@
     <string name="PaymentPasswordInfo">Por favor, crea una contraseña para proteger tu información de pago. Será requerida al iniciar sesión.</string>
     <string name="PaymentPasswordReEnter">Pon tu contraseña otra vez</string>
     <string name="PaymentPasswordTitle">Contraseña</string>
+    <string name="PaymentPhoneEmailToProvider">El e-mail y telefóno serán entregados a %1$s como información de facturación.</string>
+    <string name="PaymentPhoneToProvider">El teléfono será entregado a %1$s como información de facturación.</string>
     <string name="PaymentPrecheckoutFailed">Lo sentimos, el pago fue cancelado por el bot.</string>
     <string name="PaymentReceipt">Recibo</string>
     <string name="PaymentShippingAddress">Dirección de envío</string>
@@ -1308,6 +1320,8 @@
     <string name="ResetAccountInfo">Como la cuenta **%1$s** está activa y protegida con una contraseña, la eliminaremos en 1 semana, por motivos de seguridad. Puedes cancelar el proceso en cualquier momento.</string>
     <string name="ResetAccountStatus">Podrás restablecer tu cuenta en:</string>
     <string name="ResetAllNotifications">Restablecer las notificaciones</string>
+    <string name="ResetAutomaticMediaDownload">Restablecer ajustes de autodescarga</string>
+    <string name="ResetAutomaticMediaDownloadAlert">¿Quieres restablecer los ajustes de autodescarga?</string>
     <string name="ResetMyAccount">RESTABLECER MI CUENTA</string>
     <string name="ResetMyAccountText">Si continúas con el reinicio de tu cuenta, perderás todos tus chats y mensajes, junto con toda la multimedia y archivos que compartiste.</string>
     <string name="ResetMyAccountWarning">Advertencia</string>
@@ -1454,7 +1468,7 @@
     <string name="ShowInChat">Mostrar en el chat</string>
     <string name="ShowNearbyPlaces">LEVANTA PARA VER LUGARES CERCANOS</string>
     <string name="Shuffle">Aleatorio</string>
-    <string name="SinglePhotosHelp">Mostrar las fotos en mensajes por separado</string>
+    <string name="SinglePhotosHelp">Mostrar multimedia en mensajes por separado</string>
     <string name="SlideToCancel">DESLIZA PARA CANCELAR</string>
     <string name="SmartNotifications">Notificaciones inteligentes</string>
     <string name="SmartNotificationsAlert">Frecuencia de alertas</string>

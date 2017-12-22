@@ -3,7 +3,6 @@ package com.google.android.gms.internal;
 import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.IOException;
 import java.util.Arrays;
-import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 
 public final class aej extends adj<aej> implements Cloneable {
@@ -272,7 +271,7 @@ public final class aej extends adj<aej> implements Cloneable {
                     }
                     com_google_android_gms_internal_adg.zza(this.zzcua);
                     continue;
-                case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*66*/:
+                case 66:
                     this.zzctY = com_google_android_gms_internal_adg.readString();
                     continue;
                 case 74:

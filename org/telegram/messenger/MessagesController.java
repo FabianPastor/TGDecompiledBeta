@@ -376,6 +376,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private int currentDeletingTaskChannelId;
     private ArrayList<Integer> currentDeletingTaskMids;
     private int currentDeletingTaskTime;
+    public boolean defaultP2pContacts = false;
     private final Comparator<TL_dialog> dialogComparator = new Comparator<TL_dialog>() {
         public int compare(TL_dialog dialog1, TL_dialog dialog2) {
             if (!dialog1.pinned && dialog2.pinned) {
@@ -595,6 +596,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.callPacketTimeout = preferences.getInt("callPacketTimeout", 10000);
         this.maxPinnedDialogsCount = preferences.getInt("maxPinnedDialogsCount", 5);
         this.installReferer = preferences.getString("installReferer", null);
+        this.defaultP2pContacts = preferences.getBoolean("defaultP2pContacts", false);
         String disabledFeaturesString = preferences.getString("disabledFeatures", null);
         if (disabledFeaturesString != null && disabledFeaturesString.length() != 0) {
             try {
@@ -642,6 +644,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesController.this.callConnectTimeout = config.call_connect_timeout_ms;
                 MessagesController.this.callPacketTimeout = config.call_packet_timeout_ms;
                 MessagesController.this.maxPinnedDialogsCount = config.pinned_dialogs_count_max;
+                MessagesController.this.defaultP2pContacts = config.default_p2p_contacts;
                 Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
                 editor.putInt("maxGroupCount", MessagesController.this.maxGroupCount);
                 editor.putInt("maxMegagroupCount", MessagesController.this.maxMegagroupCount);
@@ -657,6 +660,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 editor.putInt("callPacketTimeout", MessagesController.this.callPacketTimeout);
                 editor.putString("linkPrefix", MessagesController.this.linkPrefix);
                 editor.putInt("maxPinnedDialogsCount", MessagesController.this.maxPinnedDialogsCount);
+                editor.putBoolean("defaultP2pContacts", MessagesController.this.defaultP2pContacts);
                 try {
                     SerializedData data = new SerializedData();
                     data.writeInt32(MessagesController.this.disabledFeatures.size());
@@ -1064,6 +1068,9 @@ public class MessagesController implements NotificationCenterDelegate {
             fromCache = true;
         }
         User oldUser = (User) this.users.get(Integer.valueOf(user.id));
+        if (oldUser == user) {
+            return false;
+        }
         if (!(oldUser == null || TextUtils.isEmpty(oldUser.username))) {
             this.objectsByUsernames.remove(oldUser.username.toLowerCase());
         }
@@ -1077,20 +1084,22 @@ public class MessagesController implements NotificationCenterDelegate {
             } else if (fromCache) {
                 return false;
             } else {
-                if (user.username != null) {
-                    oldUser.username = user.username;
-                    oldUser.flags |= 8;
-                } else {
-                    oldUser.username = null;
-                    oldUser.flags &= -9;
+                if (user.bot) {
+                    if (user.username != null) {
+                        oldUser.username = user.username;
+                        oldUser.flags |= 8;
+                    } else {
+                        oldUser.flags &= -9;
+                        oldUser.username = null;
+                    }
                 }
                 if (user.photo != null) {
                     oldUser.photo = user.photo;
                     oldUser.flags |= 32;
                     return false;
                 }
-                oldUser.photo = null;
                 oldUser.flags &= -33;
+                oldUser.photo = null;
                 return false;
             }
         } else if (!fromCache) {
@@ -1110,19 +1119,21 @@ public class MessagesController implements NotificationCenterDelegate {
             return false;
         } else {
             user.min = false;
-            if (oldUser.username != null) {
-                user.username = oldUser.username;
-                user.flags |= 8;
-            } else {
-                user.username = null;
-                user.flags &= -9;
+            if (oldUser.bot) {
+                if (oldUser.username != null) {
+                    user.username = oldUser.username;
+                    user.flags |= 8;
+                } else {
+                    user.flags &= -9;
+                    user.username = null;
+                }
             }
             if (oldUser.photo != null) {
                 user.photo = oldUser.photo;
                 user.flags |= 32;
             } else {
-                user.photo = null;
                 user.flags &= -33;
+                user.photo = null;
             }
             this.users.put(Integer.valueOf(user.id), user);
             return false;
@@ -1151,80 +1162,82 @@ public class MessagesController implements NotificationCenterDelegate {
     public void putChat(final Chat chat, boolean fromCache) {
         if (chat != null) {
             Chat oldChat = (Chat) this.chats.get(Integer.valueOf(chat.id));
-            if (!(oldChat == null || TextUtils.isEmpty(oldChat.username))) {
-                this.objectsByUsernames.remove(oldChat.username.toLowerCase());
-            }
-            if (!TextUtils.isEmpty(chat.username)) {
-                this.objectsByUsernames.put(chat.username.toLowerCase(), chat);
-            }
-            if (chat.min) {
-                if (oldChat == null) {
-                    this.chats.put(Integer.valueOf(chat.id), chat);
-                } else if (!fromCache) {
-                    oldChat.title = chat.title;
-                    oldChat.photo = chat.photo;
-                    oldChat.broadcast = chat.broadcast;
-                    oldChat.verified = chat.verified;
-                    oldChat.megagroup = chat.megagroup;
-                    oldChat.democracy = chat.democracy;
-                    if (chat.username != null) {
-                        oldChat.username = chat.username;
-                        oldChat.flags |= 64;
-                    } else {
-                        oldChat.username = null;
-                        oldChat.flags &= -65;
-                    }
-                    if (chat.participants_count != 0) {
-                        oldChat.participants_count = chat.participants_count;
-                    }
+            if (oldChat != chat) {
+                if (!(oldChat == null || TextUtils.isEmpty(oldChat.username))) {
+                    this.objectsByUsernames.remove(oldChat.username.toLowerCase());
                 }
-            } else if (!fromCache) {
-                if (oldChat != null) {
-                    int newFlags;
-                    if (chat.version != oldChat.version) {
-                        this.loadedFullChats.remove(Integer.valueOf(chat.id));
+                if (!TextUtils.isEmpty(chat.username)) {
+                    this.objectsByUsernames.put(chat.username.toLowerCase(), chat);
+                }
+                if (chat.min) {
+                    if (oldChat == null) {
+                        this.chats.put(Integer.valueOf(chat.id), chat);
+                    } else if (!fromCache) {
+                        oldChat.title = chat.title;
+                        oldChat.photo = chat.photo;
+                        oldChat.broadcast = chat.broadcast;
+                        oldChat.verified = chat.verified;
+                        oldChat.megagroup = chat.megagroup;
+                        oldChat.democracy = chat.democracy;
+                        if (chat.username != null) {
+                            oldChat.username = chat.username;
+                            oldChat.flags |= 64;
+                        } else {
+                            oldChat.flags &= -65;
+                            oldChat.username = null;
+                        }
+                        if (chat.participants_count != 0) {
+                            oldChat.participants_count = chat.participants_count;
+                        }
+                    }
+                } else if (!fromCache) {
+                    if (oldChat != null) {
+                        int newFlags;
+                        if (chat.version != oldChat.version) {
+                            this.loadedFullChats.remove(Integer.valueOf(chat.id));
+                        }
+                        if (oldChat.participants_count != 0 && chat.participants_count == 0) {
+                            chat.participants_count = oldChat.participants_count;
+                            chat.flags |= 131072;
+                        }
+                        int oldFlags = oldChat.banned_rights != null ? oldChat.banned_rights.flags : 0;
+                        if (chat.banned_rights != null) {
+                            newFlags = chat.banned_rights.flags;
+                        } else {
+                            newFlags = 0;
+                        }
+                        if (oldFlags != newFlags) {
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.channelRightsUpdated, chat);
+                                }
+                            });
+                        }
+                    }
+                    this.chats.put(Integer.valueOf(chat.id), chat);
+                } else if (oldChat == null) {
+                    this.chats.put(Integer.valueOf(chat.id), chat);
+                } else if (oldChat.min) {
+                    chat.min = false;
+                    chat.title = oldChat.title;
+                    chat.photo = oldChat.photo;
+                    chat.broadcast = oldChat.broadcast;
+                    chat.verified = oldChat.verified;
+                    chat.megagroup = oldChat.megagroup;
+                    chat.democracy = oldChat.democracy;
+                    if (oldChat.username != null) {
+                        chat.username = oldChat.username;
+                        chat.flags |= 64;
+                    } else {
+                        chat.flags &= -65;
+                        chat.username = null;
                     }
                     if (oldChat.participants_count != 0 && chat.participants_count == 0) {
                         chat.participants_count = oldChat.participants_count;
                         chat.flags |= 131072;
                     }
-                    int oldFlags = oldChat.banned_rights != null ? oldChat.banned_rights.flags : 0;
-                    if (chat.banned_rights != null) {
-                        newFlags = chat.banned_rights.flags;
-                    } else {
-                        newFlags = 0;
-                    }
-                    if (oldFlags != newFlags) {
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.channelRightsUpdated, chat);
-                            }
-                        });
-                    }
+                    this.chats.put(Integer.valueOf(chat.id), chat);
                 }
-                this.chats.put(Integer.valueOf(chat.id), chat);
-            } else if (oldChat == null) {
-                this.chats.put(Integer.valueOf(chat.id), chat);
-            } else if (oldChat.min) {
-                chat.min = false;
-                chat.title = oldChat.title;
-                chat.photo = oldChat.photo;
-                chat.broadcast = oldChat.broadcast;
-                chat.verified = oldChat.verified;
-                chat.megagroup = oldChat.megagroup;
-                chat.democracy = oldChat.democracy;
-                if (oldChat.username != null) {
-                    chat.username = oldChat.username;
-                    chat.flags |= 64;
-                } else {
-                    chat.username = null;
-                    chat.flags &= -65;
-                }
-                if (oldChat.participants_count != 0 && chat.participants_count == 0) {
-                    chat.participants_count = oldChat.participants_count;
-                    chat.flags |= 131072;
-                }
-                this.chats.put(Integer.valueOf(chat.id), chat);
             }
         }
     }
@@ -2293,9 +2306,9 @@ public class MessagesController implements NotificationCenterDelegate {
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll, long taskId, TLObject taskRequest) {
         long newTaskId;
         NativeByteBuffer data;
+        NativeByteBuffer data2;
         Throwable e;
         final int i;
-        TL_messages_deleteMessages req;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
             ArrayList<Integer> toSend = null;
             if (taskId == 0) {
@@ -2321,23 +2334,22 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
-            NativeByteBuffer data2;
             if (channelId != 0) {
-                TL_channels_deleteMessages req2;
+                TL_channels_deleteMessages req;
                 if (taskRequest != null) {
-                    req2 = (TL_channels_deleteMessages) taskRequest;
+                    req = (TL_channels_deleteMessages) taskRequest;
                     newTaskId = taskId;
                 } else {
-                    req2 = new TL_channels_deleteMessages();
-                    req2.id = toSend;
-                    req2.channel = getInputChannel(channelId);
+                    req = new TL_channels_deleteMessages();
+                    req.id = toSend;
+                    req.channel = getInputChannel(channelId);
                     data = null;
                     try {
-                        data2 = new NativeByteBuffer(req2.getObjectSize() + 8);
+                        data2 = new NativeByteBuffer(req.getObjectSize() + 8);
                         try {
                             data2.writeInt32(7);
                             data2.writeInt32(channelId);
-                            req2.serializeToStream(data2);
+                            req.serializeToStream(data2);
                             data = data2;
                         } catch (Exception e2) {
                             e = e2;
@@ -2345,7 +2357,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             FileLog.e(e);
                             newTaskId = MessagesStorage.getInstance().createPendingTask(data);
                             i = channelId;
-                            ConnectionsManager.getInstance().sendRequest(req2, new RequestDelegate() {
+                            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                                 public void run(TLObject response, TL_error error) {
                                     if (error == null) {
                                         TL_messages_affectedMessages res = (TL_messages_affectedMessages) response;
@@ -2363,39 +2375,40 @@ public class MessagesController implements NotificationCenterDelegate {
                         FileLog.e(e);
                         newTaskId = MessagesStorage.getInstance().createPendingTask(data);
                         i = channelId;
-                        ConnectionsManager.getInstance().sendRequest(req2, /* anonymous class already generated */);
+                        ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
                         return;
                     }
                     newTaskId = MessagesStorage.getInstance().createPendingTask(data);
                 }
                 i = channelId;
-                ConnectionsManager.getInstance().sendRequest(req2, /* anonymous class already generated */);
+                ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
                 return;
             }
+            TL_messages_deleteMessages req2;
             if (!(randoms == null || encryptedChat == null || randoms.isEmpty())) {
                 SecretChatHelper.getInstance().sendMessagesDeleteMessage(encryptedChat, randoms, null);
             }
             if (taskRequest != null) {
-                req = (TL_messages_deleteMessages) taskRequest;
+                req2 = (TL_messages_deleteMessages) taskRequest;
                 newTaskId = taskId;
             } else {
-                req = new TL_messages_deleteMessages();
-                req.id = toSend;
-                req.revoke = forAll;
+                req2 = new TL_messages_deleteMessages();
+                req2.id = toSend;
+                req2.revoke = forAll;
                 data = null;
                 try {
-                    data2 = new NativeByteBuffer(req.getObjectSize() + 8);
+                    data2 = new NativeByteBuffer(req2.getObjectSize() + 8);
                     try {
                         data2.writeInt32(7);
                         data2.writeInt32(channelId);
-                        req.serializeToStream(data2);
+                        req2.serializeToStream(data2);
                         data = data2;
                     } catch (Exception e4) {
                         e = e4;
                         data = data2;
                         FileLog.e(e);
                         newTaskId = MessagesStorage.getInstance().createPendingTask(data);
-                        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                        ConnectionsManager.getInstance().sendRequest(req2, new RequestDelegate() {
                             public void run(TLObject response, TL_error error) {
                                 if (error == null) {
                                     TL_messages_affectedMessages res = (TL_messages_affectedMessages) response;
@@ -2411,11 +2424,11 @@ public class MessagesController implements NotificationCenterDelegate {
                     e = e5;
                     FileLog.e(e);
                     newTaskId = MessagesStorage.getInstance().createPendingTask(data);
-                    ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
+                    ConnectionsManager.getInstance().sendRequest(req2, /* anonymous class already generated */);
                 }
                 newTaskId = MessagesStorage.getInstance().createPendingTask(data);
             }
-            ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
+            ConnectionsManager.getInstance().sendRequest(req2, /* anonymous class already generated */);
         }
     }
 
@@ -3636,6 +3649,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesController.this.getDifference();
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
+                        MessageObject messageObject;
                         MessagesController.this.resetingDialogs = false;
                         MessagesController.this.applyDialogsNotificationsSettings(org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs);
                         if (!UserConfig.draftsLoaded) {
@@ -3644,7 +3658,6 @@ public class MessagesController implements NotificationCenterDelegate {
                         MessagesController.this.putUsers(org_telegram_tgnet_TLRPC_messages_Dialogs.users, false);
                         MessagesController.this.putChats(org_telegram_tgnet_TLRPC_messages_Dialogs.chats, false);
                         for (int a = 0; a < MessagesController.this.dialogs.size(); a++) {
-                            MessageObject messageObject;
                             TL_dialog oldDialog = (TL_dialog) MessagesController.this.dialogs.get(a);
                             if (((int) oldDialog.id) != 0) {
                                 MessagesController.this.dialogs_dict.remove(Long.valueOf(oldDialog.id));
@@ -3918,8 +3931,8 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
-                Chat chat;
                 User user;
+                Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 AbstractMap usersDict = new HashMap();
@@ -3937,6 +3950,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 Message lastMessage = null;
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                     if (lastMessage == null || message.date < lastMessage.date) {
                         lastMessage = message;
@@ -4007,7 +4021,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 final ArrayList<TL_dialog> dialogsToReload = new ArrayList();
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
-                    Integer value;
                     TL_dialog d = (TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(a);
                     if (d.id == 0 && d.peer != null) {
                         if (d.peer.user_id != 0) {
@@ -4107,7 +4120,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         if (arrayList != null) {
                             for (int a = 0; a < arrayList.size(); a++) {
                                 EncryptedChat encryptedChat = (EncryptedChat) arrayList.get(a);
-                                if ((encryptedChat instanceof TL_encryptedChat) && AndroidUtilities.getMyLayerVersion(encryptedChat.layer) < 66) {
+                                if ((encryptedChat instanceof TL_encryptedChat) && AndroidUtilities.getMyLayerVersion(encryptedChat.layer) < 73) {
                                     SecretChatHelper.getInstance().sendNotifyLayerMessage(encryptedChat, null);
                                 }
                                 MessagesController.this.putEncryptedChat(encryptedChat, true);
@@ -4364,6 +4377,8 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void checkLastDialogMessage(TL_dialog dialog, InputPeer peer, long taskId) {
         Throwable e;
+        long newTaskId;
+        final TL_dialog tL_dialog;
         final int lower_id = (int) dialog.id;
         if (lower_id != 0 && !this.checkingLastMessagesDialogs.containsKey(Integer.valueOf(lower_id))) {
             InputPeer inputPeer;
@@ -4375,8 +4390,6 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             req.peer = inputPeer;
             if (req.peer != null && !(req.peer instanceof TL_inputPeerChannel)) {
-                long newTaskId;
-                final TL_dialog tL_dialog;
                 req.limit = 1;
                 this.checkingLastMessagesDialogs.put(Integer.valueOf(lower_id), Boolean.valueOf(true));
                 if (taskId == 0) {
@@ -5894,7 +5907,6 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId, InputChannel inputChannel) {
-        Integer channelPts;
         Throwable e;
         long newTaskId;
         TL_updates_getChannelDifference req;
@@ -5905,6 +5917,7 @@ public class MessagesController implements NotificationCenterDelegate {
             gettingDifferenceChannel = Boolean.valueOf(false);
         }
         if (!gettingDifferenceChannel.booleanValue()) {
+            Integer channelPts;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = (Integer) this.channelsPts.get(Integer.valueOf(channelId));
@@ -6055,7 +6068,6 @@ public class MessagesController implements NotificationCenterDelegate {
                                                                     long uid;
                                                                     ArrayList<MessageObject> arr;
                                                                     message = (Message) res.new_messages.get(a);
-                                                                    FileLog.d("received messages with id = " + message.id + " text = " + message.message + " media = " + message.media);
                                                                     if (channelFinal == null || !channelFinal.left) {
                                                                         if (message.out) {
                                                                             num = outboxValue;
@@ -6282,9 +6294,7 @@ public class MessagesController implements NotificationCenterDelegate {
             req.qts = qts;
             if (this.getDifferenceFirstSync) {
                 req.flags |= 1;
-                if (BuildVars.DEBUG_PRIVATE_VERSION) {
-                    req.pts_total_limit = 100;
-                } else if (ConnectionsManager.isConnectedOrConnectingToWiFi()) {
+                if (ConnectionsManager.isConnectedOrConnectingToWiFi()) {
                     req.pts_total_limit = DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS;
                 } else {
                     req.pts_total_limit = 1000;
@@ -6853,7 +6863,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         });
                     }
                 });
-                MessagesStorage.getInstance().putMessages(messagesArr, true, true, false, MediaController.getInstance().getAutodownloadMask());
+                MessagesStorage.getInstance().putMessages(messagesArr, true, true, false, 0);
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
                         MessagesController.this.updateInterfaceWithMessages((long) (-chat_id), pushMessages);
@@ -6920,7 +6930,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                             });
                                         }
                                     });
-                                    MessagesStorage.getInstance().putMessages(messagesArr, true, true, false, MediaController.getInstance().getAutodownloadMask());
+                                    MessagesStorage.getInstance().putMessages(messagesArr, true, true, false, 0);
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
                                             MessagesController.this.updateInterfaceWithMessages((long) (-chat_id), pushMessages);

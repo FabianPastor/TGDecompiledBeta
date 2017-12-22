@@ -2,7 +2,6 @@ package com.google.android.gms.internal;
 
 import android.support.v4.view.MotionEventCompat;
 import java.io.IOException;
-import org.telegram.messenger.SecretChatHelper;
 
 public final class aen extends adp {
     public long zzaLt;
@@ -67,7 +66,7 @@ public final class aen extends adp {
                 case 58:
                     this.zzcus = com_google_android_gms_internal_adg.readString();
                     continue;
-                case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*66*/:
+                case 66:
                     this.zzcut = com_google_android_gms_internal_adg.readString();
                     continue;
                 case 74:

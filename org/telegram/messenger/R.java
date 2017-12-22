@@ -768,6 +768,7 @@ public final class R {
         public static final int AddStickers = NUM;
         public static final int AddStickersInstalled = NUM;
         public static final int AddStickersNotFound = NUM;
+        public static final int AddSubscriber = NUM;
         public static final int AddToContacts = NUM;
         public static final int AddToFavorites = NUM;
         public static final int AddToMasks = NUM;
@@ -874,10 +875,17 @@ public final class R {
         public static final int AudioTitle = NUM;
         public static final int AudioUnknownArtist = NUM;
         public static final int AudioUnknownTitle = NUM;
+        public static final int AutoDownloadMedia = NUM;
         public static final int AutoLock = NUM;
         public static final int AutoLockDisabled = NUM;
         public static final int AutoLockInTime = NUM;
         public static final int AutoLockInfo = NUM;
+        public static final int AutodownloadChannels = NUM;
+        public static final int AutodownloadContacts = NUM;
+        public static final int AutodownloadGroupChats = NUM;
+        public static final int AutodownloadPrivateChats = NUM;
+        public static final int AutodownloadSizeLimit = NUM;
+        public static final int AutodownloadSizeLimitUpTo = NUM;
         public static final int AutomaticMediaDownload = NUM;
         public static final int AutoplayGifs = NUM;
         public static final int AwaitingEncryption = NUM;
@@ -1011,6 +1019,7 @@ public final class R {
         public static final int ChannelSignMessages = NUM;
         public static final int ChannelSignMessagesInfo = NUM;
         public static final int ChannelSilentBroadcast = NUM;
+        public static final int ChannelSubscribers = NUM;
         public static final int ChannelUnmute = NUM;
         public static final int ChannelUserAddLimit = NUM;
         public static final int ChannelUserCantAdd = NUM;
@@ -1865,6 +1874,7 @@ public final class R {
         public static final int PaymentConfirmationMessage = NUM;
         public static final int PaymentConfirmationNewCard = NUM;
         public static final int PaymentConnectionFailed = NUM;
+        public static final int PaymentEmailToProvider = NUM;
         public static final int PaymentFailed = NUM;
         public static final int PaymentInvoice = NUM;
         public static final int PaymentNoShippingMethod = NUM;
@@ -1876,6 +1886,8 @@ public final class R {
         public static final int PaymentPasswordInfo = NUM;
         public static final int PaymentPasswordReEnter = NUM;
         public static final int PaymentPasswordTitle = NUM;
+        public static final int PaymentPhoneEmailToProvider = NUM;
+        public static final int PaymentPhoneToProvider = NUM;
         public static final int PaymentPrecheckoutFailed = NUM;
         public static final int PaymentReceipt = NUM;
         public static final int PaymentShippingAddress = NUM;
@@ -2005,6 +2017,8 @@ public final class R {
         public static final int ResetAccountInfo = NUM;
         public static final int ResetAccountStatus = NUM;
         public static final int ResetAllNotifications = NUM;
+        public static final int ResetAutomaticMediaDownload = NUM;
+        public static final int ResetAutomaticMediaDownloadAlert = NUM;
         public static final int ResetMyAccount = NUM;
         public static final int ResetMyAccountText = NUM;
         public static final int ResetMyAccountWarning = NUM;

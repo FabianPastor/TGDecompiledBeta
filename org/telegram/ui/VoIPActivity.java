@@ -58,7 +58,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.Emoji;
-import org.telegram.messenger.EmojiData;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.ImageReceiver.ImageReceiverDelegate;
 import org.telegram.messenger.LocaleController;
@@ -819,12 +818,6 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
             String[] emoji = EncryptionKeyEmojifier.emojifyForCall(Utilities.computeSHA256(encryptedChat.auth_key, 0, encryptedChat.auth_key.length));
             for (int i = 0; i < 4; i++) {
                 Drawable drawable = Emoji.getEmojiDrawable(emoji[i]);
-                if (drawable == null) {
-                    CharSequence newCode = (CharSequence) EmojiData.emojiAliasMap.get(emoji[i]);
-                    if (newCode != null) {
-                        drawable = Emoji.getEmojiDrawable(newCode);
-                    }
-                }
                 if (drawable != null) {
                     drawable.setBounds(0, 0, AndroidUtilities.dp(22.0f), AndroidUtilities.dp(22.0f));
                     this.keyEmojiViews[i].setImageDrawable(drawable);

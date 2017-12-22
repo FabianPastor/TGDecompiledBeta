@@ -484,12 +484,11 @@ public class MentionsAdapter extends SelectionAdapter {
                             public void run() {
                                 boolean z = false;
                                 if (MentionsAdapter.this.searchingContextQuery != null && str.equals(MentionsAdapter.this.searchingContextQuery)) {
-                                    if (MentionsAdapter.this.delegate != null) {
-                                        MentionsAdapter.this.delegate.onContextSearch(false);
-                                    }
                                     MentionsAdapter.this.contextQueryReqid = 0;
                                     if (z && response == null) {
                                         MentionsAdapter.this.searchForContextBotResults(false, user2, str, str2);
+                                    } else if (MentionsAdapter.this.delegate != null) {
+                                        MentionsAdapter.this.delegate.onContextSearch(false);
                                     }
                                     if (response != null) {
                                         TL_messages_botResults res = response;
@@ -552,11 +551,11 @@ public class MentionsAdapter extends SelectionAdapter {
                                         } else {
                                             MentionsAdapter.this.notifyDataSetChanged();
                                         }
-                                        MentionsAdapterDelegate access$1500 = MentionsAdapter.this.delegate;
+                                        MentionsAdapterDelegate access$1600 = MentionsAdapter.this.delegate;
                                         if (!(MentionsAdapter.this.searchResultBotContext.isEmpty() && MentionsAdapter.this.searchResultBotContextSwitch == null)) {
                                             z = true;
                                         }
-                                        access$1500.needChangePanelVisibility(z);
+                                        access$1600.needChangePanelVisibility(z);
                                     }
                                 }
                             }

@@ -71,6 +71,7 @@
     <string name="AddStickers">إضافة ملصق</string>
     <string name="AddStickersInstalled">تم إضافة ملصقات جديدة</string>
     <string name="AddStickersNotFound">لا يوجد ملصقات</string>
+    <string name="AddSubscriber">إضافة مشترك</string>
     <string name="AddToContacts">أضف لجهات الاتصال</string>
     <string name="AddToFavorites">أضف للمفضلة</string>
     <string name="AddToMasks">إضافة إلى الأقنعة</string>
@@ -177,10 +178,17 @@
     <string name="AudioTitle">الموسيقى المشتركة</string>
     <string name="AudioUnknownArtist">الفنان غير معروف</string>
     <string name="AudioUnknownTitle">العنوان غير معروف</string>
+    <string name="AutoDownloadMedia">تنزيل الوسائط تلقائياً</string>
     <string name="AutoLock">قفل تلقائي</string>
     <string name="AutoLockDisabled">معطّل</string>
     <string name="AutoLockInTime">خلال %1$s</string>
     <string name="AutoLockInfo">اطلب رمز المرور إذا غبت فترة محددة من الزمن.</string>
+    <string name="AutodownloadChannels">القنوات</string>
+    <string name="AutodownloadContacts">جهات الاتصال</string>
+    <string name="AutodownloadGroupChats">المحادثات الجماعية</string>
+    <string name="AutodownloadPrivateChats">المحادثات الخاصة</string>
+    <string name="AutodownloadSizeLimit">قيّد بالحجم</string>
+    <string name="AutodownloadSizeLimitUpTo">حتى %1$s</string>
     <string name="AutomaticMediaDownload">تنزيل تلقائي للوسائط</string>
     <string name="AutoplayGifs">تشغيل تلقائي للصور المتحركة</string>
     <string name="AwaitingEncryption">في إنتظار اتصال %s …</string>
@@ -314,6 +322,7 @@
     <string name="ChannelSignMessages">وقّع الرسائل</string>
     <string name="ChannelSignMessagesInfo">قم بإضافة أسماء المشرفين للرسائل التي يرسلونها.</string>
     <string name="ChannelSilentBroadcast">رسالة جماعية صامتة</string>
+    <string name="ChannelSubscribers">المشتركون</string>
     <string name="ChannelUnmute">إلغاء الصامت</string>
     <string name="ChannelUserAddLimit">المعذرة، يمكنك إضافة أول ٢٠٠ عضو للقناة فقط. يمكن لعدد غير محدود من الأعضاء الدخول للقناة عن طريق رابط القناة.</string>
     <string name="ChannelUserCantAdd">المعذرة، لا يمكنك إضافة هذا المستخدم للقنوات.</string>
@@ -336,7 +345,7 @@
     <string name="ChatHistoryVisibleInfo">الأعضاء الجدد سيتمكنون من الإطلاع على الرسائل التي تم إرسالها قبل انضمامهم.</string>
     <string name="ChatLocation">موقع</string>
     <string name="ChatVideo">مقطع مرئي</string>
-    <string name="ChatYourSelf">تحدث مع نفسك</string>
+    <string name="ChatYourSelf">الرسائل المحفوظة</string>
     <string name="ChatYourSelfDescription1">حوّل الرسائل إلى هنا لحفظهم</string>
     <string name="ChatYourSelfDescription2">أرسل الوسائط والملفات لحفظهم</string>
     <string name="ChatYourSelfDescription3">افتح هذه المحادثة من أي جهاز من أجهزتك</string>
@@ -728,7 +737,7 @@
     <string name="GroupMembers">أعضاء</string>
     <string name="GroupName">اسم المجموعة</string>
     <string name="GroupNotifications">إشعارات المجموعات</string>
-    <string name="GroupPhotosHelp">يعرض الصور كرسالة واحدة</string>
+    <string name="GroupPhotosHelp">اجمع الصور في رسالة واحدة</string>
     <string name="GroupStickers">ملصقات المجموعة</string>
     <string name="GroupStickersInfo">يمكنك اختيار حزمة ستكون متاحة لكل أعضاء هذه المجموعة أثناء المراسلة في هذه المجموعة.</string>
     <string name="GroupUserAddLimit">المعذرة، المجموعة ممتلئة.</string>
@@ -1168,6 +1177,7 @@
     <string name="PaymentConfirmationMessage">بطاقتك %1$s مسجلة مسبقًا. لتتمكن من استخدامها، يرجى إدخال كلمة مرور التحقق بخطوتين.</string>
     <string name="PaymentConfirmationNewCard">اختر بطاقة أخرى</string>
     <string name="PaymentConnectionFailed">تعذر الوصور إلى خادم الدفع. فضلًا تحقق من اتصال الانترنت وحاول مرة أخرى.</string>
+    <string name="PaymentEmailToProvider">سيتم إرسال البريد الالكتروني إلى %1$s كمعلومات الدفع.</string>
     <string name="PaymentFailed">المعذرة، تم رفض عملية الدفع.</string>
     <string name="PaymentInvoice">الفاتورة</string>
     <string name="PaymentNoShippingMethod">المعذرة، لا يمكن التوصيل لعنوانك.</string>
@@ -1179,6 +1189,8 @@
     <string name="PaymentPasswordInfo">يرجى اختيار كلمة مرور لحماية معلومات الدفع الخاصة بك. ستطلب منك عند تسجيل الدخول.</string>
     <string name="PaymentPasswordReEnter">أعد إدخال كلمة المرور</string>
     <string name="PaymentPasswordTitle">كلمة المرور</string>
+    <string name="PaymentPhoneEmailToProvider">سيتم إرسال الرقم والبريد الإلكتروني إلى %1$s كمعلومات الدفع.</string>
+    <string name="PaymentPhoneToProvider">سيتم إرسال الرقم إلى %1$s كمعلومات الدفع.</string>
     <string name="PaymentPrecheckoutFailed">المعذرة، تم إلغاء عملية الدفع من البوت.</string>
     <string name="PaymentReceipt">الفاتورة</string>
     <string name="PaymentShippingAddress">عنوان الشحن</string>
@@ -1308,6 +1320,8 @@
     <string name="ResetAccountInfo">بما أن الحساب **%1$s** فعّال ومحمي بكلمة مرور، سنقوم بحذفه خلال أسبوع لأسباب أمنية. يمكنك إلغاء هذه العملية في أي وقت.</string>
     <string name="ResetAccountStatus">ستتمكن من إعادة تعيين حسابك خلال:</string>
     <string name="ResetAllNotifications">إعادة تعيين كافة الإشعارات</string>
+    <string name="ResetAutomaticMediaDownload">إعادة تعيين إعدادات التنزيل التلقائي</string>
+    <string name="ResetAutomaticMediaDownloadAlert">هل أنت متأكد من رغبتك في إعادة تعيين إعدادات التنزيل التلقائي؟</string>
     <string name="ResetMyAccount">إعادة تعيين حسابي</string>
     <string name="ResetMyAccountText">إذا قمت بإعادة تعيين حسابك، ستفقد كافّة محادثاتك ورسائلك، بالإضافة إلى الوسائط والملفات التي تمت مشاركتها.</string>
     <string name="ResetMyAccountWarning">تحذير</string>
@@ -1454,7 +1468,7 @@
     <string name="ShowInChat">أظهر في المحادثة</string>
     <string name="ShowNearbyPlaces">اسحب للأعلى لمشاهدة الأماكن القريبة</string>
     <string name="Shuffle">عشوائي</string>
-    <string name="SinglePhotosHelp">يعرض الصور كرسائل متفرقة</string>
+    <string name="SinglePhotosHelp">اعرض الصور كرسائل متفرقة</string>
     <string name="SlideToCancel">قم بالسحب للإلغاء</string>
     <string name="SmartNotifications">إشعارات ذكية</string>
     <string name="SmartNotificationsAlert">تردد صوت التنبيه</string>

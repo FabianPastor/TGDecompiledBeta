@@ -130,6 +130,20 @@ public class ImageLoader {
             }
         }
 
+        public void replaceImageReceiver(ImageReceiver imageReceiver, String key, String filter, boolean thumb) {
+            int index = this.imageReceiverArray.indexOf(imageReceiver);
+            if (index != -1) {
+                if (((Boolean) this.thumbs.get(index)).booleanValue() != thumb) {
+                    index = this.imageReceiverArray.subList(index + 1, this.imageReceiverArray.size()).indexOf(imageReceiver);
+                    if (index == -1) {
+                        return;
+                    }
+                }
+                this.keys.set(index, key);
+                this.filters.set(index, filter);
+            }
+        }
+
         public void removeImageReceiver(ImageReceiver imageReceiver) {
             Boolean thumb = Boolean.valueOf(this.selfThumb);
             int a = 0;
@@ -1323,7 +1337,12 @@ public class ImageLoader {
                         CacheImage alreadyLoadingCache = (CacheImage) ImageLoader.this.imageLoadingByKeys.get(str2);
                         CacheImage alreadyLoadingImage = (CacheImage) ImageLoader.this.imageLoadingByTag.get(finalTag);
                         if (alreadyLoadingImage != null) {
-                            if (alreadyLoadingImage == alreadyLoadingUrl || alreadyLoadingImage == alreadyLoadingCache) {
+                            if (alreadyLoadingImage == alreadyLoadingCache) {
+                                added = true;
+                            } else if (alreadyLoadingImage == alreadyLoadingUrl) {
+                                if (alreadyLoadingCache == null) {
+                                    alreadyLoadingImage.replaceImageReceiver(imageReceiver2, str2, str3, i != 0);
+                                }
                                 added = true;
                             } else {
                                 alreadyLoadingImage.removeImageReceiver(imageReceiver2);
@@ -1409,7 +1428,7 @@ public class ImageLoader {
                                 img.animatedFile = true;
                             }
                             if (cacheFile == null) {
-                                if (i2 != 0 || i3 == 0 || str4 != null || isEncrypted) {
+                                if (i2 != 0 || i3 <= 0 || str4 != null || isEncrypted) {
                                     cacheFile = new File(FileLoader.getInstance().getDirectory(4), str);
                                     if (cacheFile.exists()) {
                                         cacheFileExists = true;
@@ -1448,7 +1467,7 @@ public class ImageLoader {
                                 if (tLObject instanceof FileLocation) {
                                     FileLocation location2 = (FileLocation) tLObject;
                                     int localCacheType = i2;
-                                    if (localCacheType == 0 && (i3 == 0 || location2.key != null)) {
+                                    if (localCacheType == 0 && (i3 <= 0 || location2.key != null)) {
                                         localCacheType = 1;
                                     }
                                     FileLoader.getInstance().loadFile(location2, str5, i3, localCacheType);
@@ -1775,7 +1794,6 @@ public class ImageLoader {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static Bitmap loadBitmap(String path, Uri uri, float maxWidth, float maxHeight, boolean useMaxScale) {
         float scaleFactor;
-        Bitmap newBitmap;
         Options bmOptions = new Options();
         bmOptions.inJustDecodeBounds = true;
         InputStream inputStream = null;
@@ -1854,6 +1872,7 @@ public class ImageLoader {
             }
         }
         Bitmap b = null;
+        Bitmap newBitmap;
         if (path != null) {
             try {
                 b = BitmapFactory.decodeFile(path, bmOptions);

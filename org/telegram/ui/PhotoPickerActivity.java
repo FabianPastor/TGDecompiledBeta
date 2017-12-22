@@ -848,7 +848,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         });
         if (this.singlePhoto) {
             this.pickerBottomLayout.setVisibility(8);
-        } else if ((this.selectedAlbum != null || this.type == 0) && this.chatActivity != null && this.chatActivity.getCurrentEncryptedChat() == null) {
+        } else if ((this.selectedAlbum != null || this.type == 0) && this.chatActivity != null && this.chatActivity.allowGroupPhotos()) {
             this.imageOrderToggleButton = new ImageView(context);
             this.imageOrderToggleButton.setScaleType(ScaleType.CENTER);
             this.imageOrderToggleButton.setImageResource(R.drawable.photos_group);

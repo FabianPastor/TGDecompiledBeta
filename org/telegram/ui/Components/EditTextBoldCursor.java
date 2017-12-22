@@ -178,7 +178,12 @@ public class EditTextBoldCursor extends EditText {
             getPaint().setColor(this.hintColor);
             getPaint().setAlpha((int) (255.0f * this.hintAlpha));
             canvas.save();
-            canvas.translate(0.0f, ((float) (getMeasuredHeight() - this.hintLayout.getHeight())) / 2.0f);
+            int left = 0;
+            float lineLeft = this.hintLayout.getLineLeft(0);
+            if (lineLeft != 0.0f) {
+                left = (int) (((float) null) - lineLeft);
+            }
+            canvas.translate((float) left, ((float) (getMeasuredHeight() - this.hintLayout.getHeight())) / 2.0f);
             this.hintLayout.draw(canvas);
             getPaint().setColor(oldColor);
             canvas.restore();

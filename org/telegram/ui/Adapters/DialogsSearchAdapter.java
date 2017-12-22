@@ -640,7 +640,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             cursor.dispose();
                         }
                         if (!encryptedToLoad.isEmpty()) {
-                            cursor = MessagesStorage.getInstance().getDatabase().queryFinalized(String.format(Locale.US, "SELECT q.data, u.name, q.user, q.g, q.authkey, q.ttl, u.data, u.status, q.layer, q.seq_in, q.seq_out, q.use_count, q.exchange_id, q.key_date, q.fprint, q.fauthkey, q.khash, q.in_seq_no FROM enc_chats as q INNER JOIN users as u ON q.user = u.uid WHERE q.uid IN(%s)", new Object[]{TextUtils.join(",", encryptedToLoad)}), new Object[0]);
+                            cursor = MessagesStorage.getInstance().getDatabase().queryFinalized(String.format(Locale.US, "SELECT q.data, u.name, q.user, q.g, q.authkey, q.ttl, u.data, u.status, q.layer, q.seq_in, q.seq_out, q.use_count, q.exchange_id, q.key_date, q.fprint, q.fauthkey, q.khash, q.in_seq_no, q.admin_id, q.mtproto_seq FROM enc_chats as q INNER JOIN users as u ON q.user = u.uid WHERE q.uid IN(%s)", new Object[]{TextUtils.join(",", encryptedToLoad)}), new Object[0]);
                             while (cursor.next()) {
                                 name = cursor.stringValue(1);
                                 tName = LocaleController.getInstance().getTranslitString(name);
@@ -692,6 +692,11 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                             chat2.future_auth_key = cursor.byteArrayValue(15);
                                             chat2.key_hash = cursor.byteArrayValue(16);
                                             chat2.in_seq_no = cursor.intValue(17);
+                                            int admin_id = cursor.intValue(18);
+                                            if (admin_id != 0) {
+                                                chat2.admin_id = admin_id;
+                                            }
+                                            chat2.mtproto_seq = cursor.intValue(19);
                                             if (user2.status != null) {
                                                 user2.status.expires = cursor.intValue(7);
                                             }
@@ -1055,9 +1060,9 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Object username;
         switch (holder.getItemViewType()) {
             case 0:
+                Object username;
                 TLObject tLObject;
                 ProfileSearchCell cell = holder.itemView;
                 TLObject user = null;

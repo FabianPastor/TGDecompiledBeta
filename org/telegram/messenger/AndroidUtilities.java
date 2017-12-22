@@ -103,6 +103,7 @@ import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.ForegroundDetector;
 import org.telegram.ui.Components.TypefaceSpan;
 
@@ -398,8 +399,8 @@ Error: java.util.NoSuchElementException
         if (pathString == null) {
             return false;
         }
-        String path;
         while (true) {
+            String path;
             String newPath = Utilities.readlink(pathString);
             if (newPath != null && !newPath.equals(pathString)) {
                 pathString = newPath;
@@ -894,30 +895,41 @@ Error: java.util.NoSuchElementException
             if (user != null || chat != null) {
                 String name;
                 TLObject photo = null;
-                if (user != null) {
-                    if (UserObject.isUserSelf(user)) {
-                        name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
-                    } else {
-                        name = ContactsController.formatName(user.first_name, user.last_name);
-                    }
-                    if (user.photo != null) {
-                        photo = user.photo.photo_small;
-                    }
-                } else {
+                boolean selfUser = false;
+                if (user == null) {
                     name = chat.title;
                     if (chat.photo != null) {
                         photo = chat.photo.photo_small;
                     }
+                } else if (UserObject.isUserSelf(user)) {
+                    name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
+                    selfUser = true;
+                } else {
+                    name = ContactsController.formatName(user.first_name, user.last_name);
+                    if (user.photo != null) {
+                        photo = user.photo.photo_small;
+                    }
                 }
                 Bitmap bitmap = null;
-                if (photo != null) {
-                    try {
-                        bitmap = BitmapFactory.decodeFile(FileLoader.getPathToAttach(photo, true).toString());
-                        if (bitmap != null) {
-                            int size = dp(58.0f);
-                            Bitmap result = Bitmap.createBitmap(size, size, Config.ARGB_8888);
-                            result.eraseColor(0);
-                            Canvas canvas = new Canvas(result);
+                if (selfUser || photo != null) {
+                    if (!selfUser) {
+                        try {
+                            bitmap = BitmapFactory.decodeFile(FileLoader.getPathToAttach(photo, true).toString());
+                        } catch (Throwable e) {
+                            FileLog.e(e);
+                        }
+                    }
+                    if (selfUser || bitmap != null) {
+                        int size = dp(58.0f);
+                        Bitmap result = Bitmap.createBitmap(size, size, Config.ARGB_8888);
+                        result.eraseColor(0);
+                        Canvas canvas = new Canvas(result);
+                        if (selfUser) {
+                            AvatarDrawable avatarDrawable = new AvatarDrawable(user);
+                            avatarDrawable.setSavedMessages(1);
+                            avatarDrawable.setBounds(0, 0, size, size);
+                            avatarDrawable.draw(canvas);
+                        } else {
                             Shader bitmapShader = new BitmapShader(bitmap, TileMode.CLAMP, TileMode.CLAMP);
                             if (roundPaint == null) {
                                 roundPaint = new Paint(1);
@@ -930,20 +942,18 @@ Error: java.util.NoSuchElementException
                             bitmapRect.set(0.0f, 0.0f, (float) bitmap.getWidth(), (float) bitmap.getHeight());
                             canvas.drawRoundRect(bitmapRect, (float) bitmap.getWidth(), (float) bitmap.getHeight(), roundPaint);
                             canvas.restore();
-                            Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.book_logo);
-                            int w = dp(15.0f);
-                            int left = (size - w) - dp(2.0f);
-                            int top = (size - w) - dp(2.0f);
-                            drawable.setBounds(left, top, left + w, top + w);
-                            drawable.draw(canvas);
-                            try {
-                                canvas.setBitmap(null);
-                            } catch (Exception e) {
-                            }
-                            bitmap = result;
                         }
-                    } catch (Throwable e2) {
-                        FileLog.e(e2);
+                        Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.book_logo);
+                        int w = dp(15.0f);
+                        int left = (size - w) - dp(2.0f);
+                        int top = (size - w) - dp(2.0f);
+                        drawable.setBounds(left, top, left + w, top + w);
+                        drawable.draw(canvas);
+                        try {
+                            canvas.setBitmap(null);
+                        } catch (Exception e2) {
+                        }
+                        bitmap = result;
                     }
                 }
                 if (VERSION.SDK_INT >= 26) {
@@ -988,8 +998,8 @@ Error: java.util.NoSuchElementException
                 addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
                 ApplicationLoader.applicationContext.sendBroadcast(addIntent);
             }
-        } catch (Throwable e22) {
-            FileLog.e(e22);
+        } catch (Throwable e3) {
+            FileLog.e(e3);
         }
     }
 

@@ -92,6 +92,7 @@ import org.telegram.tgnet.TLRPC.TL_messages_getDhConfig;
 import org.telegram.tgnet.TLRPC.TL_messages_requestEncryption;
 import org.telegram.tgnet.TLRPC.TL_messages_sendEncrypted;
 import org.telegram.tgnet.TLRPC.TL_messages_sendEncryptedFile;
+import org.telegram.tgnet.TLRPC.TL_messages_sendEncryptedMultiMedia;
 import org.telegram.tgnet.TLRPC.TL_messages_sendEncryptedService;
 import org.telegram.tgnet.TLRPC.TL_peerUser;
 import org.telegram.tgnet.TLRPC.TL_photo;
@@ -108,7 +109,7 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 
 public class SecretChatHelper {
-    public static final int CURRENT_SECRET_CHAT_LAYER = 66;
+    public static final int CURRENT_SECRET_CHAT_LAYER = 73;
     private static volatile SecretChatHelper Instance = null;
     private HashMap<Integer, EncryptedChat> acceptingChats = new HashMap();
     public ArrayList<Update> delayedEncryptedChatUpdates = new ArrayList();
@@ -120,13 +121,13 @@ public class SecretChatHelper {
     public static class TL_decryptedMessageHolder extends TLObject {
         public static int constructor = NUM;
         public int date;
+        public int decryptedWithVersion;
         public EncryptedFile file;
         public TL_decryptedMessageLayer layer;
         public boolean new_key_used;
-        public long random_id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
-            this.random_id = stream.readInt64(exception);
+            stream.readInt64(exception);
             this.date = stream.readInt32(exception);
             this.layer = TL_decryptedMessageLayer.TLdeserialize(stream, stream.readInt32(exception), exception);
             if (stream.readBool(exception)) {
@@ -137,7 +138,7 @@ public class SecretChatHelper {
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
-            stream.writeInt64(this.random_id);
+            stream.writeInt64(0);
             stream.writeInt32(this.date);
             this.layer.serializeToStream(stream);
             stream.writeBool(this.file != null);
@@ -292,6 +293,7 @@ public class SecretChatHelper {
                 newChat.seq_in = exist.seq_in;
                 newChat.seq_out = exist.seq_out;
                 newChat.admin_id = exist.admin_id;
+                newChat.mtproto_seq = exist.mtproto_seq;
             }
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
@@ -354,7 +356,7 @@ public class SecretChatHelper {
                 reqSend.action = message.action.encryptedAction;
             } else {
                 reqSend.action = new TL_decryptedMessageActionNotifyLayer();
-                reqSend.action.layer = 66;
+                reqSend.action.layer = 73;
                 message = createServiceSecretMessage(encryptedChat, reqSend.action);
             }
             reqSend.random_id = message.random_id;
@@ -551,6 +553,12 @@ public class SecretChatHelper {
         return (!(message.action instanceof TL_messageEncryptedAction) || (message.action.encryptedAction instanceof TL_decryptedMessageActionScreenshotMessages) || (message.action.encryptedAction instanceof TL_decryptedMessageActionSetMessageTTL)) ? false : true;
     }
 
+    protected void performSendEncryptedRequest(TL_messages_sendEncryptedMultiMedia req, DelayedMessage message) {
+        for (int a = 0; a < req.files.size(); a++) {
+            performSendEncryptedRequest((DecryptedMessage) req.messages.get(a), (Message) message.messages.get(a), message.encryptedChat, (InputEncryptedFile) req.files.get(a), (String) message.originalPaths.get(a), (MessageObject) message.messageObjects.get(a));
+        }
+    }
+
     protected void performSendEncryptedRequest(DecryptedMessage req, Message newMsgObj, EncryptedChat chat, InputEncryptedFile encryptedFile, String originalPath, MessageObject newMsg) {
         if (req != null && chat.auth_key != null && !(chat instanceof TL_encryptedChatRequested) && !(chat instanceof TL_encryptedChatWaiting)) {
             SendMessagesHelper.getInstance().putToSendingMessages(newMsgObj);
@@ -570,6 +578,7 @@ public class SecretChatHelper {
                         layer.random_bytes = new byte[15];
                         Utilities.random.nextBytes(layer.random_bytes);
                         TLObject toEncryptObject = layer;
+                        int mtprotoVersion = AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 73 ? 2 : 1;
                         if (encryptedChat.seq_in == 0 && encryptedChat.seq_out == 0) {
                             if (encryptedChat.admin_id == UserConfig.getClientUserId()) {
                                 encryptedChat.seq_out = 1;
@@ -614,14 +623,11 @@ public class SecretChatHelper {
                         AbstractSerializedData nativeByteBuffer = new NativeByteBuffer(len + 4);
                         nativeByteBuffer.writeInt32(len);
                         toEncryptObject.serializeToStream(nativeByteBuffer);
-                        Object messageKeyFull = Utilities.computeSHA1(nativeByteBuffer.buffer);
-                        Object messageKey = new byte[16];
-                        if (messageKeyFull.length != 0) {
-                            System.arraycopy(messageKeyFull, messageKeyFull.length - 16, messageKey, 0, 16);
-                        }
-                        MessageKeyData keyData = MessageKeyData.generateMessageKeyData(encryptedChat.auth_key, messageKey, false);
                         len = nativeByteBuffer.length();
                         int extraLen = len % 16 != 0 ? 16 - (len % 16) : 0;
+                        if (mtprotoVersion == 2) {
+                            extraLen += (Utilities.random.nextInt(3) + 2) * 16;
+                        }
                         NativeByteBuffer dataForEncryption = new NativeByteBuffer(len + extraLen);
                         nativeByteBuffer.position(0);
                         dataForEncryption.writeBytes((NativeByteBuffer) nativeByteBuffer);
@@ -630,7 +636,16 @@ public class SecretChatHelper {
                             Utilities.random.nextBytes(b);
                             dataForEncryption.writeBytes(b);
                         }
+                        Object messageKey = new byte[16];
+                        boolean incoming = mtprotoVersion == 2 && encryptedChat.admin_id != UserConfig.getClientUserId();
+                        if (mtprotoVersion == 2) {
+                            System.arraycopy(Utilities.computeSHA256(encryptedChat.auth_key, (incoming ? 8 : 0) + 88, 32, dataForEncryption.buffer, 0, dataForEncryption.buffer.limit()), 8, messageKey, 0, 16);
+                        } else {
+                            Object messageKeyFull = Utilities.computeSHA1(nativeByteBuffer.buffer);
+                            System.arraycopy(messageKeyFull, messageKeyFull.length - 16, messageKey, 0, 16);
+                        }
                         nativeByteBuffer.reuse();
+                        MessageKeyData keyData = MessageKeyData.generateMessageKeyData(encryptedChat.auth_key, messageKey, incoming, mtprotoVersion);
                         Utilities.aesIgeEncryption(dataForEncryption.buffer, keyData.aesKey, keyData.aesIv, true, false, 0, dataForEncryption.limit());
                         NativeByteBuffer data = new NativeByteBuffer((messageKey.length + 8) + dataForEncryption.length());
                         dataForEncryption.position(0);
@@ -689,7 +704,7 @@ public class SecretChatHelper {
                                         }
                                     }
                                     SecretChatHelper.this.sendingNotifyLayer.remove(Integer.valueOf(currentChat.id));
-                                    currentChat.layer = AndroidUtilities.setMyLayerVersion(currentChat.layer, 66);
+                                    currentChat.layer = AndroidUtilities.setMyLayerVersion(currentChat.layer, 73);
                                     MessagesStorage.getInstance().updateEncryptedChatLayer(currentChat);
                                 }
                                 if (message == null) {
@@ -764,7 +779,7 @@ public class SecretChatHelper {
             }
             chat.layer = AndroidUtilities.setPeerLayerVersion(chat.layer, newPeerLayer);
             MessagesStorage.getInstance().updateEncryptedChatLayer(chat);
-            if (currentPeerLayer < 66) {
+            if (currentPeerLayer < 73) {
                 sendNotifyLayerMessage(chat, null);
             }
             AndroidUtilities.runOnUIThread(new Runnable() {
@@ -775,7 +790,7 @@ public class SecretChatHelper {
         }
     }
 
-    public Message processDecryptedObject(EncryptedChat chat, EncryptedFile file, int date, long random_id, TLObject object, boolean new_key_used) {
+    public Message processDecryptedObject(EncryptedChat chat, EncryptedFile file, int date, TLObject object, boolean new_key_used) {
         if (object != null) {
             int from_id = chat.admin_id;
             if (from_id == UserConfig.getClientUserId()) {
@@ -819,13 +834,17 @@ public class SecretChatHelper {
                 UserConfig.saveConfig(false);
                 newMessage.from_id = from_id;
                 newMessage.to_id = new TL_peerUser();
-                newMessage.random_id = random_id;
+                newMessage.random_id = decryptedMessage.random_id;
                 newMessage.to_id.user_id = UserConfig.getClientUserId();
                 newMessage.unread = true;
                 newMessage.flags = 768;
                 if (decryptedMessage.via_bot_name != null && decryptedMessage.via_bot_name.length() > 0) {
                     newMessage.via_bot_name = decryptedMessage.via_bot_name;
                     newMessage.flags |= 2048;
+                }
+                if (decryptedMessage.grouped_id != 0) {
+                    newMessage.grouped_id = decryptedMessage.grouped_id;
+                    newMessage.flags |= 131072;
                 }
                 newMessage.dialog_id = ((long) chat.id) << 32;
                 if (decryptedMessage.reply_to_random_id != 0) {
@@ -872,6 +891,10 @@ public class SecretChatHelper {
                         small.type = "s";
                         small.location = new TL_fileLocationUnavailable();
                         newMessage.media.photo.sizes.add(small);
+                    }
+                    if (newMessage.ttl != 0) {
+                        newMessage.media.ttl_seconds = newMessage.ttl;
+                        newMessage.flags |= 4;
                     }
                     TL_photoSize big = new TL_photoSize();
                     big.w = decryptedMessage.media.w;
@@ -928,6 +951,8 @@ public class SecretChatHelper {
                         return newMessage;
                     }
                     newMessage.ttl = Math.max(decryptedMessage.media.duration + 2, newMessage.ttl);
+                    newMessage.media.ttl_seconds = newMessage.ttl;
+                    newMessage.flags |= 4;
                     return newMessage;
                 } else if (decryptedMessage.media instanceof TL_decryptedMessageMediaDocument) {
                     if (decryptedMessage.media.key == null || decryptedMessage.media.key.length != 32 || decryptedMessage.media.iv == null || decryptedMessage.media.iv.length != 32) {
@@ -1386,7 +1411,10 @@ public class SecretChatHelper {
                 holes.remove(a);
                 a--;
                 update = true;
-                Message message = processDecryptedObject(chat, holder.file, holder.date, holder.random_id, holder.layer.message, holder.new_key_used);
+                if (holder.decryptedWithVersion == 2) {
+                    chat.mtproto_seq = Math.min(chat.mtproto_seq, chat.seq_in);
+                }
+                Message message = processDecryptedObject(chat, holder.file, holder.date, holder.layer.message, holder.new_key_used);
                 if (message != null) {
                     messages.add(message);
                 }
@@ -1401,16 +1429,54 @@ public class SecretChatHelper {
         }
     }
 
+    private boolean decryptWithMtProtoVersion(NativeByteBuffer is, byte[] keyToDecrypt, byte[] messageKey, int version, boolean incoming, boolean encryptOnError) {
+        if (version == 1) {
+            incoming = false;
+        }
+        MessageKeyData keyData = MessageKeyData.generateMessageKeyData(keyToDecrypt, messageKey, incoming, version);
+        Utilities.aesIgeEncryption(is.buffer, keyData.aesKey, keyData.aesIv, false, false, 24, is.limit() - 24);
+        int len = is.readInt32(false);
+        if (version == 2) {
+            if (!Utilities.arraysEquals(messageKey, 0, Utilities.computeSHA256(keyToDecrypt, (incoming ? 8 : 0) + 88, 32, is.buffer, 24, is.buffer.limit()), 8)) {
+                if (encryptOnError) {
+                    Utilities.aesIgeEncryption(is.buffer, keyData.aesKey, keyData.aesIv, true, false, 24, is.limit() - 24);
+                    is.position(24);
+                }
+                return false;
+            }
+        }
+        int l = len + 28;
+        if (l < is.buffer.limit() - 15 || l > is.buffer.limit()) {
+            l = is.buffer.limit();
+        }
+        byte[] messageKeyFull = Utilities.computeSHA1(is.buffer, 24, l);
+        if (!Utilities.arraysEquals(messageKey, 0, messageKeyFull, messageKeyFull.length - 16)) {
+            if (encryptOnError) {
+                Utilities.aesIgeEncryption(is.buffer, keyData.aesKey, keyData.aesIv, true, false, 24, is.limit() - 24);
+                is.position(24);
+            }
+            return false;
+        }
+        if (len <= 0 || len > is.limit() - 28) {
+            return false;
+        }
+        int padding = (is.limit() - 28) - len;
+        if ((version != 2 || (padding >= 12 && padding <= 1024)) && (version != 1 || padding <= 15)) {
+            return true;
+        }
+        return false;
+    }
+
     protected ArrayList<Message> decryptMessage(EncryptedMessage message) {
         EncryptedChat chat = MessagesController.getInstance().getEncryptedChatDB(message.chat_id, true);
         if (chat == null || (chat instanceof TL_encryptedChatDiscarded)) {
             return null;
         }
         try {
-            NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(message.bytes.length);
-            nativeByteBuffer.writeBytes(message.bytes);
-            nativeByteBuffer.position(0);
-            long fingerprint = nativeByteBuffer.readInt64(false);
+            NativeByteBuffer is = new NativeByteBuffer(message.bytes.length);
+            is.writeBytes(message.bytes);
+            is.position(0);
+            long fingerprint = is.readInt64(false);
             byte[] keyToDecrypt = null;
             boolean new_key_used = false;
             if (chat.key_fingerprint == fingerprint) {
@@ -1419,20 +1485,29 @@ public class SecretChatHelper {
                 keyToDecrypt = chat.future_auth_key;
                 new_key_used = true;
             }
+            int mtprotoVersion = AndroidUtilities.getPeerLayerVersion(chat.layer) >= 73 ? 2 : 1;
+            int decryptedWithVersion = mtprotoVersion;
             if (keyToDecrypt != null) {
-                byte[] messageKey = nativeByteBuffer.readData(16, false);
-                MessageKeyData keyData = MessageKeyData.generateMessageKeyData(keyToDecrypt, messageKey, false);
-                Utilities.aesIgeEncryption(nativeByteBuffer.buffer, keyData.aesKey, keyData.aesIv, false, false, 24, nativeByteBuffer.limit() - 24);
-                int len = nativeByteBuffer.readInt32(false);
-                if (len < 0 || len > nativeByteBuffer.limit() - 28) {
-                    return null;
+                byte[] messageKey = is.readData(16, false);
+                boolean incoming = chat.admin_id == UserConfig.getClientUserId();
+                boolean tryAnotherDecrypt = true;
+                if (decryptedWithVersion == 2 && chat.mtproto_seq != 0) {
+                    tryAnotherDecrypt = false;
                 }
-                byte[] messageKeyFull = Utilities.computeSHA1(nativeByteBuffer.buffer, 24, Math.min((len + 4) + 24, nativeByteBuffer.buffer.limit()));
-                if (!Utilities.arraysEquals(messageKey, 0, messageKeyFull, messageKeyFull.length - 16)) {
-                    return null;
+                if (!decryptWithMtProtoVersion(is, keyToDecrypt, messageKey, mtprotoVersion, incoming, tryAnotherDecrypt)) {
+                    if (mtprotoVersion == 2) {
+                        decryptedWithVersion = 1;
+                        if (!(tryAnotherDecrypt && decryptWithMtProtoVersion(is, keyToDecrypt, messageKey, 1, incoming, false))) {
+                            return null;
+                        }
+                    }
+                    decryptedWithVersion = 2;
+                    if (!decryptWithMtProtoVersion(is, keyToDecrypt, messageKey, 2, incoming, tryAnotherDecrypt)) {
+                        return null;
+                    }
                 }
-                TLObject object = TLClassStore.Instance().TLdeserialize(nativeByteBuffer, nativeByteBuffer.readInt32(false), false);
-                nativeByteBuffer.reuse();
+                TLObject object = TLClassStore.Instance().TLdeserialize(is, is.readInt32(false), false);
+                is.reuse();
                 if (!new_key_used && AndroidUtilities.getPeerLayerVersion(chat.layer) >= 20) {
                     chat.key_use_count_in = (short) (chat.key_use_count_in + 1);
                 }
@@ -1455,13 +1530,10 @@ public class SecretChatHelper {
                     if (layer.out_seq_no <= chat.seq_in) {
                         return null;
                     }
-                    if (chat.seq_in == layer.out_seq_no || chat.seq_in == layer.out_seq_no - 2) {
-                        applyPeerLayer(chat, layer.layer);
-                        chat.seq_in = layer.out_seq_no;
-                        chat.in_seq_no = layer.in_seq_no;
-                        MessagesStorage.getInstance().updateEncryptedChatSeq(chat, true);
-                        object = layer.message;
-                    } else {
+                    if (decryptedWithVersion == 1 && chat.mtproto_seq != 0 && layer.out_seq_no >= chat.mtproto_seq) {
+                        return null;
+                    }
+                    if (chat.seq_in != layer.out_seq_no - 2) {
                         FileLog.e("got hole");
                         ArrayList<TL_decryptedMessageHolder> arr = (ArrayList) this.secretHolesQueue.get(Integer.valueOf(chat.id));
                         if (arr == null) {
@@ -1493,24 +1565,32 @@ public class SecretChatHelper {
                         TL_decryptedMessageHolder holder = new TL_decryptedMessageHolder();
                         holder.layer = layer;
                         holder.file = message.file;
-                        holder.random_id = message.random_id;
                         holder.date = message.date;
                         holder.new_key_used = new_key_used;
+                        holder.decryptedWithVersion = decryptedWithVersion;
                         arr.add(holder);
                         return null;
                     }
+                    if (decryptedWithVersion == 2) {
+                        chat.mtproto_seq = Math.min(chat.mtproto_seq, chat.seq_in);
+                    }
+                    applyPeerLayer(chat, layer.layer);
+                    chat.seq_in = layer.out_seq_no;
+                    chat.in_seq_no = layer.in_seq_no;
+                    MessagesStorage.getInstance().updateEncryptedChatSeq(chat, true);
+                    object = layer.message;
                 } else if (!((object instanceof TL_decryptedMessageService) && (((TL_decryptedMessageService) object).action instanceof TL_decryptedMessageActionNotifyLayer))) {
                     return null;
                 }
                 ArrayList<Message> messages = new ArrayList();
-                Message decryptedMessage = processDecryptedObject(chat, message.file, message.date, message.random_id, object, new_key_used);
+                Message decryptedMessage = processDecryptedObject(chat, message.file, message.date, object, new_key_used);
                 if (decryptedMessage != null) {
                     messages.add(decryptedMessage);
                 }
                 checkSecretHoles(chat, messages);
                 return messages;
             }
-            nativeByteBuffer.reuse();
+            is.reuse();
             FileLog.e(String.format("fingerprint mismatch %x", new Object[]{Long.valueOf(fingerprint)}));
             return null;
         } catch (Throwable e) {
@@ -1582,6 +1662,7 @@ public class SecretChatHelper {
             newChat.seq_in = encryptedChat.seq_in;
             newChat.seq_out = encryptedChat.seq_out;
             newChat.admin_id = encryptedChat.admin_id;
+            newChat.mtproto_seq = encryptedChat.mtproto_seq;
             MessagesStorage.getInstance().updateEncryptedChat(newChat);
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {

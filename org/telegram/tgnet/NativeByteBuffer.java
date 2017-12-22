@@ -399,6 +399,7 @@ public class NativeByteBuffer extends AbstractSerializedData {
     }
 
     public String readString(boolean exception) {
+        int startReadPosition = getPosition();
         int sl = 1;
         try {
             int l = getIntFromByte(this.buffer.get());
@@ -417,6 +418,7 @@ public class NativeByteBuffer extends AbstractSerializedData {
                 throw new RuntimeException("read string error", e);
             }
             FileLog.e("read string error");
+            position(startReadPosition);
             return "";
         }
     }

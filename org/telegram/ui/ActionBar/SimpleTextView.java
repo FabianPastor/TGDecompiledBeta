@@ -96,6 +96,7 @@ public class SimpleTextView extends View implements Callback {
             } else {
                 this.offsetX = -AndroidUtilities.dp(8.0f);
             }
+            this.offsetX += getPaddingLeft();
         }
     }
 
@@ -108,7 +109,6 @@ public class SimpleTextView extends View implements Callback {
                 if (this.rightDrawable != null) {
                     width = (width - this.rightDrawable.getIntrinsicWidth()) - this.drawablePadding;
                 }
-                width -= getPaddingLeft() + getPaddingRight();
                 CharSequence string = TextUtils.ellipsize(this.text, this.textPaint, (float) width, TruncateAt.END);
                 this.layout = new StaticLayout(string, 0, string.length(), this.textPaint, AndroidUtilities.dp(8.0f) + width, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 calcOffset(width);

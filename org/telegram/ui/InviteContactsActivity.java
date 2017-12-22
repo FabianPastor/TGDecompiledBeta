@@ -576,14 +576,18 @@ public class InviteContactsActivity extends BaseFragment implements Notification
             }
         });
         this.editText.setOnKeyListener(new OnKeyListener() {
+            private boolean wasEmpty;
+
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode != 67 || event.getAction() != 1 || InviteContactsActivity.this.editText.length() != 0 || InviteContactsActivity.this.allSpans.isEmpty()) {
-                    return false;
+                if (event.getAction() == 0) {
+                    this.wasEmpty = InviteContactsActivity.this.editText.length() == 0;
+                } else if (event.getAction() == 1 && this.wasEmpty && !InviteContactsActivity.this.allSpans.isEmpty()) {
+                    InviteContactsActivity.this.spansContainer.removeSpan((GroupCreateSpan) InviteContactsActivity.this.allSpans.get(InviteContactsActivity.this.allSpans.size() - 1));
+                    InviteContactsActivity.this.updateHint();
+                    InviteContactsActivity.this.checkVisibleRows();
+                    return true;
                 }
-                InviteContactsActivity.this.spansContainer.removeSpan((GroupCreateSpan) InviteContactsActivity.this.allSpans.get(InviteContactsActivity.this.allSpans.size() - 1));
-                InviteContactsActivity.this.updateHint();
-                InviteContactsActivity.this.checkVisibleRows();
-                return true;
+                return false;
             }
         });
         this.editText.addTextChangedListener(new TextWatcher() {

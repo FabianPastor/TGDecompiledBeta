@@ -563,7 +563,7 @@ public class DialogCell extends BaseCell {
                         this.drawPinBackground = true;
                     }
                     nameString = LocaleController.getString("SavedMessages", R.string.SavedMessages);
-                } else if (this.user.id / 1000 == 777 || this.user.id / 1000 == 333 || ContactsController.getInstance().contactsDict.get(this.user.id) != null) {
+                } else if (this.user.id / 1000 == 777 || this.user.id / 1000 == 333 || ContactsController.getInstance().contactsDict.get(Integer.valueOf(this.user.id)) != null) {
                     nameString = UserObject.getUserName(this.user);
                 } else if (ContactsController.getInstance().contactsDict.size() == 0 && (!ContactsController.getInstance().contactsLoaded || ContactsController.getInstance().isLoadingContacts())) {
                     nameString = UserObject.getUserName(this.user);

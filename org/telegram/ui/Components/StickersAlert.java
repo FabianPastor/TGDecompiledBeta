@@ -716,8 +716,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     private void updateFields() {
-        Throwable e;
         SpannableStringBuilder spannableStringBuilder;
+        Throwable e;
         if (this.titleTextView != null) {
             if (this.stickerSet != null) {
                 spannableStringBuilder = null;

@@ -102,21 +102,23 @@ public class EditTextCaption extends EditTextBoldCursor {
             }
 
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                boolean z = true;
                 if (item.getItemId() == R.id.menu_regular) {
                     EditTextCaption.this.makeSelectedRegular();
                     mode.finish();
-                    return true;
                 } else if (item.getItemId() == R.id.menu_bold) {
                     EditTextCaption.this.makeSelectedBold();
                     mode.finish();
-                    return true;
-                } else if (item.getItemId() != R.id.menu_italic) {
-                    return callback.onActionItemClicked(mode, item);
-                } else {
+                } else if (item.getItemId() == R.id.menu_italic) {
                     EditTextCaption.this.makeSelectedItalic();
                     mode.finish();
-                    return true;
+                } else {
+                    try {
+                        z = callback.onActionItemClicked(mode, item);
+                    } catch (Exception e) {
+                    }
                 }
+                return z;
             }
 
             public void onDestroyActionMode(ActionMode mode) {

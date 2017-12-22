@@ -3,6 +3,7 @@ package org.telegram.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.SharedPreferences;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -125,6 +126,9 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
 
         public void onBindViewHolder(ViewHolder holder, int position) {
             int i = R.drawable.greydivider;
+            boolean z = false;
+            int i2 = 1;
+            String str;
             switch (holder.getItemViewType()) {
                 case 0:
                     TextSettingsCell textCell = holder.itemView;
@@ -183,15 +187,20 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         textCell.setText(LocaleController.getString("PrivacyPaymentsClear", R.string.PrivacyPaymentsClear), false);
                         return;
                     } else if (position == PrivacySettingsActivity.this.callsP2PRow) {
-                        switch (PrivacySettingsActivity.this.getParentActivity().getSharedPreferences("mainconfig", 0).getInt("calls_p2p_new", 1)) {
-                            case 0:
-                                value = LocaleController.getString("LastSeenEverybody", R.string.LastSeenEverybody);
+                        SharedPreferences prefs = PrivacySettingsActivity.this.getParentActivity().getSharedPreferences("mainconfig", 0);
+                        str = "calls_p2p_new";
+                        if (!MessagesController.getInstance().defaultP2pContacts) {
+                            i2 = 0;
+                        }
+                        switch (prefs.getInt(str, i2)) {
+                            case 1:
+                                value = LocaleController.getString("LastSeenContacts", R.string.LastSeenContacts);
                                 break;
                             case 2:
                                 value = LocaleController.getString("LastSeenNobody", R.string.LastSeenNobody);
                                 break;
                             default:
-                                value = LocaleController.getString("LastSeenContacts", R.string.LastSeenContacts);
+                                value = LocaleController.getString("LastSeenEverybody", R.string.LastSeenEverybody);
                                 break;
                         }
                         textCell.setTextAndValue(LocaleController.getString("PrivacyCallsP2PTitle", R.string.PrivacyCallsP2PTitle), value, false);
@@ -215,19 +224,15 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         return;
                     } else if (position == PrivacySettingsActivity.this.secretDetailRow) {
                         privacyCell.setText("");
-                        r8 = this.mContext;
-                        if (PrivacySettingsActivity.this.callsSectionRow == -1) {
-                            i = R.drawable.greydivider_bottom;
-                        }
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(r8, i, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, PrivacySettingsActivity.this.callsSectionRow == -1 ? R.drawable.greydivider_bottom : R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == PrivacySettingsActivity.this.paymentsDetailRow) {
                         privacyCell.setText(LocaleController.getString("PrivacyPaymentsClearInfo", R.string.PrivacyPaymentsClearInfo));
-                        r8 = this.mContext;
+                        Context context = this.mContext;
                         if (PrivacySettingsActivity.this.secretSectionRow == -1 && PrivacySettingsActivity.this.callsSectionRow == -1) {
                             i = R.drawable.greydivider_bottom;
                         }
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(r8, i, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(context, i, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == PrivacySettingsActivity.this.callsDetailRow) {
                         privacyCell.setText(LocaleController.getString("PrivacyCallsP2PHelp", R.string.PrivacyCallsP2PHelp));
@@ -262,7 +267,11 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                 case 3:
                     TextCheckCell textCheckCell = holder.itemView;
                     if (position == PrivacySettingsActivity.this.secretWebpageRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("SecretWebPage", R.string.SecretWebPage), MessagesController.getInstance().secretWebpagePreview == 1, true);
+                        str = LocaleController.getString("SecretWebPage", R.string.SecretWebPage);
+                        if (MessagesController.getInstance().secretWebpagePreview == 1) {
+                            z = true;
+                        }
+                        textCheckCell.setTextAndCheck(str, z, true);
                         return;
                     }
                     return;

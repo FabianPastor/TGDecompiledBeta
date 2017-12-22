@@ -70,6 +70,9 @@ public class GcmPushListenerService extends GcmListenerService {
                         if (time == -1 || UserConfig.lastAppPauseTime < time) {
                             ConnectivityManager connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");
                             NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+                            if (BuildVars.DEBUG_VERSION) {
+                                FileLog.d("try show notification in background with time " + time + " with nework info " + netInfo + " and status " + connectivityManager.getRestrictBackgroundStatus());
+                            }
                             if (connectivityManager.getRestrictBackgroundStatus() == 3 && netInfo.getType() == 0) {
                                 NotificationsController.getInstance().showSingleBackgroundNotification();
                             }

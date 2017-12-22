@@ -188,12 +188,12 @@ public class DefaultMp4Builder implements Mp4Builder {
     }
 
     public Container build(Movie movie) {
-        int i;
         if (this.intersectionFinder == null) {
             this.intersectionFinder = new TwoSecondIntersectionFinder(movie, 2);
         }
         LOG.fine("Creating movie " + movie);
         for (Track track : movie.getTracks()) {
+            int i;
             List<Sample> samples = track.getSamples();
             putSamples(track, samples);
             Object sizes = new long[samples.size()];

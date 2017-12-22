@@ -769,7 +769,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             this.timeoutRunnable = null;
         }
         try {
-            boolean allowP2p;
+            int i;
             FileLog.d("InitCall: keyID=" + this.keyFingerprint);
             SharedPreferences nprefs = getSharedPreferences("notifications", 0);
             HashSet<String> hashes = new HashSet(nprefs.getStringSet("calls_access_hashes", Collections.EMPTY_SET));
@@ -804,25 +804,28 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             this.controller.setEncryptionKey(this.authKey, this.isOutgoing);
             TL_phoneConnection[] endpoints = new TL_phoneConnection[(this.call.alternative_connections.size() + 1)];
             endpoints[0] = this.call.connection;
-            for (int i = 0; i < this.call.alternative_connections.size(); i++) {
-                endpoints[i + 1] = (TL_phoneConnection) this.call.alternative_connections.get(i);
+            for (int i2 = 0; i2 < this.call.alternative_connections.size(); i2++) {
+                endpoints[i2 + 1] = (TL_phoneConnection) this.call.alternative_connections.get(i2);
             }
             VoIPHelper.upgradeP2pSetting();
-            switch (getSharedPreferences("mainconfig", 0).getInt("calls_p2p_new", 1)) {
+            boolean allowP2p = true;
+            SharedPreferences sharedPreferences = getSharedPreferences("mainconfig", 0);
+            String str = "calls_p2p_new";
+            if (MessagesController.getInstance().defaultP2pContacts) {
+                i = 1;
+            } else {
+                i = 0;
+            }
+            switch (sharedPreferences.getInt(str, i)) {
                 case 0:
                     allowP2p = true;
+                    break;
+                case 1:
+                    allowP2p = ContactsController.getInstance().contactsDict.get(Integer.valueOf(this.user.id)) != null;
                     break;
                 case 2:
                     allowP2p = false;
                     break;
-                default:
-                    if (ContactsController.getInstance().contactsDict.get(this.user.id) == null) {
-                        allowP2p = false;
-                        break;
-                    } else {
-                        allowP2p = true;
-                        break;
-                    }
             }
             VoIPController voIPController = this.controller;
             boolean z = this.call.protocol.udp_p2p && allowP2p;

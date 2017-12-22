@@ -575,10 +575,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         return;
                     } else {
                         if (ProfileActivity.this.info != null) {
-                            textCell.setTextAndValue(LocaleController.getString("ChannelMembers", R.string.ChannelMembers), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.info.participants_count)}));
+                            if (!ChatObject.isChannel(ProfileActivity.this.currentChat) || ProfileActivity.this.currentChat.megagroup) {
+                                textCell.setTextAndValue(LocaleController.getString("ChannelMembers", R.string.ChannelMembers), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.info.participants_count)}));
+                                return;
+                            } else {
+                                textCell.setTextAndValue(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.info.participants_count)}));
+                                return;
+                            }
+                        } else if (!ChatObject.isChannel(ProfileActivity.this.currentChat) || ProfileActivity.this.currentChat.megagroup) {
+                            textCell.setText(LocaleController.getString("ChannelMembers", R.string.ChannelMembers));
                             return;
                         } else {
-                            textCell.setText(LocaleController.getString("ChannelMembers", R.string.ChannelMembers));
+                            textCell.setText(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers));
                             return;
                         }
                     }
@@ -2722,7 +2730,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 }
                 for (a = 0; a < 2; a++) {
                     if (this.nameTextView[a] != null) {
-                        if (a == 0 && user.id != UserConfig.getClientUserId() && user.id / 1000 != 777 && user.id / 1000 != 333 && user.phone != null && user.phone.length() != 0 && ContactsController.getInstance().contactsDict.get(user.id) == null && (ContactsController.getInstance().contactsDict.size() != 0 || !ContactsController.getInstance().isLoadingContacts())) {
+                        if (a == 0 && user.id != UserConfig.getClientUserId() && user.id / 1000 != 777 && user.id / 1000 != 333 && user.phone != null && user.phone.length() != 0 && ContactsController.getInstance().contactsDict.get(Integer.valueOf(user.id)) == null && (ContactsController.getInstance().contactsDict.size() != 0 || !ContactsController.getInstance().isLoadingContacts())) {
                             String phoneString = PhoneFormat.getInstance().format("+" + user.phone);
                             if (!this.nameTextView[a].getText().equals(phoneString)) {
                                 this.nameTextView[a].setText(phoneString);
@@ -2845,7 +2853,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 if (userFull != null && userFull.phone_calls_available) {
                     this.callItem = menu.addItem(15, (int) R.drawable.ic_call_white_24dp);
                 }
-                if (ContactsController.getInstance().contactsDict.get(this.user_id) == null) {
+                if (ContactsController.getInstance().contactsDict.get(Integer.valueOf(this.user_id)) == null) {
                     User user = MessagesController.getInstance().getUser(Integer.valueOf(this.user_id));
                     if (user != null) {
                         item = menu.addItem(10, (int) R.drawable.ic_ab_other);

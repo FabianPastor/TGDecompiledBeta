@@ -663,7 +663,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     if (messageObject.type == 1 && !FileLoader.getPathToMessage(messageObject.messageOwner).exists()) {
                         photoExist = false;
                     }
-                    if (photoExist || MediaController.getInstance().canDownloadMedia(1)) {
+                    if (photoExist || MediaController.getInstance().canDownloadMedia(messageObject)) {
                         imageView.setImage(currentPhotoObject.location, "100_100", thumb.location, currentPhotoObject.size);
                         photoSet = true;
                     } else if (thumb != null) {
@@ -714,7 +714,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 });
             }
             cell.setMessageObject(messageObject);
-            if (MediaController.getInstance().canDownloadMedia(2)) {
+            if (MediaController.getInstance().canDownloadMedia(messageObject)) {
                 cell.downloadAudioIfNeed();
             }
         } else {
@@ -996,7 +996,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
 
     private void updateSubtitle() {
         if (this.actionBar != null && this.currentChat == null && this.currentUser != null) {
-            if (this.currentUser.id / 1000 == 777 || this.currentUser.id / 1000 == 333 || ContactsController.getInstance().contactsDict.get(this.currentUser.id) != null || (ContactsController.getInstance().contactsDict.size() == 0 && ContactsController.getInstance().isLoadingContacts())) {
+            if (this.currentUser.id / 1000 == 777 || this.currentUser.id / 1000 == 333 || ContactsController.getInstance().contactsDict.get(Integer.valueOf(this.currentUser.id)) != null || (ContactsController.getInstance().contactsDict.size() == 0 && ContactsController.getInstance().isLoadingContacts())) {
                 this.nameTextView.setText(UserObject.getUserName(this.currentUser));
             } else if (this.currentUser.phone == null || this.currentUser.phone.length() == 0) {
                 this.nameTextView.setText(UserObject.getUserName(this.currentUser));

@@ -3,7 +3,6 @@ package com.google.android.gms.internal;
 import android.support.v4.view.MotionEventCompat;
 import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.IOException;
-import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 
 public final class zzcjz extends adj<zzcjz> {
@@ -396,7 +395,7 @@ public final class zzcjz extends adj<zzcjz> {
                 case 56:
                     this.zzbvK = Long.valueOf(com_google_android_gms_internal_adg.zzLG());
                     continue;
-                case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*66*/:
+                case 66:
                     this.zzbvL = com_google_android_gms_internal_adg.readString();
                     continue;
                 case 74:

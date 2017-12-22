@@ -71,6 +71,7 @@
     <string name="AddStickers">Aggiungi sticker</string>
     <string name="AddStickersInstalled">Nuovi sticker aggiunti</string>
     <string name="AddStickersNotFound">Sticker non trovati</string>
+    <string name="AddSubscriber">Aggiungi iscritto</string>
     <string name="AddToContacts">Aggiungi ai contatti</string>
     <string name="AddToFavorites">Aggiungi ai preferiti</string>
     <string name="AddToMasks">Aggiungi alle maschere</string>
@@ -146,8 +147,8 @@
     <string name="AreYouSureShareMyContactInfoBot">Il bot saprà il tuo numero di telefono. Questo può essere utile per l\'integrazione con altri servizi.</string>
     <string name="AreYouSureShareMyContactInfoUser">Sicuro di voler condividere il tuo numero di telefono %1$s con **%2$s**?</string>
     <string name="AreYouSureUnblockContact">Vuoi sbloccare questo contatto?</string>
-    <string name="ArticleByAuthor">di %1$s</string>
-    <string name="ArticleDateByAuthor">%1$s di %2$s</string>
+    <string name="ArticleByAuthor">da %1$s</string>
+    <string name="ArticleDateByAuthor">%1$s da %2$s</string>
     <string name="AskAQuestion">Fai una domanda</string>
     <string name="AskAQuestionInfo">Per favore nota che l\'assistenza di Telegram è fornita da volontari. Proviamo a rispondere quanto prima, ma potrebbe volerci del tempo. Dai un\'occhiata alle &lt;a href=\"https://telegram.org/faq/it#domande-generali\"&gt;domande frequenti di Telegram&lt;/a&gt;: contengono suggerimenti importanti per &lt;a href=\"https://telegram.org/faq/it#risoluzione-dei-problemi\"&gt;risolvere i problemi&lt;/a&gt; e risposte a quasi tutte le domande.</string>
     <string name="AskButton">Chiedi a un volontario</string>
@@ -177,10 +178,17 @@
     <string name="AudioTitle">Musica condivisa</string>
     <string name="AudioUnknownArtist">Artista sconosciuto</string>
     <string name="AudioUnknownTitle">Titolo sconosciuto</string>
+    <string name="AutoDownloadMedia">Download automatico</string>
     <string name="AutoLock">Blocco automatico</string>
     <string name="AutoLockDisabled">Disabilitato</string>
     <string name="AutoLockInTime">tra %1$s</string>
-    <string name="AutoLockInfo">Richiede il codice se lontano per del tempo.</string>
+    <string name="AutoLockInfo">Richiede il codice se assente per del tempo.</string>
+    <string name="AutodownloadChannels">Canali</string>
+    <string name="AutodownloadContacts">Contatti</string>
+    <string name="AutodownloadGroupChats">Gruppi</string>
+    <string name="AutodownloadPrivateChats">Chat private</string>
+    <string name="AutodownloadSizeLimit">Limita per dimensione</string>
+    <string name="AutodownloadSizeLimitUpTo">fino a %1$s</string>
     <string name="AutomaticMediaDownload">Download automatico media</string>
     <string name="AutoplayGifs">Autoriproduzione GIF</string>
     <string name="AwaitingEncryption">Attendo che %s si colleghi...</string>
@@ -314,6 +322,7 @@
     <string name="ChannelSignMessages">Firma messaggi</string>
     <string name="ChannelSignMessagesInfo">Aggiungi i nomi degli amministratori nei messaggi da loro pubblicati.</string>
     <string name="ChannelSilentBroadcast">Post silenzioso</string>
+    <string name="ChannelSubscribers">Iscritti</string>
     <string name="ChannelUnmute">SUONA</string>
     <string name="ChannelUserAddLimit">Spiacenti, puoi aggiungere solo i primi 200 membri a un canale. Ricorda che un numero illimitato di persone potrebbe unirsi tramite il link del canale.</string>
     <string name="ChannelUserCantAdd">Spiacenti, non puoi aggiungere questo utente ai canali.</string>
@@ -336,7 +345,7 @@
     <string name="ChatHistoryVisibleInfo">I nuovi membri vedranno i messaggi che sono stati inviati prima che si unissero.</string>
     <string name="ChatLocation">Posizione</string>
     <string name="ChatVideo">Video</string>
-    <string name="ChatYourSelf">chat con te stesso</string>
+    <string name="ChatYourSelf">inoltra qui per salvare</string>
     <string name="ChatYourSelfDescription1">Inoltra i messaggi qui per salvarli</string>
     <string name="ChatYourSelfDescription2">Invia media e file per archiviarli</string>
     <string name="ChatYourSelfDescription3">Accedi alla chat da ogni dispositivo</string>
@@ -455,7 +464,7 @@
     <string name="DefaultRingtone">Predefinita</string>
     <string name="Delete">Elimina</string>
     <string name="DeleteAccountHelp">Se non ti connetti almeno una volta in questo periodo, il tuo account verrà eliminato insieme a tutti i gruppi, i messaggi e i contatti.</string>
-    <string name="DeleteAccountIfAwayFor">Se lontano per</string>
+    <string name="DeleteAccountIfAwayFor">Se assente per</string>
     <string name="DeleteAccountTitle">Elimina il mio account</string>
     <string name="DeleteAllFrom">Elimina tutto da %1$s</string>
     <string name="DeleteAndExit">Elimina e lascia il gruppo</string>
@@ -728,7 +737,7 @@
     <string name="GroupMembers">Membri</string>
     <string name="GroupName">Nome del gruppo</string>
     <string name="GroupNotifications">Notifiche di gruppo</string>
-    <string name="GroupPhotosHelp">Mostra le foto come messaggio unico</string>
+    <string name="GroupPhotosHelp">Mostra i media come messaggio unico</string>
     <string name="GroupStickers">Sticker del gruppo</string>
     <string name="GroupStickersInfo">Puoi rendere un set di sticker disponibile a tutti i membri che scrivono all\'interno di questo gruppo.</string>
     <string name="GroupUserAddLimit">Spiacenti, questo gruppo è pieno.</string>
@@ -810,7 +819,7 @@
     <string name="KMetersAway">km</string>
     <string name="KeepMedia">Mantieni media</string>
     <string name="KeepMediaForever">Sempre</string>
-    <string name="KeepMediaInfo">Foto, video e altri file dalle chat nel cloud che non hai **aperto** in questo periodo verranno eliminati dal dispositivo per preservare lo spazio sul disco. Tutti i media rimarranno nel cloud di Telegram e potranno essere riscaricati ogni volta che ne avrai bisogno.</string>
+    <string name="KeepMediaInfo">Foto, video e altri file dalle chat nel cloud che non hai **aperto** in questo periodo verranno eliminati dal dispositivo per preservare lo spazio sul disco. Tutti i media rimarranno nel cloud Telegram e potranno essere riscaricati ogni volta che ne avrai bisogno.</string>
     <string name="KickFromBroadcast">Rimuovi dalla lista broadcast</string>
     <string name="KickFromGroup">Rimuovi dal gruppo</string>
     <string name="KickFromSupergroup">Limita utente</string>
@@ -1168,6 +1177,7 @@
     <string name="PaymentConfirmationMessage">La tua carta %1$s è registrata. Per pagare con questa carta, per favore inserisci la tua password della verifica in due passaggi.</string>
     <string name="PaymentConfirmationNewCard">Scegli una carta differente</string>
     <string name="PaymentConnectionFailed">Impossibile raggiungere il server di pagamento. Per favore controlla la tua connessione a Internet e riprova.</string>
+    <string name="PaymentEmailToProvider">L\' e-mail sarà passata a %1$s come info di fatturazione.</string>
     <string name="PaymentFailed">Spiacenti, il pagamento è stato rifiutato.</string>
     <string name="PaymentInvoice">FATTURA</string>
     <string name="PaymentNoShippingMethod">Spiacenti, non è possibile consegnare al tuo indirizzo.</string>
@@ -1179,6 +1189,8 @@
     <string name="PaymentPasswordInfo">Per favore crea una password per proteggere le tue info di pagamento. Ti verrà chiesto di inserirla quando accedi.</string>
     <string name="PaymentPasswordReEnter">Reinserisci la tua password</string>
     <string name="PaymentPasswordTitle">Password</string>
+    <string name="PaymentPhoneEmailToProvider">Il numero e l\'e-mail saranno passati a %1$s come info di fatturazione.</string>
+    <string name="PaymentPhoneToProvider">Il numero sarà passato a %1$s come info di fatturazione.</string>
     <string name="PaymentPrecheckoutFailed">Spiacenti, il pagamento è stato annullato dal bot.</string>
     <string name="PaymentReceipt">Ricevuta</string>
     <string name="PaymentShippingAddress">Indirizzo di spedizione</string>
@@ -1308,6 +1320,8 @@
     <string name="ResetAccountInfo">Dato che l\'account **%1$s** è attivo e protetto da una password, lo elimineremo tra 1 settimana per motivi di sicurezza. Puoi annullare questo processo in qualsiasi momento.</string>
     <string name="ResetAccountStatus">Potrai ripristinare il tuo account tra:</string>
     <string name="ResetAllNotifications">Ripristina tutte le notifiche</string>
+    <string name="ResetAutomaticMediaDownload">Ripristina download automatico</string>
+    <string name="ResetAutomaticMediaDownloadAlert">Sei sicuro di voler ripristinare le impostazioni di download automatico?</string>
     <string name="ResetMyAccount">RIPRISTINA IL MIO ACCOUNT</string>
     <string name="ResetMyAccountText">Perderai tutte le chat e i messaggi, insieme ai media e ai file condivisi, se procederai a ripristinare il tuo account.</string>
     <string name="ResetMyAccountWarning">Attenzione</string>
@@ -1454,7 +1468,7 @@
     <string name="ShowInChat">Visualizza in chat</string>
     <string name="ShowNearbyPlaces">TIRA SU PER VEDERE I LUOGHI VICINI</string>
     <string name="Shuffle">Casuale</string>
-    <string name="SinglePhotosHelp">Mostra le foto come messaggi separati</string>
+    <string name="SinglePhotosHelp">Mostra i media come messaggi separati</string>
     <string name="SlideToCancel">ANNULLA</string>
     <string name="SmartNotifications">Notifiche intelligenti</string>
     <string name="SmartNotificationsAlert">Frequenza avviso sonoro</string>

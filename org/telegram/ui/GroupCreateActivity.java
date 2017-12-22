@@ -728,14 +728,20 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             }
         });
         this.editText.setOnKeyListener(new OnKeyListener() {
+            private boolean wasEmpty;
+
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode != 67 || event.getAction() != 1 || GroupCreateActivity.this.editText.length() != 0 || GroupCreateActivity.this.allSpans.isEmpty()) {
-                    return false;
+                if (keyCode == 67) {
+                    if (event.getAction() == 0) {
+                        this.wasEmpty = GroupCreateActivity.this.editText.length() == 0;
+                    } else if (event.getAction() == 1 && this.wasEmpty && !GroupCreateActivity.this.allSpans.isEmpty()) {
+                        GroupCreateActivity.this.spansContainer.removeSpan((GroupCreateSpan) GroupCreateActivity.this.allSpans.get(GroupCreateActivity.this.allSpans.size() - 1));
+                        GroupCreateActivity.this.updateHint();
+                        GroupCreateActivity.this.checkVisibleRows();
+                        return true;
+                    }
                 }
-                GroupCreateActivity.this.spansContainer.removeSpan((GroupCreateSpan) GroupCreateActivity.this.allSpans.get(GroupCreateActivity.this.allSpans.size() - 1));
-                GroupCreateActivity.this.updateHint();
-                GroupCreateActivity.this.checkVisibleRows();
-                return true;
+                return false;
             }
         });
         this.editText.addTextChangedListener(new TextWatcher() {

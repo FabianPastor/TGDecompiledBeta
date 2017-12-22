@@ -71,6 +71,7 @@
     <string name="AddStickers">Stickers toevoegen</string>
     <string name="AddStickersInstalled">Nieuwe stickers toegevoegd</string>
     <string name="AddStickersNotFound">Stickers niet gevonden</string>
+    <string name="AddSubscriber">Abonnee toevoegen</string>
     <string name="AddToContacts">Toevoegen aan contacten</string>
     <string name="AddToFavorites">Toevoegen aan favorieten</string>
     <string name="AddToMasks">Maskers toevoegen</string>
@@ -177,10 +178,17 @@
     <string name="AudioTitle">Gedeelde muziek</string>
     <string name="AudioUnknownArtist">Onbekende artiest</string>
     <string name="AudioUnknownTitle">Onbekende titel</string>
+    <string name="AutoDownloadMedia">Automatisch downloaden</string>
     <string name="AutoLock">Automatisch vergrendelen</string>
     <string name="AutoLockDisabled">Uitgeschakeld</string>
     <string name="AutoLockInTime">over %1$s</string>
     <string name="AutoLockInfo">Vraag om toegangscode indien afwezig</string>
+    <string name="AutodownloadChannels">Kanalen</string>
+    <string name="AutodownloadContacts">Contacten</string>
+    <string name="AutodownloadGroupChats">Groepschats</string>
+    <string name="AutodownloadPrivateChats">Chats</string>
+    <string name="AutodownloadSizeLimit">MAXIMALE GROOTTE</string>
+    <string name="AutodownloadSizeLimitUpTo">tot %1$s</string>
     <string name="AutomaticMediaDownload">Automatisch media downloaden</string>
     <string name="AutoplayGifs">GIF\'s automatisch afspelen</string>
     <string name="AwaitingEncryption">Wachten tot %s online komt</string>
@@ -314,6 +322,7 @@
     <string name="ChannelSignMessages">Ondertekenen</string>
     <string name="ChannelSignMessagesInfo">Beheerdersnaam bij alle uitgaande berichten.</string>
     <string name="ChannelSilentBroadcast">Stil massabericht</string>
+    <string name="ChannelSubscribers">Abonnees</string>
     <string name="ChannelUnmute">GELUID AAN</string>
     <string name="ChannelUserAddLimit">Je kunt 200 leden handmatig toevoegen aan een kanaal. Een ongelimiteerd aantal mensen kan lid worden via de link van het kanaal.</string>
     <string name="ChannelUserCantAdd">Je kunt deze gebruiker niet toevoegen aan kanalen.</string>
@@ -336,7 +345,7 @@
     <string name="ChatHistoryVisibleInfo">Nieuwe leden krijgen chatgeschiedenis ouder dan de eigen deelname te zien.</string>
     <string name="ChatLocation">Locatie</string>
     <string name="ChatVideo">Video</string>
-    <string name="ChatYourSelf">je cloudopslag</string>
+    <string name="ChatYourSelf">Hierheen doorsturen om op te slaan</string>
     <string name="ChatYourSelfDescription1">• Berichten naartoe door te sturen</string>
     <string name="ChatYourSelfDescription2">• Media en bestanden te bewaren</string>
     <string name="ChatYourSelfDescription3">• Te gebruiken op al je apparaten</string>
@@ -728,7 +737,7 @@
     <string name="GroupMembers">Leden</string>
     <string name="GroupName">Groepsnaam</string>
     <string name="GroupNotifications">Groepsmeldingen</string>
-    <string name="GroupPhotosHelp">Geeft foto\'s als een enkel bericht weer</string>
+    <string name="GroupPhotosHelp">Geef media als een enkel bericht weer</string>
     <string name="GroupStickers">Groepsstickers</string>
     <string name="GroupStickersInfo">Je kunt een stickerbundel kiezen die voor iedereen in de groepschat beschikbaar is.</string>
     <string name="GroupUserAddLimit">Sorry, deze groep is vol.</string>
@@ -1168,6 +1177,7 @@
     <string name="PaymentConfirmationMessage">Kaartinformatie %1$s is opgeslagen. Geef je 2-staps-verificatie-wachtwoord in om met deze kaart te betalen.</string>
     <string name="PaymentConfirmationNewCard">Kies een andere kaart</string>
     <string name="PaymentConnectionFailed">Betalingsprovider kon niet worden bereikt, controleer je internetverbinding en probeer het opnieuw.</string>
+    <string name="PaymentEmailToProvider">E-mail wordt doorgegeven aan %1$s als factuurinformatie.</string>
     <string name="PaymentFailed">Sorry, de betaling werd geweigerd.</string>
     <string name="PaymentInvoice">FACTUUR</string>
     <string name="PaymentNoShippingMethod">Sorry, afleveren op jouw adres is niet mogelijk.</string>
@@ -1179,6 +1189,8 @@
     <string name="PaymentPasswordInfo">Stel een wachtwoord in om je betaalinformatie te beschermen. Tijdens het inloggen vragen we je om dit wachtwoord.</string>
     <string name="PaymentPasswordReEnter">Wachtwoord opnieuw invoeren</string>
     <string name="PaymentPasswordTitle">Wachtwoord</string>
+    <string name="PaymentPhoneEmailToProvider">Telefoonnummer en E-mail worden doorgegeven aan %1$s als factuurinformatie.</string>
+    <string name="PaymentPhoneToProvider">Telefoonnummer wordt doorgegeven aan %1$s als factuurinformatie.</string>
     <string name="PaymentPrecheckoutFailed">Sorry, de bot heeft je betaling geannuleerd.</string>
     <string name="PaymentReceipt">Betalingsbewijs</string>
     <string name="PaymentShippingAddress">Verzendadres</string>
@@ -1308,6 +1320,8 @@
     <string name="ResetAccountInfo">Account **%1$s** is actief en beveiligd met een wachtwoord, het verwijderen stellen we daarom 1 week uit. Je kunt dit proces ieder moment annuleren.</string>
     <string name="ResetAccountStatus">Je account kan gereset worden over:</string>
     <string name="ResetAllNotifications">Meldingen resetten</string>
+    <string name="ResetAutomaticMediaDownload">Autom. downloaden resetten</string>
+    <string name="ResetAutomaticMediaDownloadAlert">Instellingen voor automatisch downloaden echt resetten?</string>
     <string name="ResetMyAccount">ACCOUNT RESETTEN</string>
     <string name="ResetMyAccountText">Al je chats, berichten en alle andere data gaan verloren als je verder gaat met de account-reset.</string>
     <string name="ResetMyAccountWarning">Waarschuwing</string>
@@ -1454,7 +1468,7 @@
     <string name="ShowInChat">In chat weergeven</string>
     <string name="ShowNearbyPlaces">VEEG OMHOOG VOOR PLEKKEN DICHTBIJ</string>
     <string name="Shuffle">Shuffle</string>
-    <string name="SinglePhotosHelp">Geeft foto\'s als aparte berichten weer</string>
+    <string name="SinglePhotosHelp">Geeft media als aparte berichten weer</string>
     <string name="SlideToCancel">SLEEP OM TE ANNULEREN</string>
     <string name="SmartNotifications">Slimme meldingen</string>
     <string name="SmartNotificationsAlert">Aantal geluidsmeldingen</string>

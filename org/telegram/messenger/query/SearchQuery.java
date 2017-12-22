@@ -244,6 +244,13 @@ public class SearchQuery {
                                             UserConfig.botRatingLoadTime = (int) (System.currentTimeMillis() / 1000);
                                         } else {
                                             SearchQuery.hints = category.peers;
+                                            int selfUserId = UserConfig.getClientUserId();
+                                            for (int b = 0; b < SearchQuery.hints.size(); b++) {
+                                                if (((TL_topPeer) SearchQuery.hints.get(b)).peer.user_id == selfUserId) {
+                                                    SearchQuery.hints.remove(b);
+                                                    break;
+                                                }
+                                            }
                                             UserConfig.ratingLoadTime = (int) (System.currentTimeMillis() / 1000);
                                         }
                                     }
@@ -310,28 +317,31 @@ public class SearchQuery {
                         final ArrayList<TL_topPeer> inlineBotsNew = new ArrayList();
                         final ArrayList<User> users = new ArrayList();
                         final ArrayList<Chat> chats = new ArrayList();
+                        int selfUserId = UserConfig.getClientUserId();
                         try {
                             ArrayList<Integer> usersToLoad = new ArrayList();
                             ArrayList<Integer> chatsToLoad = new ArrayList();
                             SQLiteCursor cursor = MessagesStorage.getInstance().getDatabase().queryFinalized("SELECT did, type, rating FROM chat_hints WHERE 1 ORDER BY rating DESC", new Object[0]);
                             while (cursor.next()) {
                                 int did = cursor.intValue(0);
-                                int type = cursor.intValue(1);
-                                TL_topPeer peer = new TL_topPeer();
-                                peer.rating = cursor.doubleValue(2);
-                                if (did > 0) {
-                                    peer.peer = new TL_peerUser();
-                                    peer.peer.user_id = did;
-                                    usersToLoad.add(Integer.valueOf(did));
-                                } else {
-                                    peer.peer = new TL_peerChat();
-                                    peer.peer.chat_id = -did;
-                                    chatsToLoad.add(Integer.valueOf(-did));
-                                }
-                                if (type == 0) {
-                                    hintsNew.add(peer);
-                                } else if (type == 1) {
-                                    inlineBotsNew.add(peer);
+                                if (did != selfUserId) {
+                                    int type = cursor.intValue(1);
+                                    TL_topPeer peer = new TL_topPeer();
+                                    peer.rating = cursor.doubleValue(2);
+                                    if (did > 0) {
+                                        peer.peer = new TL_peerUser();
+                                        peer.peer.user_id = did;
+                                        usersToLoad.add(Integer.valueOf(did));
+                                    } else {
+                                        peer.peer = new TL_peerChat();
+                                        peer.peer.chat_id = -did;
+                                        chatsToLoad.add(Integer.valueOf(-did));
+                                    }
+                                    if (type == 0) {
+                                        hintsNew.add(peer);
+                                    } else if (type == 1) {
+                                        inlineBotsNew.add(peer);
+                                    }
                                 }
                             }
                             cursor.dispose();

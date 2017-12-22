@@ -71,6 +71,7 @@
     <string name="AddStickers">Sticker hinzufügen</string>
     <string name="AddStickersInstalled">Neue Sticker hinzugefügt</string>
     <string name="AddStickersNotFound">Sticker nicht gefunden</string>
+    <string name="AddSubscriber">Abonnent hinzufügen</string>
     <string name="AddToContacts">Zu Kontakten hinzufügen</string>
     <string name="AddToFavorites">Zu Favoriten hinzufügen</string>
     <string name="AddToMasks">Masken hinzufügen</string>
@@ -177,10 +178,17 @@
     <string name="AudioTitle">Geteilte Musik</string>
     <string name="AudioUnknownArtist">Unbekannter Künstler</string>
     <string name="AudioUnknownTitle">Unbekannter Titel</string>
+    <string name="AutoDownloadMedia">Medien Auto-Download</string>
     <string name="AutoLock">Auto-Sperre</string>
     <string name="AutoLockDisabled">Deaktiviert</string>
     <string name="AutoLockInTime">in %1$s</string>
     <string name="AutoLockInfo">Sperrt App bei Inaktivität automatisch.</string>
+    <string name="AutodownloadChannels">Kanäle</string>
+    <string name="AutodownloadContacts">Kontakte</string>
+    <string name="AutodownloadGroupChats">Gruppenchats</string>
+    <string name="AutodownloadPrivateChats">Private Chats</string>
+    <string name="AutodownloadSizeLimit">Maximale Größe</string>
+    <string name="AutodownloadSizeLimitUpTo">bis zu %1$s</string>
     <string name="AutomaticMediaDownload">Automatischer Mediendownload</string>
     <string name="AutoplayGifs">GIFs autom. Abspielen</string>
     <string name="AwaitingEncryption">Warte, bis %s online geht...</string>
@@ -314,6 +322,7 @@
     <string name="ChannelSignMessages">Nachrichten unterschreiben</string>
     <string name="ChannelSignMessagesInfo">Zeigt für neue Nachrichten an, welcher Admin die Nachricht gesendet hat.</string>
     <string name="ChannelSilentBroadcast">Lautloser Broadcast</string>
+    <string name="ChannelSubscribers">Abonnenten</string>
     <string name="ChannelUnmute">STUMM AUS</string>
     <string name="ChannelUserAddLimit">Du kannst nur die ersten 200 Leute einladen, aber unbegrenzt viele können dem Kanal über den Einladungslink beitreten.</string>
     <string name="ChannelUserCantAdd">Du kannst diesen Nutzer nicht einladen.</string>
@@ -336,7 +345,7 @@
     <string name="ChatHistoryVisibleInfo">Neue Mitglieder sehen Nachrichten, die vor ihrem Beitritt gesendet wurden.</string>
     <string name="ChatLocation">Standort</string>
     <string name="ChatVideo">Video</string>
-    <string name="ChatYourSelf">chatte mit dir selbst</string>
+    <string name="ChatYourSelf">gespeicherte Nachrichten</string>
     <string name="ChatYourSelfDescription1">Speichere deine Lieblings-Chats</string>
     <string name="ChatYourSelfDescription2">Sende Dateien jeglicher Art</string>
     <string name="ChatYourSelfDescription3">Synchronisiert auf allen Geräten</string>
@@ -361,7 +370,7 @@
     <string name="ChromeCustomTabs">In-App Browser</string>
     <string name="ChromeCustomTabsInfo">Externe Links innerhalb der App öffnen</string>
     <string name="ClearButton">Löschen</string>
-    <string name="ClearHistory">Verlauf löschen</string>
+    <string name="ClearHistory">Verlauf leeren</string>
     <string name="ClearHistoryCache">Cache leeren</string>
     <string name="ClearMediaCache">Cache Leeren</string>
     <string name="ClearOtherSessionsHelp">Alle Geräte außer diesem werden abgemeldet.</string>
@@ -728,7 +737,7 @@
     <string name="GroupMembers">Mitglieder</string>
     <string name="GroupName">Gruppenname</string>
     <string name="GroupNotifications">Gruppen</string>
-    <string name="GroupPhotosHelp">Zeigt alle Bilder in einer Nachricht</string>
+    <string name="GroupPhotosHelp">Zeigt alle Medien in einer Nachricht</string>
     <string name="GroupStickers">Gruppen-Sticker</string>
     <string name="GroupStickersInfo">Paket wählen, welches alle in der Gruppe sehen können.</string>
     <string name="GroupUserAddLimit">Leider ist diese Gruppe schon voll.</string>
@@ -1168,6 +1177,7 @@
     <string name="PaymentConfirmationMessage">Deine Karte %1$s ist bereits gespeichert. Um mit dieser Karte zu bezahlen, tippe dein Kennwort der zweistufigen Bestätigung ein.</string>
     <string name="PaymentConfirmationNewCard">Wähle eine andere Karte</string>
     <string name="PaymentConnectionFailed">Kann den Zahlungsserver nicht erreichen. Bitte prüfe deine Internetverbindung und versuche es erneut.</string>
+    <string name="PaymentEmailToProvider">E-Mail wird an %1$s als Rechnungsinformation weitergeleitet.</string>
     <string name="PaymentFailed">Tut uns sehr leid. Die Zahlung wurde abgelehnt.</string>
     <string name="PaymentInvoice">RECHNUNG</string>
     <string name="PaymentNoShippingMethod">Tut uns sehr leid, leider kann an deine Adresse nichts geliefert werden.</string>
@@ -1179,6 +1189,8 @@
     <string name="PaymentPasswordInfo">Um deine Zahlungsinformationen zu schützen, erstelle bitte ein Kennwort. Du brauchst dieses bei der Anmeldung.</string>
     <string name="PaymentPasswordReEnter">Kennwort erneut eingeben</string>
     <string name="PaymentPasswordTitle">Kennwort</string>
+    <string name="PaymentPhoneEmailToProvider">Nummer und E-Mail werden an %1$s als Rechnungsinformation weitergeleitet.</string>
+    <string name="PaymentPhoneToProvider">Nummer wird an %1$s als Rechnungsinformation weitergeleitet.</string>
     <string name="PaymentPrecheckoutFailed">Tut uns sehr leid. Die Zahlung wurde durch den Bot abgebrochen.</string>
     <string name="PaymentReceipt">Beleg</string>
     <string name="PaymentShippingAddress">Versandadresse</string>
@@ -1308,6 +1320,8 @@
     <string name="ResetAccountInfo">Da dein Konto **%1$s** aktiv und durch ein Kennwort geschützt ist, löschen wir es aus Sicherheitsgründen in einer Woche. Du kannst den Vorgang jederzeit abbrechen.</string>
     <string name="ResetAccountStatus">Du kannst dein Konto zurücksetzen in:</string>
     <string name="ResetAllNotifications">Mitteilungseinstellungen zurücksetzen</string>
+    <string name="ResetAutomaticMediaDownload">Einstellungen zurücksetzen</string>
+    <string name="ResetAutomaticMediaDownloadAlert">Möchtest du die Einstellungen für automatische Downloads wirklich zurücksetzen?</string>
     <string name="ResetMyAccount">KONTO ZURÜCKSETZEN</string>
     <string name="ResetMyAccountText">Wenn du dein Konto zurücksetzt, verlierst du alle Chats und Nachrichten, ebenso deine geteilten Bilder und Videos.</string>
     <string name="ResetMyAccountWarning">Warnung</string>
@@ -1454,7 +1468,7 @@
     <string name="ShowInChat">Im Chat zeigen</string>
     <string name="ShowNearbyPlaces">HOCHZIEHEN, FÜR ORTE IN DER NÄHE</string>
     <string name="Shuffle">Zufallswiedergabe</string>
-    <string name="SinglePhotosHelp">Zeigt Bilder als einzelne Nachrichten</string>
+    <string name="SinglePhotosHelp">Zeigt Medien als einzelne Nachrichten</string>
     <string name="SlideToCancel">WISCHEN UM ABZUBRECHEN</string>
     <string name="SmartNotifications">Schlaue Benachrichtigungen</string>
     <string name="SmartNotificationsAlert">Anzahl Benachrichtigungen</string>

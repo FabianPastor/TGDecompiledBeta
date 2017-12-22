@@ -258,7 +258,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
 
         public boolean allowGroupPhotos() {
-            return ChatAttachAlert.this.baseFragment != null && ChatAttachAlert.this.baseFragment.getCurrentEncryptedChat() == null;
+            return ChatAttachAlert.this.baseFragment != null && ChatAttachAlert.this.baseFragment.allowGroupPhotos();
         }
     };
     private boolean pressed;

@@ -16,7 +16,6 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
 import android.text.TextUtils;
-import android.util.SparseArray;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -72,7 +71,7 @@ public class ContactsController {
     public HashMap<String, Contact> contactsBookSPhones = new HashMap();
     public HashMap<String, TL_contact> contactsByPhone = new HashMap();
     public HashMap<String, TL_contact> contactsByShortPhone = new HashMap();
-    public SparseArray<TL_contact> contactsDict = new SparseArray();
+    public ConcurrentHashMap<Integer, TL_contact> contactsDict = new ConcurrentHashMap(20, 1.0f, 2);
     public boolean contactsLoaded;
     private boolean contactsSyncInProgress;
     private Account currentAccount;
@@ -1116,7 +1115,7 @@ public class ContactsController {
                 if (!ContactsController.this.contacts.isEmpty()) {
                     a = 0;
                     while (a < contactsArr.size()) {
-                        if (ContactsController.this.contactsDict.get(((TL_contact) contactsArr.get(a)).user_id) != null) {
+                        if (ContactsController.this.contactsDict.get(Integer.valueOf(((TL_contact) contactsArr.get(a)).user_id)) != null) {
                             contactsArr.remove(a);
                             a--;
                         }
@@ -1163,7 +1162,7 @@ public class ContactsController {
                                 return UserObject.getFirstName((User) usersDict.get(Integer.valueOf(tl_contact.user_id))).compareTo(UserObject.getFirstName((User) usersDict.get(Integer.valueOf(tl_contact2.user_id))));
                             }
                         });
-                        final SparseArray<TL_contact> contactsDictionary = new SparseArray();
+                        final ConcurrentHashMap<Integer, TL_contact> contactsDictionary = new ConcurrentHashMap(20, 1.0f, 2);
                         final HashMap<String, ArrayList<TL_contact>> sectionsDict = new HashMap();
                         final HashMap<String, ArrayList<TL_contact>> sectionsDictMutual = new HashMap();
                         final ArrayList<String> sortedSectionsArray = new ArrayList();
@@ -1180,7 +1179,7 @@ public class ContactsController {
                             TL_contact value = (TL_contact) contactsArr.get(a);
                             User user = (User) usersDict.get(Integer.valueOf(value.user_id));
                             if (user != null) {
-                                contactsDictionary.put(value.user_id, value);
+                                contactsDictionary.put(Integer.valueOf(value.user_id), value);
                                 if (!(contactsByPhonesDict == null || TextUtils.isEmpty(user.phone))) {
                                     contactsByPhonesDict.put(user.phone, value);
                                     contactsByPhonesShortDict.put(user.phone.substring(Math.max(0, user.phone.length() - 7)), value);
@@ -1484,7 +1483,6 @@ public class ContactsController {
         int a;
         Integer uid;
         Contact contact;
-        int index;
         if (newC == null || contactsTD == null) {
             newC = new ArrayList();
             contactsTD = new ArrayList();
@@ -1504,6 +1502,7 @@ public class ContactsController {
         StringBuilder toDelete = new StringBuilder();
         boolean reloadContacts = false;
         for (a = 0; a < newC.size(); a++) {
+            int index;
             TL_contact newContact = (TL_contact) newC.get(a);
             User user = null;
             if (userDict != null) {
@@ -1581,17 +1580,17 @@ public class ContactsController {
                 boolean z = true;
                 for (a = 0; a < newContacts.size(); a++) {
                     TL_contact contact = (TL_contact) newContacts.get(a);
-                    if (ContactsController.this.contactsDict.get(contact.user_id) == null) {
+                    if (ContactsController.this.contactsDict.get(Integer.valueOf(contact.user_id)) == null) {
                         ContactsController.this.contacts.add(contact);
-                        ContactsController.this.contactsDict.put(contact.user_id, contact);
+                        ContactsController.this.contactsDict.put(Integer.valueOf(contact.user_id), contact);
                     }
                 }
                 for (a = 0; a < contactsToDelete.size(); a++) {
                     Integer uid = (Integer) contactsToDelete.get(a);
-                    contact = (TL_contact) ContactsController.this.contactsDict.get(uid.intValue());
+                    contact = (TL_contact) ContactsController.this.contactsDict.get(uid);
                     if (contact != null) {
                         ContactsController.this.contacts.remove(contact);
-                        ContactsController.this.contactsDict.remove(uid.intValue());
+                        ContactsController.this.contactsDict.remove(uid);
                     }
                 }
                 if (!newContacts.isEmpty()) {
@@ -1779,11 +1778,11 @@ public class ContactsController {
                                 while (it.hasNext()) {
                                     User u = (User) it.next();
                                     MessagesController.getInstance().putUser(u, false);
-                                    if (ContactsController.this.contactsDict.get(u.id) == null) {
+                                    if (ContactsController.this.contactsDict.get(Integer.valueOf(u.id)) == null) {
                                         TL_contact newContact = new TL_contact();
                                         newContact.user_id = u.id;
                                         ContactsController.this.contacts.add(newContact);
-                                        ContactsController.this.contactsDict.put(newContact.user_id, newContact);
+                                        ContactsController.this.contactsDict.put(Integer.valueOf(newContact.user_id), newContact);
                                     }
                                 }
                                 ContactsController.this.buildContactsSectionsArrays(true);
@@ -1841,11 +1840,11 @@ public class ContactsController {
                                 Iterator it = users.iterator();
                                 while (it.hasNext()) {
                                     User user = (User) it.next();
-                                    TL_contact contact = (TL_contact) ContactsController.this.contactsDict.get(user.id);
+                                    TL_contact contact = (TL_contact) ContactsController.this.contactsDict.get(Integer.valueOf(user.id));
                                     if (contact != null) {
                                         remove = true;
                                         ContactsController.this.contacts.remove(contact);
-                                        ContactsController.this.contactsDict.remove(user.id);
+                                        ContactsController.this.contactsDict.remove(Integer.valueOf(user.id));
                                     }
                                 }
                                 if (remove) {

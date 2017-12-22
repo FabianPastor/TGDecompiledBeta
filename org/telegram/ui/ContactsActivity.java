@@ -376,8 +376,9 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             if (!user.bot && this.needForwardCount) {
                 message = String.format("%s\n\n%s", new Object[]{message, LocaleController.getString("AddToTheGroupForwardCount", R.string.AddToTheGroupForwardCount)});
                 editText = new EditText(getParentActivity());
-                editText.setTextSize(18.0f);
+                editText.setTextSize(1, 18.0f);
                 editText.setText("50");
+                editText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                 editText.setGravity(17);
                 editText.setInputType(2);
                 editText.setImeOptions(6);
@@ -428,9 +429,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     if (layoutParams instanceof LayoutParams) {
                         ((LayoutParams) layoutParams).gravity = 1;
                     }
-                    int dp = AndroidUtilities.dp(10.0f);
+                    int dp = AndroidUtilities.dp(24.0f);
                     layoutParams.leftMargin = dp;
                     layoutParams.rightMargin = dp;
+                    layoutParams.height = AndroidUtilities.dp(36.0f);
                     editText.setLayoutParams(layoutParams);
                 }
                 editText.setSelection(editText.getText().length());

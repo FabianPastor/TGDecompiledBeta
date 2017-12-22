@@ -295,6 +295,12 @@ public class Emoji {
     public static EmojiDrawable getEmojiDrawable(CharSequence code) {
         DrawableInfo info = (DrawableInfo) rects.get(code);
         if (info == null) {
+            CharSequence newCode = (CharSequence) EmojiData.emojiAliasMap.get(code);
+            if (newCode != null) {
+                info = (DrawableInfo) rects.get(newCode);
+            }
+        }
+        if (info == null) {
             FileLog.e("No drawable for emoji " + code);
             return null;
         }
@@ -405,12 +411,26 @@ public class Emoji {
             stringBuilder.append(c);
             startLength++;
             buf = (buf << 16) | ((long) c);
-            if (doneEmoji && i + 2 < length && cs.charAt(i + 1) == '?') {
-                next = cs.charAt(i + 2);
-                if (next >= '?' && next <= '?') {
-                    stringBuilder.append(cs.subSequence(i + 1, i + 3));
-                    startLength += 2;
-                    i += 2;
+            if (doneEmoji && i + 2 < length) {
+                next = cs.charAt(i + 1);
+                if (next == '?') {
+                    next = cs.charAt(i + 2);
+                    if (next >= '?' && next <= '?') {
+                        stringBuilder.append(cs.subSequence(i + 1, i + 3));
+                        startLength += 2;
+                        i += 2;
+                    }
+                } else if (stringBuilder.length() >= 2 && stringBuilder.charAt(0) == '?' && stringBuilder.charAt(1) == '?' && next == '?') {
+                    i++;
+                    do {
+                        stringBuilder.append(cs.subSequence(i, i + 2));
+                        startLength += 2;
+                        i += 2;
+                        if (i >= cs.length()) {
+                            break;
+                        }
+                    } while (cs.charAt(i) == '?');
+                    i--;
                 }
             }
             previousGoodIndex = i;
@@ -442,14 +462,7 @@ public class Emoji {
                 if (emojiOnly != null) {
                     emojiOnly[0] = emojiOnly[0] + 1;
                 }
-                CharSequence code = stringBuilder.subSequence(0, stringBuilder.length());
-                EmojiDrawable drawable = getEmojiDrawable(code);
-                if (drawable == null) {
-                    CharSequence newCode = (CharSequence) EmojiData.emojiAliasMap.get(code);
-                    if (newCode != null) {
-                        drawable = getEmojiDrawable(newCode);
-                    }
-                }
+                EmojiDrawable drawable = getEmojiDrawable(stringBuilder.subSequence(0, stringBuilder.length()));
                 if (drawable != null) {
                     s.setSpan(new EmojiSpan(drawable, 0, size, fontMetrics), startIndex, startIndex + startLength, 33);
                     emojiCount++;

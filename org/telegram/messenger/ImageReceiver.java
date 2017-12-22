@@ -168,7 +168,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         boolean z;
         boolean z2;
         if (!(fileLocation == null && httpUrl == null && thumbLocation == null) && (fileLocation == null || (fileLocation instanceof TL_fileLocation) || (fileLocation instanceof TL_fileEncryptedLocation) || (fileLocation instanceof TL_document) || (fileLocation instanceof TL_webDocument) || (fileLocation instanceof TL_documentEncrypted))) {
-            if (!(thumbLocation instanceof TL_fileLocation)) {
+            if (!((thumbLocation instanceof TL_fileLocation) || (thumbLocation instanceof TL_fileEncryptedLocation))) {
                 thumbLocation = null;
             }
             String key = null;

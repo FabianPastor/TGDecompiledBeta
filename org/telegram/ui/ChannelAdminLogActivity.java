@@ -624,7 +624,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         pinnedTop = false;
                     }
                     messageCell.setMessageObject(message, null, pinnedBotton, pinnedTop);
-                    if ((view instanceof ChatMessageCell) && MediaController.getInstance().canDownloadMedia(2)) {
+                    if ((view instanceof ChatMessageCell) && MediaController.getInstance().canDownloadMedia(message)) {
                         ((ChatMessageCell) view).downloadAudioIfNeed();
                     }
                     messageCell.setHighlighted(false);
@@ -1508,7 +1508,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     options.add(Integer.valueOf(9));
                 } else if (type == 8) {
                     User user = MessagesController.getInstance().getUser(Integer.valueOf(this.selectedObject.messageOwner.media.user_id));
-                    if (!(user == null || user.id == UserConfig.getClientUserId() || ContactsController.getInstance().contactsDict.get(user.id) != null)) {
+                    if (!(user == null || user.id == UserConfig.getClientUserId() || ContactsController.getInstance().contactsDict.get(Integer.valueOf(user.id)) != null)) {
                         items.add(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
                         options.add(Integer.valueOf(15));
                     }

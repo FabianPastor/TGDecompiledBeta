@@ -3,7 +3,6 @@ package org.telegram.ui.Cells;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
@@ -20,11 +19,9 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.MessageEntity;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_messageEntityEmail;
@@ -233,7 +230,7 @@ public class SharedLinkCell extends FrameLayout {
         }
         this.letterDrawable.setBounds(x, AndroidUtilities.dp(10.0f), x + maxPhotoWidth, AndroidUtilities.dp(62.0f));
         if (hasPhoto) {
-            TLObject currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(this.message.photoThumbs, maxPhotoWidth, true);
+            PhotoSize currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(this.message.photoThumbs, maxPhotoWidth, true);
             PhotoSize currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(this.message.photoThumbs, 80);
             if (currentPhotoObjectThumb == currentPhotoObject) {
                 currentPhotoObjectThumb = null;
@@ -244,18 +241,7 @@ public class SharedLinkCell extends FrameLayout {
             }
             this.linkImageView.setImageCoords(x, AndroidUtilities.dp(10.0f), maxPhotoWidth, maxPhotoWidth);
             String fileName = FileLoader.getAttachFileName(currentPhotoObject);
-            boolean photoExist = true;
-            if (!FileLoader.getPathToAttach(currentPhotoObject, true).exists()) {
-                photoExist = false;
-            }
-            String filter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(maxPhotoWidth), Integer.valueOf(maxPhotoWidth)});
-            if (photoExist || MediaController.getInstance().canDownloadMedia(1) || FileLoader.getInstance().isLoadingFile(fileName)) {
-                this.linkImageView.setImage(currentPhotoObject.location, filter, currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(maxPhotoWidth), Integer.valueOf(maxPhotoWidth)}), 0, null, 0);
-            } else if (currentPhotoObjectThumb != null) {
-                this.linkImageView.setImage(null, null, currentPhotoObjectThumb.location, String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(maxPhotoWidth), Integer.valueOf(maxPhotoWidth)}), 0, null, 0);
-            } else {
-                this.linkImageView.setImageBitmap((Drawable) null);
-            }
+            this.linkImageView.setImage(currentPhotoObject.location, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(maxPhotoWidth), Integer.valueOf(maxPhotoWidth)}), currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(maxPhotoWidth), Integer.valueOf(maxPhotoWidth)}), 0, null, 0);
             this.drawLinkImageView = true;
         }
         height = 0;

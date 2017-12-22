@@ -543,7 +543,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         int a;
         boolean allowDivider;
         View view;
+        User providerUser;
+        User user;
+        String providerName;
         if (this.currentStep == 0) {
+            int i;
             HashMap<String, String> languageMap = new HashMap();
             HashMap<String, String> countryMap = new HashMap();
             try {
@@ -891,8 +895,33 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     }
                 });
                 if (a == 9) {
-                    this.sectionCell[1] = new ShadowSectionCell(context);
-                    this.linearLayout2.addView(this.sectionCell[1], LayoutHelper.createLinear(-1, -2));
+                    if (this.paymentForm.invoice.email_to_provider || this.paymentForm.invoice.phone_to_provider) {
+                        providerUser = null;
+                        for (int b = 0; b < this.paymentForm.users.size(); b++) {
+                            user = (User) this.paymentForm.users.get(b);
+                            if (user.id == this.paymentForm.provider_id) {
+                                providerUser = user;
+                            }
+                        }
+                        if (providerUser != null) {
+                            providerName = ContactsController.formatName(providerUser.first_name, providerUser.last_name);
+                        } else {
+                            providerName = "";
+                        }
+                        this.bottomCell[1] = new TextInfoPrivacyCell(context);
+                        this.bottomCell[1].setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        this.linearLayout2.addView(this.bottomCell[1], LayoutHelper.createLinear(-1, -2));
+                        if (this.paymentForm.invoice.email_to_provider && this.paymentForm.invoice.phone_to_provider) {
+                            this.bottomCell[1].setText(LocaleController.formatString("PaymentPhoneEmailToProvider", R.string.PaymentPhoneEmailToProvider, providerName));
+                        } else if (this.paymentForm.invoice.email_to_provider) {
+                            this.bottomCell[1].setText(LocaleController.formatString("PaymentEmailToProvider", R.string.PaymentPhoneEmailToProvider, providerName));
+                        } else {
+                            this.bottomCell[1].setText(LocaleController.formatString("PaymentPhoneToProvider", R.string.PaymentPhoneEmailToProvider, providerName));
+                        }
+                    } else {
+                        this.sectionCell[1] = new ShadowSectionCell(context);
+                        this.linearLayout2.addView(this.sectionCell[1], LayoutHelper.createLinear(-1, -2));
+                    }
                     this.checkCell1 = new TextCheckCell(context);
                     this.checkCell1.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                     this.checkCell1.setTextAndCheck(LocaleController.getString("PaymentShippingSave", R.string.PaymentShippingSave), this.saveShippingInfo, false);
@@ -928,9 +957,15 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             } else {
                 this.inputFields[5].setImeOptions(268435462);
             }
-            ShadowSectionCell shadowSectionCell = this.sectionCell[1];
-            int i = (this.paymentForm.invoice.name_requested || this.paymentForm.invoice.phone_requested || this.paymentForm.invoice.email_requested) ? 0 : 8;
-            shadowSectionCell.setVisibility(i);
+            if (this.sectionCell[1] != null) {
+                ShadowSectionCell shadowSectionCell = this.sectionCell[1];
+                i = (this.paymentForm.invoice.name_requested || this.paymentForm.invoice.phone_requested || this.paymentForm.invoice.email_requested) ? 0 : 8;
+                shadowSectionCell.setVisibility(i);
+            } else if (this.bottomCell[1] != null) {
+                TextInfoPrivacyCell textInfoPrivacyCell = this.bottomCell[1];
+                i = (this.paymentForm.invoice.name_requested || this.paymentForm.invoice.phone_requested || this.paymentForm.invoice.email_requested) ? 0 : 8;
+                textInfoPrivacyCell.setVisibility(i);
+            }
             HeaderCell headerCell = this.headerCell[1];
             i = (this.paymentForm.invoice.name_requested || this.paymentForm.invoice.phone_requested || this.paymentForm.invoice.email_requested) ? 0 : 8;
             headerCell.setVisibility(i);
@@ -1614,7 +1649,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 a++;
             }
         } else if (this.currentStep == 4 || this.currentStep == 5) {
-            String providerName;
             this.paymentInfoCell = new PaymentInfoCell(context);
             this.paymentInfoCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
             this.paymentInfoCell.setInvoice((TL_messageMediaInvoice) this.messageObject.messageOwner.media, this.currentBotName);
@@ -1671,9 +1705,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     }
                 });
             }
-            User providerUser = null;
+            providerUser = null;
             for (a = 0; a < this.paymentForm.users.size(); a++) {
-                User user = (User) this.paymentForm.users.get(a);
+                user = (User) this.paymentForm.users.get(a);
                 if (user.id == this.paymentForm.provider_id) {
                     providerUser = user;
                 }

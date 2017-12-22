@@ -38,7 +38,9 @@ import org.telegram.tgnet.TLRPC.InputStickerSet;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.tgnet.TLRPC.MessageEntity;
+import org.telegram.tgnet.TLRPC.PageBlock;
 import org.telegram.tgnet.TLRPC.Peer;
+import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEvent;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEventActionChangeAbout;
@@ -129,6 +131,10 @@ import org.telegram.tgnet.TLRPC.TL_message_old2;
 import org.telegram.tgnet.TLRPC.TL_message_old3;
 import org.telegram.tgnet.TLRPC.TL_message_old4;
 import org.telegram.tgnet.TLRPC.TL_message_secret;
+import org.telegram.tgnet.TLRPC.TL_pageBlockCollage;
+import org.telegram.tgnet.TLRPC.TL_pageBlockPhoto;
+import org.telegram.tgnet.TLRPC.TL_pageBlockSlideshow;
+import org.telegram.tgnet.TLRPC.TL_pageBlockVideo;
 import org.telegram.tgnet.TLRPC.TL_peerChannel;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
@@ -140,6 +146,7 @@ import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
 import org.telegram.tgnet.TLRPC.TL_webDocument;
 import org.telegram.tgnet.TLRPC.TL_webPage;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.TLRPC.WebPage;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.URLSpanBotCommand;
@@ -1635,6 +1642,100 @@ public class MessageObject {
         }
     }
 
+    private Photo getPhotoWithId(WebPage webPage, long id) {
+        if (webPage == null || webPage.cached_page == null) {
+            return null;
+        }
+        if (webPage.photo != null && webPage.photo.id == id) {
+            return webPage.photo;
+        }
+        for (int a = 0; a < webPage.cached_page.photos.size(); a++) {
+            Photo photo = (Photo) webPage.cached_page.photos.get(a);
+            if (photo.id == id) {
+                return photo;
+            }
+        }
+        return null;
+    }
+
+    private Document getDocumentWithId(WebPage webPage, long id) {
+        if (webPage == null || webPage.cached_page == null) {
+            return null;
+        }
+        if (webPage.document != null && webPage.document.id == id) {
+            return webPage.document;
+        }
+        for (int a = 0; a < webPage.cached_page.documents.size(); a++) {
+            Document document = (Document) webPage.cached_page.documents.get(a);
+            if (document.id == id) {
+                return document;
+            }
+        }
+        return null;
+    }
+
+    private MessageObject getMessageObjectForBlock(WebPage webPage, PageBlock pageBlock) {
+        TL_message message = null;
+        if (pageBlock instanceof TL_pageBlockPhoto) {
+            Photo photo = getPhotoWithId(webPage, pageBlock.photo_id);
+            if (photo == webPage.photo) {
+                return this;
+            }
+            message = new TL_message();
+            message.media = new TL_messageMediaPhoto();
+            message.media.photo = photo;
+        } else if (pageBlock instanceof TL_pageBlockVideo) {
+            if (getDocumentWithId(webPage, pageBlock.video_id) == webPage.document) {
+                return this;
+            }
+            message = new TL_message();
+            message.media = new TL_messageMediaDocument();
+            message.media.document = getDocumentWithId(webPage, pageBlock.video_id);
+        }
+        message.message = "";
+        message.id = Utilities.random.nextInt();
+        message.date = this.messageOwner.date;
+        message.to_id = this.messageOwner.to_id;
+        message.out = this.messageOwner.out;
+        message.from_id = this.messageOwner.from_id;
+        this(message, null, false);
+        return this;
+    }
+
+    public ArrayList<MessageObject> getWebPagePhotos(ArrayList<MessageObject> array, ArrayList<PageBlock> blocksToSearch) {
+        ArrayList<MessageObject> messageObjects;
+        WebPage webPage = this.messageOwner.media.webpage;
+        if (array == null) {
+            messageObjects = new ArrayList();
+        } else {
+            messageObjects = array;
+        }
+        if (webPage.cached_page != null) {
+            ArrayList<PageBlock> blocks;
+            if (blocksToSearch == null) {
+                blocks = webPage.cached_page.blocks;
+            } else {
+                blocks = blocksToSearch;
+            }
+            for (int a = 0; a < blocks.size(); a++) {
+                PageBlock block = (PageBlock) blocks.get(a);
+                int b;
+                if (block instanceof TL_pageBlockSlideshow) {
+                    TL_pageBlockSlideshow slideshow = (TL_pageBlockSlideshow) block;
+                    for (b = 0; b < slideshow.items.size(); b++) {
+                        messageObjects.add(getMessageObjectForBlock(webPage, (PageBlock) slideshow.items.get(b)));
+                    }
+                } else if (block instanceof TL_pageBlockCollage) {
+                    TL_pageBlockCollage slideshow2 = (TL_pageBlockCollage) block;
+                    for (b = 0; b < slideshow2.items.size(); b++) {
+                        messageObjects.add(getMessageObjectForBlock(webPage, (PageBlock) slideshow2.items.get(b)));
+                    }
+                }
+            }
+        }
+        return messageObjects;
+    }
+
     public void measureInlineBotButtons() {
         this.wantedBotKeyboardWidth = 0;
         if (this.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
@@ -2663,6 +2764,17 @@ public class MessageObject {
         return this.messageOwner.id;
     }
 
+    public static int getMessageSize(Message message) {
+        if (message.media == null || message.media.document == null) {
+            return 0;
+        }
+        return message.media.document.size;
+    }
+
+    public int getSize() {
+        return getMessageSize(this.messageOwner);
+    }
+
     public long getIdWithChannel() {
         long id = (long) this.messageOwner.id;
         if (this.messageOwner.to_id == null || this.messageOwner.to_id.channel_id == 0) {
@@ -2921,11 +3033,22 @@ public class MessageObject {
         return (message.media == null || message.media.document == null || !isMusicDocument(message.media.document)) ? false : true;
     }
 
+    public static boolean isGifMessage(Message message) {
+        return (message.media == null || message.media.document == null || !isGifDocument(message.media.document)) ? false : true;
+    }
+
     public static boolean isRoundVideoMessage(Message message) {
         if (message.media instanceof TL_messageMediaWebPage) {
             return isRoundVideoDocument(message.media.webpage.document);
         }
         return (message.media == null || message.media.document == null || !isRoundVideoDocument(message.media.document)) ? false : true;
+    }
+
+    public static boolean isPhoto(Message message) {
+        if (message.media instanceof TL_messageMediaWebPage) {
+            return message.media.webpage.photo instanceof TL_photo;
+        }
+        return message.media instanceof TL_messageMediaPhoto;
     }
 
     public static boolean isVoiceMessage(Message message) {
@@ -3158,7 +3281,7 @@ public class MessageObject {
     }
 
     public boolean isGif() {
-        return (this.messageOwner.media instanceof TL_messageMediaDocument) && isGifDocument(this.messageOwner.media.document);
+        return isGifMessage(this.messageOwner);
     }
 
     public boolean isWebpageDocument() {

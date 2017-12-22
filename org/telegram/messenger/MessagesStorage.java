@@ -231,7 +231,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE users_data(uid INTEGER PRIMARY KEY, about TEXT)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE users(uid INTEGER PRIMARY KEY, name TEXT, status INTEGER, data BLOB)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE chats(uid INTEGER PRIMARY KEY, name TEXT, data BLOB)").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE enc_chats(uid INTEGER PRIMARY KEY, user INTEGER, name TEXT, data BLOB, g BLOB, authkey BLOB, ttl INTEGER, layer INTEGER, seq_in INTEGER, seq_out INTEGER, use_count INTEGER, exchange_id INTEGER, key_date INTEGER, fprint INTEGER, fauthkey BLOB, khash BLOB, in_seq_no INTEGER, admin_id INTEGER)").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE enc_chats(uid INTEGER PRIMARY KEY, user INTEGER, name TEXT, data BLOB, g BLOB, authkey BLOB, ttl INTEGER, layer INTEGER, seq_in INTEGER, seq_out INTEGER, use_count INTEGER, exchange_id INTEGER, key_date INTEGER, fprint INTEGER, fauthkey BLOB, khash BLOB, in_seq_no INTEGER, admin_id INTEGER, mtproto_seq INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE channel_users_v2(did INTEGER, uid INTEGER, date INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE channel_admins(did INTEGER, uid INTEGER, PRIMARY KEY(did, uid))").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE contacts(uid INTEGER PRIMARY KEY, mutual INTEGER)").stepThis().dispose();
@@ -252,7 +252,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE pending_tasks(id INTEGER PRIMARY KEY, data BLOB);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE requested_holes(uid INTEGER, seq_out_start INTEGER, seq_out_end INTEGER, PRIMARY KEY (uid, seq_out_start, seq_out_end));").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE sharing_locations(uid INTEGER PRIMARY KEY, mid INTEGER, date INTEGER, period INTEGER, message BLOB);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 45").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 46").stepThis().dispose();
             } else {
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
                 FileLog.e("current db version = " + version);
@@ -287,7 +287,7 @@ public class MessagesStorage {
                         FileLog.e(e2);
                     }
                 }
-                if (version < 45) {
+                if (version < 46) {
                     updateDbToLastVersion(version);
                 }
             }
@@ -605,6 +605,11 @@ public class MessagesStorage {
                         MessagesStorage.this.database.executeFast("CREATE TABLE IF NOT EXISTS user_phones_v7(key TEXT, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (key, phone))").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v7(sphone, deleted);").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 45").stepThis().dispose();
+                        version = 45;
+                    }
+                    if (version == 45) {
+                        MessagesStorage.this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN mtproto_seq INTEGER default 0").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("PRAGMA user_version = 46").stepThis().dispose();
                     }
                 } catch (Throwable e) {
                     FileLog.e(e);
@@ -2237,8 +2242,8 @@ public class MessagesStorage {
                     }
                     state.dispose();
                 }
+                this.database.commitTransaction();
             }
-            this.database.commitTransaction();
             MessagesController.getInstance().processDialogsUpdateRead(dialogsToUpdate, dialogsToUpdateMentions);
             if (!channelMentionsToReload.isEmpty()) {
                 MessagesController.getInstance().reloadMentionsCountForChannels(channelMentionsToReload);
@@ -3903,46 +3908,6 @@ Error: java.util.NoSuchElementException
         });
     }
 
-    public void startTransaction(boolean useQueue) {
-        if (useQueue) {
-            this.storageQueue.postRunnable(new Runnable() {
-                public void run() {
-                    try {
-                        MessagesStorage.this.database.beginTransaction();
-                    } catch (Throwable e) {
-                        FileLog.e(e);
-                    }
-                }
-            });
-            return;
-        }
-        try {
-            this.database.beginTransaction();
-        } catch (Throwable e) {
-            FileLog.e(e);
-        }
-    }
-
-    public void commitTransaction(boolean useQueue) {
-        if (useQueue) {
-            this.storageQueue.postRunnable(new Runnable() {
-                public void run() {
-                    try {
-                        MessagesStorage.this.database.commitTransaction();
-                    } catch (Throwable e) {
-                        FileLog.e(e);
-                    }
-                }
-            });
-            return;
-        }
-        try {
-            this.database.commitTransaction();
-        } catch (Throwable e) {
-            FileLog.e(e);
-        }
-    }
-
     public TLObject getSentFile(String path, int type) {
         if (path == null || path.endsWith("attheme")) {
             return null;
@@ -4095,7 +4060,7 @@ Error: java.util.NoSuchElementException
                 L_0x0087:
                     throw r5;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.61.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.59.run():void");
                 }
             });
         }
@@ -4127,83 +4092,87 @@ Error: java.util.NoSuchElementException
                     /*
                     r10 = this;
                     r3 = 0;
-                    r4 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r4 = r4.database;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r5 = "UPDATE enc_chats SET seq_in = ?, seq_out = ?, use_count = ?, in_seq_no = ? WHERE uid = ?";	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r3 = r4.executeFast(r5);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r4 = 1;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r5 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r5 = r5.seq_in;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r4 = 2;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r5 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r5 = r5.seq_out;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r4 = 3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r5 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r5 = r5.key_use_count_in;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r5 = r5 << 16;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r6 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r6 = r6.key_use_count_out;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r5 = r5 | r6;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r4 = 4;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r5 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r5 = r5.in_seq_no;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r4 = 5;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r5 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r5 = r5.id;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r3.step();	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r4 = r4;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    if (r4 == 0) goto L_0x007c;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                L_0x0044:
-                    r4 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r4 = r4.id;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r4 = (long) r4;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r6 = 32;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r0 = r4 << r6;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r4 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r4 = r4.database;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r6 = "DELETE FROM messages WHERE mid IN (SELECT m.mid FROM messages as m LEFT JOIN messages_seq as s ON m.mid = s.mid WHERE m.uid = %d AND m.date = 0 AND m.mid < 0 AND s.seq_out <= %d)";	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r7 = 2;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r7 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r8 = 0;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r9 = java.lang.Long.valueOf(r0);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r7[r8] = r9;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r8 = 1;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r9 = r3;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r9 = r9.in_seq_no;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r9 = java.lang.Integer.valueOf(r9);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r7[r8] = r9;	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r5 = java.lang.String.format(r5, r6, r7);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r4 = r4.executeFast(r5);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r4 = r4.stepThis();	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    r4.dispose();	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                L_0x007c:
-                    if (r3 == 0) goto L_0x0081;
-                L_0x007e:
+                    r4 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r4 = r4.database;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = "UPDATE enc_chats SET seq_in = ?, seq_out = ?, use_count = ?, in_seq_no = ?, mtproto_seq = ? WHERE uid = ?";	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r3 = r4.executeFast(r5);	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r4 = 1;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = r3;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = r5.seq_in;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r4 = 2;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = r3;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = r5.seq_out;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r4 = 3;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = r3;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = r5.key_use_count_in;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = r5 << 16;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r6 = r3;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r6 = r6.key_use_count_out;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = r5 | r6;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r4 = 4;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = r3;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = r5.in_seq_no;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r4 = 5;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = r3;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = r5.mtproto_seq;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r4 = 6;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = r3;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = r5.id;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r3.step();	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r4 = r4;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    if (r4 == 0) goto L_0x0084;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                L_0x004c:
+                    r4 = r3;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r4 = r4.id;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r4 = (long) r4;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r6 = 32;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r0 = r4 << r6;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r4 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r4 = r4.database;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r6 = "DELETE FROM messages WHERE mid IN (SELECT m.mid FROM messages as m LEFT JOIN messages_seq as s ON m.mid = s.mid WHERE m.uid = %d AND m.date = 0 AND m.mid < 0 AND s.seq_out <= %d)";	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r7 = 2;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r7 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r8 = 0;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r9 = java.lang.Long.valueOf(r0);	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r7[r8] = r9;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r8 = 1;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r9 = r3;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r9 = r9.in_seq_no;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r9 = java.lang.Integer.valueOf(r9);	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r7[r8] = r9;	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r5 = java.lang.String.format(r5, r6, r7);	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r4 = r4.executeFast(r5);	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r4 = r4.stepThis();	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    r4.dispose();	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                L_0x0084:
+                    if (r3 == 0) goto L_0x0089;
+                L_0x0086:
                     r3.dispose();
-                L_0x0081:
+                L_0x0089:
                     return;
-                L_0x0082:
+                L_0x008a:
                     r2 = move-exception;
-                    org.telegram.messenger.FileLog.e(r2);	 Catch:{ Exception -> 0x0082, all -> 0x008c }
-                    if (r3 == 0) goto L_0x0081;
-                L_0x0088:
+                    org.telegram.messenger.FileLog.e(r2);	 Catch:{ Exception -> 0x008a, all -> 0x0094 }
+                    if (r3 == 0) goto L_0x0089;
+                L_0x0090:
                     r3.dispose();
-                    goto L_0x0081;
-                L_0x008c:
+                    goto L_0x0089;
+                L_0x0094:
                     r4 = move-exception;
-                    if (r3 == 0) goto L_0x0092;
-                L_0x008f:
+                    if (r3 == 0) goto L_0x009a;
+                L_0x0097:
                     r3.dispose();
-                L_0x0092:
+                L_0x009a:
                     throw r4;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.62.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.60.run():void");
                 }
             });
         }
@@ -4268,7 +4237,7 @@ Error: java.util.NoSuchElementException
                 L_0x0037:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.63.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.61.run():void");
                 }
             });
         }
@@ -4333,7 +4302,7 @@ Error: java.util.NoSuchElementException
                 L_0x0037:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.64.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.62.run():void");
                 }
             });
         }
@@ -4367,201 +4336,205 @@ Error: java.util.NoSuchElementException
                     r9 = 16;
                     r7 = 1;
                     r6 = 0;
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    if (r8 == 0) goto L_0x0011;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    if (r8 == 0) goto L_0x0011;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x000a:
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.length;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    if (r8 >= r9) goto L_0x0023;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.length;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    if (r8 >= r9) goto L_0x0023;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x0011:
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    if (r8 == 0) goto L_0x0023;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    if (r8 == 0) goto L_0x0023;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x0017:
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r9 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r9 = r9.auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r9 = org.telegram.messenger.AndroidUtilities.calcAuthKeyHash(r9);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8.key_hash = r9;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r9 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r9 = r9.auth_key;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r9 = org.telegram.messenger.AndroidUtilities.calcAuthKeyHash(r9);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8.key_hash = r9;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x0023:
-                    r8 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.database;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r9 = "UPDATE enc_chats SET data = ?, g = ?, authkey = ?, ttl = ?, layer = ?, seq_in = ?, seq_out = ?, use_count = ?, exchange_id = ?, key_date = ?, fprint = ?, fauthkey = ?, khash = ?, in_seq_no = ?, admin_id = ? WHERE uid = ?";	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6 = r8.executeFast(r9);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r0 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.getObjectSize();	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r0.<init>(r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r1 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.a_or_b;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    if (r8 == 0) goto L_0x0148;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.database;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r9 = "UPDATE enc_chats SET data = ?, g = ?, authkey = ?, ttl = ?, layer = ?, seq_in = ?, seq_out = ?, use_count = ?, exchange_id = ?, key_date = ?, fprint = ?, fauthkey = ?, khash = ?, in_seq_no = ?, admin_id = ?, mtproto_seq = ? WHERE uid = ?";	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6 = r8.executeFast(r9);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r0 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.getObjectSize();	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r0.<init>(r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r1 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.a_or_b;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    if (r8 == 0) goto L_0x0151;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x0043:
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.a_or_b;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.length;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.a_or_b;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.length;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x0048:
-                    r1.<init>(r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r2 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    if (r8 == 0) goto L_0x014b;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r1.<init>(r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r2 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    if (r8 == 0) goto L_0x0154;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x0053:
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.length;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.length;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x0058:
-                    r2.<init>(r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r3 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.future_auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    if (r8 == 0) goto L_0x014e;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r2.<init>(r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r3 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.future_auth_key;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    if (r8 == 0) goto L_0x0157;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x0063:
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.future_auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.length;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.future_auth_key;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.length;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x0068:
-                    r3.<init>(r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r4 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    if (r8 == 0) goto L_0x0078;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r3.<init>(r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r4 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    if (r8 == 0) goto L_0x0078;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x0073:
-                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = r7.length;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = r7.length;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x0078:
-                    r4.<init>(r7);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7.serializeToStream(r0);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = 1;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindByteBuffer(r7, r0);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = r7.a_or_b;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    if (r7 == 0) goto L_0x0091;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r4.<init>(r7);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7.serializeToStream(r0);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 1;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindByteBuffer(r7, r0);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = r7.a_or_b;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    if (r7 == 0) goto L_0x0091;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x008a:
-                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = r7.a_or_b;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r1.writeBytes(r7);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = r7.a_or_b;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r1.writeBytes(r7);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x0091:
-                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = r7.auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    if (r7 == 0) goto L_0x009e;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = r7.auth_key;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    if (r7 == 0) goto L_0x009e;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x0097:
-                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = r7.auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r2.writeBytes(r7);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = r7.auth_key;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r2.writeBytes(r7);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x009e:
-                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = r7.future_auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    if (r7 == 0) goto L_0x00ab;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = r7.future_auth_key;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    if (r7 == 0) goto L_0x00ab;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x00a4:
-                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = r7.future_auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r3.writeBytes(r7);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = r7.future_auth_key;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r3.writeBytes(r7);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x00ab:
-                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    if (r7 == 0) goto L_0x00b8;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    if (r7 == 0) goto L_0x00b8;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x00b1:
-                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r4.writeBytes(r7);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r4.writeBytes(r7);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
                 L_0x00b8:
-                    r7 = 2;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindByteBuffer(r7, r1);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = 3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindByteBuffer(r7, r2);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = 4;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.ttl;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = 5;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.layer;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = 6;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.seq_in;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = 7;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.seq_out;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = 8;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.key_use_count_in;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8 << 16;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r9 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r9 = r9.key_use_count_out;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8 | r9;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = 9;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.exchange_id;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = 10;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.key_create_date;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = 11;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.future_key_fingerprint;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = 12;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindByteBuffer(r7, r3);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = 13;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindByteBuffer(r7, r4);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = 14;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.in_seq_no;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = 15;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.admin_id;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r7 = 16;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r8 = r8.id;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r6.step();	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r0.reuse();	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r1.reuse();	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r2.reuse();	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r3.reuse();	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    r4.reuse();	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    if (r6 == 0) goto L_0x0147;
-                L_0x0144:
+                    r7 = 2;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindByteBuffer(r7, r1);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindByteBuffer(r7, r2);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 4;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.ttl;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 5;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.layer;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 6;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.seq_in;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 7;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.seq_out;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 8;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.key_use_count_in;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8 << 16;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r9 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r9 = r9.key_use_count_out;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8 | r9;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 9;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.exchange_id;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 10;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.key_create_date;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 11;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.future_key_fingerprint;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 12;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindByteBuffer(r7, r3);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 13;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindByteBuffer(r7, r4);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 14;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.in_seq_no;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 15;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.admin_id;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 16;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.mtproto_seq;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r7 = 17;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r3;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r8 = r8.id;	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r6.step();	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r0.reuse();	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r1.reuse();	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r2.reuse();	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r3.reuse();	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    r4.reuse();	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    if (r6 == 0) goto L_0x0150;
+                L_0x014d:
                     r6.dispose();
-                L_0x0147:
+                L_0x0150:
                     return;
-                L_0x0148:
+                L_0x0151:
                     r8 = r7;
                     goto L_0x0048;
-                L_0x014b:
+                L_0x0154:
                     r8 = r7;
                     goto L_0x0058;
-                L_0x014e:
+                L_0x0157:
                     r8 = r7;
                     goto L_0x0068;
-                L_0x0151:
+                L_0x015a:
                     r5 = move-exception;
-                    org.telegram.messenger.FileLog.e(r5);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
-                    if (r6 == 0) goto L_0x0147;
-                L_0x0157:
+                    org.telegram.messenger.FileLog.e(r5);	 Catch:{ Exception -> 0x015a, all -> 0x0164 }
+                    if (r6 == 0) goto L_0x0150;
+                L_0x0160:
                     r6.dispose();
-                    goto L_0x0147;
-                L_0x015b:
+                    goto L_0x0150;
+                L_0x0164:
                     r7 = move-exception;
-                    if (r6 == 0) goto L_0x0161;
-                L_0x015e:
+                    if (r6 == 0) goto L_0x016a;
+                L_0x0167:
                     r6.dispose();
-                L_0x0161:
+                L_0x016a:
                     throw r7;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.65.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.63.run():void");
                 }
             });
         }
@@ -4655,7 +4628,7 @@ Error: java.util.NoSuchElementException
                         if ((chat.key_hash == null || chat.key_hash.length < 16) && chat.auth_key != null) {
                             chat.key_hash = AndroidUtilities.calcAuthKeyHash(chat.auth_key);
                         }
-                        SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO enc_chats VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                        SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO enc_chats VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                         NativeByteBuffer data = new NativeByteBuffer(chat.getObjectSize());
                         if (chat.a_or_b != null) {
                             length = chat.a_or_b.length;
@@ -4710,6 +4683,7 @@ Error: java.util.NoSuchElementException
                         state.bindByteBuffer(16, data5);
                         state.bindInteger(17, chat.in_seq_no);
                         state.bindInteger(18, chat.admin_id);
+                        state.bindInteger(19, chat.mtproto_seq);
                         state.step();
                         state.dispose();
                         data.reuse();
@@ -4923,7 +4897,7 @@ Error: java.util.NoSuchElementException
 
     public void getEncryptedChatsInternal(String chatsToLoad, ArrayList<EncryptedChat> result, ArrayList<Integer> usersToLoad) throws Exception {
         if (chatsToLoad != null && chatsToLoad.length() != 0 && result != null) {
-            SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data, user, g, authkey, ttl, layer, seq_in, seq_out, use_count, exchange_id, key_date, fprint, fauthkey, khash, in_seq_no, admin_id FROM enc_chats WHERE uid IN(%s)", new Object[]{chatsToLoad}), new Object[0]);
+            SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data, user, g, authkey, ttl, layer, seq_in, seq_out, use_count, exchange_id, key_date, fprint, fauthkey, khash, in_seq_no, admin_id, mtproto_seq FROM enc_chats WHERE uid IN(%s)", new Object[]{chatsToLoad}), new Object[0]);
             while (cursor.next()) {
                 try {
                     NativeByteBuffer data = cursor.byteBufferValue(0);
@@ -4954,6 +4928,7 @@ Error: java.util.NoSuchElementException
                             if (admin_id != 0) {
                                 chat.admin_id = admin_id;
                             }
+                            chat.mtproto_seq = cursor.intValue(16);
                             result.add(chat);
                         }
                     }
@@ -5270,12 +5245,12 @@ Error: java.util.NoSuchElementException
 
     private void putMessagesInternal(ArrayList<Message> messages, boolean withTransaction, boolean doNotUpdateDialogDate, int downloadMask, boolean ifNoLastMessage) {
         Message lastMessage;
+        SQLiteCursor cursor;
         int a;
         Integer type;
         Integer count;
         if (ifNoLastMessage) {
             try {
-                SQLiteCursor cursor;
                 lastMessage = (Message) messages.get(0);
                 if (lastMessage.dialog_id == 0) {
                     if (lastMessage.to_id.user_id != 0) {
@@ -5492,28 +5467,24 @@ Error: java.util.NoSuchElementException
                 state5.step();
             }
             data.reuse();
-            if ((message.to_id.channel_id == 0 || message.post) && message.date >= ConnectionsManager.getInstance().getCurrentTime() - 3600 && downloadMask != 0 && ((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument))) {
+            if (downloadMask != 0 && ((message.to_id.channel_id == 0 || message.post) && message.date >= ConnectionsManager.getInstance().getCurrentTime() - 3600 && MediaController.getInstance().canDownloadMedia(message) && ((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)))) {
                 int type2 = 0;
                 long id = 0;
                 MessageMedia object = null;
                 if (MessageObject.isVoiceMessage(message)) {
-                    if ((downloadMask & 2) != 0 && message.media.document.size < 2097152) {
-                        id = message.media.document.id;
-                        type2 = 2;
-                        object = new TL_messageMediaDocument();
-                        object.document = message.media.document;
-                        object.flags |= 1;
-                    }
+                    id = message.media.document.id;
+                    type2 = 2;
+                    object = new TL_messageMediaDocument();
+                    object.document = message.media.document;
+                    object.flags |= 1;
                 } else if (MessageObject.isRoundVideoMessage(message)) {
-                    if ((downloadMask & 64) != 0 && message.media.document.size < 5242880) {
-                        id = message.media.document.id;
-                        type2 = 64;
-                        object = new TL_messageMediaDocument();
-                        object.document = message.media.document;
-                        object.flags |= 1;
-                    }
+                    id = message.media.document.id;
+                    type2 = 64;
+                    object = new TL_messageMediaDocument();
+                    object.document = message.media.document;
+                    object.flags |= 1;
                 } else if (message.media instanceof TL_messageMediaPhoto) {
-                    if (!((downloadMask & 1) == 0 || FileLoader.getClosestPhotoSizeWithSize(message.media.photo.sizes, AndroidUtilities.getPhotoSize()) == null)) {
+                    if (FileLoader.getClosestPhotoSizeWithSize(message.media.photo.sizes, AndroidUtilities.getPhotoSize()) != null) {
                         id = message.media.photo.id;
                         type2 = 1;
                         object = new TL_messageMediaPhoto();
@@ -5521,14 +5492,12 @@ Error: java.util.NoSuchElementException
                         object.flags |= 1;
                     }
                 } else if (MessageObject.isVideoMessage(message)) {
-                    if ((downloadMask & 4) != 0) {
-                        id = message.media.document.id;
-                        type2 = 4;
-                        object = new TL_messageMediaDocument();
-                        object.document = message.media.document;
-                        object.flags |= 1;
-                    }
-                } else if (!(!(message.media instanceof TL_messageMediaDocument) || MessageObject.isMusicMessage(message) || MessageObject.isGifDocument(message.media.document) || (downloadMask & 8) == 0)) {
+                    id = message.media.document.id;
+                    type2 = 4;
+                    object = new TL_messageMediaDocument();
+                    object.document = message.media.document;
+                    object.flags |= 1;
+                } else if (!(!(message.media instanceof TL_messageMediaDocument) || MessageObject.isMusicMessage(message) || MessageObject.isGifDocument(message.media.document))) {
                     id = message.media.document.id;
                     type2 = 8;
                     object = new TL_messageMediaDocument();
@@ -5733,6 +5702,7 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
+        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -5785,7 +5755,6 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
-        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {

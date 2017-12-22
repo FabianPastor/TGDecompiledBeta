@@ -11,6 +11,7 @@ import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.ExoPlayer.EventListener;
 import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
 import org.telegram.messenger.exoplayer2.PlaybackParameters;
+import org.telegram.messenger.exoplayer2.Player;
 import org.telegram.messenger.exoplayer2.SimpleExoPlayer;
 import org.telegram.messenger.exoplayer2.SimpleExoPlayer.VideoListener;
 import org.telegram.messenger.exoplayer2.Timeline;
@@ -18,7 +19,6 @@ import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorsFactory;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.source.LoopingMediaSource;
 import org.telegram.messenger.exoplayer2.source.MediaSource;
-import org.telegram.messenger.exoplayer2.source.MergingMediaSource;
 import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
 import org.telegram.messenger.exoplayer2.source.dash.DashMediaSource;
 import org.telegram.messenger.exoplayer2.source.dash.DefaultDashChunkSource;
@@ -40,15 +40,20 @@ public class VideoPlayer implements EventListener, VideoListener {
     private static final int RENDERER_BUILDING_STATE_BUILDING = 2;
     private static final int RENDERER_BUILDING_STATE_BUILT = 3;
     private static final int RENDERER_BUILDING_STATE_IDLE = 1;
+    private SimpleExoPlayer audioPlayer;
+    private boolean audioPlayerReady;
     private boolean autoplay;
     private VideoPlayerDelegate delegate;
     private boolean lastReportedPlayWhenReady;
     private int lastReportedPlaybackState = 1;
     private Handler mainHandler = new Handler();
     private Factory mediaDataSourceFactory = new ExtendedDefaultDataSourceFactory(ApplicationLoader.applicationContext, BANDWIDTH_METER, new DefaultHttpDataSourceFactory("Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)", BANDWIDTH_METER));
+    private boolean mixedAudio;
+    private boolean mixedPlayWhenReady;
     private SimpleExoPlayer player;
     private TextureView textureView;
     private MappingTrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(BANDWIDTH_METER));
+    private boolean videoPlayerReady;
 
     public interface RendererBuilder {
         void buildRenderers(VideoPlayer videoPlayer);
@@ -78,9 +83,45 @@ public class VideoPlayer implements EventListener, VideoListener {
             this.player.setVideoTextureView(this.textureView);
             this.player.setPlayWhenReady(this.autoplay);
         }
+        if (this.mixedAudio && this.audioPlayer == null) {
+            this.audioPlayer = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, new DefaultLoadControl(), null, 0);
+            this.audioPlayer.addListener(new Player.EventListener() {
+                public void onTimelineChanged(Timeline timeline, Object manifest) {
+                }
+
+                public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+                }
+
+                public void onLoadingChanged(boolean isLoading) {
+                }
+
+                public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                    if (!VideoPlayer.this.audioPlayerReady && playbackState == 3) {
+                        VideoPlayer.this.audioPlayerReady = true;
+                        VideoPlayer.this.checkPlayersReady();
+                    }
+                }
+
+                public void onRepeatModeChanged(int repeatMode) {
+                }
+
+                public void onPlayerError(ExoPlaybackException error) {
+                }
+
+                public void onPositionDiscontinuity() {
+                }
+
+                public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+                }
+            });
+            this.audioPlayer.setPlayWhenReady(this.autoplay);
+        }
     }
 
     public void preparePlayerLoop(Uri videoUri, String videoType, Uri audioUri, String audioType) {
+        this.mixedAudio = true;
+        this.audioPlayerReady = false;
+        this.videoPlayerReady = false;
         ensurePleyaerCreated();
         MediaSource mediaSource1 = null;
         MediaSource mediaSource2 = null;
@@ -137,32 +178,35 @@ public class VideoPlayer implements EventListener, VideoListener {
                 mediaSource2 = mediaSource3;
             }
         }
-        MergingMediaSource mergingMediaSource = new MergingMediaSource(mediaSource1, mediaSource2);
         this.player.prepare(mediaSource1, true, true);
+        this.audioPlayer.prepare(mediaSource2, true, true);
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void preparePlayer(Uri uri, String type) {
         MediaSource mediaSource;
+        boolean z = false;
+        this.videoPlayerReady = false;
+        this.mixedAudio = false;
         ensurePleyaerCreated();
-        boolean z = true;
         switch (type.hashCode()) {
             case 3680:
                 if (type.equals("ss")) {
                     z = true;
                     break;
                 }
-                break;
             case 103407:
                 if (type.equals("hls")) {
                     z = true;
                     break;
                 }
-                break;
             case 3075986:
                 if (type.equals("dash")) {
-                    z = false;
                     break;
                 }
+            default:
+                z = true;
                 break;
         }
         switch (z) {
@@ -191,6 +235,10 @@ public class VideoPlayer implements EventListener, VideoListener {
             this.player.release();
             this.player = null;
         }
+        if (this.audioPlayer != null) {
+            this.audioPlayer.release();
+            this.audioPlayer = null;
+        }
     }
 
     public void setTextureView(TextureView texture) {
@@ -203,21 +251,53 @@ public class VideoPlayer implements EventListener, VideoListener {
     }
 
     public void play() {
+        this.mixedPlayWhenReady = true;
+        if (!this.mixedAudio || (this.audioPlayerReady && this.videoPlayerReady)) {
+            if (this.player != null) {
+                this.player.setPlayWhenReady(true);
+            }
+            if (this.audioPlayer != null) {
+                this.audioPlayer.setPlayWhenReady(true);
+                return;
+            }
+            return;
+        }
         if (this.player != null) {
-            this.player.setPlayWhenReady(true);
+            this.player.setPlayWhenReady(false);
+        }
+        if (this.audioPlayer != null) {
+            this.audioPlayer.setPlayWhenReady(false);
         }
     }
 
     public void pause() {
+        this.mixedPlayWhenReady = false;
         if (this.player != null) {
             this.player.setPlayWhenReady(false);
+        }
+        if (this.audioPlayer != null) {
+            this.audioPlayer.setPlayWhenReady(false);
         }
     }
 
     public void setPlayWhenReady(boolean playWhenReady) {
+        this.mixedPlayWhenReady = playWhenReady;
+        if (playWhenReady && this.mixedAudio && (!this.audioPlayerReady || !this.videoPlayerReady)) {
+            if (this.player != null) {
+                this.player.setPlayWhenReady(false);
+            }
+            if (this.audioPlayer != null) {
+                this.audioPlayer.setPlayWhenReady(false);
+                return;
+            }
+            return;
+        }
         this.autoplay = playWhenReady;
         if (this.player != null) {
             this.player.setPlayWhenReady(playWhenReady);
+        }
+        if (this.audioPlayer != null) {
+            this.audioPlayer.setPlayWhenReady(playWhenReady);
         }
     }
 
@@ -234,12 +314,16 @@ public class VideoPlayer implements EventListener, VideoListener {
     }
 
     public void setMute(boolean value) {
+        float f = 0.0f;
         if (this.player != null) {
-            if (value) {
-                this.player.setVolume(0.0f);
-            } else {
-                this.player.setVolume(1.0f);
+            this.player.setVolume(value ? 0.0f : 1.0f);
+        }
+        if (this.audioPlayer != null) {
+            SimpleExoPlayer simpleExoPlayer = this.audioPlayer;
+            if (!value) {
+                f = 1.0f;
             }
+            simpleExoPlayer.setVolume(f);
         }
     }
 
@@ -249,6 +333,9 @@ public class VideoPlayer implements EventListener, VideoListener {
     public void setVolume(float volume) {
         if (this.player != null) {
             this.player.setVolume(volume);
+        }
+        if (this.audioPlayer != null) {
+            this.audioPlayer.setVolume(volume);
         }
     }
 
@@ -271,7 +358,7 @@ public class VideoPlayer implements EventListener, VideoListener {
     }
 
     public boolean isPlaying() {
-        return this.player != null && this.player.getPlayWhenReady();
+        return (this.mixedAudio && this.mixedPlayWhenReady) || (this.player != null && this.player.getPlayWhenReady());
     }
 
     public boolean isBuffering() {
@@ -282,6 +369,15 @@ public class VideoPlayer implements EventListener, VideoListener {
         if (this.player != null) {
             this.player.setAudioStreamType(type);
         }
+        if (this.audioPlayer != null) {
+            this.audioPlayer.setAudioStreamType(type);
+        }
+    }
+
+    private void checkPlayersReady() {
+        if (this.audioPlayerReady && this.videoPlayerReady && this.mixedPlayWhenReady) {
+            play();
+        }
     }
 
     public void onLoadingChanged(boolean isLoading) {
@@ -289,6 +385,10 @@ public class VideoPlayer implements EventListener, VideoListener {
 
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         maybeReportPlayerState();
+        if (!this.videoPlayerReady && playbackState == 3) {
+            this.videoPlayerReady = true;
+            checkPlayersReady();
+        }
     }
 
     public void onTimelineChanged(Timeline timeline, Object manifest) {

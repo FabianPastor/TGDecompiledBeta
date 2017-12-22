@@ -490,15 +490,32 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             this.videoId = vid;
         }
 
+        private String decodeUrl(String input) {
+            StringBuilder source = new StringBuilder(input);
+            for (int a = 0; a < source.length(); a++) {
+                char c = source.charAt(a);
+                char lower = Character.toLowerCase(c);
+                if (c == lower) {
+                    lower = Character.toUpperCase(c);
+                }
+                source.setCharAt(a, lower);
+            }
+            try {
+                return new String(Base64.decode(source.toString(), 0), "UTF-8");
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
         protected String doInBackground(Void... voids) {
             String playerCode = WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "https://coub.com/api/v2/coubs/%s.json", new Object[]{this.videoId}));
             if (isCancelled()) {
                 return null;
             }
             try {
-                JSONObject json = new JSONObject(playerCode);
-                String video = json.getString("file");
-                String audio = json.getString("audio_file_url");
+                JSONObject json = new JSONObject(playerCode).getJSONObject("file_versions").getJSONObject("mobile");
+                String video = decodeUrl(json.getString("gifv"));
+                String audio = json.getJSONArray(MimeTypes.BASE_TYPE_AUDIO).getString(0);
                 if (!(video == null || audio == null)) {
                     this.results[0] = video;
                     this.results[1] = "other";
@@ -543,9 +560,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
 
         private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
+            Matcher matcher;
             expr = expr.trim();
             if (!TextUtils.isEmpty(expr)) {
-                Matcher matcher;
                 if (expr.charAt(0) == '(') {
                     int parens_count = 0;
                     matcher = WebPlayerView.exprParensPattern.matcher(expr);
@@ -1955,6 +1972,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     public boolean loadVideo(String url, Photo thumb, String originalUrl, boolean autoplay) {
         String youtubeId = null;
         String vimeoId = null;
+        String coubId = null;
         String twitchClipId = null;
         String twitchStreamId = null;
         String mp4File = null;
@@ -2049,6 +2067,20 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                         FileLog.e(e22222);
                     }
                 }
+                if (twitchStreamId == null) {
+                    try {
+                        matcher = coubIdRegex.matcher(url);
+                        id = null;
+                        if (matcher.find()) {
+                            id = matcher.group(1);
+                        }
+                        if (id != null) {
+                            coubId = id;
+                        }
+                    } catch (Throwable e222222) {
+                        FileLog.e(e222222);
+                    }
+                }
             }
         }
         this.initied = false;
@@ -2105,10 +2137,11 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 youtubeVideoTask = new VimeoVideoTask(vimeoId);
                 youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
                 this.currentTask = youtubeVideoTask;
-            } else if (null != null) {
-                youtubeVideoTask = new CoubVideoTask(null);
+            } else if (coubId != null) {
+                youtubeVideoTask = new CoubVideoTask(coubId);
                 youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
                 this.currentTask = youtubeVideoTask;
+                this.isStream = true;
             } else if (aparatId != null) {
                 youtubeVideoTask = new AparatVideoTask(aparatId);
                 youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
@@ -2126,7 +2159,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             this.controlsView.show(false, false);
             showProgress(true, false);
         }
-        if (youtubeId == null && vimeoId == null && null == null && aparatId == null && mp4File == null && twitchClipId == null && twitchStreamId == null) {
+        if (youtubeId == null && vimeoId == null && coubId == null && aparatId == null && mp4File == null && twitchClipId == null && twitchStreamId == null) {
             this.controlsView.setVisibility(8);
             return false;
         }

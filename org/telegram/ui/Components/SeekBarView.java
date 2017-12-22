@@ -14,6 +14,7 @@ public class SeekBarView extends FrameLayout {
     private Paint outerPaint1;
     private boolean pressed;
     private float progressToSet;
+    private boolean reportChanges;
     private int thumbDX;
     private int thumbHeight;
     private int thumbWidth;
@@ -33,12 +34,21 @@ public class SeekBarView extends FrameLayout {
         this.thumbHeight = AndroidUtilities.dp(24.0f);
     }
 
+    public void setColors(int inner, int outer) {
+        this.innerPaint1.setColor(inner);
+        this.outerPaint1.setColor(outer);
+    }
+
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         return onTouch(ev);
     }
 
     public boolean onTouchEvent(MotionEvent event) {
         return onTouch(event);
+    }
+
+    public void setReportChanges(boolean value) {
+        this.reportChanges = value;
     }
 
     public void setDelegate(SeekBarViewDelegate seekBarViewDelegate) {
@@ -70,6 +80,9 @@ public class SeekBarView extends FrameLayout {
                 this.thumbX = 0;
             } else if (this.thumbX > getMeasuredWidth() - this.thumbWidth) {
                 this.thumbX = getMeasuredWidth() - this.thumbWidth;
+            }
+            if (this.reportChanges) {
+                this.delegate.onSeekBarDrag(((float) this.thumbX) / ((float) (getMeasuredWidth() - this.thumbWidth)));
             }
             invalidate();
             return true;

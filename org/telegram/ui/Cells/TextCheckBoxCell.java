@@ -73,6 +73,10 @@ public class TextCheckBoxCell extends FrameLayout {
         this.checkBox.setChecked(checked, true);
     }
 
+    public boolean isChecked() {
+        return this.checkBox.isChecked();
+    }
+
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);

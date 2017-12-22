@@ -66,7 +66,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.tgnet.ConnectionsManager;
@@ -4948,7 +4947,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                     return true;
                 }
                 return false;
-            case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*66*/:
+            case 66:
                 if ((this.mTempRect.left < this.mTempRect2.left || this.mTempRect.right <= this.mTempRect2.left) && this.mTempRect.right < this.mTempRect2.right) {
                     return true;
                 }
