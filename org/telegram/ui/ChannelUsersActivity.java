@@ -681,13 +681,13 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         public void onBindViewHolder(ViewHolder holder, int position) {
             User user;
             CharSequence username;
-            CharSequence username2;
             Throwable e;
-            Object username3;
+            Object username2;
             String u;
             ManageChatUserCell userCell;
             switch (holder.getItemViewType()) {
                 case 0:
+                    CharSequence username3;
                     String foundUserName;
                     CharSequence spannableStringBuilder;
                     int idx;
@@ -727,13 +727,13 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                 ok = true;
                                 name = (CharSequence) this.searchResultNames.get(position - 1);
                                 if (name != null && un != null && un.length() > 0 && name.toString().startsWith("@" + un)) {
-                                    username = name;
+                                    username3 = name;
                                     name = null;
-                                    username2 = username;
+                                    username = username3;
                                 }
                             } else {
                                 position -= count + 1;
-                                username2 = null;
+                                username = null;
                             }
                             if (!ok) {
                                 count = this.searchAdapterHelper.getGlobalSearch().size();
@@ -748,7 +748,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                             ((SpannableStringBuilder) spannableStringBuilder).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
                                         } catch (Exception e2) {
                                             e = e2;
-                                            username3 = un;
+                                            username2 = un;
                                             FileLog.e(e);
                                             if (nameSearch != null) {
                                                 u = UserObject.getUserName(user);
@@ -760,13 +760,13 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                             }
                                             userCell = (ManageChatUserCell) holder.itemView;
                                             userCell.setTag(Integer.valueOf(position));
-                                            userCell.setData(user, name, username);
+                                            userCell.setData(user, name, username3);
                                             return;
                                         }
                                     } catch (Exception e3) {
                                         e = e3;
-                                        username = username2;
-                                        username3 = un;
+                                        username3 = username;
+                                        username2 = un;
                                         FileLog.e(e);
                                         if (nameSearch != null) {
                                             u = UserObject.getUserName(user);
@@ -778,7 +778,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                         }
                                         userCell = (ManageChatUserCell) holder.itemView;
                                         userCell.setTag(Integer.valueOf(position));
-                                        userCell.setData(user, name, username);
+                                        userCell.setData(user, name, username3);
                                         return;
                                     }
                                     if (nameSearch != null) {
@@ -791,11 +791,11 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                     }
                                     userCell = (ManageChatUserCell) holder.itemView;
                                     userCell.setTag(Integer.valueOf(position));
-                                    userCell.setData(user, name, username);
+                                    userCell.setData(user, name, username3);
                                     return;
                                 }
                             }
-                            username = username2;
+                            username3 = username;
                             if (nameSearch != null) {
                                 u = UserObject.getUserName(user);
                                 name = new SpannableStringBuilder(u);
@@ -806,11 +806,11 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                             }
                             userCell = (ManageChatUserCell) holder.itemView;
                             userCell.setTag(Integer.valueOf(position));
-                            userCell.setData(user, name, username);
+                            userCell.setData(user, name, username3);
                             return;
                         }
                     }
-                    username2 = null;
+                    username = null;
                     if (ok) {
                         count = this.searchAdapterHelper.getGlobalSearch().size();
                         foundUserName = this.searchAdapterHelper.getLastFoundUsername();
@@ -829,10 +829,10 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         }
                         userCell = (ManageChatUserCell) holder.itemView;
                         userCell.setTag(Integer.valueOf(position));
-                        userCell.setData(user, name, username);
+                        userCell.setData(user, name, username3);
                         return;
                     }
-                    username = username2;
+                    username3 = username;
                     if (nameSearch != null) {
                         u = UserObject.getUserName(user);
                         name = new SpannableStringBuilder(u);
@@ -843,7 +843,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     }
                     userCell = (ManageChatUserCell) holder.itemView;
                     userCell.setTag(Integer.valueOf(position));
-                    userCell.setData(user, name, username);
+                    userCell.setData(user, name, username3);
                     return;
                 case 1:
                     GraySectionCell sectionCell = holder.itemView;
