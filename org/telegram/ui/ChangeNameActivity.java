@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -52,9 +51,9 @@ public class ChangeNameActivity extends BaseFragment {
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
-        User user = MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId()));
+        User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
         if (user == null) {
-            user = UserConfig.getCurrentUser();
+            user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
         }
         LinearLayout linearLayout = new LinearLayout(context);
         this.fragmentView = linearLayout;
@@ -130,14 +129,14 @@ public class ChangeNameActivity extends BaseFragment {
 
     public void onResume() {
         super.onResume();
-        if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("view_animations", true)) {
+        if (!MessagesController.getGlobalMainSettings().getBoolean("view_animations", true)) {
             this.firstNameField.requestFocus();
             AndroidUtilities.showKeyboard(this.firstNameField);
         }
     }
 
     private void saveName() {
-        User currentUser = UserConfig.getCurrentUser();
+        User currentUser = UserConfig.getInstance(this.currentAccount).getCurrentUser();
         if (currentUser != null && this.lastNameField.getText() != null && this.firstNameField.getText() != null) {
             String newFirst = this.firstNameField.getText().toString();
             String newLast = this.lastNameField.getText().toString();
@@ -148,15 +147,15 @@ public class ChangeNameActivity extends BaseFragment {
                 currentUser.first_name = newFirst;
                 req.last_name = newLast;
                 currentUser.last_name = newLast;
-                User user = MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId()));
+                User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
                 if (user != null) {
                     user.first_name = req.first_name;
                     user.last_name = req.last_name;
                 }
-                UserConfig.saveConfig(true);
-                NotificationCenter.getInstance().postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
-                NotificationCenter.getInstance().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
-                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                UserConfig.getInstance(this.currentAccount).saveConfig(true);
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, TL_error error) {
                     }
                 });

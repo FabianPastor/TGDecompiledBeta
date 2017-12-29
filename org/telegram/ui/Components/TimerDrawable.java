@@ -33,29 +33,29 @@ public class TimerDrawable extends Drawable {
         String timeString;
         this.time = value;
         if (this.time >= 1 && this.time < 60) {
-            timeString = "" + value;
+            timeString = TtmlNode.ANONYMOUS_REGION_ID + value;
             if (timeString.length() < 2) {
                 timeString = timeString + "s";
             }
         } else if (this.time >= 60 && this.time < 3600) {
-            timeString = "" + (value / 60);
+            timeString = TtmlNode.ANONYMOUS_REGION_ID + (value / 60);
             if (timeString.length() < 2) {
                 timeString = timeString + "m";
             }
         } else if (this.time >= 3600 && this.time < 86400) {
-            timeString = "" + ((value / 60) / 60);
+            timeString = TtmlNode.ANONYMOUS_REGION_ID + ((value / 60) / 60);
             if (timeString.length() < 2) {
                 timeString = timeString + "h";
             }
         } else if (this.time < 86400 || this.time >= 604800) {
-            timeString = "" + ((((value / 60) / 60) / 24) / 7);
+            timeString = TtmlNode.ANONYMOUS_REGION_ID + ((((value / 60) / 60) / 24) / 7);
             if (timeString.length() < 2) {
                 timeString = timeString + "w";
             } else if (timeString.length() > 2) {
                 timeString = "c";
             }
         } else {
-            timeString = "" + (((value / 60) / 60) / 24);
+            timeString = TtmlNode.ANONYMOUS_REGION_ID + (((value / 60) / 60) / 24);
             if (timeString.length() < 2) {
                 timeString = timeString + "d";
             }

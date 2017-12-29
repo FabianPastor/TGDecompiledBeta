@@ -38,7 +38,7 @@ public class UpdateFragment extends DialogFragment implements OnClickListener, U
 
     public static UpdateFragment newInstance(JSONArray versionInfo, String urlString) {
         Bundle arguments = new Bundle();
-        arguments.putString("url", urlString);
+        arguments.putString(FRAGMENT_URL, urlString);
         arguments.putString(FRAGMENT_VERSION_INFO, versionInfo.toString());
         UpdateFragment fragment = new UpdateFragment();
         fragment.setArguments(arguments);
@@ -48,7 +48,7 @@ public class UpdateFragment extends DialogFragment implements OnClickListener, U
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            this.mUrlString = getArguments().getString("url");
+            this.mUrlString = getArguments().getString(FRAGMENT_URL);
             this.mVersionInfo = new JSONArray(getArguments().getString(FRAGMENT_VERSION_INFO));
             setStyle(1, 16973939);
         } catch (JSONException e) {
@@ -83,7 +83,7 @@ public class UpdateFragment extends DialogFragment implements OnClickListener, U
         WebView webView = (WebView) view.findViewById(R.id.web_update_details);
         webView.clearCache(true);
         webView.destroyDrawingCache();
-        webView.loadDataWithBaseURL(Constants.BASE_URL, this.mVersionHelper.getReleaseNotes(false), "text/html", "utf-8", null);
+        webView.loadDataWithBaseURL("https://sdk.hockeyapp.net/", this.mVersionHelper.getReleaseNotes(false), "text/html", "utf-8", null);
         return view;
     }
 
@@ -152,7 +152,7 @@ public class UpdateFragment extends DialogFragment implements OnClickListener, U
             PackageManager pm = activity.getPackageManager();
             return pm.getApplicationLabel(pm.getApplicationInfo(activity.getPackageName(), 0)).toString();
         } catch (NameNotFoundException e) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
     }
 

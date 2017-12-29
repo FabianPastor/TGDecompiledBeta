@@ -16,6 +16,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 import net.hockeyapp.android.utils.HockeyLog;
+import org.telegram.messenger.exoplayer2.C;
 
 public class Constants {
     public static String ANDROID_BUILD = null;
@@ -23,18 +24,11 @@ public class Constants {
     public static String APP_PACKAGE = null;
     public static String APP_VERSION = null;
     public static String APP_VERSION_NAME = null;
-    public static final String BASE_URL = "https://sdk.hockeyapp.net/";
-    private static final String BUNDLE_BUILD_NUMBER = "buildNumber";
     public static String CRASH_IDENTIFIER = null;
     public static String DEVICE_IDENTIFIER = null;
-    public static final String FILES_DIRECTORY_NAME = "HockeyApp";
     public static String FILES_PATH = null;
     public static String PHONE_MANUFACTURER = null;
     public static String PHONE_MODEL = null;
-    public static final String SDK_NAME = "HockeySDK";
-    public static final String SDK_USER_AGENT = "HockeySDK/Android 4.1.3";
-    public static final String SDK_VERSION = "4.1.3";
-    public static final int UPDATE_PERMISSIONS_REQUEST = 1;
 
     public static void loadFromContext(Context context) {
         ANDROID_VERSION = VERSION.RELEASE;
@@ -76,11 +70,11 @@ public class Constants {
                 PackageManager packageManager = context.getPackageManager();
                 PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
                 APP_PACKAGE = packageInfo.packageName;
-                APP_VERSION = "" + packageInfo.versionCode;
+                APP_VERSION = TtmlNode.ANONYMOUS_REGION_ID + packageInfo.versionCode;
                 APP_VERSION_NAME = packageInfo.versionName;
                 int buildNumber = loadBuildNumber(context, packageManager);
                 if (buildNumber != 0 && buildNumber > packageInfo.versionCode) {
-                    APP_VERSION = "" + buildNumber;
+                    APP_VERSION = TtmlNode.ANONYMOUS_REGION_ID + buildNumber;
                 }
             } catch (NameNotFoundException e) {
                 HockeyLog.error("Exception thrown when accessing the package info:");
@@ -94,7 +88,7 @@ public class Constants {
         try {
             Bundle metaData = packageManager.getApplicationInfo(context.getPackageName(), 128).metaData;
             if (metaData != null) {
-                i = metaData.getInt(BUNDLE_BUILD_NUMBER, 0);
+                i = metaData.getInt("buildNumber", 0);
             }
         } catch (NameNotFoundException e) {
             HockeyLog.error("Exception thrown when accessing the application info:");
@@ -109,7 +103,7 @@ public class Constants {
             String combined = APP_PACKAGE + ":" + deviceIdentifier + ":" + createSalt(context);
             try {
                 MessageDigest digest = MessageDigest.getInstance("SHA-1");
-                byte[] bytes = combined.getBytes("UTF-8");
+                byte[] bytes = combined.getBytes(C.UTF8_NAME);
                 digest.update(bytes, 0, bytes.length);
                 CRASH_IDENTIFIER = bytesToHex(digest.digest());
             } catch (Throwable e) {
@@ -151,7 +145,7 @@ public class Constants {
             abiString = Build.CPU_ABI;
         }
         String fingerprint = "HA" + (Build.BOARD.length() % 10) + (Build.BRAND.length() % 10) + (abiString.length() % 10) + (Build.PRODUCT.length() % 10);
-        String serial = "";
+        String serial = TtmlNode.ANONYMOUS_REGION_ID;
         try {
             serial = Build.class.getField("SERIAL").get(null).toString();
         } catch (Throwable th) {

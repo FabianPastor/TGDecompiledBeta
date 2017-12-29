@@ -14,7 +14,6 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 import android.widget.CompoundButton;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
@@ -83,7 +82,7 @@ public class Switch extends CompoundButton {
             this.mTrackDrawable.setCallback(this);
         }
         if (AndroidUtilities.density < 1.0f) {
-            this.mSwitchMinWidth = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
+            this.mSwitchMinWidth = AndroidUtilities.dp(30.0f);
         } else {
             this.mSwitchMinWidth = 0;
         }

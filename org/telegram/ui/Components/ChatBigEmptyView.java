@@ -6,7 +6,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -29,7 +28,7 @@ public class ChatBigEmptyView extends LinearLayout {
             this.secretViewStatusTextView.setTextSize(1, 15.0f);
             this.secretViewStatusTextView.setTextColor(Theme.getColor(Theme.key_chat_serviceText));
             this.secretViewStatusTextView.setGravity(1);
-            this.secretViewStatusTextView.setMaxWidth(AndroidUtilities.dp(BitmapDescriptorFactory.HUE_AZURE));
+            this.secretViewStatusTextView.setMaxWidth(AndroidUtilities.dp(210.0f));
             this.textViews.add(this.secretViewStatusTextView);
             addView(this.secretViewStatusTextView, LayoutHelper.createLinear(-2, -2, 49));
         } else {

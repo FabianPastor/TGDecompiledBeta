@@ -1,44 +1,90 @@
 package com.google.android.gms.common.internal;
 
-import android.accounts.Account;
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.TextUtils;
+import com.google.android.gms.common.util.zzw;
 
-public final class zzbq implements Creator<zzbp> {
-    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        int zzd = zzb.zzd(parcel);
-        int i = 0;
-        Account account = null;
-        int i2 = 0;
-        GoogleSignInAccount googleSignInAccount = null;
-        while (parcel.dataPosition() < zzd) {
-            int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
-                case 1:
-                    i2 = zzb.zzg(parcel, readInt);
-                    break;
-                case 2:
-                    account = (Account) zzb.zza(parcel, readInt, Account.CREATOR);
-                    break;
-                case 3:
-                    i = zzb.zzg(parcel, readInt);
-                    break;
-                case 4:
-                    googleSignInAccount = (GoogleSignInAccount) zzb.zza(parcel, readInt, GoogleSignInAccount.CREATOR);
-                    break;
-                default:
-                    zzb.zzb(parcel, readInt);
-                    break;
-            }
+public final class zzbq {
+    public static void checkArgument(boolean z) {
+        if (!z) {
+            throw new IllegalArgumentException();
         }
-        zzb.zzF(parcel, zzd);
-        return new zzbp(i2, account, i, googleSignInAccount);
     }
 
-    public final /* synthetic */ Object[] newArray(int i) {
-        return new zzbp[i];
+    public static void checkArgument(boolean z, Object obj) {
+        if (!z) {
+            throw new IllegalArgumentException(String.valueOf(obj));
+        }
+    }
+
+    public static <T> T checkNotNull(T t) {
+        if (t != null) {
+            return t;
+        }
+        throw new NullPointerException("null reference");
+    }
+
+    public static <T> T checkNotNull(T t, Object obj) {
+        if (t != null) {
+            return t;
+        }
+        throw new NullPointerException(String.valueOf(obj));
+    }
+
+    public static void checkState(boolean z) {
+        if (!z) {
+            throw new IllegalStateException();
+        }
+    }
+
+    public static void zza(Handler handler) {
+        if (Looper.myLooper() != handler.getLooper()) {
+            throw new IllegalStateException("Must be called on the handler thread");
+        }
+    }
+
+    public static void zza(boolean z, Object obj) {
+        if (!z) {
+            throw new IllegalStateException(String.valueOf(obj));
+        }
+    }
+
+    public static void zza(boolean z, String str, Object... objArr) {
+        if (!z) {
+            throw new IllegalStateException(String.format(str, objArr));
+        }
+    }
+
+    public static void zzb(boolean z, String str, Object... objArr) {
+        if (!z) {
+            throw new IllegalArgumentException(String.format(str, objArr));
+        }
+    }
+
+    public static void zzge(String str) {
+        if (!zzw.zzau()) {
+            throw new IllegalStateException(str);
+        }
+    }
+
+    public static String zzgm(String str) {
+        if (!TextUtils.isEmpty(str)) {
+            return str;
+        }
+        throw new IllegalArgumentException("Given String is empty or null");
+    }
+
+    public static void zzgn(String str) {
+        if (zzw.zzau()) {
+            throw new IllegalStateException(str);
+        }
+    }
+
+    public static String zzh(String str, Object obj) {
+        if (!TextUtils.isEmpty(str)) {
+            return str;
+        }
+        throw new IllegalArgumentException(String.valueOf(obj));
     }
 }

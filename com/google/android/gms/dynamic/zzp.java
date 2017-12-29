@@ -2,26 +2,25 @@ package com.google.android.gms.dynamic;
 
 import android.content.Context;
 import android.os.IBinder;
-import com.google.android.gms.common.internal.zzbo;
-import com.google.android.gms.common.zzo;
+import com.google.android.gms.common.internal.zzbq;
 
 public abstract class zzp<T> {
-    private final String zzaSC;
-    private T zzaSD;
+    private final String zzgwn;
+    private T zzgwo;
 
     protected zzp(String str) {
-        this.zzaSC = str;
+        this.zzgwn = str;
     }
 
-    protected final T zzaS(Context context) throws zzq {
-        if (this.zzaSD == null) {
-            zzbo.zzu(context);
-            Context remoteContext = zzo.getRemoteContext(context);
+    protected final T zzde(Context context) throws zzq {
+        if (this.zzgwo == null) {
+            zzbq.checkNotNull(context);
+            Context remoteContext = com.google.android.gms.common.zzp.getRemoteContext(context);
             if (remoteContext == null) {
                 throw new zzq("Could not get remote context.");
             }
             try {
-                this.zzaSD = zzb((IBinder) remoteContext.getClassLoader().loadClass(this.zzaSC).newInstance());
+                this.zzgwo = zze((IBinder) remoteContext.getClassLoader().loadClass(this.zzgwn).newInstance());
             } catch (Throwable e) {
                 throw new zzq("Could not load creator class.", e);
             } catch (Throwable e2) {
@@ -30,8 +29,8 @@ public abstract class zzp<T> {
                 throw new zzq("Could not access creator.", e22);
             }
         }
-        return this.zzaSD;
+        return this.zzgwo;
     }
 
-    protected abstract T zzb(IBinder iBinder);
+    protected abstract T zze(IBinder iBinder);
 }

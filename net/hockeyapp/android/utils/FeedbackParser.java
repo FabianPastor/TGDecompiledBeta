@@ -3,6 +3,7 @@ package net.hockeyapp.android.utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import net.hockeyapp.android.UpdateFragment;
 import net.hockeyapp.android.objects.Feedback;
 import net.hockeyapp.android.objects.FeedbackAttachment;
 import net.hockeyapp.android.objects.FeedbackMessage;
@@ -10,14 +11,12 @@ import net.hockeyapp.android.objects.FeedbackResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public class FeedbackParser {
 
     private static class FeedbackParserHolder {
         public static final FeedbackParser INSTANCE = new FeedbackParser();
-
-        private FeedbackParserHolder() {
-        }
     }
 
     private FeedbackParser() {
@@ -45,7 +44,7 @@ public class FeedbackParser {
                 messages = new ArrayList();
                 for (int i = 0; i < messagesArray.length(); i++) {
                     String subject = messagesArray.getJSONObject(i).getString("subject").toString();
-                    String text = messagesArray.getJSONObject(i).getString("text").toString();
+                    String text = messagesArray.getJSONObject(i).getString(MimeTypes.BASE_TYPE_TEXT).toString();
                     String oem = messagesArray.getJSONObject(i).getString("oem").toString();
                     String model = messagesArray.getJSONObject(i).getString("model").toString();
                     String osVersion = messagesArray.getJSONObject(i).getString("os_version").toString();
@@ -65,7 +64,7 @@ public class FeedbackParser {
                             int attachmentId = jsonAttachments.getJSONObject(j).getInt(TtmlNode.ATTR_ID);
                             int attachmentMessageId = jsonAttachments.getJSONObject(j).getInt("feedback_message_id");
                             String filename = jsonAttachments.getJSONObject(j).getString("file_name");
-                            String url = jsonAttachments.getJSONObject(j).getString("url");
+                            String url = jsonAttachments.getJSONObject(j).getString(UpdateFragment.FRAGMENT_URL);
                             String attachmentCreatedAt = jsonAttachments.getJSONObject(j).getString("created_at");
                             String attachmentUpdatedAt = jsonAttachments.getJSONObject(j).getString("updated_at");
                             FeedbackAttachment feedbackAttachment = new FeedbackAttachment();

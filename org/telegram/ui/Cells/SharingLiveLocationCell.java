@@ -139,10 +139,10 @@ public class SharingLiveLocationCell extends FrameLayout {
             address = messageObject.messageOwner.media.address;
         }
         if (TextUtils.isEmpty(messageObject.messageOwner.media.title)) {
-            name = "";
+            name = TtmlNode.ANONYMOUS_REGION_ID;
             this.avatarDrawable = null;
             if (fromId > 0) {
-                User user = MessagesController.getInstance().getUser(Integer.valueOf(fromId));
+                User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(fromId));
                 if (user != null) {
                     if (user.photo != null) {
                         photo = user.photo.photo_small;
@@ -151,7 +151,7 @@ public class SharingLiveLocationCell extends FrameLayout {
                     name = UserObject.getUserName(user);
                 }
             } else {
-                Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-fromId));
+                Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-fromId));
                 if (chat != null) {
                     if (chat.photo != null) {
                         photo = chat.photo.photo_small;
@@ -199,7 +199,7 @@ public class SharingLiveLocationCell extends FrameLayout {
         int lower_id = info.id;
         TLObject photo = null;
         if (lower_id > 0) {
-            User user = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
+            User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(lower_id));
             this.avatarDrawable.setInfo(user);
             if (user != null) {
                 this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
@@ -208,7 +208,7 @@ public class SharingLiveLocationCell extends FrameLayout {
                 }
             }
         } else {
-            Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
+            Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-lower_id));
             if (chat != null) {
                 this.avatarDrawable.setInfo(chat);
                 this.nameTextView.setText(chat.title);
@@ -238,7 +238,7 @@ public class SharingLiveLocationCell extends FrameLayout {
         int lower_id = (int) info.did;
         TLObject photo = null;
         if (lower_id > 0) {
-            User user = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
+            User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(lower_id));
             if (user != null) {
                 this.avatarDrawable.setInfo(user);
                 this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
@@ -247,7 +247,7 @@ public class SharingLiveLocationCell extends FrameLayout {
                 }
             }
         } else {
-            Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
+            Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-lower_id));
             if (chat != null) {
                 this.avatarDrawable.setInfo(chat);
                 this.nameTextView.setText(chat.title);
@@ -270,7 +270,7 @@ public class SharingLiveLocationCell extends FrameLayout {
                 stopTime = this.liveLocation.object.date + this.liveLocation.object.media.period;
                 period = this.liveLocation.object.media.period;
             }
-            int currentTime = ConnectionsManager.getInstance().getCurrentTime();
+            int currentTime = ConnectionsManager.getAccountInstance().getCurrentTime();
             if (stopTime >= currentTime) {
                 int color;
                 float f;

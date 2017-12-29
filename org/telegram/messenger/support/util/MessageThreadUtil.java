@@ -1,8 +1,8 @@
 package org.telegram.messenger.support.util;
 
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.content.ParallelExecutorCompat;
 import android.util.Log;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -221,7 +221,7 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
                 }
             };
             AtomicBoolean mBackgroundRunning = new AtomicBoolean(false);
-            private final Executor mExecutor = ParallelExecutorCompat.getParallelExecutor();
+            private final Executor mExecutor = AsyncTask.THREAD_POOL_EXECUTOR;
             final MessageQueue mQueue = new MessageQueue();
 
             public void refresh(int generation) {

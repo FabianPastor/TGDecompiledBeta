@@ -2,33 +2,32 @@ package com.google.android.gms.wallet.wobs;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.internal.zzbfn;
 
-public final class zzl implements Creator<zzk> {
+public final class zzl implements Creator<UriData> {
     public final /* synthetic */ Object createFromParcel(Parcel parcel) {
         String str = null;
-        int zzd = zzb.zzd(parcel);
+        int zzd = zzbfn.zzd(parcel);
         String str2 = null;
         while (parcel.dataPosition() < zzd) {
             int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
+            switch (65535 & readInt) {
                 case 2:
-                    str2 = zzb.zzq(parcel, readInt);
+                    str2 = zzbfn.zzq(parcel, readInt);
                     break;
                 case 3:
-                    str = zzb.zzq(parcel, readInt);
+                    str = zzbfn.zzq(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, readInt);
+                    zzbfn.zzb(parcel, readInt);
                     break;
             }
         }
-        zzb.zzF(parcel, zzd);
-        return new zzk(str2, str);
+        zzbfn.zzaf(parcel, zzd);
+        return new UriData(str2, str);
     }
 
     public final /* synthetic */ Object[] newArray(int i) {
-        return new zzk[i];
+        return new UriData[i];
     }
 }

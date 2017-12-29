@@ -1,23 +1,34 @@
 package com.google.android.gms.wearable.internal;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.NodeApi.GetLocalNodeResult;
+import android.os.Parcel;
+import android.os.ParcelFileDescriptor;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfn;
 
-public final class zzef implements GetLocalNodeResult {
-    private final Status mStatus;
-    private final Node zzbSZ;
-
-    public zzef(Status status, Node node) {
-        this.mStatus = status;
-        this.zzbSZ = node;
+public final class zzef implements Creator<zzee> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzbfn.zzd(parcel);
+        int i = 0;
+        ParcelFileDescriptor parcelFileDescriptor = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (65535 & readInt) {
+                case 2:
+                    i = zzbfn.zzg(parcel, readInt);
+                    break;
+                case 3:
+                    parcelFileDescriptor = (ParcelFileDescriptor) zzbfn.zza(parcel, readInt, ParcelFileDescriptor.CREATOR);
+                    break;
+                default:
+                    zzbfn.zzb(parcel, readInt);
+                    break;
+            }
+        }
+        zzbfn.zzaf(parcel, zzd);
+        return new zzee(i, parcelFileDescriptor);
     }
 
-    public final Node getNode() {
-        return this.zzbSZ;
-    }
-
-    public final Status getStatus() {
-        return this.mStatus;
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new zzee[i];
     }
 }

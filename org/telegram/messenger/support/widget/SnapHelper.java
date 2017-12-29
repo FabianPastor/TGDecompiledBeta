@@ -1,7 +1,5 @@
 package org.telegram.messenger.support.widget;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -37,10 +35,8 @@ public abstract class SnapHelper extends OnFlingListener {
         }
     };
 
-    @Nullable
-    public abstract int[] calculateDistanceToFinalSnap(@NonNull LayoutManager layoutManager, @NonNull View view);
+    public abstract int[] calculateDistanceToFinalSnap(LayoutManager layoutManager, View view);
 
-    @Nullable
     public abstract View findSnapView(LayoutManager layoutManager);
 
     public abstract int findTargetSnapPosition(LayoutManager layoutManager, int i, int i2);
@@ -57,7 +53,7 @@ public abstract class SnapHelper extends OnFlingListener {
         return false;
     }
 
-    public void attachToRecyclerView(@Nullable RecyclerView recyclerView) throws IllegalStateException {
+    public void attachToRecyclerView(RecyclerView recyclerView) throws IllegalStateException {
         if (this.mRecyclerView != recyclerView) {
             if (this.mRecyclerView != null) {
                 destroyCallbacks();
@@ -92,11 +88,11 @@ public abstract class SnapHelper extends OnFlingListener {
         return outDist;
     }
 
-    private boolean snapFromFling(@NonNull LayoutManager layoutManager, int velocityX, int velocityY) {
+    private boolean snapFromFling(LayoutManager layoutManager, int velocityX, int velocityY) {
         if (!(layoutManager instanceof ScrollVectorProvider)) {
             return false;
         }
-        SmoothScroller smoothScroller = createSnapScroller(layoutManager);
+        SmoothScroller smoothScroller = createScroller(layoutManager);
         if (smoothScroller == null) {
             return false;
         }
@@ -124,17 +120,23 @@ public abstract class SnapHelper extends OnFlingListener {
         }
     }
 
-    @Nullable
+    protected SmoothScroller createScroller(LayoutManager layoutManager) {
+        return createSnapScroller(layoutManager);
+    }
+
+    @Deprecated
     protected LinearSmoothScroller createSnapScroller(LayoutManager layoutManager) {
         if (layoutManager instanceof ScrollVectorProvider) {
             return new LinearSmoothScroller(this.mRecyclerView.getContext()) {
                 protected void onTargetFound(View targetView, State state, Action action) {
-                    int[] snapDistances = SnapHelper.this.calculateDistanceToFinalSnap(SnapHelper.this.mRecyclerView.getLayoutManager(), targetView);
-                    int dx = snapDistances[0];
-                    int dy = snapDistances[1];
-                    int time = calculateTimeForDeceleration(Math.max(Math.abs(dx), Math.abs(dy)));
-                    if (time > 0) {
-                        action.update(dx, dy, time, this.mDecelerateInterpolator);
+                    if (SnapHelper.this.mRecyclerView != null) {
+                        int[] snapDistances = SnapHelper.this.calculateDistanceToFinalSnap(SnapHelper.this.mRecyclerView.getLayoutManager(), targetView);
+                        int dx = snapDistances[0];
+                        int dy = snapDistances[1];
+                        int time = calculateTimeForDeceleration(Math.max(Math.abs(dx), Math.abs(dy)));
+                        if (time > 0) {
+                            action.update(dx, dy, time, this.mDecelerateInterpolator);
+                        }
                     }
                 }
 

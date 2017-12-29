@@ -1,26 +1,16 @@
 package com.google.android.gms.common;
 
-import java.lang.ref.WeakReference;
+import java.util.Arrays;
 
-abstract class zzi extends zzg {
-    private static final WeakReference<byte[]> zzaAj = new WeakReference(null);
-    private WeakReference<byte[]> zzaAi = zzaAj;
+final class zzi extends zzh {
+    private final byte[] zzflc;
 
     zzi(byte[] bArr) {
-        super(bArr);
+        super(Arrays.copyOfRange(bArr, 0, 25));
+        this.zzflc = bArr;
     }
 
     final byte[] getBytes() {
-        byte[] bArr;
-        synchronized (this) {
-            bArr = (byte[]) this.zzaAi.get();
-            if (bArr == null) {
-                bArr = zzpa();
-                this.zzaAi = new WeakReference(bArr);
-            }
-        }
-        return bArr;
+        return this.zzflc;
     }
-
-    protected abstract byte[] zzpa();
 }

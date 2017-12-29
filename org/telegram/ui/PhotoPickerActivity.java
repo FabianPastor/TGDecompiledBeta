@@ -7,7 +7,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -24,7 +23,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
-import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -44,8 +42,8 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageReceiver.BitmapHolder;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.AlbumEntry;
 import org.telegram.messenger.MediaController.PhotoEntry;
 import org.telegram.messenger.MediaController.SearchImage;
@@ -53,10 +51,12 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.support.widget.GridLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
@@ -69,6 +69,7 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.FoundGif;
@@ -142,7 +143,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             object.viewY = coords[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
             object.parentView = PhotoPickerActivity.this.listView;
             object.imageReceiver = cell.photoImage.getImageReceiver();
-            object.thumb = object.imageReceiver.getBitmap();
+            object.thumb = object.imageReceiver.getBitmapSafe();
             object.scale = cell.photoImage.getScaleX();
             cell.showCheck(false);
             return object;
@@ -195,10 +196,10 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             return PhotoPickerActivity.this.allowCaption;
         }
 
-        public Bitmap getThumbForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+        public BitmapHolder getThumbForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
             PhotoPickerPhotoCell cell = PhotoPickerActivity.this.getCellForIndex(index);
             if (cell != null) {
-                return cell.photoImage.getImageReceiver().getBitmap();
+                return cell.photoImage.getImageReceiver().getBitmapSafe();
             }
             return null;
         }
@@ -354,7 +355,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
         public void toggleGroupPhotosEnabled() {
             if (PhotoPickerActivity.this.imageOrderToggleButton != null) {
-                PhotoPickerActivity.this.imageOrderToggleButton.setColorFilter(MediaController.getInstance().isGroupPhotosEnabled() ? new PorterDuffColorFilter(-10043398, Mode.MULTIPLY) : null);
+                PhotoPickerActivity.this.imageOrderToggleButton.setColorFilter(SharedConfig.groupPhotosEnabled ? new PorterDuffColorFilter(-10043398, Mode.MULTIPLY) : null);
             }
         }
 
@@ -594,24 +595,24 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     public boolean onFragmentCreate() {
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.closeChats);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.recentImagesDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.closeChats);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recentImagesDidLoaded);
         if (this.selectedAlbum == null && this.recentImages.isEmpty()) {
-            MessagesStorage.getInstance().loadWebRecent(this.type);
+            MessagesStorage.getInstance(this.currentAccount).loadWebRecent(this.type);
             this.loadingRecent = true;
         }
         return super.onFragmentCreate();
     }
 
     public void onFragmentDestroy() {
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.closeChats);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.recentImagesDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.recentImagesDidLoaded);
         if (this.currentBingTask != null) {
             this.currentBingTask.cancel(true);
             this.currentBingTask = null;
         }
         if (this.giphyReqId != 0) {
-            ConnectionsManager.getInstance().cancelRequest(this.giphyReqId, true);
+            ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.giphyReqId, true);
             this.giphyReqId = 0;
         }
         super.onFragmentDestroy();
@@ -660,7 +661,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             PhotoPickerActivity.this.currentBingTask = null;
                         }
                         if (PhotoPickerActivity.this.giphyReqId != 0) {
-                            ConnectionsManager.getInstance().cancelRequest(PhotoPickerActivity.this.giphyReqId, true);
+                            ConnectionsManager.getInstance(PhotoPickerActivity.this.currentAccount).cancelRequest(PhotoPickerActivity.this.giphyReqId, true);
                             PhotoPickerActivity.this.giphyReqId = 0;
                         }
                         if (PhotoPickerActivity.this.type == 0) {
@@ -709,7 +710,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
         this.fragmentView = new FrameLayout(context);
         this.frameLayout = (FrameLayout) this.fragmentView;
-        this.frameLayout.setBackgroundColor(-16777216);
+        this.frameLayout.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         this.listView = new RecyclerListView(context);
         this.listView.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f));
         this.listView.setClipToPadding(false);
@@ -787,7 +788,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             if (PhotoPickerActivity.this.listAdapter != null) {
                                 PhotoPickerActivity.this.listAdapter.notifyDataSetChanged();
                             }
-                            MessagesStorage.getInstance().clearWebRecent(PhotoPickerActivity.this.type);
+                            MessagesStorage.getInstance(PhotoPickerActivity.this.currentAccount).clearWebRecent(PhotoPickerActivity.this.type);
                         }
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -855,13 +856,13 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             this.pickerBottomLayout.addView(this.imageOrderToggleButton, LayoutHelper.createFrame(48, -1, 17));
             this.imageOrderToggleButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
-                    MediaController.getInstance().toggleGroupPhotosEnabled();
-                    PhotoPickerActivity.this.imageOrderToggleButton.setColorFilter(MediaController.getInstance().isGroupPhotosEnabled() ? new PorterDuffColorFilter(-10043398, Mode.MULTIPLY) : null);
-                    PhotoPickerActivity.this.showHint(false, MediaController.getInstance().isGroupPhotosEnabled());
+                    SharedConfig.toggleGroupPhotosEnabled();
+                    PhotoPickerActivity.this.imageOrderToggleButton.setColorFilter(SharedConfig.groupPhotosEnabled ? new PorterDuffColorFilter(-10043398, Mode.MULTIPLY) : null);
+                    PhotoPickerActivity.this.showHint(false, SharedConfig.groupPhotosEnabled);
                     PhotoPickerActivity.this.updateCheckedPhotoIndices();
                 }
             });
-            this.imageOrderToggleButton.setColorFilter(MediaController.getInstance().isGroupPhotosEnabled() ? new PorterDuffColorFilter(-10043398, Mode.MULTIPLY) : null);
+            this.imageOrderToggleButton.setColorFilter(SharedConfig.groupPhotosEnabled ? new PorterDuffColorFilter(-10043398, Mode.MULTIPLY) : null);
         }
         if (this.selectedAlbum != null || this.type == 0) {
             z = true;
@@ -891,7 +892,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         fixLayout();
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.closeChats) {
             removeSelfFromStack();
         } else if (id == NotificationCenter.recentImagesDidLoaded && this.selectedAlbum == null && this.type == ((Integer) args[0]).intValue()) {
@@ -1108,7 +1109,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         if (this.searching) {
             this.searching = false;
             if (this.giphyReqId != 0) {
-                ConnectionsManager.getInstance().cancelRequest(this.giphyReqId, true);
+                ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.giphyReqId, true);
                 this.giphyReqId = 0;
             }
             if (this.currentBingTask != null) {
@@ -1122,7 +1123,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         req.offset = offset;
         final int token = this.lastSearchToken + 1;
         this.lastSearchToken = token;
-        this.giphyReqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+        this.giphyReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
             public void run(final TLObject response, TL_error error) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
@@ -1191,14 +1192,14 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 });
             }
         });
-        ConnectionsManager.getInstance().bindRequestToGuid(this.giphyReqId, this.classGuid);
+        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(this.giphyReqId, this.classGuid);
     }
 
     private void searchBingImages(String query, int offset, int count) {
         if (this.searching) {
             this.searching = false;
             if (this.giphyReqId != 0) {
-                ConnectionsManager.getInstance().cancelRequest(this.giphyReqId, true);
+                ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.giphyReqId, true);
                 this.giphyReqId = 0;
             }
             if (this.currentBingTask != null) {
@@ -1209,7 +1210,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         try {
             boolean adult;
             this.searching = true;
-            String phone = UserConfig.getCurrentUser().phone;
+            String phone = UserConfig.getInstance(this.currentAccount).getCurrentUser().phone;
             if (phone.startsWith("44") || phone.startsWith("49") || phone.startsWith("43") || phone.startsWith("31") || phone.startsWith("1")) {
                 adult = true;
             } else {
@@ -1218,7 +1219,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             Locale locale = Locale.US;
             String str = "https://api.cognitive.microsoft.com/bing/v5.0/images/search?q='%s'&offset=%d&count=%d&$format=json&safeSearch=%s";
             Object[] objArr = new Object[4];
-            objArr[0] = URLEncoder.encode(query, "UTF-8");
+            objArr[0] = URLEncoder.encode(query, C.UTF8_NAME);
             objArr[1] = Integer.valueOf(offset);
             objArr[2] = Integer.valueOf(count);
             objArr[3] = adult ? "Strict" : "Off";
@@ -1294,7 +1295,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         }
                         if (httpConnectionStream != null) {
                             try {
-                                byte[] data = new byte[32768];
+                                byte[] data = new byte[TLRPC.MESSAGE_FLAG_EDITED];
                                 StringBuilder result2 = null;
                                 while (!isCancelled()) {
                                     try {
@@ -1307,7 +1308,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                                     result = result2;
                                                 }
                                                 try {
-                                                    result.append(new String(data, 0, read, "UTF-8"));
+                                                    result.append(new String(data, 0, read, C.UTF8_NAME));
                                                     result2 = result;
                                                 } catch (Exception e3) {
                                                     e22 = e3;
@@ -1380,7 +1381,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     int addedCount = 0;
                     if (response != null) {
                         try {
-                            JSONArray result = response.getJSONArray(Param.VALUE);
+                            JSONArray result = response.getJSONArray("value");
                             boolean added = false;
                             for (int a = 0; a < result.length(); a++) {
                                 try {

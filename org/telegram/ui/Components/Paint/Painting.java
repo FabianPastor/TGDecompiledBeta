@@ -5,13 +5,13 @@ import android.graphics.Bitmap.Config;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.opengl.GLES20;
-import com.google.android.gms.gcm.Task;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.Map;
 import java.util.UUID;
 import org.telegram.messenger.DispatchQueue;
+import org.telegram.messenger.MessagesController;
 import org.telegram.ui.Components.Size;
 
 public class Painting {
@@ -148,7 +148,7 @@ public class Painting {
                     GLES20.glViewport(0, 0, (int) Painting.this.size.width, (int) Painting.this.size.height);
                     if (clearBuffer) {
                         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-                        GLES20.glClear(16384);
+                        GLES20.glClear(MessagesController.UPDATE_MASK_CHAT_ADMINS);
                     }
                     if (Painting.this.shaders != null) {
                         Shader shader = (Shader) Painting.this.shaders.get(Painting.this.brush.isLightSaber() ? "brushLight" : "brush");
@@ -309,7 +309,7 @@ public class Painting {
         int texture = this.buffers[0];
         GLES20.glBindTexture(3553, texture);
         GLES20.glTexParameteri(3553, 10241, 9729);
-        GLES20.glTexParameteri(3553, Task.EXTRAS_LIMIT_BYTES, 9729);
+        GLES20.glTexParameteri(3553, 10240, 9729);
         GLES20.glTexParameteri(3553, 10242, 33071);
         GLES20.glTexParameteri(3553, 10243, 33071);
         GLES20.glTexImage2D(3553, 0, 6408, width, height, 0, 6408, 5121, null);
@@ -339,7 +339,7 @@ public class Painting {
             GLES20.glBindTexture(3553, getTexture());
         }
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        GLES20.glClear(16384);
+        GLES20.glClear(MessagesController.UPDATE_MASK_CHAT_ADMINS);
         GLES20.glBlendFunc(1, 771);
         GLES20.glVertexAttribPointer(0, 2, 5126, false, 8, this.vertexBuffer);
         GLES20.glEnableVertexAttribArray(0);

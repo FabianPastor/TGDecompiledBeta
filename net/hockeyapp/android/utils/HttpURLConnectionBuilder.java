@@ -16,23 +16,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.hockeyapp.android.Constants;
+import org.telegram.messenger.exoplayer2.C;
 
 public class HttpURLConnectionBuilder {
-    public static final String DEFAULT_CHARSET = "UTF-8";
-    private static final int DEFAULT_TIMEOUT = 120000;
-    public static final long FORM_FIELD_LIMIT = 4194304;
     private final Map<String, String> mHeaders;
     private SimpleMultipartEntity mMultipartEntity;
     private String mRequestBody;
     private String mRequestMethod;
-    private int mTimeout = DEFAULT_TIMEOUT;
+    private int mTimeout = 120000;
     private final String mUrlString;
 
     public HttpURLConnectionBuilder(String urlString) {
         this.mUrlString = urlString;
         this.mHeaders = new HashMap();
-        this.mHeaders.put("User-Agent", Constants.SDK_USER_AGENT);
+        this.mHeaders.put("User-Agent", "HockeySDK/Android 4.1.3");
     }
 
     public HttpURLConnectionBuilder setRequestMethod(String requestMethod) {
@@ -48,12 +45,12 @@ public class HttpURLConnectionBuilder {
     public HttpURLConnectionBuilder writeFormFields(Map<String, String> fields) {
         for (String key : fields.keySet()) {
             String value = (String) fields.get(key);
-            if (((long) value.length()) > FORM_FIELD_LIMIT) {
-                throw new IllegalArgumentException("Form field " + key + " size too large: " + value.length() + " - max allowed: " + FORM_FIELD_LIMIT);
+            if (((long) value.length()) > 4194304) {
+                throw new IllegalArgumentException("Form field " + key + " size too large: " + value.length() + " - max allowed: " + 4194304);
             }
         }
         try {
-            String formString = getFormString(fields, "UTF-8");
+            String formString = getFormString(fields, C.UTF8_NAME);
             setHeader("Content-Type", "application/x-www-form-urlencoded");
             setRequestBody(formString);
             return this;
@@ -84,14 +81,6 @@ public class HttpURLConnectionBuilder {
         }
     }
 
-    public HttpURLConnectionBuilder setTimeout(int timeout) {
-        if (timeout < 0) {
-            throw new IllegalArgumentException("Timeout has to be positive.");
-        }
-        this.mTimeout = timeout;
-        return this;
-    }
-
     public HttpURLConnectionBuilder setHeader(String name, String value) {
         this.mHeaders.put(name, value);
         return this;
@@ -119,7 +108,7 @@ public class HttpURLConnectionBuilder {
             connection.setRequestProperty(name, (String) this.mHeaders.get(name));
         }
         if (!TextUtils.isEmpty(this.mRequestBody)) {
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), C.UTF8_NAME));
             writer.write(this.mRequestBody);
             writer.flush();
             writer.close();

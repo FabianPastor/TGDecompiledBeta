@@ -5,8 +5,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.v4.internal.view.SupportMenu;
-import android.support.v4.view.InputDeviceCompat;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
@@ -20,7 +18,7 @@ import org.telegram.ui.Components.LayoutHelper;
 public class TextColorCell extends FrameLayout {
     private static Paint colorPaint;
     public static final int[] colors = new int[]{-1031100, -29183, -12769, -8792480, -12521994, -12140801, -2984711, -45162, -4473925};
-    public static final int[] colorsToSave = new int[]{SupportMenu.CATEGORY_MASK, -29183, InputDeviceCompat.SOURCE_ANY, -16711936, -16711681, -16776961, -2984711, -65281, -1};
+    public static final int[] colorsToSave = new int[]{-65536, -29183, -256, -16711936, -16711681, -16776961, -2984711, -65281, -1};
     private float alpha = 1.0f;
     private int currentColor;
     private boolean needDivider;

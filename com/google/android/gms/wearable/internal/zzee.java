@@ -1,24 +1,26 @@
 package com.google.android.gms.wearable.internal;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.NodeApi.GetConnectedNodesResult;
-import java.util.List;
+import android.os.Parcel;
+import android.os.ParcelFileDescriptor;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-public final class zzee implements GetConnectedNodesResult {
-    private final Status mStatus;
-    private final List<Node> zzbSY;
+public final class zzee extends zzbfm {
+    public static final Creator<zzee> CREATOR = new zzef();
+    public final int statusCode;
+    public final ParcelFileDescriptor zzjnk;
 
-    public zzee(Status status, List<Node> list) {
-        this.mStatus = status;
-        this.zzbSY = list;
+    public zzee(int i, ParcelFileDescriptor parcelFileDescriptor) {
+        this.statusCode = i;
+        this.zzjnk = parcelFileDescriptor;
     }
 
-    public final List<Node> getNodes() {
-        return this.zzbSY;
-    }
-
-    public final Status getStatus() {
-        return this.mStatus;
+    public final void writeToParcel(Parcel parcel, int i) {
+        int i2 = i | 1;
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zzc(parcel, 2, this.statusCode);
+        zzbfp.zza(parcel, 3, this.zzjnk, i2, false);
+        zzbfp.zzai(parcel, zze);
     }
 }

@@ -1,26 +1,30 @@
 package com.google.android.gms.wearable.internal;
 
-import android.os.RemoteException;
-import com.google.android.gms.common.api.Api.zzb;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Result;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.internal.zzbaz;
-import com.google.android.gms.wearable.DataApi.DataListener;
+import com.google.android.gms.common.internal.zzbq;
 
-final class zzbr extends zzn<Status> {
-    private /* synthetic */ DataListener zzbSA;
+public final class zzbr extends zzej {
+    private final Object mLock = new Object();
+    private zzav zzljm;
+    private zzbs zzljq;
 
-    zzbr(zzbi com_google_android_gms_wearable_internal_zzbi, GoogleApiClient googleApiClient, DataListener dataListener) {
-        this.zzbSA = dataListener;
-        super(googleApiClient);
+    public final void zza(zzbs com_google_android_gms_wearable_internal_zzbs) {
+        synchronized (this.mLock) {
+            this.zzljq = (zzbs) zzbq.checkNotNull(com_google_android_gms_wearable_internal_zzbs);
+            zzav com_google_android_gms_wearable_internal_zzav = this.zzljm;
+        }
+        if (com_google_android_gms_wearable_internal_zzav != null) {
+            com_google_android_gms_wearable_internal_zzbs.zzb(com_google_android_gms_wearable_internal_zzav);
+        }
     }
 
-    protected final /* synthetic */ void zza(zzb com_google_android_gms_common_api_Api_zzb) throws RemoteException {
-        ((zzfw) com_google_android_gms_common_api_Api_zzb).zza((zzbaz) this, this.zzbSA);
-    }
-
-    public final /* synthetic */ Result zzb(Status status) {
-        return status;
+    public final void zzs(int i, int i2) {
+        synchronized (this.mLock) {
+            zzbs com_google_android_gms_wearable_internal_zzbs = this.zzljq;
+            zzav com_google_android_gms_wearable_internal_zzav = new zzav(i, i2);
+            this.zzljm = com_google_android_gms_wearable_internal_zzav;
+        }
+        if (com_google_android_gms_wearable_internal_zzbs != null) {
+            com_google_android_gms_wearable_internal_zzbs.zzb(com_google_android_gms_wearable_internal_zzav);
+        }
     }
 }

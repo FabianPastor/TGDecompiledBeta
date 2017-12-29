@@ -4,54 +4,49 @@ import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.v4.util.ArrayMap;
 import android.util.Base64;
 import android.util.Log;
 import java.io.IOException;
 import java.security.KeyPair;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class InstanceID {
-    public static final String ERROR_BACKOFF = "RETRY_LATER";
-    public static final String ERROR_MAIN_THREAD = "MAIN_THREAD";
-    public static final String ERROR_MISSING_INSTANCEID_SERVICE = "MISSING_INSTANCEID_SERVICE";
-    public static final String ERROR_SERVICE_NOT_AVAILABLE = "SERVICE_NOT_AVAILABLE";
-    public static final String ERROR_TIMEOUT = "TIMEOUT";
-    private static Map<String, InstanceID> zzbgQ = new HashMap();
-    private static zzh zzbgR;
-    private static zze zzbgS;
-    private static String zzbgW;
+    private static Map<String, InstanceID> zzifg = new ArrayMap();
+    private static zzo zzifh;
+    private static zzl zzifi;
+    private static String zzifm;
     private Context mContext;
-    private KeyPair zzbgT;
-    private String zzbgU = "";
-    private long zzbgV;
+    private KeyPair zzifj;
+    private String zzifk = TtmlNode.ANONYMOUS_REGION_ID;
+    private long zzifl;
 
     private InstanceID(Context context, String str, Bundle bundle) {
         this.mContext = context.getApplicationContext();
-        this.zzbgU = str;
+        this.zzifk = str;
     }
 
     public static InstanceID getInstance(Context context) {
-        return zza(context, null);
+        return getInstance(context, null);
     }
 
-    public static synchronized InstanceID zza(Context context, Bundle bundle) {
+    public static synchronized InstanceID getInstance(Context context, Bundle bundle) {
         InstanceID instanceID;
         synchronized (InstanceID.class) {
-            String string = bundle == null ? "" : bundle.getString("subtype");
-            String str = string == null ? "" : string;
+            String string = bundle == null ? TtmlNode.ANONYMOUS_REGION_ID : bundle.getString("subtype");
+            String str = string == null ? TtmlNode.ANONYMOUS_REGION_ID : string;
             Context applicationContext = context.getApplicationContext();
-            if (zzbgR == null) {
-                zzbgR = new zzh(applicationContext);
-                zzbgS = new zze(applicationContext);
+            if (zzifh == null) {
+                zzifh = new zzo(applicationContext);
+                zzifi = new zzl(applicationContext);
             }
-            zzbgW = Integer.toString(zzba(applicationContext));
-            instanceID = (InstanceID) zzbgQ.get(str);
+            zzifm = Integer.toString(zzdm(applicationContext));
+            instanceID = (InstanceID) zzifg.get(str);
             if (instanceID == null) {
                 instanceID = new InstanceID(applicationContext, str, bundle);
-                zzbgQ.put(str, instanceID);
+                zzifg.put(str, instanceID);
             }
         }
         return instanceID;
@@ -63,12 +58,27 @@ public class InstanceID {
             digest[0] = (byte) ((digest[0] & 15) + 112);
             return Base64.encodeToString(digest, 0, 8, 11);
         } catch (NoSuchAlgorithmException e) {
-            Log.w("InstanceID", "Unexpected error, device missing required alghorithms");
+            Log.w("InstanceID", "Unexpected error, device missing required algorithms");
             return null;
         }
     }
 
-    static int zzba(Context context) {
+    private final KeyPair zzave() {
+        if (this.zzifj == null) {
+            this.zzifj = zzifh.zzib(this.zzifk);
+        }
+        if (this.zzifj == null) {
+            this.zzifl = System.currentTimeMillis();
+            this.zzifj = zzifh.zzc(this.zzifk, this.zzifl);
+        }
+        return this.zzifj;
+    }
+
+    public static zzo zzavg() {
+        return zzifh;
+    }
+
+    static int zzdm(Context context) {
         int i = 0;
         try {
             return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
@@ -79,7 +89,7 @@ public class InstanceID {
         }
     }
 
-    static String zzbb(Context context) {
+    static String zzdn(Context context) {
         try {
             return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (NameNotFoundException e) {
@@ -89,50 +99,8 @@ public class InstanceID {
         }
     }
 
-    static String zzj(byte[] bArr) {
+    static String zzo(byte[] bArr) {
         return Base64.encodeToString(bArr, 11);
-    }
-
-    private final KeyPair zzvK() {
-        if (this.zzbgT == null) {
-            this.zzbgT = zzbgR.zzds(this.zzbgU);
-        }
-        if (this.zzbgT == null) {
-            this.zzbgV = System.currentTimeMillis();
-            this.zzbgT = zzbgR.zzc(this.zzbgU, this.zzbgV);
-        }
-        return this.zzbgT;
-    }
-
-    public static zzh zzvM() {
-        return zzbgR;
-    }
-
-    public void deleteInstanceID() throws IOException {
-        zzb("*", "*", null);
-        zzvL();
-    }
-
-    public void deleteToken(String str, String str2) throws IOException {
-        zzb(str, str2, null);
-    }
-
-    public long getCreationTime() {
-        if (this.zzbgV == 0) {
-            String str = zzbgR.get(this.zzbgU, "cre");
-            if (str != null) {
-                this.zzbgV = Long.parseLong(str);
-            }
-        }
-        return this.zzbgV;
-    }
-
-    public String getId() {
-        return zza(zzvK());
-    }
-
-    public String getToken(String str, String str2) throws IOException {
-        return getToken(str, str2, null);
     }
 
     public String getToken(String str, String str2, Bundle bundle) throws IOException {
@@ -142,11 +110,11 @@ public class InstanceID {
             throw new IOException("MAIN_THREAD");
         }
         Object obj3;
-        String str3 = zzbgR.get("appVersion");
-        if (str3 == null || !str3.equals(zzbgW)) {
+        String str3 = zzifh.get("appVersion");
+        if (str3 == null || !str3.equals(zzifm)) {
             obj3 = 1;
         } else {
-            str3 = zzbgR.get("lastToken");
+            str3 = zzifh.get("lastToken");
             int i;
             if (str3 == null) {
                 i = 1;
@@ -158,8 +126,8 @@ public class InstanceID {
                 }
             }
         }
-        String zzf = obj3 != null ? null : zzbgR.zzf(this.zzbgU, str, str2);
-        if (zzf == null) {
+        String zze = obj3 != null ? null : zzifh.zze(this.zzifk, str, str2);
+        if (zze == null) {
             if (bundle == null) {
                 bundle = new Bundle();
             }
@@ -169,56 +137,32 @@ public class InstanceID {
             if (!"jwt".equals(bundle.getString("type"))) {
                 obj = obj2;
             }
-            zzf = zzc(str, str2, bundle);
-            if (!(zzf == null || r1 == null)) {
-                zzbgR.zza(this.zzbgU, str, str2, zzf, zzbgW);
+            zze = zzb(str, str2, bundle);
+            if (!(zze == null || r1 == null)) {
+                zzifh.zza(this.zzifk, str, str2, zze, zzifm);
             }
         }
-        return zzf;
+        return zze;
     }
 
-    public final void zzb(String str, String str2, Bundle bundle) throws IOException {
-        if (Looper.getMainLooper() == Looper.myLooper()) {
-            throw new IOException("MAIN_THREAD");
-        }
-        zzbgR.zzg(this.zzbgU, str, str2);
-        if (bundle == null) {
-            bundle = new Bundle();
-        }
-        bundle.putString("sender", str);
-        if (str2 != null) {
-            bundle.putString("scope", str2);
-        }
-        bundle.putString("subscription", str);
-        bundle.putString("delete", "1");
-        bundle.putString("X-delete", "1");
-        bundle.putString("subtype", "".equals(this.zzbgU) ? str : this.zzbgU);
-        String str3 = "X-subtype";
-        if (!"".equals(this.zzbgU)) {
-            str = this.zzbgU;
-        }
-        bundle.putString(str3, str);
-        zze.zzh(zzbgS.zza(bundle, zzvK()));
+    public final void zzavf() {
+        this.zzifl = 0;
+        zzifh.zzhz(String.valueOf(this.zzifk).concat("|"));
+        this.zzifj = null;
     }
 
-    public final String zzc(String str, String str2, Bundle bundle) throws IOException {
+    public final String zzb(String str, String str2, Bundle bundle) throws IOException {
         if (str2 != null) {
             bundle.putString("scope", str2);
         }
         bundle.putString("sender", str);
-        String str3 = "".equals(this.zzbgU) ? str : this.zzbgU;
+        String str3 = TtmlNode.ANONYMOUS_REGION_ID.equals(this.zzifk) ? str : this.zzifk;
         if (!bundle.containsKey("legacy.register")) {
             bundle.putString("subscription", str);
             bundle.putString("subtype", str3);
             bundle.putString("X-subscription", str);
             bundle.putString("X-subtype", str3);
         }
-        return zze.zzh(zzbgS.zza(bundle, zzvK()));
-    }
-
-    public final void zzvL() {
-        this.zzbgV = 0;
-        zzbgR.zzdq(String.valueOf(this.zzbgU).concat("|"));
-        this.zzbgT = null;
+        return zzl.zzj(zzifi.zza(bundle, zzave()));
     }
 }

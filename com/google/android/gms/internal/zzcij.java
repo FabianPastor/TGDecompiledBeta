@@ -1,25 +1,19 @@
 package com.google.android.gms.internal;
 
-import android.os.RemoteException;
+import com.google.android.gms.common.internal.zzbq;
+import java.lang.Thread.UncaughtExceptionHandler;
 
-final class zzcij implements Runnable {
-    private /* synthetic */ zzcid zzbua;
+final class zzcij implements UncaughtExceptionHandler {
+    private final String zzjep;
+    private /* synthetic */ zzcih zzjeq;
 
-    zzcij(zzcid com_google_android_gms_internal_zzcid) {
-        this.zzbua = com_google_android_gms_internal_zzcid;
+    public zzcij(zzcih com_google_android_gms_internal_zzcih, String str) {
+        this.zzjeq = com_google_android_gms_internal_zzcih;
+        zzbq.checkNotNull(str);
+        this.zzjep = str;
     }
 
-    public final void run() {
-        zzcfd zzd = this.zzbua.zzbtU;
-        if (zzd == null) {
-            this.zzbua.zzwF().zzyx().log("Failed to send measurementEnabled to service");
-            return;
-        }
-        try {
-            zzd.zzb(this.zzbua.zzwu().zzdV(this.zzbua.zzwF().zzyE()));
-            this.zzbua.zzkP();
-        } catch (RemoteException e) {
-            this.zzbua.zzwF().zzyx().zzj("Failed to send measurementEnabled to the service", e);
-        }
+    public final synchronized void uncaughtException(Thread thread, Throwable th) {
+        this.zzjeq.zzawy().zzazd().zzj(this.zzjep, th);
     }
 }

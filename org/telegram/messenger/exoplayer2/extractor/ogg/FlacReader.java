@@ -19,7 +19,7 @@ final class FlacReader extends StreamReader {
     private FlacOggSeeker flacOggSeeker;
     private FlacStreamInfo streamInfo;
 
-    private class FlacOggSeeker implements OggSeeker, SeekMap {
+    private class FlacOggSeeker implements SeekMap, OggSeeker {
         private static final int METADATA_LENGTH_OFFSET = 1;
         private static final int SEEK_POINT_SIZE = 18;
         private long firstFrameOffset = -1;

@@ -3,101 +3,77 @@ package com.google.android.gms.wearable.internal;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.data.DataHolder;
 
-public class zza extends zzdj {
-    public void zzT(DataHolder dataHolder) {
-        throw new UnsupportedOperationException();
-    }
-
+public class zza extends zzel {
     public void zza(Status status) {
         throw new UnsupportedOperationException();
     }
 
-    public void zza(zzaz com_google_android_gms_wearable_internal_zzaz) {
+    public void zza(zzbn com_google_android_gms_wearable_internal_zzbn) {
         throw new UnsupportedOperationException();
     }
 
-    public void zza(zzbb com_google_android_gms_wearable_internal_zzbb) {
+    public void zza(zzbp com_google_android_gms_wearable_internal_zzbp) {
         throw new UnsupportedOperationException();
     }
 
-    public void zza(zzbf com_google_android_gms_wearable_internal_zzbf) {
+    public void zza(zzbt com_google_android_gms_wearable_internal_zzbt) {
         throw new UnsupportedOperationException();
     }
 
-    public void zza(zzce com_google_android_gms_wearable_internal_zzce) {
+    public void zza(zzdg com_google_android_gms_wearable_internal_zzdg) {
         throw new UnsupportedOperationException();
     }
 
-    public void zza(zzcg com_google_android_gms_wearable_internal_zzcg) {
+    public void zza(zzdi com_google_android_gms_wearable_internal_zzdi) {
         throw new UnsupportedOperationException();
     }
 
-    public void zza(zzci com_google_android_gms_wearable_internal_zzci) {
+    public void zza(zzdk com_google_android_gms_wearable_internal_zzdk) {
         throw new UnsupportedOperationException();
     }
 
-    public void zza(zzck com_google_android_gms_wearable_internal_zzck) {
+    public void zza(zzdm com_google_android_gms_wearable_internal_zzdm) {
         throw new UnsupportedOperationException();
     }
 
-    public void zza(zzcm com_google_android_gms_wearable_internal_zzcm) {
+    public void zza(zzdo com_google_android_gms_wearable_internal_zzdo) {
         throw new UnsupportedOperationException();
     }
 
     @Deprecated
-    public final void zza(zzcp com_google_android_gms_wearable_internal_zzcp) {
+    public final void zza(zzdr com_google_android_gms_wearable_internal_zzdr) {
         throw new UnsupportedOperationException();
     }
 
-    public final void zza(zzcr com_google_android_gms_wearable_internal_zzcr) {
+    public final void zza(zzdt com_google_android_gms_wearable_internal_zzdt) {
         throw new UnsupportedOperationException();
     }
 
-    public final void zza(zzct com_google_android_gms_wearable_internal_zzct) {
+    public final void zza(zzdv com_google_android_gms_wearable_internal_zzdv) {
         throw new UnsupportedOperationException();
     }
 
-    public final void zza(zzcu com_google_android_gms_wearable_internal_zzcu) {
+    public final void zza(zzdw com_google_android_gms_wearable_internal_zzdw) {
         throw new UnsupportedOperationException();
     }
 
-    public final void zza(zzcw com_google_android_gms_wearable_internal_zzcw) {
+    public final void zza(zzdy com_google_android_gms_wearable_internal_zzdy) {
         throw new UnsupportedOperationException();
     }
 
-    public void zza(zzcy com_google_android_gms_wearable_internal_zzcy) {
+    public void zza(zzea com_google_android_gms_wearable_internal_zzea) {
         throw new UnsupportedOperationException();
     }
 
-    public void zza(zzda com_google_android_gms_wearable_internal_zzda) {
+    public void zza(zzec com_google_android_gms_wearable_internal_zzec) {
         throw new UnsupportedOperationException();
     }
 
-    public void zza(zzdc com_google_android_gms_wearable_internal_zzdc) {
+    public void zza(zzee com_google_android_gms_wearable_internal_zzee) {
         throw new UnsupportedOperationException();
     }
 
-    public void zza(zzde com_google_android_gms_wearable_internal_zzde) {
-        throw new UnsupportedOperationException();
-    }
-
-    public void zza(zzei com_google_android_gms_wearable_internal_zzei) {
-        throw new UnsupportedOperationException();
-    }
-
-    public void zza(zzem com_google_android_gms_wearable_internal_zzem) {
-        throw new UnsupportedOperationException();
-    }
-
-    public void zza(zzeq com_google_android_gms_wearable_internal_zzeq) {
-        throw new UnsupportedOperationException();
-    }
-
-    public void zza(zzes com_google_android_gms_wearable_internal_zzes) {
-        throw new UnsupportedOperationException();
-    }
-
-    public final void zza(zzew com_google_android_gms_wearable_internal_zzew) {
+    public void zza(zzeg com_google_android_gms_wearable_internal_zzeg) {
         throw new UnsupportedOperationException();
     }
 
@@ -105,7 +81,31 @@ public class zza extends zzdj {
         throw new UnsupportedOperationException();
     }
 
-    public void zzb(zzbf com_google_android_gms_wearable_internal_zzbf) {
+    public void zza(zzfq com_google_android_gms_wearable_internal_zzfq) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void zza(zzfu com_google_android_gms_wearable_internal_zzfu) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void zza(zzfy com_google_android_gms_wearable_internal_zzfy) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void zza(zzga com_google_android_gms_wearable_internal_zzga) {
+        throw new UnsupportedOperationException();
+    }
+
+    public final void zza(zzge com_google_android_gms_wearable_internal_zzge) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void zzat(DataHolder dataHolder) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void zzb(zzbt com_google_android_gms_wearable_internal_zzbt) {
         throw new UnsupportedOperationException();
     }
 }

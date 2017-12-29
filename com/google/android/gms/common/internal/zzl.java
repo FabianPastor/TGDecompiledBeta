@@ -6,37 +6,37 @@ import android.os.IBinder;
 import android.os.IInterface;
 
 public final class zzl implements ServiceConnection {
-    private /* synthetic */ zzd zzaHe;
-    private final int zzaHh;
+    private /* synthetic */ zzd zzfza;
+    private final int zzfzd;
 
     public zzl(zzd com_google_android_gms_common_internal_zzd, int i) {
-        this.zzaHe = com_google_android_gms_common_internal_zzd;
-        this.zzaHh = i;
+        this.zzfza = com_google_android_gms_common_internal_zzd;
+        this.zzfzd = i;
     }
 
     public final void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         if (iBinder == null) {
-            this.zzaHe.zzaz(16);
+            this.zzfza.zzcf(16);
             return;
         }
-        synchronized (this.zzaHe.zzaGO) {
-            zzaw com_google_android_gms_common_internal_zzaw;
-            zzd com_google_android_gms_common_internal_zzd = this.zzaHe;
+        synchronized (this.zzfza.zzfyk) {
+            zzay com_google_android_gms_common_internal_zzay;
+            zzd com_google_android_gms_common_internal_zzd = this.zzfza;
             if (iBinder == null) {
-                com_google_android_gms_common_internal_zzaw = null;
+                com_google_android_gms_common_internal_zzay = null;
             } else {
                 IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.common.internal.IGmsServiceBroker");
-                com_google_android_gms_common_internal_zzaw = (queryLocalInterface == null || !(queryLocalInterface instanceof zzaw)) ? new zzax(iBinder) : (zzaw) queryLocalInterface;
+                com_google_android_gms_common_internal_zzay = (queryLocalInterface == null || !(queryLocalInterface instanceof zzay)) ? new zzaz(iBinder) : (zzay) queryLocalInterface;
             }
-            com_google_android_gms_common_internal_zzd.zzaGP = com_google_android_gms_common_internal_zzaw;
+            com_google_android_gms_common_internal_zzd.zzfyl = com_google_android_gms_common_internal_zzay;
         }
-        this.zzaHe.zza(0, null, this.zzaHh);
+        this.zzfza.zza(0, null, this.zzfzd);
     }
 
     public final void onServiceDisconnected(ComponentName componentName) {
-        synchronized (this.zzaHe.zzaGO) {
-            this.zzaHe.zzaGP = null;
+        synchronized (this.zzfza.zzfyk) {
+            this.zzfza.zzfyl = null;
         }
-        this.zzaHe.mHandler.sendMessage(this.zzaHe.mHandler.obtainMessage(6, this.zzaHh, 1));
+        this.zzfza.mHandler.sendMessage(this.zzfza.mHandler.obtainMessage(6, this.zzfzd, 1));
     }
 }

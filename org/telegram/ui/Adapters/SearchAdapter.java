@@ -110,8 +110,9 @@ public class SearchAdapter extends SelectionAdapter {
                 if (SearchAdapter.this.allowUsernameSearch) {
                     SearchAdapter.this.searchAdapterHelper.queryServerSearch(query, true, SearchAdapter.this.allowChats, SearchAdapter.this.allowBots, true, SearchAdapter.this.channelId, false);
                 }
+                final int currentAccount = UserConfig.selectedAccount;
                 final ArrayList<TL_contact> contactsCopy = new ArrayList();
-                contactsCopy.addAll(ContactsController.getInstance().contacts);
+                contactsCopy.addAll(ContactsController.getInstance(currentAccount).contacts);
                 Utilities.searchQueue.postRunnable(new Runnable() {
                     public void run() {
                         String search1 = query.trim().toLowerCase();
@@ -131,8 +132,8 @@ public class SearchAdapter extends SelectionAdapter {
                         ArrayList<User> resultArray = new ArrayList();
                         ArrayList<CharSequence> resultArrayNames = new ArrayList();
                         for (int a = 0; a < contactsCopy.size(); a++) {
-                            User user = MessagesController.getInstance().getUser(Integer.valueOf(((TL_contact) contactsCopy.get(a)).user_id));
-                            if (user.id != UserConfig.getClientUserId() && (!SearchAdapter.this.onlyMutual || user.mutual_contact)) {
+                            User user = MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(((TL_contact) contactsCopy.get(a)).user_id));
+                            if (user.id != UserConfig.getInstance(currentAccount).getClientUserId() && (!SearchAdapter.this.onlyMutual || user.mutual_contact)) {
                                 String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
                                 String tName = LocaleController.getInstance().getTranslitString(name);
                                 if (name.equals(tName)) {

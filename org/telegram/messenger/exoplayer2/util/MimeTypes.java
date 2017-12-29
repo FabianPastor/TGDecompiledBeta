@@ -3,8 +3,6 @@ package org.telegram.messenger.exoplayer2.util;
 import android.text.TextUtils;
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
-import com.googlecode.mp4parser.boxes.AC3SpecificBox;
-import com.googlecode.mp4parser.boxes.EC3SpecificBox;
 
 public final class MimeTypes {
     public static final String APPLICATION_CAMERA_MOTION = "application/x-camera-motion";
@@ -79,7 +77,7 @@ public final class MimeTypes {
     }
 
     public static boolean isText(String mimeType) {
-        return "text".equals(getTopLevelType(mimeType));
+        return BASE_TYPE_TEXT.equals(getTopLevelType(mimeType));
     }
 
     public static boolean isApplication(String mimeType) {
@@ -132,10 +130,10 @@ public final class MimeTypes {
         if (codec.startsWith(AudioSampleEntry.TYPE3)) {
             return AUDIO_AAC;
         }
-        if (codec.startsWith(AudioSampleEntry.TYPE8) || codec.startsWith(AC3SpecificBox.TYPE)) {
+        if (codec.startsWith(AudioSampleEntry.TYPE8) || codec.startsWith("dac3")) {
             return AUDIO_AC3;
         }
-        if (codec.startsWith(AudioSampleEntry.TYPE9) || codec.startsWith(EC3SpecificBox.TYPE)) {
+        if (codec.startsWith(AudioSampleEntry.TYPE9) || codec.startsWith("dec3")) {
             return AUDIO_E_AC3;
         }
         if (codec.startsWith("dtsc") || codec.startsWith(AudioSampleEntry.TYPE13)) {

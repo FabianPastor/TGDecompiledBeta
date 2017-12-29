@@ -19,14 +19,15 @@ import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ClearCacheService;
+import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.query.BotQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.NativeByteBuffer;
@@ -116,7 +117,7 @@ public class CacheControlActivity extends BaseFragment {
                         }
                     } else if (position == CacheControlActivity.this.keepMediaRow) {
                         String value;
-                        int keepMedia = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("keep_media", 2);
+                        int keepMedia = MessagesController.getGlobalMainSettings().getInt("keep_media", 2);
                         if (keepMedia == 0) {
                             value = LocaleController.formatPluralString("Weeks", 1);
                         } else if (keepMedia == 1) {
@@ -138,7 +139,7 @@ public class CacheControlActivity extends BaseFragment {
                         privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == CacheControlActivity.this.cacheInfoRow) {
-                        privacyCell.setText("");
+                        privacyCell.setText(TtmlNode.ANONYMOUS_REGION_ID);
                         privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == CacheControlActivity.this.keepMediaInfoRow) {
@@ -185,17 +186,17 @@ public class CacheControlActivity extends BaseFragment {
         this.databaseSize = new File(ApplicationLoader.getFilesDirFixed(), "cache4.db").length();
         Utilities.globalQueue.postRunnable(new Runnable() {
             public void run() {
-                CacheControlActivity.this.cacheSize = CacheControlActivity.this.getDirectorySize(FileLoader.getInstance().checkDirectory(4), 0);
+                CacheControlActivity.this.cacheSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(4), 0);
                 if (!CacheControlActivity.this.canceled) {
-                    CacheControlActivity.this.photoSize = CacheControlActivity.this.getDirectorySize(FileLoader.getInstance().checkDirectory(0), 0);
+                    CacheControlActivity.this.photoSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(0), 0);
                     if (!CacheControlActivity.this.canceled) {
-                        CacheControlActivity.this.videoSize = CacheControlActivity.this.getDirectorySize(FileLoader.getInstance().checkDirectory(2), 0);
+                        CacheControlActivity.this.videoSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(2), 0);
                         if (!CacheControlActivity.this.canceled) {
-                            CacheControlActivity.this.documentsSize = CacheControlActivity.this.getDirectorySize(FileLoader.getInstance().checkDirectory(3), 1);
+                            CacheControlActivity.this.documentsSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(3), 1);
                             if (!CacheControlActivity.this.canceled) {
-                                CacheControlActivity.this.musicSize = CacheControlActivity.this.getDirectorySize(FileLoader.getInstance().checkDirectory(3), 2);
+                                CacheControlActivity.this.musicSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(3), 2);
                                 if (!CacheControlActivity.this.canceled) {
-                                    CacheControlActivity.this.audioSize = CacheControlActivity.this.getDirectorySize(FileLoader.getInstance().checkDirectory(1), 0);
+                                    CacheControlActivity.this.audioSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(1), 0);
                                     CacheControlActivity.this.totalSize = ((((CacheControlActivity.this.cacheSize + CacheControlActivity.this.videoSize) + CacheControlActivity.this.audioSize) + CacheControlActivity.this.photoSize) + CacheControlActivity.this.documentsSize) + CacheControlActivity.this.musicSize;
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
@@ -290,7 +291,7 @@ public class CacheControlActivity extends BaseFragment {
                             type = 4;
                         }
                         if (type != -1) {
-                            File file = FileLoader.getInstance().checkDirectory(type);
+                            File file = FileLoader.checkDirectory(type);
                             if (file != null) {
                                 try {
                                     File[] array = file.listFiles();
@@ -318,21 +319,21 @@ public class CacheControlActivity extends BaseFragment {
                                 }
                             }
                             if (type == 4) {
-                                CacheControlActivity.this.cacheSize = CacheControlActivity.this.getDirectorySize(FileLoader.getInstance().checkDirectory(4), documentsMusicType);
+                                CacheControlActivity.this.cacheSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(4), documentsMusicType);
                                 imagesCleared = true;
                             } else if (type == 1) {
-                                CacheControlActivity.this.audioSize = CacheControlActivity.this.getDirectorySize(FileLoader.getInstance().checkDirectory(1), documentsMusicType);
+                                CacheControlActivity.this.audioSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(1), documentsMusicType);
                             } else if (type == 3) {
                                 if (documentsMusicType == 1) {
-                                    CacheControlActivity.this.documentsSize = CacheControlActivity.this.getDirectorySize(FileLoader.getInstance().checkDirectory(3), documentsMusicType);
+                                    CacheControlActivity.this.documentsSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(3), documentsMusicType);
                                 } else {
-                                    CacheControlActivity.this.musicSize = CacheControlActivity.this.getDirectorySize(FileLoader.getInstance().checkDirectory(3), documentsMusicType);
+                                    CacheControlActivity.this.musicSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(3), documentsMusicType);
                                 }
                             } else if (type == 0) {
                                 imagesCleared = true;
-                                CacheControlActivity.this.photoSize = CacheControlActivity.this.getDirectorySize(FileLoader.getInstance().checkDirectory(0), documentsMusicType);
+                                CacheControlActivity.this.photoSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(0), documentsMusicType);
                             } else if (type == 2) {
-                                CacheControlActivity.this.videoSize = CacheControlActivity.this.getDirectorySize(FileLoader.getInstance().checkDirectory(2), documentsMusicType);
+                                CacheControlActivity.this.videoSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(2), documentsMusicType);
                             }
                         }
                     }
@@ -386,7 +387,7 @@ public class CacheControlActivity extends BaseFragment {
                         builder = new Builder(CacheControlActivity.this.getParentActivity());
                         builder.setItems(new CharSequence[]{LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever)}, new OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+                                Editor editor = MessagesController.getGlobalMainSettings().edit();
                                 if (which == 0) {
                                     editor.putInt("keep_media", 3).commit();
                                 } else if (which == 1) {
@@ -421,10 +422,10 @@ public class CacheControlActivity extends BaseFragment {
                                 progressDialog.setCanceledOnTouchOutside(false);
                                 progressDialog.setCancelable(false);
                                 progressDialog.show();
-                                MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+                                MessagesStorage.getInstance(CacheControlActivity.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
                                     public void run() {
                                         try {
-                                            SQLiteDatabase database = MessagesStorage.getInstance().getDatabase();
+                                            SQLiteDatabase database = MessagesStorage.getInstance(CacheControlActivity.this.currentAccount).getDatabase();
                                             ArrayList<Long> dialogsToCleanup = new ArrayList();
                                             SQLiteCursor cursor = database.queryFinalized("SELECT did FROM dialogs WHERE 1", new Object[0]);
                                             StringBuilder ids = new StringBuilder();
@@ -475,7 +476,7 @@ public class CacheControlActivity extends BaseFragment {
                                                         database.executeFast("DELETE FROM media_counts_v2 WHERE uid = " + did2).stepThis().dispose();
                                                         database.executeFast("DELETE FROM media_v2 WHERE uid = " + did2).stepThis().dispose();
                                                         database.executeFast("DELETE FROM media_holes_v2 WHERE uid = " + did2).stepThis().dispose();
-                                                        BotQuery.clearBotKeyboard(did2.longValue(), null);
+                                                        DataQuery.getInstance(CacheControlActivity.this.currentAccount).clearBotKeyboard(did2.longValue(), null);
                                                         if (messageId != -1) {
                                                             MessagesStorage.createFirstHoles(did2.longValue(), state5, state6, messageId);
                                                         }

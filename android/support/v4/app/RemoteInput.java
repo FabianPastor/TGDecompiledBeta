@@ -1,36 +1,25 @@
 package android.support.v4.app;
 
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Intent;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.support.annotation.RestrictTo;
-import android.support.annotation.RestrictTo.Scope;
-import android.support.v4.app.RemoteInputCompatBase.RemoteInput.Factory;
 import android.util.Log;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class RemoteInput extends android.support.v4.app.RemoteInputCompatBase.RemoteInput {
-    public static final String EXTRA_RESULTS_DATA = "android.remoteinput.resultsData";
-    @RestrictTo({Scope.LIBRARY_GROUP})
-    public static final Factory FACTORY = new Factory() {
-        public RemoteInput build(String resultKey, CharSequence label, CharSequence[] choices, boolean allowFreeFormInput, Bundle extras) {
-            return new RemoteInput(resultKey, label, choices, allowFreeFormInput, extras);
-        }
-
-        public RemoteInput[] newArray(int size) {
-            return new RemoteInput[size];
-        }
-    };
-    private static final Impl IMPL;
-    public static final String RESULTS_CLIP_LABEL = "android.remoteinput.results";
-    private static final String TAG = "RemoteInput";
-    private final boolean mAllowFreeFormInput;
+    private final boolean mAllowFreeFormTextInput;
+    private final Set<String> mAllowedDataTypes;
     private final CharSequence[] mChoices;
     private final Bundle mExtras;
     private final CharSequence mLabel;
     private final String mResultKey;
 
     public static final class Builder {
-        private boolean mAllowFreeFormInput = true;
+        private boolean mAllowFreeFormTextInput = true;
+        private final Set<String> mAllowedDataTypes = new HashSet();
         private CharSequence[] mChoices;
         private Bundle mExtras = new Bundle();
         private CharSequence mLabel;
@@ -48,84 +37,18 @@ public final class RemoteInput extends android.support.v4.app.RemoteInputCompatB
             return this;
         }
 
-        public Builder setChoices(CharSequence[] choices) {
-            this.mChoices = choices;
-            return this;
-        }
-
-        public Builder setAllowFreeFormInput(boolean allowFreeFormInput) {
-            this.mAllowFreeFormInput = allowFreeFormInput;
-            return this;
-        }
-
-        public Builder addExtras(Bundle extras) {
-            if (extras != null) {
-                this.mExtras.putAll(extras);
-            }
-            return this;
-        }
-
-        public Bundle getExtras() {
-            return this.mExtras;
-        }
-
         public RemoteInput build() {
-            return new RemoteInput(this.mResultKey, this.mLabel, this.mChoices, this.mAllowFreeFormInput, this.mExtras);
+            return new RemoteInput(this.mResultKey, this.mLabel, this.mChoices, this.mAllowFreeFormTextInput, this.mExtras, this.mAllowedDataTypes);
         }
     }
 
-    interface Impl {
-        void addResultsToIntent(RemoteInput[] remoteInputArr, Intent intent, Bundle bundle);
-
-        Bundle getResultsFromIntent(Intent intent);
-    }
-
-    static class ImplApi20 implements Impl {
-        ImplApi20() {
-        }
-
-        public Bundle getResultsFromIntent(Intent intent) {
-            return RemoteInputCompatApi20.getResultsFromIntent(intent);
-        }
-
-        public void addResultsToIntent(RemoteInput[] remoteInputs, Intent intent, Bundle results) {
-            RemoteInputCompatApi20.addResultsToIntent(remoteInputs, intent, results);
-        }
-    }
-
-    static class ImplBase implements Impl {
-        ImplBase() {
-        }
-
-        public Bundle getResultsFromIntent(Intent intent) {
-            Log.w(RemoteInput.TAG, "RemoteInput is only supported from API Level 16");
-            return null;
-        }
-
-        public void addResultsToIntent(RemoteInput[] remoteInputs, Intent intent, Bundle results) {
-            Log.w(RemoteInput.TAG, "RemoteInput is only supported from API Level 16");
-        }
-    }
-
-    static class ImplJellybean implements Impl {
-        ImplJellybean() {
-        }
-
-        public Bundle getResultsFromIntent(Intent intent) {
-            return RemoteInputCompatJellybean.getResultsFromIntent(intent);
-        }
-
-        public void addResultsToIntent(RemoteInput[] remoteInputs, Intent intent, Bundle results) {
-            RemoteInputCompatJellybean.addResultsToIntent(remoteInputs, intent, results);
-        }
-    }
-
-    RemoteInput(String resultKey, CharSequence label, CharSequence[] choices, boolean allowFreeFormInput, Bundle extras) {
+    RemoteInput(String resultKey, CharSequence label, CharSequence[] choices, boolean allowFreeFormTextInput, Bundle extras, Set<String> allowedDataTypes) {
         this.mResultKey = resultKey;
         this.mLabel = label;
         this.mChoices = choices;
-        this.mAllowFreeFormInput = allowFreeFormInput;
+        this.mAllowFreeFormTextInput = allowFreeFormTextInput;
         this.mExtras = extras;
+        this.mAllowedDataTypes = allowedDataTypes;
     }
 
     public String getResultKey() {
@@ -140,8 +63,16 @@ public final class RemoteInput extends android.support.v4.app.RemoteInputCompatB
         return this.mChoices;
     }
 
+    public Set<String> getAllowedDataTypes() {
+        return this.mAllowedDataTypes;
+    }
+
+    public boolean isDataOnly() {
+        return (getAllowFreeFormInput() || ((getChoices() != null && getChoices().length != 0) || getAllowedDataTypes() == null || getAllowedDataTypes().isEmpty())) ? false : true;
+    }
+
     public boolean getAllowFreeFormInput() {
-        return this.mAllowFreeFormInput;
+        return this.mAllowFreeFormTextInput;
     }
 
     public Bundle getExtras() {
@@ -149,20 +80,44 @@ public final class RemoteInput extends android.support.v4.app.RemoteInputCompatB
     }
 
     public static Bundle getResultsFromIntent(Intent intent) {
-        return IMPL.getResultsFromIntent(intent);
-    }
-
-    public static void addResultsToIntent(RemoteInput[] remoteInputs, Intent intent, Bundle results) {
-        IMPL.addResultsToIntent(remoteInputs, intent, results);
-    }
-
-    static {
         if (VERSION.SDK_INT >= 20) {
-            IMPL = new ImplApi20();
-        } else if (VERSION.SDK_INT >= 16) {
-            IMPL = new ImplJellybean();
-        } else {
-            IMPL = new ImplBase();
+            return android.app.RemoteInput.getResultsFromIntent(intent);
         }
+        if (VERSION.SDK_INT >= 16) {
+            Intent clipDataIntent = getClipDataIntentFromIntent(intent);
+            if (clipDataIntent != null) {
+                return (Bundle) clipDataIntent.getExtras().getParcelable("android.remoteinput.resultsData");
+            }
+            return null;
+        }
+        Log.w("RemoteInput", "RemoteInput is only supported from API Level 16");
+        return null;
+    }
+
+    static android.app.RemoteInput[] fromCompat(RemoteInput[] srcArray) {
+        if (srcArray == null) {
+            return null;
+        }
+        android.app.RemoteInput[] result = new android.app.RemoteInput[srcArray.length];
+        for (int i = 0; i < srcArray.length; i++) {
+            result[i] = fromCompat(srcArray[i]);
+        }
+        return result;
+    }
+
+    static android.app.RemoteInput fromCompat(RemoteInput src) {
+        return new android.app.RemoteInput.Builder(src.getResultKey()).setLabel(src.getLabel()).setChoices(src.getChoices()).setAllowFreeFormInput(src.getAllowFreeFormInput()).addExtras(src.getExtras()).build();
+    }
+
+    private static Intent getClipDataIntentFromIntent(Intent intent) {
+        ClipData clipData = intent.getClipData();
+        if (clipData == null) {
+            return null;
+        }
+        ClipDescription clipDescription = clipData.getDescription();
+        if (clipDescription.hasMimeType("text/vnd.android.intent") && clipDescription.getLabel().equals("android.remoteinput.results")) {
+            return clipData.getItemAt(0).getIntent();
+        }
+        return null;
     }
 }

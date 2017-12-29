@@ -1,26 +1,33 @@
 package com.google.android.gms.wearable.internal;
 
-import android.os.RemoteException;
-import com.google.android.gms.common.api.Api.zzb;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Result;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.internal.zzbaz;
-import com.google.android.gms.wearable.MessageApi.MessageListener;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfn;
 
-final class zzdu extends zzn<Status> {
-    private /* synthetic */ MessageListener zzbSU;
-
-    zzdu(zzds com_google_android_gms_wearable_internal_zzds, GoogleApiClient googleApiClient, MessageListener messageListener) {
-        this.zzbSU = messageListener;
-        super(googleApiClient);
+public final class zzdu implements Creator<zzdv> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        boolean z = false;
+        int zzd = zzbfn.zzd(parcel);
+        int i = 0;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (65535 & readInt) {
+                case 2:
+                    i = zzbfn.zzg(parcel, readInt);
+                    break;
+                case 3:
+                    z = zzbfn.zzc(parcel, readInt);
+                    break;
+                default:
+                    zzbfn.zzb(parcel, readInt);
+                    break;
+            }
+        }
+        zzbfn.zzaf(parcel, zzd);
+        return new zzdv(i, z);
     }
 
-    protected final /* synthetic */ void zza(zzb com_google_android_gms_common_api_Api_zzb) throws RemoteException {
-        ((zzfw) com_google_android_gms_common_api_Api_zzb).zza((zzbaz) this, this.zzbSU);
-    }
-
-    public final /* synthetic */ Result zzb(Status status) {
-        return status;
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new zzdv[i];
     }
 }

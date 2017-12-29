@@ -115,8 +115,8 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         this.actionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
         this.actionBarLayout.init(mainFragmentsStack);
         this.actionBarLayout.setDelegate(this);
-        NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeOtherAppActivities, this);
-        this.currentConnectionState = ConnectionsManager.getInstance().getConnectionState();
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeOtherAppActivities, this);
+        this.currentConnectionState = ConnectionsManager.getAccountInstance().getConnectionState();
         Intent intent = getIntent();
         if (savedInstanceState == null) {
             z = false;

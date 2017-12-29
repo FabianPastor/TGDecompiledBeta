@@ -7,7 +7,6 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -28,7 +27,7 @@ public class SessionCell extends FrameLayout {
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(0);
         linearLayout.setWeightSum(1.0f);
-        addView(linearLayout, LayoutHelper.createFrame(-1, BitmapDescriptorFactory.HUE_ORANGE, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 11.0f, 11.0f, 0.0f));
+        addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 11.0f, 11.0f, 0.0f));
         this.nameTextView = new TextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.nameTextView.setTextSize(1, 16.0f);

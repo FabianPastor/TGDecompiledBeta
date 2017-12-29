@@ -318,16 +318,16 @@ public class PhoneFormat {
                 if (this.data[a] != (byte) 0) {
                     a++;
                 } else if (offset == a - offset) {
-                    return "";
+                    return TtmlNode.ANONYMOUS_REGION_ID;
                 } else {
                     return new String(this.data, offset, a - offset);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                return "";
+                return TtmlNode.ANONYMOUS_REGION_ID;
             }
         }
-        return "";
+        return TtmlNode.ANONYMOUS_REGION_ID;
     }
 
     public CallingCodeInfo callingCodeInfo(String callingCode) {

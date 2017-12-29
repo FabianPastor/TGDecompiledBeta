@@ -30,7 +30,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -50,11 +49,13 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -92,7 +93,7 @@ import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.DialogsActivity.DialogsActivityDelegate;
 import org.telegram.ui.LaunchActivity;
 
-public class AudioPlayerAlert extends BottomSheet implements NotificationCenterDelegate, FileDownloadProgressListener {
+public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgressListener, NotificationCenterDelegate {
     private int TAG;
     private ActionBar actionBar;
     private AnimatorSet actionBarAnimation;
@@ -316,12 +317,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         this.parentActivity = (LaunchActivity) context;
         this.noCoverDrawable = context.getResources().getDrawable(R.drawable.nocover).mutate();
         this.noCoverDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_placeholder), Mode.MULTIPLY));
-        this.TAG = MediaController.getInstance().generateObserverTag();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidReset);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidStarted);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.musicDidLoaded);
+        this.TAG = MediaController.getInstance(this.currentAccount).generateObserverTag();
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidReset);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidStarted);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.musicDidLoaded);
         this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_background), Mode.MULTIPLY));
         this.paint.setColor(Theme.getColor(Theme.key_player_placeholderBackground));
@@ -362,7 +363,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
                 }
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 AudioPlayerAlert.this.inFullSize = getMeasuredHeight() >= height;
-                int availableHeight = ((height - ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) - AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN);
+                int availableHeight = ((height - ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) - AndroidUtilities.dp(120.0f);
                 int maxSize = Math.max(availableHeight, getMeasuredWidth());
                 AudioPlayerAlert.this.thumbMaxX = ((getMeasuredWidth() - maxSize) / 2) - AndroidUtilities.dp(17.0f);
                 AudioPlayerAlert.this.thumbMaxY = AndroidUtilities.dp(19.0f);
@@ -411,22 +412,22 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         this.avatarContainer = new ChatAvatarContainer(context, null, false);
         this.avatarContainer.setEnabled(false);
         this.avatarContainer.setTitleColors(Theme.getColor(Theme.key_player_actionBarTitle), Theme.getColor(Theme.key_player_actionBarSubtitle));
-        MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
+        MessageObject messageObject = MediaController.getInstance(this.currentAccount).getPlayingMessageObject();
         if (messageObject != null) {
             long did = messageObject.getDialogId();
             int lower_id = (int) did;
             int high_id = (int) (did >> 32);
             User user;
             if (lower_id == 0) {
-                user = MessagesController.getInstance().getUser(Integer.valueOf(MessagesController.getInstance().getEncryptedChat(Integer.valueOf(high_id)).user_id));
+                user = MessagesController.getAccountInstance().getUser(Integer.valueOf(MessagesController.getAccountInstance().getEncryptedChat(Integer.valueOf(high_id)).user_id));
                 this.avatarContainer.setTitle(ContactsController.formatName(user.first_name, user.last_name));
                 this.avatarContainer.setUserAvatar(user);
             } else if (lower_id > 0) {
-                user = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
+                user = MessagesController.getAccountInstance().getUser(Integer.valueOf(lower_id));
                 this.avatarContainer.setTitle(ContactsController.formatName(user.first_name, user.last_name));
                 this.avatarContainer.setUserAvatar(user);
             } else {
-                Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
+                Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-lower_id));
                 this.avatarContainer.setTitle(chat.title);
                 this.avatarContainer.setChatAvatar(chat);
             }
@@ -625,17 +626,17 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         this.titleTextView.setEllipsize(TruncateAt.END);
         this.titleTextView.setSingleLine(true);
         FrameLayout frameLayout = this.playerLayout;
-        frameLayout.addView(this.titleTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 72.0f, 18.0f, BitmapDescriptorFactory.HUE_YELLOW, 0.0f));
+        frameLayout.addView(this.titleTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 72.0f, 18.0f, 60.0f, 0.0f));
         this.authorTextView = new TextView(context);
         this.authorTextView.setTextColor(Theme.getColor(Theme.key_player_time));
         this.authorTextView.setTextSize(1, 14.0f);
         this.authorTextView.setEllipsize(TruncateAt.END);
         this.authorTextView.setSingleLine(true);
         frameLayout = this.playerLayout;
-        frameLayout.addView(this.authorTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 72.0f, 40.0f, BitmapDescriptorFactory.HUE_YELLOW, 0.0f));
+        frameLayout.addView(this.authorTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 72.0f, 40.0f, 60.0f, 0.0f));
         this.optionsButton = new ActionBarMenuItem(context, null, 0, Theme.getColor(Theme.key_player_actionBarItems));
         this.optionsButton.setIcon((int) R.drawable.ic_ab_other);
-        this.optionsButton.setAdditionalOffset(-AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN));
+        this.optionsButton.setAdditionalOffset(-AndroidUtilities.dp(120.0f));
         frameLayout = this.playerLayout;
         frameLayout.addView(this.optionsButton, LayoutHelper.createFrame(40, 40.0f, 53, 0.0f, 19.0f, 10.0f, 0.0f));
         this.optionsButton.addSubItem(1, LocaleController.getString("Forward", R.string.Forward));
@@ -649,11 +650,11 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         this.seekBarView = new SeekBarView(context);
         this.seekBarView.setDelegate(new SeekBarViewDelegate() {
             public void onSeekBarDrag(float progress) {
-                MediaController.getInstance().seekToProgress(MediaController.getInstance().getPlayingMessageObject(), progress);
+                MediaController.getInstance(AudioPlayerAlert.this.currentAccount).seekToProgress(MediaController.getInstance(AudioPlayerAlert.this.currentAccount).getPlayingMessageObject(), progress);
             }
         });
         frameLayout = this.playerLayout;
-        frameLayout.addView(this.seekBarView, LayoutHelper.createFrame(-1, BitmapDescriptorFactory.HUE_ORANGE, 51, 8.0f, 62.0f, 8.0f, 0.0f));
+        frameLayout.addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 8.0f, 62.0f, 8.0f, 0.0f));
         this.progressView = new LineProgressView(context);
         this.progressView.setVisibility(4);
         this.progressView.setBackgroundColor(Theme.getColor(Theme.key_player_progressBackground));
@@ -700,7 +701,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         textView.setCompoundDrawablesWithIntrinsicBounds(this.playOrderButtons[1], null, null, null);
         this.shuffleButton.setDelegate(new ActionBarMenuItemDelegate() {
             public void onItemClick(int id) {
-                MediaController.getInstance().toggleShuffleMusic(id);
+                MediaController.getInstance(AudioPlayerAlert.this.currentAccount).toggleShuffleMusic(id);
                 AudioPlayerAlert.this.updateShuffleButton();
             }
         });
@@ -712,7 +713,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         bottomView.addView(imageView, LayoutHelper.createFrame(48, 48, 51));
         imageView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                MediaController.getInstance().playPreviousMessage();
+                MediaController.getInstance(AudioPlayerAlert.this.currentAccount).playPreviousMessage();
             }
         });
         viewArr = this.buttons;
@@ -724,11 +725,11 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         bottomView.addView(this.playButton, LayoutHelper.createFrame(48, 48, 51));
         this.playButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                if (!MediaController.getInstance().isDownloadingCurrentMessage()) {
-                    if (MediaController.getInstance().isMessagePaused()) {
-                        MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
+                if (!MediaController.getInstance(AudioPlayerAlert.this.currentAccount).isDownloadingCurrentMessage()) {
+                    if (MediaController.getInstance(AudioPlayerAlert.this.currentAccount).isMessagePaused()) {
+                        MediaController.getInstance(AudioPlayerAlert.this.currentAccount).playMessage(MediaController.getInstance(AudioPlayerAlert.this.currentAccount).getPlayingMessageObject());
                     } else {
-                        MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
+                        MediaController.getInstance(AudioPlayerAlert.this.currentAccount).pauseMessage(MediaController.getInstance(AudioPlayerAlert.this.currentAccount).getPlayingMessageObject());
                     }
                 }
             }
@@ -741,7 +742,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         bottomView.addView(imageView, LayoutHelper.createFrame(48, 48, 51));
         imageView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                MediaController.getInstance().playNextMessage();
+                MediaController.getInstance(AudioPlayerAlert.this.currentAccount).playNextMessage();
             }
         });
         viewArr = this.buttons;
@@ -753,7 +754,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         bottomView.addView(this.repeatButton, LayoutHelper.createFrame(50, 48, 51));
         this.repeatButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                MediaController.getInstance().toggleRepeatMode();
+                SharedConfig.toggleRepeatMode();
                 AudioPlayerAlert.this.updateRepeatButton();
             }
         });
@@ -771,7 +772,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
                 } else if (AudioPlayerAlert.this.scrollToSong) {
                     AudioPlayerAlert.this.scrollToSong = false;
                     boolean found = false;
-                    MessageObject playingMessageObject = MediaController.getInstance().getPlayingMessageObject();
+                    MessageObject playingMessageObject = MediaController.getInstance(AudioPlayerAlert.this.currentAccount).getPlayingMessageObject();
                     if (playingMessageObject != null) {
                         int idx;
                         int count = AudioPlayerAlert.this.listView.getChildCount();
@@ -862,7 +863,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
                 AudioPlayerAlert.this.updateLayout();
             }
         });
-        this.playlist = MediaController.getInstance().getPlaylist();
+        this.playlist = MediaController.getInstance(this.currentAccount).getPlaylist();
         this.listAdapter.notifyDataSetChanged();
         this.containerView.addView(this.playerLayout, LayoutHelper.createFrame(-1, 178.0f));
         this.containerView.addView(this.shadow2, LayoutHelper.createFrame(-1, 3.0f));
@@ -899,7 +900,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
 
     private void onSubItemClick(int id) {
         Throwable e;
-        MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
+        MessageObject messageObject = MediaController.getInstance(this.currentAccount).getPlayingMessageObject();
         if (messageObject != null) {
             Bundle args;
             if (id == 1) {
@@ -913,13 +914,13 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
                 dialogsActivity.setDelegate(new DialogsActivityDelegate() {
                     public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
                         long did;
-                        if (dids.size() > 1 || ((Long) dids.get(0)).longValue() == ((long) UserConfig.getClientUserId()) || message != null) {
+                        if (dids.size() > 1 || ((Long) dids.get(0)).longValue() == ((long) UserConfig.getInstance(AudioPlayerAlert.this.currentAccount).getClientUserId()) || message != null) {
                             for (int a = 0; a < dids.size(); a++) {
                                 did = ((Long) dids.get(a)).longValue();
                                 if (message != null) {
-                                    SendMessagesHelper.getInstance().sendMessage(message.toString(), did, null, null, true, null, null, null);
+                                    SendMessagesHelper.getInstance(AudioPlayerAlert.this.currentAccount).sendMessage(message.toString(), did, null, null, true, null, null, null);
                                 }
-                                SendMessagesHelper.getInstance().sendMessage(arrayList, did);
+                                SendMessagesHelper.getInstance(AudioPlayerAlert.this.currentAccount).sendMessage(arrayList, did);
                             }
                             fragment.finishFragment();
                             return;
@@ -936,7 +937,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
                         } else if (lower_part < 0) {
                             args.putInt("chat_id", -lower_part);
                         }
-                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                        NotificationCenter.getInstance(AudioPlayerAlert.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                         ChatActivity chatActivity = new ChatActivity(args);
                         if (AudioPlayerAlert.this.parentActivity.presentFragment(chatActivity, true, false)) {
                             chatActivity.showReplyPanel(true, null, arrayList, null, false);
@@ -1006,24 +1007,24 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
                     User currentUser;
                     Chat currentChat;
                     if (lower_id > 0) {
-                        currentUser = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
+                        currentUser = MessagesController.getAccountInstance().getUser(Integer.valueOf(lower_id));
                         currentChat = null;
                     } else {
                         currentUser = null;
-                        currentChat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
+                        currentChat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-lower_id));
                     }
                     if (!(currentUser == null && ChatObject.isChannel(currentChat))) {
-                        int currentDate = ConnectionsManager.getInstance().getCurrentTime();
-                        if (!((currentUser == null || currentUser.id == UserConfig.getClientUserId()) && currentChat == null) && ((messageObject.messageOwner.action == null || (messageObject.messageOwner.action instanceof TL_messageActionEmpty)) && messageObject.isOut() && currentDate - messageObject.messageOwner.date <= 172800)) {
+                        int currentDate = ConnectionsManager.getAccountInstance().getCurrentTime();
+                        if (!((currentUser == null || currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId()) && currentChat == null) && ((messageObject.messageOwner.action == null || (messageObject.messageOwner.action instanceof TL_messageActionEmpty)) && messageObject.isOut() && currentDate - messageObject.messageOwner.date <= 172800)) {
                             int dp;
                             int dp2;
                             View frameLayout = new FrameLayout(this.parentActivity);
                             CheckBoxCell cell = new CheckBoxCell(this.parentActivity, true);
                             cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                             if (currentChat != null) {
-                                cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), "", false, false);
+                                cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                             } else {
-                                cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(currentUser)), "", false, false);
+                                cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(currentUser)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                             }
                             if (LocaleController.isRTL) {
                                 dp = AndroidUtilities.dp(16.0f);
@@ -1068,9 +1069,9 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
                         if (((int) messageObject2.getDialogId()) == 0 && messageObject2.messageOwner.random_id != 0) {
                             random_ids = new ArrayList();
                             random_ids.add(Long.valueOf(messageObject2.messageOwner.random_id));
-                            encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (messageObject2.getDialogId() >> 32)));
+                            encryptedChat = MessagesController.getAccountInstance().getEncryptedChat(Integer.valueOf((int) (messageObject2.getDialogId() >> 32)));
                         }
-                        MessagesController.getInstance().deleteMessages(arr, random_ids, encryptedChat, messageObject2.messageOwner.to_id.channel_id, zArr2[0]);
+                        MessagesController.getAccountInstance().deleteMessages(arr, random_ids, encryptedChat, messageObject2.messageOwner.to_id.channel_id, zArr2[0]);
                     }
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -1087,7 +1088,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
                 } else if (lower_part > 0) {
                     args.putInt("user_id", lower_part);
                 } else if (lower_part < 0) {
-                    Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_part));
+                    Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-lower_part));
                     if (!(chat == null || chat.migrated_to == null)) {
                         args.putInt("migrated_to", lower_part);
                         lower_part = -chat.migrated_to.channel_id;
@@ -1095,7 +1096,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
                     args.putInt("chat_id", -lower_part);
                 }
                 args.putInt("message_id", messageObject.getId());
-                NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                 this.parentActivity.presentFragment(new ChatActivity(args), false, false);
                 dismiss();
             }
@@ -1115,10 +1116,10 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
                 return paddingTop - i;
             }
         }
-        return -1000;
+        return C.PRIORITY_DOWNLOAD;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         MessageObject messageObject;
         if (id == NotificationCenter.messagePlayingDidStarted || id == NotificationCenter.messagePlayingPlayStateChanged || id == NotificationCenter.messagePlayingDidReset) {
             boolean z;
@@ -1158,12 +1159,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
                 }
             }
         } else if (id == NotificationCenter.messagePlayingProgressDidChanged) {
-            messageObject = MediaController.getInstance().getPlayingMessageObject();
+            messageObject = MediaController.getInstance(this.currentAccount).getPlayingMessageObject();
             if (messageObject != null && messageObject.isMusic()) {
                 updateProgress(messageObject);
             }
         } else if (id == NotificationCenter.musicDidLoaded) {
-            this.playlist = MediaController.getInstance().getPlaylist();
+            this.playlist = MediaController.getInstance(this.currentAccount).getPlaylist();
             this.listAdapter.notifyDataSetChanged();
         }
     }
@@ -1235,12 +1236,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
 
     public void dismiss() {
         super.dismiss();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingDidReset);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingDidStarted);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.musicDidLoaded);
-        MediaController.getInstance().removeLoadingFileObserver(this);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStarted);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.musicDidLoaded);
+        MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
 
     public void onBackPressed() {
@@ -1270,25 +1271,25 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
 
     private void updateShuffleButton() {
         Drawable drawable;
-        if (MediaController.getInstance().isShuffleMusic()) {
+        if (SharedConfig.shuffleMusic) {
             drawable = getContext().getResources().getDrawable(R.drawable.pl_shuffle).mutate();
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), Mode.MULTIPLY));
             this.shuffleButton.setIcon(drawable);
         } else {
             drawable = getContext().getResources().getDrawable(R.drawable.music_reverse).mutate();
-            if (MediaController.getInstance().isPlayOrderReversed()) {
+            if (SharedConfig.playOrderReversed) {
                 drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_buttonActive), Mode.MULTIPLY));
             } else {
                 drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_player_button), Mode.MULTIPLY));
             }
             this.shuffleButton.setIcon(drawable);
         }
-        this.playOrderButtons[0].setColorFilter(new PorterDuffColorFilter(Theme.getColor(MediaController.getInstance().isPlayOrderReversed() ? Theme.key_player_buttonActive : Theme.key_player_button), Mode.MULTIPLY));
-        this.playOrderButtons[1].setColorFilter(new PorterDuffColorFilter(Theme.getColor(MediaController.getInstance().isShuffleMusic() ? Theme.key_player_buttonActive : Theme.key_player_button), Mode.MULTIPLY));
+        this.playOrderButtons[0].setColorFilter(new PorterDuffColorFilter(Theme.getColor(SharedConfig.playOrderReversed ? Theme.key_player_buttonActive : Theme.key_player_button), Mode.MULTIPLY));
+        this.playOrderButtons[1].setColorFilter(new PorterDuffColorFilter(Theme.getColor(SharedConfig.shuffleMusic ? Theme.key_player_buttonActive : Theme.key_player_button), Mode.MULTIPLY));
     }
 
     private void updateRepeatButton() {
-        int mode = MediaController.getInstance().getRepeatMode();
+        int mode = SharedConfig.repeatMode;
         if (mode == 0) {
             this.repeatButton.setImageResource(R.drawable.pl_repeat);
             this.repeatButton.setTag(Theme.key_player_button);
@@ -1328,14 +1329,14 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
             cacheFile = FileLoader.getPathToMessage(messageObject.messageOwner);
         }
         if (cacheFile.exists()) {
-            MediaController.getInstance().removeLoadingFileObserver(this);
+            MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
             this.progressView.setVisibility(4);
             this.seekBarView.setVisibility(0);
             this.playButton.setEnabled(true);
             return;
         }
         String fileName = messageObject.getFileName();
-        MediaController.getInstance().addLoadingFileObserver(fileName, this);
+        MediaController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
         Float progress = ImageLoader.getInstance().getFileProgress(fileName);
         this.progressView.setProgress(progress != null ? progress.floatValue() : 0.0f, false);
         this.progressView.setVisibility(0);
@@ -1344,7 +1345,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
     }
 
     private void updateTitle(boolean shutdown) {
-        MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
+        MessageObject messageObject = MediaController.getInstance(this.currentAccount).getPlayingMessageObject();
         if ((messageObject == null && shutdown) || (messageObject != null && !messageObject.isMusic())) {
             dismiss();
         } else if (messageObject != null) {
@@ -1361,7 +1362,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
             }
             checkIfMusicDownloaded(messageObject);
             updateProgress(messageObject);
-            if (MediaController.getInstance().isMessagePaused()) {
+            if (MediaController.getInstance(this.currentAccount).isMessagePaused()) {
                 this.playButton.setImageDrawable(Theme.createSimpleSelectorDrawable(this.playButton.getContext(), R.drawable.pl_play, Theme.getColor(Theme.key_player_button), Theme.getColor(Theme.key_player_buttonActive)));
             } else {
                 this.playButton.setImageDrawable(Theme.createSimpleSelectorDrawable(this.playButton.getContext(), R.drawable.pl_pause, Theme.getColor(Theme.key_player_button), Theme.getColor(Theme.key_player_buttonActive)));
@@ -1372,7 +1373,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
             this.authorTextView.setText(author);
             this.actionBar.setTitle(title);
             this.actionBar.setSubtitle(author);
-            AudioInfo audioInfo = MediaController.getInstance().getAudioInfo();
+            AudioInfo audioInfo = MediaController.getInstance(this.currentAccount).getAudioInfo();
             if (audioInfo == null || audioInfo.getCover() == null) {
                 this.hasNoCover = true;
                 this.placeholderImageView.invalidate();

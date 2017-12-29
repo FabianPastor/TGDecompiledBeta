@@ -1,72 +1,106 @@
 package com.google.android.gms.common.internal;
 
-import android.util.Log;
+import android.content.ComponentName;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import java.util.HashSet;
+import java.util.Set;
 
-public final class zzaj {
-    private static int zzaHZ = 15;
-    private static final String zzaIa = null;
-    private final String zzaIb;
-    private final String zzaIc;
+final class zzaj implements ServiceConnection {
+    private ComponentName mComponentName;
+    private int mState = 2;
+    private IBinder zzfzf;
+    private final Set<ServiceConnection> zzgaq = new HashSet();
+    private boolean zzgar;
+    private final zzah zzgas;
+    private /* synthetic */ zzai zzgat;
 
-    public zzaj(String str) {
-        this(str, null);
+    public zzaj(zzai com_google_android_gms_common_internal_zzai, zzah com_google_android_gms_common_internal_zzah) {
+        this.zzgat = com_google_android_gms_common_internal_zzai;
+        this.zzgas = com_google_android_gms_common_internal_zzah;
     }
 
-    private zzaj(String str, String str2) {
-        zzbo.zzb((Object) str, (Object) "log tag cannot be null");
-        zzbo.zzb(str.length() <= 23, "tag \"%s\" is longer than the %d character maximum", str, Integer.valueOf(23));
-        this.zzaIb = str;
-        this.zzaIc = null;
+    public final IBinder getBinder() {
+        return this.zzfzf;
     }
 
-    private final boolean zzaB(int i) {
-        return Log.isLoggable(this.zzaIb, i);
+    public final ComponentName getComponentName() {
+        return this.mComponentName;
     }
 
-    private final String zzcE(String str) {
-        return this.zzaIc == null ? str : this.zzaIc.concat(str);
+    public final int getState() {
+        return this.mState;
     }
 
-    public final void zzb(String str, String str2, Throwable th) {
-        if (zzaB(4)) {
-            Log.i(str, zzcE(str2), th);
+    public final boolean isBound() {
+        return this.zzgar;
+    }
+
+    public final void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+        synchronized (this.zzgat.zzgam) {
+            this.zzgat.mHandler.removeMessages(1, this.zzgas);
+            this.zzfzf = iBinder;
+            this.mComponentName = componentName;
+            for (ServiceConnection onServiceConnected : this.zzgaq) {
+                onServiceConnected.onServiceConnected(componentName, iBinder);
+            }
+            this.mState = 1;
         }
     }
 
-    public final void zzc(String str, String str2, Throwable th) {
-        if (zzaB(5)) {
-            Log.w(str, zzcE(str2), th);
+    public final void onServiceDisconnected(ComponentName componentName) {
+        synchronized (this.zzgat.zzgam) {
+            this.zzgat.mHandler.removeMessages(1, this.zzgas);
+            this.zzfzf = null;
+            this.mComponentName = componentName;
+            for (ServiceConnection onServiceDisconnected : this.zzgaq) {
+                onServiceDisconnected.onServiceDisconnected(componentName);
+            }
+            this.mState = 2;
         }
     }
 
-    public final void zzd(String str, String str2, Throwable th) {
-        if (zzaB(6)) {
-            Log.e(str, zzcE(str2), th);
+    public final void zza(ServiceConnection serviceConnection, String str) {
+        this.zzgat.zzgan;
+        this.zzgat.mApplicationContext;
+        this.zzgas.zzall();
+        this.zzgaq.add(serviceConnection);
+    }
+
+    public final boolean zza(ServiceConnection serviceConnection) {
+        return this.zzgaq.contains(serviceConnection);
+    }
+
+    public final boolean zzalm() {
+        return this.zzgaq.isEmpty();
+    }
+
+    public final void zzb(ServiceConnection serviceConnection, String str) {
+        this.zzgat.zzgan;
+        this.zzgat.mApplicationContext;
+        this.zzgaq.remove(serviceConnection);
+    }
+
+    public final void zzgi(String str) {
+        this.mState = 3;
+        this.zzgar = this.zzgat.zzgan.zza(this.zzgat.mApplicationContext, str, this.zzgas.zzall(), this, this.zzgas.zzalk());
+        if (this.zzgar) {
+            this.zzgat.mHandler.sendMessageDelayed(this.zzgat.mHandler.obtainMessage(1, this.zzgas), this.zzgat.zzgap);
+            return;
+        }
+        this.mState = 2;
+        try {
+            this.zzgat.zzgan;
+            this.zzgat.mApplicationContext.unbindService(this);
+        } catch (IllegalArgumentException e) {
         }
     }
 
-    public final void zze(String str, String str2, Throwable th) {
-        if (zzaB(7)) {
-            Log.e(str, zzcE(str2), th);
-            Log.wtf(str, zzcE(str2), th);
-        }
-    }
-
-    public final void zzx(String str, String str2) {
-        if (zzaB(3)) {
-            Log.d(str, zzcE(str2));
-        }
-    }
-
-    public final void zzy(String str, String str2) {
-        if (zzaB(5)) {
-            Log.w(str, zzcE(str2));
-        }
-    }
-
-    public final void zzz(String str, String str2) {
-        if (zzaB(6)) {
-            Log.e(str, zzcE(str2));
-        }
+    public final void zzgj(String str) {
+        this.zzgat.mHandler.removeMessages(1, this.zzgas);
+        this.zzgat.zzgan;
+        this.zzgat.mApplicationContext.unbindService(this);
+        this.zzgar = false;
+        this.mState = 2;
     }
 }

@@ -34,8 +34,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import com.google.android.gms.gcm.Task;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
@@ -43,15 +41,16 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.Intro;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocaleController.LocaleInfo;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
@@ -66,6 +65,7 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class IntroActivity extends Activity implements NotificationCenterDelegate {
     private BottomPagesView bottomPages;
+    private int currentAccount = UserConfig.selectedAccount;
     private long currentDate;
     private int currentViewPagerPage;
     private boolean destroyed;
@@ -279,7 +279,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                 Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
                 GLES20.glBindTexture(3553, this.textures[index]);
                 GLES20.glTexParameteri(3553, 10241, 9729);
-                GLES20.glTexParameteri(3553, Task.EXTRAS_LIMIT_BYTES, 9729);
+                GLES20.glTexParameteri(3553, 10240, 9729);
                 GLES20.glTexParameteri(3553, 10242, 33071);
                 GLES20.glTexParameteri(3553, 10243, 33071);
                 GLUtils.texImage2D(3553, 0, bitmap, 0);
@@ -368,7 +368,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         setTheme(R.style.Theme.TMessages);
         super.onCreate(savedInstanceState);
         requestWindowFeature(1);
-        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putLong("intro_crashed_time", System.currentTimeMillis()).commit();
+        MessagesController.getGlobalMainSettings().edit().putLong("intro_crashed_time", System.currentTimeMillis()).commit();
         this.titles = new String[]{LocaleController.getString("Page1Title", R.string.Page1Title), LocaleController.getString("Page2Title", R.string.Page2Title), LocaleController.getString("Page3Title", R.string.Page3Title), LocaleController.getString("Page5Title", R.string.Page5Title), LocaleController.getString("Page4Title", R.string.Page4Title), LocaleController.getString("Page6Title", R.string.Page6Title)};
         this.messages = new String[]{LocaleController.getString("Page1Message", R.string.Page1Message), LocaleController.getString("Page2Message", R.string.Page2Message), LocaleController.getString("Page3Message", R.string.Page3Message), LocaleController.getString("Page5Message", R.string.Page5Message), LocaleController.getString("Page4Message", R.string.Page4Message), LocaleController.getString("Page6Message", R.string.Page6Message)};
         View scrollView = new ScrollView(this);
@@ -475,7 +475,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         if (BuildVars.DEBUG_VERSION) {
             scrollView.setOnLongClickListener(new OnLongClickListener() {
                 public boolean onLongClick(View v) {
-                    ConnectionsManager.getInstance().switchBackend();
+                    ConnectionsManager.getInstance(IntroActivity.this.currentAccount).switchBackend();
                     return true;
                 }
             });
@@ -486,11 +486,11 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         this.textView.setTextColor(-15494190);
         this.textView.setGravity(17);
         this.textView.setTextSize(1, 16.0f);
-        frameLayout.addView(this.textView, LayoutHelper.createFrame(-2, BitmapDescriptorFactory.HUE_ORANGE, 81, 0.0f, 0.0f, 0.0f, 20.0f));
+        frameLayout.addView(this.textView, LayoutHelper.createFrame(-2, 30.0f, 81, 0.0f, 0.0f, 0.0f, 20.0f));
         this.textView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (!IntroActivity.this.startPressed && IntroActivity.this.localeInfo != null) {
-                    LocaleController.getInstance().applyLanguage(IntroActivity.this.localeInfo, true, false);
+                    LocaleController.getInstance().applyLanguage(IntroActivity.this.localeInfo, true, false, IntroActivity.this.currentAccount);
                     IntroActivity.this.startPressed = true;
                     Intent intent2 = new Intent(IntroActivity.this, LaunchActivity.class);
                     intent2.putExtra("fromIntro", true);
@@ -516,10 +516,10 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
             setRequestedOrientation(1);
             setContentView(scrollView);
         }
-        LocaleController.getInstance().loadRemoteLanguages();
+        LocaleController.getInstance().loadRemoteLanguages(this.currentAccount);
         checkContinueText();
         this.justCreated = true;
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.suggestedLangpack);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.suggestedLangpack);
         AndroidUtilities.handleProxyIntent(this, getIntent());
     }
 
@@ -537,20 +537,20 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
         AndroidUtilities.checkForCrashes(this);
         AndroidUtilities.checkForUpdates(this);
-        ConnectionsManager.getInstance().setAppPaused(false, false);
+        ConnectionsManager.getInstance(this.currentAccount).setAppPaused(false, false);
     }
 
     protected void onPause() {
         super.onPause();
         AndroidUtilities.unregisterUpdates();
-        ConnectionsManager.getInstance().setAppPaused(true, false);
+        ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
     }
 
     protected void onDestroy() {
         super.onDestroy();
         this.destroyed = true;
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.suggestedLangpack);
-        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putLong("intro_crashed_time", 0).commit();
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.suggestedLangpack);
+        MessagesController.getGlobalMainSettings().edit().putLong("intro_crashed_time", 0).commit();
     }
 
     private void checkContinueText() {
@@ -587,7 +587,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                 this.localeInfo = englishInfo;
             }
             req.keys.add("ContinueOnThisLanguage");
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                     if (response != null) {
                         Vector vector = (Vector) response;
@@ -598,7 +598,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                                     public void run() {
                                         if (!IntroActivity.this.destroyed) {
                                             IntroActivity.this.textView.setText(string.value);
-                                            ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putString("language_showed2", LocaleController.getSystemLocaleStringIso639().toLowerCase()).commit();
+                                            MessagesController.getGlobalMainSettings().edit().putString("language_showed2", LocaleController.getSystemLocaleStringIso639().toLowerCase()).commit();
                                         }
                                     }
                                 });
@@ -610,7 +610,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.suggestedLangpack) {
             checkContinueText();
         }

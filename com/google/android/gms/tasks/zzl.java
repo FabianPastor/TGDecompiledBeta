@@ -1,34 +1,33 @@
 package com.google.android.gms.tasks;
 
-import android.support.annotation.NonNull;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
 final class zzl<TResult> {
     private final Object mLock = new Object();
-    private Queue<zzk<TResult>> zzbMc;
-    private boolean zzbMd;
+    private Queue<zzk<TResult>> zzkuj;
+    private boolean zzkuk;
 
     zzl() {
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public final void zza(@NonNull Task<TResult> task) {
+    public final void zza(zzk<TResult> com_google_android_gms_tasks_zzk_TResult) {
         synchronized (this.mLock) {
-            if (this.zzbMc == null || this.zzbMd) {
-            } else {
-                this.zzbMd = true;
+            if (this.zzkuj == null) {
+                this.zzkuj = new ArrayDeque();
             }
+            this.zzkuj.add(com_google_android_gms_tasks_zzk_TResult);
         }
     }
 
-    public final void zza(@NonNull zzk<TResult> com_google_android_gms_tasks_zzk_TResult) {
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public final void zzb(Task<TResult> task) {
         synchronized (this.mLock) {
-            if (this.zzbMc == null) {
-                this.zzbMc = new ArrayDeque();
+            if (this.zzkuj == null || this.zzkuk) {
+            } else {
+                this.zzkuk = true;
             }
-            this.zzbMc.add(com_google_android_gms_tasks_zzk_TResult);
         }
     }
 }

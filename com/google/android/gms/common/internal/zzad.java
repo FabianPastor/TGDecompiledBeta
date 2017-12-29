@@ -1,9 +1,16 @@
 package com.google.android.gms.common.internal;
 
-import android.os.Bundle;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 
-public interface zzad {
-    boolean isConnected();
+final class zzad implements zzg {
+    private /* synthetic */ OnConnectionFailedListener zzgaa;
 
-    Bundle zzoC();
+    zzad(OnConnectionFailedListener onConnectionFailedListener) {
+        this.zzgaa = onConnectionFailedListener;
+    }
+
+    public final void onConnectionFailed(ConnectionResult connectionResult) {
+        this.zzgaa.onConnectionFailed(connectionResult);
+    }
 }

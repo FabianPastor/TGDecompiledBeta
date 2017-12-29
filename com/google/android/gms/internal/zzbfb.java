@@ -1,7 +1,7 @@
 package com.google.android.gms.internal;
 
-final class zzbfb extends zzbez<Long> {
-    zzbfb(String str, Long l) {
-        super(str, l);
+final class zzbfb extends zzbey<Integer> {
+    zzbfb(String str, Integer num) {
+        super(str, num);
     }
 }

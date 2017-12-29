@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">Εγκατάσταση</string>
     <string name="common_google_play_services_install_text">Η εφαρμογή %1$s δεν μπορεί να εκτελεστεί χωρίς τις υπηρεσίες Google Play, οι οποίες λείπουν από τη συσκευή σας.</string>
     <string name="common_google_play_services_install_title">Λήψη υπηρεσιών Google Play</string>
+    <string name="common_google_play_services_notification_channel_name">Διαθεσιμότητα υπηρεσιών Google Play</string>
     <string name="common_google_play_services_notification_ticker">Σφάλμα Υπηρεσιών Google Play</string>
     <string name="common_google_play_services_unknown_issue">Η εφαρμογή %1$s αντιμετωπίζει κάποιο πρόβλημα με τις υπηρεσίες Google Play. Προσπαθήστε ξανά.</string>
     <string name="common_google_play_services_unsupported_text">Η εφαρμογή %1$s δεν θα εκτελεστεί χωρίς τις υπηρεσίες Google Play, οι οποίες δεν υποστηρίζονται από τη συσκευή σας.</string>
@@ -17,5 +18,7 @@
     <string name="common_open_on_phone">Άνοιγμα σε τηλέφωνο</string>
     <string name="common_signin_button_text">Σύνδεση</string>
     <string name="common_signin_button_text_long">Συνδεθείτε με το Google</string>
+    <string name="gcm_fallback_notification_channel_label">Διάφορα</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Αγορά μέσω Google</string>
 </resources>

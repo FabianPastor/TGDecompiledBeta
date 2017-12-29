@@ -1,8 +1,5 @@
 package org.telegram.messenger.exoplayer2.text.cea;
 
-import android.support.v4.internal.view.SupportMenu;
-import android.support.v4.view.InputDeviceCompat;
-import android.support.v4.view.MotionEventCompat;
 import android.text.Layout.Alignment;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -34,7 +31,7 @@ public final class Cea608Decoder extends CeaDecoder {
     private static final int CC_TYPE_FLAG = 2;
     private static final int CC_VALID_608_ID = 4;
     private static final int CC_VALID_FLAG = 4;
-    private static final int[] COLORS = new int[]{-1, -16711936, -16776961, -16711681, SupportMenu.CATEGORY_MASK, InputDeviceCompat.SOURCE_ANY, -65281};
+    private static final int[] COLORS = new int[]{-1, -16711936, -16776961, -16711681, -65536, -256, -65281};
     private static final int[] COLUMN_INDICES = new int[]{0, 4, 8, 12, 16, 20, 24, 28};
     private static final byte CTRL_BACKSPACE = (byte) 33;
     private static final byte CTRL_CARRIAGE_RETURN = (byte) 45;
@@ -436,16 +433,16 @@ public final class Cea608Decoder extends CeaDecoder {
                                 return;
                             }
                             return;
-                        case MotionEventCompat.AXIS_GENERIC_14 /*45*/:
+                        case (byte) 45:
                             if (this.captionMode == 1 && !this.currentCueBuilder.isEmpty()) {
                                 this.currentCueBuilder.rollUp();
                                 return;
                             }
                             return;
-                        case MotionEventCompat.AXIS_GENERIC_15 /*46*/:
+                        case (byte) 46:
                             resetCueBuilders();
                             return;
-                        case MotionEventCompat.AXIS_GENERIC_16 /*47*/:
+                        case (byte) 47:
                             this.cues = getDisplayCues();
                             resetCueBuilders();
                             return;

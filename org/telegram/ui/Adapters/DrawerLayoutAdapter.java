@@ -2,8 +2,11 @@ package org.telegram.ui.Adapters;
 
 import android.content.Context;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -14,12 +17,16 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Cells.DrawerActionCell;
+import org.telegram.ui.Cells.DrawerAddCell;
 import org.telegram.ui.Cells.DrawerProfileCell;
+import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class DrawerLayoutAdapter extends SelectionAdapter {
+    private ArrayList<Integer> accountNumbers = new ArrayList();
+    private boolean accountsShowed;
     private ArrayList<Item> items = new ArrayList(11);
     private Context mContext;
 
@@ -46,7 +53,23 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
     }
 
     public int getItemCount() {
-        return this.items.size();
+        if (!this.accountsShowed) {
+            return this.items.size();
+        }
+        int count = this.accountNumbers.size();
+        if (count < 3) {
+            count++;
+        }
+        return count + 2;
+    }
+
+    public void setAccountsShowed(boolean value) {
+        this.accountsShowed = value;
+        notifyDataSetChanged();
+    }
+
+    public boolean isAccountsShowed() {
+        return this.accountsShowed;
     }
 
     public void notifyDataSetChanged() {
@@ -55,20 +78,33 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
     }
 
     public boolean isEnabled(ViewHolder holder) {
-        return holder.getItemViewType() == 3;
+        return holder.getAdapterPosition() != 0 && (this.accountsShowed || holder.getItemViewType() == 3);
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         switch (viewType) {
             case 0:
-                view = new DrawerProfileCell(this.mContext);
+                View drawerProfileCell = new DrawerProfileCell(this.mContext);
+                drawerProfileCell.setOnArrowClickListener(new OnClickListener() {
+                    public void onClick(View v) {
+                        DrawerLayoutAdapter.this.accountsShowed = ((DrawerProfileCell) v).isAccountsShowed();
+                        DrawerLayoutAdapter.this.notifyDataSetChanged();
+                    }
+                });
+                view = drawerProfileCell;
                 break;
             case 2:
                 view = new DividerCell(this.mContext);
                 break;
             case 3:
                 view = new DrawerActionCell(this.mContext);
+                break;
+            case 4:
+                view = new DrawerUserCell(this.mContext);
+                break;
+            case 5:
+                view = new DrawerAddCell(this.mContext);
                 break;
             default:
                 view = new EmptyCell(this.mContext, AndroidUtilities.dp(8.0f));
@@ -81,11 +117,16 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
     public void onBindViewHolder(ViewHolder holder, int position) {
         switch (holder.getItemViewType()) {
             case 0:
-                ((DrawerProfileCell) holder.itemView).setUser(MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId())));
+                ((DrawerProfileCell) holder.itemView).setUser(MessagesController.getAccountInstance().getUser(Integer.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId())), this.accountsShowed);
                 holder.itemView.setBackgroundColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
                 return;
             case 3:
-                ((Item) this.items.get(position)).bind((DrawerActionCell) holder.itemView);
+                DrawerActionCell drawerActionCell = holder.itemView;
+                ((Item) this.items.get(position)).bind(drawerActionCell);
+                drawerActionCell.setPadding(0, 0, 0, 0);
+                return;
+            case 4:
+                holder.itemView.setAccount(((Integer) this.accountNumbers.get(position - 2)).intValue());
                 return;
             default:
                 return;
@@ -93,21 +134,52 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
     }
 
     public int getItemViewType(int i) {
-        if (i == 0) {
+        if (this.accountsShowed) {
+            if (i == 0) {
+                return 0;
+            }
+            if (i == 1) {
+                return 1;
+            }
+            return i + -2 < UserConfig.getActivatedAccountsCount() ? 4 : 5;
+        } else if (i == 0) {
             return 0;
+        } else {
+            if (i == 1) {
+                return 1;
+            }
+            if (i == 5) {
+                return 2;
+            }
+            return 3;
         }
-        if (i == 1) {
-            return 1;
-        }
-        if (i == 5) {
-            return 2;
-        }
-        return 3;
     }
 
     private void resetItems() {
+        if (this.accountsShowed) {
+            this.accountNumbers.clear();
+            for (int a = 0; a < 3; a++) {
+                if (UserConfig.getInstance(a).isClientActivated()) {
+                    this.accountNumbers.add(Integer.valueOf(a));
+                }
+            }
+            Collections.sort(this.accountNumbers, new Comparator<Integer>() {
+                public int compare(Integer o1, Integer o2) {
+                    long l1 = (long) UserConfig.getInstance(o1.intValue()).loginTime;
+                    long l2 = (long) UserConfig.getInstance(o2.intValue()).loginTime;
+                    if (l1 > l2) {
+                        return 1;
+                    }
+                    if (l1 < l2) {
+                        return -1;
+                    }
+                    return 0;
+                }
+            });
+            return;
+        }
         this.items.clear();
-        if (UserConfig.isClientActivated()) {
+        if (UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
             this.items.add(null);
             this.items.add(null);
             this.items.add(new Item(2, LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.menu_newgroup));

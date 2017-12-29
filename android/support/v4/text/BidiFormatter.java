@@ -4,22 +4,11 @@ import android.text.SpannableStringBuilder;
 import java.util.Locale;
 
 public final class BidiFormatter {
-    private static final int DEFAULT_FLAGS = 2;
     private static final BidiFormatter DEFAULT_LTR_INSTANCE = new BidiFormatter(false, 2, DEFAULT_TEXT_DIRECTION_HEURISTIC);
     private static final BidiFormatter DEFAULT_RTL_INSTANCE = new BidiFormatter(true, 2, DEFAULT_TEXT_DIRECTION_HEURISTIC);
     private static TextDirectionHeuristicCompat DEFAULT_TEXT_DIRECTION_HEURISTIC = TextDirectionHeuristicsCompat.FIRSTSTRONG_LTR;
-    private static final int DIR_LTR = -1;
-    private static final int DIR_RTL = 1;
-    private static final int DIR_UNKNOWN = 0;
-    private static final String EMPTY_STRING = "";
-    private static final int FLAG_STEREO_RESET = 2;
-    private static final char LRE = '‪';
-    private static final char LRM = '‎';
-    private static final String LRM_STRING = Character.toString(LRM);
-    private static final char PDF = '‬';
-    private static final char RLE = '‫';
-    private static final char RLM = '‏';
-    private static final String RLM_STRING = Character.toString(RLM);
+    private static final String LRM_STRING = Character.toString('‎');
+    private static final String RLM_STRING = Character.toString('‏');
     private final TextDirectionHeuristicCompat mDefaultTextDirectionHeuristicCompat;
     private final int mFlags;
     private final boolean mIsRtlContext;
@@ -33,32 +22,10 @@ public final class BidiFormatter {
             initialize(BidiFormatter.isRtlLocale(Locale.getDefault()));
         }
 
-        public Builder(boolean rtlContext) {
-            initialize(rtlContext);
-        }
-
-        public Builder(Locale locale) {
-            initialize(BidiFormatter.isRtlLocale(locale));
-        }
-
         private void initialize(boolean isRtlContext) {
             this.mIsRtlContext = isRtlContext;
             this.mTextDirectionHeuristicCompat = BidiFormatter.DEFAULT_TEXT_DIRECTION_HEURISTIC;
             this.mFlags = 2;
-        }
-
-        public Builder stereoReset(boolean stereoReset) {
-            if (stereoReset) {
-                this.mFlags |= 2;
-            } else {
-                this.mFlags &= -3;
-            }
-            return this;
-        }
-
-        public Builder setTextDirectionHeuristic(TextDirectionHeuristicCompat heuristic) {
-            this.mTextDirectionHeuristicCompat = heuristic;
-            return this;
         }
 
         private static BidiFormatter getDefaultInstanceFromContext(boolean isRtlContext) {
@@ -74,8 +41,7 @@ public final class BidiFormatter {
     }
 
     private static class DirectionalityEstimator {
-        private static final byte[] DIR_TYPE_CACHE = new byte[DIR_TYPE_CACHE_SIZE];
-        private static final int DIR_TYPE_CACHE_SIZE = 1792;
+        private static final byte[] DIR_TYPE_CACHE = new byte[1792];
         private int charIndex;
         private final boolean isHtml;
         private char lastChar;
@@ -83,7 +49,7 @@ public final class BidiFormatter {
         private final CharSequence text;
 
         static {
-            for (int i = 0; i < DIR_TYPE_CACHE_SIZE; i++) {
+            for (int i = 0; i < 1792; i++) {
                 DIR_TYPE_CACHE[i] = Character.getDirectionality(i);
             }
         }
@@ -366,22 +332,10 @@ public final class BidiFormatter {
         return new Builder().build();
     }
 
-    public static BidiFormatter getInstance(boolean rtlContext) {
-        return new Builder(rtlContext).build();
-    }
-
-    public static BidiFormatter getInstance(Locale locale) {
-        return new Builder(locale).build();
-    }
-
     private BidiFormatter(boolean isRtlContext, int flags, TextDirectionHeuristicCompat heuristic) {
         this.mIsRtlContext = isRtlContext;
         this.mFlags = flags;
         this.mDefaultTextDirectionHeuristicCompat = heuristic;
-    }
-
-    public boolean isRtlContext() {
-        return this.mIsRtlContext;
     }
 
     public boolean getStereoReset() {
@@ -394,7 +348,7 @@ public final class BidiFormatter {
             return LRM_STRING;
         }
         if (!this.mIsRtlContext || (isRtl && getExitDir(str) != -1)) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
         return RLM_STRING;
     }
@@ -405,24 +359,9 @@ public final class BidiFormatter {
             return LRM_STRING;
         }
         if (!this.mIsRtlContext || (isRtl && getEntryDir(str) != -1)) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
         return RLM_STRING;
-    }
-
-    public boolean isRtl(String str) {
-        return isRtl((CharSequence) str);
-    }
-
-    public boolean isRtl(CharSequence str) {
-        return this.mDefaultTextDirectionHeuristicCompat.isRtl(str, 0, str.length());
-    }
-
-    public String unicodeWrap(String str, TextDirectionHeuristicCompat heuristic, boolean isolate) {
-        if (str == null) {
-            return null;
-        }
-        return unicodeWrap((CharSequence) str, heuristic, isolate).toString();
     }
 
     public CharSequence unicodeWrap(CharSequence str, TextDirectionHeuristicCompat heuristic, boolean isolate) {
@@ -435,9 +374,9 @@ public final class BidiFormatter {
             result.append(markBefore(str, isRtl ? TextDirectionHeuristicsCompat.RTL : TextDirectionHeuristicsCompat.LTR));
         }
         if (isRtl != this.mIsRtlContext) {
-            result.append(isRtl ? RLE : LRE);
+            result.append(isRtl ? '‫' : '‪');
             result.append(str);
-            result.append(PDF);
+            result.append('‬');
         } else {
             result.append(str);
         }
@@ -452,26 +391,6 @@ public final class BidiFormatter {
         }
         result.append(markAfter(str, textDirectionHeuristicCompat));
         return result;
-    }
-
-    public String unicodeWrap(String str, TextDirectionHeuristicCompat heuristic) {
-        return unicodeWrap(str, heuristic, true);
-    }
-
-    public CharSequence unicodeWrap(CharSequence str, TextDirectionHeuristicCompat heuristic) {
-        return unicodeWrap(str, heuristic, true);
-    }
-
-    public String unicodeWrap(String str, boolean isolate) {
-        return unicodeWrap(str, this.mDefaultTextDirectionHeuristicCompat, isolate);
-    }
-
-    public CharSequence unicodeWrap(CharSequence str, boolean isolate) {
-        return unicodeWrap(str, this.mDefaultTextDirectionHeuristicCompat, isolate);
-    }
-
-    public String unicodeWrap(String str) {
-        return unicodeWrap(str, this.mDefaultTextDirectionHeuristicCompat, true);
     }
 
     public CharSequence unicodeWrap(CharSequence str) {

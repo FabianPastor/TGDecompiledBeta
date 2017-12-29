@@ -1,8 +1,6 @@
 package net.hockeyapp.android.utils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
@@ -52,10 +50,6 @@ public class SimpleMultipartEntity {
         this.mOut.write("Content-Transfer-Encoding: 8bit\r\n\r\n".getBytes());
         this.mOut.write(value.getBytes());
         this.mOut.write(("\r\n--" + this.mBoundary + "\r\n").getBytes());
-    }
-
-    public void addPart(String key, File value, boolean lastFile) throws IOException {
-        addPart(key, value.getName(), new FileInputStream(value), lastFile);
     }
 
     public void addPart(String key, String fileName, InputStream fin, boolean lastFile) throws IOException {

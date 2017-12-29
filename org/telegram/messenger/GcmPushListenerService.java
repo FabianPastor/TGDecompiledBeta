@@ -18,19 +18,42 @@ public class GcmPushListenerService extends GcmListenerService {
         FileLog.d("GCM received bundle: " + bundle + " from: " + from);
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
+                int userId;
                 ApplicationLoader.postInitApplication();
+                Object userIdObject = bundle.get("user_id");
+                if (userIdObject == null) {
+                    userId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+                } else if (userIdObject instanceof Integer) {
+                    userId = ((Integer) userIdObject).intValue();
+                } else if (userIdObject instanceof String) {
+                    userId = Utilities.parseInt((String) userIdObject).intValue();
+                } else {
+                    userId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+                }
+                int account = UserConfig.selectedAccount;
+                for (int a = 0; a < 3; a++) {
+                    if (UserConfig.getInstance(a).getClientUserId() == userId) {
+                        account = a;
+                        break;
+                    }
+                }
+                final int currentAccount = account;
                 try {
                     String key = bundle.getString("loc_key");
                     if ("DC_UPDATE".equals(key)) {
-                        JSONObject object = new JSONObject(bundle.getString("custom"));
-                        int dc = object.getInt("dc");
-                        String[] parts = object.getString("addr").split(":");
+                        JSONObject jSONObject = new JSONObject(bundle.getString("custom"));
+                        int dc = jSONObject.getInt("dc");
+                        String[] parts = jSONObject.getString("addr").split(":");
                         if (parts.length == 2) {
-                            ConnectionsManager.getInstance().applyDatacenterAddress(dc, parts[0], Integer.parseInt(parts[1]));
-                        } else {
-                            return;
+                            ConnectionsManager.getInstance(currentAccount).applyDatacenterAddress(dc, parts[0], Integer.parseInt(parts[1]));
+                            ConnectionsManager.onInternalPushReceived(currentAccount);
+                            ConnectionsManager.getInstance(currentAccount).resumeNetworkMaybe();
                         }
-                    } else if ("MESSAGE_ANNOUNCEMENT".equals(key)) {
+                        return;
+                    }
+                    Object obj;
+                    long time;
+                    if ("MESSAGE_ANNOUNCEMENT".equals(key)) {
                         obj = bundle.get("google.sent_time");
                         try {
                             if (obj instanceof String) {
@@ -55,10 +78,10 @@ public class GcmPushListenerService extends GcmListenerService {
                         final TL_updates tL_updates = updates;
                         Utilities.stageQueue.postRunnable(new Runnable() {
                             public void run() {
-                                MessagesController.getInstance().processUpdates(tL_updates, false);
+                                MessagesController.getInstance(currentAccount).processUpdates(tL_updates, false);
                             }
                         });
-                    } else if (VERSION.SDK_INT >= 24 && ApplicationLoader.mainInterfacePaused && UserConfig.isClientActivated() && bundle.get("badge") == null) {
+                    } else if (VERSION.SDK_INT >= 24 && ApplicationLoader.mainInterfacePaused && UserConfig.getInstance(currentAccount).isClientActivated() && bundle.get("badge") == null) {
                         obj = bundle.get("google.sent_time");
                         if (obj instanceof String) {
                             time = Utilities.parseLong((String) obj).longValue();
@@ -67,22 +90,22 @@ public class GcmPushListenerService extends GcmListenerService {
                         } else {
                             time = -1;
                         }
-                        if (time == -1 || UserConfig.lastAppPauseTime < time) {
+                        if (time == -1 || SharedConfig.lastAppPauseTime < time) {
                             ConnectivityManager connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");
                             NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
                             if (BuildVars.DEBUG_VERSION) {
                                 FileLog.d("try show notification in background with time " + time + " with nework info " + netInfo + " and status " + connectivityManager.getRestrictBackgroundStatus());
                             }
                             if (connectivityManager.getRestrictBackgroundStatus() == 3 && netInfo.getType() == 0) {
-                                NotificationsController.getInstance().showSingleBackgroundNotification();
+                                NotificationsController.getInstance(currentAccount).showSingleBackgroundNotification();
                             }
                         }
                     }
+                    ConnectionsManager.onInternalPushReceived(currentAccount);
+                    ConnectionsManager.getInstance(currentAccount).resumeNetworkMaybe();
                 } catch (Throwable e2) {
                     FileLog.e(e2);
                 }
-                ConnectionsManager.onInternalPushReceived();
-                ConnectionsManager.getInstance().resumeNetworkMaybe();
             }
         });
     }

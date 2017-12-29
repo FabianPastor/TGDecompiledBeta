@@ -84,7 +84,7 @@ public class DialogMeUrlCell extends BaseCell {
         TLObject image;
         int nameWidth;
         int avatarLeft;
-        String nameString = "";
+        String nameString = TtmlNode.ANONYMOUS_REGION_ID;
         TextPaint currentNamePaint = Theme.dialogs_namePaint;
         TextPaint currentMessagePaint = Theme.dialogs_messagePaint;
         this.drawNameGroup = false;
@@ -93,7 +93,7 @@ public class DialogMeUrlCell extends BaseCell {
         this.drawNameBot = false;
         this.drawVerified = false;
         if (this.recentMeUrl instanceof TL_recentMeUrlChat) {
-            Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(this.recentMeUrl.chat_id));
+            Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(this.recentMeUrl.chat_id));
             if (chat.id < 0 || (ChatObject.isChannel(chat) && !chat.megagroup)) {
                 this.drawNameBroadcast = true;
                 this.nameLockTop = AndroidUtilities.dp(16.5f);
@@ -117,7 +117,7 @@ public class DialogMeUrlCell extends BaseCell {
             }
             this.avatarDrawable.setInfo(chat);
         } else if (this.recentMeUrl instanceof TL_recentMeUrlUser) {
-            User user = MessagesController.getInstance().getUser(Integer.valueOf(this.recentMeUrl.user_id));
+            User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(this.recentMeUrl.user_id));
             if (LocaleController.isRTL) {
                 this.nameLeft = AndroidUtilities.dp(14.0f);
             } else {
@@ -212,7 +212,7 @@ public class DialogMeUrlCell extends BaseCell {
         } else {
             image = null;
         }
-        CharSequence messageString = MessagesController.getInstance().linkPrefix + "/" + this.recentMeUrl.url;
+        CharSequence messageString = MessagesController.getAccountInstance().linkPrefix + "/" + this.recentMeUrl.url;
         this.avatarImage.setImage(image, "50_50", this.avatarDrawable, null, 0);
         if (TextUtils.isEmpty(nameString)) {
             nameString = LocaleController.getString("HiddenName", R.string.HiddenName);
@@ -314,16 +314,16 @@ public class DialogMeUrlCell extends BaseCell {
             canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), Theme.dialogs_tabletSeletedPaint);
         }
         if (this.drawNameLock) {
-            setDrawableBounds(Theme.dialogs_lockDrawable, this.nameLockLeft, this.nameLockTop);
+            BaseCell.setDrawableBounds(Theme.dialogs_lockDrawable, this.nameLockLeft, this.nameLockTop);
             Theme.dialogs_lockDrawable.draw(canvas);
         } else if (this.drawNameGroup) {
-            setDrawableBounds(Theme.dialogs_groupDrawable, this.nameLockLeft, this.nameLockTop);
+            BaseCell.setDrawableBounds(Theme.dialogs_groupDrawable, this.nameLockLeft, this.nameLockTop);
             Theme.dialogs_groupDrawable.draw(canvas);
         } else if (this.drawNameBroadcast) {
-            setDrawableBounds(Theme.dialogs_broadcastDrawable, this.nameLockLeft, this.nameLockTop);
+            BaseCell.setDrawableBounds(Theme.dialogs_broadcastDrawable, this.nameLockLeft, this.nameLockTop);
             Theme.dialogs_broadcastDrawable.draw(canvas);
         } else if (this.drawNameBot) {
-            setDrawableBounds(Theme.dialogs_botDrawable, this.nameLockLeft, this.nameLockTop);
+            BaseCell.setDrawableBounds(Theme.dialogs_botDrawable, this.nameLockLeft, this.nameLockTop);
             Theme.dialogs_botDrawable.draw(canvas);
         }
         if (this.nameLayout != null) {
@@ -343,8 +343,8 @@ public class DialogMeUrlCell extends BaseCell {
             canvas.restore();
         }
         if (this.drawVerified) {
-            setDrawableBounds(Theme.dialogs_verifiedDrawable, this.nameMuteLeft, AndroidUtilities.dp(16.5f));
-            setDrawableBounds(Theme.dialogs_verifiedCheckDrawable, this.nameMuteLeft, AndroidUtilities.dp(16.5f));
+            BaseCell.setDrawableBounds(Theme.dialogs_verifiedDrawable, this.nameMuteLeft, AndroidUtilities.dp(16.5f));
+            BaseCell.setDrawableBounds(Theme.dialogs_verifiedCheckDrawable, this.nameMuteLeft, AndroidUtilities.dp(16.5f));
             Theme.dialogs_verifiedDrawable.draw(canvas);
             Theme.dialogs_verifiedCheckDrawable.draw(canvas);
         }

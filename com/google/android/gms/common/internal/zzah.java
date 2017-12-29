@@ -1,109 +1,53 @@
 package com.google.android.gms.common.internal;
 
 import android.content.ComponentName;
-import android.content.ServiceConnection;
-import android.os.IBinder;
-import com.google.android.gms.common.stats.zza;
-import java.util.HashSet;
-import java.util.Set;
-import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
+import android.content.Intent;
+import java.util.Arrays;
 
-final class zzah implements ServiceConnection {
-    private int mState = 2;
-    private ComponentName zzaHO;
-    private final Set<ServiceConnection> zzaHT = new HashSet();
-    private boolean zzaHU;
-    private final zzaf zzaHV;
-    private /* synthetic */ zzag zzaHW;
-    private IBinder zzaHj;
+public final class zzah {
+    private final ComponentName mComponentName = null;
+    private final String zzdrp;
+    private final String zzgak;
+    private final int zzgal;
 
-    public zzah(zzag com_google_android_gms_common_internal_zzag, zzaf com_google_android_gms_common_internal_zzaf) {
-        this.zzaHW = com_google_android_gms_common_internal_zzag;
-        this.zzaHV = com_google_android_gms_common_internal_zzaf;
+    public zzah(String str, String str2, int i) {
+        this.zzdrp = zzbq.zzgm(str);
+        this.zzgak = zzbq.zzgm(str2);
+        this.zzgal = i;
     }
 
-    public final IBinder getBinder() {
-        return this.zzaHj;
+    public final boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof zzah)) {
+            return false;
+        }
+        zzah com_google_android_gms_common_internal_zzah = (zzah) obj;
+        return zzbg.equal(this.zzdrp, com_google_android_gms_common_internal_zzah.zzdrp) && zzbg.equal(this.zzgak, com_google_android_gms_common_internal_zzah.zzgak) && zzbg.equal(this.mComponentName, com_google_android_gms_common_internal_zzah.mComponentName) && this.zzgal == com_google_android_gms_common_internal_zzah.zzgal;
     }
 
     public final ComponentName getComponentName() {
-        return this.zzaHO;
+        return this.mComponentName;
     }
 
-    public final int getState() {
-        return this.mState;
+    public final String getPackage() {
+        return this.zzgak;
     }
 
-    public final boolean isBound() {
-        return this.zzaHU;
+    public final int hashCode() {
+        return Arrays.hashCode(new Object[]{this.zzdrp, this.zzgak, this.mComponentName, Integer.valueOf(this.zzgal)});
     }
 
-    public final void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-        synchronized (this.zzaHW.zzaHP) {
-            this.zzaHW.mHandler.removeMessages(1, this.zzaHV);
-            this.zzaHj = iBinder;
-            this.zzaHO = componentName;
-            for (ServiceConnection onServiceConnected : this.zzaHT) {
-                onServiceConnected.onServiceConnected(componentName, iBinder);
-            }
-            this.mState = 1;
-        }
+    public final String toString() {
+        return this.zzdrp == null ? this.mComponentName.flattenToString() : this.zzdrp;
     }
 
-    public final void onServiceDisconnected(ComponentName componentName) {
-        synchronized (this.zzaHW.zzaHP) {
-            this.zzaHW.mHandler.removeMessages(1, this.zzaHV);
-            this.zzaHj = null;
-            this.zzaHO = componentName;
-            for (ServiceConnection onServiceDisconnected : this.zzaHT) {
-                onServiceDisconnected.onServiceDisconnected(componentName);
-            }
-            this.mState = 2;
-        }
+    public final int zzalk() {
+        return this.zzgal;
     }
 
-    public final void zza(ServiceConnection serviceConnection, String str) {
-        this.zzaHW.zzaHQ;
-        this.zzaHW.mApplicationContext;
-        this.zzaHV.zzrB();
-        this.zzaHT.add(serviceConnection);
-    }
-
-    public final boolean zza(ServiceConnection serviceConnection) {
-        return this.zzaHT.contains(serviceConnection);
-    }
-
-    public final void zzb(ServiceConnection serviceConnection, String str) {
-        this.zzaHW.zzaHQ;
-        this.zzaHW.mApplicationContext;
-        this.zzaHT.remove(serviceConnection);
-    }
-
-    public final void zzcB(String str) {
-        this.mState = 3;
-        this.zzaHW.zzaHQ;
-        this.zzaHU = zza.zza(this.zzaHW.mApplicationContext, str, this.zzaHV.zzrB(), this, TsExtractor.TS_STREAM_TYPE_AC3);
-        if (this.zzaHU) {
-            this.zzaHW.mHandler.sendMessageDelayed(this.zzaHW.mHandler.obtainMessage(1, this.zzaHV), this.zzaHW.zzaHS);
-            return;
-        }
-        this.mState = 2;
-        try {
-            this.zzaHW.zzaHQ;
-            this.zzaHW.mApplicationContext.unbindService(this);
-        } catch (IllegalArgumentException e) {
-        }
-    }
-
-    public final void zzcC(String str) {
-        this.zzaHW.mHandler.removeMessages(1, this.zzaHV);
-        this.zzaHW.zzaHQ;
-        this.zzaHW.mApplicationContext.unbindService(this);
-        this.zzaHU = false;
-        this.mState = 2;
-    }
-
-    public final boolean zzrC() {
-        return this.zzaHT.isEmpty();
+    public final Intent zzall() {
+        return this.zzdrp != null ? new Intent(this.zzdrp).setPackage(this.zzgak) : new Intent().setComponent(this.mComponentName);
     }
 }

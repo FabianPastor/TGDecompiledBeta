@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.text.webvtt;
 
-import android.support.annotation.NonNull;
 import android.text.Layout.Alignment;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -71,7 +70,7 @@ final class WebvttCueParser {
             String[] classes;
             int voiceStartIndex = fullTagExpression.indexOf(" ");
             if (voiceStartIndex == -1) {
-                voice = "";
+                voice = TtmlNode.ANONYMOUS_REGION_ID;
             } else {
                 voice = fullTagExpression.substring(voiceStartIndex).trim();
                 fullTagExpression = fullTagExpression.substring(0, voiceStartIndex);
@@ -87,7 +86,7 @@ final class WebvttCueParser {
         }
 
         public static StartTag buildWholeCueVirtualTag() {
-            return new StartTag("", 0, "", new String[0]);
+            return new StartTag(TtmlNode.ANONYMOUS_REGION_ID, 0, TtmlNode.ANONYMOUS_REGION_ID, new String[0]);
         }
     }
 
@@ -100,7 +99,7 @@ final class WebvttCueParser {
             this.style = style;
         }
 
-        public int compareTo(@NonNull StyleMatch another) {
+        public int compareTo(StyleMatch another) {
             return this.score - another.score;
         }
     }
@@ -481,7 +480,7 @@ final class WebvttCueParser {
         int i = -1;
         switch (str.hashCode()) {
             case 0:
-                if (str.equals("")) {
+                if (str.equals(TtmlNode.ANONYMOUS_REGION_ID)) {
                     i = 6;
                     break;
                 }

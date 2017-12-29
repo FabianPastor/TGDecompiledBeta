@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.extractor.mp4;
 
-import android.support.v4.view.ViewCompat;
 import com.coremedia.iso.boxes.ChunkOffset64BitBox;
 import com.coremedia.iso.boxes.CompositionTimeToSample;
 import com.coremedia.iso.boxes.EditBox;
@@ -43,24 +42,6 @@ import com.coremedia.iso.boxes.mdat.MediaDataBox;
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.coremedia.iso.boxes.sampleentry.TextSampleEntry;
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
-import com.googlecode.mp4parser.boxes.AC3SpecificBox;
-import com.googlecode.mp4parser.boxes.DTSSpecificBox;
-import com.googlecode.mp4parser.boxes.EC3SpecificBox;
-import com.googlecode.mp4parser.boxes.apple.PixelAspectRationAtom;
-import com.googlecode.mp4parser.boxes.dece.SampleEncryptionBox;
-import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
-import com.googlecode.mp4parser.boxes.mp4.samplegrouping.SampleGroupDescriptionBox;
-import com.googlecode.mp4parser.boxes.mp4.samplegrouping.SampleToGroupBox;
-import com.googlecode.mp4parser.boxes.threegpp26244.SegmentIndexBox;
-import com.mp4parser.iso14496.part12.SampleAuxiliaryInformationOffsetsBox;
-import com.mp4parser.iso14496.part12.SampleAuxiliaryInformationSizesBox;
-import com.mp4parser.iso14496.part15.AvcConfigurationBox;
-import com.mp4parser.iso14496.part15.HevcConfigurationBox;
-import com.mp4parser.iso14496.part30.WebVTTSampleEntry;
-import com.mp4parser.iso14496.part30.XMLSubtitleSampleEntry;
-import com.mp4parser.iso23001.part7.ProtectionSystemSpecificHeaderBox;
-import com.mp4parser.iso23001.part7.TrackEncryptionBox;
-import com.mp4parser.iso23009.part1.EventMessageBox;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -79,16 +60,16 @@ abstract class Atom {
     public static final int TYPE_alac = Util.getIntegerCodeForString("alac");
     public static final int TYPE_avc1 = Util.getIntegerCodeForString(VisualSampleEntry.TYPE3);
     public static final int TYPE_avc3 = Util.getIntegerCodeForString(VisualSampleEntry.TYPE4);
-    public static final int TYPE_avcC = Util.getIntegerCodeForString(AvcConfigurationBox.TYPE);
+    public static final int TYPE_avcC = Util.getIntegerCodeForString("avcC");
     public static final int TYPE_c608 = Util.getIntegerCodeForString("c608");
     public static final int TYPE_camm = Util.getIntegerCodeForString("camm");
     public static final int TYPE_co64 = Util.getIntegerCodeForString(ChunkOffset64BitBox.TYPE);
     public static final int TYPE_ctts = Util.getIntegerCodeForString(CompositionTimeToSample.TYPE);
     public static final int TYPE_d263 = Util.getIntegerCodeForString("d263");
-    public static final int TYPE_dac3 = Util.getIntegerCodeForString(AC3SpecificBox.TYPE);
+    public static final int TYPE_dac3 = Util.getIntegerCodeForString("dac3");
     public static final int TYPE_data = Util.getIntegerCodeForString("data");
-    public static final int TYPE_ddts = Util.getIntegerCodeForString(DTSSpecificBox.TYPE);
-    public static final int TYPE_dec3 = Util.getIntegerCodeForString(EC3SpecificBox.TYPE);
+    public static final int TYPE_ddts = Util.getIntegerCodeForString("ddts");
+    public static final int TYPE_dec3 = Util.getIntegerCodeForString("dec3");
     public static final int TYPE_dtsc = Util.getIntegerCodeForString("dtsc");
     public static final int TYPE_dtse = Util.getIntegerCodeForString(AudioSampleEntry.TYPE13);
     public static final int TYPE_dtsh = Util.getIntegerCodeForString(AudioSampleEntry.TYPE12);
@@ -96,16 +77,16 @@ abstract class Atom {
     public static final int TYPE_ec_3 = Util.getIntegerCodeForString(AudioSampleEntry.TYPE9);
     public static final int TYPE_edts = Util.getIntegerCodeForString(EditBox.TYPE);
     public static final int TYPE_elst = Util.getIntegerCodeForString(EditListBox.TYPE);
-    public static final int TYPE_emsg = Util.getIntegerCodeForString(EventMessageBox.TYPE);
+    public static final int TYPE_emsg = Util.getIntegerCodeForString("emsg");
     public static final int TYPE_enca = Util.getIntegerCodeForString(AudioSampleEntry.TYPE_ENCRYPTED);
     public static final int TYPE_encv = Util.getIntegerCodeForString(VisualSampleEntry.TYPE_ENCRYPTED);
-    public static final int TYPE_esds = Util.getIntegerCodeForString(ESDescriptorBox.TYPE);
+    public static final int TYPE_esds = Util.getIntegerCodeForString("esds");
     public static final int TYPE_frma = Util.getIntegerCodeForString(OriginalFormatBox.TYPE);
     public static final int TYPE_ftyp = Util.getIntegerCodeForString(FileTypeBox.TYPE);
     public static final int TYPE_hdlr = Util.getIntegerCodeForString(HandlerBox.TYPE);
     public static final int TYPE_hev1 = Util.getIntegerCodeForString(VisualSampleEntry.TYPE7);
     public static final int TYPE_hvc1 = Util.getIntegerCodeForString(VisualSampleEntry.TYPE6);
-    public static final int TYPE_hvcC = Util.getIntegerCodeForString(HevcConfigurationBox.TYPE);
+    public static final int TYPE_hvcC = Util.getIntegerCodeForString("hvcC");
     public static final int TYPE_ilst = Util.getIntegerCodeForString(AppleItemListBox.TYPE);
     public static final int TYPE_lpcm = Util.getIntegerCodeForString("lpcm");
     public static final int TYPE_mdat = Util.getIntegerCodeForString(MediaDataBox.TYPE);
@@ -122,26 +103,26 @@ abstract class Atom {
     public static final int TYPE_mvex = Util.getIntegerCodeForString(MovieExtendsBox.TYPE);
     public static final int TYPE_mvhd = Util.getIntegerCodeForString(MovieHeaderBox.TYPE);
     public static final int TYPE_name = Util.getIntegerCodeForString("name");
-    public static final int TYPE_pasp = Util.getIntegerCodeForString(PixelAspectRationAtom.TYPE);
+    public static final int TYPE_pasp = Util.getIntegerCodeForString("pasp");
     public static final int TYPE_proj = Util.getIntegerCodeForString("proj");
-    public static final int TYPE_pssh = Util.getIntegerCodeForString(ProtectionSystemSpecificHeaderBox.TYPE);
+    public static final int TYPE_pssh = Util.getIntegerCodeForString("pssh");
     public static final int TYPE_s263 = Util.getIntegerCodeForString(VisualSampleEntry.TYPE2);
-    public static final int TYPE_saio = Util.getIntegerCodeForString(SampleAuxiliaryInformationOffsetsBox.TYPE);
-    public static final int TYPE_saiz = Util.getIntegerCodeForString(SampleAuxiliaryInformationSizesBox.TYPE);
+    public static final int TYPE_saio = Util.getIntegerCodeForString("saio");
+    public static final int TYPE_saiz = Util.getIntegerCodeForString("saiz");
     public static final int TYPE_samr = Util.getIntegerCodeForString(AudioSampleEntry.TYPE1);
     public static final int TYPE_sawb = Util.getIntegerCodeForString(AudioSampleEntry.TYPE2);
-    public static final int TYPE_sbgp = Util.getIntegerCodeForString(SampleToGroupBox.TYPE);
+    public static final int TYPE_sbgp = Util.getIntegerCodeForString("sbgp");
     public static final int TYPE_schi = Util.getIntegerCodeForString(SchemeInformationBox.TYPE);
     public static final int TYPE_schm = Util.getIntegerCodeForString(SchemeTypeBox.TYPE);
-    public static final int TYPE_senc = Util.getIntegerCodeForString(SampleEncryptionBox.TYPE);
-    public static final int TYPE_sgpd = Util.getIntegerCodeForString(SampleGroupDescriptionBox.TYPE);
-    public static final int TYPE_sidx = Util.getIntegerCodeForString(SegmentIndexBox.TYPE);
+    public static final int TYPE_senc = Util.getIntegerCodeForString("senc");
+    public static final int TYPE_sgpd = Util.getIntegerCodeForString("sgpd");
+    public static final int TYPE_sidx = Util.getIntegerCodeForString("sidx");
     public static final int TYPE_sinf = Util.getIntegerCodeForString(ProtectionSchemeInformationBox.TYPE);
     public static final int TYPE_sowt = Util.getIntegerCodeForString("sowt");
     public static final int TYPE_st3d = Util.getIntegerCodeForString("st3d");
     public static final int TYPE_stbl = Util.getIntegerCodeForString(SampleTableBox.TYPE);
     public static final int TYPE_stco = Util.getIntegerCodeForString(StaticChunkOffsetBox.TYPE);
-    public static final int TYPE_stpp = Util.getIntegerCodeForString(XMLSubtitleSampleEntry.TYPE);
+    public static final int TYPE_stpp = Util.getIntegerCodeForString("stpp");
     public static final int TYPE_stsc = Util.getIntegerCodeForString(SampleToChunkBox.TYPE);
     public static final int TYPE_stsd = Util.getIntegerCodeForString(SampleDescriptionBox.TYPE);
     public static final int TYPE_stss = Util.getIntegerCodeForString(SyncSampleBox.TYPE);
@@ -149,7 +130,7 @@ abstract class Atom {
     public static final int TYPE_stts = Util.getIntegerCodeForString(TimeToSampleBox.TYPE);
     public static final int TYPE_stz2 = Util.getIntegerCodeForString("stz2");
     public static final int TYPE_sv3d = Util.getIntegerCodeForString("sv3d");
-    public static final int TYPE_tenc = Util.getIntegerCodeForString(TrackEncryptionBox.TYPE);
+    public static final int TYPE_tenc = Util.getIntegerCodeForString("tenc");
     public static final int TYPE_tfdt = Util.getIntegerCodeForString(TrackFragmentBaseMediaDecodeTimeBox.TYPE);
     public static final int TYPE_tfhd = Util.getIntegerCodeForString(TrackFragmentHeaderBox.TYPE);
     public static final int TYPE_tkhd = Util.getIntegerCodeForString(TrackHeaderBox.TYPE);
@@ -165,7 +146,7 @@ abstract class Atom {
     public static final int TYPE_vp09 = Util.getIntegerCodeForString("vp09");
     public static final int TYPE_vpcC = Util.getIntegerCodeForString("vpcC");
     public static final int TYPE_wave = Util.getIntegerCodeForString(AppleWaveBox.TYPE);
-    public static final int TYPE_wvtt = Util.getIntegerCodeForString(WebVTTSampleEntry.TYPE);
+    public static final int TYPE_wvtt = Util.getIntegerCodeForString("wvtt");
     public final int type;
 
     static final class ContainerAtom extends Atom {
@@ -253,10 +234,10 @@ abstract class Atom {
     }
 
     public static int parseFullAtomFlags(int fullAtomInt) {
-        return ViewCompat.MEASURED_SIZE_MASK & fullAtomInt;
+        return 16777215 & fullAtomInt;
     }
 
     public static String getAtomTypeString(int type) {
-        return "" + ((char) ((type >> 24) & 255)) + ((char) ((type >> 16) & 255)) + ((char) ((type >> 8) & 255)) + ((char) (type & 255));
+        return TtmlNode.ANONYMOUS_REGION_ID + ((char) ((type >> 24) & 255)) + ((char) ((type >> 16) & 255)) + ((char) ((type >> 8) & 255)) + ((char) (type & 255));
     }
 }

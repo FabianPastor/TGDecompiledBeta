@@ -10,7 +10,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.ui.Components.BackupImageView;
@@ -51,7 +50,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         this.checkBox.setCheckOffset(AndroidUtilities.dp(1.0f));
         this.checkBox.setDrawBackground(true);
         this.checkBox.setColor(-10043398, -1);
-        addView(this.checkBox, LayoutHelper.createFrame(zoom ? 30 : 26, zoom ? BitmapDescriptorFactory.HUE_ORANGE : 26.0f, 53, 0.0f, 4.0f, 4.0f, 0.0f));
+        addView(this.checkBox, LayoutHelper.createFrame(zoom ? 30 : 26, zoom ? 30.0f : 26.0f, 53, 0.0f, 4.0f, 4.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

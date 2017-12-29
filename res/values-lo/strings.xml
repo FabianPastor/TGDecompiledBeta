@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">ຕິດຕັ້ງ</string>
     <string name="common_google_play_services_install_text">%1$s ຈະບໍ່ສາມາດເປີດໃຊ້ໄດ້ຫາກບໍ່ມີການບໍລິການ Google Play ເຊິ່ງແທັບເລັດຂອງທ່ານບໍ່ມີ.</string>
     <string name="common_google_play_services_install_title">ຕິດຕັ້ງບໍລິການ Google Play</string>
+    <string name="common_google_play_services_notification_channel_name">ສະຖານະບໍລິການ Google Play</string>
     <string name="common_google_play_services_notification_ticker">Google Play Services ​ເກີດ​ຄວາມ​ຜິດ​ພາດ</string>
     <string name="common_google_play_services_unknown_issue">%1$s ກຳລັງມີບັນຫາກັບບໍລິການ Google Play. ກະລຸນາລອງໃໝ່ອີກຄັ້ງ.</string>
     <string name="common_google_play_services_unsupported_text">%1$s ຈະບໍ່ສາມາດໃຊ້ໄດ້ຫາກບໍ່ມີບໍລິການ Google Play ເຊິ່ງອຸປະກອນຂອງທ່ານບໍ່ຮອງຮັບ.</string>
@@ -17,5 +18,7 @@
     <string name="common_open_on_phone">​ເປີດ​ໃນ​ໂທ​ລະ​ສັບ</string>
     <string name="common_signin_button_text">ລົງຊື່ເຂົ້າໃຊ້</string>
     <string name="common_signin_button_text_long">ລົງຊື່ເຂົ້າໃຊ້ດ້ວຍ Google</string>
+    <string name="gcm_fallback_notification_channel_label">ອື່ນໆ</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">ຊື້ໂດຍໃຊ້ Google</string>
 </resources>

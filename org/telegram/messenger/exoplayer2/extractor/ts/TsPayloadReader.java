@@ -60,7 +60,7 @@ public interface TsPayloadReader {
         }
 
         public TrackIdGenerator(int programNumber, int firstTrackId, int trackIdIncrement) {
-            this.formatIdPrefix = programNumber != Integer.MIN_VALUE ? programNumber + "/" : "";
+            this.formatIdPrefix = programNumber != Integer.MIN_VALUE ? programNumber + "/" : TtmlNode.ANONYMOUS_REGION_ID;
             this.firstTrackId = firstTrackId;
             this.trackIdIncrement = trackIdIncrement;
             this.trackId = Integer.MIN_VALUE;

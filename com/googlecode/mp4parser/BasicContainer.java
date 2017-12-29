@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class BasicContainer implements Container, Iterator<Box>, Closeable {
+public class BasicContainer implements Container, Closeable, Iterator<Box> {
     private static final Box EOF = new AnonymousClass1("eof ");
     private static Logger LOG = Logger.getLogger(BasicContainer.class);
     protected BoxParser boxParser;

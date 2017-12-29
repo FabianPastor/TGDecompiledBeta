@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.source;
 
-import android.support.annotation.Nullable;
 import java.io.IOException;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
@@ -9,7 +8,7 @@ import org.telegram.messenger.exoplayer2.upstream.Allocator;
 public interface MediaSource {
 
     public interface Listener {
-        void onSourceInfoRefreshed(Timeline timeline, @Nullable Object obj);
+        void onSourceInfoRefreshed(Timeline timeline, Object obj);
     }
 
     public static final class MediaPeriodId {

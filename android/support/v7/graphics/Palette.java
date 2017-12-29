@@ -3,49 +3,34 @@ package android.support.v7.graphics;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.os.AsyncTask;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.graphics.ColorUtils;
-import android.support.v4.os.AsyncTaskCompat;
 import android.support.v4.util.ArrayMap;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.util.TimingLogger;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import org.telegram.ui.ActionBar.Theme;
 
 public final class Palette {
-    static final int DEFAULT_CALCULATE_NUMBER_COLORS = 16;
     static final Filter DEFAULT_FILTER = new Filter() {
-        private static final float BLACK_MAX_LIGHTNESS = 0.05f;
-        private static final float WHITE_MIN_LIGHTNESS = 0.95f;
-
         public boolean isAllowed(int rgb, float[] hsl) {
             return (isWhite(hsl) || isBlack(hsl) || isNearRedILine(hsl)) ? false : true;
         }
 
         private boolean isBlack(float[] hslColor) {
-            return hslColor[2] <= BLACK_MAX_LIGHTNESS;
+            return hslColor[2] <= 0.05f;
         }
 
         private boolean isWhite(float[] hslColor) {
-            return hslColor[2] >= WHITE_MIN_LIGHTNESS;
+            return hslColor[2] >= 0.95f;
         }
 
         private boolean isNearRedILine(float[] hslColor) {
             return hslColor[0] >= 10.0f && hslColor[0] <= 37.0f && hslColor[1] <= 0.82f;
         }
     };
-    static final int DEFAULT_RESIZE_BITMAP_AREA = 12544;
-    static final String LOG_TAG = "Palette";
-    static final boolean LOG_TIMINGS = false;
-    static final float MIN_CONTRAST_BODY_TEXT = 4.5f;
-    static final float MIN_CONTRAST_TITLE_TEXT = 3.0f;
     private final Swatch mDominantSwatch = findDominantSwatch();
     private final Map<Target, Swatch> mSelectedSwatches = new ArrayMap();
     private final List<Swatch> mSwatches;
@@ -57,7 +42,7 @@ public final class Palette {
         private final List<Filter> mFilters = new ArrayList();
         private int mMaxColors = 16;
         private Rect mRegion;
-        private int mResizeArea = Palette.DEFAULT_RESIZE_BITMAP_AREA;
+        private int mResizeArea = 12544;
         private int mResizeMaxDimension = -1;
         private final List<Swatch> mSwatches;
         private final List<Target> mTargets = new ArrayList();
@@ -77,87 +62,6 @@ public final class Palette {
             this.mTargets.add(Target.DARK_MUTED);
         }
 
-        public Builder(List<Swatch> swatches) {
-            if (swatches == null || swatches.isEmpty()) {
-                throw new IllegalArgumentException("List of Swatches is not valid");
-            }
-            this.mFilters.add(Palette.DEFAULT_FILTER);
-            this.mSwatches = swatches;
-            this.mBitmap = null;
-        }
-
-        @NonNull
-        public Builder maximumColorCount(int colors) {
-            this.mMaxColors = colors;
-            return this;
-        }
-
-        @Deprecated
-        @NonNull
-        public Builder resizeBitmapSize(int maxDimension) {
-            this.mResizeMaxDimension = maxDimension;
-            this.mResizeArea = -1;
-            return this;
-        }
-
-        @NonNull
-        public Builder resizeBitmapArea(int area) {
-            this.mResizeArea = area;
-            this.mResizeMaxDimension = -1;
-            return this;
-        }
-
-        @NonNull
-        public Builder clearFilters() {
-            this.mFilters.clear();
-            return this;
-        }
-
-        @NonNull
-        public Builder addFilter(Filter filter) {
-            if (filter != null) {
-                this.mFilters.add(filter);
-            }
-            return this;
-        }
-
-        @NonNull
-        public Builder setRegion(int left, int top, int right, int bottom) {
-            if (this.mBitmap != null) {
-                if (this.mRegion == null) {
-                    this.mRegion = new Rect();
-                }
-                this.mRegion.set(0, 0, this.mBitmap.getWidth(), this.mBitmap.getHeight());
-                if (!this.mRegion.intersect(left, top, right, bottom)) {
-                    throw new IllegalArgumentException("The given region must intersect with the Bitmap's dimensions.");
-                }
-            }
-            return this;
-        }
-
-        @NonNull
-        public Builder clearRegion() {
-            this.mRegion = null;
-            return this;
-        }
-
-        @NonNull
-        public Builder addTarget(@NonNull Target target) {
-            if (!this.mTargets.contains(target)) {
-                this.mTargets.add(target);
-            }
-            return this;
-        }
-
-        @NonNull
-        public Builder clearTargets() {
-            if (this.mTargets != null) {
-                this.mTargets.clear();
-            }
-            return this;
-        }
-
-        @NonNull
         public Palette generate() {
             List<Swatch> swatches;
             TimingLogger logger = null;
@@ -202,27 +106,6 @@ public final class Palette {
             return p;
         }
 
-        @NonNull
-        public AsyncTask<Bitmap, Void, Palette> generate(final PaletteAsyncListener listener) {
-            if (listener == null) {
-                throw new IllegalArgumentException("listener can not be null");
-            }
-            return AsyncTaskCompat.executeParallel(new AsyncTask<Bitmap, Void, Palette>() {
-                protected Palette doInBackground(Bitmap... params) {
-                    try {
-                        return Builder.this.generate();
-                    } catch (Exception e) {
-                        Log.e(Palette.LOG_TAG, "Exception thrown during async generate", e);
-                        return null;
-                    }
-                }
-
-                protected void onPostExecute(Palette colorExtractor) {
-                    listener.onGenerated(colorExtractor);
-                }
-            }, this.mBitmap);
-        }
-
         private int[] getPixelsFromBitmap(Bitmap bitmap) {
             int bitmapWidth = bitmap.getWidth();
             int bitmapHeight = bitmap.getHeight();
@@ -261,10 +144,6 @@ public final class Palette {
         boolean isAllowed(int i, float[] fArr);
     }
 
-    public interface PaletteAsyncListener {
-        void onGenerated(Palette palette);
-    }
-
     public static final class Swatch {
         private final int mBlue;
         private int mBodyTextColor;
@@ -276,7 +155,7 @@ public final class Palette {
         private final int mRgb;
         private int mTitleTextColor;
 
-        public Swatch(@ColorInt int color, int population) {
+        public Swatch(int color, int population) {
             this.mRed = Color.red(color);
             this.mGreen = Color.green(color);
             this.mBlue = Color.blue(color);
@@ -284,20 +163,6 @@ public final class Palette {
             this.mPopulation = population;
         }
 
-        Swatch(int red, int green, int blue, int population) {
-            this.mRed = red;
-            this.mGreen = green;
-            this.mBlue = blue;
-            this.mRgb = Color.rgb(red, green, blue);
-            this.mPopulation = population;
-        }
-
-        Swatch(float[] hsl, int population) {
-            this(ColorUtils.HSLToColor(hsl), population);
-            this.mHsl = hsl;
-        }
-
-        @ColorInt
         public int getRgb() {
             return this.mRgb;
         }
@@ -314,13 +179,11 @@ public final class Palette {
             return this.mPopulation;
         }
 
-        @ColorInt
         public int getTitleTextColor() {
             ensureTextColorsGenerated();
             return this.mTitleTextColor;
         }
 
-        @ColorInt
         public int getBodyTextColor() {
             ensureTextColorsGenerated();
             return this.mBodyTextColor;
@@ -328,30 +191,30 @@ public final class Palette {
 
         private void ensureTextColorsGenerated() {
             if (!this.mGeneratedTextColors) {
-                int lightBodyAlpha = ColorUtils.calculateMinimumAlpha(-1, this.mRgb, Palette.MIN_CONTRAST_BODY_TEXT);
-                int lightTitleAlpha = ColorUtils.calculateMinimumAlpha(-1, this.mRgb, Palette.MIN_CONTRAST_TITLE_TEXT);
+                int lightBodyAlpha = ColorUtils.calculateMinimumAlpha(-1, this.mRgb, 4.5f);
+                int lightTitleAlpha = ColorUtils.calculateMinimumAlpha(-1, this.mRgb, 3.0f);
                 if (lightBodyAlpha == -1 || lightTitleAlpha == -1) {
-                    int darkBodyAlpha = ColorUtils.calculateMinimumAlpha(-16777216, this.mRgb, Palette.MIN_CONTRAST_BODY_TEXT);
-                    int darkTitleAlpha = ColorUtils.calculateMinimumAlpha(-16777216, this.mRgb, Palette.MIN_CONTRAST_TITLE_TEXT);
-                    if (darkBodyAlpha == -1 || darkBodyAlpha == -1) {
+                    int darkBodyAlpha = ColorUtils.calculateMinimumAlpha(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, this.mRgb, 4.5f);
+                    int darkTitleAlpha = ColorUtils.calculateMinimumAlpha(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, this.mRgb, 3.0f);
+                    if (darkBodyAlpha == -1 || darkTitleAlpha == -1) {
                         int alphaComponent;
                         if (lightBodyAlpha != -1) {
                             alphaComponent = ColorUtils.setAlphaComponent(-1, lightBodyAlpha);
                         } else {
-                            alphaComponent = ColorUtils.setAlphaComponent(-16777216, darkBodyAlpha);
+                            alphaComponent = ColorUtils.setAlphaComponent(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, darkBodyAlpha);
                         }
                         this.mBodyTextColor = alphaComponent;
                         if (lightTitleAlpha != -1) {
                             alphaComponent = ColorUtils.setAlphaComponent(-1, lightTitleAlpha);
                         } else {
-                            alphaComponent = ColorUtils.setAlphaComponent(-16777216, darkTitleAlpha);
+                            alphaComponent = ColorUtils.setAlphaComponent(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, darkTitleAlpha);
                         }
                         this.mTitleTextColor = alphaComponent;
                         this.mGeneratedTextColors = true;
                         return;
                     }
-                    this.mBodyTextColor = ColorUtils.setAlphaComponent(-16777216, darkBodyAlpha);
-                    this.mTitleTextColor = ColorUtils.setAlphaComponent(-16777216, darkTitleAlpha);
+                    this.mBodyTextColor = ColorUtils.setAlphaComponent(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, darkBodyAlpha);
+                    this.mTitleTextColor = ColorUtils.setAlphaComponent(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, darkTitleAlpha);
                     this.mGeneratedTextColors = true;
                     return;
                 }
@@ -388,124 +251,22 @@ public final class Palette {
         return new Builder(bitmap);
     }
 
-    public static Palette from(List<Swatch> swatches) {
-        return new Builder((List) swatches).generate();
-    }
-
-    @Deprecated
-    public static Palette generate(Bitmap bitmap) {
-        return from(bitmap).generate();
-    }
-
-    @Deprecated
-    public static Palette generate(Bitmap bitmap, int numColors) {
-        return from(bitmap).maximumColorCount(numColors).generate();
-    }
-
-    @Deprecated
-    public static AsyncTask<Bitmap, Void, Palette> generateAsync(Bitmap bitmap, PaletteAsyncListener listener) {
-        return from(bitmap).generate(listener);
-    }
-
-    @Deprecated
-    public static AsyncTask<Bitmap, Void, Palette> generateAsync(Bitmap bitmap, int numColors, PaletteAsyncListener listener) {
-        return from(bitmap).maximumColorCount(numColors).generate(listener);
-    }
-
     Palette(List<Swatch> swatches, List<Target> targets) {
         this.mSwatches = swatches;
         this.mTargets = targets;
     }
 
-    @NonNull
-    public List<Swatch> getSwatches() {
-        return Collections.unmodifiableList(this.mSwatches);
-    }
-
-    @NonNull
-    public List<Target> getTargets() {
-        return Collections.unmodifiableList(this.mTargets);
-    }
-
-    @Nullable
-    public Swatch getVibrantSwatch() {
-        return getSwatchForTarget(Target.VIBRANT);
-    }
-
-    @Nullable
-    public Swatch getLightVibrantSwatch() {
-        return getSwatchForTarget(Target.LIGHT_VIBRANT);
-    }
-
-    @Nullable
-    public Swatch getDarkVibrantSwatch() {
-        return getSwatchForTarget(Target.DARK_VIBRANT);
-    }
-
-    @Nullable
-    public Swatch getMutedSwatch() {
-        return getSwatchForTarget(Target.MUTED);
-    }
-
-    @Nullable
-    public Swatch getLightMutedSwatch() {
-        return getSwatchForTarget(Target.LIGHT_MUTED);
-    }
-
-    @Nullable
-    public Swatch getDarkMutedSwatch() {
-        return getSwatchForTarget(Target.DARK_MUTED);
-    }
-
-    @ColorInt
-    public int getVibrantColor(@ColorInt int defaultColor) {
-        return getColorForTarget(Target.VIBRANT, defaultColor);
-    }
-
-    @ColorInt
-    public int getLightVibrantColor(@ColorInt int defaultColor) {
-        return getColorForTarget(Target.LIGHT_VIBRANT, defaultColor);
-    }
-
-    @ColorInt
-    public int getDarkVibrantColor(@ColorInt int defaultColor) {
-        return getColorForTarget(Target.DARK_VIBRANT, defaultColor);
-    }
-
-    @ColorInt
-    public int getMutedColor(@ColorInt int defaultColor) {
-        return getColorForTarget(Target.MUTED, defaultColor);
-    }
-
-    @ColorInt
-    public int getLightMutedColor(@ColorInt int defaultColor) {
-        return getColorForTarget(Target.LIGHT_MUTED, defaultColor);
-    }
-
-    @ColorInt
-    public int getDarkMutedColor(@ColorInt int defaultColor) {
+    public int getDarkMutedColor(int defaultColor) {
         return getColorForTarget(Target.DARK_MUTED, defaultColor);
     }
 
-    @Nullable
-    public Swatch getSwatchForTarget(@NonNull Target target) {
+    public Swatch getSwatchForTarget(Target target) {
         return (Swatch) this.mSelectedSwatches.get(target);
     }
 
-    @ColorInt
-    public int getColorForTarget(@NonNull Target target, @ColorInt int defaultColor) {
+    public int getColorForTarget(Target target, int defaultColor) {
         Swatch swatch = getSwatchForTarget(target);
         return swatch != null ? swatch.getRgb() : defaultColor;
-    }
-
-    @Nullable
-    public Swatch getDominantSwatch() {
-        return this.mDominantSwatch;
-    }
-
-    @ColorInt
-    public int getDominantColor(@ColorInt int defaultColor) {
-        return this.mDominantSwatch != null ? this.mDominantSwatch.getRgb() : defaultColor;
     }
 
     void generate() {
@@ -586,11 +347,5 @@ public final class Palette {
             }
         }
         return maxSwatch;
-    }
-
-    private static float[] copyHslValues(Swatch color) {
-        float[] newHsl = new float[3];
-        System.arraycopy(color.getHsl(), 0, newHsl, 0, 3);
-        return newHsl;
     }
 }

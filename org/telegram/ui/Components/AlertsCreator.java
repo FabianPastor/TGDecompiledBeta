@@ -12,9 +12,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.wallet.WalletConstants;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -22,9 +20,11 @@ import org.telegram.messenger.MessagesStorage.IntCallback;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SecretChatHelper;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -85,9 +85,9 @@ public class AlertsCreator {
 
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static Dialog processError(TL_error error, BaseFragment fragment, TLObject request, Object... args) {
+    public static Dialog processError(int currentAccount, TL_error error, BaseFragment fragment, TLObject request, Object... args) {
         boolean z = false;
-        if (error.code == WalletConstants.ERROR_CODE_SPENDING_LIMIT_EXCEEDED || error.text == null) {
+        if (error.code == 406 || error.text == null) {
             return null;
         }
         if (!(request instanceof TL_channels_joinChannel) && !(request instanceof TL_channels_editAdmin) && !(request instanceof TL_channels_inviteToChannel) && !(request instanceof TL_messages_addChatUser) && !(request instanceof TL_messages_startBot) && !(request instanceof TL_channels_editBanned)) {
@@ -234,7 +234,7 @@ public class AlertsCreator {
                                             showSimpleAlert(fragment, LocaleController.getString("CodeExpired", R.string.CodeExpired));
                                         } else if (error.text.startsWith("FLOOD_WAIT")) {
                                             showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
-                                        } else if (error.code != -1000) {
+                                        } else if (error.code != C.PRIORITY_DOWNLOAD) {
                                             showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
                                         }
                                     } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
@@ -257,7 +257,7 @@ public class AlertsCreator {
                                 showSimpleAlert(fragment, LocaleController.getString("JoinToGroupErrorNotExist", R.string.JoinToGroupErrorNotExist));
                             }
                         } else if (error.text.equals("PEER_FLOOD")) {
-                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(0));
+                            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(0));
                         }
                     } else if (!error.text.equals("MESSAGE_NOT_MODIFIED")) {
                         showSimpleAlert(fragment, LocaleController.getString("EditMessageError", R.string.EditMessageError));
@@ -273,7 +273,7 @@ public class AlertsCreator {
         } else if (fragment != null) {
             showAddUserAlert(error.text, fragment, ((Boolean) args[0]).booleanValue());
         } else if (error.text.equals("PEER_FLOOD")) {
-            NotificationCenter.getInstance().postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(1));
+            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(1));
         }
         return null;
     }
@@ -314,7 +314,7 @@ public class AlertsCreator {
         builder.setItems(items, new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 long flags;
-                int untilTime = ConnectionsManager.getInstance().getCurrentTime();
+                int untilTime = ConnectionsManager.getAccountInstance().getCurrentTime();
                 if (i == 0) {
                     untilTime += 3600;
                 } else if (i == 1) {
@@ -324,7 +324,7 @@ public class AlertsCreator {
                 } else if (i == 3) {
                     untilTime = ConnectionsManager.DEFAULT_DATACENTER_ID;
                 }
-                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
                 if (i == 3) {
                     editor.putInt("notify2_" + dialog_id, 2);
                     flags = 1;
@@ -333,15 +333,15 @@ public class AlertsCreator {
                     editor.putInt("notifyuntil_" + dialog_id, untilTime);
                     flags = (((long) untilTime) << 32) | 1;
                 }
-                NotificationsController.getInstance().removeNotificationsForDialog(dialog_id);
-                MessagesStorage.getInstance().setDialogFlags(dialog_id, flags);
+                NotificationsController.getInstance(UserConfig.selectedAccount).removeNotificationsForDialog(dialog_id);
+                MessagesStorage.getAccountInstance().setDialogFlags(dialog_id, flags);
                 editor.commit();
-                TL_dialog dialog = (TL_dialog) MessagesController.getInstance().dialogs_dict.get(Long.valueOf(dialog_id));
+                TL_dialog dialog = (TL_dialog) MessagesController.getAccountInstance().dialogs_dict.get(Long.valueOf(dialog_id));
                 if (dialog != null) {
                     dialog.notify_settings = new TL_peerNotifySettings();
                     dialog.notify_settings.mute_until = untilTime;
                 }
-                NotificationsController.updateServerNotificationsSettings(dialog_id);
+                NotificationsController.getInstance(UserConfig.selectedAccount).updateServerNotificationsSettings(dialog_id);
             }
         });
         return builder.create();
@@ -362,7 +362,7 @@ public class AlertsCreator {
                     return;
                 }
                 TL_account_reportPeer req = new TL_account_reportPeer();
-                req.peer = MessagesController.getInputPeer((int) dialog_id);
+                req.peer = MessagesController.getAccountInstance().getInputPeer((int) dialog_id);
                 if (i == 0) {
                     req.reason = new TL_inputReportReasonSpam();
                 } else if (i == 1) {
@@ -370,7 +370,7 @@ public class AlertsCreator {
                 } else if (i == 2) {
                     req.reason = new TL_inputReportReasonPornography();
                 }
-                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                ConnectionsManager.getAccountInstance().sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, TL_error error) {
                     }
                 });
@@ -529,7 +529,7 @@ public class AlertsCreator {
                     builder.setMessage(LocaleController.getString("NobodyLikesSpam2", R.string.NobodyLikesSpam2));
                     builder.setNegativeButton(LocaleController.getString("MoreInfo", R.string.MoreInfo), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            MessagesController.openByUserName("spambot", fragment, 1);
+                            MessagesController.getInstance(fragment.getCurrentAccount()).openByUserName("spambot", fragment, 1);
                         }
                     });
                     break;
@@ -613,7 +613,7 @@ public class AlertsCreator {
 
     public static Dialog createColorSelectDialog(Activity parentActivity, long dialog_id, boolean globalGroup, boolean globalAll, Runnable onSelect) {
         int currentColor;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
         if (globalGroup) {
             currentColor = preferences.getInt("GroupLed", -16776961);
         } else if (globalAll) {
@@ -665,7 +665,7 @@ public class AlertsCreator {
         final Runnable runnable = onSelect;
         builder.setPositiveButton(LocaleController.getString("Set", R.string.Set), new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int which) {
-                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
                 if (z) {
                     editor.putInt("MessagesLed", selectedColor[0]);
                 } else if (z2) {
@@ -685,7 +685,7 @@ public class AlertsCreator {
         final Runnable runnable2 = onSelect;
         builder.setNeutralButton(LocaleController.getString("LedDisabled", R.string.LedDisabled), new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
                 if (z3) {
                     editor.putInt("MessagesLed", 0);
                 } else if (z4) {
@@ -704,7 +704,7 @@ public class AlertsCreator {
             final Runnable runnable3 = onSelect;
             builder.setNegativeButton(LocaleController.getString("Default", R.string.Default), new OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                    Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
                     editor.remove("color_" + j3);
                     editor.commit();
                     if (runnable3 != null) {
@@ -728,7 +728,7 @@ public class AlertsCreator {
 
     public static Dialog createVibrationSelectDialog(Activity parentActivity, BaseFragment parentFragment, long dialog_id, String prefKeyPrefix, Runnable onSelect) {
         String[] descriptions;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
         final int[] selected = new int[1];
         if (dialog_id != 0) {
             selected[0] = preferences.getInt(prefKeyPrefix + dialog_id, 0);
@@ -766,7 +766,7 @@ public class AlertsCreator {
             cell.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     selected[0] = ((Integer) v.getTag()).intValue();
-                    Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                    Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
                     if (j != 0) {
                         if (selected[0] == 0) {
                             editor.putInt(str + j, 0);
@@ -873,7 +873,7 @@ public class AlertsCreator {
 
     public static Dialog createFreeSpaceDialog(LaunchActivity parentActivity) {
         final int[] selected = new int[1];
-        int keepMedia = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("keep_media", 2);
+        int keepMedia = MessagesController.getGlobalMainSettings().getInt("keep_media", 2);
         if (keepMedia == 2) {
             selected[0] = 3;
         } else if (keepMedia == 0) {
@@ -937,7 +937,7 @@ public class AlertsCreator {
         builder.setView(linearLayout);
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putInt("keep_media", selected[0]).commit();
+                MessagesController.getGlobalMainSettings().edit().putInt("keep_media", selected[0]).commit();
             }
         });
         final LaunchActivity launchActivity = parentActivity;
@@ -951,7 +951,7 @@ public class AlertsCreator {
 
     public static Dialog createPrioritySelectDialog(Activity parentActivity, BaseFragment parentFragment, long dialog_id, boolean globalGroup, boolean globalAll, Runnable onSelect) {
         String[] descriptions;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
         final int[] selected = new int[1];
         if (dialog_id != 0) {
             selected[0] = preferences.getInt("priority_" + dialog_id, 3);
@@ -986,7 +986,7 @@ public class AlertsCreator {
             cell.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     selected[0] = ((Integer) v.getTag()).intValue();
-                    Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                    Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
                     if (j != 0) {
                         if (selected[0] == 0) {
                             selected[0] = 3;
@@ -1017,7 +1017,7 @@ public class AlertsCreator {
     }
 
     public static Dialog createPopupSelectDialog(Activity parentActivity, final BaseFragment parentFragment, final boolean globalGroup, boolean globalAll, final Runnable onSelect) {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
         final int[] selected = new int[1];
         if (globalAll) {
             selected[0] = preferences.getInt("popupAll", 0);
@@ -1038,7 +1038,7 @@ public class AlertsCreator {
             cell.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     selected[0] = ((Integer) v.getTag()).intValue();
-                    Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                    Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
                     editor.putInt(globalGroup ? "popupGroup" : "popupAll", selected[0]);
                     editor.commit();
                     if (parentFragment != null) {
@@ -1136,7 +1136,7 @@ public class AlertsCreator {
                 if (value == 20) {
                     return LocaleController.formatTTLString(604800);
                 }
-                return "";
+                return TtmlNode.ANONYMOUS_REGION_ID;
             }
         });
         builder.setView(numberPicker);
@@ -1158,8 +1158,8 @@ public class AlertsCreator {
                     encryptedChat.ttl = 604800;
                 }
                 if (oldValue != encryptedChat.ttl) {
-                    SecretChatHelper.getInstance().sendTTLMessage(encryptedChat, null);
-                    MessagesStorage.getInstance().updateEncryptedChatTTL(encryptedChat);
+                    SecretChatHelper.getInstance(UserConfig.selectedAccount).sendTTLMessage(encryptedChat, null);
+                    MessagesStorage.getAccountInstance().updateEncryptedChatTTL(encryptedChat);
                 }
             }
         });

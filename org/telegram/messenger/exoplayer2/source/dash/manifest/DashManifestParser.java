@@ -5,9 +5,6 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
-import com.google.firebase.analytics.FirebaseAnalytics.Param;
-import com.mp4parser.iso14496.part30.WebVTTSampleEntry;
-import com.mp4parser.iso14496.part30.XMLSubtitleSampleEntry;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -15,7 +12,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.aspectj.lang.JoinPoint;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
@@ -226,7 +222,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
     }
 
     protected UtcTimingElement parseUtcTiming(XmlPullParser xpp) {
-        return buildUtcTimingElement(xpp.getAttributeValue(null, "schemeIdUri"), xpp.getAttributeValue(null, Param.VALUE));
+        return buildUtcTimingElement(xpp.getAttributeValue(null, "schemeIdUri"), xpp.getAttributeValue(null, "value"));
     }
 
     protected UtcTimingElement buildUtcTimingElement(String schemeIdUri, String value) {
@@ -369,7 +365,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
         if (MimeTypes.BASE_TYPE_VIDEO.equals(contentType)) {
             return 2;
         }
-        if ("text".equals(contentType)) {
+        if (MimeTypes.BASE_TYPE_TEXT.equals(contentType)) {
             return 3;
         }
         return -1;
@@ -394,7 +390,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
 
     protected SchemeData parseContentProtection(XmlPullParser xpp) throws XmlPullParserException, IOException {
         boolean isPlayReady = "urn:uuid:9a04f079-9840-4286-ab92-e65be0885f95".equals(xpp.getAttributeValue(null, "schemeIdUri"));
-        String schemeType = xpp.getAttributeValue(null, Param.VALUE);
+        String schemeType = xpp.getAttributeValue(null, "value");
         byte[] data = null;
         UUID uuid = null;
         boolean requiresSecureDecoder = false;
@@ -423,7 +419,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
 
     protected int parseRole(XmlPullParser xpp) throws XmlPullParserException, IOException {
         String schemeIdUri = parseString(xpp, "schemeIdUri", null);
-        String value = parseString(xpp, Param.VALUE, null);
+        String value = parseString(xpp, "value", null);
         do {
             xpp.next();
         } while (!XmlPullParserUtil.isEndTag(xpp, "Role"));
@@ -597,7 +593,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
         long duration = parseLong(xpp, "duration", parent != null ? parent.duration : C.TIME_UNSET);
         int startNumber = parseInt(xpp, "startNumber", parent != null ? parent.startNumber : 1);
         UrlTemplate mediaTemplate = parseUrlTemplate(xpp, "media", parent != null ? parent.mediaTemplate : null);
-        UrlTemplate initializationTemplate = parseUrlTemplate(xpp, JoinPoint.INITIALIZATION, parent != null ? parent.initializationTemplate : null);
+        UrlTemplate initializationTemplate = parseUrlTemplate(xpp, "initialization", parent != null ? parent.initializationTemplate : null);
         RangedUri initialization = null;
         List<SegmentTimelineElement> timeline = null;
         do {
@@ -685,7 +681,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
     protected int parseAudioChannelConfiguration(XmlPullParser xpp) throws XmlPullParserException, IOException {
         int audioChannels = -1;
         if ("urn:mpeg:dash:23003:3:audio_channel_configuration:2011".equals(parseString(xpp, "schemeIdUri", null))) {
-            audioChannels = parseInt(xpp, Param.VALUE, -1);
+            audioChannels = parseInt(xpp, "value", -1);
         }
         do {
             xpp.next();
@@ -704,10 +700,10 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
             return containerMimeType;
         }
         if (MimeTypes.APPLICATION_MP4.equals(containerMimeType)) {
-            if (XMLSubtitleSampleEntry.TYPE.equals(codecs)) {
+            if ("stpp".equals(codecs)) {
                 return MimeTypes.APPLICATION_TTML;
             }
-            if (WebVTTSampleEntry.TYPE.equals(codecs)) {
+            if ("wvtt".equals(codecs)) {
                 return MimeTypes.APPLICATION_MP4VTT;
             }
         } else if (MimeTypes.APPLICATION_RAWCC.equals(containerMimeType)) {
@@ -751,8 +747,8 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
     }
 
     protected static Descriptor parseDescriptor(XmlPullParser xpp, String tag) throws XmlPullParserException, IOException {
-        String schemeIdUri = parseString(xpp, "schemeIdUri", "");
-        String value = parseString(xpp, Param.VALUE, null);
+        String schemeIdUri = parseString(xpp, "schemeIdUri", TtmlNode.ANONYMOUS_REGION_ID);
+        String value = parseString(xpp, "value", null);
         String id = parseString(xpp, TtmlNode.ATTR_ID, null);
         do {
             xpp.next();

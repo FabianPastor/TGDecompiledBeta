@@ -2,33 +2,44 @@ package com.google.android.gms.wallet.wobs;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.internal.zzbfn;
 
-public final class zzn implements Creator<zzm> {
+public final class zzn implements Creator<WalletObjectMessage> {
     public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        long j = 0;
-        int zzd = zzb.zzd(parcel);
-        long j2 = 0;
+        UriData uriData = null;
+        int zzd = zzbfn.zzd(parcel);
+        UriData uriData2 = null;
+        TimeInterval timeInterval = null;
+        String str = null;
+        String str2 = null;
         while (parcel.dataPosition() < zzd) {
             int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
+            switch (65535 & readInt) {
                 case 2:
-                    j2 = zzb.zzi(parcel, readInt);
+                    str2 = zzbfn.zzq(parcel, readInt);
                     break;
                 case 3:
-                    j = zzb.zzi(parcel, readInt);
+                    str = zzbfn.zzq(parcel, readInt);
+                    break;
+                case 4:
+                    timeInterval = (TimeInterval) zzbfn.zza(parcel, readInt, TimeInterval.CREATOR);
+                    break;
+                case 5:
+                    uriData2 = (UriData) zzbfn.zza(parcel, readInt, UriData.CREATOR);
+                    break;
+                case 6:
+                    uriData = (UriData) zzbfn.zza(parcel, readInt, UriData.CREATOR);
                     break;
                 default:
-                    zzb.zzb(parcel, readInt);
+                    zzbfn.zzb(parcel, readInt);
                     break;
             }
         }
-        zzb.zzF(parcel, zzd);
-        return new zzm(j2, j);
+        zzbfn.zzaf(parcel, zzd);
+        return new WalletObjectMessage(str2, str, timeInterval, uriData2, uriData);
     }
 
     public final /* synthetic */ Object[] newArray(int i) {
-        return new zzm[i];
+        return new WalletObjectMessage[i];
     }
 }

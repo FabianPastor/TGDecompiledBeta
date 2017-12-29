@@ -55,7 +55,7 @@ import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 public class ChatUsersActivity extends BaseFragment implements NotificationCenterDelegate {
     private static final int search_button = 0;
     private int chatId = this.arguments.getInt("chat_id");
-    private Chat currentChat = MessagesController.getInstance().getChat(Integer.valueOf(this.chatId));
+    private Chat currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId));
     private EmptyTextProgressView emptyView;
     private boolean firstLoaded;
     private ChatFull info;
@@ -116,7 +116,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 case 0:
                     ManageChatUserCell userCell = holder.itemView;
                     userCell.setTag(Integer.valueOf(position));
-                    User user = MessagesController.getInstance().getUser(Integer.valueOf(getItem(position).user_id));
+                    User user = MessagesController.getInstance(ChatUsersActivity.this.currentAccount).getUser(Integer.valueOf(getItem(position).user_id));
                     if (user != null) {
                         userCell.setData(user, null, null);
                         return;
@@ -125,7 +125,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 case 1:
                     TextInfoPrivacyCell privacyCell = holder.itemView;
                     if (position == ChatUsersActivity.this.participantsInfoRow) {
-                        privacyCell.setText("");
+                        privacyCell.setText(TtmlNode.ANONYMOUS_REGION_ID);
                         return;
                     }
                     return;
@@ -218,7 +218,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                             ArrayList<CharSequence> resultArrayNames = new ArrayList();
                             for (int a = 0; a < contactsCopy.size(); a++) {
                                 ChatParticipant participant = (ChatParticipant) contactsCopy.get(a);
-                                User user = MessagesController.getInstance().getUser(Integer.valueOf(participant.user_id));
+                                User user = MessagesController.getInstance(ChatUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.user_id));
                                 String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
                                 String tName = LocaleController.getInstance().getTranslitString(name);
                                 if (name.equals(tName)) {
@@ -303,7 +303,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             if (object instanceof User) {
                 user = (User) object;
             } else {
-                user = MessagesController.getInstance().getUser(Integer.valueOf(((ChatParticipant) object).user_id));
+                user = MessagesController.getInstance(ChatUsersActivity.this.currentAccount).getUser(Integer.valueOf(((ChatParticipant) object).user_id));
             }
             String un = user.username;
             CharSequence name = (CharSequence) this.searchResultNames.get(position);
@@ -333,7 +333,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     private void updateRows() {
-        this.currentChat = MessagesController.getInstance().getChat(Integer.valueOf(this.chatId));
+        this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId));
         if (this.currentChat != null) {
             this.participantsStartRow = -1;
             this.participantsEndRow = -1;
@@ -357,7 +357,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoaded);
         fetchUsers();
         return true;
     }
@@ -376,7 +376,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoaded);
     }
 
     public View createView(Context context) {
@@ -503,7 +503,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (participant == null) {
             return false;
         }
-        int currentUserId = UserConfig.getClientUserId();
+        int currentUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
         if (participant.user_id == currentUserId) {
             return false;
         }
@@ -527,7 +527,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         builder.setItems((CharSequence[]) items.toArray(new CharSequence[actions.size()]), new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (((Integer) actions.get(i)).intValue() == 0) {
-                    MessagesController.getInstance().deleteUserFromChat(ChatUsersActivity.this.chatId, MessagesController.getInstance().getUser(Integer.valueOf(participant.user_id)), ChatUsersActivity.this.info);
+                    MessagesController.getInstance(ChatUsersActivity.this.currentAccount).deleteUserFromChat(ChatUsersActivity.this.chatId, MessagesController.getInstance(ChatUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.user_id)), ChatUsersActivity.this.info);
                 }
             }
         });
@@ -535,7 +535,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         return true;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.chatInfoDidLoaded) {
             ChatFull chatFull = args[0];
             boolean byChannelUsers = ((Boolean) args[2]).booleanValue();

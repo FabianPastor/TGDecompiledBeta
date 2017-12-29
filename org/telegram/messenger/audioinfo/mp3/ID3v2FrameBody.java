@@ -84,7 +84,7 @@ public class ID3v2FrameBody {
             }
             return string.substring(1);
         } catch (Exception e) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
     }
 

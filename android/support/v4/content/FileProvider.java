@@ -13,7 +13,6 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
-import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,17 +21,8 @@ import java.util.Map.Entry;
 import org.xmlpull.v1.XmlPullParserException;
 
 public class FileProvider extends ContentProvider {
-    private static final String ATTR_NAME = "name";
-    private static final String ATTR_PATH = "path";
     private static final String[] COLUMNS = new String[]{"_display_name", "_size"};
     private static final File DEVICE_ROOT = new File("/");
-    private static final String META_DATA_FILE_PROVIDER_PATHS = "android.support.FILE_PROVIDER_PATHS";
-    private static final String TAG_CACHE_PATH = "cache-path";
-    private static final String TAG_EXTERNAL = "external-path";
-    private static final String TAG_EXTERNAL_CACHE = "external-cache-path";
-    private static final String TAG_EXTERNAL_FILES = "external-files-path";
-    private static final String TAG_FILES_PATH = "files-path";
-    private static final String TAG_ROOT_PATH = "root-path";
     private static HashMap<String, PathStrategy> sCache = new HashMap();
     private PathStrategy mStrategy;
 
@@ -81,7 +71,7 @@ public class FileProvider extends ContentProvider {
                 } else {
                     path = path.substring(rootPath.length() + 1);
                 }
-                return new Builder().scheme(Param.CONTENT).authority(this.mAuthority).encodedPath(Uri.encode((String) mostSpecific.getKey()) + '/' + Uri.encode(path, "/")).build();
+                return new Builder().scheme("content").authority(this.mAuthority).encodedPath(Uri.encode((String) mostSpecific.getKey()) + '/' + Uri.encode(path, "/")).build();
             } catch (IOException e) {
                 throw new IllegalArgumentException("Failed to resolve canonical path for " + file);
             }
@@ -210,7 +200,7 @@ public class FileProvider extends ContentProvider {
 
     private static PathStrategy parsePathStrategy(Context context, String authority) throws IOException, XmlPullParserException {
         SimplePathStrategy strat = new SimplePathStrategy(authority);
-        XmlResourceParser in = context.getPackageManager().resolveContentProvider(authority, 128).loadXmlMetaData(context.getPackageManager(), META_DATA_FILE_PROVIDER_PATHS);
+        XmlResourceParser in = context.getPackageManager().resolveContentProvider(authority, 128).loadXmlMetaData(context.getPackageManager(), "android.support.FILE_PROVIDER_PATHS");
         if (in == null) {
             throw new IllegalArgumentException("Missing android.support.FILE_PROVIDER_PATHS meta-data");
         }
@@ -221,23 +211,23 @@ public class FileProvider extends ContentProvider {
             }
             if (type == 2) {
                 String tag = in.getName();
-                String name = in.getAttributeValue(null, ATTR_NAME);
-                String path = in.getAttributeValue(null, ATTR_PATH);
+                String name = in.getAttributeValue(null, "name");
+                String path = in.getAttributeValue(null, "path");
                 File target = null;
-                if (TAG_ROOT_PATH.equals(tag)) {
+                if ("root-path".equals(tag)) {
                     target = DEVICE_ROOT;
-                } else if (TAG_FILES_PATH.equals(tag)) {
+                } else if ("files-path".equals(tag)) {
                     target = context.getFilesDir();
-                } else if (TAG_CACHE_PATH.equals(tag)) {
+                } else if ("cache-path".equals(tag)) {
                     target = context.getCacheDir();
-                } else if (TAG_EXTERNAL.equals(tag)) {
+                } else if ("external-path".equals(tag)) {
                     target = Environment.getExternalStorageDirectory();
-                } else if (TAG_EXTERNAL_FILES.equals(tag)) {
+                } else if ("external-files-path".equals(tag)) {
                     File[] externalFilesDirs = ContextCompat.getExternalFilesDirs(context, null);
                     if (externalFilesDirs.length > 0) {
                         target = externalFilesDirs[0];
                     }
-                } else if (TAG_EXTERNAL_CACHE.equals(tag)) {
+                } else if ("external-cache-path".equals(tag)) {
                     File[] externalCacheDirs = ContextCompat.getExternalCacheDirs(context);
                     if (externalCacheDirs.length > 0) {
                         target = externalCacheDirs[0];

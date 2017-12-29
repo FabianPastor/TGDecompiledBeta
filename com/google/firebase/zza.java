@@ -1,12 +1,12 @@
 package com.google.firebase;
 
-import com.google.android.gms.internal.zzbax;
+import com.google.android.gms.common.api.internal.zzl;
 
-final class zza implements zzbax {
+final class zza implements zzl {
     zza() {
     }
 
-    public final void zzac(boolean z) {
-        FirebaseApp.zzac(z);
+    public final void zzbf(boolean z) {
+        FirebaseApp.zzbf(z);
     }
 }

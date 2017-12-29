@@ -8,11 +8,11 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
@@ -78,7 +78,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                 cell.setTag(Integer.valueOf(position));
                 StickerSetCovered stickerSet = (StickerSetCovered) ArchivedStickersActivity.this.sets.get(position);
                 cell.setStickersSet(stickerSet, position != ArchivedStickersActivity.this.sets.size() + -1);
-                cell.setChecked(StickersQuery.isStickerPackInstalled(stickerSet.set.id));
+                cell.setChecked(DataQuery.getInstance(ArchivedStickersActivity.this.currentAccount).isStickerPackInstalled(stickerSet.set.id));
             }
         }
 
@@ -96,7 +96,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             int num = ((Integer) ((ArchivedStickerSetCell) buttonView.getParent()).getTag()).intValue();
                             if (num < ArchivedStickersActivity.this.sets.size()) {
-                                StickersQuery.removeStickersSet(ArchivedStickersActivity.this.getParentActivity(), ((StickerSetCovered) ArchivedStickersActivity.this.sets.get(num)).set, !isChecked ? 1 : 2, ArchivedStickersActivity.this, false);
+                                DataQuery.getInstance(ArchivedStickersActivity.this.currentAccount).removeStickersSet(ArchivedStickersActivity.this.getParentActivity(), ((StickerSetCovered) ArchivedStickersActivity.this.sets.get(num)).set, !isChecked ? 1 : 2, ArchivedStickersActivity.this, false);
                             }
                         }
                     });
@@ -136,13 +136,13 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         super.onFragmentCreate();
         getStickers();
         updateRows();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.needReloadArchivedStickers);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.needReloadArchivedStickers);
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.needReloadArchivedStickers);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.needReloadArchivedStickers);
     }
 
     public View createView(Context context) {
@@ -264,7 +264,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
             req.offset_id = this.sets.isEmpty() ? 0 : ((StickerSetCovered) this.sets.get(this.sets.size() - 1)).set.id;
             req.limit = 15;
             req.masks = this.currentType == 1;
-            ConnectionsManager.getInstance().bindRequestToGuid(ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, final TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -300,7 +300,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.needReloadArchivedStickers) {
             this.firstLoaded = false;
             this.endReached = false;

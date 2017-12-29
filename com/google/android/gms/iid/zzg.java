@@ -1,21 +1,21 @@
 package com.google.android.gms.iid;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
-final class zzg extends BroadcastReceiver {
-    private /* synthetic */ zze zzbhn;
+final class zzg implements Runnable {
+    private /* synthetic */ zzd zziez;
+    private /* synthetic */ zzf zzifa;
 
-    zzg(zze com_google_android_gms_iid_zze) {
-        this.zzbhn = com_google_android_gms_iid_zze;
+    zzg(zzf com_google_android_gms_iid_zzf, zzd com_google_android_gms_iid_zzd) {
+        this.zzifa = com_google_android_gms_iid_zzf;
+        this.zziez = com_google_android_gms_iid_zzd;
     }
 
-    public final void onReceive(Context context, Intent intent) {
-        if (Log.isLoggable("InstanceID/Rpc", 3)) {
-            Log.d("InstanceID/Rpc", "Received GSF callback via dynamic receiver");
+    public final void run() {
+        if (Log.isLoggable("EnhancedIntentService", 3)) {
+            Log.d("EnhancedIntentService", "bg processing of the intent starting now");
         }
-        this.zzbhn.zzi(intent);
+        this.zzifa.zziey.handleIntent(this.zziez.intent);
+        this.zziez.finish();
     }
 }

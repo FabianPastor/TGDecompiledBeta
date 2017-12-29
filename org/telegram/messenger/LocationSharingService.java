@@ -12,6 +12,7 @@ import org.telegram.messenger.LocationController.SharingLocationInfo;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.ui.LaunchActivity;
 
@@ -21,7 +22,7 @@ public class LocationSharingService extends Service implements NotificationCente
     private Runnable runnable;
 
     public LocationSharingService() {
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.liveLocationsChanged);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.liveLocationsChanged);
     }
 
     public void onCreate() {
@@ -32,7 +33,9 @@ public class LocationSharingService extends Service implements NotificationCente
                 LocationSharingService.this.handler.postDelayed(LocationSharingService.this.runnable, ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
                 Utilities.stageQueue.postRunnable(new Runnable() {
                     public void run() {
-                        LocationController.getInstance().update();
+                        for (int a = 0; a < 3; a++) {
+                            LocationController.getInstance(a).update();
+                        }
                     }
                 });
             }
@@ -49,14 +52,14 @@ public class LocationSharingService extends Service implements NotificationCente
             this.handler.removeCallbacks(this.runnable);
         }
         stopForeground(true);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.liveLocationsChanged);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.liveLocationsChanged);
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.liveLocationsChanged && this.handler != null) {
             this.handler.post(new Runnable() {
                 public void run() {
-                    if (LocationController.getInstance().sharingLocationsUI.isEmpty()) {
+                    if (LocationSharingService.this.getInfos().isEmpty()) {
                         LocationSharingService.this.stopSelf();
                     } else {
                         LocationSharingService.this.updateNotification();
@@ -66,24 +69,37 @@ public class LocationSharingService extends Service implements NotificationCente
         }
     }
 
+    private ArrayList<SharingLocationInfo> getInfos() {
+        ArrayList<SharingLocationInfo> infos = new ArrayList();
+        for (int a = 0; a < 3; a++) {
+            ArrayList<SharingLocationInfo> arrayList = LocationController.getInstance(a).sharingLocationsUI;
+            if (!arrayList.isEmpty()) {
+                infos.addAll(arrayList);
+            }
+        }
+        return infos;
+    }
+
     private void updateNotification() {
         if (this.builder != null) {
             String param;
-            ArrayList<SharingLocationInfo> infos = LocationController.getInstance().sharingLocationsUI;
+            ArrayList<SharingLocationInfo> infos = getInfos();
             if (infos.size() == 1) {
-                int lower_id = (int) ((SharingLocationInfo) infos.get(0)).messageObject.getDialogId();
+                SharingLocationInfo info = (SharingLocationInfo) infos.get(0);
+                int lower_id = (int) info.messageObject.getDialogId();
+                int currentAccount = info.messageObject.currentAccount;
                 if (lower_id > 0) {
-                    param = UserObject.getFirstName(MessagesController.getInstance().getUser(Integer.valueOf(lower_id)));
+                    param = UserObject.getFirstName(MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(lower_id)));
                 } else {
-                    Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
+                    Chat chat = MessagesController.getInstance(currentAccount).getChat(Integer.valueOf(-lower_id));
                     if (chat != null) {
                         param = chat.title;
                     } else {
-                        param = "";
+                        param = TtmlNode.ANONYMOUS_REGION_ID;
                     }
                 }
             } else {
-                param = LocaleController.formatPluralString("Chats", LocationController.getInstance().sharingLocationsUI.size());
+                param = LocaleController.formatPluralString("Chats", infos.size());
             }
             String str = String.format(LocaleController.getString("AttachLiveLocationIsSharing", R.string.AttachLiveLocationIsSharing), new Object[]{LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation), param});
             this.builder.setTicker(str);
@@ -93,18 +109,19 @@ public class LocationSharingService extends Service implements NotificationCente
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (LocationController.getInstance().sharingLocationsUI.isEmpty()) {
+        if (getInfos().isEmpty()) {
             stopSelf();
         }
         if (this.builder == null) {
             Intent intent2 = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
             intent2.setAction("org.tmessages.openlocations");
-            intent2.setFlags(32768);
+            intent2.setFlags(TLRPC.MESSAGE_FLAG_EDITED);
             PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, 0);
             this.builder = new Builder(ApplicationLoader.applicationContext);
             this.builder.setWhen(System.currentTimeMillis());
             this.builder.setSmallIcon(R.drawable.notification);
             this.builder.setContentIntent(contentIntent);
+            this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
             this.builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));
             this.builder.addAction(0, LocaleController.getString("StopLiveLocation", R.string.StopLiveLocation), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, new Intent(ApplicationLoader.applicationContext, StopLiveLocationReceiver.class), 134217728));
         }

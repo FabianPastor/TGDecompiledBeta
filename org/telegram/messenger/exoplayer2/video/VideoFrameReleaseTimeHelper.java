@@ -29,7 +29,7 @@ public final class VideoFrameReleaseTimeHelper {
     private final long vsyncOffsetNs;
     private final VSyncSampler vsyncSampler;
 
-    private static final class VSyncSampler implements FrameCallback, Callback {
+    private static final class VSyncSampler implements Callback, FrameCallback {
         private static final int CREATE_CHOREOGRAPHER = 0;
         private static final VSyncSampler INSTANCE = new VSyncSampler();
         private static final int MSG_ADD_OBSERVER = 1;

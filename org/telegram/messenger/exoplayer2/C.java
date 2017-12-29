@@ -3,7 +3,6 @@ package org.telegram.messenger.exoplayer2;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.media.AudioManager;
-import android.support.v4.view.PointerIconCompat;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.UUID;
@@ -205,7 +204,7 @@ public final class C {
     static {
         int i;
         if (Util.SDK_INT < 23) {
-            i = PointerIconCompat.TYPE_GRAB;
+            i = 1020;
         } else {
             i = 6396;
         }

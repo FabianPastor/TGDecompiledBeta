@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">Installer</string>
     <string name="common_google_play_services_install_text">%1$s ne fonctionnera pas sans les services Google Play, qui ne sont pas installés sur votre appareil.</string>
     <string name="common_google_play_services_install_title">Installer les services Google Play</string>
+    <string name="common_google_play_services_notification_channel_name">Disponibilité des services Google Play</string>
     <string name="common_google_play_services_notification_ticker">Erreur liée aux services Google Play</string>
     <string name="common_google_play_services_unknown_issue">L\'application %1$s rencontre des problèmes avec les services Google Play. Veuillez réessayer.</string>
     <string name="common_google_play_services_unsupported_text">%1$s ne fonctionnera pas sans les services Google Play, qui ne sont pas compatibles avec votre appareil.</string>
@@ -17,6 +18,7 @@
     <string name="common_open_on_phone">Ouvrir sur le téléphone</string>
     <string name="common_signin_button_text">Se connecter</string>
     <string name="common_signin_button_text_long">Se connecter avec Google</string>
+    <string name="gcm_fallback_notification_channel_label">Divers</string>
     <string name="hockeyapp_crash_dialog_app_name_fallback">Arrêt de l\'application</string>
     <string name="hockeyapp_crash_dialog_message">Voulez-vous envoyer un rapport anonyme pour nous aider à corriger le problème?</string>
     <string name="hockeyapp_crash_dialog_negative_button">Ne pas envoyer</string>
@@ -87,5 +89,6 @@
     <string name="hockeyapp_update_dialog_positive_button">Afficher</string>
     <string name="hockeyapp_update_dialog_title">Mise à jour disponible</string>
     <string name="hockeyapp_update_mandatory_toast">%s est disponible. Cette mise à jour est obligatoire!</string>
+    <string name="status_bar_notification_info_overflow">&gt;999</string>
     <string name="wallet_buy_button_place_holder">Acheter avec Google</string>
 </resources>

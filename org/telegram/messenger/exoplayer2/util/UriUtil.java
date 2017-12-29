@@ -20,10 +20,10 @@ public final class UriUtil {
     public static String resolve(String baseUri, String referenceUri) {
         StringBuilder uri = new StringBuilder();
         if (baseUri == null) {
-            baseUri = "";
+            baseUri = TtmlNode.ANONYMOUS_REGION_ID;
         }
         if (referenceUri == null) {
-            referenceUri = "";
+            referenceUri = TtmlNode.ANONYMOUS_REGION_ID;
         }
         int[] refIndices = getUriIndices(referenceUri);
         if (refIndices[0] != -1) {

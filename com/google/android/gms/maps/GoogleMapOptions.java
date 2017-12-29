@@ -7,48 +7,49 @@ import android.os.Parcelable.Creator;
 import android.util.AttributeSet;
 import com.google.android.gms.R;
 import com.google.android.gms.common.internal.ReflectedParcelable;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
-import com.google.android.gms.common.internal.zzbe;
+import com.google.android.gms.common.internal.zzbg;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
+import com.google.android.gms.maps.internal.zza;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-public final class GoogleMapOptions extends zza implements ReflectedParcelable {
-    public static final Creator<GoogleMapOptions> CREATOR = new zzz();
-    private Boolean zzblZ;
-    private Boolean zzbma;
-    private int zzbmb = -1;
-    private CameraPosition zzbmc;
-    private Boolean zzbmd;
-    private Boolean zzbme;
-    private Boolean zzbmf;
-    private Boolean zzbmg;
-    private Boolean zzbmh;
-    private Boolean zzbmi;
-    private Boolean zzbmj;
-    private Boolean zzbmk;
-    private Boolean zzbml;
-    private Float zzbmm = null;
-    private Float zzbmn = null;
-    private LatLngBounds zzbmo = null;
+public final class GoogleMapOptions extends zzbfm implements ReflectedParcelable {
+    public static final Creator<GoogleMapOptions> CREATOR = new zzaa();
+    private Boolean zzisb;
+    private Boolean zzisc;
+    private int zzisd = -1;
+    private CameraPosition zzise;
+    private Boolean zzisf;
+    private Boolean zzisg;
+    private Boolean zzish;
+    private Boolean zzisi;
+    private Boolean zzisj;
+    private Boolean zzisk;
+    private Boolean zzisl;
+    private Boolean zzism;
+    private Boolean zzisn;
+    private Float zziso = null;
+    private Float zzisp = null;
+    private LatLngBounds zzisq = null;
 
     GoogleMapOptions(byte b, byte b2, int i, CameraPosition cameraPosition, byte b3, byte b4, byte b5, byte b6, byte b7, byte b8, byte b9, byte b10, byte b11, Float f, Float f2, LatLngBounds latLngBounds) {
-        this.zzblZ = com.google.android.gms.maps.internal.zza.zza(b);
-        this.zzbma = com.google.android.gms.maps.internal.zza.zza(b2);
-        this.zzbmb = i;
-        this.zzbmc = cameraPosition;
-        this.zzbmd = com.google.android.gms.maps.internal.zza.zza(b3);
-        this.zzbme = com.google.android.gms.maps.internal.zza.zza(b4);
-        this.zzbmf = com.google.android.gms.maps.internal.zza.zza(b5);
-        this.zzbmg = com.google.android.gms.maps.internal.zza.zza(b6);
-        this.zzbmh = com.google.android.gms.maps.internal.zza.zza(b7);
-        this.zzbmi = com.google.android.gms.maps.internal.zza.zza(b8);
-        this.zzbmj = com.google.android.gms.maps.internal.zza.zza(b9);
-        this.zzbmk = com.google.android.gms.maps.internal.zza.zza(b10);
-        this.zzbml = com.google.android.gms.maps.internal.zza.zza(b11);
-        this.zzbmm = f;
-        this.zzbmn = f2;
-        this.zzbmo = latLngBounds;
+        this.zzisb = zza.zza(b);
+        this.zzisc = zza.zza(b2);
+        this.zzisd = i;
+        this.zzise = cameraPosition;
+        this.zzisf = zza.zza(b3);
+        this.zzisg = zza.zza(b4);
+        this.zzish = zza.zza(b5);
+        this.zzisi = zza.zza(b6);
+        this.zzisj = zza.zza(b7);
+        this.zzisk = zza.zza(b8);
+        this.zzisl = zza.zza(b9);
+        this.zzism = zza.zza(b10);
+        this.zzisn = zza.zza(b11);
+        this.zziso = f;
+        this.zzisp = f2;
+        this.zzisq = latLngBounds;
     }
 
     public static GoogleMapOptions createFromAttributes(Context context, AttributeSet attributeSet) {
@@ -106,171 +107,127 @@ public final class GoogleMapOptions extends zza implements ReflectedParcelable {
     }
 
     public final GoogleMapOptions ambientEnabled(boolean z) {
-        this.zzbml = Boolean.valueOf(z);
+        this.zzisn = Boolean.valueOf(z);
         return this;
     }
 
     public final GoogleMapOptions camera(CameraPosition cameraPosition) {
-        this.zzbmc = cameraPosition;
+        this.zzise = cameraPosition;
         return this;
     }
 
     public final GoogleMapOptions compassEnabled(boolean z) {
-        this.zzbme = Boolean.valueOf(z);
+        this.zzisg = Boolean.valueOf(z);
         return this;
     }
 
-    public final Boolean getAmbientEnabled() {
-        return this.zzbml;
-    }
-
     public final CameraPosition getCamera() {
-        return this.zzbmc;
-    }
-
-    public final Boolean getCompassEnabled() {
-        return this.zzbme;
+        return this.zzise;
     }
 
     public final LatLngBounds getLatLngBoundsForCameraTarget() {
-        return this.zzbmo;
-    }
-
-    public final Boolean getLiteMode() {
-        return this.zzbmj;
-    }
-
-    public final Boolean getMapToolbarEnabled() {
-        return this.zzbmk;
+        return this.zzisq;
     }
 
     public final int getMapType() {
-        return this.zzbmb;
+        return this.zzisd;
     }
 
     public final Float getMaxZoomPreference() {
-        return this.zzbmn;
+        return this.zzisp;
     }
 
     public final Float getMinZoomPreference() {
-        return this.zzbmm;
-    }
-
-    public final Boolean getRotateGesturesEnabled() {
-        return this.zzbmi;
-    }
-
-    public final Boolean getScrollGesturesEnabled() {
-        return this.zzbmf;
-    }
-
-    public final Boolean getTiltGesturesEnabled() {
-        return this.zzbmh;
-    }
-
-    public final Boolean getUseViewLifecycleInFragment() {
-        return this.zzbma;
-    }
-
-    public final Boolean getZOrderOnTop() {
-        return this.zzblZ;
-    }
-
-    public final Boolean getZoomControlsEnabled() {
-        return this.zzbmd;
-    }
-
-    public final Boolean getZoomGesturesEnabled() {
-        return this.zzbmg;
+        return this.zziso;
     }
 
     public final GoogleMapOptions latLngBoundsForCameraTarget(LatLngBounds latLngBounds) {
-        this.zzbmo = latLngBounds;
+        this.zzisq = latLngBounds;
         return this;
     }
 
     public final GoogleMapOptions liteMode(boolean z) {
-        this.zzbmj = Boolean.valueOf(z);
+        this.zzisl = Boolean.valueOf(z);
         return this;
     }
 
     public final GoogleMapOptions mapToolbarEnabled(boolean z) {
-        this.zzbmk = Boolean.valueOf(z);
+        this.zzism = Boolean.valueOf(z);
         return this;
     }
 
     public final GoogleMapOptions mapType(int i) {
-        this.zzbmb = i;
+        this.zzisd = i;
         return this;
     }
 
     public final GoogleMapOptions maxZoomPreference(float f) {
-        this.zzbmn = Float.valueOf(f);
+        this.zzisp = Float.valueOf(f);
         return this;
     }
 
     public final GoogleMapOptions minZoomPreference(float f) {
-        this.zzbmm = Float.valueOf(f);
+        this.zziso = Float.valueOf(f);
         return this;
     }
 
     public final GoogleMapOptions rotateGesturesEnabled(boolean z) {
-        this.zzbmi = Boolean.valueOf(z);
+        this.zzisk = Boolean.valueOf(z);
         return this;
     }
 
     public final GoogleMapOptions scrollGesturesEnabled(boolean z) {
-        this.zzbmf = Boolean.valueOf(z);
+        this.zzish = Boolean.valueOf(z);
         return this;
     }
 
     public final GoogleMapOptions tiltGesturesEnabled(boolean z) {
-        this.zzbmh = Boolean.valueOf(z);
+        this.zzisj = Boolean.valueOf(z);
         return this;
     }
 
     public final String toString() {
-        return zzbe.zzt(this).zzg("MapType", Integer.valueOf(this.zzbmb)).zzg("LiteMode", this.zzbmj).zzg("Camera", this.zzbmc).zzg("CompassEnabled", this.zzbme).zzg("ZoomControlsEnabled", this.zzbmd).zzg("ScrollGesturesEnabled", this.zzbmf).zzg("ZoomGesturesEnabled", this.zzbmg).zzg("TiltGesturesEnabled", this.zzbmh).zzg("RotateGesturesEnabled", this.zzbmi).zzg("MapToolbarEnabled", this.zzbmk).zzg("AmbientEnabled", this.zzbml).zzg("MinZoomPreference", this.zzbmm).zzg("MaxZoomPreference", this.zzbmn).zzg("LatLngBoundsForCameraTarget", this.zzbmo).zzg("ZOrderOnTop", this.zzblZ).zzg("UseViewLifecycleInFragment", this.zzbma).toString();
+        return zzbg.zzx(this).zzg("MapType", Integer.valueOf(this.zzisd)).zzg("LiteMode", this.zzisl).zzg("Camera", this.zzise).zzg("CompassEnabled", this.zzisg).zzg("ZoomControlsEnabled", this.zzisf).zzg("ScrollGesturesEnabled", this.zzish).zzg("ZoomGesturesEnabled", this.zzisi).zzg("TiltGesturesEnabled", this.zzisj).zzg("RotateGesturesEnabled", this.zzisk).zzg("MapToolbarEnabled", this.zzism).zzg("AmbientEnabled", this.zzisn).zzg("MinZoomPreference", this.zziso).zzg("MaxZoomPreference", this.zzisp).zzg("LatLngBoundsForCameraTarget", this.zzisq).zzg("ZOrderOnTop", this.zzisb).zzg("UseViewLifecycleInFragment", this.zzisc).toString();
     }
 
     public final GoogleMapOptions useViewLifecycleInFragment(boolean z) {
-        this.zzbma = Boolean.valueOf(z);
+        this.zzisc = Boolean.valueOf(z);
         return this;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, com.google.android.gms.maps.internal.zza.zzb(this.zzblZ));
-        zzd.zza(parcel, 3, com.google.android.gms.maps.internal.zza.zzb(this.zzbma));
-        zzd.zzc(parcel, 4, getMapType());
-        zzd.zza(parcel, 5, getCamera(), i, false);
-        zzd.zza(parcel, 6, com.google.android.gms.maps.internal.zza.zzb(this.zzbmd));
-        zzd.zza(parcel, 7, com.google.android.gms.maps.internal.zza.zzb(this.zzbme));
-        zzd.zza(parcel, 8, com.google.android.gms.maps.internal.zza.zzb(this.zzbmf));
-        zzd.zza(parcel, 9, com.google.android.gms.maps.internal.zza.zzb(this.zzbmg));
-        zzd.zza(parcel, 10, com.google.android.gms.maps.internal.zza.zzb(this.zzbmh));
-        zzd.zza(parcel, 11, com.google.android.gms.maps.internal.zza.zzb(this.zzbmi));
-        zzd.zza(parcel, 12, com.google.android.gms.maps.internal.zza.zzb(this.zzbmj));
-        zzd.zza(parcel, 14, com.google.android.gms.maps.internal.zza.zzb(this.zzbmk));
-        zzd.zza(parcel, 15, com.google.android.gms.maps.internal.zza.zzb(this.zzbml));
-        zzd.zza(parcel, 16, getMinZoomPreference(), false);
-        zzd.zza(parcel, 17, getMaxZoomPreference(), false);
-        zzd.zza(parcel, 18, getLatLngBoundsForCameraTarget(), i, false);
-        zzd.zzI(parcel, zze);
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zza(parcel, 2, zza.zzb(this.zzisb));
+        zzbfp.zza(parcel, 3, zza.zzb(this.zzisc));
+        zzbfp.zzc(parcel, 4, getMapType());
+        zzbfp.zza(parcel, 5, getCamera(), i, false);
+        zzbfp.zza(parcel, 6, zza.zzb(this.zzisf));
+        zzbfp.zza(parcel, 7, zza.zzb(this.zzisg));
+        zzbfp.zza(parcel, 8, zza.zzb(this.zzish));
+        zzbfp.zza(parcel, 9, zza.zzb(this.zzisi));
+        zzbfp.zza(parcel, 10, zza.zzb(this.zzisj));
+        zzbfp.zza(parcel, 11, zza.zzb(this.zzisk));
+        zzbfp.zza(parcel, 12, zza.zzb(this.zzisl));
+        zzbfp.zza(parcel, 14, zza.zzb(this.zzism));
+        zzbfp.zza(parcel, 15, zza.zzb(this.zzisn));
+        zzbfp.zza(parcel, 16, getMinZoomPreference(), false);
+        zzbfp.zza(parcel, 17, getMaxZoomPreference(), false);
+        zzbfp.zza(parcel, 18, getLatLngBoundsForCameraTarget(), i, false);
+        zzbfp.zzai(parcel, zze);
     }
 
     public final GoogleMapOptions zOrderOnTop(boolean z) {
-        this.zzblZ = Boolean.valueOf(z);
+        this.zzisb = Boolean.valueOf(z);
         return this;
     }
 
     public final GoogleMapOptions zoomControlsEnabled(boolean z) {
-        this.zzbmd = Boolean.valueOf(z);
+        this.zzisf = Boolean.valueOf(z);
         return this;
     }
 
     public final GoogleMapOptions zoomGesturesEnabled(boolean z) {
-        this.zzbmg = Boolean.valueOf(z);
+        this.zzisi = Boolean.valueOf(z);
         return this;
     }
 }

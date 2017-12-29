@@ -14,7 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import org.telegram.messenger.AndroidUtilities;
@@ -22,6 +21,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.Components.LayoutHelper;
@@ -55,7 +55,7 @@ public class ThemeCell extends FrameLayout {
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 101.0f : BitmapDescriptorFactory.HUE_YELLOW, 0.0f, LocaleController.isRTL ? BitmapDescriptorFactory.HUE_YELLOW : 101.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 101.0f : 60.0f, 0.0f, LocaleController.isRTL ? 60.0f : 101.0f, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
         this.checkImage.setImageResource(R.drawable.sticker_added);
@@ -135,7 +135,7 @@ public class ThemeCell extends FrameLayout {
                             if (bytes[a] == (byte) 10) {
                                 linesRead++;
                                 int len = (a - start) + 1;
-                                String line = new String(bytes, start, len - 1, "UTF-8");
+                                String line = new String(bytes, start, len - 1, C.UTF8_NAME);
                                 if (line.startsWith("WPS")) {
                                     break;
                                 }

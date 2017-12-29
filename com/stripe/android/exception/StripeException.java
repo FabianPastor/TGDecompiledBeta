@@ -1,7 +1,6 @@
 package com.stripe.android.exception;
 
 public abstract class StripeException extends Exception {
-    protected static final long serialVersionUID = 1;
     private String requestId;
     private Integer statusCode;
 
@@ -17,16 +16,8 @@ public abstract class StripeException extends Exception {
         this.requestId = requestId;
     }
 
-    public String getRequestId() {
-        return this.requestId;
-    }
-
-    public Integer getStatusCode() {
-        return this.statusCode;
-    }
-
     public String toString() {
-        String reqIdStr = "";
+        String reqIdStr = TtmlNode.ANONYMOUS_REGION_ID;
         if (this.requestId != null) {
             reqIdStr = "; request-id: " + this.requestId;
         }

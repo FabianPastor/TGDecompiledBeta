@@ -1,5 +1,7 @@
 package org.telegram.messenger.audioinfo.mp3;
 
+import org.telegram.tgnet.TLRPC;
+
 public class MP3Frame {
     private final byte[] bytes;
     private final Header header;
@@ -13,7 +15,7 @@ public class MP3Frame {
         public void update(int value, int length) {
             int mask = 1 << (length - 1);
             do {
-                if ((((value & mask) == 0 ? 1 : 0) ^ ((this.crc & 32768) == 0 ? 1 : 0)) != 0) {
+                if ((((value & mask) == 0 ? 1 : 0) ^ ((this.crc & TLRPC.MESSAGE_FLAG_EDITED) == 0 ? 1 : 0)) != 0) {
                     this.crc = (short) (this.crc << 1);
                     this.crc = (short) (this.crc ^ 32773);
                 } else {

@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.extractor.ts;
 
-import android.support.v4.view.InputDeviceCompat;
 import android.util.SparseArray;
 import java.io.IOException;
 import org.telegram.messenger.exoplayer2.C;
@@ -166,7 +165,7 @@ public final class PsExtractor implements Extractor {
             this.psPacketBuffer.setPosition(0);
             input.skipFully(this.psPacketBuffer.readUnsignedShort() + 6);
             return 0;
-        } else if (((nextStartCode & InputDeviceCompat.SOURCE_ANY) >> 8) != 1) {
+        } else if (((nextStartCode & -256) >> 8) != 1) {
             input.skipFully(1);
             return 0;
         } else {

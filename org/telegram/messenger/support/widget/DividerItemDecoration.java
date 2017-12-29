@@ -1,13 +1,11 @@
 package org.telegram.messenger.support.widget;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.v4.view.ViewCompat;
+import android.util.Log;
 import android.view.View;
 import org.telegram.messenger.support.widget.RecyclerView.ItemDecoration;
 import org.telegram.messenger.support.widget.RecyclerView.State;
@@ -15,6 +13,7 @@ import org.telegram.messenger.support.widget.RecyclerView.State;
 public class DividerItemDecoration extends ItemDecoration {
     private static final int[] ATTRS = new int[]{16843284};
     public static final int HORIZONTAL = 0;
+    private static final String TAG = "DividerItem";
     public static final int VERTICAL = 1;
     private final Rect mBounds = new Rect();
     private Drawable mDivider;
@@ -23,6 +22,9 @@ public class DividerItemDecoration extends ItemDecoration {
     public DividerItemDecoration(Context context, int orientation) {
         TypedArray a = context.obtainStyledAttributes(ATTRS);
         this.mDivider = a.getDrawable(0);
+        if (this.mDivider == null) {
+            Log.w(TAG, "@android:attr/listDivider was not set in the theme used for this DividerItemDecoration. Please set that attribute all call setDrawable()");
+        }
         a.recycle();
         setOrientation(orientation);
     }
@@ -35,7 +37,7 @@ public class DividerItemDecoration extends ItemDecoration {
         throw new IllegalArgumentException("Invalid orientation. It should be either HORIZONTAL or VERTICAL");
     }
 
-    public void setDrawable(@NonNull Drawable drawable) {
+    public void setDrawable(Drawable drawable) {
         if (drawable == null) {
             throw new IllegalArgumentException("Drawable cannot be null.");
         }
@@ -43,7 +45,7 @@ public class DividerItemDecoration extends ItemDecoration {
     }
 
     public void onDraw(Canvas c, RecyclerView parent, State state) {
-        if (parent.getLayoutManager() != null) {
+        if (parent.getLayoutManager() != null && this.mDivider != null) {
             if (this.mOrientation == 1) {
                 drawVertical(c, parent);
             } else {
@@ -52,7 +54,6 @@ public class DividerItemDecoration extends ItemDecoration {
         }
     }
 
-    @SuppressLint({"NewApi"})
     private void drawVertical(Canvas canvas, RecyclerView parent) {
         int left;
         int right;
@@ -69,14 +70,13 @@ public class DividerItemDecoration extends ItemDecoration {
         for (int i = 0; i < childCount; i++) {
             View child = parent.getChildAt(i);
             parent.getDecoratedBoundsWithMargins(child, this.mBounds);
-            int bottom = this.mBounds.bottom + Math.round(ViewCompat.getTranslationY(child));
+            int bottom = this.mBounds.bottom + Math.round(child.getTranslationY());
             this.mDivider.setBounds(left, bottom - this.mDivider.getIntrinsicHeight(), right, bottom);
             this.mDivider.draw(canvas);
         }
         canvas.restore();
     }
 
-    @SuppressLint({"NewApi"})
     private void drawHorizontal(Canvas canvas, RecyclerView parent) {
         int top;
         int bottom;
@@ -93,7 +93,7 @@ public class DividerItemDecoration extends ItemDecoration {
         for (int i = 0; i < childCount; i++) {
             View child = parent.getChildAt(i);
             parent.getLayoutManager().getDecoratedBoundsWithMargins(child, this.mBounds);
-            int right = this.mBounds.right + Math.round(ViewCompat.getTranslationX(child));
+            int right = this.mBounds.right + Math.round(child.getTranslationX());
             this.mDivider.setBounds(right - this.mDivider.getIntrinsicWidth(), top, right, bottom);
             this.mDivider.draw(canvas);
         }
@@ -101,7 +101,9 @@ public class DividerItemDecoration extends ItemDecoration {
     }
 
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
-        if (this.mOrientation == 1) {
+        if (this.mDivider == null) {
+            outRect.set(0, 0, 0, 0);
+        } else if (this.mOrientation == 1) {
             outRect.set(0, 0, 0, this.mDivider.getIntrinsicHeight());
         } else {
             outRect.set(0, 0, this.mDivider.getIntrinsicWidth(), 0);

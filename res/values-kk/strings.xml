@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">Орнату</string>
     <string name="common_google_play_services_install_text">Google Play қызметтері құрылғыда болмағандықтан, %1$s іске қосылмайды.</string>
     <string name="common_google_play_services_install_title">Google Play қызметтерін алу</string>
+    <string name="common_google_play_services_notification_channel_name">Google Play қызметтерінің қолжетімділігі</string>
     <string name="common_google_play_services_notification_ticker">Google Play қызметтерінің қатесі</string>
     <string name="common_google_play_services_unknown_issue">%1$s қолданбасында Google Play қызметіне байланысты белгісіз қате шықты. Әрекетті қайталаңыз.</string>
     <string name="common_google_play_services_unsupported_text">%1$s қолданбасы құрылғыңызда қолдау көрсетілмейтін Google Play қызметінсіз жұмыс істемейді.</string>
@@ -17,4 +18,6 @@
     <string name="common_open_on_phone">Телефонда ашу</string>
     <string name="common_signin_button_text">Кіру</string>
     <string name="common_signin_button_text_long">Google арқылы кіру</string>
+    <string name="gcm_fallback_notification_channel_label">Өзге</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
 </resources>

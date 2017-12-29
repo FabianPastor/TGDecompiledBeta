@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.exoplayer2.C;
 
 public class SerializedData extends AbstractSerializedData {
     private DataInputStream in;
@@ -235,7 +236,7 @@ public class SerializedData extends AbstractSerializedData {
 
     public void writeString(String s) {
         try {
-            writeByteArray(s.getBytes("UTF-8"));
+            writeByteArray(s.getBytes(C.UTF8_NAME));
         } catch (Exception e) {
             FileLog.e("write string error");
         }
@@ -370,7 +371,7 @@ public class SerializedData extends AbstractSerializedData {
                 this.in.read();
                 this.len++;
             }
-            return new String(b, "UTF-8");
+            return new String(b, C.UTF8_NAME);
         } catch (Exception e) {
             if (exception) {
                 throw new RuntimeException("read string error", e);

@@ -2,6 +2,7 @@ package org.telegram.messenger.exoplayer2.util;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 
 public final class ParsableByteArray {
@@ -386,7 +387,7 @@ public final class ParsableByteArray {
     }
 
     public String readString(int length) {
-        return readString(length, Charset.forName("UTF-8"));
+        return readString(length, Charset.forName(C.UTF8_NAME));
     }
 
     public String readString(int length, Charset charset) {
@@ -397,7 +398,7 @@ public final class ParsableByteArray {
 
     public String readNullTerminatedString(int length) {
         if (length == 0) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
         int stringLength = length;
         int lastIndex = (this.position + length) - 1;
@@ -456,7 +457,6 @@ public final class ParsableByteArray {
     }
 
     public long readUtf8EncodedLong() {
-        int i;
         int length = 0;
         long value = (long) this.data[this.position];
         for (int j = 7; j >= 0; j--) {
@@ -471,6 +471,7 @@ public final class ParsableByteArray {
                 if (length != 0) {
                     throw new NumberFormatException("Invalid UTF-8 sequence first byte: " + value);
                 }
+                int i;
                 for (i = 1; i < length; i++) {
                     x = this.data[this.position + i];
                     if ((x & PsExtractor.AUDIO_STREAM) == 128) {

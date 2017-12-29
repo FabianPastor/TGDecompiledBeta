@@ -8,8 +8,6 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
-import android.support.annotation.NonNull;
-import android.support.v4.view.MotionEventCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -38,6 +36,7 @@ import java.util.regex.Pattern;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.ExoPlayerLibraryInfo;
 import org.telegram.messenger.exoplayer2.ParserException;
+import org.telegram.messenger.exoplayer2.RendererCapabilities;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 
 public final class Util {
@@ -116,7 +115,7 @@ public final class Util {
 
     public static ExecutorService newSingleThreadExecutor(final String threadName) {
         return Executors.newSingleThreadExecutor(new ThreadFactory() {
-            public Thread newThread(@NonNull Runnable r) {
+            public Thread newThread(Runnable r) {
                 return new Thread(r, threadName);
             }
         });
@@ -145,7 +144,7 @@ public final class Util {
     }
 
     public static byte[] getUtf8Bytes(String value) {
-        return value.getBytes(Charset.forName("UTF-8"));
+        return value.getBytes(Charset.forName(C.UTF8_NAME));
     }
 
     public static boolean isLinebreak(int c) {
@@ -430,7 +429,7 @@ public final class Util {
                 return 3;
             case 16:
                 return 2;
-            case 24:
+            case RendererCapabilities.ADAPTIVE_SUPPORT_MASK /*24*/:
                 return Integer.MIN_VALUE;
             case 32:
                 return NUM;
@@ -598,7 +597,7 @@ public final class Util {
             case '\"':
             case '%':
             case '*':
-            case MotionEventCompat.AXIS_GENERIC_16 /*47*/:
+            case '/':
             case ':':
             case '<':
             case '>':

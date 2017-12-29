@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">Инсталиране</string>
     <string name="common_google_play_services_install_text">%1$s няма да се изпълнява, тъй като услугите за Google Play не са инсталирани на устройството ви.</string>
     <string name="common_google_play_services_install_title">Изтегляне на услугите за Google Play</string>
+    <string name="common_google_play_services_notification_channel_name">Наличност на услугите за Google Play</string>
     <string name="common_google_play_services_notification_ticker">Грешка в услугите за Google Play</string>
     <string name="common_google_play_services_unknown_issue">%1$s има проблеми с услугите за Google Play. Моля, опитайте отново.</string>
     <string name="common_google_play_services_unsupported_text">%1$s няма да се изпълнява, тъй като услугите за Google Play не се поддържат от устройството ви.</string>
@@ -17,5 +18,7 @@
     <string name="common_open_on_phone">Отваряне на телефона</string>
     <string name="common_signin_button_text">Вход</string>
     <string name="common_signin_button_text_long">Вход с Google</string>
+    <string name="gcm_fallback_notification_channel_label">Разни</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Купете с Google</string>
 </resources>

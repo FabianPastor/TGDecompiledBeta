@@ -1,22 +1,22 @@
 package com.google.android.gms.common.internal;
 
+import android.app.Activity;
 import android.content.Intent;
-import com.google.android.gms.internal.zzbdt;
 
-final class zzw extends zzt {
+final class zzw extends zzv {
+    private /* synthetic */ Activity val$activity;
     private /* synthetic */ Intent val$intent;
     private /* synthetic */ int val$requestCode;
-    private /* synthetic */ zzbdt zzaHp;
 
-    zzw(Intent intent, zzbdt com_google_android_gms_internal_zzbdt, int i) {
+    zzw(Intent intent, Activity activity, int i) {
         this.val$intent = intent;
-        this.zzaHp = com_google_android_gms_internal_zzbdt;
+        this.val$activity = activity;
         this.val$requestCode = i;
     }
 
-    public final void zzrv() {
+    public final void zzale() {
         if (this.val$intent != null) {
-            this.zzaHp.startActivityForResult(this.val$intent, this.val$requestCode);
+            this.val$activity.startActivityForResult(this.val$intent, this.val$requestCode);
         }
     }
 }

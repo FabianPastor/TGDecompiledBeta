@@ -21,9 +21,6 @@ import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.exoplayer2.C;
-import org.telegram.messenger.query.BotQuery;
-import org.telegram.messenger.query.MessagesQuery;
-import org.telegram.messenger.query.SharedMediaQuery;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.AbstractSerializedData;
 import org.telegram.tgnet.ConnectionsManager;
@@ -98,21 +95,22 @@ import org.telegram.tgnet.TLRPC.messages_Messages;
 import org.telegram.tgnet.TLRPC.photos_Photos;
 
 public class MessagesStorage {
-    private static volatile MessagesStorage Instance = null;
-    public static int lastDateValue = 0;
-    public static int lastPtsValue = 0;
-    public static int lastQtsValue = 0;
-    public static int lastSecretVersion = 0;
-    public static int lastSeqValue = 0;
-    public static int secretG = 0;
-    public static byte[] secretPBytes = null;
+    private static volatile MessagesStorage[] Instance = new MessagesStorage[3];
     private File cacheFile;
+    private int currentAccount;
     private SQLiteDatabase database;
+    public int lastDateValue = 0;
+    public int lastPtsValue = 0;
+    public int lastQtsValue = 0;
     private int lastSavedDate = 0;
     private int lastSavedPts = 0;
     private int lastSavedQts = 0;
     private int lastSavedSeq = 0;
+    public int lastSecretVersion = 0;
+    public int lastSeqValue = 0;
     private AtomicLong lastTaskId = new AtomicLong(System.currentTimeMillis());
+    public int secretG = 0;
+    public byte[] secretPBytes = null;
     private DispatchQueue storageQueue = new DispatchQueue("storageQueue");
 
     private class Hole {
@@ -136,16 +134,17 @@ public class MessagesStorage {
         void run(int i);
     }
 
-    public static MessagesStorage getInstance() {
-        MessagesStorage localInstance = Instance;
+    public static MessagesStorage getInstance(int num) {
+        MessagesStorage localInstance = Instance[num];
         if (localInstance == null) {
             synchronized (MessagesStorage.class) {
                 try {
-                    localInstance = Instance;
+                    localInstance = Instance[num];
                     if (localInstance == null) {
-                        MessagesStorage localInstance2 = new MessagesStorage();
+                        MessagesStorage[] messagesStorageArr = Instance;
+                        MessagesStorage localInstance2 = new MessagesStorage(num);
                         try {
-                            Instance = localInstance2;
+                            messagesStorageArr[num] = localInstance2;
                             localInstance = localInstance2;
                         } catch (Throwable th) {
                             Throwable th2 = th;
@@ -162,7 +161,12 @@ public class MessagesStorage {
         return localInstance;
     }
 
-    public MessagesStorage() {
+    public static MessagesStorage getAccountInstance() {
+        return getInstance(UserConfig.selectedAccount);
+    }
+
+    public MessagesStorage(int instance) {
+        this.currentAccount = instance;
         this.storageQueue.setPriority(10);
         openDatabase(true);
     }
@@ -176,7 +180,13 @@ public class MessagesStorage {
     }
 
     public void openDatabase(boolean first) {
-        this.cacheFile = new File(ApplicationLoader.getFilesDirFixed(), "cache4.db");
+        if (this.currentAccount == 0) {
+            this.cacheFile = new File(ApplicationLoader.getFilesDirFixed(), "cache4.db");
+        } else {
+            this.cacheFile = new File(ApplicationLoader.getFilesDirFixed(), "account" + this.currentAccount + "/");
+            this.cacheFile.mkdirs();
+            this.cacheFile = new File(this.cacheFile, "cache4.db");
+        }
         boolean createTable = false;
         if (!this.cacheFile.exists()) {
             createTable = true;
@@ -263,18 +273,18 @@ public class MessagesStorage {
                 try {
                     SQLiteCursor cursor = this.database.queryFinalized("SELECT seq, pts, date, qts, lsv, sg, pbytes FROM params WHERE id = 1", new Object[0]);
                     if (cursor.next()) {
-                        lastSeqValue = cursor.intValue(0);
-                        lastPtsValue = cursor.intValue(1);
-                        lastDateValue = cursor.intValue(2);
-                        lastQtsValue = cursor.intValue(3);
-                        lastSecretVersion = cursor.intValue(4);
-                        secretG = cursor.intValue(5);
+                        this.lastSeqValue = cursor.intValue(0);
+                        this.lastPtsValue = cursor.intValue(1);
+                        this.lastDateValue = cursor.intValue(2);
+                        this.lastQtsValue = cursor.intValue(3);
+                        this.lastSecretVersion = cursor.intValue(4);
+                        this.secretG = cursor.intValue(5);
                         if (cursor.isNull(6)) {
-                            secretPBytes = null;
+                            this.secretPBytes = null;
                         } else {
-                            secretPBytes = cursor.byteArrayValue(6);
-                            if (secretPBytes != null && secretPBytes.length == 1) {
-                                secretPBytes = null;
+                            this.secretPBytes = cursor.byteArrayValue(6);
+                            if (this.secretPBytes != null && this.secretPBytes.length == 1) {
+                                this.secretPBytes = null;
                             }
                         }
                     }
@@ -296,14 +306,14 @@ public class MessagesStorage {
             FileLog.e(e3);
             if (first && e3.getMessage().contains("malformed")) {
                 cleanupInternal();
-                UserConfig.dialogsLoadOffsetId = 0;
-                UserConfig.totalDialogsLoadCount = 0;
-                UserConfig.dialogsLoadOffsetDate = 0;
-                UserConfig.dialogsLoadOffsetUserId = 0;
-                UserConfig.dialogsLoadOffsetChatId = 0;
-                UserConfig.dialogsLoadOffsetChannelId = 0;
-                UserConfig.dialogsLoadOffsetAccess = 0;
-                UserConfig.saveConfig(false);
+                UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetId = 0;
+                UserConfig.getInstance(this.currentAccount).totalDialogsLoadCount = 0;
+                UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetDate = 0;
+                UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetUserId = 0;
+                UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetChatId = 0;
+                UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetChannelId = 0;
+                UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetAccess = 0;
+                UserConfig.getInstance(this.currentAccount).saveConfig(false);
                 openDatabase(false);
             }
         }
@@ -620,17 +630,17 @@ public class MessagesStorage {
     }
 
     private void cleanupInternal() {
-        lastDateValue = 0;
-        lastSeqValue = 0;
-        lastPtsValue = 0;
-        lastQtsValue = 0;
-        lastSecretVersion = 0;
+        this.lastDateValue = 0;
+        this.lastSeqValue = 0;
+        this.lastPtsValue = 0;
+        this.lastQtsValue = 0;
+        this.lastSecretVersion = 0;
         this.lastSavedSeq = 0;
         this.lastSavedPts = 0;
         this.lastSavedDate = 0;
         this.lastSavedQts = 0;
-        secretPBytes = null;
-        secretG = 0;
+        this.secretPBytes = null;
+        this.secretG = 0;
         if (this.database != null) {
             this.database.close();
             this.database = null;
@@ -650,7 +660,7 @@ public class MessagesStorage {
                 if (isLogin) {
                     Utilities.stageQueue.postRunnable(new Runnable() {
                         public void run() {
-                            MessagesController.getInstance().getDifference();
+                            MessagesController.getInstance(MessagesStorage.this.currentAccount).getDifference();
                         }
                     });
                 }
@@ -689,14 +699,14 @@ public class MessagesStorage {
             public void run() {
                 try {
                     HashMap<Long, Long> ids = new HashMap();
-                    Map<String, ?> values = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getAll();
+                    Map<String, ?> values = MessagesController.getNotificationsSettings(MessagesStorage.this.currentAccount).getAll();
                     for (Entry<String, ?> entry : values.entrySet()) {
                         String key = (String) entry.getKey();
                         if (key.startsWith("notify2_")) {
                             Integer value = (Integer) entry.getValue();
                             if (value.intValue() == 2 || value.intValue() == 3) {
                                 long flags;
-                                key = key.replace("notify2_", "");
+                                key = key.replace("notify2_", TtmlNode.ANONYMOUS_REGION_ID);
                                 if (value.intValue() == 2) {
                                     flags = 1;
                                 } else {
@@ -789,7 +799,7 @@ public class MessagesStorage {
                                         final Chat chat2 = chat;
                                         Utilities.stageQueue.postRunnable(new Runnable() {
                                             public void run() {
-                                                MessagesController.getInstance().loadUnknownChannel(chat2, taskId);
+                                                MessagesController.getInstance(MessagesStorage.this.currentAccount).loadUnknownChannel(chat2, taskId);
                                             }
                                         });
                                         break;
@@ -800,7 +810,7 @@ public class MessagesStorage {
                                     newDialogType = data.readInt32(false);
                                     Utilities.stageQueue.postRunnable(new Runnable() {
                                         public void run() {
-                                            MessagesController.getInstance().getChannelDifference(channelId, newDialogType, taskId, null);
+                                            MessagesController.getInstance(MessagesStorage.this.currentAccount).getChannelDifference(channelId, newDialogType, taskId, null);
                                         }
                                     });
                                     break;
@@ -827,13 +837,13 @@ public class MessagesStorage {
                                     final long j = taskId;
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
-                                            MessagesController.getInstance().checkLastDialogMessage(dialog, peer, j);
+                                            MessagesController.getInstance(MessagesStorage.this.currentAccount).checkLastDialogMessage(dialog, peer, j);
                                         }
                                     });
                                     break;
                                 case 3:
                                     long random_id = data.readInt64(false);
-                                    SendMessagesHelper.getInstance().sendGame(InputPeer.TLdeserialize(data, data.readInt32(false), false), (TL_inputMediaGame) InputMedia.TLdeserialize(data, data.readInt32(false), false), random_id, taskId);
+                                    SendMessagesHelper.getInstance(MessagesStorage.this.currentAccount).sendGame(InputPeer.TLdeserialize(data, data.readInt32(false), false), (TL_inputMediaGame) InputMedia.TLdeserialize(data, data.readInt32(false), false), random_id, taskId);
                                     break;
                                 case 4:
                                     final long did = data.readInt64(false);
@@ -842,7 +852,7 @@ public class MessagesStorage {
                                     final long j2 = taskId;
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
-                                            MessagesController.getInstance().pinDialog(did, pin, TLdeserialize, j2);
+                                            MessagesController.getInstance(MessagesStorage.this.currentAccount).pinDialog(did, pin, TLdeserialize, j2);
                                         }
                                     });
                                     break;
@@ -852,7 +862,7 @@ public class MessagesStorage {
                                     final InputChannel inputChannel = InputChannel.TLdeserialize(data, data.readInt32(false), false);
                                     Utilities.stageQueue.postRunnable(new Runnable() {
                                         public void run() {
-                                            MessagesController.getInstance().getChannelDifference(channelId, newDialogType, taskId, inputChannel);
+                                            MessagesController.getInstance(MessagesStorage.this.currentAccount).getChannelDifference(channelId, newDialogType, taskId, inputChannel);
                                         }
                                     });
                                     break;
@@ -869,7 +879,7 @@ public class MessagesStorage {
                                         final long j3 = taskId;
                                         AndroidUtilities.runOnUIThread(new Runnable() {
                                             public void run() {
-                                                MessagesController.getInstance().deleteMessages(null, null, null, i, true, j3, finalRequest);
+                                                MessagesController.getInstance(MessagesStorage.this.currentAccount).deleteMessages(null, null, null, i, true, j3, finalRequest);
                                             }
                                         });
                                         break;
@@ -906,7 +916,7 @@ public class MessagesStorage {
 
     private void saveDiffParamsInternal(int seq, int pts, int date, int qts) {
         try {
-            if (this.lastSavedSeq != seq || this.lastSavedPts != pts || this.lastSavedDate != date || lastQtsValue != qts) {
+            if (this.lastSavedSeq != seq || this.lastSavedPts != pts || this.lastSavedDate != date || this.lastQtsValue != qts) {
                 SQLitePreparedStatement state = this.database.executeFast("UPDATE params SET seq = ?, pts = ?, date = ?, qts = ? WHERE id = 1");
                 state.bindInteger(1, seq);
                 state.bindInteger(2, pts);
@@ -962,7 +972,7 @@ public class MessagesStorage {
                     final HashMap<Long, Integer> pushDialogs = new HashMap();
                     SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT d.did, d.unread_count, s.flags FROM dialogs as d LEFT JOIN dialog_settings as s ON d.did = s.did WHERE d.unread_count != 0", new Object[0]);
                     StringBuilder ids = new StringBuilder();
-                    int currentTime = ConnectionsManager.getInstance().getCurrentTime();
+                    int currentTime = ConnectionsManager.getInstance(MessagesStorage.this.currentAccount).getCurrentTime();
                     while (cursor.next()) {
                         long flags = cursor.longValue(2);
                         boolean muted = (1 & flags) != 0;
@@ -1119,7 +1129,7 @@ public class MessagesStorage {
                     Collections.reverse(messages);
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            NotificationsController.getInstance().processLoadedUnreadMessages(pushDialogs, messages, users, chats, encryptedChats);
+                            NotificationsController.getInstance(MessagesStorage.this.currentAccount).processLoadedUnreadMessages(pushDialogs, messages, users, chats, encryptedChats);
                         }
                     });
                 } catch (Throwable e2) {
@@ -1187,7 +1197,7 @@ public class MessagesStorage {
                     cursor.dispose();
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.recentImagesDidLoaded, Integer.valueOf(type), arrayList);
+                            NotificationCenter.getInstance(MessagesStorage.this.currentAccount).postNotificationName(NotificationCenter.recentImagesDidLoaded, Integer.valueOf(type), arrayList);
                         }
                     });
                 } catch (Throwable e) {
@@ -1255,9 +1265,9 @@ public class MessagesStorage {
                         state.requery();
                         state.bindString(1, searchImage.id);
                         state.bindInteger(2, searchImage.type);
-                        state.bindString(3, searchImage.imageUrl != null ? searchImage.imageUrl : "");
-                        state.bindString(4, searchImage.thumbUrl != null ? searchImage.thumbUrl : "");
-                        state.bindString(5, searchImage.localUrl != null ? searchImage.localUrl : "");
+                        state.bindString(3, searchImage.imageUrl != null ? searchImage.imageUrl : TtmlNode.ANONYMOUS_REGION_ID);
+                        state.bindString(4, searchImage.thumbUrl != null ? searchImage.thumbUrl : TtmlNode.ANONYMOUS_REGION_ID);
+                        state.bindString(5, searchImage.localUrl != null ? searchImage.localUrl : TtmlNode.ANONYMOUS_REGION_ID);
                         state.bindInteger(6, searchImage.width);
                         state.bindInteger(7, searchImage.height);
                         state.bindInteger(8, searchImage.size);
@@ -1309,7 +1319,7 @@ public class MessagesStorage {
                     cursor.dispose();
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.wallpapersDidLoaded, wallPapers);
+                            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.wallpapersDidLoaded, wallPapers);
                         }
                     });
                 } catch (Throwable e) {
@@ -1339,7 +1349,7 @@ public class MessagesStorage {
                     if (usersToLoad.length() != 0) {
                         MessagesStorage.this.getUsersInternal(usersToLoad.toString(), users);
                     }
-                    MessagesController.getInstance().processLoadedBlockedUsers(ids, users, true);
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processLoadedBlockedUsers(ids, users, true);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -1432,16 +1442,16 @@ public class MessagesStorage {
                     cursor.dispose();
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            MessagesController.getInstance().markChannelDialogMessageAsDeleted(mids, channelId);
+                            MessagesController.getInstance(MessagesStorage.this.currentAccount).markChannelDialogMessageAsDeleted(mids, channelId);
                         }
                     });
                     MessagesStorage.this.markMessagesAsDeletedInternal((ArrayList) mids, channelId);
                     MessagesStorage.this.updateDialogsWithDeletedMessagesInternal(mids, null, channelId);
-                    FileLoader.getInstance().deleteFiles(filesToDelete, 0);
+                    FileLoader.getInstance(MessagesStorage.this.currentAccount).deleteFiles(filesToDelete, 0);
                     if (!mids.isEmpty()) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, mids, Integer.valueOf(channelId));
+                                NotificationCenter.getInstance(MessagesStorage.this.currentAccount).postNotificationName(NotificationCenter.messagesDeleted, mids, Integer.valueOf(channelId));
                             }
                         });
                     }
@@ -1474,39 +1484,41 @@ public class MessagesStorage {
                         cursor = MessagesStorage.this.database.queryFinalized("SELECT data FROM messages WHERE uid = " + did, new Object[0]);
                         ArrayList<File> filesToDelete = new ArrayList();
                         while (cursor.next()) {
-                            try {
-                                data = cursor.byteBufferValue(0);
-                                if (data != null) {
-                                    message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                    data.reuse();
-                                    if (!(message == null || message.media == null)) {
-                                        File file;
-                                        if (message.media instanceof TL_messageMediaPhoto) {
-                                            Iterator it = message.media.photo.sizes.iterator();
-                                            while (it.hasNext()) {
-                                                file = FileLoader.getPathToAttach((PhotoSize) it.next());
-                                                if (file != null && file.toString().length() > 0) {
-                                                    filesToDelete.add(file);
-                                                }
-                                            }
-                                        } else if (message.media instanceof TL_messageMediaDocument) {
-                                            file = FileLoader.getPathToAttach(message.media.document);
-                                            if (file != null && file.toString().length() > 0) {
-                                                filesToDelete.add(file);
-                                            }
-                                            file = FileLoader.getPathToAttach(message.media.document.thumb);
+                            data = cursor.byteBufferValue(0);
+                            if (data != null) {
+                                message = Message.TLdeserialize(data, data.readInt32(false), false);
+                                data.reuse();
+                                if (!(message == null || message.media == null)) {
+                                    File file;
+                                    if (message.media instanceof TL_messageMediaPhoto) {
+                                        Iterator it = message.media.photo.sizes.iterator();
+                                        while (it.hasNext()) {
+                                            file = FileLoader.getPathToAttach((PhotoSize) it.next());
                                             if (file != null && file.toString().length() > 0) {
                                                 filesToDelete.add(file);
                                             }
                                         }
+                                    } else {
+                                        try {
+                                            if (message.media instanceof TL_messageMediaDocument) {
+                                                file = FileLoader.getPathToAttach(message.media.document);
+                                                if (file != null && file.toString().length() > 0) {
+                                                    filesToDelete.add(file);
+                                                }
+                                                file = FileLoader.getPathToAttach(message.media.document.thumb);
+                                                if (file != null && file.toString().length() > 0) {
+                                                    filesToDelete.add(file);
+                                                }
+                                            }
+                                        } catch (Throwable e) {
+                                            FileLog.e(e);
+                                        }
                                     }
                                 }
-                            } catch (Throwable e) {
-                                FileLog.e(e);
                             }
                         }
                         cursor.dispose();
-                        FileLoader.getInstance().deleteFiles(filesToDelete, messagesOnly);
+                        FileLoader.getInstance(MessagesStorage.this.currentAccount).deleteFiles(filesToDelete, messagesOnly);
                     }
                     if (messagesOnly == 0 || messagesOnly == 3) {
                         MessagesStorage.this.database.executeFast("DELETE FROM dialogs WHERE did = " + did).stepThis().dispose();
@@ -1550,7 +1562,7 @@ public class MessagesStorage {
                             MessagesStorage.this.database.executeFast("DELETE FROM media_counts_v2 WHERE uid = " + did).stepThis().dispose();
                             MessagesStorage.this.database.executeFast("DELETE FROM media_v2 WHERE uid = " + did).stepThis().dispose();
                             MessagesStorage.this.database.executeFast("DELETE FROM media_holes_v2 WHERE uid = " + did).stepThis().dispose();
-                            BotQuery.clearBotKeyboard(did, null);
+                            DataQuery.getInstance(MessagesStorage.this.currentAccount).clearBotKeyboard(did, null);
                             SQLitePreparedStatement state5 = MessagesStorage.this.database.executeFast("REPLACE INTO messages_holes VALUES(?, ?, ?)");
                             SQLitePreparedStatement state6 = MessagesStorage.this.database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
                             if (messageId != -1) {
@@ -1569,10 +1581,10 @@ public class MessagesStorage {
                     MessagesStorage.this.database.executeFast("DELETE FROM media_v2 WHERE uid = " + did).stepThis().dispose();
                     MessagesStorage.this.database.executeFast("DELETE FROM messages_holes WHERE uid = " + did).stepThis().dispose();
                     MessagesStorage.this.database.executeFast("DELETE FROM media_holes_v2 WHERE uid = " + did).stepThis().dispose();
-                    BotQuery.clearBotKeyboard(did, null);
+                    DataQuery.getInstance(MessagesStorage.this.currentAccount).clearBotKeyboard(did, null);
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.needReloadRecentDialogsSearch, new Object[0]);
+                            NotificationCenter.getInstance(MessagesStorage.this.currentAccount).postNotificationName(NotificationCenter.needReloadRecentDialogsSearch, new Object[0]);
                         }
                     });
                 } catch (Throwable e22) {
@@ -1608,7 +1620,7 @@ public class MessagesStorage {
                     cursor.dispose();
                     Utilities.stageQueue.postRunnable(new Runnable() {
                         public void run() {
-                            MessagesController.getInstance().processLoadedUserPhotos(res, i, i2, j, true, i3);
+                            MessagesController.getInstance(MessagesStorage.this.currentAccount).processLoadedUserPhotos(res, i, i2, j, true, i3);
                         }
                     });
                 } catch (Throwable e) {
@@ -1732,50 +1744,50 @@ public class MessagesStorage {
                     }
                     MessagesStorage.this.putDialogsInternal(org_telegram_tgnet_TLRPC_messages_Dialogs, false);
                     MessagesStorage.this.saveDiffParamsInternal(i2, i3, i4, i5);
-                    if (message == null || message.id == UserConfig.dialogsLoadOffsetId) {
-                        UserConfig.dialogsLoadOffsetId = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                    if (message == null || message.id == UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetId) {
+                        UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetId = ConnectionsManager.DEFAULT_DATACENTER_ID;
                     } else {
-                        UserConfig.totalDialogsLoadCount = org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size();
-                        UserConfig.dialogsLoadOffsetId = message.id;
-                        UserConfig.dialogsLoadOffsetDate = message.date;
+                        UserConfig.getInstance(MessagesStorage.this.currentAccount).totalDialogsLoadCount = org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size();
+                        UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetId = message.id;
+                        UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetDate = message.date;
                         Chat chat;
                         if (message.to_id.channel_id != 0) {
-                            UserConfig.dialogsLoadOffsetChannelId = message.to_id.channel_id;
-                            UserConfig.dialogsLoadOffsetChatId = 0;
-                            UserConfig.dialogsLoadOffsetUserId = 0;
+                            UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetChannelId = message.to_id.channel_id;
+                            UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetChatId = 0;
+                            UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetUserId = 0;
                             for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.chats.size(); a++) {
                                 chat = (Chat) org_telegram_tgnet_TLRPC_messages_Dialogs.chats.get(a);
-                                if (chat.id == UserConfig.dialogsLoadOffsetChannelId) {
-                                    UserConfig.dialogsLoadOffsetAccess = chat.access_hash;
+                                if (chat.id == UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetChannelId) {
+                                    UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetAccess = chat.access_hash;
                                     break;
                                 }
                             }
                         } else if (message.to_id.chat_id != 0) {
-                            UserConfig.dialogsLoadOffsetChatId = message.to_id.chat_id;
-                            UserConfig.dialogsLoadOffsetChannelId = 0;
-                            UserConfig.dialogsLoadOffsetUserId = 0;
+                            UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetChatId = message.to_id.chat_id;
+                            UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetChannelId = 0;
+                            UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetUserId = 0;
                             for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.chats.size(); a++) {
                                 chat = (Chat) org_telegram_tgnet_TLRPC_messages_Dialogs.chats.get(a);
-                                if (chat.id == UserConfig.dialogsLoadOffsetChatId) {
-                                    UserConfig.dialogsLoadOffsetAccess = chat.access_hash;
+                                if (chat.id == UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetChatId) {
+                                    UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetAccess = chat.access_hash;
                                     break;
                                 }
                             }
                         } else if (message.to_id.user_id != 0) {
-                            UserConfig.dialogsLoadOffsetUserId = message.to_id.user_id;
-                            UserConfig.dialogsLoadOffsetChatId = 0;
-                            UserConfig.dialogsLoadOffsetChannelId = 0;
+                            UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetUserId = message.to_id.user_id;
+                            UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetChatId = 0;
+                            UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetChannelId = 0;
                             for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.users.size(); a++) {
                                 User user = (User) org_telegram_tgnet_TLRPC_messages_Dialogs.users.get(a);
-                                if (user.id == UserConfig.dialogsLoadOffsetUserId) {
-                                    UserConfig.dialogsLoadOffsetAccess = user.access_hash;
+                                if (user.id == UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetUserId) {
+                                    UserConfig.getInstance(MessagesStorage.this.currentAccount).dialogsLoadOffsetAccess = user.access_hash;
                                     break;
                                 }
                             }
                         }
                     }
-                    UserConfig.saveConfig(false);
-                    MessagesController.getInstance().completeDialogsReset(org_telegram_tgnet_TLRPC_messages_Dialogs, i6, i2, i3, i4, i5, hashMap, hashMap2, message);
+                    UserConfig.getInstance(MessagesStorage.this.currentAccount).saveConfig(false);
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).completeDialogsReset(org_telegram_tgnet_TLRPC_messages_Dialogs, i6, i2, i3, i4, i5, hashMap, hashMap2, message);
                 } catch (Throwable e) {
                     FileLog.e("tmessages", e);
                 }
@@ -1888,12 +1900,12 @@ public class MessagesStorage {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
                                 for (int a = 0; a < messages.size(); a++) {
-                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.updateMessageMedia, messages.get(a));
+                                    NotificationCenter.getInstance(MessagesStorage.this.currentAccount).postNotificationName(NotificationCenter.updateMessageMedia, messages.get(a));
                                 }
                             }
                         });
                     }
-                    FileLoader.getInstance().deleteFiles(filesToDelete, 0);
+                    FileLoader.getInstance(MessagesStorage.this.currentAccount).deleteFiles(filesToDelete, 0);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -1928,7 +1940,7 @@ public class MessagesStorage {
                         arr.add(Integer.valueOf((int) mid));
                     }
                     cursor.dispose();
-                    MessagesController.getInstance().processLoadedDeleteTask(date, arr, channelId);
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processLoadedDeleteTask(date, arr, channelId);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -1957,7 +1969,7 @@ public class MessagesStorage {
                     MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE dialogs SET unread_count_i = %d WHERE did = %d", new Object[]{Integer.valueOf(old_mentions_count), Long.valueOf(j)})).stepThis().dispose();
                     HashMap<Long, Integer> hashMap = new HashMap();
                     hashMap.put(Long.valueOf(j), Integer.valueOf(old_mentions_count));
-                    MessagesController.getInstance().processDialogsUpdateRead(null, hashMap);
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processDialogsUpdateRead(null, hashMap);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -1987,7 +1999,7 @@ public class MessagesStorage {
                     MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE dialogs SET unread_count_i = %d WHERE did = %d", new Object[]{Integer.valueOf(count), Long.valueOf(did)})).stepThis().dispose();
                     HashMap<Long, Integer> hashMap = new HashMap();
                     hashMap.put(Long.valueOf(did), Integer.valueOf(count));
-                    MessagesController.getInstance().processDialogsUpdateRead(null, hashMap);
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processDialogsUpdateRead(null, hashMap);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -2023,9 +2035,9 @@ public class MessagesStorage {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
                             if (!z) {
-                                MessagesStorage.getInstance().markMessagesContentAsRead(midsArray, 0);
+                                MessagesStorage.this.markMessagesContentAsRead(midsArray, 0);
                             }
-                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesReadContent, midsArray);
+                            NotificationCenter.getInstance(MessagesStorage.this.currentAccount).postNotificationName(NotificationCenter.messagesReadContent, midsArray);
                         }
                     });
                     SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO enc_tasks_v2 VALUES(?, ?)");
@@ -2041,7 +2053,7 @@ public class MessagesStorage {
                     }
                     state.dispose();
                     MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE messages SET ttl = 0 WHERE mid = %d", new Object[]{Long.valueOf(mid)})).stepThis().dispose();
-                    MessagesController.getInstance().didAddedNewTask(minDate, messages);
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).didAddedNewTask(minDate, messages);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -2102,8 +2114,8 @@ public class MessagesStorage {
                         final ArrayList<Long> arrayList = midsArray;
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                MessagesStorage.getInstance().markMessagesContentAsRead(arrayList, 0);
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesReadContent, arrayList);
+                                MessagesStorage.this.markMessagesContentAsRead(arrayList, 0);
+                                NotificationCenter.getInstance(MessagesStorage.this.currentAccount).postNotificationName(NotificationCenter.messagesReadContent, arrayList);
                             }
                         });
                     }
@@ -2123,7 +2135,7 @@ public class MessagesStorage {
                         state.dispose();
                         MessagesStorage.this.database.commitTransaction();
                         MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE messages SET ttl = 0 WHERE mid IN(%s)", new Object[]{mids.toString()})).stepThis().dispose();
-                        MessagesController.getInstance().didAddedNewTask(minDate, messages);
+                        MessagesController.getInstance(MessagesStorage.this.currentAccount).didAddedNewTask(minDate, messages);
                     }
                 } catch (Throwable e) {
                     FileLog.e(e);
@@ -2245,9 +2257,9 @@ public class MessagesStorage {
                 }
                 this.database.commitTransaction();
             }
-            MessagesController.getInstance().processDialogsUpdateRead(dialogsToUpdate, dialogsToUpdateMentions);
+            MessagesController.getInstance(this.currentAccount).processDialogsUpdateRead(dialogsToUpdate, dialogsToUpdateMentions);
             if (!channelMentionsToReload.isEmpty()) {
-                MessagesController.getInstance().reloadMentionsCountForChannels(channelMentionsToReload);
+                MessagesController.getInstance(this.currentAccount).reloadMentionsCountForChannels(channelMentionsToReload);
             }
         } catch (Throwable e) {
             FileLog.e(e);
@@ -2291,7 +2303,7 @@ public class MessagesStorage {
                             final ChatFull finalInfo = info;
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
-                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatInfoDidLoaded, finalInfo, Integer.valueOf(0), Boolean.valueOf(false), null);
+                                    NotificationCenter.getInstance(MessagesStorage.this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoaded, finalInfo, Integer.valueOf(0), Boolean.valueOf(false), null);
                                 }
                             });
                             SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?)");
@@ -2322,7 +2334,7 @@ public class MessagesStorage {
                         ids.add(Integer.valueOf(cursor.intValue(0)));
                     }
                     cursor.dispose();
-                    MessagesController.getInstance().processLoadedChannelAdmins(ids, chatId, true);
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processLoadedChannelAdmins(ids, chatId, true);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -2390,7 +2402,7 @@ public class MessagesStorage {
             this.storageQueue.postRunnable(new Runnable() {
                 public void run() {
                     try {
-                        int currentDate = ConnectionsManager.getInstance().getCurrentTime();
+                        int currentDate = ConnectionsManager.getInstance(MessagesStorage.this.currentAccount).getCurrentTime();
                         if (result instanceof TL_messages_botCallbackAnswer) {
                             currentDate += ((TL_messages_botCallbackAnswer) result).cache_time;
                         } else if (result instanceof TL_messages_botResults) {
@@ -2415,7 +2427,7 @@ public class MessagesStorage {
 
     public void getBotCache(final String key, final RequestDelegate requestDelegate) {
         if (key != null && requestDelegate != null) {
-            final int currentDate = ConnectionsManager.getInstance().getCurrentTime();
+            final int currentDate = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
             this.storageQueue.postRunnable(new Runnable() {
                 public void run() {
                     TLObject result = null;
@@ -2534,7 +2546,7 @@ public class MessagesStorage {
                         final ChatFull finalInfo = info;
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatInfoDidLoaded, finalInfo, Integer.valueOf(0), Boolean.valueOf(false), null);
+                                NotificationCenter.getInstance(MessagesStorage.this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoaded, finalInfo, Integer.valueOf(0), Boolean.valueOf(false), null);
                             }
                         });
                         SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?)");
@@ -2595,7 +2607,7 @@ public class MessagesStorage {
                             TL_chatParticipant participant = new TL_chatParticipant();
                             participant.user_id = i3;
                             participant.inviter_id = i4;
-                            participant.date = ConnectionsManager.getInstance().getCurrentTime();
+                            participant.date = ConnectionsManager.getInstance(MessagesStorage.this.currentAccount).getCurrentTime();
                             info.participants.participants.add(participant);
                         } else if (i2 == 2) {
                             a = 0;
@@ -2624,7 +2636,7 @@ public class MessagesStorage {
                         final ChatFull finalInfo = info;
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatInfoDidLoaded, finalInfo, Integer.valueOf(0), Boolean.valueOf(false), null);
+                                NotificationCenter.getInstance(MessagesStorage.this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoaded, finalInfo, Integer.valueOf(0), Boolean.valueOf(false), null);
                             }
                         });
                         SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?)");
@@ -2841,21 +2853,21 @@ Error: java.util.NoSuchElementException
                         semaphore2.release();
                     }
                     if ((info instanceof TL_channelFull) && info.pinned_msg_id != 0) {
-                        pinnedMessageObject = MessagesQuery.loadPinnedMessage(i, info.pinned_msg_id, false);
+                        pinnedMessageObject = DataQuery.getInstance(MessagesStorage.this.currentAccount).loadPinnedMessage(i, info.pinned_msg_id, false);
                     }
-                    MessagesController.getInstance().processChatInfo(i, info, loadedUsers, true, z, z2, pinnedMessageObject);
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processChatInfo(i, info, loadedUsers, true, z, z2, pinnedMessageObject);
                     if (semaphore2 != null) {
                         semaphore2.release();
                     }
                 } catch (Throwable e2) {
                     FileLog.e(e2);
-                    MessagesController.getInstance().processChatInfo(i, info, loadedUsers, true, z, z2, null);
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processChatInfo(i, info, loadedUsers, true, z, z2, null);
                     if (semaphore2 != null) {
                         semaphore2.release();
                     }
                 } catch (Throwable th) {
                     Throwable th2 = th;
-                    MessagesController.getInstance().processChatInfo(i, info, loadedUsers, true, z, z2, null);
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processChatInfo(i, info, loadedUsers, true, z, z2, null);
                     if (semaphore2 != null) {
                         semaphore2.release();
                     }
@@ -3035,10 +3047,10 @@ Error: java.util.NoSuchElementException
                                 contact.last_name = cursor.stringValue(2);
                                 contact.imported = cursor.intValue(6);
                                 if (contact.first_name == null) {
-                                    contact.first_name = "";
+                                    contact.first_name = TtmlNode.ANONYMOUS_REGION_ID;
                                 }
                                 if (contact.last_name == null) {
-                                    contact.last_name = "";
+                                    contact.last_name = TtmlNode.ANONYMOUS_REGION_ID;
                                 }
                                 contact.contact_id = uid;
                                 contactHashMap.put(Integer.valueOf(uid), contact);
@@ -3053,12 +3065,12 @@ Error: java.util.NoSuchElementException
                                     }
                                     contact.shortPhones.add(sphone);
                                     contact.phoneDeleted.add(Integer.valueOf(cursor.intValue(5)));
-                                    contact.phoneTypes.add("");
+                                    contact.phoneTypes.add(TtmlNode.ANONYMOUS_REGION_ID);
                                 }
                             }
                         }
                         cursor.dispose();
-                        ContactsController.getInstance().migratePhoneBookToV7(contactHashMap);
+                        ContactsController.getInstance(MessagesStorage.this.currentAccount).migratePhoneBookToV7(contactHashMap);
                         return;
                     }
                 } catch (Throwable e) {
@@ -3077,10 +3089,10 @@ Error: java.util.NoSuchElementException
                             contact.last_name = cursor.stringValue(3);
                             contact.imported = cursor.intValue(7);
                             if (contact.first_name == null) {
-                                contact.first_name = "";
+                                contact.first_name = TtmlNode.ANONYMOUS_REGION_ID;
                             }
                             if (contact.last_name == null) {
-                                contact.last_name = "";
+                                contact.last_name = TtmlNode.ANONYMOUS_REGION_ID;
                             }
                             contactHashMap2.put(key, contact);
                         }
@@ -3094,7 +3106,7 @@ Error: java.util.NoSuchElementException
                                 }
                                 contact.shortPhones.add(sphone);
                                 contact.phoneDeleted.add(Integer.valueOf(cursor.intValue(6)));
-                                contact.phoneTypes.add("");
+                                contact.phoneTypes.add(TtmlNode.ANONYMOUS_REGION_ID);
                             }
                         }
                     }
@@ -3103,7 +3115,7 @@ Error: java.util.NoSuchElementException
                     contactHashMap2.clear();
                     FileLog.e(e2);
                 }
-                ContactsController.getInstance().performSyncPhoneBook(contactHashMap2, true, true, false, false, !byError, false);
+                ContactsController.getInstance(MessagesStorage.this.currentAccount).performSyncPhoneBook(contactHashMap2, true, true, false, false, !byError, false);
             }
         });
     }
@@ -3142,7 +3154,7 @@ Error: java.util.NoSuchElementException
                     users.clear();
                     FileLog.e(e);
                 }
-                ContactsController.getInstance().processLoadedContacts(contacts, users, 1);
+                ContactsController.getInstance(MessagesStorage.this.currentAccount).processLoadedContacts(contacts, users, 1);
             }
         });
     }
@@ -3236,7 +3248,7 @@ Error: java.util.NoSuchElementException
                         }
                         MessagesStorage.this.getChatsInternal(stringToLoad.toString(), chats);
                     }
-                    SendMessagesHelper.getInstance().processUnsentMessages(messages, users, chats, encryptedChats);
+                    SendMessagesHelper.getInstance(MessagesStorage.this.currentAccount).processUnsentMessages(messages, users, chats, encryptedChats);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -3894,16 +3906,16 @@ Error: java.util.NoSuchElementException
                     if (!chatsToLoad.isEmpty()) {
                         MessagesStorage.this.getChatsInternal(TextUtils.join(",", chatsToLoad), res.chats);
                     }
-                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer, mentions_unread);
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer, mentions_unread);
                 } catch (Throwable e2) {
                     res.messages.clear();
                     res.chats.clear();
                     res.users.clear();
                     FileLog.e(e2);
-                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer, mentions_unread);
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer, mentions_unread);
                 } catch (Throwable th) {
                     Throwable th2 = th;
-                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer, mentions_unread);
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer, mentions_unread);
                 }
             }
         });
@@ -4599,7 +4611,7 @@ Error: java.util.NoSuchElementException
                     try {
                         ArrayList<Integer> usersToLoad = new ArrayList();
                         ArrayList<EncryptedChat> encryptedChats = new ArrayList();
-                        MessagesStorage.this.getEncryptedChatsInternal("" + chat_id, encryptedChats, usersToLoad);
+                        MessagesStorage.this.getEncryptedChatsInternal(TtmlNode.ANONYMOUS_REGION_ID + chat_id, encryptedChats, usersToLoad);
                         if (!(encryptedChats.isEmpty() || usersToLoad.isEmpty())) {
                             ArrayList<User> users = new ArrayList();
                             MessagesStorage.this.getUsersInternal(TextUtils.join(",", usersToLoad), users);
@@ -4717,7 +4729,7 @@ Error: java.util.NoSuchElementException
     }
 
     private String formatUserSearchName(User user) {
-        StringBuilder str = new StringBuilder("");
+        StringBuilder str = new StringBuilder(TtmlNode.ANONYMOUS_REGION_ID);
         if (user.first_name != null && user.first_name.length() > 0) {
             str.append(user.first_name);
         }
@@ -4841,7 +4853,7 @@ Error: java.util.NoSuchElementException
                 if (chat.title != null) {
                     state.bindString(2, chat.title.toLowerCase());
                 } else {
-                    state.bindString(2, "");
+                    state.bindString(2, TtmlNode.ANONYMOUS_REGION_ID);
                 }
                 state.bindByteBuffer(3, data);
                 state.step();
@@ -5048,7 +5060,7 @@ Error: java.util.NoSuchElementException
                     cursor.dispose();
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            MediaController.getInstance().processDownloadObjects(type, objects);
+                            MediaController.getInstance(MessagesStorage.this.currentAccount).processDownloadObjects(type, objects);
                         }
                     });
                 } catch (Throwable e) {
@@ -5131,7 +5143,7 @@ Error: java.util.NoSuchElementException
                             MessagesStorage.this.database.commitTransaction();
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
-                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.didReceivedWebpages, messages);
+                                    NotificationCenter.getInstance(MessagesStorage.this.currentAccount).postNotificationName(NotificationCenter.didReceivedWebpages, messages);
                                 }
                             });
                         }
@@ -5164,7 +5176,7 @@ Error: java.util.NoSuchElementException
                     MessagesStorage.this.database.executeFast("DELETE FROM media_v2 WHERE uid = " + did).stepThis().dispose();
                     MessagesStorage.this.database.executeFast("DELETE FROM messages_holes WHERE uid = " + did).stepThis().dispose();
                     MessagesStorage.this.database.executeFast("DELETE FROM media_holes_v2 WHERE uid = " + did).stepThis().dispose();
-                    BotQuery.clearBotKeyboard(did, null);
+                    DataQuery.getInstance(MessagesStorage.this.currentAccount).clearBotKeyboard(did, null);
                     TL_messages_dialogs dialogs = new TL_messages_dialogs();
                     dialogs.chats.addAll(difference.chats);
                     dialogs.users.addAll(difference.users);
@@ -5188,19 +5200,19 @@ Error: java.util.NoSuchElementException
                     dialog.pts = difference.pts;
                     dialogs.dialogs.add(dialog);
                     MessagesStorage.this.putDialogsInternal(dialogs, false);
-                    MessagesStorage.getInstance().updateDialogsWithDeletedMessages(new ArrayList(), null, false, channel_id);
+                    MessagesStorage.this.updateDialogsWithDeletedMessages(new ArrayList(), null, false, channel_id);
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(did), Boolean.valueOf(true));
+                            NotificationCenter.getInstance(MessagesStorage.this.currentAccount).postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(did), Boolean.valueOf(true));
                         }
                     });
                     if (!checkInvite) {
                         return;
                     }
                     if (newDialogType == 1) {
-                        MessagesController.getInstance().checkChannelInviter(channel_id);
+                        MessagesController.getInstance(MessagesStorage.this.currentAccount).checkChannelInviter(channel_id);
                     } else {
-                        MessagesController.getInstance().generateJoinMessage(channel_id, false);
+                        MessagesController.getInstance(MessagesStorage.this.currentAccount).generateJoinMessage(channel_id, false);
                     }
                 } catch (Throwable e) {
                     FileLog.e(e);
@@ -5334,7 +5346,7 @@ Error: java.util.NoSuchElementException
                     messagesIdsMap.put(Long.valueOf(messageId), Long.valueOf(message.dialog_id));
                 }
             }
-            if (SharedMediaQuery.canAddMessageToMedia(message)) {
+            if (DataQuery.canAddMessageToMedia(message)) {
                 if (messageMediaIds == null) {
                     messageMediaIds = new StringBuilder();
                     messagesMediaIdsMap = new HashMap();
@@ -5345,7 +5357,7 @@ Error: java.util.NoSuchElementException
                 }
                 messageMediaIds.append(messageId);
                 messagesMediaIdsMap.put(Long.valueOf(messageId), Long.valueOf(message.dialog_id));
-                mediaTypes.put(Long.valueOf(messageId), Integer.valueOf(SharedMediaQuery.getMediaType(message)));
+                mediaTypes.put(Long.valueOf(messageId), Integer.valueOf(DataQuery.getMediaType(message)));
             }
             if (isValidKeyboardToSave(message)) {
                 Message oldMessage = (Message) botKeyboards.get(Long.valueOf(message.dialog_id));
@@ -5355,7 +5367,7 @@ Error: java.util.NoSuchElementException
             }
         }
         for (Entry<Long, Message> entry : botKeyboards.entrySet()) {
-            BotQuery.putBotKeyboard(((Long) entry.getKey()).longValue(), (Message) entry.getValue());
+            DataQuery.getInstance(this.currentAccount).putBotKeyboard(((Long) entry.getKey()).longValue(), (Message) entry.getValue());
         }
         if (messageMediaIds != null) {
             cursor = this.database.queryFinalized("SELECT mid FROM media_v2 WHERE mid IN(" + messageMediaIds.toString() + ")", new Object[0]);
@@ -5449,7 +5461,7 @@ Error: java.util.NoSuchElementException
                 state3.bindLong(2, messageId);
                 state3.step();
             }
-            if (SharedMediaQuery.canAddMessageToMedia(message)) {
+            if (DataQuery.canAddMessageToMedia(message)) {
                 if (state2 == null) {
                     state2 = this.database.executeFast("REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)");
                 }
@@ -5457,7 +5469,7 @@ Error: java.util.NoSuchElementException
                 state2.bindLong(1, messageId);
                 state2.bindLong(2, message.dialog_id);
                 state2.bindInteger(3, message.date);
-                state2.bindInteger(4, SharedMediaQuery.getMediaType(message));
+                state2.bindInteger(4, DataQuery.getMediaType(message));
                 state2.bindByteBuffer(5, data);
                 state2.step();
             }
@@ -5468,7 +5480,7 @@ Error: java.util.NoSuchElementException
                 state5.step();
             }
             data.reuse();
-            if (downloadMask != 0 && ((message.to_id.channel_id == 0 || message.post) && message.date >= ConnectionsManager.getInstance().getCurrentTime() - 3600 && MediaController.getInstance().canDownloadMedia(message) && ((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)))) {
+            if (downloadMask != 0 && ((message.to_id.channel_id == 0 || message.post) && message.date >= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() - 3600 && MediaController.getInstance(this.currentAccount).canDownloadMedia(message) && ((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)))) {
                 int type2 = 0;
                 long id = 0;
                 MessageMedia object = null;
@@ -5560,7 +5572,7 @@ Error: java.util.NoSuchElementException
                     pinned = cursor.intValue(6);
                     old_mentions_count = cursor.intValue(7);
                 } else if (channelId != 0) {
-                    MessagesController.getInstance().checkChannelInviter(channelId);
+                    MessagesController.getInstance(this.currentAccount).checkChannelInviter(channelId);
                 }
                 cursor.dispose();
                 Integer mentions_count = (Integer) mentionCounts.get(key);
@@ -5634,12 +5646,12 @@ Error: java.util.NoSuchElementException
         if (withTransaction) {
             this.database.commitTransaction();
         }
-        MessagesController.getInstance().processDialogsUpdateRead(messagesCounts, mentionCounts);
+        MessagesController.getInstance(this.currentAccount).processDialogsUpdateRead(messagesCounts, mentionCounts);
         if (downloadMediaMask != 0) {
             final int i = downloadMediaMask;
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
-                    MediaController.getInstance().newDownloadObjectsAvailable(i);
+                    MediaController.getInstance(MessagesStorage.this.currentAccount).newDownloadObjectsAvailable(i);
                 }
             });
         }
@@ -5703,7 +5715,6 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
-        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -5756,6 +5767,7 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
+        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {
@@ -6044,12 +6056,12 @@ Error: java.util.NoSuchElementException
                         if (!mids.isEmpty()) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
-                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, mids, Integer.valueOf(0));
+                                    NotificationCenter.getInstance(MessagesStorage.this.currentAccount).postNotificationName(NotificationCenter.messagesDeleted, mids, Integer.valueOf(0));
                                 }
                             });
-                            MessagesStorage.getInstance().updateDialogsWithReadMessagesInternal(mids, null, null, null);
-                            MessagesStorage.getInstance().markMessagesAsDeletedInternal((ArrayList) mids, 0);
-                            MessagesStorage.getInstance().updateDialogsWithDeletedMessagesInternal(mids, null, 0);
+                            MessagesStorage.this.updateDialogsWithReadMessagesInternal(mids, null, null, null);
+                            MessagesStorage.this.markMessagesAsDeletedInternal((ArrayList) mids, 0);
+                            MessagesStorage.this.updateDialogsWithDeletedMessagesInternal(mids, null, 0);
                         }
                     } catch (Throwable e) {
                         FileLog.e(e);
@@ -6079,67 +6091,69 @@ Error: java.util.NoSuchElementException
                 ids = TextUtils.join(",", messages);
             }
             ArrayList<File> filesToDelete = new ArrayList();
-            int currentUser = UserConfig.getClientUserId();
+            int currentUser = UserConfig.getInstance(this.currentAccount).getClientUserId();
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state, out, mention FROM messages WHERE mid IN(%s)", new Object[]{ids}), new Object[0]);
             while (cursor.next()) {
-                try {
-                    long did = cursor.longValue(0);
-                    if (did != ((long) currentUser)) {
-                        int read_state = cursor.intValue(2);
-                        if (cursor.intValue(3) == 0) {
-                            Integer num;
-                            Integer[] unread_count = (Integer[]) dialogsToUpdate.get(Long.valueOf(did));
-                            if (unread_count == null) {
-                                unread_count = new Integer[]{Integer.valueOf(0), Integer.valueOf(0)};
-                                dialogsToUpdate.put(Long.valueOf(did), unread_count);
-                            }
-                            if (read_state < 2) {
-                                num = unread_count[1];
-                                unread_count[1] = Integer.valueOf(unread_count[1].intValue() + 1);
-                            }
-                            if (read_state == 0 || read_state == 2) {
-                                num = unread_count[0];
-                                unread_count[0] = Integer.valueOf(unread_count[0].intValue() + 1);
-                            }
+                long did = cursor.longValue(0);
+                if (did != ((long) currentUser)) {
+                    int read_state = cursor.intValue(2);
+                    if (cursor.intValue(3) == 0) {
+                        Integer num;
+                        Integer[] unread_count = (Integer[]) dialogsToUpdate.get(Long.valueOf(did));
+                        if (unread_count == null) {
+                            unread_count = new Integer[]{Integer.valueOf(0), Integer.valueOf(0)};
+                            dialogsToUpdate.put(Long.valueOf(did), unread_count);
                         }
-                        if (((int) did) == 0) {
-                            NativeByteBuffer data = cursor.byteBufferValue(1);
-                            if (data != null) {
-                                Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                data.reuse();
-                                if (message == null) {
-                                    continue;
-                                } else if (message.media instanceof TL_messageMediaPhoto) {
-                                    it = message.media.photo.sizes.iterator();
-                                    while (it.hasNext()) {
-                                        file = FileLoader.getPathToAttach((PhotoSize) it.next());
-                                        if (file != null && file.toString().length() > 0) {
-                                            filesToDelete.add(file);
-                                        }
-                                    }
-                                } else if (message.media instanceof TL_messageMediaDocument) {
-                                    file = FileLoader.getPathToAttach(message.media.document);
-                                    if (file != null && file.toString().length() > 0) {
-                                        filesToDelete.add(file);
-                                    }
-                                    file = FileLoader.getPathToAttach(message.media.document.thumb);
+                        if (read_state < 2) {
+                            num = unread_count[1];
+                            unread_count[1] = Integer.valueOf(unread_count[1].intValue() + 1);
+                        }
+                        if (read_state == 0 || read_state == 2) {
+                            num = unread_count[0];
+                            unread_count[0] = Integer.valueOf(unread_count[0].intValue() + 1);
+                        }
+                    }
+                    if (((int) did) == 0) {
+                        NativeByteBuffer data = cursor.byteBufferValue(1);
+                        if (data != null) {
+                            Message message = Message.TLdeserialize(data, data.readInt32(false), false);
+                            data.reuse();
+                            if (message == null) {
+                                continue;
+                            } else if (message.media instanceof TL_messageMediaPhoto) {
+                                it = message.media.photo.sizes.iterator();
+                                while (it.hasNext()) {
+                                    file = FileLoader.getPathToAttach((PhotoSize) it.next());
                                     if (file != null && file.toString().length() > 0) {
                                         filesToDelete.add(file);
                                     }
                                 }
                             } else {
-                                continue;
+                                try {
+                                    if (message.media instanceof TL_messageMediaDocument) {
+                                        file = FileLoader.getPathToAttach(message.media.document);
+                                        if (file != null && file.toString().length() > 0) {
+                                            filesToDelete.add(file);
+                                        }
+                                        file = FileLoader.getPathToAttach(message.media.document.thumb);
+                                        if (file != null && file.toString().length() > 0) {
+                                            filesToDelete.add(file);
+                                        }
+                                    }
+                                } catch (Throwable e) {
+                                    FileLog.e(e);
+                                }
                             }
                         } else {
                             continue;
                         }
+                    } else {
+                        continue;
                     }
-                } catch (Throwable e) {
-                    FileLog.e(e);
                 }
             }
             cursor.dispose();
-            FileLoader.getInstance().deleteFiles(filesToDelete, 0);
+            FileLoader.getInstance(this.currentAccount).deleteFiles(filesToDelete, 0);
             for (Entry<Long, Integer[]> entry : dialogsToUpdate.entrySet()) {
                 Long did2 = (Long) entry.getKey();
                 Integer[] counts = (Integer[]) entry.getValue();
@@ -6165,7 +6179,7 @@ Error: java.util.NoSuchElementException
             this.database.executeFast(String.format(Locale.US, "DELETE FROM messages_seq WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
             this.database.executeFast(String.format(Locale.US, "DELETE FROM media_v2 WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
             this.database.executeFast("DELETE FROM media_counts_v2 WHERE 1").stepThis().dispose();
-            BotQuery.clearBotKeyboard(0, messages);
+            DataQuery.getInstance(this.currentAccount).clearBotKeyboard(0, messages);
             return arrayList;
         } catch (Throwable e2) {
             FileLog.e(e2);
@@ -6283,7 +6297,7 @@ Error: java.util.NoSuchElementException
                 getUsersInternal(TextUtils.join(",", usersToLoad), dialogs.users);
             }
             if (!dialogs.dialogs.isEmpty() || !encryptedChats.isEmpty()) {
-                MessagesController.getInstance().processDialogsUpdate(dialogs, encryptedChats);
+                MessagesController.getInstance(this.currentAccount).processDialogsUpdate(dialogs, encryptedChats);
             }
         } catch (Throwable e) {
             FileLog.e(e);
@@ -6326,7 +6340,7 @@ Error: java.util.NoSuchElementException
             HashMap<Long, Integer[]> dialogsToUpdate = new HashMap();
             long maxMessageId = ((long) mid) | (((long) channelId) << 32);
             ArrayList<File> filesToDelete = new ArrayList();
-            int currentUser = UserConfig.getClientUserId();
+            int currentUser = UserConfig.getInstance(this.currentAccount).getClientUserId();
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state, out, mention FROM messages WHERE uid = %d AND mid <= %d", new Object[]{Integer.valueOf(-channelId), Long.valueOf(maxMessageId)}), new Object[0]);
             while (cursor.next()) {
                 try {
@@ -6386,7 +6400,7 @@ Error: java.util.NoSuchElementException
                 }
             }
             cursor.dispose();
-            FileLoader.getInstance().deleteFiles(filesToDelete, 0);
+            FileLoader.getInstance(this.currentAccount).deleteFiles(filesToDelete, 0);
             for (Entry<Long, Integer[]> entry : dialogsToUpdate.entrySet()) {
                 Long did2 = (Long) entry.getKey();
                 Integer[] counts = (Integer[]) entry.getValue();
@@ -6434,12 +6448,12 @@ Error: java.util.NoSuchElementException
             if (message.media instanceof TL_messageMediaUnsupported_old) {
                 if (message.media.bytes.length == 0) {
                     message.media.bytes = new byte[1];
-                    message.media.bytes[0] = (byte) 73;
+                    message.media.bytes[0] = (byte) 74;
                 }
             } else if (message.media instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 message.media.bytes = new byte[1];
-                message.media.bytes[0] = (byte) 73;
+                message.media.bytes[0] = (byte) 74;
                 message.flags |= 512;
             }
         }
@@ -6750,12 +6764,12 @@ Error: java.util.NoSuchElementException
                             state.bindInteger(10, 0);
                             state.bindInteger(11, message.mentioned ? 1 : 0);
                             state.step();
-                            if (SharedMediaQuery.canAddMessageToMedia(message)) {
+                            if (DataQuery.canAddMessageToMedia(message)) {
                                 state2.requery();
                                 state2.bindLong(1, messageId);
                                 state2.bindLong(2, j);
                                 state2.bindInteger(3, message.date);
-                                state2.bindInteger(4, SharedMediaQuery.getMediaType(message));
+                                state2.bindInteger(4, DataQuery.getMediaType(message));
                                 state2.bindByteBuffer(5, (NativeByteBuffer) nativeByteBuffer);
                                 state2.step();
                             }
@@ -6779,7 +6793,7 @@ Error: java.util.NoSuchElementException
                             state5.dispose();
                         }
                         if (botKeyboard != null) {
-                            BotQuery.putBotKeyboard(j, botKeyboard);
+                            DataQuery.getInstance(MessagesStorage.this.currentAccount).putBotKeyboard(j, botKeyboard);
                         }
                         MessagesStorage.this.putUsersInternal(org_telegram_tgnet_TLRPC_messages_Messages.users);
                         MessagesStorage.this.putChatsInternal(org_telegram_tgnet_TLRPC_messages_Messages.chats);
@@ -6787,11 +6801,11 @@ Error: java.util.NoSuchElementException
                             MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE dialogs SET unread_count_i = %d WHERE did = %d", new Object[]{Integer.valueOf(mentionCountUpdate), Long.valueOf(j)})).stepThis().dispose();
                             HashMap<Long, Integer> hashMap = new HashMap();
                             hashMap.put(Long.valueOf(j), Integer.valueOf(mentionCountUpdate));
-                            MessagesController.getInstance().processDialogsUpdateRead(null, hashMap);
+                            MessagesController.getInstance(MessagesStorage.this.currentAccount).processDialogsUpdateRead(null, hashMap);
                         }
                         MessagesStorage.this.database.commitTransaction();
                         if (z) {
-                            MessagesStorage.getInstance().updateDialogsWithDeletedMessages(new ArrayList(), null, false, channelId);
+                            MessagesStorage.this.updateDialogsWithDeletedMessages(new ArrayList(), null, false, channelId);
                         }
                     } else if (i == 0) {
                         MessagesStorage.this.doneHolesInTable("messages_holes", j, i2);
@@ -6879,17 +6893,17 @@ Error: java.util.NoSuchElementException
     public void getDialogs(final int offset, final int count) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
-                Message message;
                 messages_Dialogs dialogs = new TL_messages_dialogs();
                 ArrayList<EncryptedChat> encryptedChats = new ArrayList();
                 ArrayList<Integer> usersToLoad = new ArrayList();
-                usersToLoad.add(Integer.valueOf(UserConfig.getClientUserId()));
+                usersToLoad.add(Integer.valueOf(UserConfig.getInstance(MessagesStorage.this.currentAccount).getClientUserId()));
                 ArrayList<Integer> chatsToLoad = new ArrayList();
                 ArrayList<Integer> encryptedToLoad = new ArrayList();
                 ArrayList<Long> replyMessages = new ArrayList();
                 HashMap<Long, Message> replyMessageOwners = new HashMap();
                 SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned, d.unread_count_i FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
                 while (cursor.next()) {
+                    Message message;
                     TL_dialog dialog = new TL_dialog();
                     dialog.id = cursor.longValue(0);
                     dialog.top_message = cursor.intValue(1);
@@ -6984,7 +6998,7 @@ Error: java.util.NoSuchElementException
                         dialogs.chats.clear();
                         encryptedChats.clear();
                         FileLog.e(e2);
-                        MessagesController.getInstance().processLoadedDialogs(dialogs, encryptedChats, 0, 100, 1, true, false, true);
+                        MessagesController.getInstance(MessagesStorage.this.currentAccount).processLoadedDialogs(dialogs, encryptedChats, 0, 100, 1, true, false, true);
                         return;
                     }
                 }
@@ -7022,7 +7036,7 @@ Error: java.util.NoSuchElementException
                 if (!usersToLoad.isEmpty()) {
                     MessagesStorage.this.getUsersInternal(TextUtils.join(",", usersToLoad), dialogs.users);
                 }
-                MessagesController.getInstance().processLoadedDialogs(dialogs, encryptedChats, offset, count, 1, false, false, true);
+                MessagesController.getInstance(MessagesStorage.this.currentAccount).processLoadedDialogs(dialogs, encryptedChats, offset, count, 1, false, false, true);
             }
         });
     }
@@ -7094,7 +7108,7 @@ Error: java.util.NoSuchElementException
                     if (message != null) {
                         messageDate = Math.max(message.date, 0);
                         if (isValidKeyboardToSave(message)) {
-                            BotQuery.putBotKeyboard(dialog.id, message);
+                            DataQuery.getInstance(this.currentAccount).putBotKeyboard(dialog.id, message);
                         }
                         fixUnsupportedMedia(message);
                         NativeByteBuffer data = new NativeByteBuffer(message.getObjectSize());
@@ -7116,12 +7130,12 @@ Error: java.util.NoSuchElementException
                         state.bindInteger(10, 0);
                         state.bindInteger(11, message.mentioned ? 1 : 0);
                         state.step();
-                        if (SharedMediaQuery.canAddMessageToMedia(message)) {
+                        if (DataQuery.canAddMessageToMedia(message)) {
                             state3.requery();
                             state3.bindLong(1, messageId);
                             state3.bindLong(2, dialog.id);
                             state3.bindInteger(3, message.date);
-                            state3.bindInteger(4, SharedMediaQuery.getMediaType(message));
+                            state3.bindInteger(4, DataQuery.getMediaType(message));
                             state3.bindByteBuffer(5, data);
                             state3.step();
                         }
@@ -7233,7 +7247,7 @@ Error: java.util.NoSuchElementException
         final Integer[] max = new Integer[]{Integer.valueOf(0)};
         final boolean z = outbox;
         final long j = dialog_id;
-        getInstance().getStorageQueue().postRunnable(new Runnable() {
+        this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 SQLiteCursor cursor = null;
                 try {
@@ -7272,7 +7286,7 @@ Error: java.util.NoSuchElementException
     public int getChannelPtsSync(final int channelId) {
         final Semaphore semaphore = new Semaphore(0);
         final Integer[] pts = new Integer[]{Integer.valueOf(0)};
-        getInstance().getStorageQueue().postRunnable(new Runnable() {
+        this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 SQLiteCursor cursor = null;
                 try {
@@ -7313,7 +7327,7 @@ Error: java.util.NoSuchElementException
     public User getUserSync(final int user_id) {
         final Semaphore semaphore = new Semaphore(0);
         final User[] user = new User[1];
-        getInstance().getStorageQueue().postRunnable(new Runnable() {
+        this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 user[0] = MessagesStorage.this.getUser(user_id);
                 semaphore.release();
@@ -7330,7 +7344,7 @@ Error: java.util.NoSuchElementException
     public Chat getChatSync(final int chat_id) {
         final Semaphore semaphore = new Semaphore(0);
         final Chat[] chat = new Chat[1];
-        getInstance().getStorageQueue().postRunnable(new Runnable() {
+        this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 chat[0] = MessagesStorage.this.getChat(chat_id);
                 semaphore.release();
@@ -7347,7 +7361,7 @@ Error: java.util.NoSuchElementException
     public User getUser(int user_id) {
         try {
             ArrayList<User> users = new ArrayList();
-            getUsersInternal("" + user_id, users);
+            getUsersInternal(TtmlNode.ANONYMOUS_REGION_ID + user_id, users);
             if (users.isEmpty()) {
                 return null;
             }
@@ -7372,7 +7386,7 @@ Error: java.util.NoSuchElementException
     public Chat getChat(int chat_id) {
         try {
             ArrayList<Chat> chats = new ArrayList();
-            getChatsInternal("" + chat_id, chats);
+            getChatsInternal(TtmlNode.ANONYMOUS_REGION_ID + chat_id, chats);
             if (chats.isEmpty()) {
                 return null;
             }
@@ -7386,7 +7400,7 @@ Error: java.util.NoSuchElementException
     public EncryptedChat getEncryptedChat(int chat_id) {
         try {
             ArrayList<EncryptedChat> encryptedChats = new ArrayList();
-            getEncryptedChatsInternal("" + chat_id, encryptedChats, null);
+            getEncryptedChatsInternal(TtmlNode.ANONYMOUS_REGION_ID + chat_id, encryptedChats, null);
             if (encryptedChats.isEmpty()) {
                 return null;
             }

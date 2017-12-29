@@ -2,7 +2,6 @@ package org.telegram.messenger;
 
 import android.graphics.Typeface;
 import android.os.Build.VERSION;
-import android.support.v4.widget.AutoScrollHelper;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.Spannable.Factory;
@@ -14,7 +13,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.File;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -172,6 +170,7 @@ public class MessageObject {
     public StringBuilder botButtonsLayout;
     public CharSequence caption;
     public int contentType;
+    public int currentAccount;
     public TL_channelAdminLogEvent currentEvent;
     public String customReplyName;
     public String dateKey;
@@ -313,8 +312,8 @@ public class MessageObject {
                     this.maxSizeWidth -= 50;
                     this.firstSpanAdditionalSize += 50;
                 }
-                int minHeight = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN);
-                int minWidth = (int) (((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN)) / (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) this.maxSizeWidth)));
+                int minHeight = AndroidUtilities.dp(120.0f);
+                int minWidth = (int) (((float) AndroidUtilities.dp(120.0f)) / (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) this.maxSizeWidth)));
                 int paddingsWidth = (int) (((float) AndroidUtilities.dp(40.0f)) / (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) this.maxSizeWidth)));
                 float maxAspectRatio = ((float) this.maxSizeWidth) / 814.0f;
                 averageAspectRatio /= (float) count;
@@ -370,7 +369,7 @@ public class MessageObject {
                     for (a = 0; a < attempts.size(); a++) {
                         MessageGroupedLayoutAttempt attempt = (MessageGroupedLayoutAttempt) attempts.get(a);
                         height = 0.0f;
-                        float minLineHeight = AutoScrollHelper.NO_MAX;
+                        float minLineHeight = Float.MAX_VALUE;
                         for (int b = 0; b < attempt.heights.length; b++) {
                             height += attempt.heights[b];
                             if (attempt.heights[b] < minLineHeight) {
@@ -587,21 +586,22 @@ public class MessageObject {
         }
     }
 
-    public MessageObject(Message message, AbstractMap<Integer, User> users, boolean generateLayout) {
-        this(message, users, null, generateLayout);
+    public MessageObject(int accountNum, Message message, AbstractMap<Integer, User> users, boolean generateLayout) {
+        this(accountNum, message, users, null, generateLayout);
     }
 
-    public MessageObject(Message message, AbstractMap<Integer, User> users, AbstractMap<Integer, Chat> chats, boolean generateLayout) {
-        this(message, (AbstractMap) users, (AbstractMap) chats, generateLayout, 0);
+    public MessageObject(int accountNum, Message message, AbstractMap<Integer, User> users, AbstractMap<Integer, Chat> chats, boolean generateLayout) {
+        this(accountNum, message, (AbstractMap) users, (AbstractMap) chats, generateLayout, 0);
     }
 
-    public MessageObject(Message message, AbstractMap<Integer, User> users, AbstractMap<Integer, Chat> chats, boolean generateLayout, long eid) {
+    public MessageObject(int accountNum, Message message, AbstractMap<Integer, User> users, AbstractMap<Integer, Chat> chats, boolean generateLayout, long eid) {
         this.type = 1000;
         Theme.createChatResources(null, true);
+        this.currentAccount = accountNum;
         this.messageOwner = message;
         this.eventId = eid;
         if (message.replyMessage != null) {
-            this.replyMessageObject = new MessageObject(message.replyMessage, users, chats, false);
+            this.replyMessageObject = new MessageObject(accountNum, message.replyMessage, users, chats, false);
         }
         User fromUser = null;
         if (message.from_id > 0) {
@@ -609,7 +609,7 @@ public class MessageObject {
                 fromUser = (User) users.get(Integer.valueOf(message.from_id));
             }
             if (fromUser == null) {
-                fromUser = MessagesController.getInstance().getUser(Integer.valueOf(message.from_id));
+                fromUser = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(message.from_id));
             }
         }
         String name;
@@ -630,17 +630,15 @@ public class MessageObject {
                             whoUser = (User) users.get(Integer.valueOf(message.action.user_id));
                         }
                         if (whoUser == null) {
-                            whoUser = MessagesController.getInstance().getUser(Integer.valueOf(message.action.user_id));
+                            whoUser = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(message.action.user_id));
                         }
                         if (isOut()) {
                             this.messageText = replaceWithLink(LocaleController.getString("ActionYouKickUser", R.string.ActionYouKickUser), "un2", whoUser);
+                        } else if (message.action.user_id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+                            this.messageText = replaceWithLink(LocaleController.getString("ActionKickUserYou", R.string.ActionKickUserYou), "un1", fromUser);
                         } else {
-                            if (message.action.user_id == UserConfig.getClientUserId()) {
-                                this.messageText = replaceWithLink(LocaleController.getString("ActionKickUserYou", R.string.ActionKickUserYou), "un1", fromUser);
-                            } else {
-                                this.messageText = replaceWithLink(LocaleController.getString("ActionKickUser", R.string.ActionKickUser), "un2", whoUser);
-                                this.messageText = replaceWithLink(this.messageText, "un1", fromUser);
-                            }
+                            this.messageText = replaceWithLink(LocaleController.getString("ActionKickUser", R.string.ActionKickUser), "un2", whoUser);
+                            this.messageText = replaceWithLink(this.messageText, "un1", fromUser);
                         }
                     } else if (isOut()) {
                         this.messageText = LocaleController.getString("ActionYouLeftUser", R.string.ActionYouLeftUser);
@@ -658,7 +656,7 @@ public class MessageObject {
                             whoUser = (User) users.get(Integer.valueOf(singleUserId));
                         }
                         if (whoUser == null) {
-                            whoUser = MessagesController.getInstance().getUser(Integer.valueOf(singleUserId));
+                            whoUser = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(singleUserId));
                         }
                         if (singleUserId == message.from_id) {
                             if (message.to_id.channel_id != 0 && !isMegagroup()) {
@@ -669,14 +667,14 @@ public class MessageObject {
                                 } else {
                                     this.messageText = replaceWithLink(LocaleController.getString("ActionAddUserSelf", R.string.ActionAddUserSelf), "un1", fromUser);
                                 }
-                            } else if (singleUserId == UserConfig.getClientUserId()) {
+                            } else if (singleUserId == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                                 this.messageText = LocaleController.getString("ChannelMegaJoined", R.string.ChannelMegaJoined);
                             } else {
                                 this.messageText = replaceWithLink(LocaleController.getString("ActionAddUserSelfMega", R.string.ActionAddUserSelfMega), "un1", fromUser);
                             }
                         } else if (isOut()) {
                             this.messageText = replaceWithLink(LocaleController.getString("ActionYouAddUser", R.string.ActionYouAddUser), "un2", whoUser);
-                        } else if (singleUserId != UserConfig.getClientUserId()) {
+                        } else if (singleUserId != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                             this.messageText = replaceWithLink(LocaleController.getString("ActionAddUser", R.string.ActionAddUser), "un2", whoUser);
                             this.messageText = replaceWithLink(this.messageText, "un1", fromUser);
                         } else if (message.to_id.channel_id == 0) {
@@ -738,20 +736,20 @@ public class MessageObject {
                     String date;
                     long time = ((long) message.date) * 1000;
                     if (LocaleController.getInstance().formatterDay == null || LocaleController.getInstance().formatterYear == null) {
-                        date = "" + message.date;
+                        date = TtmlNode.ANONYMOUS_REGION_ID + message.date;
                     } else {
                         date = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(time), LocaleController.getInstance().formatterDay.format(time));
                     }
-                    User to_user = UserConfig.getCurrentUser();
+                    User to_user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
                     if (to_user == null) {
                         if (users != null) {
                             to_user = (User) users.get(Integer.valueOf(this.messageOwner.to_id.user_id));
                         }
                         if (to_user == null) {
-                            to_user = MessagesController.getInstance().getUser(Integer.valueOf(this.messageOwner.to_id.user_id));
+                            to_user = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(this.messageOwner.to_id.user_id));
                         }
                     }
-                    name = to_user != null ? UserObject.getFirstName(to_user) : "";
+                    name = to_user != null ? UserObject.getFirstName(to_user) : TtmlNode.ANONYMOUS_REGION_ID;
                     this.messageText = LocaleController.formatString("NotificationUnrecognizedDevice", R.string.NotificationUnrecognizedDevice, name, date, message.action.title, message.action.address);
                 } else if (message.action instanceof TL_messageActionUserJoined) {
                     this.messageText = LocaleController.formatString("NotificationContactJoined", R.string.NotificationContactJoined, UserObject.getUserName(fromUser));
@@ -805,7 +803,7 @@ public class MessageObject {
                 } else if (message.action instanceof TL_messageActionPhoneCall) {
                     TL_messageActionPhoneCall call = this.messageOwner.action;
                     boolean isMissed = call.reason instanceof TL_phoneCallDiscardReasonMissed;
-                    if (this.messageOwner.from_id == UserConfig.getClientUserId()) {
+                    if (this.messageOwner.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                         if (isMissed) {
                             this.messageText = LocaleController.getString("CallMessageOutgoingMissed", R.string.CallMessageOutgoingMissed);
                         } else {
@@ -842,7 +840,7 @@ public class MessageObject {
                         fromUser = (User) users.get(Integer.valueOf(uid));
                     }
                     if (fromUser == null) {
-                        fromUser = MessagesController.getInstance().getUser(Integer.valueOf(uid));
+                        fromUser = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(uid));
                     }
                     generatePaymentSentMessageText(null);
                 }
@@ -891,7 +889,7 @@ public class MessageObject {
             }
         }
         if (this.messageText == null) {
-            this.messageText = "";
+            this.messageText = TtmlNode.ANONYMOUS_REGION_ID;
         }
         setType();
         measureInlineBotButtons();
@@ -918,7 +916,7 @@ public class MessageObject {
             } else {
                 paint = Theme.chat_msgTextPaint;
             }
-            int[] emojiOnly = MessagesController.getInstance().allowBigEmoji ? new int[1] : null;
+            int[] emojiOnly = MessagesController.getInstance(accountNum).allowBigEmoji ? new int[1] : null;
             this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, emojiOnly);
             if (emojiOnly != null && emojiOnly[0] >= 1 && emojiOnly[0] <= 3) {
                 TextPaint emojiPaint;
@@ -951,14 +949,14 @@ public class MessageObject {
         checkMediaExistance();
     }
 
-    private void createDateArray(TL_channelAdminLogEvent event, ArrayList<MessageObject> messageObjects, HashMap<String, ArrayList<MessageObject>> messagesByDays) {
+    private void createDateArray(int accountNum, TL_channelAdminLogEvent event, ArrayList<MessageObject> messageObjects, HashMap<String, ArrayList<MessageObject>> messagesByDays) {
         if (((ArrayList) messagesByDays.get(this.dateKey)) == null) {
             messagesByDays.put(this.dateKey, new ArrayList());
             TL_message dateMsg = new TL_message();
             dateMsg.message = LocaleController.formatDateChat((long) event.date);
             dateMsg.id = 0;
             dateMsg.date = event.date;
-            MessageObject dateObj = new MessageObject(dateMsg, null, false);
+            MessageObject dateObj = new MessageObject(accountNum, dateMsg, null, false);
             dateObj.type = 10;
             dateObj.contentType = 1;
             dateObj.isDateObject = true;
@@ -966,12 +964,12 @@ public class MessageObject {
         }
     }
 
-    public MessageObject(TL_channelAdminLogEvent event, ArrayList<MessageObject> messageObjects, HashMap<String, ArrayList<MessageObject>> messagesByDays, Chat chat, int[] mid) {
+    public MessageObject(int accountNum, TL_channelAdminLogEvent event, ArrayList<MessageObject> messageObjects, HashMap<String, ArrayList<MessageObject>> messagesByDays, Chat chat, int[] mid) {
         int a;
         this.type = 1000;
         TLObject fromUser = null;
         if (event.user_id > 0 && null == null) {
-            fromUser = MessagesController.getInstance().getUser(Integer.valueOf(event.user_id));
+            fromUser = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(event.user_id));
         }
         this.currentEvent = event;
         Calendar rightNow = new GregorianCalendar();
@@ -1039,7 +1037,7 @@ public class MessageObject {
         } else if (event.action instanceof TL_channelAdminLogEventActionParticipantInvite) {
             this.messageOwner = new TL_messageService();
             this.messageOwner.action = new TL_messageActionChatAddUser();
-            TLObject whoUser = MessagesController.getInstance().getUser(Integer.valueOf(event.action.participant.user_id));
+            TLObject whoUser = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(event.action.participant.user_id));
             if (event.action.participant.user_id != this.messageOwner.from_id) {
                 this.messageText = replaceWithLink(LocaleController.getString("EventLogAdded", R.string.EventLogAdded), "un2", whoUser);
                 this.messageText = replaceWithLink(this.messageText, "un1", fromUser);
@@ -1050,11 +1048,11 @@ public class MessageObject {
             }
         } else if (event.action instanceof TL_channelAdminLogEventActionParticipantToggleAdmin) {
             this.messageOwner = new TL_message();
-            whoUser = MessagesController.getInstance().getUser(Integer.valueOf(event.action.prev_participant.user_id));
+            whoUser = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(event.action.prev_participant.user_id));
             str = LocaleController.getString("EventLogPromoted", R.string.EventLogPromoted);
-            r7 = new Object[1];
-            r7[0] = getUserName(whoUser, this.messageOwner.entities, str.indexOf("%1$s"));
-            r0 = new StringBuilder(String.format(str, r7));
+            r5 = new Object[1];
+            r5[0] = getUserName(whoUser, this.messageOwner.entities, str.indexOf("%1$s"));
+            r0 = new StringBuilder(String.format(str, r5));
             r0.append("\n");
             TL_channelAdminRights o = event.action.prev_participant.admin_rights;
             TL_channelAdminRights n = event.action.new_participant.admin_rights;
@@ -1101,7 +1099,7 @@ public class MessageObject {
             this.messageText = r0.toString();
         } else if (event.action instanceof TL_channelAdminLogEventActionParticipantToggleBan) {
             this.messageOwner = new TL_message();
-            whoUser = MessagesController.getInstance().getUser(Integer.valueOf(event.action.prev_participant.user_id));
+            whoUser = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(event.action.prev_participant.user_id));
             TL_channelBannedRights o2 = event.action.prev_participant.banned_rights;
             TL_channelBannedRights n2 = event.action.new_participant.banned_rights;
             if (!chat.megagroup || (n2 != null && n2.view_messages && (n2 == null || o2 == null || n2.until_date == o2.until_date))) {
@@ -1110,9 +1108,9 @@ public class MessageObject {
                 } else {
                     str = LocaleController.getString("EventLogChannelRestricted", R.string.EventLogChannelRestricted);
                 }
-                r7 = new Object[1];
-                r7[0] = getUserName(whoUser, this.messageOwner.entities, str.indexOf("%1$s"));
-                this.messageText = String.format(str, r7);
+                r5 = new Object[1];
+                r5[0] = getUserName(whoUser, this.messageOwner.entities, str.indexOf("%1$s"));
+                this.messageText = String.format(str, r5);
             } else {
                 StringBuilder bannedDuration;
                 if (n2 == null || AndroidUtilities.isBannedForever(n2.until_date)) {
@@ -1153,10 +1151,10 @@ public class MessageObject {
                     }
                 }
                 str = LocaleController.getString("EventLogRestrictedUntil", R.string.EventLogRestrictedUntil);
-                r7 = new Object[2];
-                r7[0] = getUserName(whoUser, this.messageOwner.entities, str.indexOf("%1$s"));
-                r7[1] = bannedDuration.toString();
-                r0 = new StringBuilder(String.format(str, r7));
+                r5 = new Object[2];
+                r5[0] = getUserName(whoUser, this.messageOwner.entities, str.indexOf("%1$s"));
+                r5[1] = bannedDuration.toString();
+                r0 = new StringBuilder(String.format(str, r5));
                 boolean added = false;
                 if (o2 == null) {
                     o2 = new TL_channelBannedRights();
@@ -1252,8 +1250,8 @@ public class MessageObject {
                 message.media = new TL_messageMediaWebPage();
                 message.media.webpage = new TL_webPage();
                 message.media.webpage.flags = 10;
-                message.media.webpage.display_url = "";
-                message.media.webpage.url = "";
+                message.media.webpage.display_url = TtmlNode.ANONYMOUS_REGION_ID;
+                message.media.webpage.url = TtmlNode.ANONYMOUS_REGION_ID;
                 message.media.webpage.site_name = LocaleController.getString("EventLogPreviousGroupDescription", R.string.EventLogPreviousGroupDescription);
                 message.media.webpage.description = ((TL_channelAdminLogEventActionChangeAbout) event.action).prev_value;
             }
@@ -1271,9 +1269,9 @@ public class MessageObject {
             message.to_id = to_id;
             message.date = event.date;
             if (TextUtils.isEmpty(newLink)) {
-                message.message = "";
+                message.message = TtmlNode.ANONYMOUS_REGION_ID;
             } else {
-                message.message = "https://" + MessagesController.getInstance().linkPrefix + "/" + newLink;
+                message.message = "https://" + MessagesController.getInstance(accountNum).linkPrefix + "/" + newLink;
             }
             TL_messageEntityUrl url = new TL_messageEntityUrl();
             url.offset = 0;
@@ -1285,10 +1283,10 @@ public class MessageObject {
                 message.media = new TL_messageMediaWebPage();
                 message.media.webpage = new TL_webPage();
                 message.media.webpage.flags = 10;
-                message.media.webpage.display_url = "";
-                message.media.webpage.url = "";
+                message.media.webpage.display_url = TtmlNode.ANONYMOUS_REGION_ID;
+                message.media.webpage.url = TtmlNode.ANONYMOUS_REGION_ID;
                 message.media.webpage.site_name = LocaleController.getString("EventLogPreviousLink", R.string.EventLogPreviousLink);
-                message.media.webpage.description = "https://" + MessagesController.getInstance().linkPrefix + "/" + ((TL_channelAdminLogEventActionChangeUsername) event.action).prev_value;
+                message.media.webpage.description = "https://" + MessagesController.getInstance(accountNum).linkPrefix + "/" + ((TL_channelAdminLogEventActionChangeUsername) event.action).prev_value;
             }
         } else if (event.action instanceof TL_channelAdminLogEventActionEditMessage) {
             message = new TL_message();
@@ -1319,8 +1317,8 @@ public class MessageObject {
             }
             message.reply_markup = newMessage.reply_markup;
             message.media.webpage.flags = 10;
-            message.media.webpage.display_url = "";
-            message.media.webpage.url = "";
+            message.media.webpage.display_url = TtmlNode.ANONYMOUS_REGION_ID;
+            message.media.webpage.url = TtmlNode.ANONYMOUS_REGION_ID;
         } else if (event.action instanceof TL_channelAdminLogEventActionChangeStickerSet) {
             InputStickerSet newStickerset = ((TL_channelAdminLogEventActionChangeStickerSet) event.action).new_stickerset;
             InputStickerSet oldStickerset = ((TL_channelAdminLogEventActionChangeStickerSet) event.action).new_stickerset;
@@ -1364,9 +1362,9 @@ public class MessageObject {
             if (chat.megagroup) {
                 message.flags |= Integer.MIN_VALUE;
             }
-            MessageObject messageObject = new MessageObject(message, null, null, true, this.eventId);
+            MessageObject messageObject = new MessageObject(accountNum, message, null, null, true, this.eventId);
             if (messageObject.contentType >= 0) {
-                createDateArray(event, messageObjects, messagesByDays);
+                createDateArray(accountNum, event, messageObjects, messagesByDays);
                 messageObjects.add(messageObjects.size() - 1, messageObject);
             } else {
                 this.contentType = -1;
@@ -1374,10 +1372,10 @@ public class MessageObject {
         }
         if (this.contentType >= 0) {
             TextPaint paint;
-            createDateArray(event, messageObjects, messagesByDays);
+            createDateArray(accountNum, event, messageObjects, messagesByDays);
             messageObjects.add(messageObjects.size() - 1, this);
             if (this.messageText == null) {
-                this.messageText = "";
+                this.messageText = TtmlNode.ANONYMOUS_REGION_ID;
             }
             setType();
             measureInlineBotButtons();
@@ -1395,7 +1393,7 @@ public class MessageObject {
             } else {
                 paint = Theme.chat_msgTextPaint;
             }
-            int[] emojiOnly = MessagesController.getInstance().allowBigEmoji ? new int[1] : null;
+            int[] emojiOnly = MessagesController.getInstance(accountNum).allowBigEmoji ? new int[1] : null;
             this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, emojiOnly);
             if (emojiOnly != null && emojiOnly[0] >= 1 && emojiOnly[0] <= 3) {
                 TextPaint emojiPaint;
@@ -1431,7 +1429,7 @@ public class MessageObject {
     private String getUserName(User user, ArrayList<MessageEntity> entities, int offset) {
         String name;
         if (user == null) {
-            name = "";
+            name = TtmlNode.ANONYMOUS_REGION_ID;
         } else {
             name = ContactsController.formatName(user.first_name, user.last_name);
         }
@@ -1460,7 +1458,7 @@ public class MessageObject {
             TextPaint paint;
             User fromUser = null;
             if (isFromUser()) {
-                fromUser = MessagesController.getInstance().getUser(Integer.valueOf(this.messageOwner.from_id));
+                fromUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.messageOwner.from_id));
             }
             this.messageText = this.messageOwner.message;
             if (this.messageOwner.media instanceof TL_messageMediaGame) {
@@ -1475,20 +1473,20 @@ public class MessageObject {
 
     public void generateGameMessageText(User fromUser) {
         if (fromUser == null && this.messageOwner.from_id > 0) {
-            fromUser = MessagesController.getInstance().getUser(Integer.valueOf(this.messageOwner.from_id));
+            fromUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.messageOwner.from_id));
         }
         TL_game game = null;
         if (!(this.replyMessageObject == null || this.replyMessageObject.messageOwner.media == null || this.replyMessageObject.messageOwner.media.game == null)) {
             game = this.replyMessageObject.messageOwner.media.game;
         }
         if (game != null) {
-            if (fromUser == null || fromUser.id != UserConfig.getClientUserId()) {
+            if (fromUser == null || fromUser.id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                 this.messageText = replaceWithLink(LocaleController.formatString("ActionUserScoredInGame", R.string.ActionUserScoredInGame, LocaleController.formatPluralString("Points", this.messageOwner.action.score)), "un1", fromUser);
             } else {
                 this.messageText = LocaleController.formatString("ActionYouScoredInGame", R.string.ActionYouScoredInGame, LocaleController.formatPluralString("Points", this.messageOwner.action.score));
             }
             this.messageText = replaceWithLink(this.messageText, "un2", game);
-        } else if (fromUser == null || fromUser.id != UserConfig.getClientUserId()) {
+        } else if (fromUser == null || fromUser.id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
             this.messageText = replaceWithLink(LocaleController.formatString("ActionUserScored", R.string.ActionUserScored, LocaleController.formatPluralString("Points", this.messageOwner.action.score)), "un1", fromUser);
         } else {
             this.messageText = LocaleController.formatString("ActionYouScored", R.string.ActionYouScored, LocaleController.formatPluralString("Points", this.messageOwner.action.score));
@@ -1502,12 +1500,12 @@ public class MessageObject {
     public void generatePaymentSentMessageText(User fromUser) {
         String name;
         if (fromUser == null) {
-            fromUser = MessagesController.getInstance().getUser(Integer.valueOf((int) getDialogId()));
+            fromUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf((int) getDialogId()));
         }
         if (fromUser != null) {
             name = UserObject.getFirstName(fromUser);
         } else {
-            name = "";
+            name = TtmlNode.ANONYMOUS_REGION_ID;
         }
         if (this.replyMessageObject == null || !(this.replyMessageObject.messageOwner.media instanceof TL_messageMediaInvoice)) {
             this.messageText = LocaleController.formatString("PaymentSuccessfullyPaidNoItem", R.string.PaymentSuccessfullyPaidNoItem, LocaleController.getInstance().formatCurrencyString(this.messageOwner.action.total_amount, this.messageOwner.action.currency), name);
@@ -1519,10 +1517,10 @@ public class MessageObject {
     public void generatePinMessageText(User fromUser, Chat chat) {
         if (fromUser == null && chat == null) {
             if (this.messageOwner.from_id > 0) {
-                fromUser = MessagesController.getInstance().getUser(Integer.valueOf(this.messageOwner.from_id));
+                fromUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.messageOwner.from_id));
             }
             if (fromUser == null) {
-                TLObject chat2 = MessagesController.getInstance().getChat(Integer.valueOf(this.messageOwner.to_id.channel_id));
+                TLObject chat2 = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.messageOwner.to_id.channel_id));
             }
         }
         CharSequence string;
@@ -1692,14 +1690,13 @@ public class MessageObject {
             message.media = new TL_messageMediaDocument();
             message.media.document = getDocumentWithId(webPage, pageBlock.video_id);
         }
-        message.message = "";
+        message.message = TtmlNode.ANONYMOUS_REGION_ID;
         message.id = Utilities.random.nextInt();
         message.date = this.messageOwner.date;
         message.to_id = this.messageOwner.to_id;
         message.out = this.messageOwner.out;
         message.from_id = this.messageOwner.from_id;
-        this(message, null, false);
-        return this;
+        return new MessageObject(this.currentAccount, message, null, false);
     }
 
     public ArrayList<MessageObject> getWebPagePhotos(ArrayList<MessageObject> array, ArrayList<PageBlock> blocksToSearch) {
@@ -1775,6 +1772,7 @@ public class MessageObject {
 
     public void setType() {
         int oldType = this.type;
+        this.isRoundVideoCached = 0;
         if ((this.messageOwner instanceof TL_message) || (this.messageOwner instanceof TL_messageForwarded_old2)) {
             if (isMediaEmpty()) {
                 this.type = 0;
@@ -1866,7 +1864,7 @@ public class MessageObject {
         this.layoutCreated = true;
         User fromUser = null;
         if (isFromUser()) {
-            fromUser = MessagesController.getInstance().getUser(Integer.valueOf(this.messageOwner.from_id));
+            fromUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.messageOwner.from_id));
         }
         if (this.messageOwner.media instanceof TL_messageMediaGame) {
             paint = Theme.chat_msgGameTextPaint;
@@ -1899,7 +1897,7 @@ public class MessageObject {
                 }
             }
         }
-        return "";
+        return TtmlNode.ANONYMOUS_REGION_ID;
     }
 
     public static boolean isGifDocument(Document document) {
@@ -2060,14 +2058,14 @@ public class MessageObject {
         if (TextUtils.indexOf(source, param) < 0) {
             return source;
         }
-        SpannableStringBuilder names = new SpannableStringBuilder("");
+        SpannableStringBuilder names = new SpannableStringBuilder(TtmlNode.ANONYMOUS_REGION_ID);
         for (int a = 0; a < uids.size(); a++) {
             User user = null;
             if (usersDict != null) {
                 user = (User) usersDict.get(uids.get(a));
             }
             if (user == null) {
-                user = MessagesController.getInstance().getUser((Integer) uids.get(a));
+                user = MessagesController.getInstance(this.currentAccount).getUser((Integer) uids.get(a));
             }
             if (user != null) {
                 String name = UserObject.getUserName(user);
@@ -2076,7 +2074,7 @@ public class MessageObject {
                     names.append(", ");
                 }
                 names.append(name);
-                names.setSpan(new URLSpanNoUnderlineBold("" + user.id), start, name.length() + start, 33);
+                names.setSpan(new URLSpanNoUnderlineBold(TtmlNode.ANONYMOUS_REGION_ID + user.id), start, name.length() + start, 33);
             }
         }
         return TextUtils.replace(source, new String[]{param}, new CharSequence[]{names});
@@ -2091,19 +2089,19 @@ public class MessageObject {
         String id;
         if (object instanceof User) {
             name = UserObject.getUserName((User) object);
-            id = "" + ((User) object).id;
+            id = TtmlNode.ANONYMOUS_REGION_ID + ((User) object).id;
         } else if (object instanceof Chat) {
             name = ((Chat) object).title;
-            id = "" + (-((Chat) object).id);
+            id = TtmlNode.ANONYMOUS_REGION_ID + (-((Chat) object).id);
         } else if (object instanceof TL_game) {
             name = ((TL_game) object).title;
             id = "game";
         } else {
-            name = "";
+            name = TtmlNode.ANONYMOUS_REGION_ID;
             id = "0";
         }
         SpannableStringBuilder builder = new SpannableStringBuilder(TextUtils.replace(source, new String[]{param}, new String[]{name.replace('\n', ' ')}));
-        builder.setSpan(new URLSpanNoUnderlineBold("" + id), start, name.length() + start, 33);
+        builder.setSpan(new URLSpanNoUnderlineBold(TtmlNode.ANONYMOUS_REGION_ID + id), start, name.length() + start, 33);
         return builder;
     }
 
@@ -2118,7 +2116,7 @@ public class MessageObject {
             ext = this.messageOwner.media.document.mime_type;
         }
         if (ext == null) {
-            ext = "";
+            ext = TtmlNode.ANONYMOUS_REGION_ID;
         }
         return ext.toUpperCase();
     }
@@ -2138,7 +2136,7 @@ public class MessageObject {
         } else if (this.messageOwner.media instanceof TL_messageMediaWebPage) {
             return FileLoader.getAttachFileName(this.messageOwner.media.webpage.document);
         }
-        return "";
+        return TtmlNode.ANONYMOUS_REGION_ID;
     }
 
     public int getFileType() {
@@ -2294,7 +2292,7 @@ public class MessageObject {
 
     public static void addLinks(boolean isOut, CharSequence messageText, boolean botCommands) {
         if ((messageText instanceof Spannable) && containsUrls(messageText)) {
-            if (messageText.length() < Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
+            if (messageText.length() < 1000) {
                 try {
                     Linkify.addLinks((Spannable) messageText, 5);
                 } catch (Throwable e) {
@@ -2353,7 +2351,7 @@ public class MessageObject {
             boolean useManualParse = !hasEntities && (this.eventId != 0 || (this.messageOwner instanceof TL_message_old) || (this.messageOwner instanceof TL_message_old2) || (this.messageOwner instanceof TL_message_old3) || (this.messageOwner instanceof TL_message_old4) || (this.messageOwner instanceof TL_messageForwarded_old) || (this.messageOwner instanceof TL_messageForwarded_old2) || (this.messageOwner instanceof TL_message_secret) || (this.messageOwner.media instanceof TL_messageMediaInvoice) || ((isOut() && this.messageOwner.send_state != 0) || this.messageOwner.id < 0 || (this.messageOwner.media instanceof TL_messageMediaUnsupported)));
             if (useManualParse) {
                 addLinks(isOutOwner(), this.messageText);
-            } else if ((this.messageText instanceof Spannable) && this.messageText.length() < Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
+            } else if ((this.messageText instanceof Spannable) && this.messageText.length() < 1000) {
                 try {
                     Linkify.addLinks((Spannable) this.messageText, 4);
                 } catch (Throwable e) {
@@ -2393,9 +2391,9 @@ public class MessageObject {
                         } else if ((entity instanceof TL_messageEntityCode) || (entity instanceof TL_messageEntityPre)) {
                             spannable.setSpan(new URLSpanMono(spannable, entity.offset, entity.offset + entity.length, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
                         } else if (entity instanceof TL_messageEntityMentionName) {
-                            spannable.setSpan(new URLSpanUserMention("" + ((TL_messageEntityMentionName) entity).user_id, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
+                            spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_messageEntityMentionName) entity).user_id, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
                         } else if (entity instanceof TL_inputMessageEntityMentionName) {
-                            spannable.setSpan(new URLSpanUserMention("" + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
+                            spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
                         } else if (!useManualParse) {
                             String url = this.messageOwner.message.substring(entity.offset, entity.offset + entity.length);
                             if (entity instanceof TL_messageEntityBotCommand) {
@@ -2496,7 +2494,7 @@ public class MessageObject {
                             this.textLayoutBlocks.add(block);
                             try {
                                 lastLeft = block.textLayout.getLineLeft(currentBlockLinesCount - 1);
-                                if (a == 0) {
+                                if (a == 0 && lastLeft >= 0.0f) {
                                     this.textXOffset = lastLeft;
                                 }
                             } catch (Throwable e222) {
@@ -2636,9 +2634,7 @@ public class MessageObject {
                 }
                 this.textLayoutBlocks.add(block);
                 lastLeft = block.textLayout.getLineLeft(currentBlockLinesCount - 1);
-                if (a == 0) {
-                    this.textXOffset = lastLeft;
-                }
+                this.textXOffset = lastLeft;
                 lastLine = block.textLayout.getLineWidth(currentBlockLinesCount - 1);
                 linesMaxWidth = (int) Math.ceil((double) lastLine);
                 if (a == blocksCount - 1) {
@@ -2708,7 +2704,7 @@ public class MessageObject {
         if (this.messageOwner.fwd_from == null) {
             return true;
         }
-        int selfUserId = UserConfig.getClientUserId();
+        int selfUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
         if (getDialogId() == ((long) selfUserId)) {
             if (this.messageOwner.fwd_from.from_id == selfUserId || (this.messageOwner.fwd_from.saved_from_peer != null && this.messageOwner.fwd_from.saved_from_peer.user_id == selfUserId)) {
                 return true;
@@ -2841,7 +2837,7 @@ public class MessageObject {
         if (this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer == null || this.messageOwner.fwd_from.saved_from_peer.channel_id == 0) {
             return false;
         }
-        return ChatObject.isMegagroup(MessagesController.getInstance().getChat(Integer.valueOf(this.messageOwner.fwd_from.saved_from_peer.channel_id)));
+        return ChatObject.isMegagroup(MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.messageOwner.fwd_from.saved_from_peer.channel_id)));
     }
 
     public static boolean isMegagroup(Message message) {
@@ -2890,7 +2886,7 @@ public class MessageObject {
     public int getSecretTimeLeft() {
         int secondsLeft = this.messageOwner.ttl;
         if (this.messageOwner.destroyTime != 0) {
-            return Math.max(0, this.messageOwner.destroyTime - ConnectionsManager.getInstance().getCurrentTime());
+            return Math.max(0, this.messageOwner.destroyTime - ConnectionsManager.getInstance(this.currentAccount).getCurrentTime());
         }
         return secondsLeft;
     }
@@ -2913,7 +2909,7 @@ public class MessageObject {
         if (this.messageOwner.media instanceof TL_messageMediaWebPage) {
             return FileLoader.getDocumentFileName(this.messageOwner.media.webpage.document);
         }
-        return "";
+        return TtmlNode.ANONYMOUS_REGION_ID;
     }
 
     public static boolean isStickerDocument(Document document) {
@@ -3136,7 +3132,7 @@ public class MessageObject {
                 return AndroidUtilities.dp(82.0f);
             }
             if (this.type == 10) {
-                return AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
+                return AndroidUtilities.dp(30.0f);
             }
             if (this.type == 11) {
                 return AndroidUtilities.dp(50.0f);
@@ -3198,8 +3194,8 @@ public class MessageObject {
                 }
                 if (h > photoHeight) {
                     h = photoHeight;
-                } else if (h < AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN)) {
-                    h = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN);
+                } else if (h < AndroidUtilities.dp(120.0f)) {
+                    h = AndroidUtilities.dp(120.0f);
                 }
                 if (isSecretPhoto()) {
                     if (AndroidUtilities.isTablet()) {
@@ -3328,7 +3324,7 @@ public class MessageObject {
                 a++;
             }
         }
-        return "";
+        return TtmlNode.ANONYMOUS_REGION_ID;
     }
 
     public int getDuration() {
@@ -3381,19 +3377,19 @@ public class MessageObject {
                 if (!unknown) {
                     return null;
                 }
-                if (isOutOwner() || (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.from_id == UserConfig.getClientUserId())) {
+                if (isOutOwner() || (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId())) {
                     return LocaleController.getString("FromYou", R.string.FromYou);
                 }
                 User user = null;
                 Chat chat = null;
                 if (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.channel_id != 0) {
-                    chat = MessagesController.getInstance().getChat(Integer.valueOf(this.messageOwner.fwd_from.channel_id));
+                    chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.messageOwner.fwd_from.channel_id));
                 } else if (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.from_id != 0) {
-                    user = MessagesController.getInstance().getUser(Integer.valueOf(this.messageOwner.fwd_from.from_id));
+                    user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.messageOwner.fwd_from.from_id));
                 } else if (this.messageOwner.from_id < 0) {
-                    chat = MessagesController.getInstance().getChat(Integer.valueOf(-this.messageOwner.from_id));
+                    chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-this.messageOwner.from_id));
                 } else {
-                    user = MessagesController.getInstance().getUser(Integer.valueOf(this.messageOwner.from_id));
+                    user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.messageOwner.from_id));
                 }
                 if (user != null) {
                     return UserObject.getUserName(user);
@@ -3403,7 +3399,7 @@ public class MessageObject {
                 }
             }
         }
-        return "";
+        return TtmlNode.ANONYMOUS_REGION_ID;
     }
 
     public InputStickerSet getInputStickerSet() {
@@ -3415,7 +3411,7 @@ public class MessageObject {
     }
 
     public boolean needDrawForwarded() {
-        return ((this.messageOwner.flags & 4) == 0 || this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer != null || ((long) UserConfig.getClientUserId()) == getDialogId()) ? false : true;
+        return ((this.messageOwner.flags & 4) == 0 || this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer != null || ((long) UserConfig.getInstance(this.currentAccount).getClientUserId()) == getDialogId()) ? false : true;
     }
 
     public static boolean isForwardedMessage(Message message) {
@@ -3435,22 +3431,22 @@ public class MessageObject {
     }
 
     public boolean canEditMessage(Chat chat) {
-        return canEditMessage(this.messageOwner, chat);
+        return canEditMessage(this.currentAccount, this.messageOwner, chat);
     }
 
     public boolean canEditMessageAnytime(Chat chat) {
-        return canEditMessageAnytime(this.messageOwner, chat);
+        return canEditMessageAnytime(this.currentAccount, this.messageOwner, chat);
     }
 
-    public static boolean canEditMessageAnytime(Message message, Chat chat) {
+    public static boolean canEditMessageAnytime(int currentAccount, Message message, Chat chat) {
         if (message == null || message.to_id == null || ((message.media != null && (isRoundVideoDocument(message.media.document) || isStickerDocument(message.media.document))) || ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.id < 0))) {
             return false;
         }
-        if (message.from_id == message.to_id.user_id && message.from_id == UserConfig.getClientUserId() && !isLiveLocationMessage(message)) {
+        if (message.from_id == message.to_id.user_id && message.from_id == UserConfig.getInstance(currentAccount).getClientUserId() && !isLiveLocationMessage(message)) {
             return true;
         }
         if (chat == null && message.to_id.channel_id != 0) {
-            chat = MessagesController.getInstance().getChat(Integer.valueOf(message.to_id.channel_id));
+            chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(message.to_id.channel_id));
             if (chat == null) {
                 return false;
             }
@@ -3466,15 +3462,15 @@ public class MessageObject {
         return false;
     }
 
-    public static boolean canEditMessage(Message message, Chat chat) {
+    public static boolean canEditMessage(int currentAccount, Message message, Chat chat) {
         if (message == null || message.to_id == null || ((message.media != null && (isRoundVideoDocument(message.media.document) || isStickerDocument(message.media.document))) || ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.id < 0))) {
             return false;
         }
-        if (message.from_id == message.to_id.user_id && message.from_id == UserConfig.getClientUserId() && !isLiveLocationMessage(message)) {
+        if (message.from_id == message.to_id.user_id && message.from_id == UserConfig.getInstance(currentAccount).getClientUserId() && !isLiveLocationMessage(message)) {
             return true;
         }
         if (chat == null && message.to_id.channel_id != 0) {
-            chat = MessagesController.getInstance().getChat(Integer.valueOf(message.to_id.channel_id));
+            chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(message.to_id.channel_id));
             if (chat == null) {
                 return false;
             }
@@ -3487,11 +3483,11 @@ public class MessageObject {
                 return true;
             }
         }
-        if (Math.abs(message.date - ConnectionsManager.getInstance().getCurrentTime()) > MessagesController.getInstance().maxEditTime) {
+        if (Math.abs(message.date - ConnectionsManager.getInstance(currentAccount).getCurrentTime()) > MessagesController.getAccountInstance().maxEditTime) {
             return false;
         }
         if (message.to_id.channel_id == 0) {
-            if (message.out || message.from_id == UserConfig.getClientUserId()) {
+            if (message.out || message.from_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
                 if (message.media instanceof TL_messageMediaPhoto) {
                     return true;
                 }
@@ -3522,7 +3518,7 @@ public class MessageObject {
             return true;
         }
         if (chat == null && message.to_id.channel_id != 0) {
-            chat = MessagesController.getInstance().getChat(Integer.valueOf(message.to_id.channel_id));
+            chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(message.to_id.channel_id));
         }
         if (ChatObject.isChannel(chat)) {
             if (message.id != 1) {
@@ -3547,12 +3543,12 @@ public class MessageObject {
     public String getForwardedName() {
         if (this.messageOwner.fwd_from != null) {
             if (this.messageOwner.fwd_from.channel_id != 0) {
-                Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(this.messageOwner.fwd_from.channel_id));
+                Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(this.messageOwner.fwd_from.channel_id));
                 if (chat != null) {
                     return chat.title;
                 }
             } else if (this.messageOwner.fwd_from.from_id != 0) {
-                User user = MessagesController.getInstance().getUser(Integer.valueOf(this.messageOwner.fwd_from.from_id));
+                User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(this.messageOwner.fwd_from.from_id));
                 if (user != null) {
                     return UserObject.getUserName(user);
                 }

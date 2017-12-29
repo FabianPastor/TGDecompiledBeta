@@ -1,51 +1,33 @@
 package com.google.android.gms.wearable.internal;
 
 import android.os.Parcel;
-import android.os.RemoteException;
-import com.google.android.gms.common.data.DataHolder;
-import com.google.android.gms.internal.zzee;
-import com.google.android.gms.internal.zzef;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfn;
 
-public abstract class zzdl extends zzee implements zzdk {
-    public zzdl() {
-        attachInterface(this, "com.google.android.gms.wearable.internal.IWearableListener");
+public final class zzdl implements Creator<zzdk> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzbfn.zzd(parcel);
+        int i = 0;
+        zzah com_google_android_gms_wearable_internal_zzah = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (65535 & readInt) {
+                case 2:
+                    i = zzbfn.zzg(parcel, readInt);
+                    break;
+                case 3:
+                    com_google_android_gms_wearable_internal_zzah = (zzah) zzbfn.zza(parcel, readInt, zzah.CREATOR);
+                    break;
+                default:
+                    zzbfn.zzb(parcel, readInt);
+                    break;
+            }
+        }
+        zzbfn.zzaf(parcel, zzd);
+        return new zzdk(i, com_google_android_gms_wearable_internal_zzah);
     }
 
-    public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-        if (zza(i, parcel, parcel2, i2)) {
-            return true;
-        }
-        switch (i) {
-            case 1:
-                zzS((DataHolder) zzef.zza(parcel, DataHolder.CREATOR));
-                break;
-            case 2:
-                zza((zzdx) zzef.zza(parcel, zzdx.CREATOR));
-                break;
-            case 3:
-                zza((zzeg) zzef.zza(parcel, zzeg.CREATOR));
-                break;
-            case 4:
-                zzb((zzeg) zzef.zza(parcel, zzeg.CREATOR));
-                break;
-            case 5:
-                onConnectedNodes(parcel.createTypedArrayList(zzeg.CREATOR));
-                break;
-            case 6:
-                zza((zzl) zzef.zza(parcel, zzl.CREATOR));
-                break;
-            case 7:
-                zza((zzai) zzef.zza(parcel, zzai.CREATOR));
-                break;
-            case 8:
-                zza((zzaa) zzef.zza(parcel, zzaa.CREATOR));
-                break;
-            case 9:
-                zza((zzi) zzef.zza(parcel, zzi.CREATOR));
-                break;
-            default:
-                return false;
-        }
-        return true;
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new zzdk[i];
     }
 }

@@ -2,15 +2,7 @@ package com.stripe.android;
 
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.Size;
-import android.support.annotation.VisibleForTesting;
-import com.stripe.android.exception.APIConnectionException;
-import com.stripe.android.exception.APIException;
 import com.stripe.android.exception.AuthenticationException;
-import com.stripe.android.exception.CardException;
-import com.stripe.android.exception.InvalidRequestException;
 import com.stripe.android.exception.StripeException;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
@@ -21,7 +13,6 @@ import java.util.concurrent.Executor;
 
 public class Stripe {
     private String defaultPublishableKey;
-    @VisibleForTesting
     TokenCreator tokenCreator = new TokenCreator() {
         public void create(final Card card, final String publishableKey, Executor executor, final TokenCallback callback) {
             Stripe.this.executeTokenTask(executor, new AsyncTask<Void, Void, ResponseWrapper>() {
@@ -50,7 +41,6 @@ public class Stripe {
         }
     }
 
-    @VisibleForTesting
     interface TokenCreator {
         void create(Card card, String str, Executor executor, TokenCallback tokenCallback);
     }
@@ -59,19 +49,15 @@ public class Stripe {
         setDefaultPublishableKey(publishableKey);
     }
 
-    public void createToken(@NonNull Card card, @NonNull TokenCallback callback) {
+    public void createToken(Card card, TokenCallback callback) {
         createToken(card, this.defaultPublishableKey, callback);
     }
 
-    public void createToken(@NonNull Card card, @NonNull String publishableKey, @NonNull TokenCallback callback) {
+    public void createToken(Card card, String publishableKey, TokenCallback callback) {
         createToken(card, publishableKey, null, callback);
     }
 
-    public void createToken(@NonNull Card card, @NonNull Executor executor, @NonNull TokenCallback callback) {
-        createToken(card, this.defaultPublishableKey, executor, callback);
-    }
-
-    public void createToken(@NonNull Card card, @Size(min = 1) @NonNull String publishableKey, @Nullable Executor executor, @NonNull TokenCallback callback) {
+    public void createToken(Card card, String publishableKey, Executor executor, TokenCallback callback) {
         if (card == null) {
             try {
                 throw new RuntimeException("Required Parameter: 'card' is required to create a token");
@@ -86,21 +72,12 @@ public class Stripe {
         }
     }
 
-    public Token createTokenSynchronous(Card card) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
-        return createTokenSynchronous(card, this.defaultPublishableKey);
-    }
-
-    public Token createTokenSynchronous(Card card, String publishableKey) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
-        validateKey(publishableKey);
-        return StripeApiHandler.createToken(StripeNetworkUtils.hashMapFromCard(card), RequestOptions.builder(publishableKey).build());
-    }
-
-    public void setDefaultPublishableKey(@Size(min = 1) @NonNull String publishableKey) throws AuthenticationException {
+    public void setDefaultPublishableKey(String publishableKey) throws AuthenticationException {
         validateKey(publishableKey);
         this.defaultPublishableKey = publishableKey;
     }
 
-    private void validateKey(@Size(min = 1) @NonNull String publishableKey) throws AuthenticationException {
+    private void validateKey(String publishableKey) throws AuthenticationException {
         if (publishableKey == null || publishableKey.length() == 0) {
             throw new AuthenticationException("Invalid Publishable Key: You must use a valid publishable key to create a token.  For more info, see https://stripe.com/docs/stripe.js.", null, Integer.valueOf(0));
         } else if (publishableKey.startsWith("sk_")) {

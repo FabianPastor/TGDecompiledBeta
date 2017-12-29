@@ -12,15 +12,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLRPC;
 
 final class ColorCutQuantizer {
-    static final int COMPONENT_BLUE = -1;
-    static final int COMPONENT_GREEN = -2;
-    static final int COMPONENT_RED = -3;
-    private static final String LOG_TAG = "ColorCutQuantizer";
-    private static final boolean LOG_TIMINGS = false;
-    private static final int QUANTIZE_WORD_MASK = 31;
-    private static final int QUANTIZE_WORD_WIDTH = 5;
     private static final Comparator<Vbox> VBOX_COMPARATOR_VOLUME = new Comparator<Vbox>() {
         public int compare(Vbox lhs, Vbox rhs) {
             return rhs.getVolume() - lhs.getVolume();
@@ -142,7 +136,7 @@ final class ColorCutQuantizer {
             for (int i = this.mLowerIndex; i <= this.mUpperIndex; i++) {
                 count += hist[colors[i]];
                 if (count >= midPoint) {
-                    return i;
+                    return Math.min(this.mUpperIndex - 1, i);
                 }
             }
             return this.mLowerIndex;
@@ -169,7 +163,7 @@ final class ColorCutQuantizer {
 
     ColorCutQuantizer(int[] pixels, int maxColors, Filter[] filters) {
         this.mFilters = filters;
-        int[] hist = new int[32768];
+        int[] hist = new int[TLRPC.MESSAGE_FLAG_EDITED];
         this.mHistogram = hist;
         for (int i = 0; i < pixels.length; i++) {
             int quantizedColor = quantizeFromRgb888(pixels[i]);

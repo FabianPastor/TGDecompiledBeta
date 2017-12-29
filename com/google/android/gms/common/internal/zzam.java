@@ -1,22 +1,27 @@
 package com.google.android.gms.common.internal;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.os.RemoteException;
-import com.google.android.gms.internal.zzee;
-import com.google.android.gms.internal.zzef;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 
-public abstract class zzam extends zzee implements zzal {
-    public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-        if (zza(i, parcel, parcel2, i2)) {
-            return true;
-        }
-        if (i != 2) {
-            return false;
-        }
-        Parcelable account = getAccount();
-        parcel2.writeNoException();
-        zzef.zzb(parcel2, account);
-        return true;
+public final class zzam {
+    private final String mPackageName;
+    private final int zzgal = TsExtractor.TS_STREAM_TYPE_AC3;
+    private final String zzgba;
+    private final boolean zzgbb = false;
+
+    public zzam(String str, String str2, boolean z, int i) {
+        this.mPackageName = str;
+        this.zzgba = str2;
+    }
+
+    final String getPackageName() {
+        return this.mPackageName;
+    }
+
+    final int zzalk() {
+        return this.zzgal;
+    }
+
+    final String zzalo() {
+        return this.zzgba;
     }
 }

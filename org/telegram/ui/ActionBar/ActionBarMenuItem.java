@@ -368,7 +368,7 @@ public class ActionBarMenuItem extends FrameLayout {
         if (this.searchContainer.getVisibility() != 0) {
             this.searchContainer.setVisibility(0);
             setVisibility(8);
-            this.searchField.setText("");
+            this.searchField.setText(TtmlNode.ANONYMOUS_REGION_ID);
             this.searchField.requestFocus();
             if (openKeyboard) {
                 AndroidUtilities.showKeyboard(this.searchField);
@@ -551,7 +551,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 this.clearButton.setOnClickListener(new OnClickListener() {
                     public void onClick(View v) {
                         if (ActionBarMenuItem.this.searchField.length() != 0) {
-                            ActionBarMenuItem.this.searchField.setText("");
+                            ActionBarMenuItem.this.searchField.setText(TtmlNode.ANONYMOUS_REGION_ID);
                         } else if (ActionBarMenuItem.this.searchFieldCaption != null && ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) {
                             ActionBarMenuItem.this.searchFieldCaption.setVisibility(8);
                             if (ActionBarMenuItem.this.listener != null) {
@@ -600,7 +600,7 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public void clearSearchText() {
         if (this.searchField != null) {
-            this.searchField.setText("");
+            this.searchField.setText(TtmlNode.ANONYMOUS_REGION_ID);
         }
     }
 

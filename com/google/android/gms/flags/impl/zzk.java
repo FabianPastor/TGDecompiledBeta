@@ -5,13 +5,13 @@ import android.content.SharedPreferences;
 import java.util.concurrent.Callable;
 
 final class zzk implements Callable<SharedPreferences> {
-    private /* synthetic */ Context zztF;
+    private /* synthetic */ Context val$context;
 
     zzk(Context context) {
-        this.zztF = context;
+        this.val$context = context;
     }
 
     public final /* synthetic */ Object call() throws Exception {
-        return this.zztF.getSharedPreferences("google_sdk_flags", 0);
+        return this.val$context.getSharedPreferences("google_sdk_flags", 0);
     }
 }

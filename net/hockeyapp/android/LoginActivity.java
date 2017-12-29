@@ -24,9 +24,6 @@ import net.hockeyapp.android.utils.Util;
 import org.telegram.tgnet.ConnectionsManager;
 
 public class LoginActivity extends Activity {
-    public static final String EXTRA_MODE = "mode";
-    public static final String EXTRA_SECRET = "secret";
-    public static final String EXTRA_URL = "url";
     private Button mButtonLogin;
     private Handler mLoginHandler;
     private LoginTask mLoginTask;
@@ -44,7 +41,7 @@ public class LoginActivity extends Activity {
         public void handleMessage(Message msg) {
             Activity activity = (Activity) this.mWeakActivity.get();
             if (activity != null) {
-                if (msg.getData().getBoolean(LoginTask.BUNDLE_SUCCESS)) {
+                if (msg.getData().getBoolean("success")) {
                     activity.finish();
                     if (LoginManager.listener != null) {
                         LoginManager.listener.onSuccess();
@@ -62,9 +59,9 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.hockeyapp_activity_login);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            this.mUrl = extras.getString("url");
-            this.mSecret = extras.getString(EXTRA_SECRET);
-            this.mMode = extras.getInt(EXTRA_MODE);
+            this.mUrl = extras.getString(UpdateFragment.FRAGMENT_URL);
+            this.mSecret = extras.getString("secret");
+            this.mMode = extras.getInt("mode");
         }
         configureView();
         initLoginHandler();
@@ -162,7 +159,7 @@ public class LoginActivity extends Activity {
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
     }
 }

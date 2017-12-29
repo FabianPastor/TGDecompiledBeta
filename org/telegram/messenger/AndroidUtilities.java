@@ -14,19 +14,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.Intent.ShortcutIconResource;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapShader;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Matrix.ScaleToFit;
@@ -34,13 +27,10 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Shader;
-import android.graphics.Shader.TileMode;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Environment;
@@ -51,7 +41,6 @@ import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images.Media;
 import android.provider.MediaStore.Video;
 import android.support.v4.content.FileProvider;
-import android.support.v4.internal.view.SupportMenu;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.EdgeEffectCompat;
 import android.telephony.TelephonyManager;
@@ -71,8 +60,6 @@ import android.widget.EdgeEffect;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import com.android.internal.telephony.ITelephony;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -93,17 +80,14 @@ import net.hockeyapp.android.CrashManagerListener;
 import net.hockeyapp.android.UpdateManager;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.Chat;
-import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.TL_document;
-import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.ForegroundDetector;
 import org.telegram.ui.Components.TypefaceSpan;
 
@@ -259,7 +243,7 @@ Error: java.util.NoSuchElementException
     }
 
     public static int[] calcDrawableColor(Drawable drawable) {
-        int bitmapColor = -16777216;
+        int bitmapColor = Theme.ACTION_BAR_VIDEO_EDIT_COLOR;
         int[] result = new int[2];
         try {
             if (drawable instanceof BitmapDrawable) {
@@ -399,8 +383,8 @@ Error: java.util.NoSuchElementException
         if (pathString == null) {
             return false;
         }
+        String path;
         while (true) {
-            String path;
             String newPath = Utilities.readlink(pathString);
             if (newPath != null && !newPath.equals(pathString)) {
                 pathString = newPath;
@@ -583,7 +567,7 @@ Error: java.util.NoSuchElementException
         } catch (Throwable e22) {
             FileLog.e(e22);
         }
-        return new File("");
+        return new File(TtmlNode.ANONYMOUS_REGION_ID);
     }
 
     public static int dp(float value) {
@@ -672,19 +656,19 @@ Error: java.util.NoSuchElementException
     }
 
     public static int getMyLayerVersion(int layer) {
-        return SupportMenu.USER_MASK & layer;
+        return 65535 & layer;
     }
 
     public static int getPeerLayerVersion(int layer) {
-        return (layer >> 16) & SupportMenu.USER_MASK;
+        return (layer >> 16) & 65535;
     }
 
     public static int setMyLayerVersion(int layer, int version) {
-        return (SupportMenu.CATEGORY_MASK & layer) | version;
+        return (-65536 & layer) | version;
     }
 
     public static int setPeerLayerVersion(int layer, int version) {
-        return (SupportMenu.USER_MASK & layer) | (version << 16);
+        return (65535 & layer) | (version << 16);
     }
 
     public static void runOnUIThread(Runnable runnable) {
@@ -850,205 +834,6 @@ Error: java.util.NoSuchElementException
         }
     }
 
-    private static Intent createIntrnalShortcutIntent(long did) {
-        Intent shortcutIntent = new Intent(ApplicationLoader.applicationContext, OpenChatReceiver.class);
-        int lower_id = (int) did;
-        int high_id = (int) (did >> 32);
-        if (lower_id == 0) {
-            shortcutIntent.putExtra("encId", high_id);
-            if (MessagesController.getInstance().getEncryptedChat(Integer.valueOf(high_id)) == null) {
-                return null;
-            }
-        } else if (lower_id > 0) {
-            shortcutIntent.putExtra("userId", lower_id);
-        } else if (lower_id >= 0) {
-            return null;
-        } else {
-            shortcutIntent.putExtra("chatId", -lower_id);
-        }
-        shortcutIntent.setAction("com.tmessages.openchat" + did);
-        shortcutIntent.addFlags(ConnectionsManager.FileTypeFile);
-        return shortcutIntent;
-    }
-
-    public static void installShortcut(long did) {
-        try {
-            Intent shortcutIntent = createIntrnalShortcutIntent(did);
-            int lower_id = (int) did;
-            int high_id = (int) (did >> 32);
-            User user = null;
-            Chat chat = null;
-            if (lower_id == 0) {
-                EncryptedChat encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf(high_id));
-                if (encryptedChat != null) {
-                    user = MessagesController.getInstance().getUser(Integer.valueOf(encryptedChat.user_id));
-                } else {
-                    return;
-                }
-            } else if (lower_id > 0) {
-                user = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
-            } else if (lower_id < 0) {
-                chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
-            } else {
-                return;
-            }
-            if (user != null || chat != null) {
-                String name;
-                TLObject photo = null;
-                boolean selfUser = false;
-                if (user == null) {
-                    name = chat.title;
-                    if (chat.photo != null) {
-                        photo = chat.photo.photo_small;
-                    }
-                } else if (UserObject.isUserSelf(user)) {
-                    name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
-                    selfUser = true;
-                } else {
-                    name = ContactsController.formatName(user.first_name, user.last_name);
-                    if (user.photo != null) {
-                        photo = user.photo.photo_small;
-                    }
-                }
-                Bitmap bitmap = null;
-                if (selfUser || photo != null) {
-                    if (!selfUser) {
-                        try {
-                            bitmap = BitmapFactory.decodeFile(FileLoader.getPathToAttach(photo, true).toString());
-                        } catch (Throwable e) {
-                            FileLog.e(e);
-                        }
-                    }
-                    if (selfUser || bitmap != null) {
-                        int size = dp(58.0f);
-                        Bitmap result = Bitmap.createBitmap(size, size, Config.ARGB_8888);
-                        result.eraseColor(0);
-                        Canvas canvas = new Canvas(result);
-                        if (selfUser) {
-                            AvatarDrawable avatarDrawable = new AvatarDrawable(user);
-                            avatarDrawable.setSavedMessages(1);
-                            avatarDrawable.setBounds(0, 0, size, size);
-                            avatarDrawable.draw(canvas);
-                        } else {
-                            Shader bitmapShader = new BitmapShader(bitmap, TileMode.CLAMP, TileMode.CLAMP);
-                            if (roundPaint == null) {
-                                roundPaint = new Paint(1);
-                                bitmapRect = new RectF();
-                            }
-                            float scale = ((float) size) / ((float) bitmap.getWidth());
-                            canvas.save();
-                            canvas.scale(scale, scale);
-                            roundPaint.setShader(bitmapShader);
-                            bitmapRect.set(0.0f, 0.0f, (float) bitmap.getWidth(), (float) bitmap.getHeight());
-                            canvas.drawRoundRect(bitmapRect, (float) bitmap.getWidth(), (float) bitmap.getHeight(), roundPaint);
-                            canvas.restore();
-                        }
-                        Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.book_logo);
-                        int w = dp(15.0f);
-                        int left = (size - w) - dp(2.0f);
-                        int top = (size - w) - dp(2.0f);
-                        drawable.setBounds(left, top, left + w, top + w);
-                        drawable.draw(canvas);
-                        try {
-                            canvas.setBitmap(null);
-                        } catch (Exception e2) {
-                        }
-                        bitmap = result;
-                    }
-                }
-                if (VERSION.SDK_INT >= 26) {
-                    ShortcutInfo.Builder pinShortcutInfo = new ShortcutInfo.Builder(ApplicationLoader.applicationContext, "sdid_" + did).setShortLabel(name).setIntent(shortcutIntent);
-                    if (bitmap != null) {
-                        pinShortcutInfo.setIcon(Icon.createWithBitmap(bitmap));
-                    } else if (user != null) {
-                        if (user.bot) {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.book_bot));
-                        } else {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.book_user));
-                        }
-                    } else if (chat != null) {
-                        if (!ChatObject.isChannel(chat) || chat.megagroup) {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.book_group));
-                        } else {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.book_channel));
-                        }
-                    }
-                    ((ShortcutManager) ApplicationLoader.applicationContext.getSystemService(ShortcutManager.class)).requestPinShortcut(pinShortcutInfo.build(), null);
-                    return;
-                }
-                Intent addIntent = new Intent();
-                if (bitmap != null) {
-                    addIntent.putExtra("android.intent.extra.shortcut.ICON", bitmap);
-                } else if (user != null) {
-                    if (user.bot) {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, R.drawable.book_bot));
-                    } else {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, R.drawable.book_user));
-                    }
-                } else if (chat != null) {
-                    if (!ChatObject.isChannel(chat) || chat.megagroup) {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, R.drawable.book_group));
-                    } else {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, R.drawable.book_channel));
-                    }
-                }
-                addIntent.putExtra("android.intent.extra.shortcut.INTENT", shortcutIntent);
-                addIntent.putExtra("android.intent.extra.shortcut.NAME", name);
-                addIntent.putExtra("duplicate", false);
-                addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-                ApplicationLoader.applicationContext.sendBroadcast(addIntent);
-            }
-        } catch (Throwable e3) {
-            FileLog.e(e3);
-        }
-    }
-
-    public static void uninstallShortcut(long did) {
-        try {
-            if (VERSION.SDK_INT >= 26) {
-                ShortcutManager shortcutManager = (ShortcutManager) ApplicationLoader.applicationContext.getSystemService(ShortcutManager.class);
-                ArrayList<String> arrayList = new ArrayList();
-                arrayList.add("sdid_" + did);
-                shortcutManager.removeDynamicShortcuts(arrayList);
-                return;
-            }
-            int lower_id = (int) did;
-            int high_id = (int) (did >> 32);
-            User user = null;
-            Chat chat = null;
-            if (lower_id == 0) {
-                EncryptedChat encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf(high_id));
-                if (encryptedChat != null) {
-                    user = MessagesController.getInstance().getUser(Integer.valueOf(encryptedChat.user_id));
-                } else {
-                    return;
-                }
-            } else if (lower_id > 0) {
-                user = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
-            } else if (lower_id < 0) {
-                chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
-            } else {
-                return;
-            }
-            if (user != null || chat != null) {
-                String name;
-                if (user != null) {
-                    name = ContactsController.formatName(user.first_name, user.last_name);
-                } else {
-                    name = chat.title;
-                }
-                Intent addIntent = new Intent();
-                addIntent.putExtra("android.intent.extra.shortcut.INTENT", createIntrnalShortcutIntent(did));
-                addIntent.putExtra("android.intent.extra.shortcut.NAME", name);
-                addIntent.putExtra("duplicate", false);
-                addIntent.setAction("com.android.launcher.action.UNINSTALL_SHORTCUT");
-                ApplicationLoader.applicationContext.sendBroadcast(addIntent);
-            }
-        } catch (Throwable e) {
-            FileLog.e(e);
-        }
-    }
-
     public static int getViewInset(View view) {
         int i = 0;
         if (!(view == null || VERSION.SDK_INT < 21 || view.getHeight() == displaySize.y || view.getHeight() == displaySize.y - statusBarHeight)) {
@@ -1210,12 +995,12 @@ Error: java.util.NoSuchElementException
                     if (start == -1) {
                         break;
                     }
-                    stringBuilder.replace(start, start + 3, "");
+                    stringBuilder.replace(start, start + 3, TtmlNode.ANONYMOUS_REGION_ID);
                     end = stringBuilder.indexOf("</b>");
                     if (end == -1) {
                         end = stringBuilder.indexOf("<b>");
                     }
-                    stringBuilder.replace(end, end + 4, "");
+                    stringBuilder.replace(end, end + 4, TtmlNode.ANONYMOUS_REGION_ID);
                     bolds.add(Integer.valueOf(start));
                     bolds.add(Integer.valueOf(end));
                 }
@@ -1224,10 +1009,10 @@ Error: java.util.NoSuchElementException
                     if (start == -1) {
                         break;
                     }
-                    stringBuilder.replace(start, start + 2, "");
+                    stringBuilder.replace(start, start + 2, TtmlNode.ANONYMOUS_REGION_ID);
                     end = stringBuilder.indexOf("**");
                     if (end >= 0) {
-                        stringBuilder.replace(end, end + 2, "");
+                        stringBuilder.replace(end, end + 2, TtmlNode.ANONYMOUS_REGION_ID);
                         bolds.add(Integer.valueOf(start));
                         bolds.add(Integer.valueOf(end));
                     }
@@ -1249,7 +1034,7 @@ Error: java.util.NoSuchElementException
         if (reset) {
             ForegroundDetector.getInstance().resetBackgroundVar();
         }
-        return UserConfig.passcodeHash.length() > 0 && wasInBackground && (UserConfig.appLocked || (!(UserConfig.autoLockIn == 0 || UserConfig.lastPauseTime == 0 || UserConfig.appLocked || UserConfig.lastPauseTime + UserConfig.autoLockIn > ConnectionsManager.getInstance().getCurrentTime()) || ConnectionsManager.getInstance().getCurrentTime() + 5 < UserConfig.lastPauseTime));
+        return SharedConfig.passcodeHash.length() > 0 && wasInBackground && (SharedConfig.appLocked || (!(SharedConfig.autoLockIn == 0 || SharedConfig.lastPauseTime == 0 || SharedConfig.appLocked || SharedConfig.lastPauseTime + SharedConfig.autoLockIn > ConnectionsManager.getAccountInstance().getCurrentTime()) || ConnectionsManager.getAccountInstance().getCurrentTime() + 5 < SharedConfig.lastPauseTime));
     }
 
     public static void shakeView(final View view, final float x, final int num) {
@@ -1318,7 +1103,7 @@ Error: java.util.NoSuchElementException
 
     private static File getAlbumDir() {
         if (VERSION.SDK_INT >= 23 && ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") != 0) {
-            return FileLoader.getInstance().getDirectory(4);
+            return FileLoader.getDirectory(4);
         }
         if ("mounted".equals(Environment.getExternalStorageState())) {
             File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Telegram");
@@ -1386,7 +1171,7 @@ Error: java.util.NoSuchElementException
                     String selection = "_id=?";
                     return getDataColumn(ApplicationLoader.applicationContext, contentUri, "_id=?", new String[]{split[1]});
                 }
-            } else if (Param.CONTENT.equalsIgnoreCase(uri.getScheme())) {
+            } else if ("content".equalsIgnoreCase(uri.getScheme())) {
                 return getDataColumn(ApplicationLoader.applicationContext, uri, null, null);
             } else {
                 if ("file".equalsIgnoreCase(uri.getScheme())) {
@@ -1460,7 +1245,7 @@ Error: java.util.NoSuchElementException
 
     public static CharSequence generateSearchName(String name, String name2, String q) {
         if (name == null && name2 == null) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
         CharSequence builder = new SpannableStringBuilder();
         String wholeString = name;
@@ -1795,10 +1580,10 @@ Error: java.util.NoSuchElementException
             matrix.preRotate(90.0f);
             matrix.preTranslate(0.0f, -dst.width());
         } else if (rotation == 180) {
-            matrix.preRotate(BitmapDescriptorFactory.HUE_CYAN);
+            matrix.preRotate(180.0f);
             matrix.preTranslate(-dst.width(), -dst.height());
         } else if (rotation == 270) {
-            matrix.preRotate(BitmapDescriptorFactory.HUE_VIOLET);
+            matrix.preRotate(270.0f);
             matrix.preTranslate(-dst.height(), 0.0f);
         }
         matrix.preScale(sx, sy);
@@ -1810,7 +1595,7 @@ Error: java.util.NoSuchElementException
             return false;
         }
         try {
-            if ((intent.getFlags() & 1048576) != 0) {
+            if ((intent.getFlags() & ExtractorMediaSource.DEFAULT_LOADING_CHECK_INTERVAL_BYTES) != 0) {
                 return false;
             }
             Uri data = intent.getData();
@@ -1849,10 +1634,10 @@ Error: java.util.NoSuchElementException
                 return false;
             }
             if (user == null) {
-                user = "";
+                user = TtmlNode.ANONYMOUS_REGION_ID;
             }
             if (password == null) {
-                password = "";
+                password = TtmlNode.ANONYMOUS_REGION_ID;
             }
             showProxyAlert(activity, address, port, user, password);
             return true;
@@ -1878,7 +1663,7 @@ Error: java.util.NoSuchElementException
         builder.setMessage(stringBuilder.toString());
         builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", R.string.ConnectingToProxyEnable), new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+                Editor editor = MessagesController.getGlobalMainSettings().edit();
                 editor.putBoolean("proxy_enabled", true);
                 editor.putString("proxy_ip", address);
                 int p = Utilities.parseInt(port).intValue();
@@ -1894,8 +1679,10 @@ Error: java.util.NoSuchElementException
                     editor.putString("proxy_user", user);
                 }
                 editor.commit();
-                ConnectionsManager.native_setProxySettings(address, p, user, password);
-                NotificationCenter.getInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
+                for (int a = 0; a < 3; a++) {
+                    ConnectionsManager.native_setProxySettings(a, address, p, user, password);
+                }
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);

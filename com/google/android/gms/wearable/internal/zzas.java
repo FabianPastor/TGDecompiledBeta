@@ -1,34 +1,43 @@
 package com.google.android.gms.wearable.internal;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.common.internal.zzbo;
-import com.google.android.gms.wearable.Channel.GetInputStreamResult;
-import java.io.IOException;
-import java.io.InputStream;
+import com.google.android.gms.wearable.Channel;
+import com.google.android.gms.wearable.ChannelApi.ChannelListener;
+import com.google.android.gms.wearable.ChannelClient.ChannelCallback;
 
-final class zzas implements GetInputStreamResult {
-    private final Status mStatus;
-    private final InputStream zzbSo;
+public final class zzas implements ChannelListener {
+    private final ChannelCallback zzliz;
 
-    zzas(Status status, InputStream inputStream) {
-        this.mStatus = (Status) zzbo.zzu(status);
-        this.zzbSo = inputStream;
+    public zzas(ChannelCallback channelCallback) {
+        this.zzliz = channelCallback;
     }
 
-    public final InputStream getInputStream() {
-        return this.zzbSo;
-    }
-
-    public final Status getStatus() {
-        return this.mStatus;
-    }
-
-    public final void release() {
-        if (this.zzbSo != null) {
-            try {
-                this.zzbSo.close();
-            } catch (IOException e) {
-            }
+    public final boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
         }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        return this.zzliz.equals(((zzas) obj).zzliz);
+    }
+
+    public final int hashCode() {
+        return this.zzliz.hashCode();
+    }
+
+    public final void onChannelClosed(Channel channel, int i, int i2) {
+        this.zzliz.onChannelClosed(zzao.zza(channel), i, i2);
+    }
+
+    public final void onChannelOpened(Channel channel) {
+        this.zzliz.onChannelOpened(zzao.zza(channel));
+    }
+
+    public final void onInputClosed(Channel channel, int i, int i2) {
+        this.zzliz.onInputClosed(zzao.zza(channel), i, i2);
+    }
+
+    public final void onOutputClosed(Channel channel, int i, int i2) {
+        this.zzliz.onOutputClosed(zzao.zza(channel), i, i2);
     }
 }

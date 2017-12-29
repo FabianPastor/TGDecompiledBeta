@@ -1,22 +1,12 @@
 package com.google.android.gms.common.api;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 public class ApiException extends Exception {
     protected final Status mStatus;
 
-    public ApiException(@NonNull Status status) {
-        super(status.getStatusMessage());
+    public ApiException(Status status) {
+        int statusCode = status.getStatusCode();
+        String statusMessage = status.getStatusMessage() != null ? status.getStatusMessage() : TtmlNode.ANONYMOUS_REGION_ID;
+        super(new StringBuilder(String.valueOf(statusMessage).length() + 13).append(statusCode).append(": ").append(statusMessage).toString());
         this.mStatus = status;
-    }
-
-    public int getStatusCode() {
-        return this.mStatus.getStatusCode();
-    }
-
-    @Nullable
-    public String getStatusMessage() {
-        return this.mStatus.getStatusMessage();
     }
 }

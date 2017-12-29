@@ -13,7 +13,7 @@ import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.upstream.DataSource.Factory;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
-public final class ExtractorMediaSource implements MediaSource, Listener {
+public final class ExtractorMediaSource implements Listener, MediaSource {
     public static final int DEFAULT_LOADING_CHECK_INTERVAL_BYTES = 1048576;
     public static final int DEFAULT_MIN_LOADABLE_RETRY_COUNT_LIVE = 6;
     public static final int DEFAULT_MIN_LOADABLE_RETRY_COUNT_ON_DEMAND = 3;
@@ -40,7 +40,7 @@ public final class ExtractorMediaSource implements MediaSource, Listener {
     }
 
     public ExtractorMediaSource(Uri uri, Factory dataSourceFactory, ExtractorsFactory extractorsFactory, Handler eventHandler, EventListener eventListener, String customCacheKey) {
-        this(uri, dataSourceFactory, extractorsFactory, -1, eventHandler, eventListener, customCacheKey, 1048576);
+        this(uri, dataSourceFactory, extractorsFactory, -1, eventHandler, eventListener, customCacheKey, DEFAULT_LOADING_CHECK_INTERVAL_BYTES);
     }
 
     public ExtractorMediaSource(Uri uri, Factory dataSourceFactory, ExtractorsFactory extractorsFactory, int minLoadableRetryCount, Handler eventHandler, EventListener eventListener, String customCacheKey, int continueLoadingCheckIntervalBytes) {

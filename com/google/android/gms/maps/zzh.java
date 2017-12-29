@@ -7,13 +7,13 @@ import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.internal.zzay;
 
 final class zzh extends zzay {
-    private /* synthetic */ OnMyLocationChangeListener zzblG;
+    private /* synthetic */ OnMyLocationChangeListener zzirh;
 
     zzh(GoogleMap googleMap, OnMyLocationChangeListener onMyLocationChangeListener) {
-        this.zzblG = onMyLocationChangeListener;
+        this.zzirh = onMyLocationChangeListener;
     }
 
-    public final void zzF(IObjectWrapper iObjectWrapper) {
-        this.zzblG.onMyLocationChange((Location) zzn.zzE(iObjectWrapper));
+    public final void zzy(IObjectWrapper iObjectWrapper) {
+        this.zzirh.onMyLocationChange((Location) zzn.zzx(iObjectWrapper));
     }
 }

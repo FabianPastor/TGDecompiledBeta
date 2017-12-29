@@ -1716,8 +1716,9 @@
     <string name="common_google_play_services_install_button">تثبيت</string>
     <string name="common_google_play_services_install_text">‏لن يتم تشغيل %1$s بدون خدمات Google Play، والتي لا تتوفر على جهازك.</string>
     <string name="common_google_play_services_install_title">‏الحصول على خدمات Google Play</string>
+    <string name="common_google_play_services_notification_channel_name">‏مدى توفّر خدمات Google Play</string>
     <string name="common_google_play_services_notification_ticker">‏خطأ في خدمات Google Play</string>
-    <string name="common_google_play_services_unknown_issue">‏لدى %1$s مشكلة في خدمات Google Play. الرجاء إعادة المحاولة.</string>
+    <string name="common_google_play_services_unknown_issue">‏لدى %1$s مشكلة في خدمات Google Play. يُرجى إعادة المحاولة.</string>
     <string name="common_google_play_services_unsupported_text">‏لن يتم تشغيل %1$s بدون خدمات Google Play التي لا يوفرها جهازك.</string>
     <string name="common_google_play_services_update_button">تحديث</string>
     <string name="common_google_play_services_update_text">‏لن يتم تشغيل %1$s ما لم يتم تحديث خدمات Google Play.</string>
@@ -1741,6 +1742,7 @@
     <string name="formatterWeek">EEE</string>
     <string name="formatterYear">dd.MM.yy</string>
     <string name="formatterYearMax">dd.MM.yyyy</string>
+    <string name="gcm_fallback_notification_channel_label">متنوعة</string>
     <string name="items_few">%1$d ملفات</string>
     <string name="items_many">%1$d ملف</string>
     <string name="items_one">%1$d ملف</string>
@@ -1753,5 +1755,6 @@
     <string name="messages_other">%1$d رسالة</string>
     <string name="messages_two">%1$d رسالتان</string>
     <string name="messages_zero">لا يوجد رسائل</string>
+    <string name="status_bar_notification_info_overflow">+999</string>
     <string name="wallet_buy_button_place_holder">الشراء عبر Google</string>
 </resources>

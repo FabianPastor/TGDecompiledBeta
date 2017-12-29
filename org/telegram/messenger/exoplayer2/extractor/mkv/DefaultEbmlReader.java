@@ -145,7 +145,7 @@ final class DefaultEbmlReader implements EbmlReader {
 
     private String readString(ExtractorInput input, int byteLength) throws IOException, InterruptedException {
         if (byteLength == 0) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
         byte[] stringBytes = new byte[byteLength];
         input.readFully(stringBytes, 0, byteLength);

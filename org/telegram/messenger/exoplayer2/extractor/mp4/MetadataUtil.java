@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.extractor.mp4;
 
-import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import com.coremedia.iso.boxes.GenreBox;
 import com.coremedia.iso.boxes.RatingBox;
@@ -55,7 +54,7 @@ final class MetadataUtil {
         int typeTopByte = (type >> 24) & 255;
         Entry parseCommentAttribute;
         if (typeTopByte == 169 || typeTopByte == 65533) {
-            int shortType = type & ViewCompat.MEASURED_SIZE_MASK;
+            int shortType = type & 16777215;
             try {
                 if (shortType == SHORT_TYPE_COMMENT) {
                     parseCommentAttribute = parseCommentAttribute(type, ilst);
@@ -216,7 +215,7 @@ final class MetadataUtil {
             data.skipBytes(10);
             int index = data.readUnsignedShort();
             if (index > 0) {
-                String value = "" + index;
+                String value = TtmlNode.ANONYMOUS_REGION_ID + index;
                 int count = data.readUnsignedShort();
                 if (count > 0) {
                     value = value + "/" + count;

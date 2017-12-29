@@ -5,7 +5,6 @@ import com.coremedia.iso.Utf8;
 import com.googlecode.mp4parser.AbstractFullBox;
 import com.googlecode.mp4parser.RequiresParseDetailAspect;
 import java.nio.ByteBuffer;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.JoinPoint.StaticPart;
 import org.aspectj.runtime.reflect.Factory;
 
@@ -14,7 +13,7 @@ public class XmlBox extends AbstractFullBox {
     private static final /* synthetic */ StaticPart ajc$tjp_0 = null;
     private static final /* synthetic */ StaticPart ajc$tjp_1 = null;
     private static final /* synthetic */ StaticPart ajc$tjp_2 = null;
-    String xml = "";
+    String xml = TtmlNode.ANONYMOUS_REGION_ID;
 
     static {
         ajc$preClinit();
@@ -22,9 +21,9 @@ public class XmlBox extends AbstractFullBox {
 
     private static /* synthetic */ void ajc$preClinit() {
         Factory factory = new Factory("XmlBox.java", XmlBox.class);
-        ajc$tjp_0 = factory.makeSJP(JoinPoint.METHOD_EXECUTION, factory.makeMethodSig("1", "getXml", "com.coremedia.iso.boxes.XmlBox", "", "", "", "java.lang.String"), 20);
-        ajc$tjp_1 = factory.makeSJP(JoinPoint.METHOD_EXECUTION, factory.makeMethodSig("1", "setXml", "com.coremedia.iso.boxes.XmlBox", "java.lang.String", "xml", "", "void"), 24);
-        ajc$tjp_2 = factory.makeSJP(JoinPoint.METHOD_EXECUTION, factory.makeMethodSig("1", "toString", "com.coremedia.iso.boxes.XmlBox", "", "", "", "java.lang.String"), 46);
+        ajc$tjp_0 = factory.makeSJP("method-execution", factory.makeMethodSig("1", "getXml", "com.coremedia.iso.boxes.XmlBox", TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, "java.lang.String"), 20);
+        ajc$tjp_1 = factory.makeSJP("method-execution", factory.makeMethodSig("1", "setXml", "com.coremedia.iso.boxes.XmlBox", "java.lang.String", "xml", TtmlNode.ANONYMOUS_REGION_ID, "void"), 24);
+        ajc$tjp_2 = factory.makeSJP("method-execution", factory.makeMethodSig("1", "toString", "com.coremedia.iso.boxes.XmlBox", TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, "java.lang.String"), 46);
     }
 
     public XmlBox() {

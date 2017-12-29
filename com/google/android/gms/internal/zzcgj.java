@@ -1,59 +1,84 @@
 package com.google.android.gms.internal;
 
-import android.support.annotation.NonNull;
-import com.google.android.gms.common.internal.zzbo;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
 
-final class zzcgj<V> extends FutureTask<V> implements Comparable<zzcgj> {
-    private final String zzbsg;
-    private /* synthetic */ zzcgg zzbsh;
-    private final long zzbsi = zzcgg.zzbsf.getAndIncrement();
-    private final boolean zzbsj;
-
-    zzcgj(zzcgg com_google_android_gms_internal_zzcgg, Runnable runnable, boolean z, String str) {
-        this.zzbsh = com_google_android_gms_internal_zzcgg;
-        super(runnable, null);
-        zzbo.zzu(str);
-        this.zzbsg = str;
-        this.zzbsj = false;
-        if (this.zzbsi == Long.MAX_VALUE) {
-            com_google_android_gms_internal_zzcgg.zzwF().zzyx().log("Tasks index overflow");
-        }
-    }
-
-    zzcgj(zzcgg com_google_android_gms_internal_zzcgg, Callable<V> callable, boolean z, String str) {
-        this.zzbsh = com_google_android_gms_internal_zzcgg;
-        super(callable);
-        zzbo.zzu(str);
-        this.zzbsg = str;
-        this.zzbsj = z;
-        if (this.zzbsi == Long.MAX_VALUE) {
-            com_google_android_gms_internal_zzcgg.zzwF().zzyx().log("Tasks index overflow");
-        }
-    }
-
-    public final /* synthetic */ int compareTo(@NonNull Object obj) {
-        zzcgj com_google_android_gms_internal_zzcgj = (zzcgj) obj;
-        if (this.zzbsj != com_google_android_gms_internal_zzcgj.zzbsj) {
-            return this.zzbsj ? -1 : 1;
-        } else {
-            if (this.zzbsi < com_google_android_gms_internal_zzcgj.zzbsi) {
-                return -1;
+public final class zzcgj implements Creator<zzcgi> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzbfn.zzd(parcel);
+        String str = null;
+        String str2 = null;
+        String str3 = null;
+        String str4 = null;
+        long j = 0;
+        long j2 = 0;
+        String str5 = null;
+        boolean z = true;
+        boolean z2 = false;
+        long j3 = -2147483648L;
+        String str6 = null;
+        long j4 = 0;
+        long j5 = 0;
+        int i = 0;
+        boolean z3 = true;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (65535 & readInt) {
+                case 2:
+                    str = zzbfn.zzq(parcel, readInt);
+                    break;
+                case 3:
+                    str2 = zzbfn.zzq(parcel, readInt);
+                    break;
+                case 4:
+                    str3 = zzbfn.zzq(parcel, readInt);
+                    break;
+                case 5:
+                    str4 = zzbfn.zzq(parcel, readInt);
+                    break;
+                case 6:
+                    j = zzbfn.zzi(parcel, readInt);
+                    break;
+                case 7:
+                    j2 = zzbfn.zzi(parcel, readInt);
+                    break;
+                case 8:
+                    str5 = zzbfn.zzq(parcel, readInt);
+                    break;
+                case 9:
+                    z = zzbfn.zzc(parcel, readInt);
+                    break;
+                case 10:
+                    z2 = zzbfn.zzc(parcel, readInt);
+                    break;
+                case 11:
+                    j3 = zzbfn.zzi(parcel, readInt);
+                    break;
+                case 12:
+                    str6 = zzbfn.zzq(parcel, readInt);
+                    break;
+                case 13:
+                    j4 = zzbfn.zzi(parcel, readInt);
+                    break;
+                case 14:
+                    j5 = zzbfn.zzi(parcel, readInt);
+                    break;
+                case 15:
+                    i = zzbfn.zzg(parcel, readInt);
+                    break;
+                case 16:
+                    z3 = zzbfn.zzc(parcel, readInt);
+                    break;
+                default:
+                    zzbfn.zzb(parcel, readInt);
+                    break;
             }
-            if (this.zzbsi > com_google_android_gms_internal_zzcgj.zzbsi) {
-                return 1;
-            }
-            this.zzbsh.zzwF().zzyy().zzj("Two tasks share the same index. index", Long.valueOf(this.zzbsi));
-            return 0;
         }
+        zzbfn.zzaf(parcel, zzd);
+        return new zzcgi(str, str2, str3, str4, j, j2, str5, z, z2, j3, str6, j4, j5, i, z3);
     }
 
-    protected final void setException(Throwable th) {
-        this.zzbsh.zzwF().zzyx().zzj(this.zzbsg, th);
-        if (th instanceof zzcgh) {
-            Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), th);
-        }
-        super.setException(th);
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new zzcgi[i];
     }
 }

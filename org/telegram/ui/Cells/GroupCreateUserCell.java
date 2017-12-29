@@ -25,6 +25,7 @@ public class GroupCreateUserCell extends FrameLayout {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private BackupImageView avatarImageView;
     private GroupCreateCheckBox checkBox;
+    private int currentAccount = UserConfig.selectedAccount;
     private CharSequence currentName;
     private CharSequence currentStatus;
     private User currentUser;
@@ -161,7 +162,7 @@ public class GroupCreateUserCell extends FrameLayout {
                 this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
                 this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
                 this.statusTextView.setText(LocaleController.getString("Bot", R.string.Bot));
-            } else if (this.currentUser.id == UserConfig.getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getInstance().getCurrentTime()) || MessagesController.getInstance().onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
+            } else if (this.currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getAccountInstance().getCurrentTime()) || MessagesController.getAccountInstance().onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
                 this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
                 this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_onlineText));
                 this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));

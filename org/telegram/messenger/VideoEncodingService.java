@@ -10,12 +10,13 @@ import org.telegram.messenger.beta.R;
 
 public class VideoEncodingService extends Service implements NotificationCenterDelegate {
     private Builder builder;
+    private int currentAccount = UserConfig.selectedAccount;
     private int currentProgress;
     private String path;
 
     public VideoEncodingService() {
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileUploadProgressChanged);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.stopEncodingService);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileUploadProgressChanged);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stopEncodingService);
     }
 
     public IBinder onBind(Intent arg2) {
@@ -24,12 +25,12 @@ public class VideoEncodingService extends Service implements NotificationCenterD
 
     public void onDestroy() {
         stopForeground(true);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FileUploadProgressChanged);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.stopEncodingService);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileUploadProgressChanged);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.stopEncodingService);
         FileLog.e("destroy video service");
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         boolean z = true;
         if (id == NotificationCenter.FileUploadProgressChanged) {
             String fileName = args[0];
@@ -68,6 +69,7 @@ public class VideoEncodingService extends Service implements NotificationCenterD
                 this.builder = new Builder(ApplicationLoader.applicationContext);
                 this.builder.setSmallIcon(17301640);
                 this.builder.setWhen(System.currentTimeMillis());
+                this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
                 this.builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));
                 if (isGif) {
                     this.builder.setTicker(LocaleController.getString("SendingGif", R.string.SendingGif));

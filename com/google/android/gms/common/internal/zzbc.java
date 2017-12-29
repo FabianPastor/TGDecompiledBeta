@@ -5,23 +5,23 @@ import android.os.IInterface;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.RemoteException;
+import com.google.android.gms.common.zzn;
 import com.google.android.gms.dynamic.IObjectWrapper;
-import com.google.android.gms.dynamic.IObjectWrapper.zza;
-import com.google.android.gms.internal.zzed;
-import com.google.android.gms.internal.zzef;
+import com.google.android.gms.internal.zzeu;
+import com.google.android.gms.internal.zzew;
 
-public final class zzbc extends zzed implements zzbb {
+public final class zzbc extends zzeu implements zzba {
     zzbc(IBinder iBinder) {
-        super(iBinder, "com.google.android.gms.common.internal.ISignInButtonCreator");
+        super(iBinder, "com.google.android.gms.common.internal.IGoogleCertificatesApi");
     }
 
-    public final IObjectWrapper zza(IObjectWrapper iObjectWrapper, zzbt com_google_android_gms_common_internal_zzbt) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzef.zza(zzZ, (IInterface) iObjectWrapper);
-        zzef.zza(zzZ, (Parcelable) com_google_android_gms_common_internal_zzbt);
-        zzZ = zza(2, zzZ);
-        IObjectWrapper zzM = zza.zzM(zzZ.readStrongBinder());
-        zzZ.recycle();
-        return zzM;
+    public final boolean zza(zzn com_google_android_gms_common_zzn, IObjectWrapper iObjectWrapper) throws RemoteException {
+        Parcel zzbe = zzbe();
+        zzew.zza(zzbe, (Parcelable) com_google_android_gms_common_zzn);
+        zzew.zza(zzbe, (IInterface) iObjectWrapper);
+        zzbe = zza(5, zzbe);
+        boolean zza = zzew.zza(zzbe);
+        zzbe.recycle();
+        return zza;
     }
 }

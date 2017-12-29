@@ -1,19 +1,32 @@
 package com.google.android.gms.internal;
 
-import android.os.RemoteException;
-import com.google.android.gms.common.api.Api.zzb;
-import com.google.android.gms.tasks.TaskCompletionSource;
+public class zzbey<T> {
+    private static String READ_PERMISSION = "com.google.android.providers.gsf.permission.READ_GSERVICES";
+    private static final Object sLock = new Object();
+    private static zzbfe zzfvo = null;
+    private static int zzfvp = 0;
+    private String zzbhb;
+    private T zzbhc;
+    private T zzfvq = null;
 
-public abstract class zzbey<A extends zzb, L> {
-    private final zzbdy<L> zzaEN;
-
-    protected zzbey(zzbdy<L> com_google_android_gms_internal_zzbdy_L) {
-        this.zzaEN = com_google_android_gms_internal_zzbdy_L;
+    protected zzbey(String str, T t) {
+        this.zzbhb = str;
+        this.zzbhc = t;
     }
 
-    protected abstract void zzc(A a, TaskCompletionSource<Void> taskCompletionSource) throws RemoteException;
+    public static zzbey<Integer> zza(String str, Integer num) {
+        return new zzbfb(str, num);
+    }
 
-    public final zzbdy<L> zzqG() {
-        return this.zzaEN;
+    public static zzbey<Long> zza(String str, Long l) {
+        return new zzbfa(str, l);
+    }
+
+    public static zzbey<Boolean> zze(String str, boolean z) {
+        return new zzbez(str, Boolean.valueOf(z));
+    }
+
+    public static zzbey<String> zzs(String str, String str2) {
+        return new zzbfd(str, str2);
     }
 }

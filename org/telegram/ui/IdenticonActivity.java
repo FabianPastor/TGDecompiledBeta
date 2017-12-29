@@ -77,13 +77,13 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
 
     public boolean onFragmentCreate() {
         this.chat_id = getArguments().getInt("chat_id");
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
         return super.onFragmentCreate();
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
     }
 
     public View createView(Context context) {
@@ -151,12 +151,12 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         this.emojiTextView.setGravity(17);
         this.emojiTextView.setTextSize(1, 32.0f);
         this.container.addView(this.emojiTextView, LayoutHelper.createFrame(-2, -2.0f));
-        EncryptedChat encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf(this.chat_id));
+        EncryptedChat encryptedChat = MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf(this.chat_id));
         if (encryptedChat != null) {
             IdenticonDrawable drawable = new IdenticonDrawable();
             identiconView.setImageDrawable(drawable);
             drawable.setEncryptedChat(encryptedChat);
-            User user = MessagesController.getInstance().getUser(Integer.valueOf(encryptedChat.user_id));
+            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(encryptedChat.user_id));
             SpannableStringBuilder hash = new SpannableStringBuilder();
             StringBuilder emojis = new StringBuilder();
             if (encryptedChat.key_hash.length > 16) {
@@ -207,7 +207,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         fixLayout();
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.emojiDidLoaded && this.emojiTextView != null) {
             this.emojiTextView.invalidate();
         }

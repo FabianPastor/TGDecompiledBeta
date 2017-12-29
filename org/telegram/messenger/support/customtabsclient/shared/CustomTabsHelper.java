@@ -87,6 +87,6 @@ public class CustomTabsHelper {
     }
 
     public static String[] getPackages() {
-        return new String[]{"", STABLE_PACKAGE, BETA_PACKAGE, DEV_PACKAGE, LOCAL_PACKAGE};
+        return new String[]{TtmlNode.ANONYMOUS_REGION_ID, STABLE_PACKAGE, BETA_PACKAGE, DEV_PACKAGE, LOCAL_PACKAGE};
     }
 }

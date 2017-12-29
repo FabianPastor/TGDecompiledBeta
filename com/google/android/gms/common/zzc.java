@@ -2,10 +2,10 @@ package com.google.android.gms.common;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-public final class zzc extends zza {
+public final class zzc extends zzbfm {
     public static final Creator<zzc> CREATOR = new zzd();
     private String name;
     private int version;
@@ -16,9 +16,9 @@ public final class zzc extends zza {
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 1, this.name, false);
-        zzd.zzc(parcel, 2, this.version);
-        zzd.zzI(parcel, zze);
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zza(parcel, 1, this.name, false);
+        zzbfp.zzc(parcel, 2, this.version);
+        zzbfp.zzai(parcel, zze);
     }
 }

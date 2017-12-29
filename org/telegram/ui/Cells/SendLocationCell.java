@@ -13,6 +13,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -22,6 +23,7 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class SendLocationCell extends FrameLayout {
     private SimpleTextView accurateTextView;
+    private int currentAccount = UserConfig.selectedAccount;
     private long dialogId;
     private ImageView imageView;
     private Runnable invalidateRunnable = new Runnable() {
@@ -89,7 +91,7 @@ public class SendLocationCell extends FrameLayout {
 
     public void setHasLocation(boolean value) {
         float f = 1.0f;
-        if (LocationController.getInstance().getSharingLocationInfo(this.dialogId) == null) {
+        if (LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId) == null) {
             float f2;
             SimpleTextView simpleTextView = this.titleTextView;
             if (value) {
@@ -140,7 +142,7 @@ public class SendLocationCell extends FrameLayout {
     }
 
     private void checkText() {
-        SharingLocationInfo info = LocationController.getInstance().getSharingLocationInfo(this.dialogId);
+        SharingLocationInfo info = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
         if (info != null) {
             setText(LocaleController.getString("StopLiveLocation", R.string.StopLiveLocation), LocaleController.formatLocationUpdateDate(info.messageObject.messageOwner.edit_date != 0 ? (long) info.messageObject.messageOwner.edit_date : (long) info.messageObject.messageOwner.date));
         } else {
@@ -149,9 +151,9 @@ public class SendLocationCell extends FrameLayout {
     }
 
     protected void onDraw(Canvas canvas) {
-        SharingLocationInfo currentInfo = LocationController.getInstance().getSharingLocationInfo(this.dialogId);
+        SharingLocationInfo currentInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
         if (currentInfo != null) {
-            int currentTime = ConnectionsManager.getInstance().getCurrentTime();
+            int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
             if (currentInfo.stopTime >= currentTime) {
                 float progress = ((float) Math.abs(currentInfo.stopTime - currentTime)) / ((float) currentInfo.period);
                 if (LocaleController.isRTL) {

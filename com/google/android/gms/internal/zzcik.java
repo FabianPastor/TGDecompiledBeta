@@ -1,41 +1,58 @@
 package com.google.android.gms.internal;
 
-import android.os.RemoteException;
-import android.text.TextUtils;
+import com.google.android.gms.common.internal.zzbq;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
-final class zzcik implements Runnable {
-    private /* synthetic */ String zzbjh;
-    private /* synthetic */ zzcez zzbtj;
-    private /* synthetic */ zzcid zzbua;
-    private /* synthetic */ boolean zzbud = true;
-    private /* synthetic */ boolean zzbue;
+final class zzcik<V> extends FutureTask<V> implements Comparable<zzcik> {
+    private final String zzjep;
+    private /* synthetic */ zzcih zzjeq;
+    private final long zzjer = zzcih.zzjeo.getAndIncrement();
+    final boolean zzjes;
 
-    zzcik(zzcid com_google_android_gms_internal_zzcid, boolean z, boolean z2, zzcez com_google_android_gms_internal_zzcez, String str) {
-        this.zzbua = com_google_android_gms_internal_zzcid;
-        this.zzbue = z2;
-        this.zzbtj = com_google_android_gms_internal_zzcez;
-        this.zzbjh = str;
+    zzcik(zzcih com_google_android_gms_internal_zzcih, Runnable runnable, boolean z, String str) {
+        this.zzjeq = com_google_android_gms_internal_zzcih;
+        super(runnable, null);
+        zzbq.checkNotNull(str);
+        this.zzjep = str;
+        this.zzjes = false;
+        if (this.zzjer == Long.MAX_VALUE) {
+            com_google_android_gms_internal_zzcih.zzawy().zzazd().log("Tasks index overflow");
+        }
     }
 
-    public final void run() {
-        zzcfd zzd = this.zzbua.zzbtU;
-        if (zzd == null) {
-            this.zzbua.zzwF().zzyx().log("Discarding data. Failed to send event to service");
-            return;
+    zzcik(zzcih com_google_android_gms_internal_zzcih, Callable<V> callable, boolean z, String str) {
+        this.zzjeq = com_google_android_gms_internal_zzcih;
+        super(callable);
+        zzbq.checkNotNull(str);
+        this.zzjep = str;
+        this.zzjes = z;
+        if (this.zzjer == Long.MAX_VALUE) {
+            com_google_android_gms_internal_zzcih.zzawy().zzazd().log("Tasks index overflow");
         }
-        if (this.zzbud) {
-            this.zzbua.zza(zzd, this.zzbue ? null : this.zzbtj);
+    }
+
+    public final /* synthetic */ int compareTo(Object obj) {
+        zzcik com_google_android_gms_internal_zzcik = (zzcik) obj;
+        if (this.zzjes != com_google_android_gms_internal_zzcik.zzjes) {
+            return this.zzjes ? -1 : 1;
         } else {
-            try {
-                if (TextUtils.isEmpty(this.zzbjh)) {
-                    zzd.zza(this.zzbtj, this.zzbua.zzwu().zzdV(this.zzbua.zzwF().zzyE()));
-                } else {
-                    zzd.zza(this.zzbtj, this.zzbjh, this.zzbua.zzwF().zzyE());
-                }
-            } catch (RemoteException e) {
-                this.zzbua.zzwF().zzyx().zzj("Failed to send event to the service", e);
+            if (this.zzjer < com_google_android_gms_internal_zzcik.zzjer) {
+                return -1;
             }
+            if (this.zzjer > com_google_android_gms_internal_zzcik.zzjer) {
+                return 1;
+            }
+            this.zzjeq.zzawy().zzaze().zzj("Two tasks share the same index. index", Long.valueOf(this.zzjer));
+            return 0;
         }
-        this.zzbua.zzkP();
+    }
+
+    protected final void setException(Throwable th) {
+        this.zzjeq.zzawy().zzazd().zzj(this.zzjep, th);
+        if (th instanceof zzcii) {
+            Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), th);
+        }
+        super.setException(th);
     }
 }

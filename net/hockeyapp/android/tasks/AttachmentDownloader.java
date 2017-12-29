@@ -29,9 +29,6 @@ public class AttachmentDownloader {
 
     private static class AttachmentDownloaderHolder {
         public static final AttachmentDownloader INSTANCE = new AttachmentDownloader();
-
-        private AttachmentDownloaderHolder() {
-        }
     }
 
     private static class DownloadJob {
@@ -165,7 +162,7 @@ public class AttachmentDownloader {
 
         private URLConnection createConnection(URL url) throws IOException {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.addRequestProperty("User-Agent", Constants.SDK_USER_AGENT);
+            connection.addRequestProperty("User-Agent", "HockeySDK/Android 4.1.3");
             connection.setInstanceFollowRedirects(true);
             if (VERSION.SDK_INT <= 9) {
                 connection.setRequestProperty("connection", "close");

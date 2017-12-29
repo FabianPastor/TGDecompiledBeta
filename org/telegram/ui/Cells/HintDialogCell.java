@@ -53,7 +53,7 @@ public class HintDialogCell extends FrameLayout {
 
     public void checkUnreadCounter(int mask) {
         if (mask == 0 || (mask & 256) != 0 || (mask & 2048) != 0) {
-            TL_dialog dialog = (TL_dialog) MessagesController.getInstance().dialogs_dict.get(Long.valueOf(this.dialog_id));
+            TL_dialog dialog = (TL_dialog) MessagesController.getAccountInstance().dialogs_dict.get(Long.valueOf(this.dialog_id));
             if (dialog == null || dialog.unread_count == 0) {
                 if (this.countLayout != null) {
                     if (mask != 0) {
@@ -77,36 +77,36 @@ public class HintDialogCell extends FrameLayout {
     public void update() {
         int uid = (int) this.dialog_id;
         if (uid > 0) {
-            this.avatarDrawable.setInfo(MessagesController.getInstance().getUser(Integer.valueOf(uid)));
+            this.avatarDrawable.setInfo(MessagesController.getAccountInstance().getUser(Integer.valueOf(uid)));
             return;
         }
-        this.avatarDrawable.setInfo(MessagesController.getInstance().getChat(Integer.valueOf(-uid)));
+        this.avatarDrawable.setInfo(MessagesController.getAccountInstance().getChat(Integer.valueOf(-uid)));
     }
 
     public void setDialog(int uid, boolean counter, CharSequence name) {
         this.dialog_id = (long) uid;
         TLObject photo = null;
         if (uid > 0) {
-            User user = MessagesController.getInstance().getUser(Integer.valueOf(uid));
+            User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(uid));
             if (name != null) {
                 this.nameTextView.setText(name);
             } else if (user != null) {
                 this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
             } else {
-                this.nameTextView.setText("");
+                this.nameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
             }
             this.avatarDrawable.setInfo(user);
             if (!(user == null || user.photo == null)) {
                 photo = user.photo.photo_small;
             }
         } else {
-            Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-uid));
+            Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-uid));
             if (name != null) {
                 this.nameTextView.setText(name);
             } else if (chat != null) {
                 this.nameTextView.setText(chat.title);
             } else {
-                this.nameTextView.setText("");
+                this.nameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
             }
             this.avatarDrawable.setInfo(chat);
             if (!(chat == null || chat.photo == null)) {
@@ -128,7 +128,7 @@ public class HintDialogCell extends FrameLayout {
             int left = AndroidUtilities.dp(54.0f);
             int x = left - AndroidUtilities.dp(5.5f);
             this.rect.set((float) x, (float) top, (float) ((this.countWidth + x) + AndroidUtilities.dp(11.0f)), (float) (AndroidUtilities.dp(23.0f) + top));
-            canvas.drawRoundRect(this.rect, 11.5f * AndroidUtilities.density, 11.5f * AndroidUtilities.density, MessagesController.getInstance().isDialogMuted(this.dialog_id) ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint);
+            canvas.drawRoundRect(this.rect, 11.5f * AndroidUtilities.density, 11.5f * AndroidUtilities.density, MessagesController.getAccountInstance().isDialogMuted(this.dialog_id) ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint);
             canvas.save();
             canvas.translate((float) left, (float) (AndroidUtilities.dp(4.0f) + top));
             this.countLayout.draw(canvas);

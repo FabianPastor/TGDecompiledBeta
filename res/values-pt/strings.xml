@@ -70,4 +70,5 @@
     <string name="hockeyapp_update_dialog_positive_button">Mostrar</string>
     <string name="hockeyapp_update_dialog_title">Atualização disponível</string>
     <string name="hockeyapp_update_mandatory_toast">%s está disponível e é obrigatória!</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
 </resources>

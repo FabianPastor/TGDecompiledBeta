@@ -97,64 +97,24 @@ public class DecoderConfigDescriptor extends BaseDescriptor {
         return out;
     }
 
-    public DecoderSpecificInfo getDecoderSpecificInfo() {
-        return this.decoderSpecificInfo;
-    }
-
-    public AudioSpecificConfig getAudioSpecificInfo() {
-        return this.audioSpecificInfo;
-    }
-
     public void setAudioSpecificInfo(AudioSpecificConfig audioSpecificInfo) {
         this.audioSpecificInfo = audioSpecificInfo;
-    }
-
-    public List<ProfileLevelIndicationDescriptor> getProfileLevelIndicationDescriptors() {
-        return this.profileLevelIndicationDescriptors;
-    }
-
-    public int getObjectTypeIndication() {
-        return this.objectTypeIndication;
     }
 
     public void setObjectTypeIndication(int objectTypeIndication) {
         this.objectTypeIndication = objectTypeIndication;
     }
 
-    public int getStreamType() {
-        return this.streamType;
-    }
-
     public void setStreamType(int streamType) {
         this.streamType = streamType;
-    }
-
-    public int getUpStream() {
-        return this.upStream;
-    }
-
-    public void setUpStream(int upStream) {
-        this.upStream = upStream;
-    }
-
-    public int getBufferSizeDB() {
-        return this.bufferSizeDB;
     }
 
     public void setBufferSizeDB(int bufferSizeDB) {
         this.bufferSizeDB = bufferSizeDB;
     }
 
-    public long getMaxBitRate() {
-        return this.maxBitRate;
-    }
-
     public void setMaxBitRate(long maxBitRate) {
         this.maxBitRate = maxBitRate;
-    }
-
-    public long getAvgBitRate() {
-        return this.avgBitRate;
     }
 
     public void setAvgBitRate(long avgBitRate) {

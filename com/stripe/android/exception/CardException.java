@@ -13,20 +13,4 @@ public class CardException extends StripeException {
         this.declineCode = declineCode;
         this.charge = charge;
     }
-
-    public String getCode() {
-        return this.code;
-    }
-
-    public String getParam() {
-        return this.param;
-    }
-
-    public String getDeclineCode() {
-        return this.declineCode;
-    }
-
-    public String getCharge() {
-        return this.charge;
-    }
 }

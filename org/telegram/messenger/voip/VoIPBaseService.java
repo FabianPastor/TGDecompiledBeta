@@ -42,6 +42,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
@@ -83,6 +84,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected VoIPController controller;
     protected boolean controllerStarted;
     protected WakeLock cpuWakelock;
+    protected int currentAccount = -1;
     protected int currentState = 0;
     protected boolean haveAudioFocus;
     protected boolean isBtHeadsetConnected;
@@ -270,6 +272,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         if (VERSION.SDK_INT >= 21) {
             builder.setColor(-13851168);
         }
+        if (VERSION.SDK_INT >= 26) {
+            builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
+        }
         if (photo != null) {
             BitmapDrawable img = ImageLoader.getInstance().getImageFromMemory(photo, null, "50_50");
             if (img != null) {
@@ -296,7 +301,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         FileLog.d("=============== VoIPService STOPPING ===============");
         stopForeground(true);
         stopRinging();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.appDidLogout);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.appDidLogout);
         SensorManager sm = (SensorManager) getSystemService("sensor");
         if (sm.getDefaultSensor(8) != null) {
             sm.unregisterListener(this);
@@ -313,13 +318,13 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         sharedInstance = null;
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
-                NotificationCenter.getInstance().postNotificationName(NotificationCenter.didEndedCall, new Object[0]);
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didEndedCall, new Object[0]);
             }
         });
         if (this.controller != null && this.controllerStarted) {
             this.lastKnownDuration = this.controller.getCallDuration();
             updateStats();
-            StatsController.getInstance().incrementTotalCallsTime(getStatsNetworkType(), ((int) (this.lastKnownDuration / 1000)) % 5);
+            StatsController.getInstance(this.currentAccount).incrementTotalCallsTime(getStatsNetworkType(), ((int) (this.lastKnownDuration / 1000)) % 5);
             onControllerPreRelease();
             this.controller.release();
             this.controller = null;
@@ -342,7 +347,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         if (!this.playingSound) {
             this.soundPool.release();
         }
-        ConnectionsManager.getInstance().setAppPaused(true, false);
+        ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
         VoIPHelper.lastCallTime = System.currentTimeMillis();
     }
 
@@ -351,6 +356,12 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 
     protected VoIPController createController() {
         return new VoIPController();
+    }
+
+    protected void initializeAccountRelatedThings() {
+        updateServerConfig();
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.appDidLogout);
+        ConnectionsManager.getInstance(this.currentAccount).setAppPaused(false, false);
     }
 
     public void onCreate() {
@@ -362,7 +373,6 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         } else {
             VoIPController.setNativeBufferSize(Integer.parseInt(am.getProperty("android.media.property.OUTPUT_FRAMES_PER_BUFFER")));
         }
-        updateServerConfig();
         try {
             this.controller = createController();
             this.controller.setConnectionStateListener(this);
@@ -378,7 +388,6 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             }
             filter.addAction("android.intent.action.PHONE_STATE");
             registerReceiver(this.receiver, filter);
-            ConnectionsManager.getInstance().setAppPaused(false, false);
             this.soundPool = new SoundPool(1, 0, 0);
             this.spConnectingId = this.soundPool.load(this, R.raw.voip_connecting, 1);
             this.spRingbackID = this.soundPool.load(this, R.raw.voip_ringback, 1);
@@ -403,7 +412,6 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                     ((StateListener) it.next()).onAudioSettingsChanged();
                 }
             }
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.appDidLogout);
         } catch (Exception x) {
             FileLog.e("error initializing voip controller", x);
             callFailed();
@@ -428,18 +436,18 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         this.stats = this.prevStats;
         this.prevStats = tmp;
         if (wifiSentDiff > 0) {
-            StatsController.getInstance().incrementSentBytesCount(1, 0, wifiSentDiff);
+            StatsController.getInstance(this.currentAccount).incrementSentBytesCount(1, 0, wifiSentDiff);
         }
         if (wifiRecvdDiff > 0) {
-            StatsController.getInstance().incrementReceivedBytesCount(1, 0, wifiRecvdDiff);
+            StatsController.getInstance(this.currentAccount).incrementReceivedBytesCount(1, 0, wifiRecvdDiff);
         }
         if (mobileSentDiff > 0) {
-            StatsController instance = StatsController.getInstance();
+            StatsController instance = StatsController.getInstance(this.currentAccount);
             int i = (this.lastNetInfo == null || !this.lastNetInfo.isRoaming()) ? 0 : 2;
             instance.incrementSentBytesCount(i, 0, mobileSentDiff);
         }
         if (mobileRecvdDiff > 0) {
-            instance = StatsController.getInstance();
+            instance = StatsController.getInstance(this.currentAccount);
             i = (this.lastNetInfo == null || !this.lastNetInfo.isRoaming()) ? 0 : 2;
             instance.incrementReceivedBytesCount(i, 0, mobileRecvdDiff);
         }
@@ -622,15 +630,15 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
                         if (VoIPBaseService.this.controller != null) {
-                            StatsController.getInstance().incrementTotalCallsTime(VoIPBaseService.this.getStatsNetworkType(), 5);
+                            StatsController.getInstance(VoIPBaseService.this.currentAccount).incrementTotalCallsTime(VoIPBaseService.this.getStatsNetworkType(), 5);
                             AndroidUtilities.runOnUIThread(this, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                         }
                     }
                 }, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                 if (this.isOutgoing) {
-                    StatsController.getInstance().incrementSentItemsCount(getStatsNetworkType(), 0, 1);
+                    StatsController.getInstance(this.currentAccount).incrementSentItemsCount(getStatsNetworkType(), 0, 1);
                 } else {
-                    StatsController.getInstance().incrementReceivedItemsCount(getStatsNetworkType(), 0, 1);
+                    StatsController.getInstance(this.currentAccount).incrementReceivedItemsCount(getStatsNetworkType(), 0, 1);
                 }
             }
         }
@@ -697,9 +705,24 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     public void updateOutputGainControlState() {
+        boolean z;
+        int i = 1;
         AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
         VoIPController voIPController = this.controller;
-        boolean z = (!hasEarpiece() || am.isSpeakerphoneOn() || am.isBluetoothScoOn() || this.isHeadsetPlugged) ? false : true;
+        if (!hasEarpiece() || am.isSpeakerphoneOn() || am.isBluetoothScoOn() || this.isHeadsetPlugged) {
+            z = false;
+        } else {
+            z = true;
+        }
         voIPController.setAudioOutputGainControlEnabled(z);
+        VoIPController voIPController2 = this.controller;
+        if (this.isHeadsetPlugged || !(!hasEarpiece() || am.isSpeakerphoneOn() || am.isBluetoothScoOn() || this.isHeadsetPlugged)) {
+            i = 0;
+        }
+        voIPController2.setEchoCancellationStrength(i);
+    }
+
+    public int getAccount() {
+        return this.currentAccount;
     }
 }

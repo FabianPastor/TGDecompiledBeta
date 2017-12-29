@@ -51,31 +51,4 @@ public final class Pools {
             return false;
         }
     }
-
-    public static class SynchronizedPool<T> extends SimplePool<T> {
-        private final Object mLock = new Object();
-
-        public SynchronizedPool(int maxPoolSize) {
-            super(maxPoolSize);
-        }
-
-        public T acquire() {
-            T acquire;
-            synchronized (this.mLock) {
-                acquire = super.acquire();
-            }
-            return acquire;
-        }
-
-        public boolean release(T element) {
-            boolean release;
-            synchronized (this.mLock) {
-                release = super.release(element);
-            }
-            return release;
-        }
-    }
-
-    private Pools() {
-    }
 }

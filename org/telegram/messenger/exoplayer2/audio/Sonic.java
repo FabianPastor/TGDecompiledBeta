@@ -2,6 +2,7 @@ package org.telegram.messenger.exoplayer2.audio;
 
 import java.nio.ShortBuffer;
 import java.util.Arrays;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
 final class Sonic {
@@ -193,8 +194,8 @@ final class Sonic {
         int skip;
         int period;
         int retPeriod;
-        if (this.sampleRate > 4000) {
-            skip = this.sampleRate / 4000;
+        if (this.sampleRate > AMDF_FREQUENCY) {
+            skip = this.sampleRate / AMDF_FREQUENCY;
         } else {
             skip = 1;
         }
@@ -282,7 +283,7 @@ final class Sonic {
             int newSampleRate = (int) (((float) this.sampleRate) / rate);
             int oldSampleRate = this.sampleRate;
             while (true) {
-                if (newSampleRate <= 16384 && oldSampleRate <= 16384) {
+                if (newSampleRate <= MessagesController.UPDATE_MASK_CHAT_ADMINS && oldSampleRate <= MessagesController.UPDATE_MASK_CHAT_ADMINS) {
                     break;
                 }
                 newSampleRate /= 2;

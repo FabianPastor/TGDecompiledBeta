@@ -1,9 +1,5 @@
 package com.stripe.android.net;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
-import com.google.android.gms.wallet.WalletConstants;
 import com.stripe.android.exception.APIConnectionException;
 import com.stripe.android.exception.APIException;
 import com.stripe.android.exception.AuthenticationException;
@@ -16,8 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -30,18 +24,12 @@ import java.util.Scanner;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
 import org.json.JSONObject;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public class StripeApiHandler {
-    public static final String CHARSET = "UTF-8";
-    private static final String DNS_CACHE_TTL_PROPERTY_NAME = "networkaddress.cache.ttl";
-    static final String GET = "GET";
-    public static final String LIVE_API_BASE = "https://api.stripe.com";
-    static final String POST = "POST";
     private static final SSLSocketFactory SSL_SOCKET_FACTORY = new StripeSSLSocketFactory();
-    public static final String TOKENS = "tokens";
-    public static final String VERSION = "3.5.0";
 
     private static final class Parameter {
         public final String key;
@@ -51,10 +39,6 @@ public class StripeApiHandler {
             this.key = key;
             this.value = value;
         }
-    }
-
-    @Retention(RetentionPolicy.SOURCE)
-    @interface RestMethod {
     }
 
     private static com.stripe.android.model.Token requestToken(java.lang.String r15, java.lang.String r16, java.util.Map<java.lang.String, java.lang.Object> r17, com.stripe.android.net.RequestOptions r18) throws com.stripe.android.exception.AuthenticationException, com.stripe.android.exception.InvalidRequestException, com.stripe.android.exception.APIConnectionException, com.stripe.android.exception.CardException, com.stripe.android.exception.APIException {
@@ -70,8 +54,6 @@ Error: java.util.NoSuchElementException
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
 	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:59)
-	at jadx.core.ProcessClass.process(ProcessClass.java:42)
 	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:306)
 	at jadx.api.JavaClass.decompile(JavaClass.java:62)
 	at jadx.api.JadxDecompiler$1.run(JadxDecompiler.java:199)
@@ -192,18 +174,8 @@ Error: java.util.NoSuchElementException
         throw new UnsupportedOperationException("Method not decompiled: com.stripe.android.net.StripeApiHandler.requestToken(java.lang.String, java.lang.String, java.util.Map, com.stripe.android.net.RequestOptions):com.stripe.android.model.Token");
     }
 
-    @Nullable
-    public static Token createToken(@NonNull Map<String, Object> cardParams, @NonNull RequestOptions options) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
-        return requestToken(POST, getApiUrl(), cardParams, options);
-    }
-
-    @Nullable
-    public static Token retrieveToken(@NonNull RequestOptions options, @NonNull String tokenId) throws AuthenticationException, InvalidRequestException, APIConnectionException, APIException {
-        try {
-            return requestToken(GET, getRetrieveTokenApiUrl(tokenId), null, options);
-        } catch (CardException cardException) {
-            throw new APIException(cardException.getMessage(), cardException.getRequestId(), cardException.getStatusCode(), cardException);
-        }
+    public static Token createToken(Map<String, Object> cardParams, RequestOptions options) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
+        return requestToken("POST", getApiUrl(), cardParams, options);
     }
 
     static String createQuery(Map<String, Object> params) throws UnsupportedEncodingException, InvalidRequestException {
@@ -221,9 +193,9 @@ Error: java.util.NoSuchElementException
         int i = 0;
         Map<String, String> headers = new HashMap();
         String apiVersion = options.getApiVersion();
-        headers.put("Accept-Charset", "UTF-8");
+        headers.put("Accept-Charset", C.UTF8_NAME);
         headers.put("Accept", "application/json");
-        headers.put("User-Agent", String.format("Stripe/v1 JavaBindings/%s", new Object[]{VERSION}));
+        headers.put("User-Agent", String.format("Stripe/v1 JavaBindings/%s", new Object[]{"3.5.0"}));
         headers.put("Authorization", String.format("Bearer %s", new Object[]{options.getPublishableApiKey()}));
         String[] propertyNames = new String[]{"os.name", "os.version", "os.arch", "java.version", "java.vendor", "java.vm.version", "java.vm.vendor"};
         Map<String, String> propertyMap = new HashMap();
@@ -233,7 +205,7 @@ Error: java.util.NoSuchElementException
             propertyMap.put(propertyName, System.getProperty(propertyName));
             i++;
         }
-        propertyMap.put("bindings.version", VERSION);
+        propertyMap.put("bindings.version", "3.5.0");
         propertyMap.put("lang", "Java");
         propertyMap.put("publisher", "Stripe");
         headers.put("X-Stripe-Client-User-Agent", new JSONObject(propertyMap).toString());
@@ -246,14 +218,8 @@ Error: java.util.NoSuchElementException
         return headers;
     }
 
-    @VisibleForTesting
     static String getApiUrl() {
-        return String.format("%s/v1/%s", new Object[]{LIVE_API_BASE, TOKENS});
-    }
-
-    @VisibleForTesting
-    static String getRetrieveTokenApiUrl(@NonNull String tokenId) {
-        return String.format("%s/%s", new Object[]{getApiUrl(), tokenId});
+        return String.format("%s/v1/%s", new Object[]{"https://api.stripe.com", "tokens"});
     }
 
     private static String formatURL(String url, String query) {
@@ -266,19 +232,19 @@ Error: java.util.NoSuchElementException
 
     private static HttpURLConnection createGetConnection(String url, String query, RequestOptions options) throws IOException {
         HttpURLConnection conn = createStripeConnection(formatURL(url, query), options);
-        conn.setRequestMethod(GET);
+        conn.setRequestMethod("GET");
         return conn;
     }
 
     private static HttpURLConnection createPostConnection(String url, String query, RequestOptions options) throws IOException {
         HttpURLConnection conn = createStripeConnection(url, options);
         conn.setDoOutput(true);
-        conn.setRequestMethod(POST);
-        conn.setRequestProperty("Content-Type", String.format("application/x-www-form-urlencoded;charset=%s", new Object[]{"UTF-8"}));
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", String.format("application/x-www-form-urlencoded;charset=%s", new Object[]{C.UTF8_NAME}));
         OutputStream outputStream = null;
         try {
             outputStream = conn.getOutputStream();
-            outputStream.write(query.getBytes("UTF-8"));
+            outputStream.write(query.getBytes(C.UTF8_NAME));
             return conn;
         } finally {
             if (outputStream != null) {
@@ -317,7 +283,7 @@ Error: java.util.NoSuchElementException
         List<Parameter> flatParams = new LinkedList();
         String newPrefix = String.format("%s[]", new Object[]{keyPrefix});
         if (params.isEmpty()) {
-            flatParams.add(new Parameter(keyPrefix, ""));
+            flatParams.add(new Parameter(keyPrefix, TtmlNode.ANONYMOUS_REGION_ID));
         } else {
             for (Object flattenParamsValue : params) {
                 flatParams.addAll(flattenParamsValue(flattenParamsValue, newPrefix));
@@ -349,11 +315,11 @@ Error: java.util.NoSuchElementException
         if (value instanceof List) {
             return flattenParamsList((List) value, keyPrefix);
         }
-        if ("".equals(value)) {
+        if (TtmlNode.ANONYMOUS_REGION_ID.equals(value)) {
             throw new InvalidRequestException("You cannot set '" + keyPrefix + "' to an empty string. We interpret empty strings as null in requests. You may set '" + keyPrefix + "' to null to delete the property.", keyPrefix, null, Integer.valueOf(0), null);
         } else if (value == null) {
             flatParams = new LinkedList();
-            flatParams.add(new Parameter(keyPrefix, ""));
+            flatParams.add(new Parameter(keyPrefix, TtmlNode.ANONYMOUS_REGION_ID));
             return flatParams;
         } else {
             flatParams = new LinkedList();
@@ -369,11 +335,11 @@ Error: java.util.NoSuchElementException
                 throw new InvalidRequestException(stripeError.message, stripeError.param, requestId, Integer.valueOf(rCode), null);
             case 401:
                 throw new AuthenticationException(stripeError.message, requestId, Integer.valueOf(rCode));
-            case WalletConstants.ERROR_CODE_SERVICE_UNAVAILABLE /*402*/:
+            case 402:
                 throw new CardException(stripeError.message, requestId, stripeError.code, stripeError.param, stripeError.decline_code, stripeError.charge, Integer.valueOf(rCode), null);
             case 403:
                 throw new PermissionException(stripeError.message, requestId, Integer.valueOf(rCode));
-            case WalletConstants.ERROR_CODE_INVALID_PARAMETERS /*404*/:
+            case 404:
                 throw new InvalidRequestException(stripeError.message, stripeError.param, requestId, Integer.valueOf(rCode), null);
             case 429:
                 throw new RateLimitException(stripeError.message, stripeError.param, requestId, Integer.valueOf(rCode), null);
@@ -390,7 +356,7 @@ Error: java.util.NoSuchElementException
         if (str == null) {
             return null;
         }
-        return URLEncoder.encode(str, "UTF-8");
+        return URLEncoder.encode(str, C.UTF8_NAME);
     }
 
     /* JADX WARNING: inconsistent code. */
@@ -402,11 +368,11 @@ Error: java.util.NoSuchElementException
             String rBody;
             switch (method.hashCode()) {
                 case 70454:
-                    if (method.equals(GET)) {
+                    if (method.equals("GET")) {
                         break;
                     }
                 case 2461856:
-                    if (method.equals(POST)) {
+                    if (method.equals("POST")) {
                         int i = 1;
                         break;
                     }
@@ -443,7 +409,7 @@ Error: java.util.NoSuchElementException
     }
 
     private static String getResponseBody(InputStream responseStream) throws IOException {
-        String rBody = new Scanner(responseStream, "UTF-8").useDelimiter("\\A").next();
+        String rBody = new Scanner(responseStream, C.UTF8_NAME).useDelimiter("\\A").next();
         responseStream.close();
         return rBody;
     }

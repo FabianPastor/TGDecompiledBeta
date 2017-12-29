@@ -23,7 +23,7 @@ public class SmsListener extends BroadcastReceiver {
                 try {
                     Object[] pdus = (Object[]) bundle.get("pdus");
                     SmsMessage[] msgs = new SmsMessage[pdus.length];
-                    String wholeString = "";
+                    String wholeString = TtmlNode.ANONYMOUS_REGION_ID;
                     for (int i = 0; i < msgs.length; i++) {
                         msgs[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
                         wholeString = wholeString + msgs[i].getMessageBody();
@@ -33,7 +33,7 @@ public class SmsListener extends BroadcastReceiver {
                         if (matcher.find() && matcher.group(0).length() >= 3) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
-                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.didReceiveSmsCode, matcher.group(0));
+                                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didReceiveSmsCode, matcher.group(0));
                                 }
                             });
                         }

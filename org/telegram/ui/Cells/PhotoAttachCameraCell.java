@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 @SuppressLint({"NewApi"})
@@ -17,7 +18,7 @@ public class PhotoAttachCameraCell extends FrameLayout {
         ImageView imageView = new ImageView(context);
         imageView.setScaleType(ScaleType.CENTER);
         imageView.setImageResource(R.drawable.instant_camera);
-        imageView.setBackgroundColor(-16777216);
+        imageView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         addView(imageView, LayoutHelper.createFrame(80, 80.0f));
     }
 

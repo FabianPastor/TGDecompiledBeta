@@ -100,7 +100,7 @@ public class Utilities {
 
     public static String bytesToHex(byte[] bytes) {
         if (bytes == null) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
         char[] hexChars = new char[(bytes.length * 2)];
         for (int j = 0; j < bytes.length; j++) {

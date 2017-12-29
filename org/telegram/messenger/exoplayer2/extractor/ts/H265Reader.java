@@ -25,14 +25,14 @@ public final class H265Reader implements ElementaryStreamReader {
     private boolean hasOutputFormat;
     private TrackOutput output;
     private long pesTimeUs;
-    private final NalUnitTargetBuffer pps = new NalUnitTargetBuffer(34, 128);
+    private final NalUnitTargetBuffer pps = new NalUnitTargetBuffer(PPS_NUT, 128);
     private final boolean[] prefixFlags = new boolean[3];
-    private final NalUnitTargetBuffer prefixSei = new NalUnitTargetBuffer(39, 128);
+    private final NalUnitTargetBuffer prefixSei = new NalUnitTargetBuffer(PREFIX_SEI_NUT, 128);
     private SampleReader sampleReader;
     private final SeiReader seiReader;
     private final ParsableByteArray seiWrapper = new ParsableByteArray();
-    private final NalUnitTargetBuffer sps = new NalUnitTargetBuffer(33, 128);
-    private final NalUnitTargetBuffer suffixSei = new NalUnitTargetBuffer(40, 128);
+    private final NalUnitTargetBuffer sps = new NalUnitTargetBuffer(SPS_NUT, 128);
+    private final NalUnitTargetBuffer suffixSei = new NalUnitTargetBuffer(SUFFIX_SEI_NUT, 128);
     private long totalBytesWritten;
     private final NalUnitTargetBuffer vps = new NalUnitTargetBuffer(32, 128);
 
@@ -77,7 +77,7 @@ public final class H265Reader implements ElementaryStreamReader {
                     outputSample(offset);
                     this.readingSample = false;
                 }
-                if (nalUnitType <= 34) {
+                if (nalUnitType <= H265Reader.PPS_NUT) {
                     this.isFirstParameterSet = !this.writingParameterSets;
                     this.writingParameterSets = true;
                 }

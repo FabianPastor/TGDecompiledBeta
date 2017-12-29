@@ -1,7 +1,5 @@
 package org.telegram.messenger.support.util;
 
-import android.support.annotation.UiThread;
-import android.support.annotation.WorkerThread;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
@@ -201,17 +199,13 @@ public class AsyncListUtil<T> {
     final ViewCallback mViewCallback;
 
     public static abstract class DataCallback<T> {
-        @WorkerThread
         public abstract void fillData(T[] tArr, int i, int i2);
 
-        @WorkerThread
         public abstract int refreshData();
 
-        @WorkerThread
         public void recycleData(T[] tArr, int itemCount) {
         }
 
-        @WorkerThread
         public int getMaxCachedTiles() {
             return 10;
         }
@@ -222,16 +216,12 @@ public class AsyncListUtil<T> {
         public static final int HINT_SCROLL_DESC = 1;
         public static final int HINT_SCROLL_NONE = 0;
 
-        @UiThread
         public abstract void getItemRangeInto(int[] iArr);
 
-        @UiThread
         public abstract void onDataRefresh();
 
-        @UiThread
         public abstract void onItemLoaded(int i);
 
-        @UiThread
         public void extendRangeInto(int[] range, int[] outRange, int scrollHint) {
             int i;
             int fullRange = (range[1] - range[0]) + 1;

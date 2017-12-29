@@ -2,11 +2,11 @@ package com.google.android.gms.vision.face.internal.client;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
+import com.google.android.gms.internal.zzbfn;
 
 public final class zzb implements Creator<FaceParcel> {
     public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        int zzd = com.google.android.gms.common.internal.safeparcel.zzb.zzd(parcel);
+        int zzd = zzbfn.zzd(parcel);
         int i = 0;
         int i2 = 0;
         float f = 0.0f;
@@ -21,49 +21,49 @@ public final class zzb implements Creator<FaceParcel> {
         float f9 = 0.0f;
         while (parcel.dataPosition() < zzd) {
             int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
+            switch (65535 & readInt) {
                 case 1:
-                    i = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, readInt);
+                    i = zzbfn.zzg(parcel, readInt);
                     break;
                 case 2:
-                    i2 = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, readInt);
+                    i2 = zzbfn.zzg(parcel, readInt);
                     break;
                 case 3:
-                    f = com.google.android.gms.common.internal.safeparcel.zzb.zzl(parcel, readInt);
+                    f = zzbfn.zzl(parcel, readInt);
                     break;
                 case 4:
-                    f2 = com.google.android.gms.common.internal.safeparcel.zzb.zzl(parcel, readInt);
+                    f2 = zzbfn.zzl(parcel, readInt);
                     break;
                 case 5:
-                    f3 = com.google.android.gms.common.internal.safeparcel.zzb.zzl(parcel, readInt);
+                    f3 = zzbfn.zzl(parcel, readInt);
                     break;
                 case 6:
-                    f4 = com.google.android.gms.common.internal.safeparcel.zzb.zzl(parcel, readInt);
+                    f4 = zzbfn.zzl(parcel, readInt);
                     break;
                 case 7:
-                    f5 = com.google.android.gms.common.internal.safeparcel.zzb.zzl(parcel, readInt);
+                    f5 = zzbfn.zzl(parcel, readInt);
                     break;
                 case 8:
-                    f6 = com.google.android.gms.common.internal.safeparcel.zzb.zzl(parcel, readInt);
+                    f6 = zzbfn.zzl(parcel, readInt);
                     break;
                 case 9:
-                    landmarkParcelArr = (LandmarkParcel[]) com.google.android.gms.common.internal.safeparcel.zzb.zzb(parcel, readInt, LandmarkParcel.CREATOR);
+                    landmarkParcelArr = (LandmarkParcel[]) zzbfn.zzb(parcel, readInt, LandmarkParcel.CREATOR);
                     break;
                 case 10:
-                    f7 = com.google.android.gms.common.internal.safeparcel.zzb.zzl(parcel, readInt);
+                    f7 = zzbfn.zzl(parcel, readInt);
                     break;
                 case 11:
-                    f8 = com.google.android.gms.common.internal.safeparcel.zzb.zzl(parcel, readInt);
+                    f8 = zzbfn.zzl(parcel, readInt);
                     break;
                 case 12:
-                    f9 = com.google.android.gms.common.internal.safeparcel.zzb.zzl(parcel, readInt);
+                    f9 = zzbfn.zzl(parcel, readInt);
                     break;
                 default:
-                    com.google.android.gms.common.internal.safeparcel.zzb.zzb(parcel, readInt);
+                    zzbfn.zzb(parcel, readInt);
                     break;
             }
         }
-        com.google.android.gms.common.internal.safeparcel.zzb.zzF(parcel, zzd);
+        zzbfn.zzaf(parcel, zzd);
         return new FaceParcel(i, i2, f, f2, f3, f4, f5, f6, landmarkParcelArr, f7, f8, f9);
     }
 

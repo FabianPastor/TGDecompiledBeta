@@ -28,69 +28,12 @@ public class ExceptionHandler implements UncaughtExceptionHandler {
         this.mCrashManagerListener = listener;
     }
 
-    @Deprecated
-    public static void saveException(Throwable exception, CrashManagerListener listener) {
-        saveException(exception, null, listener);
-    }
-
     public static void saveException(Throwable exception, Thread thread, CrashManagerListener listener) {
         Date now = new Date();
         Date startDate = new Date(CrashManager.getInitializeTimestamp());
         exception.printStackTrace(new PrintWriter(new StringWriter()));
         String filename = UUID.randomUUID().toString();
         CrashDetails crashDetails = new CrashDetails(filename, exception);
-        crashDetails.setAppPackage(Constants.APP_PACKAGE);
-        crashDetails.setAppVersionCode(Constants.APP_VERSION);
-        crashDetails.setAppVersionName(Constants.APP_VERSION_NAME);
-        crashDetails.setAppStartDate(startDate);
-        crashDetails.setAppCrashDate(now);
-        if (listener == null || listener.includeDeviceData()) {
-            crashDetails.setOsVersion(Constants.ANDROID_VERSION);
-            crashDetails.setOsBuild(Constants.ANDROID_BUILD);
-            crashDetails.setDeviceManufacturer(Constants.PHONE_MANUFACTURER);
-            crashDetails.setDeviceModel(Constants.PHONE_MODEL);
-        }
-        if (thread != null && (listener == null || listener.includeThreadDetails())) {
-            crashDetails.setThreadName(thread.getName() + "-" + thread.getId());
-        }
-        if (Constants.CRASH_IDENTIFIER != null && (listener == null || listener.includeDeviceIdentifier())) {
-            crashDetails.setReporterKey(Constants.CRASH_IDENTIFIER);
-        }
-        crashDetails.writeCrashReport();
-        if (listener != null) {
-            try {
-                writeValueToFile(limitedString(listener.getUserID()), filename + ".user");
-                writeValueToFile(limitedString(listener.getContact()), filename + ".contact");
-                writeValueToFile(listener.getDescription(), filename + ".description");
-            } catch (Throwable e) {
-                HockeyLog.error("Error saving crash meta data!", e);
-            }
-        }
-    }
-
-    public static void saveNativeException(Throwable exception, String managedExceptionString, Thread thread, CrashManagerListener listener) {
-        if (!TextUtils.isEmpty(managedExceptionString)) {
-            String[] splits = managedExceptionString.split("--- End of managed exception stack trace ---", 2);
-            if (splits != null && splits.length > 0) {
-                managedExceptionString = splits[0];
-            }
-        }
-        saveXamarinException(exception, thread, managedExceptionString, Boolean.valueOf(false), listener);
-    }
-
-    public static void saveManagedException(Throwable exception, Thread thread, CrashManagerListener listener) {
-        saveXamarinException(exception, thread, null, Boolean.valueOf(true), listener);
-    }
-
-    private static void saveXamarinException(Throwable exception, Thread thread, String additionalManagedException, Boolean isManagedException, CrashManagerListener listener) {
-        Date startDate = new Date(CrashManager.getInitializeTimestamp());
-        String filename = UUID.randomUUID().toString();
-        Date now = new Date();
-        PrintWriter printWriter = new PrintWriter(new StringWriter());
-        if (exception != null) {
-            exception.printStackTrace(printWriter);
-        }
-        CrashDetails crashDetails = new CrashDetails(filename, exception, additionalManagedException, isManagedException);
         crashDetails.setAppPackage(Constants.APP_PACKAGE);
         crashDetails.setAppVersionCode(Constants.APP_VERSION);
         crashDetails.setAppVersionName(Constants.APP_VERSION_NAME);

@@ -122,8 +122,8 @@ public class DocumentSelectActivity extends BaseFragment {
         String title;
 
         private ListItem() {
-            this.subtitle = "";
-            this.ext = "";
+            this.subtitle = TtmlNode.ANONYMOUS_REGION_ID;
+            this.ext = TtmlNode.ANONYMOUS_REGION_ID;
         }
     }
 
@@ -791,7 +791,7 @@ public class DocumentSelectActivity extends BaseFragment {
             StatFs stat = new StatFs(path);
             long free = ((long) stat.getAvailableBlocks()) * ((long) stat.getBlockSize());
             if (((long) stat.getBlockCount()) * ((long) stat.getBlockSize()) == 0) {
-                return "";
+                return TtmlNode.ANONYMOUS_REGION_ID;
             }
             return LocaleController.formatString("FreeOfTotal", R.string.FreeOfTotal, AndroidUtilities.formatFileSize(free), AndroidUtilities.formatFileSize(((long) stat.getBlockCount()) * ((long) stat.getBlockSize())));
         } catch (Throwable e) {

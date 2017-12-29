@@ -13,11 +13,10 @@ import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.query.StickersQuery;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
@@ -44,7 +43,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         }
 
         public int getOpacity() {
-            return 0;
+            return -2;
         }
 
         public int getIntrinsicWidth() {
@@ -82,7 +81,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         this.infoTextView.setTextSize(1, 13.0f);
         this.infoTextView.setEllipsize(TruncateAt.END);
         this.infoTextView.setSingleLine(true);
-        addView(this.infoTextView, LayoutHelper.createFrame(-2, -1.0f, 51, (float) left, BitmapDescriptorFactory.HUE_ORANGE, 100.0f, 0.0f));
+        addView(this.infoTextView, LayoutHelper.createFrame(-2, -1.0f, 51, (float) left, 30.0f, 100.0f, 0.0f));
         this.addButton = new TextView(context) {
             protected void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
@@ -124,7 +123,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(BitmapDescriptorFactory.HUE_YELLOW), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f), NUM));
     }
 
     public void setAddOnClickListener(OnClickListener onClickListener) {
@@ -143,7 +142,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         }
         if (this.hasOnClick) {
             this.addButton.setVisibility(0);
-            boolean isStickerPackInstalled = StickersQuery.isStickerPackInstalled(stickerSet.set.id);
+            boolean isStickerPackInstalled = DataQuery.getAccountInstance().isStickerPackInstalled(stickerSet.set.id);
             this.isInstalled = isStickerPackInstalled;
             if (isStickerPackInstalled) {
                 this.addButton.setBackgroundDrawable(this.delDrawable);

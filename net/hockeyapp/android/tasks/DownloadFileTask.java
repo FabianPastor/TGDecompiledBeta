@@ -23,12 +23,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.UUID;
-import net.hockeyapp.android.Constants;
 import net.hockeyapp.android.R;
 import net.hockeyapp.android.listeners.DownloadFileListener;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public class DownloadFileTask extends AsyncTask<Void, Integer, Long> {
-    protected static final int MAX_REDIRECTS = 6;
     protected Context mContext;
     private String mDownloadErrorMessage;
     protected String mFilePath = (Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download");
@@ -63,7 +62,7 @@ public class DownloadFileTask extends AsyncTask<Void, Integer, Long> {
         int lengthOfFile = connection.getContentLength();
         String contentType = connection.getContentType();
         Long valueOf;
-        if (contentType == null || !contentType.contains("text")) {
+        if (contentType == null || !contentType.contains(MimeTypes.BASE_TYPE_TEXT)) {
             try {
                 File dir = new File(this.mFilePath);
                 if (dir.mkdirs() || dir.exists()) {
@@ -197,7 +196,7 @@ public class DownloadFileTask extends AsyncTask<Void, Integer, Long> {
     }
 
     protected void setConnectionProperties(HttpURLConnection connection) {
-        connection.addRequestProperty("User-Agent", Constants.SDK_USER_AGENT);
+        connection.addRequestProperty("User-Agent", "HockeySDK/Android 4.1.3");
         connection.setInstanceFollowRedirects(true);
         if (VERSION.SDK_INT <= 9) {
             connection.setRequestProperty("connection", "close");

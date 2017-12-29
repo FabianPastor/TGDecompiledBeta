@@ -3,15 +3,15 @@ package com.google.android.gms.wearable;
 import java.util.List;
 
 final class zzp implements Runnable {
-    private /* synthetic */ zzc zzbRA;
-    private /* synthetic */ List zzbRD;
+    private /* synthetic */ zzd zzlho;
+    private /* synthetic */ List zzlhr;
 
-    zzp(zzc com_google_android_gms_wearable_WearableListenerService_zzc, List list) {
-        this.zzbRA = com_google_android_gms_wearable_WearableListenerService_zzc;
-        this.zzbRD = list;
+    zzp(zzd com_google_android_gms_wearable_WearableListenerService_zzd, List list) {
+        this.zzlho = com_google_android_gms_wearable_WearableListenerService_zzd;
+        this.zzlhr = list;
     }
 
     public final void run() {
-        this.zzbRA.zzbRx.onConnectedNodes(this.zzbRD);
+        this.zzlho.zzlhk.onConnectedNodes(this.zzlhr);
     }
 }

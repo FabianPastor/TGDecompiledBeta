@@ -12,7 +12,6 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
-import android.support.v4.view.InputDeviceCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -27,7 +26,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.File;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
@@ -254,25 +252,25 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.date = date + 60;
             message.dialog_id = 1;
             message.flags = 259;
-            message.from_id = UserConfig.getClientUserId();
+            message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
             message.id = 1;
             message.media = new TL_messageMediaEmpty();
             message.out = true;
             message.to_id = new TL_peerUser();
             message.to_id.user_id = 0;
-            MessageObject replyMessageObject = new MessageObject(message, null, true);
+            MessageObject replyMessageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, null, true);
             message = new TL_message();
             message.message = "I can't even take you seriously right now.";
             message.date = date + 960;
             message.dialog_id = 1;
             message.flags = 259;
-            message.from_id = UserConfig.getClientUserId();
+            message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
             message.id = 1;
             message.media = new TL_messageMediaEmpty();
             message.out = true;
             message.to_id = new TL_peerUser();
             message.to_id.user_id = 0;
-            this.messages.add(new MessageObject(message, null, true));
+            this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, message, null, true));
             message = new TL_message();
             message.date = date + TsExtractor.TS_STREAM_TYPE_HDMV_DTS;
             message.dialog_id = 1;
@@ -293,8 +291,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.media.document.attributes.add(audio);
             message.out = false;
             message.to_id = new TL_peerUser();
-            message.to_id.user_id = UserConfig.getClientUserId();
-            this.messages.add(new MessageObject(message, null, true));
+            message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
+            this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, message, null, true));
             message = new TL_message();
             message.message = "Ah, you kids today with techno music! You should enjoy the classics, like Hasselhoff!";
             message.date = date + 60;
@@ -306,8 +304,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.media = new TL_messageMediaEmpty();
             message.out = false;
             message.to_id = new TL_peerUser();
-            message.to_id.user_id = UserConfig.getClientUserId();
-            MessageObject messageObject = new MessageObject(message, null, true);
+            message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
+            MessageObject messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, null, true);
             messageObject.customReplyName = "Lucio";
             messageObject.replyMessageObject = replyMessageObject;
             this.messages.add(messageObject);
@@ -315,7 +313,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.date = date + 120;
             message.dialog_id = 1;
             message.flags = 259;
-            message.from_id = UserConfig.getClientUserId();
+            message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
             message.id = 1;
             message.media = new TL_messageMediaDocument();
             messageMedia = message.media;
@@ -333,7 +331,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.out = true;
             message.to_id = new TL_peerUser();
             message.to_id.user_id = 0;
-            messageObject = new MessageObject(message, null, true);
+            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, null, true);
             messageObject.audioProgressSec = 1;
             messageObject.audioProgress = 0.3f;
             messageObject.useCustomPhoto = true;
@@ -342,7 +340,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message = new TL_message();
             message.date = date + 10;
             message.dialog_id = 1;
-            message.flags = InputDeviceCompat.SOURCE_KEYBOARD;
+            message.flags = 257;
             message.from_id = 0;
             message.id = 1;
             message.media = new TL_messageMediaPhoto();
@@ -363,15 +361,15 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.media.caption = "Bring it on! I LIVE for this!";
             message.out = false;
             message.to_id = new TL_peerUser();
-            message.to_id.user_id = UserConfig.getClientUserId();
-            messageObject = new MessageObject(message, null, true);
+            message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
+            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, null, true);
             messageObject.useCustomPhoto = true;
             this.messages.add(messageObject);
             message = new TL_message();
             message.message = LocaleController.formatDateChat((long) date);
             message.id = 0;
             message.date = date;
-            messageObject = new MessageObject(message, null, false);
+            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, null, false);
             messageObject.type = 10;
             messageObject.contentType = 1;
             messageObject.isDateObject = true;
@@ -569,7 +567,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (VERSION.SDK_INT < 21) {
             Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
-            shadowDrawable.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
             Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
             drawable = combinedDrawable;
@@ -595,7 +593,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         if (VERSION.SDK_INT >= 21) {
             f = 56.0f;
         } else {
-            f = BitmapDescriptorFactory.HUE_YELLOW;
+            f = 60.0f;
         }
         if (LocaleController.isRTL) {
             i = 3;
@@ -758,12 +756,12 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     public boolean onFragmentCreate() {
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
         return super.onFragmentCreate();
     }
 
     public void onFragmentDestroy() {
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
         super.onFragmentDestroy();
     }
 
@@ -783,7 +781,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         return super.onBackPressed();
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.emojiDidLoaded && this.listView != null) {
             int count = this.listView.getChildCount();
             for (int a = 0; a < count; a++) {

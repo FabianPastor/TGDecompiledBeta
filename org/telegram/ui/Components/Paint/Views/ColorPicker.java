@@ -21,11 +21,12 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Paint.Swatch;
 
 public class ColorPicker extends FrameLayout {
-    private static final int[] COLORS = new int[]{-1431751, -2409774, -13610525, -11942419, -8337308, -205211, -223667, -16777216, -1};
+    private static final int[] COLORS = new int[]{-1431751, -2409774, -13610525, -11942419, -8337308, -205211, -223667, Theme.ACTION_BAR_VIDEO_EDIT_COLOR, -1};
     private static final float[] LOCATIONS = new float[]{0.0f, 0.14f, 0.24f, 0.39f, 0.49f, 0.62f, 0.73f, 0.85f, 1.0f};
     private Paint backgroundPaint = new Paint(1);
     private boolean changingWeight;

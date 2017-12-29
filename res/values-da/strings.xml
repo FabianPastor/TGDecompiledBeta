@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">Installer</string>
     <string name="common_google_play_services_install_text">Du skal installere Google Play-tjenester, før %1$s kan køre på din enhed.</string>
     <string name="common_google_play_services_install_title">Hent Google Play-tjenester</string>
+    <string name="common_google_play_services_notification_channel_name">Google Play-tjenesters tilgængelighed</string>
     <string name="common_google_play_services_notification_ticker">Fejl i Google Play-tjenester</string>
     <string name="common_google_play_services_unknown_issue">%1$s har problemer med Google Play-tjenester. Prøv igen.</string>
     <string name="common_google_play_services_unsupported_text">%1$s fungerer ikke uden Google Play-tjenester, som ikke understøttes på din enhed.</string>
@@ -17,5 +18,7 @@
     <string name="common_open_on_phone">Åbn på telefonen</string>
     <string name="common_signin_button_text">Log ind</string>
     <string name="common_signin_button_text_long">Log ind med Google</string>
+    <string name="gcm_fallback_notification_channel_label">Diverse</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Køb med Google</string>
 </resources>

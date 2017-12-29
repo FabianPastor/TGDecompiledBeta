@@ -10,16 +10,6 @@ public class ExtensionDescriptor extends BaseDescriptor {
     private static Logger log = Logger.getLogger(ExtensionDescriptor.class.getName());
     byte[] bytes;
 
-    static int[] allTags() {
-        int[] ints = new int[148];
-        for (int i = 106; i < 254; i++) {
-            int pos = i - 106;
-            log.finest("pos:" + pos);
-            ints[pos] = i;
-        }
-        return ints;
-    }
-
     public void parseDetail(ByteBuffer bb) throws IOException {
         if (getSize() > 0) {
             this.bytes = new byte[this.sizeOfInstance];

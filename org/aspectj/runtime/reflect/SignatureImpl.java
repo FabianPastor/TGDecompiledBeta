@@ -7,8 +7,6 @@ import org.aspectj.lang.Signature;
 abstract class SignatureImpl implements Signature {
     static Class[] EMPTY_CLASS_ARRAY = new Class[0];
     static String[] EMPTY_STRING_ARRAY = new String[0];
-    static final String INNER_SEP = ":";
-    static final char SEP = '-';
     private static boolean useCache = true;
     Class declaringType;
     String declaringTypeName;
@@ -92,14 +90,6 @@ abstract class SignatureImpl implements Signature {
         return toString(StringMaker.middleStringMaker);
     }
 
-    public final String toShortString() {
-        return toString(StringMaker.shortStringMaker);
-    }
-
-    public final String toLongString() {
-        return toString(StringMaker.longStringMaker);
-    }
-
     public int getModifiers() {
         if (this.modifiers == -1) {
             this.modifiers = extractInt(0);
@@ -128,66 +118,11 @@ abstract class SignatureImpl implements Signature {
         return this.declaringTypeName;
     }
 
-    String fullTypeName(Class type) {
-        if (type == null) {
-            return "ANONYMOUS";
-        }
-        if (type.isArray()) {
-            return new StringBuffer().append(fullTypeName(type.getComponentType())).append("[]").toString();
-        }
-        return type.getName().replace('$', '.');
-    }
-
-    String stripPackageName(String name) {
-        int dot = name.lastIndexOf(46);
-        return dot == -1 ? name : name.substring(dot + 1);
-    }
-
-    String shortTypeName(Class type) {
-        if (type == null) {
-            return "ANONYMOUS";
-        }
-        if (type.isArray()) {
-            return new StringBuffer().append(shortTypeName(type.getComponentType())).append("[]").toString();
-        }
-        return stripPackageName(type.getName()).replace('$', '.');
-    }
-
-    void addFullTypeNames(StringBuffer buf, Class[] types) {
-        for (int i = 0; i < types.length; i++) {
-            if (i > 0) {
-                buf.append(", ");
-            }
-            buf.append(fullTypeName(types[i]));
-        }
-    }
-
-    void addShortTypeNames(StringBuffer buf, Class[] types) {
-        for (int i = 0; i < types.length; i++) {
-            if (i > 0) {
-                buf.append(", ");
-            }
-            buf.append(shortTypeName(types[i]));
-        }
-    }
-
-    void addTypeArray(StringBuffer buf, Class[] types) {
-        addFullTypeNames(buf, types);
-    }
-
-    public void setLookupClassLoader(ClassLoader loader) {
-        this.lookupClassLoader = loader;
-    }
-
     private ClassLoader getLookupClassLoader() {
         if (this.lookupClassLoader == null) {
             this.lookupClassLoader = getClass().getClassLoader();
         }
         return this.lookupClassLoader;
-    }
-
-    public SignatureImpl(String stringRep) {
-        this.stringRep = stringRep;
     }
 
     String extractString(int n) {
@@ -217,31 +152,13 @@ abstract class SignatureImpl implements Signature {
         return Factory.makeClass(extractString(n), getLookupClassLoader());
     }
 
-    String[] extractStrings(int n) {
-        StringTokenizer st = new StringTokenizer(extractString(n), INNER_SEP);
-        int N = st.countTokens();
-        String[] ret = new String[N];
-        for (int i = 0; i < N; i++) {
-            ret[i] = st.nextToken();
-        }
-        return ret;
-    }
-
     Class[] extractTypes(int n) {
-        StringTokenizer st = new StringTokenizer(extractString(n), INNER_SEP);
+        StringTokenizer st = new StringTokenizer(extractString(n), ":");
         int N = st.countTokens();
         Class[] ret = new Class[N];
         for (int i = 0; i < N; i++) {
             ret[i] = Factory.makeClass(st.nextToken(), getLookupClassLoader());
         }
         return ret;
-    }
-
-    static void setUseCache(boolean b) {
-        useCache = b;
-    }
-
-    static boolean getUseCache() {
-        return useCache;
     }
 }

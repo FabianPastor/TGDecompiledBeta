@@ -17,7 +17,7 @@ public class NativeLoader {
     private static final int LIB_VERSION = 27;
     private static final String LOCALE_LIB_SO_NAME = "libtmessages.27loc.so";
     private static volatile boolean nativeLoaded = false;
-    private String crashPath = "";
+    private String crashPath = TtmlNode.ANONYMOUS_REGION_ID;
 
     private static native void init(String str, boolean z);
 

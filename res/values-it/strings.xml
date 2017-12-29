@@ -1716,6 +1716,7 @@
     <string name="common_google_play_services_install_button">Installa</string>
     <string name="common_google_play_services_install_text">L\'app %1$s non funzionerà senza Google Play Services, non presente sul tuo dispositivo.</string>
     <string name="common_google_play_services_install_title">Installa Google Play Services</string>
+    <string name="common_google_play_services_notification_channel_name">Disponibilità di Google Play Services</string>
     <string name="common_google_play_services_notification_ticker">Errore Google Play Services</string>
     <string name="common_google_play_services_unknown_issue">%1$s sta riscontrando problemi con Google Play Services. Riprova.</string>
     <string name="common_google_play_services_unsupported_text">%1$s non funzionerà senza Google Play Services, non supportati dal tuo dispositivo.</string>
@@ -1741,6 +1742,7 @@
     <string name="formatterWeek">EEE</string>
     <string name="formatterYear">dd.MM.yy</string>
     <string name="formatterYearMax">dd.MM.yyyy</string>
+    <string name="gcm_fallback_notification_channel_label">Varie</string>
     <string name="hockeyapp_crash_dialog_app_name_fallback">Questa app</string>
     <string name="hockeyapp_crash_dialog_message">Vuoi inviare un report in modo anonimo così possiamo risolvere il problema?</string>
     <string name="hockeyapp_crash_dialog_negative_button">Non inviare</string>
@@ -1823,5 +1825,6 @@
     <string name="messages_other">%1$d messaggi</string>
     <string name="messages_two">%1$d messaggi</string>
     <string name="messages_zero">%1$d messaggi</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Acquista con Google</string>
 </resources>

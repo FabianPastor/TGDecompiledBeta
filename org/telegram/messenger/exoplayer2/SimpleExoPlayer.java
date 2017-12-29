@@ -5,7 +5,6 @@ import android.graphics.SurfaceTexture;
 import android.media.PlaybackParams;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -70,7 +69,7 @@ public class SimpleExoPlayer implements ExoPlayer {
         void onVideoSizeChanged(int i, int i2, int i3, float f);
     }
 
-    private final class ComponentListener implements VideoRendererEventListener, AudioRendererEventListener, TextRenderer.Output, Output, Callback, SurfaceTextureListener {
+    private final class ComponentListener implements Callback, SurfaceTextureListener, AudioRendererEventListener, Output, TextRenderer.Output, VideoRendererEventListener {
         private ComponentListener() {
         }
 
@@ -420,7 +419,7 @@ public class SimpleExoPlayer implements ExoPlayer {
 
     @TargetApi(23)
     @Deprecated
-    public void setPlaybackParams(@Nullable PlaybackParams params) {
+    public void setPlaybackParams(PlaybackParams params) {
         PlaybackParameters playbackParameters;
         if (params != null) {
             params.allowDefaults();

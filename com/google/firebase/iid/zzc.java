@@ -4,17 +4,17 @@ import android.content.Intent;
 
 final class zzc implements Runnable {
     private /* synthetic */ Intent val$intent;
-    private /* synthetic */ Intent zzckg;
-    private /* synthetic */ zzb zzckh;
+    private /* synthetic */ Intent zzies;
+    private /* synthetic */ zzb zznyj;
 
     zzc(zzb com_google_firebase_iid_zzb, Intent intent, Intent intent2) {
-        this.zzckh = com_google_firebase_iid_zzb;
+        this.zznyj = com_google_firebase_iid_zzb;
         this.val$intent = intent;
-        this.zzckg = intent2;
+        this.zzies = intent2;
     }
 
     public final void run() {
-        this.zzckh.handleIntent(this.val$intent);
-        this.zzckh.zzm(this.zzckg);
+        this.zznyj.handleIntent(this.val$intent);
+        this.zznyj.zzh(this.zzies);
     }
 }

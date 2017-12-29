@@ -7,10 +7,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.AnimRes;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.BundleCompat;
 import android.support.v4.content.ContextCompat;
@@ -45,9 +41,7 @@ public final class CustomTabsIntent {
     public static final int NO_TITLE = 0;
     public static final int SHOW_PAGE_TITLE = 1;
     public static final int TOOLBAR_ACTION_BUTTON_ID = 0;
-    @NonNull
     public final Intent intent;
-    @Nullable
     public final Bundle startAnimationBundle;
 
     public static final class Builder {
@@ -61,7 +55,7 @@ public final class CustomTabsIntent {
             this(null);
         }
 
-        public Builder(@Nullable CustomTabsSession session) {
+        public Builder(CustomTabsSession session) {
             IBinder iBinder = null;
             this.mIntent = new Intent("android.intent.action.VIEW");
             this.mMenuItems = null;
@@ -80,7 +74,7 @@ public final class CustomTabsIntent {
             this.mIntent.putExtras(bundle);
         }
 
-        public Builder setToolbarColor(@ColorInt int color) {
+        public Builder setToolbarColor(int color) {
             this.mIntent.putExtra(CustomTabsIntent.EXTRA_TOOLBAR_COLOR, color);
             return this;
         }
@@ -90,7 +84,7 @@ public final class CustomTabsIntent {
             return this;
         }
 
-        public Builder setCloseButtonIcon(@NonNull Bitmap icon) {
+        public Builder setCloseButtonIcon(Bitmap icon) {
             this.mIntent.putExtra(CustomTabsIntent.EXTRA_CLOSE_BUTTON_ICON, icon);
             return this;
         }
@@ -100,7 +94,7 @@ public final class CustomTabsIntent {
             return this;
         }
 
-        public Builder addMenuItem(@NonNull String label, @NonNull PendingIntent pendingIntent) {
+        public Builder addMenuItem(String label, PendingIntent pendingIntent) {
             if (this.mMenuItems == null) {
                 this.mMenuItems = new ArrayList();
             }
@@ -116,7 +110,7 @@ public final class CustomTabsIntent {
             return this;
         }
 
-        public Builder setActionButton(@NonNull Bitmap icon, @NonNull String description, @NonNull PendingIntent pendingIntent, boolean shouldTint) {
+        public Builder setActionButton(Bitmap icon, String description, PendingIntent pendingIntent, boolean shouldTint) {
             Bundle bundle = new Bundle();
             bundle.putInt(CustomTabsIntent.KEY_ID, 0);
             bundle.putParcelable(CustomTabsIntent.KEY_ICON, icon);
@@ -127,12 +121,12 @@ public final class CustomTabsIntent {
             return this;
         }
 
-        public Builder setActionButton(@NonNull Bitmap icon, @NonNull String description, @NonNull PendingIntent pendingIntent) {
+        public Builder setActionButton(Bitmap icon, String description, PendingIntent pendingIntent) {
             return setActionButton(icon, description, pendingIntent, false);
         }
 
         @Deprecated
-        public Builder addToolbarItem(int id, @NonNull Bitmap icon, @NonNull String description, PendingIntent pendingIntent) throws IllegalStateException {
+        public Builder addToolbarItem(int id, Bitmap icon, String description, PendingIntent pendingIntent) throws IllegalStateException {
             if (this.mActionButtons == null) {
                 this.mActionButtons = new ArrayList();
             }
@@ -148,12 +142,12 @@ public final class CustomTabsIntent {
             return this;
         }
 
-        public Builder setSecondaryToolbarColor(@ColorInt int color) {
+        public Builder setSecondaryToolbarColor(int color) {
             this.mIntent.putExtra(CustomTabsIntent.EXTRA_SECONDARY_TOOLBAR_COLOR, color);
             return this;
         }
 
-        public Builder setSecondaryToolbarViews(@NonNull RemoteViews remoteViews, @Nullable int[] clickableIDs, @Nullable PendingIntent pendingIntent) {
+        public Builder setSecondaryToolbarViews(RemoteViews remoteViews, int[] clickableIDs, PendingIntent pendingIntent) {
             this.mIntent.putExtra(CustomTabsIntent.EXTRA_REMOTEVIEWS, remoteViews);
             this.mIntent.putExtra(CustomTabsIntent.EXTRA_REMOTEVIEWS_VIEW_IDS, clickableIDs);
             this.mIntent.putExtra(CustomTabsIntent.EXTRA_REMOTEVIEWS_PENDINGINTENT, pendingIntent);
@@ -165,12 +159,12 @@ public final class CustomTabsIntent {
             return this;
         }
 
-        public Builder setStartAnimations(@NonNull Context context, @AnimRes int enterResId, @AnimRes int exitResId) {
+        public Builder setStartAnimations(Context context, int enterResId, int exitResId) {
             this.mStartAnimationBundle = ActivityOptionsCompat.makeCustomAnimation(context, enterResId, exitResId).toBundle();
             return this;
         }
 
-        public Builder setExitAnimations(@NonNull Context context, @AnimRes int enterResId, @AnimRes int exitResId) {
+        public Builder setExitAnimations(Context context, int enterResId, int exitResId) {
             this.mIntent.putExtra(CustomTabsIntent.EXTRA_EXIT_ANIMATION_BUNDLE, ActivityOptionsCompat.makeCustomAnimation(context, enterResId, exitResId).toBundle());
             return this;
         }

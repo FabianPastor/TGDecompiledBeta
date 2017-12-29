@@ -7,12 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 public final class ArraySet<E> implements Collection<E>, Set<E> {
-    private static final int BASE_SIZE = 4;
-    private static final int CACHE_SIZE = 10;
-    private static final boolean DEBUG = false;
     private static final int[] INT = new int[0];
     private static final Object[] OBJECT = new Object[0];
-    private static final String TAG = "ArraySet";
     static Object[] sBaseCache;
     static int sBaseCacheSize;
     static Object[] sTwiceBaseCache;
@@ -141,10 +137,6 @@ public final class ArraySet<E> implements Collection<E>, Set<E> {
         this(0, false);
     }
 
-    public ArraySet(int capacity) {
-        this(capacity, false);
-    }
-
     public ArraySet(int capacity, boolean identityHashCode) {
         this.mIdentityHashCode = identityHashCode;
         if (capacity == 0) {
@@ -154,20 +146,6 @@ public final class ArraySet<E> implements Collection<E>, Set<E> {
             allocArrays(capacity);
         }
         this.mSize = 0;
-    }
-
-    public ArraySet(ArraySet<E> set) {
-        this();
-        if (set != null) {
-            addAll((ArraySet) set);
-        }
-    }
-
-    public ArraySet(Collection<E> set) {
-        this();
-        if (set != null) {
-            addAll((Collection) set);
-        }
     }
 
     public void clear() {
@@ -251,34 +229,6 @@ public final class ArraySet<E> implements Collection<E>, Set<E> {
         return true;
     }
 
-    public void append(E value) {
-        int index = this.mSize;
-        int hash = value == null ? 0 : this.mIdentityHashCode ? System.identityHashCode(value) : value.hashCode();
-        if (index >= this.mHashes.length) {
-            throw new IllegalStateException("Array is full");
-        } else if (index <= 0 || this.mHashes[index - 1] <= hash) {
-            this.mSize = index + 1;
-            this.mHashes[index] = hash;
-            this.mArray[index] = value;
-        } else {
-            add(value);
-        }
-    }
-
-    public void addAll(ArraySet<? extends E> array) {
-        int N = array.mSize;
-        ensureCapacity(this.mSize + N);
-        if (this.mSize != 0) {
-            for (int i = 0; i < N; i++) {
-                add(array.valueAt(i));
-            }
-        } else if (N > 0) {
-            System.arraycopy(array.mHashes, 0, this.mHashes, 0, N);
-            System.arraycopy(array.mArray, 0, this.mArray, 0, N);
-            this.mSize = N;
-        }
-    }
-
     public boolean remove(Object object) {
         int index = indexOf(object);
         if (index < 0) {
@@ -321,15 +271,6 @@ public final class ArraySet<E> implements Collection<E>, Set<E> {
             }
         }
         return old;
-    }
-
-    public boolean removeAll(ArraySet<? extends E> array) {
-        int N = array.mSize;
-        int originalSize = this.mSize;
-        for (int i = 0; i < N; i++) {
-            remove(array.valueAt(i));
-        }
-        return originalSize != this.mSize;
     }
 
     public int size() {

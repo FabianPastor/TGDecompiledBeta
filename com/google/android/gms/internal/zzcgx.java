@@ -1,23 +1,53 @@
 package com.google.android.gms.internal;
 
-import java.util.List;
-import java.util.concurrent.Callable;
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import java.util.Iterator;
 
-final class zzcgx implements Callable<List<zzcjk>> {
-    private /* synthetic */ String zzbjh;
-    private /* synthetic */ zzcgq zzbtf;
-    private /* synthetic */ String zzbth;
-    private /* synthetic */ String zzbti;
+public final class zzcgx extends zzbfm implements Iterable<String> {
+    public static final Creator<zzcgx> CREATOR = new zzcgz();
+    private final Bundle zzebe;
 
-    zzcgx(zzcgq com_google_android_gms_internal_zzcgq, String str, String str2, String str3) {
-        this.zzbtf = com_google_android_gms_internal_zzcgq;
-        this.zzbjh = str;
-        this.zzbth = str2;
-        this.zzbti = str3;
+    zzcgx(Bundle bundle) {
+        this.zzebe = bundle;
     }
 
-    public final /* synthetic */ Object call() throws Exception {
-        this.zzbtf.zzboe.zzze();
-        return this.zzbtf.zzboe.zzwz().zzh(this.zzbjh, this.zzbth, this.zzbti);
+    final Object get(String str) {
+        return this.zzebe.get(str);
+    }
+
+    final Double getDouble(String str) {
+        return Double.valueOf(this.zzebe.getDouble(str));
+    }
+
+    final Long getLong(String str) {
+        return Long.valueOf(this.zzebe.getLong(str));
+    }
+
+    final String getString(String str) {
+        return this.zzebe.getString(str);
+    }
+
+    public final Iterator<String> iterator() {
+        return new zzcgy(this);
+    }
+
+    public final int size() {
+        return this.zzebe.size();
+    }
+
+    public final String toString() {
+        return this.zzebe.toString();
+    }
+
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zza(parcel, 2, zzayx(), false);
+        zzbfp.zzai(parcel, zze);
+    }
+
+    public final Bundle zzayx() {
+        return new Bundle(this.zzebe);
     }
 }

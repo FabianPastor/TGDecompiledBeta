@@ -1,6 +1,5 @@
 package org.telegram.messenger.time;
 
-import com.googlecode.mp4parser.boxes.microsoft.XtraBox;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -16,7 +15,7 @@ import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class FastDatePrinter implements DatePrinter, Serializable {
+public class FastDatePrinter implements Serializable, DatePrinter {
     public static final int FULL = 0;
     public static final int LONG = 1;
     public static final int MEDIUM = 2;
@@ -483,7 +482,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
                 case 'G':
                     rule = new TextField(0, ERAs);
                     break;
-                case XtraBox.MP4_XTRA_BT_GUID /*72*/:
+                case 'H':
                     rule = selectNumberRule(11, tokenLen);
                     break;
                 case 'K':

@@ -117,7 +117,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                     holder.itemView.setText(LocaleController.formatPluralString("Members", GroupCreateFinalActivity.this.selectedContacts.size()));
                     return;
                 default:
-                    holder.itemView.setUser(MessagesController.getInstance().getUser((Integer) GroupCreateFinalActivity.this.selectedContacts.get(position - 1)), null, null);
+                    holder.itemView.setUser(MessagesController.getInstance(GroupCreateFinalActivity.this.currentAccount).getUser((Integer) GroupCreateFinalActivity.this.selectedContacts.get(position - 1)), null, null);
                     return;
             }
         }
@@ -145,25 +145,25 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     public boolean onFragmentCreate() {
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatDidCreated);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatDidFailCreate);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatDidCreated);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatDidFailCreate);
         this.avatarUpdater.parentFragment = this;
         this.avatarUpdater.delegate = this;
         this.selectedContacts = getArguments().getIntegerArrayList("result");
         final ArrayList<Integer> usersToLoad = new ArrayList();
         for (int a = 0; a < this.selectedContacts.size(); a++) {
             Integer uid = (Integer) this.selectedContacts.get(a);
-            if (MessagesController.getInstance().getUser(uid) == null) {
+            if (MessagesController.getInstance(this.currentAccount).getUser(uid) == null) {
                 usersToLoad.add(uid);
             }
         }
         if (!usersToLoad.isEmpty()) {
             final Semaphore semaphore = new Semaphore(0);
             final ArrayList<User> users = new ArrayList();
-            MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
-                    users.addAll(MessagesStorage.getInstance().getUsers(usersToLoad));
+                    users.addAll(MessagesStorage.getInstance(GroupCreateFinalActivity.this.currentAccount).getUsers(usersToLoad));
                     semaphore.release();
                 }
             });
@@ -177,7 +177,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             }
             Iterator it = users.iterator();
             while (it.hasNext()) {
-                MessagesController.getInstance().putUser((User) it.next(), true);
+                MessagesController.getInstance(this.currentAccount).putUser((User) it.next(), true);
             }
         }
         return super.onFragmentCreate();
@@ -185,12 +185,12 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatDidCreated);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatDidFailCreate);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatDidCreated);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatDidFailCreate);
         this.avatarUpdater.clear();
         if (this.reqId != 0) {
-            ConnectionsManager.getInstance().cancelRequest(this.reqId, true);
+            ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.reqId, true);
         }
     }
 
@@ -228,7 +228,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                         return;
                     }
                     GroupCreateFinalActivity.this.showEditDoneProgress(true);
-                    GroupCreateFinalActivity.this.reqId = MessagesController.getInstance().createChat(GroupCreateFinalActivity.this.editText.getText().toString(), GroupCreateFinalActivity.this.selectedContacts, null, GroupCreateFinalActivity.this.chatType, GroupCreateFinalActivity.this);
+                    GroupCreateFinalActivity.this.reqId = MessagesController.getInstance(GroupCreateFinalActivity.this.currentAccount).createChat(GroupCreateFinalActivity.this.editText.getText().toString(), GroupCreateFinalActivity.this.selectedContacts, null, GroupCreateFinalActivity.this.chatType, GroupCreateFinalActivity.this);
                 }
             }
         });
@@ -302,7 +302,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.editText.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
         this.editText.setImeOptions(268435456);
-        this.editText.setInputType(16384);
+        this.editText.setInputType(MessagesController.UPDATE_MASK_CHAT_ADMINS);
         this.editText.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
         this.editText.setFilters(new InputFilter[]{new LengthFilter(100)});
         this.editText.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -326,13 +326,13 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
             public void afterTextChanged(Editable s) {
                 String obj;
-                AvatarDrawable access$1300 = GroupCreateFinalActivity.this.avatarDrawable;
+                AvatarDrawable access$1500 = GroupCreateFinalActivity.this.avatarDrawable;
                 if (GroupCreateFinalActivity.this.editText.length() > 0) {
                     obj = GroupCreateFinalActivity.this.editText.getText().toString();
                 } else {
                     obj = null;
                 }
-                access$1300.setInfo(5, obj, null, false);
+                access$1500.setInfo(5, obj, null, false);
                 GroupCreateFinalActivity.this.avatarImage.invalidate();
             }
         });
@@ -364,7 +364,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 GroupCreateFinalActivity.this.avatar = small.location;
                 GroupCreateFinalActivity.this.avatarImage.setImage(GroupCreateFinalActivity.this.avatar, "50_50", GroupCreateFinalActivity.this.avatarDrawable);
                 if (GroupCreateFinalActivity.this.createAfterUpload) {
-                    MessagesController.getInstance().createChat(GroupCreateFinalActivity.this.editText.getText().toString(), GroupCreateFinalActivity.this.selectedContacts, null, GroupCreateFinalActivity.this.chatType, GroupCreateFinalActivity.this);
+                    MessagesController.getInstance(GroupCreateFinalActivity.this.currentAccount).createChat(GroupCreateFinalActivity.this.editText.getText().toString(), GroupCreateFinalActivity.this.selectedContacts, null, GroupCreateFinalActivity.this.chatType, GroupCreateFinalActivity.this);
                 }
             }
         });
@@ -408,7 +408,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.updateInterfaces) {
             if (this.listView != null) {
                 int mask = ((Integer) args[0]).intValue();
@@ -432,12 +432,12 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         } else if (id == NotificationCenter.chatDidCreated) {
             this.reqId = 0;
             int chat_id = ((Integer) args[0]).intValue();
-            NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
             Bundle args2 = new Bundle();
             args2.putInt("chat_id", chat_id);
             presentFragment(new ChatActivity(args2), true);
             if (this.uploadedAvatar != null) {
-                MessagesController.getInstance().changeChatAvatar(chat_id, this.uploadedAvatar);
+                MessagesController.getInstance(this.currentAccount).changeChatAvatar(chat_id, this.uploadedAvatar);
             }
         }
     }
@@ -508,13 +508,13 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                         ((GroupCreateUserCell) child).update(0);
                     }
                 }
-                AvatarDrawable access$1300 = GroupCreateFinalActivity.this.avatarDrawable;
+                AvatarDrawable access$1500 = GroupCreateFinalActivity.this.avatarDrawable;
                 if (GroupCreateFinalActivity.this.editText.length() > 0) {
                     obj = GroupCreateFinalActivity.this.editText.getText().toString();
                 } else {
                     obj = null;
                 }
-                access$1300.setInfo(5, obj, null, false);
+                access$1500.setInfo(5, obj, null, false);
                 GroupCreateFinalActivity.this.avatarImage.invalidate();
             }
         };

@@ -6,31 +6,27 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
-import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.common.internal.zzbq;
 
 public class ErrorDialogFragment extends DialogFragment {
     private Dialog mDialog = null;
-    private OnCancelListener zzazZ = null;
-
-    public static ErrorDialogFragment newInstance(Dialog dialog) {
-        return newInstance(dialog, null);
-    }
+    private OnCancelListener zzfkt = null;
 
     public static ErrorDialogFragment newInstance(Dialog dialog, OnCancelListener onCancelListener) {
         ErrorDialogFragment errorDialogFragment = new ErrorDialogFragment();
-        Dialog dialog2 = (Dialog) zzbo.zzb((Object) dialog, (Object) "Cannot display null dialog");
+        Dialog dialog2 = (Dialog) zzbq.checkNotNull(dialog, "Cannot display null dialog");
         dialog2.setOnCancelListener(null);
         dialog2.setOnDismissListener(null);
         errorDialogFragment.mDialog = dialog2;
         if (onCancelListener != null) {
-            errorDialogFragment.zzazZ = onCancelListener;
+            errorDialogFragment.zzfkt = onCancelListener;
         }
         return errorDialogFragment;
     }
 
     public void onCancel(DialogInterface dialogInterface) {
-        if (this.zzazZ != null) {
-            this.zzazZ.onCancel(dialogInterface);
+        if (this.zzfkt != null) {
+            this.zzfkt.onCancel(dialogInterface);
         }
     }
 

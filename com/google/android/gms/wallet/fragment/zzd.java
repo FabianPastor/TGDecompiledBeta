@@ -2,39 +2,38 @@ package com.google.android.gms.wallet.fragment;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.internal.zzbfn;
 import com.google.android.gms.wallet.MaskedWallet;
 import com.google.android.gms.wallet.MaskedWalletRequest;
 
 public final class zzd implements Creator<WalletFragmentInitParams> {
     public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        int zzd = zzb.zzd(parcel);
+        int zzd = zzbfn.zzd(parcel);
         int i = -1;
         MaskedWalletRequest maskedWalletRequest = null;
         String str = null;
         MaskedWallet maskedWallet = null;
         while (parcel.dataPosition() < zzd) {
             int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
+            switch (65535 & readInt) {
                 case 2:
-                    str = zzb.zzq(parcel, readInt);
+                    str = zzbfn.zzq(parcel, readInt);
                     break;
                 case 3:
-                    maskedWalletRequest = (MaskedWalletRequest) zzb.zza(parcel, readInt, MaskedWalletRequest.CREATOR);
+                    maskedWalletRequest = (MaskedWalletRequest) zzbfn.zza(parcel, readInt, MaskedWalletRequest.CREATOR);
                     break;
                 case 4:
-                    i = zzb.zzg(parcel, readInt);
+                    i = zzbfn.zzg(parcel, readInt);
                     break;
                 case 5:
-                    maskedWallet = (MaskedWallet) zzb.zza(parcel, readInt, MaskedWallet.CREATOR);
+                    maskedWallet = (MaskedWallet) zzbfn.zza(parcel, readInt, MaskedWallet.CREATOR);
                     break;
                 default:
-                    zzb.zzb(parcel, readInt);
+                    zzbfn.zzb(parcel, readInt);
                     break;
             }
         }
-        zzb.zzF(parcel, zzd);
+        zzbfn.zzaf(parcel, zzd);
         return new WalletFragmentInitParams(str, maskedWalletRequest, i, maskedWallet);
     }
 

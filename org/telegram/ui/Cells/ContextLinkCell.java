@@ -12,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.animation.AccelerateInterpolator;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -65,9 +64,10 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     private static final int DOCUMENT_ATTACH_TYPE_STICKER = 6;
     private static final int DOCUMENT_ATTACH_TYPE_VIDEO = 4;
     private static AccelerateInterpolator interpolator = new AccelerateInterpolator(0.5f);
-    private int TAG = MediaController.getInstance().generateObserverTag();
+    private int TAG = MediaController.getInstance(this.currentAccount).generateObserverTag();
     private boolean buttonPressed;
     private int buttonState;
+    private int currentAccount = UserConfig.selectedAccount;
     private MessageObject currentMessageObject;
     private PhotoSize currentPhotoObject;
     private ContextLinkCellDelegate delegate;
@@ -283,7 +283,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + Math.max(AndroidUtilities.dp(68.0f), AndroidUtilities.dp(16.0f) + Math.max(AndroidUtilities.dp(52.0f), height)));
         int maxPhotoWidth = AndroidUtilities.dp(52.0f);
         x = LocaleController.isRTL ? (MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(8.0f)) - maxPhotoWidth : AndroidUtilities.dp(8.0f);
-        this.letterDrawable.setBounds(x, AndroidUtilities.dp(8.0f), x + maxPhotoWidth, AndroidUtilities.dp(BitmapDescriptorFactory.HUE_YELLOW));
+        this.letterDrawable.setBounds(x, AndroidUtilities.dp(8.0f), x + maxPhotoWidth, AndroidUtilities.dp(60.0f));
         this.linkImageView.setImageCoords(x, AndroidUtilities.dp(8.0f), maxPhotoWidth, maxPhotoWidth);
         if (this.documentAttachType == 3 || this.documentAttachType == 5) {
             this.radialProgress.setProgressRect(AndroidUtilities.dp(4.0f) + x, AndroidUtilities.dp(12.0f), AndroidUtilities.dp(48.0f) + x, AndroidUtilities.dp(56.0f));
@@ -318,7 +318,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             message.id = -Utilities.random.nextInt();
             message.to_id = new TL_peerUser();
             Peer peer = message.to_id;
-            int clientUserId = UserConfig.getClientUserId();
+            int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
             message.from_id = clientUserId;
             peer.user_id = clientUserId;
             message.date = (int) (System.currentTimeMillis() / 1000);
@@ -330,7 +330,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             message.flags |= 768;
             if (this.documentAttach != null) {
                 message.media.document = this.documentAttach;
-                message.attachPath = "";
+                message.attachPath = TtmlNode.ANONYMOUS_REGION_ID;
             } else {
                 String str;
                 String ext = ImageLoader.getHttpUrlExtension(this.inlineResult.content_url, this.documentAttachType == 5 ? "mp3" : "ogg");
@@ -344,8 +344,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                 message.media.document.dc_id = 0;
                 TL_documentAttributeAudio attributeAudio = new TL_documentAttributeAudio();
                 attributeAudio.duration = this.inlineResult.duration;
-                attributeAudio.title = this.inlineResult.title != null ? this.inlineResult.title : "";
-                attributeAudio.performer = this.inlineResult.description != null ? this.inlineResult.description : "";
+                attributeAudio.title = this.inlineResult.title != null ? this.inlineResult.title : TtmlNode.ANONYMOUS_REGION_ID;
+                attributeAudio.performer = this.inlineResult.description != null ? this.inlineResult.description : TtmlNode.ANONYMOUS_REGION_ID;
                 attributeAudio.flags |= 3;
                 if (this.documentAttachType == 3) {
                     attributeAudio.voice = true;
@@ -354,7 +354,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                 TL_documentAttributeFilename fileName = new TL_documentAttributeFilename();
                 fileName.file_name = Utilities.MD5(this.inlineResult.content_url) + "." + ImageLoader.getHttpUrlExtension(this.inlineResult.content_url, this.documentAttachType == 5 ? "mp3" : "ogg");
                 message.media.document.attributes.add(fileName);
-                File directory = FileLoader.getInstance().getDirectory(4);
+                File directory = FileLoader.getDirectory(4);
                 StringBuilder append = new StringBuilder().append(Utilities.MD5(this.inlineResult.content_url)).append(".");
                 String str2 = this.inlineResult.content_url;
                 if (this.documentAttachType == 5) {
@@ -364,7 +364,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                 }
                 message.attachPath = new File(directory, append.append(ImageLoader.getHttpUrlExtension(str2, str)).toString()).getAbsolutePath();
             }
-            this.currentMessageObject = new MessageObject(message, null, false);
+            this.currentMessageObject = new MessageObject(this.currentAccount, message, null, false);
         }
     }
 
@@ -421,7 +421,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         if (this.drawLinkImageView) {
             this.linkImageView.onDetachedFromWindow();
         }
-        MediaController.getInstance().removeLoadingFileObserver(this);
+        MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
 
     protected void onAttachedToWindow() {
@@ -496,13 +496,13 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             return;
         }
         if (this.buttonState == 0) {
-            if (MediaController.getInstance().playMessage(this.currentMessageObject)) {
+            if (MediaController.getInstance(this.currentAccount).playMessage(this.currentMessageObject)) {
                 this.buttonState = 1;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                 invalidate();
             }
         } else if (this.buttonState == 1) {
-            if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
+            if (MediaController.getInstance(this.currentAccount).pauseMessage(this.currentMessageObject)) {
                 this.buttonState = 0;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                 invalidate();
@@ -510,16 +510,16 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         } else if (this.buttonState == 2) {
             this.radialProgress.setProgress(0.0f, false);
             if (this.documentAttach != null) {
-                FileLoader.getInstance().loadFile(this.documentAttach, true, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, true, 0);
             } else {
-                ImageLoader.getInstance().loadHttpFile(this.inlineResult.content_url, this.documentAttachType == 5 ? "mp3" : "ogg");
+                ImageLoader.getInstance().loadHttpFile(this.inlineResult.content_url, this.documentAttachType == 5 ? "mp3" : "ogg", this.currentAccount);
             }
             this.buttonState = 4;
             this.radialProgress.setBackground(getDrawableForCurrentState(), true, false);
             invalidate();
         } else if (this.buttonState == 4) {
             if (this.documentAttach != null) {
-                FileLoader.getInstance().cancelLoadFile(this.documentAttach);
+                FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.documentAttach);
             } else {
                 ImageLoader.getInstance().cancelLoadHttpFile(this.inlineResult.content_url);
             }
@@ -663,7 +663,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                 cacheFile = FileLoader.getPathToAttach(this.documentAttach);
             } else {
                 fileName = this.inlineResult.content_url;
-                cacheFile = new File(FileLoader.getInstance().getDirectory(4), Utilities.MD5(this.inlineResult.content_url) + "." + ImageLoader.getHttpUrlExtension(this.inlineResult.content_url, this.documentAttachType == 5 ? "mp3" : "ogg"));
+                cacheFile = new File(FileLoader.getDirectory(4), Utilities.MD5(this.inlineResult.content_url) + "." + ImageLoader.getHttpUrlExtension(this.inlineResult.content_url, this.documentAttachType == 5 ? "mp3" : "ogg"));
             }
         } else if (this.mediaWebpage) {
             if (this.inlineResult != null) {
@@ -676,10 +676,10 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                     cacheFile = FileLoader.getPathToAttach(this.currentPhotoObject);
                 } else if (this.inlineResult.content_url != null) {
                     fileName = Utilities.MD5(this.inlineResult.content_url) + "." + ImageLoader.getHttpUrlExtension(this.inlineResult.content_url, "jpg");
-                    cacheFile = new File(FileLoader.getInstance().getDirectory(4), fileName);
+                    cacheFile = new File(FileLoader.getDirectory(4), fileName);
                 } else if (this.inlineResult.thumb_url != null) {
                     fileName = Utilities.MD5(this.inlineResult.thumb_url) + "." + ImageLoader.getHttpUrlExtension(this.inlineResult.thumb_url, "jpg");
-                    cacheFile = new File(FileLoader.getInstance().getDirectory(4), fileName);
+                    cacheFile = new File(FileLoader.getDirectory(4), fileName);
                 }
             } else if (this.documentAttach != null) {
                 fileName = FileLoader.getAttachFileName(this.documentAttach);
@@ -694,10 +694,10 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             cacheFile.delete();
         }
         if (cacheFile.exists()) {
-            MediaController.getInstance().removeLoadingFileObserver(this);
+            MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
             if (this.documentAttachType == 5 || this.documentAttachType == 3) {
-                boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-                if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
+                boolean playing = MediaController.getInstance(this.currentAccount).isPlayingMessage(this.currentMessageObject);
+                if (!playing || (playing && MediaController.getInstance(this.currentAccount).isMessagePaused())) {
                     this.buttonState = 0;
                 } else {
                     this.buttonState = 1;
@@ -709,12 +709,12 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             invalidate();
             return;
         }
-        MediaController.getInstance().addLoadingFileObserver(fileName, this);
+        MediaController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
         Float progress;
         if (this.documentAttachType == 5 || this.documentAttachType == 3) {
             boolean isLoading;
             if (this.documentAttach != null) {
-                isLoading = FileLoader.getInstance().isLoadingFile(fileName);
+                isLoading = FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName);
             } else {
                 isLoading = ImageLoader.getInstance().isLoadingHttpFile(fileName);
             }

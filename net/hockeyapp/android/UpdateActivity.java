@@ -29,10 +29,7 @@ import net.hockeyapp.android.utils.HockeyLog;
 import net.hockeyapp.android.utils.Util;
 import net.hockeyapp.android.utils.VersionHelper;
 
-public class UpdateActivity extends Activity implements UpdateActivityInterface, UpdateInfoListener, OnClickListener {
-    private static final int DIALOG_ERROR_ID = 0;
-    public static final String EXTRA_JSON = "json";
-    public static final String EXTRA_URL = "url";
+public class UpdateActivity extends Activity implements OnClickListener, UpdateInfoListener {
     private Context mContext;
     protected DownloadFileTask mDownloadTask;
     private ErrorObject mError;
@@ -43,7 +40,7 @@ public class UpdateActivity extends Activity implements UpdateActivityInterface,
         setTitle("App Update");
         setContentView(getLayoutView());
         this.mContext = this;
-        this.mVersionHelper = new VersionHelper(this, getIntent().getStringExtra(EXTRA_JSON), this);
+        this.mVersionHelper = new VersionHelper(this, getIntent().getStringExtra("json"), this);
         configureView();
         this.mDownloadTask = (DownloadFileTask) getLastNonConfigurationInstance();
         if (this.mDownloadTask != null) {
@@ -143,7 +140,7 @@ public class UpdateActivity extends Activity implements UpdateActivityInterface,
             appSizeString = String.format(Locale.US, "%.2f", new Object[]{Float.valueOf(((float) appSize) / 1048576.0f)}) + " MB";
         } else {
             final String str = versionString;
-            AsyncTaskUtils.execute(new GetFileSizeTask(this, getIntent().getStringExtra("url"), new DownloadFileListener() {
+            AsyncTaskUtils.execute(new GetFileSizeTask(this, getIntent().getStringExtra(UpdateFragment.FRAGMENT_URL), new DownloadFileListener() {
                 public void downloadSuccessful(DownloadFileTask task) {
                     if (task instanceof GetFileSizeTask) {
                         long appSize = ((GetFileSizeTask) task).getSize();
@@ -158,7 +155,7 @@ public class UpdateActivity extends Activity implements UpdateActivityInterface,
         WebView webView = (WebView) findViewById(R.id.web_update_details);
         webView.clearCache(true);
         webView.destroyDrawingCache();
-        webView.loadDataWithBaseURL(Constants.BASE_URL, getReleaseNotes(), "text/html", "utf-8", null);
+        webView.loadDataWithBaseURL("https://sdk.hockeyapp.net/", getReleaseNotes(), "text/html", "utf-8", null);
     }
 
     protected String getReleaseNotes() {
@@ -166,7 +163,7 @@ public class UpdateActivity extends Activity implements UpdateActivityInterface,
     }
 
     protected void startDownloadTask() {
-        startDownloadTask(getIntent().getStringExtra("url"));
+        startDownloadTask(getIntent().getStringExtra(UpdateFragment.FRAGMENT_URL));
     }
 
     protected void startDownloadTask(String url) {
@@ -199,7 +196,7 @@ public class UpdateActivity extends Activity implements UpdateActivityInterface,
             PackageManager pm = getPackageManager();
             return pm.getApplicationLabel(pm.getApplicationInfo(getPackageName(), 0)).toString();
         } catch (NameNotFoundException e) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
     }
 

@@ -1,7 +1,5 @@
 package org.telegram.messenger.support.util;
 
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,7 +24,6 @@ public class DiffUtil {
 
         public abstract int getOldListSize();
 
-        @Nullable
         public Object getChangePayload(int oldItemPosition, int newItemPosition) {
             return null;
         }
@@ -205,7 +202,7 @@ public class DiffUtil {
                     dispatchAdditions(postponedUpdates, batchingCallback, endX, posNew - endY, endY);
                 }
                 for (int i = snakeSize - 1; i >= 0; i--) {
-                    if ((this.mOldItemStatuses[snake.x + i] & 31) == 2) {
+                    if ((this.mOldItemStatuses[snake.x + i] & FLAG_MASK) == 2) {
                         batchingCallback.onChanged(snake.x + i, 1, this.mCallback.getChangePayload(snake.x + i, snake.y + i));
                     }
                 }
@@ -233,7 +230,7 @@ public class DiffUtil {
         private void dispatchAdditions(List<PostponedUpdate> postponedUpdates, ListUpdateCallback updateCallback, int start, int count, int globalIndex) {
             if (this.mDetectMoves) {
                 for (int i = count - 1; i >= 0; i--) {
-                    int status = this.mNewItemStatuses[globalIndex + i] & 31;
+                    int status = this.mNewItemStatuses[globalIndex + i] & FLAG_MASK;
                     switch (status) {
                         case 0:
                             updateCallback.onInserted(start, 1);
@@ -265,7 +262,7 @@ public class DiffUtil {
         private void dispatchRemovals(List<PostponedUpdate> postponedUpdates, ListUpdateCallback updateCallback, int start, int count, int globalIndex) {
             if (this.mDetectMoves) {
                 for (int i = count - 1; i >= 0; i--) {
-                    int status = this.mOldItemStatuses[globalIndex + i] & 31;
+                    int status = this.mOldItemStatuses[globalIndex + i] & FLAG_MASK;
                     switch (status) {
                         case 0:
                             updateCallback.onRemoved(start + i, 1);
@@ -295,7 +292,6 @@ public class DiffUtil {
             updateCallback.onRemoved(start, count);
         }
 
-        @VisibleForTesting
         List<Snake> getSnakes() {
             return this.mSnakes;
         }

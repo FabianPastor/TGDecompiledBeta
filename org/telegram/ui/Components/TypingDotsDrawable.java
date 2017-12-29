@@ -3,18 +3,19 @@ package org.telegram.ui.Components;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.view.animation.DecelerateInterpolator;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
 
 public class TypingDotsDrawable extends StatusDrawable {
+    private int currentAccount = UserConfig.selectedAccount;
     private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
     private float[] elapsedTimes = new float[]{0.0f, 0.0f, 0.0f};
     private boolean isChat = false;
     private long lastUpdateTime = 0;
     private float[] scales = new float[3];
-    private float[] startTimes = new float[]{0.0f, 150.0f, BitmapDescriptorFactory.HUE_MAGENTA};
+    private float[] startTimes = new float[]{0.0f, 150.0f, 300.0f};
     private boolean started = false;
 
     public void setIsChat(boolean value) {
@@ -62,7 +63,7 @@ public class TypingDotsDrawable extends StatusDrawable {
         }
         this.startTimes[0] = 0.0f;
         this.startTimes[1] = 150.0f;
-        this.startTimes[2] = BitmapDescriptorFactory.HUE_MAGENTA;
+        this.startTimes[2] = 300.0f;
         this.started = false;
     }
 
@@ -84,7 +85,7 @@ public class TypingDotsDrawable extends StatusDrawable {
         if (!this.started) {
             return;
         }
-        if (NotificationCenter.getInstance().isAnimationInProgress()) {
+        if (NotificationCenter.getInstance(this.currentAccount).isAnimationInProgress()) {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     TypingDotsDrawable.this.checkUpdate();
@@ -102,7 +103,7 @@ public class TypingDotsDrawable extends StatusDrawable {
     }
 
     public int getOpacity() {
-        return 0;
+        return -2;
     }
 
     public int getIntrinsicWidth() {

@@ -1,7 +1,6 @@
 package org.telegram.ui.Components.Paint.Views;
 
 import android.view.MotionEvent;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 public class RotationGestureDetector {
     private float angle;
@@ -78,7 +77,7 @@ public class RotationGestureDetector {
         if (angle < -180.0f) {
             angle += 360.0f;
         }
-        if (angle > BitmapDescriptorFactory.HUE_CYAN) {
+        if (angle > 180.0f) {
             return angle - 360.0f;
         }
         return angle;

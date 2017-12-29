@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">Installi</string>
     <string name="common_google_play_services_install_text">Rakendus %1$s töötab ainult koos Google Play teenustega, mida teie seadmes pole.</string>
     <string name="common_google_play_services_install_title">Google Play teenuste hankimine</string>
+    <string name="common_google_play_services_notification_channel_name">Google Play teenuste saadavalolek</string>
     <string name="common_google_play_services_notification_ticker">Viga Google Play teenustes</string>
     <string name="common_google_play_services_unknown_issue">Rakendusel %1$s on probleeme Google Play teenustega. Proovige uuesti.</string>
     <string name="common_google_play_services_unsupported_text">Rakendus %1$s töötab ainult koos Google Play teenustega, mida teie seadmes ei toetata.</string>
@@ -17,5 +18,7 @@
     <string name="common_open_on_phone">Ava telefonis</string>
     <string name="common_signin_button_text">Logi sisse</string>
     <string name="common_signin_button_text_long">Logi sisse Google\'i kontoga</string>
+    <string name="gcm_fallback_notification_channel_label">Muu</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Osta Google\'iga</string>
 </resources>

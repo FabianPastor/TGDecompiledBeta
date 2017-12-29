@@ -112,7 +112,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
             switch (holder.getItemViewType()) {
                 case 0:
                     TextCheckCell checkCell = holder.itemView;
-                    SetAdminsActivity.this.chat = MessagesController.getInstance().getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
+                    SetAdminsActivity.this.chat = MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
                     String string = LocaleController.getString("SetAdminsAll", R.string.SetAdminsAll);
                     if (SetAdminsActivity.this.chat == null || SetAdminsActivity.this.chat.admins_enabled) {
                         z = false;
@@ -135,7 +135,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                             return;
                         }
                     } else if (position == SetAdminsActivity.this.usersEndRow) {
-                        privacyCell.setText("");
+                        privacyCell.setText(TtmlNode.ANONYMOUS_REGION_ID);
                         privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
@@ -145,15 +145,15 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                     boolean z3;
                     UserCell userCell = holder.itemView;
                     ChatParticipant part = (ChatParticipant) SetAdminsActivity.this.participants.get(position - SetAdminsActivity.this.usersStartRow);
-                    userCell.setData(MessagesController.getInstance().getUser(Integer.valueOf(part.user_id)), null, null, 0);
-                    SetAdminsActivity.this.chat = MessagesController.getInstance().getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
+                    userCell.setData(MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getUser(Integer.valueOf(part.user_id)), null, null, 0);
+                    SetAdminsActivity.this.chat = MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
                     if ((part instanceof TL_chatParticipant) && (SetAdminsActivity.this.chat == null || SetAdminsActivity.this.chat.admins_enabled)) {
                         z3 = false;
                     } else {
                         z3 = true;
                     }
                     userCell.setChecked(z3, false);
-                    if (SetAdminsActivity.this.chat == null || !SetAdminsActivity.this.chat.admins_enabled || part.user_id == UserConfig.getClientUserId()) {
+                    if (SetAdminsActivity.this.chat == null || !SetAdminsActivity.this.chat.admins_enabled || part.user_id == UserConfig.getInstance(SetAdminsActivity.this.currentAccount).getClientUserId()) {
                         z2 = true;
                     }
                     userCell.setCheckDisabled(z2);
@@ -237,8 +237,8 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                             ArrayList<CharSequence> resultArrayNames = new ArrayList();
                             for (int a = 0; a < contactsCopy.size(); a++) {
                                 ChatParticipant participant = (ChatParticipant) contactsCopy.get(a);
-                                User user = MessagesController.getInstance().getUser(Integer.valueOf(participant.user_id));
-                                if (user.id != UserConfig.getClientUserId()) {
+                                User user = MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getUser(Integer.valueOf(participant.user_id));
+                                if (user.id != UserConfig.getInstance(SetAdminsActivity.this.currentAccount).getClientUserId()) {
                                     String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
                                     String tName = LocaleController.getInstance().getTranslitString(name);
                                     if (name.equals(tName)) {
@@ -304,7 +304,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
             boolean z;
             boolean z2 = false;
             ChatParticipant participant = getItem(position);
-            User user = MessagesController.getInstance().getUser(Integer.valueOf(participant.user_id));
+            User user = MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getUser(Integer.valueOf(participant.user_id));
             String un = user.username;
             CharSequence username = null;
             CharSequence name = null;
@@ -317,14 +317,14 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
             }
             UserCell userCell = holder.itemView;
             userCell.setData(user, name, username, 0);
-            SetAdminsActivity.this.chat = MessagesController.getInstance().getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
+            SetAdminsActivity.this.chat = MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
             if ((participant instanceof TL_chatParticipant) && (SetAdminsActivity.this.chat == null || SetAdminsActivity.this.chat.admins_enabled)) {
                 z = false;
             } else {
                 z = true;
             }
             userCell.setChecked(z, false);
-            if (SetAdminsActivity.this.chat == null || !SetAdminsActivity.this.chat.admins_enabled || participant.user_id == UserConfig.getClientUserId()) {
+            if (SetAdminsActivity.this.chat == null || !SetAdminsActivity.this.chat.admins_enabled || participant.user_id == UserConfig.getInstance(SetAdminsActivity.this.currentAccount).getClientUserId()) {
                 z2 = true;
             }
             userCell.setCheckDisabled(z2);
@@ -342,15 +342,15 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatInfoDidLoaded);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatInfoDidLoaded);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
     }
 
     public View createView(Context context) {
@@ -423,7 +423,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                 if (SetAdminsActivity.this.listView.getAdapter() == SetAdminsActivity.this.searchAdapter || (position >= SetAdminsActivity.this.usersStartRow && position < SetAdminsActivity.this.usersEndRow)) {
                     ChatParticipant participant;
                     UserCell userCell = (UserCell) view;
-                    SetAdminsActivity.this.chat = MessagesController.getInstance().getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
+                    SetAdminsActivity.this.chat = MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
                     int index = -1;
                     if (SetAdminsActivity.this.listView.getAdapter() == SetAdminsActivity.this.searchAdapter) {
                         participant = SetAdminsActivity.this.searchAdapter.getItem(position);
@@ -462,7 +462,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                         z2 = ((participant instanceof TL_chatParticipant) && (SetAdminsActivity.this.chat == null || SetAdminsActivity.this.chat.admins_enabled)) ? false : true;
                         userCell.setChecked(z2, true);
                         if (SetAdminsActivity.this.chat != null && SetAdminsActivity.this.chat.admins_enabled) {
-                            MessagesController instance = MessagesController.getInstance();
+                            MessagesController instance = MessagesController.getInstance(SetAdminsActivity.this.currentAccount);
                             int access$1000 = SetAdminsActivity.this.chat_id;
                             int i = participant.user_id;
                             if (participant instanceof TL_chatParticipant) {
@@ -472,7 +472,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                         }
                     }
                 } else if (position == SetAdminsActivity.this.allAdminsRow) {
-                    SetAdminsActivity.this.chat = MessagesController.getInstance().getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
+                    SetAdminsActivity.this.chat = MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
                     if (SetAdminsActivity.this.chat != null) {
                         Chat access$900 = SetAdminsActivity.this.chat;
                         if (SetAdminsActivity.this.chat.admins_enabled) {
@@ -486,7 +486,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                             z = false;
                         }
                         textCheckCell.setChecked(z);
-                        MessagesController.getInstance().toggleAdminMode(SetAdminsActivity.this.chat_id, SetAdminsActivity.this.chat.admins_enabled);
+                        MessagesController.getInstance(SetAdminsActivity.this.currentAccount).toggleAdminMode(SetAdminsActivity.this.chat_id, SetAdminsActivity.this.chat.admins_enabled);
                     }
                 }
             }
@@ -501,7 +501,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
         return this.fragmentView;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.chatInfoDidLoaded) {
             ChatFull chatFull = args[0];
             if (chatFull.id == this.chat_id) {
@@ -561,8 +561,8 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                             return -1;
                         }
                         if (type1 == type2) {
-                            User user1 = MessagesController.getInstance().getUser(Integer.valueOf(rhs.user_id));
-                            User user2 = MessagesController.getInstance().getUser(Integer.valueOf(lhs.user_id));
+                            User user1 = MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getUser(Integer.valueOf(rhs.user_id));
+                            User user2 = MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getUser(Integer.valueOf(lhs.user_id));
                             int status1 = 0;
                             int status2 = 0;
                             if (!(user1 == null || user1.status == null)) {

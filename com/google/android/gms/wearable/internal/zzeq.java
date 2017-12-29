@@ -1,21 +1,37 @@
 package com.google.android.gms.wearable.internal;
 
+import android.os.IBinder;
+import android.os.IInterface;
 import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
+import android.os.Parcelable;
+import android.os.RemoteException;
+import com.google.android.gms.internal.zzeu;
+import com.google.android.gms.internal.zzew;
 
-public final class zzeq extends zza {
-    public static final Creator<zzeq> CREATOR = new zzer();
-    public final int statusCode;
-
-    public zzeq(int i) {
-        this.statusCode = i;
+public final class zzeq extends zzeu implements zzep {
+    zzeq(IBinder iBinder) {
+        super(iBinder, "com.google.android.gms.wearable.internal.IWearableService");
     }
 
-    public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zzc(parcel, 2, this.statusCode);
-        zzd.zzI(parcel, zze);
+    public final void zza(zzek com_google_android_gms_wearable_internal_zzek, zzd com_google_android_gms_wearable_internal_zzd) throws RemoteException {
+        Parcel zzbe = zzbe();
+        zzew.zza(zzbe, (IInterface) com_google_android_gms_wearable_internal_zzek);
+        zzew.zza(zzbe, (Parcelable) com_google_android_gms_wearable_internal_zzd);
+        zzb(16, zzbe);
+    }
+
+    public final void zzb(zzek com_google_android_gms_wearable_internal_zzek, zzei com_google_android_gms_wearable_internal_zzei, String str) throws RemoteException {
+        Parcel zzbe = zzbe();
+        zzew.zza(zzbe, (IInterface) com_google_android_gms_wearable_internal_zzek);
+        zzew.zza(zzbe, (IInterface) com_google_android_gms_wearable_internal_zzei);
+        zzbe.writeString(str);
+        zzb(35, zzbe);
+    }
+
+    public final void zzc(zzek com_google_android_gms_wearable_internal_zzek, String str) throws RemoteException {
+        Parcel zzbe = zzbe();
+        zzew.zza(zzbe, (IInterface) com_google_android_gms_wearable_internal_zzek);
+        zzbe.writeString(str);
+        zzb(32, zzbe);
     }
 }

@@ -118,14 +118,14 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 
     public boolean onFragmentCreate() {
         fillLanguages();
-        LocaleController.getInstance().loadRemoteLanguages();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.suggestedLangpack);
+        LocaleController.getInstance().loadRemoteLanguages(this.currentAccount);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.suggestedLangpack);
         return super.onFragmentCreate();
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.suggestedLangpack);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.suggestedLangpack);
     }
 
     public View createView(Context context) {
@@ -194,7 +194,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                         localeInfo = (LocaleInfo) LanguageSelectActivity.this.sortedLanguages.get(position);
                     }
                     if (localeInfo != null) {
-                        LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true);
+                        LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, LanguageSelectActivity.this.currentAccount);
                         LanguageSelectActivity.this.parentLayout.rebuildAllFragmentViews(false, false);
                     }
                     LanguageSelectActivity.this.finishFragment();
@@ -220,7 +220,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                 builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (LocaleController.getInstance().deleteLanguage(finalLocaleInfo)) {
+                        if (LocaleController.getInstance().deleteLanguage(finalLocaleInfo, LanguageSelectActivity.this.currentAccount)) {
                             LanguageSelectActivity.this.fillLanguages();
                             if (LanguageSelectActivity.this.searchResult != null) {
                                 LanguageSelectActivity.this.searchResult.remove(finalLocaleInfo);
@@ -249,7 +249,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         return this.fragmentView;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.suggestedLangpack && this.listAdapter != null) {
             fillLanguages();
             this.listAdapter.notifyDataSetChanged();

@@ -153,7 +153,7 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
         i = this.rowCount;
         this.rowCount = i + 1;
         this.rightsShadowRow = i;
-        Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(this.chatId));
+        Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId));
         if (chat == null || !TextUtils.isEmpty(chat.username)) {
             this.forwardRow = -1;
             this.forwardShadowRow = -1;
@@ -168,13 +168,13 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
     }
 
     public boolean onFragmentCreate() {
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoaded);
         return super.onFragmentCreate();
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoaded);
     }
 
     public View createView(Context context) {
@@ -188,7 +188,7 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
                 } else if (id == 1) {
                     if (!(ChannelPermissionsActivity.this.headerCell2 == null || ChannelPermissionsActivity.this.headerCell2.getVisibility() != 0 || ChannelPermissionsActivity.this.info == null || ChannelPermissionsActivity.this.info.hidden_prehistory == ChannelPermissionsActivity.this.historyHidden)) {
                         ChannelPermissionsActivity.this.info.hidden_prehistory = ChannelPermissionsActivity.this.historyHidden;
-                        MessagesController.getInstance().toogleChannelInvitesHistory(ChannelPermissionsActivity.this.chatId, ChannelPermissionsActivity.this.historyHidden);
+                        MessagesController.getInstance(ChannelPermissionsActivity.this.currentAccount).toogleChannelInvitesHistory(ChannelPermissionsActivity.this.chatId, ChannelPermissionsActivity.this.historyHidden);
                     }
                     ChannelPermissionsActivity.this.finishFragment();
                 }
@@ -226,37 +226,37 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
                             z2 = true;
                         }
                         checkCell.setChecked(z2);
-                        TL_channelAdminRights access$500;
+                        TL_channelAdminRights access$600;
                         if (position == ChannelPermissionsActivity.this.changeInfoRow) {
-                            access$500 = ChannelPermissionsActivity.this.adminRights;
+                            access$600 = ChannelPermissionsActivity.this.adminRights;
                             if (ChannelPermissionsActivity.this.adminRights.change_info) {
                                 z = false;
                             }
-                            access$500.change_info = z;
+                            access$600.change_info = z;
                         } else if (position == ChannelPermissionsActivity.this.addUsersRow) {
-                            access$500 = ChannelPermissionsActivity.this.adminRights;
+                            access$600 = ChannelPermissionsActivity.this.adminRights;
                             if (ChannelPermissionsActivity.this.adminRights.invite_users) {
                                 z = false;
                             }
-                            access$500.invite_users = z;
+                            access$600.invite_users = z;
                         } else if (position == ChannelPermissionsActivity.this.sendMediaRow) {
-                            access$500 = ChannelPermissionsActivity.this.adminRights;
+                            access$600 = ChannelPermissionsActivity.this.adminRights;
                             if (ChannelPermissionsActivity.this.adminRights.ban_users) {
                                 z = false;
                             }
-                            access$500.ban_users = z;
+                            access$600.ban_users = z;
                         } else if (position == ChannelPermissionsActivity.this.sendStickersRow) {
-                            access$500 = ChannelPermissionsActivity.this.adminRights;
+                            access$600 = ChannelPermissionsActivity.this.adminRights;
                             if (ChannelPermissionsActivity.this.adminRights.add_admins) {
                                 z = false;
                             }
-                            access$500.add_admins = z;
+                            access$600.add_admins = z;
                         } else if (position == ChannelPermissionsActivity.this.embedLinksRow) {
-                            access$500 = ChannelPermissionsActivity.this.adminRights;
+                            access$600 = ChannelPermissionsActivity.this.adminRights;
                             if (ChannelPermissionsActivity.this.adminRights.pin_messages) {
                                 z = false;
                             }
-                            access$500.pin_messages = z;
+                            access$600.pin_messages = z;
                         }
                     }
                 }
@@ -308,7 +308,7 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.chatInfoDidLoaded) {
             ChatFull chatFull = args[0];
             if (chatFull.id == this.chatId) {

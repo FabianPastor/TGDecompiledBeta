@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.util;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,11 +43,11 @@ public final class AtomicFile {
             this.fileOutputStream.write(b);
         }
 
-        public void write(@NonNull byte[] b) throws IOException {
+        public void write(byte[] b) throws IOException {
             this.fileOutputStream.write(b);
         }
 
-        public void write(@NonNull byte[] b, int off, int len) throws IOException {
+        public void write(byte[] b, int off, int len) throws IOException {
             this.fileOutputStream.write(b, off, len);
         }
     }

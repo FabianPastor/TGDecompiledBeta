@@ -143,6 +143,7 @@ public class MP4Builder {
         this.mdat.setDataOffset(0);
         this.mdat.setContentSize(0);
         this.fos.flush();
+        this.fos.getFD().sync();
     }
 
     public boolean writeSampleData(int trackIndex, ByteBuffer byteBuf, BufferInfo bufferInfo, boolean writeLength) throws Exception {
@@ -176,6 +177,7 @@ public class MP4Builder {
         this.dataOffset += (long) bufferInfo.size;
         if (flush) {
             this.fos.flush();
+            this.fos.getFD().sync();
         }
         return flush;
     }
@@ -200,6 +202,7 @@ public class MP4Builder {
         }
         createMovieBox(this.currentMp4Movie).getBox(this.fc);
         this.fos.flush();
+        this.fos.getFD().sync();
         this.fc.close();
         this.fos.close();
     }

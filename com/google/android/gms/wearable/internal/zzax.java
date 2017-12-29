@@ -1,71 +1,41 @@
 package com.google.android.gms.wearable.internal;
 
-import android.util.Log;
-import com.google.android.gms.common.internal.zzbo;
-import com.google.android.gms.wearable.ChannelIOException;
-import java.io.IOException;
-import java.io.OutputStream;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfn;
 
-public final class zzax extends OutputStream {
-    private volatile zzah zzbSr;
-    private final OutputStream zzbSt;
-
-    public zzax(OutputStream outputStream) {
-        this.zzbSt = (OutputStream) zzbo.zzu(outputStream);
+public final class zzax implements Creator<zzaw> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzbfn.zzd(parcel);
+        int i = 0;
+        int i2 = 0;
+        zzay com_google_android_gms_wearable_internal_zzay = null;
+        int i3 = 0;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (65535 & readInt) {
+                case 2:
+                    com_google_android_gms_wearable_internal_zzay = (zzay) zzbfn.zza(parcel, readInt, zzay.CREATOR);
+                    break;
+                case 3:
+                    i2 = zzbfn.zzg(parcel, readInt);
+                    break;
+                case 4:
+                    i = zzbfn.zzg(parcel, readInt);
+                    break;
+                case 5:
+                    i3 = zzbfn.zzg(parcel, readInt);
+                    break;
+                default:
+                    zzbfn.zzb(parcel, readInt);
+                    break;
+            }
+        }
+        zzbfn.zzaf(parcel, zzd);
+        return new zzaw(com_google_android_gms_wearable_internal_zzay, i2, i, i3);
     }
 
-    private final IOException zza(IOException iOException) {
-        zzah com_google_android_gms_wearable_internal_zzah = this.zzbSr;
-        if (com_google_android_gms_wearable_internal_zzah == null) {
-            return iOException;
-        }
-        if (Log.isLoggable("ChannelOutputStream", 2)) {
-            Log.v("ChannelOutputStream", "Caught IOException, but channel has been closed. Translating to ChannelIOException.", iOException);
-        }
-        return new ChannelIOException("Channel closed unexpectedly before stream was finished", com_google_android_gms_wearable_internal_zzah.zzbSh, com_google_android_gms_wearable_internal_zzah.zzbSi);
-    }
-
-    public final void close() throws IOException {
-        try {
-            this.zzbSt.close();
-        } catch (IOException e) {
-            throw zza(e);
-        }
-    }
-
-    public final void flush() throws IOException {
-        try {
-            this.zzbSt.flush();
-        } catch (IOException e) {
-            throw zza(e);
-        }
-    }
-
-    public final void write(int i) throws IOException {
-        try {
-            this.zzbSt.write(i);
-        } catch (IOException e) {
-            throw zza(e);
-        }
-    }
-
-    public final void write(byte[] bArr) throws IOException {
-        try {
-            this.zzbSt.write(bArr);
-        } catch (IOException e) {
-            throw zza(e);
-        }
-    }
-
-    public final void write(byte[] bArr, int i, int i2) throws IOException {
-        try {
-            this.zzbSt.write(bArr, i, i2);
-        } catch (IOException e) {
-            throw zza(e);
-        }
-    }
-
-    final void zzc(zzah com_google_android_gms_wearable_internal_zzah) {
-        this.zzbSr = com_google_android_gms_wearable_internal_zzah;
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new zzaw[i];
     }
 }

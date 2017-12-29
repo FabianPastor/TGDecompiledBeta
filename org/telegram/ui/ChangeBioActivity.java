@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -99,7 +98,7 @@ public class ChangeBioActivity extends BaseFragment {
                     return result;
                 }
                 ChangeBioActivity.this.doneButton.performClick();
-                return "";
+                return TtmlNode.ANONYMOUS_REGION_ID;
             }
         }});
         this.firstNameField.setMinHeight(AndroidUtilities.dp(36.0f));
@@ -124,7 +123,7 @@ public class ChangeBioActivity extends BaseFragment {
             }
 
             public void afterTextChanged(Editable s) {
-                ChangeBioActivity.this.checkTextView.setText("" + (70 - ChangeBioActivity.this.firstNameField.length()));
+                ChangeBioActivity.this.checkTextView.setText(TtmlNode.ANONYMOUS_REGION_ID + (70 - ChangeBioActivity.this.firstNameField.length()));
             }
         });
         fieldContainer.addView(this.firstNameField, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 0.0f, 4.0f, 0.0f));
@@ -139,7 +138,7 @@ public class ChangeBioActivity extends BaseFragment {
         this.helpTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.helpTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("UserBioInfo", R.string.UserBioInfo)));
         linearLayout.addView(this.helpTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 24, 10, 24, 0));
-        TL_userFull userFull = MessagesController.getInstance().getUserFull(UserConfig.getClientUserId());
+        TL_userFull userFull = MessagesController.getAccountInstance().getUserFull(UserConfig.getInstance(this.currentAccount).getClientUserId());
         if (!(userFull == null || userFull.about == null)) {
             this.firstNameField.setText(userFull.about);
             this.firstNameField.setSelection(this.firstNameField.length());
@@ -149,20 +148,20 @@ public class ChangeBioActivity extends BaseFragment {
 
     public void onResume() {
         super.onResume();
-        if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("view_animations", true)) {
+        if (!MessagesController.getGlobalMainSettings().getBoolean("view_animations", true)) {
             this.firstNameField.requestFocus();
             AndroidUtilities.showKeyboard(this.firstNameField);
         }
     }
 
     private void saveName() {
-        final TL_userFull userFull = MessagesController.getInstance().getUserFull(UserConfig.getClientUserId());
+        final TL_userFull userFull = MessagesController.getAccountInstance().getUserFull(UserConfig.getInstance(this.currentAccount).getClientUserId());
         if (getParentActivity() != null && userFull != null) {
             String currentName = userFull.about;
             if (currentName == null) {
-                currentName = "";
+                currentName = TtmlNode.ANONYMOUS_REGION_ID;
             }
-            final String newName = this.firstNameField.getText().toString().replace("\n", "");
+            final String newName = this.firstNameField.getText().toString().replace("\n", TtmlNode.ANONYMOUS_REGION_ID);
             if (currentName.equals(newName)) {
                 finishFragment();
                 return;
@@ -174,7 +173,7 @@ public class ChangeBioActivity extends BaseFragment {
             final TL_account_updateProfile req = new TL_account_updateProfile();
             req.about = newName;
             req.flags |= 4;
-            final int reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            final int reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, final TL_error error) {
                     if (error == null) {
                         final User user = (User) response;
@@ -186,7 +185,7 @@ public class ChangeBioActivity extends BaseFragment {
                                     FileLog.e(e);
                                 }
                                 userFull.about = newName;
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.userInfoDidLoaded, Integer.valueOf(user.id), userFull);
+                                NotificationCenter.getInstance(ChangeBioActivity.this.currentAccount).postNotificationName(NotificationCenter.userInfoDidLoaded, Integer.valueOf(user.id), userFull);
                                 ChangeBioActivity.this.finishFragment();
                             }
                         });
@@ -199,15 +198,15 @@ public class ChangeBioActivity extends BaseFragment {
                             } catch (Throwable e) {
                                 FileLog.e(e);
                             }
-                            AlertsCreator.processError(error, ChangeBioActivity.this, req, new Object[0]);
+                            AlertsCreator.processError(ChangeBioActivity.this.currentAccount, error, ChangeBioActivity.this, req, new Object[0]);
                         }
                     });
                 }
             }, 2);
-            ConnectionsManager.getInstance().bindRequestToGuid(reqId, this.classGuid);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(reqId, this.classGuid);
             progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ConnectionsManager.getInstance().cancelRequest(reqId, true);
+                    ConnectionsManager.getInstance(ChangeBioActivity.this.currentAccount).cancelRequest(reqId, true);
                     try {
                         dialog.dismiss();
                     } catch (Throwable e) {

@@ -3,33 +3,33 @@ package com.google.android.gms.wearable;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
-import com.google.android.gms.common.internal.zzbe;
+import com.google.android.gms.common.internal.zzbg;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 import java.util.Arrays;
 
-public class ConnectionConfiguration extends zza implements ReflectedParcelable {
+public class ConnectionConfiguration extends zzbfm implements ReflectedParcelable {
     public static final Creator<ConnectionConfiguration> CREATOR = new zzg();
     private final String mName;
-    private final int zzaMJ;
-    private final String zzaTl;
-    private volatile boolean zzair;
-    private final int zzamr;
-    private final boolean zzbRb;
-    private volatile String zzbRc;
-    private boolean zzbRd;
-    private String zzbRe;
+    private volatile boolean zzdyh;
+    private final int zzeie;
+    private final int zzgkq;
+    private final String zzgzw;
+    private final boolean zzlgo;
+    private volatile String zzlgp;
+    private boolean zzlgq;
+    private String zzlgr;
 
     ConnectionConfiguration(String str, String str2, int i, int i2, boolean z, boolean z2, String str3, boolean z3, String str4) {
         this.mName = str;
-        this.zzaTl = str2;
-        this.zzamr = i;
-        this.zzaMJ = i2;
-        this.zzbRb = z;
-        this.zzair = z2;
-        this.zzbRc = str3;
-        this.zzbRd = z3;
-        this.zzbRe = str4;
+        this.zzgzw = str2;
+        this.zzeie = i;
+        this.zzgkq = i2;
+        this.zzlgo = z;
+        this.zzdyh = z2;
+        this.zzlgp = str3;
+        this.zzlgq = z3;
+        this.zzlgr = str4;
     }
 
     public boolean equals(Object obj) {
@@ -37,11 +37,11 @@ public class ConnectionConfiguration extends zza implements ReflectedParcelable 
             return false;
         }
         ConnectionConfiguration connectionConfiguration = (ConnectionConfiguration) obj;
-        return zzbe.equal(this.mName, connectionConfiguration.mName) && zzbe.equal(this.zzaTl, connectionConfiguration.zzaTl) && zzbe.equal(Integer.valueOf(this.zzamr), Integer.valueOf(connectionConfiguration.zzamr)) && zzbe.equal(Integer.valueOf(this.zzaMJ), Integer.valueOf(connectionConfiguration.zzaMJ)) && zzbe.equal(Boolean.valueOf(this.zzbRb), Boolean.valueOf(connectionConfiguration.zzbRb)) && zzbe.equal(Boolean.valueOf(this.zzbRd), Boolean.valueOf(connectionConfiguration.zzbRd));
+        return zzbg.equal(this.mName, connectionConfiguration.mName) && zzbg.equal(this.zzgzw, connectionConfiguration.zzgzw) && zzbg.equal(Integer.valueOf(this.zzeie), Integer.valueOf(connectionConfiguration.zzeie)) && zzbg.equal(Integer.valueOf(this.zzgkq), Integer.valueOf(connectionConfiguration.zzgkq)) && zzbg.equal(Boolean.valueOf(this.zzlgo), Boolean.valueOf(connectionConfiguration.zzlgo)) && zzbg.equal(Boolean.valueOf(this.zzlgq), Boolean.valueOf(connectionConfiguration.zzlgq));
     }
 
     public int hashCode() {
-        return Arrays.hashCode(new Object[]{this.mName, this.zzaTl, Integer.valueOf(this.zzamr), Integer.valueOf(this.zzaMJ), Boolean.valueOf(this.zzbRb), Boolean.valueOf(this.zzbRd)});
+        return Arrays.hashCode(new Object[]{this.mName, this.zzgzw, Integer.valueOf(this.zzeie), Integer.valueOf(this.zzgkq), Boolean.valueOf(this.zzlgo), Boolean.valueOf(this.zzlgq)});
     }
 
     public String toString() {
@@ -50,34 +50,34 @@ public class ConnectionConfiguration extends zza implements ReflectedParcelable 
         String valueOf = String.valueOf(this.mName);
         stringBuilder.append(valueOf.length() != 0 ? str.concat(valueOf) : new String(str));
         str = ", mAddress=";
-        valueOf = String.valueOf(this.zzaTl);
+        valueOf = String.valueOf(this.zzgzw);
         stringBuilder.append(valueOf.length() != 0 ? str.concat(valueOf) : new String(str));
-        stringBuilder.append(", mType=" + this.zzamr);
-        stringBuilder.append(", mRole=" + this.zzaMJ);
-        stringBuilder.append(", mEnabled=" + this.zzbRb);
-        stringBuilder.append(", mIsConnected=" + this.zzair);
+        stringBuilder.append(", mType=" + this.zzeie);
+        stringBuilder.append(", mRole=" + this.zzgkq);
+        stringBuilder.append(", mEnabled=" + this.zzlgo);
+        stringBuilder.append(", mIsConnected=" + this.zzdyh);
         str = ", mPeerNodeId=";
-        valueOf = String.valueOf(this.zzbRc);
+        valueOf = String.valueOf(this.zzlgp);
         stringBuilder.append(valueOf.length() != 0 ? str.concat(valueOf) : new String(str));
-        stringBuilder.append(", mBtlePriority=" + this.zzbRd);
+        stringBuilder.append(", mBtlePriority=" + this.zzlgq);
         str = ", mNodeId=";
-        valueOf = String.valueOf(this.zzbRe);
+        valueOf = String.valueOf(this.zzlgr);
         stringBuilder.append(valueOf.length() != 0 ? str.concat(valueOf) : new String(str));
         stringBuilder.append("]");
         return stringBuilder.toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.mName, false);
-        zzd.zza(parcel, 3, this.zzaTl, false);
-        zzd.zzc(parcel, 4, this.zzamr);
-        zzd.zzc(parcel, 5, this.zzaMJ);
-        zzd.zza(parcel, 6, this.zzbRb);
-        zzd.zza(parcel, 7, this.zzair);
-        zzd.zza(parcel, 8, this.zzbRc, false);
-        zzd.zza(parcel, 9, this.zzbRd);
-        zzd.zza(parcel, 10, this.zzbRe, false);
-        zzd.zzI(parcel, zze);
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zza(parcel, 2, this.mName, false);
+        zzbfp.zza(parcel, 3, this.zzgzw, false);
+        zzbfp.zzc(parcel, 4, this.zzeie);
+        zzbfp.zzc(parcel, 5, this.zzgkq);
+        zzbfp.zza(parcel, 6, this.zzlgo);
+        zzbfp.zza(parcel, 7, this.zzdyh);
+        zzbfp.zza(parcel, 8, this.zzlgp, false);
+        zzbfp.zza(parcel, 9, this.zzlgq);
+        zzbfp.zza(parcel, 10, this.zzlgr, false);
+        zzbfp.zzai(parcel, zze);
     }
 }

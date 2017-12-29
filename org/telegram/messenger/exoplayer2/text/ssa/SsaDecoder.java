@@ -11,6 +11,7 @@ import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.messenger.exoplayer2.text.SimpleSubtitleDecoder;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.LongArray;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
@@ -97,7 +98,7 @@ public final class SsaDecoder extends SimpleSubtitleDecoder {
                         break;
                     }
                 case 3556653:
-                    if (key.equals("text")) {
+                    if (key.equals(MimeTypes.BASE_TYPE_TEXT)) {
                         i2 = 2;
                         break;
                     }
@@ -146,7 +147,7 @@ public final class SsaDecoder extends SimpleSubtitleDecoder {
                 return;
             }
         }
-        cues.add(new Cue(lineValues[this.formatTextIndex].replaceAll("\\{.*?\\}", "").replaceAll("\\\\N", "\n").replaceAll("\\\\n", "\n")));
+        cues.add(new Cue(lineValues[this.formatTextIndex].replaceAll("\\{.*?\\}", TtmlNode.ANONYMOUS_REGION_ID).replaceAll("\\\\N", "\n").replaceAll("\\\\n", "\n")));
         cueTimesUs.add(startTimeUs);
         if (endTimeUs != C.TIME_UNSET) {
             cues.add(null);

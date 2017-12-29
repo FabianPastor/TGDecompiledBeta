@@ -47,7 +47,7 @@ public final class DefaultDataSource implements DataSource {
             }
         } else if (SCHEME_ASSET.equals(scheme)) {
             this.dataSource = getAssetDataSource();
-        } else if ("content".equals(scheme)) {
+        } else if (SCHEME_CONTENT.equals(scheme)) {
             this.dataSource = getContentDataSource();
         } else if (SCHEME_RTMP.equals(scheme)) {
             this.dataSource = getRtmpDataSource();

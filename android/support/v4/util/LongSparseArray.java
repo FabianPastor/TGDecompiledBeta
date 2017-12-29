@@ -45,18 +45,6 @@ public class LongSparseArray<E> implements Cloneable {
         return (i < 0 || this.mValues[i] == DELETED) ? valueIfKeyNotFound : this.mValues[i];
     }
 
-    public void delete(long key) {
-        int i = ContainerHelpers.binarySearch(this.mKeys, this.mSize, key);
-        if (i >= 0 && this.mValues[i] != DELETED) {
-            this.mValues[i] = DELETED;
-            this.mGarbage = true;
-        }
-    }
-
-    public void remove(long key) {
-        delete(key);
-    }
-
     public void removeAt(int index) {
         if (this.mValues[index] != DELETED) {
             this.mValues[index] = DELETED;
@@ -139,32 +127,6 @@ public class LongSparseArray<E> implements Cloneable {
         return this.mValues[index];
     }
 
-    public void setValueAt(int index, E value) {
-        if (this.mGarbage) {
-            gc();
-        }
-        this.mValues[index] = value;
-    }
-
-    public int indexOfKey(long key) {
-        if (this.mGarbage) {
-            gc();
-        }
-        return ContainerHelpers.binarySearch(this.mKeys, this.mSize, key);
-    }
-
-    public int indexOfValue(E value) {
-        if (this.mGarbage) {
-            gc();
-        }
-        for (int i = 0; i < this.mSize; i++) {
-            if (this.mValues[i] == value) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     public void clear() {
         int n = this.mSize;
         Object[] values = this.mValues;
@@ -173,29 +135,6 @@ public class LongSparseArray<E> implements Cloneable {
         }
         this.mSize = 0;
         this.mGarbage = false;
-    }
-
-    public void append(long key, E value) {
-        if (this.mSize == 0 || key > this.mKeys[this.mSize - 1]) {
-            if (this.mGarbage && this.mSize >= this.mKeys.length) {
-                gc();
-            }
-            int pos = this.mSize;
-            if (pos >= this.mKeys.length) {
-                int n = ContainerHelpers.idealLongArraySize(pos + 1);
-                long[] nkeys = new long[n];
-                Object[] nvalues = new Object[n];
-                System.arraycopy(this.mKeys, 0, nkeys, 0, this.mKeys.length);
-                System.arraycopy(this.mValues, 0, nvalues, 0, this.mValues.length);
-                this.mKeys = nkeys;
-                this.mValues = nvalues;
-            }
-            this.mKeys[pos] = key;
-            this.mValues[pos] = value;
-            this.mSize = pos + 1;
-            return;
-        }
-        put(key, value);
     }
 
     public String toString() {

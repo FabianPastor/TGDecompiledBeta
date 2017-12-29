@@ -1,6 +1,5 @@
 package android.support.v4.text;
 
-import java.nio.CharBuffer;
 import java.util.Locale;
 
 public final class TextDirectionHeuristicsCompat {
@@ -10,9 +9,6 @@ public final class TextDirectionHeuristicsCompat {
     public static final TextDirectionHeuristicCompat LOCALE = TextDirectionHeuristicLocale.INSTANCE;
     public static final TextDirectionHeuristicCompat LTR = new TextDirectionHeuristicInternal(null, false);
     public static final TextDirectionHeuristicCompat RTL = new TextDirectionHeuristicInternal(null, true);
-    private static final int STATE_FALSE = 1;
-    private static final int STATE_TRUE = 0;
-    private static final int STATE_UNKNOWN = 2;
 
     private interface TextDirectionAlgorithm {
         int checkRtl(CharSequence charSequence, int i, int i2);
@@ -81,10 +77,6 @@ public final class TextDirectionHeuristicsCompat {
 
         public TextDirectionHeuristicImpl(TextDirectionAlgorithm algorithm) {
             this.mAlgorithm = algorithm;
-        }
-
-        public boolean isRtl(char[] array, int start, int count) {
-            return isRtl(CharBuffer.wrap(array), start, count);
         }
 
         public boolean isRtl(CharSequence cs, int start, int count) {
@@ -163,8 +155,5 @@ public final class TextDirectionHeuristicsCompat {
             default:
                 return 2;
         }
-    }
-
-    private TextDirectionHeuristicsCompat() {
     }
 }

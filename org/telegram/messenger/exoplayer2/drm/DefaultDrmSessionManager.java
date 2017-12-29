@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
@@ -29,7 +28,7 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 @TargetApi(18)
-public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSessionManager<T>, DrmSession<T> {
+public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSession<T>, DrmSessionManager<T> {
     private static final String CENC_SCHEME_MIME_TYPE = "cenc";
     private static final int MAX_LICENSE_DURATION_TO_RENEW = 60;
     public static final int MODE_DOWNLOAD = 2;
@@ -222,7 +221,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSe
         this.offlineLicenseKeySetId = offlineLicenseKeySetId;
     }
 
-    public boolean canAcquireSession(@NonNull DrmInitData drmInitData) {
+    public boolean canAcquireSession(DrmInitData drmInitData) {
         SchemeData schemeData = drmInitData.get(this.uuid);
         if (schemeData == null) {
             return false;

@@ -43,12 +43,12 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.EmojiData;
 import org.telegram.messenger.FileLog;
@@ -56,9 +56,9 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
-import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.GridLayoutManager;
 import org.telegram.messenger.support.widget.GridLayoutManager.SpanSizeLookup;
 import org.telegram.messenger.support.widget.RecyclerView;
@@ -106,6 +106,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private ImageView backspaceButton;
     private boolean backspaceOnce;
     private boolean backspacePressed;
+    private int currentAccount = UserConfig.selectedAccount;
     private int currentBackgroundType = -1;
     private int currentChatId;
     private int currentPage;
@@ -222,7 +223,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
 
         protected void onDraw(Canvas canvas) {
             float f;
-            this.backgroundDrawable.setBounds(0, 0, getMeasuredWidth(), AndroidUtilities.dp(AndroidUtilities.isTablet() ? BitmapDescriptorFactory.HUE_YELLOW : 52.0f));
+            this.backgroundDrawable.setBounds(0, 0, getMeasuredWidth(), AndroidUtilities.dp(AndroidUtilities.isTablet() ? 60.0f : 52.0f));
             this.backgroundDrawable.draw(canvas);
             Drawable drawable = this.arrowDrawable;
             int dp = this.arrowX - AndroidUtilities.dp(9.0f);
@@ -263,7 +264,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                                 color = "🏿";
                                 break;
                             default:
-                                color = "";
+                                color = TtmlNode.ANONYMOUS_REGION_ID;
                                 break;
                         }
                         code = EmojiView.addColorToCode(code, color);
@@ -527,7 +528,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                         if (view.getTop() < 0) {
                             yOffset = view.getTop();
                         }
-                        EmojiView.this.pickerView.setEmoji(code, (AndroidUtilities.dp(AndroidUtilities.isTablet() ? BitmapDescriptorFactory.HUE_ORANGE : 22.0f) - xOffset) + ((int) AndroidUtilities.dpf2(0.5f)));
+                        EmojiView.this.pickerView.setEmoji(code, (AndroidUtilities.dp(AndroidUtilities.isTablet() ? 30.0f : 22.0f) - xOffset) + ((int) AndroidUtilities.dpf2(0.5f)));
                         EmojiView.this.pickerViewPopup.setFocusable(true);
                         EmojiView.this.pickerViewPopup.showAsDropDown(view, xOffset, (((-view.getMeasuredHeight()) - EmojiView.this.popupHeight) + ((view.getMeasuredHeight() - EmojiView.this.emojiSize) / 2)) - yOffset);
                         view.getParent().requestDisallowInterceptTouchEvent(true);
@@ -701,7 +702,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
 
         public void customOnDraw(Canvas canvas, int position) {
-            if (position == 6 && !StickersQuery.getUnreadStickerSets().isEmpty() && EmojiView.this.dotPaint != null) {
+            if (position == 6 && !DataQuery.getInstance(EmojiView.this.currentAccount).getUnreadStickerSets().isEmpty() && EmojiView.this.dotPaint != null) {
                 canvas.drawCircle((float) ((canvas.getWidth() / 2) + AndroidUtilities.dp(9.0f)), (float) ((canvas.getHeight() / 2) - AndroidUtilities.dp(8.0f)), (float) AndroidUtilities.dp(5.0f), EmojiView.this.dotPaint);
             }
         }
@@ -846,7 +847,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     ((StickerSetNameCell) view).setOnIconClickListener(new OnClickListener() {
                         public void onClick(View v) {
                             if (EmojiView.this.groupStickerSet == null) {
-                                EmojiView.this.getContext().getSharedPreferences("emoji", 0).edit().putLong("group_hide_stickers_" + EmojiView.this.info.id, EmojiView.this.info.stickerset != null ? EmojiView.this.info.stickerset.id : 0).commit();
+                                MessagesController.getEmojiSettings(EmojiView.this.currentAccount).edit().putLong("group_hide_stickers_" + EmojiView.this.info.id, EmojiView.this.info.stickerset != null ? EmojiView.this.info.stickerset.id : 0).commit();
                                 EmojiView.this.updateStickerTabs();
                                 if (EmojiView.this.stickersGridAdapter != null) {
                                     EmojiView.this.stickersGridAdapter.notifyDataSetChanged();
@@ -926,7 +927,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                         } else {
                             icon = EmojiView.this.groupStickerSet != null ? R.drawable.stickersclose : R.drawable.stickerset_close;
                         }
-                        Chat chat = EmojiView.this.info != null ? MessagesController.getInstance().getChat(Integer.valueOf(EmojiView.this.info.id)) : null;
+                        Chat chat = EmojiView.this.info != null ? MessagesController.getInstance(EmojiView.this.currentAccount).getChat(Integer.valueOf(EmojiView.this.info.id)) : null;
                         String str = "CurrentGroupStickers";
                         Object[] objArr = new Object[1];
                         objArr[0] = chat != null ? chat.title : "Group Stickers";
@@ -1118,7 +1119,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     return;
                 case 2:
                     boolean unread;
-                    ArrayList<Long> unreadStickers = StickersQuery.getUnreadStickerSets();
+                    ArrayList<Long> unreadStickers = DataQuery.getInstance(EmojiView.this.currentAccount).getUnreadStickerSets();
                     StickerSetCovered stickerSetCovered = (StickerSetCovered) this.sets.get(((Integer) this.cache.get(Integer.valueOf(position))).intValue());
                     if (unreadStickers == null || !unreadStickers.contains(Long.valueOf(stickerSetCovered.set.id))) {
                         unread = false;
@@ -1128,7 +1129,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     FeaturedStickerSetInfoCell cell = holder.itemView;
                     cell.setStickerSet(stickerSetCovered, unread);
                     if (unread) {
-                        StickersQuery.markFaturedStickersByIdAsRead(stickerSetCovered.set.id);
+                        DataQuery.getInstance(EmojiView.this.currentAccount).markFaturedStickersByIdAsRead(stickerSetCovered.set.id);
                     }
                     boolean installing = EmojiView.this.installingStickerSets.containsKey(Long.valueOf(stickerSetCovered.set.id));
                     boolean removing = EmojiView.this.removingStickerSets.containsKey(Long.valueOf(stickerSetCovered.set.id));
@@ -1176,10 +1177,10 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 this.sets.clear();
                 this.totalItems = 0;
                 int num = 0;
-                ArrayList<StickerSetCovered> packs = StickersQuery.getFeaturedStickerSets();
+                ArrayList<StickerSetCovered> packs = DataQuery.getInstance(EmojiView.this.currentAccount).getFeaturedStickerSets();
                 for (int a = 0; a < packs.size(); a++) {
                     StickerSetCovered pack = (StickerSetCovered) packs.get(a);
-                    if (!(StickersQuery.isStickerPackInstalled(pack.set.id) || (pack.covers.isEmpty() && pack.cover == null))) {
+                    if (!(DataQuery.getInstance(EmojiView.this.currentAccount).isStickerPackInstalled(pack.set.id) || (pack.covers.isEmpty() && pack.cover == null))) {
                         int count;
                         int b;
                         this.sets.add(pack);
@@ -1208,7 +1209,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 }
                 if (this.totalItems != 0) {
                     EmojiView.this.trendingLoaded = true;
-                    EmojiView.this.featuredStickersHash = StickersQuery.getFeaturesStickersHashWithoutUnread();
+                    EmojiView.this.featuredStickersHash = DataQuery.getInstance(EmojiView.this.currentAccount).getFeaturesStickersHashWithoutUnread();
                 }
                 super.notifyDataSetChanged();
             }
@@ -1280,7 +1281,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         for (int i = 0; i < EmojiData.dataColored.length + 1; i++) {
             GridView gridView = new GridView(context);
             if (AndroidUtilities.isTablet()) {
-                gridView.setColumnWidth(AndroidUtilities.dp(BitmapDescriptorFactory.HUE_YELLOW));
+                gridView.setColumnWidth(AndroidUtilities.dp(60.0f));
             } else {
                 gridView.setColumnWidth(AndroidUtilities.dp(45.0f));
             }
@@ -1295,8 +1296,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
         if (needStickers) {
             this.stickersWrap = new FrameLayout(context);
-            StickersQuery.checkStickers(0);
-            StickersQuery.checkFeaturedStickers();
+            DataQuery.getInstance(this.currentAccount).checkStickers(0);
+            DataQuery.getInstance(this.currentAccount).checkFeaturedStickers();
             this.stickersGridView = new RecyclerListView(context) {
                 public boolean onInterceptTouchEvent(MotionEvent event) {
                     return super.onInterceptTouchEvent(event) || StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, EmojiView.this.stickersGridView, EmojiView.this.getMeasuredHeight(), EmojiView.this.stickerPreviewViewerDelegate);
@@ -1477,8 +1478,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                         builder.setMessage(LocaleController.getString("DeleteGif", R.string.DeleteGif));
                         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK).toUpperCase(), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                StickersQuery.removeRecentGif(searchImage);
-                                EmojiView.this.recentGifs = StickersQuery.getRecentGifs();
+                                DataQuery.getInstance(EmojiView.this.currentAccount).removeRecentGif(searchImage);
+                                EmojiView.this.recentGifs = DataQuery.getInstance(EmojiView.this.currentAccount).getRecentGifs();
                                 if (EmojiView.this.gifsAdapter != null) {
                                     EmojiView.this.gifsAdapter.notifyDataSetChanged();
                                 }
@@ -1787,7 +1788,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         this.mediaBanTooltip.setGravity(16);
         this.mediaBanTooltip.setTextSize(1, 14.0f);
         this.mediaBanTooltip.setVisibility(4);
-        addView(this.mediaBanTooltip, LayoutHelper.createFrame(-2, -2.0f, 53, BitmapDescriptorFactory.HUE_ORANGE, 53.0f, 5.0f, 0.0f));
+        addView(this.mediaBanTooltip, LayoutHelper.createFrame(-2, -2.0f, 53, 30.0f, 53.0f, 5.0f, 0.0f));
         this.emojiSize = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 40.0f : 32.0f);
         this.pickerView = new EmojiColorPickerView(context);
         View view2 = this.pickerView;
@@ -1810,7 +1811,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 return true;
             }
         });
-        this.currentPage = getContext().getSharedPreferences("emoji", 0).getInt("selected_page", 0);
+        this.currentPage = MessagesController.getGlobalEmojiSettings().getInt("selected_page", 0);
         Emoji.loadRecentEmoji();
         ((EmojiGridAdapter) this.adapters.get(0)).notifyDataSetChanged();
     }
@@ -1867,7 +1868,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
         if (this.currentPage != newPage) {
             this.currentPage = newPage;
-            getContext().getSharedPreferences("emoji", 0).edit().putInt("selected_page", newPage).commit();
+            MessagesController.getGlobalEmojiSettings().edit().putInt("selected_page", newPage).commit();
         }
     }
 
@@ -1976,7 +1977,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 this.gifTabNum = this.stickersTabOffset;
                 this.stickersTabOffset++;
             }
-            ArrayList<Long> unread = StickersQuery.getUnreadStickerSets();
+            ArrayList<Long> unread = DataQuery.getInstance(this.currentAccount).getUnreadStickerSets();
             if (!(this.trendingGridAdapter == null || this.trendingGridAdapter.getItemCount() == 0 || unread.isEmpty())) {
                 drawable = getContext().getResources().getDrawable(R.drawable.ic_smiles_trend);
                 Theme.setDrawableColorByKey(drawable, Theme.key_chat_emojiPanelIcon);
@@ -2003,7 +2004,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             this.groupStickerSet = null;
             this.groupStickerPackPosition = -1;
             this.groupStickerPackNum = -10;
-            ArrayList<TL_messages_stickerSet> packs = StickersQuery.getStickerSets(0);
+            ArrayList<TL_messages_stickerSet> packs = DataQuery.getInstance(this.currentAccount).getStickerSets(0);
             for (a = 0; a < packs.size(); a++) {
                 pack = (TL_messages_stickerSet) packs.get(a);
                 if (!(pack.set.archived || pack.documents == null || pack.documents.isEmpty())) {
@@ -2011,15 +2012,15 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 }
             }
             if (this.info != null) {
-                long hiddenStickerSetId = getContext().getSharedPreferences("emoji", 0).getLong("group_hide_stickers_" + this.info.id, -1);
-                chat = MessagesController.getInstance().getChat(Integer.valueOf(this.info.id));
+                long hiddenStickerSetId = MessagesController.getEmojiSettings(this.currentAccount).getLong("group_hide_stickers_" + this.info.id, -1);
+                chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.info.id));
                 if (chat == null || this.info.stickerset == null || !ChatObject.hasAdminRights(chat)) {
                     this.groupStickersHidden = hiddenStickerSetId != -1;
                 } else if (this.info.stickerset != null) {
                     this.groupStickersHidden = hiddenStickerSetId == this.info.stickerset.id;
                 }
                 if (this.info.stickerset != null) {
-                    pack = StickersQuery.getGroupStickerSetById(this.info.stickerset);
+                    pack = DataQuery.getInstance(this.currentAccount).getGroupStickerSetById(this.info.stickerset);
                     if (!(pack == null || pack.documents == null || pack.documents.isEmpty() || pack.set == null)) {
                         TL_messages_stickerSet set = new TL_messages_stickerSet();
                         set.documents = pack.documents;
@@ -2051,7 +2052,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             a = 0;
             while (a < this.stickerSets.size()) {
                 if (a == this.groupStickerPackNum) {
-                    chat = MessagesController.getInstance().getChat(Integer.valueOf(this.info.id));
+                    chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.info.id));
                     if (chat == null) {
                         this.stickerSets.remove(0);
                         a--;
@@ -2129,9 +2130,9 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
 
     public void addRecentSticker(Document document) {
         if (document != null) {
-            StickersQuery.addRecentSticker(0, document, (int) (System.currentTimeMillis() / 1000), false);
+            DataQuery.getInstance(this.currentAccount).addRecentSticker(0, document, (int) (System.currentTimeMillis() / 1000), false);
             boolean wasEmpty = this.recentStickers.isEmpty();
-            this.recentStickers = StickersQuery.getRecentStickers(0);
+            this.recentStickers = DataQuery.getInstance(this.currentAccount).getRecentStickers(0);
             if (this.stickersGridAdapter != null) {
                 this.stickersGridAdapter.notifyDataSetChanged();
             }
@@ -2144,7 +2145,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     public void addRecentGif(Document document) {
         if (document != null) {
             boolean wasEmpty = this.recentGifs.isEmpty();
-            this.recentGifs = StickersQuery.getRecentGifs();
+            this.recentGifs = DataQuery.getInstance(this.currentAccount).getRecentGifs();
             if (this.gifsAdapter != null) {
                 this.gifsAdapter.notifyDataSetChanged();
             }
@@ -2294,10 +2295,10 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (this.stickersGridAdapter != null) {
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.stickersDidLoaded);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.recentImagesDidLoaded);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.featuredStickersDidLoaded);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.groupStickersDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recentImagesDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.featuredStickersDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.groupStickersDidLoaded);
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     EmojiView.this.updateStickerTabs();
@@ -2313,8 +2314,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             Emoji.sortEmoji();
             ((EmojiGridAdapter) this.adapters.get(0)).notifyDataSetChanged();
             if (this.stickersGridAdapter != null) {
-                NotificationCenter.getInstance().addObserver(this, NotificationCenter.stickersDidLoaded);
-                NotificationCenter.getInstance().addObserver(this, NotificationCenter.recentDocumentsDidLoaded);
+                NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoaded);
+                NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recentDocumentsDidLoaded);
                 updateStickerTabs();
                 reloadStickersAdapter();
                 if (!(this.gifsGridView == null || this.gifsGridView.getVisibility() != 0 || this.listener == null)) {
@@ -2329,9 +2330,9 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             }
             checkDocuments(true);
             checkDocuments(false);
-            StickersQuery.loadRecents(0, true, true, false);
-            StickersQuery.loadRecents(0, false, true, false);
-            StickersQuery.loadRecents(2, false, true, false);
+            DataQuery.getInstance(this.currentAccount).loadRecents(0, true, true, false);
+            DataQuery.getInstance(this.currentAccount).loadRecents(0, false, true, false);
+            DataQuery.getInstance(this.currentAccount).loadRecents(2, false, true, false);
         }
     }
 
@@ -2341,10 +2342,10 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
 
     public void onDestroy() {
         if (this.stickersGridAdapter != null) {
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.stickersDidLoaded);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.recentDocumentsDidLoaded);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.featuredStickersDidLoaded);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.groupStickersDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.stickersDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.recentDocumentsDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.featuredStickersDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.groupStickersDidLoaded);
         }
     }
 
@@ -2359,7 +2360,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         int previousCount;
         if (isGif) {
             previousCount = this.recentGifs.size();
-            this.recentGifs = StickersQuery.getRecentGifs();
+            this.recentGifs = DataQuery.getInstance(this.currentAccount).getRecentGifs();
             if (this.gifsAdapter != null) {
                 this.gifsAdapter.notifyDataSetChanged();
             }
@@ -2374,8 +2375,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
         previousCount = this.recentStickers.size();
         int previousCount2 = this.favouriteStickers.size();
-        this.recentStickers = StickersQuery.getRecentStickers(0);
-        this.favouriteStickers = StickersQuery.getRecentStickers(2);
+        this.recentStickers = DataQuery.getInstance(this.currentAccount).getRecentStickers(0);
+        this.favouriteStickers = DataQuery.getInstance(this.currentAccount).getRecentStickers(2);
         for (int a = 0; a < this.favouriteStickers.size(); a++) {
             Document favSticker = (Document) this.favouriteStickers.get(a);
             for (int b = 0; b < this.recentStickers.size(); b++) {
@@ -2412,7 +2413,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
 
     public void showStickerBanHint() {
         if (this.mediaBanTooltip.getVisibility() != 0) {
-            Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(this.currentChatId));
+            Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.currentChatId));
             if (chat != null && chat.banned_rights != null) {
                 if (AndroidUtilities.isBannedForever(chat.banned_rights.until_date)) {
                     this.mediaBanTooltip.setText(LocaleController.getString("AttachStickersRestrictedForever", R.string.AttachStickersRestrictedForever));
@@ -2459,12 +2460,12 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     View child = this.trendingGridView.getChildAt(a);
                     if ((child instanceof FeaturedStickerSetInfoCell) && ((Holder) this.trendingGridView.getChildViewHolder(child)) != null) {
                         FeaturedStickerSetInfoCell cell = (FeaturedStickerSetInfoCell) child;
-                        ArrayList<Long> unreadStickers = StickersQuery.getUnreadStickerSets();
+                        ArrayList<Long> unreadStickers = DataQuery.getInstance(this.currentAccount).getUnreadStickerSets();
                         StickerSetCovered stickerSetCovered = cell.getStickerSet();
                         boolean unread = unreadStickers != null && unreadStickers.contains(Long.valueOf(stickerSetCovered.set.id));
                         cell.setStickerSet(stickerSetCovered, unread);
                         if (unread) {
-                            StickersQuery.markFaturedStickersByIdAsRead(stickerSetCovered.set.id);
+                            DataQuery.getInstance(this.currentAccount).markFaturedStickersByIdAsRead(stickerSetCovered.set.id);
                         }
                         boolean installing = this.installingStickerSets.containsKey(Long.valueOf(stickerSetCovered.set.id));
                         boolean removing = this.removingStickerSets.containsKey(Long.valueOf(stickerSetCovered.set.id));
@@ -2493,7 +2494,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         return this.stickersGridAdapter != null && this.stickersGridAdapter.getItemCount() > 0;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.stickersDidLoaded) {
             if (((Integer) args[0]).intValue() == 0) {
                 if (this.trendingGridAdapter != null) {
@@ -2515,7 +2516,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             }
         } else if (id == NotificationCenter.featuredStickersDidLoaded) {
             if (this.trendingGridAdapter != null) {
-                if (this.featuredStickersHash != StickersQuery.getFeaturesStickersHashWithoutUnread()) {
+                if (this.featuredStickersHash != DataQuery.getInstance(this.currentAccount).getFeaturesStickersHashWithoutUnread()) {
                     this.trendingLoaded = false;
                 }
                 if (this.trendingLoaded) {

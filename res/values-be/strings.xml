@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">Усталяваць</string>
     <string name="common_google_play_services_install_text">%1$s не будзе працаваць без службаў Google Play, якія адсутнічаюць на вашай прыладзе.</string>
     <string name="common_google_play_services_install_title">Атрымаць службы Google Play</string>
+    <string name="common_google_play_services_notification_channel_name">Даступнасць сэрвісаў Google Play</string>
     <string name="common_google_play_services_notification_ticker">Памылка службаў Google Play</string>
     <string name="common_google_play_services_unknown_issue">У праграмы %1$s узніклі праблемы са службамі Google Play. Паўтарыце спробу.</string>
     <string name="common_google_play_services_unsupported_text">%1$s не будзе працаваць без службаў Google Play, якія не падтрымліваюцца вашай прыладай.</string>
@@ -17,4 +18,6 @@
     <string name="common_open_on_phone">Адкрыць на тэлефоне</string>
     <string name="common_signin_button_text">Увайсцi</string>
     <string name="common_signin_button_text_long">Увайсці праз Google</string>
+    <string name="gcm_fallback_notification_channel_label">Рознае</string>
+    <string name="status_bar_notification_info_overflow">больш за 999</string>
 </resources>

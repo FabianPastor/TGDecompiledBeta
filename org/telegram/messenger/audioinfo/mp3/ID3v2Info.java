@@ -3,13 +3,12 @@ package org.telegram.messenger.audioinfo.mp3;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.telegram.messenger.audioinfo.AudioInfo;
+import org.telegram.messenger.exoplayer2.RendererCapabilities;
 import org.telegram.messenger.exoplayer2.metadata.id3.ApicFrame;
 import org.telegram.messenger.exoplayer2.metadata.id3.CommentFrame;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
@@ -434,7 +433,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
                             opts.inJustDecodeBounds = false;
                             this.cover = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
                             if (this.cover != null) {
-                                float scale = ((float) Math.max(this.cover.getWidth(), this.cover.getHeight())) / BitmapDescriptorFactory.HUE_GREEN;
+                                float scale = ((float) Math.max(this.cover.getWidth(), this.cover.getHeight())) / 120.0f;
                                 if (scale > 0.0f) {
                                     this.smallCover = Bitmap.createScaledBitmap(this.cover, (int) (((float) this.cover.getWidth()) / scale), (int) (((float) this.cover.getHeight()) / scale), true);
                                 } else {
@@ -456,7 +455,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
             case 2:
             case 3:
                 CommentOrUnsynchronizedLyrics comm = parseCommentOrUnsynchronizedLyricsFrame(frame);
-                if (this.comment == null || comm.description == null || "".equals(comm.description)) {
+                if (this.comment == null || comm.description == null || TtmlNode.ANONYMOUS_REGION_ID.equals(comm.description)) {
                     this.comment = comm.text;
                     return;
                 }
@@ -578,7 +577,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
                 }
                 return;
             case 23:
-            case 24:
+            case RendererCapabilities.ADAPTIVE_SUPPORT_MASK /*24*/:
                 String trck = parseTextFrame(frame);
                 if (trck.length() > 0) {
                     index = trck.indexOf(47);
@@ -614,15 +613,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
                 }
                 return;
             case 25:
-            case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
+            case 26:
                 this.grouping = parseTextFrame(frame);
                 return;
             case 27:
             case 28:
                 this.title = parseTextFrame(frame);
                 return;
-            case NalUnitTypes.NAL_TYPE_RSV_VCL29 /*29*/:
-            case NalUnitTypes.NAL_TYPE_RSV_VCL30 /*30*/:
+            case 29:
+            case 30:
                 String tyer = parseTextFrame(frame);
                 if (tyer.length() > 0) {
                     try {
@@ -637,7 +636,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
                     }
                 }
                 return;
-            case NalUnitTypes.NAL_TYPE_RSV_VCL31 /*31*/:
+            case 31:
             case 32:
                 if (this.lyrics == null) {
                     this.lyrics = parseCommentOrUnsynchronizedLyricsFrame(frame).text;

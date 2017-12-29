@@ -124,7 +124,7 @@ public final class NalUnitUtil {
     }
 
     public static boolean isNalUnitSei(String mimeType, byte nalUnitHeaderFirstByte) {
-        return ("video/avc".equals(mimeType) && (nalUnitHeaderFirstByte & 31) == 6) || (MimeTypes.VIDEO_H265.equals(mimeType) && ((nalUnitHeaderFirstByte & 126) >> 1) == 39);
+        return ("video/avc".equals(mimeType) && (nalUnitHeaderFirstByte & 31) == 6) || (MimeTypes.VIDEO_H265.equals(mimeType) && ((nalUnitHeaderFirstByte & 126) >> 1) == H265_NAL_UNIT_TYPE_PREFIX_SEI);
     }
 
     public static int getNalUnitType(byte[] data, int offset) {

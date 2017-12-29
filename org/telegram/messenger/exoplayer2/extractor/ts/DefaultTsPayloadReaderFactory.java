@@ -66,7 +66,7 @@ public final class DefaultTsPayloadReaderFactory implements Factory {
                     return null;
                 }
                 return new PesReader(new H264Reader(buildSeiReader(esInfo), isSet(1), isSet(8)));
-            case 36:
+            case TsExtractor.TS_STREAM_TYPE_H265 /*36*/:
                 return new PesReader(new H265Reader(buildSeiReader(esInfo)));
             case TsExtractor.TS_STREAM_TYPE_DVBSUBS /*89*/:
                 return new PesReader(new DvbSubtitleReader(esInfo.dvbSubtitleInfos));

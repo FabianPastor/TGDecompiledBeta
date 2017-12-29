@@ -17,7 +17,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.Locale;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.Theme;
@@ -200,7 +199,7 @@ public class NumberPicker extends LinearLayout {
         this.mSelectionDividerHeight = (int) TypedValue.applyDimension(1, 2.0f, getResources().getDisplayMetrics());
         this.mSelectionDividersDistance = (int) TypedValue.applyDimension(1, 48.0f, getResources().getDisplayMetrics());
         this.mMinHeight = -1;
-        this.mMaxHeight = (int) TypedValue.applyDimension(1, BitmapDescriptorFactory.HUE_CYAN, getResources().getDisplayMetrics());
+        this.mMaxHeight = (int) TypedValue.applyDimension(1, 180.0f, getResources().getDisplayMetrics());
         if (this.mMinHeight == -1 || this.mMaxHeight == -1 || this.mMinHeight <= this.mMaxHeight) {
             this.mMinWidth = (int) TypedValue.applyDimension(1, 64.0f, getResources().getDisplayMetrics());
             this.mMaxWidth = -1;
@@ -758,7 +757,7 @@ public class NumberPicker extends LinearLayout {
                 result = specSize;
                 break;
         }
-        return (-16777216 & childMeasuredState) | result;
+        return (Theme.ACTION_BAR_VIDEO_EDIT_COLOR & childMeasuredState) | result;
     }
 
     private void initializeSelectorWheelIndices() {
@@ -887,7 +886,7 @@ public class NumberPicker extends LinearLayout {
         if (((String) cache.get(selectorIndex)) == null) {
             String scrollSelectorValue;
             if (selectorIndex < this.mMinValue || selectorIndex > this.mMaxValue) {
-                scrollSelectorValue = "";
+                scrollSelectorValue = TtmlNode.ANONYMOUS_REGION_ID;
             } else if (this.mDisplayedValues != null) {
                 scrollSelectorValue = this.mDisplayedValues[selectorIndex - this.mMinValue];
             } else {

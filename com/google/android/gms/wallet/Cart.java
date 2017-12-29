@@ -3,83 +3,62 @@ package com.google.android.gms.wallet;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 import java.util.ArrayList;
-import java.util.List;
 
-public final class Cart extends zza implements ReflectedParcelable {
-    public static final Creator<Cart> CREATOR = new zzd();
-    String zzbOm;
-    String zzbOn;
-    ArrayList<LineItem> zzbOo;
+public final class Cart extends zzbfm implements ReflectedParcelable {
+    public static final Creator<Cart> CREATOR = new zzg();
+    String zzkzr;
+    String zzkzs;
+    ArrayList<LineItem> zzkzt;
 
     public final class Builder {
-        private /* synthetic */ Cart zzbOp;
+        private /* synthetic */ Cart zzkzu;
 
         private Builder(Cart cart) {
-            this.zzbOp = cart;
+            this.zzkzu = cart;
         }
 
         public final Builder addLineItem(LineItem lineItem) {
-            this.zzbOp.zzbOo.add(lineItem);
+            this.zzkzu.zzkzt.add(lineItem);
             return this;
         }
 
         public final Cart build() {
-            return this.zzbOp;
+            return this.zzkzu;
         }
 
         public final Builder setCurrencyCode(String str) {
-            this.zzbOp.zzbOn = str;
-            return this;
-        }
-
-        public final Builder setLineItems(List<LineItem> list) {
-            this.zzbOp.zzbOo.clear();
-            this.zzbOp.zzbOo.addAll(list);
+            this.zzkzu.zzkzs = str;
             return this;
         }
 
         public final Builder setTotalPrice(String str) {
-            this.zzbOp.zzbOm = str;
+            this.zzkzu.zzkzr = str;
             return this;
         }
     }
 
     Cart() {
-        this.zzbOo = new ArrayList();
+        this.zzkzt = new ArrayList();
     }
 
     Cart(String str, String str2, ArrayList<LineItem> arrayList) {
-        this.zzbOm = str;
-        this.zzbOn = str2;
-        this.zzbOo = arrayList;
+        this.zzkzr = str;
+        this.zzkzs = str2;
+        this.zzkzt = arrayList;
     }
 
     public static Builder newBuilder() {
-        Cart cart = new Cart();
-        cart.getClass();
         return new Builder();
     }
 
-    public final String getCurrencyCode() {
-        return this.zzbOn;
-    }
-
-    public final ArrayList<LineItem> getLineItems() {
-        return this.zzbOo;
-    }
-
-    public final String getTotalPrice() {
-        return this.zzbOm;
-    }
-
     public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.zzbOm, false);
-        zzd.zza(parcel, 3, this.zzbOn, false);
-        zzd.zzc(parcel, 4, this.zzbOo, false);
-        zzd.zzI(parcel, zze);
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zza(parcel, 2, this.zzkzr, false);
+        zzbfp.zza(parcel, 3, this.zzkzs, false);
+        zzbfp.zzc(parcel, 4, this.zzkzt, false);
+        zzbfp.zzai(parcel, zze);
     }
 }

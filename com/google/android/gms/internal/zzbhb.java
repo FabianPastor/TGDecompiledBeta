@@ -1,62 +1,31 @@
 package com.google.android.gms.internal;
 
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
+import com.google.android.gms.common.internal.zzbq;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class zzbhb implements Creator<zzbha> {
-    static void zza(zzbha com_google_android_gms_internal_zzbha, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, com_google_android_gms_internal_zzbha.versionCode);
-        zzc.zza(parcel, 2, com_google_android_gms_internal_zzbha.x);
-        zzc.zza(parcel, 3, com_google_android_gms_internal_zzbha.y);
-        zzc.zzc(parcel, 4, com_google_android_gms_internal_zzbha.type);
-        zzc.zzJ(parcel, zzaV);
+public final class zzbhb implements ThreadFactory {
+    private final int mPriority;
+    private final String zzgfb;
+    private final AtomicInteger zzgfc;
+    private final ThreadFactory zzgfd;
+
+    public zzbhb(String str) {
+        this(str, 0);
     }
 
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzjj(parcel);
+    private zzbhb(String str, int i) {
+        this.zzgfc = new AtomicInteger();
+        this.zzgfd = Executors.defaultThreadFactory();
+        this.zzgfb = (String) zzbq.checkNotNull(str, "Name must not be null");
+        this.mPriority = 0;
     }
 
-    public /* synthetic */ Object[] newArray(int i) {
-        return zznz(i);
-    }
-
-    public zzbha zzjj(Parcel parcel) {
-        int i = 0;
-        float f = 0.0f;
-        int zzaU = zzb.zzaU(parcel);
-        float f2 = 0.0f;
-        int i2 = 0;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
-                case 1:
-                    i2 = zzb.zzg(parcel, zzaT);
-                    break;
-                case 2:
-                    f2 = zzb.zzl(parcel, zzaT);
-                    break;
-                case 3:
-                    f = zzb.zzl(parcel, zzaT);
-                    break;
-                case 4:
-                    i = zzb.zzg(parcel, zzaT);
-                    break;
-                default:
-                    zzb.zzb(parcel, zzaT);
-                    break;
-            }
-        }
-        if (parcel.dataPosition() == zzaU) {
-            return new zzbha(i2, f2, f, i);
-        }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
-    }
-
-    public zzbha[] zznz(int i) {
-        return new zzbha[i];
+    public final Thread newThread(Runnable runnable) {
+        Thread newThread = this.zzgfd.newThread(new zzbhc(runnable, 0));
+        String str = this.zzgfb;
+        newThread.setName(new StringBuilder(String.valueOf(str).length() + 13).append(str).append("[").append(this.zzgfc.getAndIncrement()).append("]").toString());
+        return newThread;
     }
 }

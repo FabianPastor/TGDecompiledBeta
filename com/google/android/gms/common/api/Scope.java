@@ -3,19 +3,19 @@ package com.google.android.gms.common.api;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
-import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.common.internal.zzbq;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-public final class Scope extends zza implements ReflectedParcelable {
-    public static final Creator<Scope> CREATOR = new zze();
-    private final String zzaBl;
-    private int zzaku;
+public final class Scope extends zzbfm implements ReflectedParcelable {
+    public static final Creator<Scope> CREATOR = new zzf();
+    private int zzeck;
+    private final String zzfnh;
 
     Scope(int i, String str) {
-        zzbo.zzh(str, "scopeUri must not be null or empty");
-        this.zzaku = i;
-        this.zzaBl = str;
+        zzbq.zzh(str, "scopeUri must not be null or empty");
+        this.zzeck = i;
+        this.zzfnh = str;
     }
 
     public Scope(String str) {
@@ -23,25 +23,21 @@ public final class Scope extends zza implements ReflectedParcelable {
     }
 
     public final boolean equals(Object obj) {
-        return this == obj ? true : !(obj instanceof Scope) ? false : this.zzaBl.equals(((Scope) obj).zzaBl);
+        return this == obj ? true : !(obj instanceof Scope) ? false : this.zzfnh.equals(((Scope) obj).zzfnh);
     }
 
     public final int hashCode() {
-        return this.zzaBl.hashCode();
+        return this.zzfnh.hashCode();
     }
 
     public final String toString() {
-        return this.zzaBl;
+        return this.zzfnh;
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zzc(parcel, 1, this.zzaku);
-        zzd.zza(parcel, 2, this.zzaBl, false);
-        zzd.zzI(parcel, zze);
-    }
-
-    public final String zzpp() {
-        return this.zzaBl;
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zzc(parcel, 1, this.zzeck);
+        zzbfp.zza(parcel, 2, this.zzfnh, false);
+        zzbfp.zzai(parcel, zze);
     }
 }

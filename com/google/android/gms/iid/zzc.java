@@ -1,21 +1,20 @@
 package com.google.android.gms.iid;
 
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.os.RemoteException;
-import com.google.android.gms.internal.zzed;
-import com.google.android.gms.internal.zzef;
+import android.content.Intent;
 
-public final class zzc extends zzed implements zzb {
-    zzc(IBinder iBinder) {
-        super(iBinder, "com.google.android.gms.iid.IMessengerCompat");
+final class zzc implements Runnable {
+    private /* synthetic */ Intent val$intent;
+    private /* synthetic */ Intent zzies;
+    private /* synthetic */ zzb zziet;
+
+    zzc(zzb com_google_android_gms_iid_zzb, Intent intent, Intent intent2) {
+        this.zziet = com_google_android_gms_iid_zzb;
+        this.val$intent = intent;
+        this.zzies = intent2;
     }
 
-    public final void send(Message message) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzef.zza(zzZ, (Parcelable) message);
-        zzc(1, zzZ);
+    public final void run() {
+        this.zziet.handleIntent(this.val$intent);
+        this.zziet.zzh(this.zzies);
     }
 }

@@ -9,10 +9,6 @@ import java.nio.ByteBuffer;
 public class SLConfigDescriptor extends BaseDescriptor {
     int predefined;
 
-    public int getPredefined() {
-        return this.predefined;
-    }
-
     public void setPredefined(int predefined) {
         this.predefined = predefined;
     }

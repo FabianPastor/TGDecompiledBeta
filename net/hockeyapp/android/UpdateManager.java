@@ -15,19 +15,8 @@ import net.hockeyapp.android.utils.AsyncTaskUtils;
 import net.hockeyapp.android.utils.Util;
 
 public class UpdateManager {
-    public static final String INSTALLER_ADB = "adb";
-    public static final String INSTALLER_PACKAGE_INSTALLER_NOUGAT = "com.google.android.packageinstaller";
-    public static final String INSTALLER_PACKAGE_INSTALLER_NOUGAT2 = "com.android.packageinstaller";
     private static UpdateManagerListener lastListener = null;
     private static CheckUpdateTask updateTask = null;
-
-    public static void register(Activity activity) {
-        String appIdentifier = Util.getAppIdentifier(activity);
-        if (TextUtils.isEmpty(appIdentifier)) {
-            throw new IllegalArgumentException("HockeyApp app identifier was not configured correctly in manifest or build configuration.");
-        }
-        register(activity, appIdentifier);
-    }
 
     public static void register(Activity activity, String appIdentifier) {
         register(activity, appIdentifier, true);
@@ -37,16 +26,8 @@ public class UpdateManager {
         register(activity, appIdentifier, null, isDialogRequired);
     }
 
-    public static void register(Activity activity, String appIdentifier, UpdateManagerListener listener) {
-        register(activity, Constants.BASE_URL, appIdentifier, listener, true);
-    }
-
     public static void register(Activity activity, String appIdentifier, UpdateManagerListener listener, boolean isDialogRequired) {
-        register(activity, Constants.BASE_URL, appIdentifier, listener, isDialogRequired);
-    }
-
-    public static void register(Activity activity, String urlString, String appIdentifier, UpdateManagerListener listener) {
-        register(activity, urlString, appIdentifier, listener, true);
+        register(activity, "https://sdk.hockeyapp.net/", appIdentifier, listener, isDialogRequired);
     }
 
     public static void register(Activity activity, String urlString, String appIdentifier, UpdateManagerListener listener, boolean isDialogRequired) {
@@ -56,21 +37,6 @@ public class UpdateManager {
         if ((!Util.fragmentsSupported().booleanValue() || !dialogShown(weakActivity)) && !checkExpiryDate(weakActivity, listener)) {
             if ((listener != null && listener.canUpdateInMarket()) || !installedFromMarket(weakActivity)) {
                 startUpdateTask(weakActivity, urlString, appIdentifier, listener, isDialogRequired);
-            }
-        }
-    }
-
-    public static void registerForBackground(Context appContext, String appIdentifier, UpdateManagerListener listener) {
-        registerForBackground(appContext, Constants.BASE_URL, appIdentifier, listener);
-    }
-
-    public static void registerForBackground(Context appContext, String urlString, String appIdentifier, UpdateManagerListener listener) {
-        appIdentifier = Util.sanitizeAppIdentifier(appIdentifier);
-        lastListener = listener;
-        WeakReference<Context> weakContext = new WeakReference(appContext);
-        if (!checkExpiryDateForBackground(listener)) {
-            if ((listener != null && listener.canUpdateInMarket()) || !installedFromMarket(weakContext)) {
-                startUpdateTaskForBackground(weakContext, urlString, appIdentifier, listener);
             }
         }
     }
@@ -115,10 +81,10 @@ public class UpdateManager {
                 return false;
             }
             boolean result = true;
-            if (VERSION.SDK_INT >= 24 && (TextUtils.equals(installer, INSTALLER_PACKAGE_INSTALLER_NOUGAT) || TextUtils.equals(installer, INSTALLER_PACKAGE_INSTALLER_NOUGAT2))) {
+            if (VERSION.SDK_INT >= 24 && (TextUtils.equals(installer, "com.google.android.packageinstaller") || TextUtils.equals(installer, "com.android.packageinstaller"))) {
                 result = false;
             }
-            if (TextUtils.equals(installer, INSTALLER_ADB)) {
+            if (TextUtils.equals(installer, "adb")) {
                 return false;
             }
             return result;
@@ -146,15 +112,6 @@ public class UpdateManager {
             return;
         }
         updateTask.attach(weakActivity);
-    }
-
-    private static void startUpdateTaskForBackground(WeakReference<Context> weakContext, String urlString, String appIdentifier, UpdateManagerListener listener) {
-        if (updateTask == null || updateTask.getStatus() == Status.FINISHED) {
-            updateTask = new CheckUpdateTask(weakContext, urlString, appIdentifier, listener);
-            AsyncTaskUtils.execute(updateTask);
-            return;
-        }
-        updateTask.attach(weakContext);
     }
 
     @TargetApi(11)

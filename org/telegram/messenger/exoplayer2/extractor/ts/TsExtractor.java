@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.extractor.ts;
 
-import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
@@ -345,7 +344,7 @@ public final class TsExtractor implements Extractor {
             this.tsPacketBuffer.setPosition(endOfPacket);
             return 0;
         }
-        boolean payloadUnitStartIndicator = (AccessibilityEventCompat.TYPE_WINDOWS_CHANGED & tsPacketHeader) != 0;
+        boolean payloadUnitStartIndicator = (4194304 & tsPacketHeader) != 0;
         int pid = (2096896 & tsPacketHeader) >> 8;
         boolean adaptationFieldExists = (tsPacketHeader & 32) != 0;
         boolean payloadExists = (tsPacketHeader & 16) != 0;

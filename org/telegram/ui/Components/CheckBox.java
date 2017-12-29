@@ -167,7 +167,7 @@ public class CheckBox extends View {
 
     public void setNum(int num) {
         if (num >= 0) {
-            this.checkedText = "" + (num + 1);
+            this.checkedText = TtmlNode.ANONYMOUS_REGION_ID + (num + 1);
         } else if (this.checkAnimator == null) {
             this.checkedText = null;
         }
@@ -176,7 +176,7 @@ public class CheckBox extends View {
 
     public void setChecked(int num, boolean checked, boolean animated) {
         if (num >= 0) {
-            this.checkedText = "" + (num + 1);
+            this.checkedText = TtmlNode.ANONYMOUS_REGION_ID + (num + 1);
         }
         if (checked != this.isChecked) {
             this.isChecked = checked;

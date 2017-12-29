@@ -9,7 +9,6 @@ import android.media.AudioTimestamp;
 import android.os.ConditionVariable;
 import android.os.SystemClock;
 import android.util.Log;
-import com.google.android.gms.wearable.WearableStatusCodes;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -1014,7 +1013,7 @@ public final class AudioTrack {
     }
 
     private android.media.AudioTrack initializeKeepSessionIdAudioTrack(int audioSessionId) {
-        return new android.media.AudioTrack(3, WearableStatusCodes.TARGET_NODE_NOT_CONNECTED, 4, 2, 2, 0, audioSessionId);
+        return new android.media.AudioTrack(3, 4000, 4, 2, 2, 0, audioSessionId);
     }
 
     private static int getEncodingForMimeType(String mimeType) {

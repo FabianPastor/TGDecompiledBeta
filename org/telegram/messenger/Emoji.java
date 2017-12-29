@@ -246,7 +246,7 @@ public class Emoji {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 Emoji.emojiBmp[i][i2] = finalBitmap;
-                NotificationCenter.getInstance().postNotificationName(NotificationCenter.emojiDidLoaded, new Object[0]);
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiDidLoaded, new Object[0]);
             }
         });
     }
@@ -339,7 +339,7 @@ public class Emoji {
     }
 
     public static CharSequence replaceEmoji(CharSequence cs, FontMetricsInt fontMetrics, int size, boolean createNew, int[] emojiOnly) {
-        if (MessagesController.getInstance().useSystemEmoji || cs == null || cs.length() == 0) {
+        if (MessagesController.getAccountInstance().useSystemEmoji || cs == null || cs.length() == 0) {
             return cs;
         }
         Spannable s;
@@ -527,7 +527,7 @@ public class Emoji {
     }
 
     public static void saveRecentEmoji() {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0);
+        SharedPreferences preferences = MessagesController.getGlobalEmojiSettings();
         StringBuilder stringBuilder = new StringBuilder();
         for (Entry<String, Integer> entry : emojiUseHistory.entrySet()) {
             if (stringBuilder.length() != 0) {
@@ -541,7 +541,7 @@ public class Emoji {
     }
 
     public static void clearRecentEmoji() {
-        ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0).edit().putBoolean("filled_default", true).commit();
+        MessagesController.getGlobalEmojiSettings().edit().putBoolean("filled_default", true).commit();
         emojiUseHistory.clear();
         recentEmoji.clear();
         saveRecentEmoji();
@@ -553,32 +553,32 @@ public class Emoji {
             String[] args2;
             int a;
             recentEmojiLoaded = true;
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0);
+            SharedPreferences preferences = MessagesController.getGlobalEmojiSettings();
             try {
                 emojiUseHistory.clear();
                 if (preferences.contains("emojis")) {
-                    str = preferences.getString("emojis", "");
+                    str = preferences.getString("emojis", TtmlNode.ANONYMOUS_REGION_ID);
                     if (str != null && str.length() > 0) {
                         for (String arg : str.split(",")) {
                             args2 = arg.split("=");
                             long value = Utilities.parseLong(args2[0]).longValue();
-                            String string = "";
+                            StringBuilder string = new StringBuilder();
                             for (a = 0; a < 4; a++) {
-                                string = String.valueOf((char) ((int) value)) + string;
+                                string.insert(0, String.valueOf((char) ((int) value)));
                                 value >>= 16;
                                 if (value == 0) {
                                     break;
                                 }
                             }
                             if (string.length() > 0) {
-                                emojiUseHistory.put(string, Utilities.parseInt(args2[1]));
+                                emojiUseHistory.put(string.toString(), Utilities.parseInt(args2[1]));
                             }
                         }
                     }
                     preferences.edit().remove("emojis").commit();
                     saveRecentEmoji();
                 } else {
-                    str = preferences.getString("emojis2", "");
+                    str = preferences.getString("emojis2", TtmlNode.ANONYMOUS_REGION_ID);
                     if (str != null && str.length() > 0) {
                         for (String arg2 : str.split(",")) {
                             args2 = arg2.split("=");
@@ -599,7 +599,7 @@ public class Emoji {
                 FileLog.e(e);
             }
             try {
-                str = preferences.getString(TtmlNode.ATTR_TTS_COLOR, "");
+                str = preferences.getString(TtmlNode.ATTR_TTS_COLOR, TtmlNode.ANONYMOUS_REGION_ID);
                 if (str != null && str.length() > 0) {
                     String[] args = str.split(",");
                     for (String arg22 : args) {
@@ -614,7 +614,7 @@ public class Emoji {
     }
 
     public static void saveEmojiColors() {
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0);
+        SharedPreferences preferences = MessagesController.getGlobalEmojiSettings();
         StringBuilder stringBuilder = new StringBuilder();
         for (Entry<String, String> entry : emojiColor.entrySet()) {
             if (stringBuilder.length() != 0) {

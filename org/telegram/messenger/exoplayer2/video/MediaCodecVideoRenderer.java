@@ -10,7 +10,6 @@ import android.media.MediaCrypto;
 import android.media.MediaFormat;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Surface;
 import java.nio.ByteBuffer;
@@ -94,7 +93,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
             codec.setOnFrameRenderedListener(this, new Handler());
         }
 
-        public void onFrameRendered(@NonNull MediaCodec codec, long presentationTimeUs, long nanoTime) {
+        public void onFrameRendered(MediaCodec codec, long presentationTimeUs, long nanoTime) {
             if (this == MediaCodecVideoRenderer.this.tunnelingOnFrameRenderedListener) {
                 MediaCodecVideoRenderer.this.maybeNotifyRenderedFirstFrame();
             }

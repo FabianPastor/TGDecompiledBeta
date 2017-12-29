@@ -17,7 +17,6 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
-import android.support.v4.internal.view.SupportMenu;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -39,8 +38,6 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import com.google.android.gms.wearable.WearableStatusCodes;
-import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -59,6 +56,7 @@ import java.util.concurrent.Semaphore;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
+import net.hockeyapp.android.UpdateFragment;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -76,11 +74,13 @@ import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate;
 
-public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnAudioFocusChangeListener {
+public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListener, VideoPlayerDelegate {
     private static final int AUDIO_FOCUSED = 2;
     private static final int AUDIO_NO_FOCUS_CAN_DUCK = 1;
     private static final int AUDIO_NO_FOCUS_NO_DUCK = 0;
@@ -90,7 +90,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     private static final String exprName = "[a-zA-Z_$][a-zA-Z_$0-9]*";
     private static final Pattern exprParensPattern = Pattern.compile("[()]");
     private static final Pattern jsPattern = Pattern.compile("\"assets\":.+?\"js\":\\s*(\"[^\"]+\")");
-    private static int lastContainerId = WearableStatusCodes.DUPLICATE_LISTENER;
+    private static int lastContainerId = 4001;
     private static final Pattern playerIdPattern = Pattern.compile(".*?-([a-zA-Z0-9_-]+)(?:/watch_as3|/html5player(?:-new)?|(?:/[a-z]{2}_[A-Z]{2})?/base)?\\.([a-z]+)$");
     private static final Pattern sigPattern = Pattern.compile("\\.sig\\|\\|([a-zA-Z0-9$]+)\\(");
     private static final Pattern sigPattern2 = Pattern.compile("[\"']signature[\"']\\s*,\\s*([a-zA-Z0-9$]+)\\(");
@@ -501,7 +501,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 source.setCharAt(a, lower);
             }
             try {
-                return new String(Base64.decode(source.toString(), 0), "UTF-8");
+                return new String(Base64.decode(source.toString(), 0), C.UTF8_NAME);
             } catch (Exception e) {
                 return null;
             }
@@ -594,7 +594,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                         interpretExpression(matcher.group(3), localVars, allowRecursion - 1);
                         String index = matcher.group(2);
                         if (TextUtils.isEmpty(index)) {
-                            localVars.put(matcher.group(1), "");
+                            localVars.put(matcher.group(1), TtmlNode.ANONYMOUS_REGION_ID);
                             return;
                         }
                         interpretExpression(index, localVars, allowRecursion);
@@ -623,7 +623,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                                     if (!TextUtils.isEmpty(m1)) {
                                         m2 = m1;
                                     }
-                                    String member = m2.replace("\"", "");
+                                    String member = m2.replace("\"", TtmlNode.ANONYMOUS_REGION_ID);
                                     String arg_str = matcher.group(4);
                                     if (localVars.get(variable) == null) {
                                         extractObject(variable);
@@ -726,7 +726,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         private void buildFunction(String[] argNames, String funcCode) throws Exception {
             HashMap<String, String> localVars = new HashMap();
             for (Object put : argNames) {
-                localVars.put(put, "");
+                localVars.put(put, TtmlNode.ANONYMOUS_REGION_ID);
             }
             String[] stmts = funcCode.split(";");
             boolean[] abort = new boolean[1];
@@ -756,7 +756,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 this.codeLines.clear();
                 FileLog.e(e);
             }
-            return TextUtils.join("", this.codeLines);
+            return TextUtils.join(TtmlNode.ANONYMOUS_REGION_ID, this.codeLines);
         }
     }
 
@@ -792,7 +792,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             try {
                 Matcher filelist = WebPlayerView.twitchClipFilePattern.matcher(playerCode);
                 if (filelist.find()) {
-                    this.results[0] = new JSONObject(filelist.group(1)).getJSONArray("quality_options").getJSONObject(0).getString(Param.SOURCE);
+                    this.results[0] = new JSONObject(filelist.group(1)).getJSONArray("quality_options").getJSONObject(0).getString("source");
                     this.results[1] = "other";
                 }
             } catch (Throwable e) {
@@ -845,9 +845,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             try {
                 JSONObject stream = new JSONObject(streamCode).getJSONObject("stream");
                 JSONObject accessToken = new JSONObject(WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "https://api.twitch.tv/api/channels/%s/access_token", new Object[]{this.videoId}), headers, false));
-                String sig = URLEncoder.encode(accessToken.getString("sig"), "UTF-8");
-                String token = URLEncoder.encode(accessToken.getString("token"), "UTF-8");
-                URLEncoder.encode("https://youtube.googleapis.com/v/" + this.videoId, "UTF-8");
+                String sig = URLEncoder.encode(accessToken.getString("sig"), C.UTF8_NAME);
+                String token = URLEncoder.encode(accessToken.getString("token"), C.UTF8_NAME);
+                URLEncoder.encode("https://youtube.googleapis.com/v/" + this.videoId, C.UTF8_NAME);
                 String params = "allow_source=true&allow_audio_only=true&allow_spectre=true&player=twitchweb&segment_preference=4&p=" + ((int) (Math.random() * 1.0E7d)) + "&sig=" + sig + "&token=" + token;
                 this.results[0] = String.format(Locale.US, "https://usher.ttvnw.net/api/channel/hls/%s.m3u8?%s", new Object[]{this.videoId, params});
                 this.results[1] = "hls";
@@ -892,9 +892,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 if (files.has("hls")) {
                     JSONObject hls = files.getJSONObject("hls");
                     try {
-                        this.results[0] = hls.getString("url");
+                        this.results[0] = hls.getString(UpdateFragment.FRAGMENT_URL);
                     } catch (Exception e) {
-                        this.results[0] = hls.getJSONObject("cdns").getJSONObject(hls.getString("default_cdn")).getString("url");
+                        this.results[0] = hls.getJSONObject("cdns").getJSONObject(hls.getString("default_cdn")).getString(UpdateFragment.FRAGMENT_URL);
                     }
                     this.results[1] = "hls";
                     if (isCancelled()) {
@@ -904,7 +904,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 }
                 if (files.has("progressive")) {
                     this.results[1] = "other";
-                    this.results[0] = files.getJSONArray("progressive").getJSONObject(0).getString("url");
+                    this.results[0] = files.getJSONArray("progressive").getJSONObject(0).getString(UpdateFragment.FRAGMENT_URL);
                 }
                 if (isCancelled()) {
                     return this.results[0];
@@ -972,7 +972,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             Matcher matcher;
             String params = "video_id=" + this.videoId + "&ps=default&gl=US&hl=en";
             try {
-                params = params + "&eurl=" + URLEncoder.encode("https://youtube.googleapis.com/v/" + this.videoId, "UTF-8");
+                params = params + "&eurl=" + URLEncoder.encode("https://youtube.googleapis.com/v/" + this.videoId, C.UTF8_NAME);
             } catch (Throwable e) {
                 FileLog.e(e);
             }
@@ -986,7 +986,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             }
             this.result[1] = "dash";
             boolean encrypted = false;
-            String[] extra = new String[]{"", "&el=info", "&el=embedded", "&el=detailpage", "&el=vevo"};
+            String[] extra = new String[]{TtmlNode.ANONYMOUS_REGION_ID, "&el=info", "&el=embedded", "&el=detailpage", "&el=vevo"};
             for (String str : extra) {
                 String videoInfo = WebPlayerView.this.downloadUrlContent(this, "https://www.youtube.com/get_video_info?" + params + str);
                 if (isCancelled()) {
@@ -1004,7 +1004,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                             args2 = args[a].split("=");
                             if (args2.length == 2) {
                                 try {
-                                    this.result[0] = URLDecoder.decode(args2[1], "UTF-8");
+                                    this.result[0] = URLDecoder.decode(args2[1], C.UTF8_NAME);
                                 } catch (Throwable e2) {
                                     FileLog.e(e2);
                                 }
@@ -1018,7 +1018,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                             args2 = args[a].split("=");
                             if (args2.length == 2) {
                                 try {
-                                    hls = URLDecoder.decode(args2[1], "UTF-8");
+                                    hls = URLDecoder.decode(args2[1], C.UTF8_NAME);
                                 } catch (Throwable e22) {
                                     FileLog.e(e22);
                                 }
@@ -1130,7 +1130,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                                             return;
                                         }
                                         try {
-                                            WebPlayerView.this.webView.loadUrl("data:text/html;charset=utf-8;base64," + Base64.encodeToString(("<script>" + functionCodeFinal + "</script>").getBytes("UTF-8"), 0));
+                                            WebPlayerView.this.webView.loadUrl("data:text/html;charset=utf-8;base64," + Base64.encodeToString(("<script>" + functionCodeFinal + "</script>").getBytes(C.UTF8_NAME), 0));
                                         } catch (Throwable e) {
                                             FileLog.e(e);
                                         }
@@ -1272,7 +1272,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             }
             if (httpConnectionStream != null) {
                 try {
-                    byte[] data = new byte[32768];
+                    byte[] data = new byte[TLRPC.MESSAGE_FLAG_EDITED];
                     StringBuilder result2 = null;
                     while (!parentTask.isCancelled()) {
                         try {
@@ -1285,7 +1285,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                                         result = result2;
                                     }
                                     try {
-                                        result.append(new String(data, 0, read, "UTF-8"));
+                                        result.append(new String(data, 0, read, C.UTF8_NAME));
                                         result2 = result;
                                     } catch (Exception e3) {
                                         e22 = e3;
@@ -1455,7 +1455,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         };
         setWillNotDraw(false);
         this.delegate = webPlayerViewDelegate;
-        this.backgroundPaint.setColor(-16777216);
+        this.backgroundPaint.setColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         this.aspectRatioFrameLayout = new AspectRatioFrameLayout(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -1495,7 +1495,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
         if (this.allowInlineAnimation && this.textureViewContainer != null) {
             this.textureImageView = new ImageView(context);
-            this.textureImageView.setBackgroundColor(SupportMenu.CATEGORY_MASK);
+            this.textureImageView.setBackgroundColor(-65536);
             this.textureImageView.setPivotX(0.0f);
             this.textureImageView.setPivotY(0.0f);
             this.textureImageView.setVisibility(4);

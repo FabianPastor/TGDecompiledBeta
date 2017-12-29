@@ -25,7 +25,7 @@ import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
-public final class DynamicConcatenatingMediaSource implements MediaSource, ExoPlayerComponent {
+public final class DynamicConcatenatingMediaSource implements ExoPlayerComponent, MediaSource {
     private static final int MSG_ADD = 0;
     private static final int MSG_ADD_MULTIPLE = 1;
     private static final int MSG_MOVE = 3;

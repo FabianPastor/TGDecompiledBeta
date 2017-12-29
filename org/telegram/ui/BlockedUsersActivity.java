@@ -50,10 +50,10 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         }
 
         public int getItemCount() {
-            if (MessagesController.getInstance().blockedUsers.isEmpty()) {
+            if (MessagesController.getAccountInstance().blockedUsers.isEmpty()) {
                 return 0;
             }
-            return MessagesController.getInstance().blockedUsers.size() + 1;
+            return MessagesController.getAccountInstance().blockedUsers.size() + 1;
         }
 
         public boolean isEnabled(ViewHolder holder) {
@@ -76,7 +76,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
 
         public void onBindViewHolder(ViewHolder holder, int position) {
             if (holder.getItemViewType() == 0) {
-                User user = MessagesController.getInstance().getUser((Integer) MessagesController.getInstance().blockedUsers.get(position));
+                User user = MessagesController.getAccountInstance().getUser((Integer) MessagesController.getAccountInstance().blockedUsers.get(position));
                 if (user != null) {
                     String number;
                     if (user.bot) {
@@ -92,7 +92,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         }
 
         public int getItemViewType(int i) {
-            if (i == MessagesController.getInstance().blockedUsers.size()) {
+            if (i == MessagesController.getAccountInstance().blockedUsers.size()) {
                 return 1;
             }
             return 0;
@@ -101,16 +101,16 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.blockedUsersDidLoaded);
-        MessagesController.getInstance().getBlockedUsers(false);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.blockedUsersDidLoaded);
+        MessagesController.getAccountInstance().getBlockedUsers(false);
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.blockedUsersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.blockedUsersDidLoaded);
     }
 
     public View createView(Context context) {
@@ -155,22 +155,22 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
-                if (position < MessagesController.getInstance().blockedUsers.size()) {
+                if (position < MessagesController.getAccountInstance().blockedUsers.size()) {
                     Bundle args = new Bundle();
-                    args.putInt("user_id", ((Integer) MessagesController.getInstance().blockedUsers.get(position)).intValue());
+                    args.putInt("user_id", ((Integer) MessagesController.getAccountInstance().blockedUsers.get(position)).intValue());
                     BlockedUsersActivity.this.presentFragment(new ProfileActivity(args));
                 }
             }
         });
         this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
             public boolean onItemClick(View view, int position) {
-                if (position < MessagesController.getInstance().blockedUsers.size() && BlockedUsersActivity.this.getParentActivity() != null) {
-                    BlockedUsersActivity.this.selectedUserId = ((Integer) MessagesController.getInstance().blockedUsers.get(position)).intValue();
+                if (position < MessagesController.getAccountInstance().blockedUsers.size() && BlockedUsersActivity.this.getParentActivity() != null) {
+                    BlockedUsersActivity.this.selectedUserId = ((Integer) MessagesController.getAccountInstance().blockedUsers.get(position)).intValue();
                     Builder builder = new Builder(BlockedUsersActivity.this.getParentActivity());
                     builder.setItems(new CharSequence[]{LocaleController.getString("Unblock", R.string.Unblock)}, new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (i == 0) {
-                                MessagesController.getInstance().unblockUser(BlockedUsersActivity.this.selectedUserId);
+                                MessagesController.getAccountInstance().unblockUser(BlockedUsersActivity.this.selectedUserId);
                             }
                         }
                     });
@@ -179,7 +179,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                 return true;
             }
         });
-        if (MessagesController.getInstance().loadingBlockedUsers) {
+        if (MessagesController.getAccountInstance().loadingBlockedUsers) {
             this.emptyView.showProgress();
         } else {
             this.emptyView.showTextView();
@@ -187,7 +187,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         return this.fragmentView;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.updateInterfaces) {
             int mask = ((Integer) args[0]).intValue();
             if ((mask & 2) != 0 || (mask & 1) != 0) {
@@ -222,7 +222,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
 
     public void didSelectContact(User user, String param, ContactsActivity activity) {
         if (user != null) {
-            MessagesController.getInstance().blockUser(user.id);
+            MessagesController.getAccountInstance().blockUser(user.id);
         }
     }
 

@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.query.StickersQuery;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.ui.Cells.StickerCell;
@@ -18,6 +19,7 @@ import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class StickersAdapter extends SelectionAdapter implements NotificationCenterDelegate {
+    private int currentAccount = UserConfig.selectedAccount;
     private StickersAdapterDelegate delegate;
     private String lastSticker;
     private Context mContext;
@@ -32,18 +34,18 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     public StickersAdapter(Context context, StickersAdapterDelegate delegate) {
         this.mContext = context;
         this.delegate = delegate;
-        StickersQuery.checkStickers(0);
-        StickersQuery.checkStickers(1);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileDidLoaded);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileDidFailedLoad);
+        DataQuery.getInstance(this.currentAccount).checkStickers(0);
+        DataQuery.getInstance(this.currentAccount).checkStickers(1);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidFailedLoad);
     }
 
     public void onDestroy() {
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FileDidLoaded);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FileDidFailedLoad);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailedLoad);
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         boolean z = false;
         if ((id == NotificationCenter.FileDidLoaded || id == NotificationCenter.FileDidFailedLoad) && this.stickers != null && !this.stickers.isEmpty() && !this.stickersToLoad.isEmpty() && this.visible) {
             this.stickersToLoad.remove(args[0]);
@@ -67,7 +69,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
             Document document = (Document) this.stickers.get(a);
             if (!FileLoader.getPathToAttach(document.thumb, "webp", true).exists()) {
                 this.stickersToLoad.add(FileLoader.getAttachFileName(document.thumb, "webp"));
-                FileLoader.getInstance().loadFile(document.thumb.location, "webp", 0, 1);
+                FileLoader.getInstance(this.currentAccount).loadFile(document.thumb.location, "webp", 0, 1);
             }
         }
         return this.stickersToLoad.isEmpty();
@@ -96,15 +98,15 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
                 a++;
             }
             this.lastSticker = emoji.toString();
-            HashMap<String, ArrayList<Document>> allStickers = StickersQuery.getAllStickers();
+            HashMap<String, ArrayList<Document>> allStickers = DataQuery.getInstance(this.currentAccount).getAllStickers();
             if (allStickers != null) {
                 ArrayList<Document> newStickers = (ArrayList) allStickers.get(this.lastSticker);
                 if (this.stickers == null || newStickers != null) {
                     ArrayList arrayList = (newStickers == null || newStickers.isEmpty()) ? null : new ArrayList(newStickers);
                     this.stickers = arrayList;
                     if (this.stickers != null) {
-                        final ArrayList<Document> recentStickers = StickersQuery.getRecentStickersNoCopy(0);
-                        final ArrayList<Document> favsStickers = StickersQuery.getRecentStickersNoCopy(2);
+                        final ArrayList<Document> recentStickers = DataQuery.getInstance(this.currentAccount).getRecentStickersNoCopy(0);
+                        final ArrayList<Document> favsStickers = DataQuery.getInstance(this.currentAccount).getRecentStickersNoCopy(2);
                         if (!recentStickers.isEmpty()) {
                             Collections.sort(this.stickers, new Comparator<Document>() {
                                 private int getIndex(long id) {

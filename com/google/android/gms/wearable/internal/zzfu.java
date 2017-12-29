@@ -1,14 +1,24 @@
 package com.google.android.gms.wearable.internal;
 
-import com.google.android.gms.internal.zzbaz;
-import com.google.android.gms.wearable.MessageApi.SendMessageResult;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-final class zzfu extends zzfc<SendMessageResult> {
-    public zzfu(zzbaz<SendMessageResult> com_google_android_gms_internal_zzbaz_com_google_android_gms_wearable_MessageApi_SendMessageResult) {
-        super(com_google_android_gms_internal_zzbaz_com_google_android_gms_wearable_MessageApi_SendMessageResult);
+public final class zzfu extends zzbfm {
+    public static final Creator<zzfu> CREATOR = new zzfv();
+    public final int statusCode;
+    public final zzdd zzlkn;
+
+    public zzfu(int i, zzdd com_google_android_gms_wearable_internal_zzdd) {
+        this.statusCode = i;
+        this.zzlkn = com_google_android_gms_wearable_internal_zzdd;
     }
 
-    public final void zza(zzes com_google_android_gms_wearable_internal_zzes) {
-        zzR(new zzdw(zzev.zzaY(com_google_android_gms_wearable_internal_zzes.statusCode), com_google_android_gms_wearable_internal_zzes.zzbhd));
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zzc(parcel, 2, this.statusCode);
+        zzbfp.zza(parcel, 3, this.zzlkn, i, false);
+        zzbfp.zzai(parcel, zze);
     }
 }

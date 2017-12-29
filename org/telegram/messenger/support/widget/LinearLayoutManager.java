@@ -5,10 +5,6 @@ import android.graphics.PointF;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
-import android.support.annotation.RestrictTo;
-import android.support.annotation.RestrictTo.Scope;
-import android.support.v4.view.accessibility.AccessibilityEventCompat;
-import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
@@ -24,7 +20,7 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.ViewDropHandler;
 import org.telegram.tgnet.ConnectionsManager;
 
-public class LinearLayoutManager extends LayoutManager implements ViewDropHandler, ScrollVectorProvider {
+public class LinearLayoutManager extends LayoutManager implements ScrollVectorProvider, ViewDropHandler {
     static final boolean DEBUG = false;
     public static final int HORIZONTAL = 0;
     public static final int INVALID_OFFSET = Integer.MIN_VALUE;
@@ -234,7 +230,6 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         }
     }
 
-    @RestrictTo({Scope.LIBRARY_GROUP})
     public static class SavedState implements Parcelable {
         public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
@@ -328,9 +323,8 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
     public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
         super.onInitializeAccessibilityEvent(event);
         if (getChildCount() > 0) {
-            AccessibilityRecordCompat record = AccessibilityEventCompat.asRecord(event);
-            record.setFromIndex(findFirstVisibleItemPosition());
-            record.setToIndex(findLastVisibleItemPosition());
+            event.setFromIndex(findFirstVisibleItemPosition());
+            event.setToIndex(findLastVisibleItemPosition());
         }
     }
 
@@ -491,11 +485,14 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         ensureLayoutState();
         this.mLayoutState.mRecycle = false;
         resolveShouldLayoutReverse();
-        if (!(this.mAnchorInfo.mValid && this.mPendingScrollPosition == -1 && this.mPendingSavedState == null)) {
+        View focused = getFocusedChild();
+        if (!this.mAnchorInfo.mValid || this.mPendingScrollPosition != -1 || this.mPendingSavedState != null) {
             this.mAnchorInfo.reset();
             this.mAnchorInfo.mLayoutFromEnd = this.mShouldReverseLayout ^ this.mStackFromEnd;
             updateAnchorInfoForLayout(recycler, state, this.mAnchorInfo);
             this.mAnchorInfo.mValid = true;
+        } else if (focused != null && (this.mOrientationHelper.getDecoratedStart(focused) >= this.mOrientationHelper.getEndAfterPadding() || this.mOrientationHelper.getDecoratedEnd(focused) <= this.mOrientationHelper.getStartAfterPadding())) {
+            this.mAnchorInfo.assignFromViewAndKeepVisibleRect(focused);
         }
         int extra = getExtraLayoutSpace(state);
         if (this.mLayoutState.mLastScrollDelta >= 0) {
@@ -1040,11 +1037,6 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         return this.mInitialPrefetchItemCount;
     }
 
-    @Deprecated
-    public int getInitialItemPrefetchCount() {
-        return getInitialPrefetchItemCount();
-    }
-
     public void collectAdjacentPrefetchPositions(int dx, int dy, State state, LayoutPrefetchRegistry layoutPrefetchRegistry) {
         int delta;
         if (this.mOrientation == 0) {
@@ -1053,6 +1045,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
             delta = dy;
         }
         if (getChildCount() != 0 && delta != 0) {
+            ensureLayoutState();
             updateLayoutState(delta > 0 ? 1 : -1, Math.abs(delta), true, state);
             collectPrefetchPositionsForLayoutState(state, this.mLayoutState, layoutPrefetchRegistry);
         }
@@ -1127,7 +1120,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         }
     }
 
-    protected void recycleViewsFromEnd(Recycler recycler, int dt) {
+    private void recycleViewsFromEnd(Recycler recycler, int dt) {
         int childCount = getChildCount();
         if (dt >= 0) {
             int limit = this.mOrientationHelper.getEnd() - dt;
@@ -1586,7 +1579,6 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         return this.mPendingSavedState == null && this.mLastStackFromEnd == this.mStackFromEnd;
     }
 
-    @RestrictTo({Scope.LIBRARY_GROUP})
     public void prepareForDrop(View view, View target, int x, int y) {
         int dropDirection;
         assertNotInLayoutOrScroll("Cannot drop a view during a scroll or layout calculation");

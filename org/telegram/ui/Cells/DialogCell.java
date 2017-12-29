@@ -17,6 +17,7 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
@@ -26,7 +27,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.query.DraftQuery;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.DraftMessage;
@@ -60,6 +60,7 @@ public class DialogCell extends BaseCell {
     private int countLeft;
     private int countTop = AndroidUtilities.dp(39.0f);
     private int countWidth;
+    private int currentAccount = UserConfig.selectedAccount;
     private long currentDialogId;
     private int currentEditDate;
     private CustomDialog customDialog;
@@ -213,14 +214,14 @@ public class DialogCell extends BaseCell {
         int w;
         int avatarLeft;
         int messageWidth;
-        String nameString = "";
-        String timeString = "";
+        String nameString = TtmlNode.ANONYMOUS_REGION_ID;
+        String timeString = TtmlNode.ANONYMOUS_REGION_ID;
         String countString = null;
         String mentionString = null;
-        CharSequence messageString = "";
+        CharSequence messageString = TtmlNode.ANONYMOUS_REGION_ID;
         CharSequence printingString = null;
         if (this.isDialogCell) {
-            printingString = (CharSequence) MessagesController.getInstance().printingStrings.get(Long.valueOf(this.currentDialogId));
+            printingString = (CharSequence) MessagesController.getInstance(this.currentAccount).printingStrings.get(Long.valueOf(this.currentDialogId));
         }
         TextPaint currentNamePaint = Theme.dialogs_namePaint;
         TextPaint currentMessagePaint = Theme.dialogs_messagePaint;
@@ -376,7 +377,7 @@ public class DialogCell extends BaseCell {
                 lastDate = this.message.messageOwner.date;
             }
             if (this.isDialogCell) {
-                this.draftMessage = DraftQuery.getDraft(this.currentDialogId);
+                this.draftMessage = DataQuery.getInstance(this.currentAccount).getDraft(this.currentDialogId);
                 if ((this.draftMessage != null && ((TextUtils.isEmpty(this.draftMessage.message) && this.draftMessage.reply_to_msg_id == 0) || (lastDate > this.draftMessage.date && this.unreadCount != 0))) || ((ChatObject.isChannel(this.chat) && !this.chat.megagroup && !this.chat.creator && (this.chat.admin_rights == null || !this.chat.admin_rights.post_messages)) || (this.chat != null && (this.chat.left || this.chat.kicked)))) {
                     this.draftMessage = null;
                 }
@@ -410,9 +411,9 @@ public class DialogCell extends BaseCell {
                     User fromUser = null;
                     Chat fromChat = null;
                     if (this.message.isFromUser()) {
-                        fromUser = MessagesController.getInstance().getUser(Integer.valueOf(this.message.messageOwner.from_id));
+                        fromUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.message.messageOwner.from_id));
                     } else {
-                        fromChat = MessagesController.getInstance().getChat(Integer.valueOf(this.message.messageOwner.to_id.channel_id));
+                        fromChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.message.messageOwner.to_id.channel_id));
                     }
                     if (this.dialogsType == 3 && UserObject.isUserSelf(this.user)) {
                         messageString = LocaleController.getString("SavedMessagesInfo", R.string.SavedMessagesInfo);
@@ -420,7 +421,7 @@ public class DialogCell extends BaseCell {
                         drawTime = false;
                     } else if (this.message.messageOwner instanceof TL_messageService) {
                         if (ChatObject.isChannel(this.chat) && (this.message.messageOwner.action instanceof TL_messageActionHistoryClear)) {
-                            messageString = "";
+                            messageString = TtmlNode.ANONYMOUS_REGION_ID;
                             showChecks = false;
                         } else {
                             messageString = this.message.messageText;
@@ -430,9 +431,9 @@ public class DialogCell extends BaseCell {
                         if (this.message.isOutOwner()) {
                             name = LocaleController.getString("FromYou", R.string.FromYou);
                         } else if (fromUser != null) {
-                            name = UserObject.getFirstName(fromUser).replace("\n", "");
+                            name = UserObject.getFirstName(fromUser).replace("\n", TtmlNode.ANONYMOUS_REGION_ID);
                         } else if (fromChat != null) {
-                            name = fromChat.title.replace("\n", "");
+                            name = fromChat.title.replace("\n", TtmlNode.ANONYMOUS_REGION_ID);
                         } else {
                             name = "DELETED";
                         }
@@ -466,7 +467,7 @@ public class DialogCell extends BaseCell {
                             }
                             stringBuilder = SpannableStringBuilder.valueOf(String.format(messageFormat, new Object[]{name, mess.replace('\n', ' ')}));
                         } else {
-                            stringBuilder = SpannableStringBuilder.valueOf("");
+                            stringBuilder = SpannableStringBuilder.valueOf(TtmlNode.ANONYMOUS_REGION_ID);
                         }
                         if (stringBuilder.length() > 0) {
                             stringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_chats_nameMessage)), 0, name.length() + 1, 33);
@@ -495,11 +496,11 @@ public class DialogCell extends BaseCell {
                     if (this.encryptedChat instanceof TL_encryptedChatRequested) {
                         messageString = LocaleController.getString("EncryptionProcessing", R.string.EncryptionProcessing);
                     } else if (this.encryptedChat instanceof TL_encryptedChatWaiting) {
-                        messageString = (this.user == null || this.user.first_name == null) ? LocaleController.formatString("AwaitingEncryption", R.string.AwaitingEncryption, "") : LocaleController.formatString("AwaitingEncryption", R.string.AwaitingEncryption, this.user.first_name);
+                        messageString = (this.user == null || this.user.first_name == null) ? LocaleController.formatString("AwaitingEncryption", R.string.AwaitingEncryption, TtmlNode.ANONYMOUS_REGION_ID) : LocaleController.formatString("AwaitingEncryption", R.string.AwaitingEncryption, this.user.first_name);
                     } else if (this.encryptedChat instanceof TL_encryptedChatDiscarded) {
                         messageString = LocaleController.getString("EncryptionRejected", R.string.EncryptionRejected);
                     } else if (this.encryptedChat instanceof TL_encryptedChat) {
-                        messageString = this.encryptedChat.admin_id == UserConfig.getClientUserId() ? (this.user == null || this.user.first_name == null) ? LocaleController.formatString("EncryptedChatStartedOutgoing", R.string.EncryptedChatStartedOutgoing, "") : LocaleController.formatString("EncryptedChatStartedOutgoing", R.string.EncryptedChatStartedOutgoing, this.user.first_name) : LocaleController.getString("EncryptedChatStartedIncoming", R.string.EncryptedChatStartedIncoming);
+                        messageString = this.encryptedChat.admin_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? (this.user == null || this.user.first_name == null) ? LocaleController.formatString("EncryptedChatStartedOutgoing", R.string.EncryptedChatStartedOutgoing, TtmlNode.ANONYMOUS_REGION_ID) : LocaleController.formatString("EncryptedChatStartedOutgoing", R.string.EncryptedChatStartedOutgoing, this.user.first_name) : LocaleController.getString("EncryptedChatStartedIncoming", R.string.EncryptedChatStartedIncoming);
                     }
                 }
             }
@@ -563,9 +564,9 @@ public class DialogCell extends BaseCell {
                         this.drawPinBackground = true;
                     }
                     nameString = LocaleController.getString("SavedMessages", R.string.SavedMessages);
-                } else if (this.user.id / 1000 == 777 || this.user.id / 1000 == 333 || ContactsController.getInstance().contactsDict.get(Integer.valueOf(this.user.id)) != null) {
+                } else if (this.user.id / 1000 == 777 || this.user.id / 1000 == 333 || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.user.id)) != null) {
                     nameString = UserObject.getUserName(this.user);
-                } else if (ContactsController.getInstance().contactsDict.size() == 0 && (!ContactsController.getInstance().contactsLoaded || ContactsController.getInstance().isLoadingContacts())) {
+                } else if (ContactsController.getInstance(this.currentAccount).contactsDict.size() == 0 && (!ContactsController.getInstance(this.currentAccount).contactsLoaded || ContactsController.getInstance(this.currentAccount).isLoadingContacts())) {
                     nameString = UserObject.getUserName(this.user);
                 } else if (this.user.phone == null || this.user.phone.length() == 0) {
                     nameString = UserObject.getUserName(this.user);
@@ -721,7 +722,7 @@ public class DialogCell extends BaseCell {
         }
         if (checkMessage) {
             if (messageString == null) {
-                messageString = "";
+                messageString = TtmlNode.ANONYMOUS_REGION_ID;
             }
             mess = messageString.toString();
             if (mess.length() > 150) {
@@ -789,16 +790,16 @@ public class DialogCell extends BaseCell {
 
     private ArrayList<TL_dialog> getDialogsArray() {
         if (this.dialogsType == 0) {
-            return MessagesController.getInstance().dialogs;
+            return MessagesController.getInstance(this.currentAccount).dialogs;
         }
         if (this.dialogsType == 1) {
-            return MessagesController.getInstance().dialogsServerOnly;
+            return MessagesController.getInstance(this.currentAccount).dialogsServerOnly;
         }
         if (this.dialogsType == 2) {
-            return MessagesController.getInstance().dialogsGroupsOnly;
+            return MessagesController.getInstance(this.currentAccount).dialogsGroupsOnly;
         }
         if (this.dialogsType == 3) {
-            return MessagesController.getInstance().dialogsForward;
+            return MessagesController.getInstance(this.currentAccount).dialogsForward;
         }
         return null;
     }
@@ -806,8 +807,8 @@ public class DialogCell extends BaseCell {
     public void checkCurrentDialogIndex() {
         if (this.index < getDialogsArray().size()) {
             TL_dialog dialog = (TL_dialog) getDialogsArray().get(this.index);
-            DraftMessage newDraftMessage = DraftQuery.getDraft(this.currentDialogId);
-            MessageObject newMessageObject = (MessageObject) MessagesController.getInstance().dialogMessage.get(Long.valueOf(dialog.id));
+            DraftMessage newDraftMessage = DataQuery.getInstance(this.currentAccount).getDraft(this.currentDialogId);
+            MessageObject newMessageObject = (MessageObject) MessagesController.getInstance(this.currentAccount).dialogMessage.get(Long.valueOf(dialog.id));
             if (this.currentDialogId != dialog.id || ((this.message != null && this.message.getId() != dialog.top_message) || ((newMessageObject != null && newMessageObject.messageOwner.edit_date != this.currentEditDate) || this.unreadCount != dialog.unread_count || this.mentionCount != dialog.unread_mentions_count || this.message != newMessageObject || ((this.message == null && newMessageObject != null) || newDraftMessage != this.draftMessage || this.drawPin != dialog.pinned)))) {
                 this.currentDialogId = dialog.id;
                 update(0);
@@ -834,10 +835,10 @@ public class DialogCell extends BaseCell {
             TL_dialog dialog;
             boolean z;
             if (this.isDialogCell) {
-                dialog = (TL_dialog) MessagesController.getInstance().dialogs_dict.get(Long.valueOf(this.currentDialogId));
+                dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(Long.valueOf(this.currentDialogId));
                 if (dialog != null && mask == 0) {
                     int i;
-                    this.message = (MessageObject) MessagesController.getInstance().dialogMessage.get(Long.valueOf(dialog.id));
+                    this.message = (MessageObject) MessagesController.getInstance(this.currentAccount).dialogMessage.get(Long.valueOf(dialog.id));
                     if (this.message == null || !this.message.isUnread()) {
                         z = false;
                     } else {
@@ -864,7 +865,7 @@ public class DialogCell extends BaseCell {
             if (mask != 0) {
                 boolean continueUpdate = false;
                 if (this.isDialogCell && (mask & 64) != 0) {
-                    CharSequence printString = (CharSequence) MessagesController.getInstance().printingStrings.get(Long.valueOf(this.currentDialogId));
+                    CharSequence printString = (CharSequence) MessagesController.getInstance(this.currentAccount).printingStrings.get(Long.valueOf(this.currentDialogId));
                     if ((this.lastPrintString != null && printString == null) || ((this.lastPrintString == null && printString != null) || !(this.lastPrintString == null || printString == null || this.lastPrintString.equals(printString)))) {
                         continueUpdate = true;
                     }
@@ -886,7 +887,7 @@ public class DialogCell extends BaseCell {
                         this.lastUnreadState = this.message.isUnread();
                         continueUpdate = true;
                     } else if (this.isDialogCell) {
-                        dialog = (TL_dialog) MessagesController.getInstance().dialogs_dict.get(Long.valueOf(this.currentDialogId));
+                        dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(Long.valueOf(this.currentDialogId));
                         if (!(dialog == null || (this.unreadCount == dialog.unread_count && this.mentionCount == dialog.unread_mentions_count))) {
                             this.unreadCount = dialog.unread_count;
                             this.mentionCount = dialog.unread_mentions_count;
@@ -902,7 +903,7 @@ public class DialogCell extends BaseCell {
                     return;
                 }
             }
-            if (this.isDialogCell && MessagesController.getInstance().isDialogMuted(this.currentDialogId)) {
+            if (this.isDialogCell && MessagesController.getInstance(this.currentAccount).isDialogMuted(this.currentDialogId)) {
                 z = true;
             } else {
                 z = false;
@@ -914,22 +915,22 @@ public class DialogCell extends BaseCell {
             int lower_id = (int) this.currentDialogId;
             int high_id = (int) (this.currentDialogId >> 32);
             if (lower_id == 0) {
-                this.encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf(high_id));
+                this.encryptedChat = MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf(high_id));
                 if (this.encryptedChat != null) {
-                    this.user = MessagesController.getInstance().getUser(Integer.valueOf(this.encryptedChat.user_id));
+                    this.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.encryptedChat.user_id));
                 }
             } else if (high_id == 1) {
-                this.chat = MessagesController.getInstance().getChat(Integer.valueOf(lower_id));
+                this.chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(lower_id));
             } else if (lower_id < 0) {
-                this.chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
+                this.chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lower_id));
                 if (!(this.isDialogCell || this.chat == null || this.chat.migrated_to == null)) {
-                    Chat chat2 = MessagesController.getInstance().getChat(Integer.valueOf(this.chat.migrated_to.channel_id));
+                    Chat chat2 = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chat.migrated_to.channel_id));
                     if (chat2 != null) {
                         this.chat = chat2;
                     }
                 }
             } else {
-                this.user = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
+                this.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_id));
             }
             TLObject photo = null;
             if (this.user != null) {
@@ -964,16 +965,16 @@ public class DialogCell extends BaseCell {
                 canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), Theme.dialogs_pinnedPaint);
             }
             if (this.drawNameLock) {
-                setDrawableBounds(Theme.dialogs_lockDrawable, this.nameLockLeft, this.nameLockTop);
+                BaseCell.setDrawableBounds(Theme.dialogs_lockDrawable, this.nameLockLeft, this.nameLockTop);
                 Theme.dialogs_lockDrawable.draw(canvas);
             } else if (this.drawNameGroup) {
-                setDrawableBounds(Theme.dialogs_groupDrawable, this.nameLockLeft, this.nameLockTop);
+                BaseCell.setDrawableBounds(Theme.dialogs_groupDrawable, this.nameLockLeft, this.nameLockTop);
                 Theme.dialogs_groupDrawable.draw(canvas);
             } else if (this.drawNameBroadcast) {
-                setDrawableBounds(Theme.dialogs_broadcastDrawable, this.nameLockLeft, this.nameLockTop);
+                BaseCell.setDrawableBounds(Theme.dialogs_broadcastDrawable, this.nameLockLeft, this.nameLockTop);
                 Theme.dialogs_broadcastDrawable.draw(canvas);
             } else if (this.drawNameBot) {
-                setDrawableBounds(Theme.dialogs_botDrawable, this.nameLockLeft, this.nameLockTop);
+                BaseCell.setDrawableBounds(Theme.dialogs_botDrawable, this.nameLockLeft, this.nameLockTop);
                 Theme.dialogs_botDrawable.draw(canvas);
             }
             if (this.nameLayout != null) {
@@ -999,32 +1000,32 @@ public class DialogCell extends BaseCell {
                 canvas.restore();
             }
             if (this.drawClock) {
-                setDrawableBounds(Theme.dialogs_clockDrawable, this.checkDrawLeft, this.checkDrawTop);
+                BaseCell.setDrawableBounds(Theme.dialogs_clockDrawable, this.checkDrawLeft, this.checkDrawTop);
                 Theme.dialogs_clockDrawable.draw(canvas);
             } else if (this.drawCheck2) {
                 if (this.drawCheck1) {
-                    setDrawableBounds(Theme.dialogs_halfCheckDrawable, this.halfCheckDrawLeft, this.checkDrawTop);
+                    BaseCell.setDrawableBounds(Theme.dialogs_halfCheckDrawable, this.halfCheckDrawLeft, this.checkDrawTop);
                     Theme.dialogs_halfCheckDrawable.draw(canvas);
-                    setDrawableBounds(Theme.dialogs_checkDrawable, this.checkDrawLeft, this.checkDrawTop);
+                    BaseCell.setDrawableBounds(Theme.dialogs_checkDrawable, this.checkDrawLeft, this.checkDrawTop);
                     Theme.dialogs_checkDrawable.draw(canvas);
                 } else {
-                    setDrawableBounds(Theme.dialogs_checkDrawable, this.checkDrawLeft, this.checkDrawTop);
+                    BaseCell.setDrawableBounds(Theme.dialogs_checkDrawable, this.checkDrawLeft, this.checkDrawTop);
                     Theme.dialogs_checkDrawable.draw(canvas);
                 }
             }
             if (this.dialogMuted && !this.drawVerified) {
-                setDrawableBounds(Theme.dialogs_muteDrawable, this.nameMuteLeft, AndroidUtilities.dp(16.5f));
+                BaseCell.setDrawableBounds(Theme.dialogs_muteDrawable, this.nameMuteLeft, AndroidUtilities.dp(16.5f));
                 Theme.dialogs_muteDrawable.draw(canvas);
             } else if (this.drawVerified) {
-                setDrawableBounds(Theme.dialogs_verifiedDrawable, this.nameMuteLeft, AndroidUtilities.dp(16.5f));
-                setDrawableBounds(Theme.dialogs_verifiedCheckDrawable, this.nameMuteLeft, AndroidUtilities.dp(16.5f));
+                BaseCell.setDrawableBounds(Theme.dialogs_verifiedDrawable, this.nameMuteLeft, AndroidUtilities.dp(16.5f));
+                BaseCell.setDrawableBounds(Theme.dialogs_verifiedCheckDrawable, this.nameMuteLeft, AndroidUtilities.dp(16.5f));
                 Theme.dialogs_verifiedDrawable.draw(canvas);
                 Theme.dialogs_verifiedCheckDrawable.draw(canvas);
             }
             if (this.drawError) {
                 this.rect.set((float) this.errorLeft, (float) this.errorTop, (float) (this.errorLeft + AndroidUtilities.dp(23.0f)), (float) (this.errorTop + AndroidUtilities.dp(23.0f)));
                 canvas.drawRoundRect(this.rect, AndroidUtilities.density * 11.5f, AndroidUtilities.density * 11.5f, Theme.dialogs_errorPaint);
-                setDrawableBounds(Theme.dialogs_errorDrawable, this.errorLeft + AndroidUtilities.dp(5.5f), this.errorTop + AndroidUtilities.dp(5.0f));
+                BaseCell.setDrawableBounds(Theme.dialogs_errorDrawable, this.errorLeft + AndroidUtilities.dp(5.5f), this.errorTop + AndroidUtilities.dp(5.0f));
                 Theme.dialogs_errorDrawable.draw(canvas);
             } else if (this.drawCount || this.drawMention) {
                 int x;
@@ -1043,11 +1044,11 @@ public class DialogCell extends BaseCell {
                     x = this.mentionLeft - AndroidUtilities.dp(5.5f);
                     this.rect.set((float) x, (float) this.countTop, (float) ((this.mentionWidth + x) + AndroidUtilities.dp(11.0f)), (float) (this.countTop + AndroidUtilities.dp(23.0f)));
                     canvas.drawRoundRect(this.rect, AndroidUtilities.density * 11.5f, AndroidUtilities.density * 11.5f, Theme.dialogs_countPaint);
-                    setDrawableBounds(Theme.dialogs_mentionDrawable, this.mentionLeft - AndroidUtilities.dp(2.0f), this.countTop + AndroidUtilities.dp(3.2f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
+                    BaseCell.setDrawableBounds(Theme.dialogs_mentionDrawable, this.mentionLeft - AndroidUtilities.dp(2.0f), this.countTop + AndroidUtilities.dp(3.2f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
                     Theme.dialogs_mentionDrawable.draw(canvas);
                 }
             } else if (this.drawPin) {
-                setDrawableBounds(Theme.dialogs_pinnedDrawable, this.pinLeft, this.pinTop);
+                BaseCell.setDrawableBounds(Theme.dialogs_pinnedDrawable, this.pinLeft, this.pinTop);
                 Theme.dialogs_pinnedDrawable.draw(canvas);
             }
             if (this.useSeparator) {

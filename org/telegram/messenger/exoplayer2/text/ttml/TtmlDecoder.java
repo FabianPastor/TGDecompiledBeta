@@ -2,7 +2,6 @@ package org.telegram.messenger.exoplayer2.text.ttml;
 
 import android.text.Layout.Alignment;
 import android.util.Log;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -27,7 +26,7 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
     private static final String ATTR_REGION = "region";
     private static final String ATTR_STYLE = "style";
     private static final Pattern CLOCK_TIME = Pattern.compile("^([0-9][0-9]+):([0-9][0-9]):([0-9][0-9])(?:(\\.[0-9]+)|:([0-9][0-9])(?:\\.([0-9]+))?)?$");
-    private static final FrameAndTickRate DEFAULT_FRAME_AND_TICK_RATE = new FrameAndTickRate(BitmapDescriptorFactory.HUE_ORANGE, 1, 1);
+    private static final FrameAndTickRate DEFAULT_FRAME_AND_TICK_RATE = new FrameAndTickRate(30.0f, 1, 1);
     private static final int DEFAULT_FRAME_RATE = 30;
     private static final Pattern FONT_SIZE = Pattern.compile("^(([0-9]*.)?[0-9]+)(px|em|%)$");
     private static final Pattern OFFSET_TIME = Pattern.compile("^([0-9]+(?:\\.[0-9]+)?)(h|m|s|ms|f|t)$");
@@ -63,7 +62,7 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
             XmlPullParser xmlParser = this.xmlParserFactory.newPullParser();
             Map<String, TtmlStyle> globalStyles = new HashMap();
             Map<String, TtmlRegion> regionMap = new HashMap();
-            regionMap.put("", new TtmlRegion(null));
+            regionMap.put(TtmlNode.ANONYMOUS_REGION_ID, new TtmlRegion(null));
             xmlParser.setInput(new ByteArrayInputStream(bytes, 0, length), null);
             TtmlSubtitle ttmlSubtitle = null;
             LinkedList<TtmlNode> nodeStack = new LinkedList();
@@ -120,7 +119,7 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
     }
 
     private FrameAndTickRate parseFrameAndTickRates(XmlPullParser xmlParser) throws SubtitleDecoderException {
-        int frameRate = 30;
+        int frameRate = DEFAULT_FRAME_RATE;
         String frameRateString = xmlParser.getAttributeValue(TTP, "frameRate");
         if (frameRateString != null) {
             frameRate = Integer.parseInt(frameRateString);
@@ -176,7 +175,7 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
         if (regionId == null) {
             return null;
         }
-        String regionOrigin = XmlPullParserUtil.getAttributeValue(xmlParser, "origin");
+        String regionOrigin = XmlPullParserUtil.getAttributeValue(xmlParser, TtmlNode.ATTR_TTS_ORIGIN);
         if (regionOrigin != null) {
             Matcher originMatcher = PERCENTAGE_COORDINATES.matcher(regionOrigin);
             if (originMatcher.matches()) {
@@ -457,7 +456,7 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
         long duration = C.TIME_UNSET;
         long startTime = C.TIME_UNSET;
         long endTime = C.TIME_UNSET;
-        String regionId = "";
+        String regionId = TtmlNode.ANONYMOUS_REGION_ID;
         String[] styleIds = null;
         int attributeCount = parser.getAttributeCount();
         TtmlStyle style = parseStyleAttributes(parser, null);

@@ -1,24 +1,23 @@
 package com.google.android.gms.internal;
 
-import android.os.Build.VERSION;
+import java.util.List;
+import java.util.concurrent.Callable;
 
-final class zzciy implements Runnable {
-    private /* synthetic */ zzcix zzbuq;
+final class zzciy implements Callable<List<zzclp>> {
+    private /* synthetic */ String zzimf;
+    private /* synthetic */ zzcir zzjgo;
+    private /* synthetic */ String zzjgq;
+    private /* synthetic */ String zzjgr;
 
-    zzciy(zzcix com_google_android_gms_internal_zzcix) {
-        this.zzbuq = com_google_android_gms_internal_zzcix;
+    zzciy(zzcir com_google_android_gms_internal_zzcir, String str, String str2, String str3) {
+        this.zzjgo = com_google_android_gms_internal_zzcir;
+        this.zzimf = str;
+        this.zzjgq = str2;
+        this.zzjgr = str3;
     }
 
-    public final void run() {
-        if (this.zzbuq.zzbun == null) {
-            zzcem.zzxE();
-            if (VERSION.SDK_INT >= 24) {
-                this.zzbuq.zzbrP.zzyD().log("AppMeasurementJobService processed last upload request.");
-                this.zzbuq.zzbup.zzbum.zza(this.zzbuq.zzbuo, false);
-            }
-        } else if (this.zzbuq.zzbup.zzbum.callServiceStopSelfResult(this.zzbuq.zzbun.intValue())) {
-            zzcem.zzxE();
-            this.zzbuq.zzbrP.zzyD().zzj("Local AppMeasurementService processed last upload request. StartId", this.zzbuq.zzbun);
-        }
+    public final /* synthetic */ Object call() throws Exception {
+        this.zzjgo.zziwf.zzbal();
+        return this.zzjgo.zziwf.zzaws().zzg(this.zzimf, this.zzjgq, this.zzjgr);
     }
 }

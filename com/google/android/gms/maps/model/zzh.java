@@ -3,12 +3,11 @@ package com.google.android.gms.maps.model;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.internal.zzbfn;
 
 public final class zzh implements Creator<MarkerOptions> {
     public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        int zzd = zzb.zzd(parcel);
+        int zzd = zzbfn.zzd(parcel);
         LatLng latLng = null;
         String str = null;
         String str2 = null;
@@ -25,55 +24,55 @@ public final class zzh implements Creator<MarkerOptions> {
         float f7 = 0.0f;
         while (parcel.dataPosition() < zzd) {
             int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
+            switch (65535 & readInt) {
                 case 2:
-                    latLng = (LatLng) zzb.zza(parcel, readInt, LatLng.CREATOR);
+                    latLng = (LatLng) zzbfn.zza(parcel, readInt, LatLng.CREATOR);
                     break;
                 case 3:
-                    str = zzb.zzq(parcel, readInt);
+                    str = zzbfn.zzq(parcel, readInt);
                     break;
                 case 4:
-                    str2 = zzb.zzq(parcel, readInt);
+                    str2 = zzbfn.zzq(parcel, readInt);
                     break;
                 case 5:
-                    iBinder = zzb.zzr(parcel, readInt);
+                    iBinder = zzbfn.zzr(parcel, readInt);
                     break;
                 case 6:
-                    f = zzb.zzl(parcel, readInt);
+                    f = zzbfn.zzl(parcel, readInt);
                     break;
                 case 7:
-                    f2 = zzb.zzl(parcel, readInt);
+                    f2 = zzbfn.zzl(parcel, readInt);
                     break;
                 case 8:
-                    z = zzb.zzc(parcel, readInt);
+                    z = zzbfn.zzc(parcel, readInt);
                     break;
                 case 9:
-                    z2 = zzb.zzc(parcel, readInt);
+                    z2 = zzbfn.zzc(parcel, readInt);
                     break;
                 case 10:
-                    z3 = zzb.zzc(parcel, readInt);
+                    z3 = zzbfn.zzc(parcel, readInt);
                     break;
                 case 11:
-                    f3 = zzb.zzl(parcel, readInt);
+                    f3 = zzbfn.zzl(parcel, readInt);
                     break;
                 case 12:
-                    f4 = zzb.zzl(parcel, readInt);
+                    f4 = zzbfn.zzl(parcel, readInt);
                     break;
                 case 13:
-                    f5 = zzb.zzl(parcel, readInt);
+                    f5 = zzbfn.zzl(parcel, readInt);
                     break;
                 case 14:
-                    f6 = zzb.zzl(parcel, readInt);
+                    f6 = zzbfn.zzl(parcel, readInt);
                     break;
                 case 15:
-                    f7 = zzb.zzl(parcel, readInt);
+                    f7 = zzbfn.zzl(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, readInt);
+                    zzbfn.zzb(parcel, readInt);
                     break;
             }
         }
-        zzb.zzF(parcel, zzd);
+        zzbfn.zzaf(parcel, zzd);
         return new MarkerOptions(latLng, str, str2, iBinder, f, f2, z, z2, z3, f3, f4, f5, f6, f7);
     }
 

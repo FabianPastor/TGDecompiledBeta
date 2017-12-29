@@ -1,35 +1,76 @@
 package com.google.android.gms.wearable.internal;
 
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.Parcel;
-import android.os.ParcelFileDescriptor;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import android.util.Log;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataItemAsset;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
-public final class zzdd implements Creator<zzdc> {
-    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        int zzd = zzb.zzd(parcel);
-        int i = 0;
-        ParcelFileDescriptor parcelFileDescriptor = null;
-        while (parcel.dataPosition() < zzd) {
-            int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
-                case 2:
-                    i = zzb.zzg(parcel, readInt);
-                    break;
-                case 3:
-                    parcelFileDescriptor = (ParcelFileDescriptor) zzb.zza(parcel, readInt, ParcelFileDescriptor.CREATOR);
-                    break;
-                default:
-                    zzb.zzb(parcel, readInt);
-                    break;
-            }
+public final class zzdd extends zzbfm implements DataItem {
+    public static final Creator<zzdd> CREATOR = new zzde();
+    private final Uri mUri;
+    private byte[] zzhyw;
+    private final Map<String, DataItemAsset> zzlkc;
+
+    zzdd(Uri uri, Bundle bundle, byte[] bArr) {
+        this.mUri = uri;
+        Map hashMap = new HashMap();
+        bundle.setClassLoader(DataItemAssetParcelable.class.getClassLoader());
+        for (String str : bundle.keySet()) {
+            hashMap.put(str, (DataItemAssetParcelable) bundle.getParcelable(str));
         }
-        zzb.zzF(parcel, zzd);
-        return new zzdc(i, parcelFileDescriptor);
+        this.zzlkc = hashMap;
+        this.zzhyw = bArr;
     }
 
-    public final /* synthetic */ Object[] newArray(int i) {
-        return new zzdc[i];
+    public final byte[] getData() {
+        return this.zzhyw;
+    }
+
+    public final Uri getUri() {
+        return this.mUri;
+    }
+
+    public final String toString() {
+        boolean isLoggable = Log.isLoggable("DataItem", 3);
+        StringBuilder stringBuilder = new StringBuilder("DataItemParcelable[");
+        stringBuilder.append("@");
+        stringBuilder.append(Integer.toHexString(hashCode()));
+        String valueOf = String.valueOf(this.zzhyw == null ? "null" : Integer.valueOf(this.zzhyw.length));
+        stringBuilder.append(new StringBuilder(String.valueOf(valueOf).length() + 8).append(",dataSz=").append(valueOf).toString());
+        stringBuilder.append(", numAssets=" + this.zzlkc.size());
+        valueOf = String.valueOf(this.mUri);
+        stringBuilder.append(new StringBuilder(String.valueOf(valueOf).length() + 6).append(", uri=").append(valueOf).toString());
+        if (isLoggable) {
+            stringBuilder.append("]\n  assets: ");
+            for (String valueOf2 : this.zzlkc.keySet()) {
+                String valueOf3 = String.valueOf(this.zzlkc.get(valueOf2));
+                stringBuilder.append(new StringBuilder((String.valueOf(valueOf2).length() + 7) + String.valueOf(valueOf3).length()).append("\n    ").append(valueOf2).append(": ").append(valueOf3).toString());
+            }
+            stringBuilder.append("\n  ]");
+            return stringBuilder.toString();
+        }
+        stringBuilder.append("]");
+        return stringBuilder.toString();
+    }
+
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zza(parcel, 2, getUri(), i, false);
+        Bundle bundle = new Bundle();
+        bundle.setClassLoader(DataItemAssetParcelable.class.getClassLoader());
+        for (Entry entry : this.zzlkc.entrySet()) {
+            bundle.putParcelable((String) entry.getKey(), new DataItemAssetParcelable((DataItemAsset) entry.getValue()));
+        }
+        zzbfp.zza(parcel, 4, bundle, false);
+        zzbfp.zza(parcel, 5, getData(), false);
+        zzbfp.zzai(parcel, zze);
     }
 }

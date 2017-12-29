@@ -15,10 +15,6 @@ public final class R {
         public static final int hockeyapp_text_white = NUM;
     }
 
-    public static final class drawable {
-        public static final int hockeyapp_btn_background = NUM;
-    }
-
     public static final class id {
         public static final int button_add_response = NUM;
         public static final int button_attachment = NUM;
@@ -131,11 +127,5 @@ public final class R {
         public static final int hockeyapp_update_dialog_title = NUM;
         public static final int hockeyapp_update_mandatory_toast = NUM;
         public static final int hockeyapp_update_version_details_label = NUM;
-    }
-
-    public static final class style {
-        public static final int HockeyApp_ButtonStyle = NUM;
-        public static final int HockeyApp_EditTextStyle = NUM;
-        public static final int HockeyApp_SingleLineInputStyle = NUM;
     }
 }

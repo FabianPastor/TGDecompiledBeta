@@ -25,6 +25,7 @@ import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.LocationActivity.LiveLocation;
 
 public class LocationActivityAdapter extends BaseLocationAdapter {
+    private int currentAccount = UserConfig.selectedAccount;
     private ArrayList<LiveLocation> currentLiveLocations = new ArrayList();
     private MessageObject currentMessageObject;
     private Location customLocation;
@@ -76,7 +77,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
 
     public void setLiveLocations(ArrayList<LiveLocation> liveLocations) {
         this.currentLiveLocations = new ArrayList(liveLocations);
-        int uid = UserConfig.getClientUserId();
+        int uid = UserConfig.getInstance(this.currentAccount).getClientUserId();
         for (int a = 0; a < this.currentLiveLocations.size(); a++) {
             if (((LiveLocation) this.currentLiveLocations.get(a)).id == uid) {
                 this.currentLiveLocations.remove(a);
@@ -311,7 +312,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
     public boolean isEnabled(ViewHolder holder) {
         int viewType = holder.getItemViewType();
         if (viewType == 6) {
-            if (LocationController.getInstance().getSharingLocationInfo(this.dialogId) == null && this.gpsLocation == null) {
+            if (LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId) == null && this.gpsLocation == null) {
                 return false;
             }
             return true;

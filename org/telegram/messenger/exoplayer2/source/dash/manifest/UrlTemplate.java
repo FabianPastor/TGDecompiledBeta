@@ -51,7 +51,7 @@ public final class UrlTemplate {
     }
 
     private static int parseTemplate(String template, String[] urlPieces, int[] identifiers, String[] identifierFormatTags) {
-        urlPieces[0] = "";
+        urlPieces[0] = TtmlNode.ANONYMOUS_REGION_ID;
         int templateIndex = 0;
         int identifierCount = 0;
         while (templateIndex < template.length()) {
@@ -117,7 +117,7 @@ public final class UrlTemplate {
                     identifierFormatTags[identifierCount] = formatTag;
                 }
                 identifierCount++;
-                urlPieces[identifierCount] = "";
+                urlPieces[identifierCount] = TtmlNode.ANONYMOUS_REGION_ID;
                 templateIndex = secondIndex + 1;
             }
         }

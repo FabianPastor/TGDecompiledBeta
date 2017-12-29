@@ -6,7 +6,6 @@ import java.io.Serializable;
 import net.hockeyapp.android.Constants;
 
 public class FeedbackAttachment implements Serializable {
-    private static final long serialVersionUID = 5059651319640956830L;
     private String mCreatedAt;
     private String mFilename;
     private int mId;
@@ -14,16 +13,8 @@ public class FeedbackAttachment implements Serializable {
     private String mUpdatedAt;
     private String mUrl;
 
-    public int getId() {
-        return this.mId;
-    }
-
     public void setId(int id) {
         this.mId = id;
-    }
-
-    public int getMessageId() {
-        return this.mMessageId;
     }
 
     public void setMessageId(int messageId) {
@@ -46,16 +37,8 @@ public class FeedbackAttachment implements Serializable {
         this.mUrl = url;
     }
 
-    public String getCreatedAt() {
-        return this.mCreatedAt;
-    }
-
     public void setCreatedAt(String createdAt) {
         this.mCreatedAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return this.mUpdatedAt;
     }
 
     public void setUpdatedAt(String updatedAt) {
@@ -63,7 +46,7 @@ public class FeedbackAttachment implements Serializable {
     }
 
     public String getCacheId() {
-        return "" + this.mMessageId + this.mId;
+        return TtmlNode.ANONYMOUS_REGION_ID + this.mMessageId + this.mId;
     }
 
     public boolean isAvailableInCache() {

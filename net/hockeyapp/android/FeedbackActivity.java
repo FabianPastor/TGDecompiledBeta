@@ -31,7 +31,6 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.wallet.WalletConstants;
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,7 +44,6 @@ import net.hockeyapp.android.objects.ErrorObject;
 import net.hockeyapp.android.objects.FeedbackMessage;
 import net.hockeyapp.android.objects.FeedbackResponse;
 import net.hockeyapp.android.objects.FeedbackUserDataElement;
-import net.hockeyapp.android.tasks.LoginTask;
 import net.hockeyapp.android.tasks.ParseFeedbackTask;
 import net.hockeyapp.android.tasks.SendFeedbackTask;
 import net.hockeyapp.android.utils.AsyncTaskUtils;
@@ -56,16 +54,6 @@ import net.hockeyapp.android.views.AttachmentListView;
 import net.hockeyapp.android.views.AttachmentView;
 
 public class FeedbackActivity extends Activity implements OnClickListener {
-    private static final int ATTACH_FILE = 2;
-    private static final int ATTACH_PICTURE = 1;
-    private static final int DIALOG_ERROR_ID = 0;
-    public static final String EXTRA_FORCE_NEW_THREAD = "forceNewThread";
-    public static final String EXTRA_INITIAL_ATTACHMENTS = "initialAttachments";
-    public static final String EXTRA_INITIAL_USER_EMAIL = "initialUserEmail";
-    public static final String EXTRA_INITIAL_USER_NAME = "initialUserName";
-    public static final String EXTRA_URL = "url";
-    private static final int MAX_ATTACHMENTS_PER_MSG = 3;
-    private static final int PAINT_IMAGE = 3;
     private String initialUserEmail;
     private String initialUserName;
     private Button mAddAttachmentButton;
@@ -111,12 +99,12 @@ public class FeedbackActivity extends Activity implements OnClickListener {
                     error.setMessage(feedbackActivity.getString(R.string.hockeyapp_feedback_send_generic_error));
                 } else {
                     Bundle bundle = msg.getData();
-                    String responseString = bundle.getString(SendFeedbackTask.BUNDLE_FEEDBACK_RESPONSE);
-                    String statusCode = bundle.getString(SendFeedbackTask.BUNDLE_FEEDBACK_STATUS);
-                    String requestType = bundle.getString(SendFeedbackTask.BUNDLE_REQUEST_TYPE);
+                    String responseString = bundle.getString("feedback_response");
+                    String statusCode = bundle.getString("feedback_status");
+                    String requestType = bundle.getString("request_type");
                     if ("send".equals(requestType) && (responseString == null || Integer.parseInt(statusCode) != 201)) {
                         error.setMessage(feedbackActivity.getString(R.string.hockeyapp_feedback_send_generic_error));
-                    } else if ("fetch".equals(requestType) && statusCode != null && (Integer.parseInt(statusCode) == WalletConstants.ERROR_CODE_INVALID_PARAMETERS || Integer.parseInt(statusCode) == 422)) {
+                    } else if ("fetch".equals(requestType) && statusCode != null && (Integer.parseInt(statusCode) == 404 || Integer.parseInt(statusCode) == 422)) {
                         feedbackActivity.resetFeedbackView();
                         success = true;
                     } else if (responseString != null) {
@@ -153,9 +141,9 @@ public class FeedbackActivity extends Activity implements OnClickListener {
             if (feedbackActivity != null) {
                 feedbackActivity.mError = new ErrorObject();
                 if (!(msg == null || msg.getData() == null)) {
-                    FeedbackResponse feedbackResponse = (FeedbackResponse) msg.getData().getSerializable(ParseFeedbackTask.BUNDLE_PARSE_FEEDBACK_RESPONSE);
+                    FeedbackResponse feedbackResponse = (FeedbackResponse) msg.getData().getSerializable("parse_feedback_response");
                     if (feedbackResponse != null) {
-                        if (feedbackResponse.getStatus().equalsIgnoreCase(LoginTask.BUNDLE_SUCCESS)) {
+                        if (feedbackResponse.getStatus().equalsIgnoreCase("success")) {
                             success = true;
                             if (feedbackResponse.getToken() != null) {
                                 PrefsUtil.getInstance().saveFeedbackTokenToPrefs(feedbackActivity, feedbackResponse.getToken());
@@ -186,11 +174,11 @@ public class FeedbackActivity extends Activity implements OnClickListener {
         this.mContext = this;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            this.mUrl = extras.getString("url");
-            this.mForceNewThread = extras.getBoolean(EXTRA_FORCE_NEW_THREAD);
-            this.initialUserName = extras.getString(EXTRA_INITIAL_USER_NAME);
-            this.initialUserEmail = extras.getString(EXTRA_INITIAL_USER_EMAIL);
-            Parcelable[] initialAttachmentsArray = extras.getParcelableArray(EXTRA_INITIAL_ATTACHMENTS);
+            this.mUrl = extras.getString(UpdateFragment.FRAGMENT_URL);
+            this.mForceNewThread = extras.getBoolean("forceNewThread");
+            this.initialUserName = extras.getString("initialUserName");
+            this.initialUserEmail = extras.getString("initialUserEmail");
+            Parcelable[] initialAttachmentsArray = extras.getParcelableArray("initialAttachments");
             if (initialAttachmentsArray != null) {
                 this.mInitialAttachments = new ArrayList();
                 for (Parcelable parcelable : initialAttachmentsArray) {
@@ -339,14 +327,14 @@ public class FeedbackActivity extends Activity implements OnClickListener {
                 if (uri != null) {
                     try {
                         Intent intent = new Intent(this, PaintActivity.class);
-                        intent.putExtra(PaintActivity.EXTRA_IMAGE_URI, uri);
+                        intent.putExtra("imageUri", uri);
                         startActivityForResult(intent, 3);
                     } catch (ActivityNotFoundException e) {
                         HockeyLog.error("HockeyApp", "Paint activity not declared!", e);
                     }
                 }
             } else if (requestCode == 3) {
-                uri = (Uri) data.getParcelableExtra(PaintActivity.EXTRA_IMAGE_URI);
+                uri = (Uri) data.getParcelableExtra("imageUri");
                 if (uri != null) {
                     attachments = (ViewGroup) findViewById(R.id.wrapper_attachments);
                     attachments.addView(new AttachmentView((Context) this, attachments, uri, true));
@@ -405,7 +393,7 @@ public class FeedbackActivity extends Activity implements OnClickListener {
             } else {
                 this.mNameInput.setText(this.initialUserName);
                 this.mEmailInput.setText(this.initialUserEmail);
-                this.mSubjectInput.setText("");
+                this.mSubjectInput.setText(TtmlNode.ANONYMOUS_REGION_ID);
                 if (TextUtils.isEmpty(this.initialUserName)) {
                     this.mNameInput.requestFocus();
                 } else if (TextUtils.isEmpty(this.initialUserEmail)) {
@@ -430,7 +418,7 @@ public class FeedbackActivity extends Activity implements OnClickListener {
             i = 0;
         }
         editText.setVisibility(i);
-        this.mTextInput.setText("");
+        this.mTextInput.setText(TtmlNode.ANONYMOUS_REGION_ID);
         if ((!this.mForceNewThread || this.mInSendFeedback) && PrefsUtil.getInstance().getFeedbackTokenFromPrefs(this.mContext) != null) {
             this.mSubjectInput.setVisibility(8);
         } else {
@@ -539,7 +527,7 @@ public class FeedbackActivity extends Activity implements OnClickListener {
         runOnUiThread(new Runnable() {
             public void run() {
                 PrefsUtil.getInstance().saveFeedbackTokenToPrefs(FeedbackActivity.this, null);
-                FeedbackActivity.this.getSharedPreferences(ParseFeedbackTask.PREFERENCES_NAME, 0).edit().remove(ParseFeedbackTask.ID_LAST_MESSAGE_SEND).remove(ParseFeedbackTask.ID_LAST_MESSAGE_PROCESSED).apply();
+                FeedbackActivity.this.getSharedPreferences("net.hockeyapp.android.feedback", 0).edit().remove("idLastMessageSend").remove("idLastMessageProcessed").apply();
                 FeedbackActivity.this.configureFeedbackView(false);
             }
         });

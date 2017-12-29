@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">O‘rnatish</string>
     <string name="common_google_play_services_install_text">%1$s ishlashi uchun qurilmangizda Google Play xizmatlarini o‘rnatish lozim.</string>
     <string name="common_google_play_services_install_title">Google Play xizmatlarini o‘rnatish</string>
+    <string name="common_google_play_services_notification_channel_name">Google Play xizmatlarining mavjudligi</string>
     <string name="common_google_play_services_notification_ticker">Google Play xizmatlari xatosi</string>
     <string name="common_google_play_services_unknown_issue">%1$s ilovasini Google Play xizmatlariga ulab bo‘lmadi. Qaytadan urinib ko‘ring.</string>
     <string name="common_google_play_services_unsupported_text">%1$s ilovasi Google Play xizmatlarisiz ishlamaydi, biroq qurilmangiz ularni qo‘llab-quvvatlamaydi.</string>
@@ -17,4 +18,6 @@
     <string name="common_open_on_phone">Telefonda ochish</string>
     <string name="common_signin_button_text">Kirish</string>
     <string name="common_signin_button_text_long">Google orqali kirish</string>
+    <string name="gcm_fallback_notification_channel_label">Har xil</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
 </resources>

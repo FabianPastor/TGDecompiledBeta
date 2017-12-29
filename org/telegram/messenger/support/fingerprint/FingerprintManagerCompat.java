@@ -3,8 +3,6 @@ package org.telegram.messenger.support.fingerprint;
 import android.content.Context;
 import android.os.Build.VERSION;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.os.CancellationSignal;
 import java.security.Signature;
 import javax.crypto.Cipher;
@@ -188,7 +186,7 @@ public final class FingerprintManagerCompat {
         return IMPL.isHardwareDetected(this.mContext);
     }
 
-    public void authenticate(@Nullable CryptoObject crypto, int flags, @Nullable CancellationSignal cancel, @NonNull AuthenticationCallback callback, @Nullable Handler handler) {
+    public void authenticate(CryptoObject crypto, int flags, CancellationSignal cancel, AuthenticationCallback callback, Handler handler) {
         IMPL.authenticate(this.mContext, crypto, flags, cancel, callback, handler);
     }
 }

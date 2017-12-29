@@ -5,7 +5,6 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.view.View;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -32,7 +31,7 @@ public class RoundVideoPlayingDrawable extends Drawable {
         if (dt > 50) {
             dt = 50;
         }
-        this.progress1 += (((float) dt) / BitmapDescriptorFactory.HUE_MAGENTA) * ((float) this.progress1Direction);
+        this.progress1 += (((float) dt) / 300.0f) * ((float) this.progress1Direction);
         if (this.progress1 > 1.0f) {
             this.progress1Direction = -1;
             this.progress1 = 1.0f;

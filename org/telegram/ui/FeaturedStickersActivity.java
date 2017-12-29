@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -59,7 +59,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
             boolean z = true;
             if (getItemViewType(position) == 0) {
                 boolean z2;
-                ArrayList<StickerSetCovered> arrayList = StickersQuery.getFeaturedStickerSets();
+                ArrayList<StickerSetCovered> arrayList = DataQuery.getInstance(FeaturedStickersActivity.this.currentAccount).getFeaturedStickerSets();
                 FeaturedStickerSetCell cell = holder.itemView;
                 cell.setTag(Integer.valueOf(position));
                 StickerSetCovered stickerSet = (StickerSetCovered) arrayList.get(position);
@@ -98,7 +98,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
                             StickerSetCovered pack = parent.getStickerSet();
                             if (!FeaturedStickersActivity.this.installingStickerSets.containsKey(Long.valueOf(pack.set.id))) {
                                 FeaturedStickersActivity.this.installingStickerSets.put(Long.valueOf(pack.set.id), pack);
-                                StickersQuery.removeStickersSet(FeaturedStickersActivity.this.getParentActivity(), pack.set, 2, FeaturedStickersActivity.this, false);
+                                DataQuery.getInstance(FeaturedStickersActivity.this.currentAccount).removeStickersSet(FeaturedStickersActivity.this.getParentActivity(), pack.set, 2, FeaturedStickersActivity.this, false);
                                 parent.setDrawProgress(true);
                             }
                         }
@@ -123,10 +123,10 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        StickersQuery.checkFeaturedStickers();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.featuredStickersDidLoaded);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.stickersDidLoaded);
-        ArrayList<Long> arrayList = StickersQuery.getUnreadStickerSets();
+        DataQuery.getInstance(this.currentAccount).checkFeaturedStickers();
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.featuredStickersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoaded);
+        ArrayList<Long> arrayList = DataQuery.getInstance(this.currentAccount).getUnreadStickerSets();
         if (arrayList != null) {
             this.unreadStickers = new ArrayList(arrayList);
         }
@@ -136,8 +136,8 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.featuredStickersDidLoaded);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.stickersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.featuredStickersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.stickersDidLoaded);
     }
 
     public View createView(Context context) {
@@ -173,7 +173,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
             public void onItemClick(final View view, int position) {
                 if (position >= FeaturedStickersActivity.this.stickersStartRow && position < FeaturedStickersActivity.this.stickersEndRow && FeaturedStickersActivity.this.getParentActivity() != null) {
                     InputStickerSet inputStickerSet;
-                    final StickerSetCovered stickerSet = (StickerSetCovered) StickersQuery.getFeaturedStickerSets().get(position);
+                    final StickerSetCovered stickerSet = (StickerSetCovered) DataQuery.getInstance(FeaturedStickersActivity.this.currentAccount).getFeaturedStickerSets().get(position);
                     if (stickerSet.set.id != 0) {
                         inputStickerSet = new TL_inputStickerSetID();
                         inputStickerSet.id = stickerSet.set.id;
@@ -199,10 +199,10 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         return this.fragmentView;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.featuredStickersDidLoaded) {
             if (this.unreadStickers == null) {
-                this.unreadStickers = StickersQuery.getUnreadStickerSets();
+                this.unreadStickers = DataQuery.getInstance(this.currentAccount).getUnreadStickerSets();
             }
             updateRows();
         } else if (id == NotificationCenter.stickersDidLoaded) {
@@ -224,7 +224,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
 
     private void updateRows() {
         this.rowCount = 0;
-        ArrayList<StickerSetCovered> stickerSets = StickersQuery.getFeaturedStickerSets();
+        ArrayList<StickerSetCovered> stickerSets = DataQuery.getInstance(this.currentAccount).getFeaturedStickerSets();
         if (stickerSets.isEmpty()) {
             this.stickersStartRow = -1;
             this.stickersEndRow = -1;
@@ -240,7 +240,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         if (this.listAdapter != null) {
             this.listAdapter.notifyDataSetChanged();
         }
-        StickersQuery.markFaturedStickersAsRead(true);
+        DataQuery.getInstance(this.currentAccount).markFaturedStickersAsRead(true);
     }
 
     public void onResume() {

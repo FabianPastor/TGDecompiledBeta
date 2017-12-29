@@ -7,7 +7,6 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
@@ -51,7 +50,7 @@ public class BotKeyboardView extends LinearLayout {
         if (this.isFullSize && this.botButtons != null && this.botButtons.rows.size() != 0) {
             int max;
             if (this.isFullSize) {
-                max = (int) Math.max(42.0f, ((float) (((this.panelHeight - AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) - ((this.botButtons.rows.size() - 1) * AndroidUtilities.dp(10.0f))) / this.botButtons.rows.size())) / AndroidUtilities.density);
+                max = (int) Math.max(42.0f, ((float) (((this.panelHeight - AndroidUtilities.dp(30.0f)) - ((this.botButtons.rows.size() - 1) * AndroidUtilities.dp(10.0f))) / this.botButtons.rows.size())) / AndroidUtilities.density);
             } else {
                 max = 42;
             }
@@ -86,7 +85,7 @@ public class BotKeyboardView extends LinearLayout {
         this.scrollView.scrollTo(0, 0);
         if (buttons != null && this.botButtons.rows.size() != 0) {
             this.isFullSize = !buttons.resize;
-            this.buttonHeight = !this.isFullSize ? 42 : (int) Math.max(42.0f, ((float) (((this.panelHeight - AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) - ((this.botButtons.rows.size() - 1) * AndroidUtilities.dp(10.0f))) / this.botButtons.rows.size())) / AndroidUtilities.density);
+            this.buttonHeight = !this.isFullSize ? 42 : (int) Math.max(42.0f, ((float) (((this.panelHeight - AndroidUtilities.dp(30.0f)) - ((this.botButtons.rows.size() - 1) * AndroidUtilities.dp(10.0f))) / this.botButtons.rows.size())) / AndroidUtilities.density);
             int a = 0;
             while (a < buttons.rows.size()) {
                 float f;
@@ -129,6 +128,6 @@ public class BotKeyboardView extends LinearLayout {
     }
 
     public int getKeyboardHeight() {
-        return this.isFullSize ? this.panelHeight : ((this.botButtons.rows.size() * AndroidUtilities.dp((float) this.buttonHeight)) + AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) + ((this.botButtons.rows.size() - 1) * AndroidUtilities.dp(10.0f));
+        return this.isFullSize ? this.panelHeight : ((this.botButtons.rows.size() * AndroidUtilities.dp((float) this.buttonHeight)) + AndroidUtilities.dp(30.0f)) + ((this.botButtons.rows.size() - 1) * AndroidUtilities.dp(10.0f));
     }
 }

@@ -32,6 +32,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -57,7 +58,7 @@ public class WebviewActivity extends BaseFragment {
     public Runnable typingRunnable = new Runnable() {
         public void run() {
             if (WebviewActivity.this.currentMessageObject != null && WebviewActivity.this.getParentActivity() != null && WebviewActivity.this.typingRunnable != null) {
-                MessagesController.getInstance().sendTyping(WebviewActivity.this.currentMessageObject.getDialogId(), 6, 0);
+                MessagesController.getAccountInstance().sendTyping(WebviewActivity.this.currentMessageObject.getDialogId(), 6, 0);
                 AndroidUtilities.runOnUIThread(WebviewActivity.this.typingRunnable, 25000);
             }
         }
@@ -111,7 +112,7 @@ public class WebviewActivity extends BaseFragment {
         this.currentGame = gameName;
         this.currentMessageObject = messageObject;
         this.short_param = startParam;
-        this.linkToCopy = "https://" + MessagesController.getInstance().linkPrefix + "/" + this.currentBot + (TextUtils.isEmpty(startParam) ? "" : "?game=" + startParam);
+        this.linkToCopy = "https://" + MessagesController.getAccountInstance().linkPrefix + "/" + this.currentBot + (TextUtils.isEmpty(startParam) ? TtmlNode.ANONYMOUS_REGION_ID : "?game=" + startParam);
     }
 
     public void onFragmentDestroy() {
@@ -242,9 +243,9 @@ public class WebviewActivity extends BaseFragment {
         String url = urlStr;
         try {
             SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("botshare", 0);
-            String existing = sharedPreferences.getString("" + messageObject.getId(), null);
-            StringBuilder hash = new StringBuilder(existing != null ? existing : "");
-            StringBuilder addHash = new StringBuilder("tgShareScoreUrl=" + URLEncoder.encode("tgb://share_game_score?hash=", "UTF-8"));
+            String existing = sharedPreferences.getString(TtmlNode.ANONYMOUS_REGION_ID + messageObject.getId(), null);
+            StringBuilder hash = new StringBuilder(existing != null ? existing : TtmlNode.ANONYMOUS_REGION_ID);
+            StringBuilder addHash = new StringBuilder("tgShareScoreUrl=" + URLEncoder.encode("tgb://share_game_score?hash=", C.UTF8_NAME));
             if (existing == null) {
                 char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
                 for (int i = 0; i < 20; i++) {
@@ -270,7 +271,7 @@ public class WebviewActivity extends BaseFragment {
             SerializedData serializedData = new SerializedData(messageObject.messageOwner.getObjectSize());
             messageObject.messageOwner.serializeToStream(serializedData);
             editor.putString(hash + "_m", Utilities.bytesToHex(serializedData.toByteArray()));
-            editor.putString(hash + "_link", "https://" + MessagesController.getInstance().linkPrefix + "/" + username + (TextUtils.isEmpty(short_name) ? "" : "?game=" + short_name));
+            editor.putString(hash + "_link", "https://" + MessagesController.getAccountInstance().linkPrefix + "/" + username + (TextUtils.isEmpty(short_name) ? TtmlNode.ANONYMOUS_REGION_ID : "?game=" + short_name));
             editor.commit();
             Browser.openUrl((Context) parentActivity, url, false);
         } catch (Throwable e) {

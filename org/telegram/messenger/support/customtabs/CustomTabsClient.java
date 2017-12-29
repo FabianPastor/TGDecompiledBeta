@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +32,11 @@ public class CustomTabsClient {
         return context.bindService(intent, connection, 33);
     }
 
-    public static String getPackageName(Context context, @Nullable List<String> packages) {
+    public static String getPackageName(Context context, List<String> packages) {
         return getPackageName(context, packages, false);
     }
 
-    public static String getPackageName(Context context, @Nullable List<String> packages, boolean ignoreDefault) {
+    public static String getPackageName(Context context, List<String> packages, boolean ignoreDefault) {
         PackageManager pm = context.getPackageManager();
         if (packages == null) {
             List packageNames = new ArrayList();

@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
-import java.nio.channels.WritableByteChannel;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -182,17 +181,6 @@ public class FragmentedMp4SampleList extends AbstractList<Sample> {
                     final ByteBuffer finalTrunData = trunData;
                     final int finalOffset = offset2;
                     Sample sample = new Sample() {
-                        public void writeTo(WritableByteChannel channel) throws IOException {
-                            channel.write(asByteBuffer());
-                        }
-
-                        public long getSize() {
-                            return sampleSize;
-                        }
-
-                        public ByteBuffer asByteBuffer() {
-                            return (ByteBuffer) ((ByteBuffer) finalTrunData.position(finalOffset)).slice().limit(CastUtils.l2i(sampleSize));
-                        }
                     };
                     this.sampleCache[index] = new SoftReference(sample);
                     return sample;

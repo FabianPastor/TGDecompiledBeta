@@ -1,14 +1,14 @@
 package com.googlecode.mp4parser.boxes.mp4.objectdescriptors;
 
-import android.support.v4.view.MotionEventCompat;
 import com.coremedia.iso.Hex;
 import com.coremedia.iso.IsoTypeWriter;
-import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import org.telegram.messenger.exoplayer2.RendererCapabilities;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 
 @Descriptor(objectTypeIndication = 64, tags = {5})
 public class AudioSpecificConfig extends BaseDescriptor {
@@ -60,7 +60,6 @@ public class AudioSpecificConfig extends BaseDescriptor {
     public int var_ScalableFlag;
 
     public class ELDSpecificConfig {
-        private static final int ELDEXT_TERM = 0;
         public boolean aacScalefactorDataResilienceFlag;
         public boolean aacSectionDataResilienceFlag;
         public boolean aacSpectralDataResilienceFlag;
@@ -276,17 +275,17 @@ public class AudioSpecificConfig extends BaseDescriptor {
             case 15:
             case 16:
                 throw new UnsupportedOperationException("can't parse StructuredAudioSpecificConfig yet");
-            case 24:
+            case RendererCapabilities.ADAPTIVE_SUPPORT_MASK /*24*/:
                 throw new UnsupportedOperationException("can't parse ErrorResilientCelpSpecificConfig yet");
             case 25:
                 throw new UnsupportedOperationException("can't parse ErrorResilientHvxcSpecificConfig yet");
-            case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
+            case 26:
             case 27:
                 parseParametricSpecificConfig(this.samplingFrequencyIndex, this.channelConfiguration, this.audioObjectType, bitReaderBuffer);
                 break;
             case 28:
                 throw new UnsupportedOperationException("can't parse SSCSpecificConfig yet");
-            case NalUnitTypes.NAL_TYPE_RSV_VCL30 /*30*/:
+            case 30:
                 this.sacPayloadEmbedding = bitReaderBuffer.readBits(1);
                 throw new UnsupportedOperationException("can't parse SpatialSpecificConfig yet");
             case 32:
@@ -295,7 +294,7 @@ public class AudioSpecificConfig extends BaseDescriptor {
                 throw new UnsupportedOperationException("can't parse MPEG_1_2_SpecificConfig yet");
             case 35:
                 throw new UnsupportedOperationException("can't parse DSTSpecificConfig yet");
-            case 36:
+            case TsExtractor.TS_STREAM_TYPE_H265 /*36*/:
                 this.fillBits = bitReaderBuffer.readBits(5);
                 throw new UnsupportedOperationException("can't parse ALSSpecificConfig yet");
             case 37:
@@ -304,7 +303,7 @@ public class AudioSpecificConfig extends BaseDescriptor {
             case 39:
                 this.eldSpecificConfig = new ELDSpecificConfig(this.channelConfiguration, bitReaderBuffer);
                 break;
-            case MotionEventCompat.AXIS_GENERIC_9 /*40*/:
+            case 40:
             case 41:
                 throw new UnsupportedOperationException("can't parse SymbolicMusicSpecificConfig yet");
         }
@@ -315,9 +314,9 @@ public class AudioSpecificConfig extends BaseDescriptor {
             case 21:
             case 22:
             case 23:
-            case 24:
+            case RendererCapabilities.ADAPTIVE_SUPPORT_MASK /*24*/:
             case 25:
-            case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
+            case 26:
             case 27:
             case 39:
                 this.epConfig = bitReaderBuffer.readBits(2);
@@ -470,28 +469,12 @@ public class AudioSpecificConfig extends BaseDescriptor {
         }
     }
 
-    public byte[] getConfigBytes() {
-        return this.configBytes;
-    }
-
-    public int getAudioObjectType() {
-        return this.audioObjectType;
-    }
-
-    public int getExtensionAudioObjectType() {
-        return this.extensionAudioObjectType;
-    }
-
     public void setAudioObjectType(int audioObjectType) {
         this.audioObjectType = audioObjectType;
     }
 
     public void setSamplingFrequencyIndex(int samplingFrequencyIndex) {
         this.samplingFrequencyIndex = samplingFrequencyIndex;
-    }
-
-    public void setSamplingFrequency(int samplingFrequency) {
-        this.samplingFrequency = samplingFrequency;
     }
 
     public void setChannelConfiguration(int channelConfiguration) {
@@ -546,14 +529,6 @@ public class AudioSpecificConfig extends BaseDescriptor {
         }
         sb.append('}');
         return sb.toString();
-    }
-
-    public int getSamplingFrequency() {
-        return this.samplingFrequencyIndex == 15 ? this.samplingFrequency : ((Integer) samplingFrequencyIndexMap.get(Integer.valueOf(this.samplingFrequencyIndex))).intValue();
-    }
-
-    public int getChannelConfiguration() {
-        return this.channelConfiguration;
     }
 
     public boolean equals(Object o) {

@@ -2,31 +2,37 @@ package com.google.android.gms.wallet.wobs;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.internal.zzbfn;
 import java.util.ArrayList;
 
-public final class zze extends zza {
-    public static final Creator<zze> CREATOR = new zzf();
-    private String zzbQH;
-    private String zzbQI;
-    private ArrayList<zzc> zzbQJ;
-
-    zze() {
-        this.zzbQJ = new ArrayList();
+public final class zze implements Creator<LabelValueRow> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        String str = null;
+        int zzd = zzbfn.zzd(parcel);
+        ArrayList arrayList = new ArrayList();
+        String str2 = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (65535 & readInt) {
+                case 2:
+                    str2 = zzbfn.zzq(parcel, readInt);
+                    break;
+                case 3:
+                    str = zzbfn.zzq(parcel, readInt);
+                    break;
+                case 4:
+                    arrayList = zzbfn.zzc(parcel, readInt, LabelValue.CREATOR);
+                    break;
+                default:
+                    zzbfn.zzb(parcel, readInt);
+                    break;
+            }
+        }
+        zzbfn.zzaf(parcel, zzd);
+        return new LabelValueRow(str2, str, arrayList);
     }
 
-    zze(String str, String str2, ArrayList<zzc> arrayList) {
-        this.zzbQH = str;
-        this.zzbQI = str2;
-        this.zzbQJ = arrayList;
-    }
-
-    public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.zzbQH, false);
-        zzd.zza(parcel, 3, this.zzbQI, false);
-        zzd.zzc(parcel, 4, this.zzbQJ, false);
-        zzd.zzI(parcel, zze);
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new LabelValueRow[i];
     }
 }

@@ -1,6 +1,5 @@
 package org.telegram.messenger.support.widget;
 
-import android.support.annotation.Nullable;
 import android.support.v4.os.TraceCompat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -216,19 +215,24 @@ final class GapWorker implements Runnable {
             return null;
         }
         Recycler recycler = view.mRecycler;
-        ViewHolder holder = recycler.tryGetViewHolderForPositionByDeadline(position, false, deadlineNs);
-        if (holder == null) {
+        try {
+            view.onEnterLayoutOrScroll();
+            ViewHolder holder = recycler.tryGetViewHolderForPositionByDeadline(position, false, deadlineNs);
+            if (holder != null) {
+                if (!holder.isBound() || holder.isInvalid()) {
+                    recycler.addViewHolderToRecycledViewPool(holder, false);
+                } else {
+                    recycler.recycleView(holder.itemView);
+                }
+            }
+            view.onExitLayoutOrScroll(false);
             return holder;
+        } catch (Throwable th) {
+            view.onExitLayoutOrScroll(false);
         }
-        if (holder.isBound()) {
-            recycler.recycleView(holder.itemView);
-            return holder;
-        }
-        recycler.addViewHolderToRecycledViewPool(holder, false);
-        return holder;
     }
 
-    private void prefetchInnerRecyclerViewWithDeadline(@Nullable RecyclerView innerView, long deadlineNs) {
+    private void prefetchInnerRecyclerViewWithDeadline(RecyclerView innerView, long deadlineNs) {
         if (innerView != null) {
             if (innerView.mDataSetHasChangedAfterLayout && innerView.mChildHelper.getUnfilteredChildCount() != 0) {
                 innerView.removeAndRecycleViews();
@@ -257,7 +261,7 @@ final class GapWorker implements Runnable {
             taskDeadlineNs = deadlineNs;
         }
         ViewHolder holder = prefetchPositionWithDeadline(task.view, task.position, taskDeadlineNs);
-        if (holder != null && holder.mNestedRecyclerView != null) {
+        if (holder != null && holder.mNestedRecyclerView != null && holder.isBound() && !holder.isInvalid()) {
             prefetchInnerRecyclerViewWithDeadline((RecyclerView) holder.mNestedRecyclerView.get(), deadlineNs);
         }
     }

@@ -1,12 +1,11 @@
 package org.telegram.messenger.exoplayer2.util;
 
-import android.support.v4.internal.view.SupportMenu;
-import android.support.v4.view.InputDeviceCompat;
 import android.text.TextUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.telegram.ui.ActionBar.Theme;
 
 public final class ColorParser {
     private static final Map<String, Integer> COLOR_MAP = new HashMap();
@@ -24,7 +23,7 @@ public final class ColorParser {
         COLOR_MAP.put("azure", Integer.valueOf(-983041));
         COLOR_MAP.put("beige", Integer.valueOf(-657956));
         COLOR_MAP.put("bisque", Integer.valueOf(-6972));
-        COLOR_MAP.put("black", Integer.valueOf(-16777216));
+        COLOR_MAP.put("black", Integer.valueOf(Theme.ACTION_BAR_VIDEO_EDIT_COLOR));
         COLOR_MAP.put("blanchedalmond", Integer.valueOf(-5171));
         COLOR_MAP.put("blue", Integer.valueOf(-16776961));
         COLOR_MAP.put("blueviolet", Integer.valueOf(-7722014));
@@ -137,7 +136,7 @@ public final class ColorParser {
         COLOR_MAP.put("powderblue", Integer.valueOf(-5185306));
         COLOR_MAP.put("purple", Integer.valueOf(-8388480));
         COLOR_MAP.put("rebeccapurple", Integer.valueOf(-10079335));
-        COLOR_MAP.put("red", Integer.valueOf(SupportMenu.CATEGORY_MASK));
+        COLOR_MAP.put("red", Integer.valueOf(-65536));
         COLOR_MAP.put("rosybrown", Integer.valueOf(-4419697));
         COLOR_MAP.put("royalblue", Integer.valueOf(-12490271));
         COLOR_MAP.put("saddlebrown", Integer.valueOf(-7650029));
@@ -164,7 +163,7 @@ public final class ColorParser {
         COLOR_MAP.put("wheat", Integer.valueOf(-663885));
         COLOR_MAP.put("white", Integer.valueOf(-1));
         COLOR_MAP.put("whitesmoke", Integer.valueOf(-657931));
-        COLOR_MAP.put("yellow", Integer.valueOf(InputDeviceCompat.SOURCE_ANY));
+        COLOR_MAP.put("yellow", Integer.valueOf(-256));
         COLOR_MAP.put("yellowgreen", Integer.valueOf(-6632142));
     }
 
@@ -178,11 +177,11 @@ public final class ColorParser {
 
     private static int parseColorInternal(String colorExpression, boolean alphaHasFloatFormat) {
         Assertions.checkArgument(!TextUtils.isEmpty(colorExpression));
-        colorExpression = colorExpression.replace(" ", "");
+        colorExpression = colorExpression.replace(" ", TtmlNode.ANONYMOUS_REGION_ID);
         if (colorExpression.charAt(0) == '#') {
             int color = (int) Long.parseLong(colorExpression.substring(1), 16);
             if (colorExpression.length() == 7) {
-                return color | -16777216;
+                return color | Theme.ACTION_BAR_VIDEO_EDIT_COLOR;
             }
             if (colorExpression.length() == 9) {
                 return ((color & 255) << 24) | (color >>> 8);

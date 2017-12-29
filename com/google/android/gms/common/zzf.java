@@ -1,64 +1,95 @@
 package com.google.android.gms.common;
 
+import android.app.PendingIntent;
 import android.content.Context;
-import android.util.Log;
-import com.google.android.gms.common.internal.zzay;
-import com.google.android.gms.common.internal.zzaz;
-import com.google.android.gms.common.internal.zzbo;
-import com.google.android.gms.dynamic.zzn;
-import com.google.android.gms.dynamite.DynamiteModule;
+import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.text.TextUtils;
+import com.google.android.gms.common.internal.zzak;
+import com.google.android.gms.common.util.zzi;
+import com.google.android.gms.internal.zzbhf;
 
-final class zzf {
-    private static zzay zzaAd;
-    private static final Object zzaAe = new Object();
-    private static Context zzaAf;
+public class zzf {
+    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = zzp.GOOGLE_PLAY_SERVICES_VERSION_CODE;
+    private static final zzf zzfkx = new zzf();
 
-    static boolean zza(String str, zzg com_google_android_gms_common_zzg) {
-        return zza(str, com_google_android_gms_common_zzg, false);
+    zzf() {
     }
 
-    private static boolean zza(String str, zzg com_google_android_gms_common_zzg, boolean z) {
-        boolean z2 = false;
-        if (zzoX()) {
-            zzbo.zzu(zzaAf);
+    public static Intent zza(Context context, int i, String str) {
+        switch (i) {
+            case 1:
+            case 2:
+                return (context == null || !zzi.zzct(context)) ? zzak.zzt("com.google.android.gms", zzu(context, str)) : zzak.zzaln();
+            case 3:
+                return zzak.zzgk("com.google.android.gms");
+            default:
+                return null;
+        }
+    }
+
+    public static zzf zzafy() {
+        return zzfkx;
+    }
+
+    public static void zzce(Context context) {
+        zzp.zzce(context);
+    }
+
+    public static int zzcf(Context context) {
+        return zzp.zzcf(context);
+    }
+
+    public static boolean zze(Context context, int i) {
+        return zzp.zze(context, i);
+    }
+
+    private static String zzu(Context context, String str) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("gcore_");
+        stringBuilder.append(GOOGLE_PLAY_SERVICES_VERSION_CODE);
+        stringBuilder.append("-");
+        if (!TextUtils.isEmpty(str)) {
+            stringBuilder.append(str);
+        }
+        stringBuilder.append("-");
+        if (context != null) {
+            stringBuilder.append(context.getPackageName());
+        }
+        stringBuilder.append("-");
+        if (context != null) {
             try {
-                z2 = zzaAd.zza(new zzm(str, com_google_android_gms_common_zzg, z), zzn.zzw(zzaAf.getPackageManager()));
-            } catch (Throwable e) {
-                Log.e("GoogleCertificates", "Failed to get Google certificates from remote", e);
+                stringBuilder.append(zzbhf.zzdb(context).getPackageInfo(context.getPackageName(), 0).versionCode);
+            } catch (NameNotFoundException e) {
             }
         }
-        return z2;
+        return stringBuilder.toString();
     }
 
-    static synchronized void zzav(Context context) {
-        synchronized (zzf.class) {
-            if (zzaAf != null) {
-                Log.w("GoogleCertificates", "GoogleCertificates has been initialized already");
-            } else if (context != null) {
-                zzaAf = context.getApplicationContext();
-            }
-        }
+    public PendingIntent getErrorResolutionPendingIntent(Context context, int i, int i2) {
+        return zza(context, i, i2, null);
     }
 
-    static boolean zzb(String str, zzg com_google_android_gms_common_zzg) {
-        return zza(str, com_google_android_gms_common_zzg, true);
+    public String getErrorString(int i) {
+        return zzp.getErrorString(i);
     }
 
-    private static boolean zzoX() {
-        boolean z = true;
-        if (zzaAd == null) {
-            zzbo.zzu(zzaAf);
-            synchronized (zzaAe) {
-                if (zzaAd == null) {
-                    try {
-                        zzaAd = zzaz.zzJ(DynamiteModule.zza(zzaAf, DynamiteModule.zzaSP, "com.google.android.gms.googlecertificates").zzcV("com.google.android.gms.common.GoogleCertificatesImpl"));
-                    } catch (Throwable e) {
-                        Log.e("GoogleCertificates", "Failed to load com.google.android.gms.googlecertificates", e);
-                        z = false;
-                    }
-                }
-            }
-        }
-        return z;
+    public int isGooglePlayServicesAvailable(Context context) {
+        int isGooglePlayServicesAvailable = zzp.isGooglePlayServicesAvailable(context);
+        return zzp.zze(context, isGooglePlayServicesAvailable) ? 18 : isGooglePlayServicesAvailable;
+    }
+
+    public boolean isUserResolvableError(int i) {
+        return zzp.isUserRecoverableError(i);
+    }
+
+    public final PendingIntent zza(Context context, int i, int i2, String str) {
+        Intent zza = zza(context, i, str);
+        return zza == null ? null : PendingIntent.getActivity(context, i2, zza, 268435456);
+    }
+
+    @Deprecated
+    public final Intent zzbp(int i) {
+        return zza(null, i, null);
     }
 }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.text.TextUtils;
-import com.google.android.gms.measurement.AppMeasurement.Param;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class VersionHelper {
-    public static final String VERSION_MAX = "99.0";
     private int mCurrentVersionCode;
     private UpdateInfoListener mListener;
     private JSONObject mNewest;
@@ -48,7 +46,7 @@ public class VersionHelper {
                     largerVersionCode = false;
                 }
                 boolean newerApkFile;
-                if (entry.getInt("version") == versionCode && isNewerThanLastUpdateTime(context, entry.getLong(Param.TIMESTAMP))) {
+                if (entry.getInt("version") == versionCode && isNewerThanLastUpdateTime(context, entry.getLong("timestamp"))) {
                     newerApkFile = true;
                 } else {
                     newerApkFile = false;
@@ -77,12 +75,12 @@ public class VersionHelper {
     }
 
     public String getVersionString() {
-        return failSafeGetStringFromJSON(this.mNewest, "shortversion", "") + " (" + failSafeGetStringFromJSON(this.mNewest, "version", "") + ")";
+        return failSafeGetStringFromJSON(this.mNewest, "shortversion", TtmlNode.ANONYMOUS_REGION_ID) + " (" + failSafeGetStringFromJSON(this.mNewest, "version", TtmlNode.ANONYMOUS_REGION_ID) + ")";
     }
 
     @SuppressLint({"SimpleDateFormat"})
     public String getFileDateString() {
-        return new SimpleDateFormat("dd.MM.yyyy").format(new Date(1000 * failSafeGetLongFromJSON(this.mNewest, Param.TIMESTAMP, 0)));
+        return new SimpleDateFormat("dd.MM.yyyy").format(new Date(1000 * failSafeGetLongFromJSON(this.mNewest, "timestamp", 0)));
     }
 
     public long getFileSizeBytes() {
@@ -144,7 +142,7 @@ public class VersionHelper {
     }
 
     private String getVersionID(JSONObject version) {
-        String versionID = "";
+        String versionID = TtmlNode.ANONYMOUS_REGION_ID;
         try {
             versionID = version.getString(TtmlNode.ATTR_ID);
         } catch (JSONException e) {
@@ -181,7 +179,7 @@ public class VersionHelper {
     }
 
     private String getVersionName(JSONObject version) {
-        String versionName = "";
+        String versionName = TtmlNode.ANONYMOUS_REGION_ID;
         try {
             versionName = version.getString("shortversion");
         } catch (JSONException e) {
@@ -191,7 +189,7 @@ public class VersionHelper {
 
     private String getVersionNotes(int count, JSONObject version) {
         StringBuilder result = new StringBuilder();
-        String notes = failSafeGetStringFromJSON(version, "notes", "");
+        String notes = failSafeGetStringFromJSON(version, "notes", TtmlNode.ANONYMOUS_REGION_ID);
         result.append("<div style='padding: 0px 10px;'>");
         if (notes.trim().length() == 0) {
             result.append("<em>No information.</em>");
@@ -207,8 +205,8 @@ public class VersionHelper {
             return 0;
         }
         try {
-            Scanner leftScanner = new Scanner(left.replaceAll("\\-.*", ""));
-            Scanner rightScanner = new Scanner(right.replaceAll("\\-.*", ""));
+            Scanner leftScanner = new Scanner(left.replaceAll("\\-.*", TtmlNode.ANONYMOUS_REGION_ID));
+            Scanner rightScanner = new Scanner(right.replaceAll("\\-.*", TtmlNode.ANONYMOUS_REGION_ID));
             leftScanner.useDelimiter("\\.");
             rightScanner.useDelimiter("\\.");
             while (leftScanner.hasNextInt() && rightScanner.hasNextInt()) {
@@ -259,7 +257,7 @@ public class VersionHelper {
             return "7.0";
         }
         if (Pattern.matches("^[a-zA-Z]+", version)) {
-            return VERSION_MAX;
+            return "99.0";
         }
         return version;
     }

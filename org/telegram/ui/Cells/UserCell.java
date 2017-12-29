@@ -33,6 +33,7 @@ public class UserCell extends FrameLayout {
     private BackupImageView avatarImageView;
     private CheckBox checkBox;
     private CheckBoxSquare checkBoxBig;
+    private int currentAccount = UserConfig.selectedAccount;
     private int currentDrawable;
     private CharSequence currentName;
     private TLObject currentObject;
@@ -121,8 +122,8 @@ public class UserCell extends FrameLayout {
             this.currrntStatus = null;
             this.currentName = null;
             this.currentObject = null;
-            this.nameTextView.setText("");
-            this.statusTextView.setText("");
+            this.nameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
+            this.statusTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
             this.avatarImageView.setImageDrawable(null);
             return;
         }
@@ -253,7 +254,7 @@ public class UserCell extends FrameLayout {
                     } else {
                         this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
                     }
-                } else if (currentUser.id == UserConfig.getClientUserId() || ((currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance().getCurrentTime()) || MessagesController.getInstance().onlinePrivacy.containsKey(Integer.valueOf(currentUser.id)))) {
+                } else if (currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((currentUser.status != null && currentUser.status.expires > ConnectionsManager.getAccountInstance().getCurrentTime()) || MessagesController.getAccountInstance().onlinePrivacy.containsKey(Integer.valueOf(currentUser.id)))) {
                     this.statusTextView.setTextColor(this.statusOnlineColor);
                     this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
                 } else {

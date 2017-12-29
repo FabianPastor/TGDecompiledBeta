@@ -40,6 +40,7 @@ import org.telegram.ui.ProfileActivity;
 public class ChatAvatarContainer extends FrameLayout implements NotificationCenterDelegate {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private BackupImageView avatarImageView;
+    private int currentAccount = UserConfig.selectedAccount;
     private int currentConnectionState;
     private CharSequence lastSubtitle;
     private int onlineCount = -1;
@@ -221,7 +222,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         int a;
         if (start) {
             try {
-                Integer type = (Integer) MessagesController.getInstance().printingStringsTypes.get(Long.valueOf(this.parentFragment.getDialogId()));
+                Integer type = (Integer) MessagesController.getInstance(this.currentAccount).printingStringsTypes.get(Long.valueOf(this.parentFragment.getDialogId()));
                 this.subtitleTextView.setLeftDrawable(this.statusDrawables[type.intValue()]);
                 for (a = 0; a < this.statusDrawables.length; a++) {
                     if (a == type.intValue()) {
@@ -248,9 +249,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             if (!UserObject.isUserSelf(user)) {
                 CharSequence newSubtitle;
                 Chat chat = this.parentFragment.getCurrentChat();
-                CharSequence printString = (CharSequence) MessagesController.getInstance().printingStrings.get(Long.valueOf(this.parentFragment.getDialogId()));
+                CharSequence printString = (CharSequence) MessagesController.getInstance(this.currentAccount).printingStrings.get(Long.valueOf(this.parentFragment.getDialogId()));
                 if (printString != null) {
-                    printString = TextUtils.replace(printString, new String[]{"..."}, new String[]{""});
+                    printString = TextUtils.replace(printString, new String[]{"..."}, new String[]{TtmlNode.ANONYMOUS_REGION_ID});
                 }
                 if (printString == null || printString.length() == 0 || (ChatObject.isChannel(chat) && !chat.megagroup)) {
                     setTypingAnimation(false);
@@ -295,11 +296,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                         }
                     } else if (user != null) {
                         String newStatus;
-                        User newUser = MessagesController.getInstance().getUser(Integer.valueOf(user.id));
+                        User newUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(user.id));
                         if (newUser != null) {
                             user = newUser;
                         }
-                        if (user.id == UserConfig.getClientUserId()) {
+                        if (user.id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                             newStatus = LocaleController.getString("ChatYourSelf", R.string.ChatYourSelf);
                         } else if (user.id == 333000 || user.id == 777000) {
                             newStatus = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
@@ -310,7 +311,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                         }
                         Object newSubtitle2 = newStatus;
                     } else {
-                        newSubtitle = "";
+                        newSubtitle = TtmlNode.ANONYMOUS_REGION_ID;
                     }
                 } else {
                     newSubtitle = printString;
@@ -380,11 +381,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             this.onlineCount = 0;
             ChatFull info = this.parentFragment.getCurrentChatInfo();
             if (info != null) {
-                int currentTime = ConnectionsManager.getInstance().getCurrentTime();
+                int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
                 if ((info instanceof TL_chatFull) || ((info instanceof TL_channelFull) && info.participants_count <= Callback.DEFAULT_DRAG_ANIMATION_DURATION && info.participants != null)) {
                     for (int a = 0; a < info.participants.participants.size(); a++) {
-                        User user = MessagesController.getInstance().getUser(Integer.valueOf(((ChatParticipant) info.participants.participants.get(a)).user_id));
-                        if (!(user == null || user.status == null || ((user.status.expires <= currentTime && user.id != UserConfig.getClientUserId()) || user.status.expires <= 10000))) {
+                        User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((ChatParticipant) info.participants.participants.get(a)).user_id));
+                        if (!(user == null || user.status == null || ((user.status.expires <= currentTime && user.id != UserConfig.getInstance(this.currentAccount).getClientUserId()) || user.status.expires <= 10000))) {
                             this.onlineCount++;
                         }
                     }
@@ -396,8 +397,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (this.parentFragment != null) {
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.didUpdatedConnectionState);
-            this.currentConnectionState = ConnectionsManager.getInstance().getConnectionState();
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.didUpdatedConnectionState);
+            this.currentConnectionState = ConnectionsManager.getInstance(this.currentAccount).getConnectionState();
             updateCurrentConnectionState();
         }
     }
@@ -405,13 +406,13 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (this.parentFragment != null) {
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didUpdatedConnectionState);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.didUpdatedConnectionState);
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.didUpdatedConnectionState) {
-            int state = ConnectionsManager.getInstance().getConnectionState();
+            int state = ConnectionsManager.getInstance(this.currentAccount).getConnectionState();
             if (this.currentConnectionState != state) {
                 this.currentConnectionState = state;
                 updateCurrentConnectionState();

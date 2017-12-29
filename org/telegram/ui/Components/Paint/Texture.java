@@ -3,7 +3,6 @@ package org.telegram.ui.Components.Paint;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
-import com.google.android.gms.gcm.Task;
 import org.telegram.ui.Components.Size;
 
 public class Texture {
@@ -42,7 +41,7 @@ public class Texture {
         GLES20.glBindTexture(3553, this.texture);
         GLES20.glTexParameteri(3553, 10242, 33071);
         GLES20.glTexParameteri(3553, 10243, 33071);
-        GLES20.glTexParameteri(3553, Task.EXTRAS_LIMIT_BYTES, 9729);
+        GLES20.glTexParameteri(3553, 10240, 9729);
         if (null != null) {
             i = 9987;
         }
@@ -62,7 +61,7 @@ public class Texture {
         GLES20.glBindTexture(3553, texture);
         GLES20.glTexParameteri(3553, 10242, 33071);
         GLES20.glTexParameteri(3553, 10243, 33071);
-        GLES20.glTexParameteri(3553, Task.EXTRAS_LIMIT_BYTES, 9729);
+        GLES20.glTexParameteri(3553, 10240, 9729);
         GLES20.glTexParameteri(3553, 10241, 9729);
         GLES20.glTexImage2D(3553, 0, 6408, (int) size.width, (int) size.height, 0, 6408, 5121, null);
         return texture;

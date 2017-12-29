@@ -1,30 +1,28 @@
 package com.google.android.gms.wearable.internal;
 
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import android.os.RemoteException;
+import com.google.android.gms.common.api.Api.zzb;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.wearable.Channel.GetOutputStreamResult;
 
-public final class zzbc implements Creator<zzbb> {
-    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        int zzd = zzb.zzd(parcel);
-        int i = 0;
-        while (parcel.dataPosition() < zzd) {
-            int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
-                case 2:
-                    i = zzb.zzg(parcel, readInt);
-                    break;
-                default:
-                    zzb.zzb(parcel, readInt);
-                    break;
-            }
-        }
-        zzb.zzF(parcel, zzd);
-        return new zzbb(i);
+final class zzbc extends zzn<GetOutputStreamResult> {
+    private /* synthetic */ zzay zzljf;
+
+    zzbc(zzay com_google_android_gms_wearable_internal_zzay, GoogleApiClient googleApiClient) {
+        this.zzljf = com_google_android_gms_wearable_internal_zzay;
+        super(googleApiClient);
     }
 
-    public final /* synthetic */ Object[] newArray(int i) {
-        return new zzbb[i];
+    protected final /* synthetic */ void zza(zzb com_google_android_gms_common_api_Api_zzb) throws RemoteException {
+        zzhg com_google_android_gms_wearable_internal_zzhg = (zzhg) com_google_android_gms_common_api_Api_zzb;
+        String zza = this.zzljf.zzecl;
+        zzei com_google_android_gms_wearable_internal_zzbr = new zzbr();
+        ((zzep) com_google_android_gms_wearable_internal_zzhg.zzakn()).zzb(new zzgt(this, com_google_android_gms_wearable_internal_zzbr), com_google_android_gms_wearable_internal_zzbr, zza);
+    }
+
+    public final /* synthetic */ Result zzb(Status status) {
+        return new zzbh(status, null);
     }
 }

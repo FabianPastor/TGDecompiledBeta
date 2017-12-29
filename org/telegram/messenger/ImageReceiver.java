@@ -43,6 +43,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private BitmapShader crossfadeShader;
     private boolean crossfadeWithOldImage;
     private boolean crossfadeWithThumb;
+    private int currentAccount;
     private float currentAlpha;
     private int currentCacheType;
     private String currentExt;
@@ -87,6 +88,44 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private Integer tag;
     private Integer thumbTag;
 
+    public static class BitmapHolder {
+        public Bitmap bitmap;
+        private String key;
+
+        public BitmapHolder(Bitmap b, String k) {
+            this.bitmap = b;
+            this.key = k;
+            if (this.key != null) {
+                ImageLoader.getInstance().incrementUseCount(this.key);
+            }
+        }
+
+        public int getWidth() {
+            return this.bitmap != null ? this.bitmap.getWidth() : 0;
+        }
+
+        public int getHeight() {
+            return this.bitmap != null ? this.bitmap.getHeight() : 0;
+        }
+
+        public boolean isRecycled() {
+            return this.bitmap == null || this.bitmap.isRecycled();
+        }
+
+        public void release() {
+            if (this.key == null) {
+                this.bitmap = null;
+                return;
+            }
+            boolean canDelete = ImageLoader.getInstance().decrementUseCount(this.key);
+            if (!ImageLoader.getInstance().isInCache(this.key) && canDelete) {
+                this.bitmap.recycle();
+            }
+            this.key = null;
+            this.bitmap = null;
+        }
+    }
+
     public interface ImageReceiverDelegate {
         void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2);
     }
@@ -121,6 +160,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.crossfadeAlpha = (byte) 1;
         this.parentView = view;
         this.roundPaint = new Paint(1);
+        this.currentAccount = UserConfig.selectedAccount;
     }
 
     public void cancelLoadImage() {
@@ -428,7 +468,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             recycleBitmap(null, a);
         }
         if (this.needsQualityThumb) {
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messageThumbGenerated);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.messageThumbGenerated);
         }
         ImageLoader.getInstance().cancelLoadingForImageReceiver(this, 0);
     }
@@ -448,14 +488,14 @@ public class ImageReceiver implements NotificationCenterDelegate {
             this.setImageBackup.ext = this.currentExt;
             this.setImageBackup.cacheType = this.currentCacheType;
         }
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didReplacedPhotoInMemCache);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReplacedPhotoInMemCache);
         clearImage();
     }
 
     public boolean onAttachedToWindow() {
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.didReplacedPhotoInMemCache);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReplacedPhotoInMemCache);
         if (this.needsQualityThumb) {
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.messageThumbGenerated);
+            NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.messageThumbGenerated);
         }
         if (this.setImageBackup == null || (this.setImageBackup.fileLocation == null && this.setImageBackup.httpUrl == null && this.setImageBackup.thumbLocation == null && this.setImageBackup.thumb == null)) {
             return false;
@@ -810,12 +850,49 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return null;
     }
 
+    public BitmapHolder getBitmapSafe() {
+        Bitmap bitmap = null;
+        String key = null;
+        if (this.currentImage instanceof AnimatedFileDrawable) {
+            bitmap = ((AnimatedFileDrawable) this.currentImage).getAnimatedBitmap();
+        } else if (this.staticThumb instanceof AnimatedFileDrawable) {
+            bitmap = ((AnimatedFileDrawable) this.staticThumb).getAnimatedBitmap();
+        } else if (this.currentImage instanceof BitmapDrawable) {
+            bitmap = ((BitmapDrawable) this.currentImage).getBitmap();
+            key = this.currentKey;
+        } else if (this.currentThumb instanceof BitmapDrawable) {
+            bitmap = ((BitmapDrawable) this.currentThumb).getBitmap();
+            key = this.currentThumbKey;
+        } else if (this.staticThumb instanceof BitmapDrawable) {
+            bitmap = ((BitmapDrawable) this.staticThumb).getBitmap();
+        }
+        if (bitmap != null) {
+            return new BitmapHolder(bitmap, key);
+        }
+        return null;
+    }
+
     public Bitmap getThumbBitmap() {
         if (this.currentThumb instanceof BitmapDrawable) {
             return ((BitmapDrawable) this.currentThumb).getBitmap();
         }
         if (this.staticThumb instanceof BitmapDrawable) {
             return ((BitmapDrawable) this.staticThumb).getBitmap();
+        }
+        return null;
+    }
+
+    public BitmapHolder getThumbBitmapSafe() {
+        Bitmap bitmap = null;
+        String key = null;
+        if (this.currentThumb instanceof BitmapDrawable) {
+            bitmap = ((BitmapDrawable) this.currentThumb).getBitmap();
+            key = this.currentThumbKey;
+        } else if (this.staticThumb instanceof BitmapDrawable) {
+            bitmap = ((BitmapDrawable) this.staticThumb).getBitmap();
+        }
+        if (bitmap != null) {
+            return new BitmapHolder(bitmap, key);
         }
         return null;
     }
@@ -1021,6 +1098,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.roundRadius = value;
     }
 
+    public void setCurrentAccount(int value) {
+        this.currentAccount = value;
+    }
+
     public int getRoundRadius() {
         return this.roundRadius;
     }
@@ -1036,9 +1117,9 @@ public class ImageReceiver implements NotificationCenterDelegate {
     public void setNeedsQualityThumb(boolean value) {
         this.needsQualityThumb = value;
         if (this.needsQualityThumb) {
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.messageThumbGenerated);
+            NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.messageThumbGenerated);
         } else {
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messageThumbGenerated);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.messageThumbGenerated);
         }
     }
 
@@ -1048,6 +1129,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
 
     public boolean isNeedsQualityThumb() {
         return this.needsQualityThumb;
+    }
+
+    public int getcurrentAccount() {
+        return this.currentAccount;
     }
 
     public void setShouldGenerateQualityThumb(boolean value) {
@@ -1245,7 +1330,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.messageThumbGenerated) {
             String key = args[1];
             if (this.currentThumbKey != null && this.currentThumbKey.equals(key)) {

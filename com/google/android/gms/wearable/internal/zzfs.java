@@ -1,14 +1,27 @@
 package com.google.android.gms.wearable.internal;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.internal.zzbaz;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-final class zzfs extends zzfc<Status> {
-    public zzfs(zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status) {
-        super(com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status);
+public final class zzfs extends zzbfm {
+    public static final Creator<zzfs> CREATOR = new zzft();
+    private String label;
+    private String packageName;
+    private long zzllb;
+
+    public zzfs(String str, String str2, long j) {
+        this.packageName = str;
+        this.label = str2;
+        this.zzllb = j;
     }
 
-    public final void zza(zzbb com_google_android_gms_wearable_internal_zzbb) {
-        zzR(new Status(com_google_android_gms_wearable_internal_zzbb.statusCode));
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zza(parcel, 2, this.packageName, false);
+        zzbfp.zza(parcel, 3, this.label, false);
+        zzbfp.zza(parcel, 4, this.zzllb);
+        zzbfp.zzai(parcel, zze);
     }
 }

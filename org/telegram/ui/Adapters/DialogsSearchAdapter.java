@@ -20,6 +20,7 @@ import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -27,7 +28,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.query.SearchQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -61,6 +61,7 @@ import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class DialogsSearchAdapter extends SelectionAdapter {
+    private int currentAccount = UserConfig.selectedAccount;
     private DialogsSearchAdapterDelegate delegate;
     private int dialogsType;
     private RecyclerListView innerListView;
@@ -128,23 +129,23 @@ public class DialogsSearchAdapter extends SelectionAdapter {
 
         public void onBindViewHolder(ViewHolder holder, int position) {
             HintDialogCell cell = holder.itemView;
-            TL_topPeer peer = (TL_topPeer) SearchQuery.hints.get(position);
+            TL_topPeer peer = (TL_topPeer) DataQuery.getInstance(DialogsSearchAdapter.this.currentAccount).hints.get(position);
             TL_dialog dialog = new TL_dialog();
             Chat chat = null;
             User user = null;
             int did = 0;
             if (peer.peer.user_id != 0) {
                 did = peer.peer.user_id;
-                user = MessagesController.getInstance().getUser(Integer.valueOf(peer.peer.user_id));
+                user = MessagesController.getInstance(DialogsSearchAdapter.this.currentAccount).getUser(Integer.valueOf(peer.peer.user_id));
             } else if (peer.peer.channel_id != 0) {
                 did = -peer.peer.channel_id;
-                chat = MessagesController.getInstance().getChat(Integer.valueOf(peer.peer.channel_id));
+                chat = MessagesController.getInstance(DialogsSearchAdapter.this.currentAccount).getChat(Integer.valueOf(peer.peer.channel_id));
             } else if (peer.peer.chat_id != 0) {
                 did = -peer.peer.chat_id;
-                chat = MessagesController.getInstance().getChat(Integer.valueOf(peer.peer.chat_id));
+                chat = MessagesController.getInstance(DialogsSearchAdapter.this.currentAccount).getChat(Integer.valueOf(peer.peer.chat_id));
             }
             cell.setTag(Integer.valueOf(did));
-            String name = "";
+            String name = TtmlNode.ANONYMOUS_REGION_ID;
             if (user != null) {
                 name = ContactsController.formatName(user.first_name, user.last_name);
             } else if (chat != null) {
@@ -154,7 +155,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         }
 
         public int getItemCount() {
-            return SearchQuery.hints.size();
+            return DataQuery.getInstance(DialogsSearchAdapter.this.currentAccount).hints.size();
         }
     }
 
@@ -177,9 +178,9 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         this.mContext = context;
         this.needMessagesSearch = messagesSearch;
         this.dialogsType = type;
-        this.selfUserId = UserConfig.getClientUserId();
+        this.selfUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
         loadRecentSearch();
-        SearchQuery.loadHints(true);
+        DataQuery.getInstance(this.currentAccount).loadHints(true);
     }
 
     public RecyclerListView getInnerListView() {
@@ -208,7 +209,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         }
         if ((this.lastMessagesSearchString != null && this.lastMessagesSearchString.length() != 0) || (query != null && query.length() != 0)) {
             if (this.reqId != 0) {
-                ConnectionsManager.getInstance().cancelRequest(this.reqId, true);
+                ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.reqId, true);
                 this.reqId = 0;
             }
             if (query == null || query.length() == 0) {
@@ -241,7 +242,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 } else {
                     id = lastMessage.messageOwner.to_id.user_id;
                 }
-                req.offset_peer = MessagesController.getInputPeer(id);
+                req.offset_peer = MessagesController.getInstance(this.currentAccount).getInputPeer(id);
             }
             this.lastMessagesSearchString = query;
             final int currentReqId = this.lastReqId + 1;
@@ -249,28 +250,28 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             if (this.delegate != null) {
                 this.delegate.searchStateChanged(true);
             }
-            this.reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, final TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
                             boolean z = true;
                             if (currentReqId == DialogsSearchAdapter.this.lastReqId && error == null) {
                                 messages_Messages res = response;
-                                MessagesStorage.getInstance().putUsersAndChats(res.users, res.chats, true, true);
-                                MessagesController.getInstance().putUsers(res.users, false);
-                                MessagesController.getInstance().putChats(res.chats, false);
+                                MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
+                                MessagesController.getInstance(DialogsSearchAdapter.this.currentAccount).putUsers(res.users, false);
+                                MessagesController.getInstance(DialogsSearchAdapter.this.currentAccount).putChats(res.chats, false);
                                 if (req.offset_id == 0) {
                                     DialogsSearchAdapter.this.searchResultMessages.clear();
                                 }
                                 for (int a = 0; a < res.messages.size(); a++) {
                                     boolean z2;
                                     Message message = (Message) res.messages.get(a);
-                                    DialogsSearchAdapter.this.searchResultMessages.add(new MessageObject(message, null, false));
+                                    DialogsSearchAdapter.this.searchResultMessages.add(new MessageObject(DialogsSearchAdapter.this.currentAccount, message, null, false));
                                     long dialog_id = MessageObject.getDialogId(message);
-                                    ConcurrentHashMap<Long, Integer> read_max = message.out ? MessagesController.getInstance().dialogs_read_outbox_max : MessagesController.getInstance().dialogs_read_inbox_max;
+                                    ConcurrentHashMap<Long, Integer> read_max = message.out ? MessagesController.getInstance(DialogsSearchAdapter.this.currentAccount).dialogs_read_outbox_max : MessagesController.getInstance(DialogsSearchAdapter.this.currentAccount).dialogs_read_inbox_max;
                                     Integer value = (Integer) read_max.get(Long.valueOf(dialog_id));
                                     if (value == null) {
-                                        value = Integer.valueOf(MessagesStorage.getInstance().getDialogReadMax(message.out, dialog_id));
+                                        value = Integer.valueOf(MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getDialogReadMax(message.out, dialog_id));
                                         read_max.put(Long.valueOf(dialog_id), value);
                                     }
                                     if (value.intValue() < message.id) {
@@ -299,21 +300,21 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public boolean hasRecentRearch() {
-        return (this.recentSearchObjects.isEmpty() && SearchQuery.hints.isEmpty()) ? false : true;
+        return (this.recentSearchObjects.isEmpty() && DataQuery.getInstance(this.currentAccount).hints.isEmpty()) ? false : true;
     }
 
     public boolean isRecentSearchDisplayed() {
-        return this.needMessagesSearch != 2 && ((this.lastSearchText == null || this.lastSearchText.length() == 0) && !(this.recentSearchObjects.isEmpty() && SearchQuery.hints.isEmpty()));
+        return this.needMessagesSearch != 2 && ((this.lastSearchText == null || this.lastSearchText.length() == 0) && !(this.recentSearchObjects.isEmpty() && DataQuery.getInstance(this.currentAccount).hints.isEmpty()));
     }
 
     public void loadRecentSearch() {
-        MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
             public void run() {
                 try {
                     long did;
                     RecentSearchObject recentSearchObject;
                     int a;
-                    SQLiteCursor cursor = MessagesStorage.getInstance().getDatabase().queryFinalized("SELECT did, date FROM search_recent WHERE 1", new Object[0]);
+                    SQLiteCursor cursor = MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getDatabase().queryFinalized("SELECT did, date FROM search_recent WHERE 1", new Object[0]);
                     ArrayList<Integer> usersToLoad = new ArrayList();
                     ArrayList<Integer> chatsToLoad = new ArrayList();
                     ArrayList<Integer> encryptedToLoad = new ArrayList();
@@ -356,14 +357,14 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                     ArrayList<User> users = new ArrayList();
                     if (!encryptedToLoad.isEmpty()) {
                         ArrayList<EncryptedChat> encryptedChats = new ArrayList();
-                        MessagesStorage.getInstance().getEncryptedChatsInternal(TextUtils.join(",", encryptedToLoad), encryptedChats, usersToLoad);
+                        MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getEncryptedChatsInternal(TextUtils.join(",", encryptedToLoad), encryptedChats, usersToLoad);
                         for (a = 0; a < encryptedChats.size(); a++) {
                             ((RecentSearchObject) hashMap.get(Long.valueOf(((long) ((EncryptedChat) encryptedChats.get(a)).id) << 32))).object = (TLObject) encryptedChats.get(a);
                         }
                     }
                     if (!chatsToLoad.isEmpty()) {
                         ArrayList<Chat> chats = new ArrayList();
-                        MessagesStorage.getInstance().getChatsInternal(TextUtils.join(",", chatsToLoad), chats);
+                        MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getChatsInternal(TextUtils.join(",", chatsToLoad), chats);
                         for (a = 0; a < chats.size(); a++) {
                             Chat chat = (Chat) chats.get(a);
                             if (chat.id > 0) {
@@ -382,7 +383,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         }
                     }
                     if (!usersToLoad.isEmpty()) {
-                        MessagesStorage.getInstance().getUsersInternal(TextUtils.join(",", usersToLoad), users);
+                        MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
                         for (a = 0; a < users.size(); a++) {
                             TLObject user = (User) users.get(a);
                             recentSearchObject = (RecentSearchObject) hashMap.get(Long.valueOf((long) user.id));
@@ -428,10 +429,10 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         recentSearchObject.object = object;
         recentSearchObject.date = (int) (System.currentTimeMillis() / 1000);
         notifyDataSetChanged();
-        MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
             public void run() {
                 try {
-                    SQLitePreparedStatement state = MessagesStorage.getInstance().getDatabase().executeFast("REPLACE INTO search_recent VALUES(?, ?)");
+                    SQLitePreparedStatement state = MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getDatabase().executeFast("REPLACE INTO search_recent VALUES(?, ?)");
                     state.requery();
                     state.bindLong(1, did);
                     state.bindInteger(2, (int) (System.currentTimeMillis() / 1000));
@@ -448,10 +449,10 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         this.recentSearchObjectsById = new HashMap();
         this.recentSearchObjects = new ArrayList();
         notifyDataSetChanged();
-        MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
             public void run() {
                 try {
-                    MessagesStorage.getInstance().getDatabase().executeFast("DELETE FROM search_recent WHERE 1").stepThis().dispose();
+                    MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getDatabase().executeFast("DELETE FROM search_recent WHERE 1").stepThis().dispose();
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -469,11 +470,11 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         for (int a = 0; a < this.recentSearchObjects.size(); a++) {
             RecentSearchObject recentSearchObject = (RecentSearchObject) this.recentSearchObjects.get(a);
             if (recentSearchObject.object instanceof User) {
-                MessagesController.getInstance().putUser((User) recentSearchObject.object, true);
+                MessagesController.getInstance(this.currentAccount).putUser((User) recentSearchObject.object, true);
             } else if (recentSearchObject.object instanceof Chat) {
-                MessagesController.getInstance().putChat((Chat) recentSearchObject.object, true);
+                MessagesController.getInstance(this.currentAccount).putChat((Chat) recentSearchObject.object, true);
             } else if (recentSearchObject.object instanceof EncryptedChat) {
-                MessagesController.getInstance().putEncryptedChat((EncryptedChat) recentSearchObject.object, true);
+                MessagesController.getInstance(this.currentAccount).putEncryptedChat((EncryptedChat) recentSearchObject.object, true);
             }
         }
         notifyDataSetChanged();
@@ -481,7 +482,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
 
     private void searchDialogsInternal(final String query, final int searchId) {
         if (this.needMessagesSearch != 2) {
-            MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
                     try {
                         String savedMessages = LocaleController.getString("SavedMessages", R.string.SavedMessages).toLowerCase();
@@ -519,7 +520,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         ArrayList<User> encUsers = new ArrayList();
                         int resultCount = 0;
                         HashMap<Long, DialogSearchResult> dialogsResult = new HashMap();
-                        SQLiteCursor cursor = MessagesStorage.getInstance().getDatabase().queryFinalized("SELECT did, date FROM dialogs ORDER BY date DESC LIMIT 600", new Object[0]);
+                        SQLiteCursor cursor = MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getDatabase().queryFinalized("SELECT did, date FROM dialogs ORDER BY date DESC LIMIT 600", new Object[0]);
                         while (cursor.next()) {
                             long id = cursor.longValue(0);
                             dialogSearchResult = new DialogSearchResult();
@@ -545,7 +546,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         }
                         cursor.dispose();
                         if (savedMessages.startsWith(search1)) {
-                            user = UserConfig.getCurrentUser();
+                            user = UserConfig.getInstance(DialogsSearchAdapter.this.currentAccount).getCurrentUser();
                             dialogSearchResult = new DialogSearchResult();
                             dialogSearchResult.date = ConnectionsManager.DEFAULT_DATACENTER_ID;
                             dialogSearchResult.name = savedMessages;
@@ -554,7 +555,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             resultCount = 0 + 1;
                         }
                         if (!usersToLoad.isEmpty()) {
-                            cursor = MessagesStorage.getInstance().getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, status, name FROM users WHERE uid IN(%s)", new Object[]{TextUtils.join(",", usersToLoad)}), new Object[0]);
+                            cursor = MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, status, name FROM users WHERE uid IN(%s)", new Object[]{TextUtils.join(",", usersToLoad)}), new Object[0]);
                             while (cursor.next()) {
                                 name = cursor.stringValue(2);
                                 tName = LocaleController.getInstance().getTranslitString(name);
@@ -601,7 +602,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             cursor.dispose();
                         }
                         if (!chatsToLoad.isEmpty()) {
-                            cursor = MessagesStorage.getInstance().getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, name FROM chats WHERE uid IN(%s)", new Object[]{TextUtils.join(",", chatsToLoad)}), new Object[0]);
+                            cursor = MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, name FROM chats WHERE uid IN(%s)", new Object[]{TextUtils.join(",", chatsToLoad)}), new Object[0]);
                             while (cursor.next()) {
                                 name = cursor.stringValue(1);
                                 tName = LocaleController.getInstance().getTranslitString(name);
@@ -640,7 +641,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             cursor.dispose();
                         }
                         if (!encryptedToLoad.isEmpty()) {
-                            cursor = MessagesStorage.getInstance().getDatabase().queryFinalized(String.format(Locale.US, "SELECT q.data, u.name, q.user, q.g, q.authkey, q.ttl, u.data, u.status, q.layer, q.seq_in, q.seq_out, q.use_count, q.exchange_id, q.key_date, q.fprint, q.fauthkey, q.khash, q.in_seq_no, q.admin_id, q.mtproto_seq FROM enc_chats as q INNER JOIN users as u ON q.user = u.uid WHERE q.uid IN(%s)", new Object[]{TextUtils.join(",", encryptedToLoad)}), new Object[0]);
+                            cursor = MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT q.data, u.name, q.user, q.g, q.authkey, q.ttl, u.data, u.status, q.layer, q.seq_in, q.seq_out, q.use_count, q.exchange_id, q.key_date, q.fprint, q.fauthkey, q.khash, q.in_seq_no, q.admin_id, q.mtproto_seq FROM enc_chats as q INNER JOIN users as u ON q.user = u.uid WHERE q.uid IN(%s)", new Object[]{TextUtils.join(",", encryptedToLoad)}), new Object[0]);
                             while (cursor.next()) {
                                 name = cursor.stringValue(1);
                                 tName = LocaleController.getInstance().getTranslitString(name);
@@ -742,7 +743,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             resultArrayNames.add(dialogSearchResult2.name);
                         }
                         if (DialogsSearchAdapter.this.dialogsType != 2) {
-                            cursor = MessagesStorage.getInstance().getDatabase().queryFinalized("SELECT u.data, u.status, u.name, u.uid FROM users as u INNER JOIN contacts as c ON u.uid = c.uid", new Object[0]);
+                            cursor = MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getDatabase().queryFinalized("SELECT u.data, u.status, u.name, u.uid FROM users as u INNER JOIN contacts as c ON u.uid = c.uid", new Object[0]);
                             while (cursor.next()) {
                                 if (!dialogsResult.containsKey(Long.valueOf((long) cursor.intValue(3)))) {
                                     name = cursor.stringValue(2);
@@ -808,14 +809,14 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                     for (int a = 0; a < arrayList.size(); a++) {
                         TLObject obj = (TLObject) arrayList.get(a);
                         if (obj instanceof User) {
-                            MessagesController.getInstance().putUser((User) obj, true);
+                            MessagesController.getInstance(DialogsSearchAdapter.this.currentAccount).putUser((User) obj, true);
                         } else if (obj instanceof Chat) {
-                            MessagesController.getInstance().putChat((Chat) obj, true);
+                            MessagesController.getInstance(DialogsSearchAdapter.this.currentAccount).putChat((Chat) obj, true);
                         } else if (obj instanceof EncryptedChat) {
-                            MessagesController.getInstance().putEncryptedChat((EncryptedChat) obj, true);
+                            MessagesController.getInstance(DialogsSearchAdapter.this.currentAccount).putEncryptedChat((EncryptedChat) obj, true);
                         }
                     }
-                    MessagesController.getInstance().putUsers(arrayList2, true);
+                    MessagesController.getInstance(DialogsSearchAdapter.this.currentAccount).putUsers(arrayList2, true);
                     DialogsSearchAdapter.this.searchResult = arrayList;
                     DialogsSearchAdapter.this.searchResultNames = arrayList3;
                     DialogsSearchAdapter.this.searchAdapterHelper.mergeResults(DialogsSearchAdapter.this.searchResult);
@@ -823,10 +824,6 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 }
             }
         });
-    }
-
-    public boolean isGlobalSearch(int i) {
-        return i > this.searchResult.size() && i <= this.searchAdapterHelper.getGlobalSearch().size() + this.searchResult.size();
     }
 
     public void clearRecentHashtags() {
@@ -914,7 +911,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             } else {
                 i2 = this.recentSearchObjects.size() + 1;
             }
-            if (!SearchQuery.hints.isEmpty()) {
+            if (!DataQuery.getInstance(this.currentAccount).hints.isEmpty()) {
                 i = 2;
             }
             return i2 + i;
@@ -922,8 +919,10 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             return this.searchResultHashtags.size() + 1;
         } else {
             int count = this.searchResult.size();
+            int localServerCount = this.searchAdapterHelper.getLocalServerSearch().size();
             int globalCount = this.searchAdapterHelper.getGlobalSearch().size();
             int messagesCount = this.searchResultMessages.size();
+            count += localServerCount;
             if (globalCount != 0) {
                 count += globalCount + 1;
             }
@@ -940,13 +939,13 @@ public class DialogsSearchAdapter extends SelectionAdapter {
 
     public Object getItem(int i) {
         if (isRecentSearchDisplayed()) {
-            int offset = !SearchQuery.hints.isEmpty() ? 2 : 0;
+            int offset = !DataQuery.getInstance(this.currentAccount).hints.isEmpty() ? 2 : 0;
             if (i <= offset || (i - 1) - offset >= this.recentSearchObjects.size()) {
                 return null;
             }
             TLObject object = ((RecentSearchObject) this.recentSearchObjects.get((i - 1) - offset)).object;
             if (object instanceof User) {
-                TLObject user = MessagesController.getInstance().getUser(Integer.valueOf(((User) object).id));
+                TLObject user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((User) object).id));
                 if (user != null) {
                     return user;
                 }
@@ -954,7 +953,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             } else if (!(object instanceof Chat)) {
                 return object;
             } else {
-                TLObject chat = MessagesController.getInstance().getChat(Integer.valueOf(((Chat) object).id));
+                TLObject chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(((Chat) object).id));
                 if (chat != null) {
                     return chat;
                 }
@@ -962,19 +961,24 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             }
         } else if (this.searchResultHashtags.isEmpty()) {
             ArrayList<TLObject> globalSearch = this.searchAdapterHelper.getGlobalSearch();
+            ArrayList<TLObject> localServerSearch = this.searchAdapterHelper.getLocalServerSearch();
             int localCount = this.searchResult.size();
+            int localServerCount = localServerSearch.size();
             int globalCount = globalSearch.isEmpty() ? 0 : globalSearch.size() + 1;
             int messagesCount = this.searchResultMessages.isEmpty() ? 0 : this.searchResultMessages.size() + 1;
             if (i >= 0 && i < localCount) {
                 return this.searchResult.get(i);
             }
-            if (i > localCount && i < globalCount + localCount) {
-                return globalSearch.get((i - localCount) - 1);
+            if (i >= localCount && i < localServerCount + localCount) {
+                return localServerSearch.get(i - localCount);
             }
-            if (i <= globalCount + localCount || i >= (globalCount + localCount) + messagesCount) {
+            if (i > localCount + localServerCount && i < (globalCount + localCount) + localServerCount) {
+                return globalSearch.get(((i - localCount) - localServerCount) - 1);
+            }
+            if (i <= (globalCount + localCount) + localServerCount || i >= ((globalCount + localCount) + messagesCount) + localServerCount) {
                 return null;
             }
-            return this.searchResultMessages.get(((i - localCount) - globalCount) - 1);
+            return this.searchResultMessages.get((((i - localCount) - globalCount) - localServerCount) - 1);
         } else if (i > 0) {
             return this.searchResultHashtags.get(i - 1);
         } else {
@@ -1077,14 +1081,14 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                     user = (User) obj;
                     un = user.username;
                 } else if (obj instanceof Chat) {
-                    chat = MessagesController.getInstance().getChat(Integer.valueOf(((Chat) obj).id));
+                    chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(((Chat) obj).id));
                     if (chat == null) {
                         chat = (Chat) obj;
                     }
                     un = chat.username;
                 } else if (obj instanceof EncryptedChat) {
-                    encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf(((EncryptedChat) obj).id));
-                    user = MessagesController.getInstance().getUser(Integer.valueOf(encryptedChat.user_id));
+                    encryptedChat = MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf(((EncryptedChat) obj).id));
+                    user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(encryptedChat.user_id));
                 }
                 boolean z;
                 if (isRecentSearchDisplayed()) {
@@ -1098,7 +1102,8 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 } else {
                     ArrayList<TLObject> globalSearch = this.searchAdapterHelper.getGlobalSearch();
                     int localCount = this.searchResult.size();
-                    z = (position == getItemCount() + -1 || position == localCount - 1 || position == (localCount + (globalSearch.isEmpty() ? 0 : globalSearch.size() + 1)) - 1) ? false : true;
+                    int localServerCount = this.searchAdapterHelper.getLocalServerSearch().size();
+                    z = (position == getItemCount() + -1 || position == (localCount + localServerCount) - 1 || position == ((localCount + (globalSearch.isEmpty() ? 0 : globalSearch.size() + 1)) + localServerCount) - 1) ? false : true;
                     cell.useSeparator = z;
                     if (position < this.searchResult.size()) {
                         name = (CharSequence) this.searchResultNames.get(position);
@@ -1106,22 +1111,43 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             username2 = name;
                             name = null;
                         }
-                    } else if (position > this.searchResult.size() && un != null) {
+                    } else {
                         String foundUserName = this.searchAdapterHelper.getLastFoundUsername();
-                        if (foundUserName.startsWith("@")) {
-                            foundUserName = foundUserName.substring(1);
-                        }
-                        try {
-                            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
-                            spannableStringBuilder.append("@");
-                            spannableStringBuilder.append(un);
-                            if (un.startsWith(foundUserName)) {
-                                spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, Math.min(spannableStringBuilder.length(), foundUserName.length() + 1), 33);
+                        if (!TextUtils.isEmpty(foundUserName)) {
+                            String nameSearch = null;
+                            String nameSearchLower = null;
+                            if (user != null) {
+                                nameSearch = ContactsController.formatName(user.first_name, user.last_name);
+                                nameSearchLower = nameSearch.toLowerCase();
+                            } else if (chat != null) {
+                                nameSearch = chat.title;
+                                nameSearchLower = nameSearch.toLowerCase();
                             }
-                            username = spannableStringBuilder;
-                        } catch (Throwable e) {
-                            username = un;
-                            FileLog.e(e);
+                            if (nameSearch != null) {
+                                int index = nameSearchLower.indexOf(foundUserName);
+                                if (index != -1) {
+                                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(nameSearch);
+                                    spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), index, foundUserName.length() + index, 33);
+                                    Object name2 = spannableStringBuilder;
+                                }
+                            }
+                            if (un != null) {
+                                if (foundUserName.startsWith("@")) {
+                                    foundUserName = foundUserName.substring(1);
+                                }
+                                try {
+                                    SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder();
+                                    spannableStringBuilder2.append("@");
+                                    spannableStringBuilder2.append(un);
+                                    if (un.startsWith(foundUserName)) {
+                                        spannableStringBuilder2.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, Math.min(spannableStringBuilder2.length(), foundUserName.length() + 1), 33);
+                                    }
+                                    username = spannableStringBuilder2;
+                                } catch (Throwable e) {
+                                    username = un;
+                                    FileLog.e(e);
+                                }
+                            }
                         }
                     }
                 }
@@ -1133,7 +1159,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 }
                 if (!(chat == null || chat.participants_count == 0)) {
                     String membersString;
-                    if (!ChatObject.isChannel((Chat) chat) || chat.megagroup) {
+                    if (!ChatObject.isChannel(chat) || chat.megagroup) {
                         membersString = LocaleController.formatPluralString("Members", chat.participants_count);
                     } else {
                         membersString = LocaleController.formatPluralString("Subscribers", chat.participants_count);
@@ -1156,7 +1182,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             case 1:
                 GraySectionCell cell2 = holder.itemView;
                 if (isRecentSearchDisplayed()) {
-                    if (position < (!SearchQuery.hints.isEmpty() ? 2 : 0)) {
+                    if (position < (!DataQuery.getInstance(this.currentAccount).hints.isEmpty() ? 2 : 0)) {
                         cell2.setText(LocaleController.getString("ChatHints", R.string.ChatHints).toUpperCase());
                         return;
                     } else {
@@ -1166,7 +1192,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 } else if (!this.searchResultHashtags.isEmpty()) {
                     cell2.setText(LocaleController.getString("Hashtags", R.string.Hashtags).toUpperCase());
                     return;
-                } else if (this.searchAdapterHelper.getGlobalSearch().isEmpty() || position != this.searchResult.size()) {
+                } else if (this.searchAdapterHelper.getGlobalSearch().isEmpty() || position != this.searchResult.size() + this.searchAdapterHelper.getLocalServerSearch().size()) {
                     cell2.setText(LocaleController.getString("SearchMessages", R.string.SearchMessages));
                     return;
                 } else {
@@ -1194,7 +1220,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
 
     public int getItemViewType(int i) {
         if (isRecentSearchDisplayed()) {
-            int offset = !SearchQuery.hints.isEmpty() ? 2 : 0;
+            int offset = !DataQuery.getInstance(this.currentAccount).hints.isEmpty() ? 2 : 0;
             if (i > offset) {
                 return 0;
             }
@@ -1205,15 +1231,16 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         } else if (this.searchResultHashtags.isEmpty()) {
             ArrayList<TLObject> globalSearch = this.searchAdapterHelper.getGlobalSearch();
             int localCount = this.searchResult.size();
+            int localServerCount = this.searchAdapterHelper.getLocalServerSearch().size();
             int globalCount = globalSearch.isEmpty() ? 0 : globalSearch.size() + 1;
             int messagesCount = this.searchResultMessages.isEmpty() ? 0 : this.searchResultMessages.size() + 1;
-            if ((i >= 0 && i < localCount) || (i > localCount && i < globalCount + localCount)) {
+            if ((i >= 0 && i < localCount + localServerCount) || (i > localCount + localServerCount && i < (globalCount + localCount) + localServerCount)) {
                 return 0;
             }
-            if (i > globalCount + localCount && i < (globalCount + localCount) + messagesCount) {
+            if (i > (globalCount + localCount) + localServerCount && i < ((globalCount + localCount) + messagesCount) + localServerCount) {
                 return 2;
             }
-            if (messagesCount == 0 || i != (globalCount + localCount) + messagesCount) {
+            if (messagesCount == 0 || i != ((globalCount + localCount) + messagesCount) + localServerCount) {
                 return 1;
             }
             return 3;

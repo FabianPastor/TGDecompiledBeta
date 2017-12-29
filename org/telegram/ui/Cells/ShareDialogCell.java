@@ -54,7 +54,7 @@ public class ShareDialogCell extends FrameLayout {
     public void setDialog(int uid, boolean checked, CharSequence name) {
         TLObject photo = null;
         if (uid > 0) {
-            User user = MessagesController.getInstance().getUser(Integer.valueOf(uid));
+            User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(uid));
             this.avatarDrawable.setInfo(user);
             if (UserObject.isUserSelf(user)) {
                 this.nameTextView.setText(LocaleController.getString("SavedMessages", R.string.SavedMessages));
@@ -65,20 +65,20 @@ public class ShareDialogCell extends FrameLayout {
                 } else if (user != null) {
                     this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
                 } else {
-                    this.nameTextView.setText("");
+                    this.nameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
                 }
                 if (!(user == null || user.photo == null)) {
                     photo = user.photo.photo_small;
                 }
             }
         } else {
-            Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-uid));
+            Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-uid));
             if (name != null) {
                 this.nameTextView.setText(name);
             } else if (chat != null) {
                 this.nameTextView.setText(chat.title);
             } else {
-                this.nameTextView.setText("");
+                this.nameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
             }
             this.avatarDrawable.setInfo(chat);
             if (!(chat == null || chat.photo == null)) {

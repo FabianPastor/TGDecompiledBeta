@@ -7,11 +7,20 @@ import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 
 public class RecyclerViewAccessibilityDelegate extends AccessibilityDelegateCompat {
-    final AccessibilityDelegateCompat mItemDelegate = new AccessibilityDelegateCompat() {
+    final AccessibilityDelegateCompat mItemDelegate = new ItemDelegate(this);
+    final RecyclerView mRecyclerView;
+
+    public static class ItemDelegate extends AccessibilityDelegateCompat {
+        final RecyclerViewAccessibilityDelegate mRecyclerViewDelegate;
+
+        public ItemDelegate(RecyclerViewAccessibilityDelegate recyclerViewDelegate) {
+            this.mRecyclerViewDelegate = recyclerViewDelegate;
+        }
+
         public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
             super.onInitializeAccessibilityNodeInfo(host, info);
-            if (!RecyclerViewAccessibilityDelegate.this.shouldIgnore() && RecyclerViewAccessibilityDelegate.this.mRecyclerView.getLayoutManager() != null) {
-                RecyclerViewAccessibilityDelegate.this.mRecyclerView.getLayoutManager().onInitializeAccessibilityNodeInfoForItem(host, info);
+            if (!this.mRecyclerViewDelegate.shouldIgnore() && this.mRecyclerViewDelegate.mRecyclerView.getLayoutManager() != null) {
+                this.mRecyclerViewDelegate.mRecyclerView.getLayoutManager().onInitializeAccessibilityNodeInfoForItem(host, info);
             }
         }
 
@@ -19,13 +28,12 @@ public class RecyclerViewAccessibilityDelegate extends AccessibilityDelegateComp
             if (super.performAccessibilityAction(host, action, args)) {
                 return true;
             }
-            if (RecyclerViewAccessibilityDelegate.this.shouldIgnore() || RecyclerViewAccessibilityDelegate.this.mRecyclerView.getLayoutManager() == null) {
+            if (this.mRecyclerViewDelegate.shouldIgnore() || this.mRecyclerViewDelegate.mRecyclerView.getLayoutManager() == null) {
                 return false;
             }
-            return RecyclerViewAccessibilityDelegate.this.mRecyclerView.getLayoutManager().performAccessibilityActionForItem(host, action, args);
+            return this.mRecyclerViewDelegate.mRecyclerView.getLayoutManager().performAccessibilityActionForItem(host, action, args);
         }
-    };
-    final RecyclerView mRecyclerView;
+    }
 
     public RecyclerViewAccessibilityDelegate(RecyclerView recyclerView) {
         this.mRecyclerView = recyclerView;

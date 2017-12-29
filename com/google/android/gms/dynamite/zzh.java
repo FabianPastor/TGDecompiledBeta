@@ -1,10 +1,19 @@
 package com.google.android.gms.dynamite;
 
-import android.content.Context;
-import com.google.android.gms.dynamite.DynamiteModule.zzc;
+import dalvik.system.PathClassLoader;
 
-public interface zzh {
-    int zzE(Context context, String str);
+final class zzh extends PathClassLoader {
+    zzh(String str, ClassLoader classLoader) {
+        super(str, classLoader);
+    }
 
-    int zzb(Context context, String str, boolean z) throws zzc;
+    protected final Class<?> loadClass(String str, boolean z) throws ClassNotFoundException {
+        if (!(str.startsWith("java.") || str.startsWith("android."))) {
+            try {
+                return findClass(str);
+            } catch (ClassNotFoundException e) {
+            }
+        }
+        return super.loadClass(str, z);
+    }
 }

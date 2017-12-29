@@ -1,17 +1,17 @@
 package com.google.android.gms.wearable;
 
-import com.google.android.gms.wearable.internal.zzdx;
+import com.google.android.gms.wearable.internal.zzfe;
 
 final class zzm implements Runnable {
-    private /* synthetic */ zzc zzbRA;
-    private /* synthetic */ zzdx zzbRB;
+    private /* synthetic */ zzd zzlho;
+    private /* synthetic */ zzfe zzlhp;
 
-    zzm(zzc com_google_android_gms_wearable_WearableListenerService_zzc, zzdx com_google_android_gms_wearable_internal_zzdx) {
-        this.zzbRA = com_google_android_gms_wearable_WearableListenerService_zzc;
-        this.zzbRB = com_google_android_gms_wearable_internal_zzdx;
+    zzm(zzd com_google_android_gms_wearable_WearableListenerService_zzd, zzfe com_google_android_gms_wearable_internal_zzfe) {
+        this.zzlho = com_google_android_gms_wearable_WearableListenerService_zzd;
+        this.zzlhp = com_google_android_gms_wearable_internal_zzfe;
     }
 
     public final void run() {
-        this.zzbRA.zzbRx.onMessageReceived(this.zzbRB);
+        this.zzlho.zzlhk.onMessageReceived(this.zzlhp);
     }
 }

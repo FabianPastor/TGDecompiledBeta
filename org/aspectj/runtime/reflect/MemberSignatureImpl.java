@@ -6,8 +6,4 @@ abstract class MemberSignatureImpl extends SignatureImpl implements MemberSignat
     MemberSignatureImpl(int modifiers, String name, Class declaringType) {
         super(modifiers, name, declaringType);
     }
-
-    public MemberSignatureImpl(String stringRep) {
-        super(stringRep);
-    }
 }

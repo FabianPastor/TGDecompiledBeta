@@ -15,7 +15,7 @@ public class VoIPFeedbackActivity extends Activity {
             public void run() {
                 VoIPFeedbackActivity.this.finish();
             }
-        }, getIntent().getLongExtra("call_id", 0), getIntent().getLongExtra("call_access_hash", 0));
+        }, getIntent().getLongExtra("call_id", 0), getIntent().getLongExtra("call_access_hash", 0), getIntent().getIntExtra("account", 0));
     }
 
     public void finish() {

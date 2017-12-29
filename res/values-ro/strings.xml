@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">Instalați</string>
     <string name="common_google_play_services_install_text">%1$s nu va rula fără serviciile Google Play, care lipsesc de pe dispozitivul dvs.</string>
     <string name="common_google_play_services_install_title">Descărcați serviciile Google Play</string>
+    <string name="common_google_play_services_notification_channel_name">Disponibilitatea serviciilor Google Play</string>
     <string name="common_google_play_services_notification_ticker">Eroare a serviciilor Google Play</string>
     <string name="common_google_play_services_unknown_issue">%1$s întâmpină probleme privind serviciile Google Play. Încercați din nou.</string>
     <string name="common_google_play_services_unsupported_text">%1$s nu va rula fără serviciile Google Play, care nu sunt acceptate de dispozitivul dvs.</string>
@@ -17,5 +18,7 @@
     <string name="common_open_on_phone">Deschideți pe telefon</string>
     <string name="common_signin_button_text">Conectați-vă</string>
     <string name="common_signin_button_text_long">Conectați-vă cu Google</string>
+    <string name="gcm_fallback_notification_channel_label">Diverse</string>
+    <string name="status_bar_notification_info_overflow">˃999</string>
     <string name="wallet_buy_button_place_holder">Cumpărați cu Google</string>
 </resources>

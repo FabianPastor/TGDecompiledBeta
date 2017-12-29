@@ -13,8 +13,6 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 public class StripeSSLSocketFactory extends SSLSocketFactory {
-    private static final String TLSv11Proto = "TLSv1.1";
-    private static final String TLSv12Proto = "TLSv1.2";
     private final boolean tlsv11Supported;
     private final boolean tlsv12Supported;
     private final SSLSocketFactory under = HttpsURLConnection.getDefaultSSLSocketFactory();
@@ -32,9 +30,9 @@ public class StripeSSLSocketFactory extends SSLSocketFactory {
         int length = supportedProtocols.length;
         while (i < length) {
             String proto = supportedProtocols[i];
-            if (proto.equals(TLSv11Proto)) {
+            if (proto.equals("TLSv1.1")) {
                 tlsv11Supported = true;
-            } else if (proto.equals(TLSv12Proto)) {
+            } else if (proto.equals("TLSv1.2")) {
                 tlsv12Supported = true;
             }
             i++;
@@ -78,10 +76,10 @@ public class StripeSSLSocketFactory extends SSLSocketFactory {
         Socket sslSock = (SSLSocket) sock;
         Set<String> protos = new HashSet(Arrays.asList(sslSock.getEnabledProtocols()));
         if (this.tlsv11Supported) {
-            protos.add(TLSv11Proto);
+            protos.add("TLSv1.1");
         }
         if (this.tlsv12Supported) {
-            protos.add(TLSv12Proto);
+            protos.add("TLSv1.2");
         }
         sslSock.setEnabledProtocols((String[]) protos.toArray(new String[0]));
         return sslSock;

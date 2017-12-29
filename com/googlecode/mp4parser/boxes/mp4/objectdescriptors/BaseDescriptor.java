@@ -13,10 +13,6 @@ public abstract class BaseDescriptor {
 
     public abstract void parseDetail(ByteBuffer byteBuffer) throws IOException;
 
-    public int getTag() {
-        return this.tag;
-    }
-
     public int getSize() {
         return (this.sizeOfInstance + 1) + this.sizeBytes;
     }

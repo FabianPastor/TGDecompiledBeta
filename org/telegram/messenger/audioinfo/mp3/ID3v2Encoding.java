@@ -7,7 +7,7 @@ public enum ID3v2Encoding {
     ISO_8859_1(Charset.forName("ISO-8859-1"), 1),
     UTF_16(Charset.forName(C.UTF16_NAME), 2),
     UTF_16BE(Charset.forName("UTF-16BE"), 2),
-    UTF_8(Charset.forName("UTF-8"), 1);
+    UTF_8(Charset.forName(C.UTF8_NAME), 1);
     
     private final Charset charset;
     private final int zeroBytes;

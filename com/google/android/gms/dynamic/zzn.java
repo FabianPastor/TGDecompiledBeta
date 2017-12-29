@@ -11,7 +11,7 @@ public final class zzn<T> extends zza {
         this.mWrappedObject = t;
     }
 
-    public static <T> T zzE(IObjectWrapper iObjectWrapper) {
+    public static <T> T zzx(IObjectWrapper iObjectWrapper) {
         int i = 0;
         if (iObjectWrapper instanceof zzn) {
             return ((zzn) iObjectWrapper).mWrappedObject;
@@ -47,7 +47,7 @@ public final class zzn<T> extends zza {
         }
     }
 
-    public static <T> IObjectWrapper zzw(T t) {
+    public static <T> IObjectWrapper zzz(T t) {
         return new zzn(t);
     }
 }

@@ -1,40 +1,70 @@
 package com.google.android.gms.wearable.internal;
 
 import android.os.IBinder;
-import android.os.IInterface;
 import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
+import android.os.Parcelable;
+import android.os.RemoteException;
+import com.google.android.gms.common.data.DataHolder;
+import com.google.android.gms.internal.zzeu;
+import com.google.android.gms.internal.zzew;
+import java.util.List;
 
-public final class zzeo extends zza {
-    public static final Creator<zzeo> CREATOR = new zzep();
-    private int zzaku;
-    private zzdk zzbRJ;
-
-    zzeo(int i, IBinder iBinder) {
-        zzdk com_google_android_gms_wearable_internal_zzdk = null;
-        this.zzaku = i;
-        if (iBinder != null) {
-            if (iBinder != null) {
-                IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.wearable.internal.IWearableListener");
-                com_google_android_gms_wearable_internal_zzdk = queryLocalInterface instanceof zzdk ? (zzdk) queryLocalInterface : new zzdm(iBinder);
-            }
-            this.zzbRJ = com_google_android_gms_wearable_internal_zzdk;
-            return;
-        }
-        this.zzbRJ = null;
+public final class zzeo extends zzeu implements zzem {
+    zzeo(IBinder iBinder) {
+        super(iBinder, "com.google.android.gms.wearable.internal.IWearableListener");
     }
 
-    public zzeo(zzdk com_google_android_gms_wearable_internal_zzdk) {
-        this.zzaku = 1;
-        this.zzbRJ = com_google_android_gms_wearable_internal_zzdk;
+    public final void onConnectedNodes(List<zzfo> list) throws RemoteException {
+        Parcel zzbe = zzbe();
+        zzbe.writeTypedList(list);
+        zzc(5, zzbe);
     }
 
-    public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zzc(parcel, 1, this.zzaku);
-        zzd.zza(parcel, 2, this.zzbRJ == null ? null : this.zzbRJ.asBinder(), false);
-        zzd.zzI(parcel, zze);
+    public final void zza(zzah com_google_android_gms_wearable_internal_zzah) throws RemoteException {
+        Parcel zzbe = zzbe();
+        zzew.zza(zzbe, (Parcelable) com_google_android_gms_wearable_internal_zzah);
+        zzc(8, zzbe);
+    }
+
+    public final void zza(zzaw com_google_android_gms_wearable_internal_zzaw) throws RemoteException {
+        Parcel zzbe = zzbe();
+        zzew.zza(zzbe, (Parcelable) com_google_android_gms_wearable_internal_zzaw);
+        zzc(7, zzbe);
+    }
+
+    public final void zza(zzfe com_google_android_gms_wearable_internal_zzfe) throws RemoteException {
+        Parcel zzbe = zzbe();
+        zzew.zza(zzbe, (Parcelable) com_google_android_gms_wearable_internal_zzfe);
+        zzc(2, zzbe);
+    }
+
+    public final void zza(zzfo com_google_android_gms_wearable_internal_zzfo) throws RemoteException {
+        Parcel zzbe = zzbe();
+        zzew.zza(zzbe, (Parcelable) com_google_android_gms_wearable_internal_zzfo);
+        zzc(3, zzbe);
+    }
+
+    public final void zza(zzi com_google_android_gms_wearable_internal_zzi) throws RemoteException {
+        Parcel zzbe = zzbe();
+        zzew.zza(zzbe, (Parcelable) com_google_android_gms_wearable_internal_zzi);
+        zzc(9, zzbe);
+    }
+
+    public final void zza(zzl com_google_android_gms_wearable_internal_zzl) throws RemoteException {
+        Parcel zzbe = zzbe();
+        zzew.zza(zzbe, (Parcelable) com_google_android_gms_wearable_internal_zzl);
+        zzc(6, zzbe);
+    }
+
+    public final void zzas(DataHolder dataHolder) throws RemoteException {
+        Parcel zzbe = zzbe();
+        zzew.zza(zzbe, (Parcelable) dataHolder);
+        zzc(1, zzbe);
+    }
+
+    public final void zzb(zzfo com_google_android_gms_wearable_internal_zzfo) throws RemoteException {
+        Parcel zzbe = zzbe();
+        zzew.zza(zzbe, (Parcelable) com_google_android_gms_wearable_internal_zzfo);
+        zzc(4, zzbe);
     }
 }

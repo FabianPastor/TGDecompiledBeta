@@ -9,7 +9,6 @@ import android.media.MediaCrypto;
 import android.media.MediaFormat;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -126,7 +125,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
         }
 
         private static String buildCustomDiagnosticInfo(int errorCode) {
-            return "com.google.android.exoplayer.MediaCodecTrackRenderer_" + (errorCode < 0 ? "neg_" : "") + Math.abs(errorCode);
+            return "com.google.android.exoplayer.MediaCodecTrackRenderer_" + (errorCode < 0 ? "neg_" : TtmlNode.ANONYMOUS_REGION_ID) + Math.abs(errorCode);
         }
     }
 
@@ -743,7 +742,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
         return false;
     }
 
-    private static boolean isDrmSchemeSupported(DrmSessionManager drmSessionManager, @Nullable DrmInitData drmInitData) {
+    private static boolean isDrmSchemeSupported(DrmSessionManager drmSessionManager, DrmInitData drmInitData) {
         if (drmInitData == null) {
             return true;
         }

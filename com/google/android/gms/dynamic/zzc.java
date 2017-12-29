@@ -5,15 +5,15 @@ import android.os.Bundle;
 
 final class zzc implements zzi {
     private /* synthetic */ Activity val$activity;
-    private /* synthetic */ zza zzaSv;
-    private /* synthetic */ Bundle zzaSw;
-    private /* synthetic */ Bundle zzxV;
+    private /* synthetic */ Bundle zzail;
+    private /* synthetic */ zza zzgwh;
+    private /* synthetic */ Bundle zzgwi;
 
     zzc(zza com_google_android_gms_dynamic_zza, Activity activity, Bundle bundle, Bundle bundle2) {
-        this.zzaSv = com_google_android_gms_dynamic_zza;
+        this.zzgwh = com_google_android_gms_dynamic_zza;
         this.val$activity = activity;
-        this.zzaSw = bundle;
-        this.zzxV = bundle2;
+        this.zzgwi = bundle;
+        this.zzail = bundle2;
     }
 
     public final int getState() {
@@ -21,6 +21,6 @@ final class zzc implements zzi {
     }
 
     public final void zzb(LifecycleDelegate lifecycleDelegate) {
-        this.zzaSv.zzaSr.onInflate(this.val$activity, this.zzaSw, this.zzxV);
+        this.zzgwh.zzgwd.onInflate(this.val$activity, this.zzgwi, this.zzail);
     }
 }

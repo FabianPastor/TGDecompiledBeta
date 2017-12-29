@@ -162,16 +162,16 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     public boolean onFragmentCreate() {
         this.loading = true;
         MediaController.loadGalleryPhotosAlbums(this.classGuid);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.albumsDidLoaded);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.recentImagesDidLoaded);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.closeChats);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.albumsDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recentImagesDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.closeChats);
         return super.onFragmentCreate();
     }
 
     public void onFragmentDestroy() {
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.albumsDidLoaded);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.recentImagesDidLoaded);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.closeChats);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.albumsDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.recentImagesDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
         super.onFragmentDestroy();
     }
 
@@ -193,7 +193,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         this.actionBar.createMenu().addItem(1, (int) R.drawable.ic_ab_other);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
-        frameLayout.setBackgroundColor(-16777216);
+        frameLayout.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         this.actionBar.setTitle(LocaleController.getString("Gallery", R.string.Gallery));
         this.listView = new RecyclerListView(context);
         this.listView.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f));
@@ -286,7 +286,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         fixLayout();
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.albumsDidLoaded) {
             if (this.classGuid == ((Integer) args[0]).intValue()) {
                 if (this.singlePhoto) {
@@ -393,10 +393,10 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 }
             }
             if (webChange) {
-                MessagesStorage.getInstance().putWebRecent(this.recentWebImages);
+                MessagesStorage.getInstance(this.currentAccount).putWebRecent(this.recentWebImages);
             }
             if (gifChanged) {
-                MessagesStorage.getInstance().putWebRecent(this.recentGifImages);
+                MessagesStorage.getInstance(this.currentAccount).putWebRecent(this.recentGifImages);
             }
             this.delegate.didSelectPhotos(media);
         }

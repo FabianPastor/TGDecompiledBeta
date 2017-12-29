@@ -5,7 +5,6 @@ import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Drawable.Callback;
 import android.graphics.drawable.Drawable.ConstantState;
-import android.support.annotation.NonNull;
 
 public class CombinedDrawable extends Drawable implements Callback {
     private int backHeight;
@@ -125,15 +124,15 @@ public class CombinedDrawable extends Drawable implements Callback {
         return this.icon.getOpacity();
     }
 
-    public void invalidateDrawable(@NonNull Drawable who) {
+    public void invalidateDrawable(Drawable who) {
         invalidateSelf();
     }
 
-    public void scheduleDrawable(@NonNull Drawable who, @NonNull Runnable what, long when) {
+    public void scheduleDrawable(Drawable who, Runnable what, long when) {
         scheduleSelf(what, when);
     }
 
-    public void unscheduleDrawable(@NonNull Drawable who, @NonNull Runnable what) {
+    public void unscheduleDrawable(Drawable who, Runnable what) {
         unscheduleSelf(what);
     }
 }

@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.text.style.URLSpan;
 import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -30,6 +29,7 @@ import org.telegram.ui.PhotoViewer;
 
 public class ChatActionCell extends BaseCell {
     private AvatarDrawable avatarDrawable;
+    private int currentAccount = UserConfig.selectedAccount;
     private MessageObject currentMessageObject;
     private int customDate;
     private CharSequence customText;
@@ -103,7 +103,7 @@ public class ChatActionCell extends BaseCell {
                         id = messageObject.messageOwner.to_id.channel_id;
                     } else {
                         id = messageObject.messageOwner.to_id.user_id;
-                        if (id == UserConfig.getClientUserId()) {
+                        if (id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                             id = messageObject.messageOwner.from_id;
                         }
                     }
@@ -221,7 +221,7 @@ public class ChatActionCell extends BaseCell {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void createLayout(CharSequence text, int width) {
-        int maxWidth = width - AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
+        int maxWidth = width - AndroidUtilities.dp(30.0f);
         this.textLayout = new StaticLayout(text, Theme.chat_actionTextPaint, maxWidth, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
         this.textHeight = 0;
         this.textWidth = 0;
@@ -252,7 +252,7 @@ public class ChatActionCell extends BaseCell {
             return;
         }
         int i;
-        int width = Math.max(AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE), MeasureSpec.getSize(widthMeasureSpec));
+        int width = Math.max(AndroidUtilities.dp(30.0f), MeasureSpec.getSize(widthMeasureSpec));
         if (width != this.previousWidth) {
             CharSequence text;
             if (this.currentMessageObject == null) {

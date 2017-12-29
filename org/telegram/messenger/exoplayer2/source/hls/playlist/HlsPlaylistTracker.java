@@ -63,7 +63,7 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
         void onPrimaryPlaylistRefreshed(HlsMediaPlaylist hlsMediaPlaylist);
     }
 
-    private final class MediaPlaylistBundle implements Callback<ParsingLoadable<HlsPlaylist>>, Runnable {
+    private final class MediaPlaylistBundle implements Runnable, Callback<ParsingLoadable<HlsPlaylist>> {
         private long blacklistUntilMs;
         private long earliestNextLoadTimeMs;
         private long lastSnapshotChangeMs;

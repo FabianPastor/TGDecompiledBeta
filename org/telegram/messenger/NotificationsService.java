@@ -20,7 +20,7 @@ public class NotificationsService extends Service {
 
     public void onDestroy() {
         FileLog.e("service destroyed");
-        if (ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("pushService", true)) {
+        if (MessagesController.getGlobalNotificationsSettings().getBoolean("pushService", true)) {
             sendBroadcast(new Intent("org.telegram.start"));
         }
     }

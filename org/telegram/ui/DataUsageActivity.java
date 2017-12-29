@@ -125,14 +125,14 @@ public class DataUsageActivity extends BaseFragment {
                         type = 6;
                     }
                     if (position == DataUsageActivity.this.callsSentRow) {
-                        textCell.setTextAndValue(LocaleController.getString("OutgoingCalls", R.string.OutgoingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance().getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                        textCell.setTextAndValue(LocaleController.getString("OutgoingCalls", R.string.OutgoingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
                         return;
                     } else if (position == DataUsageActivity.this.callsReceivedRow) {
-                        textCell.setTextAndValue(LocaleController.getString("IncomingCalls", R.string.IncomingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance().getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                        textCell.setTextAndValue(LocaleController.getString("IncomingCalls", R.string.IncomingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
                         return;
                     } else if (position == DataUsageActivity.this.callsTotalTimeRow) {
                         String time;
-                        int total = StatsController.getInstance().getCallsTotalTime(DataUsageActivity.this.currentType);
+                        int total = StatsController.getInstance(DataUsageActivity.this.currentAccount).getCallsTotalTime(DataUsageActivity.this.currentType);
                         int hours = total / 3600;
                         total -= hours * 3600;
                         total -= (total / 60) * 60;
@@ -144,16 +144,16 @@ public class DataUsageActivity extends BaseFragment {
                         textCell.setTextAndValue(LocaleController.getString("CallsTotalTime", R.string.CallsTotalTime), time, false);
                         return;
                     } else if (position == DataUsageActivity.this.messagesSentRow || position == DataUsageActivity.this.photosSentRow || position == DataUsageActivity.this.videosSentRow || position == DataUsageActivity.this.audiosSentRow || position == DataUsageActivity.this.filesSentRow) {
-                        textCell.setTextAndValue(LocaleController.getString("CountSent", R.string.CountSent), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance().getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                        textCell.setTextAndValue(LocaleController.getString("CountSent", R.string.CountSent), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
                         return;
                     } else if (position == DataUsageActivity.this.messagesReceivedRow || position == DataUsageActivity.this.photosReceivedRow || position == DataUsageActivity.this.videosReceivedRow || position == DataUsageActivity.this.audiosReceivedRow || position == DataUsageActivity.this.filesReceivedRow) {
-                        textCell.setTextAndValue(LocaleController.getString("CountReceived", R.string.CountReceived), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance().getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                        textCell.setTextAndValue(LocaleController.getString("CountReceived", R.string.CountReceived), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
                         return;
                     } else if (position == DataUsageActivity.this.messagesBytesSentRow || position == DataUsageActivity.this.photosBytesSentRow || position == DataUsageActivity.this.videosBytesSentRow || position == DataUsageActivity.this.audiosBytesSentRow || position == DataUsageActivity.this.filesBytesSentRow || position == DataUsageActivity.this.callsBytesSentRow || position == DataUsageActivity.this.totalBytesSentRow) {
-                        textCell.setTextAndValue(LocaleController.getString("BytesSent", R.string.BytesSent), AndroidUtilities.formatFileSize(StatsController.getInstance().getSentBytesCount(DataUsageActivity.this.currentType, type)), true);
+                        textCell.setTextAndValue(LocaleController.getString("BytesSent", R.string.BytesSent), AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentBytesCount(DataUsageActivity.this.currentType, type)), true);
                         return;
                     } else if (position == DataUsageActivity.this.messagesBytesReceivedRow || position == DataUsageActivity.this.photosBytesReceivedRow || position == DataUsageActivity.this.videosBytesReceivedRow || position == DataUsageActivity.this.audiosBytesReceivedRow || position == DataUsageActivity.this.filesBytesReceivedRow || position == DataUsageActivity.this.callsBytesReceivedRow || position == DataUsageActivity.this.totalBytesReceivedRow) {
-                        textCell.setTextAndValue(LocaleController.getString("BytesReceived", R.string.BytesReceived), AndroidUtilities.formatFileSize(StatsController.getInstance().getReceivedBytesCount(DataUsageActivity.this.currentType, type)), position != DataUsageActivity.this.totalBytesReceivedRow);
+                        textCell.setTextAndValue(LocaleController.getString("BytesReceived", R.string.BytesReceived), AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getReceivedBytesCount(DataUsageActivity.this.currentType, type)), position != DataUsageActivity.this.totalBytesReceivedRow);
                         return;
                     } else {
                         return;
@@ -187,7 +187,7 @@ public class DataUsageActivity extends BaseFragment {
                 case 3:
                     TextInfoPrivacyCell cell = holder.itemView;
                     cell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-                    cell.setText(LocaleController.formatString("NetworkUsageSince", R.string.NetworkUsageSince, LocaleController.getInstance().formatterStats.format(StatsController.getInstance().getResetStatsDate(DataUsageActivity.this.currentType))));
+                    cell.setText(LocaleController.formatString("NetworkUsageSince", R.string.NetworkUsageSince, LocaleController.getInstance().formatterStats.format(StatsController.getInstance(DataUsageActivity.this.currentAccount).getResetStatsDate(DataUsageActivity.this.currentType))));
                     return;
                 default:
                     return;
@@ -403,7 +403,7 @@ public class DataUsageActivity extends BaseFragment {
                     builder.setMessage(LocaleController.getString("ResetStatisticsAlert", R.string.ResetStatisticsAlert));
                     builder.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            StatsController.getInstance().resetStats(DataUsageActivity.this.currentType);
+                            StatsController.getInstance(DataUsageActivity.this.currentAccount).resetStats(DataUsageActivity.this.currentType);
                             DataUsageActivity.this.listAdapter.notifyDataSetChanged();
                         }
                     });

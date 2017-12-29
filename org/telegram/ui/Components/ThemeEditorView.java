@@ -27,8 +27,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.support.annotation.Keep;
-import android.support.v4.view.InputDeviceCompat;
-import android.support.v4.view.ViewCompat;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputFilter.LengthFilter;
@@ -55,6 +53,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -185,22 +184,22 @@ public class ThemeEditorView {
                                 int color = Utilities.parseInt(editable.toString()).intValue();
                                 if (color < 0) {
                                     color = 0;
-                                    ColorPicker.this.colorEditText[num].setText("" + 0);
+                                    ColorPicker.this.colorEditText[num].setText(TtmlNode.ANONYMOUS_REGION_ID + 0);
                                     ColorPicker.this.colorEditText[num].setSelection(ColorPicker.this.colorEditText[num].length());
                                 } else if (color > 255) {
                                     color = 255;
-                                    ColorPicker.this.colorEditText[num].setText("" + 255);
+                                    ColorPicker.this.colorEditText[num].setText(TtmlNode.ANONYMOUS_REGION_ID + 255);
                                     ColorPicker.this.colorEditText[num].setSelection(ColorPicker.this.colorEditText[num].length());
                                 }
                                 int currentColor = ColorPicker.this.getColor();
                                 if (num == 2) {
-                                    currentColor = (currentColor & InputDeviceCompat.SOURCE_ANY) | (color & 255);
+                                    currentColor = (currentColor & -256) | (color & 255);
                                 } else if (num == 1) {
                                     currentColor = (-65281 & currentColor) | ((color & 255) << 8);
                                 } else if (num == 0) {
                                     currentColor = (-16711681 & currentColor) | ((color & 255) << 16);
                                 } else if (num == 3) {
-                                    currentColor = (ViewCompat.MEASURED_SIZE_MASK & currentColor) | ((color & 255) << 24);
+                                    currentColor = (16777215 & currentColor) | ((color & 255) << 24);
                                 }
                                 ColorPicker.this.setColor(currentColor);
                                 for (int a = 0; a < ThemeEditorView.this.currentThemeDesription.size(); a++) {
@@ -246,7 +245,7 @@ public class ThemeEditorView {
                 int width = AndroidUtilities.dp(9.0f);
                 int height = this.colorWheelRadius * 2;
                 if (this.colorGradient == null) {
-                    this.colorGradient = new LinearGradient((float) x, (float) y, (float) (x + width), (float) (y + height), new int[]{-16777216, Color.HSVToColor(this.hsvTemp)}, null, TileMode.CLAMP);
+                    this.colorGradient = new LinearGradient((float) x, (float) y, (float) (x + width), (float) (y + height), new int[]{Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Color.HSVToColor(this.hsvTemp)}, null, TileMode.CLAMP);
                 }
                 this.valueSliderPaint.setShader(this.colorGradient);
                 canvas.drawRect((float) x, (float) y, (float) (x + width), (float) (y + height), this.valueSliderPaint);
@@ -254,11 +253,11 @@ public class ThemeEditorView {
                 x += this.paramValueSliderWidth * 2;
                 if (this.alphaGradient == null) {
                     int color = Color.HSVToColor(this.hsvTemp);
-                    this.alphaGradient = new LinearGradient((float) x, (float) y, (float) (x + width), (float) (y + height), new int[]{color, ViewCompat.MEASURED_SIZE_MASK & color}, null, TileMode.CLAMP);
+                    this.alphaGradient = new LinearGradient((float) x, (float) y, (float) (x + width), (float) (y + height), new int[]{color, 16777215 & color}, null, TileMode.CLAMP);
                 }
                 this.valueSliderPaint.setShader(this.alphaGradient);
                 canvas.drawRect((float) x, (float) y, (float) (x + width), (float) (y + height), this.valueSliderPaint);
-                drawPointerArrow(canvas, (width / 2) + x, (int) (((float) y) + ((1.0f - this.alpha) * ((float) height))), (Color.HSVToColor(this.colorHSV) & ViewCompat.MEASURED_SIZE_MASK) | (((int) (255.0f * this.alpha)) << 24));
+                drawPointerArrow(canvas, (width / 2) + x, (int) (((float) y) + ((1.0f - this.alpha) * ((float) height))), (Color.HSVToColor(this.colorHSV) & 16777215) | (((int) (255.0f * this.alpha)) << 24));
             }
 
             private void drawPointerArrow(Canvas canvas, int x, int y, int color) {
@@ -287,7 +286,7 @@ public class ThemeEditorView {
                     colors[i] = Color.HSVToColor(hsv);
                 }
                 colors[12] = colors[0];
-                this.colorWheelPaint.setShader(new ComposeShader(new SweepGradient((float) (width / 2), (float) (height / 2), colors, null), new RadialGradient((float) (width / 2), (float) (height / 2), (float) this.colorWheelRadius, -1, ViewCompat.MEASURED_SIZE_MASK, TileMode.CLAMP), Mode.SRC_OVER));
+                this.colorWheelPaint.setShader(new ComposeShader(new SweepGradient((float) (width / 2), (float) (height / 2), colors, null), new RadialGradient((float) (width / 2), (float) (height / 2), (float) this.colorWheelRadius, -1, 16777215, TileMode.CLAMP), Mode.SRC_OVER));
                 new Canvas(bitmap).drawCircle((float) (width / 2), (float) (height / 2), (float) this.colorWheelRadius, this.colorWheelPaint);
                 return bitmap;
             }
@@ -371,10 +370,10 @@ public class ThemeEditorView {
                             a = Color.alpha(color);
                             if (!EditorAlert.this.ignoreTextChange) {
                                 EditorAlert.this.ignoreTextChange = true;
-                                this.colorEditText[0].setText("" + red);
-                                this.colorEditText[1].setText("" + green);
-                                this.colorEditText[2].setText("" + blue);
-                                this.colorEditText[3].setText("" + a);
+                                this.colorEditText[0].setText(TtmlNode.ANONYMOUS_REGION_ID + red);
+                                this.colorEditText[1].setText(TtmlNode.ANONYMOUS_REGION_ID + green);
+                                this.colorEditText[2].setText(TtmlNode.ANONYMOUS_REGION_ID + blue);
+                                this.colorEditText[3].setText(TtmlNode.ANONYMOUS_REGION_ID + a);
                                 for (int b = 0; b < 4; b++) {
                                     this.colorEditText[b].setSelection(this.colorEditText[b].length());
                                 }
@@ -400,10 +399,10 @@ public class ThemeEditorView {
                 int a = Color.alpha(color);
                 if (!EditorAlert.this.ignoreTextChange) {
                     EditorAlert.this.ignoreTextChange = true;
-                    this.colorEditText[0].setText("" + red);
-                    this.colorEditText[1].setText("" + green);
-                    this.colorEditText[2].setText("" + blue);
-                    this.colorEditText[3].setText("" + a);
+                    this.colorEditText[0].setText(TtmlNode.ANONYMOUS_REGION_ID + red);
+                    this.colorEditText[1].setText(TtmlNode.ANONYMOUS_REGION_ID + green);
+                    this.colorEditText[2].setText(TtmlNode.ANONYMOUS_REGION_ID + blue);
+                    this.colorEditText[3].setText(TtmlNode.ANONYMOUS_REGION_ID + a);
                     for (int b = 0; b < 4; b++) {
                         this.colorEditText[b].setSelection(this.colorEditText[b].length());
                     }
@@ -417,7 +416,7 @@ public class ThemeEditorView {
             }
 
             public int getColor() {
-                return (Color.HSVToColor(this.colorHSV) & ViewCompat.MEASURED_SIZE_MASK) | (((int) (this.alpha * 255.0f)) << 24);
+                return (Color.HSVToColor(this.colorHSV) & 16777215) | (((int) (this.alpha * 255.0f)) << 24);
             }
         }
 
@@ -744,7 +743,7 @@ public class ThemeEditorView {
                     return paddingTop - i;
                 }
             }
-            return -1000;
+            return C.PRIORITY_DOWNLOAD;
         }
 
         protected boolean canDismissWithSwipe() {

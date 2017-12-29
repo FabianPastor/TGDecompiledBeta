@@ -1,45 +1,40 @@
 package com.google.android.gms.common.internal;
 
-import android.os.IBinder;
+import android.accounts.Account;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.internal.zzbfn;
 
 public final class zzbs implements Creator<zzbr> {
     public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        ConnectionResult connectionResult = null;
-        boolean z = false;
-        int zzd = zzb.zzd(parcel);
-        boolean z2 = false;
-        IBinder iBinder = null;
+        int zzd = zzbfn.zzd(parcel);
         int i = 0;
+        Account account = null;
+        int i2 = 0;
+        GoogleSignInAccount googleSignInAccount = null;
         while (parcel.dataPosition() < zzd) {
             int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
+            switch (65535 & readInt) {
                 case 1:
-                    i = zzb.zzg(parcel, readInt);
+                    i2 = zzbfn.zzg(parcel, readInt);
                     break;
                 case 2:
-                    iBinder = zzb.zzr(parcel, readInt);
+                    account = (Account) zzbfn.zza(parcel, readInt, Account.CREATOR);
                     break;
                 case 3:
-                    connectionResult = (ConnectionResult) zzb.zza(parcel, readInt, ConnectionResult.CREATOR);
+                    i = zzbfn.zzg(parcel, readInt);
                     break;
                 case 4:
-                    z2 = zzb.zzc(parcel, readInt);
-                    break;
-                case 5:
-                    z = zzb.zzc(parcel, readInt);
+                    googleSignInAccount = (GoogleSignInAccount) zzbfn.zza(parcel, readInt, GoogleSignInAccount.CREATOR);
                     break;
                 default:
-                    zzb.zzb(parcel, readInt);
+                    zzbfn.zzb(parcel, readInt);
                     break;
             }
         }
-        zzb.zzF(parcel, zzd);
-        return new zzbr(i, iBinder, connectionResult, z2, z);
+        zzbfn.zzaf(parcel, zzd);
+        return new zzbr(i2, account, i, googleSignInAccount);
     }
 
     public final /* synthetic */ Object[] newArray(int i) {

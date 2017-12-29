@@ -25,12 +25,12 @@ public class URLSpanMono extends MetricAffectingSpan {
 
     public void updateMeasureState(TextPaint p) {
         p.setTypeface(Typeface.MONOSPACE);
-        p.setTextSize((float) AndroidUtilities.dp((float) (MessagesController.getInstance().fontSize - 1)));
+        p.setTextSize((float) AndroidUtilities.dp((float) (MessagesController.getAccountInstance().fontSize - 1)));
         p.setFlags(p.getFlags() | 128);
     }
 
     public void updateDrawState(TextPaint ds) {
-        ds.setTextSize((float) AndroidUtilities.dp((float) (MessagesController.getInstance().fontSize - 1)));
+        ds.setTextSize((float) AndroidUtilities.dp((float) (MessagesController.getAccountInstance().fontSize - 1)));
         ds.setTypeface(Typeface.MONOSPACE);
         ds.setUnderlineText(false);
         if (this.isOut) {

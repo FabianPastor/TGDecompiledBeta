@@ -1,39 +1,34 @@
 package com.google.android.gms.internal;
 
-import android.os.Bundle;
-import com.google.android.gms.measurement.AppMeasurement.zzb;
+import android.content.SharedPreferences.Editor;
+import com.google.android.gms.common.internal.zzbq;
 
-final class zzcia implements Runnable {
-    private /* synthetic */ boolean zzbtN;
-    private /* synthetic */ zzb zzbtO;
-    private /* synthetic */ zzcic zzbtP;
-    private /* synthetic */ zzchz zzbtQ;
+public final class zzcia {
+    private final String zzbhb;
+    private long zzdrr;
+    private boolean zzjdl;
+    private /* synthetic */ zzchx zzjdm;
+    private final long zzjdn;
 
-    zzcia(zzchz com_google_android_gms_internal_zzchz, boolean z, zzb com_google_android_gms_measurement_AppMeasurement_zzb, zzcic com_google_android_gms_internal_zzcic) {
-        this.zzbtQ = com_google_android_gms_internal_zzchz;
-        this.zzbtN = z;
-        this.zzbtO = com_google_android_gms_measurement_AppMeasurement_zzb;
-        this.zzbtP = com_google_android_gms_internal_zzcic;
+    public zzcia(zzchx com_google_android_gms_internal_zzchx, String str, long j) {
+        this.zzjdm = com_google_android_gms_internal_zzchx;
+        zzbq.zzgm(str);
+        this.zzbhb = str;
+        this.zzjdn = j;
     }
 
-    public final void run() {
-        if (this.zzbtN && this.zzbtQ.zzbtE != null) {
-            this.zzbtQ.zza(this.zzbtQ.zzbtE);
+    public final long get() {
+        if (!this.zzjdl) {
+            this.zzjdl = true;
+            this.zzdrr = this.zzjdm.zzazl().getLong(this.zzbhb, this.zzjdn);
         }
-        Object obj = (this.zzbtO != null && this.zzbtO.zzbol == this.zzbtP.zzbol && zzcjl.zzR(this.zzbtO.zzbok, this.zzbtP.zzbok) && zzcjl.zzR(this.zzbtO.zzboj, this.zzbtP.zzboj)) ? null : 1;
-        if (obj != null) {
-            Bundle bundle = new Bundle();
-            zzchz.zza(this.zzbtP, bundle);
-            if (this.zzbtO != null) {
-                if (this.zzbtO.zzboj != null) {
-                    bundle.putString("_pn", this.zzbtO.zzboj);
-                }
-                bundle.putString("_pc", this.zzbtO.zzbok);
-                bundle.putLong("_pi", this.zzbtO.zzbol);
-            }
-            this.zzbtQ.zzwt().zzd("auto", "_vs", bundle);
-        }
-        this.zzbtQ.zzbtE = this.zzbtP;
-        this.zzbtQ.zzww().zza(this.zzbtP);
+        return this.zzdrr;
+    }
+
+    public final void set(long j) {
+        Editor edit = this.zzjdm.zzazl().edit();
+        edit.putLong(this.zzbhb, j);
+        edit.apply();
+        this.zzdrr = j;
     }
 }

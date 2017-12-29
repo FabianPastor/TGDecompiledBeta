@@ -1,19 +1,28 @@
 package com.google.android.gms.dynamite;
 
-import dalvik.system.PathClassLoader;
+import android.content.Context;
+import com.google.android.gms.dynamite.DynamiteModule.zzc;
+import com.google.android.gms.dynamite.DynamiteModule.zzd;
 
-final class zzg extends PathClassLoader {
-    zzg(String str, ClassLoader classLoader) {
-        super(str, classLoader);
+final class zzg implements zzd {
+    zzg() {
     }
 
-    protected final Class<?> loadClass(String str, boolean z) throws ClassNotFoundException {
-        if (!(str.startsWith("java.") || str.startsWith("android."))) {
-            try {
-                return findClass(str);
-            } catch (ClassNotFoundException e) {
-            }
+    public final zzj zza(Context context, String str, zzi com_google_android_gms_dynamite_zzi) throws zzc {
+        zzj com_google_android_gms_dynamite_zzj = new zzj();
+        com_google_android_gms_dynamite_zzj.zzgxg = com_google_android_gms_dynamite_zzi.zzab(context, str);
+        if (com_google_android_gms_dynamite_zzj.zzgxg != 0) {
+            com_google_android_gms_dynamite_zzj.zzgxh = com_google_android_gms_dynamite_zzi.zzc(context, str, false);
+        } else {
+            com_google_android_gms_dynamite_zzj.zzgxh = com_google_android_gms_dynamite_zzi.zzc(context, str, true);
         }
-        return super.loadClass(str, z);
+        if (com_google_android_gms_dynamite_zzj.zzgxg == 0 && com_google_android_gms_dynamite_zzj.zzgxh == 0) {
+            com_google_android_gms_dynamite_zzj.zzgxi = 0;
+        } else if (com_google_android_gms_dynamite_zzj.zzgxh >= com_google_android_gms_dynamite_zzj.zzgxg) {
+            com_google_android_gms_dynamite_zzj.zzgxi = 1;
+        } else {
+            com_google_android_gms_dynamite_zzj.zzgxi = -1;
+        }
+        return com_google_android_gms_dynamite_zzj;
     }
 }

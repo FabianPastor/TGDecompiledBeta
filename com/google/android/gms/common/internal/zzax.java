@@ -1,33 +1,31 @@
 package com.google.android.gms.common.internal;
 
-import android.os.IBinder;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.RemoteException;
+import com.google.android.gms.internal.zzev;
+import com.google.android.gms.internal.zzew;
 
-final class zzax implements zzaw {
-    private final IBinder zzrD;
-
-    zzax(IBinder iBinder) {
-        this.zzrD = iBinder;
+public abstract class zzax extends zzev implements zzaw {
+    public zzax() {
+        attachInterface(this, "com.google.android.gms.common.internal.IGmsCallbacks");
     }
 
-    public final IBinder asBinder() {
-        return this.zzrD;
-    }
-
-    public final void zza(zzau com_google_android_gms_common_internal_zzau, zzx com_google_android_gms_common_internal_zzx) throws RemoteException {
-        Parcel obtain = Parcel.obtain();
-        Parcel obtain2 = Parcel.obtain();
-        try {
-            obtain.writeInterfaceToken("com.google.android.gms.common.internal.IGmsServiceBroker");
-            obtain.writeStrongBinder(com_google_android_gms_common_internal_zzau.asBinder());
-            obtain.writeInt(1);
-            com_google_android_gms_common_internal_zzx.writeToParcel(obtain, 0);
-            this.zzrD.transact(46, obtain, obtain2, 0);
-            obtain2.readException();
-        } finally {
-            obtain2.recycle();
-            obtain.recycle();
+    public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
+        if (zza(i, parcel, parcel2, i2)) {
+            return true;
         }
+        switch (i) {
+            case 1:
+                zza(parcel.readInt(), parcel.readStrongBinder(), (Bundle) zzew.zza(parcel, Bundle.CREATOR));
+                break;
+            case 2:
+                zza(parcel.readInt(), (Bundle) zzew.zza(parcel, Bundle.CREATOR));
+                break;
+            default:
+                return false;
+        }
+        parcel2.writeNoException();
+        return true;
     }
 }

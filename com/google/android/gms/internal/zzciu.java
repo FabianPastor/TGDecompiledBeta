@@ -1,19 +1,18 @@
 package com.google.android.gms.internal;
 
-import android.content.ComponentName;
-import android.content.Context;
-
 final class zzciu implements Runnable {
-    private /* synthetic */ zzciq zzbuk;
+    private /* synthetic */ zzcgi zzjgn;
+    private /* synthetic */ zzcir zzjgo;
+    private /* synthetic */ zzcgl zzjgp;
 
-    zzciu(zzciq com_google_android_gms_internal_zzciq) {
-        this.zzbuk = com_google_android_gms_internal_zzciq;
+    zzciu(zzcir com_google_android_gms_internal_zzcir, zzcgl com_google_android_gms_internal_zzcgl, zzcgi com_google_android_gms_internal_zzcgi) {
+        this.zzjgo = com_google_android_gms_internal_zzcir;
+        this.zzjgp = com_google_android_gms_internal_zzcgl;
+        this.zzjgn = com_google_android_gms_internal_zzcgi;
     }
 
     public final void run() {
-        zzcid com_google_android_gms_internal_zzcid = this.zzbuk.zzbua;
-        Context context = this.zzbuk.zzbua.getContext();
-        zzcem.zzxE();
-        com_google_android_gms_internal_zzcid.onServiceDisconnected(new ComponentName(context, "com.google.android.gms.measurement.AppMeasurementService"));
+        this.zzjgo.zziwf.zzbal();
+        this.zzjgo.zziwf.zzb(this.zzjgp, this.zzjgn);
     }
 }

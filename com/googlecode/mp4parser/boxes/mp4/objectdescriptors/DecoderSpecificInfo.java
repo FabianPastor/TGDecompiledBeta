@@ -16,14 +16,6 @@ public class DecoderSpecificInfo extends BaseDescriptor {
         }
     }
 
-    public int serializedSize() {
-        return this.bytes.length;
-    }
-
-    public ByteBuffer serialize() {
-        return ByteBuffer.wrap(this.bytes);
-    }
-
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("DecoderSpecificInfo");

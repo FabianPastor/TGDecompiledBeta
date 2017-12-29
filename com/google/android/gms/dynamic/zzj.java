@@ -8,10 +8,10 @@ import android.view.View;
 
 @SuppressLint({"NewApi"})
 public final class zzj extends zzl {
-    private Fragment zzaSB;
+    private Fragment zzgwm;
 
     private zzj(Fragment fragment) {
-        this.zzaSB = fragment;
+        this.zzgwm = fragment;
     }
 
     public static zzj zza(Fragment fragment) {
@@ -19,106 +19,106 @@ public final class zzj extends zzl {
     }
 
     public final Bundle getArguments() {
-        return this.zzaSB.getArguments();
+        return this.zzgwm.getArguments();
     }
 
     public final int getId() {
-        return this.zzaSB.getId();
+        return this.zzgwm.getId();
     }
 
     public final boolean getRetainInstance() {
-        return this.zzaSB.getRetainInstance();
+        return this.zzgwm.getRetainInstance();
     }
 
     public final String getTag() {
-        return this.zzaSB.getTag();
+        return this.zzgwm.getTag();
     }
 
     public final int getTargetRequestCode() {
-        return this.zzaSB.getTargetRequestCode();
+        return this.zzgwm.getTargetRequestCode();
     }
 
     public final boolean getUserVisibleHint() {
-        return this.zzaSB.getUserVisibleHint();
+        return this.zzgwm.getUserVisibleHint();
     }
 
     public final IObjectWrapper getView() {
-        return zzn.zzw(this.zzaSB.getView());
+        return zzn.zzz(this.zzgwm.getView());
     }
 
     public final boolean isAdded() {
-        return this.zzaSB.isAdded();
+        return this.zzgwm.isAdded();
     }
 
     public final boolean isDetached() {
-        return this.zzaSB.isDetached();
+        return this.zzgwm.isDetached();
     }
 
     public final boolean isHidden() {
-        return this.zzaSB.isHidden();
+        return this.zzgwm.isHidden();
     }
 
     public final boolean isInLayout() {
-        return this.zzaSB.isInLayout();
+        return this.zzgwm.isInLayout();
     }
 
     public final boolean isRemoving() {
-        return this.zzaSB.isRemoving();
+        return this.zzgwm.isRemoving();
     }
 
     public final boolean isResumed() {
-        return this.zzaSB.isResumed();
+        return this.zzgwm.isResumed();
     }
 
     public final boolean isVisible() {
-        return this.zzaSB.isVisible();
+        return this.zzgwm.isVisible();
     }
 
     public final void setHasOptionsMenu(boolean z) {
-        this.zzaSB.setHasOptionsMenu(z);
+        this.zzgwm.setHasOptionsMenu(z);
     }
 
     public final void setMenuVisibility(boolean z) {
-        this.zzaSB.setMenuVisibility(z);
+        this.zzgwm.setMenuVisibility(z);
     }
 
     public final void setRetainInstance(boolean z) {
-        this.zzaSB.setRetainInstance(z);
+        this.zzgwm.setRetainInstance(z);
     }
 
     public final void setUserVisibleHint(boolean z) {
-        this.zzaSB.setUserVisibleHint(z);
+        this.zzgwm.setUserVisibleHint(z);
     }
 
     public final void startActivity(Intent intent) {
-        this.zzaSB.startActivity(intent);
+        this.zzgwm.startActivity(intent);
     }
 
     public final void startActivityForResult(Intent intent, int i) {
-        this.zzaSB.startActivityForResult(intent, i);
+        this.zzgwm.startActivityForResult(intent, i);
     }
 
-    public final void zzC(IObjectWrapper iObjectWrapper) {
-        this.zzaSB.registerForContextMenu((View) zzn.zzE(iObjectWrapper));
+    public final IObjectWrapper zzapx() {
+        return zzn.zzz(this.zzgwm.getActivity());
     }
 
-    public final void zzD(IObjectWrapper iObjectWrapper) {
-        this.zzaSB.unregisterForContextMenu((View) zzn.zzE(iObjectWrapper));
+    public final zzk zzapy() {
+        return zza(this.zzgwm.getParentFragment());
     }
 
-    public final IObjectWrapper zztA() {
-        return zzn.zzw(this.zzaSB.getResources());
+    public final IObjectWrapper zzapz() {
+        return zzn.zzz(this.zzgwm.getResources());
     }
 
-    public final zzk zztB() {
-        return zza(this.zzaSB.getTargetFragment());
+    public final zzk zzaqa() {
+        return zza(this.zzgwm.getTargetFragment());
     }
 
-    public final IObjectWrapper zzty() {
-        return zzn.zzw(this.zzaSB.getActivity());
+    public final void zzv(IObjectWrapper iObjectWrapper) {
+        this.zzgwm.registerForContextMenu((View) zzn.zzx(iObjectWrapper));
     }
 
-    public final zzk zztz() {
-        return zza(this.zzaSB.getParentFragment());
+    public final void zzw(IObjectWrapper iObjectWrapper) {
+        this.zzgwm.unregisterForContextMenu((View) zzn.zzx(iObjectWrapper));
     }
 }

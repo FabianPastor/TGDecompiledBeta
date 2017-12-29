@@ -10,10 +10,6 @@ import android.os.RemoteException;
 public interface INotificationSideChannel extends IInterface {
 
     public static abstract class Stub extends Binder implements INotificationSideChannel {
-        private static final String DESCRIPTOR = "android.support.v4.app.INotificationSideChannel";
-        static final int TRANSACTION_cancel = 2;
-        static final int TRANSACTION_cancelAll = 3;
-        static final int TRANSACTION_notify = 1;
 
         private static class Proxy implements INotificationSideChannel {
             private IBinder mRemote;
@@ -26,14 +22,10 @@ public interface INotificationSideChannel extends IInterface {
                 return this.mRemote;
             }
 
-            public String getInterfaceDescriptor() {
-                return Stub.DESCRIPTOR;
-            }
-
             public void notify(String packageName, int id, String tag, Notification notification) throws RemoteException {
                 Parcel _data = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.v4.app.INotificationSideChannel");
                     _data.writeString(packageName);
                     _data.writeInt(id);
                     _data.writeString(tag);
@@ -52,7 +44,7 @@ public interface INotificationSideChannel extends IInterface {
             public void cancel(String packageName, int id, String tag) throws RemoteException {
                 Parcel _data = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.v4.app.INotificationSideChannel");
                     _data.writeString(packageName);
                     _data.writeInt(id);
                     _data.writeString(tag);
@@ -65,7 +57,7 @@ public interface INotificationSideChannel extends IInterface {
             public void cancelAll(String packageName) throws RemoteException {
                 Parcel _data = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.v4.app.INotificationSideChannel");
                     _data.writeString(packageName);
                     this.mRemote.transact(3, _data, null, 1);
                 } finally {
@@ -74,15 +66,11 @@ public interface INotificationSideChannel extends IInterface {
             }
         }
 
-        public Stub() {
-            attachInterface(this, DESCRIPTOR);
-        }
-
         public static INotificationSideChannel asInterface(IBinder obj) {
             if (obj == null) {
                 return null;
             }
-            IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
+            IInterface iin = obj.queryLocalInterface("android.support.v4.app.INotificationSideChannel");
             if (iin == null || !(iin instanceof INotificationSideChannel)) {
                 return new Proxy(obj);
             }
@@ -97,7 +85,7 @@ public interface INotificationSideChannel extends IInterface {
             switch (code) {
                 case 1:
                     Notification _arg3;
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.v4.app.INotificationSideChannel");
                     String _arg0 = data.readString();
                     int _arg1 = data.readInt();
                     String _arg2 = data.readString();
@@ -109,15 +97,15 @@ public interface INotificationSideChannel extends IInterface {
                     notify(_arg0, _arg1, _arg2, _arg3);
                     return true;
                 case 2:
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.v4.app.INotificationSideChannel");
                     cancel(data.readString(), data.readInt(), data.readString());
                     return true;
                 case 3:
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.v4.app.INotificationSideChannel");
                     cancelAll(data.readString());
                     return true;
                 case 1598968902:
-                    reply.writeString(DESCRIPTOR);
+                    reply.writeString("android.support.v4.app.INotificationSideChannel");
                     return true;
                 default:
                     return super.onTransact(code, data, reply, flags);

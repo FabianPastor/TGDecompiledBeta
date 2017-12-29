@@ -50,11 +50,11 @@ class StringMaker {
 
     String makeModifiersString(int modifiers) {
         if (!this.includeModifiers) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
         String str = Modifier.toString(modifiers);
         if (str.length() == 0) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
         return new StringBuffer().append(str).append(" ").toString();
     }

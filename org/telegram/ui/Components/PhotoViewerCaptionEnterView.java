@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build.VERSION;
 import android.text.Editable;
@@ -27,12 +28,13 @@ import android.widget.LinearLayout;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.TLRPC.Document;
@@ -46,6 +48,7 @@ import org.telegram.ui.Components.SizeNotifierFrameLayoutPhoto.SizeNotifierFrame
 public class PhotoViewerCaptionEnterView extends FrameLayout implements NotificationCenterDelegate, SizeNotifierFrameLayoutPhotoDelegate {
     private int audioInterfaceState;
     private final int captionMaxLength = Callback.DEFAULT_DRAG_ANIMATION_DURATION;
+    private int currentAccount = UserConfig.selectedAccount;
     private ActionMode currentActionMode;
     private PhotoViewerCaptionEnterViewDelegate delegate;
     private ImageView emojiButton;
@@ -160,7 +163,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         }
         this.messageEditText.setHint(LocaleController.getString("AddCaption", R.string.AddCaption));
         this.messageEditText.setImeOptions(268435456);
-        this.messageEditText.setInputType(this.messageEditText.getInputType() | 16384);
+        this.messageEditText.setInputType(this.messageEditText.getInputType() | MessagesController.UPDATE_MASK_CHAT_ADMINS);
         this.messageEditText.setMaxLines(4);
         this.messageEditText.setHorizontallyScrolling(false);
         this.messageEditText.setTextSize(1, 18.0f);
@@ -256,6 +259,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         return true;
     }
 
+    @SuppressLint({"PrivateApi"})
     private void fixActionMode(ActionMode mode) {
         try {
             Class classActionMode = Class.forName("com.android.internal.view.FloatingActionMode");
@@ -292,7 +296,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     public void onCreate() {
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.emojiDidLoaded);
         this.sizeNotifierLayout.setDelegate(this);
     }
 
@@ -302,7 +306,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             closeKeyboard();
         }
         this.keyboardVisible = false;
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.emojiDidLoaded);
         if (this.sizeNotifierLayout != null) {
             this.sizeNotifierLayout.setDelegate(null);
         }
@@ -459,10 +463,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             }
             this.emojiView.setVisibility(0);
             if (this.keyboardHeight <= 0) {
-                this.keyboardHeight = ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0).getInt("kbd_height", AndroidUtilities.dp(200.0f));
+                this.keyboardHeight = MessagesController.getGlobalEmojiSettings().getInt("kbd_height", AndroidUtilities.dp(200.0f));
             }
             if (this.keyboardHeightLand <= 0) {
-                this.keyboardHeightLand = ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0).getInt("kbd_height_land3", AndroidUtilities.dp(200.0f));
+                this.keyboardHeightLand = MessagesController.getGlobalEmojiSettings().getInt("kbd_height_land3", AndroidUtilities.dp(200.0f));
             }
             int currentHeight = AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y ? this.keyboardHeightLand : this.keyboardHeight;
             LayoutParams layoutParams = (LayoutParams) this.emojiView.getLayoutParams();
@@ -545,10 +549,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         if (height > AndroidUtilities.dp(50.0f) && this.keyboardVisible && !AndroidUtilities.isInMultiwindow && !this.forceFloatingEmoji) {
             if (isWidthGreater) {
                 this.keyboardHeightLand = height;
-                ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0).edit().putInt("kbd_height_land3", this.keyboardHeightLand).commit();
+                MessagesController.getGlobalEmojiSettings().edit().putInt("kbd_height_land3", this.keyboardHeightLand).commit();
             } else {
                 this.keyboardHeight = height;
-                ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0).edit().putInt("kbd_height", this.keyboardHeight).commit();
+                MessagesController.getGlobalEmojiSettings().edit().putInt("kbd_height", this.keyboardHeight).commit();
             }
         }
         if (isPopupShowing()) {
@@ -588,7 +592,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         onWindowSizeChanged();
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.emojiDidLoaded && this.emojiView != null) {
             this.emojiView.invalidateViews();
         }

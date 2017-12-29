@@ -2,14 +2,13 @@ package com.google.android.gms.wearable;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.internal.zzbfn;
 
 public final class zzg implements Creator<ConnectionConfiguration> {
     public final /* synthetic */ Object createFromParcel(Parcel parcel) {
         String str = null;
         boolean z = false;
-        int zzd = zzb.zzd(parcel);
+        int zzd = zzbfn.zzd(parcel);
         String str2 = null;
         boolean z2 = false;
         boolean z3 = false;
@@ -19,40 +18,40 @@ public final class zzg implements Creator<ConnectionConfiguration> {
         String str4 = null;
         while (parcel.dataPosition() < zzd) {
             int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
+            switch (65535 & readInt) {
                 case 2:
-                    str4 = zzb.zzq(parcel, readInt);
+                    str4 = zzbfn.zzq(parcel, readInt);
                     break;
                 case 3:
-                    str3 = zzb.zzq(parcel, readInt);
+                    str3 = zzbfn.zzq(parcel, readInt);
                     break;
                 case 4:
-                    i2 = zzb.zzg(parcel, readInt);
+                    i2 = zzbfn.zzg(parcel, readInt);
                     break;
                 case 5:
-                    i = zzb.zzg(parcel, readInt);
+                    i = zzbfn.zzg(parcel, readInt);
                     break;
                 case 6:
-                    z3 = zzb.zzc(parcel, readInt);
+                    z3 = zzbfn.zzc(parcel, readInt);
                     break;
                 case 7:
-                    z2 = zzb.zzc(parcel, readInt);
+                    z2 = zzbfn.zzc(parcel, readInt);
                     break;
                 case 8:
-                    str2 = zzb.zzq(parcel, readInt);
+                    str2 = zzbfn.zzq(parcel, readInt);
                     break;
                 case 9:
-                    z = zzb.zzc(parcel, readInt);
+                    z = zzbfn.zzc(parcel, readInt);
                     break;
                 case 10:
-                    str = zzb.zzq(parcel, readInt);
+                    str = zzbfn.zzq(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, readInt);
+                    zzbfn.zzb(parcel, readInt);
                     break;
             }
         }
-        zzb.zzF(parcel, zzd);
+        zzbfn.zzaf(parcel, zzd);
         return new ConnectionConfiguration(str4, str3, i2, i, z3, z2, str2, z, str);
     }
 

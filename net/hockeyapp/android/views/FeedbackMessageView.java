@@ -24,8 +24,6 @@ public class FeedbackMessageView extends LinearLayout {
     private TextView mDateTextView = ((TextView) findViewById(R.id.label_date));
     private FeedbackMessage mFeedbackMessage;
     private TextView mMessageTextView = ((TextView) findViewById(R.id.label_text));
-    @Deprecated
-    private boolean ownMessage;
 
     public FeedbackMessageView(Context context, AttributeSet attrs) {
         super(context, attrs);

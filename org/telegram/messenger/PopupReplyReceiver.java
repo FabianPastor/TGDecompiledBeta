@@ -6,7 +6,9 @@ import android.content.Intent;
 
 public class PopupReplyReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
-        ApplicationLoader.postInitApplication();
-        NotificationsController.getInstance().forceShowPopupForReply();
+        if (intent != null) {
+            ApplicationLoader.postInitApplication();
+            NotificationsController.getInstance(intent.getIntExtra("currentAccount", UserConfig.selectedAccount)).forceShowPopupForReply();
+        }
     }
 }

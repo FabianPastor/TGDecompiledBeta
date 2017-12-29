@@ -53,10 +53,10 @@ final class WebvttCssStyle {
     }
 
     public void reset() {
-        this.targetId = "";
-        this.targetTag = "";
+        this.targetId = TtmlNode.ANONYMOUS_REGION_ID;
+        this.targetTag = TtmlNode.ANONYMOUS_REGION_ID;
         this.targetClasses = Collections.emptyList();
-        this.targetVoice = "";
+        this.targetVoice = TtmlNode.ANONYMOUS_REGION_ID;
         this.fontFamily = null;
         this.hasFontColor = false;
         this.hasBackgroundColor = false;

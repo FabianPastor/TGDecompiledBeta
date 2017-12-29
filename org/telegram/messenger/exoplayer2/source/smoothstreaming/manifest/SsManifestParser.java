@@ -5,8 +5,6 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Pair;
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
-import com.googlecode.mp4parser.boxes.AC3SpecificBox;
-import com.googlecode.mp4parser.boxes.EC3SpecificBox;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -341,10 +339,10 @@ public class SsManifestParser implements Parser<SsManifest> {
             if (fourCC.equalsIgnoreCase("TTML")) {
                 return MimeTypes.APPLICATION_TTML;
             }
-            if (fourCC.equalsIgnoreCase(AudioSampleEntry.TYPE8) || fourCC.equalsIgnoreCase(AC3SpecificBox.TYPE)) {
+            if (fourCC.equalsIgnoreCase(AudioSampleEntry.TYPE8) || fourCC.equalsIgnoreCase("dac3")) {
                 return MimeTypes.AUDIO_AC3;
             }
-            if (fourCC.equalsIgnoreCase(AudioSampleEntry.TYPE9) || fourCC.equalsIgnoreCase(EC3SpecificBox.TYPE)) {
+            if (fourCC.equalsIgnoreCase(AudioSampleEntry.TYPE9) || fourCC.equalsIgnoreCase("dec3")) {
                 return MimeTypes.AUDIO_E_AC3;
             }
             if (fourCC.equalsIgnoreCase("dtsc")) {

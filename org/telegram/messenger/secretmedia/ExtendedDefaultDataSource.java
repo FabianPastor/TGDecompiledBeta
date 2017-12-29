@@ -52,7 +52,7 @@ public final class ExtendedDefaultDataSource implements DataSource {
             }
         } else if (SCHEME_ASSET.equals(scheme)) {
             this.dataSource = this.assetDataSource;
-        } else if ("content".equals(scheme)) {
+        } else if (SCHEME_CONTENT.equals(scheme)) {
             this.dataSource = this.contentDataSource;
         } else {
             this.dataSource = this.baseDataSource;

@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.TreeSet;
 import org.telegram.messenger.exoplayer2.upstream.cache.Cache.CacheException;
 
-public final class LeastRecentlyUsedCacheEvictor implements CacheEvictor, Comparator<CacheSpan> {
+public final class LeastRecentlyUsedCacheEvictor implements Comparator<CacheSpan>, CacheEvictor {
     private long currentSize;
     private final TreeSet<CacheSpan> leastRecentlyUsed = new TreeSet(this);
     private final long maxBytes;

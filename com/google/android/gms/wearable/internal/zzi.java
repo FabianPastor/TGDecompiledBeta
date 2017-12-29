@@ -2,18 +2,18 @@ package com.google.android.gms.wearable.internal;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-public final class zzi extends zza {
+public final class zzi extends zzbfm {
     public static final Creator<zzi> CREATOR = new zzj();
     private final String mValue;
-    private byte zzbRN;
-    private final byte zzbRO;
+    private byte zzlib;
+    private final byte zzlic;
 
     public zzi(byte b, byte b2, String str) {
-        this.zzbRN = b;
-        this.zzbRO = b2;
+        this.zzlib = b;
+        this.zzlic = b2;
         this.mValue = str;
     }
 
@@ -25,25 +25,25 @@ public final class zzi extends zza {
             return false;
         }
         zzi com_google_android_gms_wearable_internal_zzi = (zzi) obj;
-        return this.zzbRN != com_google_android_gms_wearable_internal_zzi.zzbRN ? false : this.zzbRO != com_google_android_gms_wearable_internal_zzi.zzbRO ? false : this.mValue.equals(com_google_android_gms_wearable_internal_zzi.mValue);
+        return this.zzlib != com_google_android_gms_wearable_internal_zzi.zzlib ? false : this.zzlic != com_google_android_gms_wearable_internal_zzi.zzlic ? false : this.mValue.equals(com_google_android_gms_wearable_internal_zzi.mValue);
     }
 
     public final int hashCode() {
-        return ((((this.zzbRN + 31) * 31) + this.zzbRO) * 31) + this.mValue.hashCode();
+        return ((((this.zzlib + 31) * 31) + this.zzlic) * 31) + this.mValue.hashCode();
     }
 
     public final String toString() {
-        byte b = this.zzbRN;
-        byte b2 = this.zzbRO;
+        byte b = this.zzlib;
+        byte b2 = this.zzlic;
         String str = this.mValue;
         return new StringBuilder(String.valueOf(str).length() + 73).append("AmsEntityUpdateParcelable{, mEntityId=").append(b).append(", mAttributeId=").append(b2).append(", mValue='").append(str).append("'}").toString();
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.zzbRN);
-        zzd.zza(parcel, 3, this.zzbRO);
-        zzd.zza(parcel, 4, this.mValue, false);
-        zzd.zzI(parcel, zze);
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zza(parcel, 2, this.zzlib);
+        zzbfp.zza(parcel, 3, this.zzlic);
+        zzbfp.zza(parcel, 4, this.mValue, false);
+        zzbfp.zzai(parcel, zze);
     }
 }

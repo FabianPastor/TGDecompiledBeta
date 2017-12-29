@@ -22,7 +22,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -190,7 +189,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                 ProfileSearchCell cell = viewItem.cell;
                 CallLogRow row = (CallLogRow) CallLogActivity.this.calls.get(position);
                 Message last = (Message) row.calls.get(0);
-                String ldir = LocaleController.isRTL ? "‫" : "";
+                String ldir = LocaleController.isRTL ? "‫" : TtmlNode.ANONYMOUS_REGION_ID;
                 if (row.calls.size() == 1) {
                     subtitle = new SpannableString(ldir + "  " + LocaleController.formatDateCallLog((long) last.date));
                 } else {
@@ -225,15 +224,15 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         CallLogRow row;
         if (id == NotificationCenter.didReceivedNewMessages && this.firstLoaded) {
             Iterator it = args[1].iterator();
             while (it.hasNext()) {
                 MessageObject msg = (MessageObject) it.next();
                 if (msg.messageOwner.action != null && (msg.messageOwner.action instanceof TL_messageActionPhoneCall)) {
-                    int userID = msg.messageOwner.from_id == UserConfig.getClientUserId() ? msg.messageOwner.to_id.user_id : msg.messageOwner.from_id;
-                    int callType = msg.messageOwner.from_id == UserConfig.getClientUserId() ? 0 : 1;
+                    int userID = msg.messageOwner.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? msg.messageOwner.to_id.user_id : msg.messageOwner.from_id;
+                    int callType = msg.messageOwner.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? 0 : 1;
                     PhoneCallDiscardReason reason = msg.messageOwner.action.reason;
                     if (callType == 1 && ((reason instanceof TL_phoneCallDiscardReasonMissed) || (reason instanceof TL_phoneCallDiscardReasonBusy))) {
                         callType = 2;
@@ -249,7 +248,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                     row = new CallLogRow();
                     row.calls = new ArrayList();
                     row.calls.add(msg.messageOwner);
-                    row.user = MessagesController.getInstance().getUser(Integer.valueOf(userID));
+                    row.user = MessagesController.getAccountInstance().getUser(Integer.valueOf(userID));
                     row.type = callType;
                     this.calls.add(0, row);
                     this.listViewAdapter.notifyItemInserted(0);
@@ -281,15 +280,15 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         getCalls(0, 50);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.didReceivedNewMessages);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagesDeleted);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.didReceivedNewMessages);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagesDeleted);
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didReceivedNewMessages);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagesDeleted);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.didReceivedNewMessages);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagesDeleted);
     }
 
     public View createView(Context context) {
@@ -340,7 +339,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                     Bundle args = new Bundle();
                     args.putInt("user_id", row.user.id);
                     args.putInt("message_id", ((Message) row.calls.get(0)).id);
-                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                    NotificationCenter.getInstance(CallLogActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                     CallLogActivity.this.presentFragment(new ChatActivity(args), true);
                 }
             }
@@ -424,7 +423,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (VERSION.SDK_INT < 21) {
             Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
-            shadowDrawable.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
             Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
             drawable = combinedDrawable;
@@ -444,7 +443,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                 }
             });
         }
-        frameLayout.addView(this.floatingButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : BitmapDescriptorFactory.HUE_YELLOW, (LocaleController.isRTL ? 3 : 5) | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 14.0f));
+        frameLayout.addView(this.floatingButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, (LocaleController.isRTL ? 3 : 5) | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 14.0f));
         this.floatingButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Bundle args = new Bundle();
@@ -497,9 +496,9 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
             req.limit = count;
             req.peer = new TL_inputPeerEmpty();
             req.filter = new TL_inputMessagesFilterPhoneCalls();
-            req.q = "";
+            req.q = TtmlNode.ANONYMOUS_REGION_ID;
             req.offset_id = max_id;
-            ConnectionsManager.getInstance().bindRequestToGuid(ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, final TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -522,7 +521,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                                     Message msg = (Message) msgs.messages.get(a);
                                     if (!(msg.action == null || (msg.action instanceof TL_messageActionHistoryClear))) {
                                         int callType;
-                                        if (msg.from_id == UserConfig.getClientUserId()) {
+                                        if (msg.from_id == UserConfig.getInstance(CallLogActivity.this.currentAccount).getClientUserId()) {
                                             callType = 0;
                                         } else {
                                             callType = 1;
@@ -531,7 +530,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                                         if (callType == 1 && ((reason instanceof TL_phoneCallDiscardReasonMissed) || (reason instanceof TL_phoneCallDiscardReasonBusy))) {
                                             callType = 2;
                                         }
-                                        int userID = msg.from_id == UserConfig.getClientUserId() ? msg.to_id.user_id : msg.from_id;
+                                        int userID = msg.from_id == UserConfig.getInstance(CallLogActivity.this.currentAccount).getClientUserId() ? msg.to_id.user_id : msg.from_id;
                                         if (!(currentRow != null && currentRow.user.id == userID && currentRow.type == callType)) {
                                             if (!(currentRow == null || CallLogActivity.this.calls.contains(currentRow))) {
                                                 CallLogActivity.this.calls.add(currentRow);
@@ -574,7 +573,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                     for (Message msg : row.calls) {
                         ids.add(Integer.valueOf(msg.id));
                     }
-                    MessagesController.getInstance().deleteMessages(ids, null, null, 0, false);
+                    MessagesController.getAccountInstance().deleteMessages(ids, null, null, 0, false);
                 }
             }).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null).show().setCanceledOnTouchOutside(true);
         }

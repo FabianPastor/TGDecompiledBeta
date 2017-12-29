@@ -1,7 +1,6 @@
 package org.telegram.messenger.exoplayer2.source.chunk;
 
 import android.util.Log;
-import com.google.android.gms.wallet.WalletConstants;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
 import org.telegram.messenger.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException;
 
@@ -32,7 +31,7 @@ public final class ChunkedTrackBlacklistUtil {
             return false;
         }
         int responseCode = ((InvalidResponseCodeException) e).responseCode;
-        if (responseCode == WalletConstants.ERROR_CODE_INVALID_PARAMETERS || responseCode == WalletConstants.ERROR_CODE_INVALID_TRANSACTION) {
+        if (responseCode == 404 || responseCode == 410) {
             return true;
         }
         return false;

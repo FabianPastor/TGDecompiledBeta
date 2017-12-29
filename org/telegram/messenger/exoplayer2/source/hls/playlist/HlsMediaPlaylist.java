@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.source.hls.playlist;
 
-import android.support.annotation.NonNull;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Collections;
@@ -57,7 +56,7 @@ public final class HlsMediaPlaylist extends HlsPlaylist {
             this.byterangeLength = byterangeLength;
         }
 
-        public int compareTo(@NonNull Long relativeStartTimeUs) {
+        public int compareTo(Long relativeStartTimeUs) {
             if (this.relativeStartTimeUs > relativeStartTimeUs.longValue()) {
                 return 1;
             }

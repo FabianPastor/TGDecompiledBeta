@@ -2,12 +2,11 @@ package android.support.v4.view;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.Parcelable.ClassLoaderCreator;
 import android.os.Parcelable.Creator;
-import android.support.v4.os.ParcelableCompat;
-import android.support.v4.os.ParcelableCompatCreatorCallbacks;
 
 public abstract class AbsSavedState implements Parcelable {
-    public static final Creator<AbsSavedState> CREATOR = ParcelableCompat.newCreator(new ParcelableCompatCreatorCallbacks<AbsSavedState>() {
+    public static final Creator<AbsSavedState> CREATOR = new ClassLoaderCreator<AbsSavedState>() {
         public AbsSavedState createFromParcel(Parcel in, ClassLoader loader) {
             if (in.readParcelable(loader) == null) {
                 return AbsSavedState.EMPTY_STATE;
@@ -15,10 +14,14 @@ public abstract class AbsSavedState implements Parcelable {
             throw new IllegalStateException("superState must be null");
         }
 
+        public AbsSavedState createFromParcel(Parcel in) {
+            return createFromParcel(in, null);
+        }
+
         public AbsSavedState[] newArray(int size) {
             return new AbsSavedState[size];
         }
-    });
+    };
     public static final AbsSavedState EMPTY_STATE = new AbsSavedState() {
     };
     private final Parcelable mSuperState;

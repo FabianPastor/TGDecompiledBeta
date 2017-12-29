@@ -6,9 +6,10 @@ import android.view.accessibility.CaptioningManager.CaptionStyle;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import org.telegram.messenger.exoplayer2.util.Util;
+import org.telegram.ui.ActionBar.Theme;
 
 public final class CaptionStyleCompat {
-    public static final CaptionStyleCompat DEFAULT = new CaptionStyleCompat(-1, -16777216, 0, 0, -1, null);
+    public static final CaptionStyleCompat DEFAULT = new CaptionStyleCompat(-1, Theme.ACTION_BAR_VIDEO_EDIT_COLOR, 0, 0, -1, null);
     public static final int EDGE_TYPE_DEPRESSED = 4;
     public static final int EDGE_TYPE_DROP_SHADOW = 2;
     public static final int EDGE_TYPE_NONE = 0;

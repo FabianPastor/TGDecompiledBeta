@@ -137,8 +137,8 @@ public class CheckUpdateTaskWithUI extends CheckUpdateTask {
         if (this.mActivity != null) {
             Intent intent = new Intent();
             intent.setClass(this.mActivity, activityClass);
-            intent.putExtra(UpdateActivity.EXTRA_JSON, updateInfo.toString());
-            intent.putExtra("url", getURLString("apk"));
+            intent.putExtra("json", updateInfo.toString());
+            intent.putExtra(UpdateFragment.FRAGMENT_URL, getURLString("apk"));
             this.mActivity.startActivity(intent);
             if (finish.booleanValue()) {
                 this.mActivity.finish();

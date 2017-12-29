@@ -1,23 +1,22 @@
 package com.google.android.gms.internal;
 
-final class zzcio implements Runnable {
-    private /* synthetic */ zzcji zzbtk;
-    private /* synthetic */ zzcid zzbua;
-    private /* synthetic */ boolean zzbue;
+import java.util.concurrent.Callable;
 
-    zzcio(zzcid com_google_android_gms_internal_zzcid, boolean z, zzcji com_google_android_gms_internal_zzcji) {
-        this.zzbua = com_google_android_gms_internal_zzcid;
-        this.zzbue = z;
-        this.zzbtk = com_google_android_gms_internal_zzcji;
+final class zzcio implements Callable<String> {
+    private /* synthetic */ String zzimf;
+    private /* synthetic */ zzcim zzjgh;
+
+    zzcio(zzcim com_google_android_gms_internal_zzcim, String str) {
+        this.zzjgh = com_google_android_gms_internal_zzcim;
+        this.zzimf = str;
     }
 
-    public final void run() {
-        zzcfd zzd = this.zzbua.zzbtU;
-        if (zzd == null) {
-            this.zzbua.zzwF().zzyx().log("Discarding data. Failed to set user attribute");
-            return;
+    public final /* synthetic */ Object call() throws Exception {
+        zzcgh zzjb = this.zzjgh.zzaws().zzjb(this.zzimf);
+        if (zzjb != null) {
+            return zzjb.getAppInstanceId();
         }
-        this.zzbua.zza(zzd, this.zzbue ? null : this.zzbtk);
-        this.zzbua.zzkP();
+        this.zzjgh.zzawy().zzazf().log("App info was null when attempting to get app instance id");
+        return null;
     }
 }

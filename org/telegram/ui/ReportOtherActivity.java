@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.beta.R;
@@ -50,10 +49,10 @@ public class ReportOtherActivity extends BaseFragment {
                     ReportOtherActivity.this.finishFragment();
                 } else if (id == 1 && ReportOtherActivity.this.firstNameField.getText().length() != 0) {
                     TL_account_reportPeer req = new TL_account_reportPeer();
-                    req.peer = MessagesController.getInputPeer((int) ReportOtherActivity.this.dialog_id);
+                    req.peer = MessagesController.getInstance(ReportOtherActivity.this.currentAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
                     req.reason = new TL_inputReportReasonOther();
                     req.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
-                    ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    ConnectionsManager.getInstance(ReportOtherActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                         public void run(TLObject response, TL_error error) {
                         }
                     });
@@ -106,7 +105,7 @@ public class ReportOtherActivity extends BaseFragment {
 
     public void onResume() {
         super.onResume();
-        if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("view_animations", true)) {
+        if (!MessagesController.getGlobalMainSettings().getBoolean("view_animations", true)) {
             this.firstNameField.requestFocus();
             AndroidUtilities.showKeyboard(this.firstNameField);
         }

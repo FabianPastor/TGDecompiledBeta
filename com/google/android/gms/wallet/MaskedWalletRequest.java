@@ -3,263 +3,106 @@ package com.google.android.gms.wallet;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
 import com.google.android.gms.identity.intents.model.CountrySpecification;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 import java.util.ArrayList;
-import java.util.Collection;
 
-public final class MaskedWalletRequest extends zza implements ReflectedParcelable {
-    public static final Creator<MaskedWalletRequest> CREATOR = new zzs();
-    String zzVJ;
-    Cart zzbOB;
-    String zzbOn;
-    String zzbOr;
-    boolean zzbPA;
-    ArrayList<CountrySpecification> zzbPB;
-    PaymentMethodTokenizationParameters zzbPC;
-    ArrayList<Integer> zzbPD;
-    boolean zzbPr;
-    boolean zzbPs;
-    boolean zzbPt;
-    String zzbPu;
-    String zzbPv;
-    private boolean zzbPw;
-    boolean zzbPx;
-    private CountrySpecification[] zzbPy;
-    boolean zzbPz;
+public final class MaskedWalletRequest extends zzbfm implements ReflectedParcelable {
+    public static final Creator<MaskedWalletRequest> CREATOR = new zzz();
+    String zzctp;
+    String zzkzs;
+    String zzlab;
+    Cart zzlal;
+    boolean zzlcf;
+    boolean zzlcg;
+    boolean zzlch;
+    String zzlci;
+    String zzlcj;
+    private boolean zzlck;
+    boolean zzlcl;
+    private CountrySpecification[] zzlcm;
+    boolean zzlcn;
+    boolean zzlco;
+    ArrayList<CountrySpecification> zzlcp;
+    PaymentMethodTokenizationParameters zzlcq;
+    ArrayList<Integer> zzlcr;
 
     public final class Builder {
-        private /* synthetic */ MaskedWalletRequest zzbPE;
+        private /* synthetic */ MaskedWalletRequest zzlcs;
 
         private Builder(MaskedWalletRequest maskedWalletRequest) {
-            this.zzbPE = maskedWalletRequest;
-        }
-
-        public final Builder addAllowedCardNetwork(int i) {
-            if (this.zzbPE.zzbPD == null) {
-                this.zzbPE.zzbPD = new ArrayList();
-            }
-            this.zzbPE.zzbPD.add(Integer.valueOf(i));
-            return this;
-        }
-
-        public final Builder addAllowedCardNetworks(Collection<Integer> collection) {
-            if (collection != null) {
-                if (this.zzbPE.zzbPD == null) {
-                    this.zzbPE.zzbPD = new ArrayList();
-                }
-                this.zzbPE.zzbPD.addAll(collection);
-            }
-            return this;
-        }
-
-        public final Builder addAllowedCountrySpecificationForShipping(CountrySpecification countrySpecification) {
-            if (this.zzbPE.zzbPB == null) {
-                this.zzbPE.zzbPB = new ArrayList();
-            }
-            this.zzbPE.zzbPB.add(countrySpecification);
-            return this;
-        }
-
-        public final Builder addAllowedCountrySpecificationsForShipping(Collection<CountrySpecification> collection) {
-            if (collection != null) {
-                if (this.zzbPE.zzbPB == null) {
-                    this.zzbPE.zzbPB = new ArrayList();
-                }
-                this.zzbPE.zzbPB.addAll(collection);
-            }
-            return this;
+            this.zzlcs = maskedWalletRequest;
         }
 
         public final MaskedWalletRequest build() {
-            return this.zzbPE;
-        }
-
-        public final Builder setAllowDebitCard(boolean z) {
-            this.zzbPE.zzbPA = z;
-            return this;
-        }
-
-        public final Builder setAllowPrepaidCard(boolean z) {
-            this.zzbPE.zzbPz = z;
-            return this;
-        }
-
-        public final Builder setCart(Cart cart) {
-            this.zzbPE.zzbOB = cart;
-            return this;
-        }
-
-        public final Builder setCountryCode(String str) {
-            this.zzbPE.zzVJ = str;
-            return this;
+            return this.zzlcs;
         }
 
         public final Builder setCurrencyCode(String str) {
-            this.zzbPE.zzbOn = str;
+            this.zzlcs.zzkzs = str;
             return this;
         }
 
         public final Builder setEstimatedTotalPrice(String str) {
-            this.zzbPE.zzbPu = str;
-            return this;
-        }
-
-        @Deprecated
-        public final Builder setIsBillingAgreement(boolean z) {
-            this.zzbPE.zzbPx = z;
-            return this;
-        }
-
-        public final Builder setMerchantName(String str) {
-            this.zzbPE.zzbPv = str;
-            return this;
-        }
-
-        public final Builder setMerchantTransactionId(String str) {
-            this.zzbPE.zzbOr = str;
+            this.zzlcs.zzlci = str;
             return this;
         }
 
         public final Builder setPaymentMethodTokenizationParameters(PaymentMethodTokenizationParameters paymentMethodTokenizationParameters) {
-            this.zzbPE.zzbPC = paymentMethodTokenizationParameters;
-            return this;
-        }
-
-        public final Builder setPhoneNumberRequired(boolean z) {
-            this.zzbPE.zzbPr = z;
-            return this;
-        }
-
-        public final Builder setShippingAddressRequired(boolean z) {
-            this.zzbPE.zzbPs = z;
-            return this;
-        }
-
-        @Deprecated
-        public final Builder setUseMinimalBillingAddress(boolean z) {
-            this.zzbPE.zzbPt = z;
+            this.zzlcs.zzlcq = paymentMethodTokenizationParameters;
             return this;
         }
     }
 
     MaskedWalletRequest() {
-        this.zzbPz = true;
-        this.zzbPA = true;
+        this.zzlcn = true;
+        this.zzlco = true;
     }
 
     MaskedWalletRequest(String str, boolean z, boolean z2, boolean z3, String str2, String str3, String str4, Cart cart, boolean z4, boolean z5, CountrySpecification[] countrySpecificationArr, boolean z6, boolean z7, ArrayList<CountrySpecification> arrayList, PaymentMethodTokenizationParameters paymentMethodTokenizationParameters, ArrayList<Integer> arrayList2, String str5) {
-        this.zzbOr = str;
-        this.zzbPr = z;
-        this.zzbPs = z2;
-        this.zzbPt = z3;
-        this.zzbPu = str2;
-        this.zzbOn = str3;
-        this.zzbPv = str4;
-        this.zzbOB = cart;
-        this.zzbPw = z4;
-        this.zzbPx = z5;
-        this.zzbPy = countrySpecificationArr;
-        this.zzbPz = z6;
-        this.zzbPA = z7;
-        this.zzbPB = arrayList;
-        this.zzbPC = paymentMethodTokenizationParameters;
-        this.zzbPD = arrayList2;
-        this.zzVJ = str5;
+        this.zzlab = str;
+        this.zzlcf = z;
+        this.zzlcg = z2;
+        this.zzlch = z3;
+        this.zzlci = str2;
+        this.zzkzs = str3;
+        this.zzlcj = str4;
+        this.zzlal = cart;
+        this.zzlck = z4;
+        this.zzlcl = z5;
+        this.zzlcm = countrySpecificationArr;
+        this.zzlcn = z6;
+        this.zzlco = z7;
+        this.zzlcp = arrayList;
+        this.zzlcq = paymentMethodTokenizationParameters;
+        this.zzlcr = arrayList2;
+        this.zzctp = str5;
     }
 
     public static Builder newBuilder() {
-        MaskedWalletRequest maskedWalletRequest = new MaskedWalletRequest();
-        maskedWalletRequest.getClass();
         return new Builder();
     }
 
-    public final boolean allowDebitCard() {
-        return this.zzbPA;
-    }
-
-    public final boolean allowPrepaidCard() {
-        return this.zzbPz;
-    }
-
-    public final ArrayList<Integer> getAllowedCardNetworks() {
-        return this.zzbPD;
-    }
-
-    public final ArrayList<CountrySpecification> getAllowedCountrySpecificationsForShipping() {
-        return this.zzbPB;
-    }
-
-    public final CountrySpecification[] getAllowedShippingCountrySpecifications() {
-        return this.zzbPy;
-    }
-
-    public final Cart getCart() {
-        return this.zzbOB;
-    }
-
-    public final String getCountryCode() {
-        return this.zzVJ;
-    }
-
-    public final String getCurrencyCode() {
-        return this.zzbOn;
-    }
-
-    public final String getEstimatedTotalPrice() {
-        return this.zzbPu;
-    }
-
-    public final String getMerchantName() {
-        return this.zzbPv;
-    }
-
-    public final String getMerchantTransactionId() {
-        return this.zzbOr;
-    }
-
-    public final PaymentMethodTokenizationParameters getPaymentMethodTokenizationParameters() {
-        return this.zzbPC;
-    }
-
-    @Deprecated
-    public final boolean isBillingAgreement() {
-        return this.zzbPx;
-    }
-
-    public final boolean isPhoneNumberRequired() {
-        return this.zzbPr;
-    }
-
-    public final boolean isShippingAddressRequired() {
-        return this.zzbPs;
-    }
-
-    @Deprecated
-    public final boolean useMinimalBillingAddress() {
-        return this.zzbPt;
-    }
-
     public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.zzbOr, false);
-        zzd.zza(parcel, 3, this.zzbPr);
-        zzd.zza(parcel, 4, this.zzbPs);
-        zzd.zza(parcel, 5, this.zzbPt);
-        zzd.zza(parcel, 6, this.zzbPu, false);
-        zzd.zza(parcel, 7, this.zzbOn, false);
-        zzd.zza(parcel, 8, this.zzbPv, false);
-        zzd.zza(parcel, 9, this.zzbOB, i, false);
-        zzd.zza(parcel, 10, this.zzbPw);
-        zzd.zza(parcel, 11, this.zzbPx);
-        zzd.zza(parcel, 12, this.zzbPy, i, false);
-        zzd.zza(parcel, 13, this.zzbPz);
-        zzd.zza(parcel, 14, this.zzbPA);
-        zzd.zzc(parcel, 15, this.zzbPB, false);
-        zzd.zza(parcel, 16, this.zzbPC, i, false);
-        zzd.zza(parcel, 17, this.zzbPD, false);
-        zzd.zza(parcel, 18, this.zzVJ, false);
-        zzd.zzI(parcel, zze);
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zza(parcel, 2, this.zzlab, false);
+        zzbfp.zza(parcel, 3, this.zzlcf);
+        zzbfp.zza(parcel, 4, this.zzlcg);
+        zzbfp.zza(parcel, 5, this.zzlch);
+        zzbfp.zza(parcel, 6, this.zzlci, false);
+        zzbfp.zza(parcel, 7, this.zzkzs, false);
+        zzbfp.zza(parcel, 8, this.zzlcj, false);
+        zzbfp.zza(parcel, 9, this.zzlal, i, false);
+        zzbfp.zza(parcel, 10, this.zzlck);
+        zzbfp.zza(parcel, 11, this.zzlcl);
+        zzbfp.zza(parcel, 12, this.zzlcm, i, false);
+        zzbfp.zza(parcel, 13, this.zzlcn);
+        zzbfp.zza(parcel, 14, this.zzlco);
+        zzbfp.zzc(parcel, 15, this.zzlcp, false);
+        zzbfp.zza(parcel, 16, this.zzlcq, i, false);
+        zzbfp.zza(parcel, 17, this.zzlcr, false);
+        zzbfp.zza(parcel, 18, this.zzctp, false);
+        zzbfp.zzai(parcel, zze);
     }
 }

@@ -16,7 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -93,7 +92,7 @@ public class StickerSetCell extends FrameLayout {
             float f2;
             this.progressView = new RadialProgressView(getContext());
             this.progressView.setProgressColor(Theme.getColor(Theme.key_dialogProgressCircle));
-            this.progressView.setSize(AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE));
+            this.progressView.setSize(AndroidUtilities.dp(30.0f));
             view = this.progressView;
             if (!LocaleController.isRTL) {
                 i3 = 3;

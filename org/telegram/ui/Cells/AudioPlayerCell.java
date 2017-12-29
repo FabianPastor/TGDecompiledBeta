@@ -19,13 +19,15 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.FileDownloadProgressListener;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RadialProgress;
 
 public class AudioPlayerCell extends View implements FileDownloadProgressListener {
-    private int TAG = MediaController.getInstance().generateObserverTag();
+    private int TAG = MediaController.getInstance(this.currentAccount).generateObserverTag();
     private boolean buttonPressed;
     private int buttonState;
+    private int currentAccount = UserConfig.selectedAccount;
     private MessageObject currentMessageObject;
     private StaticLayout descriptionLayout;
     private int descriptionY = AndroidUtilities.dp(29.0f);
@@ -67,7 +69,7 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
 
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        MediaController.getInstance().removeLoadingFileObserver(this);
+        MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
 
     public MessageObject getMessageObject() {
@@ -76,25 +78,25 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
 
     public void didPressedButton() {
         if (this.buttonState == 0) {
-            if (MediaController.getInstance().findMessageInPlaylistAndPlay(this.currentMessageObject)) {
+            if (MediaController.getInstance(this.currentAccount).findMessageInPlaylistAndPlay(this.currentMessageObject)) {
                 this.buttonState = 1;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                 invalidate();
             }
         } else if (this.buttonState == 1) {
-            if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
+            if (MediaController.getInstance(this.currentAccount).pauseMessage(this.currentMessageObject)) {
                 this.buttonState = 0;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                 invalidate();
             }
         } else if (this.buttonState == 2) {
             this.radialProgress.setProgress(0.0f, false);
-            FileLoader.getInstance().loadFile(this.currentMessageObject.getDocument(), true, 0);
+            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), true, 0);
             this.buttonState = 4;
             this.radialProgress.setBackground(getDrawableForCurrentState(), true, false);
             invalidate();
         } else if (this.buttonState == 4) {
-            FileLoader.getInstance().cancelLoadFile(this.currentMessageObject.getDocument());
+            FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.currentMessageObject.getDocument());
             this.buttonState = 2;
             this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
             invalidate();
@@ -156,9 +158,9 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
             cacheFile.delete();
         }
         if (cacheFile.exists()) {
-            MediaController.getInstance().removeLoadingFileObserver(this);
-            boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-            if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
+            MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+            boolean playing = MediaController.getInstance(this.currentAccount).isPlayingMessage(this.currentMessageObject);
+            if (!playing || (playing && MediaController.getInstance(this.currentAccount).isMessagePaused())) {
                 this.buttonState = 0;
             } else {
                 this.buttonState = 1;
@@ -167,8 +169,8 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
             invalidate();
             return;
         }
-        MediaController.getInstance().addLoadingFileObserver(fileName, this);
-        if (FileLoader.getInstance().isLoadingFile(fileName)) {
+        MediaController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
+        if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
             this.buttonState = 4;
             Float progress = ImageLoader.getInstance().getFileProgress(fileName);
             if (progress != null) {

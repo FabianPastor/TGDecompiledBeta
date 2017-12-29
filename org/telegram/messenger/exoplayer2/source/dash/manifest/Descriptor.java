@@ -1,18 +1,13 @@
 package org.telegram.messenger.exoplayer2.source.dash.manifest;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class Descriptor {
-    @Nullable
     public final String id;
-    @NonNull
     public final String schemeIdUri;
-    @Nullable
     public final String value;
 
-    public Descriptor(@NonNull String schemeIdUri, @Nullable String value, @Nullable String id) {
+    public Descriptor(String schemeIdUri, String value, String id) {
         this.schemeIdUri = schemeIdUri;
         this.value = value;
         this.id = id;

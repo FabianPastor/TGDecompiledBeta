@@ -23,16 +23,15 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.AbsListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.query.StickersQuery;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
@@ -65,7 +64,7 @@ public class StickerPreviewViewer {
     private Runnable showSheetRunnable = new Runnable() {
         public void run() {
             if (StickerPreviewViewer.this.parentActivity != null && StickerPreviewViewer.this.currentSet != null) {
-                final boolean inFavs = StickersQuery.isStickerInFavorites(StickerPreviewViewer.this.currentSticker);
+                final boolean inFavs = DataQuery.getAccountInstance().isStickerInFavorites(StickerPreviewViewer.this.currentSticker);
                 Builder builder = new Builder(StickerPreviewViewer.this.parentActivity);
                 ArrayList<CharSequence> items = new ArrayList();
                 final ArrayList<Integer> actions = new ArrayList();
@@ -78,7 +77,7 @@ public class StickerPreviewViewer {
                     icons.add(Integer.valueOf(R.drawable.stickers_pack));
                     actions.add(Integer.valueOf(1));
                 }
-                if (!MessageObject.isMaskDocument(StickerPreviewViewer.this.currentSticker) && (inFavs || StickersQuery.canAddStickerToFavorites())) {
+                if (!MessageObject.isMaskDocument(StickerPreviewViewer.this.currentSticker) && (inFavs || DataQuery.getAccountInstance().canAddStickerToFavorites())) {
                     items.add(inFavs ? LocaleController.getString("DeleteFromFavorites", R.string.DeleteFromFavorites) : LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
                     icons.add(Integer.valueOf(inFavs ? R.drawable.stickers_unfavorite : R.drawable.stickers_favorite));
                     actions.add(Integer.valueOf(2));
@@ -100,7 +99,7 @@ public class StickerPreviewViewer {
                                         StickerPreviewViewer.this.delegate.openSet(StickerPreviewViewer.this.currentSet);
                                     }
                                 } else if (((Integer) actions.get(which)).intValue() == 2) {
-                                    StickersQuery.addRecentSticker(2, StickerPreviewViewer.this.currentSticker, (int) (System.currentTimeMillis() / 1000), inFavs);
+                                    DataQuery.getAccountInstance().addRecentSticker(2, StickerPreviewViewer.this.currentSticker, (int) (System.currentTimeMillis() / 1000), inFavs);
                                 }
                             }
                         }
@@ -530,7 +529,7 @@ public class StickerPreviewViewer {
     @SuppressLint({"DrawAllocation"})
     private void onDraw(Canvas canvas) {
         if (this.containerView != null && this.backgroundDrawable != null) {
-            this.backgroundDrawable.setAlpha((int) (BitmapDescriptorFactory.HUE_CYAN * this.showProgress));
+            this.backgroundDrawable.setAlpha((int) (180.0f * this.showProgress));
             this.backgroundDrawable.setBounds(0, 0, this.containerView.getWidth(), this.containerView.getHeight());
             this.backgroundDrawable.draw(canvas);
             canvas.save();
@@ -543,7 +542,7 @@ public class StickerPreviewViewer {
                 this.centerImage.draw(canvas);
             }
             if (this.stickerEmojiLayout != null) {
-                canvas.translate((float) (-AndroidUtilities.dp(50.0f)), (float) (((-this.centerImage.getImageHeight()) / 2) - AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)));
+                canvas.translate((float) (-AndroidUtilities.dp(50.0f)), (float) (((-this.centerImage.getImageHeight()) / 2) - AndroidUtilities.dp(30.0f)));
                 this.stickerEmojiLayout.draw(canvas);
             }
             canvas.restore();
@@ -554,7 +553,7 @@ public class StickerPreviewViewer {
                     newTime = System.currentTimeMillis();
                     dt = newTime - this.lastUpdateTime;
                     this.lastUpdateTime = newTime;
-                    this.showProgress += ((float) dt) / BitmapDescriptorFactory.HUE_GREEN;
+                    this.showProgress += ((float) dt) / 120.0f;
                     this.containerView.invalidate();
                     if (this.showProgress > 1.0f) {
                         this.showProgress = 1.0f;
@@ -564,7 +563,7 @@ public class StickerPreviewViewer {
                 newTime = System.currentTimeMillis();
                 dt = newTime - this.lastUpdateTime;
                 this.lastUpdateTime = newTime;
-                this.showProgress -= ((float) dt) / BitmapDescriptorFactory.HUE_GREEN;
+                this.showProgress -= ((float) dt) / 120.0f;
                 this.containerView.invalidate();
                 if (this.showProgress < 0.0f) {
                     this.showProgress = 0.0f;

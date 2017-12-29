@@ -18,7 +18,6 @@ import org.json.JSONObject;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public class LoginTask extends ConnectionTask<Void, Void, Boolean> {
-    public static final String BUNDLE_SUCCESS = "success";
     private Context mContext;
     private Handler mHandler;
     private final int mMode;
@@ -38,10 +37,6 @@ public class LoginTask extends ConnectionTask<Void, Void, Boolean> {
         }
     }
 
-    public void setShowProgressDialog(boolean showProgressDialog) {
-        this.mShowProgressDialog = showProgressDialog;
-    }
-
     public void attach(Context context, Handler handler) {
         this.mContext = context;
         this.mHandler = handler;
@@ -55,7 +50,7 @@ public class LoginTask extends ConnectionTask<Void, Void, Boolean> {
 
     protected void onPreExecute() {
         if ((this.mProgressDialog == null || !this.mProgressDialog.isShowing()) && this.mShowProgressDialog) {
-            this.mProgressDialog = ProgressDialog.show(this.mContext, "", "Please wait...", true, false);
+            this.mProgressDialog = ProgressDialog.show(this.mContext, TtmlNode.ANONYMOUS_REGION_ID, "Please wait...", true, false);
         }
     }
 
@@ -107,7 +102,7 @@ public class LoginTask extends ConnectionTask<Void, Void, Boolean> {
         if (this.mHandler != null) {
             Message msg = new Message();
             Bundle bundle = new Bundle();
-            bundle.putBoolean(BUNDLE_SUCCESS, success.booleanValue());
+            bundle.putBoolean("success", success.booleanValue());
             msg.setData(bundle);
             this.mHandler.sendMessage(msg);
         }

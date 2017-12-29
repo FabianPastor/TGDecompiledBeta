@@ -114,11 +114,11 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
                 case 1:
                     TextInfoPrivacyCell privacyCell = holder.itemView;
                     if (position == GroupInviteActivity.this.shadowRow) {
-                        privacyCell.setText("");
+                        privacyCell.setText(TtmlNode.ANONYMOUS_REGION_ID);
                         privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == GroupInviteActivity.this.linkInfoRow) {
-                        Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(GroupInviteActivity.this.chat_id));
+                        Chat chat = MessagesController.getInstance(GroupInviteActivity.this.currentAccount).getChat(Integer.valueOf(GroupInviteActivity.this.chat_id));
                         if (!ChatObject.isChannel(chat) || chat.megagroup) {
                             privacyCell.setText(LocaleController.getString("LinkInfo", R.string.LinkInfo));
                         } else {
@@ -157,8 +157,8 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatInfoDidLoaded);
-        MessagesController.getInstance().loadFullChat(this.chat_id, this.classGuid, true);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoaded);
+        MessagesController.getInstance(this.currentAccount).loadFullChat(this.chat_id, this.classGuid, true);
         this.loading = true;
         this.rowCount = 0;
         int i = this.rowCount;
@@ -183,7 +183,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     }
 
     public void onFragmentDestroy() {
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoaded);
     }
 
     public View createView(Context context) {
@@ -251,12 +251,12 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         return this.fragmentView;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.chatInfoDidLoaded) {
             ChatFull info = args[0];
             int guid = ((Integer) args[1]).intValue();
             if (info.id == this.chat_id && guid == this.classGuid) {
-                this.invite = MessagesController.getInstance().getExportedInvite(this.chat_id);
+                this.invite = MessagesController.getInstance(this.currentAccount).getExportedInvite(this.chat_id);
                 if (this.invite instanceof TL_chatInviteExported) {
                     this.loading = false;
                     if (this.listAdapter != null) {
@@ -281,16 +281,16 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         TLObject request;
         this.loading = true;
         TLObject req;
-        if (ChatObject.isChannel(this.chat_id)) {
+        if (ChatObject.isChannel(this.chat_id, this.currentAccount)) {
             req = new TL_channels_exportInvite();
-            req.channel = MessagesController.getInputChannel(this.chat_id);
+            req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(this.chat_id);
             request = req;
         } else {
             req = new TL_messages_exportChatInvite();
             req.chat_id = this.chat_id;
             request = req;
         }
-        ConnectionsManager.getInstance().bindRequestToGuid(ConnectionsManager.getInstance().sendRequest(request, new RequestDelegate() {
+        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new RequestDelegate() {
             public void run(final TLObject response, final TL_error error) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {

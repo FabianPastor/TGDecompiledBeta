@@ -1,12 +1,9 @@
 package android.support.v4.util;
 
+import java.util.ConcurrentModificationException;
 import java.util.Map;
 
 public class SimpleArrayMap<K, V> {
-    private static final int BASE_SIZE = 4;
-    private static final int CACHE_SIZE = 10;
-    private static final boolean DEBUG = false;
-    private static final String TAG = "ArrayMap";
     static Object[] mBaseCache;
     static int mBaseCacheSize;
     static Object[] mTwiceBaseCache;
@@ -15,12 +12,20 @@ public class SimpleArrayMap<K, V> {
     int[] mHashes;
     int mSize;
 
+    private static int binarySearchHashes(int[] hashes, int N, int hash) {
+        try {
+            return ContainerHelpers.binarySearch(hashes, N, hash);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new ConcurrentModificationException();
+        }
+    }
+
     int indexOf(Object key, int hash) {
         int N = this.mSize;
         if (N == 0) {
             return -1;
         }
-        int index = ContainerHelpers.binarySearch(this.mHashes, N, hash);
+        int index = binarySearchHashes(this.mHashes, N, hash);
         if (index < 0 || key.equals(this.mArray[index << 1])) {
             return index;
         }
@@ -46,7 +51,7 @@ public class SimpleArrayMap<K, V> {
         if (N == 0) {
             return -1;
         }
-        int index = ContainerHelpers.binarySearch(this.mHashes, N, 0);
+        int index = binarySearchHashes(this.mHashes, N, 0);
         if (index < 0 || this.mArray[index << 1] == null) {
             return index;
         }
@@ -145,32 +150,35 @@ public class SimpleArrayMap<K, V> {
         this.mSize = 0;
     }
 
-    public SimpleArrayMap(SimpleArrayMap map) {
-        this();
-        if (map != null) {
-            putAll(map);
-        }
-    }
-
     public void clear() {
-        if (this.mSize != 0) {
-            freeArrays(this.mHashes, this.mArray, this.mSize);
+        if (this.mSize > 0) {
+            int[] ohashes = this.mHashes;
+            Object[] oarray = this.mArray;
+            int osize = this.mSize;
             this.mHashes = ContainerHelpers.EMPTY_INTS;
             this.mArray = ContainerHelpers.EMPTY_OBJECTS;
             this.mSize = 0;
+            freeArrays(ohashes, oarray, osize);
+        }
+        if (this.mSize > 0) {
+            throw new ConcurrentModificationException();
         }
     }
 
     public void ensureCapacity(int minimumCapacity) {
+        int osize = this.mSize;
         if (this.mHashes.length < minimumCapacity) {
             int[] ohashes = this.mHashes;
             Object[] oarray = this.mArray;
             allocArrays(minimumCapacity);
             if (this.mSize > 0) {
-                System.arraycopy(ohashes, 0, this.mHashes, 0, this.mSize);
-                System.arraycopy(oarray, 0, this.mArray, 0, this.mSize << 1);
+                System.arraycopy(ohashes, 0, this.mHashes, 0, osize);
+                System.arraycopy(oarray, 0, this.mArray, 0, osize << 1);
             }
-            freeArrays(ohashes, oarray, this.mSize);
+            freeArrays(ohashes, oarray, osize);
+        }
+        if (this.mSize != osize) {
+            throw new ConcurrentModificationException();
         }
     }
 
@@ -234,6 +242,7 @@ public class SimpleArrayMap<K, V> {
         int hash;
         int index;
         int n = 8;
+        int osize = this.mSize;
         if (key == null) {
             hash = 0;
             index = indexOfNull();
@@ -248,44 +257,36 @@ public class SimpleArrayMap<K, V> {
             return old;
         }
         index ^= -1;
-        if (this.mSize >= this.mHashes.length) {
-            if (this.mSize >= 8) {
-                n = this.mSize + (this.mSize >> 1);
-            } else if (this.mSize < 4) {
+        if (osize >= this.mHashes.length) {
+            if (osize >= 8) {
+                n = osize + (osize >> 1);
+            } else if (osize < 4) {
                 n = 4;
             }
             int[] ohashes = this.mHashes;
             Object[] oarray = this.mArray;
             allocArrays(n);
+            if (osize != this.mSize) {
+                throw new ConcurrentModificationException();
+            }
             if (this.mHashes.length > 0) {
                 System.arraycopy(ohashes, 0, this.mHashes, 0, ohashes.length);
                 System.arraycopy(oarray, 0, this.mArray, 0, oarray.length);
             }
-            freeArrays(ohashes, oarray, this.mSize);
+            freeArrays(ohashes, oarray, osize);
         }
-        if (index < this.mSize) {
-            System.arraycopy(this.mHashes, index, this.mHashes, index + 1, this.mSize - index);
+        if (index < osize) {
+            System.arraycopy(this.mHashes, index, this.mHashes, index + 1, osize - index);
             System.arraycopy(this.mArray, index << 1, this.mArray, (index + 1) << 1, (this.mSize - index) << 1);
+        }
+        if (osize != this.mSize || index >= this.mHashes.length) {
+            throw new ConcurrentModificationException();
         }
         this.mHashes[index] = hash;
         this.mArray[index << 1] = key;
         this.mArray[(index << 1) + 1] = value;
         this.mSize++;
         return null;
-    }
-
-    public void putAll(SimpleArrayMap<? extends K, ? extends V> array) {
-        int N = array.mSize;
-        ensureCapacity(this.mSize + N);
-        if (this.mSize != 0) {
-            for (int i = 0; i < N; i++) {
-                put(array.keyAt(i), array.valueAt(i));
-            }
-        } else if (N > 0) {
-            System.arraycopy(array.mHashes, 0, this.mHashes, 0, N);
-            System.arraycopy(array.mArray, 0, this.mArray, 0, N << 1);
-            this.mSize = N;
-        }
     }
 
     public V remove(Object key) {
@@ -297,38 +298,48 @@ public class SimpleArrayMap<K, V> {
     }
 
     public V removeAt(int index) {
+        int nsize;
         int n = 8;
         Object old = this.mArray[(index << 1) + 1];
-        if (this.mSize <= 1) {
-            freeArrays(this.mHashes, this.mArray, this.mSize);
+        int osize = this.mSize;
+        if (osize <= 1) {
+            freeArrays(this.mHashes, this.mArray, osize);
             this.mHashes = ContainerHelpers.EMPTY_INTS;
             this.mArray = ContainerHelpers.EMPTY_OBJECTS;
-            this.mSize = 0;
-        } else if (this.mHashes.length <= 8 || this.mSize >= this.mHashes.length / 3) {
-            this.mSize--;
-            if (index < this.mSize) {
-                System.arraycopy(this.mHashes, index + 1, this.mHashes, index, this.mSize - index);
-                System.arraycopy(this.mArray, (index + 1) << 1, this.mArray, index << 1, (this.mSize - index) << 1);
-            }
-            this.mArray[this.mSize << 1] = null;
-            this.mArray[(this.mSize << 1) + 1] = null;
+            nsize = 0;
         } else {
-            if (this.mSize > 8) {
-                n = this.mSize + (this.mSize >> 1);
-            }
-            int[] ohashes = this.mHashes;
-            Object[] oarray = this.mArray;
-            allocArrays(n);
-            this.mSize--;
-            if (index > 0) {
-                System.arraycopy(ohashes, 0, this.mHashes, 0, index);
-                System.arraycopy(oarray, 0, this.mArray, 0, index << 1);
-            }
-            if (index < this.mSize) {
-                System.arraycopy(ohashes, index + 1, this.mHashes, index, this.mSize - index);
-                System.arraycopy(oarray, (index + 1) << 1, this.mArray, index << 1, (this.mSize - index) << 1);
+            nsize = osize - 1;
+            if (this.mHashes.length <= 8 || this.mSize >= this.mHashes.length / 3) {
+                if (index < nsize) {
+                    System.arraycopy(this.mHashes, index + 1, this.mHashes, index, nsize - index);
+                    System.arraycopy(this.mArray, (index + 1) << 1, this.mArray, index << 1, (nsize - index) << 1);
+                }
+                this.mArray[nsize << 1] = null;
+                this.mArray[(nsize << 1) + 1] = null;
+            } else {
+                if (osize > 8) {
+                    n = osize + (osize >> 1);
+                }
+                int[] ohashes = this.mHashes;
+                Object[] oarray = this.mArray;
+                allocArrays(n);
+                if (osize != this.mSize) {
+                    throw new ConcurrentModificationException();
+                }
+                if (index > 0) {
+                    System.arraycopy(ohashes, 0, this.mHashes, 0, index);
+                    System.arraycopy(oarray, 0, this.mArray, 0, index << 1);
+                }
+                if (index < nsize) {
+                    System.arraycopy(ohashes, index + 1, this.mHashes, index, nsize - index);
+                    System.arraycopy(oarray, (index + 1) << 1, this.mArray, index << 1, (nsize - index) << 1);
+                }
             }
         }
+        if (osize != this.mSize) {
+            throw new ConcurrentModificationException();
+        }
+        this.mSize = nsize;
         return old;
     }
 

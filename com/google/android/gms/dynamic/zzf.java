@@ -7,17 +7,17 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 final class zzf implements OnClickListener {
-    private /* synthetic */ Intent zzaSA;
-    private /* synthetic */ Context zztF;
+    private /* synthetic */ Context val$context;
+    private /* synthetic */ Intent zzgwl;
 
     zzf(Context context, Intent intent) {
-        this.zztF = context;
-        this.zzaSA = intent;
+        this.val$context = context;
+        this.zzgwl = intent;
     }
 
     public final void onClick(View view) {
         try {
-            this.zztF.startActivity(this.zzaSA);
+            this.val$context.startActivity(this.zzgwl);
         } catch (Throwable e) {
             Log.e("DeferredLifecycleHelper", "Failed to start resolution intent", e);
         }

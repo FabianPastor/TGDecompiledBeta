@@ -123,7 +123,7 @@ public final class DefaultExtractorInput implements ExtractorInput {
     private void ensureSpaceForPeek(int length) {
         int requiredLength = this.peekBufferPosition + length;
         if (requiredLength > this.peekBuffer.length) {
-            this.peekBuffer = Arrays.copyOf(this.peekBuffer, Util.constrainValue(this.peekBuffer.length * 2, 65536 + requiredLength, 524288 + requiredLength));
+            this.peekBuffer = Arrays.copyOf(this.peekBuffer, Util.constrainValue(this.peekBuffer.length * 2, 65536 + requiredLength, PEEK_MAX_FREE_SPACE + requiredLength));
         }
     }
 
@@ -147,7 +147,7 @@ public final class DefaultExtractorInput implements ExtractorInput {
         this.peekBufferLength -= bytesConsumed;
         this.peekBufferPosition = 0;
         byte[] newPeekBuffer = this.peekBuffer;
-        if (this.peekBufferLength < this.peekBuffer.length - 524288) {
+        if (this.peekBufferLength < this.peekBuffer.length - PEEK_MAX_FREE_SPACE) {
             newPeekBuffer = new byte[(this.peekBufferLength + 65536)];
         }
         System.arraycopy(this.peekBuffer, bytesConsumed, newPeekBuffer, 0, this.peekBufferLength);

@@ -12,9 +12,6 @@ public class PrefsUtil {
 
     private static class PrefsUtilHolder {
         public static final PrefsUtil INSTANCE = new PrefsUtil();
-
-        private PrefsUtilHolder() {
-        }
     }
 
     private PrefsUtil() {
@@ -26,10 +23,10 @@ public class PrefsUtil {
 
     public void saveFeedbackTokenToPrefs(Context context, String token) {
         if (context != null) {
-            this.mFeedbackTokenPrefs = context.getSharedPreferences(Util.PREFS_FEEDBACK_TOKEN, 0);
+            this.mFeedbackTokenPrefs = context.getSharedPreferences("net.hockeyapp.android.prefs_feedback_token", 0);
             if (this.mFeedbackTokenPrefs != null) {
                 this.mFeedbackTokenPrefsEditor = this.mFeedbackTokenPrefs.edit();
-                this.mFeedbackTokenPrefsEditor.putString(Util.PREFS_KEY_FEEDBACK_TOKEN, token);
+                this.mFeedbackTokenPrefsEditor.putString("net.hockeyapp.android.prefs_key_feedback_token", token);
                 this.mFeedbackTokenPrefsEditor.apply();
             }
         }
@@ -39,22 +36,22 @@ public class PrefsUtil {
         if (context == null) {
             return null;
         }
-        this.mFeedbackTokenPrefs = context.getSharedPreferences(Util.PREFS_FEEDBACK_TOKEN, 0);
+        this.mFeedbackTokenPrefs = context.getSharedPreferences("net.hockeyapp.android.prefs_feedback_token", 0);
         if (this.mFeedbackTokenPrefs != null) {
-            return this.mFeedbackTokenPrefs.getString(Util.PREFS_KEY_FEEDBACK_TOKEN, null);
+            return this.mFeedbackTokenPrefs.getString("net.hockeyapp.android.prefs_key_feedback_token", null);
         }
         return null;
     }
 
     public void saveNameEmailSubjectToPrefs(Context context, String name, String email, String subject) {
         if (context != null) {
-            this.mNameEmailSubjectPrefs = context.getSharedPreferences(Util.PREFS_NAME_EMAIL_SUBJECT, 0);
+            this.mNameEmailSubjectPrefs = context.getSharedPreferences("net.hockeyapp.android.prefs_name_email", 0);
             if (this.mNameEmailSubjectPrefs != null) {
                 this.mNameEmailSubjectPrefsEditor = this.mNameEmailSubjectPrefs.edit();
                 if (name == null || email == null || subject == null) {
-                    this.mNameEmailSubjectPrefsEditor.putString(Util.PREFS_KEY_NAME_EMAIL_SUBJECT, null);
+                    this.mNameEmailSubjectPrefsEditor.putString("net.hockeyapp.android.prefs_key_name_email", null);
                 } else {
-                    this.mNameEmailSubjectPrefsEditor.putString(Util.PREFS_KEY_NAME_EMAIL_SUBJECT, String.format("%s|%s|%s", new Object[]{name, email, subject}));
+                    this.mNameEmailSubjectPrefsEditor.putString("net.hockeyapp.android.prefs_key_name_email", String.format("%s|%s|%s", new Object[]{name, email, subject}));
                 }
                 this.mNameEmailSubjectPrefsEditor.apply();
             }
@@ -65,9 +62,9 @@ public class PrefsUtil {
         if (context == null) {
             return null;
         }
-        this.mNameEmailSubjectPrefs = context.getSharedPreferences(Util.PREFS_NAME_EMAIL_SUBJECT, 0);
+        this.mNameEmailSubjectPrefs = context.getSharedPreferences("net.hockeyapp.android.prefs_name_email", 0);
         if (this.mNameEmailSubjectPrefs != null) {
-            return this.mNameEmailSubjectPrefs.getString(Util.PREFS_KEY_NAME_EMAIL_SUBJECT, null);
+            return this.mNameEmailSubjectPrefs.getString("net.hockeyapp.android.prefs_key_name_email", null);
         }
         return null;
     }

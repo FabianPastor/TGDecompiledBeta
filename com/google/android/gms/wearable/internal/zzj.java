@@ -2,33 +2,32 @@ package com.google.android.gms.wearable.internal;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.internal.zzbfn;
 
 public final class zzj implements Creator<zzi> {
     public final /* synthetic */ Object createFromParcel(Parcel parcel) {
         byte b = (byte) 0;
-        int zzd = zzb.zzd(parcel);
+        int zzd = zzbfn.zzd(parcel);
         String str = null;
         byte b2 = (byte) 0;
         while (parcel.dataPosition() < zzd) {
             int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
+            switch (65535 & readInt) {
                 case 2:
-                    b2 = zzb.zze(parcel, readInt);
+                    b2 = zzbfn.zze(parcel, readInt);
                     break;
                 case 3:
-                    b = zzb.zze(parcel, readInt);
+                    b = zzbfn.zze(parcel, readInt);
                     break;
                 case 4:
-                    str = zzb.zzq(parcel, readInt);
+                    str = zzbfn.zzq(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, readInt);
+                    zzbfn.zzb(parcel, readInt);
                     break;
             }
         }
-        zzb.zzF(parcel, zzd);
+        zzbfn.zzaf(parcel, zzd);
         return new zzi(b2, b, str);
     }
 

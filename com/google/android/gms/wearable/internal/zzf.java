@@ -2,10 +2,10 @@ package com.google.android.gms.wearable.internal;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-public final class zzf extends zza {
+public final class zzf extends zzbfm {
     public static final Creator<zzf> CREATOR = new zzg();
     public final int statusCode;
 
@@ -14,8 +14,8 @@ public final class zzf extends zza {
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zzc(parcel, 2, this.statusCode);
-        zzd.zzI(parcel, zze);
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zzc(parcel, 2, this.statusCode);
+        zzbfp.zzai(parcel, zze);
     }
 }

@@ -1,32 +1,24 @@
 package com.google.android.gms.wearable.internal;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.internal.zzbaz;
-import com.google.android.gms.wearable.WearableStatusCodes;
-import java.lang.ref.WeakReference;
-import java.util.Map;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-final class zzdr<T> extends zzfc<Status> {
-    private WeakReference<Map<T, zzga<T>>> zzbSR;
-    private WeakReference<T> zzbSS;
+public final class zzdr extends zzbfm {
+    public static final Creator<zzdr> CREATOR = new zzdq();
+    private int statusCode;
+    private boolean zzlkh;
 
-    zzdr(Map<T, zzga<T>> map, T t, zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status) {
-        super(com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status);
-        this.zzbSR = new WeakReference(map);
-        this.zzbSS = new WeakReference(t);
+    public zzdr(int i, boolean z) {
+        this.statusCode = i;
+        this.zzlkh = z;
     }
 
-    public final void zza(Status status) {
-        Map map = (Map) this.zzbSR.get();
-        Object obj = this.zzbSS.get();
-        if (!(status.getStatus().getStatusCode() != WearableStatusCodes.UNKNOWN_LISTENER || map == null || obj == null)) {
-            synchronized (map) {
-                zzga com_google_android_gms_wearable_internal_zzga = (zzga) map.remove(obj);
-                if (com_google_android_gms_wearable_internal_zzga != null) {
-                    com_google_android_gms_wearable_internal_zzga.clear();
-                }
-            }
-        }
-        zzR(status);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zzc(parcel, 2, this.statusCode);
+        zzbfp.zza(parcel, 3, this.zzlkh);
+        zzbfp.zzai(parcel, zze);
     }
 }

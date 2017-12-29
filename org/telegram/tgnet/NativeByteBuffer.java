@@ -3,6 +3,7 @@ package org.telegram.tgnet;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.exoplayer2.C;
 
 public class NativeByteBuffer extends AbstractSerializedData {
     private static final ThreadLocal<NativeByteBuffer> addressWrapper = new ThreadLocal<NativeByteBuffer>() {
@@ -186,7 +187,7 @@ public class NativeByteBuffer extends AbstractSerializedData {
 
     public void writeString(String s) {
         try {
-            writeByteArray(s.getBytes("UTF-8"));
+            writeByteArray(s.getBytes(C.UTF8_NAME));
         } catch (Exception e) {
             FileLog.e("write string error");
         }
@@ -392,6 +393,17 @@ public class NativeByteBuffer extends AbstractSerializedData {
         }
     }
 
+    public void readBytes(byte[] b, int offset, int count, boolean exception) {
+        try {
+            this.buffer.get(b, offset, count);
+        } catch (Exception e) {
+            if (exception) {
+                throw new RuntimeException("read raw error", e);
+            }
+            FileLog.e("read raw error");
+        }
+    }
+
     public byte[] readData(int count, boolean exception) {
         byte[] arr = new byte[count];
         readBytes(arr, exception);
@@ -412,14 +424,14 @@ public class NativeByteBuffer extends AbstractSerializedData {
             for (int i = sl; (l + i) % 4 != 0; i++) {
                 this.buffer.get();
             }
-            return new String(b, "UTF-8");
+            return new String(b, C.UTF8_NAME);
         } catch (Exception e) {
             if (exception) {
                 throw new RuntimeException("read string error", e);
             }
             FileLog.e("read string error");
             position(startReadPosition);
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
     }
 

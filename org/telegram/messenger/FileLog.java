@@ -68,12 +68,12 @@ public class FileLog {
 
     public static String getNetworkLogPath() {
         if (!BuildVars.DEBUG_VERSION) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
         try {
             File sdCard = ApplicationLoader.applicationContext.getExternalFilesDir(null);
             if (sdCard == null) {
-                return "";
+                return TtmlNode.ANONYMOUS_REGION_ID;
             }
             File dir = new File(sdCard.getAbsolutePath() + "/logs");
             dir.mkdirs();
@@ -81,7 +81,7 @@ public class FileLog {
             return getInstance().networkFile.getAbsolutePath();
         } catch (Throwable e) {
             e.printStackTrace();
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
     }
 

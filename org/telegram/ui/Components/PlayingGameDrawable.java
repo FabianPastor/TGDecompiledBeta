@@ -5,12 +5,13 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.view.animation.DecelerateInterpolator;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
 
 public class PlayingGameDrawable extends StatusDrawable {
+    private int currentAccount = UserConfig.selectedAccount;
     private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
     private boolean isChat = false;
     private long lastUpdateTime = 0;
@@ -33,7 +34,7 @@ public class PlayingGameDrawable extends StatusDrawable {
         if (this.progress >= 1.0f) {
             this.progress = 0.0f;
         }
-        this.progress += ((float) dt) / BitmapDescriptorFactory.HUE_MAGENTA;
+        this.progress += ((float) dt) / 300.0f;
         if (this.progress > 1.0f) {
             this.progress = 1.0f;
         }
@@ -89,7 +90,7 @@ public class PlayingGameDrawable extends StatusDrawable {
         if (!this.started) {
             return;
         }
-        if (NotificationCenter.getInstance().isAnimationInProgress()) {
+        if (NotificationCenter.getInstance(this.currentAccount).isAnimationInProgress()) {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     PlayingGameDrawable.this.checkUpdate();
@@ -107,7 +108,7 @@ public class PlayingGameDrawable extends StatusDrawable {
     }
 
     public int getOpacity() {
-        return 0;
+        return -2;
     }
 
     public int getIntrinsicWidth() {

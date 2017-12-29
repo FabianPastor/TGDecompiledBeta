@@ -14,17 +14,13 @@ import java.util.ArrayList;
 import net.hockeyapp.android.FeedbackActivity;
 import net.hockeyapp.android.FeedbackManager;
 import net.hockeyapp.android.FeedbackManagerListener;
+import net.hockeyapp.android.UpdateFragment;
 import net.hockeyapp.android.objects.FeedbackMessage;
 import net.hockeyapp.android.objects.FeedbackResponse;
 import net.hockeyapp.android.utils.FeedbackParser;
 import net.hockeyapp.android.utils.Util;
 
 public class ParseFeedbackTask extends AsyncTask<Void, Void, FeedbackResponse> {
-    public static final String BUNDLE_PARSE_FEEDBACK_RESPONSE = "parse_feedback_response";
-    public static final String ID_LAST_MESSAGE_PROCESSED = "idLastMessageProcessed";
-    public static final String ID_LAST_MESSAGE_SEND = "idLastMessageSend";
-    public static final int NEW_ANSWER_NOTIFICATION_ID = 2;
-    public static final String PREFERENCES_NAME = "net.hockeyapp.android.feedback";
     private Context mContext;
     private String mFeedbackResponse;
     private Handler mHandler;
@@ -36,10 +32,6 @@ public class ParseFeedbackTask extends AsyncTask<Void, Void, FeedbackResponse> {
         this.mFeedbackResponse = feedbackResponse;
         this.mHandler = handler;
         this.mRequestType = requestType;
-    }
-
-    public void setUrlString(String urlString) {
-        this.mUrlString = urlString;
     }
 
     protected FeedbackResponse doInBackground(Void... params) {
@@ -62,7 +54,7 @@ public class ParseFeedbackTask extends AsyncTask<Void, Void, FeedbackResponse> {
         if (result != null && this.mHandler != null) {
             Message msg = new Message();
             Bundle bundle = new Bundle();
-            bundle.putSerializable(BUNDLE_PARSE_FEEDBACK_RESPONSE, result);
+            bundle.putSerializable("parse_feedback_response", result);
             msg.setData(bundle);
             this.mHandler.sendMessage(msg);
         }
@@ -71,14 +63,14 @@ public class ParseFeedbackTask extends AsyncTask<Void, Void, FeedbackResponse> {
     private void checkForNewAnswers(ArrayList<FeedbackMessage> messages) {
         FeedbackMessage latestMessage = (FeedbackMessage) messages.get(messages.size() - 1);
         int idLatestMessage = latestMessage.getId();
-        SharedPreferences preferences = this.mContext.getSharedPreferences(PREFERENCES_NAME, 0);
+        SharedPreferences preferences = this.mContext.getSharedPreferences("net.hockeyapp.android.feedback", 0);
         if (this.mRequestType.equals("send")) {
-            preferences.edit().putInt(ID_LAST_MESSAGE_SEND, idLatestMessage).putInt(ID_LAST_MESSAGE_PROCESSED, idLatestMessage).apply();
+            preferences.edit().putInt("idLastMessageSend", idLatestMessage).putInt("idLastMessageProcessed", idLatestMessage).apply();
         } else if (this.mRequestType.equals("fetch")) {
-            int idLastMessageSend = preferences.getInt(ID_LAST_MESSAGE_SEND, -1);
-            int idLastMessageProcessed = preferences.getInt(ID_LAST_MESSAGE_PROCESSED, -1);
+            int idLastMessageSend = preferences.getInt("idLastMessageSend", -1);
+            int idLastMessageProcessed = preferences.getInt("idLastMessageProcessed", -1);
             if (idLatestMessage != idLastMessageSend && idLatestMessage != idLastMessageProcessed) {
-                preferences.edit().putInt(ID_LAST_MESSAGE_PROCESSED, idLatestMessage).apply();
+                preferences.edit().putInt("idLastMessageProcessed", idLatestMessage).apply();
                 boolean eventHandled = false;
                 FeedbackManagerListener listener = FeedbackManager.getLastListener();
                 if (listener != null) {
@@ -105,7 +97,7 @@ public class ParseFeedbackTask extends AsyncTask<Void, Void, FeedbackResponse> {
             Intent intent = new Intent();
             intent.setFlags(805306368);
             intent.setClass(context, activityClass);
-            intent.putExtra("url", this.mUrlString);
+            intent.putExtra(UpdateFragment.FRAGMENT_URL, this.mUrlString);
             Notification notification = Util.createNotification(context, PendingIntent.getActivity(context, 0, intent, NUM), "HockeyApp Feedback", "A new answer to your feedback is available.", iconId);
             if (notification != null) {
                 notificationManager.notify(2, notification);

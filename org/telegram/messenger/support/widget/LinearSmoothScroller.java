@@ -2,7 +2,6 @@ package org.telegram.messenger.support.widget;
 
 import android.content.Context;
 import android.graphics.PointF;
-import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -153,7 +152,6 @@ public class LinearSmoothScroller extends SmoothScroller {
         return calculateDtToFit(layoutManager.getDecoratedLeft(view) - params.leftMargin, layoutManager.getDecoratedRight(view) + params.rightMargin, layoutManager.getPaddingLeft(), layoutManager.getWidth() - layoutManager.getPaddingRight(), snapPreference);
     }
 
-    @Nullable
     public PointF computeScrollVectorForPosition(int targetPosition) {
         LayoutManager layoutManager = getLayoutManager();
         if (layoutManager instanceof ScrollVectorProvider) {

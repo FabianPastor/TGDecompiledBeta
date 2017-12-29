@@ -14,10 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -54,11 +52,11 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     public boolean onFragmentCreate() {
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
         this.user_id = getArguments().getInt("user_id", 0);
         this.phone = getArguments().getString("phone");
         this.addContact = getArguments().getBoolean("addContact", false);
-        if (MessagesController.getInstance().getUser(Integer.valueOf(this.user_id)) == null || !super.onFragmentCreate()) {
+        if (MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.user_id)) == null || !super.onFragmentCreate()) {
             return false;
         }
         return true;
@@ -66,7 +64,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
     }
 
     public View createView(Context context) {
@@ -82,14 +80,14 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                 if (id == -1) {
                     ContactAddActivity.this.finishFragment();
                 } else if (id == 1 && ContactAddActivity.this.firstNameField.getText().length() != 0) {
-                    User user = MessagesController.getInstance().getUser(Integer.valueOf(ContactAddActivity.this.user_id));
+                    User user = MessagesController.getInstance(ContactAddActivity.this.currentAccount).getUser(Integer.valueOf(ContactAddActivity.this.user_id));
                     user.first_name = ContactAddActivity.this.firstNameField.getText().toString();
                     user.last_name = ContactAddActivity.this.lastNameField.getText().toString();
-                    ContactsController.getInstance().addContact(user);
+                    ContactsController.getInstance(ContactAddActivity.this.currentAccount).addContact(user);
                     ContactAddActivity.this.finishFragment();
-                    ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit().putInt("spam3_" + ContactAddActivity.this.user_id, 1).commit();
-                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
-                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.peerSettingsDidLoaded, Long.valueOf((long) ContactAddActivity.this.user_id));
+                    MessagesController.getNotificationsSettings(ContactAddActivity.this.currentAccount).edit().putInt("spam3_" + ContactAddActivity.this.user_id, 1).commit();
+                    NotificationCenter.getInstance(ContactAddActivity.this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
+                    NotificationCenter.getInstance(ContactAddActivity.this.currentAccount).postNotificationName(NotificationCenter.peerSettingsDidLoaded, Long.valueOf((long) ContactAddActivity.this.user_id));
                 }
             }
         });
@@ -106,7 +104,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         FrameLayout frameLayout = new FrameLayout(context);
         linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 24.0f, 24.0f, 24.0f, 0.0f));
         this.avatarImage = new BackupImageView(context);
-        this.avatarImage.setRoundRadius(AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE));
+        this.avatarImage.setRoundRadius(AndroidUtilities.dp(30.0f));
         frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(60, 60, (LocaleController.isRTL ? 5 : 3) | 48));
         this.nameTextView = new TextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -178,7 +176,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                 return true;
             }
         });
-        User user = MessagesController.getInstance().getUser(Integer.valueOf(this.user_id));
+        User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.user_id));
         if (user != null) {
             if (user.phone == null && this.phone != null) {
                 user.phone = PhoneFormat.stripExceptNumbers(this.phone);
@@ -192,7 +190,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
 
     private void updateAvatarLayout() {
         if (this.nameTextView != null) {
-            User user = MessagesController.getInstance().getUser(Integer.valueOf(this.user_id));
+            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.user_id));
             if (user != null) {
                 this.nameTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
                 this.onlineTextView.setText(LocaleController.formatUserStatus(user));
@@ -207,7 +205,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.updateInterfaces) {
             int mask = ((Integer) args[0]).intValue();
             if ((mask & 2) != 0 || (mask & 4) != 0) {
@@ -219,7 +217,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     public void onResume() {
         super.onResume();
         updateAvatarLayout();
-        if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("view_animations", true)) {
+        if (!MessagesController.getGlobalMainSettings().getBoolean("view_animations", true)) {
             this.firstNameField.requestFocus();
             AndroidUtilities.showKeyboard(this.firstNameField);
         }
@@ -235,7 +233,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
             public void didSetColor(int color) {
-                User user = MessagesController.getInstance().getUser(Integer.valueOf(ContactAddActivity.this.user_id));
+                User user = MessagesController.getInstance(ContactAddActivity.this.currentAccount).getUser(Integer.valueOf(ContactAddActivity.this.user_id));
                 if (user != null) {
                     ContactAddActivity.this.avatarDrawable.setInfo(user);
                     ContactAddActivity.this.avatarImage.invalidate();

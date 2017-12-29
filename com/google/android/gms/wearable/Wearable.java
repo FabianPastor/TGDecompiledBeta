@@ -1,48 +1,57 @@
 package com.google.android.gms.wearable;
 
+import android.os.Looper;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.Api.ApiOptions.Optional;
 import com.google.android.gms.common.api.Api.zza;
 import com.google.android.gms.common.api.Api.zzf;
-import com.google.android.gms.wearable.internal.zzac;
-import com.google.android.gms.wearable.internal.zzbh;
-import com.google.android.gms.wearable.internal.zzbi;
-import com.google.android.gms.wearable.internal.zzds;
-import com.google.android.gms.wearable.internal.zzdz;
-import com.google.android.gms.wearable.internal.zzey;
-import com.google.android.gms.wearable.internal.zzfw;
+import com.google.android.gms.wearable.internal.zzaj;
+import com.google.android.gms.wearable.internal.zzbv;
+import com.google.android.gms.wearable.internal.zzbw;
+import com.google.android.gms.wearable.internal.zzeu;
+import com.google.android.gms.wearable.internal.zzfg;
 import com.google.android.gms.wearable.internal.zzgi;
 import com.google.android.gms.wearable.internal.zzh;
+import com.google.android.gms.wearable.internal.zzhg;
+import com.google.android.gms.wearable.internal.zzhq;
 import com.google.android.gms.wearable.internal.zzk;
 import com.google.android.gms.wearable.internal.zzo;
 
 public class Wearable {
-    public static final Api<WearableOptions> API = new Api("Wearable.API", zzajS, zzajR);
+    @Deprecated
+    public static final Api<WearableOptions> API = new Api("Wearable.API", zzebg, zzebf);
+    @Deprecated
     public static final CapabilityApi CapabilityApi = new zzo();
-    public static final ChannelApi ChannelApi = new zzac();
-    public static final DataApi DataApi = new zzbi();
-    public static final MessageApi MessageApi = new zzds();
-    public static final NodeApi NodeApi = new zzdz();
-    private static zzf<zzfw> zzajR = new zzf();
-    private static final zza<zzfw, WearableOptions> zzajS = new zzj();
-    private static zzc zzbRl = new zzk();
-    private static zza zzbRm = new zzh();
-    private static zzf zzbRn = new zzbh();
-    private static zzi zzbRo = new zzey();
-    private static zzu zzbRp = new zzgi();
+    @Deprecated
+    public static final ChannelApi ChannelApi = new zzaj();
+    @Deprecated
+    public static final DataApi DataApi = new zzbw();
+    @Deprecated
+    public static final MessageApi MessageApi = new zzeu();
+    @Deprecated
+    public static final NodeApi NodeApi = new zzfg();
+    private static final zzf<zzhg> zzebf = new zzf();
+    private static final zza<zzhg, WearableOptions> zzebg = new zzj();
+    @Deprecated
+    private static zzc zzlgy = new zzk();
+    @Deprecated
+    private static zza zzlgz = new zzh();
+    @Deprecated
+    private static zzf zzlha = new zzbv();
+    @Deprecated
+    private static zzi zzlhb = new zzgi();
+    @Deprecated
+    private static zzu zzlhc = new zzhq();
 
     public static final class WearableOptions implements Optional {
+        private final Looper zzfml;
 
         public static class Builder {
-            public WearableOptions build() {
-                return new WearableOptions();
-            }
+            private Looper zzfml;
         }
 
         private WearableOptions(Builder builder) {
+            this.zzfml = builder.zzfml;
         }
-    }
-
-    private Wearable() {
     }
 }

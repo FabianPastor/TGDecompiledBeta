@@ -1,19 +1,24 @@
 package com.google.android.gms.wearable.internal;
 
-import android.content.IntentFilter;
-import android.os.RemoteException;
-import com.google.android.gms.internal.zzbaz;
-import com.google.android.gms.internal.zzbdw;
-import com.google.android.gms.wearable.NodeApi.NodeListener;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-final class zzec implements zzc<NodeListener> {
-    private /* synthetic */ IntentFilter[] zzbRX;
+public final class zzec extends zzbfm {
+    public static final Creator<zzec> CREATOR = new zzed();
+    public final int statusCode;
+    public final zzdd zzlkn;
 
-    zzec(IntentFilter[] intentFilterArr) {
-        this.zzbRX = intentFilterArr;
+    public zzec(int i, zzdd com_google_android_gms_wearable_internal_zzdd) {
+        this.statusCode = i;
+        this.zzlkn = com_google_android_gms_wearable_internal_zzdd;
     }
 
-    public final /* synthetic */ void zza(zzfw com_google_android_gms_wearable_internal_zzfw, zzbaz com_google_android_gms_internal_zzbaz, Object obj, zzbdw com_google_android_gms_internal_zzbdw) throws RemoteException {
-        com_google_android_gms_wearable_internal_zzfw.zza(com_google_android_gms_internal_zzbaz, (NodeListener) obj, com_google_android_gms_internal_zzbdw, this.zzbRX);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zzc(parcel, 2, this.statusCode);
+        zzbfp.zza(parcel, 3, this.zzlkn, i, false);
+        zzbfp.zzai(parcel, zze);
     }
 }

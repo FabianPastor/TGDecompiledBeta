@@ -2,12 +2,12 @@ package com.google.android.gms.wallet;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
+import com.google.android.gms.internal.zzbfn;
 
 public final class zzb implements Creator<zza> {
     public final /* synthetic */ Object createFromParcel(Parcel parcel) {
         String str = null;
-        int zzd = com.google.android.gms.common.internal.safeparcel.zzb.zzd(parcel);
+        int zzd = zzbfn.zzd(parcel);
         boolean z = false;
         String str2 = null;
         String str3 = null;
@@ -20,46 +20,46 @@ public final class zzb implements Creator<zza> {
         String str10 = null;
         while (parcel.dataPosition() < zzd) {
             int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
+            switch (65535 & readInt) {
                 case 2:
-                    str10 = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, readInt);
+                    str10 = zzbfn.zzq(parcel, readInt);
                     break;
                 case 3:
-                    str9 = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, readInt);
+                    str9 = zzbfn.zzq(parcel, readInt);
                     break;
                 case 4:
-                    str8 = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, readInt);
+                    str8 = zzbfn.zzq(parcel, readInt);
                     break;
                 case 5:
-                    str7 = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, readInt);
+                    str7 = zzbfn.zzq(parcel, readInt);
                     break;
                 case 6:
-                    str6 = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, readInt);
+                    str6 = zzbfn.zzq(parcel, readInt);
                     break;
                 case 7:
-                    str5 = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, readInt);
+                    str5 = zzbfn.zzq(parcel, readInt);
                     break;
                 case 8:
-                    str4 = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, readInt);
+                    str4 = zzbfn.zzq(parcel, readInt);
                     break;
                 case 9:
-                    str3 = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, readInt);
+                    str3 = zzbfn.zzq(parcel, readInt);
                     break;
                 case 10:
-                    str2 = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, readInt);
+                    str2 = zzbfn.zzq(parcel, readInt);
                     break;
                 case 11:
-                    z = com.google.android.gms.common.internal.safeparcel.zzb.zzc(parcel, readInt);
+                    z = zzbfn.zzc(parcel, readInt);
                     break;
                 case 12:
-                    str = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, readInt);
+                    str = zzbfn.zzq(parcel, readInt);
                     break;
                 default:
-                    com.google.android.gms.common.internal.safeparcel.zzb.zzb(parcel, readInt);
+                    zzbfn.zzb(parcel, readInt);
                     break;
             }
         }
-        com.google.android.gms.common.internal.safeparcel.zzb.zzF(parcel, zzd);
+        zzbfn.zzaf(parcel, zzd);
         return new zza(str10, str9, str8, str7, str6, str5, str4, str3, str2, z, str);
     }
 

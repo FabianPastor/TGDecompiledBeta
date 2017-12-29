@@ -1,30 +1,27 @@
 package com.google.android.gms.wearable.internal;
 
-import android.os.RemoteException;
-import com.google.android.gms.common.api.Api.zzb;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Result;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.wearable.MessageApi.SendMessageResult;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-final class zzdt extends zzn<SendMessageResult> {
-    private /* synthetic */ byte[] zzbKQ;
-    private /* synthetic */ String zzbST;
-    private /* synthetic */ String zzbSe;
+public final class zzdt extends zzbfm {
+    public static final Creator<zzdt> CREATOR = new zzds();
+    private int statusCode;
+    private boolean zzlki;
+    private boolean zzlkj;
 
-    zzdt(zzds com_google_android_gms_wearable_internal_zzds, GoogleApiClient googleApiClient, String str, String str2, byte[] bArr) {
-        this.zzbSe = str;
-        this.zzbST = str2;
-        this.zzbKQ = bArr;
-        super(googleApiClient);
+    public zzdt(int i, boolean z, boolean z2) {
+        this.statusCode = i;
+        this.zzlki = z;
+        this.zzlkj = z2;
     }
 
-    protected final /* synthetic */ void zza(zzb com_google_android_gms_common_api_Api_zzb) throws RemoteException {
-        zzfw com_google_android_gms_wearable_internal_zzfw = (zzfw) com_google_android_gms_common_api_Api_zzb;
-        ((zzdn) com_google_android_gms_wearable_internal_zzfw.zzrf()).zza(new zzfu(this), this.zzbSe, this.zzbST, this.zzbKQ);
-    }
-
-    protected final /* synthetic */ Result zzb(Status status) {
-        return new zzdw(status, -1);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zzc(parcel, 2, this.statusCode);
+        zzbfp.zza(parcel, 3, this.zzlki);
+        zzbfp.zza(parcel, 4, this.zzlkj);
+        zzbfp.zzai(parcel, zze);
     }
 }

@@ -15,7 +15,7 @@ public class ClearCacheService extends IntentService {
 
     protected void onHandleIntent(Intent intent) {
         ApplicationLoader.postInitApplication();
-        final int keepMedia = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("keep_media", 2);
+        final int keepMedia = MessagesController.getGlobalMainSettings().getInt("keep_media", 2);
         if (keepMedia != 2) {
             Utilities.globalQueue.postRunnable(new Runnable() {
                 public void run() {

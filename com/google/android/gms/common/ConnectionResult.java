@@ -5,52 +5,28 @@ import android.app.PendingIntent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.annotation.Nullable;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
-import com.google.android.gms.common.internal.zzbe;
-import com.google.android.gms.iid.InstanceID;
+import com.google.android.gms.common.internal.zzbg;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 import java.util.Arrays;
 
-public final class ConnectionResult extends zza {
-    public static final int API_UNAVAILABLE = 16;
-    public static final int CANCELED = 13;
+public final class ConnectionResult extends zzbfm {
     public static final Creator<ConnectionResult> CREATOR = new zzb();
-    public static final int DEVELOPER_ERROR = 10;
-    @Deprecated
-    public static final int DRIVE_EXTERNAL_STORAGE_REQUIRED = 1500;
-    public static final int INTERNAL_ERROR = 8;
-    public static final int INTERRUPTED = 15;
-    public static final int INVALID_ACCOUNT = 5;
-    public static final int LICENSE_CHECK_FAILED = 11;
-    public static final int NETWORK_ERROR = 7;
-    public static final int RESOLUTION_REQUIRED = 6;
-    public static final int RESTRICTED_PROFILE = 20;
-    public static final int SERVICE_DISABLED = 3;
-    public static final int SERVICE_INVALID = 9;
-    public static final int SERVICE_MISSING = 1;
-    public static final int SERVICE_MISSING_PERMISSION = 19;
-    public static final int SERVICE_UPDATING = 18;
-    public static final int SERVICE_VERSION_UPDATE_REQUIRED = 2;
-    public static final int SIGN_IN_FAILED = 17;
-    public static final int SIGN_IN_REQUIRED = 4;
-    public static final int SUCCESS = 0;
-    public static final int TIMEOUT = 14;
-    public static final ConnectionResult zzazX = new ConnectionResult(0);
-    private final PendingIntent mPendingIntent;
-    private int zzaku;
-    private final int zzaxu;
-    private final String zzazY;
+    public static final ConnectionResult zzfkr = new ConnectionResult(0);
+    private final int zzcd;
+    private int zzeck;
+    private final PendingIntent zzeeo;
+    private final String zzfks;
 
     public ConnectionResult(int i) {
         this(i, null, null);
     }
 
     ConnectionResult(int i, int i2, PendingIntent pendingIntent, String str) {
-        this.zzaku = i;
-        this.zzaxu = i2;
-        this.mPendingIntent = pendingIntent;
-        this.zzazY = str;
+        this.zzeck = i;
+        this.zzcd = i2;
+        this.zzeeo = pendingIntent;
+        this.zzfks = str;
     }
 
     public ConnectionResult(int i, PendingIntent pendingIntent) {
@@ -92,7 +68,7 @@ public final class ConnectionResult extends zza {
             case 13:
                 return "CANCELED";
             case 14:
-                return InstanceID.ERROR_TIMEOUT;
+                return "TIMEOUT";
             case 15:
                 return "INTERRUPTED";
             case 16:
@@ -109,7 +85,7 @@ public final class ConnectionResult extends zza {
                 return "API_VERSION_UPDATE_REQUIRED";
             case 99:
                 return "UNFINISHED";
-            case DRIVE_EXTERNAL_STORAGE_REQUIRED /*1500*/:
+            case 1500:
                 return "DRIVE_EXTERNAL_STORAGE_REQUIRED";
             default:
                 return "UNKNOWN_ERROR_CODE(" + i + ")";
@@ -124,51 +100,49 @@ public final class ConnectionResult extends zza {
             return false;
         }
         ConnectionResult connectionResult = (ConnectionResult) obj;
-        return this.zzaxu == connectionResult.zzaxu && zzbe.equal(this.mPendingIntent, connectionResult.mPendingIntent) && zzbe.equal(this.zzazY, connectionResult.zzazY);
+        return this.zzcd == connectionResult.zzcd && zzbg.equal(this.zzeeo, connectionResult.zzeeo) && zzbg.equal(this.zzfks, connectionResult.zzfks);
     }
 
     public final int getErrorCode() {
-        return this.zzaxu;
+        return this.zzcd;
     }
 
-    @Nullable
     public final String getErrorMessage() {
-        return this.zzazY;
+        return this.zzfks;
     }
 
-    @Nullable
     public final PendingIntent getResolution() {
-        return this.mPendingIntent;
+        return this.zzeeo;
     }
 
     public final boolean hasResolution() {
-        return (this.zzaxu == 0 || this.mPendingIntent == null) ? false : true;
+        return (this.zzcd == 0 || this.zzeeo == null) ? false : true;
     }
 
     public final int hashCode() {
-        return Arrays.hashCode(new Object[]{Integer.valueOf(this.zzaxu), this.mPendingIntent, this.zzazY});
+        return Arrays.hashCode(new Object[]{Integer.valueOf(this.zzcd), this.zzeeo, this.zzfks});
     }
 
     public final boolean isSuccess() {
-        return this.zzaxu == 0;
+        return this.zzcd == 0;
     }
 
     public final void startResolutionForResult(Activity activity, int i) throws SendIntentException {
         if (hasResolution()) {
-            activity.startIntentSenderForResult(this.mPendingIntent.getIntentSender(), i, null, 0, 0, 0);
+            activity.startIntentSenderForResult(this.zzeeo.getIntentSender(), i, null, 0, 0, 0);
         }
     }
 
     public final String toString() {
-        return zzbe.zzt(this).zzg("statusCode", getStatusString(this.zzaxu)).zzg("resolution", this.mPendingIntent).zzg("message", this.zzazY).toString();
+        return zzbg.zzx(this).zzg("statusCode", getStatusString(this.zzcd)).zzg("resolution", this.zzeeo).zzg("message", this.zzfks).toString();
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zzc(parcel, 1, this.zzaku);
-        zzd.zzc(parcel, 2, getErrorCode());
-        zzd.zza(parcel, 3, getResolution(), i, false);
-        zzd.zza(parcel, 4, getErrorMessage(), false);
-        zzd.zzI(parcel, zze);
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zzc(parcel, 1, this.zzeck);
+        zzbfp.zzc(parcel, 2, getErrorCode());
+        zzbfp.zza(parcel, 3, getResolution(), i, false);
+        zzbfp.zza(parcel, 4, getErrorMessage(), false);
+        zzbfp.zzai(parcel, zze);
     }
 }

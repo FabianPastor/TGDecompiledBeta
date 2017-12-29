@@ -1,23 +1,29 @@
 package com.google.android.gms.internal;
 
-import java.util.List;
-import java.util.concurrent.Callable;
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
 
-final class zzcgz implements Callable<List<zzcek>> {
-    private /* synthetic */ String zzbjh;
-    private /* synthetic */ zzcgq zzbtf;
-    private /* synthetic */ String zzbth;
-    private /* synthetic */ String zzbti;
-
-    zzcgz(zzcgq com_google_android_gms_internal_zzcgq, String str, String str2, String str3) {
-        this.zzbtf = com_google_android_gms_internal_zzcgq;
-        this.zzbjh = str;
-        this.zzbth = str2;
-        this.zzbti = str3;
+public final class zzcgz implements Creator<zzcgx> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzbfn.zzd(parcel);
+        Bundle bundle = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (65535 & readInt) {
+                case 2:
+                    bundle = zzbfn.zzs(parcel, readInt);
+                    break;
+                default:
+                    zzbfn.zzb(parcel, readInt);
+                    break;
+            }
+        }
+        zzbfn.zzaf(parcel, zzd);
+        return new zzcgx(bundle);
     }
 
-    public final /* synthetic */ Object call() throws Exception {
-        this.zzbtf.zzboe.zzze();
-        return this.zzbtf.zzboe.zzwz().zzi(this.zzbjh, this.zzbth, this.zzbti);
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new zzcgx[i];
     }
 }

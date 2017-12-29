@@ -71,7 +71,7 @@ import org.telegram.ui.Components.RecyclerListView.FastScrollAdapter;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 
-public class GroupCreateActivity extends BaseFragment implements NotificationCenterDelegate, OnClickListener {
+public class GroupCreateActivity extends BaseFragment implements OnClickListener, NotificationCenterDelegate {
     private static final int done_button = 1;
     private GroupCreateAdapter adapter;
     private ArrayList<GroupCreateSpan> allSpans = new ArrayList();
@@ -92,7 +92,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
     private boolean isNeverShare;
     private GroupCreateDividerItemDecoration itemDecoration;
     private RecyclerListView listView;
-    private int maxCount = MessagesController.getInstance().maxMegagroupCount;
+    private int maxCount = MessagesController.getInstance(this.currentAccount).maxMegagroupCount;
     private ScrollView scrollView;
     private boolean searchWas;
     private boolean searching;
@@ -279,9 +279,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
 
         public GroupCreateAdapter(Context ctx) {
             this.context = ctx;
-            ArrayList<TL_contact> arrayList = ContactsController.getInstance().contacts;
+            ArrayList<TL_contact> arrayList = ContactsController.getInstance(GroupCreateActivity.this.currentAccount).contacts;
             for (int a = 0; a < arrayList.size(); a++) {
-                User user = MessagesController.getInstance().getUser(Integer.valueOf(((TL_contact) arrayList.get(a)).user_id));
+                User user = MessagesController.getInstance(GroupCreateActivity.this.currentAccount).getUser(Integer.valueOf(((TL_contact) arrayList.get(a)).user_id));
                 if (!(user == null || user.self || user.deleted)) {
                     this.contacts.add(user);
                 }
@@ -326,7 +326,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     return user.first_name.substring(0, 1).toUpperCase();
                 }
             }
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
 
         public int getItemCount() {
@@ -540,21 +540,21 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         this.isNeverShare = args.getBoolean("isNeverShare", false);
         this.isGroup = args.getBoolean("isGroup", false);
         this.chatId = args.getInt("chatId");
-        this.maxCount = this.chatType == 0 ? MessagesController.getInstance().maxMegagroupCount : MessagesController.getInstance().maxBroadcastCount;
+        this.maxCount = this.chatType == 0 ? MessagesController.getInstance(this.currentAccount).maxMegagroupCount : MessagesController.getInstance(this.currentAccount).maxBroadcastCount;
     }
 
     public boolean onFragmentCreate() {
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.contactsDidLoaded);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatDidCreated);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.contactsDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatDidCreated);
         return super.onFragmentCreate();
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.contactsDidLoaded);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatDidCreated);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.contactsDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatDidCreated);
     }
 
     public void onClick(View v) {
@@ -767,7 +767,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             }
         });
         this.emptyView = new EmptyTextProgressView(context);
-        if (ContactsController.getInstance().isLoadingContacts()) {
+        if (ContactsController.getInstance(this.currentAccount).isLoadingContacts()) {
             this.emptyView.showProgress();
         } else {
             this.emptyView.showTextView();
@@ -808,7 +808,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                         } else if (GroupCreateActivity.this.maxCount != 0 && GroupCreateActivity.this.selectedContacts.size() == GroupCreateActivity.this.maxCount) {
                             return;
                         } else {
-                            if (GroupCreateActivity.this.chatType == 0 && GroupCreateActivity.this.selectedContacts.size() == MessagesController.getInstance().maxGroupCount) {
+                            if (GroupCreateActivity.this.chatType == 0 && GroupCreateActivity.this.selectedContacts.size() == MessagesController.getInstance(GroupCreateActivity.this.currentAccount).maxGroupCount) {
                                 Builder builder = new Builder(GroupCreateActivity.this.getParentActivity());
                                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                                 builder.setMessage(LocaleController.getString("SoftUserLimitAlert", R.string.SoftUserLimitAlert));
@@ -817,7 +817,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                                 return;
                             }
                             boolean z2;
-                            MessagesController instance = MessagesController.getInstance();
+                            MessagesController instance = MessagesController.getInstance(GroupCreateActivity.this.currentAccount);
                             if (GroupCreateActivity.this.searching) {
                                 z2 = false;
                             } else {
@@ -862,7 +862,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.contactsDidLoaded) {
             if (this.emptyView != null) {
                 this.emptyView.showTextView();
@@ -917,13 +917,13 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         if (this.chatType == 2) {
             ArrayList<InputUser> result = new ArrayList();
             for (Integer uid : this.selectedContacts.keySet()) {
-                InputUser user = MessagesController.getInputUser(MessagesController.getInstance().getUser(uid));
+                InputUser user = MessagesController.getInstance(this.currentAccount).getInputUser(MessagesController.getInstance(this.currentAccount).getUser(uid));
                 if (user != null) {
                     result.add(user);
                 }
             }
-            MessagesController.getInstance().addUsersToChannel(this.chatId, result, null);
-            NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+            MessagesController.getInstance(this.currentAccount).addUsersToChannel(this.chatId, result, null);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
             Bundle args2 = new Bundle();
             args2.putInt("chat_id", this.chatId);
             presentFragment(new ChatActivity(args2), true);

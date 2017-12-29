@@ -11,7 +11,7 @@ public final class RangedUri {
 
     public RangedUri(String referenceUri, long start, long length) {
         if (referenceUri == null) {
-            referenceUri = "";
+            referenceUri = TtmlNode.ANONYMOUS_REGION_ID;
         }
         this.referenceUri = referenceUri;
         this.start = start;

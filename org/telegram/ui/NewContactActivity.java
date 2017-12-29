@@ -29,7 +29,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -129,7 +128,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                         inputPhoneContact.last_name = NewContactActivity.this.lastNameField.getText().toString();
                         inputPhoneContact.phone = "+" + NewContactActivity.this.codeField.getText().toString() + NewContactActivity.this.phoneField.getText().toString();
                         req.contacts.add(inputPhoneContact);
-                        ConnectionsManager.getInstance().bindRequestToGuid(ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                        ConnectionsManager.getInstance(NewContactActivity.this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(NewContactActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                             public void run(TLObject response, final TL_error error) {
                                 final TL_contacts_importedContacts res = (TL_contacts_importedContacts) response;
                                 AndroidUtilities.runOnUIThread(new Runnable() {
@@ -137,9 +136,9 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                                         NewContactActivity.this.donePressed = false;
                                         if (res == null) {
                                             NewContactActivity.this.showEditDoneProgress(false, true);
-                                            AlertsCreator.processError(error, NewContactActivity.this, req, new Object[0]);
+                                            AlertsCreator.processError(NewContactActivity.this.currentAccount, error, NewContactActivity.this, req, new Object[0]);
                                         } else if (!res.users.isEmpty()) {
-                                            MessagesController.getInstance().putUsers(res.users, false);
+                                            MessagesController.getInstance(NewContactActivity.this.currentAccount).putUsers(res.users, false);
                                             MessagesController.openChatOrProfileWith((User) res.users.get(0), null, NewContactActivity.this, 1, true);
                                         } else if (NewContactActivity.this.getParentActivity() != null) {
                                             NewContactActivity.this.showEditDoneProgress(false, true);
@@ -151,7 +150,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     try {
                                                         Intent intent = new Intent("android.intent.action.VIEW", Uri.fromParts("sms", inputPhoneContact.phone, null));
-                                                        intent.putExtra("sms_body", ContactsController.getInstance().getInviteText(1));
+                                                        intent.putExtra("sms_body", ContactsController.getInstance(NewContactActivity.this.currentAccount).getInviteText(1));
                                                         NewContactActivity.this.getParentActivity().startActivityForResult(intent, 500);
                                                     } catch (Throwable e) {
                                                         FileLog.e(e);
@@ -169,7 +168,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
             }
         });
         this.avatarDrawable = new AvatarDrawable();
-        this.avatarDrawable.setInfo(5, "", "", false);
+        this.avatarDrawable.setInfo(5, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, false);
         this.editDoneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.editDoneItemProgress = new ContextProgressView(context, 1);
         this.editDoneItem.addView(this.editDoneItemProgress, LayoutHelper.createFrame(-1, -1.0f));
@@ -188,7 +187,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 0.0f, 24.0f, 0.0f, 0.0f));
         this.avatarImage = new BackupImageView(context);
         this.avatarImage.setImageDrawable(this.avatarDrawable);
-        frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(60, BitmapDescriptorFactory.HUE_YELLOW, 51, 0.0f, 9.0f, 0.0f, 0.0f));
+        frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(60, 60.0f, 51, 0.0f, 9.0f, 0.0f, 0.0f));
         this.firstNameField = new EditTextBoldCursor(context);
         this.firstNameField.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
@@ -547,7 +546,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
 
     public void onResume() {
         super.onResume();
-        if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("view_animations", true)) {
+        if (!MessagesController.getGlobalMainSettings().getBoolean("view_animations", true)) {
             this.firstNameField.requestFocus();
             AndroidUtilities.showKeyboard(this.firstNameField);
         }

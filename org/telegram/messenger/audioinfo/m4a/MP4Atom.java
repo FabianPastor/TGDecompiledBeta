@@ -67,11 +67,11 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
     }
 
     public BigDecimal readShortFixedPoint() throws IOException {
-        return new BigDecimal(String.valueOf(this.data.readByte()) + "" + String.valueOf(this.data.readUnsignedByte()));
+        return new BigDecimal(String.valueOf(this.data.readByte()) + TtmlNode.ANONYMOUS_REGION_ID + String.valueOf(this.data.readUnsignedByte()));
     }
 
     public BigDecimal readIntegerFixedPoint() throws IOException {
-        return new BigDecimal(String.valueOf(this.data.readShort()) + "" + String.valueOf(this.data.readUnsignedShort()));
+        return new BigDecimal(String.valueOf(this.data.readShort()) + TtmlNode.ANONYMOUS_REGION_ID + String.valueOf(this.data.readUnsignedShort()));
     }
 
     public String readString(int len, String enc) throws IOException {

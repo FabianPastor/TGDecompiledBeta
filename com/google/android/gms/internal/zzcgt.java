@@ -1,18 +1,23 @@
 package com.google.android.gms.internal;
 
-final class zzcgt implements Runnable {
-    private /* synthetic */ zzceh zzbte;
-    private /* synthetic */ zzcgq zzbtf;
-    private /* synthetic */ zzcek zzbtg;
+import android.os.Looper;
 
-    zzcgt(zzcgq com_google_android_gms_internal_zzcgq, zzcek com_google_android_gms_internal_zzcek, zzceh com_google_android_gms_internal_zzceh) {
-        this.zzbtf = com_google_android_gms_internal_zzcgq;
-        this.zzbtg = com_google_android_gms_internal_zzcek;
-        this.zzbte = com_google_android_gms_internal_zzceh;
+final class zzcgt implements Runnable {
+    private /* synthetic */ zzcgs zzize;
+
+    zzcgt(zzcgs com_google_android_gms_internal_zzcgs) {
+        this.zzize = com_google_android_gms_internal_zzcgs;
     }
 
     public final void run() {
-        this.zzbtf.zzboe.zzze();
-        this.zzbtf.zzboe.zzb(this.zzbtg, this.zzbte);
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            this.zzize.zziwf.zzawx().zzg(this);
+            return;
+        }
+        boolean zzdx = this.zzize.zzdx();
+        this.zzize.zzdvq = 0;
+        if (zzdx && this.zzize.zzizd) {
+            this.zzize.run();
+        }
     }
 }

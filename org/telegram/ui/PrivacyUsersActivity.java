@@ -86,7 +86,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
         public void onBindViewHolder(ViewHolder holder, int position) {
             if (holder.getItemViewType() == 0) {
-                User user = MessagesController.getInstance().getUser((Integer) PrivacyUsersActivity.this.uidArray.get(position));
+                User user = MessagesController.getInstance(PrivacyUsersActivity.this.currentAccount).getUser((Integer) PrivacyUsersActivity.this.uidArray.get(position));
                 UserCell userCell = (UserCell) holder.itemView;
                 CharSequence string = (user.phone == null || user.phone.length() == 0) ? LocaleController.getString("NumberUnknown", R.string.NumberUnknown) : PhoneFormat.getInstance().format("+" + user.phone);
                 userCell.setData(user, null, string, 0);
@@ -109,13 +109,13 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
     }
 
     public View createView(Context context) {
@@ -216,7 +216,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         return this.fragmentView;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.updateInterfaces) {
             int mask = ((Integer) args[0]).intValue();
             if ((mask & 2) != 0 || (mask & 1) != 0) {

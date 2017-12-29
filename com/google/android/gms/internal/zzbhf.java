@@ -1,36 +1,22 @@
 package com.google.android.gms.internal;
 
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
+import android.content.Context;
 
-public class zzbhf {
-    public static Bitmap zzb(Bitmap bitmap, zzbhd com_google_android_gms_internal_zzbhd) {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        if (com_google_android_gms_internal_zzbhd.rotation != 0) {
-            Matrix matrix = new Matrix();
-            matrix.postRotate((float) zznB(com_google_android_gms_internal_zzbhd.rotation));
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
+public final class zzbhf {
+    private static zzbhf zzgfh = new zzbhf();
+    private zzbhe zzgfg = null;
+
+    private final synchronized zzbhe zzda(Context context) {
+        if (this.zzgfg == null) {
+            if (context.getApplicationContext() != null) {
+                context = context.getApplicationContext();
+            }
+            this.zzgfg = new zzbhe(context);
         }
-        if (com_google_android_gms_internal_zzbhd.rotation == 1 || com_google_android_gms_internal_zzbhd.rotation == 3) {
-            com_google_android_gms_internal_zzbhd.width = height;
-            com_google_android_gms_internal_zzbhd.height = width;
-        }
-        return bitmap;
+        return this.zzgfg;
     }
 
-    private static int zznB(int i) {
-        switch (i) {
-            case 0:
-                return 0;
-            case 1:
-                return 90;
-            case 2:
-                return 180;
-            case 3:
-                return 270;
-            default:
-                throw new IllegalArgumentException("Unsupported rotation degree.");
-        }
+    public static zzbhe zzdb(Context context) {
+        return zzgfh.zzda(context);
     }
 }

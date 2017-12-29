@@ -6,7 +6,7 @@ import org.telegram.messenger.audioinfo.util.PositionInputStream;
 
 public final class MP4Input extends MP4Box<PositionInputStream> {
     public MP4Input(InputStream delegate) {
-        super(new PositionInputStream(delegate), null, "");
+        super(new PositionInputStream(delegate), null, TtmlNode.ANONYMOUS_REGION_ID);
     }
 
     public MP4Atom nextChildUpTo(String expectedTypeExpression) throws IOException {

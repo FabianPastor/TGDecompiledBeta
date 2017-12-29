@@ -1,23 +1,24 @@
 package com.google.android.gms.internal;
 
-import java.util.List;
-import java.util.concurrent.Callable;
+import java.util.Iterator;
 
-final class zzcgy implements Callable<List<zzcek>> {
-    private /* synthetic */ zzceh zzbte;
-    private /* synthetic */ zzcgq zzbtf;
-    private /* synthetic */ String zzbth;
-    private /* synthetic */ String zzbti;
+final class zzcgy implements Iterator<String> {
+    private Iterator<String> zzizr = this.zzizs.zzebe.keySet().iterator();
+    private /* synthetic */ zzcgx zzizs;
 
-    zzcgy(zzcgq com_google_android_gms_internal_zzcgq, zzceh com_google_android_gms_internal_zzceh, String str, String str2) {
-        this.zzbtf = com_google_android_gms_internal_zzcgq;
-        this.zzbte = com_google_android_gms_internal_zzceh;
-        this.zzbth = str;
-        this.zzbti = str2;
+    zzcgy(zzcgx com_google_android_gms_internal_zzcgx) {
+        this.zzizs = com_google_android_gms_internal_zzcgx;
     }
 
-    public final /* synthetic */ Object call() throws Exception {
-        this.zzbtf.zzboe.zzze();
-        return this.zzbtf.zzboe.zzwz().zzi(this.zzbte.packageName, this.zzbth, this.zzbti);
+    public final boolean hasNext() {
+        return this.zzizr.hasNext();
+    }
+
+    public final /* synthetic */ Object next() {
+        return (String) this.zzizr.next();
+    }
+
+    public final void remove() {
+        throw new UnsupportedOperationException("Remove not supported");
     }
 }

@@ -150,7 +150,7 @@ public class CameraController implements OnInfoListener {
                             public void run() {
                                 CameraController.this.loadingCameras = false;
                                 CameraController.this.cameraInitied = true;
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.cameraInitied, new Object[0]);
+                                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.cameraInitied, new Object[0]);
                             }
                         });
                     } catch (Throwable e) {
@@ -361,7 +361,9 @@ public class CameraController implements OnInfoListener {
                                 matrix.setRotate((float) CameraController.getOrientation(data));
                                 matrix.postScale(-1.0f, 1.0f);
                                 Bitmap scaled = Bitmaps.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
-                                bitmap.recycle();
+                                if (scaled != bitmap) {
+                                    bitmap.recycle();
+                                }
                                 outputStream = new FileOutputStream(path);
                                 scaled.compress(CompressFormat.JPEG, 80, outputStream);
                                 outputStream.flush();

@@ -13,7 +13,7 @@ public class NotificationCenter {
     public static final int FilePreparingFailed;
     public static final int FilePreparingStarted;
     public static final int FileUploadProgressChanged;
-    private static volatile NotificationCenter Instance = null;
+    private static volatile NotificationCenter[] Instance = new NotificationCenter[3];
     public static final int albumsDidLoaded;
     public static final int appDidLogout;
     public static final int archivedStickersCountDidLoaded;
@@ -59,6 +59,7 @@ public class NotificationCenter {
     public static final int encryptedChatCreated;
     public static final int encryptedChatUpdated;
     public static final int featuredStickersDidLoaded;
+    private static volatile NotificationCenter globalInstance;
     public static final int groupStickersDidLoaded;
     public static final int hasNewContactsToImport;
     public static final int historyCleared;
@@ -108,7 +109,6 @@ public class NotificationCenter {
     public static final int reloadInterface;
     public static final int removeAllMessagesFromDialog;
     public static final int replaceMessagesObjects;
-    public static final int screenStateChanged;
     public static final int screenshotTook;
     public static final int stickersDidLoaded;
     public static final int stopEncodingService;
@@ -124,6 +124,7 @@ public class NotificationCenter {
     private int[] allowedNotifications;
     private boolean animationInProgress;
     private int broadcasting = 0;
+    private int currentAccount;
     private ArrayList<DelayedPost> delayedPosts = new ArrayList(10);
     private SparseArray<ArrayList<Object>> observers = new SparseArray();
     private SparseArray<ArrayList<Object>> removeAfterBroadcast = new SparseArray();
@@ -139,7 +140,7 @@ public class NotificationCenter {
     }
 
     public interface NotificationCenterDelegate {
-        void didReceivedNotification(int i, Object... objArr);
+        void didReceivedNotification(int i, int i2, Object... objArr);
     }
 
     static {
@@ -263,9 +264,6 @@ public class NotificationCenter {
         didRemovedTwoStepPassword = i;
         i = totalEvents;
         totalEvents = i + 1;
-        screenStateChanged = i;
-        i = totalEvents;
-        totalEvents = i + 1;
         didLoadedReplyMessages = i;
         i = totalEvents;
         totalEvents = i + 1;
@@ -288,9 +286,6 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         groupStickersDidLoaded = i;
-        i = totalEvents;
-        totalEvents = i + 1;
-        didReplacedPhotoInMemCache = i;
         i = totalEvents;
         totalEvents = i + 1;
         messagesReadContent = i;
@@ -323,9 +318,6 @@ public class NotificationCenter {
         needReloadRecentDialogsSearch = i;
         i = totalEvents;
         totalEvents = i + 1;
-        locationPermissionGranted = i;
-        i = totalEvents;
-        totalEvents = i + 1;
         peerSettingsDidLoaded = i;
         i = totalEvents;
         totalEvents = i + 1;
@@ -344,13 +336,7 @@ public class NotificationCenter {
         recentDocumentsDidLoaded = i;
         i = totalEvents;
         totalEvents = i + 1;
-        cameraInitied = i;
-        i = totalEvents;
-        totalEvents = i + 1;
         needReloadArchivedStickers = i;
-        i = totalEvents;
-        totalEvents = i + 1;
-        didSetNewWallpapper = i;
         i = totalEvents;
         totalEvents = i + 1;
         archivedStickersCountDidLoaded = i;
@@ -359,25 +345,13 @@ public class NotificationCenter {
         paymentFinished = i;
         i = totalEvents;
         totalEvents = i + 1;
-        reloadInterface = i;
-        i = totalEvents;
-        totalEvents = i + 1;
-        suggestedLangpack = i;
-        i = totalEvents;
-        totalEvents = i + 1;
         channelRightsUpdated = i;
-        i = totalEvents;
-        totalEvents = i + 1;
-        proxySettingsChanged = i;
         i = totalEvents;
         totalEvents = i + 1;
         openArticle = i;
         i = totalEvents;
         totalEvents = i + 1;
         updateMentionsCount = i;
-        i = totalEvents;
-        totalEvents = i + 1;
-        liveLocationsChanged = i;
         i = totalEvents;
         totalEvents = i + 1;
         liveLocationsCacheChanged = i;
@@ -389,31 +363,7 @@ public class NotificationCenter {
         httpFileDidFailedLoad = i;
         i = totalEvents;
         totalEvents = i + 1;
-        messageThumbGenerated = i;
-        i = totalEvents;
-        totalEvents = i + 1;
-        didSetNewTheme = i;
-        i = totalEvents;
-        totalEvents = i + 1;
-        wallpapersDidLoaded = i;
-        i = totalEvents;
-        totalEvents = i + 1;
-        closeOtherAppActivities = i;
-        i = totalEvents;
-        totalEvents = i + 1;
         didUpdatedConnectionState = i;
-        i = totalEvents;
-        totalEvents = i + 1;
-        didReceiveSmsCode = i;
-        i = totalEvents;
-        totalEvents = i + 1;
-        didReceiveCall = i;
-        i = totalEvents;
-        totalEvents = i + 1;
-        emojiDidLoaded = i;
-        i = totalEvents;
-        totalEvents = i + 1;
-        appDidLogout = i;
         i = totalEvents;
         totalEvents = i + 1;
         FileDidUpload = i;
@@ -486,18 +436,67 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         closeInCallActivity = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        appDidLogout = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        wallpapersDidLoaded = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        didReceiveSmsCode = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        didReceiveCall = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        emojiDidLoaded = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        closeOtherAppActivities = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        cameraInitied = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        didReplacedPhotoInMemCache = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        messageThumbGenerated = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        didSetNewTheme = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        locationPermissionGranted = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        reloadInterface = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        suggestedLangpack = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        didSetNewWallpapper = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        proxySettingsChanged = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        liveLocationsChanged = i;
     }
 
-    public static NotificationCenter getInstance() {
-        NotificationCenter localInstance = Instance;
+    public static NotificationCenter getInstance(int num) {
+        NotificationCenter localInstance = Instance[num];
         if (localInstance == null) {
             synchronized (NotificationCenter.class) {
                 try {
-                    localInstance = Instance;
+                    localInstance = Instance[num];
                     if (localInstance == null) {
-                        NotificationCenter localInstance2 = new NotificationCenter();
+                        NotificationCenter[] notificationCenterArr = Instance;
+                        NotificationCenter localInstance2 = new NotificationCenter(num);
                         try {
-                            Instance = localInstance2;
+                            notificationCenterArr[num] = localInstance2;
                             localInstance = localInstance2;
                         } catch (Throwable th) {
                             Throwable th2 = th;
@@ -512,6 +511,36 @@ public class NotificationCenter {
             }
         }
         return localInstance;
+    }
+
+    public static NotificationCenter getGlobalInstance() {
+        NotificationCenter localInstance = globalInstance;
+        if (localInstance == null) {
+            synchronized (NotificationCenter.class) {
+                try {
+                    localInstance = globalInstance;
+                    if (localInstance == null) {
+                        NotificationCenter localInstance2 = new NotificationCenter(-1);
+                        try {
+                            globalInstance = localInstance2;
+                            localInstance = localInstance2;
+                        } catch (Throwable th) {
+                            Throwable th2 = th;
+                            localInstance = localInstance2;
+                            throw th2;
+                        }
+                    }
+                } catch (Throwable th3) {
+                    th2 = th3;
+                    throw th2;
+                }
+            }
+        }
+        return localInstance;
+    }
+
+    public NotificationCenter(int account) {
+        this.currentAccount = account;
     }
 
     public void setAllowedNotificationsDutingAnimation(int[] notifications) {
@@ -555,7 +584,7 @@ public class NotificationCenter {
             ArrayList<Object> objects = (ArrayList) this.observers.get(id);
             if (!(objects == null || objects.isEmpty())) {
                 for (a = 0; a < objects.size(); a++) {
-                    ((NotificationCenterDelegate) objects.get(a)).didReceivedNotification(id, args);
+                    ((NotificationCenterDelegate) objects.get(a)).didReceivedNotification(id, this.currentAccount, args);
                 }
             }
             this.broadcasting--;

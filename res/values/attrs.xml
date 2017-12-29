@@ -83,6 +83,38 @@
         <item>2</item>
         <item>3</item>
     </attr>
+    <attr name="font">
+        <item>1</item>
+    </attr>
+    <attr name="fontProviderAuthority">
+        <item>2</item>
+    </attr>
+    <attr name="fontProviderCerts">
+        <item>1</item>
+    </attr>
+    <attr name="fontProviderFetchStrategy">
+        <item>65536</item>
+        <item>1</item>
+        <item>0</item>
+    </attr>
+    <attr name="fontProviderFetchTimeout">
+        <item>65540</item>
+        <item>-1</item>
+    </attr>
+    <attr name="fontProviderPackage">
+        <item>2</item>
+    </attr>
+    <attr name="fontProviderQuery">
+        <item>2</item>
+    </attr>
+    <attr name="fontStyle">
+        <item>65536</item>
+        <item>1</item>
+        <item>0</item>
+    </attr>
+    <attr name="fontWeight">
+        <item>4</item>
+    </attr>
     <attr name="fragmentMode">
         <item>65536</item>
         <item>1</item>

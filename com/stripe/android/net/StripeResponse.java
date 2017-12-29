@@ -1,6 +1,5 @@
 package com.stripe.android.net;
 
-import android.support.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +8,7 @@ public class StripeResponse {
     private int mResponseCode;
     private Map<String, List<String>> mResponseHeaders;
 
-    public StripeResponse(int responseCode, String responseBody, @Nullable Map<String, List<String>> responseHeaders) {
+    public StripeResponse(int responseCode, String responseBody, Map<String, List<String>> responseHeaders) {
         this.mResponseCode = responseCode;
         this.mResponseBody = responseBody;
         this.mResponseHeaders = responseHeaders;
@@ -23,7 +22,6 @@ public class StripeResponse {
         return this.mResponseBody;
     }
 
-    @Nullable
     public Map<String, List<String>> getResponseHeaders() {
         return this.mResponseHeaders;
     }

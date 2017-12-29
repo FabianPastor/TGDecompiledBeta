@@ -2,41 +2,48 @@ package com.google.android.gms.wallet.wobs;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.internal.zzbfn;
 
-public final class zzh extends zza {
-    public static final Creator<zzh> CREATOR = new zzi();
-    private String zzbOH;
-    private int zzbQL;
-    private String zzbQM;
-    private double zzbQN;
-    private long zzbQO;
-    private int zzbQP;
-
-    zzh() {
-        this.zzbQP = -1;
-        this.zzbQL = -1;
-        this.zzbQN = -1.0d;
+public final class zzh implements Creator<LoyaltyPointsBalance> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        String str = null;
+        int zzd = zzbfn.zzd(parcel);
+        int i = 0;
+        double d = 0.0d;
+        long j = 0;
+        int i2 = -1;
+        String str2 = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (65535 & readInt) {
+                case 2:
+                    i = zzbfn.zzg(parcel, readInt);
+                    break;
+                case 3:
+                    str2 = zzbfn.zzq(parcel, readInt);
+                    break;
+                case 4:
+                    d = zzbfn.zzn(parcel, readInt);
+                    break;
+                case 5:
+                    str = zzbfn.zzq(parcel, readInt);
+                    break;
+                case 6:
+                    j = zzbfn.zzi(parcel, readInt);
+                    break;
+                case 7:
+                    i2 = zzbfn.zzg(parcel, readInt);
+                    break;
+                default:
+                    zzbfn.zzb(parcel, readInt);
+                    break;
+            }
+        }
+        zzbfn.zzaf(parcel, zzd);
+        return new LoyaltyPointsBalance(i, str2, d, str, j, i2);
     }
 
-    zzh(int i, String str, double d, String str2, long j, int i2) {
-        this.zzbQL = i;
-        this.zzbQM = str;
-        this.zzbQN = d;
-        this.zzbOH = str2;
-        this.zzbQO = j;
-        this.zzbQP = i2;
-    }
-
-    public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zzc(parcel, 2, this.zzbQL);
-        zzd.zza(parcel, 3, this.zzbQM, false);
-        zzd.zza(parcel, 4, this.zzbQN);
-        zzd.zza(parcel, 5, this.zzbOH, false);
-        zzd.zza(parcel, 6, this.zzbQO);
-        zzd.zzc(parcel, 7, this.zzbQP);
-        zzd.zzI(parcel, zze);
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new LoyaltyPointsBalance[i];
     }
 }

@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">התקן</string>
     <string name="common_google_play_services_install_text">‏האפליקציה %1$s לא תפעל ללא שירותי Google Play, שאינם מותקנים במכשיר.</string>
     <string name="common_google_play_services_install_title">‏קבל את שירותי Google Play</string>
+    <string name="common_google_play_services_notification_channel_name">‏זמינות של שירותי Google Play</string>
     <string name="common_google_play_services_notification_ticker">‏שגיאה בשירותי Google Play</string>
     <string name="common_google_play_services_unknown_issue">‏%1$s נתקלה בבעיה בשירותי Google Play. נסה שוב.</string>
     <string name="common_google_play_services_unsupported_text">‏%1$s לא תפעל ללא שירותי Google Play, שאינם נתמכים במכשיר שלך.</string>
@@ -15,7 +16,9 @@
     <string name="common_google_play_services_updating_text">‏האפליקציה %1$s לא תפעל ללא שירותי Google Play, שמתעדכנים כרגע.</string>
     <string name="common_google_play_services_wear_update_text">‏דרושה גרסה חדשה של שירותי Google Play. הגרסה תתעדכן בעצמה תוך זמן קצר.</string>
     <string name="common_open_on_phone">פתח בטלפון</string>
-    <string name="common_signin_button_text">היכנס</string>
+    <string name="common_signin_button_text">כניסה</string>
     <string name="common_signin_button_text_long">‏היכנס באמצעות Google</string>
+    <string name="gcm_fallback_notification_channel_label">שונות</string>
+    <string name="status_bar_notification_info_overflow">‎999+‎</string>
     <string name="wallet_buy_button_place_holder">קנה בעזרת Google</string>
 </resources>

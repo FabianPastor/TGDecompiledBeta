@@ -1,8 +1,6 @@
 package org.telegram.messenger.support.widget;
 
 import android.graphics.PointF;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.SmoothScroller.ScrollVectorProvider;
@@ -10,12 +8,10 @@ import org.telegram.tgnet.ConnectionsManager;
 
 public class LinearSnapHelper extends SnapHelper {
     private static final float INVALID_DISTANCE = 1.0f;
-    @Nullable
     private OrientationHelper mHorizontalHelper;
-    @Nullable
     private OrientationHelper mVerticalHelper;
 
-    public int[] calculateDistanceToFinalSnap(@NonNull LayoutManager layoutManager, @NonNull View targetView) {
+    public int[] calculateDistanceToFinalSnap(LayoutManager layoutManager, View targetView) {
         int[] out = new int[2];
         if (layoutManager.canScrollHorizontally()) {
             out[0] = distanceToCenter(layoutManager, targetView, getHorizontalHelper(layoutManager));
@@ -97,7 +93,7 @@ public class LinearSnapHelper extends SnapHelper {
         return null;
     }
 
-    private int distanceToCenter(@NonNull LayoutManager layoutManager, @NonNull View targetView, OrientationHelper helper) {
+    private int distanceToCenter(LayoutManager layoutManager, View targetView, OrientationHelper helper) {
         int containerCenter;
         int childCenter = helper.getDecoratedStart(targetView) + (helper.getDecoratedMeasurement(targetView) / 2);
         if (layoutManager.getClipToPadding()) {
@@ -114,14 +110,9 @@ public class LinearSnapHelper extends SnapHelper {
         if (distancePerChild <= 0.0f) {
             return 0;
         }
-        int distance = Math.abs(distances[0]) > Math.abs(distances[1]) ? distances[0] : distances[1];
-        if (distance > 0) {
-            return (int) Math.floor((double) (((float) distance) / distancePerChild));
-        }
-        return (int) Math.ceil((double) (((float) distance) / distancePerChild));
+        return Math.round(((float) (Math.abs(distances[0]) > Math.abs(distances[1]) ? distances[0] : distances[1])) / distancePerChild);
     }
 
-    @Nullable
     private View findCenterView(LayoutManager layoutManager, OrientationHelper helper) {
         int childCount = layoutManager.getChildCount();
         if (childCount == 0) {
@@ -179,16 +170,14 @@ public class LinearSnapHelper extends SnapHelper {
         return (INVALID_DISTANCE * ((float) distance)) / ((float) ((maxPos - minPos) + 1));
     }
 
-    @NonNull
-    private OrientationHelper getVerticalHelper(@NonNull LayoutManager layoutManager) {
+    private OrientationHelper getVerticalHelper(LayoutManager layoutManager) {
         if (this.mVerticalHelper == null || this.mVerticalHelper.mLayoutManager != layoutManager) {
             this.mVerticalHelper = OrientationHelper.createVerticalHelper(layoutManager);
         }
         return this.mVerticalHelper;
     }
 
-    @NonNull
-    private OrientationHelper getHorizontalHelper(@NonNull LayoutManager layoutManager) {
+    private OrientationHelper getHorizontalHelper(LayoutManager layoutManager) {
         if (this.mHorizontalHelper == null || this.mHorizontalHelper.mLayoutManager != layoutManager) {
             this.mHorizontalHelper = OrientationHelper.createHorizontalHelper(layoutManager);
         }

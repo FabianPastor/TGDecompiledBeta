@@ -12,12 +12,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.GridLayoutManager;
 import org.telegram.messenger.support.widget.GridLayoutManager.SpanSizeLookup;
 import org.telegram.messenger.support.widget.RecyclerView;
@@ -37,6 +38,7 @@ import org.telegram.ui.Components.ScrollSlidingTabStrip.ScrollSlidingTabStripDel
 import org.telegram.ui.StickerPreviewViewer;
 
 public class StickerMasksView extends FrameLayout implements NotificationCenterDelegate {
+    private int currentAccount = UserConfig.selectedAccount;
     private int currentType = 1;
     private int lastNotifyWidth;
     private Listener listener;
@@ -194,8 +196,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         super(context);
         setBackgroundColor(-14540254);
         setClickable(true);
-        StickersQuery.checkStickers(0);
-        StickersQuery.checkStickers(1);
+        DataQuery.getInstance(this.currentAccount).checkStickers(0);
+        DataQuery.getInstance(this.currentAccount).checkStickers(1);
         this.stickersGridView = new RecyclerListView(context) {
             public boolean onInterceptTouchEvent(MotionEvent event) {
                 return super.onInterceptTouchEvent(event) || StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, StickerMasksView.this.stickersGridView, StickerMasksView.this.getMeasuredHeight(), null);
@@ -232,8 +234,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
                     if (!cell.isDisabled()) {
                         Document document = cell.getSticker();
                         StickerMasksView.this.listener.onStickerSelected(document);
-                        StickersQuery.addRecentSticker(1, document, (int) (System.currentTimeMillis() / 1000), false);
-                        MessagesController.getInstance().saveRecentSticker(document, true);
+                        DataQuery.getInstance(StickerMasksView.this.currentAccount).addRecentSticker(1, document, (int) (System.currentTimeMillis() / 1000), false);
+                        MessagesController.getInstance(StickerMasksView.this.currentAccount).saveRecentSticker(document, true);
                     }
                 }
             }
@@ -247,7 +249,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         addView(this.stickersEmptyView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 48.0f, 0.0f, 0.0f));
         this.stickersGridView.setEmptyView(this.stickersEmptyView);
         this.scrollSlidingTabStrip = new ScrollSlidingTabStrip(context);
-        this.scrollSlidingTabStrip.setBackgroundColor(-16777216);
+        this.scrollSlidingTabStrip.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         this.scrollSlidingTabStrip.setUnderlineHeight(AndroidUtilities.dp(1.0f));
         this.scrollSlidingTabStrip.setIndicatorColor(-10305560);
         this.scrollSlidingTabStrip.setUnderlineColor(-15066598);
@@ -265,7 +267,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
                     if (StickerMasksView.this.listener != null) {
                         StickerMasksView.this.listener.onTypeChanged();
                     }
-                    StickerMasksView.this.recentStickers[StickerMasksView.this.currentType] = StickersQuery.getRecentStickers(StickerMasksView.this.currentType);
+                    StickerMasksView.this.recentStickers[StickerMasksView.this.currentType] = DataQuery.getInstance(StickerMasksView.this.currentAccount).getRecentStickers(StickerMasksView.this.currentType);
                     StickerMasksView.this.stickersLayoutManager.scrollToPositionWithOffset(0, 0);
                     StickerMasksView.this.updateStickerTabs();
                     StickerMasksView.this.reloadStickersAdapter();
@@ -332,7 +334,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
                 this.scrollSlidingTabStrip.addIconTab(Theme.createEmojiIconSelectorDrawable(getContext(), R.drawable.ic_masks_recent1, Theme.getColor(Theme.key_chat_emojiPanelMasksIcon), Theme.getColor(Theme.key_chat_emojiPanelMasksIconSelected)));
             }
             this.stickerSets[this.currentType].clear();
-            ArrayList<TL_messages_stickerSet> packs = StickersQuery.getStickerSets(this.currentType);
+            ArrayList<TL_messages_stickerSet> packs = DataQuery.getInstance(this.currentAccount).getStickerSets(this.currentType);
             for (a = 0; a < packs.size(); a++) {
                 TL_messages_stickerSet pack = (TL_messages_stickerSet) packs.get(a);
                 if (!(pack.set.archived || pack.documents == null || pack.documents.isEmpty())) {
@@ -361,9 +363,9 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
 
     public void addRecentSticker(Document document) {
         if (document != null) {
-            StickersQuery.addRecentSticker(this.currentType, document, (int) (System.currentTimeMillis() / 1000), false);
+            DataQuery.getInstance(this.currentAccount).addRecentSticker(this.currentType, document, (int) (System.currentTimeMillis() / 1000), false);
             boolean wasEmpty = this.recentStickers[this.currentType].isEmpty();
-            this.recentStickers[this.currentType] = StickersQuery.getRecentStickers(this.currentType);
+            this.recentStickers[this.currentType] = DataQuery.getInstance(this.currentAccount).getRecentStickers(this.currentType);
             if (this.stickersGridAdapter != null) {
                 this.stickersGridAdapter.notifyDataSetChanged();
             }
@@ -397,8 +399,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
 
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.stickersDidLoaded);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.recentImagesDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recentImagesDidLoaded);
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 StickerMasksView.this.updateStickerTabs();
@@ -410,27 +412,27 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     public void setVisibility(int visibility) {
         super.setVisibility(visibility);
         if (visibility != 8) {
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.stickersDidLoaded);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.recentDocumentsDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recentDocumentsDidLoaded);
             updateStickerTabs();
             reloadStickersAdapter();
             checkDocuments();
-            StickersQuery.loadRecents(0, false, true, false);
-            StickersQuery.loadRecents(1, false, true, false);
-            StickersQuery.loadRecents(2, false, true, false);
+            DataQuery.getInstance(this.currentAccount).loadRecents(0, false, true, false);
+            DataQuery.getInstance(this.currentAccount).loadRecents(1, false, true, false);
+            DataQuery.getInstance(this.currentAccount).loadRecents(2, false, true, false);
         }
     }
 
     public void onDestroy() {
         if (this.stickersGridAdapter != null) {
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.stickersDidLoaded);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.recentDocumentsDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.stickersDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.recentDocumentsDidLoaded);
         }
     }
 
     private void checkDocuments() {
         int previousCount = this.recentStickers[this.currentType].size();
-        this.recentStickers[this.currentType] = StickersQuery.getRecentStickers(this.currentType);
+        this.recentStickers[this.currentType] = DataQuery.getInstance(this.currentAccount).getRecentStickers(this.currentType);
         if (this.stickersGridAdapter != null) {
             this.stickersGridAdapter.notifyDataSetChanged();
         }
@@ -439,7 +441,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.stickersDidLoaded) {
             if (((Integer) args[0]).intValue() == this.currentType) {
                 updateStickerTabs();

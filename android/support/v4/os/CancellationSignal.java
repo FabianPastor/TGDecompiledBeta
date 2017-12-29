@@ -12,20 +12,6 @@ public final class CancellationSignal {
         void onCancel();
     }
 
-    public boolean isCanceled() {
-        boolean z;
-        synchronized (this) {
-            z = this.mIsCanceled;
-        }
-        return z;
-    }
-
-    public void throwIfCanceled() {
-        if (isCanceled()) {
-            throw new OperationCanceledException();
-        }
-    }
-
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void cancel() {
@@ -40,22 +26,6 @@ public final class CancellationSignal {
         }
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setOnCancelListener(OnCancelListener listener) {
-        synchronized (this) {
-            waitForCancelFinishedLocked();
-            if (this.mOnCancelListener == listener) {
-                return;
-            }
-            this.mOnCancelListener = listener;
-            if (!this.mIsCanceled || listener == null) {
-            } else {
-                listener.onCancel();
-            }
-        }
-    }
-
     public Object getCancellationSignalObject() {
         if (VERSION.SDK_INT < 16) {
             return null;
@@ -63,22 +33,13 @@ public final class CancellationSignal {
         Object obj;
         synchronized (this) {
             if (this.mCancellationSignalObj == null) {
-                this.mCancellationSignalObj = CancellationSignalCompatJellybean.create();
+                this.mCancellationSignalObj = new android.os.CancellationSignal();
                 if (this.mIsCanceled) {
-                    CancellationSignalCompatJellybean.cancel(this.mCancellationSignalObj);
+                    ((android.os.CancellationSignal) this.mCancellationSignalObj).cancel();
                 }
             }
             obj = this.mCancellationSignalObj;
         }
         return obj;
-    }
-
-    private void waitForCancelFinishedLocked() {
-        while (this.mCancelInProgress) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-            }
-        }
     }
 }

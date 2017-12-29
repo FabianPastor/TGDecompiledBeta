@@ -1,5 +1,7 @@
 package com.google.android.gms.common.util;
 
+import org.telegram.messenger.exoplayer2.C;
+
 public final class zzl {
     public static String zza(byte[] bArr, int i, int i2, boolean z) {
         if (bArr == null || bArr.length == 0 || i2 <= 0 || i2 > bArr.length) {
@@ -11,7 +13,7 @@ public final class zzl {
         int i5 = 0;
         while (i4 > 0) {
             if (i5 == 0) {
-                if (i2 < 65536) {
+                if (i2 < C.DEFAULT_BUFFER_SEGMENT_SIZE) {
                     stringBuilder.append(String.format("%04X:", new Object[]{Integer.valueOf(i3)}));
                 } else {
                     stringBuilder.append(String.format("%08X:", new Object[]{Integer.valueOf(i3)}));

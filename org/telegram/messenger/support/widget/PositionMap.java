@@ -36,11 +36,11 @@ class PositionMap<E> implements Cloneable {
         }
     }
 
-    public PositionMap() {
+    PositionMap() {
         this(10);
     }
 
-    public PositionMap(int initialCapacity) {
+    PositionMap(int initialCapacity) {
         this.mGarbage = false;
         if (initialCapacity == 0) {
             this.mKeys = ContainerHelpers.EMPTY_INTS;

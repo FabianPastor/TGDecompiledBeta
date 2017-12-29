@@ -8,21 +8,17 @@ final class zzf implements zzd {
     zzf() {
     }
 
-    public final zzi zza(Context context, String str, zzh com_google_android_gms_dynamite_zzh) throws zzc {
-        zzi com_google_android_gms_dynamite_zzi = new zzi();
-        com_google_android_gms_dynamite_zzi.zzaSU = com_google_android_gms_dynamite_zzh.zzE(context, str);
-        if (com_google_android_gms_dynamite_zzi.zzaSU != 0) {
-            com_google_android_gms_dynamite_zzi.zzaSV = com_google_android_gms_dynamite_zzh.zzb(context, str, false);
+    public final zzj zza(Context context, String str, zzi com_google_android_gms_dynamite_zzi) throws zzc {
+        zzj com_google_android_gms_dynamite_zzj = new zzj();
+        com_google_android_gms_dynamite_zzj.zzgxg = com_google_android_gms_dynamite_zzi.zzab(context, str);
+        com_google_android_gms_dynamite_zzj.zzgxh = com_google_android_gms_dynamite_zzi.zzc(context, str, true);
+        if (com_google_android_gms_dynamite_zzj.zzgxg == 0 && com_google_android_gms_dynamite_zzj.zzgxh == 0) {
+            com_google_android_gms_dynamite_zzj.zzgxi = 0;
+        } else if (com_google_android_gms_dynamite_zzj.zzgxh >= com_google_android_gms_dynamite_zzj.zzgxg) {
+            com_google_android_gms_dynamite_zzj.zzgxi = 1;
         } else {
-            com_google_android_gms_dynamite_zzi.zzaSV = com_google_android_gms_dynamite_zzh.zzb(context, str, true);
+            com_google_android_gms_dynamite_zzj.zzgxi = -1;
         }
-        if (com_google_android_gms_dynamite_zzi.zzaSU == 0 && com_google_android_gms_dynamite_zzi.zzaSV == 0) {
-            com_google_android_gms_dynamite_zzi.zzaSW = 0;
-        } else if (com_google_android_gms_dynamite_zzi.zzaSV >= com_google_android_gms_dynamite_zzi.zzaSU) {
-            com_google_android_gms_dynamite_zzi.zzaSW = 1;
-        } else {
-            com_google_android_gms_dynamite_zzi.zzaSW = -1;
-        }
-        return com_google_android_gms_dynamite_zzi;
+        return com_google_android_gms_dynamite_zzj;
     }
 }

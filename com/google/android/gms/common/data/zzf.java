@@ -4,43 +4,42 @@ import android.database.CursorWindow;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.internal.zzbfn;
 
 public final class zzf implements Creator<DataHolder> {
     public final /* synthetic */ Object createFromParcel(Parcel parcel) {
         int i = 0;
         Bundle bundle = null;
-        int zzd = zzb.zzd(parcel);
+        int zzd = zzbfn.zzd(parcel);
         CursorWindow[] cursorWindowArr = null;
         String[] strArr = null;
         int i2 = 0;
         while (parcel.dataPosition() < zzd) {
             int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
+            switch (65535 & readInt) {
                 case 1:
-                    strArr = zzb.zzA(parcel, readInt);
+                    strArr = zzbfn.zzaa(parcel, readInt);
                     break;
                 case 2:
-                    cursorWindowArr = (CursorWindow[]) zzb.zzb(parcel, readInt, CursorWindow.CREATOR);
+                    cursorWindowArr = (CursorWindow[]) zzbfn.zzb(parcel, readInt, CursorWindow.CREATOR);
                     break;
                 case 3:
-                    i = zzb.zzg(parcel, readInt);
+                    i = zzbfn.zzg(parcel, readInt);
                     break;
                 case 4:
-                    bundle = zzb.zzs(parcel, readInt);
+                    bundle = zzbfn.zzs(parcel, readInt);
                     break;
                 case 1000:
-                    i2 = zzb.zzg(parcel, readInt);
+                    i2 = zzbfn.zzg(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, readInt);
+                    zzbfn.zzb(parcel, readInt);
                     break;
             }
         }
-        zzb.zzF(parcel, zzd);
+        zzbfn.zzaf(parcel, zzd);
         DataHolder dataHolder = new DataHolder(i2, strArr, cursorWindowArr, i, bundle);
-        dataHolder.zzqR();
+        dataHolder.zzajz();
         return dataHolder;
     }
 

@@ -1,19 +1,29 @@
 package com.google.android.gms.wearable.internal;
 
-import android.content.IntentFilter;
-import android.os.RemoteException;
-import com.google.android.gms.internal.zzbaz;
-import com.google.android.gms.internal.zzbdw;
-import com.google.android.gms.wearable.DataApi.DataListener;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfn;
 
-final class zzbq implements zzc<DataListener> {
-    private /* synthetic */ IntentFilter[] zzbRX;
-
-    zzbq(IntentFilter[] intentFilterArr) {
-        this.zzbRX = intentFilterArr;
+public final class zzbq implements Creator<zzbp> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzbfn.zzd(parcel);
+        int i = 0;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (65535 & readInt) {
+                case 2:
+                    i = zzbfn.zzg(parcel, readInt);
+                    break;
+                default:
+                    zzbfn.zzb(parcel, readInt);
+                    break;
+            }
+        }
+        zzbfn.zzaf(parcel, zzd);
+        return new zzbp(i);
     }
 
-    public final /* synthetic */ void zza(zzfw com_google_android_gms_wearable_internal_zzfw, zzbaz com_google_android_gms_internal_zzbaz, Object obj, zzbdw com_google_android_gms_internal_zzbdw) throws RemoteException {
-        com_google_android_gms_wearable_internal_zzfw.zza(com_google_android_gms_internal_zzbaz, (DataListener) obj, com_google_android_gms_internal_zzbdw, this.zzbRX);
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new zzbp[i];
     }
 }

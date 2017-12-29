@@ -1,6 +1,7 @@
 package com.coremedia.iso;
 
 import java.io.UnsupportedEncodingException;
+import org.telegram.messenger.exoplayer2.C;
 
 public final class Utf8 {
     public static byte[] convert(String s) {
@@ -8,7 +9,7 @@ public final class Utf8 {
             return null;
         }
         try {
-            return s.getBytes("UTF-8");
+            return s.getBytes(C.UTF8_NAME);
         } catch (UnsupportedEncodingException e) {
             throw new Error(e);
         }
@@ -19,7 +20,7 @@ public final class Utf8 {
             return null;
         }
         try {
-            return new String(b, "UTF-8");
+            return new String(b, C.UTF8_NAME);
         } catch (UnsupportedEncodingException e) {
             throw new Error(e);
         }
@@ -30,7 +31,7 @@ public final class Utf8 {
             return 0;
         }
         try {
-            return utf8.getBytes("UTF-8").length;
+            return utf8.getBytes(C.UTF8_NAME).length;
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException();
         }

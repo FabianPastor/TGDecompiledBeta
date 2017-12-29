@@ -50,8 +50,8 @@ public class MentionCell extends LinearLayout {
 
     public void setUser(User user) {
         if (user == null) {
-            this.nameTextView.setText("");
-            this.usernameTextView.setText("");
+            this.nameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
+            this.usernameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
             this.imageView.setImageDrawable(null);
             return;
         }
@@ -65,7 +65,7 @@ public class MentionCell extends LinearLayout {
         if (user.username != null) {
             this.usernameTextView.setText("@" + user.username);
         } else {
-            this.usernameTextView.setText("");
+            this.usernameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
         }
         this.imageView.setVisibility(0);
         this.usernameTextView.setVisibility(0);

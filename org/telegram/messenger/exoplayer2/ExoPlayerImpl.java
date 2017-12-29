@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -209,7 +208,7 @@ final class ExoPlayerImpl implements ExoPlayer {
         }
     }
 
-    public void setPlaybackParameters(@Nullable PlaybackParameters playbackParameters) {
+    public void setPlaybackParameters(PlaybackParameters playbackParameters) {
         if (playbackParameters == null) {
             playbackParameters = PlaybackParameters.DEFAULT;
         }

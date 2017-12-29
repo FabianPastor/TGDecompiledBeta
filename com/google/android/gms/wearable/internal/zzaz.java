@@ -1,21 +1,25 @@
 package com.google.android.gms.wearable.internal;
 
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
+import android.os.RemoteException;
+import com.google.android.gms.common.api.Api.zzb;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.Status;
 
-public final class zzaz extends zza {
-    public static final Creator<zzaz> CREATOR = new zzba();
-    public final int statusCode;
+final class zzaz extends zzn<Status> {
+    private /* synthetic */ zzay zzljf;
 
-    public zzaz(int i) {
-        this.statusCode = i;
+    zzaz(zzay com_google_android_gms_wearable_internal_zzay, GoogleApiClient googleApiClient) {
+        this.zzljf = com_google_android_gms_wearable_internal_zzay;
+        super(googleApiClient);
     }
 
-    public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zzc(parcel, 2, this.statusCode);
-        zzd.zzI(parcel, zze);
+    protected final /* synthetic */ void zza(zzb com_google_android_gms_common_api_Api_zzb) throws RemoteException {
+        zzhg com_google_android_gms_wearable_internal_zzhg = (zzhg) com_google_android_gms_common_api_Api_zzb;
+        ((zzep) com_google_android_gms_wearable_internal_zzhg.zzakn()).zzc(new zzgn(this), this.zzljf.zzecl);
+    }
+
+    protected final /* synthetic */ Result zzb(Status status) {
+        return status;
     }
 }

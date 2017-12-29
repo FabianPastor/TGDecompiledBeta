@@ -2,37 +2,28 @@ package com.google.android.gms.wallet;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.internal.zzbfn;
 
-public final class zzh implements Creator<FullWalletRequest> {
+public final class zzh implements Creator<CountrySpecification> {
     public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        Cart cart = null;
-        int zzd = zzb.zzd(parcel);
+        int zzd = zzbfn.zzd(parcel);
         String str = null;
-        String str2 = null;
         while (parcel.dataPosition() < zzd) {
             int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
+            switch (65535 & readInt) {
                 case 2:
-                    str2 = zzb.zzq(parcel, readInt);
-                    break;
-                case 3:
-                    str = zzb.zzq(parcel, readInt);
-                    break;
-                case 4:
-                    cart = (Cart) zzb.zza(parcel, readInt, Cart.CREATOR);
+                    str = zzbfn.zzq(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, readInt);
+                    zzbfn.zzb(parcel, readInt);
                     break;
             }
         }
-        zzb.zzF(parcel, zzd);
-        return new FullWalletRequest(str2, str, cart);
+        zzbfn.zzaf(parcel, zzd);
+        return new CountrySpecification(str);
     }
 
     public final /* synthetic */ Object[] newArray(int i) {
-        return new FullWalletRequest[i];
+        return new CountrySpecification[i];
     }
 }

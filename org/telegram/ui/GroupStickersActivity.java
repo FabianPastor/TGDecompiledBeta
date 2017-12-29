@@ -26,7 +26,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -34,7 +34,6 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
@@ -118,7 +117,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 case 0:
                     long id;
                     boolean z;
-                    ArrayList<TL_messages_stickerSet> arrayList = StickersQuery.getStickerSets(0);
+                    ArrayList<TL_messages_stickerSet> arrayList = DataQuery.getInstance(GroupStickersActivity.this.currentAccount).getStickerSets(0);
                     int row = position - GroupStickersActivity.this.stickersStartRow;
                     cell = holder.itemView;
                     TL_messages_stickerSet set = (TL_messages_stickerSet) arrayList.get(row);
@@ -147,7 +146,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                                 SpannableStringBuilder stringBuilder = new SpannableStringBuilder(text);
                                 stringBuilder.setSpan(new URLSpanNoUnderline("@stickers") {
                                     public void onClick(View widget) {
-                                        MessagesController.openByUserName("stickers", GroupStickersActivity.this, 1);
+                                        MessagesController.getInstance(GroupStickersActivity.this.currentAccount).openByUserName("stickers", GroupStickersActivity.this, 1);
                                     }
                                 }, index, botName.length() + index, 18);
                                 ((TextInfoPrivacyCell) holder.itemView).setText(stringBuilder);
@@ -244,19 +243,19 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        StickersQuery.checkStickers(0);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.stickersDidLoaded);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatInfoDidLoaded);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.groupStickersDidLoaded);
+        DataQuery.getInstance(this.currentAccount).checkStickers(0);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.groupStickersDidLoaded);
         updateRows();
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.stickersDidLoaded);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatInfoDidLoaded);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.groupStickersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.stickersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.groupStickersDidLoaded);
     }
 
     public View createView(Context context) {
@@ -298,7 +297,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.nameContainer.setOrientation(0);
         this.nameContainer.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(14.0f), 0);
         this.editText = new EditText(context);
-        this.editText.setText(MessagesController.getInstance().linkPrefix + "/addstickers/");
+        this.editText.setText(MessagesController.getInstance(this.currentAccount).linkPrefix + "/addstickers/");
         this.editText.setTextSize(1, 17.0f);
         this.editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -373,7 +372,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             public void onClick(View v) {
                 GroupStickersActivity.this.searchWas = false;
                 GroupStickersActivity.this.selectedStickerSet = null;
-                GroupStickersActivity.this.usernameTextView.setText("");
+                GroupStickersActivity.this.usernameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
                 GroupStickersActivity.this.updateRows();
             }
         });
@@ -425,7 +424,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                         if (holder != null) {
                             top = holder.itemView.getTop();
                         }
-                        GroupStickersActivity.this.selectedStickerSet = (TL_messages_stickerSet) StickersQuery.getStickerSets(0).get(position - GroupStickersActivity.this.stickersStartRow);
+                        GroupStickersActivity.this.selectedStickerSet = (TL_messages_stickerSet) DataQuery.getInstance(GroupStickersActivity.this.currentAccount).getStickerSets(0).get(position - GroupStickersActivity.this.stickersStartRow);
                         GroupStickersActivity.this.ignoreTextChanges = true;
                         GroupStickersActivity.this.usernameTextView.setText(GroupStickersActivity.this.selectedStickerSet.set.short_name);
                         GroupStickersActivity.this.usernameTextView.setSelection(GroupStickersActivity.this.usernameTextView.length());
@@ -452,7 +451,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         return this.fragmentView;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.stickersDidLoaded) {
             if (((Integer) args[0]).intValue() == 0) {
                 updateRows();
@@ -461,7 +460,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             ChatFull chatFull = args[0];
             if (chatFull.id == this.chatId) {
                 if (this.info == null && chatFull.stickerset != null) {
-                    this.selectedStickerSet = StickersQuery.getGroupStickerSetById(chatFull.stickerset);
+                    this.selectedStickerSet = DataQuery.getInstance(this.currentAccount).getGroupStickerSetById(chatFull.stickerset);
                 }
                 this.info = chatFull;
                 updateRows();
@@ -477,14 +476,14 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     public void setInfo(ChatFull chatFull) {
         this.info = chatFull;
         if (this.info != null && this.info.stickerset != null) {
-            this.selectedStickerSet = StickersQuery.getGroupStickerSetById(this.info.stickerset);
+            this.selectedStickerSet = DataQuery.getInstance(this.currentAccount).getGroupStickerSetById(this.info.stickerset);
         }
     }
 
     private void resolveStickerSet() {
         if (this.listAdapter != null) {
             if (this.reqId != 0) {
-                ConnectionsManager.getInstance().cancelRequest(this.reqId, true);
+                ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.reqId, true);
                 this.reqId = 0;
             }
             if (this.queryRunnable != null) {
@@ -504,7 +503,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             this.searching = true;
             this.searchWas = true;
             final String query = this.usernameTextView.getText().toString();
-            TL_messages_stickerSet existingSet = StickersQuery.getStickerSetByName(query);
+            TL_messages_stickerSet existingSet = DataQuery.getInstance(this.currentAccount).getStickerSetByName(query);
             if (existingSet != null) {
                 this.selectedStickerSet = existingSet;
             }
@@ -523,7 +522,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                         TL_messages_getStickerSet req = new TL_messages_getStickerSet();
                         req.stickerset = new TL_inputStickerSetShortName();
                         req.stickerset.short_name = query;
-                        GroupStickersActivity.this.reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                        GroupStickersActivity.this.reqId = ConnectionsManager.getInstance(GroupStickersActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                             public void run(final TLObject response, TL_error error) {
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
@@ -582,16 +581,16 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         }
         showEditDoneProgress(true);
         TL_channels_setStickers req = new TL_channels_setStickers();
-        req.channel = MessagesController.getInputChannel(this.chatId);
+        req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(this.chatId);
         if (this.selectedStickerSet == null) {
             req.stickerset = new TL_inputStickerSetEmpty();
         } else {
-            ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0).edit().remove("group_hide_stickers_" + this.info.id).commit();
+            MessagesController.getEmojiSettings(this.currentAccount).edit().remove("group_hide_stickers_" + this.info.id).commit();
             req.stickerset = new TL_inputStickerSetID();
             req.stickerset.id = this.selectedStickerSet.set.id;
             req.stickerset.access_hash = this.selectedStickerSet.set.access_hash;
         }
-        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
             public void run(TLObject response, final TL_error error) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
@@ -600,16 +599,16 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                                 GroupStickersActivity.this.info.stickerset = null;
                             } else {
                                 GroupStickersActivity.this.info.stickerset = GroupStickersActivity.this.selectedStickerSet.set;
-                                StickersQuery.putGroupStickerSet(GroupStickersActivity.this.selectedStickerSet);
+                                DataQuery.getInstance(GroupStickersActivity.this.currentAccount).putGroupStickerSet(GroupStickersActivity.this.selectedStickerSet);
                             }
                             if (GroupStickersActivity.this.info.stickerset == null) {
-                                ChatFull access$1900 = GroupStickersActivity.this.info;
-                                access$1900.flags |= 256;
+                                ChatFull access$2100 = GroupStickersActivity.this.info;
+                                access$2100.flags |= 256;
                             } else {
                                 GroupStickersActivity.this.info.flags &= -257;
                             }
-                            MessagesStorage.getInstance().updateChatInfo(GroupStickersActivity.this.info, false);
-                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatInfoDidLoaded, GroupStickersActivity.this.info, Integer.valueOf(0), Boolean.valueOf(true), null);
+                            MessagesStorage.getInstance(GroupStickersActivity.this.currentAccount).updateChatInfo(GroupStickersActivity.this.info, false);
+                            NotificationCenter.getInstance(GroupStickersActivity.this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoaded, GroupStickersActivity.this.info, Integer.valueOf(0), Boolean.valueOf(true), null);
                             GroupStickersActivity.this.finishFragment();
                             return;
                         }
@@ -637,7 +636,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         i = this.rowCount;
         this.rowCount = i + 1;
         this.infoRow = i;
-        ArrayList<TL_messages_stickerSet> stickerSets = StickersQuery.getStickerSets(0);
+        ArrayList<TL_messages_stickerSet> stickerSets = DataQuery.getInstance(this.currentAccount).getStickerSets(0);
         if (stickerSets.isEmpty()) {
             this.headerRow = -1;
             this.stickersStartRow = -1;
@@ -667,7 +666,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         if (this.listAdapter != null) {
             this.listAdapter.notifyDataSetChanged();
         }
-        if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("view_animations", true)) {
+        if (!MessagesController.getGlobalMainSettings().getBoolean("view_animations", true)) {
             this.usernameTextView.requestFocus();
             AndroidUtilities.showKeyboard(this.usernameTextView);
         }

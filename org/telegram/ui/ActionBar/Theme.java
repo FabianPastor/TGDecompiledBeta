@@ -30,7 +30,6 @@ import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Build.VERSION;
-import android.support.v4.internal.view.SupportMenu;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.StateSet;
@@ -56,6 +55,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.ThemeEditorView;
@@ -555,6 +555,7 @@ public class Theme {
     public static final String key_chats_menuBackground = "chats_menuBackground";
     public static final String key_chats_menuCloud = "chats_menuCloud";
     public static final String key_chats_menuCloudBackgroundCats = "chats_menuCloudBackgroundCats";
+    public static final String key_chats_menuItemCheck = "chats_menuItemCheck";
     public static final String key_chats_menuItemIcon = "chats_menuItemIcon";
     public static final String key_chats_menuItemText = "chats_menuItemText";
     public static final String key_chats_menuName = "chats_menuName";
@@ -923,7 +924,7 @@ public class Theme {
         defaultColors.put(key_radioBackground, Integer.valueOf(-5000269));
         defaultColors.put(key_radioBackgroundChecked, Integer.valueOf(-13129232));
         defaultColors.put(key_windowBackgroundGray, Integer.valueOf(-986896));
-        defaultColors.put(key_windowBackgroundGrayShadow, Integer.valueOf(-16777216));
+        defaultColors.put(key_windowBackgroundGrayShadow, Integer.valueOf(ACTION_BAR_VIDEO_EDIT_COLOR));
         defaultColors.put(key_emptyListPlaceholder, Integer.valueOf(-6974059));
         defaultColors.put(key_divider, Integer.valueOf(-2500135));
         defaultColors.put(key_graySection, Integer.valueOf(-855310));
@@ -1027,6 +1028,7 @@ public class Theme {
         defaultColors.put(key_chats_muteIcon, Integer.valueOf(-5723992));
         defaultColors.put(key_chats_menuBackground, Integer.valueOf(-1));
         defaultColors.put(key_chats_menuItemText, Integer.valueOf(-12303292));
+        defaultColors.put(key_chats_menuItemCheck, Integer.valueOf(-10907718));
         defaultColors.put(key_chats_menuItemIcon, Integer.valueOf(-9211021));
         defaultColors.put(key_chats_menuName, Integer.valueOf(-1));
         defaultColors.put(key_chats_menuPhone, Integer.valueOf(-1));
@@ -1044,8 +1046,8 @@ public class Theme {
         defaultColors.put(key_chat_outBubble, Integer.valueOf(-1048610));
         defaultColors.put(key_chat_outBubbleSelected, Integer.valueOf(-2820676));
         defaultColors.put(key_chat_outBubbleShadow, Integer.valueOf(-14781172));
-        defaultColors.put(key_chat_messageTextIn, Integer.valueOf(-16777216));
-        defaultColors.put(key_chat_messageTextOut, Integer.valueOf(-16777216));
+        defaultColors.put(key_chat_messageTextIn, Integer.valueOf(ACTION_BAR_VIDEO_EDIT_COLOR));
+        defaultColors.put(key_chat_messageTextOut, Integer.valueOf(ACTION_BAR_VIDEO_EDIT_COLOR));
         defaultColors.put(key_chat_messageLinkIn, Integer.valueOf(-14255946));
         defaultColors.put(key_chat_messageLinkOut, Integer.valueOf(-14255946));
         defaultColors.put(key_chat_serviceText, Integer.valueOf(-1));
@@ -1098,8 +1100,8 @@ public class Theme {
         defaultColors.put(key_chat_inReplyNameText, Integer.valueOf(-12940081));
         defaultColors.put(key_chat_outReplyNameText, Integer.valueOf(-11162801));
         defaultColors.put(key_chat_stickerReplyNameText, Integer.valueOf(-1));
-        defaultColors.put(key_chat_inReplyMessageText, Integer.valueOf(-16777216));
-        defaultColors.put(key_chat_outReplyMessageText, Integer.valueOf(-16777216));
+        defaultColors.put(key_chat_inReplyMessageText, Integer.valueOf(ACTION_BAR_VIDEO_EDIT_COLOR));
+        defaultColors.put(key_chat_outReplyMessageText, Integer.valueOf(ACTION_BAR_VIDEO_EDIT_COLOR));
         defaultColors.put(key_chat_inReplyMediaMessageText, Integer.valueOf(-6182221));
         defaultColors.put(key_chat_outReplyMediaMessageText, Integer.valueOf(-10112933));
         defaultColors.put(key_chat_inReplyMediaMessageSelectedText, Integer.valueOf(-7752511));
@@ -1214,9 +1216,9 @@ public class Theme {
         defaultColors.put(key_chat_replyPanelMessage, Integer.valueOf(-14540254));
         defaultColors.put(key_chat_replyPanelLine, Integer.valueOf(-1513240));
         defaultColors.put(key_chat_messagePanelBackground, Integer.valueOf(-1));
-        defaultColors.put(key_chat_messagePanelText, Integer.valueOf(-16777216));
+        defaultColors.put(key_chat_messagePanelText, Integer.valueOf(ACTION_BAR_VIDEO_EDIT_COLOR));
         defaultColors.put(key_chat_messagePanelHint, Integer.valueOf(-5066062));
-        defaultColors.put(key_chat_messagePanelShadow, Integer.valueOf(-16777216));
+        defaultColors.put(key_chat_messagePanelShadow, Integer.valueOf(ACTION_BAR_VIDEO_EDIT_COLOR));
         defaultColors.put(key_chat_messagePanelIcons, Integer.valueOf(-5723992));
         defaultColors.put(key_chat_recordedVoicePlayPause, Integer.valueOf(-1));
         defaultColors.put(key_chat_recordedVoicePlayPausePressed, Integer.valueOf(-2495749));
@@ -1228,13 +1230,13 @@ public class Theme {
         defaultColors.put(key_chat_messagePanelSend, Integer.valueOf(-10309397));
         defaultColors.put(key_chat_messagePanelVoiceLock, Integer.valueOf(-5987164));
         defaultColors.put(key_chat_messagePanelVoiceLockBackground, Integer.valueOf(-1));
-        defaultColors.put(key_chat_messagePanelVoiceLockShadow, Integer.valueOf(-16777216));
+        defaultColors.put(key_chat_messagePanelVoiceLockShadow, Integer.valueOf(ACTION_BAR_VIDEO_EDIT_COLOR));
         defaultColors.put(key_chat_recordTime, Integer.valueOf(-11711413));
         defaultColors.put(key_chat_emojiPanelNewTrending, Integer.valueOf(-11688214));
         defaultColors.put(key_chat_gifSaveHintText, Integer.valueOf(-1));
         defaultColors.put(key_chat_gifSaveHintBackground, Integer.valueOf(-871296751));
         defaultColors.put(key_chat_goDownButton, Integer.valueOf(-1));
-        defaultColors.put(key_chat_goDownButtonShadow, Integer.valueOf(-16777216));
+        defaultColors.put(key_chat_goDownButtonShadow, Integer.valueOf(ACTION_BAR_VIDEO_EDIT_COLOR));
         defaultColors.put(key_chat_goDownButtonIcon, Integer.valueOf(-5723992));
         defaultColors.put(key_chat_goDownButtonCounter, Integer.valueOf(-1));
         defaultColors.put(key_chat_goDownButtonCounterBackground, Integer.valueOf(-11689240));
@@ -1330,7 +1332,7 @@ public class Theme {
         defaultColors.put(key_changephoneinfo_image, Integer.valueOf(-5723992));
         defaultColors.put(key_groupcreate_hintText, Integer.valueOf(-6182221));
         defaultColors.put(key_groupcreate_cursor, Integer.valueOf(-11361317));
-        defaultColors.put(key_groupcreate_sectionShadow, Integer.valueOf(-16777216));
+        defaultColors.put(key_groupcreate_sectionShadow, Integer.valueOf(ACTION_BAR_VIDEO_EDIT_COLOR));
         defaultColors.put(key_groupcreate_sectionText, Integer.valueOf(-8617336));
         defaultColors.put(key_groupcreate_onlineText, Integer.valueOf(-12545331));
         defaultColors.put(key_groupcreate_offlineText, Integer.valueOf(-8156010));
@@ -1408,7 +1410,7 @@ public class Theme {
         sortThemes();
         ThemeInfo applyingTheme = null;
         try {
-            String theme = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getString("theme", null);
+            String theme = MessagesController.getGlobalMainSettings().getString("theme", null);
             if (theme != null) {
                 applyingTheme = (ThemeInfo) themesDict.get(theme);
             }
@@ -1766,7 +1768,7 @@ public class Theme {
                 Editor editor;
                 if (themeInfo.pathToFile == null && themeInfo.assetName == null) {
                     if (save) {
-                        editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+                        editor = MessagesController.getGlobalMainSettings().edit();
                         editor.remove("theme");
                         if (removeWallpaperOverride) {
                             editor.remove("overrideThemeWallpaper");
@@ -1778,7 +1780,7 @@ public class Theme {
                     themedWallpaper = null;
                 } else {
                     if (save) {
-                        editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+                        editor = MessagesController.getGlobalMainSettings().edit();
                         editor.putString("theme", themeInfo.name);
                         if (removeWallpaperOverride) {
                             editor.remove("overrideThemeWallpaper");
@@ -1799,7 +1801,7 @@ public class Theme {
                 applyChatTheme(false);
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
-                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.didSetNewTheme, new Object[0]);
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewTheme, new Object[0]);
                     }
                 });
             } catch (Throwable e) {
@@ -1891,7 +1893,7 @@ public class Theme {
                     sortThemes();
                 }
                 currentTheme = newTheme;
-                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+                Editor editor = MessagesController.getGlobalMainSettings().edit();
                 editor.putString("theme", currentTheme.name);
                 editor.commit();
                 if (stream2 != null) {
@@ -2011,7 +2013,7 @@ public class Theme {
                     for (int a = 0; a < read; a++) {
                         if (bytes[a] == (byte) 10) {
                             int len = (a - start) + 1;
-                            String line = new String(bytes, start, len - 1, "UTF-8");
+                            String line = new String(bytes, start, len - 1, C.UTF8_NAME);
                             if (line.startsWith("WPS")) {
                                 themedWallpaperFileOffset = currentPosition + len;
                                 finished = true;
@@ -2441,7 +2443,7 @@ public class Theme {
         chat_msgTextPaintOneEmoji.setTextSize((float) AndroidUtilities.dp(28.0f));
         chat_msgTextPaintTwoEmoji.setTextSize((float) AndroidUtilities.dp(24.0f));
         chat_msgTextPaintThreeEmoji.setTextSize((float) AndroidUtilities.dp(20.0f));
-        chat_msgTextPaint.setTextSize((float) AndroidUtilities.dp((float) MessagesController.getInstance().fontSize));
+        chat_msgTextPaint.setTextSize((float) AndroidUtilities.dp((float) MessagesController.getAccountInstance().fontSize));
         chat_msgGameTextPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
         chat_msgBotButtonPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
         if (!fontsOnly && chat_botProgressPaint != null) {
@@ -2469,7 +2471,7 @@ public class Theme {
             chat_instantViewPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             chat_instantViewRectPaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
             chat_statusRecordPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-            chat_actionTextPaint.setTextSize((float) AndroidUtilities.dp((float) (Math.max(16, MessagesController.getInstance().fontSize) - 2)));
+            chat_actionTextPaint.setTextSize((float) AndroidUtilities.dp((float) (Math.max(16, MessagesController.getAccountInstance().fontSize) - 2)));
             chat_contextResult_titleTextPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
             chat_contextResult_descriptionTextPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             chat_radialProgressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
@@ -2659,7 +2661,7 @@ public class Theme {
         if (key.equals(key_chats_menuTopShadow)) {
             return 0;
         }
-        return SupportMenu.CATEGORY_MASK;
+        return -65536;
     }
 
     public static boolean hasThemeKey(String key) {
@@ -2708,7 +2710,7 @@ public class Theme {
 
     public static void setColor(String key, int color, boolean useDefault) {
         if (key.equals(key_chat_wallpaper)) {
-            color |= -16777216;
+            color |= ACTION_BAR_VIDEO_EDIT_COLOR;
         }
         if (useDefault) {
             currentColors.remove(key);
@@ -2724,13 +2726,13 @@ public class Theme {
 
     public static void setThemeWallpaper(String themeName, Bitmap bitmap, File path) {
         currentColors.remove(key_chat_wallpaper);
-        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().remove("overrideThemeWallpaper").commit();
+        MessagesController.getGlobalMainSettings().edit().remove("overrideThemeWallpaper").commit();
         if (bitmap != null) {
             themedWallpaper = new BitmapDrawable(bitmap);
             saveCurrentTheme(themeName, false);
             calcBackgroundColor(themedWallpaper, 0);
             applyChatServiceMessageColor();
-            NotificationCenter.getInstance().postNotificationName(NotificationCenter.didSetNewWallpapper, new Object[0]);
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewWallpapper, new Object[0]);
             return;
         }
         themedWallpaper = null;
@@ -2827,13 +2829,13 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
+                    int i;
                     int selectedBackground;
+                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        int i;
                         SharedPreferences preferences;
-                        File toFile;
-                        if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
+                        if (!MessagesController.getGlobalMainSettings().getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {
                                 Theme.wallpaper = new ColorDrawable(backgroundColor.intValue());
@@ -2878,7 +2880,7 @@ public class Theme {
                                     }
                                     if (Theme.wallpaper == null) {
                                         i = 0;
-                                        preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                                        preferences = MessagesController.getGlobalMainSettings();
                                         selectedBackground = preferences.getInt("selectedBackground", 1000001);
                                         i = preferences.getInt("selectedColor", 0);
                                         if (i == 0) {
@@ -2907,7 +2909,7 @@ public class Theme {
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
                                             Theme.applyChatServiceMessageColor();
-                                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.didSetNewWallpapper, new Object[0]);
+                                            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewWallpapper, new Object[0]);
                                         }
                                     });
                                 }
@@ -2915,7 +2917,7 @@ public class Theme {
                         }
                         if (Theme.wallpaper == null) {
                             i = 0;
-                            preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                            preferences = MessagesController.getGlobalMainSettings();
                             selectedBackground = preferences.getInt("selectedBackground", 1000001);
                             i = preferences.getInt("selectedColor", 0);
                             if (i == 0) {

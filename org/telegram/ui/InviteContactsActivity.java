@@ -68,7 +68,7 @@ import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
-public class InviteContactsActivity extends BaseFragment implements NotificationCenterDelegate, OnClickListener {
+public class InviteContactsActivity extends BaseFragment implements OnClickListener, NotificationCenterDelegate {
     private InviteAdapter adapter;
     private ArrayList<GroupCreateSpan> allSpans = new ArrayList();
     private int containerHeight;
@@ -418,28 +418,28 @@ public class InviteContactsActivity extends BaseFragment implements Notification
             super.notifyDataSetChanged();
             int count = getItemCount();
             InviteContactsActivity.this.emptyView.setVisibility(count == 1 ? 0 : 4);
-            GroupCreateDividerItemDecoration access$2900 = InviteContactsActivity.this.decoration;
+            GroupCreateDividerItemDecoration access$3200 = InviteContactsActivity.this.decoration;
             if (count == 1) {
                 z = true;
             }
-            access$2900.setSingle(z);
+            access$3200.setSingle(z);
         }
     }
 
     public boolean onFragmentCreate() {
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.contactsImported);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.contactsImported);
         fetchContacts();
-        if (!UserConfig.contactsReimported) {
-            ContactsController.getInstance().forceImportContacts();
-            UserConfig.contactsReimported = true;
-            UserConfig.saveConfig(false);
+        if (!UserConfig.getInstance(this.currentAccount).contactsReimported) {
+            ContactsController.getInstance(this.currentAccount).forceImportContacts();
+            UserConfig.getInstance(this.currentAccount).contactsReimported = true;
+            UserConfig.getInstance(this.currentAccount).saveConfig(false);
         }
         return super.onFragmentCreate();
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.contactsImported);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.contactsImported);
     }
 
     public void onClick(View v) {
@@ -612,7 +612,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
             }
         });
         this.emptyView = new EmptyTextProgressView(context);
-        if (ContactsController.getInstance().isLoadingContacts()) {
+        if (ContactsController.getInstance(this.currentAccount).isLoadingContacts()) {
             this.emptyView.showProgress();
         } else {
             this.emptyView.showTextView();
@@ -641,7 +641,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                     try {
                         Intent intent = new Intent("android.intent.action.SEND");
                         intent.setType("text/plain");
-                        String text = ContactsController.getInstance().getInviteText(0);
+                        String text = ContactsController.getInstance(InviteContactsActivity.this.currentAccount).getInviteText(0);
                         intent.putExtra("android.intent.extra.TEXT", text);
                         InviteContactsActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, text), 500);
                     } catch (Throwable e) {
@@ -711,9 +711,9 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                         }
                     }
                     Intent intent = new Intent("android.intent.action.SENDTO", Uri.parse("smsto:" + builder.toString()));
-                    intent.putExtra("sms_body", ContactsController.getInstance().getInviteText(num));
+                    intent.putExtra("sms_body", ContactsController.getInstance(InviteContactsActivity.this.currentAccount).getInviteText(num));
                     InviteContactsActivity.this.getParentActivity().startActivityForResult(intent, 500);
-                    MediaController.getInstance().startSmsObserver();
+                    MediaController.getInstance(InviteContactsActivity.this.currentAccount).startSmsObserver();
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -752,7 +752,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.contactsImported) {
             fetchContacts();
         }
@@ -805,7 +805,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
     }
 
     private void fetchContacts() {
-        this.phoneBookContacts = new ArrayList(ContactsController.getInstance().phoneBookContacts);
+        this.phoneBookContacts = new ArrayList(ContactsController.getInstance(this.currentAccount).phoneBookContacts);
         Collections.sort(this.phoneBookContacts, new Comparator<Contact>() {
             public int compare(Contact o1, Contact o2) {
                 if (o1.imported > o2.imported) {

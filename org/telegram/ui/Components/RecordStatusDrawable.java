@@ -3,7 +3,6 @@ package org.telegram.ui.Components;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.RectF;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -25,7 +24,7 @@ public class RecordStatusDrawable extends StatusDrawable {
         if (dt > 50) {
             dt = 50;
         }
-        this.progress += ((float) dt) / BitmapDescriptorFactory.HUE_MAGENTA;
+        this.progress += ((float) dt) / 300.0f;
         while (this.progress > 1.0f) {
             this.progress -= 1.0f;
         }
@@ -55,7 +54,7 @@ public class RecordStatusDrawable extends StatusDrawable {
             }
             float side = ((float) (AndroidUtilities.dp(4.0f) * a)) + (((float) AndroidUtilities.dp(4.0f)) * this.progress);
             this.rect.set(-side, -side, side, side);
-            canvas.drawArc(this.rect, -15.0f, BitmapDescriptorFactory.HUE_ORANGE, false, Theme.chat_statusRecordPaint);
+            canvas.drawArc(this.rect, -15.0f, 30.0f, false, Theme.chat_statusRecordPaint);
         }
         canvas.restore();
         if (this.started) {

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
-import android.support.v4.internal.view.SupportMenu;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -23,12 +22,13 @@ import android.widget.TextView.OnEditorActionListener;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -69,13 +69,13 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
     }
 
     public boolean onFragmentCreate() {
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.proxySettingsChanged);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.proxySettingsChanged);
         return super.onFragmentCreate();
     }
 
     public void onFragmentDestroy() {
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.proxySettingsChanged);
-        Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.proxySettingsChanged);
+        Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("proxy_enabled", this.useProxySettings);
         editor.putBoolean("proxy_enabled_calls", this.useProxyForCalls);
         String address = this.inputFields[0].getText().toString();
@@ -87,16 +87,18 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
         editor.putString("proxy_user", user);
         editor.putInt("proxy_port", port);
         editor.commit();
-        if (this.useProxySettings) {
-            ConnectionsManager.native_setProxySettings(address, port, user, password);
-        } else {
-            ConnectionsManager.native_setProxySettings("", 0, "", "");
+        for (int a = 0; a < 3; a++) {
+            if (this.useProxySettings) {
+                ConnectionsManager.native_setProxySettings(a, address, port, user, password);
+            } else {
+                ConnectionsManager.native_setProxySettings(a, TtmlNode.ANONYMOUS_REGION_ID, 0, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID);
+            }
         }
         super.onFragmentDestroy();
     }
 
     public View createView(Context context) {
-        final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+        final SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         this.useProxySettings = preferences.getBoolean("proxy_enabled", false);
         this.useProxyForCalls = preferences.getBoolean("proxy_enabled_calls", false);
         this.actionBar.setTitle(LocaleController.getString("ProxySettings", R.string.ProxySettings));
@@ -107,32 +109,32 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
                 if (id == -1) {
                     ProxySettingsActivity.this.finishFragment();
                 } else if (id == 1 && ProxySettingsActivity.this.getParentActivity() != null) {
-                    StringBuilder params = new StringBuilder("");
+                    StringBuilder params = new StringBuilder(TtmlNode.ANONYMOUS_REGION_ID);
                     String address = ProxySettingsActivity.this.inputFields[0].getText().toString();
                     String password = ProxySettingsActivity.this.inputFields[3].getText().toString();
                     String user = ProxySettingsActivity.this.inputFields[2].getText().toString();
                     String port = ProxySettingsActivity.this.inputFields[1].getText().toString();
                     try {
                         if (!TextUtils.isEmpty(address)) {
-                            params.append("server=").append(URLEncoder.encode(address, "UTF-8"));
+                            params.append("server=").append(URLEncoder.encode(address, C.UTF8_NAME));
                         }
                         if (!TextUtils.isEmpty(port)) {
                             if (params.length() != 0) {
                                 params.append("&");
                             }
-                            params.append("port=").append(URLEncoder.encode(port, "UTF-8"));
+                            params.append("port=").append(URLEncoder.encode(port, C.UTF8_NAME));
                         }
                         if (!TextUtils.isEmpty(user)) {
                             if (params.length() != 0) {
                                 params.append("&");
                             }
-                            params.append("user=").append(URLEncoder.encode(user, "UTF-8"));
+                            params.append("user=").append(URLEncoder.encode(user, C.UTF8_NAME));
                         }
                         if (!TextUtils.isEmpty(password)) {
                             if (params.length() != 0) {
                                 params.append("&");
                             }
-                            params.append("pass=").append(URLEncoder.encode(password, "UTF-8"));
+                            params.append("pass=").append(URLEncoder.encode(password, C.UTF8_NAME));
                         }
                         if (params.length() != 0) {
                             Intent shareIntent = new Intent("android.intent.action.SEND");
@@ -168,7 +170,7 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
                 ProxySettingsActivity.this.checkCell1.setChecked(ProxySettingsActivity.this.useProxySettings);
                 if (!ProxySettingsActivity.this.useProxySettings) {
                     ProxySettingsActivity.this.useForCallsCell.setChecked(false);
-                    preferences.edit().putBoolean("proxy_enabled_calls", false).apply();
+                    preferences.edit().putBoolean("proxy_enabled_calls", false).commit();
                 }
                 ProxySettingsActivity.this.useForCallsCell.setEnabled(ProxySettingsActivity.this.useProxySettings);
             }
@@ -232,10 +234,10 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
                             }
                             ProxySettingsActivity.this.ignoreOnTextChange = true;
                             int port = Utilities.parseInt(builder.toString()).intValue();
-                            if (port < 0 || port > SupportMenu.USER_MASK || !str.equals(builder.toString())) {
+                            if (port < 0 || port > 65535 || !str.equals(builder.toString())) {
                                 if (port < 0) {
                                     phoneField.setText("0");
-                                } else if (port > SupportMenu.USER_MASK) {
+                                } else if (port > 65535) {
                                     phoneField.setText("65535");
                                 } else {
                                     phoneField.setText(builder.toString());
@@ -262,19 +264,19 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
             switch (a) {
                 case 0:
                     this.inputFields[a].setHint(LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress));
-                    this.inputFields[a].setText(preferences.getString("proxy_ip", ""));
+                    this.inputFields[a].setText(preferences.getString("proxy_ip", TtmlNode.ANONYMOUS_REGION_ID));
                     break;
                 case 1:
                     this.inputFields[a].setHint(LocaleController.getString("UseProxyPort", R.string.UseProxyPort));
-                    this.inputFields[a].setText("" + preferences.getInt("proxy_port", 1080));
+                    this.inputFields[a].setText(TtmlNode.ANONYMOUS_REGION_ID + preferences.getInt("proxy_port", 1080));
                     break;
                 case 2:
                     this.inputFields[a].setHint(LocaleController.getString("UseProxyUsername", R.string.UseProxyUsername));
-                    this.inputFields[a].setText(preferences.getString("proxy_user", ""));
+                    this.inputFields[a].setText(preferences.getString("proxy_user", TtmlNode.ANONYMOUS_REGION_ID));
                     break;
                 case 3:
                     this.inputFields[a].setHint(LocaleController.getString("UseProxyPassword", R.string.UseProxyPassword));
-                    this.inputFields[a].setText(preferences.getString("proxy_pass", ""));
+                    this.inputFields[a].setText(preferences.getString("proxy_pass", TtmlNode.ANONYMOUS_REGION_ID));
                     break;
             }
             this.inputFields[a].setSelection(this.inputFields[a].length());
@@ -341,25 +343,25 @@ public class ProxySettingsActivity extends BaseFragment implements NotificationC
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.proxySettingsChanged && this.checkCell1 != null) {
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
             this.useProxySettings = preferences.getBoolean("proxy_enabled", false);
             if (this.useProxySettings) {
                 this.checkCell1.setChecked(true);
                 for (int a = 0; a < 4; a++) {
                     switch (a) {
                         case 0:
-                            this.inputFields[a].setText(preferences.getString("proxy_ip", ""));
+                            this.inputFields[a].setText(preferences.getString("proxy_ip", TtmlNode.ANONYMOUS_REGION_ID));
                             break;
                         case 1:
-                            this.inputFields[a].setText("" + preferences.getInt("proxy_port", 1080));
+                            this.inputFields[a].setText(TtmlNode.ANONYMOUS_REGION_ID + preferences.getInt("proxy_port", 1080));
                             break;
                         case 2:
-                            this.inputFields[a].setText(preferences.getString("proxy_user", ""));
+                            this.inputFields[a].setText(preferences.getString("proxy_user", TtmlNode.ANONYMOUS_REGION_ID));
                             break;
                         case 3:
-                            this.inputFields[a].setText(preferences.getString("proxy_pass", ""));
+                            this.inputFields[a].setText(preferences.getString("proxy_pass", TtmlNode.ANONYMOUS_REGION_ID));
                             break;
                         default:
                             break;

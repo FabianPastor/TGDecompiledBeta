@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">Install</string>
     <string name="common_google_play_services_install_text">%1$s won\'t run without Google Play services, which are missing from your device.</string>
     <string name="common_google_play_services_install_title">Get Google Play services</string>
+    <string name="common_google_play_services_notification_channel_name">Google Play services availability</string>
     <string name="common_google_play_services_notification_ticker">Google Play services error</string>
     <string name="common_google_play_services_unknown_issue">%1$s is having trouble with Google Play services. Please try again.</string>
     <string name="common_google_play_services_unsupported_text">%1$s won\'t run without Google Play services, which are not supported by your device.</string>
@@ -17,5 +18,7 @@
     <string name="common_open_on_phone">Open on phone</string>
     <string name="common_signin_button_text">Sign In</string>
     <string name="common_signin_button_text_long">Sign in with Google</string>
+    <string name="gcm_fallback_notification_channel_label">Miscellaneous</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Buy with Google</string>
 </resources>

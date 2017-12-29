@@ -1,16 +1,8 @@
 package com.google.android.gms.internal;
 
-final class zzchs implements Runnable {
-    private /* synthetic */ zzchl zzbtt;
-    private /* synthetic */ long zzbtx;
+import java.util.List;
+import java.util.Map;
 
-    zzchs(zzchl com_google_android_gms_internal_zzchl, long j) {
-        this.zzbtt = com_google_android_gms_internal_zzchl;
-        this.zzbtx = j;
-    }
-
-    public final void run() {
-        this.zzbtt.zzwG().zzbry.set(this.zzbtx);
-        this.zzbtt.zzwF().zzyC().zzj("Session timeout duration set", Long.valueOf(this.zzbtx));
-    }
+interface zzchs {
+    void zza(String str, int i, Throwable th, byte[] bArr, Map<String, List<String>> map);
 }

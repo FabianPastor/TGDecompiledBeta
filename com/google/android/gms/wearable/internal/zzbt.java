@@ -1,22 +1,21 @@
 package com.google.android.gms.wearable.internal;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.wearable.DataApi.DeleteDataItemsResult;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-public final class zzbt implements DeleteDataItemsResult {
-    private final Status mStatus;
-    private final int zzbSC;
+public final class zzbt extends zzbfm {
+    public static final Creator<zzbt> CREATOR = new zzbu();
+    public final int statusCode;
 
-    public zzbt(Status status, int i) {
-        this.mStatus = status;
-        this.zzbSC = i;
+    public zzbt(int i) {
+        this.statusCode = i;
     }
 
-    public final int getNumDeleted() {
-        return this.zzbSC;
-    }
-
-    public final Status getStatus() {
-        return this.mStatus;
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zzc(parcel, 2, this.statusCode);
+        zzbfp.zzai(parcel, zze);
     }
 }

@@ -29,7 +29,7 @@ import org.telegram.messenger.exoplayer2.util.MediaClock;
 import org.telegram.messenger.exoplayer2.util.StandaloneMediaClock;
 import org.telegram.messenger.exoplayer2.util.TraceUtil;
 
-final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, InvalidationListener, Listener {
+final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Listener, InvalidationListener {
     private static final int IDLE_INTERVAL_MS = 1000;
     private static final int MAXIMUM_BUFFER_AHEAD_PERIODS = 100;
     private static final int MSG_CUSTOM = 11;

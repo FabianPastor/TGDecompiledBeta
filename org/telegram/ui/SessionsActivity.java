@@ -23,6 +23,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
@@ -171,20 +172,20 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     return;
                 default:
                     SessionCell sessionCell = holder.itemView;
-                    TL_authorization access$700;
+                    TL_authorization access$900;
                     if (position == SessionsActivity.this.currentSessionRow) {
-                        access$700 = SessionsActivity.this.currentSession;
+                        access$900 = SessionsActivity.this.currentSession;
                         if (!SessionsActivity.this.sessions.isEmpty()) {
                             z2 = true;
                         }
-                        sessionCell.setSession(access$700, z2);
+                        sessionCell.setSession(access$900, z2);
                         return;
                     }
-                    access$700 = (TL_authorization) SessionsActivity.this.sessions.get(position - SessionsActivity.this.otherSessionsStartRow);
+                    access$900 = (TL_authorization) SessionsActivity.this.sessions.get(position - SessionsActivity.this.otherSessionsStartRow);
                     if (position == SessionsActivity.this.otherSessionsEndRow - 1) {
                         z = false;
                     }
-                    sessionCell.setSession(access$700, z);
+                    sessionCell.setSession(access$900, z);
                     return;
             }
         }
@@ -213,13 +214,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         super.onFragmentCreate();
         updateRows();
         loadSessions(false);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.newSessionReceived);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.newSessionReceived);
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.newSessionReceived);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.newSessionReceived);
     }
 
     public View createView(Context context) {
@@ -279,7 +280,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                ConnectionsManager.getInstance().sendRequest(new TL_auth_resetAuthorizations(), new RequestDelegate() {
+                                ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(new TL_auth_resetAuthorizations(), new RequestDelegate() {
                                     public void run(final TLObject response, final TL_error error) {
                                         AndroidUtilities.runOnUIThread(new Runnable() {
                                             public void run() {
@@ -293,10 +294,15 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                                                 }
                                             }
                                         });
-                                        UserConfig.registeredForPush = false;
-                                        UserConfig.saveConfig(false);
-                                        MessagesController.getInstance().registerForPush(UserConfig.pushString);
-                                        ConnectionsManager.getInstance().setUserId(UserConfig.getClientUserId());
+                                        for (int a = 0; a < 3; a++) {
+                                            UserConfig userConfig = UserConfig.getInstance(a);
+                                            if (userConfig.isClientActivated()) {
+                                                userConfig.registeredForPush = false;
+                                                userConfig.saveConfig(false);
+                                                MessagesController.getInstance(a).registerForPush(SharedConfig.pushString);
+                                                ConnectionsManager.getInstance(a).setUserId(userConfig.getClientUserId());
+                                            }
+                                        }
                                     }
                                 });
                             }
@@ -319,7 +325,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                                 final TL_authorization authorization = (TL_authorization) SessionsActivity.this.sessions.get(position - SessionsActivity.this.otherSessionsStartRow);
                                 TL_account_resetAuthorization req = new TL_account_resetAuthorization();
                                 req.hash = authorization.hash;
-                                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                                     public void run(TLObject response, final TL_error error) {
                                         AndroidUtilities.runOnUIThread(new Runnable() {
                                             public void run() {
@@ -357,7 +363,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.newSessionReceived) {
             loadSessions(true);
         }
@@ -368,7 +374,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             if (!silent) {
                 this.loading = true;
             }
-            ConnectionsManager.getInstance().bindRequestToGuid(ConnectionsManager.getInstance().sendRequest(new TL_account_getAuthorizations(), new RequestDelegate() {
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getAuthorizations(), new RequestDelegate() {
                 public void run(final TLObject response, final TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {

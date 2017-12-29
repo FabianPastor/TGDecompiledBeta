@@ -1,9 +1,5 @@
 package com.stripe.android.util;
 
-import android.support.annotation.Nullable;
-import com.stripe.android.model.Card;
-import com.stripe.android.model.Token;
-
 public class StripeTextUtils {
     public static boolean hasAnyPrefix(String number, String... prefixes) {
         if (number == null) {
@@ -40,53 +36,50 @@ public class StripeTextUtils {
         return value == null || value.trim().length() == 0;
     }
 
-    @Nullable
-    public static String asCardBrand(@Nullable String possibleCardType) {
+    public static String asCardBrand(String possibleCardType) {
         if (isBlank(possibleCardType)) {
             return null;
         }
-        if (Card.AMERICAN_EXPRESS.equalsIgnoreCase(possibleCardType)) {
-            return Card.AMERICAN_EXPRESS;
+        if ("American Express".equalsIgnoreCase(possibleCardType)) {
+            return "American Express";
         }
-        if (Card.MASTERCARD.equalsIgnoreCase(possibleCardType)) {
-            return Card.MASTERCARD;
+        if ("MasterCard".equalsIgnoreCase(possibleCardType)) {
+            return "MasterCard";
         }
-        if (Card.DINERS_CLUB.equalsIgnoreCase(possibleCardType)) {
-            return Card.DINERS_CLUB;
+        if ("Diners Club".equalsIgnoreCase(possibleCardType)) {
+            return "Diners Club";
         }
-        if (Card.DISCOVER.equalsIgnoreCase(possibleCardType)) {
-            return Card.DISCOVER;
+        if ("Discover".equalsIgnoreCase(possibleCardType)) {
+            return "Discover";
         }
-        if (Card.JCB.equalsIgnoreCase(possibleCardType)) {
-            return Card.JCB;
+        if ("JCB".equalsIgnoreCase(possibleCardType)) {
+            return "JCB";
         }
-        if (Card.VISA.equalsIgnoreCase(possibleCardType)) {
-            return Card.VISA;
+        if ("Visa".equalsIgnoreCase(possibleCardType)) {
+            return "Visa";
         }
-        return Card.UNKNOWN;
+        return "Unknown";
     }
 
-    @Nullable
-    public static String asFundingType(@Nullable String possibleFundingType) {
+    public static String asFundingType(String possibleFundingType) {
         if (isBlank(possibleFundingType)) {
             return null;
         }
-        if (Card.FUNDING_CREDIT.equalsIgnoreCase(possibleFundingType)) {
-            return Card.FUNDING_CREDIT;
+        if ("credit".equalsIgnoreCase(possibleFundingType)) {
+            return "credit";
         }
-        if (Card.FUNDING_DEBIT.equalsIgnoreCase(possibleFundingType)) {
-            return Card.FUNDING_DEBIT;
+        if ("debit".equalsIgnoreCase(possibleFundingType)) {
+            return "debit";
         }
-        if (Card.FUNDING_PREPAID.equalsIgnoreCase(possibleFundingType)) {
-            return Card.FUNDING_PREPAID;
+        if ("prepaid".equalsIgnoreCase(possibleFundingType)) {
+            return "prepaid";
         }
         return "unknown";
     }
 
-    @Nullable
-    public static String asTokenType(@Nullable String possibleTokenType) {
-        if (Token.TYPE_CARD.equals(possibleTokenType)) {
-            return Token.TYPE_CARD;
+    public static String asTokenType(String possibleTokenType) {
+        if ("card".equals(possibleTokenType)) {
+            return "card";
         }
         return null;
     }

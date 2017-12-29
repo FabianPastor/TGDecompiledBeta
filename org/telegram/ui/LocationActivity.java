@@ -50,7 +50,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -181,23 +180,23 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         this.swipeBackEnabled = false;
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.closeChats);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.locationPermissionGranted);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.closeChats);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.locationPermissionGranted);
         if (this.messageObject != null && this.messageObject.isLiveLocation()) {
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.didReceivedNewMessages);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagesDeleted);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.replaceMessagesObjects);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.didReceivedNewMessages);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagesDeleted);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.replaceMessagesObjects);
         }
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.locationPermissionGranted);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.closeChats);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didReceivedNewMessages);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagesDeleted);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.replaceMessagesObjects);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.locationPermissionGranted);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.didReceivedNewMessages);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagesDeleted);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.replaceMessagesObjects);
         try {
             if (this.mapView != null) {
                 this.mapView.onDestroy();
@@ -316,7 +315,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor(Theme.key_profile_actionBackground), Theme.getColor(Theme.key_profile_actionPressedBackground));
         if (VERSION.SDK_INT < 21) {
             Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
-            shadowDrawable.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
             Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
             drawable = combinedDrawable;
@@ -411,13 +410,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         } else if (object instanceof LiveLocation) {
                             LocationActivity.this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(((LiveLocation) object).marker.getPosition(), LocationActivity.this.googleMap.getMaxZoomLevel() - 4.0f));
                         }
-                    } else if (LocationController.getInstance().isSharingLocation(LocationActivity.this.dialogId)) {
-                        LocationController.getInstance().removeSharingLocation(LocationActivity.this.dialogId);
+                    } else if (LocationController.getInstance(LocationActivity.this.currentAccount).isSharingLocation(LocationActivity.this.dialogId)) {
+                        LocationController.getInstance(LocationActivity.this.currentAccount).removeSharingLocation(LocationActivity.this.dialogId);
                         LocationActivity.this.finishFragment();
                     } else if (LocationActivity.this.delegate != null && LocationActivity.this.getParentActivity() != null && LocationActivity.this.myLocation != null) {
                         User user = null;
                         if (((int) LocationActivity.this.dialogId) > 0) {
-                            user = MessagesController.getInstance().getUser(Integer.valueOf((int) LocationActivity.this.dialogId));
+                            user = MessagesController.getAccountInstance().getUser(Integer.valueOf((int) LocationActivity.this.dialogId));
                         }
                         LocationActivity.this.showDialog(AlertsCreator.createLocationUpdateDialog(LocationActivity.this.getParentActivity(), user, new IntCallback() {
                             public void run(int param) {
@@ -448,7 +447,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.mapView = new MapView(context) {
             public boolean onInterceptTouchEvent(MotionEvent ev) {
                 if (LocationActivity.this.messageObject == null) {
-                    AnimatorSet access$2000;
+                    AnimatorSet access$2200;
                     Animator[] animatorArr;
                     if (ev.getAction() == 0) {
                         if (LocationActivity.this.animatorSet != null) {
@@ -456,11 +455,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         }
                         LocationActivity.this.animatorSet = new AnimatorSet();
                         LocationActivity.this.animatorSet.setDuration(200);
-                        access$2000 = LocationActivity.this.animatorSet;
+                        access$2200 = LocationActivity.this.animatorSet;
                         animatorArr = new Animator[2];
                         animatorArr[0] = ObjectAnimator.ofFloat(LocationActivity.this.markerImageView, "translationY", new float[]{(float) (LocationActivity.this.markerTop + (-AndroidUtilities.dp(10.0f)))});
                         animatorArr[1] = ObjectAnimator.ofFloat(LocationActivity.this.markerXImageView, "alpha", new float[]{1.0f});
-                        access$2000.playTogether(animatorArr);
+                        access$2200.playTogether(animatorArr);
                         LocationActivity.this.animatorSet.start();
                     } else if (ev.getAction() == 1) {
                         if (LocationActivity.this.animatorSet != null) {
@@ -468,11 +467,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         }
                         LocationActivity.this.animatorSet = new AnimatorSet();
                         LocationActivity.this.animatorSet.setDuration(200);
-                        access$2000 = LocationActivity.this.animatorSet;
+                        access$2200 = LocationActivity.this.animatorSet;
                         animatorArr = new Animator[2];
                         animatorArr[0] = ObjectAnimator.ofFloat(LocationActivity.this.markerImageView, "translationY", new float[]{(float) LocationActivity.this.markerTop});
                         animatorArr[1] = ObjectAnimator.ofFloat(LocationActivity.this.markerXImageView, "alpha", new float[]{0.0f});
-                        access$2000.playTogether(animatorArr);
+                        access$2200.playTogether(animatorArr);
                         LocationActivity.this.animatorSet.start();
                     }
                     if (ev.getAction() == 2) {
@@ -575,7 +574,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
             if (VERSION.SDK_INT < 21) {
                 shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
-                shadowDrawable.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
+                shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
                 combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
                 combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
                 drawable = combinedDrawable;
@@ -601,7 +600,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             if (VERSION.SDK_INT >= 21) {
                 f = 56.0f;
             } else {
-                f = BitmapDescriptorFactory.HUE_YELLOW;
+                f = 60.0f;
             }
             if (LocaleController.isRTL) {
                 i = 3;
@@ -641,9 +640,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             this.adapter.setMessageObject(this.messageObject);
         }
         if (this.messageObject == null || this.messageObject.isLiveLocation()) {
-            this.mapViewClip.addView(this.locationButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : BitmapDescriptorFactory.HUE_YELLOW, (LocaleController.isRTL ? 3 : 5) | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 14.0f));
+            this.mapViewClip.addView(this.locationButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, (LocaleController.isRTL ? 3 : 5) | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 14.0f));
         } else {
-            this.mapViewClip.addView(this.locationButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : BitmapDescriptorFactory.HUE_YELLOW, (LocaleController.isRTL ? 3 : 5) | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 43.0f));
+            this.mapViewClip.addView(this.locationButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, (LocaleController.isRTL ? 3 : 5) | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 43.0f));
         }
         this.locationButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -743,15 +742,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             liveLocation = new LiveLocation();
             liveLocation.object = message;
             if (liveLocation.object.from_id != 0) {
-                liveLocation.user = MessagesController.getInstance().getUser(Integer.valueOf(liveLocation.object.from_id));
+                liveLocation.user = MessagesController.getAccountInstance().getUser(Integer.valueOf(liveLocation.object.from_id));
                 liveLocation.id = liveLocation.object.from_id;
             } else {
                 int did = (int) MessageObject.getDialogId(message);
                 if (did > 0) {
-                    liveLocation.user = MessagesController.getInstance().getUser(Integer.valueOf(did));
+                    liveLocation.user = MessagesController.getAccountInstance().getUser(Integer.valueOf(did));
                     liveLocation.id = did;
                 } else {
-                    liveLocation.chat = MessagesController.getInstance().getChat(Integer.valueOf(-did));
+                    liveLocation.chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-did));
                     liveLocation.id = -did;
                 }
             }
@@ -764,8 +763,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     liveLocation.marker = this.googleMap.addMarker(options);
                     this.markers.add(liveLocation);
                     this.markersMap.put(Integer.valueOf(liveLocation.id), liveLocation);
-                    SharingLocationInfo myInfo = LocationController.getInstance().getSharingLocationInfo(this.dialogId);
-                    if (liveLocation.id == UserConfig.getClientUserId() && myInfo != null && liveLocation.object.id == myInfo.mid && this.myLocation != null) {
+                    SharingLocationInfo myInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
+                    if (liveLocation.id == UserConfig.getInstance(this.currentAccount).getClientUserId() && myInfo != null && liveLocation.object.id == myInfo.mid && this.myLocation != null) {
                         liveLocation.marker.setPosition(new LatLng(this.myLocation.getLatitude(), this.myLocation.getLongitude()));
                     }
                 }
@@ -812,7 +811,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             this.googleMap.setOnMyLocationChangeListener(new OnMyLocationChangeListener() {
                 public void onMyLocationChange(Location location) {
                     LocationActivity.this.positionMarker(location);
-                    LocationController.getInstance().setGoogleMapLocation(location, LocationActivity.this.isFirstLocation);
+                    LocationController.getInstance(LocationActivity.this.currentAccount).setGoogleMapLocation(location, LocationActivity.this.isFirstLocation);
                     LocationActivity.this.isFirstLocation = false;
                 }
             });
@@ -822,7 +821,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             if (this.checkGpsEnabled && getParentActivity() != null) {
                 this.checkGpsEnabled = false;
                 try {
-                    if (!((LocationManager) ApplicationLoader.applicationContext.getSystemService(Param.LOCATION)).isProviderEnabled("gps")) {
+                    if (!((LocationManager) ApplicationLoader.applicationContext.getSystemService("location")).isProviderEnabled("gps")) {
                         Builder builder = new Builder(getParentActivity());
                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                         builder.setMessage(LocaleController.getString("GpsDisabledAlert", R.string.GpsDisabledAlert));
@@ -1004,7 +1003,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     private Location getLastLocation() {
-        LocationManager lm = (LocationManager) ApplicationLoader.applicationContext.getSystemService(Param.LOCATION);
+        LocationManager lm = (LocationManager) ApplicationLoader.applicationContext.getSystemService("location");
         List<String> providers = lm.getProviders(true);
         Location l = null;
         for (int i = providers.size() - 1; i >= 0; i--) {
@@ -1019,8 +1018,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     private void positionMarker(Location location) {
         if (location != null) {
             this.myLocation = new Location(location);
-            LiveLocation liveLocation = (LiveLocation) this.markersMap.get(Integer.valueOf(UserConfig.getClientUserId()));
-            SharingLocationInfo myInfo = LocationController.getInstance().getSharingLocationInfo(this.dialogId);
+            LiveLocation liveLocation = (LiveLocation) this.markersMap.get(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
+            SharingLocationInfo myInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
             if (!(liveLocation == null || myInfo == null || liveLocation.object.id != myInfo.mid)) {
                 liveLocation.marker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
             }
@@ -1061,7 +1060,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         if (this.firstFocus) {
             builder = new LatLngBounds.Builder();
         }
-        int date = ConnectionsManager.getInstance().getCurrentTime();
+        int date = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
         for (int a = 0; a < messages.size(); a++) {
             Message message = (Message) messages.get(a);
             if (message.date + message.media.period > date) {
@@ -1079,7 +1078,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     LatLngBounds bounds = builder.build();
                     if (messages.size() > 1) {
                         try {
-                            this.googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, AndroidUtilities.dp(BitmapDescriptorFactory.HUE_YELLOW)));
+                            this.googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, AndroidUtilities.dp(60.0f)));
                         } catch (Throwable e) {
                             FileLog.e(e);
                         }
@@ -1091,17 +1090,18 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     private boolean getRecentLocations() {
-        ArrayList<Message> messages = (ArrayList) LocationController.getInstance().locationsCache.get(Long.valueOf(this.messageObject.getDialogId()));
+        ArrayList<Message> messages = (ArrayList) LocationController.getInstance(this.currentAccount).locationsCache.get(Long.valueOf(this.messageObject.getDialogId()));
         if (messages == null || !messages.isEmpty()) {
             messages = null;
         } else {
             fetchRecentLocations(messages);
         }
+        final MessagesController messagesController = MessagesController.getAccountInstance();
         TL_messages_getRecentLocations req = new TL_messages_getRecentLocations();
         final long dialog_id = this.messageObject.getDialogId();
-        req.peer = MessagesController.getInputPeer((int) dialog_id);
+        req.peer = messagesController.getInputPeer((int) dialog_id);
         req.limit = 100;
-        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
             public void run(final TLObject response, TL_error error) {
                 if (response != null) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -1116,11 +1116,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                                     }
                                     a++;
                                 }
-                                MessagesStorage.getInstance().putUsersAndChats(res.users, res.chats, true, true);
-                                MessagesController.getInstance().putUsers(res.users, false);
-                                MessagesController.getInstance().putChats(res.chats, false);
-                                LocationController.getInstance().locationsCache.put(Long.valueOf(dialog_id), res.messages);
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.liveLocationsCacheChanged, Long.valueOf(dialog_id));
+                                MessagesStorage.getInstance(LocationActivity.this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
+                                messagesController.putUsers(res.users, false);
+                                messagesController.putChats(res.chats, false);
+                                LocationController.getInstance(LocationActivity.this.currentAccount).locationsCache.put(Long.valueOf(dialog_id), res.messages);
+                                NotificationCenter.getInstance(LocationActivity.this.currentAccount).postNotificationName(NotificationCenter.liveLocationsCacheChanged, Long.valueOf(dialog_id));
                                 LocationActivity.this.fetchRecentLocations(res.messages);
                             }
                         }
@@ -1134,7 +1134,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         return false;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.closeChats) {
             removeSelfFromStack();
         } else if (id == NotificationCenter.locationPermissionGranted) {
@@ -1170,7 +1170,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     if (messageObject.isLiveLocation()) {
                         LiveLocation liveLocation = (LiveLocation) this.markersMap.get(Integer.valueOf(getMessageId(messageObject.messageOwner)));
                         if (liveLocation != null) {
-                            SharingLocationInfo myInfo = LocationController.getInstance().getSharingLocationInfo(did);
+                            SharingLocationInfo myInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(did);
                             if (myInfo == null || myInfo.mid != messageObject.getId()) {
                                 liveLocation.marker.setPosition(new LatLng(messageObject.messageOwner.media.geo.lat, messageObject.messageOwner.media.geo._long));
                             }

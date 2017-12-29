@@ -10,7 +10,6 @@ import android.graphics.Paint.Style;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.view.View;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -116,7 +115,7 @@ public class GroupCreateCheckBox extends View {
             float radDiff;
             int cx = getMeasuredWidth() / 2;
             int cy = getMeasuredHeight() / 2;
-            eraser2.setStrokeWidth((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE));
+            eraser2.setStrokeWidth((float) AndroidUtilities.dp(30.0f));
             this.drawBitmap.eraseColor(0);
             float roundProgress = this.progress >= 0.5f ? 1.0f : this.progress / 0.5f;
             float checkProgress = this.progress < 0.5f ? 0.0f : (this.progress - 0.5f) / 0.5f;

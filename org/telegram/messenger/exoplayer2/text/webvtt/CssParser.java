@@ -67,7 +67,7 @@ final class CssParser {
         }
         if (BLOCK_START.equals(token)) {
             input.setPosition(position);
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
         String target = null;
         if ("(".equals(token)) {
@@ -96,10 +96,10 @@ final class CssParser {
     private static void parseStyleDeclaration(ParsableByteArray input, WebvttCssStyle style, StringBuilder stringBuilder) {
         skipWhitespaceAndComments(input);
         String property = parseIdentifier(input, stringBuilder);
-        if (!"".equals(property) && ":".equals(parseNextToken(input, stringBuilder))) {
+        if (!TtmlNode.ANONYMOUS_REGION_ID.equals(property) && ":".equals(parseNextToken(input, stringBuilder))) {
             skipWhitespaceAndComments(input);
             String value = parsePropertyValue(input, stringBuilder);
-            if (value != null && !"".equals(value)) {
+            if (value != null && !TtmlNode.ANONYMOUS_REGION_ID.equals(value)) {
                 int position = input.getPosition();
                 String token = parseNextToken(input, stringBuilder);
                 if (!";".equals(token)) {
@@ -143,7 +143,7 @@ final class CssParser {
             return null;
         }
         String identifier = parseIdentifier(input, stringBuilder);
-        return "".equals(identifier) ? "" + ((char) input.readUnsignedByte()) : identifier;
+        return TtmlNode.ANONYMOUS_REGION_ID.equals(identifier) ? TtmlNode.ANONYMOUS_REGION_ID + ((char) input.readUnsignedByte()) : identifier;
     }
 
     private static boolean maybeSkipWhitespace(ParsableByteArray input) {
@@ -234,7 +234,7 @@ final class CssParser {
     }
 
     private void applySelectorToStyle(WebvttCssStyle style, String selector) {
-        if (!"".equals(selector)) {
+        if (!TtmlNode.ANONYMOUS_REGION_ID.equals(selector)) {
             int voiceStartIndex = selector.indexOf(91);
             if (voiceStartIndex != -1) {
                 Matcher matcher = VOICE_NAME_PATTERN.matcher(selector.substring(voiceStartIndex));

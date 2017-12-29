@@ -8,7 +8,11 @@ public class GcmInstanceIDListenerService extends InstanceIDListenerService {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 ApplicationLoader.postInitApplication();
-                GcmInstanceIDListenerService.this.startService(new Intent(ApplicationLoader.applicationContext, GcmRegistrationIntentService.class));
+                try {
+                    GcmInstanceIDListenerService.this.startService(new Intent(ApplicationLoader.applicationContext, GcmRegistrationIntentService.class));
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
             }
         });
     }

@@ -7,68 +7,56 @@ import android.os.Parcelable.Creator;
 import android.util.AttributeSet;
 import com.google.android.gms.R;
 import com.google.android.gms.common.internal.ReflectedParcelable;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-public final class WalletFragmentOptions extends zza implements ReflectedParcelable {
+public final class WalletFragmentOptions extends zzbfm implements ReflectedParcelable {
     public static final Creator<WalletFragmentOptions> CREATOR = new zzf();
     private int mTheme;
-    private int zzaLU;
-    private int zzbPT;
-    private WalletFragmentStyle zzbQv;
+    private int zzgir;
+    private int zzlea;
+    private WalletFragmentStyle zzlfh;
 
     public final class Builder {
-        private /* synthetic */ WalletFragmentOptions zzbQw;
+        private /* synthetic */ WalletFragmentOptions zzlfi;
 
         private Builder(WalletFragmentOptions walletFragmentOptions) {
-            this.zzbQw = walletFragmentOptions;
+            this.zzlfi = walletFragmentOptions;
         }
 
         public final WalletFragmentOptions build() {
-            return this.zzbQw;
+            return this.zzlfi;
         }
 
         public final Builder setEnvironment(int i) {
-            this.zzbQw.zzbPT = i;
-            return this;
-        }
-
-        public final Builder setFragmentStyle(int i) {
-            this.zzbQw.zzbQv = new WalletFragmentStyle().setStyleResourceId(i);
+            this.zzlfi.zzlea = i;
             return this;
         }
 
         public final Builder setFragmentStyle(WalletFragmentStyle walletFragmentStyle) {
-            this.zzbQw.zzbQv = walletFragmentStyle;
+            this.zzlfi.zzlfh = walletFragmentStyle;
             return this;
         }
 
         public final Builder setMode(int i) {
-            this.zzbQw.zzaLU = i;
-            return this;
-        }
-
-        public final Builder setTheme(int i) {
-            this.zzbQw.mTheme = i;
+            this.zzlfi.zzgir = i;
             return this;
         }
     }
 
     private WalletFragmentOptions() {
-        this.zzbPT = 3;
-        this.zzbQv = new WalletFragmentStyle();
+        this.zzlea = 3;
+        this.zzlfh = new WalletFragmentStyle();
     }
 
     WalletFragmentOptions(int i, int i2, WalletFragmentStyle walletFragmentStyle, int i3) {
-        this.zzbPT = i;
+        this.zzlea = i;
         this.mTheme = i2;
-        this.zzbQv = walletFragmentStyle;
-        this.zzaLU = i3;
+        this.zzlfh = walletFragmentStyle;
+        this.zzgir = i3;
     }
 
     public static Builder newBuilder() {
-        WalletFragmentOptions walletFragmentOptions = new WalletFragmentOptions();
-        walletFragmentOptions.getClass();
         return new Builder();
     }
 
@@ -81,23 +69,23 @@ public final class WalletFragmentOptions extends zza implements ReflectedParcela
         obtainStyledAttributes.recycle();
         WalletFragmentOptions walletFragmentOptions = new WalletFragmentOptions();
         walletFragmentOptions.mTheme = i;
-        walletFragmentOptions.zzbPT = i2;
-        walletFragmentOptions.zzbQv = new WalletFragmentStyle().setStyleResourceId(resourceId);
-        walletFragmentOptions.zzbQv.zzby(context);
-        walletFragmentOptions.zzaLU = i3;
+        walletFragmentOptions.zzlea = i2;
+        walletFragmentOptions.zzlfh = new WalletFragmentStyle().setStyleResourceId(resourceId);
+        walletFragmentOptions.zzlfh.zzeo(context);
+        walletFragmentOptions.zzgir = i3;
         return walletFragmentOptions;
     }
 
     public final int getEnvironment() {
-        return this.zzbPT;
+        return this.zzlea;
     }
 
     public final WalletFragmentStyle getFragmentStyle() {
-        return this.zzbQv;
+        return this.zzlfh;
     }
 
     public final int getMode() {
-        return this.zzaLU;
+        return this.zzgir;
     }
 
     public final int getTheme() {
@@ -105,17 +93,17 @@ public final class WalletFragmentOptions extends zza implements ReflectedParcela
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zzc(parcel, 2, getEnvironment());
-        zzd.zzc(parcel, 3, getTheme());
-        zzd.zza(parcel, 4, getFragmentStyle(), i, false);
-        zzd.zzc(parcel, 5, getMode());
-        zzd.zzI(parcel, zze);
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zzc(parcel, 2, getEnvironment());
+        zzbfp.zzc(parcel, 3, getTheme());
+        zzbfp.zza(parcel, 4, getFragmentStyle(), i, false);
+        zzbfp.zzc(parcel, 5, getMode());
+        zzbfp.zzai(parcel, zze);
     }
 
-    public final void zzby(Context context) {
-        if (this.zzbQv != null) {
-            this.zzbQv.zzby(context);
+    public final void zzeo(Context context) {
+        if (this.zzlfh != null) {
+            this.zzlfh.zzeo(context);
         }
     }
 }

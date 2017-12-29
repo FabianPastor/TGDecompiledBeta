@@ -7,61 +7,29 @@ import org.telegram.messenger.support.widget.RecyclerView;
 
 class ItemTouchUIUtilImpl {
 
-    static class Gingerbread implements ItemTouchUIUtil {
-        Gingerbread() {
-        }
-
-        private void draw(Canvas c, RecyclerView parent, View view, float dX, float dY) {
-            c.save();
-            c.translate(dX, dY);
-            parent.drawChild(c, view, 0);
-            c.restore();
+    static class BaseImpl implements ItemTouchUIUtil {
+        BaseImpl() {
         }
 
         public void clearView(View view) {
-            view.setVisibility(0);
-        }
-
-        public void onSelected(View view) {
-            view.setVisibility(4);
-        }
-
-        public void onDraw(Canvas c, RecyclerView recyclerView, View view, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-            if (actionState != 2) {
-                draw(c, recyclerView, view, dX, dY);
-            }
-        }
-
-        public void onDrawOver(Canvas c, RecyclerView recyclerView, View view, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-            if (actionState == 2) {
-                draw(c, recyclerView, view, dX, dY);
-            }
-        }
-    }
-
-    static class Honeycomb implements ItemTouchUIUtil {
-        Honeycomb() {
-        }
-
-        public void clearView(View view) {
-            ViewCompat.setTranslationX(view, 0.0f);
-            ViewCompat.setTranslationY(view, 0.0f);
+            view.setTranslationX(0.0f);
+            view.setTranslationY(0.0f);
         }
 
         public void onSelected(View view) {
         }
 
         public void onDraw(Canvas c, RecyclerView recyclerView, View view, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-            ViewCompat.setTranslationX(view, dX);
-            ViewCompat.setTranslationY(view, dY);
+            view.setTranslationX(dX);
+            view.setTranslationY(dY);
         }
 
         public void onDrawOver(Canvas c, RecyclerView recyclerView, View view, float dX, float dY, int actionState, boolean isCurrentlyActive) {
         }
     }
 
-    static class Lollipop extends Honeycomb {
-        Lollipop() {
+    static class Api21Impl extends BaseImpl {
+        Api21Impl() {
         }
 
         public void onDraw(Canvas c, RecyclerView recyclerView, View view, float dX, float dY, int actionState, boolean isCurrentlyActive) {

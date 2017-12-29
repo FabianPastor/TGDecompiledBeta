@@ -128,6 +128,7 @@ public class RadioButton extends View {
         if (this.bitmap == null || this.bitmap.getWidth() != getMeasuredWidth()) {
             if (this.bitmap != null) {
                 this.bitmap.recycle();
+                this.bitmap = null;
             }
             try {
                 this.bitmap = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Config.ARGB_8888);

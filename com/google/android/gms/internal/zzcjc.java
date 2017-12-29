@@ -1,17 +1,18 @@
 package com.google.android.gms.internal;
 
-import android.support.annotation.WorkerThread;
+final class zzcjc implements Runnable {
+    private /* synthetic */ zzcgi zzjgn;
+    private /* synthetic */ zzcir zzjgo;
+    private /* synthetic */ zzcha zzjgs;
 
-final class zzcjc extends zzcer {
-    private /* synthetic */ zzcja zzbuu;
-
-    zzcjc(zzcja com_google_android_gms_internal_zzcja, zzcgl com_google_android_gms_internal_zzcgl) {
-        this.zzbuu = com_google_android_gms_internal_zzcja;
-        super(com_google_android_gms_internal_zzcgl);
+    zzcjc(zzcir com_google_android_gms_internal_zzcir, zzcha com_google_android_gms_internal_zzcha, zzcgi com_google_android_gms_internal_zzcgi) {
+        this.zzjgo = com_google_android_gms_internal_zzcir;
+        this.zzjgs = com_google_android_gms_internal_zzcha;
+        this.zzjgn = com_google_android_gms_internal_zzcgi;
     }
 
-    @WorkerThread
     public final void run() {
-        this.zzbuu.zzzp();
+        this.zzjgo.zziwf.zzbal();
+        this.zzjgo.zziwf.zzb(this.zzjgs, this.zzjgn);
     }
 }

@@ -1,28 +1,25 @@
 package com.google.android.gms.tasks;
 
-import android.support.annotation.NonNull;
-
 public class TaskCompletionSource<TResult> {
-    private final zzn<TResult> zzbMe = new zzn();
+    private final zzn<TResult> zzkul = new zzn();
 
-    @NonNull
     public Task<TResult> getTask() {
-        return this.zzbMe;
+        return this.zzkul;
     }
 
-    public void setException(@NonNull Exception exception) {
-        this.zzbMe.setException(exception);
+    public void setException(Exception exception) {
+        this.zzkul.setException(exception);
     }
 
     public void setResult(TResult tResult) {
-        this.zzbMe.setResult(tResult);
+        this.zzkul.setResult(tResult);
     }
 
-    public boolean trySetException(@NonNull Exception exception) {
-        return this.zzbMe.trySetException(exception);
+    public boolean trySetException(Exception exception) {
+        return this.zzkul.trySetException(exception);
     }
 
     public boolean trySetResult(TResult tResult) {
-        return this.zzbMe.trySetResult(tResult);
+        return this.zzkul.trySetResult(tResult);
     }
 }

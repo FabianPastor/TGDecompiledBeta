@@ -1,6 +1,5 @@
 package org.telegram.messenger.time;
 
-import com.googlecode.mp4parser.boxes.microsoft.XtraBox;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -22,7 +21,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FastDateParser implements DateParser, Serializable {
+public class FastDateParser implements Serializable, DateParser {
     private static final Strategy ABBREVIATED_YEAR_STRATEGY = new NumberStrategy(1) {
         void setCalendar(FastDateParser parser, Calendar cal, String value) {
             int iValue = Integer.parseInt(value);
@@ -475,7 +474,7 @@ public class FastDateParser implements DateParser, Serializable {
                 return DAY_OF_WEEK_IN_MONTH_STRATEGY;
             case 'G':
                 return getLocaleSpecificStrategy(0, definingCalendar);
-            case XtraBox.MP4_XTRA_BT_GUID /*72*/:
+            case 'H':
                 return MODULO_HOUR_OF_DAY_STRATEGY;
             case 'K':
                 return HOUR_STRATEGY;

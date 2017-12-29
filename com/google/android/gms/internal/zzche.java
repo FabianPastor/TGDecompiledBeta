@@ -1,18 +1,39 @@
 package com.google.android.gms.internal;
 
-final class zzche implements Runnable {
-    private /* synthetic */ zzceh zzbte;
-    private /* synthetic */ zzcgq zzbtf;
-    private /* synthetic */ zzcji zzbtk;
+import android.os.IInterface;
+import android.os.RemoteException;
+import java.util.List;
 
-    zzche(zzcgq com_google_android_gms_internal_zzcgq, zzcji com_google_android_gms_internal_zzcji, zzceh com_google_android_gms_internal_zzceh) {
-        this.zzbtf = com_google_android_gms_internal_zzcgq;
-        this.zzbtk = com_google_android_gms_internal_zzcji;
-        this.zzbte = com_google_android_gms_internal_zzceh;
-    }
+public interface zzche extends IInterface {
+    List<zzcln> zza(zzcgi com_google_android_gms_internal_zzcgi, boolean z) throws RemoteException;
 
-    public final void run() {
-        this.zzbtf.zzboe.zzze();
-        this.zzbtf.zzboe.zzb(this.zzbtk, this.zzbte);
-    }
+    List<zzcgl> zza(String str, String str2, zzcgi com_google_android_gms_internal_zzcgi) throws RemoteException;
+
+    List<zzcln> zza(String str, String str2, String str3, boolean z) throws RemoteException;
+
+    List<zzcln> zza(String str, String str2, boolean z, zzcgi com_google_android_gms_internal_zzcgi) throws RemoteException;
+
+    void zza(long j, String str, String str2, String str3) throws RemoteException;
+
+    void zza(zzcgi com_google_android_gms_internal_zzcgi) throws RemoteException;
+
+    void zza(zzcgl com_google_android_gms_internal_zzcgl, zzcgi com_google_android_gms_internal_zzcgi) throws RemoteException;
+
+    void zza(zzcha com_google_android_gms_internal_zzcha, zzcgi com_google_android_gms_internal_zzcgi) throws RemoteException;
+
+    void zza(zzcha com_google_android_gms_internal_zzcha, String str, String str2) throws RemoteException;
+
+    void zza(zzcln com_google_android_gms_internal_zzcln, zzcgi com_google_android_gms_internal_zzcgi) throws RemoteException;
+
+    byte[] zza(zzcha com_google_android_gms_internal_zzcha, String str) throws RemoteException;
+
+    void zzb(zzcgi com_google_android_gms_internal_zzcgi) throws RemoteException;
+
+    void zzb(zzcgl com_google_android_gms_internal_zzcgl) throws RemoteException;
+
+    String zzc(zzcgi com_google_android_gms_internal_zzcgi) throws RemoteException;
+
+    void zzd(zzcgi com_google_android_gms_internal_zzcgi) throws RemoteException;
+
+    List<zzcgl> zzj(String str, String str2, String str3) throws RemoteException;
 }

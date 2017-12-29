@@ -60,12 +60,12 @@ public class AdminedChannelCell extends FrameLayout {
         if (channel.photo != null) {
             photo = channel.photo.photo_small;
         }
-        String url = MessagesController.getInstance().linkPrefix + "/";
+        String url = MessagesController.getAccountInstance().linkPrefix + "/";
         this.currentChannel = channel;
         this.avatarDrawable.setInfo(channel);
         this.nameTextView.setText(channel.title);
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder(url + channel.username);
-        stringBuilder.setSpan(new URLSpanNoUnderline(""), url.length(), stringBuilder.length(), 33);
+        stringBuilder.setSpan(new URLSpanNoUnderline(TtmlNode.ANONYMOUS_REGION_ID), url.length(), stringBuilder.length(), 33);
         this.statusTextView.setText(stringBuilder);
         this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable);
         this.isLast = last;

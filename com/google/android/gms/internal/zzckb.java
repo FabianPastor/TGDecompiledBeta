@@ -1,180 +1,90 @@
 package com.google.android.gms.internal;
 
-import android.support.v4.view.MotionEventCompat;
-import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
-import java.io.IOException;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.Application.ActivityLifecycleCallbacks;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.TextUtils;
 
-public final class zzckb extends adj<zzckb> {
-    private static volatile zzckb[] zzbwg;
-    public String name;
-    public String zzaIF;
-    private Float zzbuA;
-    public Double zzbuB;
-    public Long zzbvA;
-    public Long zzbwh;
+@TargetApi(14)
+final class zzckb implements ActivityLifecycleCallbacks {
+    private /* synthetic */ zzcjn zzjhc;
 
-    public zzckb() {
-        this.zzbwh = null;
-        this.name = null;
-        this.zzaIF = null;
-        this.zzbvA = null;
-        this.zzbuA = null;
-        this.zzbuB = null;
-        this.zzcso = null;
-        this.zzcsx = -1;
+    private zzckb(zzcjn com_google_android_gms_internal_zzcjn) {
+        this.zzjhc = com_google_android_gms_internal_zzcjn;
     }
 
-    public static zzckb[] zzzE() {
-        if (zzbwg == null) {
-            synchronized (adn.zzcsw) {
-                if (zzbwg == null) {
-                    zzbwg = new zzckb[0];
+    public final void onActivityCreated(Activity activity, Bundle bundle) {
+        try {
+            this.zzjhc.zzawy().zzazj().log("onActivityCreated");
+            Intent intent = activity.getIntent();
+            if (intent != null) {
+                Uri data = intent.getData();
+                if (data != null && data.isHierarchical()) {
+                    if (bundle == null) {
+                        Bundle zzp = this.zzjhc.zzawu().zzp(data);
+                        this.zzjhc.zzawu();
+                        String str = zzclq.zzo(intent) ? "gs" : "auto";
+                        if (zzp != null) {
+                            this.zzjhc.zzc(str, "_cmp", zzp);
+                        }
+                    }
+                    CharSequence queryParameter = data.getQueryParameter("referrer");
+                    if (!TextUtils.isEmpty(queryParameter)) {
+                        Object obj = (queryParameter.contains("gclid") && (queryParameter.contains("utm_campaign") || queryParameter.contains("utm_source") || queryParameter.contains("utm_medium") || queryParameter.contains("utm_term") || queryParameter.contains("utm_content"))) ? 1 : null;
+                        if (obj == null) {
+                            this.zzjhc.zzawy().zzazi().log("Activity created with data 'referrer' param without gclid and at least one utm field");
+                            return;
+                        }
+                        this.zzjhc.zzawy().zzazi().zzj("Activity created with referrer", queryParameter);
+                        if (!TextUtils.isEmpty(queryParameter)) {
+                            this.zzjhc.zzb("auto", "_ldl", queryParameter);
+                        }
+                    } else {
+                        return;
+                    }
                 }
             }
+        } catch (Throwable th) {
+            this.zzjhc.zzawy().zzazd().zzj("Throwable caught in onActivityCreated", th);
         }
-        return zzbwg;
-    }
-
-    public final boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (!(obj instanceof zzckb)) {
-            return false;
-        }
-        zzckb com_google_android_gms_internal_zzckb = (zzckb) obj;
-        if (this.zzbwh == null) {
-            if (com_google_android_gms_internal_zzckb.zzbwh != null) {
-                return false;
+        zzckc zzawq = this.zzjhc.zzawq();
+        if (bundle != null) {
+            Bundle bundle2 = bundle.getBundle("com.google.firebase.analytics.screen_service");
+            if (bundle2 != null) {
+                zzckf zzq = zzawq.zzq(activity);
+                zzq.zziwm = bundle2.getLong(TtmlNode.ATTR_ID);
+                zzq.zziwk = bundle2.getString("name");
+                zzq.zziwl = bundle2.getString("referrer_name");
             }
-        } else if (!this.zzbwh.equals(com_google_android_gms_internal_zzckb.zzbwh)) {
-            return false;
-        }
-        if (this.name == null) {
-            if (com_google_android_gms_internal_zzckb.name != null) {
-                return false;
-            }
-        } else if (!this.name.equals(com_google_android_gms_internal_zzckb.name)) {
-            return false;
-        }
-        if (this.zzaIF == null) {
-            if (com_google_android_gms_internal_zzckb.zzaIF != null) {
-                return false;
-            }
-        } else if (!this.zzaIF.equals(com_google_android_gms_internal_zzckb.zzaIF)) {
-            return false;
-        }
-        if (this.zzbvA == null) {
-            if (com_google_android_gms_internal_zzckb.zzbvA != null) {
-                return false;
-            }
-        } else if (!this.zzbvA.equals(com_google_android_gms_internal_zzckb.zzbvA)) {
-            return false;
-        }
-        if (this.zzbuA == null) {
-            if (com_google_android_gms_internal_zzckb.zzbuA != null) {
-                return false;
-            }
-        } else if (!this.zzbuA.equals(com_google_android_gms_internal_zzckb.zzbuA)) {
-            return false;
-        }
-        if (this.zzbuB == null) {
-            if (com_google_android_gms_internal_zzckb.zzbuB != null) {
-                return false;
-            }
-        } else if (!this.zzbuB.equals(com_google_android_gms_internal_zzckb.zzbuB)) {
-            return false;
-        }
-        return (this.zzcso == null || this.zzcso.isEmpty()) ? com_google_android_gms_internal_zzckb.zzcso == null || com_google_android_gms_internal_zzckb.zzcso.isEmpty() : this.zzcso.equals(com_google_android_gms_internal_zzckb.zzcso);
-    }
-
-    public final int hashCode() {
-        int i = 0;
-        int hashCode = ((this.zzbuB == null ? 0 : this.zzbuB.hashCode()) + (((this.zzbuA == null ? 0 : this.zzbuA.hashCode()) + (((this.zzbvA == null ? 0 : this.zzbvA.hashCode()) + (((this.zzaIF == null ? 0 : this.zzaIF.hashCode()) + (((this.name == null ? 0 : this.name.hashCode()) + (((this.zzbwh == null ? 0 : this.zzbwh.hashCode()) + ((getClass().getName().hashCode() + 527) * 31)) * 31)) * 31)) * 31)) * 31)) * 31)) * 31;
-        if (!(this.zzcso == null || this.zzcso.isEmpty())) {
-            i = this.zzcso.hashCode();
-        }
-        return hashCode + i;
-    }
-
-    public final /* synthetic */ adp zza(adg com_google_android_gms_internal_adg) throws IOException {
-        while (true) {
-            int zzLA = com_google_android_gms_internal_adg.zzLA();
-            switch (zzLA) {
-                case 0:
-                    break;
-                case 8:
-                    this.zzbwh = Long.valueOf(com_google_android_gms_internal_adg.zzLG());
-                    continue;
-                case 18:
-                    this.name = com_google_android_gms_internal_adg.readString();
-                    continue;
-                case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
-                    this.zzaIF = com_google_android_gms_internal_adg.readString();
-                    continue;
-                case 32:
-                    this.zzbvA = Long.valueOf(com_google_android_gms_internal_adg.zzLG());
-                    continue;
-                case MotionEventCompat.AXIS_GENERIC_14 /*45*/:
-                    this.zzbuA = Float.valueOf(Float.intBitsToFloat(com_google_android_gms_internal_adg.zzLH()));
-                    continue;
-                case 49:
-                    this.zzbuB = Double.valueOf(Double.longBitsToDouble(com_google_android_gms_internal_adg.zzLI()));
-                    continue;
-                default:
-                    if (!super.zza(com_google_android_gms_internal_adg, zzLA)) {
-                        break;
-                    }
-                    continue;
-            }
-            return this;
         }
     }
 
-    public final void zza(adh com_google_android_gms_internal_adh) throws IOException {
-        if (this.zzbwh != null) {
-            com_google_android_gms_internal_adh.zzb(1, this.zzbwh.longValue());
-        }
-        if (this.name != null) {
-            com_google_android_gms_internal_adh.zzl(2, this.name);
-        }
-        if (this.zzaIF != null) {
-            com_google_android_gms_internal_adh.zzl(3, this.zzaIF);
-        }
-        if (this.zzbvA != null) {
-            com_google_android_gms_internal_adh.zzb(4, this.zzbvA.longValue());
-        }
-        if (this.zzbuA != null) {
-            com_google_android_gms_internal_adh.zzc(5, this.zzbuA.floatValue());
-        }
-        if (this.zzbuB != null) {
-            com_google_android_gms_internal_adh.zza(6, this.zzbuB.doubleValue());
-        }
-        super.zza(com_google_android_gms_internal_adh);
+    public final void onActivityDestroyed(Activity activity) {
+        this.zzjhc.zzawq().onActivityDestroyed(activity);
     }
 
-    protected final int zzn() {
-        int zzn = super.zzn();
-        if (this.zzbwh != null) {
-            zzn += adh.zze(1, this.zzbwh.longValue());
-        }
-        if (this.name != null) {
-            zzn += adh.zzm(2, this.name);
-        }
-        if (this.zzaIF != null) {
-            zzn += adh.zzm(3, this.zzaIF);
-        }
-        if (this.zzbvA != null) {
-            zzn += adh.zze(4, this.zzbvA.longValue());
-        }
-        if (this.zzbuA != null) {
-            this.zzbuA.floatValue();
-            zzn += adh.zzct(5) + 4;
-        }
-        if (this.zzbuB == null) {
-            return zzn;
-        }
-        this.zzbuB.doubleValue();
-        return zzn + (adh.zzct(6) + 8);
+    public final void onActivityPaused(Activity activity) {
+        this.zzjhc.zzawq().onActivityPaused(activity);
+        zzcjk zzaww = this.zzjhc.zzaww();
+        zzaww.zzawx().zzg(new zzclj(zzaww, zzaww.zzws().elapsedRealtime()));
+    }
+
+    public final void onActivityResumed(Activity activity) {
+        this.zzjhc.zzawq().onActivityResumed(activity);
+        zzcjk zzaww = this.zzjhc.zzaww();
+        zzaww.zzawx().zzg(new zzcli(zzaww, zzaww.zzws().elapsedRealtime()));
+    }
+
+    public final void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+        this.zzjhc.zzawq().onActivitySaveInstanceState(activity, bundle);
+    }
+
+    public final void onActivityStarted(Activity activity) {
+    }
+
+    public final void onActivityStopped(Activity activity) {
     }
 }

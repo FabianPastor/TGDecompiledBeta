@@ -1,61 +1,61 @@
 package com.google.android.gms.common.util;
 
-import android.support.v4.util.ArrayMap;
-import java.util.AbstractSet;
-import java.util.Collection;
-import java.util.Iterator;
+import com.google.android.gms.common.internal.zzbg;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
-@Deprecated
-public final class zza<E> extends AbstractSet<E> {
-    private final ArrayMap<E, E> zzaJC;
-
-    public zza() {
-        this.zzaJC = new ArrayMap();
-    }
-
-    public zza(int i) {
-        this.zzaJC = new ArrayMap(i);
-    }
-
-    public final boolean add(E e) {
-        if (this.zzaJC.containsKey(e)) {
-            return false;
+public final class zza {
+    public static <T> T[] zza(T[] tArr, T... tArr2) {
+        if (tArr == null) {
+            return null;
         }
-        this.zzaJC.put(e, e);
-        return true;
-    }
-
-    public final boolean addAll(Collection<? extends E> collection) {
-        if (!(collection instanceof zza)) {
-            return super.addAll(collection);
+        if (tArr2.length == 0) {
+            return Arrays.copyOf(tArr, tArr.length);
         }
-        zza com_google_android_gms_common_util_zza = (zza) collection;
-        int size = size();
-        this.zzaJC.putAll(com_google_android_gms_common_util_zza.zzaJC);
-        return size() > size;
-    }
-
-    public final void clear() {
-        this.zzaJC.clear();
-    }
-
-    public final boolean contains(Object obj) {
-        return this.zzaJC.containsKey(obj);
-    }
-
-    public final Iterator<E> iterator() {
-        return this.zzaJC.keySet().iterator();
-    }
-
-    public final boolean remove(Object obj) {
-        if (!this.zzaJC.containsKey(obj)) {
-            return false;
+        int i;
+        Object[] objArr = (Object[]) Array.newInstance(tArr2.getClass().getComponentType(), tArr.length);
+        int length;
+        int i2;
+        if (tArr2.length == 1) {
+            length = tArr.length;
+            int i3 = 0;
+            i = 0;
+            while (i3 < length) {
+                Object obj = tArr[i3];
+                if (zzbg.equal(tArr2[0], obj)) {
+                    i2 = i;
+                } else {
+                    i2 = i + 1;
+                    objArr[i] = obj;
+                }
+                i3++;
+                i = i2;
+            }
+        } else {
+            int length2 = tArr.length;
+            length = 0;
+            i = 0;
+            while (length < length2) {
+                Object obj2 = tArr[length];
+                int length3 = tArr2.length;
+                i2 = 0;
+                while (i2 < length3) {
+                    if (zzbg.equal(tArr2[i2], obj2)) {
+                        break;
+                    }
+                    i2++;
+                }
+                i2 = -1;
+                if ((i2 >= 0 ? 1 : 0) == 0) {
+                    i2 = i + 1;
+                    objArr[i] = obj2;
+                } else {
+                    i2 = i;
+                }
+                length++;
+                i = i2;
+            }
         }
-        this.zzaJC.remove(obj);
-        return true;
-    }
-
-    public final int size() {
-        return this.zzaJC.size();
+        return objArr == null ? null : i != objArr.length ? Arrays.copyOf(objArr, i) : objArr;
     }
 }

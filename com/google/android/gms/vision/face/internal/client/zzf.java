@@ -6,33 +6,24 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.RemoteException;
 import com.google.android.gms.dynamic.IObjectWrapper;
-import com.google.android.gms.internal.fc;
-import com.google.android.gms.internal.zzed;
-import com.google.android.gms.internal.zzef;
+import com.google.android.gms.internal.zzdjw;
+import com.google.android.gms.internal.zzeu;
+import com.google.android.gms.internal.zzew;
 
-public final class zzf extends zzed implements zze {
+public final class zzf extends zzeu implements zze {
     zzf(IBinder iBinder) {
         super(iBinder, "com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
     }
 
-    public final void zzDP() throws RemoteException {
-        zzb(3, zzZ());
+    public final void zzbjt() throws RemoteException {
+        zzb(3, zzbe());
     }
 
-    public final boolean zzbN(int i) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzZ.writeInt(i);
-        zzZ = zza(2, zzZ);
-        boolean zza = zzef.zza(zzZ);
-        zzZ.recycle();
-        return zza;
-    }
-
-    public final FaceParcel[] zzc(IObjectWrapper iObjectWrapper, fc fcVar) throws RemoteException {
-        Parcel zzZ = zzZ();
-        zzef.zza(zzZ, (IInterface) iObjectWrapper);
-        zzef.zza(zzZ, (Parcelable) fcVar);
-        Parcel zza = zza(1, zzZ);
+    public final FaceParcel[] zzc(IObjectWrapper iObjectWrapper, zzdjw com_google_android_gms_internal_zzdjw) throws RemoteException {
+        Parcel zzbe = zzbe();
+        zzew.zza(zzbe, (IInterface) iObjectWrapper);
+        zzew.zza(zzbe, (Parcelable) com_google_android_gms_internal_zzdjw);
+        Parcel zza = zza(1, zzbe);
         FaceParcel[] faceParcelArr = (FaceParcel[]) zza.createTypedArray(FaceParcel.CREATOR);
         zza.recycle();
         return faceParcelArr;

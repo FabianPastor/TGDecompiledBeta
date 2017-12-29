@@ -1,18 +1,13 @@
 package com.google.firebase.iid;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
+final /* synthetic */ class zzm implements Runnable {
+    private final zzk zznzg;
 
-final class zzm extends Handler {
-    private /* synthetic */ zzl zzckJ;
-
-    zzm(zzl com_google_firebase_iid_zzl, Looper looper) {
-        this.zzckJ = com_google_firebase_iid_zzl;
-        super(looper);
+    zzm(zzk com_google_firebase_iid_zzk) {
+        this.zznzg = com_google_firebase_iid_zzk;
     }
 
-    public final void handleMessage(Message message) {
-        this.zzckJ.zzc(message);
+    public final void run() {
+        this.zznzg.zzcjd();
     }
 }

@@ -1,7 +1,6 @@
 package org.telegram.messenger.exoplayer2.source.dash;
 
 import android.os.SystemClock;
-import com.google.android.gms.wallet.WalletConstants;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -282,7 +281,7 @@ public class DefaultDashChunkSource implements DashChunkSource {
         if (!cancelable) {
             return false;
         }
-        if (!this.manifest.dynamic && (chunk instanceof MediaChunk) && (e instanceof InvalidResponseCodeException) && ((InvalidResponseCodeException) e).responseCode == WalletConstants.ERROR_CODE_INVALID_PARAMETERS) {
+        if (!this.manifest.dynamic && (chunk instanceof MediaChunk) && (e instanceof InvalidResponseCodeException) && ((InvalidResponseCodeException) e).responseCode == 404) {
             RepresentationHolder representationHolder = this.representationHolders[this.trackSelection.indexOf(chunk.trackFormat)];
             int segmentCount = representationHolder.getSegmentCount();
             if (!(segmentCount == -1 || segmentCount == 0 || ((MediaChunk) chunk).getNextChunkIndex() <= (representationHolder.getFirstSegmentNum() + segmentCount) - 1)) {

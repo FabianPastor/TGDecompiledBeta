@@ -1,17 +1,16 @@
 package com.google.android.gms.common.util;
 
-import android.util.Base64;
+import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
+import com.google.android.gms.internal.zzbhf;
 
 public final class zzc {
-    public static String encode(byte[] bArr) {
-        return bArr == null ? null : Base64.encodeToString(bArr, 0);
-    }
-
-    public static String zzg(byte[] bArr) {
-        return bArr == null ? null : Base64.encodeToString(bArr, 10);
-    }
-
-    public static String zzh(byte[] bArr) {
-        return bArr == null ? null : Base64.encodeToString(bArr, 11);
+    public static boolean zzz(Context context, String str) {
+        "com.google.android.gms".equals(str);
+        try {
+            return (zzbhf.zzdb(context).getApplicationInfo(str, 0).flags & 2097152) != 0;
+        } catch (NameNotFoundException e) {
+            return false;
+        }
     }
 }

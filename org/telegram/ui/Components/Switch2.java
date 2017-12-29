@@ -111,10 +111,10 @@ public class Switch2 extends View {
             int y = (getMeasuredHeight() - AndroidUtilities.dp(14.0f)) / 2;
             int tx = (((int) (((float) (width - AndroidUtilities.dp(14.0f))) * this.progress)) + x) + AndroidUtilities.dp(7.0f);
             int ty = getMeasuredHeight() / 2;
-            this.paint.setColor(((-16777216 | ((((int) (255.0f + (-95.0f * this.progress))) & 255) << 16)) | ((((int) (176.0f + (38.0f * this.progress))) & 255) << 8)) | (((int) (173.0f + (77.0f * this.progress))) & 255));
+            this.paint.setColor(((Theme.ACTION_BAR_VIDEO_EDIT_COLOR | ((((int) (255.0f + (-95.0f * this.progress))) & 255) << 16)) | ((((int) (176.0f + (38.0f * this.progress))) & 255) << 8)) | (((int) (173.0f + (77.0f * this.progress))) & 255));
             this.rectF.set((float) x, (float) y, (float) (x + width), (float) (AndroidUtilities.dp(14.0f) + y));
             canvas.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(7.0f), (float) AndroidUtilities.dp(7.0f), this.paint);
-            this.paint.setColor(((-16777216 | ((((int) (219.0f + (-151.0f * this.progress))) & 255) << 16)) | ((((int) (88.0f + (80.0f * this.progress))) & 255) << 8)) | (((int) (92.0f + (142.0f * this.progress))) & 255));
+            this.paint.setColor(((Theme.ACTION_BAR_VIDEO_EDIT_COLOR | ((((int) (219.0f + (-151.0f * this.progress))) & 255) << 16)) | ((((int) (88.0f + (80.0f * this.progress))) & 255) << 8)) | (((int) (92.0f + (142.0f * this.progress))) & 255));
             canvas.drawBitmap(drawBitmap, (float) (tx - AndroidUtilities.dp(12.0f)), (float) (ty - AndroidUtilities.dp(11.0f)), null);
             canvas.drawCircle((float) tx, (float) ty, (float) AndroidUtilities.dp(10.0f), this.paint);
             this.paint2.setColor(-1);

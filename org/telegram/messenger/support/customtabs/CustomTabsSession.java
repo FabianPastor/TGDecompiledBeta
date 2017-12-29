@@ -7,8 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.widget.RemoteViews;
 import java.util.List;
 
@@ -37,7 +35,7 @@ public final class CustomTabsSession {
         }
     }
 
-    public boolean setActionButton(@NonNull Bitmap icon, @NonNull String description) {
+    public boolean setActionButton(Bitmap icon, String description) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(CustomTabsIntent.KEY_ICON, icon);
         bundle.putString(CustomTabsIntent.KEY_DESCRIPTION, description);
@@ -50,7 +48,7 @@ public final class CustomTabsSession {
         }
     }
 
-    public boolean setSecondaryToolbarViews(@Nullable RemoteViews remoteViews, @Nullable int[] clickableIDs, @Nullable PendingIntent pendingIntent) {
+    public boolean setSecondaryToolbarViews(RemoteViews remoteViews, int[] clickableIDs, PendingIntent pendingIntent) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(CustomTabsIntent.EXTRA_REMOTEVIEWS, remoteViews);
         bundle.putIntArray(CustomTabsIntent.EXTRA_REMOTEVIEWS_VIEW_IDS, clickableIDs);
@@ -63,7 +61,7 @@ public final class CustomTabsSession {
     }
 
     @Deprecated
-    public boolean setToolbarItem(int id, @NonNull Bitmap icon, @NonNull String description) {
+    public boolean setToolbarItem(int id, Bitmap icon, String description) {
         Bundle bundle = new Bundle();
         bundle.putInt(CustomTabsIntent.KEY_ID, id);
         bundle.putParcelable(CustomTabsIntent.KEY_ICON, icon);

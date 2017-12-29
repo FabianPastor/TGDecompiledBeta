@@ -22,12 +22,12 @@ import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.Crop.CropGestureDetector.CropGestureListener;
 
 public class CropView extends FrameLayout implements AreaViewListener, CropGestureListener {
@@ -114,11 +114,11 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         }
 
         private float getOrientedWidth() {
-            return (this.orientation + this.baseRotation) % BitmapDescriptorFactory.HUE_CYAN != 0.0f ? this.height : this.width;
+            return (this.orientation + this.baseRotation) % 180.0f != 0.0f ? this.height : this.width;
         }
 
         private float getOrientedHeight() {
-            return (this.orientation + this.baseRotation) % BitmapDescriptorFactory.HUE_CYAN != 0.0f ? this.width : this.height;
+            return (this.orientation + this.baseRotation) % 180.0f != 0.0f ? this.width : this.height;
         }
 
         private void translate(float x, float y) {
@@ -171,8 +171,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
             this.y = 0.0f;
             this.rotation = 0.0f;
             this.orientation = orient;
-            float w = (this.orientation + this.baseRotation) % BitmapDescriptorFactory.HUE_CYAN != 0.0f ? this.height : this.width;
-            float h = (this.orientation + this.baseRotation) % BitmapDescriptorFactory.HUE_CYAN != 0.0f ? this.width : this.height;
+            float w = (this.orientation + this.baseRotation) % 180.0f != 0.0f ? this.height : this.width;
+            float h = (this.orientation + this.baseRotation) % 180.0f != 0.0f ? this.width : this.height;
             if (freeform) {
                 this.minimumScale = areaView.getCropWidth() / w;
             } else {
@@ -202,7 +202,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     public CropView(Context context) {
         super(context);
         this.backView = new View(context);
-        this.backView.setBackgroundColor(-16777216);
+        this.backView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         this.backView.setVisibility(4);
         addView(this.backView);
         this.imageView = new ImageView(context);
@@ -272,7 +272,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
 
     public void reset() {
         this.areaView.resetAnimator();
-        this.areaView.setBitmap(this.bitmap, this.state.getBaseRotation() % BitmapDescriptorFactory.HUE_CYAN != 0.0f, this.freeform);
+        this.areaView.setBitmap(this.bitmap, this.state.getBaseRotation() % 180.0f != 0.0f, this.freeform);
         this.areaView.setLockedAspectRatio(this.freeform ? 0.0f : 1.0f);
         this.state.reset(this.areaView, 0.0f, this.freeform);
         this.areaView.getCropRect(this.initialAreaRect);
@@ -297,8 +297,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         final float[] currentScale = new float[]{1.0f};
         float scale = Math.max(targetRect.width() / this.areaView.getCropWidth(), targetRect.height() / this.areaView.getCropHeight());
         boolean ensureFit = false;
-        if (this.state.getScale() * scale > 30.0f) {
-            scale = 30.0f / this.state.getScale();
+        if (this.state.getScale() * scale > MAX_SCALE) {
+            scale = MAX_SCALE / this.state.getScale();
             ensureFit = true;
         }
         final float x = ((targetRect.centerX() - ((float) (this.imageView.getWidth() / 2))) / this.areaView.getCropWidth()) * this.state.getOrientedWidth();
@@ -479,7 +479,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         float orientation = ((this.state.getOrientation() - this.state.getBaseRotation()) - 90.0f) % 360.0f;
         boolean fform = this.freeform;
         if (!this.freeform || this.areaView.getLockAspectRatio() <= 0.0f) {
-            this.areaView.setBitmap(this.bitmap, (this.state.getBaseRotation() + orientation) % BitmapDescriptorFactory.HUE_CYAN != 0.0f, this.freeform);
+            this.areaView.setBitmap(this.bitmap, (this.state.getBaseRotation() + orientation) % 180.0f != 0.0f, this.freeform);
         } else {
             this.areaView.setLockedAspectRatio(1.0f / this.areaView.getLockAspectRatio());
             this.areaView.setActualRect(this.areaView.getLockAspectRatio());
@@ -572,8 +572,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
 
     public void onScale(float scale, float x, float y) {
         if (!this.animating) {
-            if (this.state.getScale() * scale > 30.0f) {
-                scale = 30.0f / this.state.getScale();
+            if (this.state.getScale() * scale > MAX_SCALE) {
+                scale = MAX_SCALE / this.state.getScale();
             }
             this.state.scale(scale, ((x - ((float) (this.imageView.getWidth() / 2))) / this.areaView.getCropWidth()) * this.state.getOrientedWidth(), ((y - (((((float) this.imageView.getHeight()) - this.bottomPadding) - ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))) / 2.0f)) / this.areaView.getCropHeight()) * this.state.getOrientedHeight());
             updateMatrix();
@@ -663,7 +663,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
                     CropView.this.hasAspectRatioDialog = false;
                     switch (which) {
                         case 0:
-                            CropView.this.setLockedAspectRatio((CropView.this.state.getBaseRotation() % BitmapDescriptorFactory.HUE_CYAN != 0.0f ? CropView.this.state.getHeight() : CropView.this.state.getWidth()) / (CropView.this.state.getBaseRotation() % BitmapDescriptorFactory.HUE_CYAN != 0.0f ? CropView.this.state.getWidth() : CropView.this.state.getHeight()));
+                            CropView.this.setLockedAspectRatio((CropView.this.state.getBaseRotation() % 180.0f != 0.0f ? CropView.this.state.getHeight() : CropView.this.state.getWidth()) / (CropView.this.state.getBaseRotation() % 180.0f != 0.0f ? CropView.this.state.getWidth() : CropView.this.state.getHeight()));
                             return;
                         case 1:
                             CropView.this.setLockedAspectRatio(1.0f);

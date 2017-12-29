@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">Instaliraj</string>
     <string name="common_google_play_services_install_text">%1$s neće funkcionirati bez usluga Google Playa koje nisu instalirane na vašem uređaju.</string>
     <string name="common_google_play_services_install_title">Preuzimanje usluga Google Playa</string>
+    <string name="common_google_play_services_notification_channel_name">Dostupnost usluga za Google Play</string>
     <string name="common_google_play_services_notification_ticker">Pogreška Usluga za Google Play</string>
     <string name="common_google_play_services_unknown_issue">%1$s ima poteškoća s uslugama Google Playa. Pokušajte ponovo.</string>
     <string name="common_google_play_services_unsupported_text">%1$s neće funkcionirati bez usluga Google Playa koje vaš uređaj ne podržava.</string>
@@ -17,5 +18,7 @@
     <string name="common_open_on_phone">Otvori na telefonu</string>
     <string name="common_signin_button_text">Prijava</string>
     <string name="common_signin_button_text_long">Prijava putem Googlea</string>
+    <string name="gcm_fallback_notification_channel_label">Razno</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Kupi putem Googlea</string>
 </resources>

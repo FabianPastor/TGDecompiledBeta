@@ -3,11 +3,11 @@ package com.google.android.gms.gcm;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import com.google.firebase.iid.zzb;
+import com.google.android.gms.iid.zzb;
 import java.util.Iterator;
 
 public class GcmListenerService extends zzb {
-    static void zzt(Bundle bundle) {
+    static void zzq(Bundle bundle) {
         Iterator it = bundle.keySet().iterator();
         while (it.hasNext()) {
             String str = (String) it.next();
@@ -22,30 +22,30 @@ public class GcmListenerService extends zzb {
         if ("com.google.android.c2dm.intent.RECEIVE".equals(intent.getAction())) {
             stringExtra = intent.getStringExtra("message_type");
             if (stringExtra == null) {
-                stringExtra = GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE;
+                stringExtra = "gcm";
             }
             Object obj = -1;
             switch (stringExtra.hashCode()) {
                 case -2062414158:
-                    if (stringExtra.equals(GoogleCloudMessaging.MESSAGE_TYPE_DELETED)) {
+                    if (stringExtra.equals("deleted_messages")) {
                         int i = 1;
                         break;
                     }
                     break;
                 case 102161:
-                    if (stringExtra.equals(GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE)) {
+                    if (stringExtra.equals("gcm")) {
                         obj = null;
                         break;
                     }
                     break;
                 case 814694033:
-                    if (stringExtra.equals(GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR)) {
+                    if (stringExtra.equals("send_error")) {
                         obj = 3;
                         break;
                     }
                     break;
                 case 814800675:
-                    if (stringExtra.equals(GoogleCloudMessaging.MESSAGE_TYPE_SEND_EVENT)) {
+                    if (stringExtra.equals("send_event")) {
                         obj = 2;
                         break;
                     }
@@ -58,16 +58,16 @@ public class GcmListenerService extends zzb {
                     extras.remove("android.support.content.wakelockid");
                     Object obj2 = ("1".equals(zza.zze(extras, "gcm.n.e")) || zza.zze(extras, "gcm.n.icon") != null) ? 1 : null;
                     if (obj2 != null) {
-                        if (zza.zzaY(this)) {
-                            zza.zzu(extras);
+                        if (zza.zzdk(this)) {
+                            zza.zzr(extras);
                         } else {
-                            zza.zzaX(this).zzv(extras);
+                            zza.zzdj(this).zzs(extras);
                             return;
                         }
                     }
                     stringExtra = extras.getString("from");
                     extras.remove("from");
-                    zzt(extras);
+                    zzq(extras);
                     onMessageReceived(stringExtra, extras);
                     return;
                 case 1:

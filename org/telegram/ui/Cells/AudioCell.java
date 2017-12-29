@@ -18,6 +18,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.AudioEntry;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBox;
@@ -28,6 +29,7 @@ public class AudioCell extends FrameLayout {
     private AudioEntry audioEntry;
     private TextView authorTextView;
     private CheckBox checkBox;
+    private int currentAccount = UserConfig.selectedAccount;
     private AudioCellDelegate delegate;
     private TextView genreTextView;
     private boolean needDivider;
@@ -64,10 +66,10 @@ public class AudioCell extends FrameLayout {
                 if (AudioCell.this.audioEntry == null) {
                     return;
                 }
-                if (!MediaController.getInstance().isPlayingMessage(AudioCell.this.audioEntry.messageObject) || MediaController.getInstance().isMessagePaused()) {
+                if (!MediaController.getInstance(AudioCell.this.currentAccount).isPlayingMessage(AudioCell.this.audioEntry.messageObject) || MediaController.getInstance(AudioCell.this.currentAccount).isMessagePaused()) {
                     ArrayList<MessageObject> arrayList = new ArrayList();
                     arrayList.add(AudioCell.this.audioEntry.messageObject);
-                    if (MediaController.getInstance().setPlaylist(arrayList, AudioCell.this.audioEntry.messageObject)) {
+                    if (MediaController.getInstance(AudioCell.this.currentAccount).setPlaylist(arrayList, AudioCell.this.audioEntry.messageObject)) {
                         AudioCell.this.setPlayDrawable(true);
                         if (AudioCell.this.delegate != null) {
                             AudioCell.this.delegate.startedPlayingAudio(AudioCell.this.audioEntry.messageObject);
@@ -77,7 +79,7 @@ public class AudioCell extends FrameLayout {
                     }
                     return;
                 }
-                MediaController.getInstance().pauseMessage(AudioCell.this.audioEntry.messageObject);
+                MediaController.getInstance(AudioCell.this.currentAccount).pauseMessage(AudioCell.this.audioEntry.messageObject);
                 AudioCell.this.setPlayDrawable(false);
             }
         });
@@ -214,7 +216,7 @@ public class AudioCell extends FrameLayout {
         this.genreTextView.setText(this.audioEntry.genre);
         this.authorTextView.setText(this.audioEntry.author);
         this.timeTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(this.audioEntry.duration / 60), Integer.valueOf(this.audioEntry.duration % 60)}));
-        boolean z2 = MediaController.getInstance().isPlayingMessage(this.audioEntry.messageObject) && !MediaController.getInstance().isMessagePaused();
+        boolean z2 = MediaController.getInstance(this.currentAccount).isPlayingMessage(this.audioEntry.messageObject) && !MediaController.getInstance(this.currentAccount).isMessagePaused();
         setPlayDrawable(z2);
         this.needDivider = divider;
         if (divider) {

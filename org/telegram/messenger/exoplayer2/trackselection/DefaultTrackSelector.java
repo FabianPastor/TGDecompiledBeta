@@ -392,7 +392,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
                         int trackScore = isWithinConstraints ? 2 : 1;
                         boolean isWithinCapabilities = isSupported(trackFormatSupport[trackIndex], false);
                         if (isWithinCapabilities) {
-                            trackScore += 1000;
+                            trackScore += WITHIN_RENDERER_CAPABILITIES_BONUS;
                         }
                         boolean selectTrack = trackScore > selectedTrackScore;
                         if (trackScore == selectedTrackScore) {
@@ -473,7 +473,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
             trackScore = 1;
         }
         if (isSupported(formatSupport, false)) {
-            return trackScore + 1000;
+            return trackScore + WITHIN_RENDERER_CAPABILITIES_BONUS;
         }
         return trackScore;
     }
@@ -560,7 +560,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
                         }
                     }
                     if (isSupported(trackFormatSupport[trackIndex], false)) {
-                        trackScore += 1000;
+                        trackScore += WITHIN_RENDERER_CAPABILITIES_BONUS;
                     }
                     if (trackScore > selectedTrackScore) {
                         selectedGroup = trackGroup;
@@ -584,7 +584,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
                 if (isSupported(trackFormatSupport[trackIndex], params.exceedRendererCapabilitiesIfNecessary)) {
                     int trackScore = (trackGroup.getFormat(trackIndex).selectionFlags & 1) != 0 ? 2 : 1;
                     if (isSupported(trackFormatSupport[trackIndex], false)) {
-                        trackScore += 1000;
+                        trackScore += WITHIN_RENDERER_CAPABILITIES_BONUS;
                     }
                     if (trackScore > selectedTrackScore) {
                         selectedGroup = trackGroup;

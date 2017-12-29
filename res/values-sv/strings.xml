@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">Installera</string>
     <string name="common_google_play_services_install_text">%1$s kan inte köras utan Google Play-tjänsterna, som saknas på enheten.</string>
     <string name="common_google_play_services_install_title">Hämta Google Play-tjänster</string>
+    <string name="common_google_play_services_notification_channel_name">Tillgänglighet för Google Plays tjänster</string>
     <string name="common_google_play_services_notification_ticker">Fel på Google Play-tjänster</string>
     <string name="common_google_play_services_unknown_issue">Det har uppstått ett fel mellan %1$s och Google Play-tjänsterna. Försök igen.</string>
     <string name="common_google_play_services_unsupported_text">%1$s fungerar inte utan Google Play-tjänsterna, som inte stöds på enheten.</string>
@@ -17,5 +18,7 @@
     <string name="common_open_on_phone">Öppna på mobilen</string>
     <string name="common_signin_button_text">Logga in</string>
     <string name="common_signin_button_text_long">Logga in med Google</string>
+    <string name="gcm_fallback_notification_channel_label">Diverse</string>
+    <string name="status_bar_notification_info_overflow">&gt;999</string>
     <string name="wallet_buy_button_place_holder">Köp med Google</string>
 </resources>

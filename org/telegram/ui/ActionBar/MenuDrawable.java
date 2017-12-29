@@ -5,7 +5,6 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.view.animation.DecelerateInterpolator;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 
 public class MenuDrawable extends Drawable {
@@ -33,9 +32,9 @@ public class MenuDrawable extends Drawable {
         this.lastFrameTime = 0;
         if (animated) {
             if (this.currentRotation < rotation) {
-                this.currentAnimationTime = (int) (this.currentRotation * BitmapDescriptorFactory.HUE_MAGENTA);
+                this.currentAnimationTime = (int) (this.currentRotation * 300.0f);
             } else {
-                this.currentAnimationTime = (int) ((1.0f - this.currentRotation) * BitmapDescriptorFactory.HUE_MAGENTA);
+                this.currentAnimationTime = (int) ((1.0f - this.currentRotation) * 300.0f);
             }
             this.lastFrameTime = System.currentTimeMillis();
             this.finalRotation = rotation;
@@ -53,9 +52,9 @@ public class MenuDrawable extends Drawable {
                 if (this.currentAnimationTime >= 300) {
                     this.currentRotation = this.finalRotation;
                 } else if (this.currentRotation < this.finalRotation) {
-                    this.currentRotation = this.interpolator.getInterpolation(((float) this.currentAnimationTime) / BitmapDescriptorFactory.HUE_MAGENTA) * this.finalRotation;
+                    this.currentRotation = this.interpolator.getInterpolation(((float) this.currentAnimationTime) / 300.0f) * this.finalRotation;
                 } else {
-                    this.currentRotation = 1.0f - this.interpolator.getInterpolation(((float) this.currentAnimationTime) / BitmapDescriptorFactory.HUE_MAGENTA);
+                    this.currentRotation = 1.0f - this.interpolator.getInterpolation(((float) this.currentAnimationTime) / 300.0f);
                 }
             }
             this.lastFrameTime = System.currentTimeMillis();

@@ -52,7 +52,7 @@ public abstract class AbstractBoxParser implements BoxParser {
                         }
                         contentSize -= 16;
                     }
-                    Box box = createBox(type, usertype, parent instanceof Box ? ((Box) parent).getType() : "");
+                    Box box = createBox(type, usertype, parent instanceof Box ? ((Box) parent).getType() : TtmlNode.ANONYMOUS_REGION_ID);
                     box.setParent(parent);
                     ((ByteBuffer) this.header.get()).rewind();
                     box.parse(byteChannel, (ByteBuffer) this.header.get(), contentSize, this);

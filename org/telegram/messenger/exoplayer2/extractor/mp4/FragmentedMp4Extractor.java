@@ -3,7 +3,6 @@ package org.telegram.messenger.exoplayer2.extractor.mp4;
 import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
-import com.googlecode.mp4parser.boxes.mp4.samplegrouping.CencSampleEncryptionInformationGroupEntry;
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -51,7 +50,7 @@ public final class FragmentedMp4Extractor implements Extractor {
     public static final int FLAG_WORKAROUND_IGNORE_EDIT_LISTS = 32;
     public static final int FLAG_WORKAROUND_IGNORE_TFDT_BOX = 2;
     private static final byte[] PIFF_SAMPLE_ENCRYPTION_BOX_EXTENDED_TYPE = new byte[]{(byte) -94, (byte) 57, (byte) 79, (byte) 82, (byte) 90, (byte) -101, (byte) 79, (byte) 20, (byte) -94, (byte) 68, (byte) 108, (byte) 66, (byte) 124, (byte) 100, (byte) -115, (byte) -12};
-    private static final int SAMPLE_GROUP_TYPE_seig = Util.getIntegerCodeForString(CencSampleEncryptionInformationGroupEntry.TYPE);
+    private static final int SAMPLE_GROUP_TYPE_seig = Util.getIntegerCodeForString("seig");
     private static final int STATE_READING_ATOM_HEADER = 0;
     private static final int STATE_READING_ATOM_PAYLOAD = 1;
     private static final int STATE_READING_ENCRYPTION_DATA = 2;

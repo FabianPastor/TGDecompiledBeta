@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 abstract class MapCollections<K, V> {
@@ -28,10 +29,13 @@ abstract class MapCollections<K, V> {
         }
 
         public T next() {
-            Object res = MapCollections.this.colGetEntry(this.mIndex, this.mOffset);
-            this.mIndex++;
-            this.mCanRemove = true;
-            return res;
+            if (hasNext()) {
+                Object res = MapCollections.this.colGetEntry(this.mIndex, this.mOffset);
+                this.mIndex++;
+                this.mCanRemove = true;
+                return res;
+            }
+            throw new NoSuchElementException();
         }
 
         public void remove() {
@@ -231,9 +235,12 @@ abstract class MapCollections<K, V> {
         }
 
         public Entry<K, V> next() {
-            this.mIndex++;
-            this.mEntryValid = true;
-            return this;
+            if (hasNext()) {
+                this.mIndex++;
+                this.mEntryValid = true;
+                return this;
+            }
+            throw new NoSuchElementException();
         }
 
         public void remove() {

@@ -23,21 +23,17 @@ import net.hockeyapp.android.utils.HockeyLog;
 import net.hockeyapp.android.views.PaintView;
 
 public class PaintActivity extends Activity {
-    public static final String EXTRA_IMAGE_URI = "imageUri";
-    private static final int MENU_CLEAR_ID = 3;
-    private static final int MENU_SAVE_ID = 1;
-    private static final int MENU_UNDO_ID = 2;
     private String mImageName;
     private PaintView mPaintView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
-        if (extras == null || extras.getParcelable(EXTRA_IMAGE_URI) == null) {
+        if (extras == null || extras.getParcelable("imageUri") == null) {
             HockeyLog.error("Can't set up PaintActivity as image extra was not provided!");
             return;
         }
-        Uri imageUri = (Uri) extras.getParcelable(EXTRA_IMAGE_URI);
+        Uri imageUri = (Uri) extras.getParcelable("imageUri");
         this.mImageName = determineFilename(imageUri, imageUri.getLastPathSegment());
         int displayWidth = getResources().getDisplayMetrics().widthPixels;
         int displayHeight = getResources().getDisplayMetrics().heightPixels;
@@ -139,7 +135,7 @@ public class PaintActivity extends Activity {
             }
         }.execute(new File[]{result});
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_IMAGE_URI, Uri.fromFile(result));
+        intent.putExtra("imageUri", Uri.fromFile(result));
         if (getParent() == null) {
             setResult(-1, intent);
         } else {

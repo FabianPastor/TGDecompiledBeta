@@ -1,18 +1,57 @@
 package com.google.android.gms.common.util;
 
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.common.internal.zzbo;
-import java.util.Set;
+import android.os.Process;
+import android.os.StrictMode;
+import android.os.StrictMode.ThreadPolicy;
+import java.io.BufferedReader;
+import java.io.Closeable;
+import java.io.FileReader;
+import java.io.IOException;
 
 public final class zzs {
-    public static String[] zzc(Set<Scope> set) {
-        zzbo.zzb((Object) set, (Object) "scopes can't be null.");
-        Object obj = (Scope[]) set.toArray(new Scope[set.size()]);
-        zzbo.zzb(obj, (Object) "scopes can't be null.");
-        String[] strArr = new String[obj.length];
-        for (int i = 0; i < obj.length; i++) {
-            strArr[i] = obj[i].zzpp();
+    private static String zzget = null;
+    private static final int zzgeu = Process.myPid();
+
+    public static String zzamo() {
+        if (zzget == null) {
+            zzget = zzcj(zzgeu);
         }
-        return strArr;
+        return zzget;
+    }
+
+    private static String zzcj(int i) {
+        Closeable bufferedReader;
+        Throwable th;
+        String str = null;
+        if (i > 0) {
+            ThreadPolicy allowThreadDiskReads;
+            try {
+                allowThreadDiskReads = StrictMode.allowThreadDiskReads();
+                bufferedReader = new BufferedReader(new FileReader("/proc/" + i + "/cmdline"));
+                try {
+                    StrictMode.setThreadPolicy(allowThreadDiskReads);
+                    str = bufferedReader.readLine().trim();
+                    zzn.closeQuietly(bufferedReader);
+                } catch (IOException e) {
+                    zzn.closeQuietly(bufferedReader);
+                    return str;
+                } catch (Throwable th2) {
+                    th = th2;
+                    zzn.closeQuietly(bufferedReader);
+                    throw th;
+                }
+            } catch (IOException e2) {
+                bufferedReader = str;
+                zzn.closeQuietly(bufferedReader);
+                return str;
+            } catch (Throwable th3) {
+                Throwable th4 = th3;
+                bufferedReader = str;
+                th = th4;
+                zzn.closeQuietly(bufferedReader);
+                throw th;
+            }
+        }
+        return str;
     }
 }

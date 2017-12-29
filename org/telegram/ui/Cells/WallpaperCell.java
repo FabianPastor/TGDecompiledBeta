@@ -13,6 +13,7 @@ import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_photoCachedSize;
 import org.telegram.tgnet.TLRPC.TL_wallPaperSolid;
 import org.telegram.tgnet.TLRPC.WallPaper;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -69,7 +70,7 @@ public class WallpaperCell extends FrameLayout {
         view2.setVisibility(i);
         if (wallpaper instanceof TL_wallPaperSolid) {
             this.imageView.setImageBitmap(null);
-            this.imageView.setBackgroundColor(-16777216 | wallpaper.bg_color);
+            this.imageView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR | wallpaper.bg_color);
             return;
         }
         int side = AndroidUtilities.dp(100.0f);

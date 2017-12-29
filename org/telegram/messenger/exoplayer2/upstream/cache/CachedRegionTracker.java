@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.upstream.cache;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -29,7 +28,7 @@ public final class CachedRegionTracker implements Listener {
             this.endOffset = endOffset;
         }
 
-        public int compareTo(@NonNull Region another) {
+        public int compareTo(Region another) {
             if (this.startOffset < another.startOffset) {
                 return -1;
             }

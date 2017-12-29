@@ -78,7 +78,7 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
-public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdaterDelegate, NotificationCenterDelegate {
+public class ChannelEditInfoActivity extends BaseFragment implements NotificationCenterDelegate, AvatarUpdaterDelegate {
     private static final int done_button = 1;
     private ArrayList<AdminedChannelCell> adminedChannelCells = new ArrayList();
     private ShadowSectionCell adminedInfoCell;
@@ -151,12 +151,12 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
 
     public boolean onFragmentCreate() {
         boolean z = false;
-        this.currentChat = MessagesController.getInstance().getChat(Integer.valueOf(this.chatId));
+        this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId));
         if (this.currentChat == null) {
             final Semaphore semaphore = new Semaphore(0);
-            MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
-                    ChannelEditInfoActivity.this.currentChat = MessagesStorage.getInstance().getChat(ChannelEditInfoActivity.this.chatId);
+                    ChannelEditInfoActivity.this.currentChat = MessagesStorage.getInstance(ChannelEditInfoActivity.this.currentAccount).getChat(ChannelEditInfoActivity.this.chatId);
                     semaphore.release();
                 }
             });
@@ -168,9 +168,9 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
             if (this.currentChat == null) {
                 return false;
             }
-            MessagesController.getInstance().putChat(this.currentChat, true);
+            MessagesController.getInstance(this.currentAccount).putChat(this.currentChat, true);
             if (this.info == null) {
-                MessagesStorage.getInstance().loadChatInfo(this.chatId, semaphore, false, false);
+                MessagesStorage.getInstance(this.currentAccount).loadChatInfo(this.chatId, semaphore, false, false);
                 try {
                     semaphore.acquire();
                 } catch (Throwable e2) {
@@ -189,7 +189,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
             TL_channels_checkUsername req = new TL_channels_checkUsername();
             req.username = "1";
             req.channel = new TL_inputChannelEmpty();
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, final TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -207,7 +207,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
         this.avatarUpdater.parentFragment = this;
         this.avatarUpdater.delegate = this;
         this.signMessages = this.currentChat.signatures;
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoaded);
         return super.onFragmentCreate();
     }
 
@@ -216,7 +216,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
         if (this.avatarUpdater != null) {
             this.avatarUpdater.clear();
         }
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoaded);
         AndroidUtilities.removeAdjustResize(getParentActivity(), this.classGuid);
     }
 
@@ -274,34 +274,34 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
                         }
                         if (ChannelEditInfoActivity.this.usernameTextView != null) {
                             String newUserName;
-                            String oldUserName = ChannelEditInfoActivity.this.currentChat.username != null ? ChannelEditInfoActivity.this.currentChat.username : "";
+                            String oldUserName = ChannelEditInfoActivity.this.currentChat.username != null ? ChannelEditInfoActivity.this.currentChat.username : TtmlNode.ANONYMOUS_REGION_ID;
                             if (ChannelEditInfoActivity.this.isPrivate) {
-                                newUserName = "";
+                                newUserName = TtmlNode.ANONYMOUS_REGION_ID;
                             } else {
                                 newUserName = ChannelEditInfoActivity.this.usernameTextView.getText().toString();
                             }
                             if (!oldUserName.equals(newUserName)) {
-                                MessagesController.getInstance().updateChannelUserName(ChannelEditInfoActivity.this.chatId, newUserName);
+                                MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).updateChannelUserName(ChannelEditInfoActivity.this.chatId, newUserName);
                             }
                         }
                         if (!ChannelEditInfoActivity.this.currentChat.title.equals(ChannelEditInfoActivity.this.nameTextView.getText().toString())) {
-                            MessagesController.getInstance().changeChatTitle(ChannelEditInfoActivity.this.chatId, ChannelEditInfoActivity.this.nameTextView.getText().toString());
+                            MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).changeChatTitle(ChannelEditInfoActivity.this.chatId, ChannelEditInfoActivity.this.nameTextView.getText().toString());
                         }
                         if (!(ChannelEditInfoActivity.this.info == null || ChannelEditInfoActivity.this.info.about.equals(ChannelEditInfoActivity.this.descriptionTextView.getText().toString()))) {
-                            MessagesController.getInstance().updateChannelAbout(ChannelEditInfoActivity.this.chatId, ChannelEditInfoActivity.this.descriptionTextView.getText().toString(), ChannelEditInfoActivity.this.info);
+                            MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).updateChannelAbout(ChannelEditInfoActivity.this.chatId, ChannelEditInfoActivity.this.descriptionTextView.getText().toString(), ChannelEditInfoActivity.this.info);
                         }
                         if (!(ChannelEditInfoActivity.this.headerCell2 == null || ChannelEditInfoActivity.this.headerCell2.getVisibility() != 0 || ChannelEditInfoActivity.this.info == null || !ChannelEditInfoActivity.this.currentChat.creator || ChannelEditInfoActivity.this.info.hidden_prehistory == ChannelEditInfoActivity.this.historyHidden)) {
                             ChannelEditInfoActivity.this.info.hidden_prehistory = ChannelEditInfoActivity.this.historyHidden;
-                            MessagesController.getInstance().toogleChannelInvitesHistory(ChannelEditInfoActivity.this.chatId, ChannelEditInfoActivity.this.historyHidden);
+                            MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).toogleChannelInvitesHistory(ChannelEditInfoActivity.this.chatId, ChannelEditInfoActivity.this.historyHidden);
                         }
                         if (ChannelEditInfoActivity.this.signMessages != ChannelEditInfoActivity.this.currentChat.signatures) {
                             ChannelEditInfoActivity.this.currentChat.signatures = true;
-                            MessagesController.getInstance().toogleChannelSignatures(ChannelEditInfoActivity.this.chatId, ChannelEditInfoActivity.this.signMessages);
+                            MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).toogleChannelSignatures(ChannelEditInfoActivity.this.chatId, ChannelEditInfoActivity.this.signMessages);
                         }
                         if (ChannelEditInfoActivity.this.uploadedAvatar != null) {
-                            MessagesController.getInstance().changeChatAvatar(ChannelEditInfoActivity.this.chatId, ChannelEditInfoActivity.this.uploadedAvatar);
+                            MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).changeChatAvatar(ChannelEditInfoActivity.this.chatId, ChannelEditInfoActivity.this.uploadedAvatar);
                         } else if (ChannelEditInfoActivity.this.avatar == null && (ChannelEditInfoActivity.this.currentChat.photo instanceof TL_chatPhoto)) {
-                            MessagesController.getInstance().changeChatAvatar(ChannelEditInfoActivity.this.chatId, null);
+                            MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).changeChatAvatar(ChannelEditInfoActivity.this.chatId, null);
                         }
                         ChannelEditInfoActivity.this.finishFragment();
                     } else {
@@ -405,13 +405,13 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
 
             public void afterTextChanged(Editable s) {
                 String obj;
-                AvatarDrawable access$2000 = ChannelEditInfoActivity.this.avatarDrawable;
+                AvatarDrawable access$2800 = ChannelEditInfoActivity.this.avatarDrawable;
                 if (ChannelEditInfoActivity.this.nameTextView.length() > 0) {
                     obj = ChannelEditInfoActivity.this.nameTextView.getText().toString();
                 } else {
                     obj = null;
                 }
-                access$2000.setInfo(5, obj, null, false);
+                access$2800.setInfo(5, obj, null, false);
                 ChannelEditInfoActivity.this.avatarImage.invalidate();
             }
         });
@@ -512,7 +512,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
             this.publicContainer.setOrientation(0);
             this.linkContainer.addView(this.publicContainer, LayoutHelper.createLinear(-1, 36, 17.0f, 7.0f, 17.0f, 0.0f));
             this.editText = new EditText(context);
-            this.editText.setText(MessagesController.getInstance().linkPrefix + "/");
+            this.editText.setText(MessagesController.getInstance(this.currentAccount).linkPrefix + "/");
             this.editText.setTextSize(1, 18.0f);
             this.editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -695,13 +695,13 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.closeChats);
+                            NotificationCenter.getInstance(ChannelEditInfoActivity.this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
                             if (AndroidUtilities.isTablet()) {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, Long.valueOf(-((long) ChannelEditInfoActivity.this.chatId)));
+                                NotificationCenter.getInstance(ChannelEditInfoActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, Long.valueOf(-((long) ChannelEditInfoActivity.this.chatId)));
                             } else {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                                NotificationCenter.getInstance(ChannelEditInfoActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                             }
-                            MessagesController.getInstance().deleteUserFromChat(ChannelEditInfoActivity.this.chatId, MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId())), ChannelEditInfoActivity.this.info, true);
+                            MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).deleteUserFromChat(ChannelEditInfoActivity.this.chatId, MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(ChannelEditInfoActivity.this.currentAccount).getClientUserId())), ChannelEditInfoActivity.this.info, true);
                             ChannelEditInfoActivity.this.finishFragment();
                         }
                     });
@@ -747,7 +747,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
         return this.fragmentView;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.chatInfoDidLoaded) {
             ChatFull chatFull = args[0];
             if (chatFull.id == this.chatId) {
@@ -836,7 +836,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
         if (!this.loadingAdminedChannels && this.adminnedChannelsLayout != null) {
             this.loadingAdminedChannels = true;
             updatePrivatePublic();
-            ConnectionsManager.getInstance().sendRequest(new TL_channels_getAdminedPublicChannels(), new RequestDelegate() {
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_channels_getAdminedPublicChannels(), new RequestDelegate() {
                 public void run(final TLObject response, TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -856,17 +856,17 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
                                             Builder builder = new Builder(ChannelEditInfoActivity.this.getParentActivity());
                                             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                                             if (channel.megagroup) {
-                                                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", R.string.RevokeLinkAlert, MessagesController.getInstance().linkPrefix + "/" + channel.username, channel.title)));
+                                                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", R.string.RevokeLinkAlert, MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).linkPrefix + "/" + channel.username, channel.title)));
                                             } else {
-                                                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", R.string.RevokeLinkAlertChannel, MessagesController.getInstance().linkPrefix + "/" + channel.username, channel.title)));
+                                                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", R.string.RevokeLinkAlertChannel, MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).linkPrefix + "/" + channel.username, channel.title)));
                                             }
                                             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                                             builder.setPositiveButton(LocaleController.getString("RevokeButton", R.string.RevokeButton), new OnClickListener() {
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     TL_channels_updateUsername req = new TL_channels_updateUsername();
                                                     req.channel = MessagesController.getInputChannel(channel);
-                                                    req.username = "";
-                                                    ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                                    req.username = TtmlNode.ANONYMOUS_REGION_ID;
+                                                    ConnectionsManager.getInstance(ChannelEditInfoActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                                                         public void run(TLObject response, TL_error error) {
                                                             if (response instanceof TL_boolTrue) {
                                                                 AndroidUtilities.runOnUIThread(new Runnable() {
@@ -1011,7 +1011,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
             this.checkRunnable = null;
             this.lastCheckName = null;
             if (this.checkReqId != 0) {
-                ConnectionsManager.getInstance().cancelRequest(this.checkReqId, true);
+                ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.checkReqId, true);
             }
         }
         this.lastNameAvailable = false;
@@ -1071,8 +1071,8 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
                 public void run() {
                     TL_channels_checkUsername req = new TL_channels_checkUsername();
                     req.username = name;
-                    req.channel = MessagesController.getInputChannel(ChannelEditInfoActivity.this.chatId);
-                    ChannelEditInfoActivity.this.checkReqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    req.channel = MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).getInputChannel(ChannelEditInfoActivity.this.chatId);
+                    ChannelEditInfoActivity.this.checkReqId = ConnectionsManager.getInstance(ChannelEditInfoActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                         public void run(final TLObject response, final TL_error error) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
@@ -1110,8 +1110,8 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
         if (!this.loadingInvite && this.invite == null) {
             this.loadingInvite = true;
             TL_channels_exportInvite req = new TL_channels_exportInvite();
-            req.channel = MessagesController.getInputChannel(this.chatId);
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(this.chatId);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, final TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -1134,13 +1134,13 @@ public class ChannelEditInfoActivity extends BaseFragment implements AvatarUpdat
             public void didSetColor(int color) {
                 if (ChannelEditInfoActivity.this.avatarImage != null) {
                     String obj;
-                    AvatarDrawable access$2000 = ChannelEditInfoActivity.this.avatarDrawable;
+                    AvatarDrawable access$2800 = ChannelEditInfoActivity.this.avatarDrawable;
                     if (ChannelEditInfoActivity.this.nameTextView.length() > 0) {
                         obj = ChannelEditInfoActivity.this.nameTextView.getText().toString();
                     } else {
                         obj = null;
                     }
-                    access$2000.setInfo(5, obj, null, false);
+                    access$2800.setInfo(5, obj, null, false);
                     ChannelEditInfoActivity.this.avatarImage.invalidate();
                 }
             }

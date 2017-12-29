@@ -13,34 +13,37 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import com.google.android.gms.common.data.DataHolder;
-import com.google.android.gms.common.util.zzw;
+import com.google.android.gms.common.util.zzx;
 import com.google.android.gms.wearable.CapabilityApi.CapabilityListener;
 import com.google.android.gms.wearable.ChannelApi.ChannelListener;
+import com.google.android.gms.wearable.ChannelClient.Channel;
+import com.google.android.gms.wearable.ChannelClient.ChannelCallback;
 import com.google.android.gms.wearable.DataApi.DataListener;
 import com.google.android.gms.wearable.MessageApi.MessageListener;
-import com.google.android.gms.wearable.NodeApi.NodeListener;
-import com.google.android.gms.wearable.internal.zzaa;
-import com.google.android.gms.wearable.internal.zzai;
-import com.google.android.gms.wearable.internal.zzdl;
-import com.google.android.gms.wearable.internal.zzdx;
-import com.google.android.gms.wearable.internal.zzeg;
-import com.google.android.gms.wearable.internal.zzgh;
+import com.google.android.gms.wearable.internal.zzah;
+import com.google.android.gms.wearable.internal.zzas;
+import com.google.android.gms.wearable.internal.zzaw;
+import com.google.android.gms.wearable.internal.zzen;
+import com.google.android.gms.wearable.internal.zzfe;
+import com.google.android.gms.wearable.internal.zzfo;
+import com.google.android.gms.wearable.internal.zzhp;
 import com.google.android.gms.wearable.internal.zzi;
 import com.google.android.gms.wearable.internal.zzl;
 import java.util.List;
 
-public class WearableListenerService extends Service implements CapabilityListener, ChannelListener, DataListener, MessageListener, NodeListener {
+public class WearableListenerService extends Service implements CapabilityListener, ChannelListener, DataListener, MessageListener {
     public static final String BIND_LISTENER_INTENT_ACTION = "com.google.android.gms.wearable.BIND_LISTENER";
-    private IBinder zzaHj;
-    private ComponentName zzbRq;
-    private zzb zzbRr;
-    private Intent zzbRs;
-    private Looper zzbRt;
-    private final Object zzbRu = new Object();
-    private boolean zzbRv;
+    private IBinder zzfzf;
+    private ComponentName zzlhd;
+    private zzc zzlhe;
+    private Intent zzlhf;
+    private Looper zzlhg;
+    private final Object zzlhh = new Object();
+    private boolean zzlhi;
+    private zzas zzlhj = new zzas(new zza());
 
-    class zza implements ServiceConnection {
-        private zza(WearableListenerService wearableListenerService) {
+    class zzb implements ServiceConnection {
+        private zzb(WearableListenerService wearableListenerService) {
         }
 
         public final void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -50,37 +53,37 @@ public class WearableListenerService extends Service implements CapabilityListen
         }
     }
 
-    final class zzb extends Handler {
+    final class zzc extends Handler {
         private boolean started;
-        private final zza zzbRw = new zza();
-        private /* synthetic */ WearableListenerService zzbRx;
+        private /* synthetic */ WearableListenerService zzlhk;
+        private final zzb zzlhl = new zzb();
 
-        zzb(WearableListenerService wearableListenerService, Looper looper) {
-            this.zzbRx = wearableListenerService;
+        zzc(WearableListenerService wearableListenerService, Looper looper) {
+            this.zzlhk = wearableListenerService;
             super(looper);
         }
 
         @SuppressLint({"UntrackedBindService"})
-        private final synchronized void zzDW() {
+        private final synchronized void zzbke() {
             if (!this.started) {
                 if (Log.isLoggable("WearableLS", 2)) {
-                    String valueOf = String.valueOf(this.zzbRx.zzbRq);
+                    String valueOf = String.valueOf(this.zzlhk.zzlhd);
                     Log.v("WearableLS", new StringBuilder(String.valueOf(valueOf).length() + 13).append("bindService: ").append(valueOf).toString());
                 }
-                this.zzbRx.bindService(this.zzbRx.zzbRs, this.zzbRw, 1);
+                this.zzlhk.bindService(this.zzlhk.zzlhf, this.zzlhl, 1);
                 this.started = true;
             }
         }
 
         @SuppressLint({"UntrackedBindService"})
-        private final synchronized void zzgk(String str) {
+        private final synchronized void zznx(String str) {
             if (this.started) {
                 if (Log.isLoggable("WearableLS", 2)) {
-                    String valueOf = String.valueOf(this.zzbRx.zzbRq);
+                    String valueOf = String.valueOf(this.zzlhk.zzlhd);
                     Log.v("WearableLS", new StringBuilder((String.valueOf(str).length() + 17) + String.valueOf(valueOf).length()).append("unbindService: ").append(str).append(", ").append(valueOf).toString());
                 }
                 try {
-                    this.zzbRx.unbindService(this.zzbRw);
+                    this.zzlhk.unbindService(this.zzlhl);
                 } catch (Throwable e) {
                     Log.e("WearableLS", "Exception when unbinding from local service", e);
                 }
@@ -89,43 +92,67 @@ public class WearableListenerService extends Service implements CapabilityListen
         }
 
         public final void dispatchMessage(Message message) {
-            zzDW();
+            zzbke();
             try {
                 super.dispatchMessage(message);
             } finally {
                 if (!hasMessages(0)) {
-                    zzgk("dispatch");
+                    zznx("dispatch");
                 }
             }
         }
 
         final void quit() {
             getLooper().quit();
-            zzgk("quit");
+            zznx("quit");
         }
     }
 
-    final class zzc extends zzdl {
-        final /* synthetic */ WearableListenerService zzbRx;
-        private volatile int zzbRy;
+    class zza extends ChannelCallback {
+        private /* synthetic */ WearableListenerService zzlhk;
 
-        private zzc(WearableListenerService wearableListenerService) {
-            this.zzbRx = wearableListenerService;
-            this.zzbRy = -1;
+        private zza(WearableListenerService wearableListenerService) {
+            this.zzlhk = wearableListenerService;
+        }
+
+        public final void onChannelClosed(Channel channel, int i, int i2) {
+            this.zzlhk.onChannelClosed(channel, i, i2);
+        }
+
+        public final void onChannelOpened(Channel channel) {
+            this.zzlhk.onChannelOpened(channel);
+        }
+
+        public final void onInputClosed(Channel channel, int i, int i2) {
+            this.zzlhk.onInputClosed(channel, i, i2);
+        }
+
+        public final void onOutputClosed(Channel channel, int i, int i2) {
+            this.zzlhk.onOutputClosed(channel, i, i2);
+        }
+    }
+
+    final class zzd extends zzen {
+        final /* synthetic */ WearableListenerService zzlhk;
+        private volatile int zzlhm;
+
+        private zzd(WearableListenerService wearableListenerService) {
+            this.zzlhk = wearableListenerService;
+            this.zzlhm = -1;
         }
 
         private final boolean zza(Runnable runnable, String str, Object obj) {
             if (Log.isLoggable("WearableLS", 3)) {
-                Log.d("WearableLS", String.format("%s: %s %s", new Object[]{str, this.zzbRx.zzbRq.toString(), obj}));
+                Log.d("WearableLS", String.format("%s: %s %s", new Object[]{str, this.zzlhk.zzlhd.toString(), obj}));
             }
             int callingUid = Binder.getCallingUid();
-            if (callingUid == this.zzbRy) {
+            if (callingUid == this.zzlhm) {
                 callingUid = 1;
-            } else if (zzgh.zzbz(this.zzbRx).zzgm("com.google.android.wearable.app.cn") && zzw.zzb(this.zzbRx, callingUid, "com.google.android.wearable.app.cn")) {
-                this.zzbRy = callingUid;
+            } else if (zzhp.zzep(this.zzlhk).zznz("com.google.android.wearable.app.cn") && zzx.zzb(this.zzlhk, callingUid, "com.google.android.wearable.app.cn")) {
+                this.zzlhm = callingUid;
                 callingUid = 1;
-            } else if (zzw.zzf(this.zzbRx, callingUid)) {
-                this.zzbRy = callingUid;
+            } else if (zzx.zzf(this.zzlhk, callingUid)) {
+                this.zzlhm = callingUid;
                 callingUid = 1;
             } else {
                 Log.e("WearableLS", "Caller is not GooglePlayServices; caller UID: " + callingUid);
@@ -134,44 +161,33 @@ public class WearableListenerService extends Service implements CapabilityListen
             if (callingUid == 0) {
                 return false;
             }
-            synchronized (this.zzbRx.zzbRu) {
-                if (this.zzbRx.zzbRv) {
+            synchronized (this.zzlhk.zzlhh) {
+                if (this.zzlhk.zzlhi) {
                     return false;
                 }
-                this.zzbRx.zzbRr.post(runnable);
+                this.zzlhk.zzlhe.post(runnable);
                 return true;
             }
         }
 
-        public final void onConnectedNodes(List<zzeg> list) {
+        public final void onConnectedNodes(List<zzfo> list) {
             zza(new zzp(this, list), "onConnectedNodes", list);
         }
 
-        public final void zzS(DataHolder dataHolder) {
-            Runnable com_google_android_gms_wearable_zzl = new zzl(this, dataHolder);
-            try {
-                String valueOf = String.valueOf(dataHolder);
-                if (!zza(com_google_android_gms_wearable_zzl, "onDataItemChanged", new StringBuilder(String.valueOf(valueOf).length() + 18).append(valueOf).append(", rows=").append(dataHolder.getCount()).toString())) {
-                }
-            } finally {
-                dataHolder.close();
-            }
+        public final void zza(zzah com_google_android_gms_wearable_internal_zzah) {
+            zza(new zzq(this, com_google_android_gms_wearable_internal_zzah), "onConnectedCapabilityChanged", com_google_android_gms_wearable_internal_zzah);
         }
 
-        public final void zza(zzaa com_google_android_gms_wearable_internal_zzaa) {
-            zza(new zzq(this, com_google_android_gms_wearable_internal_zzaa), "onConnectedCapabilityChanged", com_google_android_gms_wearable_internal_zzaa);
+        public final void zza(zzaw com_google_android_gms_wearable_internal_zzaw) {
+            zza(new zzt(this, com_google_android_gms_wearable_internal_zzaw), "onChannelEvent", com_google_android_gms_wearable_internal_zzaw);
         }
 
-        public final void zza(zzai com_google_android_gms_wearable_internal_zzai) {
-            zza(new zzt(this, com_google_android_gms_wearable_internal_zzai), "onChannelEvent", com_google_android_gms_wearable_internal_zzai);
+        public final void zza(zzfe com_google_android_gms_wearable_internal_zzfe) {
+            zza(new zzm(this, com_google_android_gms_wearable_internal_zzfe), "onMessageReceived", com_google_android_gms_wearable_internal_zzfe);
         }
 
-        public final void zza(zzdx com_google_android_gms_wearable_internal_zzdx) {
-            zza(new zzm(this, com_google_android_gms_wearable_internal_zzdx), "onMessageReceived", com_google_android_gms_wearable_internal_zzdx);
-        }
-
-        public final void zza(zzeg com_google_android_gms_wearable_internal_zzeg) {
-            zza(new zzn(this, com_google_android_gms_wearable_internal_zzeg), "onPeerConnected", com_google_android_gms_wearable_internal_zzeg);
+        public final void zza(zzfo com_google_android_gms_wearable_internal_zzfo) {
+            zza(new zzn(this, com_google_android_gms_wearable_internal_zzfo), "onPeerConnected", com_google_android_gms_wearable_internal_zzfo);
         }
 
         public final void zza(zzi com_google_android_gms_wearable_internal_zzi) {
@@ -182,28 +198,45 @@ public class WearableListenerService extends Service implements CapabilityListen
             zza(new zzr(this, com_google_android_gms_wearable_internal_zzl), "onNotificationReceived", com_google_android_gms_wearable_internal_zzl);
         }
 
-        public final void zzb(zzeg com_google_android_gms_wearable_internal_zzeg) {
-            zza(new zzo(this, com_google_android_gms_wearable_internal_zzeg), "onPeerDisconnected", com_google_android_gms_wearable_internal_zzeg);
+        public final void zzas(DataHolder dataHolder) {
+            Runnable com_google_android_gms_wearable_zzl = new zzl(this, dataHolder);
+            try {
+                String valueOf = String.valueOf(dataHolder);
+                if (!zza(com_google_android_gms_wearable_zzl, "onDataItemChanged", new StringBuilder(String.valueOf(valueOf).length() + 18).append(valueOf).append(", rows=").append(dataHolder.getCount()).toString())) {
+                }
+            } finally {
+                dataHolder.close();
+            }
+        }
+
+        public final void zzb(zzfo com_google_android_gms_wearable_internal_zzfo) {
+            zza(new zzo(this, com_google_android_gms_wearable_internal_zzfo), "onPeerDisconnected", com_google_android_gms_wearable_internal_zzfo);
         }
     }
 
     public Looper getLooper() {
-        if (this.zzbRt == null) {
+        if (this.zzlhg == null) {
             HandlerThread handlerThread = new HandlerThread("WearableListenerService");
             handlerThread.start();
-            this.zzbRt = handlerThread.getLooper();
+            this.zzlhg = handlerThread.getLooper();
         }
-        return this.zzbRt;
+        return this.zzlhg;
     }
 
     public final IBinder onBind(Intent intent) {
-        return BIND_LISTENER_INTENT_ACTION.equals(intent.getAction()) ? this.zzaHj : null;
+        return BIND_LISTENER_INTENT_ACTION.equals(intent.getAction()) ? this.zzfzf : null;
     }
 
     public void onCapabilityChanged(CapabilityInfo capabilityInfo) {
     }
 
     public void onChannelClosed(Channel channel, int i, int i2) {
+    }
+
+    public void onChannelClosed(Channel channel, int i, int i2) {
+    }
+
+    public void onChannelOpened(Channel channel) {
     }
 
     public void onChannelOpened(Channel channel) {
@@ -214,15 +247,15 @@ public class WearableListenerService extends Service implements CapabilityListen
 
     public void onCreate() {
         super.onCreate();
-        this.zzbRq = new ComponentName(this, getClass().getName());
+        this.zzlhd = new ComponentName(this, getClass().getName());
         if (Log.isLoggable("WearableLS", 3)) {
-            String valueOf = String.valueOf(this.zzbRq);
+            String valueOf = String.valueOf(this.zzlhd);
             Log.d("WearableLS", new StringBuilder(String.valueOf(valueOf).length() + 10).append("onCreate: ").append(valueOf).toString());
         }
-        this.zzbRr = new zzb(this, getLooper());
-        this.zzbRs = new Intent(BIND_LISTENER_INTENT_ACTION);
-        this.zzbRs.setComponent(this.zzbRq);
-        this.zzaHj = new zzc();
+        this.zzlhe = new zzc(this, getLooper());
+        this.zzlhf = new Intent(BIND_LISTENER_INTENT_ACTION);
+        this.zzlhf.setComponent(this.zzlhd);
+        this.zzfzf = new zzd();
     }
 
     public void onDataChanged(DataEventBuffer dataEventBuffer) {
@@ -230,16 +263,16 @@ public class WearableListenerService extends Service implements CapabilityListen
 
     public void onDestroy() {
         if (Log.isLoggable("WearableLS", 3)) {
-            String valueOf = String.valueOf(this.zzbRq);
+            String valueOf = String.valueOf(this.zzlhd);
             Log.d("WearableLS", new StringBuilder(String.valueOf(valueOf).length() + 11).append("onDestroy: ").append(valueOf).toString());
         }
-        synchronized (this.zzbRu) {
-            this.zzbRv = true;
-            if (this.zzbRr == null) {
-                String valueOf2 = String.valueOf(this.zzbRq);
+        synchronized (this.zzlhh) {
+            this.zzlhi = true;
+            if (this.zzlhe == null) {
+                String valueOf2 = String.valueOf(this.zzlhd);
                 throw new IllegalStateException(new StringBuilder(String.valueOf(valueOf2).length() + 111).append("onDestroy: mServiceHandler not set, did you override onCreate() but forget to call super.onCreate()? component=").append(valueOf2).toString());
             } else {
-                this.zzbRr.quit();
+                this.zzlhe.quit();
             }
         }
         super.onDestroy();
@@ -251,10 +284,16 @@ public class WearableListenerService extends Service implements CapabilityListen
     public void onInputClosed(Channel channel, int i, int i2) {
     }
 
+    public void onInputClosed(Channel channel, int i, int i2) {
+    }
+
     public void onMessageReceived(MessageEvent messageEvent) {
     }
 
     public void onNotificationReceived(zzd com_google_android_gms_wearable_zzd) {
+    }
+
+    public void onOutputClosed(Channel channel, int i, int i2) {
     }
 
     public void onOutputClosed(Channel channel, int i, int i2) {

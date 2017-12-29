@@ -15,6 +15,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.SerializedData;
@@ -54,7 +55,7 @@ public class ShareActivity extends Activity {
                 return;
             }
             String link = sharedPreferences.getString(hash + "_link", null);
-            MessageObject messageObject = new MessageObject(mess, null, false);
+            MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, mess, null, false);
             messageObject.messageOwner.with_my_score = true;
             try {
                 this.visibleDialog = ShareAlert.createShareAlert(this, messageObject, null, false, link, false);

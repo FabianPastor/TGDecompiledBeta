@@ -10,8 +10,4 @@ public enum FeedbackUserDataElement {
     private FeedbackUserDataElement(int value) {
         this.mValue = value;
     }
-
-    public int getValue() {
-        return this.mValue;
-    }
 }

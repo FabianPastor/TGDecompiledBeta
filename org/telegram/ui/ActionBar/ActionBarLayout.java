@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.ui.Components.LayoutHelper;
@@ -619,7 +620,7 @@ public class ActionBarLayout extends FrameLayout {
         if (this.parentActivity.getCurrentFocus() != null) {
             AndroidUtilities.hideKeyboard(this.parentActivity.getCurrentFocus());
         }
-        boolean needAnimation = !forceWithoutAnimation && this.parentActivity.getSharedPreferences("mainconfig", 0).getBoolean("view_animations", true);
+        boolean needAnimation = !forceWithoutAnimation && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true);
         final BaseFragment currentFragment = !this.fragmentsStack.isEmpty() ? (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1) : null;
         fragment.setParentLayout(this);
         View fragmentView = fragment.fragmentView;
@@ -803,7 +804,7 @@ public class ActionBarLayout extends FrameLayout {
                 AndroidUtilities.hideKeyboard(this.parentActivity.getCurrentFocus());
             }
             setInnerTranslationX(0.0f);
-            boolean needAnimation = animated && this.parentActivity.getSharedPreferences("mainconfig", 0).getBoolean("view_animations", true);
+            boolean needAnimation = animated && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true);
             final BaseFragment currentFragment = (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1);
             BaseFragment previousFragment = null;
             if (this.fragmentsStack.size() > 1) {
@@ -994,6 +995,12 @@ public class ActionBarLayout extends FrameLayout {
         fragment.onFragmentDestroy();
         fragment.setParentLayout(null);
         this.fragmentsStack.remove(fragment);
+    }
+
+    public void removeFragmentFromStack(int num) {
+        if (num < this.fragmentsStack.size()) {
+            removeFragmentFromStackInternal((BaseFragment) this.fragmentsStack.get(num));
+        }
     }
 
     public void removeFragmentFromStack(BaseFragment fragment) {

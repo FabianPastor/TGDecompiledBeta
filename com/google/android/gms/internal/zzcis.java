@@ -1,17 +1,16 @@
 package com.google.android.gms.internal;
 
-import android.content.ComponentName;
-
 final class zzcis implements Runnable {
-    private /* synthetic */ ComponentName val$name;
-    private /* synthetic */ zzciq zzbuk;
+    private /* synthetic */ zzcgi zzjgn;
+    private /* synthetic */ zzcir zzjgo;
 
-    zzcis(zzciq com_google_android_gms_internal_zzciq, ComponentName componentName) {
-        this.zzbuk = com_google_android_gms_internal_zzciq;
-        this.val$name = componentName;
+    zzcis(zzcir com_google_android_gms_internal_zzcir, zzcgi com_google_android_gms_internal_zzcgi) {
+        this.zzjgo = com_google_android_gms_internal_zzcir;
+        this.zzjgn = com_google_android_gms_internal_zzcgi;
     }
 
     public final void run() {
-        this.zzbuk.zzbua.onServiceDisconnected(this.val$name);
+        this.zzjgo.zziwf.zzbal();
+        this.zzjgo.zziwf.zze(this.zzjgn);
     }
 }

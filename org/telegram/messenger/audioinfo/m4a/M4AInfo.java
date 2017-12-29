@@ -15,8 +15,6 @@ import com.coremedia.iso.boxes.RatingBox;
 import com.coremedia.iso.boxes.TrackBox;
 import com.coremedia.iso.boxes.UserDataBox;
 import com.coremedia.iso.boxes.apple.AppleItemListBox;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.googlecode.mp4parser.boxes.apple.AppleNameBox;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -316,7 +314,7 @@ public class M4AInfo extends AudioInfo {
                 }
                 break;
             case 5143505:
-                if (type.equals(AppleNameBox.TYPE)) {
+                if (type.equals("©nam")) {
                     obj = 16;
                     break;
                 }
@@ -363,7 +361,7 @@ public class M4AInfo extends AudioInfo {
                     opts.inJustDecodeBounds = false;
                     this.cover = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
                     if (this.cover != null) {
-                        float scale = ((float) Math.max(this.cover.getWidth(), this.cover.getHeight())) / BitmapDescriptorFactory.HUE_GREEN;
+                        float scale = ((float) Math.max(this.cover.getWidth(), this.cover.getHeight())) / 120.0f;
                         if (scale > 0.0f) {
                             this.smallCover = Bitmap.createScaledBitmap(this.cover, (int) (((float) this.cover.getWidth()) / scale), (int) (((float) this.cover.getHeight()) / scale), true);
                         } else {

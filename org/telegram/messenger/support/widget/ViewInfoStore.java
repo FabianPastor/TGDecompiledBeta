@@ -1,8 +1,5 @@
 package org.telegram.messenger.support.widget;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.util.LongSparseArray;
 import android.support.v4.util.Pools.Pool;
@@ -12,9 +9,7 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 
 class ViewInfoStore {
     private static final boolean DEBUG = false;
-    @VisibleForTesting
     final ArrayMap<ViewHolder, InfoRecord> mLayoutHolderMap = new ArrayMap();
-    @VisibleForTesting
     final LongSparseArray<ViewHolder> mOldChangedHolders = new LongSparseArray();
 
     static class InfoRecord {
@@ -27,9 +22,7 @@ class ViewInfoStore {
         static final int FLAG_PRE_AND_POST = 12;
         static Pool<InfoRecord> sPool = new SimplePool(20);
         int flags;
-        @Nullable
         ItemHolderInfo postInfo;
-        @Nullable
         ItemHolderInfo preInfo;
 
         private InfoRecord() {
@@ -54,11 +47,11 @@ class ViewInfoStore {
     }
 
     interface ProcessCallback {
-        void processAppeared(ViewHolder viewHolder, @Nullable ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
+        void processAppeared(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
 
-        void processDisappeared(ViewHolder viewHolder, @NonNull ItemHolderInfo itemHolderInfo, @Nullable ItemHolderInfo itemHolderInfo2);
+        void processDisappeared(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
 
-        void processPersistent(ViewHolder viewHolder, @NonNull ItemHolderInfo itemHolderInfo, @NonNull ItemHolderInfo itemHolderInfo2);
+        void processPersistent(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
 
         void unused(ViewHolder viewHolder);
     }
@@ -86,12 +79,10 @@ class ViewInfoStore {
         return (record == null || (record.flags & 1) == 0) ? false : true;
     }
 
-    @Nullable
     ItemHolderInfo popFromPreLayout(ViewHolder vh) {
         return popFromLayoutStep(vh, 4);
     }
 
-    @Nullable
     ItemHolderInfo popFromPostLayout(ViewHolder vh) {
         return popFromLayoutStep(vh, 8);
     }

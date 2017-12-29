@@ -1,23 +1,26 @@
 package com.google.android.gms.measurement;
 
 import android.content.BroadcastReceiver;
+import android.content.BroadcastReceiver.PendingResult;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.MainThread;
-import com.google.android.gms.internal.zzcgc;
-import com.google.android.gms.internal.zzcge;
+import com.google.android.gms.internal.zzcid;
+import com.google.android.gms.internal.zzcif;
 
-public final class AppMeasurementInstallReferrerReceiver extends BroadcastReceiver implements zzcge {
-    private zzcgc zzboo;
+public final class AppMeasurementInstallReferrerReceiver extends BroadcastReceiver implements zzcif {
+    private zzcid zziwp;
+
+    public final PendingResult doGoAsync() {
+        return goAsync();
+    }
 
     public final void doStartService(Context context, Intent intent) {
     }
 
-    @MainThread
     public final void onReceive(Context context, Intent intent) {
-        if (this.zzboo == null) {
-            this.zzboo = new zzcgc(this);
+        if (this.zziwp == null) {
+            this.zziwp = new zzcid(this);
         }
-        this.zzboo.onReceive(context, intent);
+        this.zziwp.onReceive(context, intent);
     }
 }

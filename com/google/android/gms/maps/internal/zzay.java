@@ -3,9 +3,9 @@ package com.google.android.gms.maps.internal;
 import android.os.Parcel;
 import android.os.RemoteException;
 import com.google.android.gms.dynamic.IObjectWrapper.zza;
-import com.google.android.gms.internal.zzee;
+import com.google.android.gms.internal.zzev;
 
-public abstract class zzay extends zzee implements zzax {
+public abstract class zzay extends zzev implements zzax {
     public zzay() {
         attachInterface(this, "com.google.android.gms.maps.internal.IOnMyLocationChangeListener");
     }
@@ -17,7 +17,7 @@ public abstract class zzay extends zzee implements zzax {
         if (i != 1) {
             return false;
         }
-        zzF(zza.zzM(parcel.readStrongBinder()));
+        zzy(zza.zzaq(parcel.readStrongBinder()));
         parcel2.writeNoException();
         return true;
     }

@@ -1,26 +1,18 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.common.internal.zzbo;
-import com.google.android.gms.common.util.zze;
+final class zzcjf implements Runnable {
+    private /* synthetic */ zzcgi zzjgn;
+    private /* synthetic */ zzcir zzjgo;
+    private /* synthetic */ zzcln zzjgt;
 
-final class zzcjf {
-    private long mStartTime;
-    private final zze zzvw;
-
-    public zzcjf(zze com_google_android_gms_common_util_zze) {
-        zzbo.zzu(com_google_android_gms_common_util_zze);
-        this.zzvw = com_google_android_gms_common_util_zze;
+    zzcjf(zzcir com_google_android_gms_internal_zzcir, zzcln com_google_android_gms_internal_zzcln, zzcgi com_google_android_gms_internal_zzcgi) {
+        this.zzjgo = com_google_android_gms_internal_zzcir;
+        this.zzjgt = com_google_android_gms_internal_zzcln;
+        this.zzjgn = com_google_android_gms_internal_zzcgi;
     }
 
-    public final void clear() {
-        this.mStartTime = 0;
-    }
-
-    public final void start() {
-        this.mStartTime = this.zzvw.elapsedRealtime();
-    }
-
-    public final boolean zzu(long j) {
-        return this.mStartTime == 0 || this.zzvw.elapsedRealtime() - this.mStartTime >= j;
+    public final void run() {
+        this.zzjgo.zziwf.zzbal();
+        this.zzjgo.zziwf.zzc(this.zzjgt, this.zzjgn);
     }
 }

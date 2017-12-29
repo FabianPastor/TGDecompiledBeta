@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.text;
 
-import android.support.annotation.NonNull;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
 
 public final class SubtitleInputBuffer extends DecoderInputBuffer implements Comparable<SubtitleInputBuffer> {
@@ -10,7 +9,7 @@ public final class SubtitleInputBuffer extends DecoderInputBuffer implements Com
         super(1);
     }
 
-    public int compareTo(@NonNull SubtitleInputBuffer other) {
+    public int compareTo(SubtitleInputBuffer other) {
         if (isEndOfStream() == other.isEndOfStream()) {
             long delta = this.timeUs - other.timeUs;
             if (delta == 0) {

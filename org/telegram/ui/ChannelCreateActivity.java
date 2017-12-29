@@ -122,7 +122,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             TL_channels_checkUsername req = new TL_channels_checkUsername();
             req.username = "1";
             req.channel = new TL_inputChannelEmpty();
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, final TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -149,8 +149,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     public boolean onFragmentCreate() {
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatDidCreated);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatDidFailCreate);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatDidCreated);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatDidFailCreate);
         if (this.currentStep == 1) {
             generateLink();
         }
@@ -163,8 +163,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatDidCreated);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatDidFailCreate);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatDidCreated);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatDidFailCreate);
         if (this.avatarUpdater != null) {
             this.avatarUpdater.clear();
         }
@@ -218,14 +218,14 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                                 ChannelCreateActivity.this.progressDialog.show();
                                 return;
                             }
-                            final int reqId = MessagesController.getInstance().createChat(ChannelCreateActivity.this.nameTextView.getText().toString(), new ArrayList(), ChannelCreateActivity.this.descriptionTextView.getText().toString(), 2, ChannelCreateActivity.this);
+                            final int reqId = MessagesController.getInstance(ChannelCreateActivity.this.currentAccount).createChat(ChannelCreateActivity.this.nameTextView.getText().toString(), new ArrayList(), ChannelCreateActivity.this.descriptionTextView.getText().toString(), 2, ChannelCreateActivity.this);
                             ChannelCreateActivity.this.progressDialog = new AlertDialog(ChannelCreateActivity.this.getParentActivity(), 1);
                             ChannelCreateActivity.this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
                             ChannelCreateActivity.this.progressDialog.setCanceledOnTouchOutside(false);
                             ChannelCreateActivity.this.progressDialog.setCancelable(false);
                             ChannelCreateActivity.this.progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    ConnectionsManager.getInstance().cancelRequest(reqId, true);
+                                    ConnectionsManager.getInstance(ChannelCreateActivity.this.currentAccount).cancelRequest(reqId, true);
                                     ChannelCreateActivity.this.donePressed = false;
                                     try {
                                         dialog.dismiss();
@@ -246,7 +246,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                                 ChannelCreateActivity.this.showDialog(builder.create());
                                 return;
                             } else if (ChannelCreateActivity.this.lastNameAvailable) {
-                                MessagesController.getInstance().updateChannelUserName(ChannelCreateActivity.this.chatId, ChannelCreateActivity.this.lastCheckName);
+                                MessagesController.getInstance(ChannelCreateActivity.this.currentAccount).updateChannelUserName(ChannelCreateActivity.this.chatId, ChannelCreateActivity.this.lastCheckName);
                             } else {
                                 v = (Vibrator) ChannelCreateActivity.this.getParentActivity().getSystemService("vibrator");
                                 if (v != null) {
@@ -355,13 +355,13 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
                 public void afterTextChanged(Editable s) {
                     String obj;
-                    AvatarDrawable access$1500 = ChannelCreateActivity.this.avatarDrawable;
+                    AvatarDrawable access$1800 = ChannelCreateActivity.this.avatarDrawable;
                     if (ChannelCreateActivity.this.nameTextView.length() > 0) {
                         obj = ChannelCreateActivity.this.nameTextView.getText().toString();
                     } else {
                         obj = null;
                     }
-                    access$1500.setInfo(5, obj, null, false);
+                    access$1800.setInfo(5, obj, null, false);
                     ChannelCreateActivity.this.avatarImage.invalidate();
                 }
             });
@@ -456,7 +456,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.publicContainer.setOrientation(0);
             this.linkContainer.addView(this.publicContainer, LayoutHelper.createLinear(-1, 36, 17.0f, 7.0f, 17.0f, 0.0f));
             this.editText = new EditText(context);
-            this.editText.setText(MessagesController.getInstance().linkPrefix + "/");
+            this.editText.setText(MessagesController.getInstance(this.currentAccount).linkPrefix + "/");
             this.editText.setTextSize(1, 18.0f);
             this.editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -537,8 +537,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         if (!this.loadingInvite && this.invite == null) {
             this.loadingInvite = true;
             TL_channels_exportInvite req = new TL_channels_exportInvite();
-            req.channel = MessagesController.getInputChannel(this.chatId);
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(this.chatId);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, final TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -683,7 +683,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.chatDidFailCreate) {
             if (this.progressDialog != null) {
                 try {
@@ -707,7 +707,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             bundle.putInt("chat_id", chat_id);
             bundle.putBoolean("canCreatePublic", this.canCreatePublic);
             if (this.uploadedAvatar != null) {
-                MessagesController.getInstance().changeChatAvatar(chat_id, this.uploadedAvatar);
+                MessagesController.getInstance(this.currentAccount).changeChatAvatar(chat_id, this.uploadedAvatar);
             }
             presentFragment(new ChannelCreateActivity(bundle), true);
         }
@@ -717,7 +717,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         if (!this.loadingAdminedChannels) {
             this.loadingAdminedChannels = true;
             updatePrivatePublic();
-            ConnectionsManager.getInstance().sendRequest(new TL_channels_getAdminedPublicChannels(), new RequestDelegate() {
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_channels_getAdminedPublicChannels(), new RequestDelegate() {
                 public void run(final TLObject response, TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -737,17 +737,17 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                                             Builder builder = new Builder(ChannelCreateActivity.this.getParentActivity());
                                             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                                             if (channel.megagroup) {
-                                                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", R.string.RevokeLinkAlert, MessagesController.getInstance().linkPrefix + "/" + channel.username, channel.title)));
+                                                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", R.string.RevokeLinkAlert, MessagesController.getInstance(ChannelCreateActivity.this.currentAccount).linkPrefix + "/" + channel.username, channel.title)));
                                             } else {
-                                                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", R.string.RevokeLinkAlertChannel, MessagesController.getInstance().linkPrefix + "/" + channel.username, channel.title)));
+                                                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", R.string.RevokeLinkAlertChannel, MessagesController.getInstance(ChannelCreateActivity.this.currentAccount).linkPrefix + "/" + channel.username, channel.title)));
                                             }
                                             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                                             builder.setPositiveButton(LocaleController.getString("RevokeButton", R.string.RevokeButton), new OnClickListener() {
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     TL_channels_updateUsername req = new TL_channels_updateUsername();
                                                     req.channel = MessagesController.getInputChannel(channel);
-                                                    req.username = "";
-                                                    ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                                    req.username = TtmlNode.ANONYMOUS_REGION_ID;
+                                                    ConnectionsManager.getInstance(ChannelCreateActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                                                         public void run(TLObject response, TL_error error) {
                                                             if (response instanceof TL_boolTrue) {
                                                                 AndroidUtilities.runOnUIThread(new Runnable() {
@@ -792,7 +792,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.checkRunnable = null;
             this.lastCheckName = null;
             if (this.checkReqId != 0) {
-                ConnectionsManager.getInstance().cancelRequest(this.checkReqId, true);
+                ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.checkReqId, true);
             }
         }
         this.lastNameAvailable = false;
@@ -840,8 +840,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 public void run() {
                     TL_channels_checkUsername req = new TL_channels_checkUsername();
                     req.username = name;
-                    req.channel = MessagesController.getInputChannel(ChannelCreateActivity.this.chatId);
-                    ChannelCreateActivity.this.checkReqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    req.channel = MessagesController.getInstance(ChannelCreateActivity.this.currentAccount).getInputChannel(ChannelCreateActivity.this.chatId);
+                    ChannelCreateActivity.this.checkReqId = ConnectionsManager.getInstance(ChannelCreateActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                         public void run(final TLObject response, final TL_error error) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
@@ -924,13 +924,13 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 }
                 if (ChannelCreateActivity.this.avatarImage != null) {
                     String obj;
-                    AvatarDrawable access$1500 = ChannelCreateActivity.this.avatarDrawable;
+                    AvatarDrawable access$1800 = ChannelCreateActivity.this.avatarDrawable;
                     if (ChannelCreateActivity.this.nameTextView.length() > 0) {
                         obj = ChannelCreateActivity.this.nameTextView.getText().toString();
                     } else {
                         obj = null;
                     }
-                    access$1500.setInfo(5, obj, null, false);
+                    access$1800.setInfo(5, obj, null, false);
                     ChannelCreateActivity.this.avatarImage.invalidate();
                 }
             }

@@ -16,6 +16,7 @@ import java.util.List;
 import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.messenger.exoplayer2.util.ParsableBitArray;
 import org.telegram.messenger.exoplayer2.util.Util;
+import org.telegram.ui.ActionBar.Theme;
 
 final class DvbParser {
     private static final int DATA_TYPE_24_TABLE_DATA = 32;
@@ -508,7 +509,7 @@ final class DvbParser {
     }
 
     private static int[] generateDefault2BitClutEntries() {
-        return new int[]{0, -1, -16777216, -8421505};
+        return new int[]{0, -1, Theme.ACTION_BAR_VIDEO_EDIT_COLOR, -8421505};
     }
 
     private static int[] generateDefault4BitClutEntries() {
@@ -622,10 +623,10 @@ final class DvbParser {
                 case 32:
                     clutMapTable2To4 = buildClutMapTable(4, 4, data);
                     break;
-                case 33:
+                case DATA_TYPE_28_TABLE_DATA /*33*/:
                     clutMapTable2To8 = buildClutMapTable(4, 8, data);
                     break;
-                case 34:
+                case DATA_TYPE_48_TABLE_DATA /*34*/:
                     clutMapTable2To8 = buildClutMapTable(16, 8, data);
                     break;
                 case 240:

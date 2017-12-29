@@ -1,72 +1,64 @@
 package com.google.android.gms.common;
 
+import android.content.Context;
 import android.util.Log;
-import com.google.android.gms.common.internal.zzar;
-import com.google.android.gms.common.internal.zzas;
-import com.google.android.gms.common.internal.zzbo;
-import com.google.android.gms.common.util.zzl;
-import com.google.android.gms.dynamic.IObjectWrapper;
+import com.google.android.gms.common.internal.zzba;
+import com.google.android.gms.common.internal.zzbb;
+import com.google.android.gms.common.internal.zzbq;
 import com.google.android.gms.dynamic.zzn;
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
+import com.google.android.gms.dynamite.DynamiteModule;
 
-abstract class zzg extends zzas {
-    private int zzaAg;
+final class zzg {
+    private static zzba zzfky;
+    private static final Object zzfkz = new Object();
+    private static Context zzfla;
 
-    protected zzg(byte[] bArr) {
-        boolean z = false;
-        if (bArr.length != 25) {
-            int length = bArr.length;
-            String valueOf = String.valueOf(zzl.zza(bArr, 0, bArr.length, false));
-            Log.wtf("GoogleCertificates", new StringBuilder(String.valueOf(valueOf).length() + 51).append("Cert hash data has incorrect length (").append(length).append("):\n").append(valueOf).toString(), new Exception());
-            bArr = Arrays.copyOfRange(bArr, 0, 25);
-            if (bArr.length == 25) {
-                z = true;
+    static boolean zza(String str, zzh com_google_android_gms_common_zzh) {
+        return zza(str, com_google_android_gms_common_zzh, false);
+    }
+
+    private static boolean zza(String str, zzh com_google_android_gms_common_zzh, boolean z) {
+        boolean z2 = false;
+        if (zzafz()) {
+            zzbq.checkNotNull(zzfla);
+            try {
+                z2 = zzfky.zza(new zzn(str, com_google_android_gms_common_zzh, z), zzn.zzz(zzfla.getPackageManager()));
+            } catch (Throwable e) {
+                Log.e("GoogleCertificates", "Failed to get Google certificates from remote", e);
             }
-            zzbo.zzb(z, "cert hash data has incorrect length. length=" + bArr.length);
         }
-        this.zzaAg = Arrays.hashCode(bArr);
+        return z2;
     }
 
-    protected static byte[] zzcs(String str) {
-        try {
-            return str.getBytes("ISO-8859-1");
-        } catch (UnsupportedEncodingException e) {
-            throw new AssertionError(e);
-        }
-    }
-
-    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof zzar)) {
-            return false;
-        }
-        try {
-            zzar com_google_android_gms_common_internal_zzar = (zzar) obj;
-            if (com_google_android_gms_common_internal_zzar.zzoZ() != hashCode()) {
-                return false;
+    private static boolean zzafz() {
+        boolean z = true;
+        if (zzfky == null) {
+            zzbq.checkNotNull(zzfla);
+            synchronized (zzfkz) {
+                if (zzfky == null) {
+                    try {
+                        zzfky = zzbb.zzan(DynamiteModule.zza(zzfla, DynamiteModule.zzgwz, "com.google.android.gms.googlecertificates").zzhb("com.google.android.gms.common.GoogleCertificatesImpl"));
+                    } catch (Throwable e) {
+                        Log.e("GoogleCertificates", "Failed to load com.google.android.gms.googlecertificates", e);
+                        z = false;
+                    }
+                }
             }
-            IObjectWrapper zzoY = com_google_android_gms_common_internal_zzar.zzoY();
-            if (zzoY == null) {
-                return false;
-            }
-            return Arrays.equals(getBytes(), (byte[]) zzn.zzE(zzoY));
-        } catch (Throwable e) {
-            Log.e("GoogleCertificates", "Failed to get Google certificates from remote", e);
-            return false;
         }
+        return z;
     }
 
-    abstract byte[] getBytes();
-
-    public int hashCode() {
-        return this.zzaAg;
+    static boolean zzb(String str, zzh com_google_android_gms_common_zzh) {
+        return zza(str, com_google_android_gms_common_zzh, true);
     }
 
-    public final IObjectWrapper zzoY() {
-        return zzn.zzw(getBytes());
-    }
-
-    public final int zzoZ() {
-        return hashCode();
+    static synchronized void zzcg(Context context) {
+        synchronized (zzg.class) {
+            if (zzfla != null) {
+                Log.w("GoogleCertificates", "GoogleCertificates has been initialized already");
+            } else if (context != null) {
+                zzfla = context.getApplicationContext();
+            }
+        }
     }
 }

@@ -65,7 +65,7 @@ public class ID3v1Info extends AudioInfo {
             }
             return text.substring(0, zeroIndex);
         } catch (Exception e) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
     }
 }

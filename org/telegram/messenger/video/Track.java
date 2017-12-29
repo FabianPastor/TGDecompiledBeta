@@ -8,8 +8,6 @@ import com.coremedia.iso.boxes.SoundMediaHeaderBox;
 import com.coremedia.iso.boxes.VideoMediaHeaderBox;
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
-import com.google.android.gms.common.Scopes;
-import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
 import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.AudioSpecificConfig;
 import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.DecoderConfigDescriptor;
@@ -150,8 +148,8 @@ public class Track {
                 avcConfigurationBox.setSequenceParameterSets(spsArray);
                 avcConfigurationBox.setPictureParameterSets(ppsArray);
             }
-            if (format.containsKey(Param.LEVEL)) {
-                int level = format.getInteger(Param.LEVEL);
+            if (format.containsKey("level")) {
+                int level = format.getInteger("level");
                 if (level == 1) {
                     avcConfigurationBox.setAvcLevelIndication(1);
                 } else if (level == 32) {
@@ -190,8 +188,8 @@ public class Track {
             } else {
                 avcConfigurationBox.setAvcLevelIndication(13);
             }
-            if (format.containsKey(Scopes.PROFILE)) {
-                int profile = format.getInteger(Scopes.PROFILE);
+            if (format.containsKey("profile")) {
+                int profile = format.getInteger("profile");
                 if (profile == 1) {
                     avcConfigurationBox.setAvcProfileIndication(66);
                 } else if (profile == 2) {

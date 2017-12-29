@@ -1,19 +1,28 @@
 package com.google.android.gms.wearable.internal;
 
-import com.google.android.gms.internal.zzbdz;
-import com.google.android.gms.wearable.NodeApi.NodeListener;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
+import java.util.List;
 
-final class zzge implements zzbdz<NodeListener> {
-    private /* synthetic */ zzeg zzbRC;
+public final class zzge extends zzbfm {
+    public static final Creator<zzge> CREATOR = new zzgf();
+    private int statusCode;
+    private long zzllb;
+    private List<zzfs> zzlld;
 
-    zzge(zzeg com_google_android_gms_wearable_internal_zzeg) {
-        this.zzbRC = com_google_android_gms_wearable_internal_zzeg;
+    public zzge(int i, long j, List<zzfs> list) {
+        this.statusCode = i;
+        this.zzllb = j;
+        this.zzlld = list;
     }
 
-    public final void zzpT() {
-    }
-
-    public final /* synthetic */ void zzq(Object obj) {
-        ((NodeListener) obj).onPeerDisconnected(this.zzbRC);
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zzc(parcel, 2, this.statusCode);
+        zzbfp.zza(parcel, 3, this.zzllb);
+        zzbfp.zzc(parcel, 4, this.zzlld, false);
+        zzbfp.zzai(parcel, zze);
     }
 }

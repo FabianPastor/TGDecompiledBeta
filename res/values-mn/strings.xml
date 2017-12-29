@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">Суулгах</string>
     <string name="common_google_play_services_install_text">Таны төхөөрөмжид Google Play үйлчилгээ байхгүй тул %1$s ажиллахгүй.</string>
     <string name="common_google_play_services_install_title">Google Play үйлчилгээг авах</string>
+    <string name="common_google_play_services_notification_channel_name">Google Play-н үйлчилгээнүүдийн боломжит байдал</string>
     <string name="common_google_play_services_notification_ticker">Google Наадаан үйлчилгээний алдаа</string>
     <string name="common_google_play_services_unknown_issue">%1$s-г Google Play-н үйлчилгээгээр ашиглахад асуудал гарлаа. Дахин оролдоно уу.</string>
     <string name="common_google_play_services_unsupported_text">Таны төхөөрөмж Google Play үйлчилгээг дэмждэггүй учир %1$s ажиллахгүй.</string>
@@ -17,5 +18,7 @@
     <string name="common_open_on_phone">Утсаар нээх</string>
     <string name="common_signin_button_text">Нэвтрэх</string>
     <string name="common_signin_button_text_long">Google-р нэвтрэх:</string>
+    <string name="gcm_fallback_notification_channel_label">Бусад</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Google-р худалдан авах</string>
 </resources>

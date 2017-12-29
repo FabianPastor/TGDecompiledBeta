@@ -56,7 +56,7 @@ public class DialogsEmptyCell extends LinearLayout {
         if (totalHeight == 0) {
             totalHeight = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
         }
-        ArrayList<RecentMeUrl> arrayList = MessagesController.getInstance().hintDialogs;
+        ArrayList<RecentMeUrl> arrayList = MessagesController.getAccountInstance().hintDialogs;
         if (!arrayList.isEmpty()) {
             totalHeight -= (((AndroidUtilities.dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.dp(50.0f);
         }

@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
-import android.support.v4.view.GravityCompat;
 import android.text.TextUtils.TruncateAt;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -31,8 +30,6 @@ import net.hockeyapp.android.utils.ImageUtils;
 
 @SuppressLint({"ViewConstructor"})
 public class AttachmentView extends FrameLayout {
-    private static final int IMAGES_PER_ROW_LANDSCAPE = 2;
-    private static final int IMAGES_PER_ROW_PORTRAIT = 3;
     private final FeedbackAttachment mAttachment;
     private final Uri mAttachmentUri;
     private final Context mContext;
@@ -154,7 +151,7 @@ public class AttachmentView extends FrameLayout {
         this.mImageView = new ImageView(context);
         LinearLayout bottomView = new LinearLayout(context);
         bottomView.setLayoutParams(new LayoutParams(-1, -2, 80));
-        bottomView.setGravity(GravityCompat.START);
+        bottomView.setGravity(8388611);
         bottomView.setOrientation(1);
         bottomView.setBackgroundColor(Color.parseColor("#80262626"));
         this.mTextView = new TextView(context);

@@ -16,7 +16,7 @@ public interface HttpDataSource extends DataSource {
     public static final Predicate<String> REJECT_PAYWALL_TYPES = new Predicate<String>() {
         public boolean evaluate(String contentType) {
             contentType = Util.toLowerInvariant(contentType);
-            return (TextUtils.isEmpty(contentType) || ((contentType.contains("text") && !contentType.contains(MimeTypes.TEXT_VTT)) || contentType.contains("html") || contentType.contains("xml"))) ? false : true;
+            return (TextUtils.isEmpty(contentType) || ((contentType.contains(MimeTypes.BASE_TYPE_TEXT) && !contentType.contains(MimeTypes.TEXT_VTT)) || contentType.contains("html") || contentType.contains("xml"))) ? false : true;
         }
     };
 

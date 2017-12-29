@@ -23,9 +23,11 @@ import java.util.Collections;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
@@ -56,7 +58,7 @@ public class VoIPHelper {
         boolean isAirplaneMode = true;
         if (userFull != null && userFull.phone_calls_private) {
             new Builder(activity).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("CallNotAvailable", R.string.CallNotAvailable, ContactsController.formatName(user.first_name, user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
-        } else if (ConnectionsManager.getInstance().getConnectionState() != 3) {
+        } else if (ConnectionsManager.getAccountInstance().getConnectionState() != 3) {
             CharSequence string;
             if (System.getInt(activity.getContentResolver(), "airplane_mode_on", 0) == 0) {
                 isAirplaneMode = false;
@@ -119,7 +121,12 @@ public class VoIPHelper {
             intent.putExtra("user_id", user.id);
             intent.putExtra("is_outgoing", true);
             intent.putExtra("start_incall_activity", true);
-            activity.startService(intent);
+            intent.putExtra("account", UserConfig.selectedAccount);
+            try {
+                activity.startService(intent);
+            } catch (Throwable e) {
+                FileLog.e(e);
+            }
         }
     }
 
@@ -154,9 +161,9 @@ public class VoIPHelper {
         if ((call.reason instanceof TL_phoneCallDiscardReasonBusy) || (call.reason instanceof TL_phoneCallDiscardReasonMissed)) {
             return false;
         }
-        for (String hash : ApplicationLoader.applicationContext.getSharedPreferences("notifications", 0).getStringSet("calls_access_hashes", Collections.EMPTY_SET)) {
+        for (String hash : MessagesController.getNotificationsSettings(UserConfig.selectedAccount).getStringSet("calls_access_hashes", Collections.EMPTY_SET)) {
             String[] d = hash.split(" ");
-            if (d.length >= 2 && d[0].equals(call.call_id + "")) {
+            if (d.length >= 2 && d[0].equals(call.call_id + TtmlNode.ANONYMOUS_REGION_ID)) {
                 return true;
             }
         }
@@ -164,12 +171,12 @@ public class VoIPHelper {
     }
 
     public static void showRateAlert(Context context, TL_messageActionPhoneCall call) {
-        for (String hash : context.getSharedPreferences("notifications", 0).getStringSet("calls_access_hashes", Collections.EMPTY_SET)) {
+        for (String hash : MessagesController.getNotificationsSettings(UserConfig.selectedAccount).getStringSet("calls_access_hashes", Collections.EMPTY_SET)) {
             String[] d = hash.split(" ");
-            if (d.length >= 2 && d[0].equals(call.call_id + "")) {
+            if (d.length >= 2 && d[0].equals(call.call_id + TtmlNode.ANONYMOUS_REGION_ID)) {
                 try {
                     Context context2 = context;
-                    showRateAlert(context2, null, call.call_id, Long.parseLong(d[1]));
+                    showRateAlert(context2, null, call.call_id, Long.parseLong(d[1]), UserConfig.selectedAccount);
                     return;
                 } catch (Exception e) {
                     return;
@@ -178,7 +185,7 @@ public class VoIPHelper {
         }
     }
 
-    public static void showRateAlert(Context context, Runnable onDismiss, long callID, long accessHash) {
+    public static void showRateAlert(Context context, Runnable onDismiss, long callID, long accessHash, int account) {
         final File log = new File(getLogsDir(), callID + ".log");
         View linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
@@ -238,24 +245,26 @@ public class VoIPHelper {
         final View view3 = linearLayout;
         final long j = accessHash;
         final long j2 = callID;
+        final int i = account;
         final Context context2 = context;
         final Runnable runnable = onDismiss;
         final View btn = new Builder(context).setTitle(LocaleController.getString("CallMessageReportProblem", R.string.CallMessageReportProblem)).setView(linearLayout).setPositiveButton(LocaleController.getString("Send", R.string.Send), new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                final int currentAccount = UserConfig.selectedAccount;
                 final TL_phone_setCallRating req = new TL_phone_setCallRating();
                 req.rating = view2.getRating();
                 if (req.rating < 5) {
                     req.comment = view3.getText().toString();
                 } else {
-                    req.comment = "";
+                    req.comment = TtmlNode.ANONYMOUS_REGION_ID;
                 }
                 req.peer = new TL_inputPhoneCall();
                 req.peer.access_hash = j;
                 req.peer.id = j2;
-                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                ConnectionsManager.getInstance(i).sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, TL_error error) {
                         if (response instanceof TL_updates) {
-                            MessagesController.getInstance().processUpdates((TL_updates) response, false);
+                            MessagesController.getInstance(currentAccount).processUpdates((TL_updates) response, false);
                             if (includeLogs[0] && log.exists() && req.rating < 4) {
                                 SendMessagesHelper.prepareSendingDocument(log.getAbsolutePath(), log.getAbsolutePath(), null, "text/plain", 4244000, null, null);
                                 Toast.makeText(context2, LocaleController.getString("CallReportSent", R.string.CallReportSent), 1).show();
@@ -311,14 +320,14 @@ public class VoIPHelper {
         });
     }
 
-    public static void upgradeP2pSetting() {
-        SharedPreferences prefs = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+    public static void upgradeP2pSetting(int account) {
+        SharedPreferences prefs = MessagesController.getMainSettings(account);
         if (prefs.contains("calls_p2p")) {
             Editor e = prefs.edit();
             if (!prefs.getBoolean("calls_p2p", true)) {
                 e.putInt("calls_p2p_new", 2);
             }
-            e.remove("calls_p2p").apply();
+            e.remove("calls_p2p").commit();
         }
     }
 }

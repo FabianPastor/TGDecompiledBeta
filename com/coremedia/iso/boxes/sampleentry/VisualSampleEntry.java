@@ -1,6 +1,5 @@
 package com.coremedia.iso.boxes.sampleentry;
 
-import android.support.v4.internal.view.SupportMenu;
 import com.coremedia.iso.BoxParser;
 import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
@@ -46,7 +45,7 @@ public final class VisualSampleEntry extends AbstractSampleEntry implements Cont
         this.horizresolution = 72.0d;
         this.vertresolution = 72.0d;
         this.frameCount = 1;
-        this.compressorname = "";
+        this.compressorname = TtmlNode.ANONYMOUS_REGION_ID;
         this.depth = 24;
         this.predefined = new long[3];
     }
@@ -56,7 +55,7 @@ public final class VisualSampleEntry extends AbstractSampleEntry implements Cont
         this.horizresolution = 72.0d;
         this.vertresolution = 72.0d;
         this.frameCount = 1;
-        this.compressorname = "";
+        this.compressorname = TtmlNode.ANONYMOUS_REGION_ID;
         this.depth = 24;
         this.predefined = new long[3];
     }
@@ -228,7 +227,7 @@ public final class VisualSampleEntry extends AbstractSampleEntry implements Cont
             byteBuffer.put((byte) 0);
         }
         IsoTypeWriter.writeUInt16(byteBuffer, getDepth());
-        IsoTypeWriter.writeUInt16(byteBuffer, SupportMenu.USER_MASK);
+        IsoTypeWriter.writeUInt16(byteBuffer, 65535);
         writableByteChannel.write((ByteBuffer) byteBuffer.rewind());
         writeContainer(writableByteChannel);
     }

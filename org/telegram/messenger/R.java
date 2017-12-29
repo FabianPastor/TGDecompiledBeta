@@ -30,6 +30,15 @@ public final class R {
         public static final int circleCrop = NUM;
         public static final int colorScheme = NUM;
         public static final int environment = NUM;
+        public static final int font = NUM;
+        public static final int fontProviderAuthority = NUM;
+        public static final int fontProviderCerts = NUM;
+        public static final int fontProviderFetchStrategy = NUM;
+        public static final int fontProviderFetchTimeout = NUM;
+        public static final int fontProviderPackage = NUM;
+        public static final int fontProviderQuery = NUM;
+        public static final int fontStyle = NUM;
+        public static final int fontWeight = NUM;
         public static final int fragmentMode = NUM;
         public static final int fragmentStyle = NUM;
         public static final int imageAspectRatio = NUM;
@@ -62,6 +71,7 @@ public final class R {
     }
 
     public static final class bool {
+        public static final int abc_action_bar_embed_tabs = NUM;
         public static final int isTablet = NUM;
         public static final int useHardwareAcceleration = NUM;
     }
@@ -89,6 +99,10 @@ public final class R {
         public static final int hockeyapp_text_light = NUM;
         public static final int hockeyapp_text_normal = NUM;
         public static final int hockeyapp_text_white = NUM;
+        public static final int notification_action_color_filter = NUM;
+        public static final int notification_icon_bg_color = NUM;
+        public static final int ripple_material_light = NUM;
+        public static final int secondary_text_default_material_light = NUM;
         public static final int wallet_bright_foreground_disabled_holo_light = NUM;
         public static final int wallet_bright_foreground_holo_dark = NUM;
         public static final int wallet_bright_foreground_holo_light = NUM;
@@ -104,9 +118,34 @@ public final class R {
         public static final int wallet_secondary_text_holo_dark = NUM;
     }
 
+    public static final class dimen {
+        public static final int compat_button_inset_horizontal_material = NUM;
+        public static final int compat_button_inset_vertical_material = NUM;
+        public static final int compat_button_padding_horizontal_material = NUM;
+        public static final int compat_button_padding_vertical_material = NUM;
+        public static final int compat_control_corner_material = NUM;
+        public static final int notification_action_icon_size = NUM;
+        public static final int notification_action_text_size = NUM;
+        public static final int notification_big_circle_margin = NUM;
+        public static final int notification_content_margin_start = NUM;
+        public static final int notification_large_icon_height = NUM;
+        public static final int notification_large_icon_width = NUM;
+        public static final int notification_main_column_padding_top = NUM;
+        public static final int notification_media_narrow_margin = NUM;
+        public static final int notification_right_icon_size = NUM;
+        public static final int notification_right_side_padding_top = NUM;
+        public static final int notification_small_icon_background_padding = NUM;
+        public static final int notification_small_icon_size_as_large = NUM;
+        public static final int notification_subtext_size = NUM;
+        public static final int notification_top_pad = NUM;
+        public static final int notification_top_pad_large_text = NUM;
+    }
+
     public static final class drawable {
         public static final int ab_progress = NUM;
         public static final int abc_ic_menu_share_mtrl_alpha = NUM;
+        public static final int account_add = NUM;
+        public static final int account_check = NUM;
         public static final int add = NUM;
         public static final int admin_star = NUM;
         public static final int animationpin = NUM;
@@ -188,6 +227,8 @@ public final class R {
         public static final int circle = NUM;
         public static final int circle_big = NUM;
         public static final int cloud_big = NUM;
+        public static final int collapse_down = NUM;
+        public static final int collapse_up = NUM;
         public static final int common_full_open_on_phone = NUM;
         public static final int common_google_signin_btn_icon_dark = NUM;
         public static final int common_google_signin_btn_icon_dark_focused = NUM;
@@ -445,6 +486,17 @@ public final class R {
         public static final int nocover_small = NUM;
         public static final int nophotos = NUM;
         public static final int notification = NUM;
+        public static final int notification_action_background = NUM;
+        public static final int notification_bg = NUM;
+        public static final int notification_bg_low = NUM;
+        public static final int notification_bg_low_normal = NUM;
+        public static final int notification_bg_low_pressed = NUM;
+        public static final int notification_bg_normal = NUM;
+        public static final int notification_bg_normal_pressed = NUM;
+        public static final int notification_icon_background = NUM;
+        public static final int notification_template_icon_bg = NUM;
+        public static final int notification_template_icon_low_bg = NUM;
+        public static final int notification_tile_bg = NUM;
         public static final int notifications_s_1h = NUM;
         public static final int notifications_s_2d = NUM;
         public static final int notifications_s_custom = NUM;
@@ -452,6 +504,7 @@ public final class R {
         public static final int notifications_s_on = NUM;
         public static final int notify_members_off = NUM;
         public static final int notify_members_on = NUM;
+        public static final int notify_panel_notification_icon_bg = NUM;
         public static final int pagedown = NUM;
         public static final int pagedown_shadow = NUM;
         public static final int paint_elliptical_brush = NUM;
@@ -586,13 +639,20 @@ public final class R {
     }
 
     public static final class id {
+        public static final int action_container = NUM;
+        public static final int action_divider = NUM;
+        public static final int action_image = NUM;
+        public static final int action_text = NUM;
+        public static final int actions = NUM;
         public static final int adjust_height = NUM;
         public static final int adjust_width = NUM;
         public static final int android_pay = NUM;
         public static final int android_pay_dark = NUM;
         public static final int android_pay_light = NUM;
         public static final int android_pay_light_with_border = NUM;
+        public static final int async = NUM;
         public static final int auto = NUM;
+        public static final int blocking = NUM;
         public static final int book_now = NUM;
         public static final int button_add_response = NUM;
         public static final int button_attachment = NUM;
@@ -604,10 +664,12 @@ public final class R {
         public static final int buy_now = NUM;
         public static final int buy_with = NUM;
         public static final int buy_with_google = NUM;
+        public static final int chronometer = NUM;
         public static final int classic = NUM;
         public static final int dark = NUM;
         public static final int donate_with = NUM;
         public static final int donate_with_google = NUM;
+        public static final int forever = NUM;
         public static final int google_wallet_classic = NUM;
         public static final int google_wallet_grayscale = NUM;
         public static final int google_wallet_monochrome = NUM;
@@ -615,12 +677,16 @@ public final class R {
         public static final int holo_dark = NUM;
         public static final int holo_light = NUM;
         public static final int hybrid = NUM;
+        public static final int icon = NUM;
+        public static final int icon_group = NUM;
         public static final int icon_only = NUM;
+        public static final int info = NUM;
         public static final int input_email = NUM;
         public static final int input_message = NUM;
         public static final int input_name = NUM;
         public static final int input_password = NUM;
         public static final int input_subject = NUM;
+        public static final int italic = NUM;
         public static final int label_author = NUM;
         public static final int label_date = NUM;
         public static final int label_last_updated = NUM;
@@ -629,6 +695,8 @@ public final class R {
         public static final int label_title = NUM;
         public static final int label_version = NUM;
         public static final int light = NUM;
+        public static final int line1 = NUM;
+        public static final int line3 = NUM;
         public static final int list_attachments = NUM;
         public static final int list_feedback_messages = NUM;
         public static final int logo_only = NUM;
@@ -640,6 +708,9 @@ public final class R {
         public static final int monochrome = NUM;
         public static final int none = NUM;
         public static final int normal = NUM;
+        public static final int notification_background = NUM;
+        public static final int notification_main_column = NUM;
+        public static final int notification_main_column_container = NUM;
         public static final int player_album_art = NUM;
         public static final int player_album_title = NUM;
         public static final int player_author_name = NUM;
@@ -651,15 +722,22 @@ public final class R {
         public static final int player_progress_bar = NUM;
         public static final int player_song_name = NUM;
         public static final int production = NUM;
+        public static final int right_icon = NUM;
+        public static final int right_side = NUM;
         public static final int sandbox = NUM;
         public static final int satellite = NUM;
         public static final int selectionDetails = NUM;
         public static final int slide = NUM;
         public static final int standard = NUM;
         public static final int strict_sandbox = NUM;
+        public static final int tag_transition_group = NUM;
         public static final int terrain = NUM;
         public static final int test = NUM;
+        public static final int text = NUM;
+        public static final int text2 = NUM;
         public static final int text_headline = NUM;
+        public static final int time = NUM;
+        public static final int title = NUM;
         public static final int view_header = NUM;
         public static final int web_update_details = NUM;
         public static final int wide = NUM;
@@ -673,6 +751,7 @@ public final class R {
 
     public static final class integer {
         public static final int google_play_services_version = NUM;
+        public static final int status_bar_notification_info_maxnum = NUM;
     }
 
     public static final class layout {
@@ -682,8 +761,15 @@ public final class R {
         public static final int hockeyapp_activity_update = NUM;
         public static final int hockeyapp_fragment_update = NUM;
         public static final int hockeyapp_view_feedback_message = NUM;
+        public static final int notification_action = NUM;
+        public static final int notification_action_tombstone = NUM;
+        public static final int notification_template_custom_big = NUM;
+        public static final int notification_template_icon_group = NUM;
+        public static final int notification_template_part_chronometer = NUM;
+        public static final int notification_template_part_time = NUM;
         public static final int player_big_notification = NUM;
         public static final int player_small_notification = NUM;
+        public static final int wallet_test_layout = NUM;
     }
 
     public static final class raw {
@@ -700,7 +786,9 @@ public final class R {
         public static final int ALongTimeAgo = NUM;
         public static final int AbortPassword = NUM;
         public static final int AccessError = NUM;
+        public static final int AccountAlreadyLoggedIn = NUM;
         public static final int AccountSettings = NUM;
+        public static final int AccountSwitch = NUM;
         public static final int AccurateTo = NUM;
         public static final int ActionAddUser = NUM;
         public static final int ActionAddUserSelf = NUM;
@@ -751,6 +839,7 @@ public final class R {
         public static final int ActionYouScored = NUM;
         public static final int ActionYouScoredInGame = NUM;
         public static final int Add = NUM;
+        public static final int AddAccount = NUM;
         public static final int AddAdminErrorBlacklisted = NUM;
         public static final int AddAdminErrorNotAMember = NUM;
         public static final int AddBannedErrorAdmin = NUM;
@@ -994,6 +1083,7 @@ public final class R {
         public static final int ChannelMessageContact = NUM;
         public static final int ChannelMessageDocument = NUM;
         public static final int ChannelMessageGIF = NUM;
+        public static final int ChannelMessageLiveLocation = NUM;
         public static final int ChannelMessageMap = NUM;
         public static final int ChannelMessageMusic = NUM;
         public static final int ChannelMessageNoText = NUM;
@@ -1759,6 +1849,7 @@ public final class R {
         public static final int NotificationMessageGroupDocument = NUM;
         public static final int NotificationMessageGroupGame = NUM;
         public static final int NotificationMessageGroupGif = NUM;
+        public static final int NotificationMessageGroupLiveLocation = NUM;
         public static final int NotificationMessageGroupMap = NUM;
         public static final int NotificationMessageGroupMusic = NUM;
         public static final int NotificationMessageGroupNoText = NUM;
@@ -1768,6 +1859,7 @@ public final class R {
         public static final int NotificationMessageGroupStickerEmoji = NUM;
         public static final int NotificationMessageGroupText = NUM;
         public static final int NotificationMessageGroupVideo = NUM;
+        public static final int NotificationMessageLiveLocation = NUM;
         public static final int NotificationMessageMap = NUM;
         public static final int NotificationMessageMusic = NUM;
         public static final int NotificationMessageNoText = NUM;
@@ -1821,6 +1913,7 @@ public final class R {
         public static final int OpenGroup = NUM;
         public static final int OpenInBrowser = NUM;
         public static final int OpenInExternalApp = NUM;
+        public static final int OpenMessage = NUM;
         public static final int OpenUrlAlert = NUM;
         public static final int OtherSessions = NUM;
         public static final int OutgoingCalls = NUM;
@@ -2322,6 +2415,7 @@ public final class R {
         public static final int ViewPackPreview = NUM;
         public static final int Vignette = NUM;
         public static final int VoipAnswerCall = NUM;
+        public static final int VoipAnsweringAsAccount = NUM;
         public static final int VoipAudioRoutingBluetooth = NUM;
         public static final int VoipAudioRoutingEarpiece = NUM;
         public static final int VoipAudioRoutingSpeaker = NUM;
@@ -2413,6 +2507,7 @@ public final class R {
         public static final int common_google_play_services_install_button = NUM;
         public static final int common_google_play_services_install_text = NUM;
         public static final int common_google_play_services_install_title = NUM;
+        public static final int common_google_play_services_notification_channel_name = NUM;
         public static final int common_google_play_services_notification_ticker = NUM;
         public static final int common_google_play_services_unknown_issue = NUM;
         public static final int common_google_play_services_unsupported_text = NUM;
@@ -2441,6 +2536,7 @@ public final class R {
         public static final int formatterYear = NUM;
         public static final int formatterYearMax = NUM;
         public static final int gcm_defaultSenderId = NUM;
+        public static final int gcm_fallback_notification_channel_label = NUM;
         public static final int google_api_key = NUM;
         public static final int google_app_id = NUM;
         public static final int google_crash_reporting_api_key = NUM;
@@ -2529,6 +2625,7 @@ public final class R {
         public static final int messages_two = NUM;
         public static final int messages_zero = NUM;
         public static final int project_id = NUM;
+        public static final int status_bar_notification_info_overflow = NUM;
         public static final int wallet_buy_button_place_holder = NUM;
     }
 
@@ -2540,6 +2637,11 @@ public final class R {
         public static final int HockeyApp_EditTextStyle = NUM;
         public static final int HockeyApp_SingleLineInputStyle = NUM;
         public static final int PopupAnimation = NUM;
+        public static final int TextAppearance_Compat_Notification = NUM;
+        public static final int TextAppearance_Compat_Notification_Info = NUM;
+        public static final int TextAppearance_Compat_Notification_Line2 = NUM;
+        public static final int TextAppearance_Compat_Notification_Time = NUM;
+        public static final int TextAppearance_Compat_Notification_Title = NUM;
         public static final int Theme_TMessages = NUM;
         public static final int Theme_TMessages_BorderLessButton = NUM;
         public static final int Theme_TMessages_CalendarView = NUM;
@@ -2557,12 +2659,28 @@ public final class R {
         public static final int WalletFragmentDefaultDetailsHeaderTextAppearance = NUM;
         public static final int WalletFragmentDefaultDetailsTextAppearance = NUM;
         public static final int WalletFragmentDefaultStyle = NUM;
+        public static final int Widget_Compat_NotificationActionContainer = NUM;
+        public static final int Widget_Compat_NotificationActionText = NUM;
     }
 
     public static final class styleable {
         public static final int[] CustomWalletTheme = new int[]{org.telegram.messenger.beta.R.attr.toolbarTextColorStyle, org.telegram.messenger.beta.R.attr.windowTransitionStyle};
         public static final int CustomWalletTheme_toolbarTextColorStyle = 0;
         public static final int CustomWalletTheme_windowTransitionStyle = 1;
+        public static final int[] FontFamily = new int[]{org.telegram.messenger.beta.R.attr.fontProviderAuthority, org.telegram.messenger.beta.R.attr.fontProviderCerts, org.telegram.messenger.beta.R.attr.fontProviderFetchStrategy, org.telegram.messenger.beta.R.attr.fontProviderFetchTimeout, org.telegram.messenger.beta.R.attr.fontProviderPackage, org.telegram.messenger.beta.R.attr.fontProviderQuery};
+        public static final int[] FontFamilyFont = new int[]{16844082, 16844083, 16844095, org.telegram.messenger.beta.R.attr.font, org.telegram.messenger.beta.R.attr.fontStyle, org.telegram.messenger.beta.R.attr.fontWeight};
+        public static final int FontFamilyFont_android_font = 0;
+        public static final int FontFamilyFont_android_fontStyle = 2;
+        public static final int FontFamilyFont_android_fontWeight = 1;
+        public static final int FontFamilyFont_font = 3;
+        public static final int FontFamilyFont_fontStyle = 4;
+        public static final int FontFamilyFont_fontWeight = 5;
+        public static final int FontFamily_fontProviderAuthority = 0;
+        public static final int FontFamily_fontProviderCerts = 1;
+        public static final int FontFamily_fontProviderFetchStrategy = 2;
+        public static final int FontFamily_fontProviderFetchTimeout = 3;
+        public static final int FontFamily_fontProviderPackage = 4;
+        public static final int FontFamily_fontProviderQuery = 5;
         public static final int[] LoadingImageView = new int[]{org.telegram.messenger.beta.R.attr.circleCrop, org.telegram.messenger.beta.R.attr.imageAspectRatio, org.telegram.messenger.beta.R.attr.imageAspectRatioAdjust};
         public static final int LoadingImageView_circleCrop = 0;
         public static final int LoadingImageView_imageAspectRatio = 1;

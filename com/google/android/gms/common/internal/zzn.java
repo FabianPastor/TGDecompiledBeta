@@ -4,52 +4,50 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.RemoteException;
-import android.support.annotation.BinderThread;
 import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 
 public final class zzn extends zze {
-    private /* synthetic */ zzd zzaHe;
-    private IBinder zzaHi;
+    private /* synthetic */ zzd zzfza;
+    private IBinder zzfze;
 
-    @BinderThread
     public zzn(zzd com_google_android_gms_common_internal_zzd, int i, IBinder iBinder, Bundle bundle) {
-        this.zzaHe = com_google_android_gms_common_internal_zzd;
+        this.zzfza = com_google_android_gms_common_internal_zzd;
         super(com_google_android_gms_common_internal_zzd, i, bundle);
-        this.zzaHi = iBinder;
+        this.zzfze = iBinder;
     }
 
-    protected final void zzj(ConnectionResult connectionResult) {
-        if (this.zzaHe.zzaGW != null) {
-            this.zzaHe.zzaGW.onConnectionFailed(connectionResult);
-        }
-        this.zzaHe.onConnectionFailed(connectionResult);
-    }
-
-    protected final boolean zzrj() {
+    protected final boolean zzakr() {
         try {
-            String interfaceDescriptor = this.zzaHi.getInterfaceDescriptor();
-            if (this.zzaHe.zzdc().equals(interfaceDescriptor)) {
-                IInterface zzd = this.zzaHe.zzd(this.zzaHi);
+            String interfaceDescriptor = this.zzfze.getInterfaceDescriptor();
+            if (this.zzfza.zzhj().equals(interfaceDescriptor)) {
+                IInterface zzd = this.zzfza.zzd(this.zzfze);
                 if (zzd == null) {
                     return false;
                 }
-                if (!this.zzaHe.zza(2, 4, zzd) && !this.zzaHe.zza(3, 4, zzd)) {
+                if (!this.zzfza.zza(2, 4, zzd) && !this.zzfza.zza(3, 4, zzd)) {
                     return false;
                 }
-                this.zzaHe.zzaGZ = null;
-                Bundle zzoC = this.zzaHe.zzoC();
-                if (this.zzaHe.zzaGV != null) {
-                    this.zzaHe.zzaGV.onConnected(zzoC);
+                this.zzfza.zzfyv = null;
+                Bundle zzafi = this.zzfza.zzafi();
+                if (this.zzfza.zzfyr != null) {
+                    this.zzfza.zzfyr.onConnected(zzafi);
                 }
                 return true;
             }
-            String valueOf = String.valueOf(this.zzaHe.zzdc());
-            Log.e("GmsClient", new StringBuilder((String.valueOf(valueOf).length() + 34) + String.valueOf(interfaceDescriptor).length()).append("service descriptor mismatch: ").append(valueOf).append(" vs. ").append(interfaceDescriptor).toString());
+            String zzhj = this.zzfza.zzhj();
+            Log.e("GmsClient", new StringBuilder((String.valueOf(zzhj).length() + 34) + String.valueOf(interfaceDescriptor).length()).append("service descriptor mismatch: ").append(zzhj).append(" vs. ").append(interfaceDescriptor).toString());
             return false;
         } catch (RemoteException e) {
             Log.w("GmsClient", "service probably died");
             return false;
         }
+    }
+
+    protected final void zzj(ConnectionResult connectionResult) {
+        if (this.zzfza.zzfys != null) {
+            this.zzfza.zzfys.onConnectionFailed(connectionResult);
+        }
+        this.zzfza.onConnectionFailed(connectionResult);
     }
 }

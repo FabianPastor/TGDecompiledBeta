@@ -117,9 +117,9 @@ public class ChangeUsernameActivity extends BaseFragment {
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
-        User user = MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId()));
+        User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
         if (user == null) {
-            user = UserConfig.getCurrentUser();
+            user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
         }
         this.fragmentView = new LinearLayout(context);
         LinearLayout linearLayout = this.fragmentView;
@@ -166,7 +166,7 @@ public class ChangeUsernameActivity extends BaseFragment {
 
             public void afterTextChanged(Editable editable) {
                 if (ChangeUsernameActivity.this.firstNameField.length() > 0) {
-                    String url = "https://" + MessagesController.getInstance().linkPrefix + "/" + ChangeUsernameActivity.this.firstNameField.getText();
+                    String url = "https://" + MessagesController.getAccountInstance().linkPrefix + "/" + ChangeUsernameActivity.this.firstNameField.getText();
                     String text = LocaleController.formatString("UsernameHelpLink", R.string.UsernameHelpLink, url);
                     int index = text.indexOf(url);
                     SpannableStringBuilder textSpan = new SpannableStringBuilder(text);
@@ -208,7 +208,7 @@ public class ChangeUsernameActivity extends BaseFragment {
 
     public void onResume() {
         super.onResume();
-        if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("view_animations", true)) {
+        if (!MessagesController.getGlobalMainSettings().getBoolean("view_animations", true)) {
             this.firstNameField.requestFocus();
             AndroidUtilities.showKeyboard(this.firstNameField);
         }
@@ -228,7 +228,7 @@ public class ChangeUsernameActivity extends BaseFragment {
             this.checkRunnable = null;
             this.lastCheckName = null;
             if (this.checkReqId != 0) {
-                ConnectionsManager.getInstance().cancelRequest(this.checkReqId, true);
+                ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.checkReqId, true);
             }
         }
         this.lastNameAvailable = false;
@@ -286,9 +286,9 @@ public class ChangeUsernameActivity extends BaseFragment {
         } else if (alert) {
             return true;
         } else {
-            String currentName = UserConfig.getCurrentUser().username;
+            String currentName = UserConfig.getInstance(this.currentAccount).getCurrentUser().username;
             if (currentName == null) {
-                currentName = "";
+                currentName = TtmlNode.ANONYMOUS_REGION_ID;
             }
             if (name.equals(currentName)) {
                 this.checkTextView.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, name));
@@ -304,7 +304,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 public void run() {
                     TL_account_checkUsername req = new TL_account_checkUsername();
                     req.username = name;
-                    ChangeUsernameActivity.this.checkReqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    ChangeUsernameActivity.this.checkReqId = ConnectionsManager.getInstance(ChangeUsernameActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                         public void run(final TLObject response, final TL_error error) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
@@ -335,11 +335,11 @@ public class ChangeUsernameActivity extends BaseFragment {
 
     private void saveName() {
         if (checkUserName(this.firstNameField.getText().toString(), true)) {
-            User user = UserConfig.getCurrentUser();
+            User user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
             if (getParentActivity() != null && user != null) {
                 String currentName = user.username;
                 if (currentName == null) {
-                    currentName = "";
+                    currentName = TtmlNode.ANONYMOUS_REGION_ID;
                 }
                 String newName = this.firstNameField.getText().toString();
                 if (currentName.equals(newName)) {
@@ -352,8 +352,9 @@ public class ChangeUsernameActivity extends BaseFragment {
                 progressDialog.setCancelable(false);
                 final TL_account_updateUsername req = new TL_account_updateUsername();
                 req.username = newName;
-                NotificationCenter.getInstance().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
-                final int reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                final MessagesController messagesController = MessagesController.getAccountInstance();
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
+                final int reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, final TL_error error) {
                         if (error == null) {
                             final User user = (User) response;
@@ -366,9 +367,9 @@ public class ChangeUsernameActivity extends BaseFragment {
                                     }
                                     ArrayList<User> users = new ArrayList();
                                     users.add(user);
-                                    MessagesController.getInstance().putUsers(users, false);
-                                    MessagesStorage.getInstance().putUsersAndChats(users, null, false, true);
-                                    UserConfig.saveConfig(true);
+                                    messagesController.putUsers(users, false);
+                                    MessagesStorage.getInstance(ChangeUsernameActivity.this.currentAccount).putUsersAndChats(users, null, false, true);
+                                    UserConfig.getInstance(ChangeUsernameActivity.this.currentAccount).saveConfig(true);
                                     ChangeUsernameActivity.this.finishFragment();
                                 }
                             });
@@ -381,15 +382,15 @@ public class ChangeUsernameActivity extends BaseFragment {
                                 } catch (Throwable e) {
                                     FileLog.e(e);
                                 }
-                                AlertsCreator.processError(error, ChangeUsernameActivity.this, req, new Object[0]);
+                                AlertsCreator.processError(ChangeUsernameActivity.this.currentAccount, error, ChangeUsernameActivity.this, req, new Object[0]);
                             }
                         });
                     }
                 }, 2);
-                ConnectionsManager.getInstance().bindRequestToGuid(reqId, this.classGuid);
+                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(reqId, this.classGuid);
                 progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        ConnectionsManager.getInstance().cancelRequest(reqId, true);
+                        ConnectionsManager.getInstance(ChangeUsernameActivity.this.currentAccount).cancelRequest(reqId, true);
                         try {
                             dialog.dismiss();
                         } catch (Throwable e) {

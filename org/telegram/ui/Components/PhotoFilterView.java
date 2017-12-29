@@ -26,8 +26,6 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.google.android.gms.gcm.Task;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -45,6 +43,7 @@ import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController.SavedFilterState;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
@@ -725,20 +724,20 @@ public class PhotoFilterView extends FrameLayout {
                 GLES20.glReadPixels(0, 0, this.renderBufferWidth, this.renderBufferHeight, 6408, 5121, hsvBuffer);
                 GLES20.glBindTexture(3553, this.enhanceTextures[0]);
                 GLES20.glTexParameteri(3553, 10241, 9729);
-                GLES20.glTexParameteri(3553, Task.EXTRAS_LIMIT_BYTES, 9729);
+                GLES20.glTexParameteri(3553, 10240, 9729);
                 GLES20.glTexParameteri(3553, 10242, 33071);
                 GLES20.glTexParameteri(3553, 10243, 33071);
                 GLES20.glTexImage2D(3553, 0, 6408, this.renderBufferWidth, this.renderBufferHeight, 0, 6408, 5121, hsvBuffer);
                 ByteBuffer byteBuffer = null;
                 try {
-                    byteBuffer = ByteBuffer.allocateDirect(16384);
+                    byteBuffer = ByteBuffer.allocateDirect(MessagesController.UPDATE_MASK_CHAT_ADMINS);
                     Utilities.calcCDT(hsvBuffer, this.renderBufferWidth, this.renderBufferHeight, byteBuffer);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
                 GLES20.glBindTexture(3553, this.enhanceTextures[1]);
                 GLES20.glTexParameteri(3553, 10241, 9729);
-                GLES20.glTexParameteri(3553, Task.EXTRAS_LIMIT_BYTES, 9729);
+                GLES20.glTexParameteri(3553, 10240, 9729);
                 GLES20.glTexParameteri(3553, 10242, 33071);
                 GLES20.glTexParameteri(3553, 10243, 33071);
                 GLES20.glTexImage2D(3553, 0, 6408, 256, 16, 0, 6408, 5121, byteBuffer);
@@ -837,7 +836,7 @@ public class PhotoFilterView extends FrameLayout {
                     GLES20.glActiveTexture(33985);
                     GLES20.glBindTexture(3553, this.curveTextures[0]);
                     GLES20.glTexParameteri(3553, 10241, 9729);
-                    GLES20.glTexParameteri(3553, Task.EXTRAS_LIMIT_BYTES, 9729);
+                    GLES20.glTexParameteri(3553, 10240, 9729);
                     GLES20.glTexParameteri(3553, 10242, 33071);
                     GLES20.glTexParameteri(3553, 10243, 33071);
                     GLES20.glTexImage2D(3553, 0, 6408, Callback.DEFAULT_DRAG_ANIMATION_DURATION, 1, 0, 6408, 5121, PhotoFilterView.this.curvesToolValue.curveBuffer);
@@ -994,19 +993,19 @@ public class PhotoFilterView extends FrameLayout {
             GLES20.glGenTextures(3, this.renderTexture, 0);
             GLES20.glBindTexture(3553, this.renderTexture[0]);
             GLES20.glTexParameteri(3553, 10241, 9729);
-            GLES20.glTexParameteri(3553, Task.EXTRAS_LIMIT_BYTES, 9729);
+            GLES20.glTexParameteri(3553, 10240, 9729);
             GLES20.glTexParameteri(3553, 10242, 33071);
             GLES20.glTexParameteri(3553, 10243, 33071);
             GLES20.glTexImage2D(3553, 0, 6408, this.renderBufferWidth, this.renderBufferHeight, 0, 6408, 5121, null);
             GLES20.glBindTexture(3553, this.renderTexture[1]);
             GLES20.glTexParameteri(3553, 10241, 9729);
-            GLES20.glTexParameteri(3553, Task.EXTRAS_LIMIT_BYTES, 9729);
+            GLES20.glTexParameteri(3553, 10240, 9729);
             GLES20.glTexParameteri(3553, 10242, 33071);
             GLES20.glTexParameteri(3553, 10243, 33071);
             GLUtils.texImage2D(3553, 0, this.currentBitmap, 0);
             GLES20.glBindTexture(3553, this.renderTexture[2]);
             GLES20.glTexParameteri(3553, 10241, 9729);
-            GLES20.glTexParameteri(3553, Task.EXTRAS_LIMIT_BYTES, 9729);
+            GLES20.glTexParameteri(3553, 10240, 9729);
             GLES20.glTexParameteri(3553, 10242, 33071);
             GLES20.glTexParameteri(3553, 10243, 33071);
             GLES20.glTexImage2D(3553, 0, 6408, this.renderBufferWidth, this.renderBufferHeight, 0, 6408, 5121, null);
@@ -1290,7 +1289,7 @@ public class PhotoFilterView extends FrameLayout {
         this.toolsView = new FrameLayout(context);
         addView(this.toolsView, LayoutHelper.createFrame(-1, 186, 83));
         FrameLayout frameLayout = new FrameLayout(context);
-        frameLayout.setBackgroundColor(-16777216);
+        frameLayout.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         this.toolsView.addView(frameLayout, LayoutHelper.createFrame(-1, 48, 83));
         this.cancelTextView = new TextView(context);
         this.cancelTextView.setTextSize(1, 14.0f);
@@ -1402,7 +1401,7 @@ public class PhotoFilterView extends FrameLayout {
                 this.curveRadioButton[a].setColor(-12734994, -12734994);
             }
             frameLayout1.addView(curveTextView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 38.0f, 0.0f, 0.0f));
-            curveTextViewContainer.addView(frameLayout1, LayoutHelper.createLinear(-2, -2, a == 0 ? 0.0f : BitmapDescriptorFactory.HUE_ORANGE, 0.0f, 0.0f, 0.0f));
+            curveTextViewContainer.addView(frameLayout1, LayoutHelper.createLinear(-2, -2, a == 0 ? 0.0f : 30.0f, 0.0f, 0.0f, 0.0f));
             frameLayout1.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
                     int num = ((Integer) v.getTag()).intValue();
@@ -1419,13 +1418,13 @@ public class PhotoFilterView extends FrameLayout {
         }
         this.blurLayout = new FrameLayout(context);
         this.blurLayout.setVisibility(4);
-        this.toolsView.addView(this.blurLayout, LayoutHelper.createFrame(280, BitmapDescriptorFactory.HUE_YELLOW, 1, 0.0f, 40.0f, 0.0f, 0.0f));
+        this.toolsView.addView(this.blurLayout, LayoutHelper.createFrame(280, 60.0f, 1, 0.0f, 40.0f, 0.0f, 0.0f));
         this.blurOffButton = new TextView(context);
         this.blurOffButton.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
         this.blurOffButton.setTextSize(1, 13.0f);
         this.blurOffButton.setGravity(1);
         this.blurOffButton.setText(LocaleController.getString("BlurOff", R.string.BlurOff));
-        this.blurLayout.addView(this.blurOffButton, LayoutHelper.createFrame(80, BitmapDescriptorFactory.HUE_YELLOW));
+        this.blurLayout.addView(this.blurOffButton, LayoutHelper.createFrame(80, 60.0f));
         this.blurOffButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 PhotoFilterView.this.blurType = 0;

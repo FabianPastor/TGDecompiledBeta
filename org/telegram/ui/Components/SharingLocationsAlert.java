@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -58,7 +59,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         }
 
         public int getItemCount() {
-            return LocationController.getInstance().sharingLocationsUI.size() + 1;
+            return LocationController.getLocationsCount() + 1;
         }
 
         public int getItemViewType(int position) {
@@ -104,11 +105,11 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         public void onBindViewHolder(ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 0:
-                    holder.itemView.setDialog((SharingLocationInfo) LocationController.getInstance().sharingLocationsUI.get(position - 1));
+                    holder.itemView.setDialog(SharingLocationsAlert.this.getLocation(position - 1));
                     return;
                 case 1:
                     if (SharingLocationsAlert.this.textView != null) {
-                        SharingLocationsAlert.this.textView.setText(LocaleController.formatString("SharingLiveLocationTitle", R.string.SharingLiveLocationTitle, LocaleController.formatPluralString("Chats", LocationController.getInstance().sharingLocationsUI.size())));
+                        SharingLocationsAlert.this.textView.setText(LocaleController.formatString("SharingLiveLocationTitle", R.string.SharingLiveLocationTitle, LocaleController.formatPluralString("Chats", LocationController.getLocationsCount())));
                         return;
                     }
                     return;
@@ -120,7 +121,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
 
     public SharingLocationsAlert(Context context, SharingLocationsAlertDelegate sharingLocationsAlertDelegate) {
         super(context, false);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.liveLocationsChanged);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.liveLocationsChanged);
         this.delegate = sharingLocationsAlertDelegate;
         this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), Mode.MULTIPLY));
@@ -144,7 +145,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                     height -= AndroidUtilities.statusBarHeight;
                 }
                 int measuredWidth = getMeasuredWidth();
-                int contentSize = ((AndroidUtilities.dp(56.0f) + AndroidUtilities.dp(56.0f)) + 1) + (LocationController.getInstance().sharingLocationsUI.size() * AndroidUtilities.dp(54.0f));
+                int contentSize = ((AndroidUtilities.dp(56.0f) + AndroidUtilities.dp(56.0f)) + 1) + (LocationController.getLocationsCount() * AndroidUtilities.dp(54.0f));
                 if (contentSize < (height / 5) * 3) {
                     padding = AndroidUtilities.dp(8.0f);
                 } else {
@@ -211,8 +212,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
                 position--;
-                if (position >= 0 && position < LocationController.getInstance().sharingLocationsUI.size()) {
-                    SharingLocationsAlert.this.delegate.didSelectLocation((SharingLocationInfo) LocationController.getInstance().sharingLocationsUI.get(position));
+                if (position >= 0 && position < LocationController.getLocationsCount()) {
+                    SharingLocationsAlert.this.delegate.didSelectLocation(SharingLocationsAlert.this.getLocation(position));
                     SharingLocationsAlert.this.dismiss();
                 }
             }
@@ -229,7 +230,9 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("StopAllLocationSharings", R.string.StopAllLocationSharings));
         pickerBottomLayout.cancelButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
-                LocationController.getInstance().removeAllLocationSharings();
+                for (int a = 0; a < 3; a++) {
+                    LocationController.getInstance(a).removeAllLocationSharings();
+                }
                 SharingLocationsAlert.this.dismiss();
             }
         });
@@ -274,19 +277,30 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id != NotificationCenter.liveLocationsChanged) {
             return;
         }
-        if (LocationController.getInstance().sharingLocationsUI.isEmpty()) {
+        if (LocationController.getLocationsCount() == 0) {
             dismiss();
         } else {
             this.adapter.notifyDataSetChanged();
         }
     }
 
+    private SharingLocationInfo getLocation(int position) {
+        for (int a = 0; a < 3; a++) {
+            ArrayList<SharingLocationInfo> infos = LocationController.getInstance(a).sharingLocationsUI;
+            if (position < infos.size()) {
+                return (SharingLocationInfo) infos.get(position);
+            }
+            position -= infos.size();
+        }
+        return null;
+    }
+
     public void dismiss() {
         super.dismiss();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.liveLocationsChanged);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.liveLocationsChanged);
     }
 }

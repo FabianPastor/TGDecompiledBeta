@@ -180,10 +180,10 @@ public class JoinGroupAlert extends BottomSheet {
                 JoinGroupAlert.this.dismiss();
                 final TL_messages_importChatInvite req = new TL_messages_importChatInvite();
                 req.hash = JoinGroupAlert.this.hash;
-                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                ConnectionsManager.getAccountInstance().sendRequest(req, new RequestDelegate() {
                     public void run(final TLObject response, final TL_error error) {
                         if (error == null) {
-                            MessagesController.getInstance().processUpdates((Updates) response, false);
+                            MessagesController.getAccountInstance().processUpdates((Updates) response, false);
                         }
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
@@ -194,11 +194,11 @@ public class JoinGroupAlert extends BottomSheet {
                                             Chat chat = (Chat) updates.chats.get(0);
                                             chat.left = false;
                                             chat.kicked = false;
-                                            MessagesController.getInstance().putUsers(updates.users, false);
-                                            MessagesController.getInstance().putChats(updates.chats, false);
+                                            MessagesController.getAccountInstance().putUsers(updates.users, false);
+                                            MessagesController.getAccountInstance().putChats(updates.chats, false);
                                             Bundle args = new Bundle();
                                             args.putInt("chat_id", chat.id);
-                                            if (MessagesController.checkCanOpenChat(args, JoinGroupAlert.this.fragment)) {
+                                            if (MessagesController.getAccountInstance().checkCanOpenChat(args, JoinGroupAlert.this.fragment)) {
                                                 JoinGroupAlert.this.fragment.presentFragment(new ChatActivity(args), JoinGroupAlert.this.fragment instanceof ChatActivity);
                                                 return;
                                             }
@@ -206,7 +206,7 @@ public class JoinGroupAlert extends BottomSheet {
                                         }
                                         return;
                                     }
-                                    AlertsCreator.processError(error, JoinGroupAlert.this.fragment, req, new Object[0]);
+                                    AlertsCreator.processError(JoinGroupAlert.this.currentAccount, error, JoinGroupAlert.this.fragment, req, new Object[0]);
                                 }
                             }
                         });

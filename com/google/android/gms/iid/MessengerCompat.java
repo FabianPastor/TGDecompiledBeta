@@ -11,27 +11,27 @@ import android.os.RemoteException;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 
 public class MessengerCompat implements ReflectedParcelable {
-    public static final Creator<MessengerCompat> CREATOR = new zzd();
-    private Messenger zzbgX;
-    private zzb zzbgY;
+    public static final Creator<MessengerCompat> CREATOR = new zzk();
+    private Messenger zzifn;
+    private zzi zzifo;
 
     public MessengerCompat(IBinder iBinder) {
         if (VERSION.SDK_INT >= 21) {
-            this.zzbgX = new Messenger(iBinder);
+            this.zzifn = new Messenger(iBinder);
             return;
         }
-        zzb com_google_android_gms_iid_zzb;
+        zzi com_google_android_gms_iid_zzi;
         if (iBinder == null) {
-            com_google_android_gms_iid_zzb = null;
+            com_google_android_gms_iid_zzi = null;
         } else {
             IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.iid.IMessengerCompat");
-            com_google_android_gms_iid_zzb = queryLocalInterface instanceof zzb ? (zzb) queryLocalInterface : new zzc(iBinder);
+            com_google_android_gms_iid_zzi = queryLocalInterface instanceof zzi ? (zzi) queryLocalInterface : new zzj(iBinder);
         }
-        this.zzbgY = com_google_android_gms_iid_zzb;
+        this.zzifo = com_google_android_gms_iid_zzi;
     }
 
     private final IBinder getBinder() {
-        return this.zzbgX != null ? this.zzbgX.getBinder() : this.zzbgY.asBinder();
+        return this.zzifn != null ? this.zzifn.getBinder() : this.zzifo.asBinder();
     }
 
     public int describeContents() {
@@ -54,18 +54,18 @@ public class MessengerCompat implements ReflectedParcelable {
     }
 
     public final void send(Message message) throws RemoteException {
-        if (this.zzbgX != null) {
-            this.zzbgX.send(message);
+        if (this.zzifn != null) {
+            this.zzifn.send(message);
         } else {
-            this.zzbgY.send(message);
+            this.zzifo.send(message);
         }
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        if (this.zzbgX != null) {
-            parcel.writeStrongBinder(this.zzbgX.getBinder());
+        if (this.zzifn != null) {
+            parcel.writeStrongBinder(this.zzifn.getBinder());
         } else {
-            parcel.writeStrongBinder(this.zzbgY.asBinder());
+            parcel.writeStrongBinder(this.zzifo.asBinder());
         }
     }
 }

@@ -2,7 +2,6 @@ package org.telegram.messenger.exoplayer2.extractor.mkv;
 
 import android.util.Log;
 import android.util.SparseArray;
-import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -17,6 +16,7 @@ import java.util.UUID;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
+import org.telegram.messenger.exoplayer2.RendererCapabilities;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData.SchemeData;
 import org.telegram.messenger.exoplayer2.extractor.ChunkIndex;
@@ -300,7 +300,7 @@ public final class MatroskaExtractor implements Extractor {
             this.colorSpace = -1;
             this.colorTransfer = -1;
             this.colorRange = -1;
-            this.maxContentLuminance = 1000;
+            this.maxContentLuminance = DEFAULT_MAX_CLL;
             this.maxFrameAverageLuminance = 200;
             this.primaryRChromaticityX = -1.0f;
             this.primaryRChromaticityY = -1.0f;
@@ -620,13 +620,13 @@ public final class MatroskaExtractor implements Extractor {
                         break;
                     }
                     break;
-                case 24:
+                case RendererCapabilities.ADAPTIVE_SUPPORT_MASK /*24*/:
                     mimeType = MimeTypes.APPLICATION_SUBRIP;
                     break;
                 case 25:
                     mimeType = MimeTypes.TEXT_SSA;
                     break;
-                case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
+                case 26:
                     mimeType = MimeTypes.APPLICATION_VOBSUB;
                     initializationData = Collections.singletonList(this.codecPrivate);
                     break;

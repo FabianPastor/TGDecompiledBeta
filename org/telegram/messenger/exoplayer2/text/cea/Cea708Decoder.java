@@ -258,7 +258,7 @@ public final class Cea708Decoder extends CeaDecoder {
         public void setPenAttributes(int textTag, int offset, int penSize, boolean italicsToggle, boolean underlineToggle, int edgeType, int fontStyle) {
             if (this.italicsStartPosition != -1) {
                 if (!italicsToggle) {
-                    this.captionStringBuilder.setSpan(new StyleSpan(2), this.italicsStartPosition, this.captionStringBuilder.length(), 33);
+                    this.captionStringBuilder.setSpan(new StyleSpan(2), this.italicsStartPosition, this.captionStringBuilder.length(), Cea708Decoder.CHARACTER_NBTSP);
                     this.italicsStartPosition = -1;
                 }
             } else if (italicsToggle) {
@@ -266,7 +266,7 @@ public final class Cea708Decoder extends CeaDecoder {
             }
             if (this.underlineStartPosition != -1) {
                 if (!underlineToggle) {
-                    this.captionStringBuilder.setSpan(new UnderlineSpan(), this.underlineStartPosition, this.captionStringBuilder.length(), 33);
+                    this.captionStringBuilder.setSpan(new UnderlineSpan(), this.underlineStartPosition, this.captionStringBuilder.length(), Cea708Decoder.CHARACTER_NBTSP);
                     this.underlineStartPosition = -1;
                 }
             } else if (underlineToggle) {
@@ -276,14 +276,14 @@ public final class Cea708Decoder extends CeaDecoder {
 
         public void setPenColor(int foregroundColor, int backgroundColor, int edgeColor) {
             if (!(this.foregroundColorStartPosition == -1 || this.foregroundColor == foregroundColor)) {
-                this.captionStringBuilder.setSpan(new ForegroundColorSpan(this.foregroundColor), this.foregroundColorStartPosition, this.captionStringBuilder.length(), 33);
+                this.captionStringBuilder.setSpan(new ForegroundColorSpan(this.foregroundColor), this.foregroundColorStartPosition, this.captionStringBuilder.length(), Cea708Decoder.CHARACTER_NBTSP);
             }
             if (foregroundColor != COLOR_SOLID_WHITE) {
                 this.foregroundColorStartPosition = this.captionStringBuilder.length();
                 this.foregroundColor = foregroundColor;
             }
             if (!(this.backgroundColorStartPosition == -1 || this.backgroundColor == backgroundColor)) {
-                this.captionStringBuilder.setSpan(new BackgroundColorSpan(this.backgroundColor), this.backgroundColorStartPosition, this.captionStringBuilder.length(), 33);
+                this.captionStringBuilder.setSpan(new BackgroundColorSpan(this.backgroundColor), this.backgroundColorStartPosition, this.captionStringBuilder.length(), Cea708Decoder.CHARACTER_NBTSP);
             }
             if (backgroundColor != COLOR_SOLID_BLACK) {
                 this.backgroundColorStartPosition = this.captionStringBuilder.length();
@@ -337,16 +337,16 @@ public final class Cea708Decoder extends CeaDecoder {
             int length = spannableStringBuilder.length();
             if (length > 0) {
                 if (this.italicsStartPosition != -1) {
-                    spannableStringBuilder.setSpan(new StyleSpan(2), this.italicsStartPosition, length, 33);
+                    spannableStringBuilder.setSpan(new StyleSpan(2), this.italicsStartPosition, length, Cea708Decoder.CHARACTER_NBTSP);
                 }
                 if (this.underlineStartPosition != -1) {
-                    spannableStringBuilder.setSpan(new UnderlineSpan(), this.underlineStartPosition, length, 33);
+                    spannableStringBuilder.setSpan(new UnderlineSpan(), this.underlineStartPosition, length, Cea708Decoder.CHARACTER_NBTSP);
                 }
                 if (this.foregroundColorStartPosition != -1) {
-                    spannableStringBuilder.setSpan(new ForegroundColorSpan(this.foregroundColor), this.foregroundColorStartPosition, length, 33);
+                    spannableStringBuilder.setSpan(new ForegroundColorSpan(this.foregroundColor), this.foregroundColorStartPosition, length, Cea708Decoder.CHARACTER_NBTSP);
                 }
                 if (this.backgroundColorStartPosition != -1) {
-                    spannableStringBuilder.setSpan(new BackgroundColorSpan(this.backgroundColor), this.backgroundColorStartPosition, length, 33);
+                    spannableStringBuilder.setSpan(new BackgroundColorSpan(this.backgroundColor), this.backgroundColorStartPosition, length, Cea708Decoder.CHARACTER_NBTSP);
                 }
             }
             return new SpannableString(spannableStringBuilder);
@@ -655,7 +655,7 @@ public final class Cea708Decoder extends CeaDecoder {
                 this.currentCueBuilder.append('\n');
                 return;
             default:
-                if (command >= 17 && command <= 23) {
+                if (command >= 17 && command <= COMMAND_EXT1_END) {
                     Log.w(TAG, "Currently unsupported COMMAND_EXT1 Command: " + command);
                     this.serviceBlockPacket.skipBits(8);
                     return;
@@ -797,7 +797,7 @@ public final class Cea708Decoder extends CeaDecoder {
         if (command > 7) {
             if (command <= 15) {
                 this.serviceBlockPacket.skipBits(8);
-            } else if (command <= 23) {
+            } else if (command <= COMMAND_EXT1_END) {
                 this.serviceBlockPacket.skipBits(16);
             } else if (command <= 31) {
                 this.serviceBlockPacket.skipBits(24);
@@ -833,34 +833,34 @@ public final class Cea708Decoder extends CeaDecoder {
             case 32:
                 this.currentCueBuilder.append(' ');
                 return;
-            case 33:
+            case CHARACTER_NBTSP /*33*/:
                 this.currentCueBuilder.append(' ');
                 return;
-            case 37:
+            case CHARACTER_ELLIPSIS /*37*/:
                 this.currentCueBuilder.append('…');
                 return;
-            case 42:
+            case CHARACTER_BIG_CARONS /*42*/:
                 this.currentCueBuilder.append('Š');
                 return;
-            case 44:
+            case CHARACTER_BIG_OE /*44*/:
                 this.currentCueBuilder.append('Œ');
                 return;
-            case 48:
+            case CHARACTER_SOLID_BLOCK /*48*/:
                 this.currentCueBuilder.append('█');
                 return;
-            case 49:
+            case CHARACTER_OPEN_SINGLE_QUOTE /*49*/:
                 this.currentCueBuilder.append('‘');
                 return;
-            case 50:
+            case CHARACTER_CLOSE_SINGLE_QUOTE /*50*/:
                 this.currentCueBuilder.append('’');
                 return;
-            case 51:
+            case CHARACTER_OPEN_DOUBLE_QUOTE /*51*/:
                 this.currentCueBuilder.append('“');
                 return;
-            case 52:
+            case CHARACTER_CLOSE_DOUBLE_QUOTE /*52*/:
                 this.currentCueBuilder.append('”');
                 return;
-            case 53:
+            case CHARACTER_BOLD_BULLET /*53*/:
                 this.currentCueBuilder.append('•');
                 return;
             case CHARACTER_TM /*57*/:

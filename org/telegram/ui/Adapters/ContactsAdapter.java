@@ -10,6 +10,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.TL_contact;
@@ -24,6 +25,7 @@ import org.telegram.ui.Components.RecyclerListView.SectionsAdapter;
 
 public class ContactsAdapter extends SectionsAdapter {
     private HashMap<Integer, ?> checkedMap;
+    private int currentAccount = UserConfig.selectedAccount;
     private HashMap<Integer, User> ignoreUsers;
     private boolean isAdmin;
     private Context mContext;
@@ -49,11 +51,11 @@ public class ContactsAdapter extends SectionsAdapter {
 
     public Object getItem(int section, int position) {
         ArrayList<String> sortedUsersSectionsArray;
-        HashMap<String, ArrayList<TL_contact>> usersSectionsDict = this.onlyUsers == 2 ? ContactsController.getInstance().usersMutualSectionsDict : ContactsController.getInstance().usersSectionsDict;
+        HashMap<String, ArrayList<TL_contact>> usersSectionsDict = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).usersMutualSectionsDict : ContactsController.getInstance(this.currentAccount).usersSectionsDict;
         if (this.onlyUsers == 2) {
-            sortedUsersSectionsArray = ContactsController.getInstance().sortedUsersMutualSectionsArray;
+            sortedUsersSectionsArray = ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray;
         } else {
-            sortedUsersSectionsArray = ContactsController.getInstance().sortedUsersSectionsArray;
+            sortedUsersSectionsArray = ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray;
         }
         ArrayList<TL_contact> arr;
         if (this.onlyUsers == 0 || this.isAdmin) {
@@ -63,11 +65,11 @@ public class ContactsAdapter extends SectionsAdapter {
             if (section - 1 < sortedUsersSectionsArray.size()) {
                 arr = (ArrayList) usersSectionsDict.get(sortedUsersSectionsArray.get(section - 1));
                 if (position < arr.size()) {
-                    return MessagesController.getInstance().getUser(Integer.valueOf(((TL_contact) arr.get(position)).user_id));
+                    return MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) arr.get(position)).user_id));
                 }
                 return null;
             } else if (this.needPhonebook) {
-                return ContactsController.getInstance().phoneBookContacts.get(position);
+                return ContactsController.getInstance(this.currentAccount).phoneBookContacts.get(position);
             } else {
                 return null;
             }
@@ -76,15 +78,15 @@ public class ContactsAdapter extends SectionsAdapter {
         } else {
             arr = (ArrayList) usersSectionsDict.get(sortedUsersSectionsArray.get(section));
             if (position < arr.size()) {
-                return MessagesController.getInstance().getUser(Integer.valueOf(((TL_contact) arr.get(position)).user_id));
+                return MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) arr.get(position)).user_id));
             }
             return null;
         }
     }
 
     public boolean isEnabled(int section, int row) {
-        HashMap<String, ArrayList<TL_contact>> usersSectionsDict = this.onlyUsers == 2 ? ContactsController.getInstance().usersMutualSectionsDict : ContactsController.getInstance().usersSectionsDict;
-        ArrayList<String> sortedUsersSectionsArray = this.onlyUsers == 2 ? ContactsController.getInstance().sortedUsersMutualSectionsArray : ContactsController.getInstance().sortedUsersSectionsArray;
+        HashMap<String, ArrayList<TL_contact>> usersSectionsDict = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).usersMutualSectionsDict : ContactsController.getInstance(this.currentAccount).usersSectionsDict;
+        ArrayList<String> sortedUsersSectionsArray = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray : ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray;
         if (this.onlyUsers == 0 || this.isAdmin) {
             if (section == 0) {
                 if (this.needPhonebook || this.isAdmin) {
@@ -110,7 +112,7 @@ public class ContactsAdapter extends SectionsAdapter {
     }
 
     public int getSectionCount() {
-        int count = (this.onlyUsers == 2 ? ContactsController.getInstance().sortedUsersMutualSectionsArray : ContactsController.getInstance().sortedUsersSectionsArray).size();
+        int count = (this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray : ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray).size();
         if (this.onlyUsers == 0) {
             count++;
         }
@@ -125,11 +127,11 @@ public class ContactsAdapter extends SectionsAdapter {
 
     public int getCountForSection(int section) {
         ArrayList<String> sortedUsersSectionsArray;
-        HashMap<String, ArrayList<TL_contact>> usersSectionsDict = this.onlyUsers == 2 ? ContactsController.getInstance().usersMutualSectionsDict : ContactsController.getInstance().usersSectionsDict;
+        HashMap<String, ArrayList<TL_contact>> usersSectionsDict = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).usersMutualSectionsDict : ContactsController.getInstance(this.currentAccount).usersSectionsDict;
         if (this.onlyUsers == 2) {
-            sortedUsersSectionsArray = ContactsController.getInstance().sortedUsersMutualSectionsArray;
+            sortedUsersSectionsArray = ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray;
         } else {
-            sortedUsersSectionsArray = ContactsController.getInstance().sortedUsersSectionsArray;
+            sortedUsersSectionsArray = ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray;
         }
         int count;
         if (this.onlyUsers == 0 || this.isAdmin) {
@@ -153,34 +155,34 @@ public class ContactsAdapter extends SectionsAdapter {
             return count;
         }
         if (this.needPhonebook) {
-            return ContactsController.getInstance().phoneBookContacts.size();
+            return ContactsController.getInstance(this.currentAccount).phoneBookContacts.size();
         }
         return 0;
     }
 
     public View getSectionHeaderView(int section, View view) {
         if (this.onlyUsers == 2) {
-            HashMap<String, ArrayList<TL_contact>> usersSectionsDict = ContactsController.getInstance().usersMutualSectionsDict;
+            HashMap<String, ArrayList<TL_contact>> usersSectionsDict = ContactsController.getInstance(this.currentAccount).usersMutualSectionsDict;
         } else {
-            HashMap hashMap = ContactsController.getInstance().usersSectionsDict;
+            HashMap hashMap = ContactsController.getInstance(this.currentAccount).usersSectionsDict;
         }
-        ArrayList<String> sortedUsersSectionsArray = this.onlyUsers == 2 ? ContactsController.getInstance().sortedUsersMutualSectionsArray : ContactsController.getInstance().sortedUsersSectionsArray;
+        ArrayList<String> sortedUsersSectionsArray = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray : ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray;
         if (view == null) {
             view = new LetterSectionCell(this.mContext);
         }
         LetterSectionCell cell = (LetterSectionCell) view;
         if (this.onlyUsers == 0 || this.isAdmin) {
             if (section == 0) {
-                cell.setLetter("");
+                cell.setLetter(TtmlNode.ANONYMOUS_REGION_ID);
             } else if (section - 1 < sortedUsersSectionsArray.size()) {
                 cell.setLetter((String) sortedUsersSectionsArray.get(section - 1));
             } else {
-                cell.setLetter("");
+                cell.setLetter(TtmlNode.ANONYMOUS_REGION_ID);
             }
         } else if (section < sortedUsersSectionsArray.size()) {
             cell.setLetter((String) sortedUsersSectionsArray.get(section));
         } else {
-            cell.setLetter("");
+            cell.setLetter(TtmlNode.ANONYMOUS_REGION_ID);
         }
         return view;
     }
@@ -221,10 +223,10 @@ public class ContactsAdapter extends SectionsAdapter {
         switch (holder.getItemViewType()) {
             case 0:
                 UserCell userCell = holder.itemView;
-                HashMap<String, ArrayList<TL_contact>> usersSectionsDict = this.onlyUsers == 2 ? ContactsController.getInstance().usersMutualSectionsDict : ContactsController.getInstance().usersSectionsDict;
-                ArrayList<String> sortedUsersSectionsArray = this.onlyUsers == 2 ? ContactsController.getInstance().sortedUsersMutualSectionsArray : ContactsController.getInstance().sortedUsersSectionsArray;
+                HashMap<String, ArrayList<TL_contact>> usersSectionsDict = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).usersMutualSectionsDict : ContactsController.getInstance(this.currentAccount).usersSectionsDict;
+                ArrayList<String> sortedUsersSectionsArray = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray : ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray;
                 int i = (this.onlyUsers == 0 || this.isAdmin) ? 1 : 0;
-                User user = MessagesController.getInstance().getUser(Integer.valueOf(((TL_contact) ((ArrayList) usersSectionsDict.get(sortedUsersSectionsArray.get(section - i))).get(position)).user_id));
+                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) ((ArrayList) usersSectionsDict.get(sortedUsersSectionsArray.get(section - i))).get(position)).user_id));
                 userCell.setData(user, null, null, 0);
                 if (this.checkedMap != null) {
                     userCell.setChecked(this.checkedMap.containsKey(Integer.valueOf(user.id)), !this.scrolling);
@@ -242,7 +244,7 @@ public class ContactsAdapter extends SectionsAdapter {
             case 1:
                 TextCell textCell = holder.itemView;
                 if (section != 0) {
-                    Contact contact = (Contact) ContactsController.getInstance().phoneBookContacts.get(position);
+                    Contact contact = (Contact) ContactsController.getInstance(this.currentAccount).phoneBookContacts.get(position);
                     if (contact.first_name != null && contact.last_name != null) {
                         textCell.setText(contact.first_name + " " + contact.last_name);
                         return;
@@ -277,8 +279,8 @@ public class ContactsAdapter extends SectionsAdapter {
     }
 
     public int getItemViewType(int section, int position) {
-        HashMap<String, ArrayList<TL_contact>> usersSectionsDict = this.onlyUsers == 2 ? ContactsController.getInstance().usersMutualSectionsDict : ContactsController.getInstance().usersSectionsDict;
-        ArrayList<String> sortedUsersSectionsArray = this.onlyUsers == 2 ? ContactsController.getInstance().sortedUsersMutualSectionsArray : ContactsController.getInstance().sortedUsersSectionsArray;
+        HashMap<String, ArrayList<TL_contact>> usersSectionsDict = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).usersMutualSectionsDict : ContactsController.getInstance(this.currentAccount).usersSectionsDict;
+        ArrayList<String> sortedUsersSectionsArray = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray : ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray;
         if (this.onlyUsers == 0 || this.isAdmin) {
             if (section == 0) {
                 if (((this.needPhonebook || this.isAdmin) && position == 1) || position == 3) {
@@ -299,7 +301,7 @@ public class ContactsAdapter extends SectionsAdapter {
     }
 
     public String getLetter(int position) {
-        ArrayList<String> sortedUsersSectionsArray = this.onlyUsers == 2 ? ContactsController.getInstance().sortedUsersMutualSectionsArray : ContactsController.getInstance().sortedUsersSectionsArray;
+        ArrayList<String> sortedUsersSectionsArray = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray : ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray;
         int section = getSectionForPosition(position);
         if (section == -1) {
             section = sortedUsersSectionsArray.size() - 1;

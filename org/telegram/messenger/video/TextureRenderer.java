@@ -3,7 +3,6 @@ package org.telegram.messenger.video;
 import android.graphics.SurfaceTexture;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import com.google.android.gms.gcm.Task;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -97,7 +96,7 @@ public class TextureRenderer {
         GLES20.glBindTexture(36197, this.mTextureID);
         checkGlError("glBindTexture mTextureID");
         GLES20.glTexParameteri(36197, 10241, 9729);
-        GLES20.glTexParameteri(36197, Task.EXTRAS_LIMIT_BYTES, 9729);
+        GLES20.glTexParameteri(36197, 10240, 9729);
         GLES20.glTexParameteri(36197, 10242, 33071);
         GLES20.glTexParameteri(36197, 10243, 33071);
         checkGlError("glTexParameter");

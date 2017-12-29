@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">Installeer</string>
     <string name="common_google_play_services_install_text">%1$s sal nie sonder Google Play Dienste werk nie, wat nie op jou toestel is nie.</string>
     <string name="common_google_play_services_install_title">Kry Google Play-dienste</string>
+    <string name="common_google_play_services_notification_channel_name">Beskikbaarheid van Google Play-dienste</string>
     <string name="common_google_play_services_notification_ticker">Google Play Services-fout</string>
     <string name="common_google_play_services_unknown_issue">%1$s ondervind probleme met Google Play Dienste. Probeer asseblief weer.</string>
     <string name="common_google_play_services_unsupported_text">%1$s sal nie werk sonder Google Play Dienste nie, wat nie deur jou toestel gesteun word nie.</string>
@@ -17,5 +18,7 @@
     <string name="common_open_on_phone">Maak oop op foon</string>
     <string name="common_signin_button_text">Meld aan</string>
     <string name="common_signin_button_text_long">Meld aan met Google</string>
+    <string name="gcm_fallback_notification_channel_label">Diverse</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Koop met Google</string>
 </resources>

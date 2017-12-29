@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.view.KeyEvent;
 
 public class MusicPlayerReceiver extends BroadcastReceiver {
+    private int currentAccount = UserConfig.selectedAccount;
+
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.MEDIA_BUTTON")) {
             if (intent.getExtras() != null) {
@@ -14,26 +16,26 @@ public class MusicPlayerReceiver extends BroadcastReceiver {
                     switch (keyEvent.getKeyCode()) {
                         case 79:
                         case 85:
-                            if (MediaController.getInstance().isMessagePaused()) {
-                                MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
+                            if (MediaController.getInstance(this.currentAccount).isMessagePaused()) {
+                                MediaController.getInstance(this.currentAccount).playMessage(MediaController.getInstance(this.currentAccount).getPlayingMessageObject());
                                 return;
                             } else {
-                                MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
+                                MediaController.getInstance(this.currentAccount).pauseMessage(MediaController.getInstance(this.currentAccount).getPlayingMessageObject());
                                 return;
                             }
                         case 86:
                             return;
                         case 87:
-                            MediaController.getInstance().playNextMessage();
+                            MediaController.getInstance(this.currentAccount).playNextMessage();
                             return;
                         case 88:
-                            MediaController.getInstance().playPreviousMessage();
+                            MediaController.getInstance(this.currentAccount).playPreviousMessage();
                             return;
                         case 126:
-                            MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
+                            MediaController.getInstance(this.currentAccount).playMessage(MediaController.getInstance(this.currentAccount).getPlayingMessageObject());
                             return;
                         case 127:
-                            MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
+                            MediaController.getInstance(this.currentAccount).pauseMessage(MediaController.getInstance(this.currentAccount).getPlayingMessageObject());
                             return;
                         default:
                             return;
@@ -41,15 +43,15 @@ public class MusicPlayerReceiver extends BroadcastReceiver {
                 }
             }
         } else if (intent.getAction().equals(MusicPlayerService.NOTIFY_PLAY)) {
-            MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
+            MediaController.getInstance(this.currentAccount).playMessage(MediaController.getInstance(this.currentAccount).getPlayingMessageObject());
         } else if (intent.getAction().equals(MusicPlayerService.NOTIFY_PAUSE) || intent.getAction().equals("android.media.AUDIO_BECOMING_NOISY")) {
-            MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
+            MediaController.getInstance(this.currentAccount).pauseMessage(MediaController.getInstance(this.currentAccount).getPlayingMessageObject());
         } else if (intent.getAction().equals(MusicPlayerService.NOTIFY_NEXT)) {
-            MediaController.getInstance().playNextMessage();
+            MediaController.getInstance(this.currentAccount).playNextMessage();
         } else if (intent.getAction().equals(MusicPlayerService.NOTIFY_CLOSE)) {
-            MediaController.getInstance().cleanupPlayer(true, true);
+            MediaController.getInstance(this.currentAccount).cleanupPlayer(true, true);
         } else if (intent.getAction().equals(MusicPlayerService.NOTIFY_PREVIOUS)) {
-            MediaController.getInstance().playPreviousMessage();
+            MediaController.getInstance(this.currentAccount).playPreviousMessage();
         }
     }
 }

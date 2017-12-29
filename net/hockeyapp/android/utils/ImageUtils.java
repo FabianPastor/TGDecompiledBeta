@@ -11,9 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ImageUtils {
-    public static final int ORIENTATION_LANDSCAPE = 1;
-    public static final int ORIENTATION_PORTRAIT = 0;
-
     public static int determineOrientation(File file) throws IOException {
         Throwable th;
         InputStream input = null;

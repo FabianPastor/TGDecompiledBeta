@@ -3,10 +3,10 @@ package com.google.android.gms.maps.model;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-public final class LatLng extends zza implements ReflectedParcelable {
+public final class LatLng extends zzbfm implements ReflectedParcelable {
     public static final Creator<LatLng> CREATOR = new zzf();
     public final double latitude;
     public final double longitude;
@@ -44,9 +44,9 @@ public final class LatLng extends zza implements ReflectedParcelable {
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.latitude);
-        zzd.zza(parcel, 3, this.longitude);
-        zzd.zzI(parcel, zze);
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zza(parcel, 2, this.latitude);
+        zzbfp.zza(parcel, 3, this.longitude);
+        zzbfp.zzai(parcel, zze);
     }
 }

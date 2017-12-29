@@ -29,7 +29,7 @@ import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.Util;
 
-final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.upstream.Loader.Callback<Chunk>, ReleaseCallback, SequenceableLoader, ExtractorOutput, UpstreamFormatChangedListener {
+final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatChangedListener, SequenceableLoader, org.telegram.messenger.exoplayer2.upstream.Loader.Callback<Chunk>, ReleaseCallback {
     private static final int PRIMARY_TYPE_AUDIO = 2;
     private static final int PRIMARY_TYPE_NONE = 0;
     private static final int PRIMARY_TYPE_TEXT = 1;
@@ -109,6 +109,7 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
 
     public boolean selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs, boolean forceReset) {
         boolean seekRequired;
+        SampleQueue sampleQueue;
         Assertions.checkState(this.prepared);
         int oldEnabledTrackCount = this.enabledTrackCount;
         int i = 0;
@@ -139,7 +140,6 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
                 streams[i] = new HlsSampleStream(this, trackGroupIndex);
                 streamResetFlags[i] = true;
                 if (!seekRequired) {
-                    SampleQueue sampleQueue;
                     sampleQueue = this.sampleQueues[trackGroupIndex];
                     sampleQueue.rewind();
                     if (sampleQueue.advanceTo(positionUs, true, true) || sampleQueue.getReadIndex() == 0) {

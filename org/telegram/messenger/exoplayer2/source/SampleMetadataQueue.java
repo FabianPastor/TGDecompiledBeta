@@ -10,7 +10,7 @@ import org.telegram.messenger.exoplayer2.util.Util;
 final class SampleMetadataQueue {
     private static final int SAMPLE_CAPACITY_INCREMENT = 1000;
     private int absoluteStartIndex;
-    private int capacity = 1000;
+    private int capacity = SAMPLE_CAPACITY_INCREMENT;
     private CryptoData[] cryptoDatas = new CryptoData[this.capacity];
     private int[] flags = new int[this.capacity];
     private Format[] formats = new Format[this.capacity];
@@ -229,7 +229,7 @@ final class SampleMetadataQueue {
         this.sourceIds[relativeEndIndex] = this.upstreamSourceId;
         this.length++;
         if (this.length == this.capacity) {
-            int newCapacity = this.capacity + 1000;
+            int newCapacity = this.capacity + SAMPLE_CAPACITY_INCREMENT;
             int[] newSourceIds = new int[newCapacity];
             long[] newOffsets = new long[newCapacity];
             long[] newTimesUs = new long[newCapacity];

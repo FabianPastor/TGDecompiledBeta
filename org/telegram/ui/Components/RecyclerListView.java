@@ -25,7 +25,6 @@ import android.view.View.MeasureSpec;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
@@ -143,7 +142,7 @@ public class RecyclerListView extends RecyclerView {
                     float x = event.getX();
                     this.lastY = event.getY();
                     float currectY = ((float) Math.ceil((double) (((float) (getMeasuredHeight() - AndroidUtilities.dp(54.0f))) * this.progress))) + ((float) AndroidUtilities.dp(12.0f));
-                    if ((LocaleController.isRTL && x > ((float) AndroidUtilities.dp(25.0f))) || ((!LocaleController.isRTL && x < ((float) AndroidUtilities.dp(107.0f))) || this.lastY < currectY || this.lastY > ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) + currectY)) {
+                    if ((LocaleController.isRTL && x > ((float) AndroidUtilities.dp(25.0f))) || ((!LocaleController.isRTL && x < ((float) AndroidUtilities.dp(107.0f))) || this.lastY < currectY || this.lastY > ((float) AndroidUtilities.dp(30.0f)) + currectY)) {
                         return false;
                     }
                     this.startDy = this.lastY - currectY;
@@ -235,7 +234,7 @@ public class RecyclerListView extends RecyclerView {
                 float raduisBottom;
                 StaticLayout layoutToDraw;
                 this.paint.setAlpha((int) (255.0f * this.bubbleProgress));
-                int progressY = y + AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
+                int progressY = y + AndroidUtilities.dp(30.0f);
                 y -= AndroidUtilities.dp(46.0f);
                 float diff = 0.0f;
                 if (y <= AndroidUtilities.dp(12.0f)) {
@@ -295,14 +294,14 @@ public class RecyclerListView extends RecyclerView {
                 this.lastUpdateTime = newTime;
                 invalidate();
                 if (!this.pressed || this.letterLayout == null) {
-                    this.bubbleProgress -= ((float) dt) / BitmapDescriptorFactory.HUE_GREEN;
+                    this.bubbleProgress -= ((float) dt) / 120.0f;
                     if (this.bubbleProgress < 0.0f) {
                         this.bubbleProgress = 0.0f;
                         return;
                     }
                     return;
                 }
-                this.bubbleProgress += ((float) dt) / BitmapDescriptorFactory.HUE_GREEN;
+                this.bubbleProgress += ((float) dt) / 120.0f;
                 if (this.bubbleProgress > 1.0f) {
                     this.bubbleProgress = 1.0f;
                 }
@@ -630,6 +629,10 @@ public class RecyclerListView extends RecyclerView {
             }
             return -1;
         }
+    }
+
+    protected View getPressedChildView() {
+        return this.currentChildView;
     }
 
     protected void onChildPressed(View child, boolean pressed) {

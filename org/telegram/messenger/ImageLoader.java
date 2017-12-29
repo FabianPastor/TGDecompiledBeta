@@ -11,14 +11,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
 import android.os.Environment;
+import android.support.media.ExifInterface;
 import android.text.TextUtils;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,6 +43,7 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.InputEncryptedFile;
@@ -97,6 +97,7 @@ public class ImageLoader {
     private class CacheImage {
         protected boolean animatedFile;
         protected CacheOutTask cacheTask;
+        protected int currentAccount;
         protected File encryptionKeyPath;
         protected String ext;
         protected String filter;
@@ -168,11 +169,11 @@ public class ImageLoader {
                 this.imageReceiverArray.clear();
                 if (!(this.location == null || ImageLoader.this.forceLoadingImages.containsKey(this.key))) {
                     if (this.location instanceof FileLocation) {
-                        FileLoader.getInstance().cancelLoadFile((FileLocation) this.location, this.ext);
+                        FileLoader.getInstance(this.currentAccount).cancelLoadFile((FileLocation) this.location, this.ext);
                     } else if (this.location instanceof Document) {
-                        FileLoader.getInstance().cancelLoadFile((Document) this.location);
+                        FileLoader.getInstance(this.currentAccount).cancelLoadFile((Document) this.location);
                     } else if (this.location instanceof TL_webDocument) {
-                        FileLoader.getInstance().cancelLoadFile((TL_webDocument) this.location);
+                        FileLoader.getInstance(this.currentAccount).cancelLoadFile((TL_webDocument) this.location);
                     }
                 }
                 if (this.cacheTask != null) {
@@ -300,6 +301,7 @@ public class ImageLoader {
 
     private class HttpFileTask extends AsyncTask<Void, Void, Boolean> {
         private boolean canRetry = true;
+        private int currentAccount;
         private String ext;
         private RandomAccessFile fileOutputStream = null;
         private int fileSize;
@@ -307,10 +309,11 @@ public class ImageLoader {
         private File tempFile;
         private String url;
 
-        public HttpFileTask(String url, File tempFile, String ext) {
+        public HttpFileTask(String url, File tempFile, String ext, int currentAccount) {
             this.url = url;
             this.tempFile = tempFile;
             this.ext = ext;
+            this.currentAccount = currentAccount;
         }
 
         private void reportProgress(final float progress) {
@@ -322,7 +325,7 @@ public class ImageLoader {
                         ImageLoader.this.fileProgresses.put(HttpFileTask.this.url, Float.valueOf(progress));
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.FileLoadProgressChanged, HttpFileTask.this.url, Float.valueOf(progress));
+                                NotificationCenter.getInstance(HttpFileTask.this.currentAccount).postNotificationName(NotificationCenter.FileLoadProgressChanged, HttpFileTask.this.url, Float.valueOf(progress));
                             }
                         });
                     }
@@ -401,7 +404,7 @@ public class ImageLoader {
                 }
                 if (httpConnectionStream != null) {
                     try {
-                        byte[] data = new byte[32768];
+                        byte[] data = new byte[TLRPC.MESSAGE_FLAG_EDITED];
                         int totalLoaded = 0;
                         while (!isCancelled()) {
                             int read = httpConnectionStream.read(data);
@@ -474,7 +477,7 @@ public class ImageLoader {
                         ImageLoader.this.fileProgresses.put(HttpImageTask.this.cacheImage.url, Float.valueOf(progress));
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.FileLoadProgressChanged, HttpImageTask.this.cacheImage.url, Float.valueOf(progress));
+                                NotificationCenter.getInstance(HttpImageTask.this.cacheImage.currentAccount).postNotificationName(NotificationCenter.FileLoadProgressChanged, HttpImageTask.this.cacheImage.url, Float.valueOf(progress));
                             }
                         });
                     }
@@ -543,7 +546,7 @@ public class ImageLoader {
                 }
                 if (httpConnectionStream != null) {
                     try {
-                        byte[] data = new byte[8192];
+                        byte[] data = new byte[MessagesController.UPDATE_MASK_CHANNEL];
                         int totalLoaded = 0;
                         while (!isCancelled()) {
                             int read = httpConnectionStream.read(data);
@@ -606,10 +609,10 @@ public class ImageLoader {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
                             if (result.booleanValue()) {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.FileDidLoaded, HttpImageTask.this.cacheImage.url);
+                                NotificationCenter.getInstance(HttpImageTask.this.cacheImage.currentAccount).postNotificationName(NotificationCenter.FileDidLoaded, HttpImageTask.this.cacheImage.url);
                                 return;
                             }
-                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.FileDidFailedLoad, HttpImageTask.this.cacheImage.url, Integer.valueOf(2));
+                            NotificationCenter.getInstance(HttpImageTask.this.cacheImage.currentAccount).postNotificationName(NotificationCenter.FileDidFailedLoad, HttpImageTask.this.cacheImage.url, Integer.valueOf(2));
                         }
                     });
                 }
@@ -632,7 +635,7 @@ public class ImageLoader {
                     ImageLoader.this.fileProgresses.remove(HttpImageTask.this.cacheImage.url);
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.FileDidFailedLoad, HttpImageTask.this.cacheImage.url, Integer.valueOf(1));
+                            NotificationCenter.getInstance(HttpImageTask.this.cacheImage.currentAccount).postNotificationName(NotificationCenter.FileDidFailedLoad, HttpImageTask.this.cacheImage.url, Integer.valueOf(1));
                         }
                     });
                 }
@@ -680,7 +683,7 @@ public class ImageLoader {
                     return;
                 }
                 final String key = this.thumbLocation.volume_id + "_" + this.thumbLocation.local_id;
-                File thumbFile = new File(FileLoader.getInstance().getDirectory(4), "q_" + key + ".jpg");
+                File thumbFile = new File(FileLoader.getDirectory(4), "q_" + key + ".jpg");
                 if (thumbFile.exists() || !this.originalPath.exists()) {
                     removeTask();
                     return;
@@ -714,8 +717,8 @@ public class ImageLoader {
                 Bitmap scaledBitmap = Bitmaps.createScaledBitmap(originalBitmap, (int) (((float) w) / scaleFactor), (int) (((float) h) / scaleFactor), true);
                 if (scaledBitmap != originalBitmap) {
                     originalBitmap.recycle();
+                    originalBitmap = scaledBitmap;
                 }
-                originalBitmap = scaledBitmap;
                 FileOutputStream stream = new FileOutputStream(thumbFile);
                 originalBitmap.compress(CompressFormat.JPEG, 60, stream);
                 stream.close();
@@ -727,7 +730,7 @@ public class ImageLoader {
                         if (ThumbGenerateTask.this.filter != null) {
                             kf = kf + "@" + ThumbGenerateTask.this.filter;
                         }
-                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.messageThumbGenerated, bitmapDrawable, kf);
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.messageThumbGenerated, bitmapDrawable, kf);
                         ImageLoader.this.memCache.put(kf, bitmapDrawable);
                     }
                 });
@@ -788,88 +791,107 @@ public class ImageLoader {
                 }
             }
         };
-        FileLoader.getInstance().setDelegate(new FileLoaderDelegate() {
-            public void fileUploadProgressChanged(final String location, final float progress, final boolean isEncrypted) {
-                ImageLoader.this.fileProgresses.put(location, Float.valueOf(progress));
-                long currentTime = System.currentTimeMillis();
-                if (ImageLoader.this.lastProgressUpdateTime == 0 || ImageLoader.this.lastProgressUpdateTime < currentTime - 500) {
-                    ImageLoader.this.lastProgressUpdateTime = currentTime;
-                    AndroidUtilities.runOnUIThread(new Runnable() {
+        HashMap<Integer, File> mediaDirs = new HashMap();
+        File cachePath = AndroidUtilities.getCacheDir();
+        if (!cachePath.isDirectory()) {
+            try {
+                cachePath.mkdirs();
+            } catch (Throwable e) {
+                FileLog.e(e);
+            }
+        }
+        try {
+            new File(cachePath, ".nomedia").createNewFile();
+        } catch (Throwable e2) {
+            FileLog.e(e2);
+        }
+        mediaDirs.put(Integer.valueOf(4), cachePath);
+        for (int a = 0; a < 3; a++) {
+            final int currentAccount = a;
+            FileLoader.getInstance(a).setDelegate(new FileLoaderDelegate() {
+                public void fileUploadProgressChanged(final String location, final float progress, final boolean isEncrypted) {
+                    ImageLoader.this.fileProgresses.put(location, Float.valueOf(progress));
+                    long currentTime = System.currentTimeMillis();
+                    if (ImageLoader.this.lastProgressUpdateTime == 0 || ImageLoader.this.lastProgressUpdateTime < currentTime - 500) {
+                        ImageLoader.this.lastProgressUpdateTime = currentTime;
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.FileUploadProgressChanged, location, Float.valueOf(progress), Boolean.valueOf(isEncrypted));
+                            }
+                        });
+                    }
+                }
+
+                public void fileDidUploaded(String location, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv, long totalFileSize) {
+                    final String str = location;
+                    final InputFile inputFile2 = inputFile;
+                    final InputEncryptedFile inputEncryptedFile2 = inputEncryptedFile;
+                    final byte[] bArr = key;
+                    final byte[] bArr2 = iv;
+                    final long j = totalFileSize;
+                    Utilities.stageQueue.postRunnable(new Runnable() {
                         public void run() {
-                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.FileUploadProgressChanged, location, Float.valueOf(progress), Boolean.valueOf(isEncrypted));
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.FileDidUpload, str, inputFile2, inputEncryptedFile2, bArr, bArr2, Long.valueOf(j));
+                                }
+                            });
+                            ImageLoader.this.fileProgresses.remove(str);
                         }
                     });
                 }
-            }
 
-            public void fileDidUploaded(String location, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv, long totalFileSize) {
-                final String str = location;
-                final InputFile inputFile2 = inputFile;
-                final InputEncryptedFile inputEncryptedFile2 = inputEncryptedFile;
-                final byte[] bArr = key;
-                final byte[] bArr2 = iv;
-                final long j = totalFileSize;
-                Utilities.stageQueue.postRunnable(new Runnable() {
-                    public void run() {
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.FileDidUpload, str, inputFile2, inputEncryptedFile2, bArr, bArr2, Long.valueOf(j));
-                            }
-                        });
-                        ImageLoader.this.fileProgresses.remove(str);
-                    }
-                });
-            }
-
-            public void fileDidFailedUpload(final String location, final boolean isEncrypted) {
-                Utilities.stageQueue.postRunnable(new Runnable() {
-                    public void run() {
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.FileDidFailUpload, location, Boolean.valueOf(isEncrypted));
-                            }
-                        });
-                        ImageLoader.this.fileProgresses.remove(location);
-                    }
-                });
-            }
-
-            public void fileDidLoaded(final String location, final File finalFile, final int type) {
-                ImageLoader.this.fileProgresses.remove(location);
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        if (MediaController.getInstance().canSaveToGallery() && ImageLoader.this.telegramPath != null && finalFile != null && ((location.endsWith(".mp4") || location.endsWith(".jpg")) && finalFile.toString().startsWith(ImageLoader.this.telegramPath.toString()))) {
-                            AndroidUtilities.addMediaToGallery(finalFile.toString());
-                        }
-                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.FileDidLoaded, location);
-                        ImageLoader.this.fileDidLoaded(location, finalFile, type);
-                    }
-                });
-            }
-
-            public void fileDidFailedLoad(final String location, final int canceled) {
-                ImageLoader.this.fileProgresses.remove(location);
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        ImageLoader.this.fileDidFailedLoad(location, canceled);
-                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.FileDidFailedLoad, location, Integer.valueOf(canceled));
-                    }
-                });
-            }
-
-            public void fileLoadProgressChanged(final String location, final float progress) {
-                ImageLoader.this.fileProgresses.put(location, Float.valueOf(progress));
-                long currentTime = System.currentTimeMillis();
-                if (ImageLoader.this.lastProgressUpdateTime == 0 || ImageLoader.this.lastProgressUpdateTime < currentTime - 500) {
-                    ImageLoader.this.lastProgressUpdateTime = currentTime;
-                    AndroidUtilities.runOnUIThread(new Runnable() {
+                public void fileDidFailedUpload(final String location, final boolean isEncrypted) {
+                    Utilities.stageQueue.postRunnable(new Runnable() {
                         public void run() {
-                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.FileLoadProgressChanged, location, Float.valueOf(progress));
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.FileDidFailUpload, location, Boolean.valueOf(isEncrypted));
+                                }
+                            });
+                            ImageLoader.this.fileProgresses.remove(location);
                         }
                     });
                 }
-            }
-        });
+
+                public void fileDidLoaded(final String location, final File finalFile, final int type) {
+                    ImageLoader.this.fileProgresses.remove(location);
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            if (SharedConfig.saveToGallery && ImageLoader.this.telegramPath != null && finalFile != null && ((location.endsWith(".mp4") || location.endsWith(".jpg")) && finalFile.toString().startsWith(ImageLoader.this.telegramPath.toString()))) {
+                                AndroidUtilities.addMediaToGallery(finalFile.toString());
+                            }
+                            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.FileDidLoaded, location);
+                            ImageLoader.this.fileDidLoaded(location, finalFile, type);
+                        }
+                    });
+                }
+
+                public void fileDidFailedLoad(final String location, final int canceled) {
+                    ImageLoader.this.fileProgresses.remove(location);
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            ImageLoader.this.fileDidFailedLoad(location, canceled);
+                            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.FileDidFailedLoad, location, Integer.valueOf(canceled));
+                        }
+                    });
+                }
+
+                public void fileLoadProgressChanged(final String location, final float progress) {
+                    ImageLoader.this.fileProgresses.put(location, Float.valueOf(progress));
+                    long currentTime = System.currentTimeMillis();
+                    if (ImageLoader.this.lastProgressUpdateTime == 0 || ImageLoader.this.lastProgressUpdateTime < currentTime - 500) {
+                        ImageLoader.this.lastProgressUpdateTime = currentTime;
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.FileLoadProgressChanged, location, Float.valueOf(progress));
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        FileLoader.setMediaDirs(mediaDirs);
         BroadcastReceiver receiver = new BroadcastReceiver() {
             public void onReceive(Context arg0, Intent intent) {
                 FileLog.e("file system changed");
@@ -897,22 +919,6 @@ public class ImageLoader {
         filter.addAction("android.intent.action.MEDIA_UNMOUNTED");
         filter.addDataScheme("file");
         ApplicationLoader.applicationContext.registerReceiver(receiver, filter);
-        HashMap<Integer, File> mediaDirs = new HashMap();
-        File cachePath = AndroidUtilities.getCacheDir();
-        if (!cachePath.isDirectory()) {
-            try {
-                cachePath.mkdirs();
-            } catch (Throwable e) {
-                FileLog.e(e);
-            }
-        }
-        try {
-            new File(cachePath, ".nomedia").createNewFile();
-        } catch (Throwable e2) {
-            FileLog.e(e2);
-        }
-        mediaDirs.put(Integer.valueOf(4), cachePath);
-        FileLoader.getInstance().setMediaDirs(mediaDirs);
         checkMediaPaths();
     }
 
@@ -922,7 +928,7 @@ public class ImageLoader {
                 final HashMap<Integer, File> paths = ImageLoader.this.createMediaPaths();
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
-                        FileLoader.getInstance().setMediaDirs(paths);
+                        FileLoader.setMediaDirs(paths);
                     }
                 });
             }
@@ -998,7 +1004,7 @@ public class ImageLoader {
         } else {
             FileLog.e("this Android can't rename files");
         }
-        MediaController.getInstance().checkSaveToGalleryFiles();
+        SharedConfig.checkSaveToGalleryFiles();
         return mediaDirs;
     }
 
@@ -1259,12 +1265,12 @@ public class ImageLoader {
             for (int a = 0; a < arr.size(); a++) {
                 String filter = (String) arr.get(a);
                 performReplace(oldKey + "@" + filter, newKey + "@" + filter);
-                NotificationCenter.getInstance().postNotificationName(NotificationCenter.didReplacedPhotoInMemCache, oldK, newK, newLocation);
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didReplacedPhotoInMemCache, oldK, newK, newLocation);
             }
             return;
         }
         performReplace(oldKey, newKey);
-        NotificationCenter.getInstance().postNotificationName(NotificationCenter.didReplacedPhotoInMemCache, oldKey, newKey, newLocation);
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didReplacedPhotoInMemCache, oldKey, newKey, newLocation);
     }
 
     public void replaceImageInCache(final String oldKey, final String newKey, final FileLocation newLocation, boolean post) {
@@ -1319,6 +1325,7 @@ public class ImageLoader {
             final boolean finalIsNeedsQualityThumb = imageReceiver.isNeedsQualityThumb();
             final MessageObject parentMessageObject = imageReceiver.getParentMessageObject();
             final boolean shouldGenerateQualityThumb = imageReceiver.isShouldGenerateQualityThumb();
+            final int currentAccount = imageReceiver.getcurrentAccount();
             final int i = thumb;
             final String str = url;
             final String str2 = key;
@@ -1381,7 +1388,7 @@ public class ImageLoader {
                             }
                         } else if (i != 0) {
                             if (finalIsNeedsQualityThumb) {
-                                cacheFile = new File(FileLoader.getInstance().getDirectory(4), "q_" + str);
+                                cacheFile = new File(FileLoader.getDirectory(4), "q_" + str);
                                 if (cacheFile.exists()) {
                                     cacheFileExists = true;
                                 } else {
@@ -1404,7 +1411,7 @@ public class ImageLoader {
                                     ThumbGenerateInfo info = (ThumbGenerateInfo) ImageLoader.this.waitingForQualityThumb.get(location);
                                     if (info == null) {
                                         ThumbGenerateInfo thumbGenerateInfo = new ThumbGenerateInfo();
-                                        thumbGenerateInfo.fileLocation = (TL_fileLocation) tLObject;
+                                        thumbGenerateInfo.fileLocation = (FileLocation) tLObject;
                                         thumbGenerateInfo.filter = str3;
                                         ImageLoader.this.waitingForQualityThumb.put(location, thumbGenerateInfo);
                                     }
@@ -1429,14 +1436,14 @@ public class ImageLoader {
                             }
                             if (cacheFile == null) {
                                 if (i2 != 0 || i3 <= 0 || str4 != null || isEncrypted) {
-                                    cacheFile = new File(FileLoader.getInstance().getDirectory(4), str);
+                                    cacheFile = new File(FileLoader.getDirectory(4), str);
                                     if (cacheFile.exists()) {
                                         cacheFileExists = true;
                                     } else if (i2 == 2) {
-                                        cacheFile = new File(FileLoader.getInstance().getDirectory(4), str + ".enc");
+                                        cacheFile = new File(FileLoader.getDirectory(4), str + ".enc");
                                     }
                                 } else {
-                                    cacheFile = tLObject instanceof Document ? MessageObject.isVideoDocument((Document) tLObject) ? new File(FileLoader.getInstance().getDirectory(2), str) : new File(FileLoader.getInstance().getDirectory(3), str) : tLObject instanceof TL_webDocument ? new File(FileLoader.getInstance().getDirectory(3), str) : new File(FileLoader.getInstance().getDirectory(0), str);
+                                    cacheFile = tLObject instanceof Document ? MessageObject.isVideoDocument((Document) tLObject) ? new File(FileLoader.getDirectory(2), str) : new File(FileLoader.getDirectory(3), str) : tLObject instanceof TL_webDocument ? new File(FileLoader.getDirectory(3), str) : new File(FileLoader.getDirectory(0), str);
                                 }
                             }
                             img.selfThumb = i != 0;
@@ -1444,6 +1451,7 @@ public class ImageLoader {
                             img.filter = str3;
                             img.httpUrl = str4;
                             img.ext = str5;
+                            img.currentAccount = currentAccount;
                             if (i2 == 2) {
                                 img.encryptionKeyPath = new File(FileLoader.getInternalCacheDir(), str + ".enc.key");
                             }
@@ -1470,11 +1478,11 @@ public class ImageLoader {
                                     if (localCacheType == 0 && (i3 <= 0 || location2.key != null)) {
                                         localCacheType = 1;
                                     }
-                                    FileLoader.getInstance().loadFile(location2, str5, i3, localCacheType);
+                                    FileLoader.getInstance(currentAccount).loadFile(location2, str5, i3, localCacheType);
                                 } else if (tLObject instanceof Document) {
-                                    FileLoader.getInstance().loadFile((Document) tLObject, true, i2);
+                                    FileLoader.getInstance(currentAccount).loadFile((Document) tLObject, true, i2);
                                 } else if (tLObject instanceof TL_webDocument) {
-                                    FileLoader.getInstance().loadFile((TL_webDocument) tLObject, true, i2);
+                                    FileLoader.getInstance(currentAccount).loadFile((TL_webDocument) tLObject, true, i2);
                                 }
                                 if (imageReceiver2.isForceLoding()) {
                                     ImageLoader.this.forceLoadingImages.put(img.key, Integer.valueOf(0));
@@ -1482,7 +1490,7 @@ public class ImageLoader {
                                 }
                                 return;
                             }
-                            img.tempFilePath = new File(FileLoader.getInstance().getDirectory(4), Utilities.MD5(str4) + "_temp.jpg");
+                            img.tempFilePath = new File(FileLoader.getDirectory(4), Utilities.MD5(str4) + "_temp.jpg");
                             img.finalFilePath = cacheFile;
                             img.httpTask = new HttpImageTask(img, i3);
                             ImageLoader.this.httpTasks.add(img.httpTask);
@@ -1569,7 +1577,7 @@ public class ImageLoader {
                                     if (document2.mime_type == null && document2.mime_type.equals(MimeTypes.VIDEO_MP4)) {
                                         docExt = ".mp4";
                                     } else {
-                                        docExt = "";
+                                        docExt = TtmlNode.ANONYMOUS_REGION_ID;
                                     }
                                 }
                                 url = key + docExt;
@@ -1583,11 +1591,11 @@ public class ImageLoader {
                                 }
                             }
                         }
-                        docExt = "";
+                        docExt = TtmlNode.ANONYMOUS_REGION_ID;
                         if (docExt.length() <= 1) {
                             if (document2.mime_type == null) {
                             }
-                            docExt = "";
+                            docExt = TtmlNode.ANONYMOUS_REGION_ID;
                         }
                         url = key + docExt;
                         if (null != null) {
@@ -1673,6 +1681,7 @@ public class ImageLoader {
                         CacheImage cacheImage = (CacheImage) ImageLoader.this.imageLoadingByKeys.get(key);
                         if (cacheImage == null) {
                             cacheImage = new CacheImage();
+                            cacheImage.currentAccount = img.currentAccount;
                             cacheImage.finalFilePath = finalFile;
                             cacheImage.key = key;
                             cacheImage.httpUrl = img.httpUrl;
@@ -1727,12 +1736,12 @@ public class ImageLoader {
         return this.httpFileLoadTasksByKeys.containsKey(url);
     }
 
-    public void loadHttpFile(String url, String defaultExt) {
+    public void loadHttpFile(String url, String defaultExt, int currentAccount) {
         if (url != null && url.length() != 0 && !this.httpFileLoadTasksByKeys.containsKey(url)) {
             String ext = getHttpUrlExtension(url, defaultExt);
-            File file = new File(FileLoader.getInstance().getDirectory(4), Utilities.MD5(url) + "_temp." + ext);
+            File file = new File(FileLoader.getDirectory(4), Utilities.MD5(url) + "_temp." + ext);
             file.delete();
-            HttpFileTask task = new HttpFileTask(url, file, ext);
+            HttpFileTask task = new HttpFileTask(url, file, ext, currentAccount);
             this.httpFileLoadTasks.add(task);
             this.httpFileLoadTasksByKeys.put(url, task);
             runHttpFileLoadTasks(null, 0);
@@ -1762,7 +1771,7 @@ public class ImageLoader {
                 if (oldTask != null) {
                     if (reason == 1) {
                         if (oldTask.canRetry) {
-                            final HttpFileTask newTask = new HttpFileTask(oldTask.url, oldTask.tempFile, oldTask.ext);
+                            final HttpFileTask newTask = new HttpFileTask(oldTask.url, oldTask.tempFile, oldTask.ext, oldTask.currentAccount);
                             Runnable runnable = new Runnable() {
                                 public void run() {
                                     ImageLoader.this.httpFileLoadTasks.add(newTask);
@@ -1773,13 +1782,13 @@ public class ImageLoader {
                             AndroidUtilities.runOnUIThread(runnable, 1000);
                         } else {
                             ImageLoader.this.httpFileLoadTasksByKeys.remove(oldTask.url);
-                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.httpFileDidFailedLoad, oldTask.url, Integer.valueOf(0));
+                            NotificationCenter.getInstance(oldTask.currentAccount).postNotificationName(NotificationCenter.httpFileDidFailedLoad, oldTask.url, Integer.valueOf(0));
                         }
                     } else if (reason == 2) {
                         ImageLoader.this.httpFileLoadTasksByKeys.remove(oldTask.url);
-                        File file = new File(FileLoader.getInstance().getDirectory(4), Utilities.MD5(oldTask.url) + "." + oldTask.ext);
+                        File file = new File(FileLoader.getDirectory(4), Utilities.MD5(oldTask.url) + "." + oldTask.ext);
                         String result = oldTask.tempFile.renameTo(file) ? file.toString() : oldTask.tempFile.toString();
-                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.httpFileDidLoaded, oldTask.url, result);
+                        NotificationCenter.getInstance(oldTask.currentAccount).postNotificationName(NotificationCenter.httpFileDidLoaded, oldTask.url, result);
                     }
                 }
                 while (ImageLoader.this.currentHttpFileLoadTasksCount < 2 && !ImageLoader.this.httpFileLoadTasks.isEmpty()) {
@@ -1854,7 +1863,7 @@ public class ImageLoader {
                 Matrix matrix2 = new Matrix();
                 switch (orientation) {
                     case 3:
-                        matrix2.postRotate(BitmapDescriptorFactory.HUE_CYAN);
+                        matrix2.postRotate(180.0f);
                     case 6:
                         try {
                             matrix2.postRotate(90.0f);
@@ -1863,7 +1872,7 @@ public class ImageLoader {
                             break;
                         }
                     case 8:
-                        matrix2.postRotate(BitmapDescriptorFactory.HUE_VIOLET);
+                        matrix2.postRotate(270.0f);
                         matrix = matrix2;
                         break;
                 }
@@ -1945,8 +1954,8 @@ public class ImageLoader {
         TL_fileLocation location = new TL_fileLocation();
         location.volume_id = -2147483648L;
         location.dc_id = Integer.MIN_VALUE;
-        location.local_id = UserConfig.lastLocalId;
-        UserConfig.lastLocalId--;
+        location.local_id = SharedConfig.lastLocalId;
+        SharedConfig.lastLocalId--;
         PhotoSize size = new TL_photoSize();
         size.location = location;
         size.w = scaledBitmap.getWidth();
@@ -1962,7 +1971,7 @@ public class ImageLoader {
         } else {
             size.type = "y";
         }
-        FileOutputStream stream = new FileOutputStream(new File(FileLoader.getInstance().getDirectory(4), location.volume_id + "_" + location.local_id + ".jpg"));
+        FileOutputStream stream = new FileOutputStream(new File(FileLoader.getDirectory(4), location.volume_id + "_" + location.local_id + ".jpg"));
         scaledBitmap.compress(CompressFormat.JPEG, quality, stream);
         if (cache) {
             ByteArrayOutputStream stream2 = new ByteArrayOutputStream();
@@ -2066,8 +2075,8 @@ public class ImageLoader {
                 photoSize.location = new TL_fileLocation();
                 photoSize.location.volume_id = -2147483648L;
                 photoSize.location.dc_id = Integer.MIN_VALUE;
-                photoSize.location.local_id = UserConfig.lastLocalId;
-                UserConfig.lastLocalId--;
+                photoSize.location.local_id = SharedConfig.lastLocalId;
+                SharedConfig.lastLocalId--;
             }
             File file = FileLoader.getPathToAttach(photoSize, true);
             boolean isEncrypted = false;

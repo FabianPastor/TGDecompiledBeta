@@ -6,8 +6,6 @@ import android.os.RemoteException;
 import com.google.android.gms.dynamic.IObjectWrapper;
 
 public interface IMapViewDelegate extends IInterface {
-    IGoogleMapDelegate getMap() throws RemoteException;
-
     void getMapAsync(zzap com_google_android_gms_maps_internal_zzap) throws RemoteException;
 
     IObjectWrapper getView() throws RemoteException;

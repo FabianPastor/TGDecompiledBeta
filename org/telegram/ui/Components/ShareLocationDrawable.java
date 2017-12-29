@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
 
@@ -50,7 +49,7 @@ public class ShareLocationDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        int size = AndroidUtilities.dp(this.isSmall ? BitmapDescriptorFactory.HUE_ORANGE : BitmapDescriptorFactory.HUE_GREEN);
+        int size = AndroidUtilities.dp(this.isSmall ? 30.0f : 120.0f);
         int y = getBounds().top + ((getIntrinsicHeight() - size) / 2);
         int x = getBounds().left + ((getIntrinsicWidth() - size) / 2);
         this.drawable.setBounds(x, y, this.drawable.getIntrinsicWidth() + x, this.drawable.getIntrinsicHeight() + y);
@@ -95,10 +94,10 @@ public class ShareLocationDrawable extends Drawable {
     }
 
     public int getIntrinsicWidth() {
-        return AndroidUtilities.dp(this.isSmall ? 40.0f : BitmapDescriptorFactory.HUE_GREEN);
+        return AndroidUtilities.dp(this.isSmall ? 40.0f : 120.0f);
     }
 
     public int getIntrinsicHeight() {
-        return AndroidUtilities.dp(this.isSmall ? 40.0f : BitmapDescriptorFactory.HUE_CYAN);
+        return AndroidUtilities.dp(this.isSmall ? 40.0f : 180.0f);
     }
 }

@@ -1,7 +1,6 @@
 package org.telegram.messenger.exoplayer2.upstream.cache;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.lang.annotation.Retention;
@@ -27,7 +26,6 @@ public final class CacheDataSource implements DataSource {
     private DataSource currentDataSource;
     private boolean currentRequestIgnoresCache;
     private boolean currentRequestUnbounded;
-    @Nullable
     private final EventListener eventListener;
     private int flags;
     private final boolean ignoreCacheForUnsetLengthRequests;
@@ -116,7 +114,7 @@ Error: java.util.NoSuchElementException
         this(cache, upstream, new FileDataSource(), new CacheDataSink(cache, maxCacheFileSize), flags, null);
     }
 
-    public CacheDataSource(Cache cache, DataSource upstream, DataSource cacheReadDataSource, DataSink cacheWriteDataSink, int flags, @Nullable EventListener eventListener) {
+    public CacheDataSource(Cache cache, DataSource upstream, DataSource cacheReadDataSource, DataSink cacheWriteDataSink, int flags, EventListener eventListener) {
         boolean z;
         boolean z2 = true;
         this.cache = cache;

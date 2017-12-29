@@ -5,13 +5,6 @@ class ContainerHelpers {
     static final long[] EMPTY_LONGS = new long[0];
     static final Object[] EMPTY_OBJECTS = new Object[0];
 
-    ContainerHelpers() {
-    }
-
-    public static int idealIntArraySize(int need) {
-        return idealByteArraySize(need * 4) / 4;
-    }
-
     public static int idealLongArraySize(int need) {
         return idealByteArraySize(need * 8) / 8;
     }

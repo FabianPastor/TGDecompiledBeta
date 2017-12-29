@@ -1,7 +1,6 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -12,13 +11,14 @@ import android.graphics.Shader.TileMode;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageReceiver.BitmapHolder;
 
 public class ClippingImageView extends View {
     private float animationProgress;
     private float[][] animationValues;
     private RectF bitmapRect;
     private BitmapShader bitmapShader;
-    private Bitmap bmp;
+    private BitmapHolder bmp;
     private int clipBottom;
     private int clipLeft;
     private int clipRight;
@@ -90,7 +90,7 @@ public class ClippingImageView extends View {
     }
 
     public void onDraw(Canvas canvas) {
-        if (getVisibility() == 0 && this.bmp != null) {
+        if (getVisibility() == 0 && this.bmp != null && !this.bmp.isRecycled()) {
             float scaleY = getScaleY();
             canvas.save();
             if (this.needRadius) {
@@ -137,7 +137,7 @@ public class ClippingImageView extends View {
                 }
                 canvas.clipRect(((float) this.clipLeft) / scaleY, ((float) this.clipTop) / scaleY, ((float) getWidth()) - (((float) this.clipRight) / scaleY), ((float) getHeight()) - (((float) this.clipBottom) / scaleY));
                 try {
-                    canvas.drawBitmap(this.bmp, this.matrix, this.paint);
+                    canvas.drawBitmap(this.bmp.bitmap, this.matrix, this.paint);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -182,12 +182,16 @@ public class ClippingImageView extends View {
         this.orientation = angle;
     }
 
-    public void setImageBitmap(Bitmap bitmap) {
+    public void setImageBitmap(BitmapHolder bitmap) {
+        if (this.bmp != null) {
+            this.bmp.release();
+            this.bitmapShader = null;
+        }
         this.bmp = bitmap;
         if (bitmap != null) {
             this.bitmapRect.set(0.0f, 0.0f, (float) bitmap.getWidth(), (float) bitmap.getHeight());
             if (this.needRadius) {
-                this.bitmapShader = new BitmapShader(bitmap, TileMode.CLAMP, TileMode.CLAMP);
+                this.bitmapShader = new BitmapShader(bitmap.bitmap, TileMode.CLAMP, TileMode.CLAMP);
                 this.roundPaint.setShader(this.bitmapShader);
             }
         }

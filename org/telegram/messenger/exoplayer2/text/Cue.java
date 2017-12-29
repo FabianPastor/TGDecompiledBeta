@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.text.Layout.Alignment;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import org.telegram.ui.ActionBar.Theme;
 
 public class Cue {
     public static final int ANCHOR_TYPE_END = 2;
@@ -35,7 +36,7 @@ public class Cue {
     }
 
     public Cue(Bitmap bitmap, float horizontalPosition, int horizontalPositionAnchor, float verticalPosition, int verticalPositionAnchor, float width, float height) {
-        this(null, null, bitmap, verticalPosition, 0, verticalPositionAnchor, horizontalPosition, horizontalPositionAnchor, width, height, false, -16777216);
+        this(null, null, bitmap, verticalPosition, 0, verticalPositionAnchor, horizontalPosition, horizontalPositionAnchor, width, height, false, Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
     }
 
     public Cue(CharSequence text) {
@@ -43,7 +44,7 @@ public class Cue {
     }
 
     public Cue(CharSequence text, Alignment textAlignment, float line, int lineType, int lineAnchor, float position, int positionAnchor, float size) {
-        this(text, textAlignment, line, lineType, lineAnchor, position, positionAnchor, size, false, -16777216);
+        this(text, textAlignment, line, lineType, lineAnchor, position, positionAnchor, size, false, Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
     }
 
     public Cue(CharSequence text, Alignment textAlignment, float line, int lineType, int lineAnchor, float position, int positionAnchor, float size, boolean windowColorSet, int windowColor) {

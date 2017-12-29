@@ -7,6 +7,7 @@ import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.Notification;
 import android.app.Notification.BigTextStyle;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -17,9 +18,6 @@ import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -28,30 +26,28 @@ import android.view.View;
 import android.widget.ProgressBar;
 import com.google.android.gms.R;
 import com.google.android.gms.common.api.GoogleApiActivity;
-import com.google.android.gms.common.internal.zzbo;
-import com.google.android.gms.common.internal.zzs;
-import com.google.android.gms.common.internal.zzt;
-import com.google.android.gms.common.util.zzj;
+import com.google.android.gms.common.api.internal.zzbx;
+import com.google.android.gms.common.api.internal.zzby;
+import com.google.android.gms.common.api.internal.zzcf;
+import com.google.android.gms.common.internal.zzbq;
+import com.google.android.gms.common.internal.zzu;
+import com.google.android.gms.common.internal.zzv;
+import com.google.android.gms.common.util.zzi;
 import com.google.android.gms.common.util.zzq;
-import com.google.android.gms.internal.zzbdk;
-import com.google.android.gms.internal.zzbdl;
-import com.google.android.gms.internal.zzbdt;
-import com.google.android.gms.internal.zzbeb;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 
-public class GoogleApiAvailability extends zze {
-    public static final String GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms";
-    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = zze.GOOGLE_PLAY_SERVICES_VERSION_CODE;
-    private static final GoogleApiAvailability zzaAa = new GoogleApiAvailability();
+public class GoogleApiAvailability extends zzf {
+    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = zzf.GOOGLE_PLAY_SERVICES_VERSION_CODE;
+    private static final Object mLock = new Object();
+    private static final GoogleApiAvailability zzfku = new GoogleApiAvailability();
+    private String zzfkv;
 
     @SuppressLint({"HandlerLeak"})
     class zza extends Handler {
         private final Context mApplicationContext;
-        private /* synthetic */ GoogleApiAvailability zzaAb;
+        private /* synthetic */ GoogleApiAvailability zzfkw;
 
         public zza(GoogleApiAvailability googleApiAvailability, Context context) {
-            this.zzaAb = googleApiAvailability;
+            this.zzfkw = googleApiAvailability;
             super(Looper.myLooper() == null ? Looper.getMainLooper() : Looper.myLooper());
             this.mApplicationContext = context.getApplicationContext();
         }
@@ -59,9 +55,9 @@ public class GoogleApiAvailability extends zze {
         public final void handleMessage(Message message) {
             switch (message.what) {
                 case 1:
-                    int isGooglePlayServicesAvailable = this.zzaAb.isGooglePlayServicesAvailable(this.mApplicationContext);
-                    if (this.zzaAb.isUserResolvableError(isGooglePlayServicesAvailable)) {
-                        this.zzaAb.showErrorNotification(this.mApplicationContext, isGooglePlayServicesAvailable);
+                    int isGooglePlayServicesAvailable = this.zzfkw.isGooglePlayServicesAvailable(this.mApplicationContext);
+                    if (this.zzfkw.isUserResolvableError(isGooglePlayServicesAvailable)) {
+                        this.zzfkw.showErrorNotification(this.mApplicationContext, isGooglePlayServicesAvailable);
                         return;
                     }
                     return;
@@ -76,7 +72,7 @@ public class GoogleApiAvailability extends zze {
     }
 
     public static GoogleApiAvailability getInstance() {
-        return zzaAa;
+        return zzfku;
     }
 
     public static Dialog zza(Activity activity, OnCancelListener onCancelListener) {
@@ -85,14 +81,14 @@ public class GoogleApiAvailability extends zze {
         progressBar.setVisibility(0);
         Builder builder = new Builder(activity);
         builder.setView(progressBar);
-        builder.setMessage(zzs.zzi(activity, 18));
-        builder.setPositiveButton("", null);
+        builder.setMessage(zzu.zzi(activity, 18));
+        builder.setPositiveButton(TtmlNode.ANONYMOUS_REGION_ID, null);
         Dialog create = builder.create();
         zza(activity, create, "GooglePlayServicesUpdatingDialog", onCancelListener);
         return create;
     }
 
-    static Dialog zza(Context context, int i, zzt com_google_android_gms_common_internal_zzt, OnCancelListener onCancelListener) {
+    static Dialog zza(Context context, int i, zzv com_google_android_gms_common_internal_zzv, OnCancelListener onCancelListener) {
         Builder builder = null;
         if (i == 0) {
             return null;
@@ -105,34 +101,51 @@ public class GoogleApiAvailability extends zze {
         if (builder == null) {
             builder = new Builder(context);
         }
-        builder.setMessage(zzs.zzi(context, i));
+        builder.setMessage(zzu.zzi(context, i));
         if (onCancelListener != null) {
             builder.setOnCancelListener(onCancelListener);
         }
-        CharSequence zzk = zzs.zzk(context, i);
+        CharSequence zzk = zzu.zzk(context, i);
         if (zzk != null) {
-            builder.setPositiveButton(zzk, com_google_android_gms_common_internal_zzt);
+            builder.setPositiveButton(zzk, com_google_android_gms_common_internal_zzv);
         }
-        zzk = zzs.zzg(context, i);
+        zzk = zzu.zzg(context, i);
         if (zzk != null) {
             builder.setTitle(zzk);
         }
         return builder.create();
     }
 
-    @Nullable
-    public static zzbdk zza(Context context, zzbdl com_google_android_gms_internal_zzbdl) {
+    public static zzbx zza(Context context, zzby com_google_android_gms_common_api_internal_zzby) {
         IntentFilter intentFilter = new IntentFilter("android.intent.action.PACKAGE_ADDED");
         intentFilter.addDataScheme("package");
-        BroadcastReceiver com_google_android_gms_internal_zzbdk = new zzbdk(com_google_android_gms_internal_zzbdl);
-        context.registerReceiver(com_google_android_gms_internal_zzbdk, intentFilter);
-        com_google_android_gms_internal_zzbdk.setContext(context);
-        if (zzo.zzy(context, "com.google.android.gms")) {
-            return com_google_android_gms_internal_zzbdk;
+        BroadcastReceiver com_google_android_gms_common_api_internal_zzbx = new zzbx(com_google_android_gms_common_api_internal_zzby);
+        context.registerReceiver(com_google_android_gms_common_api_internal_zzbx, intentFilter);
+        com_google_android_gms_common_api_internal_zzbx.setContext(context);
+        if (zzp.zzv(context, "com.google.android.gms")) {
+            return com_google_android_gms_common_api_internal_zzbx;
         }
-        com_google_android_gms_internal_zzbdl.zzpA();
-        com_google_android_gms_internal_zzbdk.unregister();
+        com_google_android_gms_common_api_internal_zzby.zzahg();
+        com_google_android_gms_common_api_internal_zzbx.unregister();
         return null;
+    }
+
+    @TargetApi(26)
+    private final String zza(Context context, NotificationManager notificationManager) {
+        zzbq.checkState(zzq.isAtLeastO());
+        String zzafx = zzafx();
+        if (zzafx == null) {
+            zzafx = "com.google.android.gms.availability";
+            NotificationChannel notificationChannel = notificationManager.getNotificationChannel(zzafx);
+            CharSequence zzcn = zzu.zzcn(context);
+            if (notificationChannel == null) {
+                notificationManager.createNotificationChannel(new NotificationChannel(zzafx, zzcn, 4));
+            } else if (!zzcn.equals(notificationChannel.getName())) {
+                notificationChannel.setName(zzcn);
+                notificationManager.createNotificationChannel(notificationChannel);
+            }
+        }
+        return zzafx;
     }
 
     static void zza(Activity activity, Dialog dialog, String str, OnCancelListener onCancelListener) {
@@ -146,61 +159,67 @@ public class GoogleApiAvailability extends zze {
     @TargetApi(20)
     private final void zza(Context context, int i, String str, PendingIntent pendingIntent) {
         if (i == 18) {
-            zzar(context);
+            zzcc(context);
         } else if (pendingIntent != null) {
             Notification build;
             int i2;
-            CharSequence zzh = zzs.zzh(context, i);
-            CharSequence zzj = zzs.zzj(context, i);
+            CharSequence zzh = zzu.zzh(context, i);
+            CharSequence zzj = zzu.zzj(context, i);
             Resources resources = context.getResources();
-            if (zzj.zzaH(context)) {
-                zzbo.zzae(zzq.zzsd());
-                build = new Notification.Builder(context).setSmallIcon(context.getApplicationInfo().icon).setPriority(2).setAutoCancel(true).setContentTitle(zzh).setStyle(new BigTextStyle().bigText(zzj)).addAction(R.drawable.common_full_open_on_phone, resources.getString(R.string.common_open_on_phone), pendingIntent).build();
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService("notification");
+            if (zzi.zzct(context)) {
+                zzbq.checkState(zzq.zzamm());
+                Notification.Builder addAction = new Notification.Builder(context).setSmallIcon(context.getApplicationInfo().icon).setPriority(2).setAutoCancel(true).setContentTitle(zzh).setStyle(new BigTextStyle().bigText(zzj)).addAction(R.drawable.common_full_open_on_phone, resources.getString(R.string.common_open_on_phone), pendingIntent);
+                if (zzq.isAtLeastO() && zzq.isAtLeastO()) {
+                    addAction.setChannelId(zza(context, notificationManager));
+                }
+                build = addAction.build();
             } else {
-                build = new NotificationCompat.Builder(context).setSmallIcon(17301642).setTicker(resources.getString(R.string.common_google_play_services_notification_ticker)).setWhen(System.currentTimeMillis()).setAutoCancel(true).setContentIntent(pendingIntent).setContentTitle(zzh).setContentText(zzj).setLocalOnly(true).setStyle(new NotificationCompat.BigTextStyle().bigText(zzj)).build();
+                NotificationCompat.Builder style = new NotificationCompat.Builder(context).setSmallIcon(17301642).setTicker(resources.getString(R.string.common_google_play_services_notification_ticker)).setWhen(System.currentTimeMillis()).setAutoCancel(true).setContentIntent(pendingIntent).setContentTitle(zzh).setContentText(zzj).setLocalOnly(true).setStyle(new NotificationCompat.BigTextStyle().bigText(zzj));
+                if (zzq.isAtLeastO() && zzq.isAtLeastO()) {
+                    style.setChannelId(zza(context, notificationManager));
+                }
+                build = style.build();
             }
             switch (i) {
                 case 1:
                 case 2:
                 case 3:
-                    zzo.zzaAs.set(false);
                     i2 = 10436;
+                    zzp.zzfln.set(false);
                     break;
                 default:
                     i2 = 39789;
                     break;
             }
-            ((NotificationManager) context.getSystemService("notification")).notify(i2, build);
+            notificationManager.notify(i2, build);
         } else if (i == 6) {
             Log.w("GoogleApiAvailability", "Missing resolution for ConnectionResult.RESOLUTION_REQUIRED. Call GoogleApiAvailability#showErrorNotification(Context, ConnectionResult) instead.");
         }
     }
 
-    public Dialog getErrorDialog(Activity activity, int i, int i2) {
-        return getErrorDialog(activity, i, i2, null);
+    private final String zzafx() {
+        String str;
+        synchronized (mLock) {
+            str = this.zzfkv;
+        }
+        return str;
     }
 
     public Dialog getErrorDialog(Activity activity, int i, int i2, OnCancelListener onCancelListener) {
-        return zza((Context) activity, i, zzt.zza(activity, zze.zza(activity, i, "d"), i2), onCancelListener);
+        return zza((Context) activity, i, zzv.zza(activity, zzf.zza(activity, i, "d"), i2), onCancelListener);
     }
 
-    @Nullable
     public PendingIntent getErrorResolutionPendingIntent(Context context, int i, int i2) {
         return super.getErrorResolutionPendingIntent(context, i, i2);
     }
 
-    @Nullable
     public PendingIntent getErrorResolutionPendingIntent(Context context, ConnectionResult connectionResult) {
         return connectionResult.hasResolution() ? connectionResult.getResolution() : getErrorResolutionPendingIntent(context, connectionResult.getErrorCode(), 0);
     }
 
     public final String getErrorString(int i) {
         return super.getErrorString(i);
-    }
-
-    @Nullable
-    public String getOpenSourceSoftwareLicenseInfo(Context context) {
-        return super.getOpenSourceSoftwareLicenseInfo(context);
     }
 
     public int isGooglePlayServicesAvailable(Context context) {
@@ -211,28 +230,12 @@ public class GoogleApiAvailability extends zze {
         return super.isUserResolvableError(i);
     }
 
-    @MainThread
-    public Task<Void> makeGooglePlayServicesAvailable(Activity activity) {
-        zzbo.zzcz("makeGooglePlayServicesAvailable must be called from the main thread");
-        int isGooglePlayServicesAvailable = isGooglePlayServicesAvailable(activity);
-        if (isGooglePlayServicesAvailable == 0) {
-            return Tasks.forResult(null);
-        }
-        zzbeb zzp = zzbeb.zzp(activity);
-        zzp.zzb(new ConnectionResult(isGooglePlayServicesAvailable, null), 0);
-        return zzp.getTask();
-    }
-
-    public boolean showErrorDialogFragment(Activity activity, int i, int i2) {
-        return showErrorDialogFragment(activity, i, i2, null);
-    }
-
     public boolean showErrorDialogFragment(Activity activity, int i, int i2, OnCancelListener onCancelListener) {
         Dialog errorDialog = getErrorDialog(activity, i, i2, onCancelListener);
         if (errorDialog == null) {
             return false;
         }
-        zza(activity, errorDialog, GooglePlayServicesUtil.GMS_ERROR_DIALOG, onCancelListener);
+        zza(activity, errorDialog, "GooglePlayServicesErrorDialog", onCancelListener);
         return true;
     }
 
@@ -240,16 +243,12 @@ public class GoogleApiAvailability extends zze {
         zza(context, i, null, zza(context, i, 0, "n"));
     }
 
-    public void showErrorNotification(Context context, ConnectionResult connectionResult) {
-        zza(context, connectionResult.getErrorCode(), null, getErrorResolutionPendingIntent(context, connectionResult));
-    }
-
-    public final boolean zza(Activity activity, @NonNull zzbdt com_google_android_gms_internal_zzbdt, int i, int i2, OnCancelListener onCancelListener) {
-        Dialog zza = zza((Context) activity, i, zzt.zza(com_google_android_gms_internal_zzbdt, zze.zza(activity, i, "d"), 2), onCancelListener);
+    public final boolean zza(Activity activity, zzcf com_google_android_gms_common_api_internal_zzcf, int i, int i2, OnCancelListener onCancelListener) {
+        Dialog zza = zza((Context) activity, i, zzv.zza(com_google_android_gms_common_api_internal_zzcf, zzf.zza(activity, i, "d"), 2), onCancelListener);
         if (zza == null) {
             return false;
         }
-        zza(activity, zza, GooglePlayServicesUtil.GMS_ERROR_DIALOG, onCancelListener);
+        zza(activity, zza, "GooglePlayServicesErrorDialog", onCancelListener);
         return true;
     }
 
@@ -262,7 +261,7 @@ public class GoogleApiAvailability extends zze {
         return true;
     }
 
-    final void zzar(Context context) {
+    final void zzcc(Context context) {
         new zza(this, context).sendEmptyMessageDelayed(1, 120000);
     }
 }

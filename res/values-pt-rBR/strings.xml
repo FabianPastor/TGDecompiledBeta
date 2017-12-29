@@ -1716,6 +1716,7 @@
     <string name="common_google_play_services_install_button">Instalar</string>
     <string name="common_google_play_services_install_text">O app %1$s não funciona sem o Google Play Services, o qual não está instalado no seu dispositivo.</string>
     <string name="common_google_play_services_install_title">Instalar o Google Play Services</string>
+    <string name="common_google_play_services_notification_channel_name">Disponibilidade do Google Play Services</string>
     <string name="common_google_play_services_notification_ticker">Erro do Google Play Services</string>
     <string name="common_google_play_services_unknown_issue">O app %1$s está com problemas com o Google Play Services. Tente novamente.</string>
     <string name="common_google_play_services_unsupported_text">O app %1$s não funciona sem o Google Play Services, o qual não é compatível com seu dispositivo.</string>
@@ -1741,6 +1742,7 @@
     <string name="formatterWeek">EEE</string>
     <string name="formatterYear">dd.MM.yy</string>
     <string name="formatterYearMax">dd.MM.yyyy</string>
+    <string name="gcm_fallback_notification_channel_label">Diversos</string>
     <string name="items_few">%1$d itens</string>
     <string name="items_many">%1$d itens</string>
     <string name="items_one">%1$d item</string>
@@ -1753,5 +1755,6 @@
     <string name="messages_other">%1$d mensagens</string>
     <string name="messages_two">%1$d mensagens</string>
     <string name="messages_zero">%1$d mensagens</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Comprar com o Google</string>
 </resources>

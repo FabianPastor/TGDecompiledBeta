@@ -1,31 +1,28 @@
 package com.google.android.gms.common.internal;
 
-import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
-import com.google.android.gms.internal.zzee;
-import com.google.android.gms.internal.zzef;
+import com.google.android.gms.dynamic.IObjectWrapper;
+import com.google.android.gms.dynamic.IObjectWrapper.zza;
+import com.google.android.gms.internal.zzeu;
 
-public abstract class zzav extends zzee implements zzau {
-    public zzav() {
-        attachInterface(this, "com.google.android.gms.common.internal.IGmsCallbacks");
+public final class zzav extends zzeu implements zzat {
+    zzav(IBinder iBinder) {
+        super(iBinder, "com.google.android.gms.common.internal.ICertData");
     }
 
-    public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-        if (zza(i, parcel, parcel2, i2)) {
-            return true;
-        }
-        switch (i) {
-            case 1:
-                zza(parcel.readInt(), parcel.readStrongBinder(), (Bundle) zzef.zza(parcel, Bundle.CREATOR));
-                break;
-            case 2:
-                zza(parcel.readInt(), (Bundle) zzef.zza(parcel, Bundle.CREATOR));
-                break;
-            default:
-                return false;
-        }
-        parcel2.writeNoException();
-        return true;
+    public final IObjectWrapper zzaga() throws RemoteException {
+        Parcel zza = zza(1, zzbe());
+        IObjectWrapper zzaq = zza.zzaq(zza.readStrongBinder());
+        zza.recycle();
+        return zzaq;
+    }
+
+    public final int zzagb() throws RemoteException {
+        Parcel zza = zza(2, zzbe());
+        int readInt = zza.readInt();
+        zza.recycle();
+        return readInt;
     }
 }

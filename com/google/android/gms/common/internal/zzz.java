@@ -1,59 +1,75 @@
 package com.google.android.gms.common.internal;
 
 import android.accounts.Account;
-import android.content.Context;
+import android.os.Bundle;
+import android.os.IBinder;
 import android.os.IInterface;
-import android.os.Looper;
-import android.support.annotation.NonNull;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.Api.zze;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.zzc;
-import java.util.Set;
+import com.google.android.gms.common.zzf;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-public abstract class zzz<T extends IInterface> extends zzd<T> implements zze, zzad {
-    private final zzq zzaCA;
-    private final Account zzajb;
-    private final Set<Scope> zzame;
+public final class zzz extends zzbfm {
+    public static final Creator<zzz> CREATOR = new zzaa();
+    private int version;
+    private int zzfzr;
+    private int zzfzs;
+    String zzfzt;
+    IBinder zzfzu;
+    Scope[] zzfzv;
+    Bundle zzfzw;
+    Account zzfzx;
+    zzc[] zzfzy;
 
-    protected zzz(Context context, Looper looper, int i, zzq com_google_android_gms_common_internal_zzq, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
-        this(context, looper, zzae.zzaC(context), GoogleApiAvailability.getInstance(), i, com_google_android_gms_common_internal_zzq, (ConnectionCallbacks) zzbo.zzu(connectionCallbacks), (OnConnectionFailedListener) zzbo.zzu(onConnectionFailedListener));
+    public zzz(int i) {
+        this.version = 3;
+        this.zzfzs = zzf.GOOGLE_PLAY_SERVICES_VERSION_CODE;
+        this.zzfzr = i;
     }
 
-    private zzz(Context context, Looper looper, zzae com_google_android_gms_common_internal_zzae, GoogleApiAvailability googleApiAvailability, int i, zzq com_google_android_gms_common_internal_zzq, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
-        super(context, looper, com_google_android_gms_common_internal_zzae, googleApiAvailability, i, connectionCallbacks == null ? null : new zzaa(connectionCallbacks), onConnectionFailedListener == null ? null : new zzab(onConnectionFailedListener), com_google_android_gms_common_internal_zzq.zzrr());
-        this.zzaCA = com_google_android_gms_common_internal_zzq;
-        this.zzajb = com_google_android_gms_common_internal_zzq.getAccount();
-        Set zzro = com_google_android_gms_common_internal_zzq.zzro();
-        Set<Scope> zzb = zzb(zzro);
-        for (Scope contains : zzb) {
-            if (!zzro.contains(contains)) {
-                throw new IllegalStateException("Expanding scopes is not permitted, use implied scopes instead");
-            }
+    zzz(int i, int i2, int i3, String str, IBinder iBinder, Scope[] scopeArr, Bundle bundle, Account account, zzc[] com_google_android_gms_common_zzcArr) {
+        Account account2 = null;
+        this.version = i;
+        this.zzfzr = i2;
+        this.zzfzs = i3;
+        if ("com.google.android.gms".equals(str)) {
+            this.zzfzt = "com.google.android.gms";
+        } else {
+            this.zzfzt = str;
         }
-        this.zzame = zzb;
+        if (i < 2) {
+            if (iBinder != null) {
+                zzan com_google_android_gms_common_internal_zzap;
+                if (iBinder != null) {
+                    IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.common.internal.IAccountAccessor");
+                    com_google_android_gms_common_internal_zzap = queryLocalInterface instanceof zzan ? (zzan) queryLocalInterface : new zzap(iBinder);
+                }
+                account2 = zza.zza(com_google_android_gms_common_internal_zzap);
+            }
+            this.zzfzx = account2;
+        } else {
+            this.zzfzu = iBinder;
+            this.zzfzx = account;
+        }
+        this.zzfzv = scopeArr;
+        this.zzfzw = bundle;
+        this.zzfzy = com_google_android_gms_common_zzcArr;
     }
 
-    public final Account getAccount() {
-        return this.zzajb;
-    }
-
-    @NonNull
-    protected Set<Scope> zzb(@NonNull Set<Scope> set) {
-        return set;
-    }
-
-    public zzc[] zzrd() {
-        return new zzc[0];
-    }
-
-    protected final Set<Scope> zzrh() {
-        return this.zzame;
-    }
-
-    protected final zzq zzry() {
-        return this.zzaCA;
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zzc(parcel, 1, this.version);
+        zzbfp.zzc(parcel, 2, this.zzfzr);
+        zzbfp.zzc(parcel, 3, this.zzfzs);
+        zzbfp.zza(parcel, 4, this.zzfzt, false);
+        zzbfp.zza(parcel, 5, this.zzfzu, false);
+        zzbfp.zza(parcel, 6, this.zzfzv, i, false);
+        zzbfp.zza(parcel, 7, this.zzfzw, false);
+        zzbfp.zza(parcel, 8, this.zzfzx, i, false);
+        zzbfp.zza(parcel, 10, this.zzfzy, i, false);
+        zzbfp.zzai(parcel, zze);
     }
 }

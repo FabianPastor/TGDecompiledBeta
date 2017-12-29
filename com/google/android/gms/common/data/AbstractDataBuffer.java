@@ -1,29 +1,16 @@
 package com.google.android.gms.common.data;
 
-import android.os.Bundle;
 import java.util.Iterator;
 
 public abstract class AbstractDataBuffer<T> implements DataBuffer<T> {
-    protected final DataHolder zzaCX;
+    protected final DataHolder zzfqt;
 
     protected AbstractDataBuffer(DataHolder dataHolder) {
-        this.zzaCX = dataHolder;
+        this.zzfqt = dataHolder;
     }
-
-    @Deprecated
-    public final void close() {
-        release();
-    }
-
-    public abstract T get(int i);
 
     public int getCount() {
-        return this.zzaCX == null ? 0 : this.zzaCX.zzaFG;
-    }
-
-    @Deprecated
-    public boolean isClosed() {
-        return this.zzaCX == null || this.zzaCX.isClosed();
+        return this.zzfqt == null ? 0 : this.zzfqt.zzfwg;
     }
 
     public Iterator<T> iterator() {
@@ -31,16 +18,8 @@ public abstract class AbstractDataBuffer<T> implements DataBuffer<T> {
     }
 
     public void release() {
-        if (this.zzaCX != null) {
-            this.zzaCX.close();
+        if (this.zzfqt != null) {
+            this.zzfqt.close();
         }
-    }
-
-    public Iterator<T> singleRefIterator() {
-        return new zzh(this);
-    }
-
-    public final Bundle zzqN() {
-        return this.zzaCX.zzqN();
     }
 }

@@ -3,24 +3,20 @@ package com.google.android.gms.identity.intents.model;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-public class CountrySpecification extends zza implements ReflectedParcelable {
+public class CountrySpecification extends zzbfm implements ReflectedParcelable {
     public static final Creator<CountrySpecification> CREATOR = new zza();
-    private String zzVJ;
+    private String zzctp;
 
     public CountrySpecification(String str) {
-        this.zzVJ = str;
-    }
-
-    public String getCountryCode() {
-        return this.zzVJ;
+        this.zzctp = str;
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.zzVJ, false);
-        zzd.zzI(parcel, zze);
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zza(parcel, 2, this.zzctp, false);
+        zzbfp.zzai(parcel, zze);
     }
 }

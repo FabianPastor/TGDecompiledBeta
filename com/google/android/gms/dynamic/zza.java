@@ -13,47 +13,41 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.internal.zzs;
-import com.google.android.gms.common.zze;
+import com.google.android.gms.common.internal.zzu;
+import com.google.android.gms.common.zzf;
 import java.util.LinkedList;
 
 public abstract class zza<T extends LifecycleDelegate> {
-    private T zzaSr;
-    private Bundle zzaSs;
-    private LinkedList<zzi> zzaSt;
-    private final zzo<T> zzaSu = new zzb(this);
+    private T zzgwd;
+    private Bundle zzgwe;
+    private LinkedList<zzi> zzgwf;
+    private final zzo<T> zzgwg = new zzb(this);
 
     private final void zza(Bundle bundle, zzi com_google_android_gms_dynamic_zzi) {
-        if (this.zzaSr != null) {
-            com_google_android_gms_dynamic_zzi.zzb(this.zzaSr);
+        if (this.zzgwd != null) {
+            com_google_android_gms_dynamic_zzi.zzb(this.zzgwd);
             return;
         }
-        if (this.zzaSt == null) {
-            this.zzaSt = new LinkedList();
+        if (this.zzgwf == null) {
+            this.zzgwf = new LinkedList();
         }
-        this.zzaSt.add(com_google_android_gms_dynamic_zzi);
+        this.zzgwf.add(com_google_android_gms_dynamic_zzi);
         if (bundle != null) {
-            if (this.zzaSs == null) {
-                this.zzaSs = (Bundle) bundle.clone();
+            if (this.zzgwe == null) {
+                this.zzgwe = (Bundle) bundle.clone();
             } else {
-                this.zzaSs.putAll(bundle);
+                this.zzgwe.putAll(bundle);
             }
         }
-        zza(this.zzaSu);
-    }
-
-    private final void zzaR(int i) {
-        while (!this.zzaSt.isEmpty() && ((zzi) this.zzaSt.getLast()).getState() >= i) {
-            this.zzaSt.removeLast();
-        }
+        zza(this.zzgwg);
     }
 
     public static void zzb(FrameLayout frameLayout) {
-        GoogleApiAvailability instance = GoogleApiAvailability.getInstance();
+        zzf instance = GoogleApiAvailability.getInstance();
         Context context = frameLayout.getContext();
         int isGooglePlayServicesAvailable = instance.isGooglePlayServicesAvailable(context);
-        CharSequence zzi = zzs.zzi(context, isGooglePlayServicesAvailable);
-        CharSequence zzk = zzs.zzk(context, isGooglePlayServicesAvailable);
+        CharSequence zzi = zzu.zzi(context, isGooglePlayServicesAvailable);
+        CharSequence zzk = zzu.zzk(context, isGooglePlayServicesAvailable);
         View linearLayout = new LinearLayout(frameLayout.getContext());
         linearLayout.setOrientation(1);
         linearLayout.setLayoutParams(new LayoutParams(-2, -2));
@@ -62,7 +56,7 @@ public abstract class zza<T extends LifecycleDelegate> {
         textView.setLayoutParams(new LayoutParams(-2, -2));
         textView.setText(zzi);
         linearLayout.addView(textView);
-        Intent zza = zze.zza(context, isGooglePlayServicesAvailable, null);
+        Intent zza = zzf.zza(context, isGooglePlayServicesAvailable, null);
         if (zza != null) {
             View button = new Button(context);
             button.setId(16908313);
@@ -73,6 +67,12 @@ public abstract class zza<T extends LifecycleDelegate> {
         }
     }
 
+    private final void zzcz(int i) {
+        while (!this.zzgwf.isEmpty() && ((zzi) this.zzgwf.getLast()).getState() >= i) {
+            this.zzgwf.removeLast();
+        }
+    }
+
     public final void onCreate(Bundle bundle) {
         zza(bundle, new zzd(this, bundle));
     }
@@ -80,25 +80,17 @@ public abstract class zza<T extends LifecycleDelegate> {
     public final View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         FrameLayout frameLayout = new FrameLayout(layoutInflater.getContext());
         zza(bundle, new zze(this, frameLayout, layoutInflater, viewGroup, bundle));
-        if (this.zzaSr == null) {
+        if (this.zzgwd == null) {
             zza(frameLayout);
         }
         return frameLayout;
     }
 
     public final void onDestroy() {
-        if (this.zzaSr != null) {
-            this.zzaSr.onDestroy();
+        if (this.zzgwd != null) {
+            this.zzgwd.onDestroy();
         } else {
-            zzaR(1);
-        }
-    }
-
-    public final void onDestroyView() {
-        if (this.zzaSr != null) {
-            this.zzaSr.onDestroyView();
-        } else {
-            zzaR(2);
+            zzcz(1);
         }
     }
 
@@ -107,16 +99,16 @@ public abstract class zza<T extends LifecycleDelegate> {
     }
 
     public final void onLowMemory() {
-        if (this.zzaSr != null) {
-            this.zzaSr.onLowMemory();
+        if (this.zzgwd != null) {
+            this.zzgwd.onLowMemory();
         }
     }
 
     public final void onPause() {
-        if (this.zzaSr != null) {
-            this.zzaSr.onPause();
+        if (this.zzgwd != null) {
+            this.zzgwd.onPause();
         } else {
-            zzaR(5);
+            zzcz(5);
         }
     }
 
@@ -125,10 +117,10 @@ public abstract class zza<T extends LifecycleDelegate> {
     }
 
     public final void onSaveInstanceState(Bundle bundle) {
-        if (this.zzaSr != null) {
-            this.zzaSr.onSaveInstanceState(bundle);
-        } else if (this.zzaSs != null) {
-            bundle.putAll(this.zzaSs);
+        if (this.zzgwd != null) {
+            this.zzgwd.onSaveInstanceState(bundle);
+        } else if (this.zzgwe != null) {
+            bundle.putAll(this.zzgwe);
         }
     }
 
@@ -137,19 +129,19 @@ public abstract class zza<T extends LifecycleDelegate> {
     }
 
     public final void onStop() {
-        if (this.zzaSr != null) {
-            this.zzaSr.onStop();
+        if (this.zzgwd != null) {
+            this.zzgwd.onStop();
         } else {
-            zzaR(4);
+            zzcz(4);
         }
     }
 
     protected void zza(FrameLayout frameLayout) {
-        GoogleApiAvailability instance = GoogleApiAvailability.getInstance();
+        zzf instance = GoogleApiAvailability.getInstance();
         Context context = frameLayout.getContext();
         int isGooglePlayServicesAvailable = instance.isGooglePlayServicesAvailable(context);
-        CharSequence zzi = zzs.zzi(context, isGooglePlayServicesAvailable);
-        CharSequence zzk = zzs.zzk(context, isGooglePlayServicesAvailable);
+        CharSequence zzi = zzu.zzi(context, isGooglePlayServicesAvailable);
+        CharSequence zzk = zzu.zzk(context, isGooglePlayServicesAvailable);
         View linearLayout = new LinearLayout(frameLayout.getContext());
         linearLayout.setOrientation(1);
         linearLayout.setLayoutParams(new LayoutParams(-2, -2));
@@ -158,7 +150,7 @@ public abstract class zza<T extends LifecycleDelegate> {
         textView.setLayoutParams(new LayoutParams(-2, -2));
         textView.setText(zzi);
         linearLayout.addView(textView);
-        Intent zza = zze.zza(context, isGooglePlayServicesAvailable, null);
+        Intent zza = zzf.zza(context, isGooglePlayServicesAvailable, null);
         if (zza != null) {
             View button = new Button(context);
             button.setId(16908313);
@@ -171,7 +163,7 @@ public abstract class zza<T extends LifecycleDelegate> {
 
     protected abstract void zza(zzo<T> com_google_android_gms_dynamic_zzo_T);
 
-    public final T zztx() {
-        return this.zzaSr;
+    public final T zzapw() {
+        return this.zzgwd;
     }
 }

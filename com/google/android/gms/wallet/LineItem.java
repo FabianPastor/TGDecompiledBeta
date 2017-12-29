@@ -2,117 +2,80 @@ package com.google.android.gms.wallet;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-public final class LineItem extends zza {
-    public static final Creator<LineItem> CREATOR = new zzn();
+public final class LineItem extends zzbfm {
+    public static final Creator<LineItem> CREATOR = new zzt();
     String description;
-    String zzbOR;
-    String zzbOS;
-    int zzbOT;
-    String zzbOm;
-    String zzbOn;
+    String zzkzr;
+    String zzkzs;
+    String zzlbe;
+    String zzlbf;
+    int zzlbg;
 
     public final class Builder {
-        private /* synthetic */ LineItem zzbOU;
+        private /* synthetic */ LineItem zzlbh;
 
         private Builder(LineItem lineItem) {
-            this.zzbOU = lineItem;
+            this.zzlbh = lineItem;
         }
 
         public final LineItem build() {
-            return this.zzbOU;
+            return this.zzlbh;
         }
 
         public final Builder setCurrencyCode(String str) {
-            this.zzbOU.zzbOn = str;
+            this.zzlbh.zzkzs = str;
             return this;
         }
 
         public final Builder setDescription(String str) {
-            this.zzbOU.description = str;
+            this.zzlbh.description = str;
             return this;
         }
 
         public final Builder setQuantity(String str) {
-            this.zzbOU.zzbOR = str;
-            return this;
-        }
-
-        public final Builder setRole(int i) {
-            this.zzbOU.zzbOT = i;
+            this.zzlbh.zzlbe = str;
             return this;
         }
 
         public final Builder setTotalPrice(String str) {
-            this.zzbOU.zzbOm = str;
+            this.zzlbh.zzkzr = str;
             return this;
         }
 
         public final Builder setUnitPrice(String str) {
-            this.zzbOU.zzbOS = str;
+            this.zzlbh.zzlbf = str;
             return this;
         }
     }
 
-    public interface Role {
-        public static final int REGULAR = 0;
-        public static final int SHIPPING = 2;
-        public static final int TAX = 1;
-    }
-
     LineItem() {
-        this.zzbOT = 0;
+        this.zzlbg = 0;
     }
 
     LineItem(String str, String str2, String str3, String str4, int i, String str5) {
         this.description = str;
-        this.zzbOR = str2;
-        this.zzbOS = str3;
-        this.zzbOm = str4;
-        this.zzbOT = i;
-        this.zzbOn = str5;
+        this.zzlbe = str2;
+        this.zzlbf = str3;
+        this.zzkzr = str4;
+        this.zzlbg = i;
+        this.zzkzs = str5;
     }
 
     public static Builder newBuilder() {
-        LineItem lineItem = new LineItem();
-        lineItem.getClass();
         return new Builder();
     }
 
-    public final String getCurrencyCode() {
-        return this.zzbOn;
-    }
-
-    public final String getDescription() {
-        return this.description;
-    }
-
-    public final String getQuantity() {
-        return this.zzbOR;
-    }
-
-    public final int getRole() {
-        return this.zzbOT;
-    }
-
-    public final String getTotalPrice() {
-        return this.zzbOm;
-    }
-
-    public final String getUnitPrice() {
-        return this.zzbOS;
-    }
-
     public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.description, false);
-        zzd.zza(parcel, 3, this.zzbOR, false);
-        zzd.zza(parcel, 4, this.zzbOS, false);
-        zzd.zza(parcel, 5, this.zzbOm, false);
-        zzd.zzc(parcel, 6, this.zzbOT);
-        zzd.zza(parcel, 7, this.zzbOn, false);
-        zzd.zzI(parcel, zze);
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zza(parcel, 2, this.description, false);
+        zzbfp.zza(parcel, 3, this.zzlbe, false);
+        zzbfp.zza(parcel, 4, this.zzlbf, false);
+        zzbfp.zza(parcel, 5, this.zzkzr, false);
+        zzbfp.zzc(parcel, 6, this.zzlbg);
+        zzbfp.zza(parcel, 7, this.zzkzs, false);
+        zzbfp.zzai(parcel, zze);
     }
 }

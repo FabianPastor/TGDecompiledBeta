@@ -38,7 +38,7 @@ public class ChangePhoneHelpActivity extends BaseFragment {
         String value;
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        User user = UserConfig.getCurrentUser();
+        User user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
         if (user == null || user.phone == null || user.phone.length() == 0) {
             value = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
         } else {

@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
 
@@ -115,7 +114,7 @@ public class ShutterButton extends View {
                     if (this.totalTime > 120) {
                         this.totalTime = 120;
                     }
-                    this.redProgress = this.interpolator.getInterpolation(((float) this.totalTime) / BitmapDescriptorFactory.HUE_GREEN);
+                    this.redProgress = this.interpolator.getInterpolation(((float) this.totalTime) / 120.0f);
                     invalidate();
                 }
                 canvas.drawCircle((float) cx, (float) cy, (((float) AndroidUtilities.dp(26.0f)) * scale) * this.redProgress, this.redPaint);

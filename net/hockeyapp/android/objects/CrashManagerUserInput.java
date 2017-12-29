@@ -10,8 +10,4 @@ public enum CrashManagerUserInput {
     private CrashManagerUserInput(int value) {
         this.mValue = value;
     }
-
-    public int getValue() {
-        return this.mValue;
-    }
 }

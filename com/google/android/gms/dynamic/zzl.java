@@ -6,11 +6,11 @@ import android.os.IInterface;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.RemoteException;
-import com.google.android.gms.internal.zzee;
-import com.google.android.gms.internal.zzef;
-import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
+import com.google.android.gms.internal.zzev;
+import com.google.android.gms.internal.zzew;
+import org.telegram.messenger.exoplayer2.RendererCapabilities;
 
-public abstract class zzl extends zzee implements zzk {
+public abstract class zzl extends zzev implements zzk {
     public zzl() {
         attachInterface(this, "com.google.android.gms.dynamic.IFragmentWrapper");
     }
@@ -20,20 +20,20 @@ public abstract class zzl extends zzee implements zzk {
         if (zza(i, parcel, parcel2, i2)) {
             return true;
         }
-        IInterface zzty;
+        IInterface zzapx;
         int id;
         boolean retainInstance;
         IBinder readStrongBinder;
         switch (i) {
             case 2:
-                zzty = zzty();
+                zzapx = zzapx();
                 parcel2.writeNoException();
-                zzef.zza(parcel2, zzty);
+                zzew.zza(parcel2, zzapx);
                 break;
             case 3:
                 Parcelable arguments = getArguments();
                 parcel2.writeNoException();
-                zzef.zzb(parcel2, arguments);
+                zzew.zzb(parcel2, arguments);
                 break;
             case 4:
                 id = getId();
@@ -41,19 +41,19 @@ public abstract class zzl extends zzee implements zzk {
                 parcel2.writeInt(id);
                 break;
             case 5:
-                zzty = zztz();
+                zzapx = zzapy();
                 parcel2.writeNoException();
-                zzef.zza(parcel2, zzty);
+                zzew.zza(parcel2, zzapx);
                 break;
             case 6:
-                zzty = zztA();
+                zzapx = zzapz();
                 parcel2.writeNoException();
-                zzef.zza(parcel2, zzty);
+                zzew.zza(parcel2, zzapx);
                 break;
             case 7:
                 retainInstance = getRetainInstance();
                 parcel2.writeNoException();
-                zzef.zza(parcel2, retainInstance);
+                zzew.zza(parcel2, retainInstance);
                 break;
             case 8:
                 String tag = getTag();
@@ -61,9 +61,9 @@ public abstract class zzl extends zzee implements zzk {
                 parcel2.writeString(tag);
                 break;
             case 9:
-                zzty = zztB();
+                zzapx = zzaqa();
                 parcel2.writeNoException();
-                zzef.zza(parcel2, zzty);
+                zzew.zza(parcel2, zzapx);
                 break;
             case 10:
                 id = getTargetRequestCode();
@@ -73,88 +73,88 @@ public abstract class zzl extends zzee implements zzk {
             case 11:
                 retainInstance = getUserVisibleHint();
                 parcel2.writeNoException();
-                zzef.zza(parcel2, retainInstance);
+                zzew.zza(parcel2, retainInstance);
                 break;
             case 12:
-                zzty = getView();
+                zzapx = getView();
                 parcel2.writeNoException();
-                zzef.zza(parcel2, zzty);
+                zzew.zza(parcel2, zzapx);
                 break;
             case 13:
                 retainInstance = isAdded();
                 parcel2.writeNoException();
-                zzef.zza(parcel2, retainInstance);
+                zzew.zza(parcel2, retainInstance);
                 break;
             case 14:
                 retainInstance = isDetached();
                 parcel2.writeNoException();
-                zzef.zza(parcel2, retainInstance);
+                zzew.zza(parcel2, retainInstance);
                 break;
             case 15:
                 retainInstance = isHidden();
                 parcel2.writeNoException();
-                zzef.zza(parcel2, retainInstance);
+                zzew.zza(parcel2, retainInstance);
                 break;
             case 16:
                 retainInstance = isInLayout();
                 parcel2.writeNoException();
-                zzef.zza(parcel2, retainInstance);
+                zzew.zza(parcel2, retainInstance);
                 break;
             case 17:
                 retainInstance = isRemoving();
                 parcel2.writeNoException();
-                zzef.zza(parcel2, retainInstance);
+                zzew.zza(parcel2, retainInstance);
                 break;
             case 18:
                 retainInstance = isResumed();
                 parcel2.writeNoException();
-                zzef.zza(parcel2, retainInstance);
+                zzew.zza(parcel2, retainInstance);
                 break;
             case 19:
                 retainInstance = isVisible();
                 parcel2.writeNoException();
-                zzef.zza(parcel2, retainInstance);
+                zzew.zza(parcel2, retainInstance);
                 break;
             case 20:
                 readStrongBinder = parcel.readStrongBinder();
                 if (readStrongBinder != null) {
-                    zzty = readStrongBinder.queryLocalInterface("com.google.android.gms.dynamic.IObjectWrapper");
-                    iObjectWrapper = zzty instanceof IObjectWrapper ? (IObjectWrapper) zzty : new zzm(readStrongBinder);
+                    zzapx = readStrongBinder.queryLocalInterface("com.google.android.gms.dynamic.IObjectWrapper");
+                    iObjectWrapper = zzapx instanceof IObjectWrapper ? (IObjectWrapper) zzapx : new zzm(readStrongBinder);
                 }
-                zzC(iObjectWrapper);
+                zzv(iObjectWrapper);
                 parcel2.writeNoException();
                 break;
             case 21:
-                setHasOptionsMenu(zzef.zza(parcel));
+                setHasOptionsMenu(zzew.zza(parcel));
                 parcel2.writeNoException();
                 break;
             case 22:
-                setMenuVisibility(zzef.zza(parcel));
+                setMenuVisibility(zzew.zza(parcel));
                 parcel2.writeNoException();
                 break;
             case 23:
-                setRetainInstance(zzef.zza(parcel));
+                setRetainInstance(zzew.zza(parcel));
                 parcel2.writeNoException();
                 break;
-            case 24:
-                setUserVisibleHint(zzef.zza(parcel));
+            case RendererCapabilities.ADAPTIVE_SUPPORT_MASK /*24*/:
+                setUserVisibleHint(zzew.zza(parcel));
                 parcel2.writeNoException();
                 break;
             case 25:
-                startActivity((Intent) zzef.zza(parcel, Intent.CREATOR));
+                startActivity((Intent) zzew.zza(parcel, Intent.CREATOR));
                 parcel2.writeNoException();
                 break;
-            case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
-                startActivityForResult((Intent) zzef.zza(parcel, Intent.CREATOR), parcel.readInt());
+            case 26:
+                startActivityForResult((Intent) zzew.zza(parcel, Intent.CREATOR), parcel.readInt());
                 parcel2.writeNoException();
                 break;
             case 27:
                 readStrongBinder = parcel.readStrongBinder();
                 if (readStrongBinder != null) {
-                    zzty = readStrongBinder.queryLocalInterface("com.google.android.gms.dynamic.IObjectWrapper");
-                    iObjectWrapper = zzty instanceof IObjectWrapper ? (IObjectWrapper) zzty : new zzm(readStrongBinder);
+                    zzapx = readStrongBinder.queryLocalInterface("com.google.android.gms.dynamic.IObjectWrapper");
+                    iObjectWrapper = zzapx instanceof IObjectWrapper ? (IObjectWrapper) zzapx : new zzm(readStrongBinder);
                 }
-                zzD(iObjectWrapper);
+                zzw(iObjectWrapper);
                 parcel2.writeNoException();
                 break;
             default:

@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">Inštalovať</string>
     <string name="common_google_play_services_install_text">Na spustenie aplikácie %1$s sa vyžadujú služby Google Play, ktoré na zariadení nemáte.</string>
     <string name="common_google_play_services_install_title">Inštalovať služby Google Play</string>
+    <string name="common_google_play_services_notification_channel_name">Dostupnosť služieb Google Play</string>
     <string name="common_google_play_services_notification_ticker">Chyba služieb Google Play</string>
     <string name="common_google_play_services_unknown_issue">Aplikácia %1$s má problémy so službami Google Play. Skúste to znova.</string>
     <string name="common_google_play_services_unsupported_text">Aplikáciu %1$s nebude možné spustiť bez služieb Google Play, ktoré vaše zariadenie nepodporuje.</string>
@@ -17,5 +18,7 @@
     <string name="common_open_on_phone">Otvoriť v telefóne</string>
     <string name="common_signin_button_text">Prihlásiť sa</string>
     <string name="common_signin_button_text_long">Prihlásiť sa do účtu Google</string>
+    <string name="gcm_fallback_notification_channel_label">Rôzne</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Kúpiť cez Google</string>
 </resources>

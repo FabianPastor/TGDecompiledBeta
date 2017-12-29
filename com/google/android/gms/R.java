@@ -142,12 +142,18 @@ public final class R {
         public static final int strict_sandbox = NUM;
         public static final int terrain = NUM;
         public static final int test = NUM;
+        public static final int text = NUM;
+        public static final int text2 = NUM;
         public static final int wide = NUM;
         public static final int wrap_content = NUM;
     }
 
     public static final class integer {
         public static final int google_play_services_version = NUM;
+    }
+
+    public static final class layout {
+        public static final int wallet_test_layout = NUM;
     }
 
     public static final class string {
@@ -157,6 +163,7 @@ public final class R {
         public static final int common_google_play_services_install_button = NUM;
         public static final int common_google_play_services_install_text = NUM;
         public static final int common_google_play_services_install_title = NUM;
+        public static final int common_google_play_services_notification_channel_name = NUM;
         public static final int common_google_play_services_notification_ticker = NUM;
         public static final int common_google_play_services_unknown_issue = NUM;
         public static final int common_google_play_services_unsupported_text = NUM;
@@ -168,6 +175,7 @@ public final class R {
         public static final int common_open_on_phone = NUM;
         public static final int common_signin_button_text = NUM;
         public static final int common_signin_button_text_long = NUM;
+        public static final int gcm_fallback_notification_channel_label = NUM;
         public static final int wallet_buy_button_place_holder = NUM;
     }
 

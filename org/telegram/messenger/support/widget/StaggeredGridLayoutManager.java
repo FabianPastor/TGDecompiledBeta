@@ -6,14 +6,8 @@ import android.graphics.Rect;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RestrictTo;
-import android.support.annotation.RestrictTo.Scope;
-import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat.CollectionItemInfoCompat;
-import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -40,7 +34,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     public static final int HORIZONTAL = 0;
     static final int INVALID_OFFSET = Integer.MIN_VALUE;
     private static final float MAX_SCROLL_FACTOR = 0.33333334f;
-    private static final String TAG = "StaggeredGridLayoutManager";
+    private static final String TAG = "StaggeredGridLManager";
     public static final int VERTICAL = 1;
     private final AnchorInfo mAnchorInfo = new AnchorInfo();
     private final Runnable mCheckForGapsRunnable = new Runnable() {
@@ -53,7 +47,6 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     private boolean mLaidOutInvalidFullSpan = false;
     private boolean mLastLayoutFromEnd;
     private boolean mLastLayoutRTL;
-    @NonNull
     private final LayoutState mLayoutState;
     LazySpanLookup mLazySpanLookup = new LazySpanLookup();
     private int mOrientation;
@@ -61,11 +54,9 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     int mPendingScrollPosition = -1;
     int mPendingScrollPositionOffset = Integer.MIN_VALUE;
     private int[] mPrefetchDistances;
-    @NonNull
     OrientationHelper mPrimaryOrientation;
     private BitSet mRemainingSpans;
     boolean mReverseLayout = false;
-    @NonNull
     OrientationHelper mSecondaryOrientation;
     boolean mShouldReverseLayout = false;
     private int mSizePerSpan;
@@ -82,7 +73,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         int[] mSpanReferenceLines;
         boolean mValid;
 
-        public AnchorInfo() {
+        AnchorInfo() {
             reset();
         }
 
@@ -146,7 +137,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
             boolean mHasUnwantedGapAfter;
             int mPosition;
 
-            public FullSpanItem(Parcel in) {
+            FullSpanItem(Parcel in) {
                 boolean z = true;
                 this.mPosition = in.readInt();
                 this.mGapDir = in.readInt();
@@ -159,6 +150,9 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
                     this.mGapPerSpan = new int[spanCount];
                     in.readIntArray(this.mGapPerSpan);
                 }
+            }
+
+            FullSpanItem() {
             }
 
             int getGapForSpan(int spanIndex) {
@@ -375,7 +369,6 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         }
     }
 
-    @RestrictTo({Scope.LIBRARY_GROUP})
     public static class SavedState implements Parcelable {
         public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
@@ -1603,19 +1596,18 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
         super.onInitializeAccessibilityEvent(event);
         if (getChildCount() > 0) {
-            AccessibilityRecordCompat record = AccessibilityEventCompat.asRecord(event);
             View start = findFirstVisibleItemClosestToStart(false);
             View end = findFirstVisibleItemClosestToEnd(false);
             if (start != null && end != null) {
                 int startPos = getPosition(start);
                 int endPos = getPosition(end);
                 if (startPos < endPos) {
-                    record.setFromIndex(startPos);
-                    record.setToIndex(endPos);
+                    event.setFromIndex(startPos);
+                    event.setToIndex(endPos);
                     return;
                 }
-                record.setFromIndex(endPos);
-                record.setToIndex(startPos);
+                event.setFromIndex(endPos);
+                event.setToIndex(startPos);
             }
         }
     }
@@ -2445,7 +2437,6 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         return this.mOrientation;
     }
 
-    @Nullable
     public View onFocusSearchFailed(View focused, int direction, Recycler recycler, State state) {
         if (getChildCount() == 0) {
             return null;

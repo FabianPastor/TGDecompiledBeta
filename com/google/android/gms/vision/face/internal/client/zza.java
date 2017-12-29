@@ -9,24 +9,24 @@ import android.util.Log;
 import com.google.android.gms.dynamic.zzn;
 import com.google.android.gms.dynamite.DynamiteModule;
 import com.google.android.gms.dynamite.DynamiteModule.zzc;
-import com.google.android.gms.internal.fb;
-import com.google.android.gms.internal.fc;
+import com.google.android.gms.internal.zzdjv;
+import com.google.android.gms.internal.zzdjw;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.Landmark;
 import java.nio.ByteBuffer;
 
-public final class zza extends fb<zze> {
-    private final zzc zzbNz;
+public final class zza extends zzdjv<zze> {
+    private final zzc zzkxg;
 
     public zza(Context context, zzc com_google_android_gms_vision_face_internal_client_zzc) {
         super(context, "FaceNativeHandle");
-        this.zzbNz = com_google_android_gms_vision_face_internal_client_zzc;
-        zzDR();
+        this.zzkxg = com_google_android_gms_vision_face_internal_client_zzc;
+        zzbjv();
     }
 
     private static Landmark[] zza(FaceParcel faceParcel) {
         int i = 0;
-        LandmarkParcel[] landmarkParcelArr = faceParcel.zzbNC;
+        LandmarkParcel[] landmarkParcelArr = faceParcel.zzkxj;
         if (landmarkParcelArr == null) {
             return new Landmark[0];
         }
@@ -39,32 +39,28 @@ public final class zza extends fb<zze> {
         return landmarkArr;
     }
 
-    protected final void zzDO() throws RemoteException {
-        ((zze) zzDR()).zzDP();
-    }
-
     protected final /* synthetic */ Object zza(DynamiteModule dynamiteModule, Context context) throws RemoteException, zzc {
         zzg com_google_android_gms_vision_face_internal_client_zzg;
-        IBinder zzcV = dynamiteModule.zzcV("com.google.android.gms.vision.face.ChimeraNativeFaceDetectorCreator");
-        if (zzcV == null) {
+        IBinder zzhb = dynamiteModule.zzhb("com.google.android.gms.vision.face.ChimeraNativeFaceDetectorCreator");
+        if (zzhb == null) {
             com_google_android_gms_vision_face_internal_client_zzg = null;
         } else {
-            IInterface queryLocalInterface = zzcV.queryLocalInterface("com.google.android.gms.vision.face.internal.client.INativeFaceDetectorCreator");
-            com_google_android_gms_vision_face_internal_client_zzg = queryLocalInterface instanceof zzg ? (zzg) queryLocalInterface : new zzh(zzcV);
+            IInterface queryLocalInterface = zzhb.queryLocalInterface("com.google.android.gms.vision.face.internal.client.INativeFaceDetectorCreator");
+            com_google_android_gms_vision_face_internal_client_zzg = queryLocalInterface instanceof zzg ? (zzg) queryLocalInterface : new zzh(zzhb);
         }
-        return com_google_android_gms_vision_face_internal_client_zzg.zza(zzn.zzw(context), this.zzbNz);
+        return com_google_android_gms_vision_face_internal_client_zzg.zza(zzn.zzz(context), this.zzkxg);
     }
 
-    public final Face[] zzb(ByteBuffer byteBuffer, fc fcVar) {
+    public final Face[] zzb(ByteBuffer byteBuffer, zzdjw com_google_android_gms_internal_zzdjw) {
         if (!isOperational()) {
             return new Face[0];
         }
         try {
-            FaceParcel[] zzc = ((zze) zzDR()).zzc(zzn.zzw(byteBuffer), fcVar);
+            FaceParcel[] zzc = ((zze) zzbjv()).zzc(zzn.zzz(byteBuffer), com_google_android_gms_internal_zzdjw);
             Face[] faceArr = new Face[zzc.length];
             for (int i = 0; i < zzc.length; i++) {
                 FaceParcel faceParcel = zzc[i];
-                faceArr[i] = new Face(faceParcel.id, new PointF(faceParcel.centerX, faceParcel.centerY), faceParcel.width, faceParcel.height, faceParcel.zzbNA, faceParcel.zzbNB, zza(faceParcel), faceParcel.zzbND, faceParcel.zzbNE, faceParcel.zzbNF);
+                faceArr[i] = new Face(faceParcel.id, new PointF(faceParcel.centerX, faceParcel.centerY), faceParcel.width, faceParcel.height, faceParcel.zzkxh, faceParcel.zzkxi, zza(faceParcel), faceParcel.zzkxk, faceParcel.zzkxl, faceParcel.zzkxm);
             }
             return faceArr;
         } catch (Throwable e) {
@@ -73,15 +69,7 @@ public final class zza extends fb<zze> {
         }
     }
 
-    public final boolean zzbN(int i) {
-        if (!isOperational()) {
-            return false;
-        }
-        try {
-            return ((zze) zzDR()).zzbN(i);
-        } catch (Throwable e) {
-            Log.e("FaceNativeHandle", "Could not call native face detector", e);
-            return false;
-        }
+    protected final void zzbjs() throws RemoteException {
+        ((zze) zzbjv()).zzbjt();
     }
 }

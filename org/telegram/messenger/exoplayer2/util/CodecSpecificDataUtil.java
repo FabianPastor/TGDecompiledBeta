@@ -24,7 +24,7 @@ public final class CodecSpecificDataUtil {
         int audioObjectType = getAacAudioObjectType(bitArray);
         int sampleRate = getAacSamplingFrequency(bitArray);
         int channelConfiguration = bitArray.readBits(4);
-        if (audioObjectType == 5 || audioObjectType == 29) {
+        if (audioObjectType == 5 || audioObjectType == AUDIO_OBJECT_TYPE_PS) {
             sampleRate = getAacSamplingFrequency(bitArray);
             if (getAacAudioObjectType(bitArray) == 22) {
                 channelConfiguration = bitArray.readBits(4);
@@ -112,7 +112,7 @@ public final class CodecSpecificDataUtil {
 
     private static int getAacAudioObjectType(ParsableBitArray bitArray) {
         int audioObjectType = bitArray.readBits(5);
-        if (audioObjectType == 31) {
+        if (audioObjectType == AUDIO_OBJECT_TYPE_ESCAPE) {
             return bitArray.readBits(6) + 32;
         }
         return audioObjectType;

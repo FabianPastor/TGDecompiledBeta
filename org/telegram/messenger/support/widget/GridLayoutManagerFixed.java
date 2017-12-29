@@ -12,7 +12,8 @@ import org.telegram.messenger.support.widget.RecyclerView.Recycler;
 import org.telegram.messenger.support.widget.RecyclerView.State;
 
 public class GridLayoutManagerFixed extends GridLayoutManager {
-    ArrayList<View> additionalViews = new ArrayList(4);
+    private ArrayList<View> additionalViews = new ArrayList(4);
+    private boolean canScrollVertically = true;
 
     public GridLayoutManagerFixed(Context context, int spanCount) {
         super(context, spanCount);
@@ -24,6 +25,14 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
 
     protected boolean hasSiblingChild(int position) {
         return false;
+    }
+
+    public void setCanScrollVertically(boolean value) {
+        this.canScrollVertically = value;
+    }
+
+    public boolean canScrollVertically() {
+        return this.canScrollVertically;
     }
 
     protected void recycleViewsFromStart(Recycler recycler, int dt) {

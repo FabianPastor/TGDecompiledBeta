@@ -1,56 +1,47 @@
 package android.support.v13.view.inputmethod;
 
-import android.annotation.TargetApi;
+import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v4.os.BuildCompat;
 import android.view.inputmethod.EditorInfo;
 
-@TargetApi(13)
-@RequiresApi(13)
 public final class EditorInfoCompat {
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
     private static final EditorInfoCompatImpl IMPL;
 
     private interface EditorInfoCompatImpl {
-        @NonNull
-        String[] getContentMimeTypes(@NonNull EditorInfo editorInfo);
+        String[] getContentMimeTypes(EditorInfo editorInfo);
 
-        void setContentMimeTypes(@NonNull EditorInfo editorInfo, @Nullable String[] strArr);
+        void setContentMimeTypes(EditorInfo editorInfo, String[] strArr);
     }
 
-    private static final class Api25EditorInfoCompatImpl implements EditorInfoCompatImpl {
-        private Api25EditorInfoCompatImpl() {
+    private static final class EditorInfoCompatApi25Impl implements EditorInfoCompatImpl {
+        private EditorInfoCompatApi25Impl() {
         }
 
-        public void setContentMimeTypes(@NonNull EditorInfo editorInfo, @Nullable String[] contentMimeTypes) {
-            EditorInfoCompatApi25.setContentMimeTypes(editorInfo, contentMimeTypes);
+        public void setContentMimeTypes(EditorInfo editorInfo, String[] contentMimeTypes) {
+            editorInfo.contentMimeTypes = contentMimeTypes;
         }
 
-        @NonNull
-        public String[] getContentMimeTypes(@NonNull EditorInfo editorInfo) {
-            String[] result = EditorInfoCompatApi25.getContentMimeTypes(editorInfo);
+        public String[] getContentMimeTypes(EditorInfo editorInfo) {
+            String[] result = editorInfo.contentMimeTypes;
             return result != null ? result : EditorInfoCompat.EMPTY_STRING_ARRAY;
         }
     }
 
-    private static final class BaseEditorInfoCompatImpl implements EditorInfoCompatImpl {
+    private static final class EditorInfoCompatBaseImpl implements EditorInfoCompatImpl {
         private static String CONTENT_MIME_TYPES_KEY = "android.support.v13.view.inputmethod.EditorInfoCompat.CONTENT_MIME_TYPES";
 
-        private BaseEditorInfoCompatImpl() {
+        private EditorInfoCompatBaseImpl() {
         }
 
-        public void setContentMimeTypes(@NonNull EditorInfo editorInfo, @Nullable String[] contentMimeTypes) {
+        public void setContentMimeTypes(EditorInfo editorInfo, String[] contentMimeTypes) {
             if (editorInfo.extras == null) {
                 editorInfo.extras = new Bundle();
             }
             editorInfo.extras.putStringArray(CONTENT_MIME_TYPES_KEY, contentMimeTypes);
         }
 
-        @NonNull
-        public String[] getContentMimeTypes(@NonNull EditorInfo editorInfo) {
+        public String[] getContentMimeTypes(EditorInfo editorInfo) {
             if (editorInfo.extras == null) {
                 return EditorInfoCompat.EMPTY_STRING_ARRAY;
             }
@@ -60,18 +51,17 @@ public final class EditorInfoCompat {
     }
 
     static {
-        if (BuildCompat.isAtLeastNMR1()) {
-            IMPL = new Api25EditorInfoCompatImpl();
+        if (VERSION.SDK_INT >= 25) {
+            IMPL = new EditorInfoCompatApi25Impl();
         } else {
-            IMPL = new BaseEditorInfoCompatImpl();
+            IMPL = new EditorInfoCompatBaseImpl();
         }
     }
 
-    public static void setContentMimeTypes(@NonNull EditorInfo editorInfo, @Nullable String[] contentMimeTypes) {
+    public static void setContentMimeTypes(EditorInfo editorInfo, String[] contentMimeTypes) {
         IMPL.setContentMimeTypes(editorInfo, contentMimeTypes);
     }
 
-    @NonNull
     public static String[] getContentMimeTypes(EditorInfo editorInfo) {
         return IMPL.getContentMimeTypes(editorInfo);
     }

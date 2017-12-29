@@ -14,7 +14,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.File;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor.DiscardPolicy;
@@ -343,10 +342,10 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                         canvas.rotate(90.0f);
                         canvas.translate(0.0f, (float) (-this.dstRect.width()));
                     } else if (this.metaData[2] == 180) {
-                        canvas.rotate(BitmapDescriptorFactory.HUE_CYAN);
+                        canvas.rotate(180.0f);
                         canvas.translate((float) (-this.dstRect.width()), (float) (-this.dstRect.height()));
                     } else if (this.metaData[2] == 270) {
-                        canvas.rotate(BitmapDescriptorFactory.HUE_VIOLET);
+                        canvas.rotate(270.0f);
                         canvas.translate((float) (-this.dstRect.height()), 0.0f);
                     }
                     canvas.scale(this.scaleX, this.scaleY);

@@ -1,24 +1,15 @@
 package com.google.android.gms.internal;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.TimeoutException;
+final class zzchw implements Runnable {
+    private /* synthetic */ boolean zzjcn;
+    private /* synthetic */ zzchv zzjco;
 
-final class zzchw implements Callable<String> {
-    private /* synthetic */ zzchl zzbtt;
-
-    zzchw(zzchl com_google_android_gms_internal_zzchl) {
-        this.zzbtt = com_google_android_gms_internal_zzchl;
+    zzchw(zzchv com_google_android_gms_internal_zzchv, boolean z) {
+        this.zzjco = com_google_android_gms_internal_zzchv;
+        this.zzjcn = z;
     }
 
-    public final /* synthetic */ Object call() throws Exception {
-        Object zzyH = this.zzbtt.zzwG().zzyH();
-        if (zzyH == null) {
-            zzyH = this.zzbtt.zzwt().zzac(120000);
-            if (zzyH == null) {
-                throw new TimeoutException();
-            }
-            this.zzbtt.zzwG().zzee(zzyH);
-        }
-        return zzyH;
+    public final void run() {
+        this.zzjco.zziwf.zzbo(this.zzjcn);
     }
 }

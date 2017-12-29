@@ -132,14 +132,6 @@ public class ESDescriptor extends BaseDescriptor {
         return out;
     }
 
-    public DecoderConfigDescriptor getDecoderConfigDescriptor() {
-        return this.decoderConfigDescriptor;
-    }
-
-    public SLConfigDescriptor getSlConfigDescriptor() {
-        return this.slConfigDescriptor;
-    }
-
     public void setDecoderConfigDescriptor(DecoderConfigDescriptor decoderConfigDescriptor) {
         this.decoderConfigDescriptor = decoderConfigDescriptor;
     }
@@ -148,88 +140,8 @@ public class ESDescriptor extends BaseDescriptor {
         this.slConfigDescriptor = slConfigDescriptor;
     }
 
-    public List<BaseDescriptor> getOtherDescriptors() {
-        return this.otherDescriptors;
-    }
-
-    public int getoCREsId() {
-        return this.oCREsId;
-    }
-
-    public void setoCREsId(int oCREsId) {
-        this.oCREsId = oCREsId;
-    }
-
-    public int getEsId() {
-        return this.esId;
-    }
-
     public void setEsId(int esId) {
         this.esId = esId;
-    }
-
-    public int getStreamDependenceFlag() {
-        return this.streamDependenceFlag;
-    }
-
-    public void setStreamDependenceFlag(int streamDependenceFlag) {
-        this.streamDependenceFlag = streamDependenceFlag;
-    }
-
-    public int getURLFlag() {
-        return this.URLFlag;
-    }
-
-    public void setURLFlag(int URLFlag) {
-        this.URLFlag = URLFlag;
-    }
-
-    public int getoCRstreamFlag() {
-        return this.oCRstreamFlag;
-    }
-
-    public void setoCRstreamFlag(int oCRstreamFlag) {
-        this.oCRstreamFlag = oCRstreamFlag;
-    }
-
-    public int getStreamPriority() {
-        return this.streamPriority;
-    }
-
-    public void setStreamPriority(int streamPriority) {
-        this.streamPriority = streamPriority;
-    }
-
-    public int getURLLength() {
-        return this.URLLength;
-    }
-
-    public void setURLLength(int URLLength) {
-        this.URLLength = URLLength;
-    }
-
-    public String getURLString() {
-        return this.URLString;
-    }
-
-    public void setURLString(String URLString) {
-        this.URLString = URLString;
-    }
-
-    public int getRemoteODFlag() {
-        return this.remoteODFlag;
-    }
-
-    public void setRemoteODFlag(int remoteODFlag) {
-        this.remoteODFlag = remoteODFlag;
-    }
-
-    public int getDependsOnEsId() {
-        return this.dependsOnEsId;
-    }
-
-    public void setDependsOnEsId(int dependsOnEsId) {
-        this.dependsOnEsId = dependsOnEsId;
     }
 
     public String toString() {

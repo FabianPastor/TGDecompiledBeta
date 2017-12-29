@@ -696,7 +696,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
         if (valueStartIndex < data.length) {
             value = new String(data, valueStartIndex, indexOfEos(data, valueStartIndex, encoding) - valueStartIndex, charset);
         } else {
-            value = "";
+            value = TtmlNode.ANONYMOUS_REGION_ID;
         }
         return new TextInformationFrame("TXXX", description, value);
     }
@@ -727,7 +727,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
         if (urlStartIndex < data.length) {
             url = new String(data, urlStartIndex, indexOfZeroByte(data, urlStartIndex) - urlStartIndex, "ISO-8859-1");
         } else {
-            url = "";
+            url = TtmlNode.ANONYMOUS_REGION_ID;
         }
         return new UrlLinkFrame("WXXX", description, url);
     }
@@ -804,7 +804,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
         if (textStartIndex < data.length) {
             text = new String(data, textStartIndex, indexOfEos(data, textStartIndex, encoding) - textStartIndex, charset);
         } else {
-            text = "";
+            text = TtmlNode.ANONYMOUS_REGION_ID;
         }
         return new CommentFrame(language, description, text);
     }
@@ -894,7 +894,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
             case 2:
                 return "UTF-16BE";
             case 3:
-                return "UTF-8";
+                return C.UTF8_NAME;
             default:
                 return "ISO-8859-1";
         }

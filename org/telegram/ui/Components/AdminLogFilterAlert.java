@@ -200,11 +200,11 @@ public class AdminLogFilterAlert extends BottomSheet {
                 case 0:
                     CheckBoxCell cell = holder.itemView;
                     if (position == 0) {
-                        cell.setText(LocaleController.getString("EventLogFilterAll", R.string.EventLogFilterAll), "", AdminLogFilterAlert.this.currentFilter == null, true);
+                        cell.setText(LocaleController.getString("EventLogFilterAll", R.string.EventLogFilterAll), TtmlNode.ANONYMOUS_REGION_ID, AdminLogFilterAlert.this.currentFilter == null, true);
                         return;
                     } else if (position == AdminLogFilterAlert.this.restrictionsRow) {
                         r3 = LocaleController.getString("EventLogFilterNewRestrictions", R.string.EventLogFilterNewRestrictions);
-                        r6 = "";
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
                         if (AdminLogFilterAlert.this.currentFilter == null || (AdminLogFilterAlert.this.currentFilter.kick && AdminLogFilterAlert.this.currentFilter.ban && AdminLogFilterAlert.this.currentFilter.unkick && AdminLogFilterAlert.this.currentFilter.unban)) {
                             z = true;
                         }
@@ -212,7 +212,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                         return;
                     } else if (position == AdminLogFilterAlert.this.adminsRow) {
                         r3 = LocaleController.getString("EventLogFilterNewAdmins", R.string.EventLogFilterNewAdmins);
-                        r6 = "";
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
                         if (AdminLogFilterAlert.this.currentFilter == null || (AdminLogFilterAlert.this.currentFilter.promote && AdminLogFilterAlert.this.currentFilter.demote)) {
                             z = true;
                         }
@@ -220,7 +220,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                         return;
                     } else if (position == AdminLogFilterAlert.this.membersRow) {
                         r3 = LocaleController.getString("EventLogFilterNewMembers", R.string.EventLogFilterNewMembers);
-                        r6 = "";
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
                         if (AdminLogFilterAlert.this.currentFilter == null || (AdminLogFilterAlert.this.currentFilter.invite && AdminLogFilterAlert.this.currentFilter.join)) {
                             z = true;
                         }
@@ -229,7 +229,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                     } else if (position == AdminLogFilterAlert.this.infoRow) {
                         if (AdminLogFilterAlert.this.isMegagroup) {
                             r3 = LocaleController.getString("EventLogFilterGroupInfo", R.string.EventLogFilterGroupInfo);
-                            r6 = "";
+                            r6 = TtmlNode.ANONYMOUS_REGION_ID;
                             if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.info) {
                                 z = true;
                             }
@@ -237,7 +237,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                             return;
                         }
                         r3 = LocaleController.getString("EventLogFilterChannelInfo", R.string.EventLogFilterChannelInfo);
-                        r6 = "";
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
                         if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.info) {
                             z = true;
                         }
@@ -245,7 +245,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                         return;
                     } else if (position == AdminLogFilterAlert.this.deleteRow) {
                         r3 = LocaleController.getString("EventLogFilterDeletedMessages", R.string.EventLogFilterDeletedMessages);
-                        r6 = "";
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
                         if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.delete) {
                             z = true;
                         }
@@ -253,7 +253,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                         return;
                     } else if (position == AdminLogFilterAlert.this.editRow) {
                         r3 = LocaleController.getString("EventLogFilterEditedMessages", R.string.EventLogFilterEditedMessages);
-                        r6 = "";
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
                         if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.edit) {
                             z = true;
                         }
@@ -261,7 +261,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                         return;
                     } else if (position == AdminLogFilterAlert.this.pinnedRow) {
                         r3 = LocaleController.getString("EventLogFilterPinnedMessages", R.string.EventLogFilterPinnedMessages);
-                        r6 = "";
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
                         if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.pinned) {
                             z = true;
                         }
@@ -269,7 +269,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                         return;
                     } else if (position == AdminLogFilterAlert.this.leavingRow) {
                         r3 = LocaleController.getString("EventLogFilterLeavingMembers", R.string.EventLogFilterLeavingMembers);
-                        r6 = "";
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
                         if (!(AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.leave)) {
                             z2 = false;
                         }
@@ -277,7 +277,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                         return;
                     } else if (position == AdminLogFilterAlert.this.allAdminsRow) {
                         r3 = LocaleController.getString("EventLogAllAdmins", R.string.EventLogAllAdmins);
-                        r6 = "";
+                        r6 = TtmlNode.ANONYMOUS_REGION_ID;
                         if (AdminLogFilterAlert.this.selectedAdmins == null) {
                             z = true;
                         }
@@ -289,7 +289,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                 case 2:
                     CheckBoxUserCell userCell = holder.itemView;
                     int userId = ((ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((position - AdminLogFilterAlert.this.allAdminsRow) - 1)).user_id;
-                    User user = MessagesController.getInstance().getUser(Integer.valueOf(userId));
+                    User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(userId));
                     boolean z3 = AdminLogFilterAlert.this.selectedAdmins == null || AdminLogFilterAlert.this.selectedAdmins.containsKey(Integer.valueOf(userId));
                     if (position == getItemCount() - 1) {
                         z2 = false;
@@ -629,7 +629,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                             ((CheckBoxCell) holder.itemView).setChecked(false, true);
                         }
                         for (a = 0; a < AdminLogFilterAlert.this.currentAdmins.size(); a++) {
-                            user = MessagesController.getInstance().getUser(Integer.valueOf(((ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get(a)).user_id));
+                            user = MessagesController.getAccountInstance().getUser(Integer.valueOf(((ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get(a)).user_id));
                             AdminLogFilterAlert.this.selectedAdmins.put(Integer.valueOf(user.id), user);
                         }
                     }

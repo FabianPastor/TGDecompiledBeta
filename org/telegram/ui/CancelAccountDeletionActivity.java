@@ -28,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Timer;
@@ -115,7 +114,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         private boolean ignoreOnTextChange;
         private double lastCodeTime;
         private double lastCurrentTime;
-        private String lastError = "";
+        private String lastError = TtmlNode.ANONYMOUS_REGION_ID;
         private int length;
         private boolean nextPressed;
         private int nextType;
@@ -248,7 +247,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             final TL_auth_resendCode req = new TL_auth_resendCode();
             req.phone_number = this.phone;
             req.phone_code_hash = this.phoneHash;
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            ConnectionsManager.getInstance(CancelAccountDeletionActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, final TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -256,7 +255,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                             if (error == null) {
                                 CancelAccountDeletionActivity.this.fillNextCodeParams(params, (TL_auth_sentCode) response);
                             } else {
-                                AlertsCreator.processError(error, CancelAccountDeletionActivity.this, req, new Object[0]);
+                                AlertsCreator.processError(CancelAccountDeletionActivity.this.currentAccount, error, CancelAccountDeletionActivity.this, req, new Object[0]);
                             }
                             CancelAccountDeletionActivity.this.needHideProgress();
                         }
@@ -271,14 +270,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
 
         public void setParams(Bundle params, boolean restore) {
             if (params != null) {
-                this.codeField.setText("");
+                this.codeField.setText(TtmlNode.ANONYMOUS_REGION_ID);
                 this.waitingForEvent = true;
                 if (this.currentType == 2) {
                     AndroidUtilities.setWaitingForSms(true);
-                    NotificationCenter.getInstance().addObserver(this, NotificationCenter.didReceiveSmsCode);
+                    NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveSmsCode);
                 } else if (this.currentType == 3) {
                     AndroidUtilities.setWaitingForCall(true);
-                    NotificationCenter.getInstance().addObserver(this, NotificationCenter.didReceiveCall);
+                    NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveCall);
                 }
                 this.currentParams = params;
                 this.phone = params.getString("phone");
@@ -402,7 +401,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                     LoginActivitySmsView.this.destroyTimer();
                                     if (LoginActivitySmsView.this.currentType == 3) {
                                         AndroidUtilities.setWaitingForCall(false);
-                                        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didReceiveCall);
+                                        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
                                         LoginActivitySmsView.this.waitingForEvent = false;
                                         LoginActivitySmsView.this.destroyCodeTimer();
                                         LoginActivitySmsView.this.resendCode();
@@ -414,7 +413,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                             TL_auth_resendCode req = new TL_auth_resendCode();
                                             req.phone_number = LoginActivitySmsView.this.phone;
                                             req.phone_code_hash = LoginActivitySmsView.this.phoneHash;
-                                            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                            ConnectionsManager.getInstance(CancelAccountDeletionActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                                                 public void run(TLObject response, final TL_error error) {
                                                     if (error != null && error.text != null) {
                                                         AndroidUtilities.runOnUIThread(new Runnable() {
@@ -427,7 +426,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                             }, 2);
                                         } else if (LoginActivitySmsView.this.nextType == 3) {
                                             AndroidUtilities.setWaitingForSms(false);
-                                            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
+                                            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
                                             LoginActivitySmsView.this.waitingForEvent = false;
                                             LoginActivitySmsView.this.destroyCodeTimer();
                                             LoginActivitySmsView.this.resendCode();
@@ -459,10 +458,10 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 this.nextPressed = true;
                 if (this.currentType == 2) {
                     AndroidUtilities.setWaitingForSms(false);
-                    NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
+                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
                 } else if (this.currentType == 3) {
                     AndroidUtilities.setWaitingForCall(false);
-                    NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didReceiveCall);
+                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
                 }
                 this.waitingForEvent = false;
                 final TL_account_confirmPhone req = new TL_account_confirmPhone();
@@ -470,7 +469,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 req.phone_code_hash = this.phoneHash;
                 destroyTimer();
                 CancelAccountDeletionActivity.this.needShowProgress();
-                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                ConnectionsManager.getInstance(CancelAccountDeletionActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, final TL_error error) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
@@ -486,14 +485,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                 }
                                 if (LoginActivitySmsView.this.currentType == 2) {
                                     AndroidUtilities.setWaitingForSms(true);
-                                    NotificationCenter.getInstance().addObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveSmsCode);
+                                    NotificationCenter.getGlobalInstance().addObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveSmsCode);
                                 } else if (LoginActivitySmsView.this.currentType == 3) {
                                     AndroidUtilities.setWaitingForCall(true);
-                                    NotificationCenter.getInstance().addObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveCall);
+                                    NotificationCenter.getGlobalInstance().addObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveCall);
                                 }
                                 LoginActivitySmsView.this.waitingForEvent = true;
                                 if (LoginActivitySmsView.this.currentType != 3) {
-                                    AlertsCreator.processError(error, CancelAccountDeletionActivity.this, req, new Object[0]);
+                                    AlertsCreator.processError(CancelAccountDeletionActivity.this.currentAccount, error, CancelAccountDeletionActivity.this, req, new Object[0]);
                                 }
                             }
                         });
@@ -506,10 +505,10 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             super.onDestroyActivity();
             if (this.currentType == 2) {
                 AndroidUtilities.setWaitingForSms(false);
-                NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
+                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
             } else if (this.currentType == 3) {
                 AndroidUtilities.setWaitingForCall(false);
-                NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didReceiveCall);
+                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
             }
             this.waitingForEvent = false;
             destroyTimer();
@@ -524,15 +523,15 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             }
         }
 
-        public void didReceivedNotification(int id, Object... args) {
+        public void didReceivedNotification(int id, int account, Object... args) {
             if (this.waitingForEvent && this.codeField != null) {
                 if (id == NotificationCenter.didReceiveSmsCode) {
                     this.ignoreOnTextChange = true;
-                    this.codeField.setText("" + args[0]);
+                    this.codeField.setText(TtmlNode.ANONYMOUS_REGION_ID + args[0]);
                     this.ignoreOnTextChange = false;
                     onNextPressed();
                 } else if (id == NotificationCenter.didReceiveCall) {
-                    String num = "" + args[0];
+                    String num = TtmlNode.ANONYMOUS_REGION_ID + args[0];
                     if (AndroidUtilities.checkPhonePattern(this.pattern, num)) {
                         this.ignoreOnTextChange = true;
                         this.codeField.setText(num);
@@ -601,7 +600,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 final Bundle params = new Bundle();
                 params.putString("phone", CancelAccountDeletionActivity.this.phone);
                 this.nextPressed = true;
-                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                ConnectionsManager.getInstance(CancelAccountDeletionActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                     public void run(final TLObject response, final TL_error error) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
@@ -609,7 +608,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                 if (error == null) {
                                     CancelAccountDeletionActivity.this.fillNextCodeParams(params, (TL_auth_sentCode) response);
                                 } else {
-                                    CancelAccountDeletionActivity.this.errorDialog = AlertsCreator.processError(error, CancelAccountDeletionActivity.this, req, new Object[0]);
+                                    CancelAccountDeletionActivity.this.errorDialog = AlertsCreator.processError(CancelAccountDeletionActivity.this.currentAccount, error, CancelAccountDeletionActivity.this, req, new Object[0]);
                                 }
                             }
                         });
@@ -679,7 +678,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         int a = 0;
         while (a < this.views.length) {
             this.views[a].setVisibility(a == 0 ? 0 : 8);
-            frameLayout.addView(this.views[a], LayoutHelper.createFrame(-1, a == 0 ? -2.0f : -1.0f, 51, AndroidUtilities.isTablet() ? 26.0f : 18.0f, BitmapDescriptorFactory.HUE_ORANGE, AndroidUtilities.isTablet() ? 26.0f : 18.0f, 0.0f));
+            frameLayout.addView(this.views[a], LayoutHelper.createFrame(-1, a == 0 ? -2.0f : -1.0f, 51, AndroidUtilities.isTablet() ? 26.0f : 18.0f, 30.0f, AndroidUtilities.isTablet() ? 26.0f : 18.0f, 0.0f));
             a++;
         }
         this.actionBar.setTitle(this.views[0].getHeaderName());

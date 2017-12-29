@@ -1,18 +1,26 @@
 package com.google.android.gms.iid;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
+import android.os.Binder;
+import android.os.Process;
+import android.util.Log;
 
-final class zzf extends Handler {
-    private /* synthetic */ zze zzbhn;
+public final class zzf extends Binder {
+    private final zzb zziey;
 
-    zzf(zze com_google_android_gms_iid_zze, Looper looper) {
-        this.zzbhn = com_google_android_gms_iid_zze;
-        super(looper);
+    zzf(zzb com_google_android_gms_iid_zzb) {
+        this.zziey = com_google_android_gms_iid_zzb;
     }
 
-    public final void handleMessage(Message message) {
-        this.zzbhn.zzc(message);
+    public final void zza(zzd com_google_android_gms_iid_zzd) {
+        if (Binder.getCallingUid() != Process.myUid()) {
+            throw new SecurityException("Binding only allowed within app");
+        }
+        if (Log.isLoggable("EnhancedIntentService", 3)) {
+            Log.d("EnhancedIntentService", "service received new intent via bind strategy");
+        }
+        if (Log.isLoggable("EnhancedIntentService", 3)) {
+            Log.d("EnhancedIntentService", "intent being queued for bg execution");
+        }
+        this.zziey.zzieo.execute(new zzg(this, com_google_android_gms_iid_zzd));
     }
 }

@@ -13,20 +13,12 @@ class SourceLocationImpl implements SourceLocation {
         this.line = line;
     }
 
-    public Class getWithinType() {
-        return this.withinType;
-    }
-
     public String getFileName() {
         return this.fileName;
     }
 
     public int getLine() {
         return this.line;
-    }
-
-    public int getColumn() {
-        return -1;
     }
 
     public String toString() {

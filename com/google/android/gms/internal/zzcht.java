@@ -1,31 +1,28 @@
 package com.google.android.gms.internal;
 
-import android.os.Bundle;
+import com.google.android.gms.common.internal.zzbq;
+import java.util.List;
+import java.util.Map;
 
 final class zzcht implements Runnable {
-    private /* synthetic */ String val$name;
-    private /* synthetic */ String zzbjh;
-    private /* synthetic */ boolean zzbtA;
-    private /* synthetic */ boolean zzbtB;
-    private /* synthetic */ boolean zzbtC;
-    private /* synthetic */ String zzbth;
-    private /* synthetic */ zzchl zzbtt;
-    private /* synthetic */ long zzbty;
-    private /* synthetic */ Bundle zzbtz;
+    private final String mPackageName;
+    private final int zzcbc;
+    private final Throwable zzdfl;
+    private final zzchs zzjch;
+    private final byte[] zzjci;
+    private final Map<String, List<String>> zzjcj;
 
-    zzcht(zzchl com_google_android_gms_internal_zzchl, String str, String str2, long j, Bundle bundle, boolean z, boolean z2, boolean z3, String str3) {
-        this.zzbtt = com_google_android_gms_internal_zzchl;
-        this.zzbth = str;
-        this.val$name = str2;
-        this.zzbty = j;
-        this.zzbtz = bundle;
-        this.zzbtA = z;
-        this.zzbtB = z2;
-        this.zzbtC = z3;
-        this.zzbjh = str3;
+    private zzcht(String str, zzchs com_google_android_gms_internal_zzchs, int i, Throwable th, byte[] bArr, Map<String, List<String>> map) {
+        zzbq.checkNotNull(com_google_android_gms_internal_zzchs);
+        this.zzjch = com_google_android_gms_internal_zzchs;
+        this.zzcbc = i;
+        this.zzdfl = th;
+        this.zzjci = bArr;
+        this.mPackageName = str;
+        this.zzjcj = map;
     }
 
     public final void run() {
-        this.zzbtt.zzb(this.zzbth, this.val$name, this.zzbty, this.zzbtz, this.zzbtA, this.zzbtB, this.zzbtC, this.zzbjh);
+        this.zzjch.zza(this.mPackageName, this.zzcbc, this.zzdfl, this.zzjci, this.zzjcj);
     }
 }

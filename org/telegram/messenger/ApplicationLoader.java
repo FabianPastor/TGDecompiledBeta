@@ -8,12 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.PowerManager;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import java.io.File;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.Components.ForegroundDetector;
 
 public class ApplicationLoader extends Application {
@@ -45,6 +45,7 @@ public class ApplicationLoader extends Application {
 
     public static void postInitApplication() {
         if (!applicationInited) {
+            int a;
             applicationInited = true;
             try {
                 LocaleController.getInstance();
@@ -64,18 +65,24 @@ public class ApplicationLoader extends Application {
             } catch (Throwable e3) {
                 FileLog.e(e3);
             }
-            UserConfig.loadConfig();
-            MessagesController.getInstance();
-            ConnectionsManager.getInstance();
-            if (UserConfig.getCurrentUser() != null) {
-                MessagesController.getInstance().putUser(UserConfig.getCurrentUser(), true);
-                MessagesController.getInstance().getBlockedUsers(true);
-                SendMessagesHelper.getInstance().checkUnsentMessages();
+            SharedConfig.loadConfig();
+            for (a = 0; a < 3; a++) {
+                UserConfig.getInstance(a).loadConfig();
+                MessagesController.getInstance(a);
+                ConnectionsManager.getInstance(a);
+                User user = UserConfig.getInstance(a).getCurrentUser();
+                if (user != null) {
+                    MessagesController.getInstance(a).putUser(user, true);
+                    MessagesController.getInstance(a).getBlockedUsers(true);
+                    SendMessagesHelper.getInstance(a).checkUnsentMessages();
+                }
             }
             ((ApplicationLoader) applicationContext).initPlayServices();
             FileLog.e("app initied");
-            ContactsController.getInstance().checkAppAccount();
-            MediaController.getInstance();
+            for (a = 0; a < 3; a++) {
+                ContactsController.getInstance(a).checkAppAccount();
+                MediaController.getInstance(a);
+            }
         }
     }
 
@@ -83,19 +90,23 @@ public class ApplicationLoader extends Application {
         super.onCreate();
         applicationContext = getApplicationContext();
         NativeLoader.initNativeLibs(applicationContext);
-        boolean z = VERSION.SDK_INT == 14 || VERSION.SDK_INT == 15;
-        ConnectionsManager.native_setJava(z);
+        ConnectionsManager.native_setJava(false);
         ForegroundDetector foregroundDetector = new ForegroundDetector(this);
         applicationHandler = new Handler(applicationContext.getMainLooper());
         startPushService();
     }
 
     public static void startPushService() {
-        if (applicationContext.getSharedPreferences("Notifications", 0).getBoolean("pushService", true)) {
-            applicationContext.startService(new Intent(applicationContext, NotificationsService.class));
-        } else {
-            stopPushService();
+        if (MessagesController.getGlobalNotificationsSettings().getBoolean("pushService", true)) {
+            try {
+                applicationContext.startService(new Intent(applicationContext, NotificationsService.class));
+                return;
+            } catch (Throwable e) {
+                FileLog.e(e);
+                return;
+            }
         }
+        stopPushService();
     }
 
     public static void stopPushService() {
@@ -117,13 +128,18 @@ public class ApplicationLoader extends Application {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 if (ApplicationLoader.this.checkPlayServices()) {
-                    if (UserConfig.pushString == null || UserConfig.pushString.length() == 0) {
+                    if (SharedConfig.pushString == null || SharedConfig.pushString.length() == 0) {
                         FileLog.d("GCM Registration not found.");
                     } else {
-                        FileLog.d("GCM regId = " + UserConfig.pushString);
+                        FileLog.d("GCM regId = " + SharedConfig.pushString);
                     }
-                    ApplicationLoader.this.startService(new Intent(ApplicationLoader.applicationContext, GcmRegistrationIntentService.class));
-                    return;
+                    try {
+                        ApplicationLoader.this.startService(new Intent(ApplicationLoader.applicationContext, GcmRegistrationIntentService.class));
+                        return;
+                    } catch (Throwable e) {
+                        FileLog.e(e);
+                        return;
+                    }
                 }
                 FileLog.d("No valid Google Play Services APK found.");
             }

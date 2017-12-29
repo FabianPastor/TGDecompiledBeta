@@ -66,7 +66,7 @@ public final class SectionReader implements TsPayloadReader {
                     this.totalSectionLength = (((secondHeaderByte & 15) << 8) | thirdHeaderByte) + 3;
                     if (this.sectionData.capacity() < this.totalSectionLength) {
                         byte[] bytes = this.sectionData.data;
-                        this.sectionData.reset(Math.min(4098, Math.max(this.totalSectionLength, bytes.length * 2)));
+                        this.sectionData.reset(Math.min(MAX_SECTION_LENGTH, Math.max(this.totalSectionLength, bytes.length * 2)));
                         System.arraycopy(bytes, 0, this.sectionData.data, 0, 3);
                     }
                 }

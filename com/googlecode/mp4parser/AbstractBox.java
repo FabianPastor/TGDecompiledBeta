@@ -7,7 +7,6 @@ import com.coremedia.iso.IsoTypeWriter;
 import com.coremedia.iso.boxes.Box;
 import com.coremedia.iso.boxes.Container;
 import com.coremedia.iso.boxes.UserBox;
-import com.googlecode.mp4parser.annotations.DoNotParseDetail;
 import com.googlecode.mp4parser.util.CastUtils;
 import com.googlecode.mp4parser.util.Logger;
 import com.googlecode.mp4parser.util.Path;
@@ -65,7 +64,6 @@ public abstract class AbstractBox implements Box {
         this.isParsed = true;
     }
 
-    @DoNotParseDetail
     public void parse(DataSource dataSource, ByteBuffer header, long contentSize, BoxParser boxParser) throws IOException {
         this.contentStartPosition = dataSource.position();
         this.offset = this.contentStartPosition - ((long) header.remaining());
@@ -167,22 +165,18 @@ public abstract class AbstractBox implements Box {
         return size + ((long) i2);
     }
 
-    @DoNotParseDetail
     public String getType() {
         return this.type;
     }
 
-    @DoNotParseDetail
     public byte[] getUserType() {
         return this.userType;
     }
 
-    @DoNotParseDetail
     public Container getParent() {
         return this.parent;
     }
 
-    @DoNotParseDetail
     public void setParent(Container parent) {
         this.parent = parent;
     }
@@ -264,7 +258,6 @@ public abstract class AbstractBox implements Box {
         }
     }
 
-    @DoNotParseDetail
     public String getPath() {
         return Path.createPath(this);
     }

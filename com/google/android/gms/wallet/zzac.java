@@ -2,29 +2,45 @@ package com.google.android.gms.wallet;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.identity.intents.model.UserAddress;
+import com.google.android.gms.internal.zzbfn;
 
-public final class zzac implements Creator<zzab> {
+public final class zzac implements Creator<PaymentData> {
     public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        int zzd = zzb.zzd(parcel);
         String str = null;
+        int zzd = zzbfn.zzd(parcel);
+        PaymentMethodToken paymentMethodToken = null;
+        UserAddress userAddress = null;
+        CardInfo cardInfo = null;
+        String str2 = null;
         while (parcel.dataPosition() < zzd) {
             int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
+            switch (65535 & readInt) {
+                case 1:
+                    str2 = zzbfn.zzq(parcel, readInt);
+                    break;
                 case 2:
-                    str = zzb.zzq(parcel, readInt);
+                    cardInfo = (CardInfo) zzbfn.zza(parcel, readInt, CardInfo.CREATOR);
+                    break;
+                case 3:
+                    userAddress = (UserAddress) zzbfn.zza(parcel, readInt, UserAddress.CREATOR);
+                    break;
+                case 4:
+                    paymentMethodToken = (PaymentMethodToken) zzbfn.zza(parcel, readInt, PaymentMethodToken.CREATOR);
+                    break;
+                case 5:
+                    str = zzbfn.zzq(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, readInt);
+                    zzbfn.zzb(parcel, readInt);
                     break;
             }
         }
-        zzb.zzF(parcel, zzd);
-        return new zzab(str);
+        zzbfn.zzaf(parcel, zzd);
+        return new PaymentData(str2, cardInfo, userAddress, paymentMethodToken, str);
     }
 
     public final /* synthetic */ Object[] newArray(int i) {
-        return new zzab[i];
+        return new PaymentData[i];
     }
 }

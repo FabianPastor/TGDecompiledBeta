@@ -40,6 +40,7 @@ import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -54,7 +55,6 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.query.SharedMediaQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
@@ -176,7 +176,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             object.viewY = coords[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
                             object.parentView = MediaActivity.this.listView;
                             object.imageReceiver = imageView.getImageReceiver();
-                            object.thumb = object.imageReceiver.getBitmap();
+                            object.thumb = object.imageReceiver.getBitmapSafe();
                             object.parentView.getLocationInWindow(coords);
                             object.clipTopAddition = AndroidUtilities.dp(40.0f);
                             return object;
@@ -300,7 +300,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             int uid = (int) did;
             if (uid != 0) {
                 if (this.reqId != 0) {
-                    ConnectionsManager.getInstance().cancelRequest(this.reqId, true);
+                    ConnectionsManager.getInstance(MediaActivity.this.currentAccount).cancelRequest(this.reqId, true);
                     this.reqId = 0;
                 }
                 if (query == null || query.length() == 0) {
@@ -320,11 +320,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     req.filter = new TL_inputMessagesFilterMusic();
                 }
                 req.q = query;
-                req.peer = MessagesController.getInputPeer(uid);
+                req.peer = MessagesController.getInstance(MediaActivity.this.currentAccount).getInputPeer(uid);
                 if (req.peer != null) {
                     final int currentReqId = this.lastReqId + 1;
                     this.lastReqId = currentReqId;
-                    this.reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    this.reqId = ConnectionsManager.getInstance(MediaActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                         public void run(TLObject response, TL_error error) {
                             final ArrayList<MessageObject> messageObjects = new ArrayList();
                             if (error == null) {
@@ -332,7 +332,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                 for (int a = 0; a < res.messages.size(); a++) {
                                     Message message = (Message) res.messages.get(a);
                                     if (max_id == 0 || message.id <= max_id) {
-                                        messageObjects.add(new MessageObject(message, null, false));
+                                        messageObjects.add(new MessageObject(MediaActivity.this.currentAccount, message, null, false));
                                     }
                                 }
                             }
@@ -347,7 +347,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             });
                         }
                     }, 2);
-                    ConnectionsManager.getInstance().bindRequestToGuid(this.reqId, MediaActivity.this.classGuid);
+                    ConnectionsManager.getInstance(MediaActivity.this.currentAccount).bindRequestToGuid(this.reqId, MediaActivity.this.classGuid);
                 }
             }
         }
@@ -984,10 +984,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.mediaDidLoaded);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagesDeleted);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.didReceivedNewMessages);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messageReceivedByServer);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.mediaDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagesDeleted);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.didReceivedNewMessages);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messageReceivedByServer);
         this.dialog_id = getArguments().getLong("dialog_id", 0);
         for (int a = 0; a < this.sharedMediaData.length; a++) {
             this.sharedMediaData[a] = new SharedMediaData();
@@ -998,22 +998,22 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             }
         }
         this.sharedMediaData[0].loading = true;
-        SharedMediaQuery.loadMedia(this.dialog_id, 50, 0, 0, true, this.classGuid);
+        DataQuery.getInstance(this.currentAccount).loadMedia(this.dialog_id, 50, 0, 0, true, this.classGuid);
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.mediaDidLoaded);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didReceivedNewMessages);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagesDeleted);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messageReceivedByServer);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.mediaDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.didReceivedNewMessages);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagesDeleted);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messageReceivedByServer);
     }
 
     public View createView(Context context) {
         int a;
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
-        this.actionBar.setTitle("");
+        this.actionBar.setTitle(TtmlNode.ANONYMOUS_REGION_ID);
         this.actionBar.setAllowOverlayTitle(false);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
@@ -1073,15 +1073,15 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             User currentUser;
                             Chat currentChat;
                             if (lower_id > 0) {
-                                currentUser = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
+                                currentUser = MessagesController.getInstance(MediaActivity.this.currentAccount).getUser(Integer.valueOf(lower_id));
                                 currentChat = null;
                             } else {
                                 currentUser = null;
-                                currentChat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
+                                currentChat = MessagesController.getInstance(MediaActivity.this.currentAccount).getChat(Integer.valueOf(-lower_id));
                             }
                             if (!(currentUser == null && ChatObject.isChannel(currentChat))) {
-                                int currentDate = ConnectionsManager.getInstance().getCurrentTime();
-                                if (!((currentUser == null || currentUser.id == UserConfig.getClientUserId()) && currentChat == null)) {
+                                int currentDate = ConnectionsManager.getInstance(MediaActivity.this.currentAccount).getCurrentTime();
+                                if (!((currentUser == null || currentUser.id == UserConfig.getInstance(MediaActivity.this.currentAccount).getClientUserId()) && currentChat == null)) {
                                     boolean hasOutgoing = false;
                                     for (a = 1; a >= 0; a--) {
                                         for (Entry<Integer, MessageObject> entry : MediaActivity.this.selectedFiles[a].entrySet()) {
@@ -1106,9 +1106,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                         CheckBoxCell cell = new CheckBoxCell(MediaActivity.this.getParentActivity(), true);
                                         cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                                         if (currentChat != null) {
-                                            cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), "", false, false);
+                                            cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                                         } else {
-                                            cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(currentUser)), "", false, false);
+                                            cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(currentUser)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                                         }
                                         if (LocaleController.isRTL) {
                                             dp = AndroidUtilities.dp(16.0f);
@@ -1158,7 +1158,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                         }
                                     }
                                     if (((int) MediaActivity.this.dialog_id) == 0) {
-                                        currentEncryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (MediaActivity.this.dialog_id >> 32)));
+                                        currentEncryptedChat = MessagesController.getInstance(MediaActivity.this.currentAccount).getEncryptedChat(Integer.valueOf((int) (MediaActivity.this.dialog_id >> 32)));
                                     }
                                     if (currentEncryptedChat != null) {
                                         random_ids = new ArrayList();
@@ -1169,7 +1169,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                             }
                                         }
                                     }
-                                    MessagesController.getInstance().deleteMessages(ids, random_ids, currentEncryptedChat, channelId, zArr[0]);
+                                    MessagesController.getInstance(MediaActivity.this.currentAccount).deleteMessages(ids, random_ids, currentEncryptedChat, channelId, zArr[0]);
                                     MediaActivity.this.selectedFiles[a].clear();
                                 }
                                 MediaActivity.this.actionBar.hideActionMode();
@@ -1204,13 +1204,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             MediaActivity.this.cantDeleteMessagesCount = 0;
                             MediaActivity.this.actionBar.hideActionMode();
                             long did;
-                            if (dids.size() > 1 || ((Long) dids.get(0)).longValue() == ((long) UserConfig.getClientUserId()) || message != null) {
+                            if (dids.size() > 1 || ((Long) dids.get(0)).longValue() == ((long) UserConfig.getInstance(MediaActivity.this.currentAccount).getClientUserId()) || message != null) {
                                 for (a = 0; a < dids.size(); a++) {
                                     did = ((Long) dids.get(a)).longValue();
                                     if (message != null) {
-                                        SendMessagesHelper.getInstance().sendMessage(message.toString(), did, null, null, true, null, null, null);
+                                        SendMessagesHelper.getInstance(MediaActivity.this.currentAccount).sendMessage(message.toString(), did, null, null, true, null, null, null);
                                     }
-                                    SendMessagesHelper.getInstance().sendMessage(fmessages, did);
+                                    SendMessagesHelper.getInstance(MediaActivity.this.currentAccount).sendMessage(fmessages, did);
                                 }
                                 fragment.finishFragment();
                                 return;
@@ -1227,8 +1227,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             } else if (lower_part < 0) {
                                 args.putInt("chat_id", -lower_part);
                             }
-                            if (lower_part == 0 || MessagesController.checkCanOpenChat(args, fragment)) {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                            if (lower_part == 0 || MessagesController.getInstance(MediaActivity.this.currentAccount).checkCanOpenChat(args, fragment)) {
+                                NotificationCenter.getInstance(MediaActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                                 ChatActivity chatActivity = new ChatActivity(args);
                                 MediaActivity.this.presentFragment(chatActivity, true);
                                 chatActivity.showReplyPanel(true, null, fmessages, null, false);
@@ -1297,7 +1297,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             this.dropDownContainer.addSubItem(5, LocaleController.getString("LinksTitle", R.string.LinksTitle));
             this.dropDownContainer.addSubItem(6, LocaleController.getString("AudioTitle", R.string.AudioTitle));
         } else {
-            EncryptedChat currentEncryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (this.dialog_id >> 32)));
+            EncryptedChat currentEncryptedChat = MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf((int) (this.dialog_id >> 32)));
             if (currentEncryptedChat != null && AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 46) {
                 this.dropDownContainer.addSubItem(6, LocaleController.getString("AudioTitle", R.string.AudioTitle));
             }
@@ -1411,10 +1411,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         }
                         if (!MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].endReached[0]) {
                             MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].loading = true;
-                            SharedMediaQuery.loadMedia(MediaActivity.this.dialog_id, 50, MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].max_id[0], type, true, MediaActivity.this.classGuid);
+                            DataQuery.getInstance(MediaActivity.this.currentAccount).loadMedia(MediaActivity.this.dialog_id, 50, MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].max_id[0], type, true, MediaActivity.this.classGuid);
                         } else if (MediaActivity.this.mergeDialogId != 0 && !MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].endReached[1]) {
                             MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].loading = true;
-                            SharedMediaQuery.loadMedia(MediaActivity.this.mergeDialogId, 50, MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].max_id[1], type, true, MediaActivity.this.classGuid);
+                            DataQuery.getInstance(MediaActivity.this.currentAccount).loadMedia(MediaActivity.this.mergeDialogId, 50, MediaActivity.this.sharedMediaData[MediaActivity.this.selectedMode].max_id[1], type, true, MediaActivity.this.classGuid);
                         }
                     }
                 }
@@ -1473,7 +1473,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         return this.fragmentView;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         int type;
         ArrayList<MessageObject> arr;
         boolean enc;
@@ -1496,7 +1496,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 this.sharedMediaData[type].endReached[loadIndex] = ((Boolean) args[5]).booleanValue();
                 if (loadIndex == 0 && this.sharedMediaData[type].endReached[loadIndex] && this.mergeDialogId != 0) {
                     this.sharedMediaData[type].loading = true;
-                    SharedMediaQuery.loadMedia(this.mergeDialogId, 50, this.sharedMediaData[type].max_id[1], type, true, this.classGuid);
+                    DataQuery.getInstance(this.currentAccount).loadMedia(this.mergeDialogId, 50, this.sharedMediaData[type].max_id[1], type, true, this.classGuid);
                 }
                 if (!this.sharedMediaData[type].loading) {
                     if (this.progressView != null) {
@@ -1535,7 +1535,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         } else if (id == NotificationCenter.messagesDeleted) {
             Chat currentChat = null;
             if (((int) this.dialog_id) < 0) {
-                currentChat = MessagesController.getInstance().getChat(Integer.valueOf(-((int) this.dialog_id)));
+                currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-((int) this.dialog_id)));
             }
             int channelId = ((Integer) args[1]).intValue();
             loadIndex = 0;
@@ -1588,7 +1588,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 for (a = 0; a < arr.size(); a++) {
                     MessageObject obj = (MessageObject) arr.get(a);
                     if (!(obj.messageOwner.media == null || obj.isSecretPhoto())) {
-                        type = SharedMediaQuery.getMediaType(obj.messageOwner);
+                        type = DataQuery.getMediaType(obj.messageOwner);
                         if (type == -1) {
                             return;
                         }
@@ -1747,13 +1747,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             if (!(this.sharedMediaData[this.selectedMode].loading || this.sharedMediaData[this.selectedMode].endReached[0] || !this.sharedMediaData[this.selectedMode].messages.isEmpty())) {
                 int i;
                 this.sharedMediaData[this.selectedMode].loading = true;
+                DataQuery instance = DataQuery.getInstance(this.currentAccount);
                 long j = this.dialog_id;
                 if (this.selectedMode == 1) {
                     i = 1;
                 } else {
                     i = 4;
                 }
-                SharedMediaQuery.loadMedia(j, 50, 0, i, true, this.classGuid);
+                instance.loadMedia(j, 50, 0, i, true, this.classGuid);
             }
             this.listView.setVisibility(0);
             if (this.sharedMediaData[this.selectedMode].loading && this.sharedMediaData[this.selectedMode].messages.isEmpty()) {
@@ -1783,7 +1784,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             r1.setVisibility(r0);
             if (!(this.sharedMediaData[this.selectedMode].loading || this.sharedMediaData[this.selectedMode].endReached[0] || !this.sharedMediaData[this.selectedMode].messages.isEmpty())) {
                 this.sharedMediaData[this.selectedMode].loading = true;
-                SharedMediaQuery.loadMedia(this.dialog_id, 50, 0, 3, true, this.classGuid);
+                DataQuery.getInstance(this.currentAccount).loadMedia(this.dialog_id, 50, 0, 3, true, this.classGuid);
             }
             this.listView.setVisibility(0);
             if (this.sharedMediaData[this.selectedMode].loading && this.sharedMediaData[this.selectedMode].messages.isEmpty()) {
@@ -1839,6 +1840,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     private void onItemClick(int index, View view, MessageObject message, int a) {
+        Builder builder;
         if (message != null) {
             if (this.actionBar.isActionModeShowed()) {
                 int loadIndex = message.getDialogId() == this.dialog_id ? 0 : 1;
@@ -1876,9 +1878,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 if (view instanceof SharedDocumentCell) {
                     SharedDocumentCell cell = (SharedDocumentCell) view;
                     if (cell.isLoaded()) {
-                        if (!message.isMusic() || !MediaController.getInstance().setPlaylist(this.sharedMediaData[this.selectedMode].messages, message)) {
+                        if (!message.isMusic() || !MediaController.getInstance(this.currentAccount).setPlaylist(this.sharedMediaData[this.selectedMode].messages, message)) {
                             File f = null;
-                            String fileName = message.messageOwner.media != null ? FileLoader.getAttachFileName(message.getDocument()) : "";
+                            String fileName = message.messageOwner.media != null ? FileLoader.getAttachFileName(message.getDocument()) : TtmlNode.ANONYMOUS_REGION_ID;
                             if (!(message.messageOwner.attachPath == null || message.messageOwner.attachPath.length() == 0)) {
                                 f = new File(message.messageOwner.attachPath);
                             }
@@ -1886,7 +1888,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                 f = FileLoader.getPathToMessage(message.messageOwner);
                             }
                             if (f != null && f.exists()) {
-                                Builder builder;
                                 if (f.getName().endsWith("attheme")) {
                                     ThemeInfo themeInfo = Theme.applyThemeFile(f, message.getDocumentName(), true);
                                     if (themeInfo != null) {
@@ -1947,10 +1948,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             }
                         }
                     } else if (cell.isLoading()) {
-                        FileLoader.getInstance().cancelLoadFile(cell.getMessage().getDocument());
+                        FileLoader.getInstance(this.currentAccount).cancelLoadFile(cell.getMessage().getDocument());
                         cell.updateFileExistIcon();
                     } else {
-                        FileLoader.getInstance().loadFile(cell.getMessage().getDocument(), false, 0);
+                        FileLoader.getInstance(this.currentAccount).loadFile(cell.getMessage().getDocument(), false, 0);
                         cell.updateFileExistIcon();
                     }
                 }

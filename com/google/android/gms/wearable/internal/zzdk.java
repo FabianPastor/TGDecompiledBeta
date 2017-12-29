@@ -1,26 +1,24 @@
 package com.google.android.gms.wearable.internal;
 
-import android.os.IInterface;
-import android.os.RemoteException;
-import com.google.android.gms.common.data.DataHolder;
-import java.util.List;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 
-public interface zzdk extends IInterface {
-    void onConnectedNodes(List<zzeg> list) throws RemoteException;
+public final class zzdk extends zzbfm {
+    public static final Creator<zzdk> CREATOR = new zzdl();
+    public final int statusCode;
+    public final zzah zzlkf;
 
-    void zzS(DataHolder dataHolder) throws RemoteException;
+    public zzdk(int i, zzah com_google_android_gms_wearable_internal_zzah) {
+        this.statusCode = i;
+        this.zzlkf = com_google_android_gms_wearable_internal_zzah;
+    }
 
-    void zza(zzaa com_google_android_gms_wearable_internal_zzaa) throws RemoteException;
-
-    void zza(zzai com_google_android_gms_wearable_internal_zzai) throws RemoteException;
-
-    void zza(zzdx com_google_android_gms_wearable_internal_zzdx) throws RemoteException;
-
-    void zza(zzeg com_google_android_gms_wearable_internal_zzeg) throws RemoteException;
-
-    void zza(zzi com_google_android_gms_wearable_internal_zzi) throws RemoteException;
-
-    void zza(zzl com_google_android_gms_wearable_internal_zzl) throws RemoteException;
-
-    void zzb(zzeg com_google_android_gms_wearable_internal_zzeg) throws RemoteException;
+    public final void writeToParcel(Parcel parcel, int i) {
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zzc(parcel, 2, this.statusCode);
+        zzbfp.zza(parcel, 3, this.zzlkf, i, false);
+        zzbfp.zzai(parcel, zze);
+    }
 }

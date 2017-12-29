@@ -8,8 +8,4 @@ public abstract class FeedbackManagerListener {
     public Class<? extends FeedbackActivity> getFeedbackActivityClass() {
         return FeedbackActivity.class;
     }
-
-    public boolean shouldCreateNewFeedbackThread() {
-        return false;
-    }
 }

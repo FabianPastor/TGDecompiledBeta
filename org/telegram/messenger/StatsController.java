@@ -5,7 +5,7 @@ import android.content.SharedPreferences.Editor;
 import java.lang.reflect.Array;
 
 public class StatsController {
-    private static volatile StatsController Instance = null;
+    private static volatile StatsController[] Instance = new StatsController[3];
     private static final int TYPES_COUNT = 7;
     public static final int TYPE_AUDIOS = 3;
     public static final int TYPE_CALLS = 0;
@@ -22,6 +22,7 @@ public class StatsController {
             return Long.valueOf(System.currentTimeMillis() - 1000);
         }
     };
+    private static DispatchQueue statsSaveQueue = new DispatchQueue("statsSaveQueue");
     private int[] callsTotalTime = new int[3];
     private Editor editor;
     private long[][] receivedBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
@@ -29,18 +30,18 @@ public class StatsController {
     private long[] resetStatsDate = new long[3];
     private long[][] sentBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
     private int[][] sentItems = ((int[][]) Array.newInstance(Integer.TYPE, new int[]{3, 7}));
-    private DispatchQueue statsSaveQueue = new DispatchQueue("statsSaveQueue");
 
-    public static StatsController getInstance() {
-        StatsController localInstance = Instance;
+    public static StatsController getInstance(int num) {
+        StatsController localInstance = Instance[num];
         if (localInstance == null) {
             synchronized (StatsController.class) {
                 try {
-                    localInstance = Instance;
+                    localInstance = Instance[num];
                     if (localInstance == null) {
-                        StatsController localInstance2 = new StatsController();
+                        StatsController[] statsControllerArr = Instance;
+                        StatsController localInstance2 = new StatsController(num);
                         try {
-                            Instance = localInstance2;
+                            statsControllerArr[num] = localInstance2;
                             localInstance = localInstance2;
                         } catch (Throwable th) {
                             Throwable th2 = th;
@@ -57,8 +58,13 @@ public class StatsController {
         return localInstance;
     }
 
-    private StatsController() {
-        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("stats", 0);
+    private StatsController(int account) {
+        SharedPreferences sharedPreferences;
+        if (account == 0) {
+            sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("stats", 0);
+        } else {
+            sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("stats" + account, 0);
+        }
         boolean save = false;
         this.editor = sharedPreferences.edit();
         for (int a = 0; a < 3; a++) {
@@ -154,9 +160,9 @@ public class StatsController {
 
     private void saveStats() {
         long newTime = System.currentTimeMillis();
-        if (Math.abs(newTime - ((Long) lastStatsSaveTime.get()).longValue()) >= 1000) {
+        if (Math.abs(newTime - ((Long) lastStatsSaveTime.get()).longValue()) >= 2000) {
             lastStatsSaveTime.set(Long.valueOf(newTime));
-            this.statsSaveQueue.postRunnable(new Runnable() {
+            statsSaveQueue.postRunnable(new Runnable() {
                 public void run() {
                     for (int networkType = 0; networkType < 3; networkType++) {
                         for (int a = 0; a < 7; a++) {
@@ -169,7 +175,7 @@ public class StatsController {
                         StatsController.this.editor.putLong("resetStatsDate" + networkType, StatsController.this.resetStatsDate[networkType]);
                     }
                     try {
-                        StatsController.this.editor.apply();
+                        StatsController.this.editor.commit();
                     } catch (Throwable e) {
                         FileLog.e(e);
                     }

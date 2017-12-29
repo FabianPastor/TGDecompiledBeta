@@ -13,12 +13,14 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 
 public class BaseFragment {
     protected ActionBar actionBar;
     protected Bundle arguments;
     protected int classGuid;
+    protected int currentAccount;
     protected View fragmentView;
     protected boolean hasOwnBackground;
     private boolean isFinished;
@@ -29,20 +31,22 @@ public class BaseFragment {
     public BaseFragment() {
         this.isFinished = false;
         this.visibleDialog = null;
+        this.currentAccount = UserConfig.selectedAccount;
         this.classGuid = 0;
         this.swipeBackEnabled = true;
         this.hasOwnBackground = false;
-        this.classGuid = ConnectionsManager.getInstance().generateClassGuid();
+        this.classGuid = ConnectionsManager.generateClassGuid();
     }
 
     public BaseFragment(Bundle args) {
         this.isFinished = false;
         this.visibleDialog = null;
+        this.currentAccount = UserConfig.selectedAccount;
         this.classGuid = 0;
         this.swipeBackEnabled = true;
         this.hasOwnBackground = false;
         this.arguments = args;
-        this.classGuid = ConnectionsManager.getInstance().generateClassGuid();
+        this.classGuid = ConnectionsManager.generateClassGuid();
     }
 
     public ActionBar getActionBar() {
@@ -59,6 +63,10 @@ public class BaseFragment {
 
     public Bundle getArguments() {
         return this.arguments;
+    }
+
+    public int getCurrentAccount() {
+        return this.currentAccount;
     }
 
     protected void clearViews() {
@@ -164,7 +172,7 @@ public class BaseFragment {
     }
 
     public void onFragmentDestroy() {
-        ConnectionsManager.getInstance().cancelRequestsForGuid(this.classGuid);
+        ConnectionsManager.getInstance(this.currentAccount).cancelRequestsForGuid(this.classGuid);
         this.isFinished = true;
         if (this.actionBar != null) {
             this.actionBar.setEnabled(false);

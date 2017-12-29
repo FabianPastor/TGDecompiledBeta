@@ -134,7 +134,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             }
         });
         this.curtainView = new FrameLayout(context);
-        this.curtainView.setBackgroundColor(-16777216);
+        this.curtainView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         this.curtainView.setVisibility(4);
         addView(this.curtainView);
         this.renderView = new RenderView(context, new Painting(getPaintingSize()), bitmap, this.orientation);
@@ -233,7 +233,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             }
         });
         this.toolsView = new FrameLayout(context);
-        this.toolsView.setBackgroundColor(-16777216);
+        this.toolsView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         addView(this.toolsView, LayoutHelper.createFrame(-1, 48, 83));
         this.cancelTextView = new TextView(context);
         this.cancelTextView.setTextSize(1, 14.0f);
@@ -762,12 +762,12 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     private void createText() {
         Swatch currentSwatch = this.colorPicker.getSwatch();
         Swatch whiteSwatch = new Swatch(-1, 1.0f, currentSwatch.brushWeight);
-        Swatch blackSwatch = new Swatch(-16777216, 0.85f, currentSwatch.brushWeight);
+        Swatch blackSwatch = new Swatch(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, 0.85f, currentSwatch.brushWeight);
         if (!this.selectedStroke) {
             blackSwatch = whiteSwatch;
         }
         setCurrentSwatch(blackSwatch, true);
-        TextPaintView view = new TextPaintView(getContext(), startPositionRelativeToEntity(null), baseFontSize(), "", this.colorPicker.getSwatch(), this.selectedStroke);
+        TextPaintView view = new TextPaintView(getContext(), startPositionRelativeToEntity(null), baseFontSize(), TtmlNode.ANONYMOUS_REGION_ID, this.colorPicker.getSwatch(), this.selectedStroke);
         view.setDelegate(this);
         view.setMaxWidth((int) (getPaintingSize().width - 20.0f));
         this.entitiesView.addView(view, LayoutHelper.createFrame(-2, -2.0f));
@@ -835,8 +835,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         if (this.currentEntityView instanceof TextPaintView) {
             Swatch currentSwatch = this.colorPicker.getSwatch();
             if (stroke && currentSwatch.color == -1) {
-                setCurrentSwatch(new Swatch(-16777216, 0.85f, currentSwatch.brushWeight), true);
-            } else if (!stroke && currentSwatch.color == -16777216) {
+                setCurrentSwatch(new Swatch(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, 0.85f, currentSwatch.brushWeight), true);
+            } else if (!stroke && currentSwatch.color == Theme.ACTION_BAR_VIDEO_EDIT_COLOR) {
                 setCurrentSwatch(new Swatch(-1, 1.0f, currentSwatch.brushWeight), true);
             }
             ((TextPaintView) this.currentEntityView).setStroke(stroke);
@@ -977,7 +977,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     private FrameLayout buttonForText(final boolean stroke, String text, boolean selected) {
-        int i = -16777216;
+        int i = Theme.ACTION_BAR_VIDEO_EDIT_COLOR;
         FrameLayout button = new FrameLayout(getContext()) {
             public boolean onInterceptTouchEvent(MotionEvent ev) {
                 return true;
@@ -996,7 +996,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         textView.setBackgroundColor(0);
         textView.setEnabled(false);
         textView.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
-        textView.setTextColor(stroke ? -1 : -16777216);
+        textView.setTextColor(stroke ? -1 : Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         if (!stroke) {
             i = 0;
         }

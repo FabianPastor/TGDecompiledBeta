@@ -1,14 +1,33 @@
 package com.google.android.gms.wearable.internal;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.internal.zzbaz;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfn;
 
-final class zzfv extends zzfc<Status> {
-    public zzfv(zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status) {
-        super(com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status);
+public final class zzfv implements Creator<zzfu> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzbfn.zzd(parcel);
+        int i = 0;
+        zzdd com_google_android_gms_wearable_internal_zzdd = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (65535 & readInt) {
+                case 2:
+                    i = zzbfn.zzg(parcel, readInt);
+                    break;
+                case 3:
+                    com_google_android_gms_wearable_internal_zzdd = (zzdd) zzbfn.zza(parcel, readInt, zzdd.CREATOR);
+                    break;
+                default:
+                    zzbfn.zzb(parcel, readInt);
+                    break;
+            }
+        }
+        zzbfn.zzaf(parcel, zzd);
+        return new zzfu(i, com_google_android_gms_wearable_internal_zzdd);
     }
 
-    public final void zza(zzaz com_google_android_gms_wearable_internal_zzaz) {
-        zzR(new Status(com_google_android_gms_wearable_internal_zzaz.statusCode));
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new zzfu[i];
     }
 }

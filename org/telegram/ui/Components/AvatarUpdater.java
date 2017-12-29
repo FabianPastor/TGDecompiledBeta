@@ -33,6 +33,7 @@ import org.telegram.ui.PhotoViewer.EmptyPhotoViewerProvider;
 public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActivityDelegate {
     private PhotoSize bigPhoto;
     private boolean clearAfterUpdate = false;
+    private int currentAccount = UserConfig.selectedAccount;
     public String currentPicturePath;
     public AvatarUpdaterDelegate delegate;
     public BaseFragment parentFragment = null;
@@ -184,11 +185,11 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
             bitmap.recycle();
             if (this.bigPhoto != null && this.smallPhoto != null) {
                 if (!this.returnOnly) {
-                    UserConfig.saveConfig(false);
-                    this.uploadingAvatar = FileLoader.getInstance().getDirectory(4) + "/" + this.bigPhoto.location.volume_id + "_" + this.bigPhoto.location.local_id + ".jpg";
-                    NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileDidUpload);
-                    NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileDidFailUpload);
-                    FileLoader.getInstance().uploadFile(this.uploadingAvatar, false, true, 16777216);
+                    UserConfig.getInstance(this.currentAccount).saveConfig(false);
+                    this.uploadingAvatar = FileLoader.getDirectory(4) + "/" + this.bigPhoto.location.volume_id + "_" + this.bigPhoto.location.local_id + ".jpg";
+                    NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidUpload);
+                    NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidFailUpload);
+                    FileLoader.getInstance(this.currentAccount).uploadFile(this.uploadingAvatar, false, true, 16777216);
                 } else if (this.delegate != null) {
                     this.delegate.didUploadedPhoto(null, this.smallPhoto, this.bigPhoto);
                 }
@@ -200,13 +201,13 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
         processBitmap(bitmap);
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         String location;
         if (id == NotificationCenter.FileDidUpload) {
             location = args[0];
             if (this.uploadingAvatar != null && location.equals(this.uploadingAvatar)) {
-                NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FileDidUpload);
-                NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FileDidFailUpload);
+                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidUpload);
+                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailUpload);
                 if (this.delegate != null) {
                     this.delegate.didUploadedPhoto((InputFile) args[1], this.smallPhoto, this.bigPhoto);
                 }
@@ -219,8 +220,8 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
         } else if (id == NotificationCenter.FileDidFailUpload) {
             location = (String) args[0];
             if (this.uploadingAvatar != null && location.equals(this.uploadingAvatar)) {
-                NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FileDidUpload);
-                NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FileDidFailUpload);
+                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidUpload);
+                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailUpload);
                 this.uploadingAvatar = null;
                 if (this.clearAfterUpdate) {
                     this.parentFragment = null;

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 public class FeedbackMessage implements Serializable {
-    private static final long serialVersionUID = -8773015828853994624L;
     private String mAppId;
     private String mCleanText;
     private String mCreatedAt;
@@ -21,20 +20,7 @@ public class FeedbackMessage implements Serializable {
     private int mVia;
 
     @Deprecated
-    public String getSubjec() {
-        return this.mSubject;
-    }
-
-    @Deprecated
     public void setSubjec(String subjec) {
-        this.mSubject = subjec;
-    }
-
-    public String getSubject() {
-        return this.mSubject;
-    }
-
-    public void setSubject(String subjec) {
         this.mSubject = subjec;
     }
 
@@ -46,24 +32,12 @@ public class FeedbackMessage implements Serializable {
         this.mText = text;
     }
 
-    public String getOem() {
-        return this.mDeviceOem;
-    }
-
     public void setOem(String oem) {
         this.mDeviceOem = oem;
     }
 
-    public String getModel() {
-        return this.mDeviceModel;
-    }
-
     public void setModel(String model) {
         this.mDeviceModel = model;
-    }
-
-    public String getOsVersion() {
-        return this.mDeviceOsVersion;
     }
 
     public void setOsVersion(String osVersion) {
@@ -86,32 +60,16 @@ public class FeedbackMessage implements Serializable {
         this.mId = id;
     }
 
-    public String getToken() {
-        return this.mToken;
-    }
-
     public void setToken(String token) {
         this.mToken = token;
-    }
-
-    public int getVia() {
-        return this.mVia;
     }
 
     public void setVia(int via) {
         this.mVia = via;
     }
 
-    public String getUserString() {
-        return this.mUserString;
-    }
-
     public void setUserString(String userString) {
         this.mUserString = userString;
-    }
-
-    public String getCleanText() {
-        return this.mCleanText;
     }
 
     public void setCleanText(String cleanText) {
@@ -124,10 +82,6 @@ public class FeedbackMessage implements Serializable {
 
     public void setName(String name) {
         this.mName = name;
-    }
-
-    public String getAppId() {
-        return this.mAppId;
     }
 
     public void setAppId(String appId) {

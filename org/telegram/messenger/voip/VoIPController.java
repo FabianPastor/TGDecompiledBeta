@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.TLRPC.TL_phoneConnection;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
@@ -86,6 +87,8 @@ public class VoIPController {
     private native void nativeSetAudioOutputGainControlEnabled(long j, boolean z);
 
     private native void nativeSetConfig(long j, double d, double d2, int i, boolean z, boolean z2, boolean z3, String str, String str2);
+
+    private native void nativeSetEchoCancellationStrength(long j, int i);
 
     private native void nativeSetEncryptionKey(long j, byte[] bArr, boolean z);
 
@@ -210,10 +213,10 @@ public class VoIPController {
             } catch (Throwable th) {
             }
         }
-        boolean dump = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("dbg_dump_call_stats", false);
+        boolean dump = MessagesController.getGlobalMainSettings().getBoolean("dbg_dump_call_stats", false);
         long j = this.nativeInst;
-        boolean z = (VERSION.SDK_INT >= 16 && sysAecAvailable && VoIPServerConfig.getBoolean("use_system_aec", true)) ? false : true;
-        boolean z2 = (VERSION.SDK_INT >= 16 && sysNsAvailable && VoIPServerConfig.getBoolean("use_system_ns", true)) ? false : true;
+        boolean z = (sysAecAvailable && VoIPServerConfig.getBoolean("use_system_aec", true)) ? false : true;
+        boolean z2 = (sysNsAvailable && VoIPServerConfig.getBoolean("use_system_ns", true)) ? false : true;
         if (BuildConfig.DEBUG) {
             logFilePath = getLogFilePath("voip");
         } else {
@@ -297,5 +300,10 @@ public class VoIPController {
     public void setAudioOutputGainControlEnabled(boolean enabled) {
         ensureNativeInstance();
         nativeSetAudioOutputGainControlEnabled(this.nativeInst, enabled);
+    }
+
+    public void setEchoCancellationStrength(int strength) {
+        ensureNativeInstance();
+        nativeSetEchoCancellationStrength(this.nativeInst, strength);
     }
 }

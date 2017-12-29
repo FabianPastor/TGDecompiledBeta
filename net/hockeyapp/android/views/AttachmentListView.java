@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import net.hockeyapp.android.utils.HockeyLog;
 
 public class AttachmentListView extends ViewGroup {
-    private static final String TAG = "AttachmentListView";
     private int mLineHeight;
 
     public AttachmentListView(Context context) {
@@ -32,7 +31,7 @@ public class AttachmentListView extends ViewGroup {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (MeasureSpec.getMode(widthMeasureSpec) == 0) {
-            HockeyLog.debug(TAG, "Width is unspecified");
+            HockeyLog.debug("AttachmentListView", "Width is unspecified");
         }
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int count = getChildCount();

@@ -4,17 +4,17 @@ import android.content.SharedPreferences;
 import java.util.concurrent.Callable;
 
 final class zzg implements Callable<Long> {
-    private /* synthetic */ SharedPreferences zzaXK;
-    private /* synthetic */ String zzaXL;
-    private /* synthetic */ Long zzaXO;
+    private /* synthetic */ SharedPreferences zzhiy;
+    private /* synthetic */ String zzhiz;
+    private /* synthetic */ Long zzhjc;
 
     zzg(SharedPreferences sharedPreferences, String str, Long l) {
-        this.zzaXK = sharedPreferences;
-        this.zzaXL = str;
-        this.zzaXO = l;
+        this.zzhiy = sharedPreferences;
+        this.zzhiz = str;
+        this.zzhjc = l;
     }
 
     public final /* synthetic */ Object call() throws Exception {
-        return Long.valueOf(this.zzaXK.getLong(this.zzaXL, this.zzaXO.longValue()));
+        return Long.valueOf(this.zzhiy.getLong(this.zzhiz, this.zzhjc.longValue()));
     }
 }

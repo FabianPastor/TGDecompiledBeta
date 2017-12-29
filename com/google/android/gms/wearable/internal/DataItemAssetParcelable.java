@@ -4,41 +4,33 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.annotation.KeepName;
 import com.google.android.gms.common.internal.ReflectedParcelable;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
-import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.common.internal.zzbq;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 import com.google.android.gms.wearable.DataItemAsset;
 
 @KeepName
-public class DataItemAssetParcelable extends zza implements ReflectedParcelable, DataItemAsset {
-    public static final Creator<DataItemAssetParcelable> CREATOR = new zzby();
-    private final String zzBN;
-    private final String zzIi;
+public class DataItemAssetParcelable extends zzbfm implements ReflectedParcelable, DataItemAsset {
+    public static final Creator<DataItemAssetParcelable> CREATOR = new zzda();
+    private final String zzbhb;
+    private final String zzbuz;
 
     public DataItemAssetParcelable(DataItemAsset dataItemAsset) {
-        this.zzIi = (String) zzbo.zzu(dataItemAsset.getId());
-        this.zzBN = (String) zzbo.zzu(dataItemAsset.getDataItemKey());
+        this.zzbuz = (String) zzbq.checkNotNull(dataItemAsset.getId());
+        this.zzbhb = (String) zzbq.checkNotNull(dataItemAsset.getDataItemKey());
     }
 
     DataItemAssetParcelable(String str, String str2) {
-        this.zzIi = str;
-        this.zzBN = str2;
-    }
-
-    public /* bridge */ /* synthetic */ Object freeze() {
-        return this;
+        this.zzbuz = str;
+        this.zzbhb = str2;
     }
 
     public String getDataItemKey() {
-        return this.zzBN;
+        return this.zzbhb;
     }
 
     public String getId() {
-        return this.zzIi;
-    }
-
-    public boolean isDataValid() {
-        return true;
+        return this.zzbuz;
     }
 
     public String toString() {
@@ -46,22 +38,22 @@ public class DataItemAssetParcelable extends zza implements ReflectedParcelable,
         stringBuilder.append("DataItemAssetParcelable[");
         stringBuilder.append("@");
         stringBuilder.append(Integer.toHexString(hashCode()));
-        if (this.zzIi == null) {
+        if (this.zzbuz == null) {
             stringBuilder.append(",noid");
         } else {
             stringBuilder.append(",");
-            stringBuilder.append(this.zzIi);
+            stringBuilder.append(this.zzbuz);
         }
         stringBuilder.append(", key=");
-        stringBuilder.append(this.zzBN);
+        stringBuilder.append(this.zzbhb);
         stringBuilder.append("]");
         return stringBuilder.toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, getId(), false);
-        zzd.zza(parcel, 3, getDataItemKey(), false);
-        zzd.zzI(parcel, zze);
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zza(parcel, 2, getId(), false);
+        zzbfp.zza(parcel, 3, getDataItemKey(), false);
+        zzbfp.zzai(parcel, zze);
     }
 }

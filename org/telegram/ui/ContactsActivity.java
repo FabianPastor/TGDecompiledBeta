@@ -23,7 +23,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ContactsController.Contact;
@@ -103,10 +102,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.contactsDidLoaded);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.encryptedChatCreated);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.closeChats);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.contactsDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.encryptedChatCreated);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.closeChats);
         if (this.arguments != null) {
             this.onlyUsers = getArguments().getBoolean("onlyUsers", false);
             this.destroyAfterSelect = this.arguments.getBoolean("destroyAfterSelect", false);
@@ -122,16 +121,16 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         } else {
             this.needPhonebook = true;
         }
-        ContactsController.getInstance().checkInviteText();
+        ContactsController.getInstance(this.currentAccount).checkInviteText();
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.contactsDidLoaded);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.encryptedChatCreated);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.closeChats);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.contactsDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.encryptedChatCreated);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
         this.delegate = null;
     }
 
@@ -229,8 +228,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                         if (ContactsActivity.this.searchListViewAdapter.isGlobalSearch(position)) {
                             ArrayList<User> users = new ArrayList();
                             users.add(user);
-                            MessagesController.getInstance().putUsers(users, false);
-                            MessagesStorage.getInstance().putUsersAndChats(users, null, false, true);
+                            MessagesController.getInstance(ContactsActivity.this.currentAccount).putUsers(users, false);
+                            MessagesStorage.getInstance(ContactsActivity.this.currentAccount).putUsersAndChats(users, null, false, true);
                         }
                         if (ContactsActivity.this.returnAsResult) {
                             if (ContactsActivity.this.ignoreUsers == null || !ContactsActivity.this.ignoreUsers.containsKey(Integer.valueOf(user.id))) {
@@ -241,14 +240,14 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                         } else if (!ContactsActivity.this.createSecretChat) {
                             args = new Bundle();
                             args.putInt("user_id", user.id);
-                            if (MessagesController.checkCanOpenChat(args, ContactsActivity.this)) {
+                            if (MessagesController.getInstance(ContactsActivity.this.currentAccount).checkCanOpenChat(args, ContactsActivity.this)) {
                                 ContactsActivity.this.presentFragment(new ChatActivity(args), true);
                                 return;
                             }
                             return;
-                        } else if (user.id != UserConfig.getClientUserId()) {
+                        } else if (user.id != UserConfig.getInstance(ContactsActivity.this.currentAccount).getClientUserId()) {
                             ContactsActivity.this.creatingChat = true;
-                            SecretChatHelper.getInstance().startSecretChat(ContactsActivity.this.getParentActivity(), user);
+                            SecretChatHelper.getInstance(ContactsActivity.this.currentAccount).startSecretChat(ContactsActivity.this.getParentActivity(), user);
                             return;
                         } else {
                             return;
@@ -269,11 +268,11 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                 }
                             } else if (ContactsActivity.this.createSecretChat) {
                                 ContactsActivity.this.creatingChat = true;
-                                SecretChatHelper.getInstance().startSecretChat(ContactsActivity.this.getParentActivity(), user);
+                                SecretChatHelper.getInstance(ContactsActivity.this.currentAccount).startSecretChat(ContactsActivity.this.getParentActivity(), user);
                             } else {
                                 args = new Bundle();
                                 args.putInt("user_id", user.id);
-                                if (MessagesController.checkCanOpenChat(args, ContactsActivity.this)) {
+                                if (MessagesController.getInstance(ContactsActivity.this.currentAccount).checkCanOpenChat(args, ContactsActivity.this)) {
                                     ContactsActivity.this.presentFragment(new ChatActivity(args), true);
                                 }
                             }
@@ -292,7 +291,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         try {
                                             Intent intent = new Intent("android.intent.action.VIEW", Uri.fromParts("sms", arg1, null));
-                                            intent.putExtra("sms_body", ContactsController.getInstance().getInviteText(1));
+                                            intent.putExtra("sms_body", ContactsController.getInstance(ContactsActivity.this.currentAccount).getInviteText(1));
                                             ContactsActivity.this.getParentActivity().startActivityForResult(intent, 500);
                                         } catch (Throwable e) {
                                             FileLog.e(e);
@@ -323,7 +322,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                         args.putBoolean("allowBots", false);
                         ContactsActivity.this.presentFragment(new ContactsActivity(args), false);
                     } else if (row == 2 && MessagesController.isFeatureEnabled("broadcast_create", ContactsActivity.this)) {
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                         if (BuildVars.DEBUG_VERSION || !preferences.getBoolean("channel_intro", false)) {
                             ContactsActivity.this.presentFragment(new ChannelIntroActivity());
                             preferences.edit().putBoolean("channel_intro", true).commit();
@@ -402,8 +401,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                 } else if (value > 300) {
                                     editTextFinal.setText("300");
                                     editTextFinal.setSelection(editTextFinal.length());
-                                } else if (!str.equals("" + value)) {
-                                    editTextFinal.setText("" + value);
+                                } else if (!str.equals(TtmlNode.ANONYMOUS_REGION_ID + value)) {
+                                    editTextFinal.setText(TtmlNode.ANONYMOUS_REGION_ID + value);
                                     editTextFinal.setSelection(editTextFinal.length());
                                 }
                             }
@@ -503,7 +502,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     }
                     switch (obj) {
                         case null:
-                            ContactsController.getInstance().forceImportContacts();
+                            ContactsController.getInstance(this.currentAccount).forceImportContacts();
                             break;
                         default:
                             break;
@@ -521,7 +520,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.contactsDidLoaded) {
             if (this.listViewAdapter != null) {
                 this.listViewAdapter.notifyDataSetChanged();
@@ -536,7 +535,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 EncryptedChat encryptedChat = args[0];
                 Bundle args2 = new Bundle();
                 args2.putInt("enc_id", encryptedChat.id);
-                NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                 presentFragment(new ChatActivity(args2), true);
             }
         } else if (id == NotificationCenter.closeChats && !this.creatingChat) {

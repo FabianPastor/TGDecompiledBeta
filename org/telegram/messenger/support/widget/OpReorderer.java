@@ -11,7 +11,7 @@ class OpReorderer {
         void recycleUpdateOp(UpdateOp updateOp);
     }
 
-    public OpReorderer(Callback callback) {
+    OpReorderer(Callback callback) {
         this.mCallback = callback;
     }
 

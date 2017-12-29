@@ -68,7 +68,7 @@ public class DefaultRenderersFactory implements RenderersFactory {
     protected void buildVideoRenderers(Context context, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, long allowedVideoJoiningTimeMs, Handler eventHandler, VideoRendererEventListener eventListener, int extensionRendererMode, ArrayList<Renderer> out) {
         Throwable e;
         ArrayList<Renderer> arrayList = out;
-        arrayList.add(new MediaCodecVideoRenderer(context, MediaCodecSelector.DEFAULT, allowedVideoJoiningTimeMs, drmSessionManager, false, eventHandler, eventListener, 50));
+        arrayList.add(new MediaCodecVideoRenderer(context, MediaCodecSelector.DEFAULT, allowedVideoJoiningTimeMs, drmSessionManager, false, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY));
         if (extensionRendererMode != 0) {
             int extensionRendererIndex;
             int extensionRendererIndex2 = out.size();
@@ -80,7 +80,7 @@ public class DefaultRenderersFactory implements RenderersFactory {
             try {
                 extensionRendererIndex2 = extensionRendererIndex + 1;
                 try {
-                    out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.vp9.LibvpxVideoRenderer").getConstructor(new Class[]{Boolean.TYPE, Long.TYPE, Handler.class, VideoRendererEventListener.class, Integer.TYPE}).newInstance(new Object[]{Boolean.valueOf(true), Long.valueOf(allowedVideoJoiningTimeMs), eventHandler, eventListener, Integer.valueOf(50)}));
+                    out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.vp9.LibvpxVideoRenderer").getConstructor(new Class[]{Boolean.TYPE, Long.TYPE, Handler.class, VideoRendererEventListener.class, Integer.TYPE}).newInstance(new Object[]{Boolean.valueOf(true), Long.valueOf(allowedVideoJoiningTimeMs), eventHandler, eventListener, Integer.valueOf(MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY)}));
                     Log.i(TAG, "Loaded LibvpxVideoRenderer.");
                 } catch (ClassNotFoundException e2) {
                 } catch (Exception e3) {
@@ -98,11 +98,11 @@ public class DefaultRenderersFactory implements RenderersFactory {
     }
 
     protected void buildAudioRenderers(Context context, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, AudioProcessor[] audioProcessors, Handler eventHandler, AudioRendererEventListener eventListener, int extensionRendererMode, ArrayList<Renderer> out) {
-        int extensionRendererIndex;
         Exception e;
         ArrayList<Renderer> arrayList = out;
         arrayList.add(new MediaCodecAudioRenderer(MediaCodecSelector.DEFAULT, drmSessionManager, true, eventHandler, eventListener, AudioCapabilities.getCapabilities(context), audioProcessors));
         if (extensionRendererMode != 0) {
+            int extensionRendererIndex;
             int extensionRendererIndex2 = out.size();
             if (extensionRendererMode == 2) {
                 extensionRendererIndex = extensionRendererIndex2 - 1;

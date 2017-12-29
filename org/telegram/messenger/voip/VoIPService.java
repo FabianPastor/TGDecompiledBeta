@@ -18,13 +18,10 @@ import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.IBinder;
 import android.os.Vibrator;
-import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.view.InputDeviceCompat;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
-import com.google.android.gms.wallet.WalletConstants;
 import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -33,7 +30,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
@@ -45,6 +41,8 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.NotificationsController;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
@@ -109,7 +107,6 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
     private ArrayList<PhoneCall> pendingUpdates = new ArrayList();
     private User user;
 
-    @Nullable
     public IBinder onBind(Intent intent) {
         return null;
     }
@@ -118,9 +115,13 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
         if (sharedInstance != null) {
             FileLog.e("Tried to start the VoIP service when it's already started");
         } else {
+            this.currentAccount = intent.getIntExtra("account", -1);
+            if (this.currentAccount == -1) {
+                throw new IllegalStateException("No account specified when starting VoIP service");
+            }
             int userID = intent.getIntExtra("user_id", 0);
             this.isOutgoing = intent.getBooleanExtra("is_outgoing", false);
-            this.user = MessagesController.getInstance().getUser(Integer.valueOf(userID));
+            this.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(userID));
             if (this.user == null) {
                 FileLog.w("VoIPService: user==null");
                 stopSelf();
@@ -138,27 +139,28 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                         startActivity(new Intent(this, VoIPActivity.class).addFlags(268435456));
                     }
                 } else {
-                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeInCallActivity, new Object[0]);
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeInCallActivity, new Object[0]);
                     this.call = callIShouldHavePutIntoIntent;
                     callIShouldHavePutIntoIntent = null;
                     acknowledgeCallAndStartRinging();
                 }
                 sharedInstance = this;
+                initializeAccountRelatedThings();
             }
         }
         return 2;
     }
 
     protected void updateServerConfig() {
-        final SharedPreferences preferences = getSharedPreferences("mainconfig", 0);
+        final SharedPreferences preferences = MessagesController.getMainSettings(this.currentAccount);
         VoIPServerConfig.setConfig(preferences.getString("voip_server_config", "{}"));
         if (System.currentTimeMillis() - preferences.getLong("voip_server_config_updated", 0) > 86400000) {
-            ConnectionsManager.getInstance().sendRequest(new TL_phone_getCallConfig(), new RequestDelegate() {
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_phone_getCallConfig(), new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                     if (error == null) {
                         String data = ((TL_dataJSON) response).data;
                         VoIPServerConfig.setConfig(data);
-                        preferences.edit().putString("voip_server_config", data).putLong("voip_server_config_updated", BuildConfig.DEBUG ? 0 : System.currentTimeMillis()).apply();
+                        preferences.edit().putString("voip_server_config", data).putLong("voip_server_config_updated", BuildConfig.DEBUG ? 0 : System.currentTimeMillis()).commit();
                     }
                 }
             });
@@ -174,7 +176,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             req.peer = new TL_inputPhoneCall();
             req.peer.access_hash = this.call.access_hash;
             req.peer.id = this.call.id;
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                     FileLog.d("Sent debug logs, response=" + response);
                 }
@@ -207,24 +209,25 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
         dispatchStateChanged(14);
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
-                NotificationCenter.getInstance().postNotificationName(NotificationCenter.didStartedCall, new Object[0]);
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didStartedCall, new Object[0]);
             }
         });
         Utilities.random.nextBytes(new byte[256]);
         TL_messages_getDhConfig req = new TL_messages_getDhConfig();
         req.random_length = 256;
-        req.version = MessagesStorage.lastSecretVersion;
-        this.callReqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+        final MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
+        req.version = messagesStorage.lastSecretVersion;
+        this.callReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
             public void run(TLObject response, TL_error error) {
                 VoIPService.this.callReqId = 0;
                 if (error == null) {
                     messages_DhConfig res = (messages_DhConfig) response;
                     if (response instanceof TL_messages_dhConfig) {
                         if (Utilities.isGoodPrime(res.p, res.g)) {
-                            MessagesStorage.secretPBytes = res.p;
-                            MessagesStorage.secretG = res.g;
-                            MessagesStorage.lastSecretVersion = res.version;
-                            MessagesStorage.getInstance().saveSecretParams(MessagesStorage.lastSecretVersion, MessagesStorage.secretG, MessagesStorage.secretPBytes);
+                            messagesStorage.secretPBytes = res.p;
+                            messagesStorage.secretG = res.g;
+                            messagesStorage.lastSecretVersion = res.version;
+                            messagesStorage.saveSecretParams(messagesStorage.lastSecretVersion, messagesStorage.secretG, messagesStorage.secretPBytes);
                         } else {
                             VoIPService.this.callFailed();
                             return;
@@ -234,14 +237,14 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     for (int a = 0; a < 256; a++) {
                         salt[a] = (byte) (((byte) ((int) (Utilities.random.nextDouble() * 256.0d))) ^ res.random[a]);
                     }
-                    byte[] g_a = BigInteger.valueOf((long) MessagesStorage.secretG).modPow(new BigInteger(1, salt), new BigInteger(1, MessagesStorage.secretPBytes)).toByteArray();
+                    byte[] g_a = BigInteger.valueOf((long) messagesStorage.secretG).modPow(new BigInteger(1, salt), new BigInteger(1, messagesStorage.secretPBytes)).toByteArray();
                     if (g_a.length > 256) {
                         byte[] correctedAuth = new byte[256];
                         System.arraycopy(g_a, 1, correctedAuth, 0, 256);
                         g_a = correctedAuth;
                     }
                     TL_phone_requestCall reqCall = new TL_phone_requestCall();
-                    reqCall.user_id = MessagesController.getInputUser(VoIPService.this.user);
+                    reqCall.user_id = MessagesController.getInstance(VoIPService.this.currentAccount).getInputUser(VoIPService.this.user);
                     reqCall.protocol = new TL_phoneCallProtocol();
                     reqCall.protocol.udp_p2p = true;
                     reqCall.protocol.udp_reflector = true;
@@ -250,7 +253,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     VoIPService.this.g_a = g_a;
                     reqCall.g_a_hash = Utilities.computeSHA256(g_a, 0, g_a.length);
                     reqCall.random_id = Utilities.random.nextInt();
-                    ConnectionsManager.getInstance().sendRequest(reqCall, new RequestDelegate() {
+                    ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(reqCall, new RequestDelegate() {
                         public void run(final TLObject response, final TL_error error) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
@@ -277,7 +280,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                                                 req.peer.access_hash = VoIPService.this.call.access_hash;
                                                 req.peer.id = VoIPService.this.call.id;
                                                 req.reason = new TL_phoneCallDiscardReasonMissed();
-                                                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                                ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(req, new RequestDelegate() {
                                                     public void run(TLObject response, TL_error error) {
                                                         if (error != null) {
                                                             FileLog.e("error on phone.discardCall: " + error);
@@ -293,12 +296,12 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                                                 }, 2);
                                             }
                                         };
-                                        AndroidUtilities.runOnUIThread(VoIPService.this.timeoutRunnable, (long) MessagesController.getInstance().callReceiveTimeout);
+                                        AndroidUtilities.runOnUIThread(VoIPService.this.timeoutRunnable, (long) MessagesController.getInstance(VoIPService.this.currentAccount).callReceiveTimeout);
                                     } else if (error.code == 400 && "PARTICIPANT_VERSION_OUTDATED".equals(error.text)) {
                                         VoIPService.this.callFailed(-1);
                                     } else if (error.code == 403 && "USER_PRIVACY_RESTRICTED".equals(error.text)) {
                                         VoIPService.this.callFailed(-2);
-                                    } else if (error.code == WalletConstants.ERROR_CODE_SPENDING_LIMIT_EXCEEDED) {
+                                    } else if (error.code == 406) {
                                         VoIPService.this.callFailed(-3);
                                     } else {
                                         FileLog.e("Error on phone.requestCall: " + error);
@@ -326,7 +329,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
         req.peer = new TL_inputPhoneCall();
         req.peer.id = this.call.id;
         req.peer.access_hash = this.call.access_hash;
-        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
             public void run(final TLObject response, final TL_error error) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
@@ -349,7 +352,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
         int vibrate;
         FileLog.d("starting ringing for call " + this.call.id);
         dispatchStateChanged(15);
-        SharedPreferences prefs = getSharedPreferences("Notifications", 0);
+        SharedPreferences prefs = MessagesController.getNotificationsSettings(this.currentAccount);
         this.ringtonePlayer = new MediaPlayer();
         this.ringtonePlayer.setOnPreparedListener(new OnPreparedListener() {
             public void onPrepared(MediaPlayer mediaPlayer) {
@@ -412,22 +415,23 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
         dispatchStateChanged(12);
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
-                NotificationCenter.getInstance().postNotificationName(NotificationCenter.didStartedCall, new Object[0]);
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didStartedCall, new Object[0]);
             }
         });
+        final MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
         TL_messages_getDhConfig req = new TL_messages_getDhConfig();
         req.random_length = 256;
-        req.version = MessagesStorage.lastSecretVersion;
-        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+        req.version = messagesStorage.lastSecretVersion;
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
             public void run(TLObject response, TL_error error) {
                 if (error == null) {
                     messages_DhConfig res = (messages_DhConfig) response;
                     if (response instanceof TL_messages_dhConfig) {
                         if (Utilities.isGoodPrime(res.p, res.g)) {
-                            MessagesStorage.secretPBytes = res.p;
-                            MessagesStorage.secretG = res.g;
-                            MessagesStorage.lastSecretVersion = res.version;
-                            MessagesStorage.getInstance().saveSecretParams(MessagesStorage.lastSecretVersion, MessagesStorage.secretG, MessagesStorage.secretPBytes);
+                            messagesStorage.secretPBytes = res.p;
+                            messagesStorage.secretG = res.g;
+                            messagesStorage.lastSecretVersion = res.version;
+                            MessagesStorage.getInstance(VoIPService.this.currentAccount).saveSecretParams(messagesStorage.lastSecretVersion, messagesStorage.secretG, messagesStorage.secretPBytes);
                         } else {
                             FileLog.e("stopping VoIP service, bad prime");
                             VoIPService.this.callFailed();
@@ -439,7 +443,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                         salt[a] = (byte) (((byte) ((int) (Utilities.random.nextDouble() * 256.0d))) ^ res.random[a]);
                     }
                     VoIPService.this.a_or_b = salt;
-                    BigInteger g_b = BigInteger.valueOf((long) MessagesStorage.secretG).modPow(new BigInteger(1, salt), new BigInteger(1, MessagesStorage.secretPBytes));
+                    BigInteger g_b = BigInteger.valueOf((long) messagesStorage.secretG).modPow(new BigInteger(1, salt), new BigInteger(1, messagesStorage.secretPBytes));
                     VoIPService.this.g_a_hash = VoIPService.this.call.g_a_hash;
                     byte[] g_b_bytes = g_b.toByteArray();
                     if (g_b_bytes.length > 256) {
@@ -458,7 +462,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     tL_phoneCallProtocol.udp_p2p = true;
                     req.protocol.min_layer = 65;
                     req.protocol.max_layer = 65;
-                    ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(req, new RequestDelegate() {
                         public void run(final TLObject response, final TL_error error) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
@@ -506,7 +510,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                 }
                 callEnded();
                 if (this.callReqId != 0) {
-                    ConnectionsManager.getInstance().cancelRequest(this.callReqId, false);
+                    ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.callReqId, false);
                     this.callReqId = 0;
                     return;
                 }
@@ -540,7 +544,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     req.reason = new TL_phoneCallDiscardReasonHangup();
                     break;
             }
-            if (ConnectionsManager.getInstance().getConnectionState() == 3) {
+            if (ConnectionsManager.getInstance(this.currentAccount).getConnectionState() == 3) {
                 wasNotConnected = false;
             }
             if (wasNotConnected) {
@@ -565,13 +569,13 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                 };
                 AndroidUtilities.runOnUIThread(stopper, (long) ((int) (VoIPServerConfig.getDouble("hangup_ui_timeout", 5.0d) * 1000.0d)));
             }
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                     if (error != null) {
                         FileLog.e("error on phone.discardCall: " + error);
                     } else {
                         if (response instanceof TL_updates) {
-                            MessagesController.getInstance().processUpdates((TL_updates) response, false);
+                            MessagesController.getInstance(VoIPService.this.currentAccount).processUpdates((TL_updates) response, false);
                         }
                         FileLog.d("phone.discardCall " + response);
                     }
@@ -632,13 +636,13 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     } else if (Arrays.equals(this.g_a_hash, Utilities.computeSHA256(call.g_a_or_b, 0, call.g_a_or_b.length))) {
                         this.g_a = call.g_a_or_b;
                         BigInteger g_a = new BigInteger(1, call.g_a_or_b);
-                        BigInteger p = new BigInteger(1, MessagesStorage.secretPBytes);
+                        BigInteger p = new BigInteger(1, MessagesStorage.getInstance(this.currentAccount).secretPBytes);
                         if (Utilities.isGoodGaAndGb(g_a, p)) {
                             byte[] authKey = g_a.modPow(new BigInteger(1, this.a_or_b), p).toByteArray();
                             byte[] correctedAuth;
                             if (authKey.length > 256) {
                                 correctedAuth = new byte[256];
-                                System.arraycopy(authKey, authKey.length + InputDeviceCompat.SOURCE_ANY, correctedAuth, 0, 256);
+                                System.arraycopy(authKey, authKey.length - 256, correctedAuth, 0, 256);
                                 authKey = correctedAuth;
                             } else if (authKey.length < 256) {
                                 correctedAuth = new byte[256];
@@ -686,7 +690,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                             VoIPService.this.declineIncomingCall(3, null);
                         }
                     };
-                    AndroidUtilities.runOnUIThread(this.timeoutRunnable, (long) MessagesController.getInstance().callRingTimeout);
+                    AndroidUtilities.runOnUIThread(this.timeoutRunnable, (long) MessagesController.getInstance(this.currentAccount).callRingTimeout);
                 }
             } else if (BuildVars.DEBUG_VERSION) {
                 FileLog.w("onCallUpdated called with wrong call id (got " + call.id + ", expected " + this.call.id + ")");
@@ -696,7 +700,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
 
     private void startRatingActivity() {
         try {
-            PendingIntent.getActivity(this, 0, new Intent(this, VoIPFeedbackActivity.class).putExtra("call_id", this.call.id).putExtra("call_access_hash", this.call.access_hash).addFlags(805306368), 0).send();
+            PendingIntent.getActivity(this, 0, new Intent(this, VoIPFeedbackActivity.class).putExtra("call_id", this.call.id).putExtra("call_access_hash", this.call.access_hash).putExtra("account", this.currentAccount).addFlags(805306368), 0).send();
         } catch (Exception x) {
             FileLog.e("Error starting incall activity", x);
         }
@@ -708,14 +712,14 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
 
     private void processAcceptedCall() {
         dispatchStateChanged(12);
-        BigInteger p = new BigInteger(1, MessagesStorage.secretPBytes);
+        BigInteger p = new BigInteger(1, MessagesStorage.getInstance(this.currentAccount).secretPBytes);
         BigInteger i_authKey = new BigInteger(1, this.call.g_b);
         if (Utilities.isGoodGaAndGb(i_authKey, p)) {
             byte[] authKey = i_authKey.modPow(new BigInteger(1, this.a_or_b), p).toByteArray();
             byte[] correctedAuth;
             if (authKey.length > 256) {
                 correctedAuth = new byte[256];
-                System.arraycopy(authKey, authKey.length + InputDeviceCompat.SOURCE_ANY, correctedAuth, 0, 256);
+                System.arraycopy(authKey, authKey.length - 256, correctedAuth, 0, 256);
                 authKey = correctedAuth;
             } else if (authKey.length < 256) {
                 correctedAuth = new byte[256];
@@ -743,7 +747,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             TL_phoneCallProtocol tL_phoneCallProtocol = req.protocol;
             req.protocol.udp_reflector = true;
             tL_phoneCallProtocol.udp_p2p = true;
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, final TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -771,7 +775,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
         try {
             int i;
             FileLog.d("InitCall: keyID=" + this.keyFingerprint);
-            SharedPreferences nprefs = getSharedPreferences("notifications", 0);
+            SharedPreferences nprefs = MessagesController.getNotificationsSettings(this.currentAccount);
             HashSet<String> hashes = new HashSet(nprefs.getStringSet("calls_access_hashes", Collections.EMPTY_SET));
             hashes.add(this.call.id + " " + this.call.access_hash + " " + System.currentTimeMillis());
             while (hashes.size() > 20) {
@@ -799,29 +803,29 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     hashes.remove(oldest);
                 }
             }
-            nprefs.edit().putStringSet("calls_access_hashes", hashes).apply();
-            this.controller.setConfig(((double) MessagesController.getInstance().callPacketTimeout) / 1000.0d, ((double) MessagesController.getInstance().callConnectTimeout) / 1000.0d, getSharedPreferences("mainconfig", 0).getInt("VoipDataSaving", 0), this.call.id);
+            nprefs.edit().putStringSet("calls_access_hashes", hashes).commit();
+            this.controller.setConfig(((double) MessagesController.getInstance(this.currentAccount).callPacketTimeout) / 1000.0d, ((double) MessagesController.getInstance(this.currentAccount).callConnectTimeout) / 1000.0d, MessagesController.getGlobalMainSettings().getInt("VoipDataSaving", 0), this.call.id);
             this.controller.setEncryptionKey(this.authKey, this.isOutgoing);
             TL_phoneConnection[] endpoints = new TL_phoneConnection[(this.call.alternative_connections.size() + 1)];
             endpoints[0] = this.call.connection;
             for (int i2 = 0; i2 < this.call.alternative_connections.size(); i2++) {
                 endpoints[i2 + 1] = (TL_phoneConnection) this.call.alternative_connections.get(i2);
             }
-            VoIPHelper.upgradeP2pSetting();
+            VoIPHelper.upgradeP2pSetting(this.currentAccount);
             boolean allowP2p = true;
-            SharedPreferences sharedPreferences = getSharedPreferences("mainconfig", 0);
+            SharedPreferences mainSettings = MessagesController.getMainSettings(this.currentAccount);
             String str = "calls_p2p_new";
-            if (MessagesController.getInstance().defaultP2pContacts) {
+            if (MessagesController.getInstance(this.currentAccount).defaultP2pContacts) {
                 i = 1;
             } else {
                 i = 0;
             }
-            switch (sharedPreferences.getInt(str, i)) {
+            switch (mainSettings.getInt(str, i)) {
                 case 0:
                     allowP2p = true;
                     break;
                 case 1:
-                    allowP2p = ContactsController.getInstance().contactsDict.get(Integer.valueOf(this.user.id)) != null;
+                    allowP2p = ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.user.id)) != null;
                     break;
                 case 2:
                     allowP2p = false;
@@ -830,7 +834,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             VoIPController voIPController = this.controller;
             boolean z = this.call.protocol.udp_p2p && allowP2p;
             voIPController.setRemoteEndpoints(endpoints, z);
-            SharedPreferences prefs = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+            SharedPreferences prefs = MessagesController.getGlobalMainSettings();
             if (prefs.getBoolean("proxy_enabled", false)) {
                 if (prefs.getBoolean("proxy_enabled_calls", false)) {
                     String server = prefs.getString("proxy_ip", null);
@@ -864,29 +868,34 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
     private void showIncomingNotification() {
         Intent intent = new Intent(this, VoIPActivity.class);
         intent.addFlags(805306368);
-        Builder builder = new Builder(this).setContentTitle(LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding)).setContentText(ContactsController.formatName(this.user.first_name, this.user.last_name)).setSmallIcon(R.drawable.notification).setContentIntent(PendingIntent.getActivity(this, 0, intent, 0));
-        if (VERSION.SDK_INT >= 16) {
-            Intent endIntent = new Intent(this, VoIPActionsReceiver.class);
-            endIntent.setAction(getPackageName() + ".DECLINE_CALL");
-            endIntent.putExtra("call_id", getCallID());
-            CharSequence endTitle = LocaleController.getString("VoipDeclineCall", R.string.VoipDeclineCall);
-            if (VERSION.SDK_INT >= 24) {
-                CharSequence endTitle2 = new SpannableString(endTitle);
-                ((SpannableString) endTitle2).setSpan(new ForegroundColorSpan(-769226), 0, endTitle2.length(), 0);
-                endTitle = endTitle2;
-            }
-            builder.addAction(R.drawable.ic_call_end_white_24dp, endTitle, PendingIntent.getBroadcast(this, 0, endIntent, 134217728));
-            Intent answerIntent = new Intent(this, VoIPActionsReceiver.class);
-            answerIntent.setAction(getPackageName() + ".ANSWER_CALL");
-            answerIntent.putExtra("call_id", getCallID());
-            CharSequence answerTitle = LocaleController.getString("VoipAnswerCall", R.string.VoipAnswerCall);
-            if (VERSION.SDK_INT >= 24) {
-                CharSequence answerTitle2 = new SpannableString(answerTitle);
-                ((SpannableString) answerTitle2).setSpan(new ForegroundColorSpan(-16733696), 0, answerTitle2.length(), 0);
-                answerTitle = answerTitle2;
-            }
-            builder.addAction(R.drawable.ic_call_white_24dp, answerTitle, PendingIntent.getBroadcast(this, 0, answerIntent, 134217728));
-            builder.setPriority(2);
+        Builder builder = new Builder(this).setContentText(LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding)).setContentTitle(ContactsController.formatName(this.user.first_name, this.user.last_name)).setSmallIcon(R.drawable.notification).setContentIntent(PendingIntent.getActivity(this, 0, intent, 0));
+        if (VERSION.SDK_INT >= 26) {
+            builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
+        }
+        Intent endIntent = new Intent(this, VoIPActionsReceiver.class);
+        endIntent.setAction(getPackageName() + ".DECLINE_CALL");
+        endIntent.putExtra("call_id", getCallID());
+        CharSequence endTitle = LocaleController.getString("VoipDeclineCall", R.string.VoipDeclineCall);
+        if (VERSION.SDK_INT >= 24) {
+            CharSequence endTitle2 = new SpannableString(endTitle);
+            ((SpannableString) endTitle2).setSpan(new ForegroundColorSpan(-769226), 0, endTitle2.length(), 0);
+            endTitle = endTitle2;
+        }
+        builder.addAction(R.drawable.ic_call_end_white_24dp, endTitle, PendingIntent.getBroadcast(this, 0, endIntent, 134217728));
+        Intent answerIntent = new Intent(this, VoIPActionsReceiver.class);
+        answerIntent.setAction(getPackageName() + ".ANSWER_CALL");
+        answerIntent.putExtra("call_id", getCallID());
+        CharSequence answerTitle = LocaleController.getString("VoipAnswerCall", R.string.VoipAnswerCall);
+        if (VERSION.SDK_INT >= 24) {
+            CharSequence answerTitle2 = new SpannableString(answerTitle);
+            ((SpannableString) answerTitle2).setSpan(new ForegroundColorSpan(-16733696), 0, answerTitle2.length(), 0);
+            answerTitle = answerTitle2;
+        }
+        builder.addAction(R.drawable.ic_call_white_24dp, answerTitle, PendingIntent.getBroadcast(this, 0, answerIntent, 134217728));
+        builder.setPriority(2);
+        if (UserConfig.getActivatedAccountsCount() > 1) {
+            User self = UserConfig.getInstance(this.currentAccount).getCurrentUser();
+            builder.setSubText(LocaleController.formatString("VoipAnsweringAsAccount", R.string.VoipAnsweringAsAccount, ContactsController.formatName(self.first_name, self.last_name)));
         }
         if (VERSION.SDK_INT >= 17) {
             builder.setShowWhen(false);
@@ -954,7 +963,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             long preferredRelayID = (this.controller == null || !this.controllerStarted) ? 0 : this.controller.getPreferredRelayID();
             req.connection_id = preferredRelayID;
             req.reason = new TL_phoneCallDiscardReasonDisconnect();
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                     if (error != null) {
                         FileLog.e("error on phone.discardCall: " + error);
@@ -1023,7 +1032,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
         return this.g_a;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.appDidLogout) {
             callEnded();
         }

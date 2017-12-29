@@ -1,7 +1,10 @@
 package com.google.android.gms.dynamite;
 
-public final class zzi {
-    public int zzaSU = 0;
-    public int zzaSV = 0;
-    public int zzaSW = 0;
+import android.content.Context;
+import com.google.android.gms.dynamite.DynamiteModule.zzc;
+
+public interface zzi {
+    int zzab(Context context, String str);
+
+    int zzc(Context context, String str, boolean z) throws zzc;
 }

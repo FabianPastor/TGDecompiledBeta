@@ -38,15 +38,15 @@ import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat;
@@ -125,7 +125,7 @@ public class PasscodeView extends FrameLayout {
         }
 
         private int getXForTextView(int pos) {
-            return (((getMeasuredWidth() - (this.stringBuilder.length() * AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE))) / 2) + (AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE) * pos)) - AndroidUtilities.dp(10.0f);
+            return (((getMeasuredWidth() - (this.stringBuilder.length() * AndroidUtilities.dp(30.0f))) / 2) + (AndroidUtilities.dp(30.0f) * pos)) - AndroidUtilities.dp(10.0f);
         }
 
         public void appendCharacter(String c) {
@@ -402,8 +402,8 @@ public class PasscodeView extends FrameLayout {
         this.passwordFrameLayout.addView(imageView);
         layoutParams = (LayoutParams) imageView.getLayoutParams();
         if (AndroidUtilities.density < 1.0f) {
-            layoutParams.width = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
-            layoutParams.height = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
+            layoutParams.width = AndroidUtilities.dp(30.0f);
+            layoutParams.height = AndroidUtilities.dp(30.0f);
         } else {
             layoutParams.width = AndroidUtilities.dp(40.0f);
             layoutParams.height = AndroidUtilities.dp(40.0f);
@@ -469,7 +469,7 @@ public class PasscodeView extends FrameLayout {
             }
 
             public void afterTextChanged(Editable s) {
-                if (PasscodeView.this.passwordEditText.length() == 4 && UserConfig.passcodeType == 0) {
+                if (PasscodeView.this.passwordEditText.length() == 4 && SharedConfig.passcodeType == 0) {
                     PasscodeView.this.processDone(false);
                 }
             }
@@ -496,8 +496,8 @@ public class PasscodeView extends FrameLayout {
         this.checkImage.setBackgroundResource(R.drawable.bar_selector_lock);
         this.passwordFrameLayout.addView(this.checkImage);
         layoutParams = (LayoutParams) this.checkImage.getLayoutParams();
-        layoutParams.width = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_YELLOW);
-        layoutParams.height = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_YELLOW);
+        layoutParams.width = AndroidUtilities.dp(60.0f);
+        layoutParams.height = AndroidUtilities.dp(60.0f);
         layoutParams.bottomMargin = AndroidUtilities.dp(4.0f);
         layoutParams.rightMargin = AndroidUtilities.dp(10.0f);
         layoutParams.gravity = 85;
@@ -599,7 +599,7 @@ public class PasscodeView extends FrameLayout {
             if (a == 10) {
                 frameLayout.setOnLongClickListener(new OnLongClickListener() {
                     public boolean onLongClick(View v) {
-                        PasscodeView.this.passwordEditText.setText("");
+                        PasscodeView.this.passwordEditText.setText(TtmlNode.ANONYMOUS_REGION_ID);
                         PasscodeView.this.passwordEditText2.eraseAllCharacters(true);
                         return true;
                     }
@@ -666,17 +666,17 @@ public class PasscodeView extends FrameLayout {
 
     private void processDone(boolean fingerprint) {
         if (!fingerprint) {
-            String password = "";
-            if (UserConfig.passcodeType == 0) {
+            String password = TtmlNode.ANONYMOUS_REGION_ID;
+            if (SharedConfig.passcodeType == 0) {
                 password = this.passwordEditText2.getString();
-            } else if (UserConfig.passcodeType == 1) {
+            } else if (SharedConfig.passcodeType == 1) {
                 password = this.passwordEditText.getText().toString();
             }
             if (password.length() == 0) {
                 onPasscodeError();
                 return;
-            } else if (!UserConfig.checkPasscode(password)) {
-                this.passwordEditText.setText("");
+            } else if (!SharedConfig.checkPasscode(password)) {
+                this.passwordEditText.setText(TtmlNode.ANONYMOUS_REGION_ID);
                 this.passwordEditText2.eraseAllCharacters(true);
                 onPasscodeError();
                 return;
@@ -696,9 +696,9 @@ public class PasscodeView extends FrameLayout {
             }
         });
         AnimatorSet.start();
-        UserConfig.appLocked = false;
-        UserConfig.saveConfig(false);
-        NotificationCenter.getInstance().postNotificationName(NotificationCenter.didSetPasscode, new Object[0]);
+        SharedConfig.appLocked = false;
+        SharedConfig.saveConfig();
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetPasscode, new Object[0]);
         setOnTouchListener(null);
         if (this.delegate != null) {
             this.delegate.didAcceptedPassword();
@@ -730,7 +730,7 @@ public class PasscodeView extends FrameLayout {
     }
 
     public void onResume() {
-        if (UserConfig.passcodeType == 1) {
+        if (SharedConfig.passcodeType == 1) {
             if (this.passwordEditText != null) {
                 this.passwordEditText.requestFocus();
                 AndroidUtilities.showKeyboard(this.passwordEditText);
@@ -770,7 +770,7 @@ public class PasscodeView extends FrameLayout {
 
     private void checkFingerprint() {
         Activity parentActivity = (Activity) getContext();
-        if (VERSION.SDK_INT >= 23 && parentActivity != null && UserConfig.useFingerprint && !ApplicationLoader.mainInterfacePaused) {
+        if (VERSION.SDK_INT >= 23 && parentActivity != null && SharedConfig.useFingerprint && !ApplicationLoader.mainInterfacePaused) {
             try {
                 if (this.fingerprintDialog != null && this.fingerprintDialog.isShowing()) {
                     return;
@@ -784,7 +784,7 @@ public class PasscodeView extends FrameLayout {
                     View relativeLayout = new RelativeLayout(getContext());
                     relativeLayout.setPadding(AndroidUtilities.dp(24.0f), 0, AndroidUtilities.dp(24.0f), 0);
                     TextView fingerprintTextView = new TextView(getContext());
-                    fingerprintTextView.setId(1000);
+                    fingerprintTextView.setId(id_fingerprint_textview);
                     fingerprintTextView.setTextAppearance(16974344);
                     fingerprintTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                     fingerprintTextView.setText(LocaleController.getString("FingerprintInfo", R.string.FingerprintInfo));
@@ -795,8 +795,8 @@ public class PasscodeView extends FrameLayout {
                     fingerprintTextView.setLayoutParams(layoutParams);
                     this.fingerprintImageView = new ImageView(getContext());
                     this.fingerprintImageView.setImageResource(R.drawable.ic_fp_40px);
-                    this.fingerprintImageView.setId(1001);
-                    relativeLayout.addView(this.fingerprintImageView, LayoutHelper.createRelative(-2.0f, -2.0f, 0, 20, 0, 0, 20, 3, 1000));
+                    this.fingerprintImageView.setId(id_fingerprint_imageview);
+                    relativeLayout.addView(this.fingerprintImageView, LayoutHelper.createRelative(-2.0f, -2.0f, 0, 20, 0, 0, 20, 3, id_fingerprint_textview));
                     this.fingerprintStatusTextView = new TextView(getContext());
                     this.fingerprintStatusTextView.setGravity(16);
                     this.fingerprintStatusTextView.setText(LocaleController.getString("FingerprintHelp", R.string.FingerprintHelp));
@@ -805,9 +805,9 @@ public class PasscodeView extends FrameLayout {
                     relativeLayout.addView(this.fingerprintStatusTextView);
                     layoutParams = LayoutHelper.createRelative(-2, -2);
                     layoutParams.setMarginStart(AndroidUtilities.dp(16.0f));
-                    layoutParams.addRule(8, 1001);
-                    layoutParams.addRule(6, 1001);
-                    layoutParams.addRule(17, 1001);
+                    layoutParams.addRule(8, id_fingerprint_imageview);
+                    layoutParams.addRule(6, id_fingerprint_imageview);
+                    layoutParams.addRule(17, id_fingerprint_imageview);
                     this.fingerprintStatusTextView.setLayoutParams(layoutParams);
                     Builder builder = new Builder(getContext());
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
@@ -867,7 +867,7 @@ public class PasscodeView extends FrameLayout {
 
     public void onShow() {
         Activity parentActivity = (Activity) getContext();
-        if (UserConfig.passcodeType == 1) {
+        if (SharedConfig.passcodeType == 1) {
             if (this.passwordEditText != null) {
                 this.passwordEditText.requestFocus();
                 AndroidUtilities.showKeyboard(this.passwordEditText);
@@ -886,7 +886,7 @@ public class PasscodeView extends FrameLayout {
             if (Theme.isCustomTheme()) {
                 this.backgroundDrawable = Theme.getCachedWallpaper();
                 this.backgroundFrameLayout.setBackgroundColor(-NUM);
-            } else if (ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("selectedBackground", 1000001) == 1000001) {
+            } else if (MessagesController.getGlobalMainSettings().getInt("selectedBackground", 1000001) == 1000001) {
                 this.backgroundFrameLayout.setBackgroundColor(-11436898);
             } else {
                 this.backgroundDrawable = Theme.getCachedWallpaper();
@@ -897,12 +897,12 @@ public class PasscodeView extends FrameLayout {
                 }
             }
             this.passcodeTextView.setText(LocaleController.getString("EnterYourPasscode", R.string.EnterYourPasscode));
-            if (UserConfig.passcodeType == 0) {
+            if (SharedConfig.passcodeType == 0) {
                 this.numbersFrameLayout.setVisibility(0);
                 this.passwordEditText.setVisibility(8);
                 this.passwordEditText2.setVisibility(0);
                 this.checkImage.setVisibility(8);
-            } else if (UserConfig.passcodeType == 1) {
+            } else if (SharedConfig.passcodeType == 1) {
                 this.passwordEditText.setFilters(new InputFilter[0]);
                 this.passwordEditText.setInputType(TsExtractor.TS_STREAM_TYPE_AC3);
                 this.numbersFrameLayout.setVisibility(8);
@@ -914,7 +914,7 @@ public class PasscodeView extends FrameLayout {
             }
             setVisibility(0);
             this.passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-            this.passwordEditText.setText("");
+            this.passwordEditText.setText(TtmlNode.ANONYMOUS_REGION_ID);
             this.passwordEditText2.eraseAllCharacters(false);
             setOnTouchListener(new OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
@@ -969,7 +969,7 @@ public class PasscodeView extends FrameLayout {
             this.numbersFrameLayout.setLayoutParams(layoutParams);
         } else {
             layoutParams = (LayoutParams) this.passwordFrameLayout.getLayoutParams();
-            if (UserConfig.passcodeType == 0) {
+            if (SharedConfig.passcodeType == 0) {
                 i = width / 2;
             } else {
                 i = width;
@@ -1035,7 +1035,7 @@ public class PasscodeView extends FrameLayout {
         int usableViewHeight = (rootView.getHeight() - AndroidUtilities.statusBarHeight) - AndroidUtilities.getViewInset(rootView);
         getWindowVisibleDisplayFrame(this.rect);
         this.keyboardHeight = usableViewHeight - (this.rect.bottom - this.rect.top);
-        if (UserConfig.passcodeType == 1 && (AndroidUtilities.isTablet() || getContext().getResources().getConfiguration().orientation != 2)) {
+        if (SharedConfig.passcodeType == 1 && (AndroidUtilities.isTablet() || getContext().getResources().getConfiguration().orientation != 2)) {
             int t = 0;
             if (this.passwordFrameLayout.getTag() != null) {
                 t = ((Integer) this.passwordFrameLayout.getTag()).intValue();

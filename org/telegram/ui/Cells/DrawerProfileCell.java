@@ -12,7 +12,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.text.TextUtils.TruncateAt;
+import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -30,6 +32,8 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class DrawerProfileCell extends FrameLayout {
+    private boolean accountsShowed;
+    private ImageView arrowView;
     private BackupImageView avatarImageView;
     private Integer currentColor;
     private Rect destRect = new Rect();
@@ -65,6 +69,9 @@ public class DrawerProfileCell extends FrameLayout {
         this.phoneTextView.setSingleLine(true);
         this.phoneTextView.setGravity(3);
         addView(this.phoneTextView, LayoutHelper.createFrame(-1, -2.0f, 83, 16.0f, 0.0f, 76.0f, 9.0f));
+        this.arrowView = new ImageView(context);
+        this.arrowView.setScaleType(ScaleType.CENTER);
+        addView(this.arrowView, LayoutHelper.createFrame(59, 59, 85));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -86,7 +93,7 @@ public class DrawerProfileCell extends FrameLayout {
         if (Theme.hasThemeKey(Theme.key_chats_menuTopShadow)) {
             color = Theme.getColor(Theme.key_chats_menuTopShadow);
         } else {
-            color = Theme.getServiceMessageColor() | -16777216;
+            color = Theme.getServiceMessageColor() | Theme.ACTION_BAR_VIDEO_EDIT_COLOR;
         }
         if (this.currentColor == null || this.currentColor.intValue() != color) {
             this.currentColor = Integer.valueOf(color);
@@ -128,12 +135,28 @@ public class DrawerProfileCell extends FrameLayout {
         }
     }
 
-    public void setUser(User user) {
+    public boolean isAccountsShowed() {
+        return this.accountsShowed;
+    }
+
+    public void setOnArrowClickListener(final OnClickListener onClickListener) {
+        this.arrowView.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                DrawerProfileCell.this.accountsShowed = !DrawerProfileCell.this.accountsShowed;
+                DrawerProfileCell.this.arrowView.setImageResource(DrawerProfileCell.this.accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
+                onClickListener.onClick(DrawerProfileCell.this);
+            }
+        });
+    }
+
+    public void setUser(User user, boolean accounts) {
         if (user != null) {
             TLObject photo = null;
             if (user.photo != null) {
                 photo = user.photo.photo_small;
             }
+            this.accountsShowed = accounts;
+            this.arrowView.setImageResource(this.accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
             this.nameTextView.setText(UserObject.getUserName(user));
             this.phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
             Drawable avatarDrawable = new AvatarDrawable(user);

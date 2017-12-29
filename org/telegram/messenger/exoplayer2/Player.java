@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2;
 
-import android.support.annotation.Nullable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
@@ -49,7 +48,6 @@ public interface Player {
 
     int getCurrentAdIndexInAdGroup();
 
-    @Nullable
     Object getCurrentManifest();
 
     int getCurrentPeriodIndex();
@@ -100,7 +98,7 @@ public interface Player {
 
     void setPlayWhenReady(boolean z);
 
-    void setPlaybackParameters(@Nullable PlaybackParameters playbackParameters);
+    void setPlaybackParameters(PlaybackParameters playbackParameters);
 
     void setRepeatMode(int i);
 

@@ -69,7 +69,7 @@ public class PhotoEditToolCell extends FrameLayout {
                 if (progress > 0) {
                     PhotoEditToolCell.this.valueTextView.setText("+" + progress);
                 } else {
-                    PhotoEditToolCell.this.valueTextView.setText("" + progress);
+                    PhotoEditToolCell.this.valueTextView.setText(TtmlNode.ANONYMOUS_REGION_ID + progress);
                 }
                 if (PhotoEditToolCell.this.valueTextView.getTag() == null) {
                     if (PhotoEditToolCell.this.valueAnimation != null) {
@@ -118,7 +118,7 @@ public class PhotoEditToolCell extends FrameLayout {
         if (value > 0.0f) {
             this.valueTextView.setText("+" + ((int) value));
         } else {
-            this.valueTextView.setText("" + ((int) value));
+            this.valueTextView.setText(TtmlNode.ANONYMOUS_REGION_ID + ((int) value));
         }
         this.valueTextView.setAlpha(0.0f);
         this.nameTextView.setAlpha(1.0f);

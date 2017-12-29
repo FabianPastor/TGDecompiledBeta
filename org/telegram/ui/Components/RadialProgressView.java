@@ -9,7 +9,6 @@ import android.graphics.RectF;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -52,11 +51,11 @@ public class RadialProgressView extends View {
         if (this.risingCircleLength) {
             this.currentCircleLength = (266.0f * this.accelerateInterpolator.getInterpolation(this.currentProgressTime / 500.0f)) + 4.0f;
         } else {
-            this.currentCircleLength = 4.0f - ((1.0f - this.decelerateInterpolator.getInterpolation(this.currentProgressTime / 500.0f)) * BitmapDescriptorFactory.HUE_VIOLET);
+            this.currentCircleLength = 4.0f - ((1.0f - this.decelerateInterpolator.getInterpolation(this.currentProgressTime / 500.0f)) * 270.0f);
         }
         if (this.currentProgressTime == 500.0f) {
             if (this.risingCircleLength) {
-                this.radOffset += BitmapDescriptorFactory.HUE_VIOLET;
+                this.radOffset += 270.0f;
                 this.currentCircleLength = -266.0f;
             }
             this.risingCircleLength = !this.risingCircleLength;

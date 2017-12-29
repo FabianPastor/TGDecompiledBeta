@@ -38,11 +38,11 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -55,9 +55,10 @@ public class BottomSheet extends Dialog {
     private boolean allowNestedScroll = true;
     private boolean applyBottomPadding = true;
     private boolean applyTopPadding = true;
-    protected ColorDrawable backDrawable = new ColorDrawable(-16777216);
+    protected ColorDrawable backDrawable = new ColorDrawable(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
     protected ContainerView container;
     protected ViewGroup containerView;
+    protected int currentAccount = UserConfig.selectedAccount;
     protected AnimatorSet currentSheetAnimation;
     private View customView;
     private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
@@ -894,7 +895,7 @@ public class BottomSheet extends Dialog {
                 animatorSet.playTogether(r2);
                 if (this.useFastDismiss) {
                     int height = this.containerView.getMeasuredHeight();
-                    animatorSet.setDuration((long) Math.max(60, (int) ((BitmapDescriptorFactory.HUE_CYAN * (((float) height) - this.containerView.getTranslationY())) / ((float) height))));
+                    animatorSet.setDuration((long) Math.max(60, (int) ((180.0f * (((float) height) - this.containerView.getTranslationY())) / ((float) height))));
                     this.useFastDismiss = false;
                 } else {
                     animatorSet.setDuration(180);

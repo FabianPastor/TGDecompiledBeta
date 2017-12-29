@@ -1,23 +1,71 @@
 package com.google.android.gms.wearable.internal;
 
-import android.os.RemoteException;
-import com.google.android.gms.common.api.Api.zzb;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Result;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.common.data.DataHolder;
-import com.google.android.gms.wearable.DataItemBuffer;
+import android.util.Log;
+import com.google.android.gms.common.internal.zzbq;
+import com.google.android.gms.wearable.ChannelIOException;
+import java.io.IOException;
+import java.io.OutputStream;
 
-final class zzbl extends zzn<DataItemBuffer> {
-    zzbl(zzbi com_google_android_gms_wearable_internal_zzbi, GoogleApiClient googleApiClient) {
-        super(googleApiClient);
+public final class zzbl extends OutputStream {
+    private volatile zzav zzljm;
+    private final OutputStream zzljo;
+
+    public zzbl(OutputStream outputStream) {
+        this.zzljo = (OutputStream) zzbq.checkNotNull(outputStream);
     }
 
-    protected final /* synthetic */ void zza(zzb com_google_android_gms_common_api_Api_zzb) throws RemoteException {
-        ((zzdn) ((zzfw) com_google_android_gms_common_api_Api_zzb).zzrf()).zza(new zzfm(this));
+    private final IOException zza(IOException iOException) {
+        zzav com_google_android_gms_wearable_internal_zzav = this.zzljm;
+        if (com_google_android_gms_wearable_internal_zzav == null) {
+            return iOException;
+        }
+        if (Log.isLoggable("ChannelOutputStream", 2)) {
+            Log.v("ChannelOutputStream", "Caught IOException, but channel has been closed. Translating to ChannelIOException.", iOException);
+        }
+        return new ChannelIOException("Channel closed unexpectedly before stream was finished", com_google_android_gms_wearable_internal_zzav.zzljc, com_google_android_gms_wearable_internal_zzav.zzljd);
     }
 
-    protected final /* synthetic */ Result zzb(Status status) {
-        return new DataItemBuffer(DataHolder.zzau(status.getStatusCode()));
+    public final void close() throws IOException {
+        try {
+            this.zzljo.close();
+        } catch (IOException e) {
+            throw zza(e);
+        }
+    }
+
+    public final void flush() throws IOException {
+        try {
+            this.zzljo.flush();
+        } catch (IOException e) {
+            throw zza(e);
+        }
+    }
+
+    public final void write(int i) throws IOException {
+        try {
+            this.zzljo.write(i);
+        } catch (IOException e) {
+            throw zza(e);
+        }
+    }
+
+    public final void write(byte[] bArr) throws IOException {
+        try {
+            this.zzljo.write(bArr);
+        } catch (IOException e) {
+            throw zza(e);
+        }
+    }
+
+    public final void write(byte[] bArr, int i, int i2) throws IOException {
+        try {
+            this.zzljo.write(bArr, i, i2);
+        } catch (IOException e) {
+            throw zza(e);
+        }
+    }
+
+    final void zzc(zzav com_google_android_gms_wearable_internal_zzav) {
+        this.zzljm = com_google_android_gms_wearable_internal_zzav;
     }
 }

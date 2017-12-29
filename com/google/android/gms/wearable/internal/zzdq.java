@@ -1,31 +1,33 @@
 package com.google.android.gms.wearable.internal;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.internal.zzbaz;
-import java.lang.ref.WeakReference;
-import java.util.Map;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfn;
 
-final class zzdq<T> extends zzfc<Status> {
-    private WeakReference<Map<T, zzga<T>>> zzbSR;
-    private WeakReference<T> zzbSS;
-
-    zzdq(Map<T, zzga<T>> map, T t, zzbaz<Status> com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status) {
-        super(com_google_android_gms_internal_zzbaz_com_google_android_gms_common_api_Status);
-        this.zzbSR = new WeakReference(map);
-        this.zzbSS = new WeakReference(t);
-    }
-
-    public final void zza(Status status) {
-        Map map = (Map) this.zzbSR.get();
-        Object obj = this.zzbSS.get();
-        if (!(status.getStatus().isSuccess() || map == null || obj == null)) {
-            synchronized (map) {
-                zzga com_google_android_gms_wearable_internal_zzga = (zzga) map.remove(obj);
-                if (com_google_android_gms_wearable_internal_zzga != null) {
-                    com_google_android_gms_wearable_internal_zzga.clear();
-                }
+public final class zzdq implements Creator<zzdr> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        boolean z = false;
+        int zzd = zzbfn.zzd(parcel);
+        int i = 0;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (65535 & readInt) {
+                case 2:
+                    i = zzbfn.zzg(parcel, readInt);
+                    break;
+                case 3:
+                    z = zzbfn.zzc(parcel, readInt);
+                    break;
+                default:
+                    zzbfn.zzb(parcel, readInt);
+                    break;
             }
         }
-        zzR(status);
+        zzbfn.zzaf(parcel, zzd);
+        return new zzdr(i, z);
+    }
+
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new zzdr[i];
     }
 }

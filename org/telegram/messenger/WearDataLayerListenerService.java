@@ -22,6 +22,8 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.User;
 
 public class WearDataLayerListenerService extends WearableListenerService {
+    private int currentAccount = UserConfig.selectedAccount;
+
     public void onCreate() {
         super.onCreate();
         FileLog.d("WearableDataLayer service created");
@@ -43,8 +45,8 @@ public class WearDataLayerListenerService extends WearableListenerService {
                 final NotificationCenterDelegate listener;
                 if ("/getCurrentUser".equals(path)) {
                     out = new DataOutputStream(new BufferedOutputStream(((GetOutputStreamResult) ch.getOutputStream(apiClient).await()).getOutputStream()));
-                    if (UserConfig.isClientActivated()) {
-                        final User user = UserConfig.getCurrentUser();
+                    if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
+                        final User user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
                         out.writeInt(user.id);
                         out.writeUTF(user.first_name);
                         out.writeUTF(user.last_name);
@@ -54,7 +56,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                             barrier = new CyclicBarrier(2);
                             if (!photo.exists()) {
                                 listener = new NotificationCenterDelegate() {
-                                    public void didReceivedNotification(int id, Object... args) {
+                                    public void didReceivedNotification(int id, int account, Object... args) {
                                         if (id == NotificationCenter.FileDidLoaded) {
                                             FileLog.d("file loaded: " + args[0] + " " + args[0].getClass().getName());
                                             if (args[0].equals(photo.getName())) {
@@ -69,8 +71,8 @@ public class WearDataLayerListenerService extends WearableListenerService {
                                 };
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
-                                        NotificationCenter.getInstance().addObserver(listener, NotificationCenter.FileDidLoaded);
-                                        FileLoader.getInstance().loadFile(user.photo.photo_small, null, 0, 1);
+                                        NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).addObserver(listener, NotificationCenter.FileDidLoaded);
+                                        FileLoader.getInstance(WearDataLayerListenerService.this.currentAccount).loadFile(user.photo.photo_small, null, 0, 1);
                                     }
                                 });
                                 try {
@@ -79,7 +81,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                                 }
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
-                                        NotificationCenter.getInstance().removeObserver(listener, NotificationCenter.FileDidLoaded);
+                                        NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).removeObserver(listener, NotificationCenter.FileDidLoaded);
                                     }
                                 });
                             }
@@ -106,11 +108,11 @@ public class WearDataLayerListenerService extends WearableListenerService {
                     FileLog.d("WearableDataLayer channel thread exiting");
                 }
                 if ("/waitForAuthCode".equals(path)) {
-                    ConnectionsManager.getInstance().setAppPaused(false, false);
+                    ConnectionsManager.getInstance(this.currentAccount).setAppPaused(false, false);
                     final String[] code = new String[]{null};
                     barrier = new CyclicBarrier(2);
                     listener = new NotificationCenterDelegate() {
-                        public void didReceivedNotification(int id, Object... args) {
+                        public void didReceivedNotification(int id, int account, Object... args) {
                             if (id == NotificationCenter.didReceivedNewMessages && ((Long) args[0]).longValue() == 777000) {
                                 ArrayList<MessageObject> arr = args[1];
                                 if (arr.size() > 0) {
@@ -131,7 +133,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                     };
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            NotificationCenter.getInstance().addObserver(listener, NotificationCenter.didReceivedNewMessages);
+                            NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).addObserver(listener, NotificationCenter.didReceivedNewMessages);
                         }
                     });
                     try {
@@ -140,18 +142,18 @@ public class WearDataLayerListenerService extends WearableListenerService {
                     }
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            NotificationCenter.getInstance().removeObserver(listener, NotificationCenter.didReceivedNewMessages);
+                            NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).removeObserver(listener, NotificationCenter.didReceivedNewMessages);
                         }
                     });
                     out = new DataOutputStream(((GetOutputStreamResult) ch.getOutputStream(apiClient).await()).getOutputStream());
                     if (code[0] != null) {
                         out.writeUTF(code[0]);
                     } else {
-                        out.writeUTF("");
+                        out.writeUTF(TtmlNode.ANONYMOUS_REGION_ID);
                     }
                     out.flush();
                     out.close();
-                    ConnectionsManager.getInstance().setAppPaused(true, false);
+                    ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
                 }
                 ch.close(apiClient).await();
                 apiClient.disconnect();

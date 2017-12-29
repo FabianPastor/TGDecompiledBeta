@@ -1,15 +1,9 @@
 package com.mp4parser.iso14496.part15;
 
-import com.coremedia.iso.Hex;
 import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
-import com.googlecode.mp4parser.authoring.tracks.CleanInputStream;
 import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.BitReaderBuffer;
 import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.BitWriterBuffer;
-import com.googlecode.mp4parser.h264.model.PictureParameterSet;
-import com.googlecode.mp4parser.h264.model.SeqParameterSet;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -132,56 +126,6 @@ public class AvcDecoderConfigurationRecord {
             }
         }
         return size;
-    }
-
-    public String[] getPPS() {
-        ArrayList<String> l = new ArrayList();
-        for (byte[] pictureParameterSet : this.pictureParameterSets) {
-            String details = "not parsable";
-            try {
-                l.add(PictureParameterSet.read(new ByteArrayInputStream(pictureParameterSet, 1, pictureParameterSet.length - 1)).toString());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return (String[]) l.toArray(new String[l.size()]);
-    }
-
-    public String[] getSPS() {
-        ArrayList<String> l = new ArrayList();
-        for (byte[] sequenceParameterSet : this.sequenceParameterSets) {
-            String detail = "not parsable";
-            try {
-                detail = SeqParameterSet.read(new CleanInputStream(new ByteArrayInputStream(sequenceParameterSet, 1, sequenceParameterSet.length - 1))).toString();
-            } catch (IOException e) {
-            }
-            l.add(detail);
-        }
-        return (String[]) l.toArray(new String[l.size()]);
-    }
-
-    public List<String> getSequenceParameterSetsAsStrings() {
-        List<String> result = new ArrayList(this.sequenceParameterSets.size());
-        for (byte[] parameterSet : this.sequenceParameterSets) {
-            result.add(Hex.encodeHex(parameterSet));
-        }
-        return result;
-    }
-
-    public List<String> getSequenceParameterSetExtsAsStrings() {
-        List<String> result = new ArrayList(this.sequenceParameterSetExts.size());
-        for (byte[] parameterSet : this.sequenceParameterSetExts) {
-            result.add(Hex.encodeHex(parameterSet));
-        }
-        return result;
-    }
-
-    public List<String> getPictureParameterSetsAsStrings() {
-        List<String> result = new ArrayList(this.pictureParameterSets.size());
-        for (byte[] parameterSet : this.pictureParameterSets) {
-            result.add(Hex.encodeHex(parameterSet));
-        }
-        return result;
     }
 
     public String toString() {

@@ -28,13 +28,15 @@ import org.telegram.tgnet.TLRPC.TL_photoCachedSize;
 import org.telegram.tgnet.TLRPC.TL_webDocument;
 
 public class FileLoader {
-    private static volatile FileLoader Instance = null;
+    private static volatile FileLoader[] Instance = new FileLoader[3];
     public static final int MEDIA_DIR_AUDIO = 1;
     public static final int MEDIA_DIR_CACHE = 4;
     public static final int MEDIA_DIR_DOCUMENT = 3;
     public static final int MEDIA_DIR_IMAGE = 0;
     public static final int MEDIA_DIR_VIDEO = 2;
+    private static HashMap<Integer, File> mediaDirs = null;
     private LinkedList<FileLoadOperation> audioLoadOperationQueue = new LinkedList();
+    private int currentAccount;
     private int currentAudioLoadOperationsCount = 0;
     private int currentLoadOperationsCount = 0;
     private int currentPhotoLoadOperationsCount = 0;
@@ -44,7 +46,6 @@ public class FileLoader {
     private volatile DispatchQueue fileLoaderQueue = new DispatchQueue("fileUploadQueue");
     private ConcurrentHashMap<String, FileLoadOperation> loadOperationPaths = new ConcurrentHashMap();
     private LinkedList<FileLoadOperation> loadOperationQueue = new LinkedList();
-    private HashMap<Integer, File> mediaDirs = null;
     private LinkedList<FileLoadOperation> photoLoadOperationQueue = new LinkedList();
     private ConcurrentHashMap<String, FileUploadOperation> uploadOperationPaths = new ConcurrentHashMap();
     private ConcurrentHashMap<String, FileUploadOperation> uploadOperationPathsEnc = new ConcurrentHashMap();
@@ -66,16 +67,17 @@ public class FileLoader {
         void fileUploadProgressChanged(String str, float f, boolean z);
     }
 
-    public static FileLoader getInstance() {
-        FileLoader localInstance = Instance;
+    public static FileLoader getInstance(int num) {
+        FileLoader localInstance = Instance[num];
         if (localInstance == null) {
             synchronized (FileLoader.class) {
                 try {
-                    localInstance = Instance;
+                    localInstance = Instance[num];
                     if (localInstance == null) {
-                        FileLoader localInstance2 = new FileLoader();
+                        FileLoader[] fileLoaderArr = Instance;
+                        FileLoader localInstance2 = new FileLoader(num);
                         try {
-                            Instance = localInstance2;
+                            fileLoaderArr[num] = localInstance2;
                             localInstance = localInstance2;
                         } catch (Throwable th) {
                             Throwable th2 = th;
@@ -92,18 +94,22 @@ public class FileLoader {
         return localInstance;
     }
 
-    public void setMediaDirs(HashMap<Integer, File> dirs) {
-        this.mediaDirs = dirs;
+    public FileLoader(int instance) {
+        this.currentAccount = instance;
     }
 
-    public File checkDirectory(int type) {
-        return (File) this.mediaDirs.get(Integer.valueOf(type));
+    public static void setMediaDirs(HashMap<Integer, File> dirs) {
+        mediaDirs = dirs;
     }
 
-    public File getDirectory(int type) {
-        File dir = (File) this.mediaDirs.get(Integer.valueOf(type));
+    public static File checkDirectory(int type) {
+        return (File) mediaDirs.get(Integer.valueOf(type));
+    }
+
+    public static File getDirectory(int type) {
+        File dir = (File) mediaDirs.get(Integer.valueOf(type));
         if (dir == null && type != 4) {
-            dir = (File) this.mediaDirs.get(Integer.valueOf(4));
+            dir = (File) mediaDirs.get(Integer.valueOf(4));
         }
         try {
             if (!dir.isDirectory()) {
@@ -134,10 +140,11 @@ public class FileLoader {
         });
     }
 
-    public void checkUploadNewDataAvailable(String location, boolean encrypted, long finalSize) {
+    public void checkUploadNewDataAvailable(String location, boolean encrypted, long newAvailableSize, long finalSize) {
         final boolean z = encrypted;
         final String str = location;
-        final long j = finalSize;
+        final long j = newAvailableSize;
+        final long j2 = finalSize;
         this.fileLoaderQueue.postRunnable(new Runnable() {
             public void run() {
                 FileUploadOperation operation;
@@ -147,9 +154,9 @@ public class FileLoader {
                     operation = (FileUploadOperation) FileLoader.this.uploadOperationPaths.get(str);
                 }
                 if (operation != null) {
-                    operation.checkNewDataAvailable(j);
-                } else if (j != 0) {
-                    FileLoader.this.uploadSizes.put(str, Long.valueOf(j));
+                    operation.checkNewDataAvailable(j, j2);
+                } else if (j2 != 0) {
+                    FileLoader.this.uploadSizes.put(str, Long.valueOf(j2));
                 }
             }
         });
@@ -180,7 +187,7 @@ public class FileLoader {
                         esimated = 0;
                         FileLoader.this.uploadSizes.remove(str);
                     }
-                    FileUploadOperation operation = new FileUploadOperation(str, z, esimated, i2);
+                    FileUploadOperation operation = new FileUploadOperation(FileLoader.this.currentAccount, str, z, esimated, i2);
                     if (z) {
                         FileLoader.this.uploadOperationPathsEnc.put(str, operation);
                     } else {
@@ -405,7 +412,7 @@ public class FileLoader {
                 if (fileName != null && !fileName.contains("-2147483648")) {
                     FileLoadOperation operation = (FileLoadOperation) FileLoader.this.loadOperationPaths.get(fileName);
                     if (operation == null) {
-                        File tempDir = FileLoader.this.getDirectory(4);
+                        File tempDir = FileLoader.getDirectory(4);
                         File storeDir = tempDir;
                         int type = 4;
                         if (fileLocation != null) {
@@ -433,11 +440,11 @@ public class FileLoader {
                             }
                         }
                         if (i2 == 0) {
-                            storeDir = FileLoader.this.getDirectory(type);
+                            storeDir = FileLoader.getDirectory(type);
                         } else if (i2 == 2) {
                             operation.setEncryptFile(true);
                         }
-                        operation.setPaths(storeDir, tempDir);
+                        operation.setPaths(FileLoader.this.currentAccount, storeDir, tempDir);
                         final String finalFileName = fileName;
                         final int finalType = type;
                         operation.setDelegate(new FileLoadOperationDelegate() {
@@ -604,7 +611,7 @@ public class FileLoader {
 
     public static String getMessageFileName(Message message) {
         if (message == null) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
         ArrayList<PhotoSize> sizes;
         PhotoSize sizeFull;
@@ -652,14 +659,14 @@ public class FileLoader {
                 }
             }
         }
-        return "";
+        return TtmlNode.ANONYMOUS_REGION_ID;
     }
 
     public static File getPathToMessage(Message message) {
         boolean z = false;
         boolean z2 = true;
         if (message == null) {
-            return new File("");
+            return new File(TtmlNode.ANONYMOUS_REGION_ID);
         }
         ArrayList<PhotoSize> sizes;
         PhotoSize sizeFull;
@@ -706,7 +713,7 @@ public class FileLoader {
         } else if (message.media instanceof TL_messageMediaInvoice) {
             return getPathToAttach(((TL_messageMediaInvoice) message.media).photo, true);
         }
-        return new File("");
+        return new File(TtmlNode.ANONYMOUS_REGION_ID);
     }
 
     public static File getPathToAttach(TLObject attach) {
@@ -720,46 +727,46 @@ public class FileLoader {
     public static File getPathToAttach(TLObject attach, String ext, boolean forceCache) {
         File dir = null;
         if (forceCache) {
-            dir = getInstance().getDirectory(4);
+            dir = getDirectory(4);
         } else if (attach instanceof Document) {
             Document document = (Document) attach;
             if (document.key != null) {
-                dir = getInstance().getDirectory(4);
+                dir = getDirectory(4);
             } else if (MessageObject.isVoiceDocument(document)) {
-                dir = getInstance().getDirectory(1);
+                dir = getDirectory(1);
             } else if (MessageObject.isVideoDocument(document)) {
-                dir = getInstance().getDirectory(2);
+                dir = getDirectory(2);
             } else {
-                dir = getInstance().getDirectory(3);
+                dir = getDirectory(3);
             }
         } else if (attach instanceof PhotoSize) {
             PhotoSize photoSize = (PhotoSize) attach;
             if (photoSize.location == null || photoSize.location.key != null || ((photoSize.location.volume_id == -2147483648L && photoSize.location.local_id < 0) || photoSize.size < 0)) {
-                dir = getInstance().getDirectory(4);
+                dir = getDirectory(4);
             } else {
-                dir = getInstance().getDirectory(0);
+                dir = getDirectory(0);
             }
         } else if (attach instanceof FileLocation) {
             FileLocation fileLocation = (FileLocation) attach;
             if (fileLocation.key != null || (fileLocation.volume_id == -2147483648L && fileLocation.local_id < 0)) {
-                dir = getInstance().getDirectory(4);
+                dir = getDirectory(4);
             } else {
-                dir = getInstance().getDirectory(0);
+                dir = getDirectory(0);
             }
         } else if (attach instanceof TL_webDocument) {
             TL_webDocument document2 = (TL_webDocument) attach;
             if (document2.mime_type.startsWith("image/")) {
-                dir = getInstance().getDirectory(0);
+                dir = getDirectory(0);
             } else if (document2.mime_type.startsWith("audio/")) {
-                dir = getInstance().getDirectory(1);
+                dir = getDirectory(1);
             } else if (document2.mime_type.startsWith("video/")) {
-                dir = getInstance().getDirectory(2);
+                dir = getDirectory(2);
             } else {
-                dir = getInstance().getDirectory(3);
+                dir = getDirectory(3);
             }
         }
         if (dir == null) {
-            return new File("");
+            return new File(TtmlNode.ANONYMOUS_REGION_ID);
         }
         return new File(dir, getAttachFileName(attach, ext));
     }
@@ -801,7 +808,7 @@ public class FileLoader {
         try {
             return name.substring(name.lastIndexOf(46) + 1);
         } catch (Exception e) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
     }
 
@@ -820,9 +827,9 @@ public class FileLoader {
             }
         }
         if (fileName != null) {
-            fileName = fileName.replaceAll("[\u0001-\u001f<>:\"/\\\\|?*]+", "").trim();
+            fileName = fileName.replaceAll("[\u0001-\u001f<>:\"/\\\\|?*]+", TtmlNode.ANONYMOUS_REGION_ID).trim();
         }
-        return fileName != null ? fileName : "";
+        return fileName != null ? fileName : TtmlNode.ANONYMOUS_REGION_ID;
     }
 
     public static String getExtensionByMime(String mime) {
@@ -830,7 +837,7 @@ public class FileLoader {
         if (index != -1) {
             return mime.substring(index + 1);
         }
-        return "";
+        return TtmlNode.ANONYMOUS_REGION_ID;
     }
 
     public static File getInternalCacheDir() {
@@ -848,7 +855,7 @@ public class FileLoader {
             ext = document.mime_type;
         }
         if (ext == null) {
-            ext = "";
+            ext = TtmlNode.ANONYMOUS_REGION_ID;
         }
         return ext.toUpperCase();
     }
@@ -870,7 +877,7 @@ public class FileLoader {
                         docExt = docExt.substring(idx);
                     }
                 }
-                docExt = "";
+                docExt = TtmlNode.ANONYMOUS_REGION_ID;
             }
             if (docExt.length() <= 1) {
                 if (document.mime_type != null) {
@@ -897,11 +904,11 @@ public class FileLoader {
                             docExt = ".ogg";
                             break;
                         default:
-                            docExt = "";
+                            docExt = TtmlNode.ANONYMOUS_REGION_ID;
                             break;
                     }
                 }
-                docExt = "";
+                docExt = TtmlNode.ANONYMOUS_REGION_ID;
             }
             if (document.version == 0) {
                 if (docExt.length() > 1) {
@@ -919,7 +926,7 @@ public class FileLoader {
         } else if (attach instanceof PhotoSize) {
             PhotoSize photo = (PhotoSize) attach;
             if (photo.location == null || (photo.location instanceof TL_fileLocationUnavailable)) {
-                return "";
+                return TtmlNode.ANONYMOUS_REGION_ID;
             }
             r5 = new StringBuilder().append(photo.location.volume_id).append("_").append(photo.location.local_id).append(".");
             if (ext == null) {
@@ -927,10 +934,10 @@ public class FileLoader {
             }
             return r5.append(ext).toString();
         } else if (!(attach instanceof FileLocation)) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         } else {
             if (attach instanceof TL_fileLocationUnavailable) {
-                return "";
+                return TtmlNode.ANONYMOUS_REGION_ID;
             }
             FileLocation location = (FileLocation) attach;
             r5 = new StringBuilder().append(location.volume_id).append("_").append(location.local_id).append(".");

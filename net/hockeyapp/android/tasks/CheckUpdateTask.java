@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Build.VERSION;
 import android.provider.Settings.Secure;
 import android.text.TextUtils;
-import com.google.android.gms.measurement.AppMeasurement.Param;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +19,6 @@ import java.net.URLEncoder;
 import java.util.Locale;
 import net.hockeyapp.android.Constants;
 import net.hockeyapp.android.Tracking;
-import net.hockeyapp.android.UpdateActivity;
 import net.hockeyapp.android.UpdateManagerListener;
 import net.hockeyapp.android.utils.HockeyLog;
 import net.hockeyapp.android.utils.Util;
@@ -29,31 +27,17 @@ import net.hockeyapp.android.utils.VersionHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.telegram.messenger.exoplayer2.C;
 
 public class CheckUpdateTask extends AsyncTask<Void, String, JSONArray> {
-    protected static final String APK = "apk";
-    private static final int MAX_NUMBER_OF_VERSIONS = 25;
-    protected String appIdentifier;
-    private Context context;
+    protected String appIdentifier = null;
+    private Context context = null;
     protected UpdateManagerListener listener;
-    protected Boolean mandatory;
-    protected String urlString;
-    private long usageTime;
-
-    public CheckUpdateTask(WeakReference<? extends Context> weakContext, String urlString) {
-        this(weakContext, urlString, null);
-    }
-
-    public CheckUpdateTask(WeakReference<? extends Context> weakContext, String urlString, String appIdentifier) {
-        this(weakContext, urlString, appIdentifier, null);
-    }
+    protected Boolean mandatory = Boolean.valueOf(false);
+    protected String urlString = null;
+    private long usageTime = 0;
 
     public CheckUpdateTask(WeakReference<? extends Context> weakContext, String urlString, String appIdentifier, UpdateManagerListener listener) {
-        this.urlString = null;
-        this.appIdentifier = null;
-        this.context = null;
-        this.mandatory = Boolean.valueOf(false);
-        this.usageTime = 0;
         this.appIdentifier = appIdentifier;
         this.urlString = urlString;
         this.listener = listener;
@@ -96,7 +80,7 @@ public class CheckUpdateTask extends AsyncTask<Void, String, JSONArray> {
                 HockeyLog.verbose("HockeyUpdate", "Returning cached JSON");
                 return json;
             }
-            URLConnection connection = createConnection(new URL(getURLString(UpdateActivity.EXTRA_JSON)));
+            URLConnection connection = createConnection(new URL(getURLString("json")));
             connection.connect();
             InputStream inputStream = new BufferedInputStream(connection.getInputStream());
             String jsonString = convertStreamToString(inputStream);
@@ -123,7 +107,7 @@ public class CheckUpdateTask extends AsyncTask<Void, String, JSONArray> {
 
     protected URLConnection createConnection(URL url) throws IOException {
         URLConnection connection = url.openConnection();
-        connection.addRequestProperty("User-Agent", Constants.SDK_USER_AGENT);
+        connection.addRequestProperty("User-Agent", "HockeySDK/Android 4.1.3");
         if (VERSION.SDK_INT <= 9) {
             connection.setRequestProperty("connection", "close");
         }
@@ -143,7 +127,7 @@ public class CheckUpdateTask extends AsyncTask<Void, String, JSONArray> {
                     largerVersionCode = false;
                 }
                 boolean newerApkFile;
-                if (entry.getInt("version") == versionCode && VersionHelper.isNewerThanLastUpdateTime(this.context, entry.getLong(Param.TIMESTAMP))) {
+                if (entry.getInt("version") == versionCode && VersionHelper.isNewerThanLastUpdateTime(this.context, entry.getLong("timestamp"))) {
                     newerApkFile = true;
                 } else {
                     newerApkFile = false;
@@ -183,7 +167,7 @@ public class CheckUpdateTask extends AsyncTask<Void, String, JSONArray> {
         if (updateInfo != null) {
             HockeyLog.verbose("HockeyUpdate", "Received Update Info");
             if (this.listener != null) {
-                this.listener.onUpdateAvailable(updateInfo, getURLString(APK));
+                this.listener.onUpdateAvailable(updateInfo, getURLString("apk"));
                 return;
             }
             return;
@@ -222,7 +206,7 @@ public class CheckUpdateTask extends AsyncTask<Void, String, JSONArray> {
         builder.append("&device=" + encodeParam(Constants.PHONE_MODEL));
         builder.append("&oem=" + encodeParam(Constants.PHONE_MANUFACTURER));
         builder.append("&app_version=" + encodeParam(Constants.APP_VERSION));
-        builder.append("&sdk=" + encodeParam(Constants.SDK_NAME));
+        builder.append("&sdk=" + encodeParam("HockeySDK"));
         builder.append("&sdk_version=" + encodeParam("4.1.3"));
         builder.append("&lang=" + encodeParam(Locale.getDefault().getLanguage()));
         builder.append("&usage_time=" + this.usageTime);
@@ -231,9 +215,9 @@ public class CheckUpdateTask extends AsyncTask<Void, String, JSONArray> {
 
     private String encodeParam(String param) {
         try {
-            return URLEncoder.encode(param, "UTF-8");
+            return URLEncoder.encode(param, C.UTF8_NAME);
         } catch (UnsupportedEncodingException e) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
     }
 

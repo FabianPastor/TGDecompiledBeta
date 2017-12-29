@@ -167,8 +167,8 @@ public class CommonGroupsActivity extends BaseFragment {
                     Chat chat = (Chat) CommonGroupsActivity.this.chats.get(position);
                     Bundle args = new Bundle();
                     args.putInt("chat_id", chat.id);
-                    if (MessagesController.checkCanOpenChat(args, CommonGroupsActivity.this)) {
-                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                    if (MessagesController.getInstance(CommonGroupsActivity.this.currentAccount).checkCanOpenChat(args, CommonGroupsActivity.this)) {
+                        NotificationCenter.getInstance(CommonGroupsActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                         CommonGroupsActivity.this.presentFragment(new ChatActivity(args), true);
                     }
                 }
@@ -204,18 +204,18 @@ public class CommonGroupsActivity extends BaseFragment {
                 this.listViewAdapter.notifyDataSetChanged();
             }
             TL_messages_getCommonChats req = new TL_messages_getCommonChats();
-            req.user_id = MessagesController.getInputUser(this.userId);
+            req.user_id = MessagesController.getInstance(this.currentAccount).getInputUser(this.userId);
             if (!(req.user_id instanceof TL_inputUserEmpty)) {
                 req.limit = count;
                 req.max_id = max_id;
-                ConnectionsManager.getInstance().bindRequestToGuid(ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                     public void run(final TLObject response, final TL_error error) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
                                 if (error == null) {
                                     boolean z;
                                     messages_Chats res = response;
-                                    MessagesController.getInstance().putChats(res.chats, false);
+                                    MessagesController.getInstance(CommonGroupsActivity.this.currentAccount).putChats(res.chats, false);
                                     CommonGroupsActivity commonGroupsActivity = CommonGroupsActivity.this;
                                     if (res.chats.isEmpty() || res.chats.size() != count) {
                                         z = true;

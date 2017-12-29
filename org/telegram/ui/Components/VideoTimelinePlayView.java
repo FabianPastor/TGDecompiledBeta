@@ -16,7 +16,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import java.util.ArrayList;
-import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.beta.R;
@@ -71,9 +70,9 @@ public class VideoTimelinePlayView extends View {
         this.paint2 = new Paint();
         this.paint2.setColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
         this.drawableLeft = context.getResources().getDrawable(R.drawable.video_cropleft);
-        this.drawableLeft.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
+        this.drawableLeft.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
         this.drawableRight = context.getResources().getDrawable(R.drawable.video_cropright);
-        this.drawableRight.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
+        this.drawableRight.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
     }
 
     public float getProgress() {
@@ -330,9 +329,8 @@ public class VideoTimelinePlayView extends View {
                 FileLog.e(e);
             }
         }
-        Iterator it = this.frames.iterator();
-        while (it.hasNext()) {
-            Bitmap bitmap = (Bitmap) it.next();
+        for (int a = 0; a < this.frames.size(); a++) {
+            Bitmap bitmap = (Bitmap) this.frames.get(a);
             if (bitmap != null) {
                 bitmap.recycle();
             }
@@ -354,9 +352,8 @@ public class VideoTimelinePlayView extends View {
     }
 
     public void clearFrames() {
-        Iterator it = this.frames.iterator();
-        while (it.hasNext()) {
-            Bitmap bitmap = (Bitmap) it.next();
+        for (int a = 0; a < this.frames.size(); a++) {
+            Bitmap bitmap = (Bitmap) this.frames.get(a);
             if (bitmap != null) {
                 bitmap.recycle();
             }

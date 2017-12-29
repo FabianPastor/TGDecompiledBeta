@@ -112,18 +112,18 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.closeChats);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidReset);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.closeChats);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidReset);
         loadAudio();
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.closeChats);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingDidReset);
-        if (this.playingAudio != null && MediaController.getInstance().isPlayingMessage(this.playingAudio)) {
-            MediaController.getInstance().cleanupPlayer(true, true);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
+        if (this.playingAudio != null && MediaController.getInstance(this.currentAccount).isPlayingMessage(this.playingAudio)) {
+            MediaController.getInstance(this.currentAccount).cleanupPlayer(true, true);
         }
     }
 
@@ -203,7 +203,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         return this.fragmentView;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.closeChats) {
             removeSelfFromStack();
         } else if (id == NotificationCenter.messagePlayingDidReset && this.listViewAdapter != null) {
@@ -246,7 +246,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                         message.id = id;
                         message.to_id = new TL_peerUser();
                         Peer peer = message.to_id;
-                        int clientUserId = UserConfig.getClientUserId();
+                        int clientUserId = UserConfig.getInstance(AudioSelectActivity.this.currentAccount).getClientUserId();
                         message.from_id = clientUserId;
                         peer.user_id = clientUserId;
                         message.date = (int) (System.currentTimeMillis() / 1000);
@@ -280,7 +280,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                         TL_documentAttributeFilename fileName = new TL_documentAttributeFilename();
                         fileName.file_name = file.getName();
                         message.media.document.attributes.add(fileName);
-                        audioEntry.messageObject = new MessageObject(message, null, false);
+                        audioEntry.messageObject = new MessageObject(AudioSelectActivity.this.currentAccount, message, null, false);
                         newAudioEntries.add(audioEntry);
                         id--;
                     }

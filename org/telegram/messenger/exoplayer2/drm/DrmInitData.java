@@ -3,7 +3,6 @@ package org.telegram.messenger.exoplayer2.drm;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
-import android.support.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -12,7 +11,7 @@ import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
-public final class DrmInitData implements Comparator<SchemeData>, Parcelable {
+public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
     public static final Creator<DrmInitData> CREATOR = new Creator<DrmInitData>() {
         public DrmInitData createFromParcel(Parcel in) {
             return new DrmInitData(in);
@@ -40,15 +39,14 @@ public final class DrmInitData implements Comparator<SchemeData>, Parcelable {
         private int hashCode;
         public final String mimeType;
         public final boolean requiresSecureDecryption;
-        @Nullable
         public final String type;
         private final UUID uuid;
 
-        public SchemeData(UUID uuid, @Nullable String type, String mimeType, byte[] data) {
+        public SchemeData(UUID uuid, String type, String mimeType, byte[] data) {
             this(uuid, type, mimeType, data, false);
         }
 
-        public SchemeData(UUID uuid, @Nullable String type, String mimeType, byte[] data, boolean requiresSecureDecryption) {
+        public SchemeData(UUID uuid, String type, String mimeType, byte[] data, boolean requiresSecureDecryption) {
             this.uuid = (UUID) Assertions.checkNotNull(uuid);
             this.type = type;
             this.mimeType = (String) Assertions.checkNotNull(mimeType);
@@ -150,7 +148,7 @@ public final class DrmInitData implements Comparator<SchemeData>, Parcelable {
         return this.schemeDatas[index];
     }
 
-    public DrmInitData copyWithSchemeType(@Nullable String schemeType) {
+    public DrmInitData copyWithSchemeType(String schemeType) {
         boolean isCopyRequired = false;
         for (SchemeData schemeData : this.schemeDatas) {
             if (!Util.areEqual(schemeData.type, schemeType)) {

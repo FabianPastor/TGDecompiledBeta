@@ -1,25 +1,28 @@
 package com.google.android.gms.wearable.internal;
 
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
-import java.util.List;
+import com.google.android.gms.common.data.DataHolder;
+import com.google.android.gms.common.data.zzc;
+import com.google.android.gms.wearable.DataItem;
 
-public final class zzcy extends zza {
-    public static final Creator<zzcy> CREATOR = new zzcz();
-    public final int statusCode;
-    public final List<zzeg> zzbSO;
+public final class zzcy extends zzc {
+    private final int zzhwi;
 
-    public zzcy(int i, List<zzeg> list) {
-        this.statusCode = i;
-        this.zzbSO = list;
+    public zzcy(DataHolder dataHolder, int i, int i2) {
+        super(dataHolder, i);
+        this.zzhwi = i2;
     }
 
-    public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zzc(parcel, 2, this.statusCode);
-        zzd.zzc(parcel, 3, this.zzbSO, false);
-        zzd.zzI(parcel, zze);
+    public final DataItem getDataItem() {
+        return new zzdf(this.zzfqt, this.zzfvx, this.zzhwi);
+    }
+
+    public final int getType() {
+        return getInteger("event_type");
+    }
+
+    public final String toString() {
+        String str = getType() == 1 ? "changed" : getType() == 2 ? "deleted" : "unknown";
+        String valueOf = String.valueOf(getDataItem());
+        return new StringBuilder((String.valueOf(str).length() + 32) + String.valueOf(valueOf).length()).append("DataEventRef{ type=").append(str).append(", dataitem=").append(valueOf).append(" }").toString();
     }
 }

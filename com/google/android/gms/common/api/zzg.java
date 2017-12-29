@@ -1,52 +1,42 @@
 package com.google.android.gms.common.api;
 
+import android.app.PendingIntent;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzb.zza;
-import com.google.android.gms.common.internal.safeparcel.zzc;
+import com.google.android.gms.internal.zzbfn;
 
-public class zzg implements Creator<Scope> {
-    static void zza(Scope scope, Parcel parcel, int i) {
-        int zzaZ = zzc.zzaZ(parcel);
-        zzc.zzc(parcel, 1, scope.zzaiI);
-        zzc.zza(parcel, 2, scope.zzvt(), false);
-        zzc.zzJ(parcel, zzaZ);
-    }
-
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzaL(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzcy(i);
-    }
-
-    public Scope zzaL(Parcel parcel) {
-        int zzaY = zzb.zzaY(parcel);
+public final class zzg implements Creator<Status> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        PendingIntent pendingIntent = null;
+        int zzd = zzbfn.zzd(parcel);
         int i = 0;
+        int i2 = 0;
         String str = null;
-        while (parcel.dataPosition() < zzaY) {
-            int zzaX = zzb.zzaX(parcel);
-            switch (zzb.zzdc(zzaX)) {
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (65535 & readInt) {
                 case 1:
-                    i = zzb.zzg(parcel, zzaX);
+                    i = zzbfn.zzg(parcel, readInt);
                     break;
                 case 2:
-                    str = zzb.zzq(parcel, zzaX);
+                    str = zzbfn.zzq(parcel, readInt);
+                    break;
+                case 3:
+                    pendingIntent = (PendingIntent) zzbfn.zza(parcel, readInt, PendingIntent.CREATOR);
+                    break;
+                case 1000:
+                    i2 = zzbfn.zzg(parcel, readInt);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaX);
+                    zzbfn.zzb(parcel, readInt);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaY) {
-            return new Scope(i, str);
-        }
-        throw new zza("Overread allowed size end=" + zzaY, parcel);
+        zzbfn.zzaf(parcel, zzd);
+        return new Status(i2, i, str, pendingIntent);
     }
 
-    public Scope[] zzcy(int i) {
-        return new Scope[i];
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new Status[i];
     }
 }

@@ -1,10 +1,10 @@
 package com.google.android.gms.dynamic;
 
 final class zzg implements zzi {
-    private /* synthetic */ zza zzaSv;
+    private /* synthetic */ zza zzgwh;
 
     zzg(zza com_google_android_gms_dynamic_zza) {
-        this.zzaSv = com_google_android_gms_dynamic_zza;
+        this.zzgwh = com_google_android_gms_dynamic_zza;
     }
 
     public final int getState() {
@@ -12,6 +12,6 @@ final class zzg implements zzi {
     }
 
     public final void zzb(LifecycleDelegate lifecycleDelegate) {
-        this.zzaSv.zzaSr.onStart();
+        this.zzgwh.zzgwd.onStart();
     }
 }

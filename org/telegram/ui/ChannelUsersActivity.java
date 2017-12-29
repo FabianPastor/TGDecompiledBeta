@@ -108,7 +108,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     private int changeAddRadio2Row;
     private int changeAddSectionRow;
     private int chatId = this.arguments.getInt("chat_id");
-    private Chat currentChat = MessagesController.getInstance().getChat(Integer.valueOf(this.chatId));
+    private Chat currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId));
     private EmptyTextProgressView emptyView;
     private boolean firstEndReached;
     private boolean firstLoaded;
@@ -237,15 +237,15 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     ManageChatUserCell userCell = holder.itemView;
                     userCell.setTag(Integer.valueOf(position));
                     ChannelParticipant participant = getItem(position);
-                    User user = MessagesController.getInstance().getUser(Integer.valueOf(participant.user_id));
+                    User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(participant.user_id));
                     if (user == null) {
                         return;
                     }
                     String role;
                     if (ChannelUsersActivity.this.type == 0) {
                         role = null;
-                        if ((participant instanceof TL_channelParticipantBanned) && MessagesController.getInstance().getUser(Integer.valueOf(participant.kicked_by)) != null) {
-                            role = LocaleController.formatString("UserRestrictionsBy", R.string.UserRestrictionsBy, ContactsController.formatName(MessagesController.getInstance().getUser(Integer.valueOf(participant.kicked_by)).first_name, MessagesController.getInstance().getUser(Integer.valueOf(participant.kicked_by)).last_name));
+                        if ((participant instanceof TL_channelParticipantBanned) && MessagesController.getAccountInstance().getUser(Integer.valueOf(participant.kicked_by)) != null) {
+                            role = LocaleController.formatString("UserRestrictionsBy", R.string.UserRestrictionsBy, ContactsController.formatName(MessagesController.getAccountInstance().getUser(Integer.valueOf(participant.kicked_by)).first_name, MessagesController.getAccountInstance().getUser(Integer.valueOf(participant.kicked_by)).last_name));
                         }
                         userCell.setData(user, null, role);
                         return;
@@ -253,8 +253,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         role = null;
                         if ((participant instanceof TL_channelParticipantCreator) || (participant instanceof TL_channelParticipantSelf)) {
                             role = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
-                        } else if ((participant instanceof TL_channelParticipantAdmin) && MessagesController.getInstance().getUser(Integer.valueOf(participant.promoted_by)) != null) {
-                            role = LocaleController.formatString("EditAdminPromotedBy", R.string.EditAdminPromotedBy, ContactsController.formatName(MessagesController.getInstance().getUser(Integer.valueOf(participant.promoted_by)).first_name, MessagesController.getInstance().getUser(Integer.valueOf(participant.promoted_by)).last_name));
+                        } else if ((participant instanceof TL_channelParticipantAdmin) && MessagesController.getAccountInstance().getUser(Integer.valueOf(participant.promoted_by)) != null) {
+                            role = LocaleController.formatString("EditAdminPromotedBy", R.string.EditAdminPromotedBy, ContactsController.formatName(MessagesController.getAccountInstance().getUser(Integer.valueOf(participant.promoted_by)).first_name, MessagesController.getAccountInstance().getUser(Integer.valueOf(participant.promoted_by)).last_name));
                         }
                         userCell.setData(user, null, role);
                         return;
@@ -293,12 +293,12 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                             privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                             return;
                         }
-                        privacyCell.setText("");
+                        privacyCell.setText(TtmlNode.ANONYMOUS_REGION_ID);
                         privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (ChannelUsersActivity.this.type == 2) {
                         if (ChannelUsersActivity.this.currentChat.megagroup || ChannelUsersActivity.this.selectType != 0) {
-                            privacyCell.setText("");
+                            privacyCell.setText(TtmlNode.ANONYMOUS_REGION_ID);
                         } else {
                             privacyCell.setText(LocaleController.getString("ChannelMembersInfo", R.string.ChannelMembersInfo));
                         }
@@ -349,7 +349,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     }
                 case 6:
                     RadioCell radioCell = holder.itemView;
-                    Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(ChannelUsersActivity.this.chatId));
+                    Chat chat = MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getChat(Integer.valueOf(ChannelUsersActivity.this.chatId));
                     String string;
                     boolean z;
                     if (position == ChannelUsersActivity.this.changeAddRadio1Row) {
@@ -484,7 +484,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     SearchAdapter.this.searchAdapterHelper.queryServerSearch(query, ChannelUsersActivity.this.selectType != 0, false, true, true, ChannelUsersActivity.this.chatId, ChannelUsersActivity.this.type == 0);
                     if (ChannelUsersActivity.this.selectType == 1) {
                         final ArrayList<TL_contact> contactsCopy = new ArrayList();
-                        contactsCopy.addAll(ContactsController.getInstance().contacts);
+                        contactsCopy.addAll(ContactsController.getInstance(ChannelUsersActivity.this.currentAccount).contacts);
                         Utilities.searchQueue.postRunnable(new Runnable() {
                             public void run() {
                                 String search1 = query.trim().toLowerCase();
@@ -504,8 +504,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                 ArrayList<User> resultArray = new ArrayList();
                                 ArrayList<CharSequence> resultArrayNames = new ArrayList();
                                 for (int a = 0; a < contactsCopy.size(); a++) {
-                                    User user = MessagesController.getInstance().getUser(Integer.valueOf(((TL_contact) contactsCopy.get(a)).user_id));
-                                    if (user.id != UserConfig.getClientUserId()) {
+                                    User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(((TL_contact) contactsCopy.get(a)).user_id));
+                                    if (user.id != UserConfig.getInstance(ChannelUsersActivity.this.currentAccount).getClientUserId()) {
                                         String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
                                         String tName = LocaleController.getInstance().getTranslitString(name);
                                         if (name.equals(tName)) {
@@ -680,13 +680,13 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
 
         public void onBindViewHolder(ViewHolder holder, int position) {
             User user;
-            CharSequence username;
             Throwable e;
-            Object username2;
+            Object username;
             String u;
             ManageChatUserCell userCell;
             switch (holder.getItemViewType()) {
                 case 0:
+                    CharSequence username2;
                     CharSequence username3;
                     String foundUserName;
                     CharSequence spannableStringBuilder;
@@ -695,7 +695,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     if (object instanceof User) {
                         user = (User) object;
                     } else {
-                        user = MessagesController.getInstance().getUser(Integer.valueOf(((ChannelParticipant) object).user_id));
+                        user = MessagesController.getAccountInstance().getUser(Integer.valueOf(((ChannelParticipant) object).user_id));
                     }
                     String un = user.username;
                     CharSequence name = null;
@@ -727,13 +727,13 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                 ok = true;
                                 name = (CharSequence) this.searchResultNames.get(position - 1);
                                 if (name != null && un != null && un.length() > 0 && name.toString().startsWith("@" + un)) {
-                                    username3 = name;
+                                    username2 = name;
                                     name = null;
-                                    username = username3;
+                                    username3 = username2;
                                 }
                             } else {
                                 position -= count + 1;
-                                username = null;
+                                username3 = null;
                             }
                             if (!ok) {
                                 count = this.searchAdapterHelper.getGlobalSearch().size();
@@ -748,7 +748,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                             ((SpannableStringBuilder) spannableStringBuilder).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
                                         } catch (Exception e2) {
                                             e = e2;
-                                            username2 = un;
+                                            username = un;
                                             FileLog.e(e);
                                             if (nameSearch != null) {
                                                 u = UserObject.getUserName(user);
@@ -760,13 +760,13 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                             }
                                             userCell = (ManageChatUserCell) holder.itemView;
                                             userCell.setTag(Integer.valueOf(position));
-                                            userCell.setData(user, name, username3);
+                                            userCell.setData(user, name, username2);
                                             return;
                                         }
                                     } catch (Exception e3) {
                                         e = e3;
-                                        username3 = username;
-                                        username2 = un;
+                                        username2 = username3;
+                                        username = un;
                                         FileLog.e(e);
                                         if (nameSearch != null) {
                                             u = UserObject.getUserName(user);
@@ -778,7 +778,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                         }
                                         userCell = (ManageChatUserCell) holder.itemView;
                                         userCell.setTag(Integer.valueOf(position));
-                                        userCell.setData(user, name, username3);
+                                        userCell.setData(user, name, username2);
                                         return;
                                     }
                                     if (nameSearch != null) {
@@ -791,11 +791,11 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                     }
                                     userCell = (ManageChatUserCell) holder.itemView;
                                     userCell.setTag(Integer.valueOf(position));
-                                    userCell.setData(user, name, username3);
+                                    userCell.setData(user, name, username2);
                                     return;
                                 }
                             }
-                            username3 = username;
+                            username2 = username3;
                             if (nameSearch != null) {
                                 u = UserObject.getUserName(user);
                                 name = new SpannableStringBuilder(u);
@@ -806,11 +806,11 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                             }
                             userCell = (ManageChatUserCell) holder.itemView;
                             userCell.setTag(Integer.valueOf(position));
-                            userCell.setData(user, name, username3);
+                            userCell.setData(user, name, username2);
                             return;
                         }
                     }
-                    username = null;
+                    username3 = null;
                     if (ok) {
                         count = this.searchAdapterHelper.getGlobalSearch().size();
                         foundUserName = this.searchAdapterHelper.getLastFoundUsername();
@@ -829,10 +829,10 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         }
                         userCell = (ManageChatUserCell) holder.itemView;
                         userCell.setTag(Integer.valueOf(position));
-                        userCell.setData(user, name, username3);
+                        userCell.setData(user, name, username2);
                         return;
                     }
-                    username3 = username;
+                    username2 = username3;
                     if (nameSearch != null) {
                         u = UserObject.getUserName(user);
                         name = new SpannableStringBuilder(u);
@@ -843,7 +843,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     }
                     userCell = (ManageChatUserCell) holder.itemView;
                     userCell.setTag(Integer.valueOf(position));
-                    userCell.setData(user, name, username3);
+                    userCell.setData(user, name, username2);
                     return;
                 case 1:
                     GraySectionCell sectionCell = holder.itemView;
@@ -895,7 +895,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     }
 
     private void updateRows() {
-        this.currentChat = MessagesController.getInstance().getChat(Integer.valueOf(this.chatId));
+        this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId));
         if (this.currentChat != null) {
             this.changeAddHeaderRow = -1;
             this.changeAddRadio1Row = -1;
@@ -1035,14 +1035,14 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoaded);
         getChannelParticipants(0, Callback.DEFAULT_DRAG_ANIMATION_DURATION);
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoaded);
     }
 
     public View createView(Context context) {
@@ -1160,7 +1160,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         ContactsActivity fragment = new ContactsActivity(args);
                         fragment.setDelegate(new ContactsActivityDelegate() {
                             public void didSelectContact(User user, String param, ContactsActivity activity) {
-                                MessagesController.getInstance().addUserToChat(ChannelUsersActivity.this.chatId, user, null, param != null ? Utilities.parseInt(param).intValue() : 0, null, ChannelUsersActivity.this);
+                                MessagesController.getAccountInstance().addUserToChat(ChannelUsersActivity.this.chatId, user, null, param != null ? Utilities.parseInt(param).intValue() : 0, null, ChannelUsersActivity.this);
                             }
                         });
                         ChannelUsersActivity.this.presentFragment(fragment);
@@ -1168,7 +1168,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 } else if (position == ChannelUsersActivity.this.addNew2Row) {
                     ChannelUsersActivity.this.presentFragment(new GroupInviteActivity(ChannelUsersActivity.this.chatId));
                 } else if (position == ChannelUsersActivity.this.changeAddRadio1Row || position == ChannelUsersActivity.this.changeAddRadio2Row) {
-                    Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(ChannelUsersActivity.this.chatId));
+                    Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(ChannelUsersActivity.this.chatId));
                     if (chat != null) {
                         boolean changed = false;
                         if (position == 1 && !chat.democracy) {
@@ -1179,7 +1179,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                             changed = true;
                         }
                         if (changed) {
-                            MessagesController.getInstance().toogleChannelInvites(ChannelUsersActivity.this.chatId, chat.democracy);
+                            MessagesController.getAccountInstance().toogleChannelInvites(ChannelUsersActivity.this.chatId, chat.democracy);
                             int count = ChannelUsersActivity.this.listView.getChildCount();
                             for (int a = 0; a < count; a++) {
                                 View child = ChannelUsersActivity.this.listView.getChildAt(a);
@@ -1222,7 +1222,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         TLObject object = ChannelUsersActivity.this.searchListViewAdapter.getItem(position);
                         if (object instanceof User) {
                             User user = (User) object;
-                            MessagesController.getInstance().putUser(user, false);
+                            MessagesController.getAccountInstance().putUser(user, false);
                             HashMap access$1200 = ChannelUsersActivity.this.participantsMap;
                             user_id = user.id;
                             participant = (ChannelParticipant) access$1200.get(Integer.valueOf(user_id));
@@ -1303,7 +1303,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         });
                         ChannelUsersActivity.this.presentFragment(fragment2);
                     } else {
-                        MessagesController.getInstance().deleteUserFromChat(ChannelUsersActivity.this.chatId, MessagesController.getInstance().getUser(Integer.valueOf(user_id)), null);
+                        MessagesController.getAccountInstance().deleteUserFromChat(ChannelUsersActivity.this.chatId, MessagesController.getAccountInstance().getUser(Integer.valueOf(user_id)), null);
                         ChannelUsersActivity.this.finishFragment();
                     }
                 }
@@ -1340,14 +1340,14 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         if (participant == null || this.selectType != 0) {
             return false;
         }
-        if (participant.user_id == UserConfig.getClientUserId()) {
+        if (participant.user_id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
             return false;
         }
         if (this.type == 2) {
             boolean allowSetAdmin;
             ArrayList<String> items;
             ArrayList<Integer> actions;
-            final User user = MessagesController.getInstance().getUser(Integer.valueOf(participant.user_id));
+            final User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(participant.user_id));
             if ((participant instanceof TL_channelParticipant) || (participant instanceof TL_channelParticipantBanned)) {
                 allowSetAdmin = true;
             } else {
@@ -1394,7 +1394,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             builder.setItems((CharSequence[]) items.toArray(new CharSequence[actions.size()]), new OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, final int i) {
                     if (((Integer) actions.get(i)).intValue() == 2) {
-                        MessagesController.getInstance().deleteUserFromChat(ChannelUsersActivity.this.chatId, user, null);
+                        MessagesController.getAccountInstance().deleteUserFromChat(ChannelUsersActivity.this.chatId, user, null);
                         for (int a = 0; a < ChannelUsersActivity.this.participants.size(); a++) {
                             if (((ChannelParticipant) ChannelUsersActivity.this.participants.get(a)).user_id == participant.user_id) {
                                 ChannelUsersActivity.this.participants.remove(a);
@@ -1420,7 +1420,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                         }
                                         newPart.admin_rights = rightsAdmin;
                                         newPart.banned_rights = rightsBanned;
-                                        newPart.inviter_id = UserConfig.getClientUserId();
+                                        newPart.inviter_id = UserConfig.getInstance(ChannelUsersActivity.this.currentAccount).getClientUserId();
                                         newPart.user_id = participant.user_id;
                                         newPart.date = participant.date;
                                         ChannelUsersActivity.this.participants.set(a, newPart);
@@ -1471,18 +1471,19 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     ChannelUsersActivity.this.updateRows();
                     ChannelUsersActivity.this.listViewAdapter.notifyDataSetChanged();
                     TL_channels_editBanned req = new TL_channels_editBanned();
-                    req.user_id = MessagesController.getInputUser(participant.user_id);
-                    req.channel = MessagesController.getInputChannel(ChannelUsersActivity.this.chatId);
+                    req.user_id = MessagesController.getAccountInstance().getInputUser(participant.user_id);
+                    req.channel = MessagesController.getAccountInstance().getInputChannel(ChannelUsersActivity.this.chatId);
                     req.banned_rights = new TL_channelBannedRights();
-                    ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    final MessagesController messagesController = MessagesController.getAccountInstance();
+                    ConnectionsManager.getInstance(ChannelUsersActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                         public void run(TLObject response, TL_error error) {
                             if (response != null) {
                                 final Updates updates = (Updates) response;
-                                MessagesController.getInstance().processUpdates(updates, false);
+                                messagesController.processUpdates(updates, false);
                                 if (!updates.chats.isEmpty()) {
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
-                                            MessagesController.getInstance().loadFullChat(((Chat) updates.chats.get(0)).id, 0, true);
+                                            messagesController.loadFullChat(((Chat) updates.chats.get(0)).id, 0, true);
                                         }
                                     }, 1000);
                                 }
@@ -1490,9 +1491,9 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         }
                     });
                 } else if (ChannelUsersActivity.this.type == 1) {
-                    MessagesController.setUserAdminRole(ChannelUsersActivity.this.chatId, MessagesController.getInstance().getUser(Integer.valueOf(participant.user_id)), new TL_channelAdminRights(), ChannelUsersActivity.this.currentChat.megagroup, ChannelUsersActivity.this);
+                    MessagesController.getAccountInstance().setUserAdminRole(ChannelUsersActivity.this.chatId, MessagesController.getAccountInstance().getUser(Integer.valueOf(participant.user_id)), new TL_channelAdminRights(), ChannelUsersActivity.this.currentChat.megagroup, ChannelUsersActivity.this);
                 } else if (ChannelUsersActivity.this.type == 2) {
-                    MessagesController.getInstance().deleteUserFromChat(ChannelUsersActivity.this.chatId, MessagesController.getInstance().getUser(Integer.valueOf(participant.user_id)), null);
+                    MessagesController.getAccountInstance().deleteUserFromChat(ChannelUsersActivity.this.chatId, MessagesController.getAccountInstance().getUser(Integer.valueOf(participant.user_id)), null);
                 }
             }
         });
@@ -1500,7 +1501,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         return true;
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.chatInfoDidLoaded) {
             ChatFull chatFull = args[0];
             boolean byChannelUsers = ((Boolean) args[2]).booleanValue();
@@ -1534,8 +1535,9 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             if (this.listViewAdapter != null) {
                 this.listViewAdapter.notifyDataSetChanged();
             }
+            final MessagesController messagesController = MessagesController.getAccountInstance();
             TL_channels_getParticipants req = new TL_channels_getParticipants();
-            req.channel = MessagesController.getInputChannel(this.chatId);
+            req.channel = messagesController.getInputChannel(this.chatId);
             final boolean byEndReached = this.firstEndReached;
             if (this.type == 0) {
                 if (byEndReached) {
@@ -1548,10 +1550,10 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             } else if (this.type == 2) {
                 req.filter = new TL_channelParticipantsRecent();
             }
-            req.filter.q = "";
+            req.filter.q = TtmlNode.ANONYMOUS_REGION_ID;
             req.offset = offset;
             req.limit = count;
-            ConnectionsManager.getInstance().bindRequestToGuid(ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, final TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -1569,8 +1571,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                             if (error == null) {
                                 int a;
                                 TL_channels_channelParticipants res = response;
-                                MessagesController.getInstance().putUsers(res.users, false);
-                                int selfId = UserConfig.getClientUserId();
+                                messagesController.putUsers(res.users, false);
+                                int selfId = UserConfig.getInstance(ChannelUsersActivity.this.currentAccount).getClientUserId();
                                 if (ChannelUsersActivity.this.selectType != 0) {
                                     for (a = 0; a < res.participants.size(); a++) {
                                         if (((ChannelParticipant) res.participants.get(a)).user_id == selfId) {
@@ -1602,15 +1604,15 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                     if (ChannelUsersActivity.this.type == 0 || ChannelUsersActivity.this.type == 2) {
                                         Collections.sort(res.participants, new Comparator<ChannelParticipant>() {
                                             public int compare(ChannelParticipant lhs, ChannelParticipant rhs) {
-                                                User user1 = MessagesController.getInstance().getUser(Integer.valueOf(rhs.user_id));
-                                                User user2 = MessagesController.getInstance().getUser(Integer.valueOf(lhs.user_id));
+                                                User user1 = messagesController.getUser(Integer.valueOf(rhs.user_id));
+                                                User user2 = messagesController.getUser(Integer.valueOf(lhs.user_id));
                                                 int status1 = 0;
                                                 int status2 = 0;
                                                 if (!(user1 == null || user1.status == null)) {
-                                                    status1 = user1.id == UserConfig.getClientUserId() ? ConnectionsManager.getInstance().getCurrentTime() + 50000 : user1.status.expires;
+                                                    status1 = user1.id == UserConfig.getInstance(ChannelUsersActivity.this.currentAccount).getClientUserId() ? ConnectionsManager.getInstance(ChannelUsersActivity.this.currentAccount).getCurrentTime() + 50000 : user1.status.expires;
                                                 }
                                                 if (!(user2 == null || user2.status == null)) {
-                                                    status2 = user2.id == UserConfig.getClientUserId() ? ConnectionsManager.getInstance().getCurrentTime() + 50000 : user2.status.expires;
+                                                    status2 = user2.id == UserConfig.getInstance(ChannelUsersActivity.this.currentAccount).getClientUserId() ? ConnectionsManager.getInstance(ChannelUsersActivity.this.currentAccount).getCurrentTime() + 50000 : user2.status.expires;
                                                 }
                                                 if (status1 <= 0 || status2 <= 0) {
                                                     if (status1 >= 0 || status2 >= 0) {

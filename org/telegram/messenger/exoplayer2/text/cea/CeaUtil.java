@@ -59,7 +59,7 @@ public final class CeaUtil {
         int userIdentifier = payload.readInt();
         int userDataTypeCode = payload.readUnsignedByte();
         payload.setPosition(startPosition);
-        if (countryCode == COUNTRY_CODE && providerCode == 49 && userIdentifier == USER_ID && userDataTypeCode == 3) {
+        if (countryCode == COUNTRY_CODE && providerCode == PROVIDER_CODE && userIdentifier == USER_ID && userDataTypeCode == 3) {
             return true;
         }
         return false;

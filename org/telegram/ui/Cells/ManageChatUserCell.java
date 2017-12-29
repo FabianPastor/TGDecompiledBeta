@@ -28,6 +28,7 @@ import org.telegram.ui.Components.LayoutHelper;
 public class ManageChatUserCell extends FrameLayout {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private BackupImageView avatarImageView;
+    private int currentAccount = UserConfig.selectedAccount;
     private CharSequence currentName;
     private User currentUser;
     private CharSequence currrntStatus;
@@ -113,8 +114,8 @@ public class ManageChatUserCell extends FrameLayout {
             this.currrntStatus = null;
             this.currentName = null;
             this.currentUser = null;
-            this.nameTextView.setText("");
-            this.statusTextView.setText("");
+            this.nameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
+            this.statusTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
             this.avatarImageView.setImageDrawable(null);
             return;
         }
@@ -198,7 +199,7 @@ public class ManageChatUserCell extends FrameLayout {
                     } else {
                         this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
                     }
-                } else if (this.currentUser.id == UserConfig.getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getInstance().getCurrentTime()) || MessagesController.getInstance().onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
+                } else if (this.currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getAccountInstance().getCurrentTime()) || MessagesController.getAccountInstance().onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
                     this.statusTextView.setTextColor(this.statusOnlineColor);
                     this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
                 } else {

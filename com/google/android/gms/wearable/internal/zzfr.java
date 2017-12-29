@@ -1,24 +1,33 @@
 package com.google.android.gms.wearable.internal;
 
-import com.google.android.gms.internal.zzbaz;
-import com.google.android.gms.wearable.DataApi.DataItemResult;
-import java.util.List;
-import java.util.concurrent.FutureTask;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.internal.zzbfn;
 
-final class zzfr extends zzfc<DataItemResult> {
-    private final List<FutureTask<Boolean>> zzJO;
-
-    zzfr(zzbaz<DataItemResult> com_google_android_gms_internal_zzbaz_com_google_android_gms_wearable_DataApi_DataItemResult, List<FutureTask<Boolean>> list) {
-        super(com_google_android_gms_internal_zzbaz_com_google_android_gms_wearable_DataApi_DataItemResult);
-        this.zzJO = list;
-    }
-
-    public final void zza(zzem com_google_android_gms_wearable_internal_zzem) {
-        zzR(new zzbs(zzev.zzaY(com_google_android_gms_wearable_internal_zzem.statusCode), com_google_android_gms_wearable_internal_zzem.zzbSP));
-        if (com_google_android_gms_wearable_internal_zzem.statusCode != 0) {
-            for (FutureTask cancel : this.zzJO) {
-                cancel.cancel(true);
+public final class zzfr implements Creator<zzfq> {
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int zzd = zzbfn.zzd(parcel);
+        int i = 0;
+        zzay com_google_android_gms_wearable_internal_zzay = null;
+        while (parcel.dataPosition() < zzd) {
+            int readInt = parcel.readInt();
+            switch (65535 & readInt) {
+                case 2:
+                    i = zzbfn.zzg(parcel, readInt);
+                    break;
+                case 3:
+                    com_google_android_gms_wearable_internal_zzay = (zzay) zzbfn.zza(parcel, readInt, zzay.CREATOR);
+                    break;
+                default:
+                    zzbfn.zzb(parcel, readInt);
+                    break;
             }
         }
+        zzbfn.zzaf(parcel, zzd);
+        return new zzfq(i, com_google_android_gms_wearable_internal_zzay);
+    }
+
+    public final /* synthetic */ Object[] newArray(int i) {
+        return new zzfq[i];
     }
 }

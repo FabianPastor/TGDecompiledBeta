@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">ინსტალაცია</string>
     <string name="common_google_play_services_install_text">%1$s ვერ გაეშვება Google Play Services-ის გარეშე, რომელიც აკლია თქვენს მოწყობილობას.</string>
     <string name="common_google_play_services_install_title">Google Play Services-ის ჩამოტვირთვა</string>
+    <string name="common_google_play_services_notification_channel_name">Google Play services-ის ხელმისაწვდომობა</string>
     <string name="common_google_play_services_notification_ticker">Google Play Services-ის შეცდომა</string>
     <string name="common_google_play_services_unknown_issue">%1$s-ს Google Play Services-თან პრობლემა შეექმნა. გთხოვთ, ცადოთ ხელახლა.</string>
     <string name="common_google_play_services_unsupported_text">%1$s ვერ გაეშვება Google Play Services-ის გარეშე, რომლებიც მხარდაუჭერელია თქვენი მოწყობილობის მიერ.</string>
@@ -17,5 +18,7 @@
     <string name="common_open_on_phone">ტელეფონში გახსნა</string>
     <string name="common_signin_button_text">შესვლა</string>
     <string name="common_signin_button_text_long">Google-ით შესვლა</string>
+    <string name="gcm_fallback_notification_channel_label">სხვადასხვა</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Google-ით ყიდვა</string>
 </resources>

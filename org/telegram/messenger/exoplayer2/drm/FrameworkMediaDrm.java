@@ -8,7 +8,6 @@ import android.media.MediaDrm;
 import android.media.NotProvisionedException;
 import android.media.ResourceBusyException;
 import android.media.UnsupportedSchemeException;
-import android.support.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -39,7 +38,7 @@ public final class FrameworkMediaDrm implements ExoMediaDrm<FrameworkMediaCrypto
 
     public void setOnEventListener(final OnEventListener<? super FrameworkMediaCrypto> listener) {
         this.mediaDrm.setOnEventListener(listener == null ? null : new MediaDrm.OnEventListener() {
-            public void onEvent(@NonNull MediaDrm md, byte[] sessionId, int event, int extra, byte[] data) {
+            public void onEvent(MediaDrm md, byte[] sessionId, int event, int extra, byte[] data) {
                 listener.onEvent(FrameworkMediaDrm.this, sessionId, event, extra, data);
             }
         });

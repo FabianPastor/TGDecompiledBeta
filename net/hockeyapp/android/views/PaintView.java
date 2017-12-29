@@ -14,7 +14,6 @@ import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.internal.view.SupportMenu;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 import java.io.IOException;
@@ -24,7 +23,6 @@ import net.hockeyapp.android.utils.HockeyLog;
 
 @SuppressLint({"ViewConstructor"})
 public class PaintView extends ImageView {
-    private static final float TOUCH_TOLERANCE = 4.0f;
     private float mX;
     private float mY;
     private Paint paint = new Paint();
@@ -73,7 +71,7 @@ public class PaintView extends ImageView {
         super(context);
         this.paint.setAntiAlias(true);
         this.paint.setDither(true);
-        this.paint.setColor(SupportMenu.CATEGORY_MASK);
+        this.paint.setColor(-65536);
         this.paint.setStyle(Style.STROKE);
         this.paint.setStrokeJoin(Join.ROUND);
         this.paint.setStrokeCap(Cap.ROUND);
@@ -135,7 +133,7 @@ public class PaintView extends ImageView {
     private void touchMove(float x, float y) {
         float dx = Math.abs(x - this.mX);
         float dy = Math.abs(y - this.mY);
-        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+        if (dx >= 4.0f || dy >= 4.0f) {
             this.path.quadTo(this.mX, this.mY, (this.mX + x) / 2.0f, (this.mY + y) / 2.0f);
             this.mX = x;
             this.mY = y;

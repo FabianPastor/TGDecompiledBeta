@@ -18,20 +18,9 @@ public class FileDataSourceImpl implements DataSource {
         this.filename = f.getName();
     }
 
-    public FileDataSourceImpl(String f) throws FileNotFoundException {
-        File file = new File(f);
-        this.fc = new FileInputStream(file).getChannel();
-        this.filename = file.getName();
-    }
-
     public FileDataSourceImpl(FileChannel fc) {
         this.fc = fc;
         this.filename = "unknown";
-    }
-
-    public FileDataSourceImpl(FileChannel fc, String filename) {
-        this.fc = fc;
-        this.filename = filename;
     }
 
     public int read(ByteBuffer byteBuffer) throws IOException {

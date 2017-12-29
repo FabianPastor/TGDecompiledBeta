@@ -13,8 +13,6 @@ public interface LifecycleDelegate {
 
     void onDestroy();
 
-    void onDestroyView();
-
     void onInflate(Activity activity, Bundle bundle, Bundle bundle2);
 
     void onLowMemory();

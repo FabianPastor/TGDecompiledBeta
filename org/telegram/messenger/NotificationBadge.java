@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import org.telegram.messenger.exoplayer2.C;
 
 public class NotificationBadge {
     private static final List<Class<? extends Badger>> BADGERS = new LinkedList();
@@ -325,7 +326,7 @@ public class NotificationBadge {
         }
 
         private boolean checkObjExists(Object obj) {
-            return obj == null || obj.toString().equals("") || obj.toString().trim().equals("null");
+            return obj == null || obj.toString().equals(TtmlNode.ANONYMOUS_REGION_ID) || obj.toString().trim().equals("null");
         }
 
         private String getSystemProperty(String propName) {
@@ -502,7 +503,7 @@ public class NotificationBadge {
                 Field field = miuiNotification.getClass().getDeclaredField("messageCount");
                 field.setAccessible(true);
                 if (badgeCount == 0) {
-                    obj = "";
+                    obj = TtmlNode.ANONYMOUS_REGION_ID;
                 } else {
                     obj = Integer.valueOf(badgeCount);
                 }
@@ -510,7 +511,7 @@ public class NotificationBadge {
             } catch (Throwable th) {
                 final Intent localIntent = new Intent(INTENT_ACTION);
                 localIntent.putExtra(EXTRA_UPDATE_APP_COMPONENT_NAME, NotificationBadge.componentName.getPackageName() + "/" + NotificationBadge.componentName.getClassName());
-                localIntent.putExtra(EXTRA_UPDATE_APP_MSG_TEXT, String.valueOf(badgeCount == 0 ? "" : Integer.valueOf(badgeCount)));
+                localIntent.putExtra(EXTRA_UPDATE_APP_MSG_TEXT, String.valueOf(badgeCount == 0 ? TtmlNode.ANONYMOUS_REGION_ID : Integer.valueOf(badgeCount)));
                 if (NotificationBadge.canResolveBroadcast(localIntent)) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -589,7 +590,7 @@ public class NotificationBadge {
         componentName = launchIntent.getComponent();
         Intent intent = new Intent("android.intent.action.MAIN");
         intent.addCategory("android.intent.category.HOME");
-        ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(intent, 65536);
+        ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(intent, C.DEFAULT_BUFFER_SEGMENT_SIZE);
         if (resolveInfo == null || resolveInfo.activityInfo.name.toLowerCase().contains("resolver")) {
             return false;
         }

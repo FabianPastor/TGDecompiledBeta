@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.source;
 
-import android.support.annotation.Nullable;
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -35,10 +34,8 @@ public final class SampleQueue implements TrackOutput {
     private AllocationNode writeAllocationNode = this.firstAllocationNode;
 
     private static final class AllocationNode {
-        @Nullable
         public Allocation allocation;
         public final long endPosition;
-        @Nullable
         public AllocationNode next;
         public final long startPosition;
         public boolean wasInitialized;

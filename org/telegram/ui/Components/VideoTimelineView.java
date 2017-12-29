@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.view.MotionEvent;
 import android.view.View;
 import java.util.ArrayList;
-import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.ui.ActionBar.Theme;
@@ -286,9 +285,8 @@ public class VideoTimelineView extends View {
                 FileLog.e(e);
             }
         }
-        Iterator it = this.frames.iterator();
-        while (it.hasNext()) {
-            Bitmap bitmap = (Bitmap) it.next();
+        for (int a = 0; a < this.frames.size(); a++) {
+            Bitmap bitmap = (Bitmap) this.frames.get(a);
             if (bitmap != null) {
                 bitmap.recycle();
             }
@@ -301,9 +299,8 @@ public class VideoTimelineView extends View {
     }
 
     public void clearFrames() {
-        Iterator it = this.frames.iterator();
-        while (it.hasNext()) {
-            Bitmap bitmap = (Bitmap) it.next();
+        for (int a = 0; a < this.frames.size(); a++) {
+            Bitmap bitmap = (Bitmap) this.frames.get(a);
             if (bitmap != null) {
                 bitmap.recycle();
             }

@@ -2,8 +2,7 @@ package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.internal.zzbfn;
 import java.util.List;
 
 public final class zzc implements Creator<CircleOptions> {
@@ -11,7 +10,7 @@ public final class zzc implements Creator<CircleOptions> {
         List list = null;
         float f = 0.0f;
         boolean z = false;
-        int zzd = zzb.zzd(parcel);
+        int zzd = zzbfn.zzd(parcel);
         double d = 0.0d;
         boolean z2 = false;
         int i = 0;
@@ -20,40 +19,40 @@ public final class zzc implements Creator<CircleOptions> {
         LatLng latLng = null;
         while (parcel.dataPosition() < zzd) {
             int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
+            switch (65535 & readInt) {
                 case 2:
-                    latLng = (LatLng) zzb.zza(parcel, readInt, LatLng.CREATOR);
+                    latLng = (LatLng) zzbfn.zza(parcel, readInt, LatLng.CREATOR);
                     break;
                 case 3:
-                    d = zzb.zzn(parcel, readInt);
+                    d = zzbfn.zzn(parcel, readInt);
                     break;
                 case 4:
-                    f2 = zzb.zzl(parcel, readInt);
+                    f2 = zzbfn.zzl(parcel, readInt);
                     break;
                 case 5:
-                    i2 = zzb.zzg(parcel, readInt);
+                    i2 = zzbfn.zzg(parcel, readInt);
                     break;
                 case 6:
-                    i = zzb.zzg(parcel, readInt);
+                    i = zzbfn.zzg(parcel, readInt);
                     break;
                 case 7:
-                    f = zzb.zzl(parcel, readInt);
+                    f = zzbfn.zzl(parcel, readInt);
                     break;
                 case 8:
-                    z2 = zzb.zzc(parcel, readInt);
+                    z2 = zzbfn.zzc(parcel, readInt);
                     break;
                 case 9:
-                    z = zzb.zzc(parcel, readInt);
+                    z = zzbfn.zzc(parcel, readInt);
                     break;
                 case 10:
-                    list = zzb.zzc(parcel, readInt, PatternItem.CREATOR);
+                    list = zzbfn.zzc(parcel, readInt, PatternItem.CREATOR);
                     break;
                 default:
-                    zzb.zzb(parcel, readInt);
+                    zzbfn.zzb(parcel, readInt);
                     break;
             }
         }
-        zzb.zzF(parcel, zzd);
+        zzbfn.zzaf(parcel, zzd);
         return new CircleOptions(latLng, d, f2, i2, i, f, z2, z, list);
     }
 

@@ -9,7 +9,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.view.View.MeasureSpec;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -37,6 +36,7 @@ public class ProfileSearchCell extends BaseCell {
     private int countLeft;
     private int countTop = AndroidUtilities.dp(25.0f);
     private int countWidth;
+    private int currentAccount = UserConfig.selectedAccount;
     private CharSequence currentName;
     private long dialog_id;
     private boolean drawCheck;
@@ -141,7 +141,7 @@ public class ProfileSearchCell extends BaseCell {
                 this.dialog_id = (long) (-this.chat.id);
                 if (!ChatObject.isChannel(this.chat) || this.chat.megagroup) {
                     this.drawNameGroup = true;
-                    this.nameLockTop = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
+                    this.nameLockTop = AndroidUtilities.dp(30.0f);
                 } else {
                     this.drawNameBroadcast = true;
                     this.nameLockTop = AndroidUtilities.dp(28.5f);
@@ -187,7 +187,7 @@ public class ProfileSearchCell extends BaseCell {
         if (this.currentName != null) {
             nameString = this.currentName;
         } else {
-            String nameString2 = "";
+            String nameString2 = TtmlNode.ANONYMOUS_REGION_ID;
             if (this.chat != null) {
                 nameString2 = this.chat.title;
             } else if (this.user != null) {
@@ -226,7 +226,7 @@ public class ProfileSearchCell extends BaseCell {
         int nameWidth2 = nameWidth - this.paddingRight;
         onlineWidth -= this.paddingRight;
         if (this.drawCount) {
-            TL_dialog dialog = (TL_dialog) MessagesController.getInstance().dialogs_dict.get(Long.valueOf(this.dialog_id));
+            TL_dialog dialog = (TL_dialog) MessagesController.getAccountInstance().dialogs_dict.get(Long.valueOf(this.dialog_id));
             if (dialog == null || dialog.unread_count == 0) {
                 this.lastUnreadCount = 0;
                 this.countLayout = null;
@@ -257,7 +257,7 @@ public class ProfileSearchCell extends BaseCell {
             } else {
                 this.onlineLeft = AndroidUtilities.dp((float) AndroidUtilities.leftBaseline);
             }
-            CharSequence onlineString = "";
+            CharSequence onlineString = TtmlNode.ANONYMOUS_REGION_ID;
             TextPaint currentOnlinePaint = Theme.dialogs_offlinePaint;
             if (this.subLabel != null) {
                 onlineString = this.subLabel;
@@ -266,7 +266,7 @@ public class ProfileSearchCell extends BaseCell {
                     onlineString = LocaleController.getString("Bot", R.string.Bot);
                 } else {
                     onlineString = LocaleController.formatUserStatus(this.user);
-                    if (this.user != null && (this.user.id == UserConfig.getClientUserId() || (this.user.status != null && this.user.status.expires > ConnectionsManager.getInstance().getCurrentTime()))) {
+                    if (this.user != null && (this.user.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || (this.user.status != null && this.user.status.expires > ConnectionsManager.getAccountInstance().getCurrentTime()))) {
                         currentOnlinePaint = Theme.dialogs_onlinePaint;
                         onlineString = LocaleController.getString("Online", R.string.Online);
                     }
@@ -369,7 +369,7 @@ public class ProfileSearchCell extends BaseCell {
                 }
             }
             if (!(continueUpdate || !this.drawCount || (mask & 256) == 0)) {
-                TL_dialog dialog = (TL_dialog) MessagesController.getInstance().dialogs_dict.get(Long.valueOf(this.dialog_id));
+                TL_dialog dialog = (TL_dialog) MessagesController.getAccountInstance().dialogs_dict.get(Long.valueOf(this.dialog_id));
                 if (!(dialog == null || dialog.unread_count == this.lastUnreadCount)) {
                     continueUpdate = true;
                 }
@@ -409,16 +409,16 @@ public class ProfileSearchCell extends BaseCell {
                 }
             }
             if (this.drawNameLock) {
-                setDrawableBounds(Theme.dialogs_lockDrawable, this.nameLockLeft, this.nameLockTop);
+                BaseCell.setDrawableBounds(Theme.dialogs_lockDrawable, this.nameLockLeft, this.nameLockTop);
                 Theme.dialogs_lockDrawable.draw(canvas);
             } else if (this.drawNameGroup) {
-                setDrawableBounds(Theme.dialogs_groupDrawable, this.nameLockLeft, this.nameLockTop);
+                BaseCell.setDrawableBounds(Theme.dialogs_groupDrawable, this.nameLockLeft, this.nameLockTop);
                 Theme.dialogs_groupDrawable.draw(canvas);
             } else if (this.drawNameBroadcast) {
-                setDrawableBounds(Theme.dialogs_broadcastDrawable, this.nameLockLeft, this.nameLockTop);
+                BaseCell.setDrawableBounds(Theme.dialogs_broadcastDrawable, this.nameLockLeft, this.nameLockTop);
                 Theme.dialogs_broadcastDrawable.draw(canvas);
             } else if (this.drawNameBot) {
-                setDrawableBounds(Theme.dialogs_botDrawable, this.nameLockLeft, this.nameLockTop);
+                BaseCell.setDrawableBounds(Theme.dialogs_botDrawable, this.nameLockLeft, this.nameLockTop);
                 Theme.dialogs_botDrawable.draw(canvas);
             }
             if (this.nameLayout != null) {
@@ -432,8 +432,8 @@ public class ProfileSearchCell extends BaseCell {
                     } else {
                         x = (this.nameLeft + ((int) this.nameLayout.getLineWidth(0))) + AndroidUtilities.dp(4.0f);
                     }
-                    setDrawableBounds(Theme.dialogs_verifiedDrawable, x, this.nameLockTop);
-                    setDrawableBounds(Theme.dialogs_verifiedCheckDrawable, x, this.nameLockTop);
+                    BaseCell.setDrawableBounds(Theme.dialogs_verifiedDrawable, x, this.nameLockTop);
+                    BaseCell.setDrawableBounds(Theme.dialogs_verifiedCheckDrawable, x, this.nameLockTop);
                     Theme.dialogs_verifiedDrawable.draw(canvas);
                     Theme.dialogs_verifiedCheckDrawable.draw(canvas);
                 }
@@ -447,7 +447,7 @@ public class ProfileSearchCell extends BaseCell {
             if (this.countLayout != null) {
                 x = this.countLeft - AndroidUtilities.dp(5.5f);
                 this.rect.set((float) x, (float) this.countTop, (float) ((this.countWidth + x) + AndroidUtilities.dp(11.0f)), (float) (this.countTop + AndroidUtilities.dp(23.0f)));
-                canvas.drawRoundRect(this.rect, 11.5f * AndroidUtilities.density, 11.5f * AndroidUtilities.density, MessagesController.getInstance().isDialogMuted(this.dialog_id) ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint);
+                canvas.drawRoundRect(this.rect, 11.5f * AndroidUtilities.density, 11.5f * AndroidUtilities.density, MessagesController.getAccountInstance().isDialogMuted(this.dialog_id) ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint);
                 canvas.save();
                 canvas.translate((float) this.countLeft, (float) (this.countTop + AndroidUtilities.dp(4.0f)));
                 this.countLayout.draw(canvas);

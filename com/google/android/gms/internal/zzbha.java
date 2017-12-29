@@ -1,22 +1,17 @@
 package com.google.android.gms.internal;
 
-import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import java.util.concurrent.Executor;
 
-public final class zzbha {
-    private static zzbha zzaKk = new zzbha();
-    private zzbgz zzaKj = null;
+public final class zzbha implements Executor {
+    private final Handler mHandler;
 
-    private final synchronized zzbgz zzaO(Context context) {
-        if (this.zzaKj == null) {
-            if (context.getApplicationContext() != null) {
-                context = context.getApplicationContext();
-            }
-            this.zzaKj = new zzbgz(context);
-        }
-        return this.zzaKj;
+    public zzbha(Looper looper) {
+        this.mHandler = new Handler(looper);
     }
 
-    public static zzbgz zzaP(Context context) {
-        return zzaKk.zzaO(context);
+    public final void execute(Runnable runnable) {
+        this.mHandler.post(runnable);
     }
 }

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
@@ -32,7 +31,7 @@ public class LocationCell extends FrameLayout {
         super(context);
         this.imageView = new BackupImageView(context);
         this.imageView.setBackgroundResource(R.drawable.round_grey);
-        this.imageView.setSize(AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE));
+        this.imageView.setSize(AndroidUtilities.dp(30.0f), AndroidUtilities.dp(30.0f));
         this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Mode.MULTIPLY));
         addView(this.imageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 17.0f, 8.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
         this.nameTextView = new TextView(context);
@@ -78,7 +77,7 @@ public class LocationCell extends FrameLayout {
         if (LocaleController.isRTL) {
             i3 = 72;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i2, f, BitmapDescriptorFactory.HUE_ORANGE, (float) i3, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i2, f, 30.0f, (float) i3, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

@@ -3,19 +3,19 @@ package com.google.android.gms.tasks;
 import java.util.concurrent.Callable;
 
 final class zzo implements Runnable {
-    private /* synthetic */ Callable zzZo;
-    private /* synthetic */ zzn zzbMk;
+    private /* synthetic */ Callable val$callable;
+    private /* synthetic */ zzn zzkur;
 
     zzo(zzn com_google_android_gms_tasks_zzn, Callable callable) {
-        this.zzbMk = com_google_android_gms_tasks_zzn;
-        this.zzZo = callable;
+        this.zzkur = com_google_android_gms_tasks_zzn;
+        this.val$callable = callable;
     }
 
     public final void run() {
         try {
-            this.zzbMk.setResult(this.zzZo.call());
+            this.zzkur.setResult(this.val$callable.call());
         } catch (Exception e) {
-            this.zzbMk.setException(e);
+            this.zzkur.setException(e);
         }
     }
 }

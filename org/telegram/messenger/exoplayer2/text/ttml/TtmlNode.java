@@ -66,7 +66,7 @@ final class TtmlNode {
     public final String text;
 
     public static TtmlNode buildTextNode(String text) {
-        return new TtmlNode(null, TtmlRenderUtil.applyTextElementSpacePolicy(text), C.TIME_UNSET, C.TIME_UNSET, null, null, "");
+        return new TtmlNode(null, TtmlRenderUtil.applyTextElementSpacePolicy(text), C.TIME_UNSET, C.TIME_UNSET, null, null, ANONYMOUS_REGION_ID);
     }
 
     public static TtmlNode buildNode(String tag, long startTimeUs, long endTimeUs, TtmlStyle style, String[] styleIds, String regionId) {
@@ -161,7 +161,7 @@ final class TtmlNode {
         this.nodeStartsByRegion.clear();
         this.nodeEndsByRegion.clear();
         String resolvedRegionId = this.regionId;
-        if ("".equals(resolvedRegionId)) {
+        if (ANONYMOUS_REGION_ID.equals(resolvedRegionId)) {
             resolvedRegionId = inheritedRegion;
         }
         if (this.isTextNode && descendsPNode) {

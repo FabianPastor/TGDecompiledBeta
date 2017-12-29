@@ -226,7 +226,7 @@ public class SimpleTextView extends View implements Callback {
 
     public CharSequence getText() {
         if (this.text == null) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
         return this.text;
     }

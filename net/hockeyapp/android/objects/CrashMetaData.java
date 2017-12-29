@@ -9,24 +9,12 @@ public class CrashMetaData {
         return this.mUserDescription;
     }
 
-    public void setUserDescription(String userDescription) {
-        this.mUserDescription = userDescription;
-    }
-
     public String getUserEmail() {
         return this.mUserEmail;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.mUserEmail = userEmail;
-    }
-
     public String getUserID() {
         return this.mUserID;
-    }
-
-    public void setUserID(String userID) {
-        this.mUserID = userID;
     }
 
     public String toString() {

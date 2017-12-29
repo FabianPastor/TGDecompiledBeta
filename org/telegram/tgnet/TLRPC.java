@@ -1,14 +1,16 @@
 package org.telegram.tgnet;
 
-import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public class TLRPC {
     public static final int CHAT_FLAG_IS_PUBLIC = 64;
-    public static final int LAYER = 73;
+    public static final int LAYER = 74;
     public static final int MESSAGE_FLAG_EDITED = 32768;
     public static final int MESSAGE_FLAG_FWD = 4;
     public static final int MESSAGE_FLAG_HAS_BOT_ID = 2048;
@@ -1698,6 +1700,7 @@ public class TLRPC {
     public static abstract class InputPaymentCredentials extends TLObject {
         public TL_dataJSON data;
         public int flags;
+        public String google_transaction_id;
         public String id;
         public TL_dataJSON payment_token;
         public boolean save;
@@ -1709,11 +1712,11 @@ public class TLRPC {
                 case -1056001329:
                     result = new TL_inputPaymentCredentialsSaved();
                     break;
+                case -905587442:
+                    result = new TL_inputPaymentCredentialsAndroidPay();
+                    break;
                 case 873977640:
                     result = new TL_inputPaymentCredentials();
-                    break;
-                case 2035705766:
-                    result = new TL_inputPaymentCredentialsAndroidPay();
                     break;
             }
             if (result == null && exception) {
@@ -2023,7 +2026,7 @@ public class TLRPC {
 
     public static abstract class Message extends TLObject {
         public MessageAction action;
-        public String attachPath = "";
+        public String attachPath = TtmlNode.ANONYMOUS_REGION_ID;
         public int date;
         public int destroyTime;
         public long dialog_id;
@@ -2481,7 +2484,7 @@ public class TLRPC {
                     mediaDocument.document.attributes.add(attributeVideo);
                     result = mediaDocument;
                     if (mediaDocument.caption == null) {
-                        mediaDocument.caption = "";
+                        mediaDocument.caption = TtmlNode.ANONYMOUS_REGION_ID;
                     }
                 } else if (result.audio_unused != null) {
                     mediaDocument = new TL_messageMediaDocument();
@@ -2512,7 +2515,7 @@ public class TLRPC {
                     mediaDocument.document.attributes.add(attributeAudio);
                     result = mediaDocument;
                     if (mediaDocument.caption == null) {
-                        mediaDocument.caption = "";
+                        mediaDocument.caption = TtmlNode.ANONYMOUS_REGION_ID;
                     }
                 }
             }
@@ -3736,7 +3739,9 @@ public class TLRPC {
     }
 
     public static class TL_account_registerDevice extends TLObject {
-        public static int constructor = NUM;
+        public static int constructor = 1280460;
+        public boolean app_sandbox;
+        public ArrayList<Integer> other_uids = new ArrayList();
         public String token;
         public int token_type;
 
@@ -3748,6 +3753,13 @@ public class TLRPC {
             stream.writeInt32(constructor);
             stream.writeInt32(this.token_type);
             stream.writeString(this.token);
+            stream.writeBool(this.app_sandbox);
+            stream.writeInt32(481674261);
+            int count = this.other_uids.size();
+            stream.writeInt32(count);
+            for (int a = 0; a < count; a++) {
+                stream.writeInt32(((Integer) this.other_uids.get(a)).intValue());
+            }
         }
     }
 
@@ -3902,7 +3914,8 @@ public class TLRPC {
     }
 
     public static class TL_account_unregisterDevice extends TLObject {
-        public static int constructor = NUM;
+        public static int constructor = 813089983;
+        public ArrayList<Integer> other_uids = new ArrayList();
         public String token;
         public int token_type;
 
@@ -3914,6 +3927,12 @@ public class TLRPC {
             stream.writeInt32(constructor);
             stream.writeInt32(this.token_type);
             stream.writeString(this.token);
+            stream.writeInt32(481674261);
+            int count = this.other_uids.size();
+            stream.writeInt32(count);
+            for (int a = 0; a < count; a++) {
+                stream.writeInt32(((Integer) this.other_uids.get(a)).intValue());
+            }
         }
     }
 
@@ -4675,7 +4694,7 @@ public class TLRPC {
                 z = false;
             }
             this.edit = z;
-            if ((this.flags & 8192) == 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) == 0) {
                 z2 = false;
             }
             this.delete = z2;
@@ -4696,7 +4715,7 @@ public class TLRPC {
             this.flags = this.settings ? this.flags | 1024 : this.flags & -1025;
             this.flags = this.pinned ? this.flags | 2048 : this.flags & -2049;
             this.flags = this.edit ? this.flags | 4096 : this.flags & -4097;
-            this.flags = this.delete ? this.flags | 8192 : this.flags & -8193;
+            this.flags = this.delete ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
             stream.writeInt32(this.flags);
         }
     }
@@ -4711,6 +4730,7 @@ public class TLRPC {
         public int flags;
         public boolean invite_link;
         public boolean invite_users;
+        public boolean manage_call;
         public boolean pin_messages;
         public boolean post_messages;
 
@@ -4773,10 +4793,16 @@ public class TLRPC {
                 z = false;
             }
             this.pin_messages = z;
-            if ((this.flags & 512) == 0) {
+            if ((this.flags & 512) != 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.add_admins = z;
+            if ((this.flags & 1024) == 0) {
                 z2 = false;
             }
-            this.add_admins = z2;
+            this.manage_call = z2;
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
@@ -4790,6 +4816,7 @@ public class TLRPC {
             this.flags = this.invite_link ? this.flags | 64 : this.flags & -65;
             this.flags = this.pin_messages ? this.flags | 128 : this.flags & -129;
             this.flags = this.add_admins ? this.flags | 512 : this.flags & -513;
+            this.flags = this.manage_call ? this.flags | 1024 : this.flags & -1025;
             stream.writeInt32(this.flags);
         }
     }
@@ -6019,8 +6046,9 @@ public class TLRPC {
     }
 
     public static class TL_contacts_found extends TLObject {
-        public static int constructor = 446822276;
+        public static int constructor = -NUM;
         public ArrayList<Chat> chats = new ArrayList();
+        public ArrayList<Peer> my_results = new ArrayList();
         public ArrayList<Peer> results = new ArrayList();
         public ArrayList<User> users = new ArrayList();
 
@@ -6038,12 +6066,13 @@ public class TLRPC {
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             if (stream.readInt32(exception) == 481674261) {
+                Peer object;
                 int count = stream.readInt32(exception);
                 int a = 0;
                 while (a < count) {
-                    Peer object = Peer.TLdeserialize(stream, stream.readInt32(exception), exception);
+                    object = Peer.TLdeserialize(stream, stream.readInt32(exception), exception);
                     if (object != null) {
-                        this.results.add(object);
+                        this.my_results.add(object);
                         a++;
                     } else {
                         return;
@@ -6053,9 +6082,9 @@ public class TLRPC {
                     count = stream.readInt32(exception);
                     a = 0;
                     while (a < count) {
-                        Chat object2 = Chat.TLdeserialize(stream, stream.readInt32(exception), exception);
-                        if (object2 != null) {
-                            this.chats.add(object2);
+                        object = Peer.TLdeserialize(stream, stream.readInt32(exception), exception);
+                        if (object != null) {
+                            this.results.add(object);
                             a++;
                         } else {
                             return;
@@ -6065,13 +6094,28 @@ public class TLRPC {
                         count = stream.readInt32(exception);
                         a = 0;
                         while (a < count) {
-                            User object3 = User.TLdeserialize(stream, stream.readInt32(exception), exception);
-                            if (object3 != null) {
-                                this.users.add(object3);
+                            Chat object2 = Chat.TLdeserialize(stream, stream.readInt32(exception), exception);
+                            if (object2 != null) {
+                                this.chats.add(object2);
                                 a++;
                             } else {
                                 return;
                             }
+                        }
+                        if (stream.readInt32(exception) == 481674261) {
+                            count = stream.readInt32(exception);
+                            a = 0;
+                            while (a < count) {
+                                User object3 = User.TLdeserialize(stream, stream.readInt32(exception), exception);
+                                if (object3 != null) {
+                                    this.users.add(object3);
+                                    a++;
+                                } else {
+                                    return;
+                                }
+                            }
+                        } else if (exception) {
+                            throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(magic)}));
                         }
                     } else if (exception) {
                         throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(magic)}));
@@ -6088,7 +6132,13 @@ public class TLRPC {
             int a;
             stream.writeInt32(constructor);
             stream.writeInt32(481674261);
-            int count = this.results.size();
+            int count = this.my_results.size();
+            stream.writeInt32(count);
+            for (a = 0; a < count; a++) {
+                ((Peer) this.my_results.get(a)).serializeToStream(stream);
+            }
+            stream.writeInt32(481674261);
+            count = this.results.size();
             stream.writeInt32(count);
             for (a = 0; a < count; a++) {
                 ((Peer) this.results.get(a)).serializeToStream(stream);
@@ -6183,7 +6233,7 @@ public class TLRPC {
             this.flags = this.bots_inline ? this.flags | 4 : this.flags & -5;
             this.flags = this.phone_calls ? this.flags | 8 : this.flags & -9;
             this.flags = this.groups ? this.flags | 1024 : this.flags & -1025;
-            this.flags = this.channels ? this.flags | 32768 : this.flags & -32769;
+            this.flags = this.channels ? this.flags | TLRPC.MESSAGE_FLAG_EDITED : this.flags & -32769;
             stream.writeInt32(this.flags);
             stream.writeInt32(this.offset);
             stream.writeInt32(this.limit);
@@ -6769,7 +6819,8 @@ public class TLRPC {
     }
 
     public static class TL_exportedMessageLink extends TLObject {
-        public static int constructor = 524838915;
+        public static int constructor = NUM;
+        public String html;
         public String link;
 
         public static TL_exportedMessageLink TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
@@ -6786,11 +6837,13 @@ public class TLRPC {
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.link = stream.readString(exception);
+            this.html = stream.readString(exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
             stream.writeString(this.link);
+            stream.writeString(this.html);
         }
     }
 
@@ -9001,7 +9054,7 @@ public class TLRPC {
                     ((MessageEntity) this.entities.get(a)).serializeToStream(stream);
                 }
             }
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 this.geo_point.serializeToStream(stream);
             }
         }
@@ -14894,7 +14947,7 @@ public class TLRPC {
             }
             this.min = z2;
             this.id = stream.readInt32(exception);
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 this.access_hash = stream.readInt64(exception);
             }
             this.title = stream.readString(exception);
@@ -14907,10 +14960,10 @@ public class TLRPC {
             if ((this.flags & 512) != 0) {
                 this.restriction_reason = stream.readString(exception);
             }
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 this.admin_rights = TL_channelAdminRights.TLdeserialize(stream, stream.readInt32(exception), exception);
             }
-            if ((this.flags & 32768) != 0) {
+            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
                 this.banned_rights = TL_channelBannedRights.TLdeserialize(stream, stream.readInt32(exception), exception);
             }
             if ((this.flags & 131072) != 0) {
@@ -14931,7 +14984,7 @@ public class TLRPC {
             this.flags = this.min ? this.flags | 4096 : this.flags & -4097;
             stream.writeInt32(this.flags);
             stream.writeInt32(this.id);
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 stream.writeInt64(this.access_hash);
             }
             stream.writeString(this.title);
@@ -14944,10 +14997,10 @@ public class TLRPC {
             if ((this.flags & 512) != 0) {
                 stream.writeString(this.restriction_reason);
             }
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 this.admin_rights.serializeToStream(stream);
             }
-            if ((this.flags & 32768) != 0) {
+            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
                 this.banned_rights.serializeToStream(stream);
             }
             if ((this.flags & 131072) != 0) {
@@ -15190,7 +15243,7 @@ public class TLRPC {
             this.id = stream.readInt32(exception);
             this.access_hash = stream.readInt64(exception);
             this.title = stream.readString(exception);
-            if ((this.flags & 65536) != 0) {
+            if ((this.flags & C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 this.until_date = stream.readInt32(exception);
             }
         }
@@ -15203,7 +15256,7 @@ public class TLRPC {
             stream.writeInt32(this.id);
             stream.writeInt64(this.access_hash);
             stream.writeString(this.title);
-            if ((this.flags & 65536) != 0) {
+            if ((this.flags & C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 stream.writeInt32(this.until_date);
             }
         }
@@ -18742,15 +18795,17 @@ public class TLRPC {
     }
 
     public static class TL_inputPaymentCredentialsAndroidPay extends InputPaymentCredentials {
-        public static int constructor = NUM;
+        public static int constructor = -905587442;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.payment_token = TL_dataJSON.TLdeserialize(stream, stream.readInt32(exception), exception);
+            this.google_transaction_id = stream.readString(exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
             this.payment_token.serializeToStream(stream);
+            stream.writeString(this.google_transaction_id);
         }
     }
 
@@ -19333,13 +19388,13 @@ public class TLRPC {
                 z = false;
             }
             this.media_unread = z;
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 z = true;
             } else {
                 z = false;
             }
             this.silent = z;
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -19392,10 +19447,10 @@ public class TLRPC {
             if ((this.flags & 1024) != 0) {
                 this.views = stream.readInt32(exception);
             }
-            if ((this.flags & 32768) != 0) {
+            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
                 this.edit_date = stream.readInt32(exception);
             }
-            if ((this.flags & 65536) != 0) {
+            if ((this.flags & C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 this.post_author = stream.readString(exception);
             }
             if ((this.flags & 131072) != 0) {
@@ -19428,9 +19483,9 @@ public class TLRPC {
             this.flags = this.out ? this.flags | 2 : this.flags & -3;
             this.flags = this.mentioned ? this.flags | 16 : this.flags & -17;
             this.flags = this.media_unread ? this.flags | 32 : this.flags & -33;
-            this.flags = this.silent ? this.flags | 8192 : this.flags & -8193;
+            this.flags = this.silent ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
             if (this.post) {
-                i = this.flags | 16384;
+                i = this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS;
             } else {
                 i = this.flags & -16385;
             }
@@ -19469,10 +19524,10 @@ public class TLRPC {
             if ((this.flags & 1024) != 0) {
                 stream.writeInt32(this.views);
             }
-            if ((this.flags & 32768) != 0) {
+            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
                 stream.writeInt32(this.edit_date);
             }
-            if ((this.flags & 65536) != 0) {
+            if ((this.flags & C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 stream.writeString(this.post_author);
             }
             if ((this.flags & 131072) != 0) {
@@ -20476,13 +20531,13 @@ public class TLRPC {
                 z = false;
             }
             this.media_unread = z;
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 z = true;
             } else {
                 z = false;
             }
             this.silent = z;
-            if ((this.flags & 16384) == 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) == 0) {
                 z2 = false;
             }
             this.post = z2;
@@ -20504,8 +20559,8 @@ public class TLRPC {
             this.flags = this.out ? this.flags | 2 : this.flags & -3;
             this.flags = this.mentioned ? this.flags | 16 : this.flags & -17;
             this.flags = this.media_unread ? this.flags | 32 : this.flags & -33;
-            this.flags = this.silent ? this.flags | 8192 : this.flags & -8193;
-            this.flags = this.post ? this.flags | 16384 : this.flags & -16385;
+            this.flags = this.silent ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
+            this.flags = this.post ? this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS : this.flags & -16385;
             stream.writeInt32(this.flags);
             stream.writeInt32(this.id);
             if ((this.flags & 256) != 0) {
@@ -24626,7 +24681,7 @@ public class TLRPC {
                 z = false;
             }
             this.media_unread = z;
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -24692,7 +24747,7 @@ public class TLRPC {
                 z = false;
             }
             this.media_unread = z;
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -25679,25 +25734,25 @@ public class TLRPC {
                 z = false;
             }
             this.mutual_contact = z;
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 z = true;
             } else {
                 z = false;
             }
             this.deleted = z;
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 z = true;
             } else {
                 z = false;
             }
             this.bot = z;
-            if ((this.flags & 32768) != 0) {
+            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
                 z = true;
             } else {
                 z = false;
             }
             this.bot_chat_history = z;
-            if ((this.flags & 65536) != 0) {
+            if ((this.flags & C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -25715,7 +25770,7 @@ public class TLRPC {
                 z = false;
             }
             this.restricted = z;
-            if ((this.flags & 1048576) != 0) {
+            if ((this.flags & ExtractorMediaSource.DEFAULT_LOADING_CHECK_INTERVAL_BYTES) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -25747,7 +25802,7 @@ public class TLRPC {
             if ((this.flags & 64) != 0) {
                 this.status = UserStatus.TLdeserialize(stream, stream.readInt32(exception), exception);
             }
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 this.bot_info_version = stream.readInt32(exception);
             }
             if ((this.flags & 262144) != 0) {
@@ -25756,7 +25811,7 @@ public class TLRPC {
             if ((this.flags & 524288) != 0) {
                 this.bot_inline_placeholder = stream.readString(exception);
             }
-            if ((this.flags & AccessibilityEventCompat.TYPE_WINDOWS_CHANGED) != 0) {
+            if ((this.flags & 4194304) != 0) {
                 this.lang_code = stream.readString(exception);
             }
         }
@@ -25766,13 +25821,13 @@ public class TLRPC {
             this.flags = this.self ? this.flags | 1024 : this.flags & -1025;
             this.flags = this.contact ? this.flags | 2048 : this.flags & -2049;
             this.flags = this.mutual_contact ? this.flags | 4096 : this.flags & -4097;
-            this.flags = this.deleted ? this.flags | 8192 : this.flags & -8193;
-            this.flags = this.bot ? this.flags | 16384 : this.flags & -16385;
-            this.flags = this.bot_chat_history ? this.flags | 32768 : this.flags & -32769;
-            this.flags = this.bot_nochats ? this.flags | 65536 : this.flags & -65537;
+            this.flags = this.deleted ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
+            this.flags = this.bot ? this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS : this.flags & -16385;
+            this.flags = this.bot_chat_history ? this.flags | TLRPC.MESSAGE_FLAG_EDITED : this.flags & -32769;
+            this.flags = this.bot_nochats ? this.flags | C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
             this.flags = this.verified ? this.flags | 131072 : this.flags & -131073;
             this.flags = this.restricted ? this.flags | 262144 : this.flags & -262145;
-            this.flags = this.min ? this.flags | 1048576 : this.flags & -1048577;
+            this.flags = this.min ? this.flags | ExtractorMediaSource.DEFAULT_LOADING_CHECK_INTERVAL_BYTES : this.flags & -1048577;
             this.flags = this.bot_inline_geo ? this.flags | 2097152 : this.flags & -2097153;
             stream.writeInt32(this.flags);
             stream.writeInt32(this.id);
@@ -25797,7 +25852,7 @@ public class TLRPC {
             if ((this.flags & 64) != 0) {
                 this.status.serializeToStream(stream);
             }
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 stream.writeInt32(this.bot_info_version);
             }
             if ((this.flags & 262144) != 0) {
@@ -25806,7 +25861,7 @@ public class TLRPC {
             if ((this.flags & 524288) != 0) {
                 stream.writeString(this.bot_inline_placeholder);
             }
-            if ((this.flags & AccessibilityEventCompat.TYPE_WINDOWS_CHANGED) != 0) {
+            if ((this.flags & 4194304) != 0) {
                 stream.writeString(this.lang_code);
             }
         }
@@ -26398,7 +26453,7 @@ public class TLRPC {
             stream.writeInt32(constructor);
             stream.writeInt32(this.user_id);
             stream.writeInt32(this.version);
-            stream.writeString("");
+            stream.writeString(TtmlNode.ANONYMOUS_REGION_ID);
             stream.writeString(this.description);
             stream.writeInt32(481674261);
             int count = this.commands.size();
@@ -27412,7 +27467,7 @@ public class TLRPC {
             }
             this.min = z2;
             this.id = stream.readInt32(exception);
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 this.access_hash = stream.readInt64(exception);
             }
             this.title = stream.readString(exception);
@@ -27442,7 +27497,7 @@ public class TLRPC {
             this.flags = this.min ? this.flags | 4096 : this.flags & -4097;
             stream.writeInt32(this.flags);
             stream.writeInt32(this.id);
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 stream.writeInt64(this.access_hash);
             }
             stream.writeString(this.title);
@@ -27513,7 +27568,7 @@ public class TLRPC {
             }
             this.min = z2;
             this.id = stream.readInt32(exception);
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 this.access_hash = stream.readInt64(exception);
             }
             this.title = stream.readString(exception);
@@ -27526,10 +27581,10 @@ public class TLRPC {
             if ((this.flags & 512) != 0) {
                 this.restriction_reason = stream.readString(exception);
             }
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 this.admin_rights = TL_channelAdminRights.TLdeserialize(stream, stream.readInt32(exception), exception);
             }
-            if ((this.flags & 32768) != 0) {
+            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
                 this.banned_rights = TL_channelBannedRights.TLdeserialize(stream, stream.readInt32(exception), exception);
             }
         }
@@ -27548,7 +27603,7 @@ public class TLRPC {
             this.flags = this.min ? this.flags | 4096 : this.flags & -4097;
             stream.writeInt32(this.flags);
             stream.writeInt32(this.id);
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 stream.writeInt64(this.access_hash);
             }
             stream.writeString(this.title);
@@ -27561,10 +27616,10 @@ public class TLRPC {
             if ((this.flags & 512) != 0) {
                 stream.writeString(this.restriction_reason);
             }
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 this.admin_rights.serializeToStream(stream);
             }
-            if ((this.flags & 32768) != 0) {
+            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
                 this.banned_rights.serializeToStream(stream);
             }
         }
@@ -28547,13 +28602,13 @@ public class TLRPC {
                 z = false;
             }
             this.media_unread = z;
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 z = true;
             } else {
                 z = false;
             }
             this.silent = z;
-            if ((this.flags & 16384) == 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) == 0) {
                 z2 = false;
             }
             this.post = z2;
@@ -28579,8 +28634,8 @@ public class TLRPC {
             this.flags = this.out ? this.flags | 2 : this.flags & -3;
             this.flags = this.mentioned ? this.flags | 16 : this.flags & -17;
             this.flags = this.media_unread ? this.flags | 32 : this.flags & -33;
-            this.flags = this.silent ? this.flags | 8192 : this.flags & -8193;
-            this.flags = this.post ? this.flags | 16384 : this.flags & -16385;
+            this.flags = this.silent ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
+            this.flags = this.post ? this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS : this.flags & -16385;
             stream.writeInt32(this.flags);
             stream.writeInt32(this.id);
             if ((this.flags & 256) != 0) {
@@ -28882,13 +28937,13 @@ public class TLRPC {
                 z = false;
             }
             this.media_unread = z;
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 z = true;
             } else {
                 z = false;
             }
             this.silent = z;
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -28953,7 +29008,7 @@ public class TLRPC {
             if ((this.flags & 1024) != 0) {
                 this.views = stream.readInt32(exception);
             }
-            if ((this.flags & 32768) != 0) {
+            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
                 this.edit_date = stream.readInt32(exception);
             }
             if (this.id < 0 || !(this.media == null || (this.media instanceof TL_messageMediaEmpty) || (this.media instanceof TL_messageMediaWebPage) || this.message == null || this.message.length() == 0 || !this.message.startsWith("-1"))) {
@@ -28984,8 +29039,8 @@ public class TLRPC {
             this.flags = this.out ? this.flags | 2 : this.flags & -3;
             this.flags = this.mentioned ? this.flags | 16 : this.flags & -17;
             this.flags = this.media_unread ? this.flags | 32 : this.flags & -33;
-            this.flags = this.silent ? this.flags | 8192 : this.flags & -8193;
-            this.flags = this.post ? this.flags | 16384 : this.flags & -16385;
+            this.flags = this.silent ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
+            this.flags = this.post ? this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS : this.flags & -16385;
             if (this.with_my_score) {
                 i = this.flags | NUM;
             } else {
@@ -29026,7 +29081,7 @@ public class TLRPC {
             if ((this.flags & 1024) != 0) {
                 stream.writeInt32(this.views);
             }
-            if ((this.flags & 32768) != 0) {
+            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
                 stream.writeInt32(this.edit_date);
             }
             String path = this.attachPath;
@@ -29068,13 +29123,13 @@ public class TLRPC {
                 z = false;
             }
             this.media_unread = z;
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 z = true;
             } else {
                 z = false;
             }
             this.silent = z;
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -29127,10 +29182,10 @@ public class TLRPC {
             if ((this.flags & 1024) != 0) {
                 this.views = stream.readInt32(exception);
             }
-            if ((this.flags & 32768) != 0) {
+            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
                 this.edit_date = stream.readInt32(exception);
             }
-            if ((this.flags & 65536) != 0) {
+            if ((this.flags & C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 this.post_author = stream.readString(exception);
             }
             if (this.id < 0 || !(this.media == null || (this.media instanceof TL_messageMediaEmpty) || (this.media instanceof TL_messageMediaWebPage) || this.message == null || this.message.length() == 0 || !this.message.startsWith("-1"))) {
@@ -29160,9 +29215,9 @@ public class TLRPC {
             this.flags = this.out ? this.flags | 2 : this.flags & -3;
             this.flags = this.mentioned ? this.flags | 16 : this.flags & -17;
             this.flags = this.media_unread ? this.flags | 32 : this.flags & -33;
-            this.flags = this.silent ? this.flags | 8192 : this.flags & -8193;
+            this.flags = this.silent ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
             if (this.post) {
-                i = this.flags | 16384;
+                i = this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS;
             } else {
                 i = this.flags & -16385;
             }
@@ -29201,10 +29256,10 @@ public class TLRPC {
             if ((this.flags & 1024) != 0) {
                 stream.writeInt32(this.views);
             }
-            if ((this.flags & 32768) != 0) {
+            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
                 stream.writeInt32(this.edit_date);
             }
-            if ((this.flags & 65536) != 0) {
+            if ((this.flags & C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 stream.writeString(this.post_author);
             }
             String path = this.attachPath;
@@ -30724,25 +30779,25 @@ public class TLRPC {
                 z = false;
             }
             this.mutual_contact = z;
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 z = true;
             } else {
                 z = false;
             }
             this.deleted = z;
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 z = true;
             } else {
                 z = false;
             }
             this.bot = z;
-            if ((this.flags & 32768) != 0) {
+            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
                 z = true;
             } else {
                 z = false;
             }
             this.bot_chat_history = z;
-            if ((this.flags & 65536) != 0) {
+            if ((this.flags & C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -30760,7 +30815,7 @@ public class TLRPC {
                 z = false;
             }
             this.restricted = z;
-            if ((this.flags & 1048576) != 0) {
+            if ((this.flags & ExtractorMediaSource.DEFAULT_LOADING_CHECK_INTERVAL_BYTES) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -30792,7 +30847,7 @@ public class TLRPC {
             if ((this.flags & 64) != 0) {
                 this.status = UserStatus.TLdeserialize(stream, stream.readInt32(exception), exception);
             }
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 this.bot_info_version = stream.readInt32(exception);
             }
             if ((this.flags & 262144) != 0) {
@@ -30808,13 +30863,13 @@ public class TLRPC {
             this.flags = this.self ? this.flags | 1024 : this.flags & -1025;
             this.flags = this.contact ? this.flags | 2048 : this.flags & -2049;
             this.flags = this.mutual_contact ? this.flags | 4096 : this.flags & -4097;
-            this.flags = this.deleted ? this.flags | 8192 : this.flags & -8193;
-            this.flags = this.bot ? this.flags | 16384 : this.flags & -16385;
-            this.flags = this.bot_chat_history ? this.flags | 32768 : this.flags & -32769;
-            this.flags = this.bot_nochats ? this.flags | 65536 : this.flags & -65537;
+            this.flags = this.deleted ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
+            this.flags = this.bot ? this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS : this.flags & -16385;
+            this.flags = this.bot_chat_history ? this.flags | TLRPC.MESSAGE_FLAG_EDITED : this.flags & -32769;
+            this.flags = this.bot_nochats ? this.flags | C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
             this.flags = this.verified ? this.flags | 131072 : this.flags & -131073;
             this.flags = this.restricted ? this.flags | 262144 : this.flags & -262145;
-            this.flags = this.min ? this.flags | 1048576 : this.flags & -1048577;
+            this.flags = this.min ? this.flags | ExtractorMediaSource.DEFAULT_LOADING_CHECK_INTERVAL_BYTES : this.flags & -1048577;
             this.flags = this.bot_inline_geo ? this.flags | 2097152 : this.flags & -2097153;
             stream.writeInt32(this.flags);
             stream.writeInt32(this.id);
@@ -30839,7 +30894,7 @@ public class TLRPC {
             if ((this.flags & 64) != 0) {
                 this.status.serializeToStream(stream);
             }
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 stream.writeInt32(this.bot_info_version);
             }
             if ((this.flags & 262144) != 0) {
@@ -30871,25 +30926,25 @@ public class TLRPC {
                 z = false;
             }
             this.mutual_contact = z;
-            if ((this.flags & 8192) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHANNEL) != 0) {
                 z = true;
             } else {
                 z = false;
             }
             this.deleted = z;
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 z = true;
             } else {
                 z = false;
             }
             this.bot = z;
-            if ((this.flags & 32768) != 0) {
+            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
                 z = true;
             } else {
                 z = false;
             }
             this.bot_chat_history = z;
-            if ((this.flags & 65536) != 0) {
+            if ((this.flags & C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -30927,7 +30982,7 @@ public class TLRPC {
             if ((this.flags & 64) != 0) {
                 this.status = UserStatus.TLdeserialize(stream, stream.readInt32(exception), exception);
             }
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 this.bot_info_version = stream.readInt32(exception);
             }
         }
@@ -30937,10 +30992,10 @@ public class TLRPC {
             this.flags = this.self ? this.flags | 1024 : this.flags & -1025;
             this.flags = this.contact ? this.flags | 2048 : this.flags & -2049;
             this.flags = this.mutual_contact ? this.flags | 4096 : this.flags & -4097;
-            this.flags = this.deleted ? this.flags | 8192 : this.flags & -8193;
-            this.flags = this.bot ? this.flags | 16384 : this.flags & -16385;
-            this.flags = this.bot_chat_history ? this.flags | 32768 : this.flags & -32769;
-            this.flags = this.bot_nochats ? this.flags | 65536 : this.flags & -65537;
+            this.flags = this.deleted ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
+            this.flags = this.bot ? this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS : this.flags & -16385;
+            this.flags = this.bot_chat_history ? this.flags | TLRPC.MESSAGE_FLAG_EDITED : this.flags & -32769;
+            this.flags = this.bot_nochats ? this.flags | C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
             this.flags = this.verified ? this.flags | 131072 : this.flags & -131073;
             this.flags = this.explicit_content ? this.flags | 262144 : this.flags & -262145;
             stream.writeInt32(this.flags);
@@ -30966,7 +31021,7 @@ public class TLRPC {
             if ((this.flags & 64) != 0) {
                 this.status.serializeToStream(stream);
             }
-            if ((this.flags & 16384) != 0) {
+            if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 stream.writeInt32(this.bot_info_version);
             }
         }

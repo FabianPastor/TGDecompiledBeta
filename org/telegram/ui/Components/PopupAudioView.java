@@ -8,7 +8,6 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
@@ -22,12 +21,13 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.BaseCell;
 import org.telegram.ui.Components.SeekBar.SeekBarDelegate;
 
-public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDownloadProgressListener {
+public class PopupAudioView extends BaseCell implements FileDownloadProgressListener, SeekBarDelegate {
     private int TAG;
     private int buttonPressed = 0;
     private int buttonState = 0;
     private int buttonX;
     private int buttonY;
+    private int currentAccount;
     protected MessageObject currentMessageObject;
     private String lastTimeString = null;
     private ProgressView progressView;
@@ -43,7 +43,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
     public PopupAudioView(Context context) {
         super(context);
         this.timePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
-        this.TAG = MediaController.getInstance().generateObserverTag();
+        this.TAG = MediaController.getInstance(this.currentAccount).generateObserverTag();
         this.seekBar = new SeekBar(getContext());
         this.seekBar.setDelegate(this);
         this.progressView = new ProgressView();
@@ -51,6 +51,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
 
     public void setMessageObject(MessageObject messageObject) {
         if (this.currentMessageObject != messageObject) {
+            this.currentAccount = messageObject.currentAccount;
             this.seekBar.setColors(Theme.getColor(Theme.key_chat_inAudioSeekbar), Theme.getColor(Theme.key_chat_inAudioSeekbarFill), Theme.getColor(Theme.key_chat_inAudioSeekbarSelected));
             this.progressView.setProgressColors(-2497813, -7944712);
             this.currentMessageObject = messageObject;
@@ -73,9 +74,9 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
             this.seekBarX = AndroidUtilities.dp(54.0f);
             this.buttonX = AndroidUtilities.dp(10.0f);
             this.timeX = (getMeasuredWidth() - this.timeWidth) - AndroidUtilities.dp(16.0f);
-            this.seekBar.setSize((getMeasuredWidth() - AndroidUtilities.dp(70.0f)) - this.timeWidth, AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE));
+            this.seekBar.setSize((getMeasuredWidth() - AndroidUtilities.dp(70.0f)) - this.timeWidth, AndroidUtilities.dp(30.0f));
             this.progressView.width = (getMeasuredWidth() - AndroidUtilities.dp(94.0f)) - this.timeWidth;
-            this.progressView.height = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
+            this.progressView.height = AndroidUtilities.dp(30.0f);
             this.seekBarY = AndroidUtilities.dp(13.0f);
             this.buttonY = AndroidUtilities.dp(10.0f);
             updateProgress();
@@ -88,7 +89,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
     protected void onDraw(Canvas canvas) {
         if (this.currentMessageObject != null) {
             if (this.wasLayout) {
-                setDrawableBounds(Theme.chat_msgInMediaDrawable, 0, 0, getMeasuredWidth(), getMeasuredHeight());
+                BaseCell.setDrawableBounds(Theme.chat_msgInMediaDrawable, 0, 0, getMeasuredWidth(), getMeasuredHeight());
                 Theme.chat_msgInMediaDrawable.draw(canvas);
                 if (this.currentMessageObject != null) {
                     canvas.save();
@@ -104,7 +105,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
                     this.timePaint.setColor(-6182221);
                     Drawable buttonDrawable = Theme.chat_fileStatesDrawable[state][this.buttonPressed];
                     int side = AndroidUtilities.dp(36.0f);
-                    setDrawableBounds(buttonDrawable, this.buttonX + ((side - buttonDrawable.getIntrinsicWidth()) / 2), this.buttonY + ((side - buttonDrawable.getIntrinsicHeight()) / 2));
+                    BaseCell.setDrawableBounds(buttonDrawable, this.buttonX + ((side - buttonDrawable.getIntrinsicWidth()) / 2), this.buttonY + ((side - buttonDrawable.getIntrinsicHeight()) / 2));
                     buttonDrawable.draw(canvas);
                     canvas.save();
                     canvas.translate((float) this.timeX, (float) AndroidUtilities.dp(18.0f));
@@ -120,7 +121,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
 
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        MediaController.getInstance().removeLoadingFileObserver(this);
+        MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -163,9 +164,9 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
 
     private void didPressedButton() {
         if (this.buttonState == 0) {
-            boolean result = MediaController.getInstance().playMessage(this.currentMessageObject);
+            boolean result = MediaController.getInstance(this.currentAccount).playMessage(this.currentMessageObject);
             if (!this.currentMessageObject.isOut() && this.currentMessageObject.isContentUnread() && this.currentMessageObject.messageOwner.to_id.channel_id == 0) {
-                MessagesController.getInstance().markMessageContentAsRead(this.currentMessageObject);
+                MessagesController.getInstance(this.currentAccount).markMessageContentAsRead(this.currentMessageObject);
                 this.currentMessageObject.setContentIsRead();
             }
             if (result) {
@@ -173,16 +174,16 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
                 invalidate();
             }
         } else if (this.buttonState == 1) {
-            if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
+            if (MediaController.getInstance(this.currentAccount).pauseMessage(this.currentMessageObject)) {
                 this.buttonState = 0;
                 invalidate();
             }
         } else if (this.buttonState == 2) {
-            FileLoader.getInstance().loadFile(this.currentMessageObject.getDocument(), true, 0);
+            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), true, 0);
             this.buttonState = 4;
             invalidate();
         } else if (this.buttonState == 3) {
-            FileLoader.getInstance().cancelLoadFile(this.currentMessageObject.getDocument());
+            FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.currentMessageObject.getDocument());
             this.buttonState = 2;
             invalidate();
         }
@@ -194,7 +195,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
                 this.seekBar.setProgress(this.currentMessageObject.audioProgress);
             }
             int duration = 0;
-            if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
+            if (MediaController.getInstance(this.currentAccount).isPlayingMessage(this.currentMessageObject)) {
                 duration = this.currentMessageObject.audioProgressSec;
             } else {
                 for (int a = 0; a < this.currentMessageObject.getDocument().attributes.size(); a++) {
@@ -216,7 +217,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
 
     public void downloadAudioIfNeed() {
         if (this.buttonState == 2) {
-            FileLoader.getInstance().loadFile(this.currentMessageObject.getDocument(), true, 0);
+            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), true, 0);
             this.buttonState = 3;
             invalidate();
         }
@@ -225,17 +226,17 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
     public void updateButtonState() {
         String fileName = this.currentMessageObject.getFileName();
         if (FileLoader.getPathToMessage(this.currentMessageObject.messageOwner).exists()) {
-            MediaController.getInstance().removeLoadingFileObserver(this);
-            boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-            if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
+            MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+            boolean playing = MediaController.getInstance(this.currentAccount).isPlayingMessage(this.currentMessageObject);
+            if (!playing || (playing && MediaController.getInstance(this.currentAccount).isMessagePaused())) {
                 this.buttonState = 0;
             } else {
                 this.buttonState = 1;
             }
             this.progressView.setProgress(0.0f);
         } else {
-            MediaController.getInstance().addLoadingFileObserver(fileName, this);
-            if (FileLoader.getInstance().isLoadingFile(fileName)) {
+            MediaController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
+            if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
                 this.buttonState = 3;
                 Float progress = ImageLoader.getInstance().getFileProgress(fileName);
                 if (progress != null) {
@@ -277,7 +278,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
     public void onSeekBarDrag(float progress) {
         if (this.currentMessageObject != null) {
             this.currentMessageObject.audioProgress = progress;
-            MediaController.getInstance().seekToProgress(this.currentMessageObject, progress);
+            MediaController.getInstance(this.currentAccount).seekToProgress(this.currentMessageObject, progress);
         }
     }
 }

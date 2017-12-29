@@ -14,22 +14,11 @@ abstract class CodeSignatureImpl extends MemberSignatureImpl implements CodeSign
         this.exceptionTypes = exceptionTypes;
     }
 
-    CodeSignatureImpl(String stringRep) {
-        super(stringRep);
-    }
-
     public Class[] getParameterTypes() {
         if (this.parameterTypes == null) {
             this.parameterTypes = extractTypes(3);
         }
         return this.parameterTypes;
-    }
-
-    public String[] getParameterNames() {
-        if (this.parameterNames == null) {
-            this.parameterNames = extractStrings(4);
-        }
-        return this.parameterNames;
     }
 
     public Class[] getExceptionTypes() {

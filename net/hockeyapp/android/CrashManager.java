@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.hockeyapp.android.objects.CrashDetails;
 import net.hockeyapp.android.objects.CrashManagerUserInput;
 import net.hockeyapp.android.objects.CrashMetaData;
 import net.hockeyapp.android.utils.HockeyLog;
@@ -30,43 +29,19 @@ import net.hockeyapp.android.utils.HttpURLConnectionBuilder;
 import net.hockeyapp.android.utils.Util;
 
 public class CrashManager {
-    private static final String ALWAYS_SEND_KEY = "always_send_crash_reports";
-    private static final int STACK_TRACES_FOUND_CONFIRMED = 2;
-    private static final int STACK_TRACES_FOUND_NEW = 1;
-    private static final int STACK_TRACES_FOUND_NONE = 0;
     private static boolean didCrashInLastSession = false;
     private static String identifier = null;
     private static long initializeTimestamp;
     private static boolean submitting = false;
     private static String urlString = null;
 
-    public static void register(Context context) {
-        String appIdentifier = Util.getAppIdentifier(context);
-        if (TextUtils.isEmpty(appIdentifier)) {
-            throw new IllegalArgumentException("HockeyApp app identifier was not configured correctly in manifest or build configuration.");
-        }
-        register(context, appIdentifier);
-    }
-
-    public static void register(Context context, String appIdentifier) {
-        register(context, Constants.BASE_URL, appIdentifier, null);
-    }
-
     public static void register(Context context, String appIdentifier, CrashManagerListener listener) {
-        register(context, Constants.BASE_URL, appIdentifier, listener);
+        register(context, "https://sdk.hockeyapp.net/", appIdentifier, listener);
     }
 
     public static void register(Context context, String urlString, String appIdentifier, CrashManagerListener listener) {
         initialize(context, urlString, appIdentifier, listener, false);
         execute(context, listener);
-    }
-
-    public static void initialize(Context context, String appIdentifier, CrashManagerListener listener) {
-        initialize(context, Constants.BASE_URL, appIdentifier, listener, true);
-    }
-
-    public static void initialize(Context context, String urlString, String appIdentifier, CrashManagerListener listener) {
-        initialize(context, urlString, appIdentifier, listener, true);
     }
 
     public static void execute(Context context, CrashManagerListener listener) {
@@ -85,7 +60,7 @@ public class CrashManager {
             if (context instanceof Activity) {
                 z2 = false;
             }
-            Boolean autoSend = Boolean.valueOf(Boolean.valueOf(z2).booleanValue() | PreferenceManager.getDefaultSharedPreferences(context).getBoolean(ALWAYS_SEND_KEY, false));
+            Boolean autoSend = Boolean.valueOf(Boolean.valueOf(z2).booleanValue() | PreferenceManager.getDefaultSharedPreferences(context).getBoolean("always_send_crash_reports", false));
             if (listener != null) {
                 autoSend = Boolean.valueOf(Boolean.valueOf(autoSend.booleanValue() | listener.shouldAutoUploadCrashes()).booleanValue() | listener.onCrashesFound());
                 listener.onNewCrashesFound();
@@ -126,40 +101,6 @@ public class CrashManager {
         return 2;
     }
 
-    public static boolean didCrashInLastSession() {
-        return didCrashInLastSession;
-    }
-
-    public static CrashDetails getLastCrashDetails() {
-        if (Constants.FILES_PATH == null || !didCrashInLastSession()) {
-            return null;
-        }
-        long lastModification = 0;
-        File lastModifiedFile = null;
-        for (File file : new File(Constants.FILES_PATH + "/").listFiles(new FilenameFilter() {
-            public boolean accept(File dir, String filename) {
-                return filename.endsWith(".stacktrace");
-            }
-        })) {
-            if (file.lastModified() > lastModification) {
-                lastModification = file.lastModified();
-                lastModifiedFile = file;
-            }
-        }
-        if (lastModifiedFile == null || !lastModifiedFile.exists()) {
-            return null;
-        }
-        try {
-            return CrashDetails.fromFile(lastModifiedFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static void submitStackTraces(WeakReference<Context> weakContext, CrashManagerListener listener) {
-        submitStackTraces(weakContext, listener, null);
-    }
-
     public static void submitStackTraces(WeakReference<Context> weakContext, CrashManagerListener listener, CrashMetaData crashMetaData) {
         String[] list = searchForStackTraces();
         Boolean successful = Boolean.valueOf(false);
@@ -185,7 +126,7 @@ public class CrashManager {
                             }
                         }
                         String applicationLog = contentsOfFile(weakContext, filename.replace(".stacktrace", ".description"));
-                        String description = crashMetaData != null ? crashMetaData.getUserDescription() : "";
+                        String description = crashMetaData != null ? crashMetaData.getUserDescription() : TtmlNode.ANONYMOUS_REGION_ID;
                         if (!TextUtils.isEmpty(applicationLog)) {
                             if (TextUtils.isEmpty(description)) {
                                 description = String.format("Log:\n%s", new Object[]{applicationLog});
@@ -198,7 +139,7 @@ public class CrashManager {
                         parameters.put("userID", userID);
                         parameters.put("contact", contact);
                         parameters.put("description", description);
-                        parameters.put("sdk", Constants.SDK_NAME);
+                        parameters.put("sdk", "HockeySDK");
                         parameters.put("sdk_version", "4.1.3");
                         urlConnection = new HttpURLConnectionBuilder(getURLString()).setRequestMethod("POST").writeFormFields(parameters).build();
                         int responseCode = urlConnection.getResponseCode();
@@ -302,7 +243,7 @@ public class CrashManager {
                 if (context == null) {
                     return false;
                 }
-                PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(ALWAYS_SEND_KEY, true).apply();
+                PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("always_send_crash_reports", true).apply();
                 sendCrashes(weakContext, listener, ignoreDefaultHandler, userProvidedMetaData);
                 return true;
             case CrashManagerUserInputSend:
@@ -310,15 +251,6 @@ public class CrashManager {
                 return true;
             default:
                 return false;
-        }
-    }
-
-    public static void resetAlwaysSend(WeakReference<Context> weakContext) {
-        if (weakContext != null) {
-            Context context = (Context) weakContext.get();
-            if (context != null) {
-                PreferenceManager.getDefaultSharedPreferences(context).edit().remove(ALWAYS_SEND_KEY).apply();
-            }
         }
     }
 
@@ -422,7 +354,7 @@ public class CrashManager {
         if (maxRetryAttempts != -1 && weakContext != null) {
             Context context = (Context) weakContext.get();
             if (context != null) {
-                SharedPreferences preferences = context.getSharedPreferences(Constants.SDK_NAME, 0);
+                SharedPreferences preferences = context.getSharedPreferences("HockeySDK", 0);
                 Editor editor = preferences.edit();
                 int retryCounter = preferences.getInt("RETRY_COUNT: " + filename, 0);
                 if (retryCounter >= maxRetryAttempts) {
@@ -440,7 +372,7 @@ public class CrashManager {
         if (weakContext != null) {
             Context context = (Context) weakContext.get();
             if (context != null) {
-                Editor editor = context.getSharedPreferences(Constants.SDK_NAME, 0).edit();
+                Editor editor = context.getSharedPreferences("HockeySDK", 0).edit();
                 editor.remove("RETRY_COUNT: " + filename);
                 editor.apply();
             }
@@ -537,7 +469,7 @@ public class CrashManager {
             if (context != null) {
                 try {
                     String[] filenames = searchForStackTraces();
-                    Editor editor = context.getSharedPreferences(Constants.SDK_NAME, 0).edit();
+                    Editor editor = context.getSharedPreferences("HockeySDK", 0).edit();
                     editor.putString("ConfirmedFilenames", joinArray(filenames, "|"));
                     editor.apply();
                 } catch (Exception e) {
@@ -580,7 +512,7 @@ public class CrashManager {
         }
         Context context = (Context) weakContext.get();
         if (context != null) {
-            return Arrays.asList(context.getSharedPreferences(Constants.SDK_NAME, 0).getString("ConfirmedFilenames", "").split("\\|"));
+            return Arrays.asList(context.getSharedPreferences("HockeySDK", 0).getString("ConfirmedFilenames", TtmlNode.ANONYMOUS_REGION_ID).split("\\|"));
         }
         return null;
     }

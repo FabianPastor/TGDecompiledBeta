@@ -17,13 +17,9 @@ import net.hockeyapp.android.R;
 import net.hockeyapp.android.utils.HockeyLog;
 import net.hockeyapp.android.utils.HttpURLConnectionBuilder;
 import net.hockeyapp.android.utils.Util;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String, String>> {
-    public static final String BUNDLE_FEEDBACK_RESPONSE = "feedback_response";
-    public static final String BUNDLE_FEEDBACK_STATUS = "feedback_status";
-    public static final String BUNDLE_REQUEST_TYPE = "request_type";
-    private static final String FILE_TAG = "HockeyApp";
-    private static final String TAG = "SendFeedbackTask";
     private List<Uri> mAttachmentUris;
     private Context mContext;
     private String mEmail;
@@ -54,18 +50,6 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
         }
     }
 
-    public void setShowProgressDialog(boolean showProgressDialog) {
-        this.mShowProgressDialog = showProgressDialog;
-    }
-
-    public void setLastMessageId(int lastMessageId) {
-        this.mLastMessageId = lastMessageId;
-    }
-
-    public void attach(Context context) {
-        this.mContext = context;
-    }
-
     public void detach() {
         this.mContext = null;
         this.mProgressDialog = null;
@@ -77,7 +61,7 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
             loadingMessage = this.mContext.getString(R.string.hockeyapp_feedback_fetching_feedback_text);
         }
         if ((this.mProgressDialog == null || !this.mProgressDialog.isShowing()) && this.mShowProgressDialog) {
-            this.mProgressDialog = ProgressDialog.show(this.mContext, "", loadingMessage, true, false);
+            this.mProgressDialog = ProgressDialog.show(this.mContext, TtmlNode.ANONYMOUS_REGION_ID, loadingMessage, true, false);
         }
     }
 
@@ -106,7 +90,7 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
             if (folder != null && folder.exists()) {
                 for (File file : folder.listFiles()) {
                     if (!(file == null || Boolean.valueOf(file.delete()).booleanValue())) {
-                        HockeyLog.debug(TAG, "Error deleting file from temporary folder");
+                        HockeyLog.debug("SendFeedbackTask", "Error deleting file from temporary folder");
                     }
                 }
             }
@@ -125,11 +109,11 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
             Message msg = new Message();
             Bundle bundle = new Bundle();
             if (result != null) {
-                bundle.putString(BUNDLE_REQUEST_TYPE, (String) result.get("type"));
-                bundle.putString(BUNDLE_FEEDBACK_RESPONSE, (String) result.get("response"));
-                bundle.putString(BUNDLE_FEEDBACK_STATUS, (String) result.get("status"));
+                bundle.putString("request_type", (String) result.get("type"));
+                bundle.putString("feedback_response", (String) result.get("response"));
+                bundle.putString("feedback_status", (String) result.get("status"));
             } else {
-                bundle.putString(BUNDLE_REQUEST_TYPE, "unknown");
+                bundle.putString("request_type", "unknown");
             }
             msg.setData(bundle);
             this.mHandler.sendMessage(msg);
@@ -145,7 +129,7 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
             parameters.put("name", this.mName);
             parameters.put("email", this.mEmail);
             parameters.put("subject", this.mSubject);
-            parameters.put("text", this.mText);
+            parameters.put(MimeTypes.BASE_TYPE_TEXT, this.mText);
             parameters.put("bundle_identifier", Constants.APP_PACKAGE);
             parameters.put("bundle_short_version", Constants.APP_VERSION_NAME);
             parameters.put("bundle_version", Constants.APP_VERSION);
@@ -185,7 +169,7 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
             parameters.put("name", this.mName);
             parameters.put("email", this.mEmail);
             parameters.put("subject", this.mSubject);
-            parameters.put("text", this.mText);
+            parameters.put(MimeTypes.BASE_TYPE_TEXT, this.mText);
             parameters.put("bundle_identifier", Constants.APP_PACKAGE);
             parameters.put("bundle_short_version", Constants.APP_VERSION_NAME);
             parameters.put("bundle_version", Constants.APP_VERSION);

@@ -1,8 +1,6 @@
 package com.stripe.android.util;
 
-import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import com.stripe.android.model.Card;
-import com.stripe.android.model.Token;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,7 +15,7 @@ public class StripeNetworkUtils {
         cardParams.put("exp_month", card.getExpMonth());
         cardParams.put("exp_year", card.getExpYear());
         cardParams.put("name", StripeTextUtils.nullIfBlank(card.getName()));
-        cardParams.put(Param.CURRENCY, StripeTextUtils.nullIfBlank(card.getCurrency()));
+        cardParams.put("currency", StripeTextUtils.nullIfBlank(card.getCurrency()));
         cardParams.put("address_line1", StripeTextUtils.nullIfBlank(card.getAddressLine1()));
         cardParams.put("address_line2", StripeTextUtils.nullIfBlank(card.getAddressLine2()));
         cardParams.put("address_city", StripeTextUtils.nullIfBlank(card.getAddressCity()));
@@ -31,7 +29,7 @@ public class StripeNetworkUtils {
                 cardParams.remove(key);
             }
         }
-        tokenParams.put(Token.TYPE_CARD, cardParams);
+        tokenParams.put("card", cardParams);
         return tokenParams;
     }
 }

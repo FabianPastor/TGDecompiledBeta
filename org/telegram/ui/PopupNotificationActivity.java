@@ -29,7 +29,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import java.util.Locale;
 import org.telegram.PhoneFormat.PhoneFormat;
@@ -45,11 +44,13 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.NotificationsController;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.User;
@@ -83,6 +84,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     private ChatActivityEnterView chatActivityEnterView;
     private int classGuid;
     private TextView countText;
+    private int currentAccount;
     private Chat currentChat;
     private int currentMessageNum = 0;
     private MessageObject currentMessageObject = null;
@@ -162,14 +164,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         if (resourceId > 0) {
             AndroidUtilities.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
         }
-        this.classGuid = ConnectionsManager.getInstance().generateClassGuid();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.appDidLogout);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.pushMessagesUpdated);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidReset);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.contactsDidLoaded);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
+        this.classGuid = ConnectionsManager.generateClassGuid();
         this.statusDrawables[0] = new TypingDotsDrawable();
         this.statusDrawables[1] = new RecordStatusDrawable();
         this.statusDrawables[2] = new SendingFileDrawable();
@@ -271,7 +267,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     if (PopupNotificationActivity.this.currentMessageNum >= 0 && PopupNotificationActivity.this.currentMessageNum < PopupNotificationActivity.this.popupMessages.size()) {
                         PopupNotificationActivity.this.popupMessages.remove(PopupNotificationActivity.this.currentMessageNum);
                     }
-                    MessagesController.getInstance().markDialogAsRead(PopupNotificationActivity.this.currentMessageObject.getDialogId(), PopupNotificationActivity.this.currentMessageObject.getId(), Math.max(0, PopupNotificationActivity.this.currentMessageObject.getId()), PopupNotificationActivity.this.currentMessageObject.messageOwner.date, true, true);
+                    MessagesController.getInstance(PopupNotificationActivity.this.currentAccount).markDialogAsRead(PopupNotificationActivity.this.currentMessageObject.getDialogId(), PopupNotificationActivity.this.currentMessageObject.getId(), Math.max(0, PopupNotificationActivity.this.currentMessageObject.getId()), PopupNotificationActivity.this.currentMessageObject.messageOwner.date, true, true);
                     PopupNotificationActivity.this.currentMessageObject = null;
                     PopupNotificationActivity.this.getNewMessage();
                 }
@@ -291,7 +287,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
 
             public void needSendTyping() {
                 if (PopupNotificationActivity.this.currentMessageObject != null) {
-                    MessagesController.getInstance().sendTyping(PopupNotificationActivity.this.currentMessageObject.getDialogId(), 0, PopupNotificationActivity.this.classGuid);
+                    MessagesController.getInstance(PopupNotificationActivity.this.currentAccount).sendTyping(PopupNotificationActivity.this.currentMessageObject.getDialogId(), 0, PopupNotificationActivity.this.classGuid);
                 }
             }
 
@@ -346,7 +342,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         layoutParams2.height = -1;
         layoutParams2.width = -2;
         layoutParams2.rightMargin = AndroidUtilities.dp(48.0f);
-        layoutParams2.leftMargin = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_YELLOW);
+        layoutParams2.leftMargin = AndroidUtilities.dp(60.0f);
         layoutParams2.gravity = 51;
         this.avatarContainer.setLayoutParams(layoutParams2);
         this.avatarImageView = new BackupImageView(this);
@@ -405,6 +401,24 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         this.wakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(268435462, "screen");
         this.wakeLock.setReferenceCounted(false);
         handleIntent(getIntent());
+    }
+
+    private void checkCurrentAccount(int newAccount) {
+        if (this.currentAccount != newAccount) {
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.appDidLogout);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.pushMessagesUpdated);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.contactsDidLoaded);
+        }
+        this.currentAccount = newAccount;
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.appDidLogout);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.pushMessagesUpdated);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidReset);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.contactsDidLoaded);
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
@@ -663,7 +677,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     if (messageObject.type == 1 && !FileLoader.getPathToMessage(messageObject.messageOwner).exists()) {
                         photoExist = false;
                     }
-                    if (photoExist || MediaController.getInstance().canDownloadMedia(messageObject)) {
+                    if (photoExist || MediaController.getInstance(this.currentAccount).canDownloadMedia(messageObject)) {
                         imageView.setImage(currentPhotoObject.location, "100_100", thumb.location, currentPhotoObject.size);
                         photoSet = true;
                     } else if (thumb != null) {
@@ -677,7 +691,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 } else {
                     imageView.setVisibility(8);
                     messageText.setVisibility(0);
-                    messageText.setTextSize(2, (float) MessagesController.getInstance().fontSize);
+                    messageText.setTextSize(2, (float) MessagesController.getInstance(this.currentAccount).fontSize);
                     messageText.setText(messageObject.messageText);
                 }
             } else if (messageObject.type == 4) {
@@ -714,7 +728,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 });
             }
             cell.setMessageObject(messageObject);
-            if (MediaController.getInstance().canDownloadMedia(messageObject)) {
+            if (MediaController.getInstance(this.currentAccount).canDownloadMedia(messageObject)) {
                 cell.downloadAudioIfNeed();
             }
         } else {
@@ -746,7 +760,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 frameLayoutAnimationListener.setTag(Integer.valueOf(1));
             }
             messageText = (TextView) view.findViewWithTag(Integer.valueOf(301));
-            messageText.setTextSize(2, (float) MessagesController.getInstance().fontSize);
+            messageText.setTextSize(2, (float) MessagesController.getInstance(this.currentAccount).fontSize);
             messageText.setText(messageObject.messageText);
         }
         if (view.getParent() == null) {
@@ -886,10 +900,11 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             z = true;
         }
         this.isReply = z;
+        checkCurrentAccount(intent != null ? intent.getIntExtra("currentAccount", UserConfig.selectedAccount) : UserConfig.selectedAccount);
         if (this.isReply) {
-            this.popupMessages = NotificationsController.getInstance().popupReplyMessages;
+            this.popupMessages = NotificationsController.getInstance(this.currentAccount).popupReplyMessages;
         } else {
-            this.popupMessages = NotificationsController.getInstance().popupMessages;
+            this.popupMessages = NotificationsController.getInstance(this.currentAccount).popupMessages;
         }
         if (((KeyguardManager) getSystemService("keyguard")).inKeyguardRestrictedInputMode() || !ApplicationLoader.isScreenOn) {
             getWindow().addFlags(2623490);
@@ -948,7 +963,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 intent.putExtra("encId", (int) (dialog_id >> 32));
             }
             intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
-            intent.setFlags(32768);
+            intent.setFlags(TLRPC.MESSAGE_FLAG_EDITED);
             startActivity(intent);
             onFinish();
             finish();
@@ -964,13 +979,13 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             if (((int) dialog_id) != 0) {
                 int lower_id = (int) dialog_id;
                 if (lower_id > 0) {
-                    this.currentUser = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
+                    this.currentUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_id));
                 } else {
-                    this.currentChat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
-                    this.currentUser = MessagesController.getInstance().getUser(Integer.valueOf(this.currentMessageObject.messageOwner.from_id));
+                    this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lower_id));
+                    this.currentUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentMessageObject.messageOwner.from_id));
                 }
             } else {
-                this.currentUser = MessagesController.getInstance().getUser(Integer.valueOf(MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (dialog_id >> 32))).user_id));
+                this.currentUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf((int) (dialog_id >> 32))).user_id));
             }
             if (this.currentChat != null && this.currentUser != null) {
                 this.nameTextView.setText(this.currentChat.title);
@@ -996,18 +1011,18 @@ public class PopupNotificationActivity extends Activity implements NotificationC
 
     private void updateSubtitle() {
         if (this.actionBar != null && this.currentChat == null && this.currentUser != null) {
-            if (this.currentUser.id / 1000 == 777 || this.currentUser.id / 1000 == 333 || ContactsController.getInstance().contactsDict.get(Integer.valueOf(this.currentUser.id)) != null || (ContactsController.getInstance().contactsDict.size() == 0 && ContactsController.getInstance().isLoadingContacts())) {
+            if (this.currentUser.id / 1000 == 777 || this.currentUser.id / 1000 == 333 || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.currentUser.id)) != null || (ContactsController.getInstance(this.currentAccount).contactsDict.size() == 0 && ContactsController.getInstance(this.currentAccount).isLoadingContacts())) {
                 this.nameTextView.setText(UserObject.getUserName(this.currentUser));
             } else if (this.currentUser.phone == null || this.currentUser.phone.length() == 0) {
                 this.nameTextView.setText(UserObject.getUserName(this.currentUser));
             } else {
                 this.nameTextView.setText(PhoneFormat.getInstance().format("+" + this.currentUser.phone));
             }
-            CharSequence printString = (CharSequence) MessagesController.getInstance().printingStrings.get(Long.valueOf(this.currentMessageObject.getDialogId()));
+            CharSequence printString = (CharSequence) MessagesController.getInstance(this.currentAccount).printingStrings.get(Long.valueOf(this.currentMessageObject.getDialogId()));
             if (printString == null || printString.length() == 0) {
                 this.lastPrintString = null;
                 setTypingAnimation(false);
-                User user = MessagesController.getInstance().getUser(Integer.valueOf(this.currentUser.id));
+                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentUser.id));
                 if (user != null) {
                     this.currentUser = user;
                 }
@@ -1024,7 +1039,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         TLObject newPhoto = null;
         Drawable avatarDrawable = null;
         if (this.currentChat != null) {
-            Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(this.currentChat.id));
+            Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.currentChat.id));
             if (chat != null) {
                 this.currentChat = chat;
                 if (this.currentChat.photo != null) {
@@ -1035,7 +1050,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 return;
             }
         } else if (this.currentUser != null) {
-            User user = MessagesController.getInstance().getUser(Integer.valueOf(this.currentUser.id));
+            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentUser.id));
             if (user != null) {
                 this.currentUser = user;
                 if (this.currentUser.photo != null) {
@@ -1056,7 +1071,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             int a;
             if (start) {
                 try {
-                    Integer type = (Integer) MessagesController.getInstance().printingStringsTypes.get(Long.valueOf(this.currentMessageObject.getDialogId()));
+                    Integer type = (Integer) MessagesController.getInstance(this.currentAccount).printingStringsTypes.get(Long.valueOf(this.currentMessageObject.getDialogId()));
                     this.onlineTextView.setCompoundDrawablesWithIntrinsicBounds(this.statusDrawables[type.intValue()], null, null, null);
                     this.onlineTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
                     for (a = 0; a < this.statusDrawables.length; a++) {
@@ -1093,7 +1108,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         if (this.chatActivityEnterView != null) {
             this.chatActivityEnterView.setFieldFocused(true);
         }
-        ConnectionsManager.getInstance().setAppPaused(false, false);
+        ConnectionsManager.getInstance(this.currentAccount).setAppPaused(false, false);
         fixLayout();
         checkAndUpdateAvatar();
         this.wakeLock.acquire(7000);
@@ -1106,10 +1121,10 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             this.chatActivityEnterView.hidePopup(false);
             this.chatActivityEnterView.setFieldFocused(false);
         }
-        ConnectionsManager.getInstance().setAppPaused(true, false);
+        ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.appDidLogout) {
             onFinish();
             finish();
@@ -1125,7 +1140,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     checkAndUpdateAvatar();
                 }
                 if ((updateMask & 64) != 0) {
-                    CharSequence printString = (CharSequence) MessagesController.getInstance().printingStrings.get(Long.valueOf(this.currentMessageObject.getDialogId()));
+                    CharSequence printString = (CharSequence) MessagesController.getInstance(this.currentAccount).printingStrings.get(Long.valueOf(this.currentMessageObject.getDialogId()));
                     if ((this.lastPrintString != null && printString == null) || ((this.lastPrintString == null && printString != null) || (this.lastPrintString != null && printString != null && !this.lastPrintString.equals(printString)))) {
                         updateSubtitle();
                     }
@@ -1196,13 +1211,13 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             if (this.isReply) {
                 this.popupMessages.clear();
             }
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.appDidLogout);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.pushMessagesUpdated);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.updateInterfaces);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingDidReset);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.contactsDidLoaded);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.appDidLogout);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.pushMessagesUpdated);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.contactsDidLoaded);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
             if (this.chatActivityEnterView != null) {
                 this.chatActivityEnterView.onDestroy();
             }

@@ -1,17 +1,20 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.measurement.AppMeasurement.ConditionalUserProperty;
-
 final class zzchn implements Runnable {
-    private /* synthetic */ zzchl zzbtt;
-    private /* synthetic */ ConditionalUserProperty zzbtu;
+    private /* synthetic */ String zzjcd;
+    private /* synthetic */ zzchm zzjce;
 
-    zzchn(zzchl com_google_android_gms_internal_zzchl, ConditionalUserProperty conditionalUserProperty) {
-        this.zzbtt = com_google_android_gms_internal_zzchl;
-        this.zzbtu = conditionalUserProperty;
+    zzchn(zzchm com_google_android_gms_internal_zzchm, String str) {
+        this.zzjce = com_google_android_gms_internal_zzchm;
+        this.zzjcd = str;
     }
 
     public final void run() {
-        this.zzbtt.zzb(this.zzbtu);
+        zzcjl zzawz = this.zzjce.zziwf.zzawz();
+        if (zzawz.isInitialized()) {
+            zzawz.zzjcq.zzf(this.zzjcd, 1);
+        } else {
+            this.zzjce.zzk(6, "Persisted config not initialized. Not logging error/warn");
+        }
     }
 }

@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.extractor.mp4;
 
-import android.support.annotation.Nullable;
 import android.util.Log;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput.CryptoData;
@@ -12,10 +11,9 @@ public final class TrackEncryptionBox {
     public final byte[] defaultInitializationVector;
     public final int initializationVectorSize;
     public final boolean isEncrypted;
-    @Nullable
     public final String schemeType;
 
-    public TrackEncryptionBox(boolean isEncrypted, @Nullable String schemeType, int initializationVectorSize, byte[] keyId, int defaultEncryptedBlocks, int defaultClearBlocks, @Nullable byte[] defaultInitializationVector) {
+    public TrackEncryptionBox(boolean isEncrypted, String schemeType, int initializationVectorSize, byte[] keyId, int defaultEncryptedBlocks, int defaultClearBlocks, byte[] defaultInitializationVector) {
         int i = 1;
         int i2 = initializationVectorSize == 0 ? 1 : 0;
         if (defaultInitializationVector != null) {
@@ -29,7 +27,7 @@ public final class TrackEncryptionBox {
         this.cryptoData = new CryptoData(schemeToCryptoMode(schemeType), keyId, defaultEncryptedBlocks, defaultClearBlocks);
     }
 
-    private static int schemeToCryptoMode(@Nullable String schemeType) {
+    private static int schemeToCryptoMode(String schemeType) {
         if (schemeType == null) {
             return 1;
         }

@@ -12,10 +12,6 @@ public class ArrayMap<K, V> extends SimpleArrayMap<K, V> implements Map<K, V> {
         super(capacity);
     }
 
-    public ArrayMap(SimpleArrayMap map) {
-        super(map);
-    }
-
     private MapCollections<K, V> getCollection() {
         if (this.mCollections == null) {
             this.mCollections = new MapCollections<K, V>() {
@@ -59,23 +55,11 @@ public class ArrayMap<K, V> extends SimpleArrayMap<K, V> implements Map<K, V> {
         return this.mCollections;
     }
 
-    public boolean containsAll(Collection<?> collection) {
-        return MapCollections.containsAllHelper(this, collection);
-    }
-
     public void putAll(Map<? extends K, ? extends V> map) {
         ensureCapacity(this.mSize + map.size());
         for (Entry<? extends K, ? extends V> entry : map.entrySet()) {
             put(entry.getKey(), entry.getValue());
         }
-    }
-
-    public boolean removeAll(Collection<?> collection) {
-        return MapCollections.removeAllHelper(this, collection);
-    }
-
-    public boolean retainAll(Collection<?> collection) {
-        return MapCollections.retainAllHelper(this, collection);
     }
 
     public Set<Entry<K, V>> entrySet() {

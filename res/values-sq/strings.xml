@@ -6,6 +6,7 @@
     <string name="common_google_play_services_install_button">Instalo</string>
     <string name="common_google_play_services_install_text">%1$s nuk do të funksionojë pa shërbimet e Google Play, të cilat mungojnë në pajisjen tënde.</string>
     <string name="common_google_play_services_install_title">Merr shërbimet e \"Luaj me Google\"</string>
+    <string name="common_google_play_services_notification_channel_name">Disponueshmëria e shërbimeve të Google Play</string>
     <string name="common_google_play_services_notification_ticker">Gabim në shërbimet e \"Luaj me Google\"</string>
     <string name="common_google_play_services_unknown_issue">%1$s ka probleme me shërbimet e Google Play. Provo sërish.</string>
     <string name="common_google_play_services_unsupported_text">%1$s nuk do të funksionojë pa shërbimet e Google Play, të cilat nuk mbështeten nga pajisja jote.</string>
@@ -17,4 +18,6 @@
     <string name="common_open_on_phone">Hape në telefon</string>
     <string name="common_signin_button_text">Identifikohu</string>
     <string name="common_signin_button_text_long">Identifikohu me Google</string>
+    <string name="gcm_fallback_notification_channel_label">Të ndryshme</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
 </resources>

@@ -236,7 +236,7 @@ public class PhotoFilterCurvesControl extends View {
                     str = String.format(Locale.US, "%.2f", new Object[]{Float.valueOf(curvesValue.whitesLevel / 100.0f)});
                     break;
                 default:
-                    str = "";
+                    str = TtmlNode.ANONYMOUS_REGION_ID;
                     break;
             }
             canvas.drawText(str, (this.actualArea.x + ((segmentWidth - this.textPaint.measureText(str)) / 2.0f)) + (((float) a) * segmentWidth), (this.actualArea.y + this.actualArea.height) - ((float) AndroidUtilities.dp(4.0f)), this.textPaint);

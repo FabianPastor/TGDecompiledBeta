@@ -7,13 +7,13 @@ import android.os.Parcelable.Creator;
 import android.util.AttributeSet;
 import com.google.android.gms.R;
 import com.google.android.gms.common.internal.ReflectedParcelable;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzd;
-import com.google.android.gms.common.internal.zzbe;
-import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.common.internal.zzbg;
+import com.google.android.gms.common.internal.zzbq;
+import com.google.android.gms.internal.zzbfm;
+import com.google.android.gms.internal.zzbfp;
 import java.util.Arrays;
 
-public final class CameraPosition extends zza implements ReflectedParcelable {
+public final class CameraPosition extends zzbfm implements ReflectedParcelable {
     public static final Creator<CameraPosition> CREATOR = new zza();
     public final float bearing;
     public final LatLng target;
@@ -21,47 +21,40 @@ public final class CameraPosition extends zza implements ReflectedParcelable {
     public final float zoom;
 
     public static final class Builder {
-        private LatLng zzbnc;
-        private float zzbnd;
-        private float zzbne;
-        private float zzbnf;
-
-        public Builder(CameraPosition cameraPosition) {
-            this.zzbnc = cameraPosition.target;
-            this.zzbnd = cameraPosition.zoom;
-            this.zzbne = cameraPosition.tilt;
-            this.zzbnf = cameraPosition.bearing;
-        }
+        private LatLng zziue;
+        private float zziuf;
+        private float zziug;
+        private float zziuh;
 
         public final Builder bearing(float f) {
-            this.zzbnf = f;
+            this.zziuh = f;
             return this;
         }
 
         public final CameraPosition build() {
-            return new CameraPosition(this.zzbnc, this.zzbnd, this.zzbne, this.zzbnf);
+            return new CameraPosition(this.zziue, this.zziuf, this.zziug, this.zziuh);
         }
 
         public final Builder target(LatLng latLng) {
-            this.zzbnc = latLng;
+            this.zziue = latLng;
             return this;
         }
 
         public final Builder tilt(float f) {
-            this.zzbne = f;
+            this.zziug = f;
             return this;
         }
 
         public final Builder zoom(float f) {
-            this.zzbnd = f;
+            this.zziuf = f;
             return this;
         }
     }
 
     public CameraPosition(LatLng latLng, float f, float f2, float f3) {
-        zzbo.zzb((Object) latLng, (Object) "null camera target");
+        zzbq.checkNotNull(latLng, "null camera target");
         boolean z = 0.0f <= f2 && f2 <= 90.0f;
-        zzbo.zzb(z, "Tilt needs to be between 0 and 90 inclusive: %s", Float.valueOf(f2));
+        zzbq.zzb(z, "Tilt needs to be between 0 and 90 inclusive: %s", Float.valueOf(f2));
         this.target = latLng;
         this.zoom = f;
         this.tilt = f2 + 0.0f;
@@ -73,10 +66,6 @@ public final class CameraPosition extends zza implements ReflectedParcelable {
 
     public static Builder builder() {
         return new Builder();
-    }
-
-    public static Builder builder(CameraPosition cameraPosition) {
-        return new Builder(cameraPosition);
     }
 
     public static CameraPosition createFromAttributes(Context context, AttributeSet attributeSet) {
@@ -99,10 +88,6 @@ public final class CameraPosition extends zza implements ReflectedParcelable {
         return builder.build();
     }
 
-    public static final CameraPosition fromLatLngZoom(LatLng latLng, float f) {
-        return new CameraPosition(latLng, f, 0.0f, 0.0f);
-    }
-
     public final boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -119,15 +104,15 @@ public final class CameraPosition extends zza implements ReflectedParcelable {
     }
 
     public final String toString() {
-        return zzbe.zzt(this).zzg("target", this.target).zzg("zoom", Float.valueOf(this.zoom)).zzg("tilt", Float.valueOf(this.tilt)).zzg("bearing", Float.valueOf(this.bearing)).toString();
+        return zzbg.zzx(this).zzg("target", this.target).zzg("zoom", Float.valueOf(this.zoom)).zzg("tilt", Float.valueOf(this.tilt)).zzg("bearing", Float.valueOf(this.bearing)).toString();
     }
 
     public final void writeToParcel(Parcel parcel, int i) {
-        int zze = zzd.zze(parcel);
-        zzd.zza(parcel, 2, this.target, i, false);
-        zzd.zza(parcel, 3, this.zoom);
-        zzd.zza(parcel, 4, this.tilt);
-        zzd.zza(parcel, 5, this.bearing);
-        zzd.zzI(parcel, zze);
+        int zze = zzbfp.zze(parcel);
+        zzbfp.zza(parcel, 2, this.target, i, false);
+        zzbfp.zza(parcel, 3, this.zoom);
+        zzbfp.zza(parcel, 4, this.tilt);
+        zzbfp.zza(parcel, 5, this.bearing);
+        zzbfp.zzai(parcel, zze);
     }
 }

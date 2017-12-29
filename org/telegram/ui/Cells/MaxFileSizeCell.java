@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
@@ -82,7 +81,7 @@ public class MaxFileSizeCell extends FrameLayout {
                 MaxFileSizeCell.this.didChangedSizeValue(size);
             }
         });
-        addView(this.seekBarView, LayoutHelper.createFrame(-1, BitmapDescriptorFactory.HUE_ORANGE, 51, 4.0f, 40.0f, 4.0f, 0.0f));
+        addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 4.0f, 40.0f, 4.0f, 0.0f));
     }
 
     protected void didChangedSizeValue(int value) {

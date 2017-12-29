@@ -15,10 +15,6 @@ public class LazyList<E> extends AbstractList<E> {
         this.elementSource = elementSource;
     }
 
-    public List<E> getUnderlying() {
-        return this.underlying;
-    }
-
     private void blowup() {
         LOG.logDebug("blowup running");
         while (this.elementSource.hasNext()) {

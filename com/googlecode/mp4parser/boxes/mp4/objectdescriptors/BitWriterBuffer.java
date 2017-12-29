@@ -1,6 +1,5 @@
 package com.googlecode.mp4parser.boxes.mp4.objectdescriptors;
 
-import android.support.v4.view.InputDeviceCompat;
 import java.nio.ByteBuffer;
 
 public class BitWriterBuffer {
@@ -29,7 +28,7 @@ public class BitWriterBuffer {
                 byteBuffer = this.buffer;
                 i3 = this.initialPos + (this.position / 8);
                 if (current > 127) {
-                    current += InputDeviceCompat.SOURCE_ANY;
+                    current -= 256;
                 }
                 byteBuffer.put(i3, (byte) current);
                 this.position += numBits;

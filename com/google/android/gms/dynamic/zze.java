@@ -6,18 +6,18 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 final class zze implements zzi {
-    private /* synthetic */ zza zzaSv;
-    private /* synthetic */ FrameLayout zzaSx;
-    private /* synthetic */ LayoutInflater zzaSy;
-    private /* synthetic */ ViewGroup zzaSz;
-    private /* synthetic */ Bundle zzxV;
+    private /* synthetic */ ViewGroup val$container;
+    private /* synthetic */ Bundle zzail;
+    private /* synthetic */ zza zzgwh;
+    private /* synthetic */ FrameLayout zzgwj;
+    private /* synthetic */ LayoutInflater zzgwk;
 
     zze(zza com_google_android_gms_dynamic_zza, FrameLayout frameLayout, LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        this.zzaSv = com_google_android_gms_dynamic_zza;
-        this.zzaSx = frameLayout;
-        this.zzaSy = layoutInflater;
-        this.zzaSz = viewGroup;
-        this.zzxV = bundle;
+        this.zzgwh = com_google_android_gms_dynamic_zza;
+        this.zzgwj = frameLayout;
+        this.zzgwk = layoutInflater;
+        this.val$container = viewGroup;
+        this.zzail = bundle;
     }
 
     public final int getState() {
@@ -25,7 +25,7 @@ final class zze implements zzi {
     }
 
     public final void zzb(LifecycleDelegate lifecycleDelegate) {
-        this.zzaSx.removeAllViews();
-        this.zzaSx.addView(this.zzaSv.zzaSr.onCreateView(this.zzaSy, this.zzaSz, this.zzxV));
+        this.zzgwj.removeAllViews();
+        this.zzgwj.addView(this.zzgwh.zzgwd.onCreateView(this.zzgwk, this.val$container, this.zzail));
     }
 }

@@ -30,27 +30,25 @@ import android.widget.EditText;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
-import org.telegram.messenger.query.SearchQuery;
-import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -108,7 +106,7 @@ import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.StickersAlert;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenterDelegate {
-    public static boolean dialogsLoaded;
+    public static boolean[] dialogsLoaded = new boolean[3];
     private String addToGroupAlertString;
     private boolean cantSendToChannels;
     private boolean checkPermission = true;
@@ -160,30 +158,30 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             this.addToGroupAlertString = this.arguments.getString("addToGroupAlertString");
         }
         if (this.searchString == null) {
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.dialogsNeedReload);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.updateInterfaces);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.encryptedChatUpdated);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.contactsDidLoaded);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.appDidLogout);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.openedChatChanged);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.notificationsSettingsUpdated);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.messageReceivedByAck);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.messageReceivedByServer);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.messageSendError);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.didSetPasscode);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.needReloadRecentDialogsSearch);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.didLoadedReplyMessages);
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.reloadHints);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.dialogsNeedReload);
+            NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.encryptedChatUpdated);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.contactsDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.appDidLogout);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.openedChatChanged);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.notificationsSettingsUpdated);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messageReceivedByAck);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messageReceivedByServer);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messageSendError);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.needReloadRecentDialogsSearch);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.didLoadedReplyMessages);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.reloadHints);
+            NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetPasscode);
         }
-        if (!dialogsLoaded) {
-            MessagesController.getInstance().loadDialogs(0, 100, true);
-            MessagesController.getInstance().loadHintDialogs();
-            ContactsController.getInstance().checkInviteText();
-            MessagesController.getInstance().loadPinnedDialogs(0, null);
-            StickersQuery.loadRecents(2, false, true, false);
-            StickersQuery.checkFeaturedStickers();
-            dialogsLoaded = true;
+        if (!dialogsLoaded[this.currentAccount]) {
+            MessagesController.getInstance(this.currentAccount).loadDialogs(0, 100, true);
+            MessagesController.getInstance(this.currentAccount).loadHintDialogs();
+            ContactsController.getInstance(this.currentAccount).checkInviteText();
+            MessagesController.getInstance(this.currentAccount).loadPinnedDialogs(0, null);
+            DataQuery.getInstance(this.currentAccount).loadRecents(2, false, true, false);
+            DataQuery.getInstance(this.currentAccount).checkFeaturedStickers();
+            dialogsLoaded[this.currentAccount] = true;
         }
         return true;
     }
@@ -191,21 +189,21 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         if (this.searchString == null) {
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.dialogsNeedReload);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.updateInterfaces);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.encryptedChatUpdated);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.contactsDidLoaded);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.appDidLogout);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.openedChatChanged);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.notificationsSettingsUpdated);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messageReceivedByAck);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messageReceivedByServer);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messageSendError);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didSetPasscode);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.needReloadRecentDialogsSearch);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didLoadedReplyMessages);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.reloadHints);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.dialogsNeedReload);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.encryptedChatUpdated);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.contactsDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.appDidLogout);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.openedChatChanged);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.notificationsSettingsUpdated);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messageReceivedByAck);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messageReceivedByServer);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messageSendError);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.needReloadRecentDialogsSearch);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.didLoadedReplyMessages);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.reloadHints);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didSetPasscode);
         }
         if (this.commentView != null) {
             this.commentView.onDestroy();
@@ -258,7 +256,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 DialogsActivity.this.searching = false;
                 DialogsActivity.this.searchWas = false;
                 if (DialogsActivity.this.listView != null) {
-                    if (MessagesController.getInstance().loadingDialogs && MessagesController.getInstance().dialogs.isEmpty()) {
+                    if (MessagesController.getInstance(DialogsActivity.this.currentAccount).loadingDialogs && MessagesController.getInstance(DialogsActivity.this.currentAccount).dialogs.isEmpty()) {
                         DialogsActivity.this.listView.setEmptyView(DialogsActivity.this.progressView);
                     } else {
                         DialogsActivity.this.progressView.setVisibility(8);
@@ -331,11 +329,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         DialogsActivity.this.parentLayout.getDrawerLayoutContainer().openDrawer(false);
                     }
                 } else if (id == 1) {
-                    if (UserConfig.appLocked) {
+                    if (SharedConfig.appLocked) {
                         z = false;
                     }
-                    UserConfig.appLocked = z;
-                    UserConfig.saveConfig(false);
+                    SharedConfig.appLocked = z;
+                    SharedConfig.saveConfig();
                     DialogsActivity.this.updatePasscodeButton();
                 }
             }
@@ -504,22 +502,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         MessageObject obj = DialogsActivity.this.dialogsSearchAdapter.getItem(position);
                         if (obj instanceof User) {
                             dialog_id = (long) ((User) obj).id;
-                            if (DialogsActivity.this.dialogsSearchAdapter.isGlobalSearch(position)) {
-                                ArrayList<User> users = new ArrayList();
-                                users.add((User) obj);
-                                MessagesController.getInstance().putUsers(users, false);
-                                MessagesStorage.getInstance().putUsersAndChats(users, null, false, true);
-                            }
                             if (!DialogsActivity.this.onlySelect) {
                                 DialogsActivity.this.dialogsSearchAdapter.putRecentSearch(dialog_id, (User) obj);
                             }
                         } else if (obj instanceof Chat) {
-                            if (DialogsActivity.this.dialogsSearchAdapter.isGlobalSearch(position)) {
-                                ArrayList<Chat> chats = new ArrayList();
-                                chats.add((Chat) obj);
-                                MessagesController.getInstance().putChats(chats, false);
-                                MessagesStorage.getInstance().putUsersAndChats(null, chats, false, true);
-                            }
                             if (((Chat) obj).id > 0) {
                                 dialog_id = (long) (-((Chat) obj).id);
                             } else {
@@ -557,7 +543,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             args.putInt("user_id", lower_part);
                         } else if (lower_part < 0) {
                             if (message_id != 0) {
-                                Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_part));
+                                Chat chat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf(-lower_part));
                                 if (!(chat == null || chat.migrated_to == null)) {
                                     args.putInt("migrated_to", lower_part);
                                     lower_part = -chat.migrated_to.channel_id;
@@ -580,11 +566,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             }
                         }
                         if (DialogsActivity.this.searchString != null) {
-                            if (MessagesController.checkCanOpenChat(args, DialogsActivity.this)) {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                            if (MessagesController.getInstance(DialogsActivity.this.currentAccount).checkCanOpenChat(args, DialogsActivity.this)) {
+                                NotificationCenter.getInstance(DialogsActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                                 DialogsActivity.this.presentFragment(new ChatActivity(args));
                             }
-                        } else if (MessagesController.checkCanOpenChat(args, DialogsActivity.this)) {
+                        } else if (MessagesController.getInstance(DialogsActivity.this.currentAccount).checkCanOpenChat(args, DialogsActivity.this)) {
                             DialogsActivity.this.presentFragment(new ChatActivity(args));
                         }
                     } else if (DialogsActivity.this.dialogsAdapter.hasSelectedDialogs()) {
@@ -617,20 +603,20 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         final boolean z;
                         if (DialogObject.isChannel(dialog)) {
                             CharSequence[] items;
-                            final Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
+                            final Chat chat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf(-lower_id));
                             int[] icons = new int[3];
                             icons[0] = dialog.pinned ? R.drawable.chats_unpin : R.drawable.chats_pin;
                             icons[1] = R.drawable.chats_clear;
                             icons[2] = R.drawable.chats_leave;
                             if (chat == null || !chat.megagroup) {
                                 items = new CharSequence[3];
-                                string = (dialog.pinned || MessagesController.getInstance().canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
+                                string = (dialog.pinned || MessagesController.getInstance(DialogsActivity.this.currentAccount).canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
                                 items[0] = string;
                                 items[1] = LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
                                 items[2] = LocaleController.getString("LeaveChannelMenu", R.string.LeaveChannelMenu);
                             } else {
                                 items = new CharSequence[3];
-                                string = (dialog.pinned || MessagesController.getInstance().canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
+                                string = (dialog.pinned || MessagesController.getInstance(DialogsActivity.this.currentAccount).canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
                                 items[0] = string;
                                 items[1] = TextUtils.isEmpty(chat.username) ? LocaleController.getString("ClearHistory", R.string.ClearHistory) : LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
                                 items[2] = LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu);
@@ -640,12 +626,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                                 public void onClick(DialogInterface dialog, int which) {
                                     boolean z = true;
                                     if (which == 0) {
-                                        MessagesController instance = MessagesController.getInstance();
-                                        long access$2800 = DialogsActivity.this.selectedDialog;
+                                        MessagesController instance = MessagesController.getInstance(DialogsActivity.this.currentAccount);
+                                        long access$3400 = DialogsActivity.this.selectedDialog;
                                         if (z) {
                                             z = false;
                                         }
-                                        if (instance.pinDialog(access$2800, z, null, 0) && !z) {
+                                        if (instance.pinDialog(access$3400, z, null, 0) && !z) {
                                             DialogsActivity.this.listView.smoothScrollToPosition(0);
                                             return;
                                         }
@@ -664,9 +650,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                                         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 if (chat != null && chat.megagroup && TextUtils.isEmpty(chat.username)) {
-                                                    MessagesController.getInstance().deleteDialog(DialogsActivity.this.selectedDialog, 1);
+                                                    MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(DialogsActivity.this.selectedDialog, 1);
                                                 } else {
-                                                    MessagesController.getInstance().deleteDialog(DialogsActivity.this.selectedDialog, 2);
+                                                    MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(DialogsActivity.this.selectedDialog, 2);
                                                 }
                                             }
                                         });
@@ -678,9 +664,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                                         }
                                         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                MessagesController.getInstance().deleteUserFromChat((int) (-DialogsActivity.this.selectedDialog), UserConfig.getCurrentUser(), null);
+                                                MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteUserFromChat((int) (-DialogsActivity.this.selectedDialog), UserConfig.getInstance(DialogsActivity.this.currentAccount).getCurrentUser(), null);
                                                 if (AndroidUtilities.isTablet()) {
-                                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, Long.valueOf(DialogsActivity.this.selectedDialog));
+                                                    NotificationCenter.getInstance(DialogsActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, Long.valueOf(DialogsActivity.this.selectedDialog));
                                                 }
                                             }
                                         });
@@ -695,12 +681,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             final boolean isChat = lower_id < 0 && high_id != 1;
                             User user = null;
                             if (!(isChat || lower_id <= 0 || high_id == 1)) {
-                                user = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
+                                user = MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(lower_id));
                             }
                             final boolean isBot = user != null && user.bot;
                             CharSequence[] charSequenceArr = new CharSequence[3];
                             if (!dialog.pinned) {
-                                if (!MessagesController.getInstance().canPinDialog(lower_id == 0)) {
+                                if (!MessagesController.getInstance(DialogsActivity.this.currentAccount).canPinDialog(lower_id == 0)) {
                                     string = null;
                                     charSequenceArr[0] = string;
                                     charSequenceArr[1] = LocaleController.getString("ClearHistory", R.string.ClearHistory);
@@ -715,12 +701,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                                         public void onClick(DialogInterface dialog, final int which) {
                                             boolean z = true;
                                             if (which == 0) {
-                                                MessagesController instance = MessagesController.getInstance();
-                                                long access$2800 = DialogsActivity.this.selectedDialog;
+                                                MessagesController instance = MessagesController.getInstance(DialogsActivity.this.currentAccount);
+                                                long access$3400 = DialogsActivity.this.selectedDialog;
                                                 if (z) {
                                                     z = false;
                                                 }
-                                                if (instance.pinDialog(access$2800, z, null, 0) && !z) {
+                                                if (instance.pinDialog(access$3400, z, null, 0) && !z) {
                                                     DialogsActivity.this.listView.smoothScrollToPosition(0);
                                                     return;
                                                 }
@@ -739,25 +725,25 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     if (which != 1) {
                                                         if (isChat) {
-                                                            Chat currentChat = MessagesController.getInstance().getChat(Integer.valueOf((int) (-DialogsActivity.this.selectedDialog)));
+                                                            Chat currentChat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf((int) (-DialogsActivity.this.selectedDialog)));
                                                             if (currentChat == null || !ChatObject.isNotInChat(currentChat)) {
-                                                                MessagesController.getInstance().deleteUserFromChat((int) (-DialogsActivity.this.selectedDialog), MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId())), null);
+                                                                MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteUserFromChat((int) (-DialogsActivity.this.selectedDialog), MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(DialogsActivity.this.currentAccount).getClientUserId())), null);
                                                             } else {
-                                                                MessagesController.getInstance().deleteDialog(DialogsActivity.this.selectedDialog, 0);
+                                                                MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(DialogsActivity.this.selectedDialog, 0);
                                                             }
                                                         } else {
-                                                            MessagesController.getInstance().deleteDialog(DialogsActivity.this.selectedDialog, 0);
+                                                            MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(DialogsActivity.this.selectedDialog, 0);
                                                         }
                                                         if (isBot) {
-                                                            MessagesController.getInstance().blockUser((int) DialogsActivity.this.selectedDialog);
+                                                            MessagesController.getInstance(DialogsActivity.this.currentAccount).blockUser((int) DialogsActivity.this.selectedDialog);
                                                         }
                                                         if (AndroidUtilities.isTablet()) {
-                                                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, Long.valueOf(DialogsActivity.this.selectedDialog));
+                                                            NotificationCenter.getInstance(DialogsActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, Long.valueOf(DialogsActivity.this.selectedDialog));
                                                             return;
                                                         }
                                                         return;
                                                     }
-                                                    MessagesController.getInstance().deleteDialog(DialogsActivity.this.selectedDialog, 1);
+                                                    MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(DialogsActivity.this.selectedDialog, 1);
                                                 }
                                             });
                                             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -827,7 +813,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (VERSION.SDK_INT < 21) {
             Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
-            shadowDrawable.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
             Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
             drawable = combinedDrawable;
@@ -852,7 +838,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         if (VERSION.SDK_INT >= 21) {
             f = 56.0f;
         } else {
-            f = BitmapDescriptorFactory.HUE_YELLOW;
+            f = 60.0f;
         }
         if (LocaleController.isRTL) {
             i = 3;
@@ -891,9 +877,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 int totalItemCount = recyclerView.getAdapter().getItemCount();
                 if (!DialogsActivity.this.searching || !DialogsActivity.this.searchWas) {
                     if (visibleItemCount > 0 && DialogsActivity.this.layoutManager.findLastVisibleItemPosition() >= DialogsActivity.this.getDialogsArray().size() - 10) {
-                        boolean fromCache = !MessagesController.getInstance().dialogsEndReached;
-                        if (fromCache || !MessagesController.getInstance().serverDialogsEndReached) {
-                            MessagesController.getInstance().loadDialogs(-1, 100, fromCache);
+                        boolean fromCache = !MessagesController.getInstance(DialogsActivity.this.currentAccount).dialogsEndReached;
+                        if (fromCache || !MessagesController.getInstance(DialogsActivity.this.currentAccount).serverDialogsEndReached) {
+                            MessagesController.getInstance(DialogsActivity.this.currentAccount).loadDialogs(-1, 100, fromCache);
                         }
                     }
                     if (DialogsActivity.this.floatingButton.getVisibility() != 8) {
@@ -966,11 +952,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         DialogsActivity.this.updateVisibleRows(512);
                     }
                     if (DialogsActivity.this.searchString != null) {
-                        if (MessagesController.checkCanOpenChat(args, DialogsActivity.this)) {
-                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                        if (MessagesController.getInstance(DialogsActivity.this.currentAccount).checkCanOpenChat(args, DialogsActivity.this)) {
+                            NotificationCenter.getInstance(DialogsActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                             DialogsActivity.this.presentFragment(new ChatActivity(args));
                         }
-                    } else if (MessagesController.checkCanOpenChat(args, DialogsActivity.this)) {
+                    } else if (MessagesController.getInstance(DialogsActivity.this.currentAccount).checkCanOpenChat(args, DialogsActivity.this)) {
                         DialogsActivity.this.presentFragment(new ChatActivity(args));
                     }
                 } else if (DialogsActivity.this.dialogsAdapter.hasSelectedDialogs()) {
@@ -983,13 +969,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             }
 
             public void needRemoveHint(final int did) {
-                if (DialogsActivity.this.getParentActivity() != null && MessagesController.getInstance().getUser(Integer.valueOf(did)) != null) {
+                if (DialogsActivity.this.getParentActivity() != null && MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(did)) != null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(DialogsActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                     builder.setMessage(LocaleController.formatString("ChatHintsDelete", R.string.ChatHintsDelete, ContactsController.formatName(user.first_name, user.last_name)));
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            SearchQuery.removePeer(did);
+                            DataQuery.getInstance(DialogsActivity.this.currentAccount).removePeer(did);
                         }
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -997,7 +983,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
             }
         });
-        if (MessagesController.getInstance().loadingDialogs && MessagesController.getInstance().dialogs.isEmpty()) {
+        if (MessagesController.getInstance(this.currentAccount).loadingDialogs && MessagesController.getInstance(this.currentAccount).dialogs.isEmpty()) {
             this.searchEmptyView.setVisibility(8);
             this.listView.setEmptyView(this.progressView);
         } else {
@@ -1137,7 +1123,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             Animator[] animatorArr;
             if (this.dialogsAdapter.hasSelectedDialogs()) {
                 if (this.commentView.getTag() == null) {
-                    this.commentView.setFieldText("");
+                    this.commentView.setFieldText(TtmlNode.ANONYMOUS_REGION_ID);
                     this.commentView.setVisibility(0);
                     animatorSet = new AnimatorSet();
                     animatorArr = new Animator[1];
@@ -1248,7 +1234,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     }
                     switch (obj) {
                         case null:
-                            ContactsController.getInstance().forceImportContacts();
+                            ContactsController.getInstance(this.currentAccount).forceImportContacts();
                             break;
                         case 1:
                             ImageLoader.getInstance().checkMediaPaths();
@@ -1262,7 +1248,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.dialogsNeedReload) {
             if (this.dialogsAdapter != null) {
                 if (this.dialogsAdapter.isDataSetChanged()) {
@@ -1271,13 +1257,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     updateVisibleRows(2048);
                 }
             }
-            if (this.dialogsSearchAdapter != null) {
-                this.dialogsSearchAdapter.notifyDataSetChanged();
-            }
             if (this.listView == null) {
                 return;
             }
-            if (MessagesController.getInstance().loadingDialogs && MessagesController.getInstance().dialogs.isEmpty()) {
+            if (MessagesController.getInstance(this.currentAccount).loadingDialogs && MessagesController.getInstance(this.currentAccount).dialogs.isEmpty()) {
                 this.searchEmptyView.setVisibility(8);
                 this.listView.setEmptyView(this.progressView);
                 return;
@@ -1298,7 +1281,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         } else if (id == NotificationCenter.updateInterfaces) {
             updateVisibleRows(((Integer) args[0]).intValue());
         } else if (id == NotificationCenter.appDidLogout) {
-            dialogsLoaded = false;
+            dialogsLoaded[this.currentAccount] = false;
         } else if (id == NotificationCenter.encryptedChatUpdated) {
             updateVisibleRows(0);
         } else if (id == NotificationCenter.contactsDidLoaded) {
@@ -1336,16 +1319,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
 
     private ArrayList<TL_dialog> getDialogsArray() {
         if (this.dialogsType == 0) {
-            return MessagesController.getInstance().dialogs;
+            return MessagesController.getInstance(this.currentAccount).dialogs;
         }
         if (this.dialogsType == 1) {
-            return MessagesController.getInstance().dialogsServerOnly;
+            return MessagesController.getInstance(this.currentAccount).dialogsServerOnly;
         }
         if (this.dialogsType == 2) {
-            return MessagesController.getInstance().dialogsGroupsOnly;
+            return MessagesController.getInstance(this.currentAccount).dialogsGroupsOnly;
         }
         if (this.dialogsType == 3) {
-            return MessagesController.getInstance().dialogsForward;
+            return MessagesController.getInstance(this.currentAccount).dialogsForward;
         }
         return null;
     }
@@ -1358,12 +1341,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
 
     private void updatePasscodeButton() {
         if (this.passcodeItem != null) {
-            if (UserConfig.passcodeHash.length() == 0 || this.searching) {
+            if (SharedConfig.passcodeHash.length() == 0 || this.searching) {
                 this.passcodeItem.setVisibility(8);
                 return;
             }
             this.passcodeItem.setVisibility(0);
-            if (UserConfig.appLocked) {
+            if (SharedConfig.appLocked) {
                 this.passcodeItem.setIcon((int) R.drawable.lock_close);
             } else {
                 this.passcodeItem.setIcon((int) R.drawable.lock_open);
@@ -1450,8 +1433,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private void didSelectResult(final long dialog_id, boolean useAlert, boolean param) {
         Chat chat;
         if (this.addToGroupAlertString == null && ((int) dialog_id) < 0) {
-            chat = MessagesController.getInstance().getChat(Integer.valueOf(-((int) dialog_id)));
-            if (ChatObject.isChannel(chat) && !chat.megagroup && (this.cantSendToChannels || !ChatObject.isCanWriteToChannel(-((int) dialog_id)))) {
+            chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-((int) dialog_id)));
+            if (ChatObject.isChannel(chat) && !chat.megagroup && (this.cantSendToChannels || !ChatObject.isCanWriteToChannel(-((int) dialog_id), this.currentAccount))) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                 builder.setMessage(LocaleController.getString("ChannelCantSendMessage", R.string.ChannelCantSendMessage));
@@ -1475,27 +1458,27 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             int lower_part = (int) dialog_id;
             int high_id = (int) (dialog_id >> 32);
             if (lower_part == 0) {
-                if (MessagesController.getInstance().getUser(Integer.valueOf(MessagesController.getInstance().getEncryptedChat(Integer.valueOf(high_id)).user_id)) != null) {
+                if (MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf(high_id)).user_id)) != null) {
                     builder.setMessage(LocaleController.formatStringSimple(this.selectAlertString, UserObject.getUserName(user)));
                 } else {
                     return;
                 }
             } else if (high_id == 1) {
-                if (MessagesController.getInstance().getChat(Integer.valueOf(lower_part)) != null) {
+                if (MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(lower_part)) != null) {
                     builder.setMessage(LocaleController.formatStringSimple(this.selectAlertStringGroup, chat.title));
                 } else {
                     return;
                 }
-            } else if (lower_part == UserConfig.getClientUserId()) {
+            } else if (lower_part == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                 builder.setMessage(LocaleController.formatStringSimple(this.selectAlertStringGroup, LocaleController.getString("SavedMessages", R.string.SavedMessages)));
             } else if (lower_part > 0) {
-                if (MessagesController.getInstance().getUser(Integer.valueOf(lower_part)) != null) {
+                if (MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_part)) != null) {
                     builder.setMessage(LocaleController.formatStringSimple(this.selectAlertString, UserObject.getUserName(user)));
                 } else {
                     return;
                 }
             } else if (lower_part < 0) {
-                if (MessagesController.getInstance().getChat(Integer.valueOf(-lower_part)) == null) {
+                if (MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lower_part)) == null) {
                     return;
                 }
                 if (this.addToGroupAlertString != null) {
@@ -1539,7 +1522,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
             }
         };
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[TsExtractor.TS_STREAM_TYPE_SPLICE_INFO];
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[TsExtractor.TS_STREAM_TYPE_E_AC3];
         themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
         themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
         themeDescriptionArr[2] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
@@ -1599,81 +1582,82 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         themeDescriptionArr[56] = new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, Theme.key_chats_menuTopShadow);
         themeDescriptionArr[57] = new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{DrawerActionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_chats_menuItemIcon);
         themeDescriptionArr[58] = new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerActionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_chats_menuItemText);
-        themeDescriptionArr[59] = new ThemeDescription(this.sideMenu, 0, new Class[]{DividerCell.class}, Theme.dividerPaint, null, null, Theme.key_divider);
-        themeDescriptionArr[60] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, Theme.key_progressCircle);
-        themeDescriptionArr[61] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_offlinePaint, null, null, Theme.key_windowBackgroundWhiteGrayText3);
-        themeDescriptionArr[62] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_onlinePaint, null, null, Theme.key_windowBackgroundWhiteBlueText3);
-        themeDescriptionArr[63] = new ThemeDescription(this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
-        themeDescriptionArr[64] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, null, null, null, Theme.key_graySection);
-        themeDescriptionArr[65] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{HashtagSearchCell.class}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[66] = new ThemeDescription(this.progressView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_progressCircle);
-        themeDescriptionArr[67] = new ThemeDescription(this.dialogsSearchAdapter.getInnerListView(), 0, new Class[]{HintDialogCell.class}, Theme.dialogs_countPaint, null, null, Theme.key_chats_unreadCounter);
-        themeDescriptionArr[68] = new ThemeDescription(this.dialogsSearchAdapter.getInnerListView(), 0, new Class[]{HintDialogCell.class}, Theme.dialogs_countGrayPaint, null, null, Theme.key_chats_unreadCounterMuted);
-        themeDescriptionArr[69] = new ThemeDescription(this.dialogsSearchAdapter.getInnerListView(), 0, new Class[]{HintDialogCell.class}, Theme.dialogs_countTextPaint, null, null, Theme.key_chats_unreadCounterText);
-        themeDescriptionArr[70] = new ThemeDescription(this.dialogsSearchAdapter.getInnerListView(), 0, new Class[]{HintDialogCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[71] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_inappPlayerBackground);
-        themeDescriptionArr[72] = new ThemeDescription(this.fragmentContextView, 0, new Class[]{FragmentContextView.class}, new String[]{"playButton"}, null, null, null, Theme.key_inappPlayerPlayPause);
-        themeDescriptionArr[73] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_inappPlayerTitle);
-        themeDescriptionArr[74] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_inappPlayerPerformer);
-        themeDescriptionArr[75] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"closeButton"}, null, null, null, Theme.key_inappPlayerClose);
-        themeDescriptionArr[76] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_returnToCallBackground);
-        themeDescriptionArr[77] = new ThemeDescription(this.fragmentContextView, 0, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_returnToCallText);
-        themeDescriptionArr[78] = new ThemeDescription(this.fragmentLocationContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_inappPlayerBackground);
-        themeDescriptionArr[79] = new ThemeDescription(this.fragmentLocationContextView, 0, new Class[]{FragmentContextView.class}, new String[]{"playButton"}, null, null, null, Theme.key_inappPlayerPlayPause);
-        themeDescriptionArr[80] = new ThemeDescription(this.fragmentLocationContextView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_inappPlayerTitle);
-        themeDescriptionArr[81] = new ThemeDescription(this.fragmentLocationContextView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_inappPlayerPerformer);
-        themeDescriptionArr[82] = new ThemeDescription(this.fragmentLocationContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"closeButton"}, null, null, null, Theme.key_inappPlayerClose);
-        themeDescriptionArr[83] = new ThemeDescription(this.fragmentLocationContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_returnToCallBackground);
-        themeDescriptionArr[84] = new ThemeDescription(this.fragmentLocationContextView, 0, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_returnToCallText);
-        themeDescriptionArr[85] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogBackground);
-        themeDescriptionArr[86] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogBackgroundGray);
-        themeDescriptionArr[87] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextBlack);
-        themeDescriptionArr[88] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextLink);
-        themeDescriptionArr[89] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogLinkSelection);
-        themeDescriptionArr[90] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextBlue);
-        themeDescriptionArr[91] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextBlue2);
-        themeDescriptionArr[92] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextBlue3);
-        themeDescriptionArr[93] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextBlue4);
-        themeDescriptionArr[94] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextRed);
-        themeDescriptionArr[95] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextGray);
-        themeDescriptionArr[96] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextGray2);
-        themeDescriptionArr[97] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextGray3);
-        themeDescriptionArr[98] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextGray4);
-        themeDescriptionArr[99] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogIcon);
-        themeDescriptionArr[100] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextHint);
-        themeDescriptionArr[101] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogInputField);
-        themeDescriptionArr[102] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogInputFieldActivated);
-        themeDescriptionArr[103] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogCheckboxSquareBackground);
-        themeDescriptionArr[104] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogCheckboxSquareCheck);
-        themeDescriptionArr[105] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogCheckboxSquareUnchecked);
-        themeDescriptionArr[106] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogCheckboxSquareDisabled);
-        themeDescriptionArr[107] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogRadioBackground);
-        themeDescriptionArr[108] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogRadioBackgroundChecked);
-        themeDescriptionArr[109] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogProgressCircle);
-        themeDescriptionArr[110] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogButton);
-        themeDescriptionArr[111] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogButtonSelector);
-        themeDescriptionArr[112] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogScrollGlow);
-        themeDescriptionArr[113] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogRoundCheckBox);
-        themeDescriptionArr[114] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogRoundCheckBoxCheck);
-        themeDescriptionArr[115] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogBadgeBackground);
-        themeDescriptionArr[116] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogBadgeText);
-        themeDescriptionArr[117] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogLineProgress);
-        themeDescriptionArr[118] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogLineProgressBackground);
-        themeDescriptionArr[119] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogGrayLine);
-        themeDescriptionArr[120] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_actionBar);
-        themeDescriptionArr[121] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_actionBarSelector);
-        themeDescriptionArr[122] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_actionBarTitle);
-        themeDescriptionArr[123] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_actionBarTop);
-        themeDescriptionArr[124] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_actionBarSubtitle);
-        themeDescriptionArr[125] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_actionBarItems);
-        themeDescriptionArr[126] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_background);
-        themeDescriptionArr[127] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_time);
-        themeDescriptionArr[128] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_progressBackground);
-        themeDescriptionArr[TsExtractor.TS_STREAM_TYPE_AC3] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_progress);
-        themeDescriptionArr[TsExtractor.TS_STREAM_TYPE_HDMV_DTS] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_placeholder);
-        themeDescriptionArr[131] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_placeholderBackground);
-        themeDescriptionArr[132] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_button);
-        themeDescriptionArr[133] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_buttonActive);
+        themeDescriptionArr[59] = new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{DrawerActionCell.class}, new String[]{"checkImageView"}, null, null, null, Theme.key_chats_menuItemCheck);
+        themeDescriptionArr[60] = new ThemeDescription(this.sideMenu, 0, new Class[]{DividerCell.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        themeDescriptionArr[61] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, Theme.key_progressCircle);
+        themeDescriptionArr[62] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_offlinePaint, null, null, Theme.key_windowBackgroundWhiteGrayText3);
+        themeDescriptionArr[63] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_onlinePaint, null, null, Theme.key_windowBackgroundWhiteBlueText3);
+        themeDescriptionArr[64] = new ThemeDescription(this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        themeDescriptionArr[65] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, null, null, null, Theme.key_graySection);
+        themeDescriptionArr[66] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{HashtagSearchCell.class}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[67] = new ThemeDescription(this.progressView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_progressCircle);
+        themeDescriptionArr[68] = new ThemeDescription(this.dialogsSearchAdapter.getInnerListView(), 0, new Class[]{HintDialogCell.class}, Theme.dialogs_countPaint, null, null, Theme.key_chats_unreadCounter);
+        themeDescriptionArr[69] = new ThemeDescription(this.dialogsSearchAdapter.getInnerListView(), 0, new Class[]{HintDialogCell.class}, Theme.dialogs_countGrayPaint, null, null, Theme.key_chats_unreadCounterMuted);
+        themeDescriptionArr[70] = new ThemeDescription(this.dialogsSearchAdapter.getInnerListView(), 0, new Class[]{HintDialogCell.class}, Theme.dialogs_countTextPaint, null, null, Theme.key_chats_unreadCounterText);
+        themeDescriptionArr[71] = new ThemeDescription(this.dialogsSearchAdapter.getInnerListView(), 0, new Class[]{HintDialogCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[72] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_inappPlayerBackground);
+        themeDescriptionArr[73] = new ThemeDescription(this.fragmentContextView, 0, new Class[]{FragmentContextView.class}, new String[]{"playButton"}, null, null, null, Theme.key_inappPlayerPlayPause);
+        themeDescriptionArr[74] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_inappPlayerTitle);
+        themeDescriptionArr[75] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_inappPlayerPerformer);
+        themeDescriptionArr[76] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"closeButton"}, null, null, null, Theme.key_inappPlayerClose);
+        themeDescriptionArr[77] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_returnToCallBackground);
+        themeDescriptionArr[78] = new ThemeDescription(this.fragmentContextView, 0, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_returnToCallText);
+        themeDescriptionArr[79] = new ThemeDescription(this.fragmentLocationContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_inappPlayerBackground);
+        themeDescriptionArr[80] = new ThemeDescription(this.fragmentLocationContextView, 0, new Class[]{FragmentContextView.class}, new String[]{"playButton"}, null, null, null, Theme.key_inappPlayerPlayPause);
+        themeDescriptionArr[81] = new ThemeDescription(this.fragmentLocationContextView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_inappPlayerTitle);
+        themeDescriptionArr[82] = new ThemeDescription(this.fragmentLocationContextView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_inappPlayerPerformer);
+        themeDescriptionArr[83] = new ThemeDescription(this.fragmentLocationContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"closeButton"}, null, null, null, Theme.key_inappPlayerClose);
+        themeDescriptionArr[84] = new ThemeDescription(this.fragmentLocationContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_returnToCallBackground);
+        themeDescriptionArr[85] = new ThemeDescription(this.fragmentLocationContextView, 0, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_returnToCallText);
+        themeDescriptionArr[86] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogBackground);
+        themeDescriptionArr[87] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogBackgroundGray);
+        themeDescriptionArr[88] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextBlack);
+        themeDescriptionArr[89] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextLink);
+        themeDescriptionArr[90] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogLinkSelection);
+        themeDescriptionArr[91] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextBlue);
+        themeDescriptionArr[92] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextBlue2);
+        themeDescriptionArr[93] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextBlue3);
+        themeDescriptionArr[94] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextBlue4);
+        themeDescriptionArr[95] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextRed);
+        themeDescriptionArr[96] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextGray);
+        themeDescriptionArr[97] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextGray2);
+        themeDescriptionArr[98] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextGray3);
+        themeDescriptionArr[99] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextGray4);
+        themeDescriptionArr[100] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogIcon);
+        themeDescriptionArr[101] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogTextHint);
+        themeDescriptionArr[102] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogInputField);
+        themeDescriptionArr[103] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogInputFieldActivated);
+        themeDescriptionArr[104] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogCheckboxSquareBackground);
+        themeDescriptionArr[105] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogCheckboxSquareCheck);
+        themeDescriptionArr[106] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogCheckboxSquareUnchecked);
+        themeDescriptionArr[107] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogCheckboxSquareDisabled);
+        themeDescriptionArr[108] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogRadioBackground);
+        themeDescriptionArr[109] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogRadioBackgroundChecked);
+        themeDescriptionArr[110] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogProgressCircle);
+        themeDescriptionArr[111] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogButton);
+        themeDescriptionArr[112] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogButtonSelector);
+        themeDescriptionArr[113] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogScrollGlow);
+        themeDescriptionArr[114] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogRoundCheckBox);
+        themeDescriptionArr[115] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogRoundCheckBoxCheck);
+        themeDescriptionArr[116] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogBadgeBackground);
+        themeDescriptionArr[117] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogBadgeText);
+        themeDescriptionArr[118] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogLineProgress);
+        themeDescriptionArr[119] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogLineProgressBackground);
+        themeDescriptionArr[120] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_dialogGrayLine);
+        themeDescriptionArr[121] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_actionBar);
+        themeDescriptionArr[122] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_actionBarSelector);
+        themeDescriptionArr[123] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_actionBarTitle);
+        themeDescriptionArr[124] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_actionBarTop);
+        themeDescriptionArr[125] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_actionBarSubtitle);
+        themeDescriptionArr[126] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_actionBarItems);
+        themeDescriptionArr[127] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_background);
+        themeDescriptionArr[128] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_time);
+        themeDescriptionArr[TsExtractor.TS_STREAM_TYPE_AC3] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_progressBackground);
+        themeDescriptionArr[TsExtractor.TS_STREAM_TYPE_HDMV_DTS] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_progress);
+        themeDescriptionArr[131] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_placeholder);
+        themeDescriptionArr[132] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_placeholderBackground);
+        themeDescriptionArr[133] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_button);
+        themeDescriptionArr[TsExtractor.TS_STREAM_TYPE_SPLICE_INFO] = new ThemeDescription(null, 0, null, null, null, null, Theme.key_player_buttonActive);
         return themeDescriptionArr;
     }
 }

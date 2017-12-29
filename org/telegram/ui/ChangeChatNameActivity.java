@@ -17,7 +17,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -116,9 +115,9 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
                         return;
                     }
                     if (ChangeChatNameActivity.this.uploadedAvatar != null) {
-                        MessagesController.getInstance().changeChatAvatar(ChangeChatNameActivity.this.chatId, ChangeChatNameActivity.this.uploadedAvatar);
+                        MessagesController.getAccountInstance().changeChatAvatar(ChangeChatNameActivity.this.chatId, ChangeChatNameActivity.this.uploadedAvatar);
                     } else if (ChangeChatNameActivity.this.avatar == null && (ChangeChatNameActivity.this.currentChat.photo instanceof TL_chatPhoto)) {
-                        MessagesController.getInstance().changeChatAvatar(ChangeChatNameActivity.this.chatId, null);
+                        MessagesController.getAccountInstance().changeChatAvatar(ChangeChatNameActivity.this.chatId, null);
                     }
                     ChangeChatNameActivity.this.finishFragment();
                     if (ChangeChatNameActivity.this.nameTextView.getText().length() != 0) {
@@ -129,7 +128,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
-        this.currentChat = MessagesController.getInstance().getChat(Integer.valueOf(this.chatId));
+        this.currentChat = MessagesController.getAccountInstance().getChat(Integer.valueOf(this.chatId));
         LinearLayout linearLayout = new LinearLayout(context);
         this.fragmentView = linearLayout;
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -252,13 +251,13 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.closeChats);
+                            NotificationCenter.getInstance(ChangeChatNameActivity.this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
                             if (AndroidUtilities.isTablet()) {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, Long.valueOf(-((long) ChangeChatNameActivity.this.chatId)));
+                                NotificationCenter.getInstance(ChangeChatNameActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, Long.valueOf(-((long) ChangeChatNameActivity.this.chatId)));
                             } else {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                                NotificationCenter.getInstance(ChangeChatNameActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                             }
-                            MessagesController.getInstance().deleteUserFromChat(ChangeChatNameActivity.this.chatId, MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId())), null, true);
+                            MessagesController.getAccountInstance().deleteUserFromChat(ChangeChatNameActivity.this.chatId, MessagesController.getAccountInstance().getUser(Integer.valueOf(UserConfig.getInstance(ChangeChatNameActivity.this.currentAccount).getClientUserId())), null, true);
                             ChangeChatNameActivity.this.finishFragment();
                         }
                     });
@@ -285,7 +284,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
 
     public void onResume() {
         super.onResume();
-        if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("view_animations", true)) {
+        if (!MessagesController.getGlobalMainSettings().getBoolean("view_animations", true)) {
             this.nameTextView.requestFocus();
             AndroidUtilities.showKeyboard(this.nameTextView);
         }
@@ -349,6 +348,6 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
     }
 
     private void saveName() {
-        MessagesController.getInstance().changeChatTitle(this.chatId, this.nameTextView.getText().toString());
+        MessagesController.getAccountInstance().changeChatTitle(this.chatId, this.nameTextView.getText().toString());
     }
 }

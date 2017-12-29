@@ -1,25 +1,23 @@
 package com.google.android.gms.internal;
 
-import android.app.job.JobParameters;
+import java.util.List;
+import java.util.concurrent.Callable;
 
-final class zzcix implements Runnable {
-    private /* synthetic */ zzcgl zzbrM;
-    final /* synthetic */ zzcfl zzbrP;
-    final /* synthetic */ Integer zzbun;
-    final /* synthetic */ JobParameters zzbuo;
-    final /* synthetic */ zzciw zzbup;
+final class zzcix implements Callable<List<zzclp>> {
+    private /* synthetic */ zzcgi zzjgn;
+    private /* synthetic */ zzcir zzjgo;
+    private /* synthetic */ String zzjgq;
+    private /* synthetic */ String zzjgr;
 
-    zzcix(zzciw com_google_android_gms_internal_zzciw, zzcgl com_google_android_gms_internal_zzcgl, Integer num, zzcfl com_google_android_gms_internal_zzcfl, JobParameters jobParameters) {
-        this.zzbup = com_google_android_gms_internal_zzciw;
-        this.zzbrM = com_google_android_gms_internal_zzcgl;
-        this.zzbun = num;
-        this.zzbrP = com_google_android_gms_internal_zzcfl;
-        this.zzbuo = jobParameters;
+    zzcix(zzcir com_google_android_gms_internal_zzcir, zzcgi com_google_android_gms_internal_zzcgi, String str, String str2) {
+        this.zzjgo = com_google_android_gms_internal_zzcir;
+        this.zzjgn = com_google_android_gms_internal_zzcgi;
+        this.zzjgq = str;
+        this.zzjgr = str2;
     }
 
-    public final void run() {
-        this.zzbrM.zzze();
-        this.zzbrM.zzl(new zzciy(this));
-        this.zzbrM.zzza();
+    public final /* synthetic */ Object call() throws Exception {
+        this.zzjgo.zziwf.zzbal();
+        return this.zzjgo.zziwf.zzaws().zzg(this.zzjgn.packageName, this.zzjgq, this.zzjgr);
     }
 }

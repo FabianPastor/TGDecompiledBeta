@@ -6,14 +6,13 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.view.animation.DecelerateInterpolator;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 
 public class BackDrawable extends Drawable {
     private boolean alwaysClose;
     private boolean animationInProgress;
-    private float animationTime = BitmapDescriptorFactory.HUE_MAGENTA;
+    private float animationTime = 300.0f;
     private int color = -1;
     private int currentAnimationTime;
     private float currentRotation;

@@ -22,7 +22,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.text.Html;
 import android.text.Spannable;
@@ -45,7 +44,6 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -54,21 +52,21 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
@@ -168,7 +166,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             PlaceProviderObject placeProviderObject = null;
             int i = 0;
             if (fileLocation != null) {
-                User user = MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId()));
+                User user = MessagesController.getInstance(SettingsActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(SettingsActivity.this.currentAccount).getClientUserId()));
                 if (!(user == null || user.photo == null || user.photo.photo_big == null)) {
                     FileLocation photoBig = user.photo.photo_big;
                     if (photoBig.local_id == fileLocation.local_id && photoBig.volume_id == fileLocation.volume_id && photoBig.dc_id == fileLocation.dc_id) {
@@ -183,8 +181,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         placeProviderObject.viewY = i2 - i;
                         placeProviderObject.parentView = SettingsActivity.this.avatarImage;
                         placeProviderObject.imageReceiver = SettingsActivity.this.avatarImage.getImageReceiver();
-                        placeProviderObject.dialogId = UserConfig.getClientUserId();
-                        placeProviderObject.thumb = placeProviderObject.imageReceiver.getBitmap();
+                        placeProviderObject.dialogId = UserConfig.getInstance(SettingsActivity.this.currentAccount).getClientUserId();
+                        placeProviderObject.thumb = placeProviderObject.imageReceiver.getBitmapSafe();
                         placeProviderObject.size = -1;
                         placeProviderObject.radius = SettingsActivity.this.avatarImage.getImageReceiver().getRoundRadius();
                         placeProviderObject.scale = SettingsActivity.this.avatarImage.getScaleX();
@@ -222,7 +220,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         private LinkMovementMethodMy() {
         }
 
-        public boolean onTouchEvent(@NonNull TextView widget, @NonNull Spannable buffer, @NonNull MotionEvent event) {
+        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
             try {
                 return super.onTouchEvent(widget, buffer, event);
             } catch (Throwable e) {
@@ -257,7 +255,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 case 2:
                     TextSettingsCell textCell = holder.itemView;
                     if (position == SettingsActivity.this.textSizeRow) {
-                        int size = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
+                        int size = MessagesController.getGlobalMainSettings().getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
                         textCell.setTextAndValue(LocaleController.getString("TextSize", R.string.TextSize), String.format("%d", new Object[]{Integer.valueOf(size)}), true);
                         return;
                     } else if (position == SettingsActivity.this.languageRow) {
@@ -267,7 +265,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         textCell.setTextAndValue(LocaleController.getString("Theme", R.string.Theme), Theme.getCurrentThemeName(), true);
                         return;
                     } else if (position == SettingsActivity.this.contactsSortRow) {
-                        int sort = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("sortContactsBy", 0);
+                        int sort = MessagesController.getGlobalMainSettings().getInt("sortContactsBy", 0);
                         if (sort == 0) {
                             value = LocaleController.getString("Default", R.string.Default);
                         } else if (sort == 1) {
@@ -308,7 +306,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         textCell.setText(LocaleController.getString("ImportContacts", R.string.ImportContacts), true);
                         return;
                     } else if (position == SettingsActivity.this.stickersRow) {
-                        textCell.setTextAndValue(LocaleController.getString("StickersName", R.string.StickersName), StickersQuery.getUnreadStickerSets().size() != 0 ? String.format("%d", new Object[]{Integer.valueOf(StickersQuery.getUnreadStickerSets().size())}) : "", true);
+                        textCell.setTextAndValue(LocaleController.getString("StickersName", R.string.StickersName), DataQuery.getInstance(SettingsActivity.this.currentAccount).getUnreadStickerSets().size() != 0 ? String.format("%d", new Object[]{Integer.valueOf(DataQuery.getInstance(SettingsActivity.this.currentAccount).getUnreadStickerSets().size())}) : TtmlNode.ANONYMOUS_REGION_ID, true);
                         return;
                     } else if (position == SettingsActivity.this.privacyPolicyRow) {
                         textCell.setText(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), true);
@@ -321,7 +319,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     }
                 case 3:
                     TextCheckCell textCell2 = holder.itemView;
-                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                    SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                     if (position == SettingsActivity.this.enableAnimationsRow) {
                         textCell2.setTextAndCheck(LocaleController.getString("EnableAnimations", R.string.EnableAnimations), preferences.getBoolean("view_animations", true), false);
                         return;
@@ -329,19 +327,19 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         textCell2.setTextAndCheck(LocaleController.getString("SendByEnter", R.string.SendByEnter), preferences.getBoolean("send_by_enter", false), true);
                         return;
                     } else if (position == SettingsActivity.this.saveToGalleryRow) {
-                        textCell2.setTextAndCheck(LocaleController.getString("SaveToGallerySettings", R.string.SaveToGallerySettings), MediaController.getInstance().canSaveToGallery(), false);
+                        textCell2.setTextAndCheck(LocaleController.getString("SaveToGallerySettings", R.string.SaveToGallerySettings), SharedConfig.saveToGallery, false);
                         return;
                     } else if (position == SettingsActivity.this.autoplayGifsRow) {
-                        textCell2.setTextAndCheck(LocaleController.getString("AutoplayGifs", R.string.AutoplayGifs), MediaController.getInstance().canAutoplayGifs(), true);
+                        textCell2.setTextAndCheck(LocaleController.getString("AutoplayGifs", R.string.AutoplayGifs), SharedConfig.autoplayGifs, true);
                         return;
                     } else if (position == SettingsActivity.this.raiseToSpeakRow) {
-                        textCell2.setTextAndCheck(LocaleController.getString("RaiseToSpeak", R.string.RaiseToSpeak), MediaController.getInstance().canRaiseToSpeak(), true);
+                        textCell2.setTextAndCheck(LocaleController.getString("RaiseToSpeak", R.string.RaiseToSpeak), SharedConfig.raiseToSpeak, true);
                         return;
                     } else if (position == SettingsActivity.this.customTabsRow) {
-                        textCell2.setTextAndValueAndCheck(LocaleController.getString("ChromeCustomTabs", R.string.ChromeCustomTabs), LocaleController.getString("ChromeCustomTabsInfo", R.string.ChromeCustomTabsInfo), MediaController.getInstance().canCustomTabs(), false, true);
+                        textCell2.setTextAndValueAndCheck(LocaleController.getString("ChromeCustomTabs", R.string.ChromeCustomTabs), LocaleController.getString("ChromeCustomTabsInfo", R.string.ChromeCustomTabsInfo), SharedConfig.customTabs, false, true);
                         return;
                     } else if (position == SettingsActivity.this.directShareRow) {
-                        textCell2.setTextAndValueAndCheck(LocaleController.getString("DirectShare", R.string.DirectShare), LocaleController.getString("DirectShareInfo", R.string.DirectShareInfo), MediaController.getInstance().canDirectShare(), false, true);
+                        textCell2.setTextAndValueAndCheck(LocaleController.getString("DirectShare", R.string.DirectShare), LocaleController.getString("DirectShareInfo", R.string.DirectShareInfo), SharedConfig.directShare, false, true);
                         return;
                     } else if (position == SettingsActivity.this.dumpCallStatsRow) {
                         textCell2.setTextAndCheck("Dump detailed call stats", preferences.getBoolean("dbg_dump_call_stats", false), true);
@@ -369,7 +367,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     TextDetailSettingsCell textCell3 = holder.itemView;
                     User user;
                     if (position == SettingsActivity.this.numberRow) {
-                        user = UserConfig.getCurrentUser();
+                        user = UserConfig.getInstance(SettingsActivity.this.currentAccount).getCurrentUser();
                         if (user == null || user.phone == null || user.phone.length() == 0) {
                             value = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
                         } else {
@@ -378,7 +376,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         textCell3.setTextAndValue(value, LocaleController.getString("Phone", R.string.Phone), true);
                         return;
                     } else if (position == SettingsActivity.this.usernameRow) {
-                        user = UserConfig.getCurrentUser();
+                        user = UserConfig.getInstance(SettingsActivity.this.currentAccount).getCurrentUser();
                         if (user == null || TextUtils.isEmpty(user.username)) {
                             value = LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty);
                         } else {
@@ -387,7 +385,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         textCell3.setTextAndValue(value, LocaleController.getString("Username", R.string.Username), true);
                         return;
                     } else if (position == SettingsActivity.this.bioRow) {
-                        TL_userFull userFull = MessagesController.getInstance().getUserFull(UserConfig.getClientUserId());
+                        TL_userFull userFull = MessagesController.getInstance(SettingsActivity.this.currentAccount).getUserFull(UserConfig.getInstance(SettingsActivity.this.currentAccount).getClientUserId());
                         if (userFull == null) {
                             value = LocaleController.getString("Loading", R.string.Loading);
                         } else if (TextUtils.isEmpty(userFull.about)) {
@@ -441,7 +439,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     try {
                         PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
                         int code = pInfo.versionCode / 10;
-                        String abi = "";
+                        String abi = TtmlNode.ANONYMOUS_REGION_ID;
                         switch (pInfo.versionCode % 10) {
                             case 0:
                                 abi = "arm";
@@ -509,19 +507,19 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             public void didUploadedPhoto(InputFile file, PhotoSize small, PhotoSize big) {
                 TL_photos_uploadProfilePhoto req = new TL_photos_uploadProfilePhoto();
                 req.file = file;
-                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                ConnectionsManager.getInstance(SettingsActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, TL_error error) {
                         if (error == null) {
-                            User user = MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId()));
+                            User user = MessagesController.getInstance(SettingsActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(SettingsActivity.this.currentAccount).getClientUserId()));
                             if (user == null) {
-                                user = UserConfig.getCurrentUser();
+                                user = UserConfig.getInstance(SettingsActivity.this.currentAccount).getCurrentUser();
                                 if (user != null) {
-                                    MessagesController.getInstance().putUser(user, false);
+                                    MessagesController.getInstance(SettingsActivity.this.currentAccount).putUser(user, false);
                                 } else {
                                     return;
                                 }
                             }
-                            UserConfig.setCurrentUser(user);
+                            UserConfig.getInstance(SettingsActivity.this.currentAccount).setCurrentUser(user);
                             TL_photos_photo photo = (TL_photos_photo) response;
                             ArrayList<PhotoSize> sizes = photo.photo.sizes;
                             PhotoSize smallSize = FileLoader.getClosestPhotoSizeWithSize(sizes, 100);
@@ -536,15 +534,15 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             } else if (smallSize != null) {
                                 user.photo.photo_small = smallSize.location;
                             }
-                            MessagesStorage.getInstance().clearUserPhotos(user.id);
+                            MessagesStorage.getInstance(SettingsActivity.this.currentAccount).clearUserPhotos(user.id);
                             ArrayList<User> users = new ArrayList();
                             users.add(user);
-                            MessagesStorage.getInstance().putUsersAndChats(users, null, false, true);
+                            MessagesStorage.getInstance(SettingsActivity.this.currentAccount).putUsersAndChats(users, null, false, true);
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
-                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(MessagesController.UPDATE_MASK_ALL));
-                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
-                                    UserConfig.saveConfig(true);
+                                    NotificationCenter.getInstance(SettingsActivity.this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(MessagesController.UPDATE_MASK_ALL));
+                                    NotificationCenter.getInstance(SettingsActivity.this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
+                                    UserConfig.getInstance(SettingsActivity.this.currentAccount).saveConfig(true);
                                 }
                             });
                         }
@@ -552,10 +550,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 });
             }
         };
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.featuredStickersDidLoaded);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.userInfoDidLoaded);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.featuredStickersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.userInfoDidLoaded);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
         this.rowCount = 0;
         int i = this.rowCount;
         this.rowCount = i + 1;
@@ -666,8 +664,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         i = this.rowCount;
         this.rowCount = i + 1;
         this.versionRow = i;
-        StickersQuery.checkFeaturedStickers();
-        MessagesController.getInstance().loadFullUser(UserConfig.getCurrentUser(), this.classGuid, true);
+        DataQuery.getInstance(this.currentAccount).checkFeaturedStickers();
+        MessagesController.getInstance(this.currentAccount).loadFullUser(UserConfig.getInstance(this.currentAccount).getCurrentUser(), this.classGuid, true);
         return true;
     }
 
@@ -676,11 +674,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         if (this.avatarImage != null) {
             this.avatarImage.setImageDrawable(null);
         }
-        MessagesController.getInstance().cancelLoadFullUser(UserConfig.getClientUserId());
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.featuredStickersDidLoaded);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.userInfoDidLoaded);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
+        MessagesController.getInstance(this.currentAccount).cancelLoadFullUser(UserConfig.getInstance(this.currentAccount).getClientUserId());
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.featuredStickersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.userInfoDidLoaded);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
         this.avatarUpdater.clear();
     }
 
@@ -706,7 +704,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            MessagesController.getInstance().performLogout(true);
+                            MessagesController.getInstance(SettingsActivity.this.currentAccount).performLogout(true);
                         }
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -719,7 +717,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         item.addSubItem(2, LocaleController.getString("LogOut", R.string.LogOut));
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context) {
-            protected boolean drawChild(@NonNull Canvas canvas, @NonNull View child, long drawingTime) {
+            protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
                 if (child != SettingsActivity.this.listView) {
                     return super.drawChild(canvas, child, drawingTime);
                 }
@@ -770,15 +768,15 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         View numberPicker = new NumberPicker(SettingsActivity.this.getParentActivity());
                         numberPicker.setMinValue(12);
                         numberPicker.setMaxValue(30);
-                        numberPicker.setValue(MessagesController.getInstance().fontSize);
+                        numberPicker.setValue(MessagesController.getInstance(SettingsActivity.this.currentAccount).fontSize);
                         builder.setView(numberPicker);
                         final View view2 = numberPicker;
                         final int i = position;
                         builder.setNegativeButton(LocaleController.getString("Done", R.string.Done), new OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+                                Editor editor = MessagesController.getGlobalMainSettings().edit();
                                 editor.putInt("fons_size", view2.getValue());
-                                MessagesController.getInstance().fontSize = view2.getValue();
+                                MessagesController.getInstance(SettingsActivity.this.currentAccount).fontSize = view2.getValue();
                                 editor.commit();
                                 if (SettingsActivity.this.listAdapter != null) {
                                     SettingsActivity.this.listAdapter.notifyItemChanged(i);
@@ -788,7 +786,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         SettingsActivity.this.showDialog(builder.create());
                     }
                 } else if (position == SettingsActivity.this.enableAnimationsRow) {
-                    preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                    preferences = MessagesController.getGlobalMainSettings();
                     boolean animations = preferences.getBoolean("view_animations", true);
                     editor = preferences.edit();
                     editor.putBoolean("view_animations", !animations);
@@ -834,7 +832,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 } else if (position == SettingsActivity.this.clearLogsRow) {
                     FileLog.cleanupLogs();
                 } else if (position == SettingsActivity.this.sendByEnterRow) {
-                    preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                    preferences = MessagesController.getGlobalMainSettings();
                     boolean send = preferences.getBoolean("send_by_enter", false);
                     editor = preferences.edit();
                     editor.putBoolean("send_by_enter", !send);
@@ -843,29 +841,29 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         ((TextCheckCell) view).setChecked(!send);
                     }
                 } else if (position == SettingsActivity.this.raiseToSpeakRow) {
-                    MediaController.getInstance().toogleRaiseToSpeak();
+                    SharedConfig.toogleRaiseToSpeak();
                     if (view instanceof TextCheckCell) {
-                        ((TextCheckCell) view).setChecked(MediaController.getInstance().canRaiseToSpeak());
+                        ((TextCheckCell) view).setChecked(SharedConfig.raiseToSpeak);
                     }
                 } else if (position == SettingsActivity.this.autoplayGifsRow) {
-                    MediaController.getInstance().toggleAutoplayGifs();
+                    SharedConfig.toggleAutoplayGifs();
                     if (view instanceof TextCheckCell) {
-                        ((TextCheckCell) view).setChecked(MediaController.getInstance().canAutoplayGifs());
+                        ((TextCheckCell) view).setChecked(SharedConfig.autoplayGifs);
                     }
                 } else if (position == SettingsActivity.this.saveToGalleryRow) {
-                    MediaController.getInstance().toggleSaveToGallery();
+                    SharedConfig.toggleSaveToGallery();
                     if (view instanceof TextCheckCell) {
-                        ((TextCheckCell) view).setChecked(MediaController.getInstance().canSaveToGallery());
+                        ((TextCheckCell) view).setChecked(SharedConfig.saveToGallery);
                     }
                 } else if (position == SettingsActivity.this.customTabsRow) {
-                    MediaController.getInstance().toggleCustomTabs();
+                    SharedConfig.toggleCustomTabs();
                     if (view instanceof TextCheckCell) {
-                        ((TextCheckCell) view).setChecked(MediaController.getInstance().canCustomTabs());
+                        ((TextCheckCell) view).setChecked(SharedConfig.customTabs);
                     }
                 } else if (position == SettingsActivity.this.directShareRow) {
-                    MediaController.getInstance().toggleDirectShare();
+                    SharedConfig.toggleDirectShare();
                     if (view instanceof TextCheckCell) {
-                        ((TextCheckCell) view).setChecked(MediaController.getInstance().canDirectShare());
+                        ((TextCheckCell) view).setChecked(SharedConfig.directShare);
                     }
                 } else if (position == SettingsActivity.this.privacyRow) {
                     SettingsActivity.this.presentFragment(new PrivacySettingsActivity());
@@ -882,7 +880,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                ConnectionsManager.getInstance().switchBackend();
+                                ConnectionsManager.getInstance(SettingsActivity.this.currentAccount).switchBackend();
                             }
                         });
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -902,7 +900,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             i2 = position;
                             builder.setItems(new CharSequence[]{LocaleController.getString("Default", R.string.Default), LocaleController.getString("SortFirstName", R.string.SortFirstName), LocaleController.getString("SortLastName", R.string.SortLastName)}, new OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+                                    Editor editor = MessagesController.getGlobalMainSettings().edit();
                                     editor.putInt("sortContactsBy", which);
                                     editor.commit();
                                     if (SettingsActivity.this.listAdapter != null) {
@@ -916,7 +914,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     } else if (position == SettingsActivity.this.usernameRow) {
                         SettingsActivity.this.presentFragment(new ChangeUsernameActivity());
                     } else if (position == SettingsActivity.this.bioRow) {
-                        if (MessagesController.getInstance().getUserFull(UserConfig.getClientUserId()) != null) {
+                        if (MessagesController.getInstance(SettingsActivity.this.currentAccount).getUserFull(UserConfig.getInstance(SettingsActivity.this.currentAccount).getClientUserId()) != null) {
                             SettingsActivity.this.presentFragment(new ChangeBioActivity());
                         }
                     } else if (position == SettingsActivity.this.numberRow) {
@@ -936,17 +934,17 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 if (a < (VERSION.SDK_INT >= 19 ? 2 : 1)) {
                                     String name = null;
                                     if (a == 0) {
-                                        maskValues[a] = MessagesController.getInstance().allowBigEmoji;
+                                        maskValues[a] = MessagesController.getInstance(SettingsActivity.this.currentAccount).allowBigEmoji;
                                         name = LocaleController.getString("EmojiBigSize", R.string.EmojiBigSize);
                                     } else if (a == 1) {
-                                        maskValues[a] = MessagesController.getInstance().useSystemEmoji;
+                                        maskValues[a] = MessagesController.getInstance(SettingsActivity.this.currentAccount).useSystemEmoji;
                                         name = LocaleController.getString("EmojiUseDefault", R.string.EmojiUseDefault);
                                     }
                                     CheckBoxCell checkBoxCell = new CheckBoxCell(SettingsActivity.this.getParentActivity(), true);
                                     checkBoxCell.setTag(Integer.valueOf(a));
                                     checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                                     linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
-                                    checkBoxCell.setText(name, "", maskValues[a], true);
+                                    checkBoxCell.setText(name, TtmlNode.ANONYMOUS_REGION_ID, maskValues[a], true);
                                     checkBoxCell.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                                     checkBoxCell.setOnClickListener(new View.OnClickListener() {
                                         public void onClick(View v) {
@@ -972,12 +970,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                             } catch (Throwable e) {
                                                 FileLog.e(e);
                                             }
-                                            Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
-                                            MessagesController instance = MessagesController.getInstance();
+                                            Editor editor = MessagesController.getGlobalMainSettings().edit();
+                                            MessagesController instance = MessagesController.getInstance(SettingsActivity.this.currentAccount);
                                             boolean z = maskValues[0];
                                             instance.allowBigEmoji = z;
                                             editor.putBoolean("allowBigEmoji", z);
-                                            instance = MessagesController.getInstance();
+                                            instance = MessagesController.getInstance(SettingsActivity.this.currentAccount);
                                             z = maskValues[1];
                                             instance.useSystemEmoji = z;
                                             editor.putBoolean("useSystemEmoji", z);
@@ -995,7 +993,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             }
                         }
                     } else if (position == SettingsActivity.this.dumpCallStatsRow) {
-                        preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                        preferences = MessagesController.getGlobalMainSettings();
                         boolean dump = preferences.getBoolean("dbg_dump_call_stats", false);
                         editor = preferences.edit();
                         editor.putBoolean("dbg_dump_call_stats", !dump);
@@ -1026,8 +1024,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         items[1] = LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts);
                         items[2] = LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts);
                         items[3] = LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs);
-                        items[4] = MediaController.getInstance().canInAppCamera() ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
-                        if (MediaController.getInstance().canRoundCamera16to9()) {
+                        items[4] = SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
+                        if (SharedConfig.roundCamera16to9) {
                             str = "switch camera to 4:3";
                         } else {
                             str = "switch camera to 16:9";
@@ -1039,7 +1037,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         items[1] = LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts);
                         items[2] = LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts);
                         items[3] = LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs);
-                        if (MediaController.getInstance().canInAppCamera()) {
+                        if (SharedConfig.inappCamera) {
                             str = LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera);
                         } else {
                             str = LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
@@ -1049,17 +1047,17 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     builder.setItems(items, new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             if (which == 0) {
-                                ContactsController.getInstance().forceImportContacts();
+                                ContactsController.getInstance(SettingsActivity.this.currentAccount).forceImportContacts();
                             } else if (which == 1) {
-                                ContactsController.getInstance().loadContacts(false, 0);
+                                ContactsController.getInstance(SettingsActivity.this.currentAccount).loadContacts(false, 0);
                             } else if (which == 2) {
-                                ContactsController.getInstance().resetImportedContacts();
+                                ContactsController.getInstance(SettingsActivity.this.currentAccount).resetImportedContacts();
                             } else if (which == 3) {
-                                MessagesController.getInstance().forceResetDialogs();
+                                MessagesController.getInstance(SettingsActivity.this.currentAccount).forceResetDialogs();
                             } else if (which == 4) {
-                                MediaController.getInstance().toggleInappCamera();
+                                SharedConfig.toggleInappCamera();
                             } else if (which == 5) {
-                                MediaController.getInstance().toggleRoundCamera16to9();
+                                SharedConfig.toggleRoundCamera16to9();
                             }
                         }
                     });
@@ -1090,7 +1088,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(42, 42.0f, 51, 64.0f, 0.0f, 0.0f, 0.0f));
         this.avatarImage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                User user = MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId()));
+                User user = MessagesController.getInstance(SettingsActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(SettingsActivity.this.currentAccount).getClientUserId()));
                 if (user != null && user.photo != null && user.photo.photo_big != null) {
                     PhotoViewer.getInstance().setParentActivity(SettingsActivity.this.getParentActivity());
                     PhotoViewer.getInstance().openPhoto(user.photo.photo_big, SettingsActivity.this.provider);
@@ -1122,7 +1120,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor(Theme.key_profile_actionBackground), Theme.getColor(Theme.key_profile_actionPressedBackground));
         if (VERSION.SDK_INT < 21) {
             Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
-            shadowDrawable.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
             Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
             drawable = combinedDrawable;
@@ -1143,14 +1141,14 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 }
             });
         }
-        frameLayout.addView(this.writeButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : BitmapDescriptorFactory.HUE_YELLOW, 53, 0.0f, 0.0f, 16.0f, 0.0f));
+        frameLayout.addView(this.writeButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, 53, 0.0f, 0.0f, 16.0f, 0.0f));
         this.writeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (SettingsActivity.this.getParentActivity() != null) {
                     Builder builder = new Builder(SettingsActivity.this.getParentActivity());
-                    User user = MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId()));
+                    User user = MessagesController.getInstance(SettingsActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(SettingsActivity.this.currentAccount).getClientUserId()));
                     if (user == null) {
-                        user = UserConfig.getCurrentUser();
+                        user = UserConfig.getInstance(SettingsActivity.this.currentAccount).getCurrentUser();
                     }
                     if (user != null) {
                         CharSequence[] items;
@@ -1169,7 +1167,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 } else if (i == 1) {
                                     SettingsActivity.this.avatarUpdater.openGallery();
                                 } else if (i == 2) {
-                                    MessagesController.getInstance().deleteUserPhoto(null);
+                                    MessagesController.getInstance(SettingsActivity.this.currentAccount).deleteUserPhoto(null);
                                 }
                             }
                         });
@@ -1205,11 +1203,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     private void performAskAQuestion() {
-        final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+        final SharedPreferences preferences = MessagesController.getMainSettings(this.currentAccount);
         int uid = preferences.getInt("support_id", 0);
         User supportUser = null;
         if (uid != 0) {
-            supportUser = MessagesController.getInstance().getUser(Integer.valueOf(uid));
+            supportUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(uid));
             if (supportUser == null) {
                 String userString = preferences.getString("support_user", null);
                 if (userString != null) {
@@ -1236,7 +1234,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(false);
             progressDialog.show();
-            ConnectionsManager.getInstance().sendRequest(new TL_help_getSupport(), new RequestDelegate() {
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_help_getSupport(), new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                     if (error == null) {
                         final TL_help_support res = (TL_help_support) response;
@@ -1256,8 +1254,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 }
                                 ArrayList<User> users = new ArrayList();
                                 users.add(res.user);
-                                MessagesStorage.getInstance().putUsersAndChats(users, null, true, true);
-                                MessagesController.getInstance().putUser(res.user, false);
+                                MessagesStorage.getInstance(SettingsActivity.this.currentAccount).putUsersAndChats(users, null, true, true);
+                                MessagesController.getInstance(SettingsActivity.this.currentAccount).putUser(res.user, false);
                                 Bundle args = new Bundle();
                                 args.putInt("user_id", res.user.id);
                                 SettingsActivity.this.presentFragment(new ChatActivity(args));
@@ -1278,7 +1276,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             });
             return;
         }
-        MessagesController.getInstance().putUser(supportUser, true);
+        MessagesController.getInstance(this.currentAccount).putUser(supportUser, true);
         Bundle args = new Bundle();
         args.putInt("user_id", supportUser.id);
         presentFragment(new ChatActivity(args));
@@ -1300,7 +1298,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public void didReceivedNotification(int id, Object... args) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.updateInterfaces) {
             int mask = ((Integer) args[0]).intValue();
             if ((mask & 2) != 0 || (mask & 1) != 0) {
@@ -1311,7 +1309,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 this.listAdapter.notifyItemChanged(this.stickersRow);
             }
         } else if (id == NotificationCenter.userInfoDidLoaded) {
-            if (args[0].intValue() == UserConfig.getClientUserId() && this.listAdapter != null) {
+            if (args[0].intValue() == UserConfig.getInstance(this.currentAccount).getClientUserId() && this.listAdapter != null) {
                 this.listAdapter.notifyItemChanged(this.bioRow);
             }
         } else if (id == NotificationCenter.emojiDidLoaded && this.listView != null) {
@@ -1422,7 +1420,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
     private void updateUserData() {
         boolean z = true;
-        User user = MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId()));
+        User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
         TLObject photo = null;
         FileLocation photoBig = null;
         if (user.photo != null) {
@@ -1460,7 +1458,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     i.addFlags(1);
                 }
                 i.setType("message/rfc822");
-                i.putExtra("android.intent.extra.EMAIL", "");
+                i.putExtra("android.intent.extra.EMAIL", TtmlNode.ANONYMOUS_REGION_ID);
                 i.putExtra("android.intent.extra.SUBJECT", "last logs");
                 i.putParcelableArrayListExtra("android.intent.extra.STREAM", uris);
                 getParentActivity().startActivityForResult(Intent.createChooser(i, "Select email application."), 500);

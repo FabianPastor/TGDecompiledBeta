@@ -2,7 +2,6 @@ package org.telegram.messenger;
 
 import android.app.IntentService;
 import android.content.Intent;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import org.telegram.messenger.beta.R;
 
@@ -13,7 +12,7 @@ public class GcmRegistrationIntentService extends IntentService {
 
     protected void onHandleIntent(Intent intent) {
         try {
-            final String token = InstanceID.getInstance(this).getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+            final String token = InstanceID.getInstance(this).getToken(getString(R.string.gcm_defaultSenderId), "GCM", null);
             FileLog.d("GCM Registration Token: " + token);
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
@@ -31,9 +30,13 @@ public class GcmRegistrationIntentService extends IntentService {
                             try {
                                 Intent intent = new Intent(ApplicationLoader.applicationContext, GcmRegistrationIntentService.class);
                                 intent.putExtra("failCount", failCount + 1);
-                                GcmRegistrationIntentService.this.startService(intent);
-                            } catch (Throwable e) {
-                                FileLog.e(e);
+                                try {
+                                    GcmRegistrationIntentService.this.startService(intent);
+                                } catch (Throwable e) {
+                                    FileLog.e(e);
+                                }
+                            } catch (Throwable e2) {
+                                FileLog.e(e2);
                             }
                         }
                     }, failCount < 20 ? 10000 : 1800000);
@@ -45,15 +48,19 @@ public class GcmRegistrationIntentService extends IntentService {
     private void sendRegistrationToServer(final String token) {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
-                UserConfig.pushString = token;
-                UserConfig.registeredForPush = false;
-                UserConfig.saveConfig(false);
-                if (UserConfig.getClientUserId() != 0) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            MessagesController.getInstance().registerForPush(token);
-                        }
-                    });
+                SharedConfig.pushString = token;
+                for (int a = 0; a < 3; a++) {
+                    UserConfig userConfig = UserConfig.getInstance(a);
+                    userConfig.registeredForPush = false;
+                    userConfig.saveConfig(false);
+                    if (userConfig.getClientUserId() != 0) {
+                        final int currentAccount = a;
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                MessagesController.getInstance(currentAccount).registerForPush(token);
+                            }
+                        });
+                    }
                 }
             }
         });

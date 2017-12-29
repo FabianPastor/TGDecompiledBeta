@@ -309,7 +309,7 @@ public class GridLayoutManager extends LinearLayoutManager {
         return this.mSpanSizeLookup;
     }
 
-    protected void updateMeasurements() {
+    private void updateMeasurements() {
         int totalSpace;
         if (getOrientation() == 1) {
             totalSpace = (getWidth() - getPaddingRight()) - getPaddingLeft();
@@ -337,7 +337,7 @@ public class GridLayoutManager extends LinearLayoutManager {
         setMeasuredDimension(width, height);
     }
 
-    private void calculateItemBorders(int totalSpace) {
+    protected void calculateItemBorders(int totalSpace) {
         this.mCachedBorders = calculateItemBorders(this.mCachedBorders, this.mSpanCount, totalSpace);
     }
 
@@ -466,7 +466,7 @@ public class GridLayoutManager extends LinearLayoutManager {
         return 0;
     }
 
-    protected int getSpanIndex(Recycler recycler, State state, int pos) {
+    private int getSpanIndex(Recycler recycler, State state, int pos) {
         if (!state.isPreLayout()) {
             return this.mSpanSizeLookup.getCachedSpanIndex(pos, this.mSpanCount);
         }
@@ -666,7 +666,7 @@ public class GridLayoutManager extends LinearLayoutManager {
         measureChildWithDecorationsAndMargin(view, wSpec, hSpec, alreadyMeasured);
     }
 
-    protected void guessMeasurement(float maxSizeInOther, int currentOtherDirSize) {
+    private void guessMeasurement(float maxSizeInOther, int currentOtherDirSize) {
         calculateItemBorders(Math.max(Math.round(((float) this.mSpanCount) * maxSizeInOther), currentOtherDirSize));
     }
 

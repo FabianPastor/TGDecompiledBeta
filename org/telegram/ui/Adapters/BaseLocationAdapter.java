@@ -2,7 +2,6 @@ package org.telegram.ui.Adapters;
 
 import android.location.Location;
 import android.os.AsyncTask;
-import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -20,8 +19,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.TL_geoPoint;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
@@ -100,9 +101,9 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 r5 = new Object[5];
                 r5[3] = String.format(Locale.US, "%f,%f", new Object[]{Double.valueOf(coordinate.getLatitude()), Double.valueOf(coordinate.getLongitude())});
                 if (query == null || query.length() <= 0) {
-                    str = "";
+                    str = TtmlNode.ANONYMOUS_REGION_ID;
                 } else {
-                    str = "&query=" + URLEncoder.encode(query, "UTF-8");
+                    str = "&query=" + URLEncoder.encode(query, C.UTF8_NAME);
                 }
                 r5[4] = str;
                 final String url = String.format(locale, str2, r5);
@@ -175,7 +176,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                             }
                             if (httpConnectionStream != null) {
                                 try {
-                                    byte[] data = new byte[32768];
+                                    byte[] data = new byte[TLRPC.MESSAGE_FLAG_EDITED];
                                     StringBuilder result2 = null;
                                     while (!isCancelled()) {
                                         try {
@@ -188,7 +189,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                                                         result = result2;
                                                     }
                                                     try {
-                                                        result.append(new String(data, 0, read, "UTF-8"));
+                                                        result.append(new String(data, 0, read, C.UTF8_NAME));
                                                         result2 = result;
                                                     } catch (Exception e3) {
                                                         e22 = e3;
@@ -277,7 +278,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                                             }
                                         }
                                         BaseLocationAdapter.this.iconUrls.add(iconUrl);
-                                        JSONObject location = object.getJSONObject(Param.LOCATION);
+                                        JSONObject location = object.getJSONObject("location");
                                         TL_messageMediaVenue venue = new TL_messageMediaVenue();
                                         venue.geo = new TL_geoPoint();
                                         venue.geo.lat = location.getDouble("lat");
@@ -296,7 +297,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                                         if (object.has("name")) {
                                             venue.title = object.getString("name");
                                         }
-                                        venue.venue_type = "";
+                                        venue.venue_type = TtmlNode.ANONYMOUS_REGION_ID;
                                         venue.venue_id = object.getString(TtmlNode.ATTR_ID);
                                         venue.provider = "foursquare";
                                         BaseLocationAdapter.this.places.add(venue);

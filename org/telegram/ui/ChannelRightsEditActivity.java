@@ -312,10 +312,10 @@ public class ChannelRightsEditActivity extends BaseFragment {
     public ChannelRightsEditActivity(int userId, int channelId, TL_channelAdminRights rightsAdmin, TL_channelBannedRights rightsBanned, int type, boolean edit) {
         int i;
         this.chatId = channelId;
-        this.currentUser = MessagesController.getInstance().getUser(Integer.valueOf(userId));
+        this.currentUser = MessagesController.getAccountInstance().getUser(Integer.valueOf(userId));
         this.currentType = type;
         this.canEdit = edit;
-        Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(this.chatId));
+        Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(this.chatId));
         if (chat != null) {
             this.isMegagroup = chat.megagroup;
             this.myAdminRights = chat.admin_rights;
@@ -496,7 +496,6 @@ public class ChannelRightsEditActivity extends BaseFragment {
         }
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
-                int i = 0;
                 if (id == -1) {
                     ChannelRightsEditActivity.this.finishFragment();
                 } else if (id == 1) {
@@ -511,17 +510,20 @@ public class ChannelRightsEditActivity extends BaseFragment {
                             ChannelRightsEditActivity.this.adminRights.ban_users = false;
                             access$200.pin_messages = false;
                         }
-                        MessagesController.setUserAdminRole(ChannelRightsEditActivity.this.chatId, ChannelRightsEditActivity.this.currentUser, ChannelRightsEditActivity.this.adminRights, ChannelRightsEditActivity.this.isMegagroup, ChannelRightsEditActivity.this.getFragmentForAlert(1));
+                        MessagesController.getAccountInstance().setUserAdminRole(ChannelRightsEditActivity.this.chatId, ChannelRightsEditActivity.this.currentUser, ChannelRightsEditActivity.this.adminRights, ChannelRightsEditActivity.this.isMegagroup, ChannelRightsEditActivity.this.getFragmentForAlert(1));
                         if (ChannelRightsEditActivity.this.delegate != null) {
+                            int i;
                             ChannelRightsEditActivityDelegate access$500 = ChannelRightsEditActivity.this.delegate;
                             if (ChannelRightsEditActivity.this.adminRights.change_info || ChannelRightsEditActivity.this.adminRights.post_messages || ChannelRightsEditActivity.this.adminRights.edit_messages || ChannelRightsEditActivity.this.adminRights.delete_messages || ChannelRightsEditActivity.this.adminRights.ban_users || ChannelRightsEditActivity.this.adminRights.invite_users || ChannelRightsEditActivity.this.adminRights.invite_link || ChannelRightsEditActivity.this.adminRights.pin_messages || ChannelRightsEditActivity.this.adminRights.add_admins) {
                                 i = 1;
+                            } else {
+                                i = 0;
                             }
                             access$500.didSetRights(i, ChannelRightsEditActivity.this.adminRights, ChannelRightsEditActivity.this.bannedRights);
                         }
                     } else if (ChannelRightsEditActivity.this.currentType == 1) {
                         int rights;
-                        MessagesController.setUserBannedRole(ChannelRightsEditActivity.this.chatId, ChannelRightsEditActivity.this.currentUser, ChannelRightsEditActivity.this.bannedRights, ChannelRightsEditActivity.this.isMegagroup, ChannelRightsEditActivity.this.getFragmentForAlert(1));
+                        MessagesController.getAccountInstance().setUserBannedRole(ChannelRightsEditActivity.this.chatId, ChannelRightsEditActivity.this.currentUser, ChannelRightsEditActivity.this.bannedRights, ChannelRightsEditActivity.this.isMegagroup, ChannelRightsEditActivity.this.getFragmentForAlert(1));
                         if (ChannelRightsEditActivity.this.bannedRights.view_messages) {
                             rights = 0;
                         } else if (ChannelRightsEditActivity.this.bannedRights.send_messages || ChannelRightsEditActivity.this.bannedRights.send_stickers || ChannelRightsEditActivity.this.bannedRights.embed_links || ChannelRightsEditActivity.this.bannedRights.send_media || ChannelRightsEditActivity.this.bannedRights.send_gifs || ChannelRightsEditActivity.this.bannedRights.send_games || ChannelRightsEditActivity.this.bannedRights.send_inline) {
@@ -574,7 +576,7 @@ public class ChannelRightsEditActivity extends BaseFragment {
                     ChannelRightsEditActivity.this.presentFragment(new ProfileActivity(args));
                 } else if (position == ChannelRightsEditActivity.this.removeAdminRow) {
                     if (ChannelRightsEditActivity.this.currentType == 0) {
-                        MessagesController.setUserAdminRole(ChannelRightsEditActivity.this.chatId, ChannelRightsEditActivity.this.currentUser, new TL_channelAdminRights(), ChannelRightsEditActivity.this.isMegagroup, ChannelRightsEditActivity.this.getFragmentForAlert(0));
+                        MessagesController.getAccountInstance().setUserAdminRole(ChannelRightsEditActivity.this.chatId, ChannelRightsEditActivity.this.currentUser, new TL_channelAdminRights(), ChannelRightsEditActivity.this.isMegagroup, ChannelRightsEditActivity.this.getFragmentForAlert(0));
                     } else if (ChannelRightsEditActivity.this.currentType == 1) {
                         ChannelRightsEditActivity.this.bannedRights = new TL_channelBannedRights();
                         ChannelRightsEditActivity.this.bannedRights.view_messages = true;
@@ -586,7 +588,7 @@ public class ChannelRightsEditActivity extends BaseFragment {
                         ChannelRightsEditActivity.this.bannedRights.send_inline = true;
                         ChannelRightsEditActivity.this.bannedRights.embed_links = true;
                         ChannelRightsEditActivity.this.bannedRights.until_date = 0;
-                        MessagesController.setUserBannedRole(ChannelRightsEditActivity.this.chatId, ChannelRightsEditActivity.this.currentUser, ChannelRightsEditActivity.this.bannedRights, ChannelRightsEditActivity.this.isMegagroup, ChannelRightsEditActivity.this.getFragmentForAlert(0));
+                        MessagesController.getAccountInstance().setUserBannedRole(ChannelRightsEditActivity.this.chatId, ChannelRightsEditActivity.this.currentUser, ChannelRightsEditActivity.this.bannedRights, ChannelRightsEditActivity.this.isMegagroup, ChannelRightsEditActivity.this.getFragmentForAlert(0));
                     }
                     if (ChannelRightsEditActivity.this.delegate != null) {
                         ChannelRightsEditActivity.this.delegate.didSetRights(0, ChannelRightsEditActivity.this.adminRights, ChannelRightsEditActivity.this.bannedRights);
@@ -682,9 +684,9 @@ public class ChannelRightsEditActivity extends BaseFragment {
                         } else if (position == ChannelRightsEditActivity.this.addUsersRow) {
                             TL_channelAdminRights access$200 = ChannelRightsEditActivity.this.adminRights;
                             TL_channelAdminRights access$2002 = ChannelRightsEditActivity.this.adminRights;
-                            r5 = !ChannelRightsEditActivity.this.adminRights.invite_users;
-                            access$2002.invite_link = r5;
-                            access$200.invite_users = r5;
+                            r3 = !ChannelRightsEditActivity.this.adminRights.invite_users;
+                            access$2002.invite_link = r3;
+                            access$200.invite_users = r3;
                         } else if (position == ChannelRightsEditActivity.this.pinMessagesRow) {
                             ChannelRightsEditActivity.this.adminRights.pin_messages = !ChannelRightsEditActivity.this.adminRights.pin_messages;
                         } else if (ChannelRightsEditActivity.this.bannedRights != null) {
@@ -702,11 +704,11 @@ public class ChannelRightsEditActivity extends BaseFragment {
                                 access$6002 = ChannelRightsEditActivity.this.bannedRights;
                                 TL_channelBannedRights access$6003 = ChannelRightsEditActivity.this.bannedRights;
                                 TL_channelBannedRights access$6004 = ChannelRightsEditActivity.this.bannedRights;
-                                r5 = !ChannelRightsEditActivity.this.bannedRights.send_stickers;
-                                access$6004.send_inline = r5;
-                                access$6003.send_gifs = r5;
-                                access$6002.send_games = r5;
-                                access$600.send_stickers = r5;
+                                r3 = !ChannelRightsEditActivity.this.bannedRights.send_stickers;
+                                access$6004.send_inline = r3;
+                                access$6003.send_gifs = r3;
+                                access$6002.send_games = r3;
+                                access$600.send_stickers = r3;
                             } else if (position == ChannelRightsEditActivity.this.embedLinksRow) {
                                 ChannelRightsEditActivity.this.bannedRights.embed_links = !ChannelRightsEditActivity.this.bannedRights.embed_links;
                             }

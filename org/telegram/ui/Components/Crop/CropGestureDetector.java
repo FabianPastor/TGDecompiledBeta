@@ -1,7 +1,6 @@
 package org.telegram.ui.Components.Crop;
 
 import android.content.Context;
-import android.support.v4.view.MotionEventCompat;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.ScaleGestureDetector.OnScaleGestureListener;
@@ -92,7 +91,7 @@ public class CropGestureDetector {
                 this.mActivePointerId = -1;
                 break;
             case 6:
-                int pointerIndex = (MotionEventCompat.ACTION_POINTER_INDEX_MASK & ev.getAction()) >> 8;
+                int pointerIndex = (65280 & ev.getAction()) >> 8;
                 if (ev.getPointerId(pointerIndex) == this.mActivePointerId) {
                     int newPointerIndex;
                     if (pointerIndex == 0) {

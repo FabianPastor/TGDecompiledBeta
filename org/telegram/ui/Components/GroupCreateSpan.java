@@ -14,7 +14,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.ImageReceiver;
@@ -157,12 +156,12 @@ public class GroupCreateSpan extends View {
                 dt = 17;
             }
             if (this.deleting) {
-                this.progress += ((float) dt) / BitmapDescriptorFactory.HUE_GREEN;
+                this.progress += ((float) dt) / 120.0f;
                 if (this.progress >= 1.0f) {
                     this.progress = 1.0f;
                 }
             } else {
-                this.progress -= ((float) dt) / BitmapDescriptorFactory.HUE_GREEN;
+                this.progress -= ((float) dt) / 120.0f;
                 if (this.progress < 0.0f) {
                     this.progress = 0.0f;
                 }

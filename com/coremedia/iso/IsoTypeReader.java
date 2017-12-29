@@ -1,9 +1,9 @@
 package com.coremedia.iso;
 
-import android.support.v4.view.MotionEventCompat;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import org.telegram.ui.ActionBar.Theme;
 
 public final class IsoTypeReader {
     public static long readUInt32BE(ByteBuffer bb) {
@@ -66,19 +66,19 @@ public final class IsoTypeReader {
     public static double readFixedPoint1616(ByteBuffer bb) {
         byte[] bytes = new byte[4];
         bb.get(bytes);
-        return ((double) ((((0 | ((bytes[0] << 24) & -16777216)) | ((bytes[1] << 16) & 16711680)) | ((bytes[2] << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK)) | (bytes[3] & 255))) / 65536.0d;
+        return ((double) ((((0 | ((bytes[0] << 24) & Theme.ACTION_BAR_VIDEO_EDIT_COLOR)) | ((bytes[1] << 16) & 16711680)) | ((bytes[2] << 8) & 65280)) | (bytes[3] & 255))) / 65536.0d;
     }
 
     public static double readFixedPoint0230(ByteBuffer bb) {
         byte[] bytes = new byte[4];
         bb.get(bytes);
-        return ((double) ((((0 | ((bytes[0] << 24) & -16777216)) | ((bytes[1] << 16) & 16711680)) | ((bytes[2] << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK)) | (bytes[3] & 255))) / 1.073741824E9d;
+        return ((double) ((((0 | ((bytes[0] << 24) & Theme.ACTION_BAR_VIDEO_EDIT_COLOR)) | ((bytes[1] << 16) & 16711680)) | ((bytes[2] << 8) & 65280)) | (bytes[3] & 255))) / 1.073741824E9d;
     }
 
     public static float readFixedPoint88(ByteBuffer bb) {
         byte[] bytes = new byte[2];
         bb.get(bytes);
-        return ((float) ((short) ((bytes[1] & 255) | ((short) (((bytes[0] << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | (short) 0))))) / 256.0f;
+        return ((float) ((short) ((bytes[1] & 255) | ((short) (((bytes[0] << 8) & 65280) | (short) 0))))) / 256.0f;
     }
 
     public static String readIso639(ByteBuffer bb) {

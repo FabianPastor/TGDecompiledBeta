@@ -46,15 +46,15 @@ public interface zzk extends IInterface {
 
     void startActivityForResult(Intent intent, int i) throws RemoteException;
 
-    void zzC(IObjectWrapper iObjectWrapper) throws RemoteException;
+    IObjectWrapper zzapx() throws RemoteException;
 
-    void zzD(IObjectWrapper iObjectWrapper) throws RemoteException;
+    zzk zzapy() throws RemoteException;
 
-    IObjectWrapper zztA() throws RemoteException;
+    IObjectWrapper zzapz() throws RemoteException;
 
-    zzk zztB() throws RemoteException;
+    zzk zzaqa() throws RemoteException;
 
-    IObjectWrapper zzty() throws RemoteException;
+    void zzv(IObjectWrapper iObjectWrapper) throws RemoteException;
 
-    zzk zztz() throws RemoteException;
+    void zzw(IObjectWrapper iObjectWrapper) throws RemoteException;
 }

@@ -10,7 +10,7 @@ public class SlideView extends LinearLayout {
     }
 
     public String getHeaderName() {
-        return "";
+        return TtmlNode.ANONYMOUS_REGION_ID;
     }
 
     public void setParams(Bundle params, boolean restore) {

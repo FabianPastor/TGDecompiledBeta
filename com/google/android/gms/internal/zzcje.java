@@ -1,15 +1,20 @@
 package com.google.android.gms.internal;
 
-final class zzcje implements Runnable {
-    private /* synthetic */ long zzbot;
-    private /* synthetic */ zzcja zzbuu;
+import java.util.concurrent.Callable;
 
-    zzcje(zzcja com_google_android_gms_internal_zzcja, long j) {
-        this.zzbuu = com_google_android_gms_internal_zzcja;
-        this.zzbot = j;
+final class zzcje implements Callable<byte[]> {
+    private /* synthetic */ String zzimf;
+    private /* synthetic */ zzcir zzjgo;
+    private /* synthetic */ zzcha zzjgs;
+
+    zzcje(zzcir com_google_android_gms_internal_zzcir, zzcha com_google_android_gms_internal_zzcha, String str) {
+        this.zzjgo = com_google_android_gms_internal_zzcir;
+        this.zzjgs = com_google_android_gms_internal_zzcha;
+        this.zzimf = str;
     }
 
-    public final void run() {
-        this.zzbuu.zzaf(this.zzbot);
+    public final /* synthetic */ Object call() throws Exception {
+        this.zzjgo.zziwf.zzbal();
+        return this.zzjgo.zziwf.zza(this.zzjgs, this.zzimf);
     }
 }

@@ -36,19 +36,6 @@ public class BitReaderBuffer {
         return rc;
     }
 
-    public int getPosition() {
-        return this.position;
-    }
-
-    public int byteSync() {
-        int left = 8 - (this.position % 8);
-        if (left == 8) {
-            left = 0;
-        }
-        readBits(left);
-        return left;
-    }
-
     public int remainingBits() {
         return (this.buffer.limit() * 8) - this.position;
     }

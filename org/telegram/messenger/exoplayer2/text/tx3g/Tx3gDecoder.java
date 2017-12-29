@@ -110,7 +110,7 @@ public final class Tx3gDecoder extends SimpleSubtitleDecoder {
         assertTrue(parsableByteArray.bytesLeft() >= 2);
         int textLength = parsableByteArray.readUnsignedShort();
         if (textLength == 0) {
-            return "";
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
         if (parsableByteArray.bytesLeft() >= 2) {
             char firstChar = parsableByteArray.peekChar();
@@ -118,7 +118,7 @@ public final class Tx3gDecoder extends SimpleSubtitleDecoder {
                 return parsableByteArray.readString(textLength, Charset.forName(C.UTF16_NAME));
             }
         }
-        return parsableByteArray.readString(textLength, Charset.forName("UTF-8"));
+        return parsableByteArray.readString(textLength, Charset.forName(C.UTF8_NAME));
     }
 
     private void applyStyleRecord(ParsableByteArray parsableByteArray, SpannableStringBuilder cueText) throws SubtitleDecoderException {

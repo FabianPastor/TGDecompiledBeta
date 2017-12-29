@@ -16,7 +16,6 @@ import android.view.TextureView.SurfaceTextureListener;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 import org.telegram.messenger.AndroidUtilities;
@@ -231,7 +230,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         if (1 == rotation || 3 == rotation) {
             this.txform.postRotate((float) ((rotation - 2) * 90), viewCenterX, viewCenterY);
         } else if (2 == rotation) {
-            this.txform.postRotate(BitmapDescriptorFactory.HUE_CYAN, viewCenterX, viewCenterY);
+            this.txform.postRotate(180.0f, viewCenterX, viewCenterY);
         }
         if (this.mirror) {
             this.txform.postScale(-1.0f, 1.0f, viewCenterX, viewCenterY);
@@ -303,7 +302,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
         if (!(this.focusProgress == 1.0f && this.innerAlpha == 0.0f && this.outerAlpha == 0.0f)) {
-            int baseRad = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
+            int baseRad = AndroidUtilities.dp(30.0f);
             long newTime = System.currentTimeMillis();
             long dt = newTime - this.lastDrawTime;
             if (dt < 0 || dt > 17) {

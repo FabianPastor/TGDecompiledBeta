@@ -8,7 +8,6 @@ import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.animation.DecelerateInterpolator;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 
 public class CloseProgressDrawable2 extends Drawable {
@@ -63,18 +62,18 @@ public class CloseProgressDrawable2 extends Drawable {
         float progress4 = 0.0f;
         if (this.angle >= 0.0f && this.angle < 90.0f) {
             progress1 = 1.0f - (this.angle / 90.0f);
-        } else if (this.angle >= 90.0f && this.angle < BitmapDescriptorFactory.HUE_CYAN) {
+        } else if (this.angle >= 90.0f && this.angle < 180.0f) {
             progress1 = 0.0f;
             progress2 = 1.0f - ((this.angle - 90.0f) / 90.0f);
-        } else if (this.angle >= BitmapDescriptorFactory.HUE_CYAN && this.angle < BitmapDescriptorFactory.HUE_VIOLET) {
+        } else if (this.angle >= 180.0f && this.angle < 270.0f) {
             progress2 = 0.0f;
             progress1 = 0.0f;
-            progress3 = 1.0f - ((this.angle - BitmapDescriptorFactory.HUE_CYAN) / 90.0f);
-        } else if (this.angle >= BitmapDescriptorFactory.HUE_VIOLET && this.angle < 360.0f) {
+            progress3 = 1.0f - ((this.angle - 180.0f) / 90.0f);
+        } else if (this.angle >= 270.0f && this.angle < 360.0f) {
             progress3 = 0.0f;
             progress2 = 0.0f;
             progress1 = 0.0f;
-            progress4 = (this.angle - BitmapDescriptorFactory.HUE_VIOLET) / 90.0f;
+            progress4 = (this.angle - 270.0f) / 90.0f;
         } else if (this.angle >= 360.0f && this.angle < 450.0f) {
             progress3 = 0.0f;
             progress2 = 0.0f;

@@ -33,7 +33,7 @@ final class AtomParsers {
     private static final int TYPE_sbtl = Util.getIntegerCodeForString("sbtl");
     private static final int TYPE_soun = Util.getIntegerCodeForString("soun");
     private static final int TYPE_subt = Util.getIntegerCodeForString("subt");
-    private static final int TYPE_text = Util.getIntegerCodeForString("text");
+    private static final int TYPE_text = Util.getIntegerCodeForString(MimeTypes.BASE_TYPE_TEXT);
     private static final int TYPE_vide = Util.getIntegerCodeForString("vide");
 
     private static final class ChunkIterator {
@@ -530,9 +530,9 @@ final class AtomParsers {
         tkhd.skipBytes(4);
         int a10 = tkhd.readInt();
         int a11 = tkhd.readInt();
-        if (a00 == 0 && a01 == 65536 && a10 == (-65536) && a11 == 0) {
+        if (a00 == 0 && a01 == C.DEFAULT_BUFFER_SEGMENT_SIZE && a10 == (-65536) && a11 == 0) {
             rotationDegrees = 90;
-        } else if (a00 == 0 && a01 == (-65536) && a10 == 65536 && a11 == 0) {
+        } else if (a00 == 0 && a01 == (-65536) && a10 == C.DEFAULT_BUFFER_SEGMENT_SIZE && a11 == 0) {
             rotationDegrees = 270;
         } else if (a00 == (-65536) && a01 == 0 && a10 == 0 && a11 == (-65536)) {
             rotationDegrees = 180;
@@ -571,7 +571,7 @@ final class AtomParsers {
         }
         mdhd.skipBytes(i);
         int languageCode = mdhd.readUnsignedShort();
-        return Pair.create(Long.valueOf(timescale), "" + ((char) (((languageCode >> 10) & 31) + 96)) + ((char) (((languageCode >> 5) & 31) + 96)) + ((char) ((languageCode & 31) + 96)));
+        return Pair.create(Long.valueOf(timescale), TtmlNode.ANONYMOUS_REGION_ID + ((char) (((languageCode >> 10) & 31) + 96)) + ((char) (((languageCode >> 5) & 31) + 96)) + ((char) ((languageCode & 31) + 96)));
     }
 
     private static StsdData parseStsd(ParsableByteArray stsd, int trackId, int rotationDegrees, String language, DrmInitData drmInitData, boolean isQuickTime) throws ParserException {
