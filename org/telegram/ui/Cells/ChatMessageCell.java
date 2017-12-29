@@ -1983,22 +1983,21 @@ public class ChatMessageCell extends BaseCell implements ImageReceiverDelegate, 
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
         int maxWidth;
+        int a;
         String str;
         int dp;
         int linkPreviewMaxWidth;
         String description;
         Photo photo;
         TLObject document;
+        String type;
         int duration;
         TL_webDocument webDocument;
         TL_webDocument webDocument2;
-        int additinalWidth;
         int height;
-        int width;
         Throwable e;
         int restLinesCount;
         int lineLeft;
-        boolean authorIsRTL;
         boolean hasRTL;
         int textWidth;
         int maxPhotoWidth;
@@ -2007,7 +2006,7 @@ public class ChatMessageCell extends BaseCell implements ImageReceiverDelegate, 
         PhotoSize photoSize;
         PhotoSize photoSize2;
         int dp2;
-        int durationWidth;
+        String fileName;
         int seconds;
         CharSequence str2;
         String price;
@@ -2031,8 +2030,8 @@ public class ChatMessageCell extends BaseCell implements ImageReceiverDelegate, 
             groupChanged = newPosition != this.currentPosition;
         }
         if (messageChanged || dataChanged || groupChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
-            int a;
             int i;
+            int width;
             float f;
             int timeWidthTotal;
             this.pinnedBottom = bottomNear;
@@ -2140,7 +2139,6 @@ public class ChatMessageCell extends BaseCell implements ImageReceiverDelegate, 
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
-            String fileName;
             boolean autoDownload;
             float scale;
             boolean photoExist;
@@ -2277,9 +2275,11 @@ public class ChatMessageCell extends BaseCell implements ImageReceiverDelegate, 
                     String site_name;
                     String title;
                     String author;
-                    String type;
                     boolean smallImage;
+                    int additinalWidth;
                     int restLines;
+                    boolean authorIsRTL;
+                    int durationWidth;
                     if (AndroidUtilities.isTablet()) {
                         if (this.isChat && messageObject.needDrawAvatar() && !this.currentMessageObject.isOut()) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(132.0f);

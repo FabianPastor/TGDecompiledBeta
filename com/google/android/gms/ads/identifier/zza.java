@@ -17,7 +17,6 @@ final class zza extends Thread {
     }
 
     public final void run() {
-        HttpURLConnection httpURLConnection;
         String message;
         Throwable e;
         zzc com_google_android_gms_ads_identifier_zzc = new zzc();
@@ -27,6 +26,7 @@ final class zza extends Thread {
             buildUpon.appendQueryParameter(str, (String) map.get(str));
         }
         String uri = buildUpon.build().toString();
+        HttpURLConnection httpURLConnection;
         try {
             httpURLConnection = (HttpURLConnection) new URL(uri).openConnection();
             int responseCode = httpURLConnection.getResponseCode();

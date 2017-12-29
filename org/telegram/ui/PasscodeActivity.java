@@ -667,13 +667,13 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         } else if (this.type != 2) {
         } else {
             if (SharedConfig.checkPasscode(this.passwordEditText.getText().toString())) {
-                this.passwordEditText.setText(TtmlNode.ANONYMOUS_REGION_ID);
-                onPasscodeError();
+                this.passwordEditText.clearFocus();
+                AndroidUtilities.hideKeyboard(this.passwordEditText);
+                presentFragment(new PasscodeActivity(0), true);
                 return;
             }
-            this.passwordEditText.clearFocus();
-            AndroidUtilities.hideKeyboard(this.passwordEditText);
-            presentFragment(new PasscodeActivity(0), true);
+            this.passwordEditText.setText(TtmlNode.ANONYMOUS_REGION_ID);
+            onPasscodeError();
         }
     }
 
