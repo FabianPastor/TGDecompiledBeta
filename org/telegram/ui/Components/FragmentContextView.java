@@ -64,7 +64,6 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
     };
     private ImageView closeButton;
-    private int currentAccount = UserConfig.selectedAccount;
     private int currentStyle = -1;
     private boolean firstLocationsLoaded;
     private BaseFragment fragment;
@@ -102,10 +101,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 if (FragmentContextView.this.currentStyle != 0) {
                     return;
                 }
-                if (MediaController.getInstance(FragmentContextView.this.currentAccount).isMessagePaused()) {
-                    MediaController.getInstance(FragmentContextView.this.currentAccount).playMessage(MediaController.getInstance(FragmentContextView.this.currentAccount).getPlayingMessageObject());
+                if (MediaController.getInstance().isMessagePaused()) {
+                    MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
                 } else {
-                    MediaController.getInstance(FragmentContextView.this.currentAccount).pauseMessage(MediaController.getInstance(FragmentContextView.this.currentAccount).getPlayingMessageObject());
+                    MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
                 }
             }
         });
@@ -149,20 +148,20 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                                 }
                                 return;
                             }
-                            LocationController.getInstance(FragmentContextView.this.currentAccount).removeSharingLocation(((ChatActivity) FragmentContextView.this.fragment).getDialogId());
+                            LocationController.getInstance(FragmentContextView.this.fragment.getCurrentAccount()).removeSharingLocation(((ChatActivity) FragmentContextView.this.fragment).getDialogId());
                         }
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     builder.show();
                     return;
                 }
-                MediaController.getInstance(FragmentContextView.this.currentAccount).cleanupPlayer(true, true);
+                MediaController.getInstance().cleanupPlayer(true, true);
             }
         });
         setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (FragmentContextView.this.currentStyle == 0) {
-                    MessageObject messageObject = MediaController.getInstance(FragmentContextView.this.currentAccount).getPlayingMessageObject();
+                    MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
                     if (FragmentContextView.this.fragment != null && messageObject != null) {
                         if (messageObject.isMusic()) {
                             FragmentContextView.this.fragment.showDialog(new AudioPlayerAlert(FragmentContextView.this.getContext()));
@@ -198,9 +197,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     FragmentContextView.this.getContext().startActivity(intent);
                 } else if (FragmentContextView.this.currentStyle == 2) {
                     long did = 0;
-                    int account = FragmentContextView.this.currentAccount;
+                    int account = UserConfig.selectedAccount;
                     if (FragmentContextView.this.fragment instanceof ChatActivity) {
                         did = ((ChatActivity) FragmentContextView.this.fragment).getDialogId();
+                        account = FragmentContextView.this.fragment.getCurrentAccount();
                     } else if (LocationController.getLocationsCount() == 1) {
                         for (int a = 0; a < 3; a++) {
                             if (!LocationController.getInstance(a).sharingLocationsUI.isEmpty()) {
@@ -231,7 +231,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.additionalContextView = contextView;
     }
 
-    private void openSharingLocation(SharingLocationInfo info) {
+    private void openSharingLocation(final SharingLocationInfo info) {
         if (info != null && this.fragment.getParentActivity() != null) {
             LaunchActivity launchActivity = (LaunchActivity) this.fragment.getParentActivity();
             launchActivity.switchToAccount(info.messageObject.currentAccount, true);
@@ -240,7 +240,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             final long dialog_id = info.messageObject.getDialogId();
             locationActivity.setDelegate(new LocationActivityDelegate() {
                 public void didSelectLocation(MessageMedia location, int live) {
-                    SendMessagesHelper.getInstance(FragmentContextView.this.currentAccount).sendMessage(location, dialog_id, null, null, null);
+                    SendMessagesHelper.getInstance(info.messageObject.currentAccount).sendMessage(location, dialog_id, null, null, null);
                 }
             });
             launchActivity.presentFragment(locationActivity);
@@ -255,9 +255,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         int i = 0;
         boolean show = false;
         if (this.isLocation) {
-            show = this.fragment instanceof DialogsActivity ? LocationController.getLocationsCount() != 0 : LocationController.getInstance(this.currentAccount).isSharingLocation(((ChatActivity) this.fragment).getDialogId());
+            show = this.fragment instanceof DialogsActivity ? LocationController.getLocationsCount() != 0 : LocationController.getInstance(this.fragment.getCurrentAccount()).isSharingLocation(((ChatActivity) this.fragment).getDialogId());
         } else if (VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getCallState() == 15) {
-            MessageObject messageObject = MediaController.getInstance(this.currentAccount).getPlayingMessageObject();
+            MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
             if (!(messageObject == null || messageObject.getId() == 0)) {
                 show = true;
             }
@@ -324,12 +324,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.topPadding = 0.0f;
         if (this.isLocation) {
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.liveLocationsChanged);
-            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.liveLocationsCacheChanged);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.liveLocationsCacheChanged);
             return;
         }
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStarted);
+        for (int a = 0; a < 3; a++) {
+            NotificationCenter.getInstance(a).removeObserver(this, NotificationCenter.messagePlayingDidReset);
+            NotificationCenter.getInstance(a).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
+            NotificationCenter.getInstance(a).removeObserver(this, NotificationCenter.messagePlayingDidStarted);
+        }
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didStartedCall);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didEndedCall);
     }
@@ -338,16 +340,18 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         super.onAttachedToWindow();
         if (this.isLocation) {
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.liveLocationsChanged);
-            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.liveLocationsCacheChanged);
+            NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.liveLocationsCacheChanged);
             if (this.additionalContextView != null) {
                 this.additionalContextView.checkVisibility();
             }
             checkLiveLocation(true);
             return;
         }
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidReset);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidStarted);
+        for (int a = 0; a < 3; a++) {
+            NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.messagePlayingDidReset);
+            NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
+            NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.messagePlayingDidStarted);
+        }
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didStartedCall);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didEndedCall);
         if (this.additionalContextView != null) {
@@ -387,7 +391,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (!(create || fragmentView == null || (fragmentView.getParent() != null && ((View) fragmentView.getParent()).getVisibility() == 0))) {
             create = true;
         }
-        boolean show = this.fragment instanceof DialogsActivity ? LocationController.getLocationsCount() != 0 : LocationController.getInstance(this.currentAccount).isSharingLocation(((ChatActivity) this.fragment).getDialogId());
+        boolean show = this.fragment instanceof DialogsActivity ? LocationController.getLocationsCount() != 0 : LocationController.getInstance(this.fragment.getCurrentAccount()).isSharingLocation(((ChatActivity) this.fragment).getDialogId());
         if (show) {
             updateStyle(2);
             this.playButton.setImageDrawable(new ShareLocationDrawable(getContext(), true));
@@ -492,22 +496,24 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
 
     private void checkLocationString() {
         if ((this.fragment instanceof ChatActivity) && this.titleTextView != null) {
-            long dialogId = this.fragment.getDialogId();
-            ArrayList<Message> messages = (ArrayList) LocationController.getInstance(this.currentAccount).locationsCache.get(Long.valueOf(dialogId));
+            ChatActivity chatActivity = this.fragment;
+            long dialogId = chatActivity.getDialogId();
+            int currentAccount = chatActivity.getCurrentAccount();
+            ArrayList<Message> messages = (ArrayList) LocationController.getInstance(currentAccount).locationsCache.get(Long.valueOf(dialogId));
             if (!this.firstLocationsLoaded) {
-                LocationController.getInstance(this.currentAccount).loadLiveLocations(dialogId);
+                LocationController.getInstance(currentAccount).loadLiveLocations(dialogId);
                 this.firstLocationsLoaded = true;
             }
             int locationSharingCount = 0;
             User notYouUser = null;
             if (messages != null) {
-                int currentUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
-                int date = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
+                int currentUserId = UserConfig.getInstance(currentAccount).getClientUserId();
+                int date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
                 for (int a = 0; a < messages.size(); a++) {
                     Message message = (Message) messages.get(a);
                     if (message.media != null && message.date + message.media.period > date) {
                         if (notYouUser == null && message.from_id != currentUserId) {
-                            notYouUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(message.from_id));
+                            notYouUser = MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(message.from_id));
                         }
                         locationSharingCount++;
                     }
@@ -521,7 +527,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     fullString = liveLocation;
                 } else {
                     int otherSharingCount = locationSharingCount - 1;
-                    if (LocationController.getInstance(this.currentAccount).isSharingLocation(dialogId)) {
+                    if (LocationController.getInstance(currentAccount).isSharingLocation(dialogId)) {
                         if (otherSharingCount == 0) {
                             fullString = String.format("%1$s - %2$s", new Object[]{liveLocation, LocaleController.getString("ChatYourSelfName", R.string.ChatYourSelfName)});
                         } else if (otherSharingCount != 1 || notYouUser == null) {
@@ -553,7 +559,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     private void checkPlayer(boolean create) {
-        MessageObject messageObject = MediaController.getInstance(this.currentAccount).getPlayingMessageObject();
+        MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
         View fragmentView = this.fragment.getFragmentView();
         if (!(create || fragmentView == null || (fragmentView.getParent() != null && ((View) fragmentView.getParent()).getVisibility() == 0))) {
             create = true;
@@ -635,7 +641,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             this.visible = true;
             setVisibility(0);
         }
-        if (MediaController.getInstance(this.currentAccount).isMessagePaused()) {
+        if (MediaController.getInstance().isMessagePaused()) {
             this.playButton.setImageResource(R.drawable.miniplayer_play);
         } else {
             this.playButton.setImageResource(R.drawable.miniplayer_pause);

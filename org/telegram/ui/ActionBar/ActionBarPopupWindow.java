@@ -10,6 +10,7 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
+import android.support.annotation.Keep;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -82,19 +83,23 @@ public class ActionBarPopupWindow extends PopupWindow {
             this.mOnDispatchKeyEventListener = listener;
         }
 
+        @Keep
         public void setBackAlpha(int value) {
             this.backAlpha = value;
         }
 
+        @Keep
         public int getBackAlpha() {
             return this.backAlpha;
         }
 
+        @Keep
         public void setBackScaleX(float value) {
             this.backScaleX = value;
             invalidate();
         }
 
+        @Keep
         public void setBackScaleY(float value) {
             this.backScaleY = value;
             if (this.animationEnabled) {

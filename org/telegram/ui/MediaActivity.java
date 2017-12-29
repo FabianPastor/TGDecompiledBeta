@@ -1012,6 +1012,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
 
     public View createView(Context context) {
         int a;
+        this.searching = false;
+        this.searchWas = false;
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         this.actionBar.setTitle(TtmlNode.ANONYMOUS_REGION_ID);
         this.actionBar.setAllowOverlayTitle(false);
@@ -1103,7 +1105,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                         int dp;
                                         int dp2;
                                         View frameLayout = new FrameLayout(MediaActivity.this.getParentActivity());
-                                        CheckBoxCell cell = new CheckBoxCell(MediaActivity.this.getParentActivity(), true);
+                                        CheckBoxCell cell = new CheckBoxCell(MediaActivity.this.getParentActivity(), 1);
                                         cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                                         if (currentChat != null) {
                                             cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), TtmlNode.ANONYMOUS_REGION_ID, false, false);
@@ -1877,7 +1879,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 if (view instanceof SharedDocumentCell) {
                     SharedDocumentCell cell = (SharedDocumentCell) view;
                     if (cell.isLoaded()) {
-                        if (!message.isMusic() || !MediaController.getInstance(this.currentAccount).setPlaylist(this.sharedMediaData[this.selectedMode].messages, message)) {
+                        if (!message.isMusic() || !MediaController.getInstance().setPlaylist(this.sharedMediaData[this.selectedMode].messages, message)) {
                             File f = null;
                             String fileName = message.messageOwner.media != null ? FileLoader.getAttachFileName(message.getDocument()) : TtmlNode.ANONYMOUS_REGION_ID;
                             if (!(message.messageOwner.attachPath == null || message.messageOwner.attachPath.length() == 0)) {

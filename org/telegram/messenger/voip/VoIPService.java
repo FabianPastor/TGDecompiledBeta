@@ -2,6 +2,8 @@ package org.telegram.messenger.voip;
 
 import android.app.KeyguardManager;
 import android.app.Notification.Builder;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
 import android.content.Intent;
@@ -41,7 +43,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
@@ -870,11 +871,34 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
         intent.addFlags(805306368);
         Builder builder = new Builder(this).setContentText(LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding)).setContentTitle(ContactsController.formatName(this.user.first_name, this.user.last_name)).setSmallIcon(R.drawable.notification).setContentIntent(PendingIntent.getActivity(this, 0, intent, 0));
         if (VERSION.SDK_INT >= 26) {
-            builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
+            SharedPreferences nprefs = MessagesController.getGlobalNotificationsSettings();
+            int chanIndex = nprefs.getInt("calls_notification_channel", 0);
+            NotificationManager nm = (NotificationManager) getSystemService("notification");
+            NotificationChannel existingChannel = nm.getNotificationChannel("incoming_calls" + chanIndex);
+            boolean needCreate = true;
+            if (existingChannel != null) {
+                if (existingChannel.getImportance() >= 4 && existingChannel.getSound() == null && existingChannel.getVibrationPattern() == null) {
+                    needCreate = false;
+                } else {
+                    FileLog.d("User messed up the notification channel; deleting it and creating a proper one");
+                    nm.deleteNotificationChannel("incoming_calls" + chanIndex);
+                    chanIndex++;
+                    nprefs.edit().putInt("calls_notification_channel", chanIndex).apply();
+                }
+            }
+            if (needCreate) {
+                NotificationChannel chan = new NotificationChannel("incoming_calls" + chanIndex, LocaleController.getString("IncomingCalls", R.string.IncomingCalls), 4);
+                chan.setSound(null, null);
+                chan.enableVibration(false);
+                chan.enableLights(false);
+                nm.createNotificationChannel(chan);
+            }
+            builder.setChannelId("incoming_calls" + chanIndex);
         }
         Intent endIntent = new Intent(this, VoIPActionsReceiver.class);
         endIntent.setAction(getPackageName() + ".DECLINE_CALL");
         endIntent.putExtra("call_id", getCallID());
+        endIntent.setFlags(268435456);
         CharSequence endTitle = LocaleController.getString("VoipDeclineCall", R.string.VoipDeclineCall);
         if (VERSION.SDK_INT >= 24) {
             CharSequence endTitle2 = new SpannableString(endTitle);
@@ -885,6 +909,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
         Intent answerIntent = new Intent(this, VoIPActionsReceiver.class);
         answerIntent.setAction(getPackageName() + ".ANSWER_CALL");
         answerIntent.putExtra("call_id", getCallID());
+        answerIntent.setFlags(268435456);
         CharSequence answerTitle = LocaleController.getString("VoipAnswerCall", R.string.VoipAnswerCall);
         if (VERSION.SDK_INT >= 24) {
             CharSequence answerTitle2 = new SpannableString(answerTitle);

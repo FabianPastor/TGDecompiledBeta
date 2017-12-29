@@ -540,7 +540,7 @@ public class CacheControlActivity extends BaseFragment {
                             }
                             if (size > 0) {
                                 CacheControlActivity.this.clear[a] = true;
-                                CheckBoxCell checkBoxCell = new CheckBoxCell(CacheControlActivity.this.getParentActivity(), true);
+                                CheckBoxCell checkBoxCell = new CheckBoxCell(CacheControlActivity.this.getParentActivity(), 1);
                                 checkBoxCell.setTag(Integer.valueOf(a));
                                 checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                                 linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));

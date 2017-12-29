@@ -161,7 +161,6 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
     }
 
     private void processManifest() {
-        long startTimeUs;
         Timeline timeline;
         for (int i = 0; i < this.mediaPeriods.size(); i++) {
             ((SsMediaPeriod) this.mediaPeriods.get(i)).updateManifest(this.manifest);
@@ -170,37 +169,38 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
         StreamElement[] streamElementArr = this.manifest.streamElements;
         int length = streamElementArr.length;
         int i2 = 0;
-        long startTimeUs2 = Long.MAX_VALUE;
+        long startTimeUs = Long.MAX_VALUE;
         while (i2 < length) {
+            long startTimeUs2;
             StreamElement element = streamElementArr[i2];
             if (element.chunkCount > 0) {
-                startTimeUs = Math.min(startTimeUs2, element.getStartTimeUs(0));
+                startTimeUs2 = Math.min(startTimeUs, element.getStartTimeUs(0));
                 endTimeUs = Math.max(endTimeUs, element.getStartTimeUs(element.chunkCount - 1) + element.getChunkDurationUs(element.chunkCount - 1));
             } else {
-                startTimeUs = startTimeUs2;
+                startTimeUs2 = startTimeUs;
             }
             i2++;
-            startTimeUs2 = startTimeUs;
-        }
-        if (startTimeUs2 == Long.MAX_VALUE) {
-            timeline = new SinglePeriodTimeline(this.manifest.isLive ? C.TIME_UNSET : 0, 0, 0, 0, true, this.manifest.isLive);
             startTimeUs = startTimeUs2;
+        }
+        if (startTimeUs == Long.MAX_VALUE) {
+            timeline = new SinglePeriodTimeline(this.manifest.isLive ? C.TIME_UNSET : 0, 0, 0, 0, true, this.manifest.isLive);
+            startTimeUs2 = startTimeUs;
         } else if (this.manifest.isLive) {
             if (this.manifest.dvrWindowLengthUs == C.TIME_UNSET || this.manifest.dvrWindowLengthUs <= 0) {
-                startTimeUs = startTimeUs2;
+                startTimeUs2 = startTimeUs;
             } else {
-                startTimeUs = Math.max(startTimeUs2, endTimeUs - this.manifest.dvrWindowLengthUs);
+                startTimeUs2 = Math.max(startTimeUs, endTimeUs - this.manifest.dvrWindowLengthUs);
             }
-            durationUs = endTimeUs - startTimeUs;
+            durationUs = endTimeUs - startTimeUs2;
             long defaultStartPositionUs = durationUs - C.msToUs(this.livePresentationDelayMs);
             if (defaultStartPositionUs < MIN_LIVE_DEFAULT_START_POSITION_US) {
                 defaultStartPositionUs = Math.min(MIN_LIVE_DEFAULT_START_POSITION_US, durationUs / 2);
             }
-            Timeline singlePeriodTimeline = new SinglePeriodTimeline(C.TIME_UNSET, durationUs, startTimeUs, defaultStartPositionUs, true, true);
+            Timeline singlePeriodTimeline = new SinglePeriodTimeline(C.TIME_UNSET, durationUs, startTimeUs2, defaultStartPositionUs, true, true);
         } else {
-            durationUs = this.manifest.durationUs != C.TIME_UNSET ? this.manifest.durationUs : endTimeUs - startTimeUs2;
-            Timeline singlePeriodTimeline2 = new SinglePeriodTimeline(startTimeUs2 + durationUs, durationUs, startTimeUs2, 0, true, false);
-            startTimeUs = startTimeUs2;
+            durationUs = this.manifest.durationUs != C.TIME_UNSET ? this.manifest.durationUs : endTimeUs - startTimeUs;
+            Timeline singlePeriodTimeline2 = new SinglePeriodTimeline(startTimeUs + durationUs, durationUs, startTimeUs, 0, true, false);
+            startTimeUs2 = startTimeUs;
         }
         this.sourceListener.onSourceInfoRefreshed(timeline, this.manifest);
     }

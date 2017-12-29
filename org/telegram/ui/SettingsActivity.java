@@ -940,7 +940,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                         maskValues[a] = MessagesController.getInstance(SettingsActivity.this.currentAccount).useSystemEmoji;
                                         name = LocaleController.getString("EmojiUseDefault", R.string.EmojiUseDefault);
                                     }
-                                    CheckBoxCell checkBoxCell = new CheckBoxCell(SettingsActivity.this.getParentActivity(), true);
+                                    CheckBoxCell checkBoxCell = new CheckBoxCell(SettingsActivity.this.getParentActivity(), 1);
                                     checkBoxCell.setTag(Integer.valueOf(a));
                                     checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                                     linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
@@ -1047,6 +1047,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     builder.setItems(items, new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             if (which == 0) {
+                                UserConfig.getInstance(SettingsActivity.this.currentAccount).syncContacts = true;
+                                UserConfig.getInstance(SettingsActivity.this.currentAccount).saveConfig(false);
                                 ContactsController.getInstance(SettingsActivity.this.currentAccount).forceImportContacts();
                             } else if (which == 1) {
                                 ContactsController.getInstance(SettingsActivity.this.currentAccount).loadContacts(false, 0);

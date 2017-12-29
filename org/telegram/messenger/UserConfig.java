@@ -41,6 +41,7 @@ public class UserConfig {
     public int ratingLoadTime;
     public boolean registeredForPush;
     private final Object sync = new Object();
+    public boolean syncContacts = true;
     public TL_account_tmpPassword tmpPassword;
     public int totalDialogsLoadCount = 0;
 
@@ -125,6 +126,7 @@ public class UserConfig {
                 editor.putInt("botRatingLoadTime", this.botRatingLoadTime);
                 editor.putBoolean("contactsReimported", this.contactsReimported);
                 editor.putInt("loginTime", this.loginTime);
+                editor.putBoolean("syncContacts", this.syncContacts);
                 editor.putInt("3migrateOffsetId", this.migrateOffsetId);
                 if (this.migrateOffsetId != -1) {
                     editor.putInt("3migrateOffsetDate", this.migrateOffsetDate);
@@ -223,6 +225,7 @@ public class UserConfig {
             this.ratingLoadTime = preferences.getInt("ratingLoadTime", 0);
             this.botRatingLoadTime = preferences.getInt("botRatingLoadTime", 0);
             this.loginTime = preferences.getInt("loginTime", this.currentAccount);
+            this.syncContacts = preferences.getBoolean("syncContacts", this.syncContacts);
             this.migrateOffsetId = preferences.getInt("3migrateOffsetId", 0);
             if (this.migrateOffsetId != -1) {
                 this.migrateOffsetDate = preferences.getInt("3migrateOffsetDate", 0);
@@ -284,6 +287,7 @@ public class UserConfig {
         this.botRatingLoadTime = 0;
         this.draftsLoaded = true;
         this.contactsReimported = true;
+        this.syncContacts = true;
         this.pinnedDialogsLoaded = false;
         this.loginTime = (int) (System.currentTimeMillis() / 1000);
         this.lastContactsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 82800;

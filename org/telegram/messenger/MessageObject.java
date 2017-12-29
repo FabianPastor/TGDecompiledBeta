@@ -184,6 +184,7 @@ public class MessageObject {
     private int isRoundVideoCached;
     public int lastLineWidth;
     private boolean layoutCreated;
+    public int linesCount;
     public CharSequence linkDescription;
     public long localGroupId;
     public boolean mediaExists;
@@ -2315,7 +2316,6 @@ public class MessageObject {
             int a;
             TextPaint paint;
             StaticLayout textLayout;
-            int linesCount;
             int blocksCount;
             int linesOffset;
             float prevOffset;
@@ -2437,12 +2437,12 @@ public class MessageObject {
                     if (VERSION.SDK_INT >= 24) {
                         textLayout = Builder.obtain(this.messageText, 0, this.messageText.length(), paint, maxWidth).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Alignment.ALIGN_NORMAL).build();
                         this.textHeight = textLayout.getHeight();
-                        linesCount = textLayout.getLineCount();
-                        blocksCount = (int) Math.ceil((double) (((float) linesCount) / 10.0f));
+                        this.linesCount = textLayout.getLineCount();
+                        blocksCount = (int) Math.ceil((double) (((float) this.linesCount) / 10.0f));
                         linesOffset = 0;
                         prevOffset = 0.0f;
                         for (a = 0; a < blocksCount; a++) {
-                            currentBlockLinesCount = Math.min(10, linesCount - linesOffset);
+                            currentBlockLinesCount = Math.min(10, this.linesCount - linesOffset);
                             block = new TextLayoutBlock();
                             if (blocksCount != 1) {
                                 block.textLayout = textLayout;
@@ -2586,12 +2586,12 @@ public class MessageObject {
             }
             textLayout = new StaticLayout(this.messageText, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             this.textHeight = textLayout.getHeight();
-            linesCount = textLayout.getLineCount();
-            blocksCount = (int) Math.ceil((double) (((float) linesCount) / 10.0f));
+            this.linesCount = textLayout.getLineCount();
+            blocksCount = (int) Math.ceil((double) (((float) this.linesCount) / 10.0f));
             linesOffset = 0;
             prevOffset = 0.0f;
             while (a < blocksCount) {
-                currentBlockLinesCount = Math.min(10, linesCount - linesOffset);
+                currentBlockLinesCount = Math.min(10, this.linesCount - linesOffset);
                 block = new TextLayoutBlock();
                 if (blocksCount != 1) {
                     startCharacter = textLayout.getLineStart(linesOffset);

@@ -41,6 +41,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
@@ -92,11 +93,11 @@ public class NotificationsController {
     public static final String EXTRA_VOICE_REPLY = "extra_voice_reply";
     private static volatile NotificationsController[] Instance = new NotificationsController[3];
     public static final String OTHER_NOTIFICATIONS_CHANNEL = "Other3";
+    protected static AudioManager audioManager = ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO));
     private static NotificationManagerCompat notificationManager;
     private static DispatchQueue notificationsQueue = new DispatchQueue("notificationsQueue");
     private static NotificationManager systemNotificationManager;
     private AlarmManager alarmManager;
-    protected AudioManager audioManager;
     private int currentAccount;
     private ArrayList<MessageObject> delayedPushMessages = new ArrayList();
     private boolean inChatSoundEnabled = true;
@@ -178,7 +179,7 @@ public class NotificationsController {
         notificationManager = NotificationManagerCompat.from(ApplicationLoader.applicationContext);
         systemNotificationManager = (NotificationManager) ApplicationLoader.applicationContext.getSystemService("notification");
         try {
-            this.audioManager = (AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+            audioManager = (AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO);
         } catch (Throwable e) {
             FileLog.e(e);
         }
@@ -237,6 +238,21 @@ public class NotificationsController {
                 Editor editor = MessagesController.getNotificationsSettings(NotificationsController.this.currentAccount).edit();
                 editor.clear();
                 editor.commit();
+                if (VERSION.SDK_INT >= 26) {
+                    try {
+                        String keyStart = NotificationsController.this.currentAccount + "channel";
+                        List<NotificationChannel> list = NotificationsController.systemNotificationManager.getNotificationChannels();
+                        int count = list.size();
+                        for (int a = 0; a < count; a++) {
+                            String id = ((NotificationChannel) list.get(a)).getId();
+                            if (id.startsWith(keyStart)) {
+                                NotificationsController.systemNotificationManager.deleteNotificationChannel(id);
+                            }
+                        }
+                    } catch (Throwable e2) {
+                        FileLog.e(e2);
+                    }
+                }
             }
         });
     }
@@ -315,7 +331,7 @@ public class NotificationsController {
                             }
                             if (vibrateOnlyIfSilent && needVibrate != 2) {
                                 try {
-                                    int mode = NotificationsController.this.audioManager.getRingerMode();
+                                    int mode = NotificationsController.audioManager.getRingerMode();
                                     if (!(mode == 0 || mode == 1)) {
                                         needVibrate = 2;
                                     }
@@ -373,7 +389,7 @@ public class NotificationsController {
                             if (ledColor != 0) {
                                 mBuilder.setLights(ledColor, 1000, 1000);
                             }
-                            if (needVibrate == 2 || MediaController.getInstance(NotificationsController.this.currentAccount).isRecordingAudio()) {
+                            if (needVibrate == 2 || MediaController.getInstance().isRecordingAudio()) {
                                 vibrationPattern = new long[]{0, 0};
                                 mBuilder.setVibrate(vibrationPattern);
                             } else if (needVibrate == 1) {
@@ -1444,9 +1460,9 @@ public class NotificationsController {
     }
 
     private void playInChatSound() {
-        if (this.inChatSoundEnabled && !MediaController.getInstance(this.currentAccount).isRecordingAudio()) {
+        if (this.inChatSoundEnabled && !MediaController.getInstance().isRecordingAudio()) {
             try {
-                if (this.audioManager.getRingerMode() == 0) {
+                if (audioManager.getRingerMode() == 0) {
                     return;
                 }
             } catch (Throwable e) {
@@ -1740,7 +1756,7 @@ public class NotificationsController {
                         }
                         if (vibrateOnlyIfSilent && needVibrate != 2) {
                             try {
-                                mode = this.audioManager.getRingerMode();
+                                mode = audioManager.getRingerMode();
                                 if (!(mode == 0 || mode == 1)) {
                                     needVibrate = 2;
                                 }
@@ -1911,7 +1927,7 @@ public class NotificationsController {
                             }
                             mBuilder.setTicker(lastMessage);
                         }
-                        if (!(MediaController.getInstance(this.currentAccount).isRecordingAudio() || choosenSoundPath == null)) {
+                        if (!(MediaController.getInstance().isRecordingAudio() || choosenSoundPath == null)) {
                             if (!choosenSoundPath.equals("NoSound")) {
                                 if (VERSION.SDK_INT >= 26) {
                                     sound = choosenSoundPath.equals(defaultPath) ? System.DEFAULT_NOTIFICATION_URI : Uri.parse(choosenSoundPath);
@@ -1925,7 +1941,7 @@ public class NotificationsController {
                         if (ledColor != 0) {
                             mBuilder.setLights(ledColor, 1000, 1000);
                         }
-                        if (needVibrate == 2 || MediaController.getInstance(this.currentAccount).isRecordingAudio()) {
+                        if (needVibrate == 2 || MediaController.getInstance().isRecordingAudio()) {
                             vibrationPattern = new long[]{0, 0};
                             mBuilder.setVibrate(vibrationPattern);
                         } else if (needVibrate == 1) {
@@ -2042,7 +2058,7 @@ public class NotificationsController {
                         priority = 1;
                     }
                 }
-                mode = this.audioManager.getRingerMode();
+                mode = audioManager.getRingerMode();
                 needVibrate = 2;
             }
             intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
@@ -2530,9 +2546,9 @@ public class NotificationsController {
     }
 
     public void playOutChatSound() {
-        if (this.inChatSoundEnabled && !MediaController.getInstance(this.currentAccount).isRecordingAudio()) {
+        if (this.inChatSoundEnabled && !MediaController.getInstance().isRecordingAudio()) {
             try {
-                if (this.audioManager.getRingerMode() == 0) {
+                if (audioManager.getRingerMode() == 0) {
                     return;
                 }
             } catch (Throwable e) {

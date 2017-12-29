@@ -9,10 +9,11 @@ import android.text.TextPaint;
 import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DownloadController;
+import org.telegram.messenger.DownloadController.FileDownloadProgressListener;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.MediaController;
-import org.telegram.messenger.MediaController.FileDownloadProgressListener;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
@@ -43,7 +44,7 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
     public PopupAudioView(Context context) {
         super(context);
         this.timePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
-        this.TAG = MediaController.getInstance(this.currentAccount).generateObserverTag();
+        this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         this.seekBar = new SeekBar(getContext());
         this.seekBar.setDelegate(this);
         this.progressView = new ProgressView();
@@ -121,7 +122,7 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
 
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+        DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -164,7 +165,7 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
 
     private void didPressedButton() {
         if (this.buttonState == 0) {
-            boolean result = MediaController.getInstance(this.currentAccount).playMessage(this.currentMessageObject);
+            boolean result = MediaController.getInstance().playMessage(this.currentMessageObject);
             if (!this.currentMessageObject.isOut() && this.currentMessageObject.isContentUnread() && this.currentMessageObject.messageOwner.to_id.channel_id == 0) {
                 MessagesController.getInstance(this.currentAccount).markMessageContentAsRead(this.currentMessageObject);
                 this.currentMessageObject.setContentIsRead();
@@ -174,7 +175,7 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
                 invalidate();
             }
         } else if (this.buttonState == 1) {
-            if (MediaController.getInstance(this.currentAccount).pauseMessage(this.currentMessageObject)) {
+            if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
                 this.buttonState = 0;
                 invalidate();
             }
@@ -195,7 +196,7 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
                 this.seekBar.setProgress(this.currentMessageObject.audioProgress);
             }
             int duration = 0;
-            if (MediaController.getInstance(this.currentAccount).isPlayingMessage(this.currentMessageObject)) {
+            if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
                 duration = this.currentMessageObject.audioProgressSec;
             } else {
                 for (int a = 0; a < this.currentMessageObject.getDocument().attributes.size(); a++) {
@@ -226,16 +227,16 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
     public void updateButtonState() {
         String fileName = this.currentMessageObject.getFileName();
         if (FileLoader.getPathToMessage(this.currentMessageObject.messageOwner).exists()) {
-            MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
-            boolean playing = MediaController.getInstance(this.currentAccount).isPlayingMessage(this.currentMessageObject);
-            if (!playing || (playing && MediaController.getInstance(this.currentAccount).isMessagePaused())) {
+            DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+            boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+            if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
                 this.buttonState = 0;
             } else {
                 this.buttonState = 1;
             }
             this.progressView.setProgress(0.0f);
         } else {
-            MediaController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
+            DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
             if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
                 this.buttonState = 3;
                 Float progress = ImageLoader.getInstance().getFileProgress(fileName);
@@ -278,7 +279,7 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
     public void onSeekBarDrag(float progress) {
         if (this.currentMessageObject != null) {
             this.currentMessageObject.audioProgress = progress;
-            MediaController.getInstance(this.currentAccount).seekToProgress(this.currentMessageObject, progress);
+            MediaController.getInstance().seekToProgress(this.currentMessageObject, progress);
         }
     }
 }

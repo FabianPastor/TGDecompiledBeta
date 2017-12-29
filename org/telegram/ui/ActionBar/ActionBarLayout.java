@@ -12,6 +12,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Keep;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -198,11 +199,13 @@ public class ActionBarLayout extends FrameLayout {
         }
     }
 
+    @Keep
     public void setInnerTranslationX(float value) {
         this.innerTranslationX = value;
         invalidate();
     }
 
+    @Keep
     public float getInnerTranslationX() {
         return this.innerTranslationX;
     }
@@ -1020,7 +1023,7 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void rebuildAllFragmentViews(boolean last, boolean showLastAfter) {
-        if (this.transitionAnimationInProgress) {
+        if (this.transitionAnimationInProgress || this.startedTracking) {
             this.rebuildAfterAnimation = true;
             this.rebuildLastAfterAnimation = last;
             this.showLastAfterAnimation = showLastAfter;

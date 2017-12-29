@@ -250,7 +250,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                     ChatActivityEnterView.this.delegate.needStartRecordAudio(1);
                     ChatActivityEnterView.this.startedDraggingX = -1.0f;
-                    MediaController.getInstance(ChatActivityEnterView.this.currentAccount).startRecording(ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject);
+                    MediaController.getInstance().startRecording(ChatActivityEnterView.this.currentAccount, ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject);
                     ChatActivityEnterView.this.updateRecordIntefrace();
                     ChatActivityEnterView.this.audioVideoButtonContainer.getParent().requestDisallowInterceptTouchEvent(true);
                     return;
@@ -567,7 +567,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         return true;
                     }
                     if (ChatActivityEnterView.this.videoSendButton == null || ChatActivityEnterView.this.videoSendButton.getTag() == null) {
-                        MediaController.getInstance(ChatActivityEnterView.this.currentAccount).stopRecording(2);
+                        MediaController.getInstance().stopRecording(2);
                         ChatActivityEnterView.this.delegate.needStartRecordAudio(0);
                         return true;
                     }
@@ -751,7 +751,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 public void onSeekBarDrag(float progress) {
                     if (ChatActivityEnterView.this.audioToSendMessageObject != null) {
                         ChatActivityEnterView.this.audioToSendMessageObject.audioProgress = progress;
-                        MediaController.getInstance(ChatActivityEnterView.this.currentAccount).seekToProgress(ChatActivityEnterView.this.audioToSendMessageObject, progress);
+                        MediaController.getInstance().seekToProgress(ChatActivityEnterView.this.audioToSendMessageObject, progress);
                     }
                 }
             });
@@ -849,11 +849,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     return;
                 }
                 ChatActivityEnterView.this.showPopup(1, 0);
-                EmojiView access$600 = ChatActivityEnterView.this.emojiView;
+                EmojiView access$500 = ChatActivityEnterView.this.emojiView;
                 if (ChatActivityEnterView.this.messageEditText.length() <= 0 || ChatActivityEnterView.this.messageEditText.getText().toString().startsWith("@gif")) {
                     z = false;
                 }
-                access$600.onOpen(z);
+                access$500.onOpen(z);
             }
         });
         this.messageEditText = new EditTextCaption(context) {
@@ -977,9 +977,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         if (count > 2 || charSequence == null || charSequence.length() == 0) {
                             ChatActivityEnterView.this.messageWebPageSearch = true;
                         }
-                        ChatActivityEnterViewDelegate access$1100 = ChatActivityEnterView.this.delegate;
+                        ChatActivityEnterViewDelegate access$1000 = ChatActivityEnterView.this.delegate;
                         boolean z = before > count + 1 || count - before > 2;
-                        access$1100.onTextChanged(charSequence, z);
+                        access$1000.onTextChanged(charSequence, z);
                     }
                     if (!(ChatActivityEnterView.this.innerTextChange == 2 || before == count || count - before <= 1)) {
                         this.processChange = true;
@@ -1112,9 +1112,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (ChatActivityEnterView.this.videoToSendMessageObject != null) {
                     ChatActivityEnterView.this.delegate.needStartRecordVideo(2);
                 } else {
-                    MessageObject playing = MediaController.getInstance(ChatActivityEnterView.this.currentAccount).getPlayingMessageObject();
+                    MessageObject playing = MediaController.getInstance().getPlayingMessageObject();
                     if (playing != null && playing == ChatActivityEnterView.this.audioToSendMessageObject) {
-                        MediaController.getInstance(ChatActivityEnterView.this.currentAccount).cleanupPlayer(true, true);
+                        MediaController.getInstance().cleanupPlayer(true, true);
                     }
                 }
                 if (ChatActivityEnterView.this.audioToSendPath != null) {
@@ -1165,12 +1165,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.recordedAudioPlayButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (ChatActivityEnterView.this.audioToSend != null) {
-                    if (!MediaController.getInstance(ChatActivityEnterView.this.currentAccount).isPlayingMessage(ChatActivityEnterView.this.audioToSendMessageObject) || MediaController.getInstance(ChatActivityEnterView.this.currentAccount).isMessagePaused()) {
+                    if (!MediaController.getInstance().isPlayingMessage(ChatActivityEnterView.this.audioToSendMessageObject) || MediaController.getInstance().isMessagePaused()) {
                         ChatActivityEnterView.this.recordedAudioPlayButton.setImageDrawable(ChatActivityEnterView.this.pauseDrawable);
-                        MediaController.getInstance(ChatActivityEnterView.this.currentAccount).playMessage(ChatActivityEnterView.this.audioToSendMessageObject);
+                        MediaController.getInstance().playMessage(ChatActivityEnterView.this.audioToSendMessageObject);
                         return;
                     }
-                    MediaController.getInstance(ChatActivityEnterView.this.currentAccount).pauseMessage(ChatActivityEnterView.this.audioToSendMessageObject);
+                    MediaController.getInstance().pauseMessage(ChatActivityEnterView.this.audioToSendMessageObject);
                     ChatActivityEnterView.this.recordedAudioPlayButton.setImageDrawable(ChatActivityEnterView.this.playDrawable);
                 }
             }
@@ -1212,7 +1212,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             public void onClick(View v) {
                 if (!ChatActivityEnterView.this.hasRecordVideo || ChatActivityEnterView.this.videoSendButton.getTag() == null) {
                     ChatActivityEnterView.this.delegate.needStartRecordAudio(0);
-                    MediaController.getInstance(ChatActivityEnterView.this.currentAccount).stopRecording(0);
+                    MediaController.getInstance().stopRecording(0);
                 } else {
                     ChatActivityEnterView.this.delegate.needStartRecordVideo(2);
                 }
@@ -1246,7 +1246,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             ChatActivityEnterView.this.startedDraggingX = -1.0f;
                             if (!ChatActivityEnterView.this.hasRecordVideo || ChatActivityEnterView.this.videoSendButton.getTag() == null) {
                                 ChatActivityEnterView.this.delegate.needStartRecordAudio(0);
-                                MediaController.getInstance(ChatActivityEnterView.this.currentAccount).stopRecording(1);
+                                MediaController.getInstance().stopRecording(1);
                             } else {
                                 ChatActivityEnterView.this.delegate.needStartRecordVideo(1);
                             }
@@ -1281,7 +1281,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         ChatActivityEnterView.this.startedDraggingX = -1.0f;
                         if (!ChatActivityEnterView.this.hasRecordVideo || ChatActivityEnterView.this.videoSendButton.getTag() == null) {
                             ChatActivityEnterView.this.delegate.needStartRecordAudio(0);
-                            MediaController.getInstance(ChatActivityEnterView.this.currentAccount).stopRecording(1);
+                            MediaController.getInstance().stopRecording(1);
                         } else {
                             ChatActivityEnterView.this.delegate.needStartRecordVideo(1);
                         }
@@ -1311,7 +1311,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     if (x < (-ChatActivityEnterView.this.distCanMove)) {
                         if (!ChatActivityEnterView.this.hasRecordVideo || ChatActivityEnterView.this.videoSendButton.getTag() == null) {
                             ChatActivityEnterView.this.delegate.needStartRecordAudio(0);
-                            MediaController.getInstance(ChatActivityEnterView.this.currentAccount).stopRecording(0);
+                            MediaController.getInstance().stopRecording(0);
                         } else {
                             ChatActivityEnterView.this.delegate.needStartRecordVideo(2);
                         }
@@ -1571,7 +1571,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     public void cancelRecordingAudioVideo() {
         if (!this.hasRecordVideo || this.videoSendButton.getTag() == null) {
             this.delegate.needStartRecordAudio(0);
-            MediaController.getInstance(this.currentAccount).stopRecording(0);
+            MediaController.getInstance().stopRecording(0);
         } else {
             this.delegate.needStartRecordVideo(2);
         }
@@ -2111,9 +2111,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             hideRecordedAudioPanel();
             checkSendButton(true);
         } else if (this.audioToSend != null) {
-            MessageObject playing = MediaController.getInstance(this.currentAccount).getPlayingMessageObject();
+            MessageObject playing = MediaController.getInstance().getPlayingMessageObject();
             if (playing != null && playing == this.audioToSendMessageObject) {
-                MediaController.getInstance(this.currentAccount).cleanupPlayer(true, true);
+                MediaController.getInstance().cleanupPlayer(true, true);
             }
             SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.audioToSend, null, this.audioToSendPath, this.dialog_id, this.replyingMessageObject, null, null, 0);
             if (this.delegate != null) {
@@ -3646,7 +3646,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         attribute = (DocumentAttribute) this.audioToSend.attributes.get(a);
                         if (attribute instanceof TL_documentAttributeAudio) {
                             if (attribute.waveform == null || attribute.waveform.length == 0) {
-                                attribute.waveform = MediaController.getInstance(this.currentAccount).getWaveform(this.audioToSendPath);
+                                attribute.waveform = MediaController.getInstance().getWaveform(this.audioToSendPath);
                             }
                             this.recordedAudioSeekBar.setWaveform(attribute.waveform);
                             this.recordedAudioTimeTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(duration % 60)}));
@@ -3668,14 +3668,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.parentActivity.setVolumeControlStream(((Boolean) args[0]).booleanValue() ? 0 : Integer.MIN_VALUE);
             }
         } else if (id == NotificationCenter.messagePlayingDidReset) {
-            if (this.audioToSendMessageObject != null && !MediaController.getInstance(this.currentAccount).isPlayingMessage(this.audioToSendMessageObject)) {
+            if (this.audioToSendMessageObject != null && !MediaController.getInstance().isPlayingMessage(this.audioToSendMessageObject)) {
                 this.recordedAudioPlayButton.setImageDrawable(this.playDrawable);
                 this.recordedAudioSeekBar.setProgress(0.0f);
             }
         } else if (id == NotificationCenter.messagePlayingProgressDidChanged) {
             Integer mid = args[0];
-            if (this.audioToSendMessageObject != null && MediaController.getInstance(this.currentAccount).isPlayingMessage(this.audioToSendMessageObject)) {
-                MessageObject player = MediaController.getInstance(this.currentAccount).getPlayingMessageObject();
+            if (this.audioToSendMessageObject != null && MediaController.getInstance().isPlayingMessage(this.audioToSendMessageObject)) {
+                MessageObject player = MediaController.getInstance().getPlayingMessageObject();
                 this.audioToSendMessageObject.audioProgress = player.audioProgress;
                 this.audioToSendMessageObject.audioProgressSec = player.audioProgressSec;
                 if (!this.recordedAudioSeekBar.isDragging()) {

@@ -53,7 +53,6 @@ public class ActionBarMenuItem extends FrameLayout {
     private boolean layoutInScreen;
     private ActionBarMenuItemSearchListener listener;
     private int[] location;
-    private int menuHeight = AndroidUtilities.dp(16.0f);
     protected boolean overrideMenuClick;
     private ActionBarMenu parentMenu;
     private ActionBarPopupWindowLayout popupLayout;
@@ -230,6 +229,31 @@ public class ActionBarMenuItem extends FrameLayout {
         this.popupLayout.addView(view, new LayoutParams(width, height));
     }
 
+    public void addSubItem(int id, View view, int width, int height) {
+        createPopupLayout();
+        view.setLayoutParams(new LayoutParams(width, height));
+        this.popupLayout.addView(view);
+        view.setTag(Integer.valueOf(id));
+        view.setOnClickListener(new OnClickListener() {
+            public void onClick(View view) {
+                if (ActionBarMenuItem.this.popupWindow != null && ActionBarMenuItem.this.popupWindow.isShowing()) {
+                    if (!ActionBarMenuItem.this.processedPopupClick) {
+                        ActionBarMenuItem.this.processedPopupClick = true;
+                        ActionBarMenuItem.this.popupWindow.dismiss(ActionBarMenuItem.this.allowCloseAnimation);
+                    } else {
+                        return;
+                    }
+                }
+                if (ActionBarMenuItem.this.parentMenu != null) {
+                    ActionBarMenuItem.this.parentMenu.onItemClick(((Integer) view.getTag()).intValue());
+                } else if (ActionBarMenuItem.this.delegate != null) {
+                    ActionBarMenuItem.this.delegate.onItemClick(((Integer) view.getTag()).intValue());
+                }
+            }
+        });
+        view.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+    }
+
     public TextView addSubItem(int id, String text) {
         createPopupLayout();
         TextView textView = new TextView(getContext());
@@ -270,7 +294,6 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             }
         });
-        this.menuHeight += layoutParams.height;
         return textView;
     }
 

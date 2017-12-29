@@ -552,13 +552,28 @@ public class AlertDialog extends Dialog implements Callback {
                         View child = getChildAt(a);
                         if (((Integer) child.getTag()).intValue() == -1) {
                             positiveButton = child;
-                            child.layout((width - getPaddingRight()) - child.getMeasuredWidth(), getPaddingTop(), (width - getPaddingRight()) + child.getMeasuredWidth(), getPaddingTop() + child.getMeasuredHeight());
-                        } else if (((Integer) child.getTag()).intValue() == -2) {
-                            int x = (width - getPaddingRight()) - child.getMeasuredWidth();
-                            if (positiveButton != null) {
-                                x -= positiveButton.getMeasuredWidth() + AndroidUtilities.dp(8.0f);
+                            if (LocaleController.isRTL) {
+                                child.layout(getPaddingLeft(), getPaddingTop(), getPaddingLeft() + child.getMeasuredWidth(), getPaddingTop() + child.getMeasuredHeight());
+                            } else {
+                                child.layout((width - getPaddingRight()) - child.getMeasuredWidth(), getPaddingTop(), (width - getPaddingRight()) + child.getMeasuredWidth(), getPaddingTop() + child.getMeasuredHeight());
                             }
-                            child.layout(x, getPaddingTop(), child.getMeasuredWidth() + x, getPaddingTop() + child.getMeasuredHeight());
+                        } else if (((Integer) child.getTag()).intValue() == -2) {
+                            int x;
+                            if (LocaleController.isRTL) {
+                                x = getPaddingLeft();
+                                if (positiveButton != null) {
+                                    x += positiveButton.getMeasuredWidth() + AndroidUtilities.dp(8.0f);
+                                }
+                                child.layout(x, getPaddingTop(), child.getMeasuredWidth() + x, getPaddingTop() + child.getMeasuredHeight());
+                            } else {
+                                x = (width - getPaddingRight()) - child.getMeasuredWidth();
+                                if (positiveButton != null) {
+                                    x -= positiveButton.getMeasuredWidth() + AndroidUtilities.dp(8.0f);
+                                }
+                                child.layout(x, getPaddingTop(), child.getMeasuredWidth() + x, getPaddingTop() + child.getMeasuredHeight());
+                            }
+                        } else if (LocaleController.isRTL) {
+                            child.layout((width - getPaddingRight()) - child.getMeasuredWidth(), getPaddingTop(), (width - getPaddingRight()) + child.getMeasuredWidth(), getPaddingTop() + child.getMeasuredHeight());
                         } else {
                             child.layout(getPaddingLeft(), getPaddingTop(), getPaddingLeft() + child.getMeasuredWidth(), getPaddingTop() + child.getMeasuredHeight());
                         }

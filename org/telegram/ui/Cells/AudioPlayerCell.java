@@ -12,19 +12,20 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import java.io.File;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DownloadController;
+import org.telegram.messenger.DownloadController.FileDownloadProgressListener;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
-import org.telegram.messenger.MediaController.FileDownloadProgressListener;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RadialProgress;
 
 public class AudioPlayerCell extends View implements FileDownloadProgressListener {
-    private int TAG = MediaController.getInstance(this.currentAccount).generateObserverTag();
+    private int TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
     private boolean buttonPressed;
     private int buttonState;
     private int currentAccount = UserConfig.selectedAccount;
@@ -69,7 +70,7 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
 
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+        DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
 
     public MessageObject getMessageObject() {
@@ -78,13 +79,13 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
 
     public void didPressedButton() {
         if (this.buttonState == 0) {
-            if (MediaController.getInstance(this.currentAccount).findMessageInPlaylistAndPlay(this.currentMessageObject)) {
+            if (MediaController.getInstance().findMessageInPlaylistAndPlay(this.currentMessageObject)) {
                 this.buttonState = 1;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                 invalidate();
             }
         } else if (this.buttonState == 1) {
-            if (MediaController.getInstance(this.currentAccount).pauseMessage(this.currentMessageObject)) {
+            if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
                 this.buttonState = 0;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                 invalidate();
@@ -158,9 +159,9 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
             cacheFile.delete();
         }
         if (cacheFile.exists()) {
-            MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
-            boolean playing = MediaController.getInstance(this.currentAccount).isPlayingMessage(this.currentMessageObject);
-            if (!playing || (playing && MediaController.getInstance(this.currentAccount).isMessagePaused())) {
+            DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+            boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+            if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
                 this.buttonState = 0;
             } else {
                 this.buttonState = 1;
@@ -169,7 +170,7 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
             invalidate();
             return;
         }
-        MediaController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
+        DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
         if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
             this.buttonState = 4;
             Float progress = ImageLoader.getInstance().getFileProgress(fileName);

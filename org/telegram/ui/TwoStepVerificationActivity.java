@@ -325,7 +325,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         this.bottomButton.setGravity((LocaleController.isRTL ? 5 : 3) | 80);
         this.bottomButton.setText(LocaleController.getString("YourEmailSkip", R.string.YourEmailSkip));
         this.bottomButton.setPadding(0, AndroidUtilities.dp(10.0f), 0, 0);
-        linearLayout2.addView(this.bottomButton, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 80, 40, 0, 40, 14));
+        linearLayout2.addView(this.bottomButton, LayoutHelper.createLinear(-1, -2, (LocaleController.isRTL ? 5 : 3) | 80, 40, 0, 40, 14));
         this.bottomButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (TwoStepVerificationActivity.this.type == 0) {

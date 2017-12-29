@@ -868,9 +868,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         } catch (Throwable e222) {
             FileLog.e(e222);
         }
-        for (int a = 0; a < 3; a++) {
-            MediaController.getInstance(a).setBaseActivity(this, true);
-        }
+        MediaController.getInstance().setBaseActivity(this, true);
     }
 
     public void switchToAccount(int account, boolean removeAll) {
@@ -879,6 +877,16 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             UserConfig.selectedAccount = account;
             UserConfig.getInstance(0).saveConfig(false);
             checkCurrentAccount();
+            if (AndroidUtilities.isTablet()) {
+                this.layersActionBarLayout.removeAllFragments();
+                this.rightActionBarLayout.removeAllFragments();
+                if (!this.tabletFullSize) {
+                    this.shadowTabletSide.setVisibility(0);
+                    if (this.rightActionBarLayout.fragmentsStack.isEmpty()) {
+                        this.backgroundTablet.setVisibility(0);
+                    }
+                }
+            }
             if (removeAll) {
                 this.actionBarLayout.removeAllFragments();
             } else {
@@ -1659,6 +1667,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     args2 = new Bundle();
                     args2.putBoolean("onlySelect", true);
                     args2.putInt("dialogsType", 3);
+                    args2.putBoolean("allowSwitchAccount", true);
                     if (this.contactsToSend != null) {
                         args2.putString("selectAlertString", LocaleController.getString("SendContactTo", R.string.SendMessagesTo));
                         args2.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroup", R.string.SendContactToGroup));
@@ -1810,7 +1819,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                             TL_inputMediaGame inputMediaGame = new TL_inputMediaGame();
                                             inputMediaGame.id = new TL_inputGameShortName();
                                             inputMediaGame.id.short_name = str3;
-                                            inputMediaGame.id.bot_id = MessagesController.getInstance(LaunchActivity.this.currentAccount).getInputUser((User) res.users.get(0));
+                                            inputMediaGame.id.bot_id = MessagesController.getInstance(i).getInputUser((User) res.users.get(0));
                                             SendMessagesHelper.getInstance(i).sendGame(MessagesController.getInstance(i).getInputPeer((int) did), inputMediaGame, 0, 0);
                                             Bundle args = new Bundle();
                                             args.putBoolean("scrollToTopOnResume", true);
@@ -2180,6 +2189,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             if (this.photoPathsArray != null) {
                 if (this.sendingText != null && this.sendingText.length() <= Callback.DEFAULT_DRAG_ANIMATION_DURATION && this.photoPathsArray.size() == 1) {
                     ((SendingMediaInfo) this.photoPathsArray.get(0)).caption = this.sendingText;
+                    this.sendingText = null;
                 }
                 SendMessagesHelper.prepareSendingMedia(this.photoPathsArray, did, null, null, false, false);
             }
@@ -2379,9 +2389,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         ArticleViewer.getInstance().destroyArticleViewer();
         StickerPreviewViewer.getInstance().destroy();
         PipRoundVideoView pipRoundVideoView = PipRoundVideoView.getInstance();
-        for (int a = 0; a < 3; a++) {
-            MediaController.getInstance(a).setBaseActivity(this, false);
-        }
+        MediaController.getInstance().setBaseActivity(this, false);
         if (pipRoundVideoView != null) {
             pipRoundVideoView.close(false);
         }
@@ -2447,10 +2455,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         if (PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().onResume();
         }
-        if (PipRoundVideoView.getInstance() != null && MediaController.getInstance(this.currentAccount).isMessagePaused()) {
-            MessageObject messageObject = MediaController.getInstance(this.currentAccount).getPlayingMessageObject();
+        if (PipRoundVideoView.getInstance() != null && MediaController.getInstance().isMessagePaused()) {
+            MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
             if (messageObject != null) {
-                MediaController.getInstance(this.currentAccount).seekToProgress(messageObject, messageObject.audioProgress);
+                MediaController.getInstance().seekToProgress(messageObject, messageObject.audioProgress);
             }
         }
     }

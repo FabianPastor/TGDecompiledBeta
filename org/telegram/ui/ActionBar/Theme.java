@@ -41,6 +41,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -49,6 +50,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -182,6 +184,7 @@ public class Theme {
     public static Drawable[][] chat_photoStatesDrawables = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{13, 2}));
     public static Paint chat_radialProgress2Paint = null;
     public static Paint chat_radialProgressPaint = null;
+    public static Drawable chat_replyIconDrawable = null;
     public static Paint chat_replyLinePaint = null;
     public static TextPaint chat_replyNamePaint = null;
     public static TextPaint chat_replyTextPaint = null;
@@ -218,6 +221,9 @@ public class Theme {
     public static Paint dialogs_errorPaint = null;
     public static Drawable dialogs_groupDrawable = null;
     public static Drawable dialogs_halfCheckDrawable = null;
+    private static Drawable dialogs_holidayDrawable = null;
+    private static int dialogs_holidayDrawableOffsetX = 0;
+    private static int dialogs_holidayDrawableOffsetY = 0;
     public static Drawable dialogs_lockDrawable = null;
     public static Drawable dialogs_mentionDrawable = null;
     public static TextPaint dialogs_messagePaint = null;
@@ -761,6 +767,7 @@ public class Theme {
     public static String[] keys_avatar_backgroundInProfile = new String[]{key_avatar_backgroundInProfileRed, key_avatar_backgroundInProfileOrange, key_avatar_backgroundInProfileViolet, key_avatar_backgroundInProfileGreen, key_avatar_backgroundInProfileCyan, key_avatar_backgroundInProfileBlue, key_avatar_backgroundInProfilePink};
     public static String[] keys_avatar_nameInMessage = new String[]{key_avatar_nameInMessageRed, key_avatar_nameInMessageOrange, key_avatar_nameInMessageViolet, key_avatar_nameInMessageGreen, key_avatar_nameInMessageCyan, key_avatar_nameInMessageBlue, key_avatar_nameInMessagePink};
     public static String[] keys_avatar_subtitleInProfile = new String[]{key_avatar_subtitleInProfileRed, key_avatar_subtitleInProfileOrange, key_avatar_subtitleInProfileViolet, key_avatar_subtitleInProfileGreen, key_avatar_subtitleInProfileCyan, key_avatar_subtitleInProfileBlue, key_avatar_subtitleInProfilePink};
+    private static long lastHolidayCheckTime;
     public static Paint linkSelectionPaint;
     public static Drawable listSelector;
     private static Paint maskPaint = new Paint(1);
@@ -1507,6 +1514,33 @@ public class Theme {
         stateListDrawable.addState(new int[]{16842908}, pressedDrawable);
         stateListDrawable.addState(StateSet.WILD_CARD, defaultDrawable);
         return stateListDrawable;
+    }
+
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static Drawable getCurrentHolidayDrawable() {
+        if (dialogs_holidayDrawable == null && System.currentTimeMillis() - lastHolidayCheckTime >= 3600000) {
+            lastHolidayCheckTime = System.currentTimeMillis();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            int monthOfYear = calendar.get(2);
+            int dayOfMonth = calendar.get(5);
+            if (monthOfYear == 11) {
+                if (dayOfMonth >= (BuildVars.DEBUG_PRIVATE_VERSION ? 29 : 31)) {
+                }
+            }
+            if (monthOfYear == 0) {
+            }
+        }
+        return dialogs_holidayDrawable;
+    }
+
+    public static int getCurrentHolidayDrawableXOffset() {
+        return dialogs_holidayDrawableOffsetX;
+    }
+
+    public static int getCurrentHolidayDrawableYOffset() {
+        return dialogs_holidayDrawableOffsetY;
     }
 
     public static Drawable createSimpleSelectorDrawable(Context context, int resource, int defaultColor, int pressedColor) {
@@ -2355,6 +2389,7 @@ public class Theme {
             chat_cornerInner[3] = resources.getDrawable(R.drawable.corner_in_bl);
             chat_shareDrawable = resources.getDrawable(R.drawable.share_round);
             chat_shareIconDrawable = resources.getDrawable(R.drawable.share_arrow);
+            chat_replyIconDrawable = resources.getDrawable(R.drawable.fast_reply);
             chat_goIconDrawable = resources.getDrawable(R.drawable.message_arrow);
             chat_ivStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), (int) R.drawable.msg_round_play_m, 1);
             chat_ivStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), (int) R.drawable.msg_round_play_m, 1);
@@ -2525,6 +2560,7 @@ public class Theme {
             setDrawableColorByKey(chat_msgStickerClockDrawable, key_chat_serviceText);
             setDrawableColorByKey(chat_msgStickerViewsDrawable, key_chat_serviceText);
             setDrawableColorByKey(chat_shareIconDrawable, key_chat_serviceIcon);
+            setDrawableColorByKey(chat_replyIconDrawable, key_chat_serviceIcon);
             setDrawableColorByKey(chat_goIconDrawable, key_chat_serviceIcon);
             setDrawableColorByKey(chat_botInlineDrawable, key_chat_serviceIcon);
             setDrawableColorByKey(chat_botLinkDrawalbe, key_chat_serviceIcon);
@@ -2829,12 +2865,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
+                    int i;
                     SharedPreferences preferences;
                     int selectedBackground;
                     File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        int i;
                         if (!MessagesController.getGlobalMainSettings().getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

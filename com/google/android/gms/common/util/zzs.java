@@ -20,11 +20,11 @@ public final class zzs {
     }
 
     private static String zzcj(int i) {
+        ThreadPolicy allowThreadDiskReads;
         Closeable bufferedReader;
         Throwable th;
         String str = null;
         if (i > 0) {
-            ThreadPolicy allowThreadDiskReads;
             try {
                 allowThreadDiskReads = StrictMode.allowThreadDiskReads();
                 bufferedReader = new BufferedReader(new FileReader("/proc/" + i + "/cmdline"));

@@ -35,10 +35,10 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -677,7 +677,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     if (messageObject.type == 1 && !FileLoader.getPathToMessage(messageObject.messageOwner).exists()) {
                         photoExist = false;
                     }
-                    if (photoExist || MediaController.getInstance(this.currentAccount).canDownloadMedia(messageObject)) {
+                    if (photoExist || DownloadController.getInstance(this.currentAccount).canDownloadMedia(messageObject)) {
                         imageView.setImage(currentPhotoObject.location, "100_100", thumb.location, currentPhotoObject.size);
                         photoSet = true;
                     } else if (thumb != null) {
@@ -728,7 +728,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 });
             }
             cell.setMessageObject(messageObject);
-            if (MediaController.getInstance(this.currentAccount).canDownloadMedia(messageObject)) {
+            if (DownloadController.getInstance(this.currentAccount).canDownloadMedia(messageObject)) {
                 cell.downloadAudioIfNeed();
             }
         } else {

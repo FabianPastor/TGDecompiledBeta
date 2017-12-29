@@ -83,6 +83,8 @@ import java.util.Locale;
 import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.DownloadController;
+import org.telegram.messenger.DownloadController.FileDownloadProgressListener;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -91,7 +93,6 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.ImageReceiver.BitmapHolder;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
-import org.telegram.messenger.MediaController.FileDownloadProgressListener;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -3187,13 +3188,13 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.radialProgress.setAlphaForPrevious(true);
             this.radialProgress.setDiff(AndroidUtilities.dp(0.0f));
             this.radialProgress.setStrikeWidth(AndroidUtilities.dp(2.0f));
-            this.TAG = MediaController.getInstance(ArticleViewer.this.currentAccount).generateObserverTag();
+            this.TAG = DownloadController.getInstance(ArticleViewer.this.currentAccount).generateObserverTag();
             this.seekBar = new SeekBar(context);
             this.seekBar.setDelegate(new SeekBarDelegate(ArticleViewer.this) {
                 public void onSeekBarDrag(float progress) {
                     if (BlockAudioCell.this.currentMessageObject != null) {
                         BlockAudioCell.this.currentMessageObject.audioProgress = progress;
-                        MediaController.getInstance(ArticleViewer.this.currentAccount).seekToProgress(BlockAudioCell.this.currentMessageObject, progress);
+                        MediaController.getInstance().seekToProgress(BlockAudioCell.this.currentMessageObject, progress);
                     }
                 }
             });
@@ -3348,7 +3349,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     this.seekBar.setProgress(this.currentMessageObject.audioProgress);
                 }
                 int duration = 0;
-                if (MediaController.getInstance(ArticleViewer.this.currentAccount).isPlayingMessage(this.currentMessageObject)) {
+                if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
                     duration = this.currentMessageObject.audioProgressSec;
                 } else {
                     for (int a = 0; a < this.currentDocument.attributes.size(); a++) {
@@ -3378,16 +3379,16 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 return;
             }
             if (fileExists) {
-                MediaController.getInstance(ArticleViewer.this.currentAccount).removeLoadingFileObserver(this);
-                boolean playing = MediaController.getInstance(ArticleViewer.this.currentAccount).isPlayingMessage(this.currentMessageObject);
-                if (!playing || (playing && MediaController.getInstance(ArticleViewer.this.currentAccount).isMessagePaused())) {
+                DownloadController.getInstance(ArticleViewer.this.currentAccount).removeLoadingFileObserver(this);
+                boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+                if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
                     this.buttonState = 0;
                 } else {
                     this.buttonState = 1;
                 }
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
             } else {
-                MediaController.getInstance(ArticleViewer.this.currentAccount).addLoadingFileObserver(fileName, null, this);
+                DownloadController.getInstance(ArticleViewer.this.currentAccount).addLoadingFileObserver(fileName, null, this);
                 if (FileLoader.getInstance(ArticleViewer.this.currentAccount).isLoadingFile(fileName)) {
                     this.buttonState = 3;
                     Float progress = ImageLoader.getInstance().getFileProgress(fileName);
@@ -3408,13 +3409,13 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         private void didPressedButton(boolean animated) {
             if (this.buttonState == 0) {
-                if (MediaController.getInstance(ArticleViewer.this.currentAccount).setPlaylist(ArticleViewer.this.audioMessages, this.currentMessageObject, false)) {
+                if (MediaController.getInstance().setPlaylist(ArticleViewer.this.audioMessages, this.currentMessageObject, false)) {
                     this.buttonState = 1;
                     this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                     invalidate();
                 }
             } else if (this.buttonState == 1) {
-                if (MediaController.getInstance(ArticleViewer.this.currentAccount).pauseMessage(this.currentMessageObject)) {
+                if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
                     this.buttonState = 0;
                     this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                     invalidate();
@@ -3487,7 +3488,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.radialProgress = new RadialProgress(this);
             this.radialProgress.setAlphaForPrevious(true);
             this.radialProgress.setProgressColor(-1);
-            this.TAG = MediaController.getInstance(ArticleViewer.this.currentAccount).generateObserverTag();
+            this.TAG = DownloadController.getInstance(ArticleViewer.this.currentAccount).generateObserverTag();
             this.channelCell = new BlockChannelCell(context, 1);
             addView(this.channelCell, LayoutHelper.createFrame(-1, -2.0f));
         }
@@ -3666,7 +3667,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (TextUtils.isEmpty(fileName)) {
                 this.radialProgress.setBackground(null, false, false);
             } else if (fileExists) {
-                MediaController.getInstance(ArticleViewer.this.currentAccount).removeLoadingFileObserver(this);
+                DownloadController.getInstance(ArticleViewer.this.currentAccount).removeLoadingFileObserver(this);
                 if (this.isGif) {
                     this.buttonState = -1;
                 } else {
@@ -3675,7 +3676,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
                 invalidate();
             } else {
-                MediaController.getInstance(ArticleViewer.this.currentAccount).addLoadingFileObserver(fileName, null, this);
+                DownloadController.getInstance(ArticleViewer.this.currentAccount).addLoadingFileObserver(fileName, null, this);
                 float setProgress = 0.0f;
                 boolean progressVisible = false;
                 if (FileLoader.getInstance(ArticleViewer.this.currentAccount).isLoadingFile(fileName)) {
@@ -4971,7 +4972,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         cell = (BlockAudioCell) view;
                         MessageObject playing = cell.getMessageObject();
                         if (playing != null && playing.getId() == mid.intValue()) {
-                            MessageObject player = MediaController.getInstance(this.currentAccount).getPlayingMessageObject();
+                            MessageObject player = MediaController.getInstance().getPlayingMessageObject();
                             if (player != null) {
                                 playing.audioProgress = player.audioProgress;
                                 playing.audioProgressSec = player.audioProgressSec;

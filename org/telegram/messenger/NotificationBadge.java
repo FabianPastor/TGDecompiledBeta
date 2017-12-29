@@ -590,20 +590,18 @@ public class NotificationBadge {
         componentName = launchIntent.getComponent();
         Intent intent = new Intent("android.intent.action.MAIN");
         intent.addCategory("android.intent.category.HOME");
-        ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(intent, C.DEFAULT_BUFFER_SEGMENT_SIZE);
-        if (resolveInfo == null || resolveInfo.activityInfo.name.toLowerCase().contains("resolver")) {
-            return false;
-        }
-        String currentHomePackage = resolveInfo.activityInfo.packageName;
-        for (Class<? extends Badger> b : BADGERS) {
-            Badger shortcutBadger = null;
-            try {
-                shortcutBadger = (Badger) b.newInstance();
-            } catch (Exception e) {
-            }
-            if (shortcutBadger != null && shortcutBadger.getSupportLaunchers().contains(currentHomePackage)) {
-                badger = shortcutBadger;
-                break;
+        for (ResolveInfo resolveInfo : context.getPackageManager().queryIntentActivities(intent, C.DEFAULT_BUFFER_SEGMENT_SIZE)) {
+            String currentHomePackage = resolveInfo.activityInfo.packageName;
+            for (Class<? extends Badger> b : BADGERS) {
+                Badger shortcutBadger = null;
+                try {
+                    shortcutBadger = (Badger) b.newInstance();
+                } catch (Exception e) {
+                }
+                if (shortcutBadger != null && shortcutBadger.getSupportLaunchers().contains(currentHomePackage)) {
+                    badger = shortcutBadger;
+                    break;
+                }
             }
         }
         if (badger == null) {

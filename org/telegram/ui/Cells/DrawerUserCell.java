@@ -3,6 +3,8 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
+import android.text.TextUtils.TruncateAt;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -24,32 +26,46 @@ public class DrawerUserCell extends FrameLayout {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private ImageView checkImageView;
     private BackupImageView imageView;
+    private boolean isMenu;
     private TextView textView;
 
-    public DrawerUserCell(Context context) {
+    public DrawerUserCell(Context context, boolean menu) {
+        float f;
         super(context);
+        this.isMenu = menu;
+        this.avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
         this.imageView = new BackupImageView(context);
         this.imageView.setRoundRadius(AndroidUtilities.dp(18.0f));
-        addView(this.imageView, LayoutHelper.createFrame(36, 36.0f, 51, 14.0f, 6.0f, 0.0f, 0.0f));
+        addView(this.imageView, LayoutHelper.createFrame(36, 36.0f, 51, menu ? 10.0f : 14.0f, menu ? 10.0f : 6.0f, 0.0f, 0.0f));
         this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
+        if (menu) {
+            this.textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
+        } else {
+            this.textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
+        }
         this.textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setGravity(19);
-        this.textView.setCompoundDrawablePadding(AndroidUtilities.dp(34.0f));
-        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, 51, 65.0f, 0.0f, 60.0f, 0.0f));
+        this.textView.setEllipsize(TruncateAt.END);
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, 51, menu ? 61.0f : 65.0f, 0.0f, menu ? 56.0f : 60.0f, 0.0f));
         this.checkImageView = new ImageView(context);
         this.checkImageView.setImageResource(R.drawable.account_check);
         this.checkImageView.setScaleType(ScaleType.CENTER);
         this.checkImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemCheck), Mode.MULTIPLY));
-        addView(this.checkImageView, LayoutHelper.createFrame(40, -1.0f, 53, 0.0f, 0.0f, 10.0f, 0.0f));
+        View view = this.checkImageView;
+        if (menu) {
+            f = 6.0f;
+        } else {
+            f = 10.0f;
+        }
+        addView(view, LayoutHelper.createFrame(40, -1.0f, 53, 0.0f, 0.0f, f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.isMenu ? 56.0f : 48.0f), NUM));
     }
 
     protected void onAttachedToWindow() {

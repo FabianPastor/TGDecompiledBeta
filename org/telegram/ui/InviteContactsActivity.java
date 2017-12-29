@@ -418,11 +418,11 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
             super.notifyDataSetChanged();
             int count = getItemCount();
             InviteContactsActivity.this.emptyView.setVisibility(count == 1 ? 0 : 4);
-            GroupCreateDividerItemDecoration access$3200 = InviteContactsActivity.this.decoration;
+            GroupCreateDividerItemDecoration access$3100 = InviteContactsActivity.this.decoration;
             if (count == 1) {
                 z = true;
             }
-            access$3200.setSingle(z);
+            access$3100.setSingle(z);
         }
     }
 
@@ -713,7 +713,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                     Intent intent = new Intent("android.intent.action.SENDTO", Uri.parse("smsto:" + builder.toString()));
                     intent.putExtra("sms_body", ContactsController.getInstance(InviteContactsActivity.this.currentAccount).getInviteText(num));
                     InviteContactsActivity.this.getParentActivity().startActivityForResult(intent, 500);
-                    MediaController.getInstance(InviteContactsActivity.this.currentAccount).startSmsObserver();
+                    MediaController.getInstance().startSmsObserver();
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }

@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
@@ -168,7 +168,7 @@ public class DataSettingsActivity extends BaseFragment {
                 case 3:
                     TextCheckCell checkCell = holder.itemView;
                     if (position == DataSettingsActivity.this.autoDownloadMediaRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("AutoDownloadMedia", R.string.AutoDownloadMedia), MediaController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("AutoDownloadMedia", R.string.AutoDownloadMedia), DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled, true);
                         return;
                     }
                     return;
@@ -185,17 +185,17 @@ public class DataSettingsActivity extends BaseFragment {
                 if (position < DataSettingsActivity.this.photosRow || position > DataSettingsActivity.this.gifsRow) {
                     textCell.setEnabled(true, null);
                 } else {
-                    textCell.setEnabled(MediaController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled, null);
+                    textCell.setEnabled(DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled, null);
                 }
             } else if (viewType == 3) {
-                holder.itemView.setChecked(MediaController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled);
+                holder.itemView.setChecked(DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled);
             }
         }
 
         public boolean isEnabled(ViewHolder holder) {
             int position = holder.getAdapterPosition();
             if (position == DataSettingsActivity.this.photosRow || position == DataSettingsActivity.this.voiceMessagesRow || position == DataSettingsActivity.this.videoMessagesRow || position == DataSettingsActivity.this.videosRow || position == DataSettingsActivity.this.filesRow || position == DataSettingsActivity.this.musicRow || position == DataSettingsActivity.this.gifsRow) {
-                return MediaController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled;
+                return DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled;
             }
             return position == DataSettingsActivity.this.storageUsageRow || position == DataSettingsActivity.this.useLessDataForCallsRow || position == DataSettingsActivity.this.mobileUsageRow || position == DataSettingsActivity.this.roamingUsageRow || position == DataSettingsActivity.this.wifiUsageRow || position == DataSettingsActivity.this.proxyRow || position == DataSettingsActivity.this.resetDownloadRow || position == DataSettingsActivity.this.autoDownloadMediaRow;
         }
@@ -338,7 +338,7 @@ public class DataSettingsActivity extends BaseFragment {
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, final int position) {
                 if (position == DataSettingsActivity.this.photosRow || position == DataSettingsActivity.this.voiceMessagesRow || position == DataSettingsActivity.this.videoMessagesRow || position == DataSettingsActivity.this.videosRow || position == DataSettingsActivity.this.filesRow || position == DataSettingsActivity.this.musicRow || position == DataSettingsActivity.this.gifsRow) {
-                    if (!MediaController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled) {
+                    if (!DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled) {
                         return;
                     }
                     if (position == DataSettingsActivity.this.photosRow) {
@@ -364,22 +364,22 @@ public class DataSettingsActivity extends BaseFragment {
                         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Editor editor = MessagesController.getMainSettings(DataSettingsActivity.this.currentAccount).edit();
-                                MediaController mediaController = MediaController.getInstance(DataSettingsActivity.this.currentAccount);
+                                DownloadController downloadController = DownloadController.getInstance(DataSettingsActivity.this.currentAccount);
                                 int a = 0;
                                 while (a < 4) {
                                     Object valueOf;
-                                    mediaController.mobileDataDownloadMask[a] = 115;
-                                    mediaController.wifiDownloadMask[a] = 115;
-                                    mediaController.roamingDownloadMask[a] = 0;
-                                    editor.putInt("mobileDataDownloadMask" + (a != 0 ? Integer.valueOf(a) : TtmlNode.ANONYMOUS_REGION_ID), mediaController.mobileDataDownloadMask[a]);
-                                    editor.putInt("wifiDownloadMask" + (a != 0 ? Integer.valueOf(a) : TtmlNode.ANONYMOUS_REGION_ID), mediaController.wifiDownloadMask[a]);
+                                    downloadController.mobileDataDownloadMask[a] = 115;
+                                    downloadController.wifiDownloadMask[a] = 115;
+                                    downloadController.roamingDownloadMask[a] = 0;
+                                    editor.putInt("mobileDataDownloadMask" + (a != 0 ? Integer.valueOf(a) : TtmlNode.ANONYMOUS_REGION_ID), downloadController.mobileDataDownloadMask[a]);
+                                    editor.putInt("wifiDownloadMask" + (a != 0 ? Integer.valueOf(a) : TtmlNode.ANONYMOUS_REGION_ID), downloadController.wifiDownloadMask[a]);
                                     StringBuilder append = new StringBuilder().append("roamingDownloadMask");
                                     if (a != 0) {
                                         valueOf = Integer.valueOf(a);
                                     } else {
                                         valueOf = TtmlNode.ANONYMOUS_REGION_ID;
                                     }
-                                    editor.putInt(append.append(valueOf).toString(), mediaController.roamingDownloadMask[a]);
+                                    editor.putInt(append.append(valueOf).toString(), downloadController.roamingDownloadMask[a]);
                                     a++;
                                 }
                                 for (a = 0; a < 7; a++) {
@@ -391,20 +391,20 @@ public class DataSettingsActivity extends BaseFragment {
                                     } else {
                                         sdefault = 10485760;
                                     }
-                                    mediaController.mobileMaxFileSize[a] = sdefault;
-                                    mediaController.wifiMaxFileSize[a] = sdefault;
-                                    mediaController.roamingMaxFileSize[a] = sdefault;
+                                    downloadController.mobileMaxFileSize[a] = sdefault;
+                                    downloadController.wifiMaxFileSize[a] = sdefault;
+                                    downloadController.roamingMaxFileSize[a] = sdefault;
                                     editor.putInt("mobileMaxDownloadSize" + a, sdefault);
                                     editor.putInt("wifiMaxDownloadSize" + a, sdefault);
                                     editor.putInt("roamingMaxDownloadSize" + a, sdefault);
                                 }
-                                if (!MediaController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled) {
-                                    MediaController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled = true;
-                                    editor.putBoolean("globalAutodownloadEnabled", MediaController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled);
+                                if (!DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled) {
+                                    DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled = true;
+                                    editor.putBoolean("globalAutodownloadEnabled", DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled);
                                     DataSettingsActivity.this.updateAutodownloadRows(true);
                                 }
                                 editor.commit();
-                                MediaController.getInstance(DataSettingsActivity.this.currentAccount).checkAutodownloadSettings();
+                                DownloadController.getInstance(DataSettingsActivity.this.currentAccount).checkAutodownloadSettings();
                             }
                         });
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -412,15 +412,15 @@ public class DataSettingsActivity extends BaseFragment {
                     }
                 } else if (position == DataSettingsActivity.this.autoDownloadMediaRow) {
                     boolean z;
-                    MediaController instance = MediaController.getInstance(DataSettingsActivity.this.currentAccount);
-                    if (MediaController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled) {
+                    DownloadController instance = DownloadController.getInstance(DataSettingsActivity.this.currentAccount);
+                    if (DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled) {
                         z = false;
                     } else {
                         z = true;
                     }
                     instance.globalAutodownloadEnabled = z;
-                    MessagesController.getMainSettings(DataSettingsActivity.this.currentAccount).edit().putBoolean("globalAutodownloadEnabled", MediaController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled).commit();
-                    ((TextCheckCell) view).setChecked(MediaController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled);
+                    MessagesController.getMainSettings(DataSettingsActivity.this.currentAccount).edit().putBoolean("globalAutodownloadEnabled", DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled).commit();
+                    ((TextCheckCell) view).setChecked(DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled);
                     DataSettingsActivity.this.updateAutodownloadRows(false);
                 } else if (position == DataSettingsActivity.this.storageUsageRow) {
                     DataSettingsActivity.this.presentFragment(new CacheControlActivity());
@@ -466,7 +466,7 @@ public class DataSettingsActivity extends BaseFragment {
     }
 
     protected void onDialogDismiss(Dialog dialog) {
-        MediaController.getInstance(this.currentAccount).checkAutodownloadSettings();
+        DownloadController.getInstance(this.currentAccount).checkAutodownloadSettings();
     }
 
     public void onResume() {
@@ -484,7 +484,7 @@ public class DataSettingsActivity extends BaseFragment {
             int type = holder.getItemViewType();
             int p = holder.getAdapterPosition();
             if (p >= this.photosRow && p <= this.gifsRow) {
-                holder.itemView.setEnabled(MediaController.getInstance(this.currentAccount).globalAutodownloadEnabled, animators);
+                holder.itemView.setEnabled(DownloadController.getInstance(this.currentAccount).globalAutodownloadEnabled, animators);
             } else if (check && p == this.autoDownloadMediaRow) {
                 holder.itemView.setChecked(true);
             }

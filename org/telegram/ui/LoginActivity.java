@@ -38,6 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 import com.coremedia.iso.boxes.TrackReferenceTypeBox;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -100,6 +101,7 @@ import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.HintEditText;
 import org.telegram.ui.Components.LayoutHelper;
@@ -119,6 +121,7 @@ public class LoginActivity extends BaseFragment {
     private Dialog permissionsShowDialog;
     private ArrayList<String> permissionsShowItems;
     private AlertDialog progressDialog;
+    private boolean syncContacts;
     private SlideView[] views;
 
     private class ProgressView extends View {
@@ -203,7 +206,7 @@ public class LoginActivity extends BaseFragment {
             this.cancelButton.setTextSize(1, 14.0f);
             this.cancelButton.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.cancelButton.setPadding(0, AndroidUtilities.dp(14.0f), 0, 0);
-            addView(this.cancelButton, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48));
+            addView(this.cancelButton, LayoutHelper.createLinear(-1, -2, (LocaleController.isRTL ? 5 : 3) | 48));
             this.cancelButton.setOnClickListener(new OnClickListener(LoginActivity.this) {
                 public void onClick(View view) {
                     if (LoginActivityPasswordView.this.has_recovery) {
@@ -404,6 +407,7 @@ public class LoginActivity extends BaseFragment {
                                     UserConfig.getInstance(LoginActivity.this.currentAccount).clearConfig();
                                     MessagesController.getInstance(LoginActivity.this.currentAccount).cleanup();
                                     UserConfig.getInstance(LoginActivity.this.currentAccount).setCurrentUser(res.user);
+                                    UserConfig.getInstance(LoginActivity.this.currentAccount).syncContacts = LoginActivity.this.syncContacts;
                                     UserConfig.getInstance(LoginActivity.this.currentAccount).saveConfig(true);
                                     MessagesStorage.getInstance(LoginActivity.this.currentAccount).cleanup(true);
                                     ArrayList<User> users = new ArrayList();
@@ -625,6 +629,7 @@ public class LoginActivity extends BaseFragment {
                                     UserConfig.getInstance(LoginActivityRecoverView.this.this$0.currentAccount).clearConfig();
                                     MessagesController.getInstance(LoginActivityRecoverView.this.this$0.currentAccount).cleanup();
                                     UserConfig.getInstance(LoginActivityRecoverView.this.this$0.currentAccount).setCurrentUser(res.user);
+                                    UserConfig.getInstance(LoginActivityRecoverView.this.this$0.currentAccount).syncContacts = LoginActivityRecoverView.this.this$0.syncContacts;
                                     UserConfig.getInstance(LoginActivityRecoverView.this.this$0.currentAccount).saveConfig(true);
                                     MessagesStorage.getInstance(LoginActivityRecoverView.this.this$0.currentAccount).cleanup(true);
                                     ArrayList<User> users = new ArrayList();
@@ -843,6 +848,7 @@ public class LoginActivity extends BaseFragment {
                                     UserConfig.getInstance(LoginActivity.this.currentAccount).clearConfig();
                                     MessagesController.getInstance(LoginActivity.this.currentAccount).cleanup();
                                     UserConfig.getInstance(LoginActivity.this.currentAccount).setCurrentUser(res.user);
+                                    UserConfig.getInstance(LoginActivity.this.currentAccount).syncContacts = LoginActivity.this.syncContacts;
                                     UserConfig.getInstance(LoginActivity.this.currentAccount).saveConfig(true);
                                     MessagesStorage.getInstance(LoginActivity.this.currentAccount).cleanup(true);
                                     ArrayList<User> users = new ArrayList();
@@ -1241,15 +1247,15 @@ public class LoginActivity extends BaseFragment {
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
             addView(linearLayout, LayoutHelper.createLinear(-1, -1, LocaleController.isRTL ? 5 : 3));
-            TextView wrongNumber = new TextView(context);
-            wrongNumber.setGravity((LocaleController.isRTL ? 5 : 3) | 1);
-            wrongNumber.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
-            wrongNumber.setTextSize(1, 14.0f);
-            wrongNumber.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-            wrongNumber.setPadding(0, AndroidUtilities.dp(24.0f), 0, 0);
-            linearLayout.addView(wrongNumber, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 80, 0, 0, 0, 10));
-            wrongNumber.setText(LocaleController.getString("WrongNumber", R.string.WrongNumber));
-            wrongNumber.setOnClickListener(new OnClickListener(LoginActivity.this) {
+            this.wrongNumber = new TextView(context);
+            this.wrongNumber.setGravity((LocaleController.isRTL ? 5 : 3) | 1);
+            this.wrongNumber.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
+            this.wrongNumber.setTextSize(1, 14.0f);
+            this.wrongNumber.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+            this.wrongNumber.setPadding(0, AndroidUtilities.dp(24.0f), 0, 0);
+            linearLayout.addView(this.wrongNumber, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 80, 0, 0, 0, 10));
+            this.wrongNumber.setText(LocaleController.getString("WrongNumber", R.string.WrongNumber));
+            this.wrongNumber.setOnClickListener(new OnClickListener(LoginActivity.this) {
                 public void onClick(View view) {
                     TL_auth_cancelCode req = new TL_auth_cancelCode();
                     req.phone_number = LoginActivitySmsView.this.requestPhone;
@@ -1554,6 +1560,7 @@ public class LoginActivity extends BaseFragment {
                                     LoginActivitySmsView.this.destroyCodeTimer();
                                     UserConfig.getInstance(LoginActivity.this.currentAccount).clearConfig();
                                     MessagesController.getInstance(LoginActivity.this.currentAccount).cleanup();
+                                    UserConfig.getInstance(LoginActivity.this.currentAccount).syncContacts = LoginActivity.this.syncContacts;
                                     UserConfig.getInstance(LoginActivity.this.currentAccount).setCurrentUser(res.user);
                                     UserConfig.getInstance(LoginActivity.this.currentAccount).saveConfig(true);
                                     MessagesStorage.getInstance(LoginActivity.this.currentAccount).cleanup(true);
@@ -1736,6 +1743,7 @@ public class LoginActivity extends BaseFragment {
             if (this.openTime != 0) {
                 bundle.putInt("open", this.openTime);
             }
+            bundle.putBoolean("syncContacts", LoginActivity.this.syncContacts);
         }
 
         public void restoreStateParams(Bundle bundle) {
@@ -1759,6 +1767,7 @@ public class LoginActivity extends BaseFragment {
             if (t2 != 0) {
                 this.openTime = t2;
             }
+            LoginActivity.this.syncContacts = bundle.getBoolean("syncContacts", true);
         }
     }
 
@@ -1870,9 +1879,9 @@ public class LoginActivity extends BaseFragment {
                                 }
                                 if (!ok) {
                                     textToSet = text.substring(1, text.length()) + PhoneView.this.phoneField.getText().toString();
-                                    EditTextBoldCursor access$800 = PhoneView.this.codeField;
+                                    EditTextBoldCursor access$1000 = PhoneView.this.codeField;
                                     text = text.substring(0, 1);
-                                    access$800.setText(text);
+                                    access$1000.setText(text);
                                 }
                             }
                             String country = (String) PhoneView.this.codesMap.get(text);
@@ -1994,11 +2003,11 @@ public class LoginActivity extends BaseFragment {
                         }
                         PhoneView.this.phoneField.setText(builder);
                         if (start >= 0) {
-                            HintEditText access$600 = PhoneView.this.phoneField;
+                            HintEditText access$800 = PhoneView.this.phoneField;
                             if (start > PhoneView.this.phoneField.length()) {
                                 start = PhoneView.this.phoneField.length();
                             }
-                            access$600.setSelection(start);
+                            access$800.setSelection(start);
                         }
                         PhoneView.this.phoneField.onTextChange();
                         PhoneView.this.ignoreOnPhoneChange = false;
@@ -2022,6 +2031,37 @@ public class LoginActivity extends BaseFragment {
             this.textView2.setGravity(LocaleController.isRTL ? 5 : 3);
             this.textView2.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             addView(this.textView2, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 28, 0, 10));
+            if (LoginActivity.this.newAccount) {
+                CheckBoxCell cell = new CheckBoxCell(context, 2);
+                cell.setText(LocaleController.getString("SyncContacts", R.string.SyncContacts), TtmlNode.ANONYMOUS_REGION_ID, LoginActivity.this.syncContacts, false);
+                addView(cell, LayoutHelper.createLinear(-2, -1, 51, 0, 0, 0, 0));
+                final LoginActivity loginActivity22222 = LoginActivity.this;
+                cell.setOnClickListener(new OnClickListener() {
+                    private Toast visibleToast;
+
+                    public void onClick(View v) {
+                        if (LoginActivity.this.getParentActivity() != null) {
+                            CheckBoxCell cell = (CheckBoxCell) v;
+                            LoginActivity.this.syncContacts = !LoginActivity.this.syncContacts;
+                            cell.setChecked(LoginActivity.this.syncContacts, true);
+                            try {
+                                if (this.visibleToast != null) {
+                                    this.visibleToast.cancel();
+                                }
+                            } catch (Throwable e) {
+                                FileLog.e(e);
+                            }
+                            if (LoginActivity.this.syncContacts) {
+                                this.visibleToast = Toast.makeText(LoginActivity.this.getParentActivity(), LocaleController.getString("SyncContactsOn", R.string.SyncContactsOn), 0);
+                                this.visibleToast.show();
+                                return;
+                            }
+                            this.visibleToast = Toast.makeText(LoginActivity.this.getParentActivity(), LocaleController.getString("SyncContactsOff", R.string.SyncContactsOff), 0);
+                            this.visibleToast.show();
+                        }
+                    }
+                });
+            }
             HashMap<String, String> languageMap = new HashMap();
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().getAssets().open("countries.txt")));
@@ -2043,7 +2083,7 @@ public class LoginActivity extends BaseFragment {
             } catch (Throwable e) {
                 FileLog.e(e);
             }
-            final LoginActivity loginActivity22222 = LoginActivity.this;
+            final LoginActivity loginActivity222222 = LoginActivity.this;
             Collections.sort(this.countriesArray, new Comparator<String>() {
                 public int compare(String lhs, String rhs) {
                     return lhs.compareTo(rhs);
@@ -2391,6 +2431,7 @@ public class LoginActivity extends BaseFragment {
         this.permissionsShowItems = new ArrayList();
         this.checkPermissions = true;
         this.checkShowPermissions = true;
+        this.syncContacts = true;
     }
 
     public LoginActivity(int account) {
@@ -2399,6 +2440,7 @@ public class LoginActivity extends BaseFragment {
         this.permissionsShowItems = new ArrayList();
         this.checkPermissions = true;
         this.checkShowPermissions = true;
+        this.syncContacts = true;
         this.currentAccount = account;
         this.newAccount = true;
     }
@@ -2459,6 +2501,7 @@ public class LoginActivity extends BaseFragment {
             this.currentViewNum = savedInstanceState.getInt("currentViewNum", 0);
             if (this.currentViewNum >= 1 && this.currentViewNum <= 4) {
                 int time = savedInstanceState.getInt("open");
+                this.syncContacts = savedInstanceState.getBoolean("syncContacts", true);
                 if (time != 0 && Math.abs((System.currentTimeMillis() / 1000) - ((long) time)) >= 86400) {
                     this.currentViewNum = 0;
                     savedInstanceState = null;
@@ -2625,6 +2668,12 @@ public class LoginActivity extends BaseFragment {
         } else if (this.currentViewNum == 7 || this.currentViewNum == 8) {
             this.views[this.currentViewNum].onBackPressed();
             setPage(6, true, null, true);
+        } else if (this.newAccount) {
+            if (this.currentAccount >= 1 && this.currentAccount <= 4) {
+                ((LoginActivitySmsView) this.views[this.currentAccount]).wrongNumber.callOnClick();
+            } else if (this.currentAccount == 5) {
+                ((LoginActivityRegisterView) this.views[this.currentAccount]).wrongNumber.callOnClick();
+            }
         }
         return false;
     }

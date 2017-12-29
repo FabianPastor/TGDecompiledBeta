@@ -79,9 +79,10 @@ public class ApplicationLoader extends Application {
             }
             ((ApplicationLoader) applicationContext).initPlayServices();
             FileLog.e("app initied");
+            MediaController.getInstance();
             for (a = 0; a < 3; a++) {
                 ContactsController.getInstance(a).checkAppAccount();
-                MediaController.getInstance(a);
+                DownloadController.getInstance(a);
             }
         }
     }

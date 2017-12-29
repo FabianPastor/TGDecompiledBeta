@@ -112,11 +112,11 @@ final class DashMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<D
     }
 
     public long selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs) {
-        TrackGroupInfo trackGroupInfo;
         HashMap<Integer, ChunkSampleStream<DashChunkSource>> primarySampleStreams = new HashMap();
         int i = 0;
         while (i < selections.length) {
             ChunkSampleStream<DashChunkSource> stream;
+            TrackGroupInfo trackGroupInfo;
             if (streams[i] instanceof ChunkSampleStream) {
                 stream = streams[i];
                 if (selections[i] == null || !mayRetainStreamFlags[i]) {

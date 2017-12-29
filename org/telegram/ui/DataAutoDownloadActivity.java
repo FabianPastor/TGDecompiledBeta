@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
@@ -227,21 +227,21 @@ public class DataAutoDownloadActivity extends BaseFragment {
         } else {
             this.maxSize = NUM;
         }
-        this.mobileDataDownloadMask = MediaController.getInstance(this.currentAccount).mobileDataDownloadMask[0];
-        this.mobileDataPrivateDownloadMask = MediaController.getInstance(this.currentAccount).mobileDataDownloadMask[1];
-        this.mobileDataGroupDownloadMask = MediaController.getInstance(this.currentAccount).mobileDataDownloadMask[2];
-        this.mobileDataChannelDownloadMask = MediaController.getInstance(this.currentAccount).mobileDataDownloadMask[3];
-        this.wifiDownloadMask = MediaController.getInstance(this.currentAccount).wifiDownloadMask[0];
-        this.wifiPrivateDownloadMask = MediaController.getInstance(this.currentAccount).wifiDownloadMask[1];
-        this.wifiGroupDownloadMask = MediaController.getInstance(this.currentAccount).wifiDownloadMask[2];
-        this.wifiChannelDownloadMask = MediaController.getInstance(this.currentAccount).wifiDownloadMask[3];
-        this.roamingDownloadMask = MediaController.getInstance(this.currentAccount).roamingDownloadMask[0];
-        this.roamingPrivateDownloadMask = MediaController.getInstance(this.currentAccount).roamingDownloadMask[1];
-        this.roamingGroupDownloadMask = MediaController.getInstance(this.currentAccount).roamingDownloadMask[2];
-        this.roamingChannelDownloadMask = MediaController.getInstance(this.currentAccount).roamingDownloadMask[2];
-        this.mobileMaxSize = MediaController.getInstance(this.currentAccount).mobileMaxFileSize[MediaController.maskToIndex(this.currentType)];
-        this.wifiMaxSize = MediaController.getInstance(this.currentAccount).wifiMaxFileSize[MediaController.maskToIndex(this.currentType)];
-        this.roamingMaxSize = MediaController.getInstance(this.currentAccount).roamingMaxFileSize[MediaController.maskToIndex(this.currentType)];
+        this.mobileDataDownloadMask = DownloadController.getInstance(this.currentType).mobileDataDownloadMask[0];
+        this.mobileDataPrivateDownloadMask = DownloadController.getInstance(this.currentType).mobileDataDownloadMask[1];
+        this.mobileDataGroupDownloadMask = DownloadController.getInstance(this.currentType).mobileDataDownloadMask[2];
+        this.mobileDataChannelDownloadMask = DownloadController.getInstance(this.currentType).mobileDataDownloadMask[3];
+        this.wifiDownloadMask = DownloadController.getInstance(this.currentType).wifiDownloadMask[0];
+        this.wifiPrivateDownloadMask = DownloadController.getInstance(this.currentType).wifiDownloadMask[1];
+        this.wifiGroupDownloadMask = DownloadController.getInstance(this.currentType).wifiDownloadMask[2];
+        this.wifiChannelDownloadMask = DownloadController.getInstance(this.currentType).wifiDownloadMask[3];
+        this.roamingDownloadMask = DownloadController.getInstance(this.currentType).roamingDownloadMask[0];
+        this.roamingPrivateDownloadMask = DownloadController.getInstance(this.currentType).roamingDownloadMask[1];
+        this.roamingGroupDownloadMask = DownloadController.getInstance(this.currentType).roamingDownloadMask[2];
+        this.roamingChannelDownloadMask = DownloadController.getInstance(this.currentType).roamingDownloadMask[2];
+        this.mobileMaxSize = DownloadController.getInstance(this.currentType).mobileMaxFileSize[DownloadController.maskToIndex(this.currentType)];
+        this.wifiMaxSize = DownloadController.getInstance(this.currentType).wifiMaxFileSize[DownloadController.maskToIndex(this.currentType)];
+        this.roamingMaxSize = DownloadController.getInstance(this.currentType).roamingMaxFileSize[DownloadController.maskToIndex(this.currentType)];
     }
 
     public boolean onFragmentCreate() {
@@ -351,34 +351,34 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 if (id == -1) {
                     DataAutoDownloadActivity.this.finishFragment();
                 } else if (id == 1) {
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileDataDownloadMask[0] = DataAutoDownloadActivity.this.mobileDataDownloadMask;
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileDataDownloadMask[1] = DataAutoDownloadActivity.this.mobileDataPrivateDownloadMask;
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileDataDownloadMask[2] = DataAutoDownloadActivity.this.mobileDataGroupDownloadMask;
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileDataDownloadMask[3] = DataAutoDownloadActivity.this.mobileDataChannelDownloadMask;
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).wifiDownloadMask[0] = DataAutoDownloadActivity.this.wifiDownloadMask;
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).wifiDownloadMask[1] = DataAutoDownloadActivity.this.wifiPrivateDownloadMask;
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).wifiDownloadMask[2] = DataAutoDownloadActivity.this.wifiGroupDownloadMask;
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).wifiDownloadMask[3] = DataAutoDownloadActivity.this.wifiChannelDownloadMask;
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).roamingDownloadMask[0] = DataAutoDownloadActivity.this.roamingDownloadMask;
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).roamingDownloadMask[1] = DataAutoDownloadActivity.this.roamingPrivateDownloadMask;
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).roamingDownloadMask[2] = DataAutoDownloadActivity.this.roamingGroupDownloadMask;
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).roamingDownloadMask[3] = DataAutoDownloadActivity.this.roamingChannelDownloadMask;
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileMaxFileSize[MediaController.maskToIndex(DataAutoDownloadActivity.this.currentType)] = DataAutoDownloadActivity.this.mobileMaxSize;
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).wifiMaxFileSize[MediaController.maskToIndex(DataAutoDownloadActivity.this.currentType)] = DataAutoDownloadActivity.this.wifiMaxSize;
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).roamingMaxFileSize[MediaController.maskToIndex(DataAutoDownloadActivity.this.currentType)] = DataAutoDownloadActivity.this.roamingMaxSize;
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).mobileDataDownloadMask[0] = DataAutoDownloadActivity.this.mobileDataDownloadMask;
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).mobileDataDownloadMask[1] = DataAutoDownloadActivity.this.mobileDataPrivateDownloadMask;
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).mobileDataDownloadMask[2] = DataAutoDownloadActivity.this.mobileDataGroupDownloadMask;
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).mobileDataDownloadMask[3] = DataAutoDownloadActivity.this.mobileDataChannelDownloadMask;
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).wifiDownloadMask[0] = DataAutoDownloadActivity.this.wifiDownloadMask;
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).wifiDownloadMask[1] = DataAutoDownloadActivity.this.wifiPrivateDownloadMask;
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).wifiDownloadMask[2] = DataAutoDownloadActivity.this.wifiGroupDownloadMask;
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).wifiDownloadMask[3] = DataAutoDownloadActivity.this.wifiChannelDownloadMask;
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).roamingDownloadMask[0] = DataAutoDownloadActivity.this.roamingDownloadMask;
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).roamingDownloadMask[1] = DataAutoDownloadActivity.this.roamingPrivateDownloadMask;
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).roamingDownloadMask[2] = DataAutoDownloadActivity.this.roamingGroupDownloadMask;
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).roamingDownloadMask[3] = DataAutoDownloadActivity.this.roamingChannelDownloadMask;
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).mobileMaxFileSize[DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType)] = DataAutoDownloadActivity.this.mobileMaxSize;
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).wifiMaxFileSize[DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType)] = DataAutoDownloadActivity.this.wifiMaxSize;
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).roamingMaxFileSize[DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType)] = DataAutoDownloadActivity.this.roamingMaxSize;
                     Editor editor = MessagesController.getMainSettings(DataAutoDownloadActivity.this.currentAccount).edit();
                     int a = 0;
                     while (a < 4) {
-                        editor.putInt("mobileDataDownloadMask" + (a != 0 ? Integer.valueOf(a) : TtmlNode.ANONYMOUS_REGION_ID), MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileDataDownloadMask[a]);
-                        editor.putInt("wifiDownloadMask" + (a != 0 ? Integer.valueOf(a) : TtmlNode.ANONYMOUS_REGION_ID), MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).wifiDownloadMask[a]);
-                        editor.putInt("roamingDownloadMask" + (a != 0 ? Integer.valueOf(a) : TtmlNode.ANONYMOUS_REGION_ID), MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).roamingDownloadMask[a]);
+                        editor.putInt("mobileDataDownloadMask" + (a != 0 ? Integer.valueOf(a) : TtmlNode.ANONYMOUS_REGION_ID), DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).mobileDataDownloadMask[a]);
+                        editor.putInt("wifiDownloadMask" + (a != 0 ? Integer.valueOf(a) : TtmlNode.ANONYMOUS_REGION_ID), DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).wifiDownloadMask[a]);
+                        editor.putInt("roamingDownloadMask" + (a != 0 ? Integer.valueOf(a) : TtmlNode.ANONYMOUS_REGION_ID), DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).roamingDownloadMask[a]);
                         a++;
                     }
-                    editor.putInt("mobileMaxDownloadSize" + MediaController.maskToIndex(DataAutoDownloadActivity.this.currentType), DataAutoDownloadActivity.this.mobileMaxSize);
-                    editor.putInt("wifiMaxDownloadSize" + MediaController.maskToIndex(DataAutoDownloadActivity.this.currentType), DataAutoDownloadActivity.this.wifiMaxSize);
-                    editor.putInt("roamingMaxDownloadSize" + MediaController.maskToIndex(DataAutoDownloadActivity.this.currentType), DataAutoDownloadActivity.this.roamingMaxSize);
+                    editor.putInt("mobileMaxDownloadSize" + DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType), DataAutoDownloadActivity.this.mobileMaxSize);
+                    editor.putInt("wifiMaxDownloadSize" + DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType), DataAutoDownloadActivity.this.wifiMaxSize);
+                    editor.putInt("roamingMaxDownloadSize" + DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType), DataAutoDownloadActivity.this.roamingMaxSize);
                     editor.commit();
-                    MediaController.getInstance(DataAutoDownloadActivity.this.currentAccount).checkAutodownloadSettings();
+                    DownloadController.getInstance(DataAutoDownloadActivity.this.currentType).checkAutodownloadSettings();
                     DataAutoDownloadActivity.this.finishFragment();
                 }
             }

@@ -400,6 +400,10 @@
     <drawable name="edit_done">res/drawable-xxhdpi-v4/edit_done.png</drawable>
     <drawable name="fab_highlight_dark">res/drawable/fab_highlight_dark.xml</drawable>
     <drawable name="fab_highlight_dark">res/drawable-v21/fab_highlight_dark.xml</drawable>
+    <drawable name="fast_reply">res/drawable-mdpi-v4/fast_reply.png</drawable>
+    <drawable name="fast_reply">res/drawable-hdpi-v4/fast_reply.png</drawable>
+    <drawable name="fast_reply">res/drawable-xhdpi-v4/fast_reply.png</drawable>
+    <drawable name="fast_reply">res/drawable-xxhdpi-v4/fast_reply.png</drawable>
     <drawable name="field_carret_empty">res/drawable/field_carret_empty.xml</drawable>
     <drawable name="flame_small">res/drawable-mdpi-v4/flame_small.png</drawable>
     <drawable name="flame_small">res/drawable-hdpi-v4/flame_small.png</drawable>
@@ -1249,6 +1253,10 @@
     <drawable name="newmsg_divider">res/drawable-hdpi-v4/newmsg_divider.png</drawable>
     <drawable name="newmsg_divider">res/drawable-xhdpi-v4/newmsg_divider.png</drawable>
     <drawable name="newmsg_divider">res/drawable-xxhdpi-v4/newmsg_divider.png</drawable>
+    <drawable name="newyear">res/drawable-mdpi-v4/newyear.png</drawable>
+    <drawable name="newyear">res/drawable-hdpi-v4/newyear.png</drawable>
+    <drawable name="newyear">res/drawable-xhdpi-v4/newyear.png</drawable>
+    <drawable name="newyear">res/drawable-xxhdpi-v4/newyear.png</drawable>
     <drawable name="nocover">res/drawable-mdpi-v4/nocover.png</drawable>
     <drawable name="nocover">res/drawable-hdpi-v4/nocover.png</drawable>
     <drawable name="nocover">res/drawable-xhdpi-v4/nocover.png</drawable>

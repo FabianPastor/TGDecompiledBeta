@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
@@ -163,7 +164,7 @@ public class LocationController implements NotificationCenterDelegate {
                         }
                     }
                     if (added) {
-                        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.liveLocationsCacheChanged, Long.valueOf(did));
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.liveLocationsCacheChanged, Long.valueOf(did), Integer.valueOf(this.currentAccount));
                     }
                 }
             }
@@ -211,7 +212,7 @@ public class LocationController implements NotificationCenterDelegate {
                         }
                     }
                     if (updated) {
-                        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.liveLocationsCacheChanged, Long.valueOf(did));
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.liveLocationsCacheChanged, Long.valueOf(did), Integer.valueOf(this.currentAccount));
                     }
                 }
             }
@@ -523,7 +524,11 @@ public class LocationController implements NotificationCenterDelegate {
 
     private void startService() {
         try {
-            ApplicationLoader.applicationContext.startService(new Intent(ApplicationLoader.applicationContext, LocationSharingService.class));
+            if (VERSION.SDK_INT >= 26) {
+                ApplicationLoader.applicationContext.startForegroundService(new Intent(ApplicationLoader.applicationContext, LocationSharingService.class));
+            } else {
+                ApplicationLoader.applicationContext.startService(new Intent(ApplicationLoader.applicationContext, LocationSharingService.class));
+            }
         } catch (Throwable e) {
             FileLog.e(e);
         }
@@ -646,7 +651,7 @@ public class LocationController implements NotificationCenterDelegate {
                                 MessagesController.getInstance(LocationController.this.currentAccount).putUsers(res.users, false);
                                 MessagesController.getInstance(LocationController.this.currentAccount).putChats(res.chats, false);
                                 LocationController.this.locationsCache.put(Long.valueOf(did), res.messages);
-                                NotificationCenter.getInstance(LocationController.this.currentAccount).postNotificationName(NotificationCenter.liveLocationsCacheChanged, Long.valueOf(did));
+                                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.liveLocationsCacheChanged, Long.valueOf(did), Integer.valueOf(LocationController.this.currentAccount));
                             }
                         });
                     }

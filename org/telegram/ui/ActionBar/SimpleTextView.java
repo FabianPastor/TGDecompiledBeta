@@ -231,6 +231,28 @@ public class SimpleTextView extends View implements Callback {
         return this.text;
     }
 
+    public int getTextStartX() {
+        if (this.layout == null) {
+            return 0;
+        }
+        int textOffsetX = 0;
+        if (this.leftDrawable != null && (this.gravity & 7) == 3) {
+            textOffsetX = 0 + (this.drawablePadding + this.leftDrawable.getIntrinsicWidth());
+        }
+        return (((int) getX()) + this.offsetX) + textOffsetX;
+    }
+
+    public TextPaint getTextPaint() {
+        return this.textPaint;
+    }
+
+    public int getTextStartY() {
+        if (this.layout == null) {
+            return 0;
+        }
+        return (int) getY();
+    }
+
     protected void onDraw(Canvas canvas) {
         int textOffsetX = 0;
         if (this.leftDrawable != null) {

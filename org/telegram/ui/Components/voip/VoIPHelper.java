@@ -210,7 +210,7 @@ public class VoIPHelper {
         linearLayout.setVisibility(8);
         linearLayout.addView(linearLayout, LayoutHelper.createLinear(-1, -2, 8.0f, 8.0f, 8.0f, 0.0f));
         final boolean[] includeLogs = new boolean[]{true};
-        linearLayout = new CheckBoxCell(context, true);
+        linearLayout = new CheckBoxCell(context, 1);
         final View view = linearLayout;
         View.OnClickListener anonymousClass5 = new View.OnClickListener() {
             public void onClick(View v) {

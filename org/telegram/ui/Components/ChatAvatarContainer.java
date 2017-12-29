@@ -43,6 +43,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private int currentAccount = UserConfig.selectedAccount;
     private int currentConnectionState;
     private CharSequence lastSubtitle;
+    private boolean occupyStatusBar = true;
     private int onlineCount = -1;
     private ChatActivity parentFragment;
     private StatusDrawable[] statusDrawables = new StatusDrawable[5];
@@ -135,6 +136,10 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         }
     }
 
+    public void setOccupyStatusBar(boolean value) {
+        this.occupyStatusBar = value;
+    }
+
     public void setTitleColors(int title, int subtitle) {
         this.titleTextView.setTextColor(title);
         this.subtitleTextView.setTextColor(title);
@@ -153,7 +158,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     }
 
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        int viewTop = ((ActionBar.getCurrentActionBarHeight() - AndroidUtilities.dp(42.0f)) / 2) + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+        int currentActionBarHeight = (ActionBar.getCurrentActionBarHeight() - AndroidUtilities.dp(42.0f)) / 2;
+        int i = (VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight;
+        int viewTop = currentActionBarHeight + i;
         this.avatarImageView.layout(AndroidUtilities.dp(8.0f), viewTop, AndroidUtilities.dp(50.0f), AndroidUtilities.dp(42.0f) + viewTop);
         if (this.subtitleTextView.getVisibility() == 0) {
             this.titleTextView.layout(AndroidUtilities.dp(62.0f), AndroidUtilities.dp(1.3f) + viewTop, AndroidUtilities.dp(62.0f) + this.titleTextView.getMeasuredWidth(), (this.titleTextView.getTextHeight() + viewTop) + AndroidUtilities.dp(1.3f));

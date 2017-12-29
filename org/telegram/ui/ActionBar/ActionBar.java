@@ -5,10 +5,14 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint.FontMetricsInt;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBar extends FrameLayout {
@@ -33,6 +38,7 @@ public class ActionBar extends FrameLayout {
     private ImageView backButtonImageView;
     private boolean castShadows;
     private int extraHeight;
+    private FontMetricsInt fontMetricsInt;
     private boolean interceptTouches;
     private boolean isBackOverlayVisible;
     protected boolean isSearchFieldVisible;
@@ -45,8 +51,11 @@ public class ActionBar extends FrameLayout {
     private ActionBarMenu menu;
     private boolean occupyStatusBar;
     protected BaseFragment parentFragment;
+    private Rect rect;
     private SimpleTextView subtitleTextView;
+    private boolean supportsHolidayImage;
     private Runnable titleActionRunnable;
+    private boolean titleOverlayShown;
     private int titleRightMargin;
     private SimpleTextView titleTextView;
 
@@ -108,6 +117,32 @@ public class ActionBar extends FrameLayout {
             backDrawable.setRotatedColor(this.itemsActionModeColor);
             backDrawable.setColor(this.itemsColor);
         }
+    }
+
+    public void setSupportsHolidayImage(boolean value) {
+        this.supportsHolidayImage = value;
+        if (this.supportsHolidayImage) {
+            this.fontMetricsInt = new FontMetricsInt();
+            this.rect = new Rect();
+        }
+        invalidate();
+    }
+
+    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        boolean result = super.drawChild(canvas, child, drawingTime);
+        if (this.supportsHolidayImage && !this.titleOverlayShown && !LocaleController.isRTL && child == this.titleTextView) {
+            Drawable drawable = Theme.getCurrentHolidayDrawable();
+            if (drawable != null) {
+                TextPaint textPaint = this.titleTextView.getTextPaint();
+                textPaint.getFontMetricsInt(this.fontMetricsInt);
+                textPaint.getTextBounds((String) this.titleTextView.getText(), 0, 1, this.rect);
+                int x = (this.titleTextView.getTextStartX() + Theme.getCurrentHolidayDrawableXOffset()) + ((this.rect.width() - (drawable.getIntrinsicWidth() + Theme.getCurrentHolidayDrawableXOffset())) / 2);
+                int y = (this.titleTextView.getTextStartY() + Theme.getCurrentHolidayDrawableYOffset()) + ((int) Math.ceil((double) (((float) (this.titleTextView.getTextHeight() - this.rect.height())) / 2.0f)));
+                drawable.setBounds(x, y - drawable.getIntrinsicHeight(), drawable.getIntrinsicWidth() + x, y);
+                drawable.draw(canvas);
+            }
+        }
+        return result;
     }
 
     public void setBackButtonImage(int resource) {
@@ -615,6 +650,17 @@ public class ActionBar extends FrameLayout {
                 createTitleTextView();
             }
             if (this.titleTextView != null) {
+                boolean z;
+                if (title != null) {
+                    z = true;
+                } else {
+                    z = false;
+                }
+                this.titleOverlayShown = z;
+                if (this.supportsHolidayImage) {
+                    this.titleTextView.invalidate();
+                    invalidate();
+                }
                 SimpleTextView simpleTextView = this.titleTextView;
                 int i2 = (textToSet == null || this.isSearchFieldVisible) ? 4 : 0;
                 simpleTextView.setVisibility(i2);

@@ -10,13 +10,12 @@ import org.telegram.messenger.beta.R;
 
 public class VideoEncodingService extends Service implements NotificationCenterDelegate {
     private Builder builder;
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount;
     private int currentProgress;
     private String path;
 
     public VideoEncodingService() {
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileUploadProgressChanged);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stopEncodingService);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.stopEncodingService);
     }
 
     public IBinder onBind(Intent arg2) {
@@ -25,8 +24,8 @@ public class VideoEncodingService extends Service implements NotificationCenterD
 
     public void onDestroy() {
         stopForeground(true);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.stopEncodingService);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileUploadProgressChanged);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.stopEncodingService);
         FileLog.e("destroy video service");
     }
 
@@ -34,7 +33,7 @@ public class VideoEncodingService extends Service implements NotificationCenterD
         boolean z = true;
         if (id == NotificationCenter.FileUploadProgressChanged) {
             String fileName = args[0];
-            if (this.path != null && this.path.equals(fileName)) {
+            if (account == this.currentAccount && this.path != null && this.path.equals(fileName)) {
                 Boolean enc = args[2];
                 this.currentProgress = (int) (args[1].floatValue() * 100.0f);
                 Builder builder = this.builder;
@@ -51,6 +50,9 @@ public class VideoEncodingService extends Service implements NotificationCenterD
             }
         } else if (id == NotificationCenter.stopEncodingService) {
             String filepath = args[0];
+            if (((Integer) args[1]).intValue() != this.currentAccount) {
+                return;
+            }
             if (filepath == null || filepath.equals(this.path)) {
                 stopSelf();
             }
@@ -60,6 +62,12 @@ public class VideoEncodingService extends Service implements NotificationCenterD
     public int onStartCommand(Intent intent, int flags, int startId) {
         boolean z = false;
         this.path = intent.getStringExtra("path");
+        int oldAccount = this.currentAccount;
+        this.currentAccount = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
+        if (oldAccount != this.currentAccount) {
+            NotificationCenter.getInstance(oldAccount).removeObserver(this, NotificationCenter.FileUploadProgressChanged);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileUploadProgressChanged);
+        }
         boolean isGif = intent.getBooleanExtra("gif", false);
         if (this.path == null) {
             stopSelf();

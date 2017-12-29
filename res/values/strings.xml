@@ -1517,6 +1517,12 @@
     <string name="Subscribers_two">%1$d subscribers</string>
     <string name="Subscribers_zero">%1$d subscribers</string>
     <string name="Support">Support</string>
+    <string name="SyncContacts">Sync Contacts</string>
+    <string name="SyncContactsAdded">Contacts from this device were added to your account.</string>
+    <string name="SyncContactsInfoOff">Turn on to import contacts from this device to your account.</string>
+    <string name="SyncContactsInfoOn">Contacts from this device will be added to your account.</string>
+    <string name="SyncContactsOff">Contacts from this device will not be added to this account.</string>
+    <string name="SyncContactsOn">Contacts from this device will be added to this account.</string>
     <string name="SystemRoot">System Root</string>
     <string name="TapHereGifs">Tap here to access saved GIFs</string>
     <string name="TelegramContacts_few">%1$d contacts on Telegram</string>

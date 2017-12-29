@@ -14,13 +14,13 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.Date;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DownloadController;
+import org.telegram.messenger.DownloadController.FileDownloadProgressListener;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.ImageReceiver.ImageReceiverDelegate;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaController;
-import org.telegram.messenger.MediaController.FileDownloadProgressListener;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
@@ -35,7 +35,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LineProgressView;
 
 public class SharedDocumentCell extends FrameLayout implements FileDownloadProgressListener {
-    private int TAG = MediaController.getInstance(this.currentAccount).generateObserverTag();
+    private int TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
     private CheckBox checkBox;
     private int currentAccount = UserConfig.selectedAccount;
     private TextView dateTextView;
@@ -214,7 +214,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
 
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+        DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
 
     protected void onAttachedToWindow() {
@@ -298,7 +298,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
             this.progressView.setProgress(0.0f, false);
             this.statusImageView.setVisibility(4);
             this.dateTextView.setPadding(0, 0, 0, 0);
-            MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+            DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
             return;
         }
         String fileName = null;
@@ -312,10 +312,10 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
             this.dateTextView.setPadding(0, 0, 0, 0);
             this.loading = false;
             this.loaded = true;
-            MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+            DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
             return;
         }
-        MediaController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
+        DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
         this.loading = FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName);
         this.statusImageView.setVisibility(0);
         this.statusImageView.setImageResource(this.loading ? R.drawable.media_doc_pause : R.drawable.media_doc_load);

@@ -97,7 +97,7 @@ public class AdminLogFilterAlert extends BottomSheet {
             View view = null;
             switch (viewType) {
                 case 0:
-                    view = new CheckBoxCell(this.context, true);
+                    view = new CheckBoxCell(this.context, 1);
                     view.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                     break;
                 case 1:

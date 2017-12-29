@@ -263,6 +263,7 @@ public final class R {
         public static final int edit_cancel = NUM;
         public static final int edit_done = NUM;
         public static final int fab_highlight_dark = NUM;
+        public static final int fast_reply = NUM;
         public static final int field_carret_empty = NUM;
         public static final int flame_small = NUM;
         public static final int flash_auto = NUM;
@@ -481,6 +482,7 @@ public final class R {
         public static final int myloc_on = NUM;
         public static final int navigate = NUM;
         public static final int newmsg_divider = NUM;
+        public static final int newyear = NUM;
         public static final int nocover = NUM;
         public static final int nocover_big = NUM;
         public static final int nocover_small = NUM;
@@ -2300,6 +2302,12 @@ public final class R {
         public static final int Subscribers_two = NUM;
         public static final int Subscribers_zero = NUM;
         public static final int Support = NUM;
+        public static final int SyncContacts = NUM;
+        public static final int SyncContactsAdded = NUM;
+        public static final int SyncContactsInfoOff = NUM;
+        public static final int SyncContactsInfoOn = NUM;
+        public static final int SyncContactsOff = NUM;
+        public static final int SyncContactsOn = NUM;
         public static final int SystemRoot = NUM;
         public static final int TapHereGifs = NUM;
         public static final int TelegramContacts_few = NUM;

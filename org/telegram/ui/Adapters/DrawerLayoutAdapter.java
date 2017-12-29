@@ -101,7 +101,7 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
                 view = new DrawerActionCell(this.mContext);
                 break;
             case 4:
-                view = new DrawerUserCell(this.mContext);
+                view = new DrawerUserCell(this.mContext, false);
                 break;
             case 5:
                 view = new DrawerAddCell(this.mContext);

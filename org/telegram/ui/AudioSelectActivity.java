@@ -122,8 +122,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         super.onFragmentDestroy();
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
-        if (this.playingAudio != null && MediaController.getInstance(this.currentAccount).isPlayingMessage(this.playingAudio)) {
-            MediaController.getInstance(this.currentAccount).cleanupPlayer(true, true);
+        if (this.playingAudio != null && MediaController.getInstance().isPlayingMessage(this.playingAudio)) {
+            MediaController.getInstance().cleanupPlayer(true, true);
         }
     }
 

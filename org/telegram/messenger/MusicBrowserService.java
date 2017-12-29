@@ -84,7 +84,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             if (service == null) {
                 return;
             }
-            if (MediaController.getInstance(service.currentAccount).getPlayingMessageObject() == null || MediaController.getInstance(service.currentAccount).isMessagePaused()) {
+            if (MediaController.getInstance().getPlayingMessageObject() == null || MediaController.getInstance().isMessagePaused()) {
                 service.stopSelf();
                 service.serviceStarted = false;
             }
@@ -96,23 +96,23 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         }
 
         public void onPlay() {
-            MessageObject messageObject = MediaController.getInstance(MusicBrowserService.this.currentAccount).getPlayingMessageObject();
+            MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
             if (messageObject == null) {
                 onPlayFromMediaId(MusicBrowserService.this.lastSelectedDialog + "_" + 0, null);
             } else {
-                MediaController.getInstance(MusicBrowserService.this.currentAccount).playMessage(messageObject);
+                MediaController.getInstance().playMessage(messageObject);
             }
         }
 
         public void onSkipToQueueItem(long queueId) {
-            MediaController.getInstance(MusicBrowserService.this.currentAccount).playMessageAtIndex((int) queueId);
+            MediaController.getInstance().playMessageAtIndex((int) queueId);
             MusicBrowserService.this.handlePlayRequest();
         }
 
         public void onSeekTo(long position) {
-            MessageObject messageObject = MediaController.getInstance(MusicBrowserService.this.currentAccount).getPlayingMessageObject();
+            MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
             if (messageObject != null) {
-                MediaController.getInstance(MusicBrowserService.this.currentAccount).seekToProgress(messageObject, ((float) (position / 1000)) / ((float) messageObject.getDuration()));
+                MediaController.getInstance().seekToProgress(messageObject, ((float) (position / 1000)) / ((float) messageObject.getDuration()));
             }
         }
 
@@ -127,7 +127,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                     if (arrayList != null && id >= 0 && id < arrayList.size()) {
                         MusicBrowserService.this.lastSelectedDialog = did;
                         MessagesController.getNotificationsSettings(MusicBrowserService.this.currentAccount).edit().putInt("auto_lastSelectedDialog", did).commit();
-                        MediaController.getInstance(MusicBrowserService.this.currentAccount).setPlaylist(arrayList, (MessageObject) arrayList.get(id), false);
+                        MediaController.getInstance().setPlaylist(arrayList, (MessageObject) arrayList.get(id), false);
                         MusicBrowserService.this.mediaSession.setQueue(arrayList1);
                         if (did > 0) {
                             User user = (User) MusicBrowserService.this.users.get(Integer.valueOf(did));
@@ -161,11 +161,11 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         }
 
         public void onSkipToNext() {
-            MediaController.getInstance(MusicBrowserService.this.currentAccount).playNextMessage();
+            MediaController.getInstance().playNextMessage();
         }
 
         public void onSkipToPrevious() {
-            MediaController.getInstance(MusicBrowserService.this.currentAccount).playPreviousMessage();
+            MediaController.getInstance().playPreviousMessage();
         }
 
         public void onPlayFromSearch(String query, Bundle extras) {
@@ -444,17 +444,17 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     private void updatePlaybackState(String error) {
         int state;
         long position = -1;
-        MessageObject playingMessageObject = MediaController.getInstance(this.currentAccount).getPlayingMessageObject();
+        MessageObject playingMessageObject = MediaController.getInstance().getPlayingMessageObject();
         if (playingMessageObject != null) {
             position = (long) (playingMessageObject.audioProgressSec * 1000);
         }
         PlaybackState.Builder stateBuilder = new PlaybackState.Builder().setActions(getAvailableActions());
         if (playingMessageObject == null) {
             state = 1;
-        } else if (MediaController.getInstance(this.currentAccount).isDownloadingCurrentMessage()) {
+        } else if (MediaController.getInstance().isDownloadingCurrentMessage()) {
             state = 6;
         } else {
-            state = MediaController.getInstance(this.currentAccount).isMessagePaused() ? 2 : 3;
+            state = MediaController.getInstance().isMessagePaused() ? 2 : 3;
         }
         if (error != null) {
             stateBuilder.setErrorMessage(error);
@@ -462,7 +462,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         }
         stateBuilder.setState(state, position, 1.0f, SystemClock.elapsedRealtime());
         if (playingMessageObject != null) {
-            stateBuilder.setActiveQueueItemId((long) MediaController.getInstance(this.currentAccount).getPlayingMessageObjectNum());
+            stateBuilder.setActiveQueueItemId((long) MediaController.getInstance().getPlayingMessageObjectNum());
         } else {
             stateBuilder.setActiveQueueItemId(0);
         }
@@ -471,10 +471,10 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
 
     private long getAvailableActions() {
         long actions = 3076;
-        if (MediaController.getInstance(this.currentAccount).getPlayingMessageObject() == null) {
+        if (MediaController.getInstance().getPlayingMessageObject() == null) {
             return 3076;
         }
-        if (!MediaController.getInstance(this.currentAccount).isMessagePaused()) {
+        if (!MediaController.getInstance().isMessagePaused()) {
             actions = 3076 | 2;
         }
         return (actions | 16) | 32;
@@ -504,13 +504,13 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         if (!this.mediaSession.isActive()) {
             this.mediaSession.setActive(true);
         }
-        MessageObject messageObject = MediaController.getInstance(this.currentAccount).getPlayingMessageObject();
+        MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
         if (messageObject != null) {
             MediaMetadata.Builder builder = new MediaMetadata.Builder();
             builder.putLong("android.media.metadata.DURATION", (long) (messageObject.getDuration() * 1000));
             builder.putString("android.media.metadata.ARTIST", messageObject.getMusicAuthor());
             builder.putString("android.media.metadata.TITLE", messageObject.getMusicTitle());
-            AudioInfo audioInfo = MediaController.getInstance(this.currentAccount).getAudioInfo();
+            AudioInfo audioInfo = MediaController.getInstance().getAudioInfo();
             if (audioInfo != null) {
                 Bitmap bitmap = audioInfo.getCover();
                 if (bitmap != null) {
@@ -522,7 +522,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     }
 
     private void handlePauseRequest() {
-        MediaController.getInstance(this.currentAccount).pauseMessage(MediaController.getInstance(this.currentAccount).getPlayingMessageObject());
+        MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
         this.delayedStopHandler.removeCallbacksAndMessages(null);
         this.delayedStopHandler.sendEmptyMessageDelayed(0, 30000);
     }

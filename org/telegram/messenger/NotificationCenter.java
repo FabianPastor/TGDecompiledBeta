@@ -234,9 +234,6 @@ public class NotificationCenter {
         openedChatChanged = i;
         i = totalEvents;
         totalEvents = i + 1;
-        stopEncodingService = i;
-        i = totalEvents;
-        totalEvents = i + 1;
         didCreatedNewDeleteTask = i;
         i = totalEvents;
         totalEvents = i + 1;
@@ -354,9 +351,6 @@ public class NotificationCenter {
         updateMentionsCount = i;
         i = totalEvents;
         totalEvents = i + 1;
-        liveLocationsCacheChanged = i;
-        i = totalEvents;
-        totalEvents = i + 1;
         httpFileDidLoaded = i;
         i = totalEvents;
         totalEvents = i + 1;
@@ -441,6 +435,9 @@ public class NotificationCenter {
         appDidLogout = i;
         i = totalEvents;
         totalEvents = i + 1;
+        stopEncodingService = i;
+        i = totalEvents;
+        totalEvents = i + 1;
         wallpapersDidLoaded = i;
         i = totalEvents;
         totalEvents = i + 1;
@@ -484,6 +481,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         liveLocationsChanged = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        liveLocationsCacheChanged = i;
     }
 
     public static NotificationCenter getInstance(int num) {

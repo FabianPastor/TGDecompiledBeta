@@ -16,6 +16,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DownloadController;
+import org.telegram.messenger.DownloadController.FileDownloadProgressListener;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -23,7 +25,6 @@ import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
-import org.telegram.messenger.MediaController.FileDownloadProgressListener;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
@@ -64,7 +65,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     private static final int DOCUMENT_ATTACH_TYPE_STICKER = 6;
     private static final int DOCUMENT_ATTACH_TYPE_VIDEO = 4;
     private static AccelerateInterpolator interpolator = new AccelerateInterpolator(0.5f);
-    private int TAG = MediaController.getInstance(this.currentAccount).generateObserverTag();
+    private int TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
     private boolean buttonPressed;
     private int buttonState;
     private int currentAccount = UserConfig.selectedAccount;
@@ -421,7 +422,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         if (this.drawLinkImageView) {
             this.linkImageView.onDetachedFromWindow();
         }
-        MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+        DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
 
     protected void onAttachedToWindow() {
@@ -496,13 +497,13 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             return;
         }
         if (this.buttonState == 0) {
-            if (MediaController.getInstance(this.currentAccount).playMessage(this.currentMessageObject)) {
+            if (MediaController.getInstance().playMessage(this.currentMessageObject)) {
                 this.buttonState = 1;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                 invalidate();
             }
         } else if (this.buttonState == 1) {
-            if (MediaController.getInstance(this.currentAccount).pauseMessage(this.currentMessageObject)) {
+            if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
                 this.buttonState = 0;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                 invalidate();
@@ -694,10 +695,10 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             cacheFile.delete();
         }
         if (cacheFile.exists()) {
-            MediaController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+            DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
             if (this.documentAttachType == 5 || this.documentAttachType == 3) {
-                boolean playing = MediaController.getInstance(this.currentAccount).isPlayingMessage(this.currentMessageObject);
-                if (!playing || (playing && MediaController.getInstance(this.currentAccount).isMessagePaused())) {
+                boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+                if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
                     this.buttonState = 0;
                 } else {
                     this.buttonState = 1;
@@ -709,7 +710,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             invalidate();
             return;
         }
-        MediaController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
+        DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
         Float progress;
         if (this.documentAttachType == 5 || this.documentAttachType == 3) {
             boolean isLoading;

@@ -18,6 +18,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     private int bottomClip;
     private SizeNotifierFrameLayoutDelegate delegate;
     private int keyboardHeight;
+    private boolean occupyStatusBar = true;
     private Rect rect = new Rect();
 
     public interface SizeNotifierFrameLayoutDelegate {
@@ -40,6 +41,10 @@ public class SizeNotifierFrameLayout extends FrameLayout {
 
     public void setDelegate(SizeNotifierFrameLayoutDelegate delegate) {
         this.delegate = delegate;
+    }
+
+    public void setOccupyStatusBar(boolean value) {
+        this.occupyStatusBar = value;
     }
 
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
@@ -96,7 +101,9 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                 canvas.restore();
                 return;
             }
-            int actionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+            int currentActionBarHeight = isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0;
+            int i = (VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight;
+            int actionBarHeight = currentActionBarHeight + i;
             int viewHeight = getMeasuredHeight() - actionBarHeight;
             float scaleX = ((float) getMeasuredWidth()) / ((float) this.backgroundDrawable.getIntrinsicWidth());
             float scaleY = ((float) (this.keyboardHeight + viewHeight)) / ((float) this.backgroundDrawable.getIntrinsicHeight());

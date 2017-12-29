@@ -55,6 +55,7 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DataQuery;
+import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
@@ -307,19 +308,19 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     public void didPressedShare(ChatMessageCell cell) {
                         if (ChannelAdminLogActivity.this.getParentActivity() != null) {
                             ChannelAdminLogActivity channelAdminLogActivity = ChannelAdminLogActivity.this;
-                            Context access$6400 = ChatActivityAdapter.this.mContext;
+                            Context access$6200 = ChatActivityAdapter.this.mContext;
                             MessageObject messageObject = cell.getMessageObject();
                             boolean z = ChatObject.isChannel(ChannelAdminLogActivity.this.currentChat) && !ChannelAdminLogActivity.this.currentChat.megagroup && ChannelAdminLogActivity.this.currentChat.username != null && ChannelAdminLogActivity.this.currentChat.username.length() > 0;
-                            channelAdminLogActivity.showDialog(ShareAlert.createShareAlert(access$6400, messageObject, null, z, null, false));
+                            channelAdminLogActivity.showDialog(ShareAlert.createShareAlert(access$6200, messageObject, null, z, null, false));
                         }
                     }
 
                     public boolean needPlayMessage(MessageObject messageObject) {
                         if (!messageObject.isVoice() && !messageObject.isRoundVideo()) {
-                            return messageObject.isMusic() ? MediaController.getInstance(ChannelAdminLogActivity.this.currentAccount).setPlaylist(ChannelAdminLogActivity.this.messages, messageObject) : false;
+                            return messageObject.isMusic() ? MediaController.getInstance().setPlaylist(ChannelAdminLogActivity.this.messages, messageObject) : false;
                         } else {
-                            boolean result = MediaController.getInstance(ChannelAdminLogActivity.this.currentAccount).playMessage(messageObject);
-                            MediaController.getInstance(ChannelAdminLogActivity.this.currentAccount).setVoiceMessagesPlaylist(null, false);
+                            boolean result = MediaController.getInstance().playMessage(messageObject);
+                            MediaController.getInstance().setVoiceMessagesPlaylist(null, false);
                             return result;
                         }
                     }
@@ -624,7 +625,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         pinnedTop = false;
                     }
                     messageCell.setMessageObject(message, null, pinnedBotton, pinnedTop);
-                    if ((view instanceof ChatMessageCell) && MediaController.getInstance(ChannelAdminLogActivity.this.currentAccount).canDownloadMedia(message)) {
+                    if ((view instanceof ChatMessageCell) && DownloadController.getInstance(ChannelAdminLogActivity.this.currentAccount).canDownloadMedia(message)) {
                         ((ChatMessageCell) view).downloadAudioIfNeed();
                     }
                     messageCell.setHighlighted(false);
@@ -906,7 +907,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
         } else if (id == NotificationCenter.messagePlayingDidStarted) {
             if (args[0].isRoundVideo()) {
-                MediaController.getInstance(this.currentAccount).setTextureView(createTextureView(true), this.aspectRatioFrameLayout, this.roundVideoContainer, true);
+                MediaController.getInstance().setTextureView(createTextureView(true), this.aspectRatioFrameLayout, this.roundVideoContainer, true);
                 updateTextureViewPosition();
             }
             if (this.chatListView != null) {
@@ -937,7 +938,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         if (messageObject != null) {
                             if (messageObject.isVoice() || messageObject.isMusic()) {
                                 cell.updateButtonState(false);
-                            } else if (messageObject.isRoundVideo() && !MediaController.getInstance(this.currentAccount).isPlayingMessage(messageObject)) {
+                            } else if (messageObject.isRoundVideo() && !MediaController.getInstance().isPlayingMessage(messageObject)) {
                                 cell.checkRoundVideoPlayback(true);
                             }
                         }
@@ -954,7 +955,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         cell = (ChatMessageCell) view;
                         MessageObject playing = cell.getMessageObject();
                         if (playing != null && playing.getId() == mid.intValue()) {
-                            MessageObject player = MediaController.getInstance(this.currentAccount).getPlayingMessageObject();
+                            MessageObject player = MediaController.getInstance().getPlayingMessageObject();
                             if (player != null) {
                                 playing.audioProgress = player.audioProgress;
                                 playing.audioProgressSec = player.audioProgressSec;
@@ -1001,6 +1002,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
         });
         this.avatarContainer = new ChatAvatarContainer(context, null, false);
+        this.avatarContainer.setOccupyStatusBar(!AndroidUtilities.isTablet());
         this.actionBar.addView(this.avatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, 56.0f, 0.0f, 40.0f, 0.0f));
         this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
             public void onSearchCollapse() {
@@ -1032,9 +1034,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.fragmentView = new SizeNotifierFrameLayout(context) {
             protected void onAttachedToWindow() {
                 super.onAttachedToWindow();
-                MessageObject messageObject = MediaController.getInstance(ChannelAdminLogActivity.this.currentAccount).getPlayingMessageObject();
+                MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
                 if (messageObject != null && messageObject.isRoundVideo() && messageObject.getDialogId() == ChannelAdminLogActivity.this.dialog_id) {
-                    MediaController.getInstance(ChannelAdminLogActivity.this.currentAccount).setTextureView(ChannelAdminLogActivity.this.createTextureView(false), ChannelAdminLogActivity.this.aspectRatioFrameLayout, ChannelAdminLogActivity.this.roundVideoContainer, true);
+                    MediaController.getInstance().setTextureView(ChannelAdminLogActivity.this.createTextureView(false), ChannelAdminLogActivity.this.aspectRatioFrameLayout, ChannelAdminLogActivity.this.roundVideoContainer, true);
                 }
             }
 
@@ -1132,6 +1134,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
         };
         this.contentView = (SizeNotifierFrameLayout) this.fragmentView;
+        this.contentView.setOccupyStatusBar(!AndroidUtilities.isTablet());
         this.contentView.setBackgroundImage(Theme.getCachedWallpaper());
         this.emptyViewContainer = new FrameLayout(context);
         this.emptyViewContainer.setVisibility(4);
@@ -1248,10 +1251,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     ChannelAdminLogActivity.this.floatingDateView.setTag(Integer.valueOf(1));
                     ChannelAdminLogActivity.this.floatingDateAnimation = new AnimatorSet();
                     ChannelAdminLogActivity.this.floatingDateAnimation.setDuration(150);
-                    AnimatorSet access$4800 = ChannelAdminLogActivity.this.floatingDateAnimation;
+                    AnimatorSet access$4600 = ChannelAdminLogActivity.this.floatingDateAnimation;
                     Animator[] animatorArr = new Animator[1];
                     animatorArr[0] = ObjectAnimator.ofFloat(ChannelAdminLogActivity.this.floatingDateView, "alpha", new float[]{1.0f});
-                    access$4800.playTogether(animatorArr);
+                    access$4600.playTogether(animatorArr);
                     ChannelAdminLogActivity.this.floatingDateAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animation) {
                             if (animation.equals(ChannelAdminLogActivity.this.floatingDateAnimation)) {
@@ -1959,7 +1962,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             if (view instanceof ChatMessageCell) {
                 ChatMessageCell messageCell = (ChatMessageCell) view;
                 MessageObject messageObject = messageCell.getMessageObject();
-                if (this.roundVideoContainer != null && messageObject.isRoundVideo() && MediaController.getInstance(this.currentAccount).isPlayingMessage(messageObject)) {
+                if (this.roundVideoContainer != null && messageObject.isRoundVideo() && MediaController.getInstance().isPlayingMessage(messageObject)) {
                     ImageReceiver imageReceiver = messageCell.getPhotoImage();
                     this.roundVideoContainer.setTranslationX((float) imageReceiver.getImageX());
                     this.roundVideoContainer.setTranslationY((float) ((this.fragmentView.getPaddingTop() + messageCell.getTop()) + imageReceiver.getImageY()));
@@ -1971,16 +1974,16 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
         }
         if (this.roundVideoContainer != null) {
-            messageObject = MediaController.getInstance(this.currentAccount).getPlayingMessageObject();
+            messageObject = MediaController.getInstance().getPlayingMessageObject();
             if (foundTextureViewMessage) {
-                MediaController.getInstance(this.currentAccount).setCurrentRoundVisible(true);
+                MediaController.getInstance().setCurrentRoundVisible(true);
                 return;
             }
             this.roundVideoContainer.setTranslationY((float) ((-AndroidUtilities.roundMessageSize) - 100));
             this.fragmentView.invalidate();
             if (messageObject != null && messageObject.isRoundVideo()) {
                 if (this.checkTextureViewPosition || PipRoundVideoView.getInstance() != null) {
-                    MediaController.getInstance(this.currentAccount).setCurrentRoundVisible(false);
+                    MediaController.getInstance().setCurrentRoundVisible(false);
                 }
             }
         }
@@ -2015,7 +2018,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     }
                     messageCell.setVisiblePart(viewTop, viewBottom - viewTop);
                     messageObject = messageCell.getMessageObject();
-                    if (this.roundVideoContainer != null && messageObject.isRoundVideo() && MediaController.getInstance(this.currentAccount).isPlayingMessage(messageObject)) {
+                    if (this.roundVideoContainer != null && messageObject.isRoundVideo() && MediaController.getInstance().isPlayingMessage(messageObject)) {
                         ImageReceiver imageReceiver = messageCell.getPhotoImage();
                         this.roundVideoContainer.setTranslationX((float) imageReceiver.getImageX());
                         this.roundVideoContainer.setTranslationY((float) ((this.fragmentView.getPaddingTop() + top) + imageReceiver.getImageY()));
@@ -2046,13 +2049,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
             if (this.roundVideoContainer != null) {
                 if (foundTextureViewMessage) {
-                    MediaController.getInstance(this.currentAccount).setCurrentRoundVisible(true);
+                    MediaController.getInstance().setCurrentRoundVisible(true);
                 } else {
                     this.roundVideoContainer.setTranslationY((float) ((-AndroidUtilities.roundMessageSize) - 100));
                     this.fragmentView.invalidate();
-                    messageObject = MediaController.getInstance(this.currentAccount).getPlayingMessageObject();
+                    messageObject = MediaController.getInstance().getPlayingMessageObject();
                     if (messageObject != null && messageObject.isRoundVideo() && this.checkTextureViewPosition) {
-                        MediaController.getInstance(this.currentAccount).setCurrentRoundVisible(false);
+                        MediaController.getInstance().setCurrentRoundVisible(false);
                     }
                 }
             }

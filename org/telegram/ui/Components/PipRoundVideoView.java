@@ -132,12 +132,12 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                         }
                     } else if (event.getAction() == 1) {
                         if (this.startDragging && !this.dragging) {
-                            MessageObject messageObject = MediaController.getInstance(PipRoundVideoView.this.currentAccount).getPlayingMessageObject();
+                            MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
                             if (messageObject != null) {
-                                if (MediaController.getInstance(PipRoundVideoView.this.currentAccount).isMessagePaused()) {
-                                    MediaController.getInstance(PipRoundVideoView.this.currentAccount).playMessage(messageObject);
+                                if (MediaController.getInstance().isMessagePaused()) {
+                                    MediaController.getInstance().playMessage(messageObject);
                                 } else {
-                                    MediaController.getInstance(PipRoundVideoView.this.currentAccount).pauseMessage(messageObject);
+                                    MediaController.getInstance().pauseMessage(messageObject);
                                 }
                             }
                         }
@@ -164,7 +164,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
                         boolean result = super.drawChild(canvas, child, drawingTime);
                         if (child == PipRoundVideoView.this.textureView) {
-                            MessageObject currentMessageObject = MediaController.getInstance(PipRoundVideoView.this.currentAccount).getPlayingMessageObject();
+                            MessageObject currentMessageObject = MediaController.getInstance().getPlayingMessageObject();
                             if (currentMessageObject != null) {
                                 PipRoundVideoView.this.rect.set(AndroidUtilities.dpf2(1.5f), AndroidUtilities.dpf2(1.5f), ((float) getMeasuredWidth()) - AndroidUtilities.dpf2(1.5f), ((float) getMeasuredHeight()) - AndroidUtilities.dpf2(1.5f));
                                 canvas.drawArc(PipRoundVideoView.this.rect, -90.0f, currentMessageObject.audioProgress * 360.0f, false, Theme.chat_radialProgressPaint);
@@ -207,7 +207,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                             result = false;
                         }
                         if (child == PipRoundVideoView.this.textureView) {
-                            MessageObject currentMessageObject = MediaController.getInstance(PipRoundVideoView.this.currentAccount).getPlayingMessageObject();
+                            MessageObject currentMessageObject = MediaController.getInstance().getPlayingMessageObject();
                             if (currentMessageObject != null) {
                                 PipRoundVideoView.this.rect.set(AndroidUtilities.dpf2(1.5f), AndroidUtilities.dpf2(1.5f), ((float) getMeasuredWidth()) - AndroidUtilities.dpf2(1.5f), ((float) getMeasuredHeight()) - AndroidUtilities.dpf2(1.5f));
                                 canvas.drawArc(PipRoundVideoView.this.rect, -90.0f, currentMessageObject.audioProgress * 360.0f, false, Theme.chat_radialProgressPaint);

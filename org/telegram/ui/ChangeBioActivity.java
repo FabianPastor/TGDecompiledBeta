@@ -123,13 +123,13 @@ public class ChangeBioActivity extends BaseFragment {
             }
 
             public void afterTextChanged(Editable s) {
-                ChangeBioActivity.this.checkTextView.setText(TtmlNode.ANONYMOUS_REGION_ID + (70 - ChangeBioActivity.this.firstNameField.length()));
+                ChangeBioActivity.this.checkTextView.setText(String.format("%d", new Object[]{Integer.valueOf(70 - ChangeBioActivity.this.firstNameField.length())}));
             }
         });
         fieldContainer.addView(this.firstNameField, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 0.0f, 4.0f, 0.0f));
         this.checkTextView = new TextView(context);
         this.checkTextView.setTextSize(1, 15.0f);
-        this.checkTextView.setText("70");
+        this.checkTextView.setText(String.format("%d", new Object[]{Integer.valueOf(70)}));
         this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
         fieldContainer.addView(this.checkTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 3 : 5, 0.0f, 4.0f, 4.0f, 0.0f));
         this.helpTextView = new TextView(context);
