@@ -2806,13 +2806,13 @@ public class LoginActivity extends BaseFragment {
 
     private void needFinishActivity() {
         clearCurrentState();
-        if (this.newAccount) {
+        if (!this.newAccount) {
+            presentFragment(new DialogsActivity(null), true);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
+        } else if (getParentActivity() != null) {
             ((LaunchActivity) getParentActivity()).switchToAccount(this.currentAccount, false);
             finishFragment();
-            return;
         }
-        presentFragment(new DialogsActivity(null), true);
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
     }
 
     private void fillNextCodeParams(Bundle params, TL_auth_sentCode res) {

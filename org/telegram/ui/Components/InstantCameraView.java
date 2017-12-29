@@ -795,13 +795,16 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             if (this.videoConvertFirstWrite) {
                 FileLoader.getInstance(InstantCameraView.this.currentAccount).uploadFile(file.toString(), false, false, 1, ConnectionsManager.FileTypeVideo);
                 this.videoConvertFirstWrite = false;
+                if (last) {
+                    FileLoader.getInstance(InstantCameraView.this.currentAccount).checkUploadNewDataAvailable(file.toString(), false, file.length(), last ? file.length() : 0);
+                    return;
+                }
                 return;
             }
             FileLoader.getInstance(InstantCameraView.this.currentAccount).checkUploadNewDataAvailable(file.toString(), false, file.length(), last ? file.length() : 0);
         }
 
         public void drainEncoder(boolean endOfStream) throws Exception {
-            MediaFormat newFormat;
             if (endOfStream) {
                 this.videoEncoder.signalEndOfInputStream();
             }
@@ -810,6 +813,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
             }
             while (true) {
+                MediaFormat newFormat;
                 ByteBuffer encodedData;
                 int encoderStatus = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
                 if (encoderStatus == -1) {

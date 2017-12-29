@@ -3463,7 +3463,14 @@ public class MessageObject {
     }
 
     public static boolean canEditMessage(int currentAccount, Message message, Chat chat) {
-        if (message == null || message.to_id == null || ((message.media != null && (isRoundVideoDocument(message.media.document) || isStickerDocument(message.media.document))) || ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.id < 0))) {
+        boolean z = true;
+        if (message == null || message.to_id == null) {
+            return false;
+        }
+        if (message.media != null && (isRoundVideoDocument(message.media.document) || isStickerDocument(message.media.document))) {
+            return false;
+        }
+        if ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.id < 0) {
             return false;
         }
         if (message.from_id == message.to_id.user_id && message.from_id == UserConfig.getInstance(currentAccount).getClientUserId() && !isLiveLocationMessage(message)) {
@@ -3475,35 +3482,39 @@ public class MessageObject {
                 return false;
             }
         }
-        if (message.out && chat != null && chat.megagroup) {
-            if (chat.creator) {
-                return true;
-            }
-            if (chat.admin_rights != null && chat.admin_rights.pin_messages) {
-                return true;
-            }
+        if (message.media != null && !(message.media instanceof TL_messageMediaEmpty) && !(message.media instanceof TL_messageMediaPhoto) && !(message.media instanceof TL_messageMediaDocument) && !(message.media instanceof TL_messageMediaWebPage)) {
+            return false;
+        }
+        if (message.out && chat != null && chat.megagroup && (chat.creator || (chat.admin_rights != null && chat.admin_rights.pin_messages))) {
+            return true;
         }
         if (Math.abs(message.date - ConnectionsManager.getInstance(currentAccount).getCurrentTime()) > MessagesController.getAccountInstance().maxEditTime) {
             return false;
         }
         if (message.to_id.channel_id == 0) {
-            if (message.out || message.from_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
-                if (message.media instanceof TL_messageMediaPhoto) {
-                    return true;
-                }
-                if (((message.media instanceof TL_messageMediaDocument) && !isStickerMessage(message)) || (message.media instanceof TL_messageMediaEmpty) || (message.media instanceof TL_messageMediaWebPage) || message.media == null) {
-                    return true;
-                }
+            if (!((message.out || message.from_id == UserConfig.getInstance(currentAccount).getClientUserId()) && ((message.media instanceof TL_messageMediaPhoto) || (((message.media instanceof TL_messageMediaDocument) && !isStickerMessage(message)) || (message.media instanceof TL_messageMediaEmpty) || (message.media instanceof TL_messageMediaWebPage) || message.media == null)))) {
+                z = false;
             }
-            return false;
+            return z;
         }
-        if ((chat.megagroup && message.out) || (!chat.megagroup && ((chat.creator || (chat.admin_rights != null && (chat.admin_rights.edit_messages || message.out))) && message.post))) {
-            if (message.media instanceof TL_messageMediaPhoto) {
-                return true;
+        if (!(chat.megagroup && message.out)) {
+            if (chat.megagroup) {
+                return false;
             }
-            if (((message.media instanceof TL_messageMediaDocument) && !isStickerMessage(message)) || (message.media instanceof TL_messageMediaEmpty) || (message.media instanceof TL_messageMediaWebPage) || message.media == null) {
-                return true;
+            if (!chat.creator) {
+                if (chat.admin_rights == null) {
+                    return false;
+                }
+                if (!(chat.admin_rights.edit_messages || message.out)) {
+                    return false;
+                }
             }
+            if (!message.post) {
+                return false;
+            }
+        }
+        if ((message.media instanceof TL_messageMediaPhoto) || (((message.media instanceof TL_messageMediaDocument) && !isStickerMessage(message)) || (message.media instanceof TL_messageMediaEmpty) || (message.media instanceof TL_messageMediaWebPage) || message.media == null)) {
+            return true;
         }
         return false;
     }
