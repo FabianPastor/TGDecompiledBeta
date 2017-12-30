@@ -3446,7 +3446,7 @@ public class MessageObject {
             return true;
         }
         if (chat == null && message.to_id.channel_id != 0) {
-            chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(message.to_id.channel_id));
+            chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(Integer.valueOf(message.to_id.channel_id));
             if (chat == null) {
                 return false;
             }
@@ -3477,7 +3477,7 @@ public class MessageObject {
             return true;
         }
         if (chat == null && message.to_id.channel_id != 0) {
-            chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(message.to_id.channel_id));
+            chat = MessagesController.getInstance(currentAccount).getChat(Integer.valueOf(message.to_id.channel_id));
             if (chat == null) {
                 return false;
             }
@@ -3488,7 +3488,7 @@ public class MessageObject {
         if (message.out && chat != null && chat.megagroup && (chat.creator || (chat.admin_rights != null && chat.admin_rights.pin_messages))) {
             return true;
         }
-        if (Math.abs(message.date - ConnectionsManager.getInstance(currentAccount).getCurrentTime()) > MessagesController.getAccountInstance().maxEditTime) {
+        if (Math.abs(message.date - ConnectionsManager.getInstance(currentAccount).getCurrentTime()) > MessagesController.getInstance(currentAccount).maxEditTime) {
             return false;
         }
         if (message.to_id.channel_id == 0) {
@@ -3520,16 +3520,16 @@ public class MessageObject {
     }
 
     public boolean canDeleteMessage(Chat chat) {
-        return this.eventId == 0 && canDeleteMessage(this.messageOwner, chat);
+        return this.eventId == 0 && canDeleteMessage(this.currentAccount, this.messageOwner, chat);
     }
 
-    public static boolean canDeleteMessage(Message message, Chat chat) {
+    public static boolean canDeleteMessage(int currentAccount, Message message, Chat chat) {
         boolean z = false;
         if (message.id < 0) {
             return true;
         }
         if (chat == null && message.to_id.channel_id != 0) {
-            chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(message.to_id.channel_id));
+            chat = MessagesController.getInstance(currentAccount).getChat(Integer.valueOf(message.to_id.channel_id));
         }
         if (ChatObject.isChannel(chat)) {
             if (message.id != 1) {
@@ -3554,12 +3554,12 @@ public class MessageObject {
     public String getForwardedName() {
         if (this.messageOwner.fwd_from != null) {
             if (this.messageOwner.fwd_from.channel_id != 0) {
-                Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(this.messageOwner.fwd_from.channel_id));
+                Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.messageOwner.fwd_from.channel_id));
                 if (chat != null) {
                     return chat.title;
                 }
             } else if (this.messageOwner.fwd_from.from_id != 0) {
-                User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(this.messageOwner.fwd_from.from_id));
+                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.messageOwner.fwd_from.from_id));
                 if (user != null) {
                     return UserObject.getUserName(user);
                 }

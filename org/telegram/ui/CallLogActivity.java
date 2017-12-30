@@ -248,7 +248,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                     row = new CallLogRow();
                     row.calls = new ArrayList();
                     row.calls.add(msg.messageOwner);
-                    row.user = MessagesController.getAccountInstance().getUser(Integer.valueOf(userID));
+                    row.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(userID));
                     row.type = callType;
                     this.calls.add(0, row);
                     this.listViewAdapter.notifyItemInserted(0);
@@ -573,7 +573,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                     for (Message msg : row.calls) {
                         ids.add(Integer.valueOf(msg.id));
                     }
-                    MessagesController.getAccountInstance().deleteMessages(ids, null, null, 0, false);
+                    MessagesController.getInstance(CallLogActivity.this.currentAccount).deleteMessages(ids, null, null, 0, false);
                 }
             }).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null).show().setCanceledOnTouchOutside(true);
         }

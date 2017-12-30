@@ -544,7 +544,6 @@ public class ChangePhoneActivity extends BaseFragment {
                 req.phone_code_hash = this.phoneHash;
                 destroyTimer();
                 ChangePhoneActivity.this.needShowProgress();
-                final MessagesController messagesController = MessagesController.getAccountInstance();
                 ConnectionsManager.getInstance(ChangePhoneActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                     public void run(final TLObject response, final TL_error error) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
@@ -560,7 +559,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                     ArrayList<User> users = new ArrayList();
                                     users.add(user);
                                     MessagesStorage.getInstance(ChangePhoneActivity.this.currentAccount).putUsersAndChats(users, null, true, true);
-                                    messagesController.putUser(user, false);
+                                    MessagesController.getInstance(ChangePhoneActivity.this.currentAccount).putUser(user, false);
                                     ChangePhoneActivity.this.finishFragment();
                                     NotificationCenter.getInstance(ChangePhoneActivity.this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
                                     return;

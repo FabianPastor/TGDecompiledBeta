@@ -25,6 +25,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
@@ -36,6 +37,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
     private TextView addButton;
     private int angle;
     private ImageView checkImage;
+    private int currentAccount = UserConfig.selectedAccount;
     private AnimatorSet currentAnimation;
     private boolean drawProgress;
     private BackupImageView imageView;
@@ -257,7 +259,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         }
         if (sameSet) {
             boolean wasInstalled = this.isInstalled;
-            z = DataQuery.getAccountInstance().isStickerPackInstalled(set.set.id);
+            z = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(set.set.id);
             this.isInstalled = z;
             if (z) {
                 if (!wasInstalled) {
@@ -308,7 +310,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
                 return;
             }
         }
-        z = DataQuery.getAccountInstance().isStickerPackInstalled(set.set.id);
+        z = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(set.set.id);
         this.isInstalled = z;
         if (z) {
             this.addButton.setVisibility(4);

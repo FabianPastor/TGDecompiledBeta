@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -28,6 +29,7 @@ import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class DialogsAdapter extends SelectionAdapter {
+    private int currentAccount = UserConfig.selectedAccount;
     private int currentCount;
     private int dialogsType;
     private boolean hasHints;
@@ -84,30 +86,30 @@ public class DialogsAdapter extends SelectionAdapter {
 
     private ArrayList<TL_dialog> getDialogsArray() {
         if (this.dialogsType == 0) {
-            return MessagesController.getAccountInstance().dialogs;
+            return MessagesController.getInstance(this.currentAccount).dialogs;
         }
         if (this.dialogsType == 1) {
-            return MessagesController.getAccountInstance().dialogsServerOnly;
+            return MessagesController.getInstance(this.currentAccount).dialogsServerOnly;
         }
         if (this.dialogsType == 2) {
-            return MessagesController.getAccountInstance().dialogsGroupsOnly;
+            return MessagesController.getInstance(this.currentAccount).dialogsGroupsOnly;
         }
         if (this.dialogsType == 3) {
-            return MessagesController.getAccountInstance().dialogsForward;
+            return MessagesController.getInstance(this.currentAccount).dialogsForward;
         }
         return null;
     }
 
     public int getItemCount() {
         int count = getDialogsArray().size();
-        if (count == 0 && MessagesController.getAccountInstance().loadingDialogs) {
+        if (count == 0 && MessagesController.getInstance(this.currentAccount).loadingDialogs) {
             return 0;
         }
-        if (!MessagesController.getAccountInstance().dialogsEndReached || count == 0) {
+        if (!MessagesController.getInstance(this.currentAccount).dialogsEndReached || count == 0) {
             count++;
         }
         if (this.hasHints) {
-            count += MessagesController.getAccountInstance().hintDialogs.size() + 2;
+            count += MessagesController.getInstance(this.currentAccount).hintDialogs.size() + 2;
         }
         this.currentCount = count;
         return count;
@@ -116,9 +118,9 @@ public class DialogsAdapter extends SelectionAdapter {
     public TLObject getItem(int i) {
         ArrayList<TL_dialog> arrayList = getDialogsArray();
         if (this.hasHints) {
-            int count = MessagesController.getAccountInstance().hintDialogs.size();
+            int count = MessagesController.getInstance(this.currentAccount).hintDialogs.size();
             if (i < count + 2) {
-                return (TLObject) MessagesController.getAccountInstance().hintDialogs.get(i - 1);
+                return (TLObject) MessagesController.getInstance(this.currentAccount).hintDialogs.get(i - 1);
             }
             i -= count + 2;
         }
@@ -129,7 +131,7 @@ public class DialogsAdapter extends SelectionAdapter {
     }
 
     public void notifyDataSetChanged() {
-        boolean z = (this.dialogsType != 0 || this.isOnlySelect || MessagesController.getAccountInstance().hintDialogs.isEmpty()) ? false : true;
+        boolean z = (this.dialogsType != 0 || this.isOnlySelect || MessagesController.getInstance(this.currentAccount).hintDialogs.isEmpty()) ? false : true;
         this.hasHints = z;
         super.notifyDataSetChanged();
     }
@@ -180,7 +182,7 @@ public class DialogsAdapter extends SelectionAdapter {
                 headerCell.addView(textView, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 15.0f, 17.0f, 0.0f));
                 textView.setOnClickListener(new OnClickListener() {
                     public void onClick(View view) {
-                        MessagesController.getAccountInstance().hintDialogs.clear();
+                        MessagesController.getInstance(DialogsAdapter.this.currentAccount).hintDialogs.clear();
                         MessagesController.getGlobalMainSettings().edit().remove("installReferer").commit();
                         DialogsAdapter.this.notifyDataSetChanged();
                     }
@@ -217,7 +219,7 @@ public class DialogsAdapter extends SelectionAdapter {
                 DialogCell cell = holder.itemView;
                 TL_dialog dialog = (TL_dialog) getItem(i);
                 if (this.hasHints) {
-                    i -= MessagesController.getAccountInstance().hintDialogs.size() + 2;
+                    i -= MessagesController.getInstance(this.currentAccount).hintDialogs.size() + 2;
                 }
                 cell.useSeparator = i != getItemCount() + -1;
                 if (this.dialogsType == 0 && AndroidUtilities.isTablet()) {
@@ -241,7 +243,7 @@ public class DialogsAdapter extends SelectionAdapter {
 
     public int getItemViewType(int i) {
         if (this.hasHints) {
-            int count = MessagesController.getAccountInstance().hintDialogs.size();
+            int count = MessagesController.getInstance(this.currentAccount).hintDialogs.size();
             if (i >= count + 2) {
                 i -= count + 2;
             } else if (i == 0) {
@@ -256,7 +258,7 @@ public class DialogsAdapter extends SelectionAdapter {
         if (i != getDialogsArray().size()) {
             return 0;
         }
-        if (MessagesController.getAccountInstance().dialogsEndReached) {
+        if (MessagesController.getInstance(this.currentAccount).dialogsEndReached) {
             return 5;
         }
         return 1;

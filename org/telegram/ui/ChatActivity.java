@@ -9138,7 +9138,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         } else if (id == NotificationCenter.didCreatedNewDeleteTask) {
             SparseArray<ArrayList<Long>> mids = args[0];
-            changed = false;
+            boolean changed = false;
             for (int i5 = 0; i5 < mids.size(); i5++) {
                 key = mids.keyAt(i5);
                 ArrayList<Long> arr2 = (ArrayList) mids.get(key);
@@ -9308,7 +9308,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             did = ((Long) args[0]).longValue();
             if (did == this.dialog_id || did == this.mergeDialogId) {
                 loadIndex = did == this.dialog_id ? 0 : 1;
-                changed = false;
                 mediaUpdated = false;
                 ArrayList<MessageObject> messageObjects = args[1];
                 newGroups = null;
@@ -9403,7 +9402,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     }
                                 }
                             }
-                            changed = true;
                         }
                     }
                 }
@@ -9420,8 +9418,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             }
                         }
                     }
-                }
-                if (!changed || this.chatLayoutManager == null || !mediaUpdated || this.chatLayoutManager.findFirstVisibleItemPosition() != 0) {
                 }
             }
         } else if (id == NotificationCenter.notificationsSettingsUpdated) {
@@ -9458,9 +9454,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
             if (updated) {
                 updateVisibleRows();
-                if (this.chatLayoutManager != null && this.chatLayoutManager.findFirstVisibleItemPosition() == 0) {
-                    moveScrollToLastMessage();
-                }
             }
         } else if (id == NotificationCenter.didReceivedWebpagesInUpdates) {
             if (this.foundWebPage != null) {

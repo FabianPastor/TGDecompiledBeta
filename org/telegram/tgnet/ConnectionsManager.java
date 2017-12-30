@@ -332,10 +332,6 @@ public class ConnectionsManager {
         return localInstance;
     }
 
-    public static ConnectionsManager getAccountInstance() {
-        return getInstance(UserConfig.selectedAccount);
-    }
-
     public ConnectionsManager(int instance) {
         String systemLangCode;
         String langCode;

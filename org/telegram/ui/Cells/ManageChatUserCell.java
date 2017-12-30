@@ -199,12 +199,12 @@ public class ManageChatUserCell extends FrameLayout {
                     } else {
                         this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
                     }
-                } else if (this.currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getAccountInstance().getCurrentTime()) || MessagesController.getAccountInstance().onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
+                } else if (this.currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
                     this.statusTextView.setTextColor(this.statusOnlineColor);
                     this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
                 } else {
                     this.statusTextView.setTextColor(this.statusColor);
-                    this.statusTextView.setText(LocaleController.formatUserStatus(this.currentUser));
+                    this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, this.currentUser));
                 }
             }
             this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable);

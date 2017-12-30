@@ -226,7 +226,7 @@ public class ProfileSearchCell extends BaseCell {
         int nameWidth2 = nameWidth - this.paddingRight;
         onlineWidth -= this.paddingRight;
         if (this.drawCount) {
-            TL_dialog dialog = (TL_dialog) MessagesController.getAccountInstance().dialogs_dict.get(Long.valueOf(this.dialog_id));
+            TL_dialog dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(Long.valueOf(this.dialog_id));
             if (dialog == null || dialog.unread_count == 0) {
                 this.lastUnreadCount = 0;
                 this.countLayout = null;
@@ -265,8 +265,8 @@ public class ProfileSearchCell extends BaseCell {
                 if (this.user.bot) {
                     onlineString = LocaleController.getString("Bot", R.string.Bot);
                 } else {
-                    onlineString = LocaleController.formatUserStatus(this.user);
-                    if (this.user != null && (this.user.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || (this.user.status != null && this.user.status.expires > ConnectionsManager.getAccountInstance().getCurrentTime()))) {
+                    onlineString = LocaleController.formatUserStatus(this.currentAccount, this.user);
+                    if (this.user != null && (this.user.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || (this.user.status != null && this.user.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()))) {
                         currentOnlinePaint = Theme.dialogs_onlinePaint;
                         onlineString = LocaleController.getString("Online", R.string.Online);
                     }
@@ -369,7 +369,7 @@ public class ProfileSearchCell extends BaseCell {
                 }
             }
             if (!(continueUpdate || !this.drawCount || (mask & 256) == 0)) {
-                TL_dialog dialog = (TL_dialog) MessagesController.getAccountInstance().dialogs_dict.get(Long.valueOf(this.dialog_id));
+                TL_dialog dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(Long.valueOf(this.dialog_id));
                 if (!(dialog == null || dialog.unread_count == this.lastUnreadCount)) {
                     continueUpdate = true;
                 }
@@ -447,7 +447,7 @@ public class ProfileSearchCell extends BaseCell {
             if (this.countLayout != null) {
                 x = this.countLeft - AndroidUtilities.dp(5.5f);
                 this.rect.set((float) x, (float) this.countTop, (float) ((this.countWidth + x) + AndroidUtilities.dp(11.0f)), (float) (this.countTop + AndroidUtilities.dp(23.0f)));
-                canvas.drawRoundRect(this.rect, 11.5f * AndroidUtilities.density, 11.5f * AndroidUtilities.density, MessagesController.getAccountInstance().isDialogMuted(this.dialog_id) ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint);
+                canvas.drawRoundRect(this.rect, 11.5f * AndroidUtilities.density, 11.5f * AndroidUtilities.density, MessagesController.getInstance(this.currentAccount).isDialogMuted(this.dialog_id) ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint);
                 canvas.save();
                 canvas.translate((float) this.countLeft, (float) (this.countTop + AndroidUtilities.dp(4.0f)));
                 this.countLayout.draw(canvas);

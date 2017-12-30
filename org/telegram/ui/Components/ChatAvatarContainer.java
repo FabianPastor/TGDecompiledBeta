@@ -314,7 +314,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                         } else if (user.bot) {
                             newStatus = LocaleController.getString("Bot", R.string.Bot);
                         } else {
-                            newStatus = LocaleController.formatUserStatus(user);
+                            newStatus = LocaleController.formatUserStatus(this.currentAccount, user);
                         }
                         Object newSubtitle2 = newStatus;
                     } else {

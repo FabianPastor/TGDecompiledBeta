@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.RecentMeUrl;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -19,6 +20,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class DialogsEmptyCell extends LinearLayout {
+    private int currentAccount = UserConfig.selectedAccount;
     private TextView emptyTextView1;
     private TextView emptyTextView2;
 
@@ -56,7 +58,7 @@ public class DialogsEmptyCell extends LinearLayout {
         if (totalHeight == 0) {
             totalHeight = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
         }
-        ArrayList<RecentMeUrl> arrayList = MessagesController.getAccountInstance().hintDialogs;
+        ArrayList<RecentMeUrl> arrayList = MessagesController.getInstance(this.currentAccount).hintDialogs;
         if (!arrayList.isEmpty()) {
             totalHeight -= (((AndroidUtilities.dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.dp(50.0f);
         }

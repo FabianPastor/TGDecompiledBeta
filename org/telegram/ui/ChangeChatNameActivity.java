@@ -115,9 +115,9 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
                         return;
                     }
                     if (ChangeChatNameActivity.this.uploadedAvatar != null) {
-                        MessagesController.getAccountInstance().changeChatAvatar(ChangeChatNameActivity.this.chatId, ChangeChatNameActivity.this.uploadedAvatar);
+                        MessagesController.getInstance(ChangeChatNameActivity.this.currentAccount).changeChatAvatar(ChangeChatNameActivity.this.chatId, ChangeChatNameActivity.this.uploadedAvatar);
                     } else if (ChangeChatNameActivity.this.avatar == null && (ChangeChatNameActivity.this.currentChat.photo instanceof TL_chatPhoto)) {
-                        MessagesController.getAccountInstance().changeChatAvatar(ChangeChatNameActivity.this.chatId, null);
+                        MessagesController.getInstance(ChangeChatNameActivity.this.currentAccount).changeChatAvatar(ChangeChatNameActivity.this.chatId, null);
                     }
                     ChangeChatNameActivity.this.finishFragment();
                     if (ChangeChatNameActivity.this.nameTextView.getText().length() != 0) {
@@ -128,7 +128,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
-        this.currentChat = MessagesController.getAccountInstance().getChat(Integer.valueOf(this.chatId));
+        this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId));
         LinearLayout linearLayout = new LinearLayout(context);
         this.fragmentView = linearLayout;
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -222,13 +222,13 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
 
             public void afterTextChanged(Editable s) {
                 String obj;
-                AvatarDrawable access$1000 = ChangeChatNameActivity.this.avatarDrawable;
+                AvatarDrawable access$1200 = ChangeChatNameActivity.this.avatarDrawable;
                 if (ChangeChatNameActivity.this.nameTextView.length() > 0) {
                     obj = ChangeChatNameActivity.this.nameTextView.getText().toString();
                 } else {
                     obj = null;
                 }
-                access$1000.setInfo(5, obj, null, false);
+                access$1200.setInfo(5, obj, null, false);
                 ChangeChatNameActivity.this.avatarImage.invalidate();
             }
         });
@@ -257,7 +257,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
                             } else {
                                 NotificationCenter.getInstance(ChangeChatNameActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                             }
-                            MessagesController.getAccountInstance().deleteUserFromChat(ChangeChatNameActivity.this.chatId, MessagesController.getAccountInstance().getUser(Integer.valueOf(UserConfig.getInstance(ChangeChatNameActivity.this.currentAccount).getClientUserId())), null, true);
+                            MessagesController.getInstance(ChangeChatNameActivity.this.currentAccount).deleteUserFromChat(ChangeChatNameActivity.this.chatId, MessagesController.getInstance(ChangeChatNameActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(ChangeChatNameActivity.this.currentAccount).getClientUserId())), null, true);
                             ChangeChatNameActivity.this.finishFragment();
                         }
                     });
@@ -348,6 +348,6 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
     }
 
     private void saveName() {
-        MessagesController.getAccountInstance().changeChatTitle(this.chatId, this.nameTextView.getText().toString());
+        MessagesController.getInstance(this.currentAccount).changeChatTitle(this.chatId, this.nameTextView.getText().toString());
     }
 }

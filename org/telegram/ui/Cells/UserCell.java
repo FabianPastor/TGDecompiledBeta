@@ -254,12 +254,12 @@ public class UserCell extends FrameLayout {
                     } else {
                         this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
                     }
-                } else if (currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((currentUser.status != null && currentUser.status.expires > ConnectionsManager.getAccountInstance().getCurrentTime()) || MessagesController.getAccountInstance().onlinePrivacy.containsKey(Integer.valueOf(currentUser.id)))) {
+                } else if (currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(currentUser.id)))) {
                     this.statusTextView.setTextColor(this.statusOnlineColor);
                     this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
                 } else {
                     this.statusTextView.setTextColor(this.statusColor);
-                    this.statusTextView.setText(LocaleController.formatUserStatus(currentUser));
+                    this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, currentUser));
                 }
             }
             if ((this.imageView.getVisibility() == 0 && this.currentDrawable == 0) || (this.imageView.getVisibility() == 8 && this.currentDrawable != 0)) {

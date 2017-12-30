@@ -4,7 +4,7 @@ public class BuildVars {
     public static String APP_HASH = "eb06d4abfb49dc3eeb1aeb98ae0f581e";
     public static int APP_ID = 6;
     public static String BING_SEARCH_KEY = "300f7735cfd04393a38d7838a0bf246b";
-    public static int BUILD_VERSION = 1165;
+    public static int BUILD_VERSION = 1166;
     public static String BUILD_VERSION_STRING = "4.7";
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean DEBUG_VERSION = true;

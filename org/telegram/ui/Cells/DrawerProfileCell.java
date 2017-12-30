@@ -139,6 +139,13 @@ public class DrawerProfileCell extends FrameLayout {
         return this.accountsShowed;
     }
 
+    public void setAccountsShowed(boolean value) {
+        if (this.accountsShowed != value) {
+            this.accountsShowed = value;
+            this.arrowView.setImageResource(this.accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
+        }
+    }
+
     public void setOnArrowClickListener(final OnClickListener onClickListener) {
         this.arrowView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {

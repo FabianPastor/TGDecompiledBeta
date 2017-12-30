@@ -14,6 +14,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLObject;
@@ -32,6 +33,7 @@ public class DialogMeUrlCell extends BaseCell {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private ImageReceiver avatarImage = new ImageReceiver(this);
     private int avatarTop = AndroidUtilities.dp(10.0f);
+    private int currentAccount = UserConfig.selectedAccount;
     private boolean drawNameBot;
     private boolean drawNameBroadcast;
     private boolean drawNameGroup;
@@ -93,7 +95,7 @@ public class DialogMeUrlCell extends BaseCell {
         this.drawNameBot = false;
         this.drawVerified = false;
         if (this.recentMeUrl instanceof TL_recentMeUrlChat) {
-            Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(this.recentMeUrl.chat_id));
+            Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.recentMeUrl.chat_id));
             if (chat.id < 0 || (ChatObject.isChannel(chat) && !chat.megagroup)) {
                 this.drawNameBroadcast = true;
                 this.nameLockTop = AndroidUtilities.dp(16.5f);
@@ -117,7 +119,7 @@ public class DialogMeUrlCell extends BaseCell {
             }
             this.avatarDrawable.setInfo(chat);
         } else if (this.recentMeUrl instanceof TL_recentMeUrlUser) {
-            User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(this.recentMeUrl.user_id));
+            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.recentMeUrl.user_id));
             if (LocaleController.isRTL) {
                 this.nameLeft = AndroidUtilities.dp(14.0f);
             } else {
@@ -212,7 +214,7 @@ public class DialogMeUrlCell extends BaseCell {
         } else {
             image = null;
         }
-        CharSequence messageString = MessagesController.getAccountInstance().linkPrefix + "/" + this.recentMeUrl.url;
+        CharSequence messageString = MessagesController.getInstance(this.currentAccount).linkPrefix + "/" + this.recentMeUrl.url;
         this.avatarImage.setImage(image, "50_50", this.avatarDrawable, null, 0);
         if (TextUtils.isEmpty(nameString)) {
             nameString = LocaleController.getString("HiddenName", R.string.HiddenName);

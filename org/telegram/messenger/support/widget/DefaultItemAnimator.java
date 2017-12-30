@@ -15,6 +15,7 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 public class DefaultItemAnimator extends SimpleItemAnimator {
     private static final boolean DEBUG = false;
     private static TimeInterpolator sDefaultInterpolator;
+    private boolean delayAnimations = true;
     ArrayList<ViewHolder> mAddAnimations = new ArrayList();
     ArrayList<ArrayList<ViewHolder>> mAdditionsList = new ArrayList();
     ArrayList<ViewHolder> mChangeAnimations = new ArrayList();
@@ -97,7 +98,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
                         DefaultItemAnimator.this.mMovesList.remove(arrayList);
                     }
                 };
-                if (removalsPending) {
+                if (this.delayAnimations && removalsPending) {
                     ViewCompat.postOnAnimationDelayed(((MoveInfo) moves.get(0)).holder.itemView, mover, getRemoveDuration());
                 } else {
                     mover.run();
@@ -139,7 +140,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
                         DefaultItemAnimator.this.mAdditionsList.remove(additions);
                     }
                 };
-                if (removalsPending || movesPending || changesPending) {
+                if (this.delayAnimations && (removalsPending || movesPending || changesPending)) {
                     ViewCompat.postOnAnimationDelayed(((ViewHolder) additions.get(0)).itemView, adder, (removalsPending ? getRemoveDuration() : 0) + Math.max(movesPending ? getMoveDuration() : 0, changesPending ? getChangeDuration() : 0));
                 } else {
                     adder.run();
@@ -152,6 +153,10 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         resetAnimation(holder);
         this.mPendingRemovals.add(holder);
         return true;
+    }
+
+    public void setDelayAnimations(boolean value) {
+        this.delayAnimations = value;
     }
 
     private void animateRemoveImpl(final ViewHolder holder) {

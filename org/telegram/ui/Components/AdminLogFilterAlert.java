@@ -289,7 +289,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                 case 2:
                     CheckBoxUserCell userCell = holder.itemView;
                     int userId = ((ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((position - AdminLogFilterAlert.this.allAdminsRow) - 1)).user_id;
-                    User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(userId));
+                    User user = MessagesController.getInstance(AdminLogFilterAlert.this.currentAccount).getUser(Integer.valueOf(userId));
                     boolean z3 = AdminLogFilterAlert.this.selectedAdmins == null || AdminLogFilterAlert.this.selectedAdmins.containsKey(Integer.valueOf(userId));
                     if (position == getItemCount() - 1) {
                         z2 = false;
@@ -629,7 +629,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                             ((CheckBoxCell) holder.itemView).setChecked(false, true);
                         }
                         for (a = 0; a < AdminLogFilterAlert.this.currentAdmins.size(); a++) {
-                            user = MessagesController.getAccountInstance().getUser(Integer.valueOf(((ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get(a)).user_id));
+                            user = MessagesController.getInstance(AdminLogFilterAlert.this.currentAccount).getUser(Integer.valueOf(((ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get(a)).user_id));
                             AdminLogFilterAlert.this.selectedAdmins.put(Integer.valueOf(user.id), user);
                         }
                     }

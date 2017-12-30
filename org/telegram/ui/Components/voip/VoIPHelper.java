@@ -58,7 +58,7 @@ public class VoIPHelper {
         boolean isAirplaneMode = true;
         if (userFull != null && userFull.phone_calls_private) {
             new Builder(activity).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("CallNotAvailable", R.string.CallNotAvailable, ContactsController.formatName(user.first_name, user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
-        } else if (ConnectionsManager.getAccountInstance().getConnectionState() != 3) {
+        } else if (ConnectionsManager.getInstance(UserConfig.selectedAccount).getConnectionState() != 3) {
             CharSequence string;
             if (System.getInt(activity.getContentResolver(), "airplane_mode_on", 0) == 0) {
                 isAirplaneMode = false;

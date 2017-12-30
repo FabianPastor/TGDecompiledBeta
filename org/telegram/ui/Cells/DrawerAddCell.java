@@ -26,13 +26,8 @@ public class DrawerAddCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setGravity(19);
-        this.textView.setCompoundDrawablePadding(AndroidUtilities.dp(27.0f));
+        this.textView.setCompoundDrawablePadding(AndroidUtilities.dp(34.0f));
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, 51, 23.0f, 0.0f, 16.0f, 0.0f));
-        Drawable drawable = getResources().getDrawable(R.drawable.account_add);
-        if (drawable != null) {
-            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemIcon), Mode.MULTIPLY));
-        }
-        this.textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -43,5 +38,10 @@ public class DrawerAddCell extends FrameLayout {
         super.onAttachedToWindow();
         this.textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
         this.textView.setText(LocaleController.getString("AddAccount", R.string.AddAccount));
+        Drawable drawable = getResources().getDrawable(R.drawable.account_add);
+        if (drawable != null) {
+            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemIcon), Mode.MULTIPLY));
+        }
+        this.textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
     }
 }

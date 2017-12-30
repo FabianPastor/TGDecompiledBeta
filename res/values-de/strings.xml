@@ -3,7 +3,9 @@
     <string name="ALongTimeAgo">vor langer Zeit gesehen</string>
     <string name="AbortPassword">Einrichten abbrechen</string>
     <string name="AccessError">Zugriffsfehler</string>
+    <string name="AccountAlreadyLoggedIn">Dieses Konto ist bereits in der App angemeldet.</string>
     <string name="AccountSettings">Kontoeinstellungen</string>
+    <string name="AccountSwitch">Wechseln</string>
     <string name="AccurateTo">Auf %1$s genau</string>
     <string name="ActionAddUser">un1 hat un2 hinzugefügt</string>
     <string name="ActionAddUserSelf">un1 ist in die Gruppe zurückgekehrt</string>
@@ -54,6 +56,7 @@
     <string name="ActionYouScored">Du hast %1$s erzielt</string>
     <string name="ActionYouScoredInGame">Du hast %1$s bei un2 erzielt</string>
     <string name="Add">Hinzufügen</string>
+    <string name="AddAccount">Konto hinzufügen</string>
     <string name="AddAdminErrorBlacklisted">Du kannst diesen Nutzer nicht als Admin festlegen, da er sich in der Sperrliste befindet und du ihn nicht entsperren darfst.</string>
     <string name="AddAdminErrorNotAMember">Du kannst diesen Nutzer nicht als Admin festlegen, da er kein Mitglied dieser Gruppe ist oder du keine Erlaubnis hast, ihn einzuladen.</string>
     <string name="AddBannedErrorAdmin">Du kannst diesen Nutzer nicht sperren, da er ein Admin dieser Gruppe ist und du keine Berechtigung hast, ihn zurückzustufen.</string>
@@ -236,7 +239,7 @@
     <string name="CallReportIncludeLogs">Technische Infos senden</string>
     <string name="CallReportLogsExplain">Das hilft uns das Problem schneller zu beseitigen. Die Inhalte deiner Konversation werden nicht angezeigt.</string>
     <string name="CallReportSent">Danke, dass du uns hilfst, Telegram-Anrufe zu verbessern.</string>
-    <string name="CallText">Wir rufen dich an in %1$d:%2$02d</string>
+    <string name="CallText">Telegram ruft dich in %1$d:%2$02d an</string>
     <string name="CallViaTelegram">Telegram-Anruf</string>
     <string name="Calling">Wir rufen dich an…</string>
     <string name="Calls">Anrufe</string>
@@ -297,6 +300,7 @@
     <string name="ChannelMessageContact">%1$s hat einen Kontakt gesendet</string>
     <string name="ChannelMessageDocument">%1$s hat eine Datei gesendet</string>
     <string name="ChannelMessageGIF">%1$s hat ein GIF gesendet</string>
+    <string name="ChannelMessageLiveLocation">%1$@ hat einen Live-Standort geteilt</string>
     <string name="ChannelMessageMap">%1$s hat einen Standort gesendet</string>
     <string name="ChannelMessageMusic">%1$s hat ein Musikstück gesendet</string>
     <string name="ChannelMessageNoText">%1$s hat eine Nachricht gesendet</string>
@@ -1062,6 +1066,7 @@
     <string name="NotificationMessageGroupDocument">%1$s hat eine Datei an die Gruppe %2$s gesendet</string>
     <string name="NotificationMessageGroupGame">%1$s hat die Gruppe %2$s eingeladen, %3$s zu spielen.</string>
     <string name="NotificationMessageGroupGif">%1$s hat ein GIF an die Gruppe %2$s gesendet</string>
+    <string name="NotificationMessageGroupLiveLocation">%1$s hat einen Live-Standort mit der Gruppe %2$s geteilt</string>
     <string name="NotificationMessageGroupMap">%1$s hat einen Standort an die Gruppe %2$s gesendet</string>
     <string name="NotificationMessageGroupMusic">%1$s hat ein Musikstück an die Gruppe %2$s gesendet</string>
     <string name="NotificationMessageGroupNoText">%1$s hat eine Nachricht an die Gruppe %2$s gesendet</string>
@@ -1071,6 +1076,7 @@
     <string name="NotificationMessageGroupStickerEmoji">%1$s hat einen %3$s Sticker an die Gruppe %2$s gesendet</string>
     <string name="NotificationMessageGroupText">%1$s @ %2$s: %3$s</string>
     <string name="NotificationMessageGroupVideo">%1$s hat ein Video an die Gruppe %2$s gesendet</string>
+    <string name="NotificationMessageLiveLocation">%1$s hat dir einen Live-Standort gesendet</string>
     <string name="NotificationMessageMap">%1$s hat dir einen Standort gesendet</string>
     <string name="NotificationMessageMusic">%1$s hat dir ein Musikstück gesendet</string>
     <string name="NotificationMessageNoText">%1$s hat dir eine Nachricht gesendet</string>
@@ -1121,9 +1127,10 @@
     <string name="OnlyWhenScreenOn">Nur wenn Bildschirm „an“</string>
     <string name="Open">Öffnen</string>
     <string name="OpenChannel">KANAL ÖFFNEN</string>
-    <string name="OpenGroup">GRUPPE ÖFFNEN</string>
+    <string name="OpenGroup">GRUPPE ANZEIGEN</string>
     <string name="OpenInBrowser">ÖFFNEN MIT...</string>
     <string name="OpenInExternalApp">Öffnen in...</string>
+    <string name="OpenMessage">NACHRICHT ANZEIGEN</string>
     <string name="OpenUrlAlert">URL %1$s öffnen?</string>
     <string name="OtherSessions">Andere Sitzungen</string>
     <string name="OutgoingCalls">Ausgehende Anrufe</string>
@@ -1315,7 +1322,7 @@
     <string name="ReportSpamAndLeave">SPAM MELDEN UND VERLASSEN</string>
     <string name="Reset">Zurücksetzen</string>
     <string name="ResetAccount">Konto zurücksetzen</string>
-    <string name="ResetAccountButton">ZURÜCKSETZEN</string>
+    <string name="ResetAccountButton">KONTO ZURÜCKSETZEN</string>
     <string name="ResetAccountCancelledAlert">Deine vorherigen Versuche das Konto zurückzusetzen wurden durch den aktiven Nutzer abgebrochen. Bitte in 7 Tagen erneut probieren.</string>
     <string name="ResetAccountInfo">Da dein Konto **%1$s** aktiv und durch ein Kennwort geschützt ist, löschen wir es aus Sicherheitsgründen in einer Woche. Du kannst den Vorgang jederzeit abbrechen.</string>
     <string name="ResetAccountStatus">Du kannst dein Konto zurücksetzen in:</string>
@@ -1325,7 +1332,7 @@
     <string name="ResetMyAccount">KONTO ZURÜCKSETZEN</string>
     <string name="ResetMyAccountText">Wenn du dein Konto zurücksetzt, verlierst du alle Chats und Nachrichten, ebenso deine geteilten Bilder und Videos.</string>
     <string name="ResetMyAccountWarning">Warnung</string>
-    <string name="ResetMyAccountWarningReset">Zurücksetzen</string>
+    <string name="ResetMyAccountWarningReset">Konto zurücksetzen</string>
     <string name="ResetMyAccountWarningText">Dies kann nicht rückgängig gemacht werden. Wenn du dein Konto zurücksetzt, sind alle Chats gelöscht.</string>
     <string name="ResetNotificationsText">Alle Einstellungen für Mitteilungen zurücksetzen</string>
     <string name="ResetStatistics">Statistik zurücksetzen</string>
@@ -1510,6 +1517,12 @@
     <string name="Subscribers_two">%1$d Abonnenten</string>
     <string name="Subscribers_zero">%1$d Abonnenten</string>
     <string name="Support">Support</string>
+    <string name="SyncContacts">Kontakte synchronisieren</string>
+    <string name="SyncContactsAdded">Kontakte von diesem Gerät wurden deinem Konto hinzugefügt.</string>
+    <string name="SyncContactsInfoOff">Einschalten, um Kontakte von diesem Gerät deinem Konto hinzuzufügen.</string>
+    <string name="SyncContactsInfoOn">Kontakte von diesem Gerät werden deinem Konto hinzugefügt.</string>
+    <string name="SyncContactsOff">Kontakte von diesem Gerät werden deinem Konto nicht hinzugefügt.</string>
+    <string name="SyncContactsOn">Kontakte von diesem Gerät werden deinem Konto hinzugefügt.</string>
     <string name="SystemRoot">Systemverzeichnis</string>
     <string name="TapHereGifs">Hier tippen um gespeicherte GIFs zu sehen</string>
     <string name="TelegramContacts_few">%1$d Kontakte bei Telegram</string>
@@ -1625,6 +1638,7 @@
     <string name="ViewPackPreview">Paket anzeigen</string>
     <string name="Vignette">Vignette</string>
     <string name="VoipAnswerCall">Annehmen</string>
+    <string name="VoipAnsweringAsAccount">Mit %s beantworten</string>
     <string name="VoipAudioRoutingBluetooth">Bluetooth</string>
     <string name="VoipAudioRoutingEarpiece">Ohrhörer</string>
     <string name="VoipAudioRoutingSpeaker">Lautsprecher</string>

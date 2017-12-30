@@ -180,10 +180,10 @@ public class JoinGroupAlert extends BottomSheet {
                 JoinGroupAlert.this.dismiss();
                 final TL_messages_importChatInvite req = new TL_messages_importChatInvite();
                 req.hash = JoinGroupAlert.this.hash;
-                ConnectionsManager.getAccountInstance().sendRequest(req, new RequestDelegate() {
+                ConnectionsManager.getInstance(JoinGroupAlert.this.currentAccount).sendRequest(req, new RequestDelegate() {
                     public void run(final TLObject response, final TL_error error) {
                         if (error == null) {
-                            MessagesController.getAccountInstance().processUpdates((Updates) response, false);
+                            MessagesController.getInstance(JoinGroupAlert.this.currentAccount).processUpdates((Updates) response, false);
                         }
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
@@ -194,11 +194,11 @@ public class JoinGroupAlert extends BottomSheet {
                                             Chat chat = (Chat) updates.chats.get(0);
                                             chat.left = false;
                                             chat.kicked = false;
-                                            MessagesController.getAccountInstance().putUsers(updates.users, false);
-                                            MessagesController.getAccountInstance().putChats(updates.chats, false);
+                                            MessagesController.getInstance(JoinGroupAlert.this.currentAccount).putUsers(updates.users, false);
+                                            MessagesController.getInstance(JoinGroupAlert.this.currentAccount).putChats(updates.chats, false);
                                             Bundle args = new Bundle();
                                             args.putInt("chat_id", chat.id);
-                                            if (MessagesController.getAccountInstance().checkCanOpenChat(args, JoinGroupAlert.this.fragment)) {
+                                            if (MessagesController.getInstance(JoinGroupAlert.this.currentAccount).checkCanOpenChat(args, JoinGroupAlert.this.fragment)) {
                                                 JoinGroupAlert.this.fragment.presentFragment(new ChatActivity(args), JoinGroupAlert.this.fragment instanceof ChatActivity);
                                                 return;
                                             }

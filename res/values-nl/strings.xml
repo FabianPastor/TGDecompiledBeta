@@ -3,7 +3,9 @@
     <string name="ALongTimeAgo">lang geleden gezien</string>
     <string name="AbortPassword">Twee-staps-verificatie annuleren</string>
     <string name="AccessError">Toegangsfout</string>
+    <string name="AccountAlreadyLoggedIn">Dit account heeft al een actieve sessie in deze app.</string>
     <string name="AccountSettings">Accountinstellingen</string>
+    <string name="AccountSwitch">Wissel</string>
     <string name="AccurateTo">Nauwkeurig tot op %1$s</string>
     <string name="ActionAddUser">un1 heeft un2 toegevoegd</string>
     <string name="ActionAddUserSelf">un1 is terug in de groep</string>
@@ -54,6 +56,7 @@
     <string name="ActionYouScored">Je hebt %1$s behaald</string>
     <string name="ActionYouScoredInGame">Je hebt met un2 %1$s behaald</string>
     <string name="Add">Toevoegen</string>
+    <string name="AddAccount">Account toevoegen</string>
     <string name="AddAdminErrorBlacklisted">Je mag geen leden deblokkeren, deze gebruiker is geblokkeerd en kan daarom niet worden toegevoegd als beheerder.</string>
     <string name="AddAdminErrorNotAMember">Je mag geen leden toevoegen, deze gebruiker is nog geen lid en kan daarom niet worden toegevoegd als beheerder.</string>
     <string name="AddBannedErrorAdmin">Je mag geen leden degraderen, deze gebruiker is een beheerder en kan daarom niet worden geblokkeerd.</string>
@@ -150,7 +153,7 @@
     <string name="ArticleByAuthor">door %1$s</string>
     <string name="ArticleDateByAuthor">%1$s door %2$s</string>
     <string name="AskAQuestion">Een vraag stellen</string>
-    <string name="AskAQuestionInfo">De ondersteuning van Telegram wordt gedaan door vrijwilligers. We doen ons best om zo snel mogelijk te antwoorden. Bekijk ook de &lt;a href=\"https://telegram.org/faq#general\"&gt;veelgestelde vragen&lt;/a&gt;: Hier staan de antwoorden op de meeste vragen en belangrijke tips voor &lt;a href=\"https://telegram.org/faq#troubleshooting\"&gt;het oplossen van problemen&lt;/a&gt;.</string>
+    <string name="AskAQuestionInfo">De ondersteuning van Telegram wordt gedaan door vrijwilligers. We doen ons best om zo snel mogelijk te antwoorden, maar het kan even duren. Bekijk ook de &lt;a href=\"https://telegram.org/faq#general-questions\"&gt;veelgestelde vragen&lt;/a&gt;: Hier staan de antwoorden op de meeste vragen en belangrijke tips voor &lt;a href=\"https://telegram.org/faq#troubleshooting\"&gt;het oplossen van problemen&lt;/a&gt;.</string>
     <string name="AskButton">Vraag een vrijwilliger</string>
     <string name="AttachAudio">Spraakbericht</string>
     <string name="AttachBotsHelp">Scrollen voor bots</string>
@@ -236,7 +239,7 @@
     <string name="CallReportIncludeLogs">Technische informatie versturen</string>
     <string name="CallReportLogsExplain">We hebben geen inzage in je gesprek, maar kunnen hiermee het probleem wel sneller oplossen.</string>
     <string name="CallReportSent">Bedankt voor je hulp bij het verbeteren van Telegram-oproepen.</string>
-    <string name="CallText">We bellen je over %1$d:%2$02d</string>
+    <string name="CallText">Telegram belt je over %1$d:%2$02d min</string>
     <string name="CallViaTelegram">Telegram-oproep</string>
     <string name="Calling">We bellen je</string>
     <string name="Calls">Oproepen</string>
@@ -297,6 +300,7 @@
     <string name="ChannelMessageContact">%1$s plaatste een contact</string>
     <string name="ChannelMessageDocument">%1$s plaatste een bestand</string>
     <string name="ChannelMessageGIF">%1$s plaatste een GIF</string>
+    <string name="ChannelMessageLiveLocation">%1$ plaatste een live-locatie</string>
     <string name="ChannelMessageMap">%1$s plaatste een locatie</string>
     <string name="ChannelMessageMusic">%1$s plaatste een muziekbestand</string>
     <string name="ChannelMessageNoText">%1$s plaatste een bericht</string>
@@ -614,9 +618,9 @@
     <string name="EventLogPromotedEditMessages">Berichten wijzigen</string>
     <string name="EventLogPromotedPinMessages">Berichten vastzetten</string>
     <string name="EventLogPromotedPostMessages">Berichten plaatsen</string>
-    <string name="EventLogRemovedChannelLink">un1 heeft de link verwijderd</string>
+    <string name="EventLogRemovedChannelLink">kanaallink door un1 verwijderd</string>
     <string name="EventLogRemovedChannelPhoto">kanaalfoto door un1 verwijderd</string>
-    <string name="EventLogRemovedGroupLink">un1 heeft de link verwijderd</string>
+    <string name="EventLogRemovedGroupLink">groepslink door un1 verwijderd</string>
     <string name="EventLogRemovedStickersSet">groepsstickers door un1 verwijderd</string>
     <string name="EventLogRemovedWGroupPhoto">groepsafbeelding door un1 verwijderd</string>
     <string name="EventLogRestrictedReadMessages">Berichten lezen</string>
@@ -977,7 +981,7 @@
     <string name="NoBlockedChannel">Geblokkeerde gebruikers kunnen alleen worden uitgenodigd door beheerders, uitnodigingslinks werken niet voor hen.</string>
     <string name="NoBlockedGroup">Geblokkeerde gebruikers kunnen alleen worden uitgenodigd door beheerders, uitnodigingslinks werken niet voor hen.</string>
     <string name="NoBlockedUsers">Geen geblokkeerde gebruikers</string>
-    <string name="NoCallLog">Je hebt nog geen oproepen</string>
+    <string name="NoCallLog">Je hebt nog geen oproepen gedaan.</string>
     <string name="NoChats">Nog geen chats</string>
     <string name="NoChatsHelp">Begin een gesprek door op de opstelknop rechtsonder te drukken of druk op de menuknop voor meer opties.</string>
     <string name="NoContacts">Nog geen contacten</string>
@@ -998,7 +1002,7 @@
     <string name="NoRecentGIFs">Niets recents</string>
     <string name="NoRecentPhotos">Niets recents</string>
     <string name="NoResult">Geen resultaten</string>
-    <string name="NoSharedAudio">Deel muziek in deze chat om ze op al je apparaten te kunnen benaderen.</string>
+    <string name="NoSharedAudio">Deel muziek in deze chat om er vanaf al je apparaten gebruik van te maken.</string>
     <string name="NoSharedAudioSecret">Muziek van deze chat verschijnt hier</string>
     <string name="NoSharedFiles">Deel bestanden en documenten in deze chat om ze op al je apparaten te kunnen benaderen.</string>
     <string name="NoSharedFilesSecret">Bestanden van deze chat verschijnen hier</string>
@@ -1062,6 +1066,7 @@
     <string name="NotificationMessageGroupDocument">%1$s heeft een bestand gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupGame">%1$s wil %3$s met de groep %2$s spelen</string>
     <string name="NotificationMessageGroupGif">%1$s heeft een GIF gestuurd naar de groep %2$s</string>
+    <string name="NotificationMessageGroupLiveLocation">%1$s deelt een live-locatie met groep %2$s</string>
     <string name="NotificationMessageGroupMap">%1$s heeft een locatie gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupMusic">%1$s heeft een muziekbestand gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupNoText">%1$s heeft een bericht gestuurd naar de groep %2$s</string>
@@ -1071,6 +1076,7 @@
     <string name="NotificationMessageGroupStickerEmoji">%1$s heeft een %3$s sticker gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupText">%1$s @ %2$s: %3$s</string>
     <string name="NotificationMessageGroupVideo">%1$s heeft een video gestuurd naar de groep %2$s</string>
+    <string name="NotificationMessageLiveLocation">%1$s deelt een live-locatie met je</string>
     <string name="NotificationMessageMap">%1$s heeft je een locatie gestuurd</string>
     <string name="NotificationMessageMusic">%1$s heeft je een muziekbestand gestuurd</string>
     <string name="NotificationMessageNoText">%1$s heeft je een bericht gestuurd</string>
@@ -1121,9 +1127,10 @@
     <string name="OnlyWhenScreenOn">Alleen bij scherm aan</string>
     <string name="Open">Openen</string>
     <string name="OpenChannel">KANAAL OPENEN</string>
-    <string name="OpenGroup">GROEP OPENEN</string>
+    <string name="OpenGroup">BEKIJK GROEP</string>
     <string name="OpenInBrowser">OPENEN IN...</string>
     <string name="OpenInExternalApp">Open met...</string>
+    <string name="OpenMessage">BEKIJK BERICHT</string>
     <string name="OpenUrlAlert">URL %1$s openen?</string>
     <string name="OtherSessions">Actieve sessies</string>
     <string name="OutgoingCalls">Uitgaande oproepen</string>
@@ -1315,7 +1322,7 @@
     <string name="ReportSpamAndLeave">SPAM MELDEN EN VERLATEN</string>
     <string name="Reset">Resetten</string>
     <string name="ResetAccount">Account resetten</string>
-    <string name="ResetAccountButton">RESETTEN</string>
+    <string name="ResetAccountButton">RESET ACCOUNT</string>
     <string name="ResetAccountCancelledAlert">De actieve gebruiker heeft de recente poging om dit account te resetten geannuleerd. Probeer het over 7 dagen nog eens.</string>
     <string name="ResetAccountInfo">Account **%1$s** is actief en beveiligd met een wachtwoord, het verwijderen stellen we daarom 1 week uit. Je kunt dit proces ieder moment annuleren.</string>
     <string name="ResetAccountStatus">Je account kan gereset worden over:</string>
@@ -1325,7 +1332,7 @@
     <string name="ResetMyAccount">ACCOUNT RESETTEN</string>
     <string name="ResetMyAccountText">Al je chats, berichten en alle andere data gaan verloren als je verder gaat met de account-reset.</string>
     <string name="ResetMyAccountWarning">Waarschuwing</string>
-    <string name="ResetMyAccountWarningReset">Resetten</string>
+    <string name="ResetMyAccountWarningReset">Reset Account</string>
     <string name="ResetMyAccountWarningText">Je kunt dit niet ongedaan maken. Al je chats, berichten en data gaan verloren als je je account reset.</string>
     <string name="ResetNotificationsText">Meldingen gereset</string>
     <string name="ResetStatistics">Gegevens opnieuw instellen</string>
@@ -1423,7 +1430,7 @@
     <string name="SendingVideo">Video versturen</string>
     <string name="SendingVideoStatus">video versturen</string>
     <string name="SentAppCode">We hebben de code naar je andere **Telegram**-app gestuurd.</string>
-    <string name="SentCallCode">We doen een activatie-oproep naar **%1$s**. Neem niet op, Telegram verwerkt de oproep automatisch.</string>
+    <string name="SentCallCode">We bellen je op nummer **%1$s**. Neem niet op, Telegram verwerkt alles automatisch.</string>
     <string name="SentCallOnly">We bellen je op **%1$s** om een code te dicteren.</string>
     <string name="SentSmsCode">We hebben een sms-bericht met activatiecode verzonden naar **%1$s**.</string>
     <string name="ServiceNotifications">Servicemeldingen</string>
@@ -1510,6 +1517,12 @@
     <string name="Subscribers_two">%1$d abonnees</string>
     <string name="Subscribers_zero">%1$d abonnees</string>
     <string name="Support">Ondersteuning</string>
+    <string name="SyncContacts">Contacten synchroniseren</string>
+    <string name="SyncContactsAdded">Contacten van dit apparaat zijn aan je account toegevoegd.</string>
+    <string name="SyncContactsInfoOff">Inschakelen om contacten van dit apparaat naar je account te importeren.</string>
+    <string name="SyncContactsInfoOn">Contacten van dit apparaat worden aan je account toegevoegd.</string>
+    <string name="SyncContactsOff">Contacten van dit apparaat worden niet aan dit account toegevoegd.</string>
+    <string name="SyncContactsOn">Contacten van dit apparaat worden aan dit account toegevoegd</string>
     <string name="SystemRoot">Systeemmap</string>
     <string name="TapHereGifs">Tik hier om opgeslagen GIF\'s te bekijken</string>
     <string name="TelegramContacts_few">%1$d contacten op Telegram</string>
@@ -1625,6 +1638,7 @@
     <string name="ViewPackPreview">Bundel bekijken</string>
     <string name="Vignette">Vignet</string>
     <string name="VoipAnswerCall">Opnemen</string>
+    <string name="VoipAnsweringAsAccount">Antwoorden als %s</string>
     <string name="VoipAudioRoutingBluetooth">Bluetooth</string>
     <string name="VoipAudioRoutingEarpiece">Oorstuk</string>
     <string name="VoipAudioRoutingSpeaker">Luidspreker</string>

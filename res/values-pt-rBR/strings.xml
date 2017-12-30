@@ -3,7 +3,9 @@
     <string name="ALongTimeAgo">visto há muito tempo</string>
     <string name="AbortPassword">Cancelar a configuração da verificação em duas etapas</string>
     <string name="AccessError">Erro de acesso</string>
+    <string name="AccountAlreadyLoggedIn">Essa conta já está logada nesse aplicativo.</string>
     <string name="AccountSettings">Configurações de Conta</string>
+    <string name="AccountSwitch">Alternar</string>
     <string name="AccurateTo">Precisão de %1$s</string>
     <string name="ActionAddUser">un1 adicionou un2</string>
     <string name="ActionAddUserSelf">un1 retornou ao grupo</string>
@@ -54,6 +56,7 @@
     <string name="ActionYouScored">Você marcou %1$s</string>
     <string name="ActionYouScoredInGame">Você marcou %1$s em un2</string>
     <string name="Add">Adicionar</string>
+    <string name="AddAccount">Adicionar Conta</string>
     <string name="AddAdminErrorBlacklisted">Você não pode adicionar esse usuário como admin porque ele está na lista negra e você não pode desbaní-lo.</string>
     <string name="AddAdminErrorNotAMember">Você não pode adicionar esse usuário como administrador porque ele não é um membro do grupo e você não possui permissão para convidá-lo.</string>
     <string name="AddBannedErrorAdmin">Você não pode banir esse usuário porque ele é um admin do grupo e você não possui permissão para rebaixá-lo.</string>
@@ -150,8 +153,8 @@
     <string name="ArticleByAuthor">por %1$s</string>
     <string name="ArticleDateByAuthor">%1$s por %2$s</string>
     <string name="AskAQuestion">Fazer uma Pergunta</string>
-    <string name="AskAQuestionInfo">Note que o suporte do Telegram é feito por voluntários. Tentaremos responder o mais rápido possível, mas poderemos demorar um pouco. Por favor verifique a página de &lt;a href=\"https://telegram.org/faq#general\"&gt;Perguntas Frequentes&lt;/a&gt;: há dicas e respostas para a maioria dos &lt;a href=\"https://telegram.org/faq#troubleshooting\"&gt;problemas&lt;/a&gt;.</string>
-    <string name="AskButton">Pergunte a um voluntário</string>
+    <string name="AskAQuestionInfo">Note que o suporte do Telegram é feito por voluntários. Tentaremos responder o mais rápido possível, mas poderemos demorar um pouco. Por favor verifique a página de &lt;a href=\"https://telegram.org/faq/br#questes-gerais\"&gt;Perguntas Frequentes&lt;/a&gt;: há dicas e respostas para a maioria dos &lt;a href=\"https://telegram.org/faq/br#soluo-de-problemas\"&gt;problemas&lt;/a&gt;.</string>
+    <string name="AskButton">Perguntar</string>
     <string name="AttachAudio">Mensagem de voz</string>
     <string name="AttachBotsHelp">Desça para ver os bots</string>
     <string name="AttachContact">Contato</string>
@@ -236,7 +239,7 @@
     <string name="CallReportIncludeLogs">Incluir informação técnica</string>
     <string name="CallReportLogsExplain">Isso não irá revelar o conteúdo de sua conversa, mas nos ajudará a resolver o problema.</string>
     <string name="CallReportSent">Obrigado por ajudar a tornar as chamadas do Telegram melhores.</string>
-    <string name="CallText">Vamos te ligar em %1$d:%2$02d</string>
+    <string name="CallText">Telegram irá te ligar em %1$d:%2$02d</string>
     <string name="CallViaTelegram">Chamada do Telegram</string>
     <string name="Calling">Estamos te ligando...</string>
     <string name="Calls">Chamadas</string>
@@ -297,6 +300,7 @@
     <string name="ChannelMessageContact">%1$s postou um contato</string>
     <string name="ChannelMessageDocument">%1$s postou um arquivo</string>
     <string name="ChannelMessageGIF">%1$s postou um GIF</string>
+    <string name="ChannelMessageLiveLocation">%1$@ postou uma localização em tempo real</string>
     <string name="ChannelMessageMap">%1$s postou uma foto</string>
     <string name="ChannelMessageMusic">%1$s postou uma música</string>
     <string name="ChannelMessageNoText">%1$s postou uma mensagem</string>
@@ -508,7 +512,7 @@
     <string name="EditAdminAddUsers">Adicionar Usuários</string>
     <string name="EditAdminAddUsersViaLink">Convidar Usuários via Link</string>
     <string name="EditAdminBanUsers">Banir Usuários</string>
-    <string name="EditAdminCantEdit">Você não têm permissão para editar esse admin.</string>
+    <string name="EditAdminCantEdit">Você não tem permissão para editar esse admin.</string>
     <string name="EditAdminChangeChannelInfo">Alterar Info do Canal</string>
     <string name="EditAdminChangeGroupInfo">Alterar Info do Grupo</string>
     <string name="EditAdminDeleteMessages">Apagar Mensagens de Outros</string>
@@ -998,7 +1002,7 @@
     <string name="NoRecentGIFs">Nenhum GIF recente</string>
     <string name="NoRecentPhotos">Nenhuma foto recente</string>
     <string name="NoResult">Nenhum resultado</string>
-    <string name="NoSharedAudio">Compartilhe músicas nesse chat e os acesse de qualquer um de seus dispositivos.</string>
+    <string name="NoSharedAudio">Compartilhe músicas nesse chat e acesse-as de qualquer um de seus dispositivos.</string>
     <string name="NoSharedAudioSecret">Músicas desse chat serão mostradas aqui.</string>
     <string name="NoSharedFiles">Compartilhar arquivos e documentos no chat e acessá-los de qualquer um de seus dispositivos.</string>
     <string name="NoSharedFilesSecret">Arquivos e documentos desse chat serão mostradas aqui.</string>
@@ -1062,6 +1066,7 @@
     <string name="NotificationMessageGroupDocument">%1$s enviou um arquivo para o grupo %2$s</string>
     <string name="NotificationMessageGroupGame">%1$s convidou o grupo %2$s para jogar %3$s</string>
     <string name="NotificationMessageGroupGif">%1$s enviou um GIF para o grupo %2$s</string>
+    <string name="NotificationMessageGroupLiveLocation">%1$s enviou uma localização em tempo real para o grupo %2$s</string>
     <string name="NotificationMessageGroupMap">%1$s enviou uma localização para o grupo %2$s</string>
     <string name="NotificationMessageGroupMusic">%1$s enviou uma música ao grupo %2$s</string>
     <string name="NotificationMessageGroupNoText">%1$s enviou uma mensagem para o grupo %2$s</string>
@@ -1071,6 +1076,7 @@
     <string name="NotificationMessageGroupStickerEmoji">%1$s enviou um %3$s sticker ao grupo %2$s</string>
     <string name="NotificationMessageGroupText">%1$s @ %2$s: %3$s</string>
     <string name="NotificationMessageGroupVideo">%1$s enviou um vídeo para o grupo %2$s</string>
+    <string name="NotificationMessageLiveLocation">%1$s te enviou uma localização em tempo real</string>
     <string name="NotificationMessageMap">%1$s enviou uma localização</string>
     <string name="NotificationMessageMusic">%1$s enviou uma música</string>
     <string name="NotificationMessageNoText">%1$s te enviou uma mensagem</string>
@@ -1121,9 +1127,10 @@
     <string name="OnlyWhenScreenOn">Somente com a tela ligada</string>
     <string name="Open">Abrir</string>
     <string name="OpenChannel">VER CANAL</string>
-    <string name="OpenGroup">ABRIR GRUPO</string>
+    <string name="OpenGroup">VER GRUPO</string>
     <string name="OpenInBrowser">ABRIR EM...</string>
     <string name="OpenInExternalApp">Abrir em...</string>
+    <string name="OpenMessage">VER MENSAGEM</string>
     <string name="OpenUrlAlert">Abrir URL em %1$s?</string>
     <string name="OtherSessions">Sessões Ativas</string>
     <string name="OutgoingCalls">Chamadas Efetuadas</string>
@@ -1315,7 +1322,7 @@
     <string name="ReportSpamAndLeave">REPORTAR SPAM E SAIR</string>
     <string name="Reset">Limpar</string>
     <string name="ResetAccount">Apagar conta</string>
-    <string name="ResetAccountButton">APAGAR</string>
+    <string name="ResetAccountButton">APAGAR CONTA</string>
     <string name="ResetAccountCancelledAlert">Suas tentativas recentes de restaurar essa conta foram canceladas pelo usuário ativo. Tente novamente em 7 dias.</string>
     <string name="ResetAccountInfo">Uma vez que a conta **%1$s** está ativa e protegida por senha, nós iremos desativá-la em 1 semana, por questões de segurança. Você pode cancelar esse processo a qualquer momento.</string>
     <string name="ResetAccountStatus">Você poderá restaurar sua conta em:</string>
@@ -1325,7 +1332,7 @@
     <string name="ResetMyAccount">APAGAR MINHA CONTA</string>
     <string name="ResetMyAccountText">Se você prosseguir e apagar a sua conta, você perderá todos os seus chats e mensagens, assim como todas as suas mídias e arquivos compartilhados.</string>
     <string name="ResetMyAccountWarning">Aviso</string>
-    <string name="ResetMyAccountWarningReset">Apagar</string>
+    <string name="ResetMyAccountWarningReset">Apagar conta</string>
     <string name="ResetMyAccountWarningText">Essa ação não pode ser desfeita. Se você apagar a sua conta, todas as suas mensagens e chats serão apagados.</string>
     <string name="ResetNotificationsText">Restaurar todas as configurações de notificação</string>
     <string name="ResetStatistics">Reiniciar Estatísticas</string>
@@ -1405,7 +1412,7 @@
     <string name="SendLiveLocationFor15m">por 15 minutos</string>
     <string name="SendLiveLocationFor1h">por 1 hora</string>
     <string name="SendLiveLocationFor8h">por 8 horas</string>
-    <string name="SendLiveLocationInfo">Atualizado em tempo real enquanto você se move</string>
+    <string name="SendLiveLocationInfo">Atualizada em tempo real enquanto você se move</string>
     <string name="SendLocation">Enviar sua localização atual</string>
     <string name="SendMessageRestricted">Os administradores do grupo restringiram você de escrever aqui até %1$s</string>
     <string name="SendMessageRestrictedForever">Os administradores do grupo restringiram você de escrever aqui</string>
@@ -1423,7 +1430,7 @@
     <string name="SendingVideo">Enviando vídeo...</string>
     <string name="SendingVideoStatus">enviando um vídeo...</string>
     <string name="SentAppCode">Nós enviamos o código para o aplicativo do **Telegram** em seu outro dispositivo.</string>
-    <string name="SentCallCode">Enviamos uma ligação de ativação para **%1$s**. Não atenda, o Telegram processará automaticamente.</string>
+    <string name="SentCallCode">Estamos ligando para o seu telefone **%1$s**. Não atenda, o Telegram processará tudo automaticamente.</string>
     <string name="SentCallOnly">Nós te ligaremos em **%1$s** para ditar o código.</string>
     <string name="SentSmsCode">Enviamos um SMS com um código de ativação para **%1$s**.</string>
     <string name="ServiceNotifications">Notificações de serviço</string>
@@ -1510,6 +1517,12 @@
     <string name="Subscribers_two">%1$d inscritos</string>
     <string name="Subscribers_zero">%1$d inscritos</string>
     <string name="Support">Suporte</string>
+    <string name="SyncContacts">Sincronizar Contatos</string>
+    <string name="SyncContactsAdded">Contatos deste dispositivo foram adicionados a sua conta.</string>
+    <string name="SyncContactsInfoOff">Ative para importar contatos desse dispositivo para sua conta.</string>
+    <string name="SyncContactsInfoOn">Contatos deste dispositivo serão adicionados a sua conta.</string>
+    <string name="SyncContactsOff">Contatos deste dispositivo não serão adicionados a sua conta.</string>
+    <string name="SyncContactsOn">Contatos deste dispositivo serão adicionados a sua conta.</string>
     <string name="SystemRoot">Administrador do Sistema</string>
     <string name="TapHereGifs">Toque aqui para acessar os GIFs salvos</string>
     <string name="TelegramContacts_few">%1$d contatos no Telegram</string>
@@ -1604,7 +1617,7 @@
     <string name="UsernameChecking">Verificando nome de usuário...</string>
     <string name="UsernameEmpty">Nenhum</string>
     <string name="UsernameHelp">Você pode escolher um nome de usuário no **Telegram**. Assim, outras pessoas poderão te encontrar pelo nome de usuário e entrar em contato sem precisar saber seu telefone. Você pode usar **a–z**, **0–9** e underline. O tamanho mínimo é **5** caracteres.</string>
-    <string name="UsernameHelpLink">Esse link abre um chat com você mesmo no Telegram: %1$s</string>
+    <string name="UsernameHelpLink">Esse link abre um chat com você no Telegram: %1$s</string>
     <string name="UsernameInUse">Desculpe, este usuário já existe.</string>
     <string name="UsernameInvalid">Desculpe, este usuário é inválido.</string>
     <string name="UsernameInvalidLong">O nome de usuário não pode exceder 32 caracteres.</string>
@@ -1625,6 +1638,7 @@
     <string name="ViewPackPreview">Ver Pacote</string>
     <string name="Vignette">Vignette</string>
     <string name="VoipAnswerCall">Atender</string>
+    <string name="VoipAnsweringAsAccount">Respondendo como %s</string>
     <string name="VoipAudioRoutingBluetooth">Bluetooth</string>
     <string name="VoipAudioRoutingEarpiece">Auricular</string>
     <string name="VoipAudioRoutingSpeaker">Alto-falante</string>
@@ -1680,7 +1694,7 @@
     <string name="WillUnmuteIn">Em %1$s</string>
     <string name="WithinAMonth">visto no último mês</string>
     <string name="WithinAWeek">visto na última semana</string>
-    <string name="WrongCountry">Código do país incorreto</string>
+    <string name="WrongCountry">Código do país inválido</string>
     <string name="WrongNumber">Número incorreto?</string>
     <string name="Years_few">%1$d anos</string>
     <string name="Years_many">%1$d anos</string>

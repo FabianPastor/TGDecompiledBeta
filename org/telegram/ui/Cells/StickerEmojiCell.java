@@ -9,6 +9,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.Emoji;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
@@ -19,6 +20,7 @@ public class StickerEmojiCell extends FrameLayout {
     private static AccelerateInterpolator interpolator = new AccelerateInterpolator(0.5f);
     private float alpha = 1.0f;
     private boolean changingAlpha;
+    private int currentAccount = UserConfig.selectedAccount;
     private TextView emojiTextView;
     private BackupImageView imageView;
     private long lastUpdateTime;
@@ -66,14 +68,14 @@ public class StickerEmojiCell extends FrameLayout {
                             set = true;
                         }
                         if (!set) {
-                            this.emojiTextView.setText(Emoji.replaceEmoji(DataQuery.getAccountInstance().getEmojiForSticker(this.sticker.id), this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
+                            this.emojiTextView.setText(Emoji.replaceEmoji(DataQuery.getInstance(this.currentAccount).getEmojiForSticker(this.sticker.id), this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
                         }
                         this.emojiTextView.setVisibility(0);
                         return;
                     }
                 }
                 if (set) {
-                    this.emojiTextView.setText(Emoji.replaceEmoji(DataQuery.getAccountInstance().getEmojiForSticker(this.sticker.id), this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
+                    this.emojiTextView.setText(Emoji.replaceEmoji(DataQuery.getInstance(this.currentAccount).getEmojiForSticker(this.sticker.id), this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
                 }
                 this.emojiTextView.setVisibility(0);
                 return;

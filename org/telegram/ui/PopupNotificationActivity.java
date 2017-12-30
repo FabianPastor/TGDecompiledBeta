@@ -1027,7 +1027,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 if (user != null) {
                     this.currentUser = user;
                 }
-                this.onlineTextView.setText(LocaleController.formatUserStatus(this.currentUser));
+                this.onlineTextView.setText(LocaleController.formatUserStatus(this.currentAccount, this.currentUser));
                 return;
             }
             this.lastPrintString = printString;

@@ -314,7 +314,7 @@ public class AlertsCreator {
         builder.setItems(items, new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 long flags;
-                int untilTime = ConnectionsManager.getAccountInstance().getCurrentTime();
+                int untilTime = ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime();
                 if (i == 0) {
                     untilTime += 3600;
                 } else if (i == 1) {
@@ -334,9 +334,9 @@ public class AlertsCreator {
                     flags = (((long) untilTime) << 32) | 1;
                 }
                 NotificationsController.getInstance(UserConfig.selectedAccount).removeNotificationsForDialog(dialog_id);
-                MessagesStorage.getAccountInstance().setDialogFlags(dialog_id, flags);
+                MessagesStorage.getInstance(UserConfig.selectedAccount).setDialogFlags(dialog_id, flags);
                 editor.commit();
-                TL_dialog dialog = (TL_dialog) MessagesController.getAccountInstance().dialogs_dict.get(Long.valueOf(dialog_id));
+                TL_dialog dialog = (TL_dialog) MessagesController.getInstance(UserConfig.selectedAccount).dialogs_dict.get(Long.valueOf(dialog_id));
                 if (dialog != null) {
                     dialog.notify_settings = new TL_peerNotifySettings();
                     dialog.notify_settings.mute_until = untilTime;
@@ -362,7 +362,7 @@ public class AlertsCreator {
                     return;
                 }
                 TL_account_reportPeer req = new TL_account_reportPeer();
-                req.peer = MessagesController.getAccountInstance().getInputPeer((int) dialog_id);
+                req.peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) dialog_id);
                 if (i == 0) {
                     req.reason = new TL_inputReportReasonSpam();
                 } else if (i == 1) {
@@ -370,7 +370,7 @@ public class AlertsCreator {
                 } else if (i == 2) {
                     req.reason = new TL_inputReportReasonPornography();
                 }
-                ConnectionsManager.getAccountInstance().sendRequest(req, new RequestDelegate() {
+                ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, TL_error error) {
                     }
                 });
@@ -1159,7 +1159,7 @@ public class AlertsCreator {
                 }
                 if (oldValue != encryptedChat.ttl) {
                     SecretChatHelper.getInstance(UserConfig.selectedAccount).sendTTLMessage(encryptedChat, null);
-                    MessagesStorage.getAccountInstance().updateEncryptedChatTTL(encryptedChat);
+                    MessagesStorage.getInstance(UserConfig.selectedAccount).updateEncryptedChatTTL(encryptedChat);
                 }
             }
         });

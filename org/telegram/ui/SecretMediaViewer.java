@@ -297,7 +297,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                 int a;
                 canvas.drawCircle((float) (getMeasuredWidth() - AndroidUtilities.dp(35.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(16.0f), this.circlePaint);
                 if (!this.useVideoProgress) {
-                    progress = ((float) Math.max(0, this.destroyTime - (System.currentTimeMillis() + ((long) (ConnectionsManager.getAccountInstance().getTimeDifference() * 1000))))) / (((float) this.destroyTtl) * 1000.0f);
+                    progress = ((float) Math.max(0, this.destroyTime - (System.currentTimeMillis() + ((long) (ConnectionsManager.getInstance(SecretMediaViewer.this.currentAccount).getTimeDifference() * 1000))))) / (((float) this.destroyTtl) * 1000.0f);
                 } else if (SecretMediaViewer.this.videoPlayer != null) {
                     long duration = SecretMediaViewer.this.videoPlayer.getDuration();
                     long position = SecretMediaViewer.this.videoPlayer.getCurrentPosition();
@@ -753,7 +753,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                     }
                     this.isVideo = true;
                     this.centerImage.setImage(null, null, this.currentThumb != null ? new BitmapDrawable(this.currentThumb.bitmap) : null, -1, null, 2);
-                    if (((long) (messageObject.getDuration() * 1000)) > (((long) messageObject.messageOwner.destroyTime) * 1000) - (System.currentTimeMillis() + ((long) (ConnectionsManager.getAccountInstance().getTimeDifference() * 1000)))) {
+                    if (((long) (messageObject.getDuration() * 1000)) > (((long) messageObject.messageOwner.destroyTime) * 1000) - (System.currentTimeMillis() + ((long) (ConnectionsManager.getInstance(this.currentAccount).getTimeDifference() * 1000)))) {
                         this.secretDeleteTimer.setDestroyTime(-1, -1, true);
                     } else {
                         this.secretDeleteTimer.setDestroyTime(((long) messageObject.messageOwner.destroyTime) * 1000, (long) messageObject.messageOwner.ttl, false);

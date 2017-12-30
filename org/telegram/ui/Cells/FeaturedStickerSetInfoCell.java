@@ -16,6 +16,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
@@ -26,6 +27,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     private Drawable addDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed));
     private int angle;
     private Paint botProgressPaint = new Paint(1);
+    private int currentAccount = UserConfig.selectedAccount;
     private Drawable delDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor(Theme.key_featuredStickers_delButton), Theme.getColor(Theme.key_featuredStickers_delButtonPressed));
     private boolean drawProgress;
     Drawable drawable = new Drawable() {
@@ -142,7 +144,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         }
         if (this.hasOnClick) {
             this.addButton.setVisibility(0);
-            boolean isStickerPackInstalled = DataQuery.getAccountInstance().isStickerPackInstalled(stickerSet.set.id);
+            boolean isStickerPackInstalled = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(stickerSet.set.id);
             this.isInstalled = isStickerPackInstalled;
             if (isStickerPackInstalled) {
                 this.addButton.setBackgroundDrawable(this.delDrawable);

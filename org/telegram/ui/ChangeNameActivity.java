@@ -51,7 +51,7 @@ public class ChangeNameActivity extends BaseFragment {
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
-        User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
+        User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
         if (user == null) {
             user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
         }
@@ -147,7 +147,7 @@ public class ChangeNameActivity extends BaseFragment {
                 currentUser.first_name = newFirst;
                 req.last_name = newLast;
                 currentUser.last_name = newLast;
-                User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
+                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
                 if (user != null) {
                     user.first_name = req.first_name;
                     user.last_name = req.last_name;

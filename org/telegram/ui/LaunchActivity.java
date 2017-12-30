@@ -78,6 +78,7 @@ import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
+import org.telegram.messenger.support.widget.DefaultItemAnimator;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
@@ -108,7 +109,6 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
-import org.telegram.ui.ActionBar.DrawerLayoutContainer.DrawerLayoutContainerDelegate;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.Cells.DrawerAddCell;
@@ -229,7 +229,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         }
         Theme.createChatResources(this, false);
         if (SharedConfig.passcodeHash.length() != 0 && SharedConfig.appLocked) {
-            SharedConfig.lastPauseTime = ConnectionsManager.getAccountInstance().getCurrentTime();
+            SharedConfig.lastPauseTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
         }
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
@@ -237,17 +237,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         }
         this.actionBarLayout = new ActionBarLayout(this);
         this.drawerLayoutContainer = new DrawerLayoutContainer(this);
-        this.drawerLayoutContainer.setDelegate(new DrawerLayoutContainerDelegate() {
-            public void onDrawerClosed() {
-                if (LaunchActivity.this.drawerLayoutAdapter != null) {
-                    LaunchActivity.this.drawerLayoutAdapter.setAccountsShowed(false);
-                }
-            }
-        });
         setContentView(this.drawerLayoutContainer, new LayoutParams(-1, -1));
         if (AndroidUtilities.isTablet()) {
             getWindow().setSoftInputMode(16);
-            View anonymousClass2 = new RelativeLayout(this) {
+            View anonymousClass1 = new RelativeLayout(this) {
                 private boolean inLayout;
 
                 public void requestLayout() {
@@ -301,24 +294,24 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     LaunchActivity.this.shadowTablet.layout(0, 0, LaunchActivity.this.shadowTablet.getMeasuredWidth(), LaunchActivity.this.shadowTablet.getMeasuredHeight());
                 }
             };
-            this.drawerLayoutContainer.addView(anonymousClass2, LayoutHelper.createFrame(-1, -1.0f));
+            this.drawerLayoutContainer.addView(anonymousClass1, LayoutHelper.createFrame(-1, -1.0f));
             this.backgroundTablet = new View(this);
             BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             this.backgroundTablet.setBackgroundDrawable(drawable);
-            anonymousClass2.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
-            anonymousClass2.addView(this.actionBarLayout);
+            anonymousClass1.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
+            anonymousClass1.addView(this.actionBarLayout);
             this.rightActionBarLayout = new ActionBarLayout(this);
             this.rightActionBarLayout.init(rightFragmentsStack);
             this.rightActionBarLayout.setDelegate(this);
-            anonymousClass2.addView(this.rightActionBarLayout);
+            anonymousClass1.addView(this.rightActionBarLayout);
             this.shadowTabletSide = new FrameLayout(this);
             this.shadowTabletSide.setBackgroundColor(NUM);
-            anonymousClass2.addView(this.shadowTabletSide);
+            anonymousClass1.addView(this.shadowTabletSide);
             this.shadowTablet = new FrameLayout(this);
             this.shadowTablet.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
             this.shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            anonymousClass2.addView(this.shadowTablet);
+            anonymousClass1.addView(this.shadowTablet);
             this.shadowTablet.setOnTouchListener(new OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
                     if (LaunchActivity.this.actionBarLayout.fragmentsStack.isEmpty() || event.getAction() != 1) {
@@ -357,11 +350,12 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             this.layersActionBarLayout.setDelegate(this);
             this.layersActionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
             this.layersActionBarLayout.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
-            anonymousClass2.addView(this.layersActionBarLayout);
+            anonymousClass1.addView(this.layersActionBarLayout);
         } else {
             this.drawerLayoutContainer.addView(this.actionBarLayout, new LayoutParams(-1, -1));
         }
         this.sideMenu = new RecyclerListView(this);
+        ((DefaultItemAnimator) this.sideMenu.getItemAnimator()).setDelayAnimations(false);
         this.sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
         this.sideMenu.setLayoutManager(new LinearLayoutManager(this, 1, false));
         RecyclerListView recyclerListView = this.sideMenu;
@@ -381,11 +375,26 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         this.sideMenu.setLayoutParams(layoutParams);
         this.sideMenu.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
-                if (!LaunchActivity.this.drawerLayoutAdapter.isAccountsShowed()) {
+                if (position == 0) {
+                    LaunchActivity.this.drawerLayoutAdapter.setAccountsShowed(!LaunchActivity.this.drawerLayoutAdapter.isAccountsShowed(), true);
+                } else if (view instanceof DrawerUserCell) {
+                    LaunchActivity.this.switchToAccount(((DrawerUserCell) view).getAccountNumber(), true);
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
+                } else if (view instanceof DrawerAddCell) {
+                    int freeAccount = -1;
+                    for (int a = 0; a < 3; a++) {
+                        if (!UserConfig.getInstance(a).isClientActivated()) {
+                            freeAccount = a;
+                            break;
+                        }
+                    }
+                    if (freeAccount >= 0) {
+                        LaunchActivity.this.presentFragment(new LoginActivity(freeAccount));
+                    }
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
+                } else {
                     int id = LaunchActivity.this.drawerLayoutAdapter.getId(position);
-                    if (position == 0) {
-                        LaunchActivity.this.drawerLayoutAdapter.setAccountsShowed(true);
-                    } else if (id == 2) {
+                    if (id == 2) {
                         if (MessagesController.isFeatureEnabled("chat_create", (BaseFragment) LaunchActivity.this.actionBarLayout.fragmentsStack.get(LaunchActivity.this.actionBarLayout.fragmentsStack.size() - 1))) {
                             LaunchActivity.this.presentFragment(new GroupCreateActivity());
                             LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
@@ -432,23 +441,6 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         LaunchActivity.this.presentFragment(new ChatActivity(args));
                         LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                     }
-                } else if (position == 0) {
-                    LaunchActivity.this.drawerLayoutAdapter.setAccountsShowed(false);
-                } else if (view instanceof DrawerUserCell) {
-                    LaunchActivity.this.switchToAccount(((DrawerUserCell) view).getAccountNumber(), true);
-                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
-                } else if (view instanceof DrawerAddCell) {
-                    int freeAccount = -1;
-                    for (int a = 0; a < 3; a++) {
-                        if (!UserConfig.getInstance(a).isClientActivated()) {
-                            freeAccount = a;
-                            break;
-                        }
-                    }
-                    if (freeAccount >= 0) {
-                        LaunchActivity.this.presentFragment(new LoginActivity(freeAccount));
-                    }
-                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 }
             }
         });
@@ -459,15 +451,16 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         Theme.loadWallpaper();
         this.passcodeView = new PasscodeView(this);
         this.drawerLayoutContainer.addView(this.passcodeView, LayoutHelper.createFrame(-1, -1.0f));
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeOtherAppActivities, this);
-        this.currentConnectionState = ConnectionsManager.getAccountInstance().getConnectionState();
         checkCurrentAccount();
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeOtherAppActivities, this);
+        this.currentConnectionState = ConnectionsManager.getInstance(this.currentAccount).getConnectionState();
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.reloadInterface);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.suggestedLangpack);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetNewTheme);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.closeOtherAppActivities);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetPasscode);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetNewWallpapper);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.notificationsCountUpdated);
         if (this.actionBarLayout.fragmentsStack.isEmpty()) {
             if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
                 DialogsActivity dialogsActivity = new DialogsActivity(null);
@@ -850,7 +843,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 View view = getWindow().getDecorView().getRootView();
                 ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
                 final View view2 = view;
-                OnGlobalLayoutListener anonymousClass6 = new OnGlobalLayoutListener() {
+                OnGlobalLayoutListener anonymousClass5 = new OnGlobalLayoutListener() {
                     public void onGlobalLayout() {
                         int height = view2.getMeasuredHeight();
                         if (VERSION.SDK_INT >= 21) {
@@ -862,8 +855,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         }
                     }
                 };
-                this.onGlobalLayoutListener = anonymousClass6;
-                viewTreeObserver.addOnGlobalLayoutListener(anonymousClass6);
+                this.onGlobalLayoutListener = anonymousClass5;
+                viewTreeObserver.addOnGlobalLayoutListener(anonymousClass5);
             }
         } catch (Throwable e222) {
             FileLog.e(e222);
@@ -2166,7 +2159,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         } else if (lower_part < 0) {
             args.putInt("chat_id", -lower_part);
         }
-        if (MessagesController.getAccountInstance().checkCanOpenChat(args, dialogsFragment)) {
+        if (MessagesController.getInstance(dialogsFragment.getCurrentAccount()).checkCanOpenChat(args, dialogsFragment)) {
             boolean z;
             boolean z2;
             ChatActivity fragment = new ChatActivity(args);
@@ -2236,6 +2229,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didSetNewTheme);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.closeOtherAppActivities);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didSetPasscode);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.notificationsCountUpdated);
         }
     }
 
@@ -2557,7 +2551,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             }
         } else if (id == NotificationCenter.didSetNewWallpapper) {
             if (this.sideMenu != null) {
-                View child = this.sideMenu.getChildAt(0);
+                child = this.sideMenu.getChildAt(0);
                 if (child != null) {
                     child.invalidate();
                 }
@@ -2628,6 +2622,16 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 try {
                     setTaskDescription(new TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault) | Theme.ACTION_BAR_VIDEO_EDIT_COLOR));
                 } catch (Exception e3) {
+                }
+            }
+        } else if (id == NotificationCenter.notificationsCountUpdated && this.sideMenu != null) {
+            Integer accountNum = args[0];
+            int count = this.sideMenu.getChildCount();
+            for (int a = 0; a < count; a++) {
+                child = this.sideMenu.getChildAt(a);
+                if ((child instanceof DrawerUserCell) && ((DrawerUserCell) child).getAccountNumber() == accountNum.intValue()) {
+                    child.invalidate();
+                    return;
                 }
             }
         }
@@ -2809,7 +2813,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         req.keys.add("ChooseYourLanguage");
                         req.keys.add("ChooseYourLanguageOther");
                         req.keys.add("ChangeLanguageLater");
-                        ConnectionsManager.getAccountInstance().sendRequest(req, new RequestDelegate() {
+                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                             public void run(TLObject response, TL_error error) {
                                 final HashMap<String, String> keys = new HashMap();
                                 if (response != null) {
@@ -2835,7 +2839,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         req.keys.add("ChooseYourLanguage");
                         req.keys.add("ChooseYourLanguageOther");
                         req.keys.add("ChangeLanguageLater");
-                        ConnectionsManager.getAccountInstance().sendRequest(req, new RequestDelegate() {
+                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                             public void run(TLObject response, TL_error error) {
                                 final HashMap<String, String> keys = new HashMap();
                                 if (response != null) {
@@ -2872,7 +2876,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             this.lockRunnable = null;
         }
         if (SharedConfig.passcodeHash.length() != 0) {
-            SharedConfig.lastPauseTime = ConnectionsManager.getAccountInstance().getCurrentTime();
+            SharedConfig.lastPauseTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
             this.lockRunnable = new Runnable() {
                 public void run() {
                     if (LaunchActivity.this.lockRunnable == this) {

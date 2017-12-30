@@ -424,15 +424,15 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
             int high_id = (int) (did >> 32);
             User user;
             if (lower_id == 0) {
-                user = MessagesController.getAccountInstance().getUser(Integer.valueOf(MessagesController.getAccountInstance().getEncryptedChat(Integer.valueOf(high_id)).user_id));
+                user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf(high_id)).user_id));
                 this.avatarContainer.setTitle(ContactsController.formatName(user.first_name, user.last_name));
                 this.avatarContainer.setUserAvatar(user);
             } else if (lower_id > 0) {
-                user = MessagesController.getAccountInstance().getUser(Integer.valueOf(lower_id));
+                user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_id));
                 this.avatarContainer.setTitle(ContactsController.formatName(user.first_name, user.last_name));
                 this.avatarContainer.setUserAvatar(user);
             } else {
-                Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-lower_id));
+                Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lower_id));
                 this.avatarContainer.setTitle(chat.title);
                 this.avatarContainer.setChatAvatar(chat);
             }
@@ -1017,14 +1017,14 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                     User currentUser;
                     Chat currentChat;
                     if (lower_id > 0) {
-                        currentUser = MessagesController.getAccountInstance().getUser(Integer.valueOf(lower_id));
+                        currentUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_id));
                         currentChat = null;
                     } else {
                         currentUser = null;
-                        currentChat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-lower_id));
+                        currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lower_id));
                     }
                     if (!(currentUser == null && ChatObject.isChannel(currentChat))) {
-                        int currentDate = ConnectionsManager.getAccountInstance().getCurrentTime();
+                        int currentDate = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
                         if (!((currentUser == null || currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId()) && currentChat == null) && ((messageObject.messageOwner.action == null || (messageObject.messageOwner.action instanceof TL_messageActionEmpty)) && messageObject.isOut() && currentDate - messageObject.messageOwner.date <= 172800)) {
                             int dp;
                             int dp2;
@@ -1079,9 +1079,9 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                         if (((int) messageObject2.getDialogId()) == 0 && messageObject2.messageOwner.random_id != 0) {
                             random_ids = new ArrayList();
                             random_ids.add(Long.valueOf(messageObject2.messageOwner.random_id));
-                            encryptedChat = MessagesController.getAccountInstance().getEncryptedChat(Integer.valueOf((int) (messageObject2.getDialogId() >> 32)));
+                            encryptedChat = MessagesController.getInstance(AudioPlayerAlert.this.currentAccount).getEncryptedChat(Integer.valueOf((int) (messageObject2.getDialogId() >> 32)));
                         }
-                        MessagesController.getAccountInstance().deleteMessages(arr, random_ids, encryptedChat, messageObject2.messageOwner.to_id.channel_id, zArr2[0]);
+                        MessagesController.getInstance(AudioPlayerAlert.this.currentAccount).deleteMessages(arr, random_ids, encryptedChat, messageObject2.messageOwner.to_id.channel_id, zArr2[0]);
                     }
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -1101,7 +1101,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 } else if (lower_part > 0) {
                     args.putInt("user_id", lower_part);
                 } else if (lower_part < 0) {
-                    Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-lower_part));
+                    Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lower_part));
                     if (!(chat == null || chat.migrated_to == null)) {
                         args.putInt("migrated_to", lower_part);
                         lower_part = -chat.migrated_to.channel_id;

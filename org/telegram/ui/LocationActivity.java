@@ -416,7 +416,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     } else if (LocationActivity.this.delegate != null && LocationActivity.this.getParentActivity() != null && LocationActivity.this.myLocation != null) {
                         User user = null;
                         if (((int) LocationActivity.this.dialogId) > 0) {
-                            user = MessagesController.getAccountInstance().getUser(Integer.valueOf((int) LocationActivity.this.dialogId));
+                            user = MessagesController.getInstance(LocationActivity.this.currentAccount).getUser(Integer.valueOf((int) LocationActivity.this.dialogId));
                         }
                         LocationActivity.this.showDialog(AlertsCreator.createLocationUpdateDialog(LocationActivity.this.getParentActivity(), user, new IntCallback() {
                             public void run(int param) {
@@ -447,7 +447,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.mapView = new MapView(context) {
             public boolean onInterceptTouchEvent(MotionEvent ev) {
                 if (LocationActivity.this.messageObject == null) {
-                    AnimatorSet access$2200;
+                    AnimatorSet access$2300;
                     Animator[] animatorArr;
                     if (ev.getAction() == 0) {
                         if (LocationActivity.this.animatorSet != null) {
@@ -455,11 +455,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         }
                         LocationActivity.this.animatorSet = new AnimatorSet();
                         LocationActivity.this.animatorSet.setDuration(200);
-                        access$2200 = LocationActivity.this.animatorSet;
+                        access$2300 = LocationActivity.this.animatorSet;
                         animatorArr = new Animator[2];
                         animatorArr[0] = ObjectAnimator.ofFloat(LocationActivity.this.markerImageView, "translationY", new float[]{(float) (LocationActivity.this.markerTop + (-AndroidUtilities.dp(10.0f)))});
                         animatorArr[1] = ObjectAnimator.ofFloat(LocationActivity.this.markerXImageView, "alpha", new float[]{1.0f});
-                        access$2200.playTogether(animatorArr);
+                        access$2300.playTogether(animatorArr);
                         LocationActivity.this.animatorSet.start();
                     } else if (ev.getAction() == 1) {
                         if (LocationActivity.this.animatorSet != null) {
@@ -467,11 +467,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         }
                         LocationActivity.this.animatorSet = new AnimatorSet();
                         LocationActivity.this.animatorSet.setDuration(200);
-                        access$2200 = LocationActivity.this.animatorSet;
+                        access$2300 = LocationActivity.this.animatorSet;
                         animatorArr = new Animator[2];
                         animatorArr[0] = ObjectAnimator.ofFloat(LocationActivity.this.markerImageView, "translationY", new float[]{(float) LocationActivity.this.markerTop});
                         animatorArr[1] = ObjectAnimator.ofFloat(LocationActivity.this.markerXImageView, "alpha", new float[]{0.0f});
-                        access$2200.playTogether(animatorArr);
+                        access$2300.playTogether(animatorArr);
                         LocationActivity.this.animatorSet.start();
                     }
                     if (ev.getAction() == 2) {
@@ -742,15 +742,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             liveLocation = new LiveLocation();
             liveLocation.object = message;
             if (liveLocation.object.from_id != 0) {
-                liveLocation.user = MessagesController.getAccountInstance().getUser(Integer.valueOf(liveLocation.object.from_id));
+                liveLocation.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(liveLocation.object.from_id));
                 liveLocation.id = liveLocation.object.from_id;
             } else {
                 int did = (int) MessageObject.getDialogId(message);
                 if (did > 0) {
-                    liveLocation.user = MessagesController.getAccountInstance().getUser(Integer.valueOf(did));
+                    liveLocation.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(did));
                     liveLocation.id = did;
                 } else {
-                    liveLocation.chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-did));
+                    liveLocation.chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-did));
                     liveLocation.id = -did;
                 }
             }
@@ -1096,10 +1096,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         } else {
             fetchRecentLocations(messages);
         }
-        final MessagesController messagesController = MessagesController.getAccountInstance();
         TL_messages_getRecentLocations req = new TL_messages_getRecentLocations();
         final long dialog_id = this.messageObject.getDialogId();
-        req.peer = messagesController.getInputPeer((int) dialog_id);
+        req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) dialog_id);
         req.limit = 100;
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
             public void run(final TLObject response, TL_error error) {
@@ -1117,8 +1116,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                                     a++;
                                 }
                                 MessagesStorage.getInstance(LocationActivity.this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
-                                messagesController.putUsers(res.users, false);
-                                messagesController.putChats(res.chats, false);
+                                MessagesController.getInstance(LocationActivity.this.currentAccount).putUsers(res.users, false);
+                                MessagesController.getInstance(LocationActivity.this.currentAccount).putChats(res.chats, false);
                                 LocationController.getInstance(LocationActivity.this.currentAccount).locationsCache.put(Long.valueOf(dialog_id), res.messages);
                                 NotificationCenter.getInstance(LocationActivity.this.currentAccount).postNotificationName(NotificationCenter.liveLocationsCacheChanged, Long.valueOf(dialog_id));
                                 LocationActivity.this.fetchRecentLocations(res.messages);

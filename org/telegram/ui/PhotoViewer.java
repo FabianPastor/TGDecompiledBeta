@@ -997,11 +997,16 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
 
         public boolean onTouchEvent(MotionEvent event) {
-            boolean result = this.gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
-            if (this.scrolling && event.getAction() == 1 && this.scroll.isFinished()) {
-                stopScrolling();
+            boolean z = false;
+            if (!this.currentPhotos.isEmpty()) {
+                if (this.gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)) {
+                    z = true;
+                }
+                if (this.scrolling && event.getAction() == 1 && this.scroll.isFinished()) {
+                    stopScrolling();
+                }
             }
-            return result;
+            return z;
         }
 
         private int getMinScrollX() {
@@ -1915,7 +1920,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         setImageIndex(0, true);
                     }
                     if (fromCache) {
-                        MessagesController.getAccountInstance().loadDialogPhotos(this.avatarsDialogId, 80, 0, false, this.classGuid);
+                        MessagesController.getInstance(this.currentAccount).loadDialogPhotos(this.avatarsDialogId, 80, 0, false, this.classGuid);
                     }
                 }
             }
@@ -1930,7 +1935,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 if (this.needSearchImageInArr && this.isFirstLoading) {
                     this.isFirstLoading = false;
                     this.loadingMoreImages = true;
-                    DataQuery.getAccountInstance().loadMedia(this.currentDialogId, 80, 0, 0, true, this.classGuid);
+                    DataQuery.getInstance(this.currentAccount).loadMedia(this.currentDialogId, 80, 0, 0, true, this.classGuid);
                 } else if (!this.imagesArr.isEmpty()) {
                     if (this.opennedFromMedia) {
                         this.actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, Integer.valueOf(this.currentIndex + 1), Integer.valueOf(this.totalImagesCount + this.totalImagesCountMerge)));
@@ -2047,16 +2052,16 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         this.loadingMoreImages = true;
                         if (this.opennedFromMedia) {
                             long j;
-                            DataQuery accountInstance = DataQuery.getAccountInstance();
+                            DataQuery instance = DataQuery.getInstance(this.currentAccount);
                             if (loadIndex == 0) {
                                 j = this.currentDialogId;
                             } else {
                                 j = this.mergeDialogId;
                             }
-                            accountInstance.loadMedia(j, 80, loadFromMaxId, 0, true, this.classGuid);
+                            instance.loadMedia(j, 80, loadFromMaxId, 0, true, this.classGuid);
                             return;
                         }
-                        DataQuery.getAccountInstance().loadMedia(loadIndex == 0 ? this.currentDialogId : this.mergeDialogId, 80, loadFromMaxId, 0, true, this.classGuid);
+                        DataQuery.getInstance(this.currentAccount).loadMedia(loadIndex == 0 ? this.currentDialogId : this.mergeDialogId, 80, loadFromMaxId, 0, true, this.classGuid);
                     }
                 } else {
                     this.needSearchImageInArr = false;
@@ -2410,7 +2415,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             } else if (lower_part > 0) {
                                 args.putInt("user_id", lower_part);
                             } else if (lower_part < 0) {
-                                Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-lower_part));
+                                Chat chat = MessagesController.getInstance(PhotoViewer.this.currentAccount).getChat(Integer.valueOf(-lower_part));
                                 if (!(chat == null || chat.migrated_to == null)) {
                                     args.putInt("migrated_to", lower_part);
                                     lower_part = -chat.migrated_to.channel_id;
@@ -2489,14 +2494,14 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                     User currentUser;
                                     Chat currentChat;
                                     if (lower_id > 0) {
-                                        currentUser = MessagesController.getAccountInstance().getUser(Integer.valueOf(lower_id));
+                                        currentUser = MessagesController.getInstance(PhotoViewer.this.currentAccount).getUser(Integer.valueOf(lower_id));
                                         currentChat = null;
                                     } else {
                                         currentUser = null;
-                                        currentChat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-lower_id));
+                                        currentChat = MessagesController.getInstance(PhotoViewer.this.currentAccount).getChat(Integer.valueOf(-lower_id));
                                     }
                                     if (!(currentUser == null && ChatObject.isChannel(currentChat))) {
-                                        int currentDate = ConnectionsManager.getAccountInstance().getCurrentTime();
+                                        int currentDate = ConnectionsManager.getInstance(PhotoViewer.this.currentAccount).getCurrentTime();
                                         if (!((currentUser == null || currentUser.id == UserConfig.getInstance(PhotoViewer.this.currentAccount).getClientUserId()) && currentChat == null) && ((PhotoViewer.this.currentMessageObject.messageOwner.action == null || (PhotoViewer.this.currentMessageObject.messageOwner.action instanceof TL_messageActionEmpty)) && PhotoViewer.this.currentMessageObject.isOut() && currentDate - PhotoViewer.this.currentMessageObject.messageOwner.date <= 172800)) {
                                             int dp;
                                             View frameLayout = new FrameLayout(PhotoViewer.this.parentActivity);
@@ -2565,14 +2570,14 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                                 }
                                             }
                                             if (current) {
-                                                MessagesController.getAccountInstance().deleteUserPhoto(null);
+                                                MessagesController.getInstance(PhotoViewer.this.currentAccount).deleteUserPhoto(null);
                                                 PhotoViewer.this.closePhoto(false, false);
                                             } else if (photo != null) {
                                                 TL_inputPhoto inputPhoto = new TL_inputPhoto();
                                                 inputPhoto.id = photo.id;
                                                 inputPhoto.access_hash = photo.access_hash;
-                                                MessagesController.getAccountInstance().deleteUserPhoto(inputPhoto);
-                                                MessagesStorage.getAccountInstance().clearUserPhoto(PhotoViewer.this.avatarsDialogId, photo.id);
+                                                MessagesController.getInstance(PhotoViewer.this.currentAccount).deleteUserPhoto(inputPhoto);
+                                                MessagesStorage.getInstance(PhotoViewer.this.currentAccount).clearUserPhoto(PhotoViewer.this.avatarsDialogId, photo.id);
                                                 PhotoViewer.this.imagesArrLocations.remove(PhotoViewer.this.currentIndex);
                                                 PhotoViewer.this.imagesArrLocationsSizes.remove(PhotoViewer.this.currentIndex);
                                                 PhotoViewer.this.avatarsArr.remove(PhotoViewer.this.currentIndex);
@@ -2603,9 +2608,9 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                             if (((int) obj.getDialogId()) == 0 && obj.messageOwner.random_id != 0) {
                                                 random_ids = new ArrayList();
                                                 random_ids.add(Long.valueOf(obj.messageOwner.random_id));
-                                                encryptedChat = MessagesController.getAccountInstance().getEncryptedChat(Integer.valueOf((int) (obj.getDialogId() >> 32)));
+                                                encryptedChat = MessagesController.getInstance(PhotoViewer.this.currentAccount).getEncryptedChat(Integer.valueOf((int) (obj.getDialogId() >> 32)));
                                             }
-                                            MessagesController.getAccountInstance().deleteMessages(arr, random_ids, encryptedChat, obj.messageOwner.to_id.channel_id, zArr[0]);
+                                            MessagesController.getInstance(PhotoViewer.this.currentAccount).deleteMessages(arr, random_ids, encryptedChat, obj.messageOwner.to_id.channel_id, zArr[0]);
                                         }
                                     }
                                 }
@@ -4921,8 +4926,6 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     siteName = siteName.toLowerCase();
                     if (!siteName.equals("instagram")) {
                         if (!siteName.equals("twitter")) {
-                            if (!siteName.equals("telegram")) {
-                            }
                         }
                     }
                     if (!TextUtils.isEmpty(webPage.author)) {
@@ -5033,12 +5036,12 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
         if (this.currentAnimation == null && !this.isEvent) {
             if (this.currentDialogId != 0 && this.totalImagesCount == 0) {
-                DataQuery.getAccountInstance().getMediaCount(this.currentDialogId, 0, this.classGuid, true);
+                DataQuery.getInstance(this.currentAccount).getMediaCount(this.currentDialogId, 0, this.classGuid, true);
                 if (this.mergeDialogId != 0) {
-                    DataQuery.getAccountInstance().getMediaCount(this.mergeDialogId, 0, this.classGuid, true);
+                    DataQuery.getInstance(this.currentAccount).getMediaCount(this.mergeDialogId, 0, this.classGuid, true);
                 }
             } else if (this.avatarsDialogId != 0) {
-                MessagesController.getAccountInstance().loadDialogPhotos(this.avatarsDialogId, 80, 0, true, this.classGuid);
+                MessagesController.getInstance(this.currentAccount).loadDialogPhotos(this.avatarsDialogId, 80, 0, true, this.classGuid);
             }
         }
         if ((this.currentMessageObject != null && this.currentMessageObject.isVideo()) || (this.currentBotInlineResult != null && (this.currentBotInlineResult.type.equals(MimeTypes.BASE_TYPE_VIDEO) || MessageObject.isVideoDocument(this.currentBotInlineResult.document)))) {
@@ -5290,14 +5293,14 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     if (this.nameOverride != null) {
                         this.nameTextView.setText(this.nameOverride);
                     } else if (this.currentMessageObject.isFromUser()) {
-                        user = MessagesController.getAccountInstance().getUser(Integer.valueOf(this.currentMessageObject.messageOwner.from_id));
+                        user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentMessageObject.messageOwner.from_id));
                         if (user != null) {
                             this.nameTextView.setText(UserObject.getUserName(user));
                         } else {
                             this.nameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
                         }
                     } else {
-                        chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(this.currentMessageObject.messageOwner.to_id.channel_id));
+                        chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.currentMessageObject.messageOwner.to_id.channel_id));
                         if (chat != null) {
                             this.nameTextView.setText(chat.title);
                         } else {
@@ -5347,7 +5350,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                     loadFromMaxId = 0;
                                 }
                             }
-                            DataQuery.getAccountInstance().loadMedia(loadIndex == 0 ? this.currentDialogId : this.mergeDialogId, 80, loadFromMaxId, 0, true, this.classGuid);
+                            DataQuery.getInstance(this.currentAccount).loadMedia(loadIndex == 0 ? this.currentDialogId : this.mergeDialogId, 80, loadFromMaxId, 0, true, this.classGuid);
                             this.loadingMoreImages = true;
                         }
                         this.actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, Integer.valueOf(this.currentIndex + 1), Integer.valueOf(this.totalImagesCount + this.totalImagesCountMerge)));
@@ -5361,7 +5364,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                     loadFromMaxId = 0;
                                 }
                             }
-                            DataQuery.getAccountInstance().loadMedia(loadIndex == 0 ? this.currentDialogId : this.mergeDialogId, 80, loadFromMaxId, 0, true, this.classGuid);
+                            DataQuery.getInstance(this.currentAccount).loadMedia(loadIndex == 0 ? this.currentDialogId : this.mergeDialogId, 80, loadFromMaxId, 0, true, this.classGuid);
                             this.loadingMoreImages = true;
                         }
                         this.actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, Integer.valueOf((((this.totalImagesCount + this.totalImagesCountMerge) - this.imagesArr.size()) + this.currentIndex) + 1), Integer.valueOf(this.totalImagesCount + this.totalImagesCountMerge)));
@@ -6117,7 +6120,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
                         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FilePreparingFailed);
                         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileNewChunkAvailable);
-                        ConnectionsManager.getAccountInstance().cancelRequestsForGuid(this.classGuid);
+                        ConnectionsManager.getInstance(this.currentAccount).cancelRequestsForGuid(this.classGuid);
                         this.isActionBarVisible = false;
                         if (this.velocityTracker != null) {
                             this.velocityTracker.recycle();

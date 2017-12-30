@@ -90,6 +90,7 @@ public class NotificationCenter {
     public static final int needShowAlert;
     public static final int newDraftReceived;
     public static final int newSessionReceived;
+    public static final int notificationsCountUpdated;
     public static final int notificationsSettingsUpdated;
     public static final int openArticle;
     public static final int openedChatChanged;
@@ -484,6 +485,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         liveLocationsCacheChanged = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        notificationsCountUpdated = i;
     }
 
     public static NotificationCenter getInstance(int num) {

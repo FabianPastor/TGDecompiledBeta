@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
@@ -524,11 +523,7 @@ public class LocationController implements NotificationCenterDelegate {
 
     private void startService() {
         try {
-            if (VERSION.SDK_INT >= 26) {
-                ApplicationLoader.applicationContext.startForegroundService(new Intent(ApplicationLoader.applicationContext, LocationSharingService.class));
-            } else {
-                ApplicationLoader.applicationContext.startService(new Intent(ApplicationLoader.applicationContext, LocationSharingService.class));
-            }
+            ApplicationLoader.applicationContext.startService(new Intent(ApplicationLoader.applicationContext, LocationSharingService.class));
         } catch (Throwable e) {
             FileLog.e(e);
         }

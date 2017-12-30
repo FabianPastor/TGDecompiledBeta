@@ -11,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
+import android.support.annotation.Keep;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -33,7 +34,6 @@ public class DrawerLayoutContainer extends FrameLayout {
     private boolean allowOpenDrawer;
     private boolean beginTrackingSent;
     private AnimatorSet currentAnimation;
-    private DrawerLayoutContainerDelegate delegate;
     private ViewGroup drawerLayout;
     private boolean drawerOpened;
     private float drawerPosition;
@@ -51,10 +51,6 @@ public class DrawerLayoutContainer extends FrameLayout {
     private int startedTrackingX;
     private int startedTrackingY;
     private VelocityTracker velocityTracker;
-
-    public interface DrawerLayoutContainerDelegate {
-        void onDrawerClosed();
-    }
 
     public DrawerLayoutContainer(Context context) {
         super(context);
@@ -77,10 +73,6 @@ public class DrawerLayoutContainer extends FrameLayout {
             setSystemUiVisibility(1280);
         }
         this.shadowLeft = getResources().getDrawable(R.drawable.menu_shadow);
-    }
-
-    public void setDelegate(DrawerLayoutContainerDelegate drawerLayoutContainerDelegate) {
-        this.delegate = drawerLayoutContainerDelegate;
     }
 
     @SuppressLint({"NewApi"})
@@ -131,6 +123,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         setDrawerPosition(this.drawerPosition + dx);
     }
 
+    @Keep
     public void setDrawerPosition(float value) {
         this.drawerPosition = value;
         if (this.drawerPosition > ((float) this.drawerLayout.getMeasuredWidth())) {
@@ -207,9 +200,6 @@ public class DrawerLayoutContainer extends FrameLayout {
         this.startedTracking = false;
         this.currentAnimation = null;
         this.drawerOpened = opened;
-        if (!(this.delegate == null || opened)) {
-            this.delegate.onDrawerClosed();
-        }
         if (!opened && (this.drawerLayout instanceof ListView)) {
             ((ListView) this.drawerLayout).setSelectionFromTop(0, 0);
         }

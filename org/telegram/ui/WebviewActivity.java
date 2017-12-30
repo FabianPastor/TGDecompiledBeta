@@ -58,7 +58,7 @@ public class WebviewActivity extends BaseFragment {
     public Runnable typingRunnable = new Runnable() {
         public void run() {
             if (WebviewActivity.this.currentMessageObject != null && WebviewActivity.this.getParentActivity() != null && WebviewActivity.this.typingRunnable != null) {
-                MessagesController.getAccountInstance().sendTyping(WebviewActivity.this.currentMessageObject.getDialogId(), 6, 0);
+                MessagesController.getInstance(WebviewActivity.this.currentAccount).sendTyping(WebviewActivity.this.currentMessageObject.getDialogId(), 6, 0);
                 AndroidUtilities.runOnUIThread(WebviewActivity.this.typingRunnable, 25000);
             }
         }
@@ -112,7 +112,7 @@ public class WebviewActivity extends BaseFragment {
         this.currentGame = gameName;
         this.currentMessageObject = messageObject;
         this.short_param = startParam;
-        this.linkToCopy = "https://" + MessagesController.getAccountInstance().linkPrefix + "/" + this.currentBot + (TextUtils.isEmpty(startParam) ? TtmlNode.ANONYMOUS_REGION_ID : "?game=" + startParam);
+        this.linkToCopy = "https://" + MessagesController.getInstance(this.currentAccount).linkPrefix + "/" + this.currentBot + (TextUtils.isEmpty(startParam) ? TtmlNode.ANONYMOUS_REGION_ID : "?game=" + startParam);
     }
 
     public void onFragmentDestroy() {
@@ -271,7 +271,7 @@ public class WebviewActivity extends BaseFragment {
             SerializedData serializedData = new SerializedData(messageObject.messageOwner.getObjectSize());
             messageObject.messageOwner.serializeToStream(serializedData);
             editor.putString(hash + "_m", Utilities.bytesToHex(serializedData.toByteArray()));
-            editor.putString(hash + "_link", "https://" + MessagesController.getAccountInstance().linkPrefix + "/" + username + (TextUtils.isEmpty(short_name) ? TtmlNode.ANONYMOUS_REGION_ID : "?game=" + short_name));
+            editor.putString(hash + "_link", "https://" + MessagesController.getInstance(messageObject.currentAccount).linkPrefix + "/" + username + (TextUtils.isEmpty(short_name) ? TtmlNode.ANONYMOUS_REGION_ID : "?game=" + short_name));
             editor.commit();
             Browser.openUrl((Context) parentActivity, url, false);
         } catch (Throwable e) {

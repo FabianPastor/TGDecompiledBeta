@@ -193,7 +193,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.user_id));
             if (user != null) {
                 this.nameTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
-                this.onlineTextView.setText(LocaleController.formatUserStatus(user));
+                this.onlineTextView.setText(LocaleController.formatUserStatus(this.currentAccount, user));
                 TLObject photo = null;
                 if (user.photo != null) {
                     photo = user.photo.photo_small;

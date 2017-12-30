@@ -12,6 +12,7 @@ import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -25,6 +26,7 @@ import org.telegram.ui.Components.URLSpanNoUnderline;
 public class AdminedChannelCell extends FrameLayout {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private BackupImageView avatarImageView;
+    private int currentAccount = UserConfig.selectedAccount;
     private Chat currentChannel;
     private ImageView deleteButton;
     private boolean isLast;
@@ -60,7 +62,7 @@ public class AdminedChannelCell extends FrameLayout {
         if (channel.photo != null) {
             photo = channel.photo.photo_small;
         }
-        String url = MessagesController.getAccountInstance().linkPrefix + "/";
+        String url = MessagesController.getInstance(this.currentAccount).linkPrefix + "/";
         this.currentChannel = channel;
         this.avatarDrawable.setInfo(channel);
         this.nameTextView.setText(channel.title);

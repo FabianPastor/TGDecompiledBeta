@@ -217,7 +217,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         checkCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsServiceConnection", R.string.NotificationsServiceConnection), LocaleController.getString("NotificationsServiceConnectionInfo", R.string.NotificationsServiceConnectionInfo), preferences.getBoolean("pushConnection", true), true, true);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.badgeNumberRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("BadgeNumber", R.string.BadgeNumber), preferences.getBoolean("badgeNumber", true), true);
+                        checkCell.setTextAndCheck(LocaleController.getString("BadgeNumber", R.string.BadgeNumber), NotificationsController.getInstance(NotificationsSettingsActivity.this.currentAccount).showBadgeNumber, true);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.inchatSoundRow) {
                         checkCell.setTextAndCheck(LocaleController.getString("InChatSound", R.string.InChatSound), preferences.getBoolean("EnableInChatSound", true), true);
@@ -709,10 +709,10 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     editor.putBoolean("EnableAutoNotifications", !enabled);
                     editor.commit();
                 } else if (position == NotificationsSettingsActivity.this.badgeNumberRow) {
-                    preferences = MessagesController.getNotificationsSettings(NotificationsSettingsActivity.this.currentAccount);
-                    editor = preferences.edit();
-                    enabled = preferences.getBoolean("badgeNumber", true);
-                    editor.putBoolean("badgeNumber", !enabled);
+                    editor = MessagesController.getNotificationsSettings(NotificationsSettingsActivity.this.currentAccount).edit();
+                    enabled = NotificationsController.getInstance(NotificationsSettingsActivity.this.currentAccount).showBadgeNumber;
+                    NotificationsController.getInstance(NotificationsSettingsActivity.this.currentAccount).showBadgeNumber = !enabled;
+                    editor.putBoolean("badgeNumber", NotificationsController.getInstance(NotificationsSettingsActivity.this.currentAccount).showBadgeNumber);
                     editor.commit();
                     NotificationsController.getInstance(NotificationsSettingsActivity.this.currentAccount).setBadgeEnabled(!enabled);
                 } else if (position == NotificationsSettingsActivity.this.notificationsServiceConnectionRow) {

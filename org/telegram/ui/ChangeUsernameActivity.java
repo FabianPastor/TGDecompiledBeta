@@ -117,7 +117,7 @@ public class ChangeUsernameActivity extends BaseFragment {
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
-        User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
+        User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
         if (user == null) {
             user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
         }
@@ -166,7 +166,7 @@ public class ChangeUsernameActivity extends BaseFragment {
 
             public void afterTextChanged(Editable editable) {
                 if (ChangeUsernameActivity.this.firstNameField.length() > 0) {
-                    String url = "https://" + MessagesController.getAccountInstance().linkPrefix + "/" + ChangeUsernameActivity.this.firstNameField.getText();
+                    String url = "https://" + MessagesController.getInstance(ChangeUsernameActivity.this.currentAccount).linkPrefix + "/" + ChangeUsernameActivity.this.firstNameField.getText();
                     String text = LocaleController.formatString("UsernameHelpLink", R.string.UsernameHelpLink, url);
                     int index = text.indexOf(url);
                     SpannableStringBuilder textSpan = new SpannableStringBuilder(text);
@@ -352,7 +352,6 @@ public class ChangeUsernameActivity extends BaseFragment {
                 progressDialog.setCancelable(false);
                 final TL_account_updateUsername req = new TL_account_updateUsername();
                 req.username = newName;
-                final MessagesController messagesController = MessagesController.getAccountInstance();
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
                 final int reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, final TL_error error) {
@@ -367,7 +366,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                                     }
                                     ArrayList<User> users = new ArrayList();
                                     users.add(user);
-                                    messagesController.putUsers(users, false);
+                                    MessagesController.getInstance(ChangeUsernameActivity.this.currentAccount).putUsers(users, false);
                                     MessagesStorage.getInstance(ChangeUsernameActivity.this.currentAccount).putUsersAndChats(users, null, false, true);
                                     UserConfig.getInstance(ChangeUsernameActivity.this.currentAccount).saveConfig(true);
                                     ChangeUsernameActivity.this.finishFragment();

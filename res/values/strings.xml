@@ -1130,7 +1130,7 @@
     <string name="OpenGroup">OPEN GROUP</string>
     <string name="OpenInBrowser">OPEN IN...</string>
     <string name="OpenInExternalApp">Open in...</string>
-    <string name="OpenMessage">OPEN MESSAGE</string>
+    <string name="OpenMessage">VIEW MESSAGE</string>
     <string name="OpenUrlAlert">Open url %1$s?</string>
     <string name="OtherSessions">Active Sessions</string>
     <string name="OutgoingCalls">Outgoing calls</string>

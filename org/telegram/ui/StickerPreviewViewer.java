@@ -31,6 +31,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
@@ -51,6 +52,7 @@ public class StickerPreviewViewer {
     private ColorDrawable backgroundDrawable = new ColorDrawable(NUM);
     private ImageReceiver centerImage = new ImageReceiver();
     private FrameLayoutDrawer containerView;
+    private int currentAccount;
     private InputStickerSet currentSet;
     private Document currentSticker;
     private View currentStickerPreviewCell;
@@ -64,7 +66,7 @@ public class StickerPreviewViewer {
     private Runnable showSheetRunnable = new Runnable() {
         public void run() {
             if (StickerPreviewViewer.this.parentActivity != null && StickerPreviewViewer.this.currentSet != null) {
-                final boolean inFavs = DataQuery.getAccountInstance().isStickerInFavorites(StickerPreviewViewer.this.currentSticker);
+                final boolean inFavs = DataQuery.getInstance(StickerPreviewViewer.this.currentAccount).isStickerInFavorites(StickerPreviewViewer.this.currentSticker);
                 Builder builder = new Builder(StickerPreviewViewer.this.parentActivity);
                 ArrayList<CharSequence> items = new ArrayList();
                 final ArrayList<Integer> actions = new ArrayList();
@@ -77,7 +79,7 @@ public class StickerPreviewViewer {
                     icons.add(Integer.valueOf(R.drawable.stickers_pack));
                     actions.add(Integer.valueOf(1));
                 }
-                if (!MessageObject.isMaskDocument(StickerPreviewViewer.this.currentSticker) && (inFavs || DataQuery.getAccountInstance().canAddStickerToFavorites())) {
+                if (!MessageObject.isMaskDocument(StickerPreviewViewer.this.currentSticker) && (inFavs || DataQuery.getInstance(StickerPreviewViewer.this.currentAccount).canAddStickerToFavorites())) {
                     items.add(inFavs ? LocaleController.getString("DeleteFromFavorites", R.string.DeleteFromFavorites) : LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
                     icons.add(Integer.valueOf(inFavs ? R.drawable.stickers_unfavorite : R.drawable.stickers_favorite));
                     actions.add(Integer.valueOf(2));
@@ -99,7 +101,7 @@ public class StickerPreviewViewer {
                                         StickerPreviewViewer.this.delegate.openSet(StickerPreviewViewer.this.currentSet);
                                     }
                                 } else if (((Integer) actions.get(which)).intValue() == 2) {
-                                    DataQuery.getAccountInstance().addRecentSticker(2, StickerPreviewViewer.this.currentSticker, (int) (System.currentTimeMillis() / 1000), inFavs);
+                                    DataQuery.getInstance(StickerPreviewViewer.this.currentAccount).addRecentSticker(2, StickerPreviewViewer.this.currentSticker, (int) (System.currentTimeMillis() / 1000), inFavs);
                                 }
                             }
                         }
@@ -377,6 +379,7 @@ public class StickerPreviewViewer {
     }
 
     public void setParentActivity(Activity activity) {
+        this.currentAccount = UserConfig.selectedAccount;
         if (this.parentActivity != activity) {
             this.parentActivity = activity;
             this.windowView = new FrameLayout(activity);

@@ -2724,7 +2724,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 } else if (this.isBot) {
                     newString2 = LocaleController.getString("Bot", R.string.Bot);
                 } else {
-                    newString2 = LocaleController.formatUserStatus(user);
+                    newString2 = LocaleController.formatUserStatus(this.currentAccount, user);
                 }
                 for (a = 0; a < 2; a++) {
                     if (this.nameTextView[a] != null) {

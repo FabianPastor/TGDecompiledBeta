@@ -162,14 +162,14 @@ public class GroupCreateUserCell extends FrameLayout {
                 this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
                 this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
                 this.statusTextView.setText(LocaleController.getString("Bot", R.string.Bot));
-            } else if (this.currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getAccountInstance().getCurrentTime()) || MessagesController.getAccountInstance().onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
+            } else if (this.currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
                 this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
                 this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_onlineText));
                 this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
             } else {
                 this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
                 this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
-                this.statusTextView.setText(LocaleController.formatUserStatus(this.currentUser));
+                this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, this.currentUser));
             }
             this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable);
         }

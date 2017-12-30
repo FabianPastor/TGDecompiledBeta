@@ -122,15 +122,15 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
 
         public void fetchDialogs() {
             this.dialogs.clear();
-            for (int a = 0; a < MessagesController.getAccountInstance().dialogsForward.size(); a++) {
-                TL_dialog dialog = (TL_dialog) MessagesController.getAccountInstance().dialogsForward.get(a);
+            for (int a = 0; a < MessagesController.getInstance(ShareAlert.this.currentAccount).dialogsForward.size(); a++) {
+                TL_dialog dialog = (TL_dialog) MessagesController.getInstance(ShareAlert.this.currentAccount).dialogsForward.get(a);
                 int lower_id = (int) dialog.id;
                 int high_id = (int) (dialog.id >> 32);
                 if (!(lower_id == 0 || high_id == 1)) {
                     if (lower_id > 0) {
                         this.dialogs.add(dialog);
                     } else {
-                        Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-lower_id));
+                        Chat chat = MessagesController.getInstance(ShareAlert.this.currentAccount).getChat(Integer.valueOf(-lower_id));
                         if (!(chat == null || ChatObject.isNotInChat(chat) || (ChatObject.isChannel(chat) && !chat.creator && ((chat.admin_rights == null || !chat.admin_rights.post_messages) && !chat.megagroup)))) {
                             this.dialogs.add(dialog);
                         }
@@ -412,9 +412,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                         for (int a = 0; a < result.size(); a++) {
                             DialogSearchResult obj = (DialogSearchResult) result.get(a);
                             if (obj.object instanceof User) {
-                                MessagesController.getAccountInstance().putUser(obj.object, true);
+                                MessagesController.getInstance(ShareAlert.this.currentAccount).putUser(obj.object, true);
                             } else if (obj.object instanceof Chat) {
-                                MessagesController.getAccountInstance().putChat(obj.object, true);
+                                MessagesController.getInstance(ShareAlert.this.currentAccount).putChat(obj.object, true);
                             }
                         }
                         if (ShareSearchAdapter.this.searchResult.isEmpty() || !result.isEmpty()) {
@@ -535,8 +535,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             this.loadingLink = true;
             TL_channels_exportMessageLink req = new TL_channels_exportMessageLink();
             req.id = ((MessageObject) messages.get(0)).getId();
-            req.channel = MessagesController.getAccountInstance().getInputChannel(((MessageObject) messages.get(0)).messageOwner.to_id.channel_id);
-            ConnectionsManager.getAccountInstance().sendRequest(req, new RequestDelegate() {
+            req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(((MessageObject) messages.get(0)).messageOwner.to_id.channel_id);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -816,7 +816,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.containerView.addView(this.shadow2, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         updateSelectedCount();
         if (!DialogsActivity.dialogsLoaded[this.currentAccount]) {
-            MessagesController.getAccountInstance().loadDialogs(0, 100, true);
+            MessagesController.getInstance(this.currentAccount).loadDialogs(0, 100, true);
             ContactsController.getInstance(this.currentAccount).checkInviteText();
             DialogsActivity.dialogsLoaded[this.currentAccount] = true;
         }

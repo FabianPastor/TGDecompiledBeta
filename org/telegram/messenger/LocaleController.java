@@ -1840,7 +1840,7 @@ public class LocaleController {
             int dateDay = rightNow.get(6);
             int dateYear = rightNow.get(1);
             if (dateDay == day && year == dateYear) {
-                int diff = ((int) (((long) ConnectionsManager.getAccountInstance().getCurrentTime()) - (date / 1000))) / 60;
+                int diff = ((int) (((long) ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime()) - (date / 1000))) / 60;
                 if (diff < 1) {
                     return getString("LocationUpdatedJustNow", R.string.LocationUpdatedJustNow);
                 }
@@ -1940,7 +1940,7 @@ public class LocaleController {
             lang = "en";
         }
         lang = lang.toLowerCase();
-        boolean z = lang.startsWith("ar") || (BuildVars.DEBUG_VERSION && (lang.startsWith("he") || lang.startsWith("iw") || lang.startsWith("fa")));
+        boolean z = lang.startsWith("ar") || lang.startsWith("fa") || (BuildVars.DEBUG_VERSION && (lang.startsWith("he") || lang.startsWith("iw")));
         isRTL = z;
         if (lang.equals("ko")) {
             i = 2;
@@ -2031,7 +2031,7 @@ public class LocaleController {
         }
     }
 
-    public static String formatUserStatus(User user) {
+    public static String formatUserStatus(int currentAccount, User user) {
         if (!(user == null || user.status == null || user.status.expires != 0)) {
             if (user.status instanceof TL_userStatusRecently) {
                 user.status.expires = -100;
@@ -2041,13 +2041,13 @@ public class LocaleController {
                 user.status.expires = -102;
             }
         }
-        if (user != null && user.status != null && user.status.expires <= 0 && MessagesController.getAccountInstance().onlinePrivacy.containsKey(Integer.valueOf(user.id))) {
+        if (user != null && user.status != null && user.status.expires <= 0 && MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(Integer.valueOf(user.id))) {
             return getString("Online", R.string.Online);
         }
         if (user == null || user.status == null || user.status.expires == 0 || UserObject.isDeleted(user) || (user instanceof TL_userEmpty)) {
             return getString("ALongTimeAgo", R.string.ALongTimeAgo);
         }
-        if (user.status.expires > ConnectionsManager.getAccountInstance().getCurrentTime()) {
+        if (user.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime()) {
             return getString("Online", R.string.Online);
         }
         if (user.status.expires == -1) {

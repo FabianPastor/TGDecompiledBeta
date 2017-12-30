@@ -3,7 +3,9 @@
     <string name="ALongTimeAgo">ultimo accesso molto tempo fa</string>
     <string name="AbortPassword">Annulla configurazione della verifica in due passaggi</string>
     <string name="AccessError">Errore di accesso</string>
+    <string name="AccountAlreadyLoggedIn">Questo account è già collegato in questa app.</string>
     <string name="AccountSettings">Impostazioni account</string>
+    <string name="AccountSwitch">Cambia</string>
     <string name="AccurateTo">Precisione di %1$s</string>
     <string name="ActionAddUser">un1 ha aggiunto un2</string>
     <string name="ActionAddUserSelf">un1 è tornato nel gruppo</string>
@@ -54,6 +56,7 @@
     <string name="ActionYouScored">Hai totalizzato %1$s</string>
     <string name="ActionYouScoredInGame">Hai totalizzato %1$s a un2</string>
     <string name="Add">Aggiungi</string>
+    <string name="AddAccount">Aggiungi account</string>
     <string name="AddAdminErrorBlacklisted">Spiacenti, non puoi aggiungere questo utente come amministratore perché è bloccato e non puoi sbloccarlo.</string>
     <string name="AddAdminErrorNotAMember">Spiacenti, non puoi aggiungere questo utente come amministratore perché non è un membro del gruppo e non sei autorizzato ad invitarlo.</string>
     <string name="AddBannedErrorAdmin">Spiacenti, non puoi bloccare questo utente perché è un amministratore in questo gruppo e non sei autorizzato a degradarlo.</string>
@@ -150,7 +153,7 @@
     <string name="ArticleByAuthor">da %1$s</string>
     <string name="ArticleDateByAuthor">%1$s da %2$s</string>
     <string name="AskAQuestion">Fai una domanda</string>
-    <string name="AskAQuestionInfo">Per favore nota che l\'assistenza di Telegram è fornita da volontari. Proviamo a rispondere quanto prima, ma potrebbe volerci del tempo. Dai un\'occhiata alle &lt;a href=\"https://telegram.org/faq/it#domande-generali\"&gt;domande frequenti di Telegram&lt;/a&gt;: contengono suggerimenti importanti per &lt;a href=\"https://telegram.org/faq/it#risoluzione-dei-problemi\"&gt;risolvere i problemi&lt;/a&gt; e risposte a quasi tutte le domande.</string>
+    <string name="AskAQuestionInfo">Per favore nota che l\'assistenza di Telegram è gestita da volontari. Proviamo a rispondere quanto prima, ma potrebbe volerci del tempo. Dai un\'occhiata alle &lt;a href=\"https://telegram.org/faq/it#domande-generali\"&gt;domande frequenti di Telegram&lt;/a&gt;: contengono suggerimenti importanti per &lt;a href=\"https://telegram.org/faq/it#risoluzione-dei-problemi\"&gt;risolvere i problemi&lt;/a&gt; e risposte a quasi tutte le domande.</string>
     <string name="AskButton">Chiedi a un volontario</string>
     <string name="AttachAudio">Messaggio vocale</string>
     <string name="AttachBotsHelp">Scorri verso il basso per i bot</string>
@@ -236,7 +239,7 @@
     <string name="CallReportIncludeLogs">Includi informazioni tecniche</string>
     <string name="CallReportLogsExplain">Questo non rivelerà i contenuti della tua conversazione, ma ci aiuterà a risolvere il problema più velocemente.</string>
     <string name="CallReportSent">Grazie per aver contribuito a rendere le chiamate di Telegram migliori.</string>
-    <string name="CallText">Ti chiameremo tra %1$d:%2$02d</string>
+    <string name="CallText">Telegram ti chiamerà tra %1$d:%2$02d</string>
     <string name="CallViaTelegram">Chiamata Telegram</string>
     <string name="Calling">Ti stiamo chiamando...</string>
     <string name="Calls">Chiamate</string>
@@ -297,6 +300,7 @@
     <string name="ChannelMessageContact">%1$s ha pubblicato un contatto</string>
     <string name="ChannelMessageDocument">%1$s ha pubblicato un file</string>
     <string name="ChannelMessageGIF">%1$s ha pubblicato una GIF</string>
+    <string name="ChannelMessageLiveLocation">%1$s ha pubblicato una posizione attuale</string>
     <string name="ChannelMessageMap">%1$s ha pubblicato una posizione</string>
     <string name="ChannelMessageMusic">%1$s ha pubblicato una traccia</string>
     <string name="ChannelMessageNoText">%1$s ha pubblicato un messaggio</string>
@@ -308,7 +312,7 @@
     <string name="ChannelMute">SILENZIA</string>
     <string name="ChannelNotifyMembersInfoOff">I post non saranno notificati ai membri</string>
     <string name="ChannelNotifyMembersInfoOn">I post saranno notificati ai membri</string>
-    <string name="ChannelPhotoEditNotification">Il canale %1$s ha aggiornato la foto</string>
+    <string name="ChannelPhotoEditNotification">Il canale %1$s ha aggiornato la sua foto</string>
     <string name="ChannelPrivate">Canale privato</string>
     <string name="ChannelPrivateInfo">È possibile unirsi ai canali privati solo tramite link d\'invito.</string>
     <string name="ChannelPrivateLinkHelp">Le persone possono unirsi al tuo canale seguendo questo link. Puoi revocare il link in ogni momento.</string>
@@ -1062,6 +1066,7 @@
     <string name="NotificationMessageGroupDocument">%1$s ha inviato un file al gruppo %2$s</string>
     <string name="NotificationMessageGroupGame">%1$s ha invitato il gruppo %2$s a giocare a %3$s</string>
     <string name="NotificationMessageGroupGif">%1$s ha inviato una GIF al gruppo %2$s</string>
+    <string name="NotificationMessageGroupLiveLocation">%1$s ha inviato una posizione attuale nel gruppo %2$s</string>
     <string name="NotificationMessageGroupMap">%1$s ha inviato una posizione al gruppo %2$s</string>
     <string name="NotificationMessageGroupMusic">%1$s ha inviato una traccia al gruppo %2$s</string>
     <string name="NotificationMessageGroupNoText">%1$s ha inviato un messaggio al gruppo %2$s</string>
@@ -1071,6 +1076,7 @@
     <string name="NotificationMessageGroupStickerEmoji">%1$s ha inviato uno %3$s sticker al gruppo %2$s</string>
     <string name="NotificationMessageGroupText">%1$s @ %2$s: %3$s</string>
     <string name="NotificationMessageGroupVideo">%1$s ha inviato un video al gruppo %2$s</string>
+    <string name="NotificationMessageLiveLocation">%1$s ti ha inviato una posizione attuale</string>
     <string name="NotificationMessageMap">%1$s ti ha inviato una posizione</string>
     <string name="NotificationMessageMusic">%1$s ti ha inviato una traccia</string>
     <string name="NotificationMessageNoText">%1$s ti ha inviato un messaggio</string>
@@ -1124,6 +1130,7 @@
     <string name="OpenGroup">APRI GRUPPO</string>
     <string name="OpenInBrowser">APRI IN...</string>
     <string name="OpenInExternalApp">Apri in...</string>
+    <string name="OpenMessage">APRI MESSAGGIO</string>
     <string name="OpenUrlAlert">Aprire url %1$s?</string>
     <string name="OtherSessions">Sessioni attive</string>
     <string name="OutgoingCalls">Chiamate in uscita</string>
@@ -1315,7 +1322,7 @@
     <string name="ReportSpamAndLeave">SEGNALA SPAM E LASCIA</string>
     <string name="Reset">Ripristina</string>
     <string name="ResetAccount">Ripristino account</string>
-    <string name="ResetAccountButton">RIPRISTINA</string>
+    <string name="ResetAccountButton">RIPRISTINA ACCOUNT</string>
     <string name="ResetAccountCancelledAlert">I tuoi tentativi recenti di ripristinare questo account sono stati annullati dal suo utente attivo. Per favore riprova tra 7 giorni.</string>
     <string name="ResetAccountInfo">Dato che l\'account **%1$s** è attivo e protetto da una password, lo elimineremo tra 1 settimana per motivi di sicurezza. Puoi annullare questo processo in qualsiasi momento.</string>
     <string name="ResetAccountStatus">Potrai ripristinare il tuo account tra:</string>
@@ -1325,7 +1332,7 @@
     <string name="ResetMyAccount">RIPRISTINA IL MIO ACCOUNT</string>
     <string name="ResetMyAccountText">Perderai tutte le chat e i messaggi, insieme ai media e ai file condivisi, se procederai a ripristinare il tuo account.</string>
     <string name="ResetMyAccountWarning">Attenzione</string>
-    <string name="ResetMyAccountWarningReset">Ripristina</string>
+    <string name="ResetMyAccountWarningReset">Ripristina account</string>
     <string name="ResetMyAccountWarningText">Questa azione non può essere annullata. Se ripristini il tuo account, tutti i tuoi messaggi e le tue chat saranno eliminati.</string>
     <string name="ResetNotificationsText">Ripristina tutte le impostazioni di notifica predefinite</string>
     <string name="ResetStatistics">Azzera statistiche</string>
@@ -1423,7 +1430,7 @@
     <string name="SendingVideo">Invio video...</string>
     <string name="SendingVideoStatus">sta inviando un video...</string>
     <string name="SentAppCode">Abbiamo inviato il codice su **Telegram** nel tuo altro dispositivo.</string>
-    <string name="SentCallCode">Abbiamo inviato una chiamata di attivazione al tuo numero **%1$s**. Non rispondere, Telegram farà tutto in automatico.</string>
+    <string name="SentCallCode">Stiamo chiamando il tuo numero **%1$s**. Non rispondere alla chiamata, Telegram farà tutto in automatico.</string>
     <string name="SentCallOnly">Stiamo chiamando il tuo numero **%1$s** per dettarti un codice.</string>
     <string name="SentSmsCode">Abbiamo inviato un SMS con un codice di attivazione al tuo numero **%1$s**.</string>
     <string name="ServiceNotifications">Notifiche di servizio</string>
@@ -1510,6 +1517,12 @@
     <string name="Subscribers_two">%1$d iscritti</string>
     <string name="Subscribers_zero">%1$d iscritti</string>
     <string name="Support">Assistenza</string>
+    <string name="SyncContacts">Sincronizza contatti</string>
+    <string name="SyncContactsAdded">I contatti da questo dispositivo sono stati aggiunti al tuo account.</string>
+    <string name="SyncContactsInfoOff">Attiva per importare i contatti da questo dispositivo nel tuo account.</string>
+    <string name="SyncContactsInfoOn">I contatti da questo dispositivo saranno aggiunti al tuo account.</string>
+    <string name="SyncContactsOff">I contatti da questo dispositivo non saranno aggiunti a questo account.</string>
+    <string name="SyncContactsOn">I contatti da questo dispositivo saranno aggiunti a questo account.</string>
     <string name="SystemRoot">Root di sistema</string>
     <string name="TapHereGifs">Tocca qui per vedere le GIF salvate</string>
     <string name="TelegramContacts_few">%1$d contatti su Telegram</string>
@@ -1625,6 +1638,7 @@
     <string name="ViewPackPreview">Visualizza pacchetto</string>
     <string name="Vignette">Vignettatura</string>
     <string name="VoipAnswerCall">Rispondi</string>
+    <string name="VoipAnsweringAsAccount">Rispondi come %s</string>
     <string name="VoipAudioRoutingBluetooth">Bluetooth</string>
     <string name="VoipAudioRoutingEarpiece">Auricolare</string>
     <string name="VoipAudioRoutingSpeaker">Altoparlante</string>
@@ -1680,7 +1694,7 @@
     <string name="WillUnmuteIn">Tra %1$s</string>
     <string name="WithinAMonth">ultimo accesso entro un mese</string>
     <string name="WithinAWeek">ultimo accesso entro una settimana</string>
-    <string name="WrongCountry">Prefisso errato</string>
+    <string name="WrongCountry">Prefisso internazionale non valido</string>
     <string name="WrongNumber">Numero errato?</string>
     <string name="Years_few">%1$d anni</string>
     <string name="Years_many">%1$d anni</string>

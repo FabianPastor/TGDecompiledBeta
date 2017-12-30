@@ -119,6 +119,7 @@ public class NotificationsController {
     private HashMap<Long, Integer> pushDialogsOverrideMention = new HashMap();
     private ArrayList<MessageObject> pushMessages = new ArrayList();
     private HashMap<Long, MessageObject> pushMessagesDict = new HashMap();
+    public boolean showBadgeNumber;
     private HashMap<Long, Point> smartNotificationsDialogs = new HashMap();
     private int soundIn;
     private boolean soundInLoaded;
@@ -175,7 +176,9 @@ public class NotificationsController {
         this.currentAccount = instance;
         this.notificationId = this.currentAccount + 1;
         this.notificationGroup = "messages" + (this.currentAccount == 0 ? TtmlNode.ANONYMOUS_REGION_ID : Integer.valueOf(this.currentAccount));
-        this.inChatSoundEnabled = MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("EnableInChatSound", true);
+        SharedPreferences preferences = MessagesController.getNotificationsSettings(this.currentAccount);
+        this.inChatSoundEnabled = preferences.getBoolean("EnableInChatSound", true);
+        this.showBadgeNumber = preferences.getBoolean("badgeNumber", true);
         notificationManager = NotificationManagerCompat.from(ApplicationLoader.applicationContext);
         systemNotificationManager = (NotificationManager) ApplicationLoader.applicationContext.getSystemService("notification");
         try {
@@ -505,9 +508,14 @@ public class NotificationsController {
                         NotificationsController.this.delayedPushMessages.clear();
                         NotificationsController.this.showOrUpdateNotification(NotificationsController.this.notifyCheck);
                     }
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.notificationsCountUpdated, Integer.valueOf(NotificationsController.this.currentAccount));
+                        }
+                    });
                 }
                 NotificationsController.this.notifyCheck = false;
-                if (preferences.getBoolean("badgeNumber", true)) {
+                if (NotificationsController.this.showBadgeNumber) {
                     NotificationsController.this.setBadge(NotificationsController.this.total_unread_count);
                 }
             }
@@ -578,9 +586,14 @@ public class NotificationsController {
                         NotificationsController.this.delayedPushMessages.clear();
                         NotificationsController.this.showOrUpdateNotification(NotificationsController.this.notifyCheck);
                     }
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.notificationsCountUpdated, Integer.valueOf(NotificationsController.this.currentAccount));
+                        }
+                    });
                 }
                 NotificationsController.this.notifyCheck = false;
-                if (preferences.getBoolean("badgeNumber", true)) {
+                if (NotificationsController.this.showBadgeNumber) {
                     NotificationsController.this.setBadge(NotificationsController.this.total_unread_count);
                 }
             }
@@ -778,6 +791,10 @@ public class NotificationsController {
         }
     }
 
+    public int getTotalUnreadCount() {
+        return this.total_unread_count;
+    }
+
     public void processDialogsUpdateRead(final HashMap<Long, Integer> dialogsToUpdate) {
         final ArrayList<MessageObject> popupArray = this.popupMessages.isEmpty() ? null : new ArrayList(this.popupMessages);
         notificationsQueue.postRunnable(new Runnable() {
@@ -854,9 +871,14 @@ public class NotificationsController {
                         NotificationsController.this.delayedPushMessages.clear();
                         NotificationsController.this.showOrUpdateNotification(NotificationsController.this.notifyCheck);
                     }
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.notificationsCountUpdated, Integer.valueOf(NotificationsController.this.currentAccount));
+                        }
+                    });
                 }
                 NotificationsController.this.notifyCheck = false;
-                if (preferences.getBoolean("badgeNumber", true)) {
+                if (NotificationsController.this.showBadgeNumber) {
                     NotificationsController.this.setBadge(NotificationsController.this.total_unread_count);
                 }
             }
@@ -932,16 +954,17 @@ public class NotificationsController {
                         NotificationsController.this.total_unread_count = NotificationsController.this.total_unread_count + count;
                     }
                 }
-                if (NotificationsController.this.total_unread_count == 0) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public void run() {
+                        if (NotificationsController.this.total_unread_count == 0) {
                             NotificationsController.this.popupMessages.clear();
                             NotificationCenter.getInstance(NotificationsController.this.currentAccount).postNotificationName(NotificationCenter.pushMessagesUpdated, new Object[0]);
                         }
-                    });
-                }
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.notificationsCountUpdated, Integer.valueOf(NotificationsController.this.currentAccount));
+                    }
+                });
                 NotificationsController.this.showOrUpdateNotification(SystemClock.uptimeMillis() / 1000 < 60);
-                if (preferences.getBoolean("badgeNumber", true)) {
+                if (NotificationsController.this.showBadgeNumber) {
                     NotificationsController.this.setBadge(NotificationsController.this.total_unread_count);
                 }
             }
@@ -2609,8 +2632,8 @@ public class NotificationsController {
             req.settings.show_previews = preferences.getBoolean("preview_" + dialog_id, true);
             req.settings.silent = preferences.getBoolean("silent_" + dialog_id, false);
             req.peer = new TL_inputNotifyPeer();
-            ((TL_inputNotifyPeer) req.peer).peer = MessagesController.getAccountInstance().getInputPeer((int) dialog_id);
-            ConnectionsManager.getAccountInstance().sendRequest(req, new RequestDelegate() {
+            ((TL_inputNotifyPeer) req.peer).peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) dialog_id);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                 }
             });

@@ -18,10 +18,8 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.beta.R;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -33,7 +31,6 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
     private static ArrayList<BaseFragment> layerFragmentsStack = new ArrayList();
     private static ArrayList<BaseFragment> mainFragmentsStack = new ArrayList();
     private ActionBarLayout actionBarLayout;
-    private int currentConnectionState;
     protected DrawerLayoutContainer drawerLayoutContainer;
     private boolean finished;
     private ActionBarLayout layersActionBarLayout;
@@ -116,7 +113,6 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         this.actionBarLayout.init(mainFragmentsStack);
         this.actionBarLayout.setDelegate(this);
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeOtherAppActivities, this);
-        this.currentConnectionState = ConnectionsManager.getAccountInstance().getConnectionState();
         Intent intent = getIntent();
         if (savedInstanceState == null) {
             z = false;
@@ -233,20 +229,6 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         AndroidUtilities.checkDisplaySize(this, newConfig);
         super.onConfigurationChanged(newConfig);
         fixLayout();
-    }
-
-    private void updateCurrentConnectionState() {
-        String text = null;
-        if (this.currentConnectionState == 2) {
-            text = LocaleController.getString("WaitingForNetwork", R.string.WaitingForNetwork);
-        } else if (this.currentConnectionState == 1) {
-            text = LocaleController.getString("Connecting", R.string.Connecting);
-        } else if (this.currentConnectionState == 5) {
-            text = LocaleController.getString("Updating", R.string.Updating);
-        } else if (this.currentConnectionState == 4) {
-            text = LocaleController.getString("ConnectingToProxy", R.string.ConnectingToProxy);
-        }
-        this.actionBarLayout.setTitleOverlayText(text, null, null);
     }
 
     public void onBackPressed() {

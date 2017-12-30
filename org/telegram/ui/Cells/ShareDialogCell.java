@@ -9,6 +9,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLObject;
@@ -23,6 +24,7 @@ import org.telegram.ui.Components.LayoutHelper;
 public class ShareDialogCell extends FrameLayout {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private CheckBox checkBox;
+    private int currentAccount = UserConfig.selectedAccount;
     private BackupImageView imageView;
     private TextView nameTextView;
 
@@ -54,7 +56,7 @@ public class ShareDialogCell extends FrameLayout {
     public void setDialog(int uid, boolean checked, CharSequence name) {
         TLObject photo = null;
         if (uid > 0) {
-            User user = MessagesController.getAccountInstance().getUser(Integer.valueOf(uid));
+            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(uid));
             this.avatarDrawable.setInfo(user);
             if (UserObject.isUserSelf(user)) {
                 this.nameTextView.setText(LocaleController.getString("SavedMessages", R.string.SavedMessages));
@@ -72,7 +74,7 @@ public class ShareDialogCell extends FrameLayout {
                 }
             }
         } else {
-            Chat chat = MessagesController.getAccountInstance().getChat(Integer.valueOf(-uid));
+            Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-uid));
             if (name != null) {
                 this.nameTextView.setText(name);
             } else if (chat != null) {

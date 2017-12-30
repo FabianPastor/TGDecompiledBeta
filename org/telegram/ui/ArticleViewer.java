@@ -691,7 +691,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.imageView.setColorFilter(new PorterDuffColorFilter(-1, Mode.MULTIPLY));
             }
             this.lastCreatedWidth = 0;
-            Chat channel = MessagesController.getAccountInstance().getChat(Integer.valueOf(block.channel.id));
+            Chat channel = MessagesController.getInstance(ArticleViewer.this.currentAccount).getChat(Integer.valueOf(block.channel.id));
             if (channel == null || channel.min) {
                 ArticleViewer.this.loadChannel(this, block.channel);
                 setState(1, false);
@@ -1865,7 +1865,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             } else if (ArticleViewer.this.channelBlock == null || event.getAction() != 1) {
                 return true;
             } else {
-                MessagesController.getAccountInstance().openByUserName(ArticleViewer.this.channelBlock.channel.username, ArticleViewer.this.parentFragment, 2);
+                MessagesController.getInstance(ArticleViewer.this.currentAccount).openByUserName(ArticleViewer.this.channelBlock.channel.username, ArticleViewer.this.parentFragment, 2);
                 ArticleViewer.this.close(false, true);
                 return true;
             }
@@ -3554,7 +3554,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             } else if (ArticleViewer.this.channelBlock == null || event.getAction() != 1) {
                 return true;
             } else {
-                MessagesController.getAccountInstance().openByUserName(ArticleViewer.this.channelBlock.channel.username, ArticleViewer.this.parentFragment, 2);
+                MessagesController.getInstance(ArticleViewer.this.currentAccount).openByUserName(ArticleViewer.this.channelBlock.channel.username, ArticleViewer.this.parentFragment, 2);
                 ArticleViewer.this.close(false, true);
                 return true;
             }
@@ -4818,7 +4818,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         req.url = this.pressedLink.getUrl();
                         req.hash = 0;
                         final TLObject tLObject = req;
-                        this.openUrlReqId = ConnectionsManager.getAccountInstance().sendRequest(req, new RequestDelegate() {
+                        this.openUrlReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                             public void run(final TLObject response, TL_error error) {
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
@@ -5303,12 +5303,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     if (position >= 0 && position < ArticleViewer.this.blocks.size()) {
                         PageBlock pageBlock = (PageBlock) ArticleViewer.this.blocks.get(position);
                         if (pageBlock instanceof TL_pageBlockChannel) {
-                            MessagesController.getAccountInstance().openByUserName(pageBlock.channel.username, ArticleViewer.this.parentFragment, 2);
+                            MessagesController.getInstance(ArticleViewer.this.currentAccount).openByUserName(pageBlock.channel.username, ArticleViewer.this.parentFragment, 2);
                             ArticleViewer.this.close(false, true);
                         }
                     }
                 } else if (ArticleViewer.this.previewsReqId == 0) {
-                    TLObject object = MessagesController.getAccountInstance().getUserOrChat("previews");
+                    TLObject object = MessagesController.getInstance(ArticleViewer.this.currentAccount).getUserOrChat("previews");
                     if (object instanceof TL_user) {
                         ArticleViewer.this.openPreviewsChat((User) object, ArticleViewer.this.currentPage.id);
                         return;
@@ -5318,7 +5318,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     ArticleViewer.this.showProgressView(true);
                     TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
                     req.username = "previews";
-                    ArticleViewer.this.previewsReqId = ConnectionsManager.getAccountInstance().sendRequest(req, new RequestDelegate() {
+                    ArticleViewer.this.previewsReqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, new RequestDelegate() {
                         public void run(final TLObject response, TL_error error) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
@@ -6287,12 +6287,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
             }
             if (this.openUrlReqId != 0) {
-                ConnectionsManager.getAccountInstance().cancelRequest(this.openUrlReqId, true);
+                ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.openUrlReqId, true);
                 this.openUrlReqId = 0;
                 showProgressView(false);
             }
             if (this.previewsReqId != 0) {
-                ConnectionsManager.getAccountInstance().cancelRequest(this.previewsReqId, true);
+                ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.previewsReqId, true);
                 this.previewsReqId = 0;
                 showProgressView(false);
             }

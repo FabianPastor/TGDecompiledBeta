@@ -169,7 +169,7 @@ public class Browser {
                         final Uri uri2 = uri;
                         final Context context2 = context;
                         final boolean z = allowCustom;
-                        final int sendRequest = ConnectionsManager.getAccountInstance().sendRequest(req, new RequestDelegate() {
+                        final int sendRequest = ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new RequestDelegate() {
                             public void run(final TLObject response, TL_error error) {
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
@@ -202,7 +202,7 @@ public class Browser {
                                         progressDialog[0].setCancelable(false);
                                         progressDialog[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
                                             public void onClick(DialogInterface dialog, int which) {
-                                                ConnectionsManager.getAccountInstance().cancelRequest(sendRequest, true);
+                                                ConnectionsManager.getInstance(UserConfig.selectedAccount).cancelRequest(sendRequest, true);
                                                 try {
                                                     dialog.dismiss();
                                                 } catch (Throwable e) {
