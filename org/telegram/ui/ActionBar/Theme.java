@@ -55,9 +55,11 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.ThemeEditorView;
@@ -77,6 +79,7 @@ public class Theme {
     public static Drawable avatar_broadcastDrawable = null;
     public static Drawable avatar_photoDrawable = null;
     public static Drawable avatar_savedDrawable = null;
+    private static boolean canStartHolidayAnimation = false;
     public static Paint chat_actionBackgroundPaint = null;
     public static TextPaint chat_actionTextPaint = null;
     public static TextPaint chat_adminPaint = null;
@@ -1516,20 +1519,39 @@ public class Theme {
         return stateListDrawable;
     }
 
+    public static boolean canStartHolidayAnimation() {
+        return canStartHolidayAnimation;
+    }
+
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static Drawable getCurrentHolidayDrawable() {
-        if (dialogs_holidayDrawable == null && System.currentTimeMillis() - lastHolidayCheckTime >= 3600000) {
+        if (System.currentTimeMillis() - lastHolidayCheckTime >= ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS) {
             lastHolidayCheckTime = System.currentTimeMillis();
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
             int monthOfYear = calendar.get(2);
             int dayOfMonth = calendar.get(5);
-            if (monthOfYear == 11) {
-                if (dayOfMonth >= (BuildVars.DEBUG_PRIVATE_VERSION ? 29 : 31)) {
-                }
+            int minutes = calendar.get(12);
+            int hour = calendar.get(11);
+            if (monthOfYear == 0 && dayOfMonth == 1 && minutes <= 10 && hour == 0) {
+                canStartHolidayAnimation = true;
+            } else {
+                canStartHolidayAnimation = false;
             }
-            if (monthOfYear == 0) {
+            if (dialogs_holidayDrawable == null) {
+                if (monthOfYear == 11) {
+                    int i;
+                    if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                        i = 29;
+                    } else {
+                        i = 31;
+                    }
+                    if (dayOfMonth >= i) {
+                    }
+                }
+                if (monthOfYear == 0) {
+                }
             }
         }
         return dialogs_holidayDrawable;
@@ -2478,7 +2500,7 @@ public class Theme {
         chat_msgTextPaintOneEmoji.setTextSize((float) AndroidUtilities.dp(28.0f));
         chat_msgTextPaintTwoEmoji.setTextSize((float) AndroidUtilities.dp(24.0f));
         chat_msgTextPaintThreeEmoji.setTextSize((float) AndroidUtilities.dp(20.0f));
-        chat_msgTextPaint.setTextSize((float) AndroidUtilities.dp((float) MessagesController.getAccountInstance().fontSize));
+        chat_msgTextPaint.setTextSize((float) AndroidUtilities.dp((float) SharedConfig.fontSize));
         chat_msgGameTextPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
         chat_msgBotButtonPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
         if (!fontsOnly && chat_botProgressPaint != null) {
@@ -2506,7 +2528,7 @@ public class Theme {
             chat_instantViewPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             chat_instantViewRectPaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
             chat_statusRecordPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-            chat_actionTextPaint.setTextSize((float) AndroidUtilities.dp((float) (Math.max(16, MessagesController.getAccountInstance().fontSize) - 2)));
+            chat_actionTextPaint.setTextSize((float) AndroidUtilities.dp((float) (Math.max(16, SharedConfig.fontSize) - 2)));
             chat_contextResult_titleTextPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
             chat_contextResult_descriptionTextPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             chat_radialProgressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
@@ -2866,11 +2888,11 @@ public class Theme {
                 public void run() {
                     Throwable e;
                     int i;
-                    SharedPreferences preferences;
                     int selectedBackground;
                     File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
+                        SharedPreferences preferences;
                         if (!MessagesController.getGlobalMainSettings().getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

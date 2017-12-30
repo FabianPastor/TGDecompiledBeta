@@ -899,7 +899,6 @@ public class SecretChatHelper {
                     }
                     if (newMessage.ttl != 0) {
                         newMessage.media.ttl_seconds = newMessage.ttl;
-                        newMessage.flags |= 4;
                     }
                     TL_photoSize big = new TL_photoSize();
                     big.w = decryptedMessage.media.w;
@@ -957,7 +956,6 @@ public class SecretChatHelper {
                     }
                     newMessage.ttl = Math.max(decryptedMessage.media.duration + 2, newMessage.ttl);
                     newMessage.media.ttl_seconds = newMessage.ttl;
-                    newMessage.flags |= 4;
                     return newMessage;
                 } else if (decryptedMessage.media instanceof TL_decryptedMessageMediaDocument) {
                     if (decryptedMessage.media.key == null || decryptedMessage.media.key.length != 32 || decryptedMessage.media.iv == null || decryptedMessage.media.iv.length != 32) {

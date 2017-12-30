@@ -917,7 +917,7 @@ public class MessageObject {
             } else {
                 paint = Theme.chat_msgTextPaint;
             }
-            int[] emojiOnly = MessagesController.getInstance(accountNum).allowBigEmoji ? new int[1] : null;
+            int[] emojiOnly = SharedConfig.allowBigEmoji ? new int[1] : null;
             this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, emojiOnly);
             if (emojiOnly != null && emojiOnly[0] >= 1 && emojiOnly[0] <= 3) {
                 TextPaint emojiPaint;
@@ -1394,7 +1394,7 @@ public class MessageObject {
             } else {
                 paint = Theme.chat_msgTextPaint;
             }
-            int[] emojiOnly = MessagesController.getInstance(accountNum).allowBigEmoji ? new int[1] : null;
+            int[] emojiOnly = SharedConfig.allowBigEmoji ? new int[1] : null;
             this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, emojiOnly);
             if (emojiOnly != null && emojiOnly[0] >= 1 && emojiOnly[0] <= 3) {
                 TextPaint emojiPaint;

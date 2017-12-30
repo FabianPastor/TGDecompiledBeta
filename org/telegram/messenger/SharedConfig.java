@@ -8,6 +8,7 @@ import java.io.File;
 import org.telegram.messenger.exoplayer2.C;
 
 public class SharedConfig {
+    public static boolean allowBigEmoji;
     public static boolean allowScreenCapture;
     public static boolean appLocked;
     public static int autoLockIn = 3600;
@@ -15,6 +16,7 @@ public class SharedConfig {
     private static boolean configLoaded;
     public static boolean customTabs = true;
     public static boolean directShare = true;
+    public static int fontSize = AndroidUtilities.dp(16.0f);
     public static boolean groupPhotosEnabled = true;
     public static boolean inappCamera = true;
     public static boolean isWaitingForPasscodeEnter;
@@ -35,6 +37,7 @@ public class SharedConfig {
     public static boolean shuffleMusic;
     private static final Object sync = new Object();
     public static boolean useFingerprint = true;
+    public static boolean useSystemEmoji;
 
     static {
         loadConfig();
@@ -103,6 +106,9 @@ public class SharedConfig {
             roundCamera16to9 = preferences.getBoolean("roundCamera16to9", true);
             groupPhotosEnabled = preferences.getBoolean("groupPhotosEnabled", true);
             repeatMode = preferences.getInt("repeatMode", 0);
+            fontSize = preferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
+            allowBigEmoji = preferences.getBoolean("allowBigEmoji", false);
+            useSystemEmoji = preferences.getBoolean("useSystemEmoji", false);
             configLoaded = true;
         }
     }

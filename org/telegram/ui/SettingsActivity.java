@@ -768,7 +768,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         View numberPicker = new NumberPicker(SettingsActivity.this.getParentActivity());
                         numberPicker.setMinValue(12);
                         numberPicker.setMaxValue(30);
-                        numberPicker.setValue(MessagesController.getInstance(SettingsActivity.this.currentAccount).fontSize);
+                        numberPicker.setValue(SharedConfig.fontSize);
                         builder.setView(numberPicker);
                         final View view2 = numberPicker;
                         final int i = position;
@@ -776,7 +776,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             public void onClick(DialogInterface dialog, int which) {
                                 Editor editor = MessagesController.getGlobalMainSettings().edit();
                                 editor.putInt("fons_size", view2.getValue());
-                                MessagesController.getInstance(SettingsActivity.this.currentAccount).fontSize = view2.getValue();
+                                SharedConfig.fontSize = view2.getValue();
                                 editor.commit();
                                 if (SettingsActivity.this.listAdapter != null) {
                                     SettingsActivity.this.listAdapter.notifyItemChanged(i);
@@ -934,10 +934,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 if (a < (VERSION.SDK_INT >= 19 ? 2 : 1)) {
                                     String name = null;
                                     if (a == 0) {
-                                        maskValues[a] = MessagesController.getInstance(SettingsActivity.this.currentAccount).allowBigEmoji;
+                                        maskValues[a] = SharedConfig.allowBigEmoji;
                                         name = LocaleController.getString("EmojiBigSize", R.string.EmojiBigSize);
                                     } else if (a == 1) {
-                                        maskValues[a] = MessagesController.getInstance(SettingsActivity.this.currentAccount).useSystemEmoji;
+                                        maskValues[a] = SharedConfig.useSystemEmoji;
                                         name = LocaleController.getString("EmojiUseDefault", R.string.EmojiUseDefault);
                                     }
                                     CheckBoxCell checkBoxCell = new CheckBoxCell(SettingsActivity.this.getParentActivity(), 1);
@@ -971,13 +971,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                                 FileLog.e(e);
                                             }
                                             Editor editor = MessagesController.getGlobalMainSettings().edit();
-                                            MessagesController instance = MessagesController.getInstance(SettingsActivity.this.currentAccount);
                                             boolean z = maskValues[0];
-                                            instance.allowBigEmoji = z;
+                                            SharedConfig.allowBigEmoji = z;
                                             editor.putBoolean("allowBigEmoji", z);
-                                            instance = MessagesController.getInstance(SettingsActivity.this.currentAccount);
                                             z = maskValues[1];
-                                            instance.useSystemEmoji = z;
+                                            SharedConfig.useSystemEmoji = z;
                                             editor.putBoolean("useSystemEmoji", z);
                                             editor.commit();
                                             if (SettingsActivity.this.listAdapter != null) {

@@ -52,6 +52,7 @@ import android.util.StateSet;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
@@ -97,6 +98,7 @@ public class AndroidUtilities {
     public static final int FLAG_TAG_BR = 1;
     public static final int FLAG_TAG_COLOR = 4;
     public static Pattern WEB_URL;
+    public static AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
     private static int adjustOwnerClassGuid = 0;
     private static RectF bitmapRect;
     private static final Object callLock = new Object();
@@ -383,8 +385,8 @@ Error: java.util.NoSuchElementException
         if (pathString == null) {
             return false;
         }
-        String path;
         while (true) {
+            String path;
             String newPath = Utilities.readlink(pathString);
             if (newPath != null && !newPath.equals(pathString)) {
                 pathString = newPath;

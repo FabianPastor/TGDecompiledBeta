@@ -44,6 +44,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.NotificationsController;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
@@ -691,7 +692,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 } else {
                     imageView.setVisibility(8);
                     messageText.setVisibility(0);
-                    messageText.setTextSize(2, (float) MessagesController.getInstance(this.currentAccount).fontSize);
+                    messageText.setTextSize(2, (float) SharedConfig.fontSize);
                     messageText.setText(messageObject.messageText);
                 }
             } else if (messageObject.type == 4) {
@@ -760,7 +761,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 frameLayoutAnimationListener.setTag(Integer.valueOf(1));
             }
             messageText = (TextView) view.findViewWithTag(Integer.valueOf(301));
-            messageText.setTextSize(2, (float) MessagesController.getInstance(this.currentAccount).fontSize);
+            messageText.setTextSize(2, (float) SharedConfig.fontSize);
             messageText.setText(messageObject.messageText);
         }
         if (view.getParent() == null) {

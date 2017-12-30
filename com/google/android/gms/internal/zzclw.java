@@ -21,9 +21,9 @@ public final class zzclw extends zzfjm<zzclw> {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private final zzclw zzi(zzfjj com_google_android_gms_internal_zzfjj) throws IOException {
-        int position;
         while (true) {
             int zzcvt = com_google_android_gms_internal_zzfjj.zzcvt();
+            int position;
             switch (zzcvt) {
                 case 0:
                     break;

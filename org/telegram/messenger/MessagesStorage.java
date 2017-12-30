@@ -5071,14 +5071,22 @@ Error: java.util.NoSuchElementException
     }
 
     private int getMessageMediaType(Message message) {
-        if ((message instanceof TL_message) && (((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)) && message.media.ttl_seconds != 0)) {
+        if (message instanceof TL_message_secret) {
+            if (((message.media instanceof TL_messageMediaPhoto) && message.ttl > 0 && message.ttl <= 60) || MessageObject.isVoiceMessage(message) || MessageObject.isVideoMessage(message) || MessageObject.isRoundVideoMessage(message)) {
+                return 1;
+            }
+            if ((message.media instanceof TL_messageMediaPhoto) || MessageObject.isVideoMessage(message)) {
+                return 0;
+            }
+        } else if ((message instanceof TL_message) && (((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)) && message.media.ttl_seconds != 0)) {
             return 1;
-        }
-        if ((message instanceof TL_message_secret) && (((message.media instanceof TL_messageMediaPhoto) && message.ttl > 0 && message.ttl <= 60) || MessageObject.isVoiceMessage(message) || MessageObject.isVideoMessage(message) || MessageObject.isRoundVideoMessage(message))) {
-            return 1;
-        }
-        if ((message.media instanceof TL_messageMediaPhoto) || MessageObject.isVideoMessage(message)) {
-            return 0;
+        } else {
+            if (message.media instanceof TL_messageMediaPhoto) {
+                return 0;
+            }
+            if (MessageObject.isVideoMessage(message)) {
+                return 0;
+            }
         }
         return -1;
     }
@@ -5715,6 +5723,7 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
+        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -5767,7 +5776,6 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
-        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {

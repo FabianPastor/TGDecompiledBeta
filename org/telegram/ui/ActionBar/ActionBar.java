@@ -24,8 +24,11 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.Components.FireworksEffect;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.SnowflakesEffect;
 
 public class ActionBar extends FrameLayout {
     public ActionBarMenuOnItemClick actionBarMenuOnItemClick;
@@ -38,6 +41,7 @@ public class ActionBar extends FrameLayout {
     private ImageView backButtonImageView;
     private boolean castShadows;
     private int extraHeight;
+    private FireworksEffect fireworksEffect;
     private FontMetricsInt fontMetricsInt;
     private boolean interceptTouches;
     private boolean isBackOverlayVisible;
@@ -48,10 +52,12 @@ public class ActionBar extends FrameLayout {
     protected int itemsColor;
     private CharSequence lastSubtitle;
     private CharSequence lastTitle;
+    private boolean manualStart;
     private ActionBarMenu menu;
     private boolean occupyStatusBar;
     protected BaseFragment parentFragment;
     private Rect rect;
+    private SnowflakesEffect snowflakesEffect;
     private SimpleTextView subtitleTextView;
     private boolean supportsHolidayImage;
     private Runnable titleActionRunnable;
@@ -128,6 +134,27 @@ public class ActionBar extends FrameLayout {
         invalidate();
     }
 
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (this.supportsHolidayImage && !this.titleOverlayShown && !LocaleController.isRTL && ev.getAction() == 0) {
+            Drawable drawable = Theme.getCurrentHolidayDrawable();
+            if (drawable != null && drawable.getBounds().contains((int) ev.getX(), (int) ev.getY())) {
+                this.manualStart = true;
+                if (this.snowflakesEffect == null) {
+                    this.fireworksEffect = null;
+                    this.snowflakesEffect = new SnowflakesEffect();
+                    this.titleTextView.invalidate();
+                    invalidate();
+                } else if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                    this.snowflakesEffect = null;
+                    this.fireworksEffect = new FireworksEffect();
+                    this.titleTextView.invalidate();
+                    invalidate();
+                }
+            }
+        }
+        return super.onInterceptTouchEvent(ev);
+    }
+
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
         if (this.supportsHolidayImage && !this.titleOverlayShown && !LocaleController.isRTL && child == this.titleTextView) {
@@ -140,6 +167,18 @@ public class ActionBar extends FrameLayout {
                 int y = (this.titleTextView.getTextStartY() + Theme.getCurrentHolidayDrawableYOffset()) + ((int) Math.ceil((double) (((float) (this.titleTextView.getTextHeight() - this.rect.height())) / 2.0f)));
                 drawable.setBounds(x, y - drawable.getIntrinsicHeight(), drawable.getIntrinsicWidth() + x, y);
                 drawable.draw(canvas);
+                if (Theme.canStartHolidayAnimation()) {
+                    if (this.snowflakesEffect == null) {
+                        this.snowflakesEffect = new SnowflakesEffect();
+                    }
+                } else if (!(this.manualStart || this.snowflakesEffect == null)) {
+                    this.snowflakesEffect = null;
+                }
+                if (this.snowflakesEffect != null) {
+                    this.snowflakesEffect.onDraw(this, canvas);
+                } else if (this.fireworksEffect != null) {
+                    this.fireworksEffect.onDraw(this, canvas);
+                }
             }
         }
         return result;

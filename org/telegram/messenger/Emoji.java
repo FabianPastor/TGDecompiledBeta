@@ -339,7 +339,7 @@ public class Emoji {
     }
 
     public static CharSequence replaceEmoji(CharSequence cs, FontMetricsInt fontMetrics, int size, boolean createNew, int[] emojiOnly) {
-        if (MessagesController.getAccountInstance().useSystemEmoji || cs == null || cs.length() == 0) {
+        if (SharedConfig.useSystemEmoji || cs == null || cs.length() == 0) {
             return cs;
         }
         Spannable s;
@@ -359,123 +359,122 @@ public class Emoji {
         boolean doneEmoji = false;
         int i = 0;
         while (i < length) {
-            char next;
-            char c = cs.charAt(i);
-            if ((c < '?' || c > '?') && (buf == 0 || (-4294967296L & buf) != 0 || (65535 & buf) != 55356 || c < '?' || c > '?')) {
-                try {
-                    if (stringBuilder.length() > 0 && (c == '♀' || c == '♂' || c == '⚕')) {
-                        stringBuilder.append(c);
-                        startLength++;
-                        buf = 0;
-                        doneEmoji = true;
-                    } else if (buf > 0 && (61440 & c) == 53248) {
-                        stringBuilder.append(c);
-                        startLength++;
-                        buf = 0;
-                        doneEmoji = true;
-                    } else if (c == '⃣') {
-                        if (i > 0) {
-                            char c2 = cs.charAt(previousGoodIndex);
-                            if ((c2 >= '0' && c2 <= '9') || c2 == '#' || c2 == '*') {
-                                startIndex = previousGoodIndex;
-                                startLength = (i - previousGoodIndex) + 1;
-                                stringBuilder.append(c2);
-                                stringBuilder.append(c);
-                                doneEmoji = true;
-                            }
-                        }
-                    } else if ((c == '©' || c == '®' || (c >= '‼' && c <= '㊙')) && EmojiData.dataCharsMap.containsKey(Character.valueOf(c))) {
-                        if (startIndex == -1) {
-                            startIndex = i;
-                        }
-                        startLength++;
-                        stringBuilder.append(c);
-                        doneEmoji = true;
-                    } else if (startIndex != -1) {
-                        stringBuilder.setLength(0);
-                        startIndex = -1;
-                        startLength = 0;
-                        doneEmoji = false;
-                    } else if (!(c == '️' || emojiOnly == null)) {
-                        emojiOnly[0] = 0;
-                        emojiOnly = null;
+            try {
+                char next;
+                char c = cs.charAt(i);
+                if ((c >= '?' && c <= '?') || (buf != 0 && (-4294967296L & buf) == 0 && (65535 & buf) == 55356 && c >= '?' && c <= '?')) {
+                    if (startIndex == -1) {
+                        startIndex = i;
                     }
-                } catch (Throwable e) {
-                    FileLog.e(e);
-                    return cs;
+                    stringBuilder.append(c);
+                    startLength++;
+                    buf = (buf << 16) | ((long) c);
+                } else if (stringBuilder.length() > 0 && (c == '♀' || c == '♂' || c == '⚕')) {
+                    stringBuilder.append(c);
+                    startLength++;
+                    buf = 0;
+                    doneEmoji = true;
+                } else if (buf > 0 && (61440 & c) == 53248) {
+                    stringBuilder.append(c);
+                    startLength++;
+                    buf = 0;
+                    doneEmoji = true;
+                } else if (c == '⃣') {
+                    if (i > 0) {
+                        char c2 = cs.charAt(previousGoodIndex);
+                        if ((c2 >= '0' && c2 <= '9') || c2 == '#' || c2 == '*') {
+                            startIndex = previousGoodIndex;
+                            startLength = (i - previousGoodIndex) + 1;
+                            stringBuilder.append(c2);
+                            stringBuilder.append(c);
+                            doneEmoji = true;
+                        }
+                    }
+                } else if ((c == '©' || c == '®' || (c >= '‼' && c <= '㊙')) && EmojiData.dataCharsMap.containsKey(Character.valueOf(c))) {
+                    if (startIndex == -1) {
+                        startIndex = i;
+                    }
+                    startLength++;
+                    stringBuilder.append(c);
+                    doneEmoji = true;
+                } else if (startIndex != -1) {
+                    stringBuilder.setLength(0);
+                    startIndex = -1;
+                    startLength = 0;
+                    doneEmoji = false;
+                } else if (!(c == '️' || emojiOnly == null)) {
+                    emojiOnly[0] = 0;
+                    emojiOnly = null;
                 }
-            }
-            if (startIndex == -1) {
-                startIndex = i;
-            }
-            stringBuilder.append(c);
-            startLength++;
-            buf = (buf << 16) | ((long) c);
-            if (doneEmoji && i + 2 < length) {
-                next = cs.charAt(i + 1);
-                if (next == '?') {
+                if (doneEmoji && i + 2 < length) {
+                    next = cs.charAt(i + 1);
+                    if (next == '?') {
+                        next = cs.charAt(i + 2);
+                        if (next >= '?' && next <= '?') {
+                            stringBuilder.append(cs.subSequence(i + 1, i + 3));
+                            startLength += 2;
+                            i += 2;
+                        }
+                    } else if (stringBuilder.length() >= 2 && stringBuilder.charAt(0) == '?' && stringBuilder.charAt(1) == '?' && next == '?') {
+                        i++;
+                        do {
+                            stringBuilder.append(cs.subSequence(i, i + 2));
+                            startLength += 2;
+                            i += 2;
+                            if (i >= cs.length()) {
+                                break;
+                            }
+                        } while (cs.charAt(i) == '?');
+                        i--;
+                    }
+                }
+                previousGoodIndex = i;
+                for (int a = 0; a < 3; a++) {
+                    if (i + 1 < length) {
+                        c = cs.charAt(i + 1);
+                        if (a == 1) {
+                            if (c == '‍' && stringBuilder.length() > 0) {
+                                stringBuilder.append(c);
+                                i++;
+                                startLength++;
+                                doneEmoji = false;
+                            }
+                        } else if (c >= '︀' && c <= '️') {
+                            i++;
+                            startLength++;
+                        }
+                    }
+                }
+                if (doneEmoji && i + 2 < length && cs.charAt(i + 1) == '?') {
                     next = cs.charAt(i + 2);
                     if (next >= '?' && next <= '?') {
                         stringBuilder.append(cs.subSequence(i + 1, i + 3));
                         startLength += 2;
                         i += 2;
                     }
-                } else if (stringBuilder.length() >= 2 && stringBuilder.charAt(0) == '?' && stringBuilder.charAt(1) == '?' && next == '?') {
-                    i++;
-                    do {
-                        stringBuilder.append(cs.subSequence(i, i + 2));
-                        startLength += 2;
-                        i += 2;
-                        if (i >= cs.length()) {
-                            break;
-                        }
-                    } while (cs.charAt(i) == '?');
-                    i--;
                 }
-            }
-            previousGoodIndex = i;
-            for (int a = 0; a < 3; a++) {
-                if (i + 1 < length) {
-                    c = cs.charAt(i + 1);
-                    if (a == 1) {
-                        if (c == '‍' && stringBuilder.length() > 0) {
-                            stringBuilder.append(c);
-                            i++;
-                            startLength++;
-                            doneEmoji = false;
-                        }
-                    } else if (c >= '︀' && c <= '️') {
-                        i++;
-                        startLength++;
+                if (doneEmoji) {
+                    if (emojiOnly != null) {
+                        emojiOnly[0] = emojiOnly[0] + 1;
                     }
+                    EmojiDrawable drawable = getEmojiDrawable(stringBuilder.subSequence(0, stringBuilder.length()));
+                    if (drawable != null) {
+                        s.setSpan(new EmojiSpan(drawable, 0, size, fontMetrics), startIndex, startIndex + startLength, 33);
+                        emojiCount++;
+                    }
+                    startLength = 0;
+                    startIndex = -1;
+                    stringBuilder.setLength(0);
+                    doneEmoji = false;
                 }
-            }
-            if (doneEmoji && i + 2 < length && cs.charAt(i + 1) == '?') {
-                next = cs.charAt(i + 2);
-                if (next >= '?' && next <= '?') {
-                    stringBuilder.append(cs.subSequence(i + 1, i + 3));
-                    startLength += 2;
-                    i += 2;
+                if (VERSION.SDK_INT < 23 && emojiCount >= 50) {
+                    break;
                 }
+                i++;
+            } catch (Throwable e) {
+                FileLog.e(e);
+                return cs;
             }
-            if (doneEmoji) {
-                if (emojiOnly != null) {
-                    emojiOnly[0] = emojiOnly[0] + 1;
-                }
-                EmojiDrawable drawable = getEmojiDrawable(stringBuilder.subSequence(0, stringBuilder.length()));
-                if (drawable != null) {
-                    s.setSpan(new EmojiSpan(drawable, 0, size, fontMetrics), startIndex, startIndex + startLength, 33);
-                    emojiCount++;
-                }
-                startLength = 0;
-                startIndex = -1;
-                stringBuilder.setLength(0);
-                doneEmoji = false;
-            }
-            if (VERSION.SDK_INT < 23 && emojiCount >= 50) {
-                break;
-            }
-            i++;
         }
         return s;
     }
