@@ -1064,9 +1064,9 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Object username;
         switch (holder.getItemViewType()) {
             case 0:
+                Object username;
                 TLObject tLObject;
                 ProfileSearchCell cell = holder.itemView;
                 TLObject user = null;

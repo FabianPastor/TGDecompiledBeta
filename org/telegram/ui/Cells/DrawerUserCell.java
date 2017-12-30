@@ -82,9 +82,8 @@ public class DrawerUserCell extends FrameLayout {
     }
 
     protected void onDraw(Canvas canvas) {
-        if (UserConfig.getActivatedAccountsCount() > 1 && NotificationsController.getInstance(this.accountNumber).showBadgeNumber) {
-            int counter = NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount();
-            String text = String.format("%d", new Object[]{Integer.valueOf(counter)});
+        if (UserConfig.getActivatedAccountsCount() > 1 && NotificationsController.getInstance(this.accountNumber).showBadgeNumber && NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount() > 0) {
+            String text = String.format("%d", new Object[]{Integer.valueOf(NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount())});
             int countTop = AndroidUtilities.dp(12.5f);
             int textWidth = (int) Math.ceil((double) Theme.chat_livePaint.measureText(text));
             int countWidth = Math.max(AndroidUtilities.dp(12.0f), textWidth);

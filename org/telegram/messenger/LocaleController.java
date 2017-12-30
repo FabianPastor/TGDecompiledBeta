@@ -935,12 +935,12 @@ public class LocaleController {
     }
 
     private HashMap<String, String> getLocaleFileStrings(File file, boolean preserveEscapes) {
+        HashMap<String, String> stringMap;
         Throwable e;
         Throwable th;
         FileInputStream fileInputStream = null;
         this.reloadLastFile = false;
         try {
-            HashMap<String, String> stringMap;
             if (file.exists()) {
                 stringMap = new HashMap();
                 XmlPullParser parser = Xml.newPullParser();

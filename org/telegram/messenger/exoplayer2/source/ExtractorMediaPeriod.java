@@ -293,6 +293,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     }
 
     public long selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs) {
+        SampleQueue sampleQueue;
         Assertions.checkState(this.prepared);
         int oldEnabledTrackCount = this.enabledTrackCount;
         int i = 0;
@@ -320,7 +321,6 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
                 streams[i] = new SampleStreamImpl(track);
                 streamResetFlags[i] = true;
                 if (!seekRequired) {
-                    SampleQueue sampleQueue;
                     sampleQueue = this.sampleQueues[track];
                     sampleQueue.rewind();
                     if (sampleQueue.advanceTo(positionUs, true, true) || sampleQueue.getReadIndex() == 0) {
