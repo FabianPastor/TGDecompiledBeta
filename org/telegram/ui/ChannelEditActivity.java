@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
@@ -372,15 +372,15 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         this.chat_id = getArguments().getInt("chat_id", 0);
         this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chat_id));
         if (this.currentChat == null) {
-            final Semaphore semaphore = new Semaphore(0);
+            final CountDownLatch countDownLatch = new CountDownLatch(1);
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
                     ChannelEditActivity.this.currentChat = MessagesStorage.getInstance(ChannelEditActivity.this.currentAccount).getChat(ChannelEditActivity.this.chat_id);
-                    semaphore.release();
+                    countDownLatch.countDown();
                 }
             });
             try {
-                semaphore.acquire();
+                countDownLatch.await();
             } catch (Throwable e) {
                 FileLog.e(e);
             }
@@ -391,6 +391,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         }
         getChannelParticipants(true);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.closeChats);
         this.sortedUsers = new ArrayList();
         updateRowsIds();
         return true;
@@ -399,6 +400,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
     }
 
     public View createView(Context context) {
@@ -559,6 +561,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                     getChannelParticipants(true);
                 }
             }
+        } else if (id == NotificationCenter.closeChats) {
+            removeSelfFromStack();
         }
     }
 

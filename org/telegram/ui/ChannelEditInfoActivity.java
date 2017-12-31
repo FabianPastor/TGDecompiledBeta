@@ -24,7 +24,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import java.util.ArrayList;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
@@ -153,15 +153,15 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
         boolean z = false;
         this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId));
         if (this.currentChat == null) {
-            final Semaphore semaphore = new Semaphore(0);
+            final CountDownLatch countDownLatch = new CountDownLatch(1);
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
                     ChannelEditInfoActivity.this.currentChat = MessagesStorage.getInstance(ChannelEditInfoActivity.this.currentAccount).getChat(ChannelEditInfoActivity.this.chatId);
-                    semaphore.release();
+                    countDownLatch.countDown();
                 }
             });
             try {
-                semaphore.acquire();
+                countDownLatch.await();
             } catch (Throwable e) {
                 FileLog.e(e);
             }
@@ -170,9 +170,9 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
             }
             MessagesController.getInstance(this.currentAccount).putChat(this.currentChat, true);
             if (this.info == null) {
-                MessagesStorage.getInstance(this.currentAccount).loadChatInfo(this.chatId, semaphore, false, false);
+                MessagesStorage.getInstance(this.currentAccount).loadChatInfo(this.chatId, countDownLatch, false, false);
                 try {
-                    semaphore.acquire();
+                    countDownLatch.await();
                 } catch (Throwable e2) {
                     FileLog.e(e2);
                 }
@@ -695,7 +695,6 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            NotificationCenter.getInstance(ChannelEditInfoActivity.this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
                             if (AndroidUtilities.isTablet()) {
                                 NotificationCenter.getInstance(ChannelEditInfoActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, Long.valueOf(-((long) ChannelEditInfoActivity.this.chatId)));
                             } else {

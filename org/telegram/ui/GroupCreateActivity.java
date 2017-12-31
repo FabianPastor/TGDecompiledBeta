@@ -356,7 +356,6 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            User user;
             switch (holder.getItemViewType()) {
                 case 0:
                     GroupCreateSectionCell cell = (GroupCreateSectionCell) holder.itemView;
@@ -366,6 +365,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                     }
                     return;
                 default:
+                    User user;
                     GroupCreateUserCell cell2 = holder.itemView;
                     CharSequence username = null;
                     CharSequence name = null;

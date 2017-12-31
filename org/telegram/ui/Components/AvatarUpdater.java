@@ -2,10 +2,10 @@ package org.telegram.ui.Components;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.support.media.ExifInterface;
 import android.support.v4.content.FileProvider;
 import java.io.File;
 import java.util.ArrayList;
@@ -82,29 +82,31 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
     }
 
     public void openGallery() {
-        if (VERSION.SDK_INT < 23 || this.parentFragment == null || this.parentFragment.getParentActivity() == null || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
-            PhotoAlbumPickerActivity fragment = new PhotoAlbumPickerActivity(true, false, false, null);
-            fragment.setDelegate(new PhotoAlbumPickerActivityDelegate() {
-                public void didSelectPhotos(ArrayList<SendingMediaInfo> photos) {
-                    if (!photos.isEmpty()) {
-                        AvatarUpdater.this.processBitmap(ImageLoader.loadBitmap(((SendingMediaInfo) photos.get(0)).path, null, 800.0f, 800.0f, true));
+        if (this.parentFragment != null) {
+            if (VERSION.SDK_INT < 23 || this.parentFragment == null || this.parentFragment.getParentActivity() == null || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
+                PhotoAlbumPickerActivity fragment = new PhotoAlbumPickerActivity(true, false, false, null);
+                fragment.setDelegate(new PhotoAlbumPickerActivityDelegate() {
+                    public void didSelectPhotos(ArrayList<SendingMediaInfo> photos) {
+                        if (!photos.isEmpty()) {
+                            AvatarUpdater.this.processBitmap(ImageLoader.loadBitmap(((SendingMediaInfo) photos.get(0)).path, null, 800.0f, 800.0f, true));
+                        }
                     }
-                }
 
-                public void startPhotoSelectActivity() {
-                    try {
-                        Intent photoPickerIntent = new Intent("android.intent.action.GET_CONTENT");
-                        photoPickerIntent.setType("image/*");
-                        AvatarUpdater.this.parentFragment.startActivityForResult(photoPickerIntent, 14);
-                    } catch (Throwable e) {
-                        FileLog.e(e);
+                    public void startPhotoSelectActivity() {
+                        try {
+                            Intent photoPickerIntent = new Intent("android.intent.action.GET_CONTENT");
+                            photoPickerIntent.setType("image/*");
+                            AvatarUpdater.this.parentFragment.startActivityForResult(photoPickerIntent, 14);
+                        } catch (Throwable e) {
+                            FileLog.e(e);
+                        }
                     }
-                }
-            });
-            this.parentFragment.presentFragment(fragment);
-            return;
+                });
+                this.parentFragment.presentFragment(fragment);
+                return;
+            }
+            this.parentFragment.getParentActivity().requestPermissions(new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, 4);
         }
-        this.parentFragment.getParentActivity().requestPermissions(new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, 4);
     }
 
     private void startCrop(String path, Uri uri) {

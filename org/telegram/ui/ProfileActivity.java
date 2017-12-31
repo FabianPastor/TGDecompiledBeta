@@ -46,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.CountDownLatch;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -737,15 +737,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         } else {
             this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chat_id));
             if (this.currentChat == null) {
-                final Semaphore semaphore = new Semaphore(0);
+                final CountDownLatch countDownLatch = new CountDownLatch(1);
                 MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
                     public void run() {
                         ProfileActivity.this.currentChat = MessagesStorage.getInstance(ProfileActivity.this.currentAccount).getChat(ProfileActivity.this.chat_id);
-                        semaphore.release();
+                        countDownLatch.countDown();
                     }
                 });
                 try {
-                    semaphore.acquire();
+                    countDownLatch.await();
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }

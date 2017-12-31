@@ -60,7 +60,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.beta.R;
@@ -2276,23 +2276,23 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                     synchronized (this.playerObjectSync) {
                         try {
                             this.ignoreFirstProgress = 3;
-                            Semaphore semaphore = new Semaphore(0);
-                            final Boolean[] result = new Boolean[1];
-                            final Semaphore semaphore2 = semaphore;
+                            final CountDownLatch countDownLatch = new CountDownLatch(1);
+                            Boolean[] result = new Boolean[1];
+                            final Boolean[] boolArr = result;
                             this.fileDecodingQueue.postRunnable(new Runnable() {
                                 public void run() {
                                     boolean z;
-                                    Boolean[] boolArr = result;
+                                    Boolean[] boolArr = boolArr;
                                     if (MediaController.this.openOpusFile(cacheFile.getAbsolutePath()) != 0) {
                                         z = true;
                                     } else {
                                         z = false;
                                     }
                                     boolArr[0] = Boolean.valueOf(z);
-                                    semaphore2.release();
+                                    countDownLatch.countDown();
                                 }
                             });
-                            semaphore.acquire();
+                            countDownLatch.await();
                             if (result[0].booleanValue()) {
                                 this.currentTotalPcmDuration = getTotalPcmDuration();
                                 this.audioTrackPlayer = new AudioTrack(this.useFrontSpeaker ? 0 : 3, 48000, 4, 2, this.playerBufferSize, 1);
@@ -2881,10 +2881,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
 
     public static void saveFile(String fullPath, Context context, int type, String name, String mime) {
         Throwable e;
-        final AlertDialog finalProgress;
-        final int i;
-        final String str;
-        final String str2;
         if (fullPath != null) {
             File file = null;
             if (!(fullPath == null || fullPath.length() == 0)) {
@@ -2897,6 +2893,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 final File sourceFile = file;
                 final boolean[] cancelled = new boolean[]{false};
                 if (sourceFile.exists()) {
+                    final AlertDialog finalProgress;
+                    final int i;
+                    final String str;
+                    final String str2;
                     AlertDialog progressDialog = null;
                     if (!(context == null || type == 0)) {
                         try {

@@ -11,7 +11,7 @@ import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.CountDownLatch;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
@@ -242,16 +242,16 @@ public class RenderView extends TextureView {
             if (!this.initialized) {
                 return null;
             }
-            final Semaphore semaphore = new Semaphore(0);
+            final CountDownLatch countDownLatch = new CountDownLatch(1);
             final Bitmap[] object = new Bitmap[1];
             try {
                 postRunnable(new Runnable() {
                     public void run() {
                         object[0] = RenderView.this.painting.getPaintingData(new RectF(0.0f, 0.0f, RenderView.this.painting.getSize().width, RenderView.this.painting.getSize().height), false).bitmap;
-                        semaphore.release();
+                        countDownLatch.countDown();
                     }
                 });
-                semaphore.acquire();
+                countDownLatch.await();
             } catch (Throwable e) {
                 FileLog.e(e);
             }

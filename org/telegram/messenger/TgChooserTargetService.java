@@ -20,7 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.CountDownLatch;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -37,7 +37,7 @@ public class TgChooserTargetService extends ChooserTargetService {
         final List<ChooserTarget> targets = new ArrayList();
         if (UserConfig.getInstance(currentAccount).isClientActivated() && MessagesController.getGlobalMainSettings().getBoolean("direct_share", true)) {
             ImageLoader imageLoader = ImageLoader.getInstance();
-            final Semaphore semaphore = new Semaphore(0);
+            final CountDownLatch countDownLatch = new CountDownLatch(1);
             final ComponentName componentName = new ComponentName(getPackageName(), LaunchActivity.class.getCanonicalName());
             MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
@@ -119,11 +119,11 @@ public class TgChooserTargetService extends ChooserTargetService {
                             targets.add(new ChooserTarget(name, icon, 1.0f, componentName, extras));
                         }
                     }
-                    semaphore.release();
+                    countDownLatch.countDown();
                 }
             });
             try {
-                semaphore.acquire();
+                countDownLatch.await();
             } catch (Throwable e) {
                 FileLog.e(e);
             }

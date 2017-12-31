@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.CountDownLatch;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
@@ -930,7 +930,7 @@ public class PhotoFilterView extends FrameLayout {
             if (!this.initied) {
                 return null;
             }
-            final Semaphore semaphore = new Semaphore(0);
+            final CountDownLatch countDownLatch = new CountDownLatch(1);
             final Bitmap[] object = new Bitmap[1];
             try {
                 postRunnable(new Runnable() {
@@ -944,12 +944,12 @@ public class PhotoFilterView extends FrameLayout {
                         GLES20.glFramebufferTexture2D(36160, 36064, 3553, access$3700[i], 0);
                         GLES20.glClear(0);
                         object[0] = EGLThread.this.getRenderBufferBitmap();
-                        semaphore.release();
+                        countDownLatch.countDown();
                         GLES20.glBindFramebuffer(36160, 0);
                         GLES20.glClear(0);
                     }
                 });
-                semaphore.acquire();
+                countDownLatch.await();
             } catch (Throwable e) {
                 FileLog.e(e);
             }

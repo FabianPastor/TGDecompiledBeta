@@ -62,7 +62,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.CountDownLatch;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.opengles.GL;
 import org.telegram.messenger.AndroidUtilities;
@@ -1457,7 +1457,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public void destroy(boolean async, Runnable beforeDestroyRunnable) {
         if (this.cameraSession != null) {
             this.cameraSession.destroy();
-            CameraController.getInstance().close(this.cameraSession, !async ? new Semaphore(0) : null, beforeDestroyRunnable);
+            CameraController.getInstance().close(this.cameraSession, !async ? new CountDownLatch(1) : null, beforeDestroyRunnable);
         }
     }
 

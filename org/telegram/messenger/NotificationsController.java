@@ -1599,6 +1599,8 @@ public class NotificationsController {
                 builder.setContentType(4);
                 builder.setUsage(5);
                 notificationChannel.setSound(sound, builder.build());
+            } else {
+                notificationChannel.setSound(null, null);
             }
             systemNotificationManager.createNotificationChannel(notificationChannel);
             preferences.edit().putString(key, channelId).putString(key + "_s", newSettingsHash).commit();

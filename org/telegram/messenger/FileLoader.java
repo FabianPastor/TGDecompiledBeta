@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.FileLoadOperation.FileLoadOperationDelegate;
 import org.telegram.messenger.FileUploadOperation.FileUploadOperationDelegate;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
@@ -350,16 +350,16 @@ public class FileLoader {
     }
 
     public boolean isLoadingFile(final String fileName) {
-        final Semaphore semaphore = new Semaphore(0);
+        final CountDownLatch semaphore = new CountDownLatch(1);
         final Boolean[] result = new Boolean[1];
         fileLoaderQueue.postRunnable(new Runnable() {
             public void run() {
                 result[0] = Boolean.valueOf(FileLoader.this.loadOperationPaths.containsKey(fileName));
-                semaphore.release();
+                semaphore.countDown();
             }
         });
         try {
-            semaphore.acquire();
+            semaphore.await();
         } catch (Throwable e) {
             FileLog.e(e);
         }

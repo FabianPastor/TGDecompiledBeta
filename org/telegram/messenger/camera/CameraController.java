@@ -24,8 +24,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import org.telegram.messenger.AndroidUtilities;
@@ -190,7 +190,7 @@ public class CameraController implements OnInfoListener {
         });
     }
 
-    public void close(final CameraSession session, final Semaphore semaphore, final Runnable beforeDestroyRunnable) {
+    public void close(final CameraSession session, final CountDownLatch countDownLatch, final Runnable beforeDestroyRunnable) {
         session.destroy();
         this.threadPool.execute(new Runnable() {
             public void run() {
@@ -210,15 +210,15 @@ public class CameraController implements OnInfoListener {
                         FileLog.e(e2);
                     }
                     session.cameraInfo.camera = null;
-                    if (semaphore != null) {
-                        semaphore.release();
+                    if (countDownLatch != null) {
+                        countDownLatch.countDown();
                     }
                 }
             }
         });
-        if (semaphore != null) {
+        if (countDownLatch != null) {
             try {
-                semaphore.acquire();
+                countDownLatch.await();
             } catch (Throwable e) {
                 FileLog.e(e);
             }

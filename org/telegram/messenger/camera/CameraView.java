@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.tgnet.ConnectionsManager;
 
@@ -295,7 +295,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     public void destroy(boolean async, Runnable beforeDestroyRunnable) {
         if (this.cameraSession != null) {
             this.cameraSession.destroy();
-            CameraController.getInstance().close(this.cameraSession, !async ? new Semaphore(0) : null, beforeDestroyRunnable);
+            CameraController.getInstance().close(this.cameraSession, !async ? new CountDownLatch(1) : null, beforeDestroyRunnable);
         }
     }
 
