@@ -217,7 +217,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
         TL_messages_getDhConfig req = new TL_messages_getDhConfig();
         req.random_length = 256;
         final MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
-        req.version = messagesStorage.lastSecretVersion;
+        req.version = messagesStorage.getLastSecretVersion();
         this.callReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
             public void run(TLObject response, TL_error error) {
                 VoIPService.this.callReqId = 0;
@@ -225,10 +225,10 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     messages_DhConfig res = (messages_DhConfig) response;
                     if (response instanceof TL_messages_dhConfig) {
                         if (Utilities.isGoodPrime(res.p, res.g)) {
-                            messagesStorage.secretPBytes = res.p;
-                            messagesStorage.secretG = res.g;
-                            messagesStorage.lastSecretVersion = res.version;
-                            messagesStorage.saveSecretParams(messagesStorage.lastSecretVersion, messagesStorage.secretG, messagesStorage.secretPBytes);
+                            messagesStorage.setSecretPBytes(res.p);
+                            messagesStorage.setSecretG(res.g);
+                            messagesStorage.setLastSecretVersion(res.version);
+                            messagesStorage.saveSecretParams(messagesStorage.getLastSecretVersion(), messagesStorage.getSecretG(), messagesStorage.getSecretPBytes());
                         } else {
                             VoIPService.this.callFailed();
                             return;
@@ -238,7 +238,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     for (int a = 0; a < 256; a++) {
                         salt[a] = (byte) (((byte) ((int) (Utilities.random.nextDouble() * 256.0d))) ^ res.random[a]);
                     }
-                    byte[] g_a = BigInteger.valueOf((long) messagesStorage.secretG).modPow(new BigInteger(1, salt), new BigInteger(1, messagesStorage.secretPBytes)).toByteArray();
+                    byte[] g_a = BigInteger.valueOf((long) messagesStorage.getSecretG()).modPow(new BigInteger(1, salt), new BigInteger(1, messagesStorage.getSecretPBytes())).toByteArray();
                     if (g_a.length > 256) {
                         byte[] correctedAuth = new byte[256];
                         System.arraycopy(g_a, 1, correctedAuth, 0, 256);
@@ -422,17 +422,17 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
         final MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
         TL_messages_getDhConfig req = new TL_messages_getDhConfig();
         req.random_length = 256;
-        req.version = messagesStorage.lastSecretVersion;
+        req.version = messagesStorage.getLastSecretVersion();
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
             public void run(TLObject response, TL_error error) {
                 if (error == null) {
                     messages_DhConfig res = (messages_DhConfig) response;
                     if (response instanceof TL_messages_dhConfig) {
                         if (Utilities.isGoodPrime(res.p, res.g)) {
-                            messagesStorage.secretPBytes = res.p;
-                            messagesStorage.secretG = res.g;
-                            messagesStorage.lastSecretVersion = res.version;
-                            MessagesStorage.getInstance(VoIPService.this.currentAccount).saveSecretParams(messagesStorage.lastSecretVersion, messagesStorage.secretG, messagesStorage.secretPBytes);
+                            messagesStorage.setSecretPBytes(res.p);
+                            messagesStorage.setSecretG(res.g);
+                            messagesStorage.setLastSecretVersion(res.version);
+                            MessagesStorage.getInstance(VoIPService.this.currentAccount).saveSecretParams(messagesStorage.getLastSecretVersion(), messagesStorage.getSecretG(), messagesStorage.getSecretPBytes());
                         } else {
                             FileLog.e("stopping VoIP service, bad prime");
                             VoIPService.this.callFailed();
@@ -444,7 +444,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                         salt[a] = (byte) (((byte) ((int) (Utilities.random.nextDouble() * 256.0d))) ^ res.random[a]);
                     }
                     VoIPService.this.a_or_b = salt;
-                    BigInteger g_b = BigInteger.valueOf((long) messagesStorage.secretG).modPow(new BigInteger(1, salt), new BigInteger(1, messagesStorage.secretPBytes));
+                    BigInteger g_b = BigInteger.valueOf((long) messagesStorage.getSecretG()).modPow(new BigInteger(1, salt), new BigInteger(1, messagesStorage.getSecretPBytes()));
                     VoIPService.this.g_a_hash = VoIPService.this.call.g_a_hash;
                     byte[] g_b_bytes = g_b.toByteArray();
                     if (g_b_bytes.length > 256) {
@@ -637,7 +637,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     } else if (Arrays.equals(this.g_a_hash, Utilities.computeSHA256(call.g_a_or_b, 0, call.g_a_or_b.length))) {
                         this.g_a = call.g_a_or_b;
                         BigInteger g_a = new BigInteger(1, call.g_a_or_b);
-                        BigInteger p = new BigInteger(1, MessagesStorage.getInstance(this.currentAccount).secretPBytes);
+                        BigInteger p = new BigInteger(1, MessagesStorage.getInstance(this.currentAccount).getSecretPBytes());
                         if (Utilities.isGoodGaAndGb(g_a, p)) {
                             byte[] authKey = g_a.modPow(new BigInteger(1, this.a_or_b), p).toByteArray();
                             byte[] correctedAuth;
@@ -713,7 +713,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
 
     private void processAcceptedCall() {
         dispatchStateChanged(12);
-        BigInteger p = new BigInteger(1, MessagesStorage.getInstance(this.currentAccount).secretPBytes);
+        BigInteger p = new BigInteger(1, MessagesStorage.getInstance(this.currentAccount).getSecretPBytes());
         BigInteger i_authKey = new BigInteger(1, this.call.g_b);
         if (Utilities.isGoodGaAndGb(i_authKey, p)) {
             byte[] authKey = i_authKey.modPow(new BigInteger(1, this.a_or_b), p).toByteArray();

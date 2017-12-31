@@ -1986,28 +1986,32 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
-        int maxWidth;
         int a;
         String str;
         int dp;
-        int linkPreviewMaxWidth;
-        String description;
         Photo photo;
         TLObject document;
         String type;
-        boolean smallImage;
+        int duration;
         TL_webDocument webDocument;
         int additinalWidth;
+        int height;
         int width;
         Throwable e;
+        int restLinesCount;
+        int lineLeft;
         boolean authorIsRTL;
         boolean hasRTL;
+        int textWidth;
         int maxPhotoWidth;
         DocumentAttribute attribute;
+        PhotoSize photoSize;
+        PhotoSize photoSize2;
+        int dp2;
         int durationWidth;
         ArrayList arrayList;
         String fileName;
-        boolean autoDownload;
+        int seconds;
         CharSequence str2;
         String price;
         SpannableStringBuilder spannableStringBuilder;
@@ -2031,8 +2035,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
         if (messageChanged || dataChanged || groupChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
             int i;
-            int height;
-            int lineLeft;
+            int linkPreviewMaxWidth;
             float f;
             int timeWidthTotal;
             this.pinnedBottom = bottomNear;
@@ -2142,6 +2145,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
+            int maxWidth;
+            boolean autoDownload;
             float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
@@ -2275,15 +2280,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     String site_name;
                     String title;
                     String author;
-                    int duration;
+                    String description;
+                    boolean smallImage;
                     TL_webDocument webDocument2;
                     int restLines;
-                    int restLinesCount;
-                    int textWidth;
-                    PhotoSize photoSize;
-                    PhotoSize photoSize2;
-                    int dp2;
-                    int seconds;
                     if (AndroidUtilities.isTablet()) {
                         if (this.isChat && messageObject.needDrawAvatar() && !this.currentMessageObject.isOut()) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(132.0f);
@@ -6422,6 +6422,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         int linkPreviewY;
         int x;
         int y;
+        float progress;
         int x1;
         int y1;
         RadialProgress radialProgress;
@@ -6779,7 +6780,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             Theme.chat_photoStatesDrawables[drawable][this.buttonPressed].draw(canvas);
             if (this.currentMessageObject.messageOwner.destroyTime != 0) {
                 if (!this.currentMessageObject.isOutOwner()) {
-                    float progress;
                     progress = ((float) Math.max(0, (((long) this.currentMessageObject.messageOwner.destroyTime) * 1000) - (System.currentTimeMillis() + ((long) (ConnectionsManager.getInstance(this.currentAccount).getTimeDifference() * 1000))))) / (((float) this.currentMessageObject.messageOwner.ttl) * 1000.0f);
                     Theme.chat_deleteProgressPaint.setAlpha((int) (255.0f * this.controlsAlpha));
                     canvas.drawArc(this.deleteProgressRect, -90.0f, -360.0f * progress, true, Theme.chat_deleteProgressPaint);

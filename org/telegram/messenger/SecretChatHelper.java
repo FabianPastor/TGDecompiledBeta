@@ -1148,8 +1148,8 @@ public class SecretChatHelper {
                     }
                     byte[] salt = new byte[256];
                     Utilities.random.nextBytes(salt);
-                    r0 = new BigInteger(1, MessagesStorage.getInstance(this.currentAccount).secretPBytes);
-                    BigInteger g_b = BigInteger.valueOf((long) MessagesStorage.getInstance(this.currentAccount).secretG).modPow(new BigInteger(1, salt), r0);
+                    r0 = new BigInteger(1, MessagesStorage.getInstance(this.currentAccount).getSecretPBytes());
+                    BigInteger g_b = BigInteger.valueOf((long) MessagesStorage.getInstance(this.currentAccount).getSecretG()).modPow(new BigInteger(1, salt), r0);
                     r0 = new BigInteger(1, serviceMessage.action.g_a);
                     if (Utilities.isGoodGaAndGb(r0, r0)) {
                         byte[] g_b_bytes = g_b.toByteArray();
@@ -1186,7 +1186,7 @@ public class SecretChatHelper {
                     }
                 } else if (serviceMessage.action instanceof TL_decryptedMessageActionAcceptKey) {
                     if (chat.exchange_id == serviceMessage.action.exchange_id) {
-                        r0 = new BigInteger(1, MessagesStorage.getInstance(this.currentAccount).secretPBytes);
+                        r0 = new BigInteger(1, MessagesStorage.getInstance(this.currentAccount).getSecretPBytes());
                         r0 = new BigInteger(1, serviceMessage.action.g_b);
                         if (Utilities.isGoodGaAndGb(r0, r0)) {
                             authKey = r0.modPow(new BigInteger(1, chat.a_or_b), r0).toByteArray();
@@ -1605,7 +1605,7 @@ public class SecretChatHelper {
         if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 20) {
             byte[] salt = new byte[256];
             Utilities.random.nextBytes(salt);
-            byte[] g_a = BigInteger.valueOf((long) MessagesStorage.getInstance(this.currentAccount).secretG).modPow(new BigInteger(1, salt), new BigInteger(1, MessagesStorage.getInstance(this.currentAccount).secretPBytes)).toByteArray();
+            byte[] g_a = BigInteger.valueOf((long) MessagesStorage.getInstance(this.currentAccount).getSecretG()).modPow(new BigInteger(1, salt), new BigInteger(1, MessagesStorage.getInstance(this.currentAccount).getSecretPBytes())).toByteArray();
             if (g_a.length > 256) {
                 byte[] correctedAuth = new byte[256];
                 System.arraycopy(g_a, 1, correctedAuth, 0, 256);
@@ -1620,7 +1620,7 @@ public class SecretChatHelper {
     }
 
     public void processAcceptedSecretChat(final EncryptedChat encryptedChat) {
-        BigInteger p = new BigInteger(1, MessagesStorage.getInstance(this.currentAccount).secretPBytes);
+        BigInteger p = new BigInteger(1, MessagesStorage.getInstance(this.currentAccount).getSecretPBytes());
         BigInteger i_authKey = new BigInteger(1, encryptedChat.g_a_or_b);
         if (Utilities.isGoodGaAndGb(i_authKey, p)) {
             byte[] authKey = i_authKey.modPow(new BigInteger(1, encryptedChat.a_or_b), p).toByteArray();
@@ -1693,7 +1693,7 @@ public class SecretChatHelper {
             this.acceptingChats.put(Integer.valueOf(encryptedChat.id), encryptedChat);
             TL_messages_getDhConfig req = new TL_messages_getDhConfig();
             req.random_length = 256;
-            req.version = MessagesStorage.getInstance(this.currentAccount).lastSecretVersion;
+            req.version = MessagesStorage.getInstance(this.currentAccount).getLastSecretVersion();
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                     if (error == null) {
@@ -1701,10 +1701,10 @@ public class SecretChatHelper {
                         messages_DhConfig res = (messages_DhConfig) response;
                         if (response instanceof TL_messages_dhConfig) {
                             if (Utilities.isGoodPrime(res.p, res.g)) {
-                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).secretPBytes = res.p;
-                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).secretG = res.g;
-                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).lastSecretVersion = res.version;
-                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).saveSecretParams(MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).lastSecretVersion, MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).secretG, MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).secretPBytes);
+                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).setSecretPBytes(res.p);
+                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).setSecretG(res.g);
+                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).setLastSecretVersion(res.version);
+                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).saveSecretParams(MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getLastSecretVersion(), MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getSecretG(), MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getSecretPBytes());
                             } else {
                                 SecretChatHelper.this.acceptingChats.remove(Integer.valueOf(encryptedChat.id));
                                 SecretChatHelper.this.declineSecretChat(encryptedChat.id);
@@ -1718,8 +1718,8 @@ public class SecretChatHelper {
                         encryptedChat.a_or_b = salt;
                         encryptedChat.seq_in = -1;
                         encryptedChat.seq_out = 0;
-                        BigInteger p = new BigInteger(1, MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).secretPBytes);
-                        BigInteger g_b = BigInteger.valueOf((long) MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).secretG).modPow(new BigInteger(1, salt), p);
+                        BigInteger p = new BigInteger(1, MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getSecretPBytes());
+                        BigInteger g_b = BigInteger.valueOf((long) MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getSecretG()).modPow(new BigInteger(1, salt), p);
                         BigInteger g_a = new BigInteger(1, encryptedChat.g_a);
                         if (Utilities.isGoodGaAndGb(g_a, p)) {
                             byte[] correctedAuth;
@@ -1797,17 +1797,17 @@ public class SecretChatHelper {
             progressDialog.setCancelable(false);
             TL_messages_getDhConfig req = new TL_messages_getDhConfig();
             req.random_length = 256;
-            req.version = MessagesStorage.getInstance(this.currentAccount).lastSecretVersion;
+            req.version = MessagesStorage.getInstance(this.currentAccount).getLastSecretVersion();
             final int reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                     if (error == null) {
                         messages_DhConfig res = (messages_DhConfig) response;
                         if (response instanceof TL_messages_dhConfig) {
                             if (Utilities.isGoodPrime(res.p, res.g)) {
-                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).secretPBytes = res.p;
-                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).secretG = res.g;
-                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).lastSecretVersion = res.version;
-                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).saveSecretParams(MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).lastSecretVersion, MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).secretG, MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).secretPBytes);
+                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).setSecretPBytes(res.p);
+                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).setSecretG(res.g);
+                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).setLastSecretVersion(res.version);
+                                MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).saveSecretParams(MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getLastSecretVersion(), MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getSecretG(), MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getSecretPBytes());
                             } else {
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
@@ -1827,7 +1827,7 @@ public class SecretChatHelper {
                         for (int a = 0; a < 256; a++) {
                             salt[a] = (byte) (((byte) ((int) (Utilities.random.nextDouble() * 256.0d))) ^ res.random[a]);
                         }
-                        byte[] g_a = BigInteger.valueOf((long) MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).secretG).modPow(new BigInteger(1, salt), new BigInteger(1, MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).secretPBytes)).toByteArray();
+                        byte[] g_a = BigInteger.valueOf((long) MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getSecretG()).modPow(new BigInteger(1, salt), new BigInteger(1, MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getSecretPBytes())).toByteArray();
                         if (g_a.length > 256) {
                             byte[] correctedAuth = new byte[256];
                             System.arraycopy(g_a, 1, correctedAuth, 0, 256);

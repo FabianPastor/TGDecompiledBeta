@@ -1890,11 +1890,11 @@ public class MessagesController implements NotificationCenterDelegate {
     protected void processNewDifferenceParams(int seq, int pts, int date, int pts_count) {
         FileLog.e("processNewDifferenceParams seq = " + seq + " pts = " + pts + " date = " + date + " pts_count = " + pts_count);
         if (pts != -1) {
-            if (MessagesStorage.getInstance(this.currentAccount).lastPtsValue + pts_count == pts) {
+            if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + pts_count == pts) {
                 FileLog.e("APPLY PTS");
-                MessagesStorage.getInstance(this.currentAccount).lastPtsValue = pts;
-                MessagesStorage.getInstance(this.currentAccount).saveDiffParams(MessagesStorage.getInstance(this.currentAccount).lastSeqValue, MessagesStorage.getInstance(this.currentAccount).lastPtsValue, MessagesStorage.getInstance(this.currentAccount).lastDateValue, MessagesStorage.getInstance(this.currentAccount).lastQtsValue);
-            } else if (MessagesStorage.getInstance(this.currentAccount).lastPtsValue != pts) {
+                MessagesStorage.getInstance(this.currentAccount).setLastPtsValue(pts);
+                MessagesStorage.getInstance(this.currentAccount).saveDiffParams(MessagesStorage.getInstance(this.currentAccount).getLastSeqValue(), MessagesStorage.getInstance(this.currentAccount).getLastPtsValue(), MessagesStorage.getInstance(this.currentAccount).getLastDateValue(), MessagesStorage.getInstance(this.currentAccount).getLastQtsValue());
+            } else if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() != pts) {
                 if (this.gettingDifference || this.updatesStartWaitTimePts == 0 || Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimePts) <= 1500) {
                     FileLog.e("ADD UPDATE TO QUEUE pts = " + pts + " pts_count = " + pts_count);
                     if (this.updatesStartWaitTimePts == 0) {
@@ -1912,14 +1912,14 @@ public class MessagesController implements NotificationCenterDelegate {
         if (seq == -1) {
             return;
         }
-        if (MessagesStorage.getInstance(this.currentAccount).lastSeqValue + 1 == seq) {
+        if (MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() + 1 == seq) {
             FileLog.e("APPLY SEQ");
-            MessagesStorage.getInstance(this.currentAccount).lastSeqValue = seq;
+            MessagesStorage.getInstance(this.currentAccount).setLastSeqValue(seq);
             if (date != -1) {
-                MessagesStorage.getInstance(this.currentAccount).lastDateValue = date;
+                MessagesStorage.getInstance(this.currentAccount).setLastDateValue(date);
             }
-            MessagesStorage.getInstance(this.currentAccount).saveDiffParams(MessagesStorage.getInstance(this.currentAccount).lastSeqValue, MessagesStorage.getInstance(this.currentAccount).lastPtsValue, MessagesStorage.getInstance(this.currentAccount).lastDateValue, MessagesStorage.getInstance(this.currentAccount).lastQtsValue);
-        } else if (MessagesStorage.getInstance(this.currentAccount).lastSeqValue == seq) {
+            MessagesStorage.getInstance(this.currentAccount).saveDiffParams(MessagesStorage.getInstance(this.currentAccount).getLastSeqValue(), MessagesStorage.getInstance(this.currentAccount).getLastPtsValue(), MessagesStorage.getInstance(this.currentAccount).getLastDateValue(), MessagesStorage.getInstance(this.currentAccount).getLastQtsValue());
+        } else if (MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() == seq) {
         } else {
             if (this.gettingDifference || this.updatesStartWaitTimeSeq == 0 || Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimeSeq) <= 1500) {
                 FileLog.e("ADD UPDATE TO QUEUE seq = " + seq);
@@ -2344,7 +2344,6 @@ public class MessagesController implements NotificationCenterDelegate {
         TL_channels_deleteMessages req;
         long newTaskId;
         NativeByteBuffer data;
-        NativeByteBuffer data2;
         Throwable e;
         final int i;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
@@ -2372,6 +2371,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance(this.currentAccount).updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
+            NativeByteBuffer data2;
             if (channelId != 0) {
                 if (taskRequest != null) {
                     req = (TL_channels_deleteMessages) taskRequest;
@@ -3508,7 +3508,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void forceResetDialogs() {
-        resetDialogs(true, MessagesStorage.getInstance(this.currentAccount).lastSeqValue, MessagesStorage.getInstance(this.currentAccount).lastPtsValue, MessagesStorage.getInstance(this.currentAccount).lastDateValue, MessagesStorage.getInstance(this.currentAccount).lastQtsValue);
+        resetDialogs(true, MessagesStorage.getInstance(this.currentAccount).getLastSeqValue(), MessagesStorage.getInstance(this.currentAccount).getLastPtsValue(), MessagesStorage.getInstance(this.currentAccount).getLastDateValue(), MessagesStorage.getInstance(this.currentAccount).getLastQtsValue());
     }
 
     private void resetDialogs(boolean query, int seq, int newPts, int date, int qts) {
@@ -3679,9 +3679,9 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 MessagesController.this.gettingDifference = false;
-                MessagesStorage.getInstance(MessagesController.this.currentAccount).lastPtsValue = i;
-                MessagesStorage.getInstance(MessagesController.this.currentAccount).lastDateValue = i2;
-                MessagesStorage.getInstance(MessagesController.this.currentAccount).lastQtsValue = i3;
+                MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastPtsValue(i);
+                MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastDateValue(i2);
+                MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastQtsValue(i3);
                 MessagesController.this.getDifference();
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
@@ -3968,7 +3968,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
-                Chat chat;
                 User user;
                 Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
@@ -3988,6 +3987,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 Message lastMessage = null;
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                     if (lastMessage == null || message.date < lastMessage.date) {
                         lastMessage = message;
@@ -4527,7 +4527,6 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 int a;
-                Chat chat;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 HashMap<Integer, User> usersDict = new HashMap();
@@ -4542,6 +4541,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     chatsDict.put(Integer.valueOf(c.id), c);
                 }
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -5666,14 +5666,14 @@ public class MessagesController implements NotificationCenterDelegate {
                     MessagesController.this.updatingState = false;
                     if (error == null) {
                         TL_updates_state res = (TL_updates_state) response;
-                        MessagesStorage.getInstance(MessagesController.this.currentAccount).lastDateValue = res.date;
-                        MessagesStorage.getInstance(MessagesController.this.currentAccount).lastPtsValue = res.pts;
-                        MessagesStorage.getInstance(MessagesController.this.currentAccount).lastSeqValue = res.seq;
-                        MessagesStorage.getInstance(MessagesController.this.currentAccount).lastQtsValue = res.qts;
+                        MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastDateValue(res.date);
+                        MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastPtsValue(res.pts);
+                        MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastSeqValue(res.seq);
+                        MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastQtsValue(res.qts);
                         for (int a = 0; a < 3; a++) {
                             MessagesController.this.processUpdatesQueue(a, 2);
                         }
-                        MessagesStorage.getInstance(MessagesController.this.currentAccount).saveDiffParams(MessagesStorage.getInstance(MessagesController.this.currentAccount).lastSeqValue, MessagesStorage.getInstance(MessagesController.this.currentAccount).lastPtsValue, MessagesStorage.getInstance(MessagesController.this.currentAccount).lastDateValue, MessagesStorage.getInstance(MessagesController.this.currentAccount).lastQtsValue);
+                        MessagesStorage.getInstance(MessagesController.this.currentAccount).saveDiffParams(MessagesStorage.getInstance(MessagesController.this.currentAccount).getLastSeqValue(), MessagesStorage.getInstance(MessagesController.this.currentAccount).getLastPtsValue(), MessagesStorage.getInstance(MessagesController.this.currentAccount).getLastDateValue(), MessagesStorage.getInstance(MessagesController.this.currentAccount).getLastQtsValue());
                     } else if (error.code != 401) {
                         MessagesController.this.loadCurrentState();
                     }
@@ -5715,28 +5715,28 @@ public class MessagesController implements NotificationCenterDelegate {
     private int isValidUpdate(Updates updates, int type) {
         if (type == 0) {
             int seq = getUpdateSeq(updates);
-            if (MessagesStorage.getInstance(this.currentAccount).lastSeqValue + 1 == seq || MessagesStorage.getInstance(this.currentAccount).lastSeqValue == seq) {
+            if (MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() + 1 == seq || MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() == seq) {
                 return 0;
             }
-            if (MessagesStorage.getInstance(this.currentAccount).lastSeqValue >= seq) {
+            if (MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() >= seq) {
                 return 2;
             }
             return 1;
         } else if (type == 1) {
-            if (updates.pts <= MessagesStorage.getInstance(this.currentAccount).lastPtsValue) {
+            if (updates.pts <= MessagesStorage.getInstance(this.currentAccount).getLastPtsValue()) {
                 return 2;
             }
-            if (MessagesStorage.getInstance(this.currentAccount).lastPtsValue + updates.pts_count == updates.pts) {
+            if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + updates.pts_count == updates.pts) {
                 return 0;
             }
             return 1;
         } else if (type != 2) {
             return 0;
         } else {
-            if (updates.pts <= MessagesStorage.getInstance(this.currentAccount).lastQtsValue) {
+            if (updates.pts <= MessagesStorage.getInstance(this.currentAccount).getLastQtsValue()) {
                 return 2;
             }
-            if (MessagesStorage.getInstance(this.currentAccount).lastQtsValue + updates.updates.size() == updates.pts) {
+            if (MessagesStorage.getInstance(this.currentAccount).getLastQtsValue() + updates.updates.size() == updates.pts) {
                 return 0;
             }
             return 1;
@@ -5833,11 +5833,11 @@ public class MessagesController implements NotificationCenterDelegate {
             if (state == 2) {
                 updates = (Updates) updatesQueue.get(0);
                 if (type == 0) {
-                    MessagesStorage.getInstance(this.currentAccount).lastSeqValue = getUpdateSeq(updates);
+                    MessagesStorage.getInstance(this.currentAccount).setLastSeqValue(getUpdateSeq(updates));
                 } else if (type == 1) {
-                    MessagesStorage.getInstance(this.currentAccount).lastPtsValue = updates.pts;
+                    MessagesStorage.getInstance(this.currentAccount).setLastPtsValue(updates.pts);
                 } else {
-                    MessagesStorage.getInstance(this.currentAccount).lastQtsValue = updates.pts;
+                    MessagesStorage.getInstance(this.currentAccount).setLastQtsValue(updates.pts);
                 }
             }
             int a = 0;
@@ -6331,12 +6331,12 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void getDifference() {
-        getDifference(MessagesStorage.getInstance(this.currentAccount).lastPtsValue, MessagesStorage.getInstance(this.currentAccount).lastDateValue, MessagesStorage.getInstance(this.currentAccount).lastQtsValue, false);
+        getDifference(MessagesStorage.getInstance(this.currentAccount).getLastPtsValue(), MessagesStorage.getInstance(this.currentAccount).getLastDateValue(), MessagesStorage.getInstance(this.currentAccount).getLastQtsValue(), false);
     }
 
     public void getDifference(int pts, final int date, final int qts, boolean slice) {
         registerForPush(SharedConfig.pushString);
-        if (MessagesStorage.getInstance(this.currentAccount).lastPtsValue == 0) {
+        if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() == 0) {
             loadCurrentState();
         } else if (slice || !this.gettingDifference) {
             this.gettingDifference = true;
@@ -6367,7 +6367,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                 public void run() {
                                     MessagesController.this.loadedFullUsers.clear();
                                     MessagesController.this.loadedFullChats.clear();
-                                    MessagesController.this.resetDialogs(true, MessagesStorage.getInstance(MessagesController.this.currentAccount).lastSeqValue, res.pts, date, qts);
+                                    MessagesController.this.resetDialogs(true, MessagesStorage.getInstance(MessagesController.this.currentAccount).getLastSeqValue(), res.pts, date, qts);
                                 }
                             });
                             return;
@@ -6541,29 +6541,29 @@ public class MessagesController implements NotificationCenterDelegate {
                                         }
                                         if (res instanceof TL_updates_difference) {
                                             MessagesController.this.gettingDifference = false;
-                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).lastSeqValue = res.state.seq;
-                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).lastDateValue = res.state.date;
-                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).lastPtsValue = res.state.pts;
-                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).lastQtsValue = res.state.qts;
+                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastSeqValue(res.state.seq);
+                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastDateValue(res.state.date);
+                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastPtsValue(res.state.pts);
+                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastQtsValue(res.state.qts);
                                             ConnectionsManager.getInstance(MessagesController.this.currentAccount).setIsUpdating(false);
                                             for (a = 0; a < 3; a++) {
                                                 MessagesController.this.processUpdatesQueue(a, 1);
                                             }
                                         } else if (res instanceof TL_updates_differenceSlice) {
-                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).lastDateValue = res.intermediate_state.date;
-                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).lastPtsValue = res.intermediate_state.pts;
-                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).lastQtsValue = res.intermediate_state.qts;
+                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastDateValue(res.intermediate_state.date);
+                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastPtsValue(res.intermediate_state.pts);
+                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastQtsValue(res.intermediate_state.qts);
                                         } else if (res instanceof TL_updates_differenceEmpty) {
                                             MessagesController.this.gettingDifference = false;
-                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).lastSeqValue = res.seq;
-                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).lastDateValue = res.date;
+                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastSeqValue(res.seq);
+                                            MessagesStorage.getInstance(MessagesController.this.currentAccount).setLastDateValue(res.date);
                                             ConnectionsManager.getInstance(MessagesController.this.currentAccount).setIsUpdating(false);
                                             for (a = 0; a < 3; a++) {
                                                 MessagesController.this.processUpdatesQueue(a, 1);
                                             }
                                         }
-                                        MessagesStorage.getInstance(MessagesController.this.currentAccount).saveDiffParams(MessagesStorage.getInstance(MessagesController.this.currentAccount).lastSeqValue, MessagesStorage.getInstance(MessagesController.this.currentAccount).lastPtsValue, MessagesStorage.getInstance(MessagesController.this.currentAccount).lastDateValue, MessagesStorage.getInstance(MessagesController.this.currentAccount).lastQtsValue);
-                                        FileLog.e("received difference with date = " + MessagesStorage.getInstance(MessagesController.this.currentAccount).lastDateValue + " pts = " + MessagesStorage.getInstance(MessagesController.this.currentAccount).lastPtsValue + " seq = " + MessagesStorage.getInstance(MessagesController.this.currentAccount).lastSeqValue + " messages = " + res.new_messages.size() + " users = " + res.users.size() + " chats = " + res.chats.size() + " other updates = " + res.other_updates.size());
+                                        MessagesStorage.getInstance(MessagesController.this.currentAccount).saveDiffParams(MessagesStorage.getInstance(MessagesController.this.currentAccount).getLastSeqValue(), MessagesStorage.getInstance(MessagesController.this.currentAccount).getLastPtsValue(), MessagesStorage.getInstance(MessagesController.this.currentAccount).getLastDateValue(), MessagesStorage.getInstance(MessagesController.this.currentAccount).getLastQtsValue());
+                                        FileLog.e("received difference with date = " + MessagesStorage.getInstance(MessagesController.this.currentAccount).getLastDateValue() + " pts = " + MessagesStorage.getInstance(MessagesController.this.currentAccount).getLastPtsValue() + " seq = " + MessagesStorage.getInstance(MessagesController.this.currentAccount).getLastSeqValue() + " messages = " + res.new_messages.size() + " users = " + res.users.size() + " chats = " + res.chats.size() + " other updates = " + res.other_updates.size());
                                     }
                                 });
                             }
@@ -7114,7 +7114,7 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             if (missingData) {
                 needGetDiff = true;
-            } else if (MessagesStorage.getInstance(this.currentAccount).lastPtsValue + updates.pts_count == updates.pts) {
+            } else if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + updates.pts_count == updates.pts) {
                 Message message = new TL_message();
                 message.id = updates.id;
                 int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
@@ -7157,7 +7157,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     message.media_unread = false;
                     message.out = true;
                 }
-                MessagesStorage.getInstance(this.currentAccount).lastPtsValue = updates.pts;
+                MessagesStorage.getInstance(this.currentAccount).setLastPtsValue(updates.pts);
                 MessageObject messageObject = new MessageObject(this.currentAccount, message, null, this.createdDialogIds.contains(Long.valueOf(message.dialog_id)));
                 ArrayList<MessageObject> objArr = new ArrayList();
                 objArr.add(messageObject);
@@ -7214,8 +7214,8 @@ public class MessagesController implements NotificationCenterDelegate {
                     });
                 }
                 MessagesStorage.getInstance(this.currentAccount).putMessages(arr2, false, true, false, 0);
-            } else if (MessagesStorage.getInstance(this.currentAccount).lastPtsValue != updates.pts) {
-                FileLog.e("need get diff short message, pts: " + MessagesStorage.getInstance(this.currentAccount).lastPtsValue + " " + updates.pts + " count = " + updates.pts_count);
+            } else if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() != updates.pts) {
+                FileLog.e("need get diff short message, pts: " + MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + " " + updates.pts + " count = " + updates.pts_count);
                 if (this.gettingDifference || this.updatesStartWaitTimePts == 0 || Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimePts) <= 1500) {
                     if (this.updatesStartWaitTimePts == 0) {
                         this.updatesStartWaitTimePts = System.currentTimeMillis();
@@ -7361,12 +7361,12 @@ public class MessagesController implements NotificationCenterDelegate {
                                 updatesNew.pts = update2.qts;
                                 updates.updates.remove(b);
                             }
-                            if (MessagesStorage.getInstance(this.currentAccount).lastQtsValue == 0 || MessagesStorage.getInstance(this.currentAccount).lastQtsValue + updatesNew.updates.size() == updatesNew.pts) {
+                            if (MessagesStorage.getInstance(this.currentAccount).getLastQtsValue() == 0 || MessagesStorage.getInstance(this.currentAccount).getLastQtsValue() + updatesNew.updates.size() == updatesNew.pts) {
                                 processUpdateArray(updatesNew.updates, updates.users, updates.chats, false);
-                                MessagesStorage.getInstance(this.currentAccount).lastQtsValue = updatesNew.pts;
+                                MessagesStorage.getInstance(this.currentAccount).setLastQtsValue(updatesNew.pts);
                                 needReceivedQueue = true;
-                            } else if (MessagesStorage.getInstance(this.currentAccount).lastPtsValue != updatesNew.pts) {
-                                FileLog.e(update + " need get diff, qts: " + MessagesStorage.getInstance(this.currentAccount).lastQtsValue + " " + updatesNew.pts);
+                            } else if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() != updatesNew.pts) {
+                                FileLog.e(update + " need get diff, qts: " + MessagesStorage.getInstance(this.currentAccount).getLastQtsValue() + " " + updatesNew.pts);
                                 if (this.gettingDifference || this.updatesStartWaitTimeQts == 0 || (this.updatesStartWaitTimeQts != 0 && Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimeQts) <= 1500)) {
                                     if (this.updatesStartWaitTimeQts == 0) {
                                         this.updatesStartWaitTimeQts = System.currentTimeMillis();
@@ -7393,15 +7393,15 @@ public class MessagesController implements NotificationCenterDelegate {
                             updatesNew.pts_count += update2.pts_count;
                             updates.updates.remove(b);
                         }
-                        if (MessagesStorage.getInstance(this.currentAccount).lastPtsValue + updatesNew.pts_count == updatesNew.pts) {
+                        if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + updatesNew.pts_count == updatesNew.pts) {
                             if (processUpdateArray(updatesNew.updates, updates.users, updates.chats, false)) {
-                                MessagesStorage.getInstance(this.currentAccount).lastPtsValue = updatesNew.pts;
+                                MessagesStorage.getInstance(this.currentAccount).setLastPtsValue(updatesNew.pts);
                             } else {
-                                FileLog.e("need get diff inner TL_updates, pts: " + MessagesStorage.getInstance(this.currentAccount).lastPtsValue + " " + updates.seq);
+                                FileLog.e("need get diff inner TL_updates, pts: " + MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + " " + updates.seq);
                                 needGetDiff = true;
                             }
-                        } else if (MessagesStorage.getInstance(this.currentAccount).lastPtsValue != updatesNew.pts) {
-                            FileLog.e(update + " need get diff, pts: " + MessagesStorage.getInstance(this.currentAccount).lastPtsValue + " " + updatesNew.pts + " count = " + updatesNew.pts_count);
+                        } else if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() != updatesNew.pts) {
+                            FileLog.e(update + " need get diff, pts: " + MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + " " + updatesNew.pts + " count = " + updatesNew.pts_count);
                             if (this.gettingDifference || this.updatesStartWaitTimePts == 0 || (this.updatesStartWaitTimePts != 0 && Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimePts) <= 1500)) {
                                 if (this.updatesStartWaitTimePts == 0) {
                                     this.updatesStartWaitTimePts = System.currentTimeMillis();
@@ -7416,20 +7416,20 @@ public class MessagesController implements NotificationCenterDelegate {
                     updates.updates.remove(a);
                     a = (a - 1) + 1;
                 }
-                boolean processUpdate = updates instanceof TL_updatesCombined ? MessagesStorage.getInstance(this.currentAccount).lastSeqValue + 1 == updates.seq_start || MessagesStorage.getInstance(this.currentAccount).lastSeqValue == updates.seq_start : MessagesStorage.getInstance(this.currentAccount).lastSeqValue + 1 == updates.seq || updates.seq == 0 || updates.seq == MessagesStorage.getInstance(this.currentAccount).lastSeqValue;
+                boolean processUpdate = updates instanceof TL_updatesCombined ? MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() + 1 == updates.seq_start || MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() == updates.seq_start : MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() + 1 == updates.seq || updates.seq == 0 || updates.seq == MessagesStorage.getInstance(this.currentAccount).getLastSeqValue();
                 if (processUpdate) {
                     processUpdateArray(updates.updates, updates.users, updates.chats, false);
                     if (updates.seq != 0) {
                         if (updates.date != 0) {
-                            MessagesStorage.getInstance(this.currentAccount).lastDateValue = updates.date;
+                            MessagesStorage.getInstance(this.currentAccount).setLastDateValue(updates.date);
                         }
-                        MessagesStorage.getInstance(this.currentAccount).lastSeqValue = updates.seq;
+                        MessagesStorage.getInstance(this.currentAccount).setLastSeqValue(updates.seq);
                     }
                 } else {
                     if (updates instanceof TL_updatesCombined) {
-                        FileLog.e("need get diff TL_updatesCombined, seq: " + MessagesStorage.getInstance(this.currentAccount).lastSeqValue + " " + updates.seq_start);
+                        FileLog.e("need get diff TL_updatesCombined, seq: " + MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() + " " + updates.seq_start);
                     } else {
-                        FileLog.e("need get diff TL_updates, seq: " + MessagesStorage.getInstance(this.currentAccount).lastSeqValue + " " + updates.seq);
+                        FileLog.e("need get diff TL_updates, seq: " + MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() + " " + updates.seq);
                     }
                     if (this.gettingDifference || this.updatesStartWaitTimeSeq == 0 || Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimeSeq) <= 1500) {
                         if (this.updatesStartWaitTimeSeq == 0) {
@@ -7446,13 +7446,13 @@ public class MessagesController implements NotificationCenterDelegate {
             FileLog.e("need get diff TL_updatesTooLong");
             needGetDiff = true;
         } else if (updates instanceof UserActionUpdatesSeq) {
-            MessagesStorage.getInstance(this.currentAccount).lastSeqValue = updates.seq;
+            MessagesStorage.getInstance(this.currentAccount).setLastSeqValue(updates.seq);
         } else if (updates instanceof UserActionUpdatesPts) {
             if (updates.chat_id != 0) {
                 this.channelsPts.put(Integer.valueOf(updates.chat_id), Integer.valueOf(updates.pts));
                 MessagesStorage.getInstance(this.currentAccount).saveChannelPts(updates.chat_id, updates.pts);
             } else {
-                MessagesStorage.getInstance(this.currentAccount).lastPtsValue = updates.pts;
+                MessagesStorage.getInstance(this.currentAccount).setLastPtsValue(updates.pts);
             }
         }
         SecretChatHelper.getInstance(this.currentAccount).processPendingEncMessages();
@@ -7476,7 +7476,7 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         if (needReceivedQueue) {
             TLObject req = new TL_messages_receivedQueue();
-            req.max_qts = MessagesStorage.getInstance(this.currentAccount).lastQtsValue;
+            req.max_qts = MessagesStorage.getInstance(this.currentAccount).getLastQtsValue();
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                 }
@@ -7489,7 +7489,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
             });
         }
-        MessagesStorage.getInstance(this.currentAccount).saveDiffParams(MessagesStorage.getInstance(this.currentAccount).lastSeqValue, MessagesStorage.getInstance(this.currentAccount).lastPtsValue, MessagesStorage.getInstance(this.currentAccount).lastDateValue, MessagesStorage.getInstance(this.currentAccount).lastQtsValue);
+        MessagesStorage.getInstance(this.currentAccount).saveDiffParams(MessagesStorage.getInstance(this.currentAccount).getLastSeqValue(), MessagesStorage.getInstance(this.currentAccount).getLastPtsValue(), MessagesStorage.getInstance(this.currentAccount).getLastDateValue(), MessagesStorage.getInstance(this.currentAccount).getLastQtsValue());
     }
 
     public boolean processUpdateArray(ArrayList<Update> updates, ArrayList<User> usersArr, ArrayList<Chat> chatsArr, boolean fromGetDifference) {

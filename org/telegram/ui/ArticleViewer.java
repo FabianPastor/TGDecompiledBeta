@@ -165,6 +165,7 @@ import org.telegram.tgnet.TLRPC.TL_pageBlockVideo;
 import org.telegram.tgnet.TLRPC.TL_pageFull;
 import org.telegram.tgnet.TLRPC.TL_pagePart;
 import org.telegram.tgnet.TLRPC.TL_peerUser;
+import org.telegram.tgnet.TLRPC.TL_photo;
 import org.telegram.tgnet.TLRPC.TL_textBold;
 import org.telegram.tgnet.TLRPC.TL_textConcat;
 import org.telegram.tgnet.TLRPC.TL_textEmail;
@@ -1430,11 +1431,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.avatarVisible = z;
                 if (z) {
                     Photo photo = ArticleViewer.this.getPhotoWithId(this.currentBlock.author_photo_id);
-                    z = photo != null;
+                    z = photo instanceof TL_photo;
                     this.avatarVisible = z;
                     if (z) {
                         this.avatarDrawable.setInfo(0, this.currentBlock.author, null, false);
-                        this.avatarImageView.setImage(FileLoader.getClosestPhotoSizeWithSize(photo.sizes, AndroidUtilities.dp(40.0f), true).location, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(40), Integer.valueOf(40)}), this.avatarDrawable, 0, null, 1);
+                        PhotoSize image = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, AndroidUtilities.dp(40.0f), true);
+                        this.avatarImageView.setImage(image != null ? image.location : null, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(40), Integer.valueOf(40)}), this.avatarDrawable, 0, null, 1);
                     }
                 }
                 this.nameLayout = ArticleViewer.this.createLayoutForText(this.currentBlock.author, null, width - AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 50)), this.currentBlock);

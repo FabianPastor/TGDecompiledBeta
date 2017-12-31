@@ -197,10 +197,10 @@ final class ExoPlayerImplInternal implements Callback, MediaPeriod.Callback, Lis
         }
 
         public long updatePeriodTrackSelection(long positionUs, boolean forceRecreateStreams, boolean[] streamResetFlags) {
-            boolean z;
             TrackSelectionArray trackSelections = this.trackSelectorResult.selections;
             int i = 0;
             while (i < trackSelections.length) {
+                boolean z;
                 boolean[] zArr = this.mayRetainStreamFlags;
                 if (forceRecreateStreams || !this.trackSelectorResult.isEquivalent(this.periodTrackSelectorResult, i)) {
                     z = false;

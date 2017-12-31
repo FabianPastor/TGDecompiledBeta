@@ -3312,6 +3312,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     public static void loadGalleryPhotosAlbums(final int guid) {
         Thread thread = new Thread(new Runnable() {
             public void run() {
+                Throwable e;
                 int imageIdColumn;
                 int bucketIdColumn;
                 int bucketNameColumn;
@@ -3340,8 +3341,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 String cameraFolder = null;
                 try {
                     cameraFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/";
-                } catch (Throwable e) {
-                    Throwable e2;
+                } catch (Throwable e2) {
                     FileLog.e(e2);
                 }
                 Integer num = null;

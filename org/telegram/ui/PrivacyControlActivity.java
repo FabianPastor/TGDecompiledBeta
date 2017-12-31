@@ -387,12 +387,17 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                         GroupCreateActivity fragment = new GroupCreateActivity(args);
                         fragment.setDelegate(new GroupCreateActivityDelegate() {
                             public void didSelectUsers(ArrayList<Integer> ids) {
+                                int a;
                                 if (position == PrivacyControlActivity.this.neverShareRow) {
                                     PrivacyControlActivity.this.currentMinus = ids;
-                                    PrivacyControlActivity.this.currentPlus.removeAll(PrivacyControlActivity.this.currentMinus);
+                                    for (a = 0; a < PrivacyControlActivity.this.currentMinus.size(); a++) {
+                                        PrivacyControlActivity.this.currentPlus.remove(PrivacyControlActivity.this.currentMinus.get(a));
+                                    }
                                 } else {
                                     PrivacyControlActivity.this.currentPlus = ids;
-                                    PrivacyControlActivity.this.currentMinus.removeAll(PrivacyControlActivity.this.currentPlus);
+                                    for (a = 0; a < PrivacyControlActivity.this.currentPlus.size(); a++) {
+                                        PrivacyControlActivity.this.currentMinus.remove(PrivacyControlActivity.this.currentPlus.get(a));
+                                    }
                                 }
                                 PrivacyControlActivity.this.doneButton.setVisibility(0);
                                 PrivacyControlActivity.this.lastCheckedType = -1;
@@ -413,15 +418,20 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                     PrivacyUsersActivity fragment2 = new PrivacyUsersActivity(createFromArray, z2, z);
                     fragment2.setDelegate(new PrivacyActivityDelegate() {
                         public void didUpdatedUserList(ArrayList<Integer> ids, boolean added) {
+                            int a;
                             if (position == PrivacyControlActivity.this.neverShareRow) {
                                 PrivacyControlActivity.this.currentMinus = ids;
                                 if (added) {
-                                    PrivacyControlActivity.this.currentPlus.removeAll(PrivacyControlActivity.this.currentMinus);
+                                    for (a = 0; a < PrivacyControlActivity.this.currentMinus.size(); a++) {
+                                        PrivacyControlActivity.this.currentPlus.remove(PrivacyControlActivity.this.currentMinus.get(a));
+                                    }
                                 }
                             } else {
                                 PrivacyControlActivity.this.currentPlus = ids;
                                 if (added) {
-                                    PrivacyControlActivity.this.currentMinus.removeAll(PrivacyControlActivity.this.currentPlus);
+                                    for (a = 0; a < PrivacyControlActivity.this.currentPlus.size(); a++) {
+                                        PrivacyControlActivity.this.currentMinus.remove(PrivacyControlActivity.this.currentPlus.get(a));
+                                    }
                                 }
                             }
                             PrivacyControlActivity.this.doneButton.setVisibility(0);
@@ -456,7 +466,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         if (this.currentType != 0 && this.currentPlus.size() > 0) {
             TL_inputPrivacyValueAllowUsers rule = new TL_inputPrivacyValueAllowUsers();
             for (a = 0; a < this.currentPlus.size(); a++) {
-                user = MessagesController.getInstance(this.currentType).getUser((Integer) this.currentPlus.get(a));
+                user = MessagesController.getInstance(this.currentAccount).getUser((Integer) this.currentPlus.get(a));
                 if (user != null) {
                     inputUser = MessagesController.getInstance(this.currentAccount).getInputUser(user);
                     if (inputUser != null) {
@@ -469,7 +479,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         if (this.currentType != 1 && this.currentMinus.size() > 0) {
             TL_inputPrivacyValueDisallowUsers rule2 = new TL_inputPrivacyValueDisallowUsers();
             for (a = 0; a < this.currentMinus.size(); a++) {
-                user = MessagesController.getInstance(this.currentType).getUser((Integer) this.currentMinus.get(a));
+                user = MessagesController.getInstance(this.currentAccount).getUser((Integer) this.currentMinus.get(a));
                 if (user != null) {
                     inputUser = MessagesController.getInstance(this.currentAccount).getInputUser(user);
                     if (inputUser != null) {
@@ -509,7 +519,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                         if (error == null) {
                             PrivacyControlActivity.this.finishFragment();
                             TL_account_privacyRules rules = response;
-                            MessagesController.getInstance(PrivacyControlActivity.this.currentType).putUsers(rules.users, false);
+                            MessagesController.getInstance(PrivacyControlActivity.this.currentAccount).putUsers(rules.users, false);
                             ContactsController.getInstance(PrivacyControlActivity.this.currentAccount).setPrivacyRules(rules.rules, PrivacyControlActivity.this.rulesType);
                             return;
                         }

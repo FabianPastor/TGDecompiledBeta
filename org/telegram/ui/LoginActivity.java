@@ -1743,7 +1743,6 @@ public class LoginActivity extends BaseFragment {
             if (this.openTime != 0) {
                 bundle.putInt("open", this.openTime);
             }
-            bundle.putBoolean("syncContacts", LoginActivity.this.syncContacts);
         }
 
         public void restoreStateParams(Bundle bundle) {
@@ -1767,11 +1766,11 @@ public class LoginActivity extends BaseFragment {
             if (t2 != 0) {
                 this.openTime = t2;
             }
-            LoginActivity.this.syncContacts = bundle.getBoolean("syncContacts", true);
         }
     }
 
     public class PhoneView extends SlideView implements OnItemSelectedListener {
+        private CheckBoxCell checkBoxCell;
         private EditTextBoldCursor codeField;
         private HashMap<String, String> codesMap = new HashMap();
         private ArrayList<String> countriesArray = new ArrayList();
@@ -2032,11 +2031,11 @@ public class LoginActivity extends BaseFragment {
             this.textView2.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             addView(this.textView2, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 28, 0, 10));
             if (LoginActivity.this.newAccount) {
-                CheckBoxCell cell = new CheckBoxCell(context, 2);
-                cell.setText(LocaleController.getString("SyncContacts", R.string.SyncContacts), TtmlNode.ANONYMOUS_REGION_ID, LoginActivity.this.syncContacts, false);
-                addView(cell, LayoutHelper.createLinear(-2, -1, 51, 0, 0, 0, 0));
+                this.checkBoxCell = new CheckBoxCell(context, 2);
+                this.checkBoxCell.setText(LocaleController.getString("SyncContacts", R.string.SyncContacts), TtmlNode.ANONYMOUS_REGION_ID, LoginActivity.this.syncContacts, false);
+                addView(this.checkBoxCell, LayoutHelper.createLinear(-2, -1, 51, 0, 0, 0, 0));
                 final LoginActivity loginActivity22222 = LoginActivity.this;
-                cell.setOnClickListener(new OnClickListener() {
+                this.checkBoxCell.setOnClickListener(new OnClickListener() {
                     private Toast visibleToast;
 
                     public void onClick(View v) {
@@ -2381,6 +2380,9 @@ public class LoginActivity extends BaseFragment {
         public void onShow() {
             super.onShow();
             fillNumber();
+            if (this.checkBoxCell != null) {
+                this.checkBoxCell.setChecked(LoginActivity.this.syncContacts, false);
+            }
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     if (PhoneView.this.phoneField == null) {
@@ -2499,9 +2501,9 @@ public class LoginActivity extends BaseFragment {
         Bundle savedInstanceState = loadCurrentState();
         if (savedInstanceState != null) {
             this.currentViewNum = savedInstanceState.getInt("currentViewNum", 0);
+            this.syncContacts = savedInstanceState.getInt("syncContacts", 1) == 1;
             if (this.currentViewNum >= 1 && this.currentViewNum <= 4) {
                 int time = savedInstanceState.getInt("open");
-                this.syncContacts = savedInstanceState.getBoolean("syncContacts", true);
                 if (time != 0 && Math.abs((System.currentTimeMillis() / 1000) - ((long) time)) >= 86400) {
                     this.currentViewNum = 0;
                     savedInstanceState = null;
@@ -2539,10 +2541,16 @@ public class LoginActivity extends BaseFragment {
     public void onPause() {
         super.onPause();
         AndroidUtilities.removeAdjustResize(getParentActivity(), this.classGuid);
+        if (this.newAccount) {
+            ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
+        }
     }
 
     public void onResume() {
         super.onResume();
+        if (this.newAccount) {
+            ConnectionsManager.getInstance(this.currentAccount).setAppPaused(false, false);
+        }
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
         try {
             if (this.currentViewNum >= 1 && this.currentViewNum <= 4 && (this.views[this.currentViewNum] instanceof LoginActivitySmsView)) {
@@ -2835,9 +2843,15 @@ public class LoginActivity extends BaseFragment {
     }
 
     public void saveSelfArgs(Bundle outState) {
+        int i = 0;
         try {
             Bundle bundle = new Bundle();
             bundle.putInt("currentViewNum", this.currentViewNum);
+            String str = "syncContacts";
+            if (this.syncContacts) {
+                i = 1;
+            }
+            bundle.putInt(str, i);
             for (int a = 0; a <= this.currentViewNum; a++) {
                 SlideView v = this.views[a];
                 if (v != null) {
@@ -2859,6 +2873,7 @@ public class LoginActivity extends BaseFragment {
             presentFragment(new DialogsActivity(null), true);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
         } else if (getParentActivity() != null) {
+            this.newAccount = false;
             ((LaunchActivity) getParentActivity()).switchToAccount(this.currentAccount, false);
             finishFragment();
         }
