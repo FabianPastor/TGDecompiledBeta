@@ -34,6 +34,7 @@ public class FileLoader {
     public static final int MEDIA_DIR_DOCUMENT = 3;
     public static final int MEDIA_DIR_IMAGE = 0;
     public static final int MEDIA_DIR_VIDEO = 2;
+    private static volatile DispatchQueue fileLoaderQueue = new DispatchQueue("fileUploadQueue");
     private static HashMap<Integer, File> mediaDirs = null;
     private LinkedList<FileLoadOperation> audioLoadOperationQueue = new LinkedList();
     private int currentAccount;
@@ -43,7 +44,6 @@ public class FileLoader {
     private int currentUploadOperationsCount = 0;
     private int currentUploadSmallOperationsCount = 0;
     private FileLoaderDelegate delegate = null;
-    private volatile DispatchQueue fileLoaderQueue = new DispatchQueue("fileUploadQueue");
     private ConcurrentHashMap<String, FileLoadOperation> loadOperationPaths = new ConcurrentHashMap();
     private LinkedList<FileLoadOperation> loadOperationQueue = new LinkedList();
     private LinkedList<FileLoadOperation> photoLoadOperationQueue = new LinkedList();
@@ -121,7 +121,7 @@ public class FileLoader {
     }
 
     public void cancelUploadFile(final String location, final boolean enc) {
-        this.fileLoaderQueue.postRunnable(new Runnable() {
+        fileLoaderQueue.postRunnable(new Runnable() {
             public void run() {
                 FileUploadOperation operation;
                 if (enc) {
@@ -145,7 +145,7 @@ public class FileLoader {
         final String str = location;
         final long j = newAvailableSize;
         final long j2 = finalSize;
-        this.fileLoaderQueue.postRunnable(new Runnable() {
+        fileLoaderQueue.postRunnable(new Runnable() {
             public void run() {
                 FileUploadOperation operation;
                 if (z) {
@@ -173,7 +173,7 @@ public class FileLoader {
             final int i = estimatedSize;
             final int i2 = type;
             final boolean z2 = small;
-            this.fileLoaderQueue.postRunnable(new Runnable() {
+            fileLoaderQueue.postRunnable(new Runnable() {
                 public void run() {
                     if (z) {
                         if (FileLoader.this.uploadOperationPathsEnc.containsKey(str)) {
@@ -200,7 +200,7 @@ public class FileLoader {
                             final byte[] bArr = key;
                             final byte[] bArr2 = iv;
                             final FileUploadOperation fileUploadOperation = operation;
-                            FileLoader.this.fileLoaderQueue.postRunnable(new Runnable() {
+                            FileLoader.fileLoaderQueue.postRunnable(new Runnable() {
                                 public void run() {
                                     if (z) {
                                         FileLoader.this.uploadOperationPathsEnc.remove(str);
@@ -235,7 +235,7 @@ public class FileLoader {
                         }
 
                         public void didFailedUploadingFile(FileUploadOperation operation) {
-                            FileLoader.this.fileLoaderQueue.postRunnable(new Runnable() {
+                            FileLoader.fileLoaderQueue.postRunnable(new Runnable() {
                                 public void run() {
                                     if (z) {
                                         FileLoader.this.uploadOperationPathsEnc.remove(str);
@@ -317,7 +317,7 @@ public class FileLoader {
             final String str = locationExt;
             final Document document2 = document;
             final TL_webDocument tL_webDocument = webDocument;
-            this.fileLoaderQueue.postRunnable(new Runnable() {
+            fileLoaderQueue.postRunnable(new Runnable() {
                 public void run() {
                     String fileName = null;
                     if (fileLocation != null) {
@@ -352,7 +352,7 @@ public class FileLoader {
     public boolean isLoadingFile(final String fileName) {
         final Semaphore semaphore = new Semaphore(0);
         final Boolean[] result = new Boolean[1];
-        this.fileLoaderQueue.postRunnable(new Runnable() {
+        fileLoaderQueue.postRunnable(new Runnable() {
             public void run() {
                 result[0] = Boolean.valueOf(FileLoader.this.loadOperationPaths.containsKey(fileName));
                 semaphore.release();
@@ -399,7 +399,7 @@ public class FileLoader {
         final boolean z = force;
         final int i = locationSize;
         final int i2 = cacheType;
-        this.fileLoaderQueue.postRunnable(new Runnable() {
+        fileLoaderQueue.postRunnable(new Runnable() {
             public void run() {
                 String fileName = null;
                 if (fileLocation != null) {
@@ -527,7 +527,7 @@ public class FileLoader {
         final Document document2 = document;
         final TL_webDocument tL_webDocument = webDocument;
         final FileLocation fileLocation = location;
-        this.fileLoaderQueue.postRunnable(new Runnable() {
+        fileLoaderQueue.postRunnable(new Runnable() {
             public void run() {
                 FileLoadOperation operation = (FileLoadOperation) FileLoader.this.loadOperationPaths.remove(str);
                 int maxCount;
@@ -950,7 +950,7 @@ public class FileLoader {
 
     public void deleteFiles(final ArrayList<File> files, final int type) {
         if (files != null && !files.isEmpty()) {
-            this.fileLoaderQueue.postRunnable(new Runnable() {
+            fileLoaderQueue.postRunnable(new Runnable() {
                 public void run() {
                     for (int a = 0; a < files.size(); a++) {
                         File file = (File) files.get(a);
