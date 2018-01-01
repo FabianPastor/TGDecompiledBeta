@@ -398,11 +398,14 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             FileLog.d("Starting incall activity for incoming call");
             try {
                 PendingIntent.getActivity(this, 12345, new Intent(this, VoIPActivity.class).addFlags(268435456), 0).send();
-                return;
             } catch (Exception x) {
                 FileLog.e("Error starting incall activity", x);
+            }
+            if (VERSION.SDK_INT >= 26) {
+                showNotification();
                 return;
             }
+            return;
         }
         showIncomingNotification();
         FileLog.d("Showing incoming call notification");
@@ -883,7 +886,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     FileLog.d("User messed up the notification channel; deleting it and creating a proper one");
                     nm.deleteNotificationChannel("incoming_calls" + chanIndex);
                     chanIndex++;
-                    nprefs.edit().putInt("calls_notification_channel", chanIndex).apply();
+                    nprefs.edit().putInt("calls_notification_channel", chanIndex).commit();
                 }
             }
             if (needCreate) {
@@ -1020,6 +1023,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                         PendingIntent.getActivity(VoIPService.this, 0, intent, 0).send();
                     } catch (CanceledException e) {
                         FileLog.e("error restarting activity", e);
+                    }
+                    if (VERSION.SDK_INT >= 26) {
+                        VoIPService.this.showNotification();
                     }
                 }
             }, 500);

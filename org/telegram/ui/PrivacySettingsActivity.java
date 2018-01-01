@@ -412,6 +412,16 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.privacyRulesUpdated);
+        if (this.currentSync != this.newSync) {
+            UserConfig.getInstance(this.currentAccount).syncContacts = this.newSync;
+            UserConfig.getInstance(this.currentAccount).saveConfig(false);
+            if (this.newSync) {
+                ContactsController.getInstance(this.currentAccount).forceImportContacts();
+                if (getParentActivity() != null) {
+                    Toast.makeText(getParentActivity(), LocaleController.getString("SyncContactsAdded", R.string.SyncContactsAdded), 0).show();
+                }
+            }
+        }
     }
 
     public View createView(Context context) {
@@ -422,16 +432,6 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
             public void onItemClick(int id) {
                 if (id == -1) {
                     PrivacySettingsActivity.this.finishFragment();
-                    if (PrivacySettingsActivity.this.currentSync != PrivacySettingsActivity.this.newSync) {
-                        UserConfig.getInstance(PrivacySettingsActivity.this.currentAccount).syncContacts = PrivacySettingsActivity.this.newSync;
-                        UserConfig.getInstance(PrivacySettingsActivity.this.currentAccount).saveConfig(false);
-                        if (PrivacySettingsActivity.this.newSync) {
-                            ContactsController.getInstance(PrivacySettingsActivity.this.currentAccount).forceImportContacts();
-                            if (PrivacySettingsActivity.this.getParentActivity() != null) {
-                                Toast.makeText(PrivacySettingsActivity.this.getParentActivity(), LocaleController.getString("SyncContactsAdded", R.string.SyncContactsAdded), 0).show();
-                            }
-                        }
-                    }
                 }
             }
         });

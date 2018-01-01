@@ -546,6 +546,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
 
     public void setParentActivity(Activity activity) {
         this.currentAccount = UserConfig.selectedAccount;
+        this.centerImage.setCurrentAccount(this.currentAccount);
         if (this.parentActivity != activity) {
             this.parentActivity = activity;
             this.scroller = new Scroller(activity);

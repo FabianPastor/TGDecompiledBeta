@@ -380,6 +380,7 @@ public class StickerPreviewViewer {
 
     public void setParentActivity(Activity activity) {
         this.currentAccount = UserConfig.selectedAccount;
+        this.centerImage.setCurrentAccount(this.currentAccount);
         if (this.parentActivity != activity) {
             this.parentActivity = activity;
             this.windowView = new FrameLayout(activity);

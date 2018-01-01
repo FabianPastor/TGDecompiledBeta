@@ -5194,6 +5194,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     public void setParentActivity(Activity activity, BaseFragment fragment) {
         this.parentFragment = fragment;
         this.currentAccount = UserConfig.selectedAccount;
+        this.leftImage.setCurrentAccount(this.currentAccount);
+        this.rightImage.setCurrentAccount(this.currentAccount);
+        this.centerImage.setCurrentAccount(this.currentAccount);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);

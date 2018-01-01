@@ -787,6 +787,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 this.unusedReceivers.remove(0);
             }
             this.imagesToDraw.add(receiver);
+            receiver.setCurrentAccount(PhotoViewer.this.currentAccount);
             return receiver;
         }
 
@@ -2177,6 +2178,9 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
 
     public void setParentActivity(Activity activity) {
         this.currentAccount = UserConfig.selectedAccount;
+        this.centerImage.setCurrentAccount(this.currentAccount);
+        this.leftImage.setCurrentAccount(this.currentAccount);
+        this.rightImage.setCurrentAccount(this.currentAccount);
         if (this.parentActivity != activity) {
             FrameLayout.LayoutParams layoutParams;
             this.parentActivity = activity;
@@ -2368,9 +2372,9 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             if (PhotoViewer.this.currentMessageObject != null) {
                                 f = FileLoader.getPathToMessage(PhotoViewer.this.currentMessageObject.messageOwner);
                             } else if (PhotoViewer.this.currentFileLocation != null) {
-                                TLObject access$5600 = PhotoViewer.this.currentFileLocation;
+                                TLObject access$5700 = PhotoViewer.this.currentFileLocation;
                                 boolean z = PhotoViewer.this.avatarsDialogId != 0 || PhotoViewer.this.isEvent;
-                                f = FileLoader.getPathToAttach(access$5600, z);
+                                f = FileLoader.getPathToAttach(access$5700, z);
                             }
                             if (f == null || !f.exists()) {
                                 builder = new Builder(PhotoViewer.this.parentActivity);
@@ -2381,13 +2385,13 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                 return;
                             }
                             String file = f.toString();
-                            Context access$1500 = PhotoViewer.this.parentActivity;
+                            Context access$1600 = PhotoViewer.this.parentActivity;
                             if (PhotoViewer.this.currentMessageObject == null || !PhotoViewer.this.currentMessageObject.isVideo()) {
                                 r2 = 0;
                             } else {
                                 r2 = 1;
                             }
-                            MediaController.saveFile(file, access$1500, r2, null, null);
+                            MediaController.saveFile(file, access$1600, r2, null, null);
                             return;
                         }
                         PhotoViewer.this.parentActivity.requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 4);
@@ -2638,9 +2642,9 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             return true;
                         }
                     } else if (PhotoViewer.this.currentFileLocation != null) {
-                        TLObject access$5600 = PhotoViewer.this.currentFileLocation;
+                        TLObject access$5700 = PhotoViewer.this.currentFileLocation;
                         boolean z = PhotoViewer.this.avatarsDialogId != 0 || PhotoViewer.this.isEvent;
-                        if (FileLoader.getPathToAttach(access$5600, z).exists()) {
+                        if (FileLoader.getPathToAttach(access$5700, z).exists()) {
                             return true;
                         }
                     }
@@ -6111,16 +6115,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         releasePlayer();
                         this.captionEditText.onDestroy();
                         this.parentChatActivity = null;
-                        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailedLoad);
-                        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidLoaded);
-                        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
-                        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.mediaCountDidLoaded);
-                        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.mediaDidLoaded);
-                        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.dialogPhotosLoaded);
-                        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
-                        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FilePreparingFailed);
-                        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileNewChunkAvailable);
-                        ConnectionsManager.getInstance(this.currentAccount).cancelRequestsForGuid(this.classGuid);
+                        removeObservers();
                         this.isActionBarVisible = false;
                         if (this.velocityTracker != null) {
                             this.velocityTracker.recycle();
@@ -6325,8 +6320,22 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
     }
 
+    private void removeObservers() {
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailedLoad);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.mediaCountDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.mediaDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.dialogPhotosLoaded);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FilePreparingFailed);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileNewChunkAvailable);
+        ConnectionsManager.getInstance(this.currentAccount).cancelRequestsForGuid(this.classGuid);
+    }
+
     public void destroyPhotoViewer() {
         if (this.parentActivity != null && this.windowView != null) {
+            removeObservers();
             releasePlayer();
             try {
                 if (this.windowView.getParent() != null) {

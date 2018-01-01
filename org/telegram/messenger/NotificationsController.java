@@ -1829,7 +1829,7 @@ public class NotificationsController {
                     } else {
                         name = chatName;
                     }
-                    if (UserConfig.getActivatedAccountsCount() == 0) {
+                    if (UserConfig.getActivatedAccountsCount() <= 1) {
                         detailText = UserObject.getFirstName(UserConfig.getInstance(this.currentAccount).getCurrentUser()) + "・";
                     } else {
                         detailText = TtmlNode.ANONYMOUS_REGION_ID;
@@ -2115,7 +2115,7 @@ public class NotificationsController {
             }
             name = LocaleController.getString("AppName", R.string.AppName);
             replace = false;
-            if (UserConfig.getActivatedAccountsCount() == 0) {
+            if (UserConfig.getActivatedAccountsCount() <= 1) {
                 detailText = TtmlNode.ANONYMOUS_REGION_ID;
             } else {
                 detailText = UserObject.getFirstName(UserConfig.getInstance(this.currentAccount).getCurrentUser()) + "・";
