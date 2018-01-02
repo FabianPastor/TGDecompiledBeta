@@ -62,19 +62,21 @@ public class DrawerUserCell extends FrameLayout {
     }
 
     public void setAccount(int account) {
-        TLObject avatar;
         this.accountNumber = account;
         User user = UserConfig.getInstance(this.accountNumber).getCurrentUser();
-        this.avatarDrawable.setInfo(user);
-        this.textView.setText(ContactsController.formatName(user.first_name, user.last_name));
-        if (user.photo == null || user.photo.photo_small == null || user.photo.photo_small.volume_id == 0 || user.photo.photo_small.local_id == 0) {
-            avatar = null;
-        } else {
-            avatar = user.photo.photo_small;
+        if (user != null) {
+            TLObject avatar;
+            this.avatarDrawable.setInfo(user);
+            this.textView.setText(ContactsController.formatName(user.first_name, user.last_name));
+            if (user.photo == null || user.photo.photo_small == null || user.photo.photo_small.volume_id == 0 || user.photo.photo_small.local_id == 0) {
+                avatar = null;
+            } else {
+                avatar = user.photo.photo_small;
+            }
+            this.imageView.getImageReceiver().setCurrentAccount(account);
+            this.imageView.setImage(avatar, "50_50", this.avatarDrawable);
+            this.checkBox.setVisibility(account == UserConfig.selectedAccount ? 0 : 4);
         }
-        this.imageView.getImageReceiver().setCurrentAccount(account);
-        this.imageView.setImage(avatar, "50_50", this.avatarDrawable);
-        this.checkBox.setVisibility(account == UserConfig.selectedAccount ? 0 : 4);
     }
 
     public int getAccountNumber() {

@@ -698,13 +698,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 if (finalSize != 0) {
                     arr = (ArrayList) this.delayedMessages.get(messageObject.messageOwner.attachPath);
                     if (arr != null) {
-                        a = 0;
-                        while (a < arr.size()) {
+                        for (a = 0; a < arr.size(); a++) {
                             message = (DelayedMessage) arr.get(a);
                             ArrayList messages;
                             if (message.type == 4) {
-                                while (0 < message.messageObjects.size()) {
-                                    MessageObject obj2 = (MessageObject) message.messageObjects.get(a);
+                                for (b = 0; b < message.messageObjects.size(); b++) {
+                                    MessageObject obj2 = (MessageObject) message.messageObjects.get(b);
                                     if (obj2 == messageObject) {
                                         obj2.videoEditedInfo = null;
                                         obj2.messageOwner.message = "-1";
@@ -714,7 +713,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         MessagesStorage.getInstance(this.currentAccount).putMessages(messages, false, true, false, 0);
                                         break;
                                     }
-                                    a++;
                                 }
                             } else if (message.obj == messageObject) {
                                 message.obj.videoEditedInfo = null;
@@ -725,7 +723,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 MessagesStorage.getInstance(this.currentAccount).putMessages(messages, false, true, false, 0);
                                 return;
                             }
-                            a++;
                         }
                     }
                 }
@@ -741,7 +738,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     while (a < arr.size()) {
                         message = (DelayedMessage) arr.get(a);
                         if (message.type == 4) {
-                            for (int b = 0; b < message.messages.size(); b++) {
+                            for (b = 0; b < message.messages.size(); b++) {
                                 if (message.messageObjects.get(b) == messageObject) {
                                     message.markAsError();
                                     arr.remove(a);
@@ -1716,8 +1713,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public void sendGame(InputPeer peer, TL_inputMediaGame game, long random_id, long taskId) {
         Throwable e;
-        long newTaskId;
         if (peer != null && game != null) {
+            long newTaskId;
             TL_messages_sendMedia request = new TL_messages_sendMedia();
             request.peer = peer;
             if (request.peer instanceof TL_inputPeerChannel) {
@@ -1795,9 +1792,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     private void sendMessage(String message, MessageMedia location, TL_photo photo, VideoEditedInfo videoEditedInfo, User user, TL_document document, TL_game game, long peer, String path, MessageObject reply_to_msg, WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<MessageEntity> entities, ReplyMarkup replyMarkup, HashMap<String, String> params, int ttl) {
         Throwable e;
-        MessageObject newMsgObj;
         if (peer != 0) {
             Chat chat;
+            MessageObject newMsgObj;
             int a;
             DocumentAttribute attribute;
             long groupId;

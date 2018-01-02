@@ -144,6 +144,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     this.call = callIShouldHavePutIntoIntent;
                     callIShouldHavePutIntoIntent = null;
                     acknowledgeCallAndStartRinging();
+                    if (VERSION.SDK_INT >= 26) {
+                        showNotification();
+                    }
                 }
                 sharedInstance = this;
                 initializeAccountRelatedThings();
@@ -445,6 +448,11 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     byte[] salt = new byte[256];
                     for (int a = 0; a < 256; a++) {
                         salt[a] = (byte) (((byte) ((int) (Utilities.random.nextDouble() * 256.0d))) ^ res.random[a]);
+                    }
+                    if (VoIPService.this.call == null) {
+                        FileLog.e("call is null");
+                        VoIPService.this.callFailed();
+                        return;
                     }
                     VoIPService.this.a_or_b = salt;
                     BigInteger g_b = BigInteger.valueOf((long) messagesStorage.getSecretG()).modPow(new BigInteger(1, salt), new BigInteger(1, messagesStorage.getSecretPBytes()));

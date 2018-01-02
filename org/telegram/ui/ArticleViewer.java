@@ -2541,15 +2541,15 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         protected void onDraw(Canvas canvas) {
             ArticleViewer.colorPaint.setColor(this.currentColor);
-            canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(48.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), ArticleViewer.colorPaint);
+            canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), ArticleViewer.colorPaint);
             if (this.selected) {
                 ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
                 ArticleViewer.selectorPaint.setColor(-15428119);
-                canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(48.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), ArticleViewer.selectorPaint);
+                canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), ArticleViewer.selectorPaint);
             } else if (this.currentColor == -1) {
                 ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
                 ArticleViewer.selectorPaint.setColor(-4539718);
-                canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(48.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(9.0f), ArticleViewer.selectorPaint);
+                canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(9.0f), ArticleViewer.selectorPaint);
             }
         }
     }
@@ -5422,7 +5422,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     int i = (!this.nightModeEnabled || this.selectedColor == 2) ? -3355444 : -15428119;
                     imageView.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
                     this.nightModeImageView.setBackgroundDrawable(Theme.createSelectorDrawable(251658240));
-                    this.colorCells[a].addView(this.nightModeImageView, LayoutHelper.createFrame(48, 48, 53));
+                    this.colorCells[a].addView(this.nightModeImageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 48));
                     this.nightModeImageView.setOnClickListener(new OnClickListener() {
                         public void onClick(View v) {
                             ArticleViewer.this.nightModeEnabled = !ArticleViewer.this.nightModeEnabled;
@@ -5739,19 +5739,43 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     }
 
     private void showNightModeHint() {
+        int i = 3;
+        int i2 = 56;
         if (this.parentActivity != null && this.nightModeHintView == null && this.nightModeEnabled) {
+            int i3;
+            int i4;
             this.nightModeHintView = new FrameLayout(this.parentActivity);
             this.nightModeHintView.setBackgroundColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
-            this.containerView.addView(this.nightModeHintView, LayoutHelper.createFrame(-2, -2, 83));
+            this.containerView.addView(this.nightModeHintView, LayoutHelper.createFrame(-1, -2, 83));
             ImageView nightModeImageView = new ImageView(this.parentActivity);
             nightModeImageView.setScaleType(ScaleType.CENTER);
             nightModeImageView.setImageResource(R.drawable.moon);
-            this.nightModeHintView.addView(nightModeImageView, LayoutHelper.createFrame(56, 56, 19));
+            FrameLayout frameLayout = this.nightModeHintView;
+            if (LocaleController.isRTL) {
+                i3 = 5;
+            } else {
+                i3 = 3;
+            }
+            frameLayout.addView(nightModeImageView, LayoutHelper.createFrame(56, 56, i3 | 16));
             TextView textView = new TextView(this.parentActivity);
             textView.setText(LocaleController.getString("InstantViewNightMode", R.string.InstantViewNightMode));
             textView.setTextColor(-1);
             textView.setTextSize(1, 15.0f);
-            this.nightModeHintView.addView(textView, LayoutHelper.createFrame(-1, -1.0f, 51, 56.0f, 11.0f, 10.0f, 12.0f));
+            FrameLayout frameLayout2 = this.nightModeHintView;
+            if (LocaleController.isRTL) {
+                i = 5;
+            }
+            i |= 48;
+            if (LocaleController.isRTL) {
+                i4 = 10;
+            } else {
+                i4 = 56;
+            }
+            float f = (float) i4;
+            if (!LocaleController.isRTL) {
+                i2 = 10;
+            }
+            frameLayout2.addView(textView, LayoutHelper.createFrame(-1, -1.0f, i, f, 11.0f, (float) i2, 12.0f));
             AnimatorSet animatorSet = new AnimatorSet();
             Animator[] animatorArr = new Animator[1];
             animatorArr[0] = ObjectAnimator.ofFloat(this.nightModeHintView, "translationY", new float[]{(float) AndroidUtilities.dp(100.0f), 0.0f});

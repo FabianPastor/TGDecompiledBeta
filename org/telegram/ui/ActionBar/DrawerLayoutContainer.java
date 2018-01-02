@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.support.annotation.Keep;
@@ -43,6 +44,7 @@ public class DrawerLayoutContainer extends FrameLayout {
     private int minDrawerMargin = ((int) ((64.0f * AndroidUtilities.density) + 0.5f));
     private int paddingTop;
     private ActionBarLayout parentActionBarLayout;
+    private Rect rect = new Rect();
     private float scrimOpacity;
     private Paint scrimPaint = new Paint();
     private Drawable shadowLeft;
@@ -262,13 +264,16 @@ public class DrawerLayoutContainer extends FrameLayout {
         if (!this.drawerOpened || ev == null || ev.getX() <= this.drawerPosition || this.startedTracking) {
             if (this.allowOpenDrawer && this.parentActionBarLayout.fragmentsStack.size() == 1) {
                 if (ev != null && ((ev.getAction() == 0 || ev.getAction() == 2) && !this.startedTracking && !this.maybeStartTracking)) {
-                    this.startedTrackingPointerId = ev.getPointerId(0);
-                    this.maybeStartTracking = true;
+                    this.parentActionBarLayout.getHitRect(this.rect);
                     this.startedTrackingX = (int) ev.getX();
                     this.startedTrackingY = (int) ev.getY();
-                    cancelCurrentAnimation();
-                    if (this.velocityTracker != null) {
-                        this.velocityTracker.clear();
+                    if (this.rect.contains(this.startedTrackingX, this.startedTrackingY)) {
+                        this.startedTrackingPointerId = ev.getPointerId(0);
+                        this.maybeStartTracking = true;
+                        cancelCurrentAnimation();
+                        if (this.velocityTracker != null) {
+                            this.velocityTracker.clear();
+                        }
                     }
                 } else if (ev != null && ev.getAction() == 2 && ev.getPointerId(0) == this.startedTrackingPointerId) {
                     if (this.velocityTracker == null) {

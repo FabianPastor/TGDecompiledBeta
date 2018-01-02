@@ -319,6 +319,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
         if (messageObject != null) {
             this.currentAccount = messageObject.currentAccount;
+        } else {
+            this.currentAccount = UserConfig.selectedAccount;
         }
         this.parentActivity = (LaunchActivity) context;
         this.noCoverDrawable = context.getResources().getDrawable(R.drawable.nocover).mutate();
@@ -424,17 +426,26 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
             int high_id = (int) (did >> 32);
             User user;
             if (lower_id == 0) {
-                user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf(high_id)).user_id));
-                this.avatarContainer.setTitle(ContactsController.formatName(user.first_name, user.last_name));
-                this.avatarContainer.setUserAvatar(user);
+                EncryptedChat encryptedChat = MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf(high_id));
+                if (encryptedChat != null) {
+                    user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(encryptedChat.user_id));
+                    if (user != null) {
+                        this.avatarContainer.setTitle(ContactsController.formatName(user.first_name, user.last_name));
+                        this.avatarContainer.setUserAvatar(user);
+                    }
+                }
             } else if (lower_id > 0) {
                 user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_id));
-                this.avatarContainer.setTitle(ContactsController.formatName(user.first_name, user.last_name));
-                this.avatarContainer.setUserAvatar(user);
+                if (user != null) {
+                    this.avatarContainer.setTitle(ContactsController.formatName(user.first_name, user.last_name));
+                    this.avatarContainer.setUserAvatar(user);
+                }
             } else {
                 Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lower_id));
-                this.avatarContainer.setTitle(chat.title);
-                this.avatarContainer.setChatAvatar(chat);
+                if (chat != null) {
+                    this.avatarContainer.setTitle(chat.title);
+                    this.avatarContainer.setChatAvatar(chat);
+                }
             }
         }
         this.avatarContainer.setSubtitle(LocaleController.getString("AudioTitle", R.string.AudioTitle));
