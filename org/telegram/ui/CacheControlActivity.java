@@ -183,7 +183,7 @@ public class CacheControlActivity extends BaseFragment {
         i = this.rowCount;
         this.rowCount = i + 1;
         this.databaseInfoRow = i;
-        this.databaseSize = new File(ApplicationLoader.getFilesDirFixed(), "cache4.db").length();
+        this.databaseSize = MessagesStorage.getInstance(this.currentAccount).getDatabaseFile().length();
         Utilities.globalQueue.postRunnable(new Runnable() {
             public void run() {
                 CacheControlActivity.this.cacheSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(4), 0);
@@ -499,7 +499,7 @@ public class CacheControlActivity extends BaseFragment {
                                                         FileLog.e(e);
                                                     }
                                                     if (CacheControlActivity.this.listAdapter != null) {
-                                                        CacheControlActivity.this.databaseSize = new File(ApplicationLoader.getFilesDirFixed(), "cache4.db").length();
+                                                        CacheControlActivity.this.databaseSize = MessagesStorage.getInstance(CacheControlActivity.this.currentAccount).getDatabaseFile().length();
                                                         CacheControlActivity.this.listAdapter.notifyDataSetChanged();
                                                     }
                                                 }

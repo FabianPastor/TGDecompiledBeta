@@ -384,8 +384,12 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                 if (visibleItemCount > 0) {
                     int totalItemCount = CallLogActivity.this.listViewAdapter.getItemCount();
                     if (!(CallLogActivity.this.endReached || CallLogActivity.this.loading || CallLogActivity.this.calls.isEmpty() || firstVisibleItem + visibleItemCount < totalItemCount - 5)) {
-                        CallLogRow row = (CallLogRow) CallLogActivity.this.calls.get(CallLogActivity.this.calls.size() - 1);
-                        CallLogActivity.this.getCalls(((Message) row.calls.get(row.calls.size() - 1)).id, 100);
+                        final CallLogRow row = (CallLogRow) CallLogActivity.this.calls.get(CallLogActivity.this.calls.size() - 1);
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                CallLogActivity.this.getCalls(((Message) row.calls.get(row.calls.size() - 1)).id, 100);
+                            }
+                        });
                     }
                 }
                 if (CallLogActivity.this.floatingButton.getVisibility() != 8) {

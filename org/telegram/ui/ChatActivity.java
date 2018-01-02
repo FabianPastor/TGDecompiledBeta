@@ -7473,7 +7473,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         MessageObject obj;
         int loadIndex;
         int count;
-        boolean z;
         HashMap<Long, GroupedMessages> newGroups;
         ArrayList<MessageObject> dayArray;
         Message dateMsg;
@@ -7571,15 +7570,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         this.last_message_id = ((Integer) args[5]).intValue();
                     }
                     int newRowsCount = 0;
-                    if (load_type != 0) {
-                        boolean[] zArr = this.forwardEndReached;
-                        z = this.startLoadFromMessageId == 0 && this.last_message_id == 0;
-                        zArr[loadIndex] = z;
+                    if (!(load_type == 0 || (this.startLoadFromMessageId == 0 && this.last_message_id == 0))) {
+                        this.forwardEndReached[loadIndex] = false;
                     }
                     if ((load_type == 1 || load_type == 3) && loadIndex == 1) {
-                        boolean[] zArr2 = this.endReached;
+                        boolean[] zArr = this.endReached;
                         this.cacheEndReached[0] = true;
-                        zArr2[0] = true;
+                        zArr[0] = true;
                         this.forwardEndReached[0] = false;
                         this.minMessageId[0] = 0;
                     }
@@ -7969,13 +7966,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             int last_unread_date_final = last_unread_date;
                             final int id2 = ((MessageObject) this.messages.get(0)).getId();
                             final int i2 = last_unread_date_final;
-                            final boolean z2 = wasUnreadFinal;
+                            final boolean z = wasUnreadFinal;
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
                                     if (ChatActivity.this.last_message_id != 0) {
-                                        MessagesController.getInstance(ChatActivity.this.currentAccount).markDialogAsRead(ChatActivity.this.dialog_id, id2, ChatActivity.this.last_message_id, i2, z2, false);
+                                        MessagesController.getInstance(ChatActivity.this.currentAccount).markDialogAsRead(ChatActivity.this.dialog_id, id2, ChatActivity.this.last_message_id, i2, z, false);
                                     } else {
-                                        MessagesController.getInstance(ChatActivity.this.currentAccount).markDialogAsRead(ChatActivity.this.dialog_id, id2, ChatActivity.this.minMessageId[0], ChatActivity.this.maxDate[0], z2, false);
+                                        MessagesController.getInstance(ChatActivity.this.currentAccount).markDialogAsRead(ChatActivity.this.dialog_id, id2, ChatActivity.this.minMessageId[0], ChatActivity.this.maxDate[0], z, false);
                                     }
                                 }
                             }, 700);
@@ -8956,8 +8953,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     this.hasBotsCommands = false;
                     this.botInfo.clear();
                     this.botsCount = 0;
-                    z = (this.info.bot_info.isEmpty() || this.currentChat == null || !this.currentChat.megagroup) ? false : true;
-                    URLSpanBotCommand.enabled = z;
+                    r5 = (this.info.bot_info.isEmpty() || this.currentChat == null || !this.currentChat.megagroup) ? false : true;
+                    URLSpanBotCommand.enabled = r5;
                     this.botsCount = this.info.bot_info.size();
                     for (a = 0; a < this.info.bot_info.size(); a++) {
                         BotInfo bot = (BotInfo) this.info.bot_info.get(a);
@@ -9031,15 +9028,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 initStickers();
                 if (this.chatActivityEnterView != null) {
                     ChatActivityEnterView chatActivityEnterView = this.chatActivityEnterView;
-                    z = this.currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(this.currentEncryptedChat.layer) >= edit;
-                    boolean z3 = this.currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(this.currentEncryptedChat.layer) >= 46;
-                    chatActivityEnterView.setAllowStickersAndGifs(z, z3);
+                    r5 = this.currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(this.currentEncryptedChat.layer) >= edit;
+                    boolean z2 = this.currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(this.currentEncryptedChat.layer) >= 46;
+                    chatActivityEnterView.setAllowStickersAndGifs(r5, z2);
                     this.chatActivityEnterView.checkRoundVideo();
                 }
                 if (this.mentionsAdapter != null) {
                     MentionsAdapter mentionsAdapter = this.mentionsAdapter;
-                    z = !this.chatActivityEnterView.isEditingMessage() && (this.currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(this.currentEncryptedChat.layer) >= 46);
-                    mentionsAdapter.setNeedBotContext(z);
+                    r5 = !this.chatActivityEnterView.isEditingMessage() && (this.currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(this.currentEncryptedChat.layer) >= 46);
+                    mentionsAdapter.setNeedBotContext(r5);
                 }
             }
         } else if (id == NotificationCenter.messagesReadEncrypted) {
@@ -9386,6 +9383,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                             if (oldPosition != null) {
                                                 groupedMessages.positions.put(messageObject, oldPosition);
                                             }
+                                            if (newGroups == null) {
+                                                newGroups = new HashMap();
+                                            }
+                                            newGroups.put(Long.valueOf(groupedMessages.groupId), groupedMessages);
                                         }
                                     }
                                 }

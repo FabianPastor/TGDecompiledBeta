@@ -46,8 +46,8 @@ public class ContainerMediaChunk extends BaseMediaChunk {
     }
 
     public final void load() throws IOException, InterruptedException {
-        ExtractorInput input;
         DataSpec loadDataSpec = this.dataSpec.subrange((long) this.bytesLoaded);
+        ExtractorInput input;
         try {
             input = new DefaultExtractorInput(this.dataSource, loadDataSpec.absoluteStreamPosition, this.dataSource.open(loadDataSpec));
             if (this.bytesLoaded == 0) {
