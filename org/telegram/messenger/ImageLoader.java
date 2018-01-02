@@ -1419,7 +1419,7 @@ public class ImageLoader {
                                     ImageLoader.this.waitingForQualityThumbByTag.put(finalTag, location);
                                 }
                                 if (attachPath.exists() && shouldGenerateQualityThumb) {
-                                    ImageLoader.this.generateThumb(parentMessageObject.getFileType(), attachPath, (TL_fileLocation) tLObject, str3);
+                                    ImageLoader.this.generateThumb(parentMessageObject.getFileType(), attachPath, (FileLocation) tLObject, str3);
                                 }
                             }
                         }

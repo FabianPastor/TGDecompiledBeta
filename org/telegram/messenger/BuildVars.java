@@ -4,7 +4,7 @@ public class BuildVars {
     public static String APP_HASH = "eb06d4abfb49dc3eeb1aeb98ae0f581e";
     public static int APP_ID = 6;
     public static String BING_SEARCH_KEY = "300f7735cfd04393a38d7838a0bf246b";
-    public static int BUILD_VERSION = 1173;
+    public static int BUILD_VERSION = 1175;
     public static String BUILD_VERSION_STRING = "4.7";
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean DEBUG_VERSION = true;
@@ -13,5 +13,5 @@ public class BuildVars {
     public static String FOURSQUARE_API_VERSION = "20150326";
     public static String GOOGLE_API_KEY = "AIzaSyA-t0jLPjUt2FxrA8VPK2EiYHcYcboIR6k";
     public static String HOCKEY_APP_HASH = "a5b5c4f551dadedc9918d9766a22ca7c";
-    public static String HOCKEY_APP_HASH_DEBUG = (DEBUG_PRIVATE_VERSION ? "d6c5e548ce524f4ab1e355235341f91c" : "dc3b3c6317af4a3caa5269a58697e088");
+    public static String HOCKEY_APP_HASH_DEBUG = "dc3b3c6317af4a3caa5269a58697e088";
 }
