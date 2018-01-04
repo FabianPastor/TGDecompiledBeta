@@ -39,6 +39,7 @@ import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -1106,6 +1107,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
 
     protected void onResume() {
         super.onResume();
+        MediaController.getInstance().setFeedbackView(this.chatActivityEnterView, true);
         if (this.chatActivityEnterView != null) {
             this.chatActivityEnterView.setFieldFocused(true);
         }
@@ -1198,6 +1200,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     protected void onDestroy() {
         super.onDestroy();
         onFinish();
+        MediaController.getInstance().setFeedbackView(this.chatActivityEnterView, false);
         if (this.wakeLock.isHeld()) {
             this.wakeLock.release();
         }

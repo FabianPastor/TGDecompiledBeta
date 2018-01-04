@@ -30,6 +30,7 @@ public class FeedbackParser {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public FeedbackResponse parseFeedbackResponse(String feedbackResponseJson) {
         JSONException e;
+        Feedback feedback;
         FeedbackResponse feedbackResponse = null;
         if (feedbackResponseJson == null) {
             return null;
@@ -37,7 +38,7 @@ public class FeedbackParser {
         try {
             JSONObject jSONObject = new JSONObject(feedbackResponseJson);
             JSONObject feedbackObject = jSONObject.getJSONObject("feedback");
-            Feedback feedback = new Feedback();
+            Feedback feedback2 = new Feedback();
             JSONArray messagesArray = feedbackObject.getJSONArray("messages");
             ArrayList<FeedbackMessage> messages = null;
             if (messagesArray.length() > 0) {
@@ -95,31 +96,30 @@ public class FeedbackParser {
                     messages.add(feedbackMessage);
                 }
             }
-            feedback.setMessages(messages);
+            feedback2.setMessages(messages);
             try {
-                feedback.setName(feedbackObject.getString("name").toString());
+                feedback2.setName(feedbackObject.getString("name").toString());
             } catch (JSONException e2) {
                 e2.printStackTrace();
             }
             try {
-                feedback.setEmail(feedbackObject.getString("email").toString());
+                feedback2.setEmail(feedbackObject.getString("email").toString());
             } catch (JSONException e22) {
                 e22.printStackTrace();
             }
             try {
-                feedback.setId(feedbackObject.getInt(TtmlNode.ATTR_ID));
+                feedback2.setId(feedbackObject.getInt(TtmlNode.ATTR_ID));
             } catch (JSONException e222) {
                 e222.printStackTrace();
             }
             try {
-                feedback.setCreatedAt(feedbackObject.getString("created_at").toString());
+                feedback2.setCreatedAt(feedbackObject.getString("created_at").toString());
             } catch (JSONException e2222) {
                 e2222.printStackTrace();
             }
             FeedbackResponse feedbackResponse2 = new FeedbackResponse();
-            Feedback feedback2;
             try {
-                feedbackResponse2.setFeedback(feedback);
+                feedbackResponse2.setFeedback(feedback2);
                 try {
                     feedbackResponse2.setStatus(jSONObject.getString("status").toString());
                 } catch (JSONException e22222) {
@@ -130,11 +130,11 @@ public class FeedbackParser {
                 } catch (JSONException e222222) {
                     e222222.printStackTrace();
                 }
-                feedback2 = feedback;
+                feedback = feedback2;
                 return feedbackResponse2;
             } catch (JSONException e3) {
                 e222222 = e3;
-                feedback2 = feedback;
+                feedback = feedback2;
                 feedbackResponse = feedbackResponse2;
                 e222222.printStackTrace();
                 return feedbackResponse;

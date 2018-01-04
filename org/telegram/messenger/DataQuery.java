@@ -15,6 +15,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Path.Direction;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Shader.TileMode;
@@ -157,7 +161,9 @@ public class DataQuery {
             return 0;
         }
     };
+    private static Paint erasePaint;
     private static Paint roundPaint;
+    private static Path roundPath;
     private HashMap<String, ArrayList<Document>> allStickers = new HashMap();
     private int[] archivedStickersCount = new int[2];
     private HashMap<Integer, BotInfo> botInfos = new HashMap();
@@ -2470,18 +2476,19 @@ public class DataQuery {
                                     if (bitmap != null) {
                                         int size = AndroidUtilities.dp(48.0f);
                                         Bitmap result = Bitmap.createBitmap(size, size, Config.ARGB_8888);
-                                        result.eraseColor(0);
                                         Canvas canvas = new Canvas(result);
-                                        Shader bitmapShader = new BitmapShader(bitmap, TileMode.CLAMP, TileMode.CLAMP);
                                         if (DataQuery.roundPaint == null) {
-                                            DataQuery.roundPaint = new Paint(1);
+                                            DataQuery.roundPaint = new Paint(3);
                                             DataQuery.bitmapRect = new RectF();
+                                            DataQuery.erasePaint = new Paint(1);
+                                            DataQuery.erasePaint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+                                            DataQuery.roundPath = new Path();
+                                            DataQuery.roundPath.addCircle((float) (size / 2), (float) (size / 2), (float) ((size / 2) - AndroidUtilities.dp(2.0f)), Direction.CW);
+                                            DataQuery.roundPath.toggleInverseFillType();
                                         }
-                                        float scale = ((float) size) / ((float) bitmap.getWidth());
-                                        canvas.scale(scale, scale);
-                                        DataQuery.roundPaint.setShader(bitmapShader);
                                         DataQuery.bitmapRect.set((float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(46.0f), (float) AndroidUtilities.dp(46.0f));
-                                        canvas.drawRoundRect(DataQuery.bitmapRect, (float) bitmap.getWidth(), (float) bitmap.getHeight(), DataQuery.roundPaint);
+                                        canvas.drawBitmap(bitmap, null, DataQuery.bitmapRect, DataQuery.roundPaint);
+                                        canvas.drawPath(DataQuery.roundPath, DataQuery.erasePaint);
                                         try {
                                             canvas.setBitmap(null);
                                         } catch (Exception e) {

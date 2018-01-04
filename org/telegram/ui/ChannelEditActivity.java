@@ -247,7 +247,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
 
     private class SearchAdapter extends SelectionAdapter {
         private Context mContext;
-        private SearchAdapterHelper searchAdapterHelper = new SearchAdapterHelper();
+        private SearchAdapterHelper searchAdapterHelper = new SearchAdapterHelper(true);
         private Timer searchTimer;
 
         public SearchAdapter(Context context) {

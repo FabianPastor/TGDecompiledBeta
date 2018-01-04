@@ -2311,9 +2311,9 @@ public class MessageObject {
     }
 
     public void generateLayout(User fromUser) {
-        int a;
         if (this.type == 0 && this.messageOwner.to_id != null && !TextUtils.isEmpty(this.messageText)) {
             boolean hasEntities;
+            int a;
             TextPaint paint;
             StaticLayout textLayout;
             int blocksCount;

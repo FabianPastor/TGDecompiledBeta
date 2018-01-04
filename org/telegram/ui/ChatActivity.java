@@ -36,7 +36,6 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.provider.ContactsContract.Contacts;
 import android.support.v4.content.FileProvider;
 import android.text.Spannable;
@@ -1874,7 +1873,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (this.currentEncryptedChat != null) {
             try {
                 if (VERSION.SDK_INT >= edit && (SharedConfig.passcodeHash.length() == 0 || SharedConfig.allowScreenCapture)) {
-                    getParentActivity().getWindow().clearFlags(MessagesController.UPDATE_MASK_CHANNEL);
+                    MediaController.getInstance().setFlagSecure(this, false);
                 }
             } catch (Throwable e) {
                 FileLog.e(e);
@@ -2770,7 +2769,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             this.wasTrackingVibrate = false;
                         } else if (!this.wasTrackingVibrate) {
                             try {
-                                ((Vibrator) ApplicationLoader.applicationContext.getSystemService("vibrator")).vibrate(10);
+                                performHapticFeedback(3, 2);
                             } catch (Exception e2) {
                             }
                             this.wasTrackingVibrate = true;
@@ -4637,7 +4636,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         updatePinnedMessageView(true);
         try {
             if (this.currentEncryptedChat != null && VERSION.SDK_INT >= edit && (SharedConfig.passcodeHash.length() == 0 || SharedConfig.allowScreenCapture)) {
-                getParentActivity().getWindow().setFlags(MessagesController.UPDATE_MASK_CHANNEL, MessagesController.UPDATE_MASK_CHANNEL);
+                MediaController.getInstance().setFlagSecure(this, true);
             }
         } catch (Throwable e2) {
             FileLog.e(e2);

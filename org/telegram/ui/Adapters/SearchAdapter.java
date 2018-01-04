@@ -54,7 +54,7 @@ public class SearchAdapter extends SelectionAdapter {
         this.allowChats = chats;
         this.allowBots = bots;
         this.channelId = searchChannelId;
-        this.searchAdapterHelper = new SearchAdapterHelper();
+        this.searchAdapterHelper = new SearchAdapterHelper(true);
         this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate() {
             public void onDataSetChanged() {
                 SearchAdapter.this.notifyDataSetChanged();
@@ -238,12 +238,12 @@ public class SearchAdapter extends SelectionAdapter {
     public void onBindViewHolder(ViewHolder holder, int position) {
         Throwable e;
         Object username;
-        ProfileSearchCell profileSearchCell;
-        boolean z;
+        UserCell userCell;
         if (holder.getItemViewType() == 0) {
             TLObject object = getItem(position);
             if (object != null) {
-                UserCell userCell;
+                ProfileSearchCell profileSearchCell;
+                boolean z;
                 int id = 0;
                 String un = null;
                 if (object instanceof User) {

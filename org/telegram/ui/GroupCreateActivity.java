@@ -287,7 +287,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                     this.contacts.add(user);
                 }
             }
-            this.searchAdapterHelper = new SearchAdapterHelper();
+            this.searchAdapterHelper = new SearchAdapterHelper(true);
             this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate(GroupCreateActivity.this) {
                 public void onDataSetChanged() {
                     GroupCreateAdapter.this.notifyDataSetChanged();

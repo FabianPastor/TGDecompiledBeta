@@ -39,7 +39,7 @@ import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.Vibrator;
+import android.support.annotation.Keep;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.TextureView;
@@ -66,7 +66,6 @@ import java.util.concurrent.CountDownLatch;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.opengles.GL;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -711,9 +710,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     public void run() {
                         if (!InstantCameraView.this.cancelled) {
                             try {
-                                ((Vibrator) ApplicationLoader.applicationContext.getSystemService("vibrator")).vibrate(20);
-                            } catch (Throwable e) {
-                                FileLog.e(e);
+                                InstantCameraView.this.performHapticFeedback(3, 2);
+                            } catch (Exception e) {
                             }
                             AndroidUtilities.lockOrientation(InstantCameraView.this.baseFragment.getParentActivity());
                             InstantCameraView.this.recording = true;
@@ -805,6 +803,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void drainEncoder(boolean endOfStream) throws Exception {
+            MediaFormat newFormat;
+            ByteBuffer encodedData;
             if (endOfStream) {
                 this.videoEncoder.signalEndOfInputStream();
             }
@@ -813,8 +813,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
             }
             while (true) {
-                MediaFormat newFormat;
-                ByteBuffer encodedData;
                 int encoderStatus = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
                 if (encoderStatus == -1) {
                     if (!endOfStream) {
@@ -1778,6 +1776,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
     }
 
+    @Keep
     public void setAlpha(float alpha) {
         ((ColorDrawable) getBackground()).setAlpha((int) (192.0f * alpha));
         invalidate();

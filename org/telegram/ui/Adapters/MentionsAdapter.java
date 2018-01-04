@@ -152,7 +152,7 @@ public class MentionsAdapter extends SelectionAdapter {
         this.delegate = mentionsAdapterDelegate;
         this.isDarkTheme = darkTheme;
         this.dialog_id = did;
-        this.searchAdapterHelper = new SearchAdapterHelper();
+        this.searchAdapterHelper = new SearchAdapterHelper(true);
         this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate() {
             public void onDataSetChanged() {
                 MentionsAdapter.this.notifyDataSetChanged();

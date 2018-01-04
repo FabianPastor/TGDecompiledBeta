@@ -431,7 +431,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
 
         public SearchAdapter(Context context) {
             this.mContext = context;
-            this.searchAdapterHelper = new SearchAdapterHelper();
+            this.searchAdapterHelper = new SearchAdapterHelper(true);
             this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate(ChannelUsersActivity.this) {
                 public void onDataSetChanged() {
                     SearchAdapter.this.notifyDataSetChanged();
@@ -679,18 +679,18 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
+            User user;
             Throwable e;
             Object username;
-            int idx;
+            ManageChatUserCell userCell;
             switch (holder.getItemViewType()) {
                 case 0:
-                    User user;
                     CharSequence username2;
                     CharSequence username3;
                     String foundUserName;
                     CharSequence spannableStringBuilder;
                     String u;
-                    ManageChatUserCell userCell;
+                    int idx;
                     TLObject object = getItem(position);
                     if (object instanceof User) {
                         user = (User) object;
@@ -1247,7 +1247,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     if (ChannelUsersActivity.this.selectType == 0) {
                         boolean canEdit = false;
                         if (ChannelUsersActivity.this.type == 1) {
-                            canEdit = ChannelUsersActivity.this.currentChat.creator || canEditAdmin;
+                            canEdit = user_id != UserConfig.getInstance(ChannelUsersActivity.this.currentAccount).getClientUserId() && (ChannelUsersActivity.this.currentChat.creator || canEditAdmin);
                         } else if (ChannelUsersActivity.this.type == 0) {
                             canEdit = ChatObject.canBlockUsers(ChannelUsersActivity.this.currentChat);
                         }
